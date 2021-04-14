@@ -1,0 +1,74 @@
+# Do not change version. This is the version of aws buildspec, not the version of your buldspec file.
+version: 0.2
+
+# env:
+#   variables: 
+    # REACT_APP_FRONTENT_STRIPE_PUBLIC_KEY: ${REACT_APP_FRONTENT_STRIPE_PUBLIC_KEY}
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 12
+    commands:
+      - npm i npm -g
+  pre_build:
+    commands:
+  build:
+    commands:
+      # building API server
+      # - echo attempting to build the API Server
+      - cd api
+      - npm install
+      - npm run build
+      - mv node_modules ./dist
+      - mv package.json ./dist
+      - mv dist ../
+      - cd ..
+      - rm -R -f api
+      - mv dist api
+      # building client
+      # - echo attempting to build the client
+      # - cd client 
+      # - npm install --legacy-peer-deps
+      # - npm run build
+      # - npm run export
+      # - mv out clientDist
+      # - mv clientDist ..
+      # - cd ..
+      # building Admin Panel
+      # - echo attempting to build the Panel
+      # - cd admin
+      # - npm install --legacy-peer-deps
+      # - npm run build
+      # - mv build adminDist
+      # - mv adminDist ..
+      # - cd ..
+    
+  post_build:
+    commands:
+      - cd serverConfig
+      - mv .npmrc ../
+      - mv appspec.yml ../
+      - mv poloTMS.nginx.config ../
+      - mv scripts ../
+
+    #   - echo Build completed on `date`
+# Include only the files required for your application to run.
+# Do not use recursively include artifacts from node_modules directory as it will include unnecessary packages
+# used only for building and testing.
+# ExpressJS apps will need other artifact directories included (bin/*, public/*, routes/*, views/* etc).
+artifacts:
+  files:
+    # - '**/*' #copy  all build files to S3 location
+    - api/**/*
+    # - clientDist/**/*
+    # - adminDist/**/*
+    - scripts/**/*
+    - wellnessDaisy.nginx.config
+    - appspec.yml
+    - .npmrc
+    # - app.js
+    # - node_modules/*
+    # - views/*
+    # - services/*
+    # - package.json
