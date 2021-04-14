@@ -49,7 +49,7 @@ phases:
       - cd serverConfig
       - mv .npmrc ../
       - mv appspec.yml ../
-      - mv poloTMS.nginx.config ../
+      - mv wellnessDaisy.nginx.config ../
       - mv scripts ../
 
     #   - echo Build completed on `date`
