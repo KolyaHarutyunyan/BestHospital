@@ -5,7 +5,7 @@ import { setupSwagger } from './util/swagger';
 import * as session from 'express-session';
 
 async function bootstrap() {
-  const PORT = process.env.PORT || 8100;
+  const PORT = process.env.PORT || 8200;
   const app = await NestFactory.create(AppModule);
 
   // Middlewares

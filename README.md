@@ -27,4 +27,4 @@ ssh-keygen -R polotms.eachbase.com
 
 
 # MongoDB Atlas database user
-1. test: username: polotms-mongo, password: !POLEachbase1!
+1. test: username: wellnessdaisy-mongo, password: !WELEachbase1!
