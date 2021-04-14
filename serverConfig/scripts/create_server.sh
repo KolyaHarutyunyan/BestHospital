@@ -97,8 +97,8 @@ sudo snap install --classic certbot
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
 0 12 * * * /usr/bin/certbot renew --quiet # for cron job scheduling for the automatic updates 
 
-sudo certbot --nginx -d polotms.eachbase.com # test certificates
-sudo certbot --nginx -d polotms.com -d www.polotms.com # live certificates
+sudo certbot --nginx -d wellnessdaisy.eachbase.com # test certificates
+# sudo certbot --nginx -d polotms.com -d www.polotms.com # live certificates
 
 
 
