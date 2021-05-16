@@ -1,0 +1,17 @@
+[
+  {
+    "title": "ALL_ACCESS",
+    "description": "Used for super admin",
+    "code": 0
+  },
+  {
+    "title": "MANAGE_ROLES",
+    "description": "Used for users to manage role system",
+    "code": 2
+  },
+  {
+    "title": "MANAGE_ADMINS",
+    "description": "Used for users to manage admins",
+    "code": 3
+  }
+]
