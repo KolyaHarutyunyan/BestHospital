@@ -6,9 +6,11 @@ import { MailerModule } from '../mailer';
 import { AppController } from './app.controller';
 import { DatabaseConnection } from './app.database';
 import { AppService } from './app.service';
+import { AuthNModule } from '../authN';
+import { AuthZModule } from '../authZ';
 
 @Module({
-  imports: [AuthZModule, AuthNModule, AdminModule, MailerModule],
+  imports: [AuthNModule, AuthZModule],
   controllers: [AppController],
   providers: [AppService, DatabaseConnection],
 })
