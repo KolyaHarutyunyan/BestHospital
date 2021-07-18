@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsPhoneNumber, IsUrl } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsPhoneNumber, IsUrl } from 'class-validator';
 import { AddressDTO } from '../../address';
+import { FundingStatus } from '../funding.constants';
 
 export class FundingDTO {
     @ApiProperty()
@@ -21,8 +22,11 @@ export class FundingDTO {
     phoneNumber: string;
     @ApiProperty({ type: AddressDTO })
     address: AddressDTO;
-    @ApiProperty()
-    status: string;
+    @ApiProperty({ enum: FundingStatus })
+    @IsEnum(FundingStatus)
+    status: number;
     @ApiProperty()
     comments: string;
+    @ApiProperty()
+    histories: string;
 }
