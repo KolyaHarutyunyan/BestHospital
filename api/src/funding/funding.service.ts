@@ -18,13 +18,14 @@ import { IHistory } from '../history';
 
 import { ServiceService } from '../service';
 import { CommentService } from '../comment';
-
+import { HistoryService, serviceLog } from '../history';
 @Injectable()
 export class FundingService {
   constructor(
     private readonly addressService: AddressService,
     private readonly service: ServiceService,
     private readonly commentService: CommentService,
+    private readonly historyService: HistoryService,
 
 
     private readonly sanitizer: FundingSanitizer,
@@ -61,42 +62,27 @@ export class FundingService {
   async createService(dto: CreateServiceDto, _id: string): Promise<ServiceDTO> {
     const funder = await this.model.findOne({ _id });
     this.checkFunder(funder)
-
-    const firstName = 'Edgar';
-    const type = "service";
-    const modify = "create";
-
     const service = await this.service.create(dto, _id);
-
-    funder.histories.push({
-      funderId: _id,
-      title: `${firstName} ${modify} a new ${type}`,
-      time: this.formatAMPM(new Date()),
-    });
-    await funder.save()
+    await this.historyService.create(serviceLog.createServiceTitle, _id);
     return service;
   }
 
   /** Add a new comment */
-  async addComment(_id: string, text: string): Promise<FundingDTO> {
-    try {
-      const funder = await this.model.findOne({ _id });
-      this.checkFunder(funder);
-      const data = {
-        user: '60f01ec194abb63ff8f0aa75',
-        text
-      }
-      funder.comments.push(data);
-      await funder.save()
-      return this.sanitizer.sanitize(funder);
-    } catch (e) {
-      throw e;
-    }
+  async addComment(_id: string, text: string): Promise<any> {
+    const funder = await this.model.findOne({ _id });
+    this.checkFunder(funder);
+    const comment = await this.commentService.create(_id, text);
+    await this.historyService.create(serviceLog.createCommentTitle, _id);
+    return comment;
   }
 
   /** returns all funders */
-  async findAll(): Promise<FundingDTO[]> {
-    const funders = await this.model.find({});
+  async findAll(skip: number, limit: number): Promise<FundingDTO[]> {
+    
+    if (isNaN(skip)) skip = 0;
+    if (isNaN(limit)) limit = 10;
+
+    const funders = await this.model.find({}).skip(skip).limit(limit);
     return this.sanitizer.sanitizeMany(funders);
   }
 
@@ -108,20 +94,19 @@ export class FundingService {
   }
 
   /** returns all comments */
-  async getComments(_id): Promise<FundingDTO[]> {
-    const funders = await this.model.find({ _id, comments: { $exists: true, $ne: [] } }, 'comments')
-      .populate('comments.user', 'firstName lastName username');
-    if (!funders.length) this.checkComment(null)
-    // this.checkComment(funders);
-    return this.sanitizer.sanitizeMany(funders);
+  async getComments(_id, skip, limit): Promise<any> {
+    const funder = await this.model.findOne({ _id });
+    this.checkFunder(funder);
+    return await this.commentService.findAll(_id, skip, limit);
   }
 
   /** returns all histories */
-  async findAllHistories(_id: string): Promise<FundingDTO[]> {
+  async findAllHistories(_id: string): Promise<any> {
     try {
-      const histories = await this.model.find({ _id, histories: { $exists: true, $ne: [] } }, 'histories.title histories.time histories.date')
-      // this.checkHistory(histories)
-      return this.sanitizer.sanitizeMany(histories);
+      const funder = await this.model.findOne({ _id });
+      this.checkFunder(funder);
+      return await this.historyService.findAll(_id);
+      // return this.sanitizer.sanitizeMany(histories);
     } catch (e) {
       throw e;
     }
@@ -131,10 +116,10 @@ export class FundingService {
   async removeComment(_id: string, funderId: string): Promise<string> {
     const funder = await this.model.findOne({ _id: funderId });
     this.checkFunder(funder);
-    const comment = await this.model.updateOne({ _id: funderId }, { $pull: { comments: { _id } } });
-    if (!comment.nModified) this.checkComment(null)
-    // this.checkComment(funders);
-    return _id
+    const comment = await this.commentService.remove(_id);
+    await this.historyService.create(serviceLog.deleteCommentTitle, _id);
+    return comment
+
   }
 
   /** Get Funder By Id */
@@ -168,19 +153,10 @@ export class FundingService {
 
   /** Update the service */
   async updateService(serviceId: string, dto: UpdateServiceDto): Promise<ServiceDTO> {
-    const firstName = 'Edgar';
-    const type = "service";
-    const modify = "update";
     const service = await this.service.update(serviceId, dto)
     const funder = await this.model.findOne({ _id: service.funderId });
-    funder.histories.push({
-      funderId: funder._id,
-      title: `${firstName} ${modify} a new ${type}`,
-      time: this.formatAMPM(new Date()),
-    });
-    await funder.save()
+    await this.historyService.create(serviceLog.updateServiceTitle, funder._id);
     return service;
-
   }
 
   /** Delete the funder */
@@ -221,17 +197,5 @@ export class FundingService {
         HttpStatus.NOT_FOUND,
       );
     }
-  }
-
-  // Get time like 10:00 AM
-  formatAMPM(date) {
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    var strTime = hours + ':' + minutes + ' ' + ampm;
-    return strTime;
   }
 }

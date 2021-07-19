@@ -5,4 +5,5 @@ export interface IComment extends Document {
   text: string;
   created: Date;
   user: string;
+  funder: any;
 }

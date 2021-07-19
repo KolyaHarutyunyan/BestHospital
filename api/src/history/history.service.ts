@@ -1,16 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { MongooseUtil } from '../util';
-import { AdminService } from '../admin';
 import { CreateHistoryDto } from './dto/create.dto';
-import { UpdateHistoryDto } from './dto/update-history.dto';
+import { HistoryDto } from './dto/history.dto';
 import { HistoryModel } from './history.model';
 import { IHistory } from './interface';
+import { HistorySanitizer } from './interceptor';
 
 @Injectable()
 export class HistoryService {
   constructor(
-    // private readonly sanitizer: ServiceSanitizer,
+    private readonly sanitizer: HistorySanitizer
   ) {
     this.model = HistoryModel;
     this.mongooseUtil = new MongooseUtil();
@@ -18,17 +18,18 @@ export class HistoryService {
   private model: Model<IHistory>;
   private mongooseUtil: MongooseUtil;
 
-  async create(dto: CreateHistoryDto) {
+  /** Create a new history */
+  async create(title: string, funderId: string): Promise<CreateHistoryDto> {
     try {
-      //  const staff = await this.adminService.findById(dto.staffId);
       // get Admin firstName
       const firstName = 'Edgar';
       const history = new this.model({
-        funderId: dto.funderId,
-        title: `${firstName} ${dto.modify} a new ${dto.type}`,
+        funderId,
+        title,
         time: this.formatAMPM(new Date()),
       });
       await history.save();
+
       return
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'History already exists');
@@ -37,28 +38,28 @@ export class HistoryService {
   }
 
   /** returns all histories */
-  async findAll(funderId: string): Promise<any> {
+  async findAll(funderId: string): Promise<HistoryDto[]> {
     try {
       const histories = await this.model.find({ funderId });
-      return histories;
-      // return this.sanitizer.sanitizeMany(services);
+      this.checkHistory(histories);
+      return this.sanitizer.sanitizeMany(histories);
     } catch (e) {
       throw e;
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} history`;
+  /** Private methods */
+  /** if the history is not found, throws an exception */
+  private checkHistory(history: IHistory[]) {
+    if (!history) {
+      throw new HttpException(
+        'History with this id was not found',
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 
-  update(id: number, updateHistoryDto: UpdateHistoryDto) {
-    return `This action updates a #${id} history`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} history`;
-  }
-  
+  //Get time like 10:00 AM
   formatAMPM(date) {
     var hours = date.getHours();
     var minutes = date.getMinutes();

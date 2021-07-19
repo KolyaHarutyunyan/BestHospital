@@ -9,12 +9,9 @@ export class CreateHistoryDto {
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
-    type: string;
+    title: string;
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
-    modify: string;
-    @ApiProperty()
-    @IsString()
-    staffId?: string
+    time: string;
 }

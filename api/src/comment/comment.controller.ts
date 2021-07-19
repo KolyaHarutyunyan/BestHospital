@@ -12,10 +12,10 @@ export class CommentController {
   //   return this.commentService.create(createCommentDto);
   // }
 
-  @Get()
-  findAll() {
-    return this.commentService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.commentService.findAll();
+  // }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -27,8 +27,8 @@ export class CommentController {
     return this.commentService.update(+id, updateCommentDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.commentService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.commentService.remove(+id);
+  // }
 }

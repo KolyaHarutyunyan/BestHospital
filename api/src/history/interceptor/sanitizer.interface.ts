@@ -9,6 +9,8 @@ export class HistorySanitizer implements ISanitize {
 
   sanitize(history: IHistory): HistoryDto {
     const historyrDTO: HistoryDto = {
+      id: history.id,
+      funderId: history.funderId,
       title: history.title,
       time: history.time,
       date: history.date

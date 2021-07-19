@@ -8,13 +8,13 @@ import { AddressModule } from 'src/address';
 import { AuthNModule } from '../authN';
 import { ServiceModule } from '../service';
 import { CommentModule } from '../comment';
-
+import { HistorySanitizer } from '../history'
 import { FundingSanitizer } from './interceptor';
 
 @Module({
   imports: [AuthNModule, AddressModule, ServiceModule, CommentModule],
   controllers: [FundingController],
-  providers: [FundingService, HistoryService, CommentService, FundingSanitizer],
+  providers: [FundingService, HistoryService, CommentService, FundingSanitizer, HistorySanitizer],
   exports: [FundingService],
 })
 export class FundingModule { }

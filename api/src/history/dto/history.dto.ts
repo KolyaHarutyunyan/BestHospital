@@ -3,15 +3,13 @@ import { IsEmail, IsEnum, IsNotEmpty, IsPhoneNumber, IsString, IsUrl } from 'cla
 
 export class HistoryDto {
     @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
+    id: string;
+    @ApiProperty()
+    funderId: string;
+    @ApiProperty()
     title: string;
     @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
     time: string;
     @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
     date: string;
 }

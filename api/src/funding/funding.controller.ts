@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ApiHeader, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { FundingService } from './funding.service';
 import { HistoryService } from '../history/history.service';
@@ -8,6 +8,7 @@ import { ServiceDTO, UpdateServiceDto } from '../service/dto';
 import { HistoryDto } from '../history/dto';
 import { CreateServiceDto } from '../service/dto';
 import { Public, ParseObjectIdPipe } from '../util';
+import { CommentDto } from '../comment/dto';
 
 @Controller('funding')
 @ApiTags('Funding Endpoints')
@@ -28,20 +29,19 @@ export class FundingController {
   /** Create a new service */
   @Post(':id/service')
   @Public()
-  @ApiOkResponse({ type: FundingDTO })
+  @ApiOkResponse({ type: ServiceDTO })
   async createService(@Param('id', ParseObjectIdPipe) id: string,
     @Body() createServiceDTO: CreateServiceDto): Promise<ServiceDTO> {
     const staffId = '60f01ec194abb63ff8f0aa75';
     const service = await this.fundingService.createService(createServiceDTO, id);
-    // await this.historyService.create({ type: "service", modify: "create", staffId, funderId: service.funderId });
     return service
   }
 
   /** Add a new comment */
   @Post(':id/comment')
   @Public()
-  @ApiOkResponse({ type: FundingDTO })
-  async addComment(@Param('id', ParseObjectIdPipe) id: string, @Body('text') text: string): Promise<FundingDTO> {
+  @ApiOkResponse({ type: CommentDto })
+  async addComment(@Param('id', ParseObjectIdPipe) id: string, @Body('text') text: string): Promise<any> {
     return await this.fundingService.addComment(id, text);
   }
 
@@ -49,14 +49,16 @@ export class FundingController {
   @Get()
   @Public()
   @ApiOkResponse({ type: [FundingDTO] })
-  async findAll(): Promise<FundingDTO[]> {
-    return await this.fundingService.findAll();
+  async findAll(
+    @Query('skip') skip: number,
+    @Query('limit') limit: number): Promise<FundingDTO[]> {
+    return await this.fundingService.findAll(skip, limit);
   }
 
   /** Get all services */
   @Get(':id/service')
   @Public()
-  @ApiOkResponse({ type: FundingDTO })
+  @ApiOkResponse({ type: [ServiceDTO] })
   async findAllServices(@Param('id', ParseObjectIdPipe) id: string): Promise<ServiceDTO[]> {
     return await this.fundingService.findAllServices(id);
   }
@@ -64,16 +66,18 @@ export class FundingController {
   /** Get all comments */
   @Get(':id/comments')
   @Public()
-  @ApiOkResponse({ type: FundingDTO })
-  async getComments(@Param('id', ParseObjectIdPipe) id: string): Promise<FundingDTO[]> {
-    return await this.fundingService.getComments(id);
+  @ApiOkResponse({ type: [CommentDto] })
+  async getComments(@Param('id', ParseObjectIdPipe) id: string,
+    @Query('skip') skip: number,
+    @Query('limit') limit: number): Promise<CommentDto[]> {
+    return await this.fundingService.getComments(id, skip, limit);
   }
 
   /** Get all histories */
   @Get(':id/histories')
   @Public()
-  @ApiOkResponse({ type: FundingDTO })
-  async findAllHistories(@Param('id', ParseObjectIdPipe) id: string): Promise<FundingDTO[]> {
+  @ApiOkResponse({ type: [HistoryDto] })
+  async findAllHistories(@Param('id', ParseObjectIdPipe) id: string): Promise<any> {
     return await this.fundingService.findAllHistories(id);
   }
 
@@ -93,19 +97,17 @@ export class FundingController {
     const staffId = '60f01ec194abb63ff8f0aa75';
     const funder = await this.fundingService.update(id, updateFundingDto);
     return funder;
-
   }
 
   /** Edit the Service */
   @Patch('/service/:serviceId')
   @Public()
-  @ApiOkResponse({ type: FundingDTO })
+  @ApiOkResponse({ type: ServiceDTO })
   async updateService(
     @Param('serviceId', ParseObjectIdPipe) serviceId: string,
     @Body() updateServiceDto: UpdateServiceDto): Promise<ServiceDTO> {
     const staffId = '60f01ec194abb63ff8f0aa75';
     const service = await this.fundingService.updateService(serviceId, updateServiceDto);
-    // await this.historyService.create({ type: "service", modify: "update", staffId, funderId: service.funderId });
     return service
   }
 
@@ -120,7 +122,7 @@ export class FundingController {
   /** Delete the comment */
   @Delete(':funderId/comments/:id')
   @Public()
-  @ApiOkResponse({ type: FundingDTO })
+  @ApiOkResponse({ type: CommentDto })
   async removeComment(
     @Param('id', ParseObjectIdPipe) id: string,
     @Param('funderId', ParseObjectIdPipe) funderId: string): Promise<string> {

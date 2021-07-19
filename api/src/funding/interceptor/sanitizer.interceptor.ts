@@ -18,9 +18,7 @@ export class FundingSanitizer implements ISanitize {
       contact: funder.contact,
       website: funder.website,
       status: funder.status,
-      address: this.addressSanitizer.sanitize(funder.address),
-      comments: funder.comments,
-      histories: funder.histories
+      address: this.addressSanitizer.sanitize(funder.address)
     };
     return funderDTO;
   }

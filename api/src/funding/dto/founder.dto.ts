@@ -25,8 +25,4 @@ export class FundingDTO {
     @ApiProperty({ enum: FundingStatus })
     @IsEnum(FundingStatus)
     status: number;
-    @ApiProperty()
-    comments: string;
-    @ApiProperty()
-    histories: string;
 }
