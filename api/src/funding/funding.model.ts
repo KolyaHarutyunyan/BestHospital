@@ -12,7 +12,7 @@ const FundingSchema = new Schema({
     address: addressSchema,
     contact: { type: String, required: true },
     website: { type: String, required: true },
-    status: { type: String },
+    status: { type: String }
 });
 
 export const FundingModel = model<IFunder>('Funder', FundingSchema);

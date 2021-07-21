@@ -6,6 +6,8 @@ export class ServiceDTO {
     @IsNotEmpty()
     id: string
     @ApiProperty()
+    credentials?: any
+    @ApiProperty()
     @IsNotEmpty()
     @IsString()
     serviceId: string

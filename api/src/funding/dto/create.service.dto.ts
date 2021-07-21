@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsPhoneNumber, IsString, IsUrl } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsPhoneNumber, IsString, IsUrl} from 'class-validator';
+import { ParseObjectIdPipe } from '../../util';
 // import { FundingStatus } from '../funding.constants';
 
 export class CreateServiceDto {
@@ -11,6 +12,8 @@ export class CreateServiceDto {
     @IsNotEmpty()
     @IsString()
     serviceId: string;
+    @ApiProperty()
+    credentialId: ParseObjectIdPipe;
     @ApiProperty()
     @IsNotEmpty()
     @IsNumber()

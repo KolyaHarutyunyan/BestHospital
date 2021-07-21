@@ -12,7 +12,8 @@ export const serviceSchema = new Schema({
     max: { type: Number },
     modifier: { type: String },
     displayCode: {type: String},
-    category: {type: String}
+    category: {type: String},
+    credentials: [{ type: Types.ObjectId, ref: 'Credential' }]
 });
 
 export const ServiceModel = model<IService>('FundingService', serviceSchema);

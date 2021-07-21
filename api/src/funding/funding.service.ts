@@ -17,6 +17,8 @@ import { IHistory } from '../history';
 import { ServiceService } from '../service';
 import { CommentService } from '../comment';
 import { HistoryService, serviceLog } from '../history';
+import { CredentialService } from '../credential';
+
 @Injectable()
 export class FundingService {
   constructor(
@@ -24,6 +26,7 @@ export class FundingService {
     private readonly service: ServiceService,
     private readonly commentService: CommentService,
     private readonly historyService: HistoryService,
+    private readonly credentialService: CredentialService,
 
 
     private readonly sanitizer: FundingSanitizer,
@@ -64,6 +67,7 @@ export class FundingService {
     try {
       const funder = await this.model.findOne({ _id });
       this.checkFunder(funder)
+
       const globService = await this.service.findOne(dto.serviceId);
       let service = new this.serviceModel({
         funderId: _id,
@@ -75,6 +79,11 @@ export class FundingService {
         min: dto.min,
         max: dto.max
       });
+
+      if (dto.credentialId) {
+        await this.credentialService.findOne(dto.credentialId);
+        service.credentials.push(dto.credentialId)
+      };
       await service.save();
       await this.historyService.create(serviceLog.createServiceTitle, _id);
       // return this.sanitizer.sanitize(service)
@@ -107,7 +116,7 @@ export class FundingService {
 
   /** returns all services */
   async findAllServices(_id: string): Promise<ServiceDTO[]> {
-       try {
+    try {
       const funder = await this.model.findOne({ _id });
       this.checkFunder(funder);
       const services = await this.serviceModel.find({ funderId: _id }).populate('serviceId');
