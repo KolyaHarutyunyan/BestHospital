@@ -3,10 +3,8 @@ import { ApiHeader, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger
 import { FundingService } from './funding.service';
 import { HistoryService } from '../history/history.service';
 
-import { CreateFundingDTO, FundingDTO, CreateCommentDTO, UpdateFundingDto } from './dto';
-import { ServiceDTO, UpdateServiceDto } from '../service/dto';
+import { CreateFundingDTO, FundingDTO, UpdateFundingDto, ServiceDTO, UpdateServiceDto, CreateServiceDto } from './dto';
 import { HistoryDto } from '../history/dto';
-import { CreateServiceDto } from '../service/dto';
 import { Public, ParseObjectIdPipe } from '../util';
 import { CommentDto } from '../comment/dto';
 
@@ -17,6 +15,13 @@ export class FundingController {
     private readonly fundingService: FundingService,
     private readonly historyService: HistoryService,
   ) { }
+  /** Test a new Test */
+  @Get()
+  @Public()
+  @ApiOkResponse({ type: FundingDTO })
+  async test(): Promise<string> {
+    return 'Hello World!'
+  }
 
   /** Create a new funder */
   @Post()

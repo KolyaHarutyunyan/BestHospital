@@ -10,9 +10,25 @@ export class CreateServiceDto {
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
-    displayCode: string;
+    serviceId: string;
     @ApiProperty()
     @IsNotEmpty()
-    @IsString()
-    category: string;
+    @IsNumber()
+    rate: number;
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsNumber()
+    cptCode: number;
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsNumber()
+    size: number;
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsNumber()
+    min: number
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsNumber()
+    max: number;
 }

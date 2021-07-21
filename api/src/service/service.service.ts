@@ -21,17 +21,10 @@ export class ServiceService {
   private mongooseUtil: MongooseUtil;
 
   /** Create a new service */
-  async create(dto: CreateServiceDto, funderId: string): Promise<ServiceDTO> {
+  async create(dto: CreateServiceDto): Promise<ServiceDTO> {
     try {
       let service = new this.model({
-        funderId,
         name: dto.name,
-        rate: dto.rate,
-        cptCode: dto.cptCode,
-        size: dto.size,
-        min: dto.min,
-        max: dto.max,
-        modifier: dto.modifier,
         displayCode: dto.displayCode,
         category: dto.category
       });
@@ -44,17 +37,24 @@ export class ServiceService {
   }
 
   /** returns all services */
-  async findAll(funderId: string):Promise<ServiceDTO[]> {
+  async findAll(): Promise<ServiceDTO[]> {
     try {
-      const services = await this.model.find({ funderId });
+      const services = await this.model.find({});
       return this.sanitizer.sanitizeMany(services);
     } catch (e) {
       throw e;
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} service`;
+  /** Get Service By Id */
+  async findOne(_id: string) {
+    try {
+      const service = await this.model.findOne({ _id });
+      this.checkService(service);
+      return this.sanitizer.sanitize(service);
+    } catch (e) {
+      throw e;
+    }
   }
 
   /** Update the funder */
@@ -63,12 +63,6 @@ export class ServiceService {
       const service = await this.model.findOne({ _id });
       this.checkService(service);
       if (dto.name) service.name = dto.name;
-      if (dto.rate) service.rate = dto.rate;
-      if (dto.cptCode) service.cptCode = dto.cptCode;
-      if (dto.size) service.size = dto.size;
-      if (dto.min) service.min = dto.min;
-      if (dto.max) service.max = dto.max;
-      if (dto.modifier) service.modifier = dto.modifier;
       if (dto.displayCode) service.displayCode = dto.displayCode;
       if (dto.category) service.category = dto.category;
       await service.save();
@@ -79,8 +73,11 @@ export class ServiceService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} service`;
+  /** Delete the funder */
+  async remove(_id: number) {
+    const service = await this.model.findByIdAndDelete({ _id });
+    this.checkService(service);
+    return service._id;
   }
 
   /** Private methods */

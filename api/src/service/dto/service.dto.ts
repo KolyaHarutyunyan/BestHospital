@@ -8,35 +8,7 @@ export class ServiceDTO {
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
-    funderId: string;
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
     name: string;
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsNumber()
-    rate: number;
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsNumber()
-    cptCode: number;
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsNumber()
-    size: number;
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsNumber()
-    min: number
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsNumber()
-    max: number;
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
-    modifier: string;
     @ApiProperty()
     @IsNotEmpty()
     @IsString()

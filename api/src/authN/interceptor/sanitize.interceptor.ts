@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { IRole, RoleDTO } from 'src/authZ/role';
-import { RoleSanitizer } from 'src/authZ/role/interceptors';
+import { IRole, RoleDTO } from '../../authZ/role';
+import { RoleSanitizer } from '../../authZ/role/interceptors';
 import { ISanitize } from '../../util';
 import { AuthResponseDTO } from '../dto';
 import { IAuth } from '../interface';

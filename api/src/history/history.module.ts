@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { HistoryService } from './history.service';
 import { HistoryController } from './history.controller';
-import { AdminService } from '../admin/admin.service';
-import { AdminModule } from '../admin/admin.module';
+import { StaffService } from '../staff/staff.service';
+import { StaffModule } from '../staff/staff.module';
 import { HistorySanitizer } from './interceptor';
 
 @Module({

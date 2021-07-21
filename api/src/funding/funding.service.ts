@@ -2,15 +2,13 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { CreateFundingDTO } from './dto/create.dto';
 import { UpdateFundingDto } from './dto/edit.dto';
-
-import { ServiceDTO } from '../service/dto'
 import { FundingModel } from './funding.model';
-import { IFunder } from './interface';
+import { ServiceModel } from './service.model';
+import { IFunder, IService } from './interface';
 import { MongooseUtil, ParseObjectIdPipe } from '../util';
 import { AddressService } from '../address';
-import { CreateServiceDto, UpdateServiceDto } from '../service/dto';
 import { FundingSanitizer } from './interceptor';
-import { FundingDTO } from './dto';
+import { FundingDTO, ServiceDTO, UpdateServiceDto, CreateServiceDto } from './dto';
 import { HistoryDto } from '../history/dto';
 import { AuthNService } from 'src/authN';
 import { IComment } from '../comment';
@@ -32,9 +30,12 @@ export class FundingService {
 
   ) {
     this.model = FundingModel;
+    this.serviceModel = ServiceModel;
     this.mongooseUtil = new MongooseUtil();
   }
   private model: Model<IFunder>;
+  private serviceModel: Model<IService>;
+
   private mongooseUtil: MongooseUtil;
 
   /** Create a new funder */
@@ -60,11 +61,29 @@ export class FundingService {
 
   /** Create a new service */
   async createService(dto: CreateServiceDto, _id: string): Promise<ServiceDTO> {
-    const funder = await this.model.findOne({ _id });
-    this.checkFunder(funder)
-    const service = await this.service.create(dto, _id);
-    await this.historyService.create(serviceLog.createServiceTitle, _id);
-    return service;
+    try {
+      const funder = await this.model.findOne({ _id });
+      this.checkFunder(funder)
+      const globService = await this.service.findOne(dto.serviceId);
+      let service = new this.serviceModel({
+        funderId: _id,
+        serviceId: globService.id,
+        name: dto.name,
+        rate: dto.rate,
+        cptCode: dto.cptCode,
+        size: dto.size,
+        min: dto.min,
+        max: dto.max
+      });
+      await service.save();
+      await this.historyService.create(serviceLog.createServiceTitle, _id);
+      // return this.sanitizer.sanitize(service)
+      return service;
+    } catch (e) {
+      this.mongooseUtil.checkDuplicateKey(e, 'Service already exists');
+      throw e;
+    }
+
   }
 
   /** Add a new comment */
@@ -78,7 +97,7 @@ export class FundingService {
 
   /** returns all funders */
   async findAll(skip: number, limit: number): Promise<FundingDTO[]> {
-    
+
     if (isNaN(skip)) skip = 0;
     if (isNaN(limit)) limit = 10;
 
@@ -88,9 +107,15 @@ export class FundingService {
 
   /** returns all services */
   async findAllServices(_id: string): Promise<ServiceDTO[]> {
-    const funder = await this.model.findOne({ _id });
-    this.checkFunder(funder);
-    return await this.service.findAll(_id)
+       try {
+      const funder = await this.model.findOne({ _id });
+      this.checkFunder(funder);
+      const services = await this.serviceModel.find({ funderId: _id }).populate('serviceId');
+      // return this.sanitizer.sanitizeMany(services);
+      return services
+    } catch (e) {
+      throw e;
+    }
   }
 
   /** returns all comments */
@@ -153,10 +178,23 @@ export class FundingService {
 
   /** Update the service */
   async updateService(serviceId: string, dto: UpdateServiceDto): Promise<ServiceDTO> {
-    const service = await this.service.update(serviceId, dto)
-    const funder = await this.model.findOne({ _id: service.funderId });
-    await this.historyService.create(serviceLog.updateServiceTitle, funder._id);
-    return service;
+    try {
+      const service = await this.serviceModel.findOne({ _id: serviceId });
+      const funder = await this.model.findOne({ _id: service.funderId });
+      // this.checkService(service);
+      if (dto.name) service.name = dto.name;
+      if (dto.rate) service.rate = dto.rate;
+      if (dto.size) service.size = dto.size;
+      if (dto.min) service.min = dto.min;
+      if (dto.max) service.max = dto.max;
+      await service.save();
+      await this.historyService.create(serviceLog.updateServiceTitle, funder._id);
+      return service;
+      // return this.sanitizer.sanitize(service);
+    } catch (e) {
+      this.mongooseUtil.checkDuplicateKey(e, 'Service already exists');
+      throw e;
+    }
   }
 
   /** Delete the funder */

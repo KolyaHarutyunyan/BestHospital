@@ -9,11 +9,23 @@ export class UpdateServiceDto {
     name: string;
     @ApiProperty()
     @IsNotEmpty()
-    @IsString()
-    displayCode: string;
+    @IsNumber()
+    rate: number;
     @ApiProperty()
     @IsNotEmpty()
-    @IsString()
-    category: string;
+    @IsNumber()
+    cptCode: number;
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsNumber()
+    size: number;
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsNumber()
+    min: number
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsNumber()
+    max: number;
 }
 

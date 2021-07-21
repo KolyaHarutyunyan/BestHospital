@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AdminModule } from '../admin';
+import { StaffModule } from '../staff';
 import { AuthNModule } from 'src/authN';
 import { AuthZModule } from 'src/authZ';
 import { FundingModule } from 'src/funding';
@@ -9,7 +9,7 @@ import { DatabaseConnection } from './app.database';
 import { AppService } from './app.service';
 import { AddressModule } from '../address';
 @Module({
-  imports: [AuthNModule, AuthZModule, AddressModule, AdminModule, FundingModule],
+  imports: [AuthNModule, AuthZModule, AddressModule, StaffModule, FundingModule],
   controllers: [AppController],
   providers: [AppService, DatabaseConnection],
 })

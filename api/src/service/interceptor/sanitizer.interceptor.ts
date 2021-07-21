@@ -9,15 +9,8 @@ export class ServiceSanitizer implements ISanitize {
 
   sanitize(service: IService): ServiceDTO {
     const serviceDTO: ServiceDTO = {
-      funderId: service.funderId,
       id: service._id,
       name: service.name,
-      rate: service.rate,
-      cptCode: service.cptCode,
-      size: service.size,
-      min: service.min,
-      max: service.max,
-      modifier: service.modifier,
       displayCode: service.displayCode,
       category: service.category
     };

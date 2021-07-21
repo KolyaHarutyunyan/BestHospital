@@ -4,7 +4,7 @@ import { HistoryService } from '../history/history.service';
 import { CommentService } from '../comment/comment.service';
 
 import { FundingController } from './funding.controller';
-import { AddressModule } from 'src/address';
+import { AddressModule } from '../address';
 import { AuthNModule } from '../authN';
 import { ServiceModule } from '../service';
 import { CommentModule } from '../comment';

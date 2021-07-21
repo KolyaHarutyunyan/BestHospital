@@ -2,16 +2,9 @@ import { model, Schema, Types } from 'mongoose';
 import { IService } from './interface';
 
 export const serviceSchema = new Schema({
-    funderId: { type: Types.ObjectId, ref: 'Funder' },
-    name: { type: String },
-    rate: {type: Number},
-    cptCode: { type: Number },
-    size: { type: Number },
-    min: { type: Number },
-    max: { type: Number },
     modifier: { type: String },
     displayCode: {type: String},
     category: {type: String}
 });
 
-export const ServiceModel = model<IService>('service', serviceSchema);
+export const ServiceModel = model<IService>('Service', serviceSchema);
