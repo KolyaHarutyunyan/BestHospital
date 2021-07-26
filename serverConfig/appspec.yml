@@ -5,8 +5,8 @@ files:
     destination: /etc/nginx/sites-enabled/
   - source: /api
     destination: /var/www/wellnessdaisy/api
-  # - source: /clientDist
-    # destination: /var/www/wellnessDaisy/webapp
+  - source: /clientDist
+    destination: /var/www/wellnessdaisy/webapp
   # - source: /adminDist
   #   destination: /var/www/wellnessDaisy/admin
   - source: /.npmrc
