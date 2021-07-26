@@ -1,0 +1,1 @@
+export { CarriersTable } from './carriersTable'

@@ -1,0 +1,1 @@
+export { HumanResourcesTable } from "./humanResourcesTable";

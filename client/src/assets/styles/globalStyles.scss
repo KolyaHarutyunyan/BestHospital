@@ -1,0 +1,23 @@
+#spin{
+  display: none;
+}
+
+.MuiTabs-root{
+  min-height: 36px!important;
+}
+.MuiAppBar-colorPrimary{
+   background: #FFFFFF 0% 0% no-repeat padding-box!important;
+}
+
+
+.my-profile{
+  .MuiBackdrop-root{
+    background: transparent!important;
+  }
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px #FFFFFF inset;
+  color: #545F7E
+}
+

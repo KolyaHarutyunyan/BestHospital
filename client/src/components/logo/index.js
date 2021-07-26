@@ -1,0 +1,1 @@
+export { GlobalLogo } from "./globalLogo";

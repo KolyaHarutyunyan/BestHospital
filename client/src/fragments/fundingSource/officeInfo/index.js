@@ -1,0 +1,1 @@
+export { OfficesInfo } from "./officesInfo";
