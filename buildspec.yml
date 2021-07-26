@@ -27,7 +27,7 @@ phases:
       - rm -R -f api
       - mv dist api
       # building client
-     - echo attempting to build the Panel
+      - echo attempting to build the Panel
       - cd client
       - npm install --legacy-peer-deps
       - npm run build
@@ -53,7 +53,7 @@ artifacts:
   files:
     # - '**/*' #copy  all build files to S3 location
     - api/**/*
-    # - clientDist/**/*
+    - clientDist/**/*
     # - adminDist/**/*
     - scripts/**/*
     - wellnessdaisy.nginx.config
