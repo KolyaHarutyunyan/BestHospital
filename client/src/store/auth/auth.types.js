@@ -1,0 +1,30 @@
+/** Types */
+
+// Log In
+export const LOG_IN = 'LOG_IN';
+export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
+export const LOG_IN_FAIL = 'LOG_IN_FAIL';
+
+// Log out
+export const LOG_OUT = 'LOG_OUT';
+
+// Get Recovery Link
+export const GET_RECOVERY_LINK = 'GET_RECOVERY_LINK'
+export const GET_RECOVERY_LINK_SUCCESS = 'GET_RECOVERY_LINK_SUCCESS'
+export const GET_RECOVERY_LINK_FAIL = 'GET_RECOVERY_LINK_FAIL'
+export const GET_RECOVERY_LINK_TRY_AGAIN = 'GET_RECOVERY_LINK_TRY_AGAIN'
+export const RESET_PASSWORD_REQUEST = 'RESET_PASSWORD_REQUEST'
+export const RESET_PASSWORD_SUCCESS = 'RESET_PASSWORD_SUCCESS'
+export const RESET_PASSWORD_CLEAR = 'RESET_PASSWORD_CLEAR'
+
+// Clear error
+export const CLEAR_ERROR='CLEAR_ERROR';
+
+//Change password
+export const CHANGE_PASSWORD_REQUEST = 'CHANGE_PASSWORD_REQUEST'
+
+
+
+
+
+

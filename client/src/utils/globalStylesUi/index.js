@@ -1,0 +1,5 @@
+export { Colors, Shadow, Backgrounds } from './globalColors'
+export { useGlobalStyles, useGlobalTextStyles, AntSwitch } from './globalStyles'
+export { useGlobalText} from './globalText'
+export { createInputsWrapper} from './globalScreens'
+export { globalModals } from './globalModals'
