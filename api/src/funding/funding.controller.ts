@@ -17,7 +17,6 @@ export class FundingController {
   ) { }
   /** Test a new Test */
   @Get()
-  @Public()
   @ApiOkResponse({ type: FundingDTO })
   async test(): Promise<string> {
     return 'Hello World!'

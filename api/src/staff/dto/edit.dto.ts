@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsNumber, IsPhoneNumber, IsString } from 'class-validator';
 
 export class EditStaffDTO {
   @ApiProperty()
@@ -13,20 +13,17 @@ export class EditStaffDTO {
   lastName: string;
   @ApiProperty({ required: false })
   @IsString()
-  firstEmail: string;
+  email: string;
   @ApiProperty({ required: false })
   @IsString()
-  secondEmail: string;
+  secondaryEmail: string;
   @ApiProperty({ required: false })
   @IsNotEmpty()
   @IsPhoneNumber('US')
-  firstNumber: string;
+  phone: string;
   @ApiProperty({ required: false })
   @IsString()
-  secondNumber: string;
-  @ApiProperty({ required: false })
-  @IsString()
-  driveLicenze: string;
+  secondaryPhone: string;
   @ApiProperty({ required: false })
   @IsString()
   state: string;
@@ -40,8 +37,8 @@ export class EditStaffDTO {
   @IsString()
   residency: string;
   @ApiProperty({ required: false })
-  @IsString()
-  ssn: string;
-  @ApiProperty({ required: false })
-  address?: string;
+  @IsNumber()
+  ssn: number;
+  // @ApiProperty({ required: false })
+  // address?: string;
 }

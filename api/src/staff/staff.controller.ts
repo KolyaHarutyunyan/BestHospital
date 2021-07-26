@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { StaffService } from './staff.service';
-import { StaffDTO, CreateStaffDto, EditStaffDTO } from './dto';
+import { StaffDTO, CreateStaffDto, EditStaffDTO, CreateStaffCredentialDto, StaffCredentialDTO } from './dto';
 import { ACCESS_TOKEN } from '../authN';
 import { Public, ParseObjectIdPipe } from '../util';
 import { AuthZGuard, PermissionList } from 'src/authZ';
@@ -21,13 +21,14 @@ export class StaffController {
   constructor(private readonly staffService: StaffService) {}
 
   /** Create a new admin */
-  @Post()
-  @Public()
-  @ApiOkResponse({ type: StaffDTO })
-  async create(@Body() createStaffDTO: CreateStaffDto): Promise<StaffDTO> {
-    const admin = await this.staffService.create(createStaffDTO);
-    return admin;
-  }
+  // @Post()
+  // @Public()
+  // @ApiOkResponse({ type: StaffDTO })
+  // async create(@Body() createStaffDTO: CreateStaffDto): Promise<StaffDTO> {
+  //   console.log('ok');
+  //   const admin = await this.staffService.create(createStaffDTO);
+  //   return admin;
+  // }
 
   /** Edit an admin */
   @Patch(':id')
@@ -51,6 +52,16 @@ export class StaffController {
     return admin;
   }
 
+    /** Create a new staff credential */
+    @Post('staffCredential')
+    @Public()
+    async createStaffCredential(
+      @Body() createStaffCredentialDTO: CreateStaffCredentialDto,
+    ): Promise<StaffCredentialDTO> {
+      const staffCredential = await this.staffService.createStaffCredential(createStaffCredentialDTO);
+      return staffCredential;
+    }
+  
   /** Get All Users */
   @Get()
   @Public()

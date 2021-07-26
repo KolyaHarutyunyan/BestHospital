@@ -11,15 +11,13 @@ export class StaffDTO {
   @ApiProperty()
   lastName: string;
   @ApiProperty()
-  firstEmail: string;
+  email: string;
   @ApiProperty({ required: false })
-  secondEmail: string;
+  secondaryEmail: string;
   @ApiProperty()
-  firstNumber: string;
+  phone: string;
   @ApiProperty({ required: false })
-  secondNumber: string;
-  @ApiProperty()
-  driveLicenze: string;
+  secondaryPhone: string;
   @ApiProperty()
   state: string;
   @ApiProperty()
@@ -29,7 +27,7 @@ export class StaffDTO {
   @ApiProperty()
   residency: string;
   @ApiProperty()
-  ssn: string;
-  @ApiProperty({ type: AddressDTO })
-  address: AddressDTO;
+  ssn: number;
+  // @ApiProperty({ type: AddressDTO })
+  // address: AddressDTO;
 }

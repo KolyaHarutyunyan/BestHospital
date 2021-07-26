@@ -14,17 +14,16 @@ export class StaffSanitizer implements ISanitize {
       firstName: user.firstName,
       middleName: user.middleName,
       lastName: user.lastName,
-      firstEmail: user.firstEmail,
-      secondEmail: user.secondEmail,
-      firstNumber: user.firstNumber,
-      secondNumber: user.secondNumber,
-      driveLicenze: user.driveLicenze,
+      email: user.email,
+      secondaryEmail: user.secondaryEmail,
+      phone: user.phone,
+      secondaryPhone: user.secondaryPhone,
       state: user.state,
       gender: user.gender,
       birthday: user.birthday,
       residency: user.residency,
-      ssn: user.ssn,
-      address: this.addressSanitizer.sanitize(user.address),
+      ssn: user.ssn
+      // address: this.addressSanitizer.sanitize(user.address),
     };
     return userDTO;
   }

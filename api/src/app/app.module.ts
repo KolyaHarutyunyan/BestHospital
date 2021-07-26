@@ -8,9 +8,11 @@ import { AppController } from './app.controller';
 import { DatabaseConnection } from './app.database';
 import { AppService } from './app.service';
 import { AddressModule } from '../address';
+import { EmploymentModule } from '../employment';
+
 @Module({
-  imports: [AuthNModule, AuthZModule, AddressModule, StaffModule, FundingModule],
+  imports: [AuthNModule, AuthZModule, AddressModule, StaffModule, FundingModule, EmploymentModule],
   controllers: [AppController],
   providers: [AppService, DatabaseConnection],
 })
-export class AppModule {}
+export class AppModule { }

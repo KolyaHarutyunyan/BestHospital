@@ -6,15 +6,14 @@ export interface IStaff extends Document {
   firstName: string;
   middleName: string;
   lastName: string;
-  firstEmail: string;
-  secondEmail: string;
-  firstNumber: string;
-  secondNumber: string;
-  driveLicenze: string;
+  email: string;
+  secondaryEmail: string;
+  phone: string;
+  secondaryPhone: string;
   state: string;
   gender: string;
   birthday: string;
   residency: string;
-  ssn: string;
-  address: IAddress;
+  ssn: number;
+  // address: IAddress;
 }
