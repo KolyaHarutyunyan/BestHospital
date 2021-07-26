@@ -8,4 +8,8 @@ export const BASE_URL = {
   production: 'https://wellnessdaisy.com',
 }[mode];
 
-
+export const DOMAIN_NAME = {
+  local: 'http://localhost:3000',
+  development: 'https://wellnessdaisy.eachbase.com/',
+  production: 'https://wellnessdaisy.com/socialLogin',
+}[mode];
