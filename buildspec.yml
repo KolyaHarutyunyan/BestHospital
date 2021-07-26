@@ -27,29 +27,21 @@ phases:
       - rm -R -f api
       - mv dist api
       # building client
-      # - echo attempting to build the client
-      # - cd client 
-      # - npm install --legacy-peer-deps
-      # - npm run build
-      # - npm run export
-      # - mv out clientDist
-      # - mv clientDist ..
-      # - cd ..
-      # building Admin Panel
-      # - echo attempting to build the Panel
-      # - cd admin
-      # - npm install --legacy-peer-deps
-      # - npm run build
-      # - mv build adminDist
-      # - mv adminDist ..
-      # - cd ..
+     - echo attempting to build the Panel
+      - cd client
+      - npm install --legacy-peer-deps
+      - npm run build
+      - mv build clientDist
+      - mv clientDist ..
+      - cd ..
+
     
   post_build:
     commands:
       - cd serverConfig
       - mv .npmrc ../
       - mv appspec.yml ../
-      - mv wellnessDaisy.nginx.config ../
+      - mv wellnessdaisy.nginx.config ../
       - mv scripts ../
 
     #   - echo Build completed on `date`
@@ -64,7 +56,7 @@ artifacts:
     # - clientDist/**/*
     # - adminDist/**/*
     - scripts/**/*
-    - wellnessDaisy.nginx.config
+    - wellnessdaisy.nginx.config
     - appspec.yml
     - .npmrc
     # - app.js

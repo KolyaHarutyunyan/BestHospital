@@ -5,10 +5,10 @@ switch (mode) {
         apiBase = 'http://localhost:8100/api';
         break;
     case 'development':
-        apiBase = 'https://polotms.eachbase.com/api';
+        apiBase = 'https://wellnessdaisy.eachbase.com/api';
         break;
     case 'production':
-        apiBase = 'https://aurorabanquethall.com/api';
+        apiBase = 'https://wellnessdaisy.com/api';
         break;
     default:
         break;

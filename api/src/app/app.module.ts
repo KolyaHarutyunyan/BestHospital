@@ -1,13 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AdminModule } from '../admin';
-import { AuthNModule } from 'src/authN';
-import { AuthZModule } from 'src/authZ';
 import { MailerModule } from '../mailer';
 import { AppController } from './app.controller';
 import { DatabaseConnection } from './app.database';
 import { AppService } from './app.service';
-import { AuthNModule } from 'src/authN';
-import { AuthZModule } from 'src/authZ';
+import { AuthNModule } from '../authN';
+import { AuthZModule } from '../authZ';
 import { AddressModule } from '../address';
 import { AdminModule } from '../admin';
 
