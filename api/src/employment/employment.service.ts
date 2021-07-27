@@ -42,7 +42,7 @@ export class EmploymentService {
         employment.departmentId = dto.departmentId;
       }
       await employment.save();
-      return employment
+      return employment;
       // return this.sanitizer.sanitize(user);
     } catch (e) {
       console.log(e);

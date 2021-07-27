@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateCredentialDto } from './dto/create.dto';
 import { UpdateCredentialDto } from './dto/update-credential.dto';
 import { ICredential } from './interface';
-import { CredentialModel } from '../staff/credential.model'
+import { CredentialModel } from './credential.model'
 import { Model } from 'mongoose';
 import { Public, ParseObjectIdPipe, MongooseUtil } from '../util';
 import { CredentialsStatus } from '../credential';

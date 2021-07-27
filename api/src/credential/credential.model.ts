@@ -1,6 +1,6 @@
 import { model, Schema, Types } from 'mongoose';
-import { ICredential } from '../credential/interface';
-import { CredentialsStatus } from '../credential/credential.constants';
+import { ICredential } from './interface';
+import { CredentialsStatus } from './credential.constants';
 
 export const credentialSchema = new Schema({
     name: { type: String },

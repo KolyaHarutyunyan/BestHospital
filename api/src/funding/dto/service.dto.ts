@@ -39,4 +39,12 @@ export class ServiceDTO {
     @IsNotEmpty()
     @IsNumber()
     max: number;
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsNumber()
+    modifier: number;
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsNumber()
+    type: number;
 }

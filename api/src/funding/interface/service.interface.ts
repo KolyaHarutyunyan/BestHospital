@@ -11,7 +11,8 @@ export interface IService extends Document {
   size: number;
   min: number;
   max: number;
-  modifier: string;
+  modifier: number;
+  type: number;
   displayCode: string;
   category: string;
   text: string;

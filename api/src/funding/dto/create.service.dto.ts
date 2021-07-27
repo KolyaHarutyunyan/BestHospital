@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsPhoneNumber, IsString, IsUrl} from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsPhoneNumber, IsString, IsUrl } from 'class-validator';
 import { ParseObjectIdPipe } from '../../util';
+import { ModifierStatus, TypeStatus } from '../funding.constants';
+
 // import { FundingStatus } from '../funding.constants';
 
 export class CreateServiceDto {
@@ -34,4 +36,10 @@ export class CreateServiceDto {
     @IsNotEmpty()
     @IsNumber()
     max: number;
+    @ApiProperty({ enum: ModifierStatus })
+    @IsEnum(ModifierStatus)
+    modifier: number;
+    @ApiProperty({ enum: TypeStatus })
+    @IsEnum(TypeStatus)
+    type: number;
 }

@@ -77,7 +77,9 @@ export class FundingService {
         cptCode: dto.cptCode,
         size: dto.size,
         min: dto.min,
-        max: dto.max
+        max: dto.max,
+        modifier: dto.modifier,
+        type: dto.type
       });
 
       if (dto.credentialId) {
@@ -119,7 +121,7 @@ export class FundingService {
     try {
       const funder = await this.model.findOne({ _id });
       this.checkFunder(funder);
-      const services = await this.serviceModel.find({ funderId: _id }).populate('serviceId');
+      const services = await this.serviceModel.find({ funderId: _id }).populate('serviceId').populate("credentials", 'name');
       // return this.sanitizer.sanitizeMany(services);
       return services
     } catch (e) {

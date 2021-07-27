@@ -7,6 +7,7 @@ import { ServiceSanitizer } from './interceptor';
 import { CreateServiceDto } from './dto/create.dto';
 import { UpdateServiceDto } from './dto/edit.dto';
 import { ServiceDTO } from './dto'
+import { isValidObjectId } from '../util';
 
 @Injectable()
 export class ServiceService {
@@ -49,6 +50,7 @@ export class ServiceService {
   /** Get Service By Id */
   async findOne(_id: string) {
     try {
+      isValidObjectId(_id)
       const service = await this.model.findOne({ _id });
       this.checkService(service);
       return this.sanitizer.sanitize(service);

@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
-import { ApiHeader, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiOkResponse, ApiOperation, ApiProperty, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { FundingService } from './funding.service';
 import { HistoryService } from '../history/history.service';
 
@@ -16,11 +16,12 @@ export class FundingController {
     private readonly historyService: HistoryService,
   ) { }
   /** Test a new Test */
-  @Get()
-  @ApiOkResponse({ type: FundingDTO })
-  async test(): Promise<string> {
-    return 'Hello World!'
-  }
+  // @Get()
+  // @Public()
+  // @ApiOkResponse({ type: FundingDTO })
+  // async test(): Promise<string> {
+  //   return 'Hello World!'
+  // }
 
   /** Create a new funder */
   @Post()
@@ -53,9 +54,22 @@ export class FundingController {
   @Get()
   @Public()
   @ApiOkResponse({ type: [FundingDTO] })
+  @ApiQuery({
+    name: "skip",
+    description: "where",
+    required: false,
+    type: Number
+  })
+  @ApiQuery({
+    name: "limit",
+    description: "how",
+    required: false,
+    type: Number
+  })
   async findAll(
     @Query('skip') skip: number,
     @Query('limit') limit: number): Promise<FundingDTO[]> {
+    console.log('ok');
     return await this.fundingService.findAll(skip, limit);
   }
 
