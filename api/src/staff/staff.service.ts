@@ -33,6 +33,7 @@ export class StaffService {
   create = async (dto: CreateStaffDto): Promise<StaffDTO> => {
     try {
       const _id = Types.ObjectId();
+      
       let user = new this.model({
         _id,
         email: dto.email,

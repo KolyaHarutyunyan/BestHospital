@@ -5,7 +5,6 @@ import { UserStatus } from './staff.constants';
 import { IStaff } from './interface';
 
 const StaffSchema = new Schema({
-  _id: {type: String},
   email: { type: String, required: true, unique: true },
   secondaryEmail: { type: String, required: true },
   firstName: { type: String, required: true },

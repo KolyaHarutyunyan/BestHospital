@@ -1,5 +1,6 @@
 import { model, Schema, Types } from 'mongoose';
 import { addressSchema } from '../address';
+import { FundingStatus } from './funding.constants';
 import { IFunder } from './interface';
 
 // adminId: { type: Types.ObjectId, ref: 'auth' },
@@ -12,7 +13,7 @@ const FundingSchema = new Schema({
     address: addressSchema,
     contact: { type: String, required: true },
     website: { type: String, required: true },
-    status: { type: String }
+    status: { type: Number, enum: FundingStatus }
 });
 
 export const FundingModel = model<IFunder>('Funder', FundingSchema);

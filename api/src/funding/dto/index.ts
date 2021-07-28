@@ -6,3 +6,8 @@ export { UpdateFundingDto } from './edit.dto';
 export { CreateServiceDto } from './create.service.dto'
 export { ServiceDTO } from './service.dto'
 export { UpdateServiceDto } from './edit.service.dto'
+
+// modifier
+export { CreateModifierDto } from './create.modifier.dto';
+export { UpdateModifierDto } from './edit.modifier.dto';
+export { ModifyDTO } from './modify.dto'

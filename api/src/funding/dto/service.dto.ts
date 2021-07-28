@@ -6,8 +6,6 @@ export class ServiceDTO {
     @IsNotEmpty()
     id: string
     @ApiProperty()
-    credentials?: any
-    @ApiProperty()
     @IsNotEmpty()
     @IsString()
     serviceId: string
@@ -39,12 +37,4 @@ export class ServiceDTO {
     @IsNotEmpty()
     @IsNumber()
     max: number;
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsNumber()
-    modifier: number;
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsNumber()
-    type: number;
 }

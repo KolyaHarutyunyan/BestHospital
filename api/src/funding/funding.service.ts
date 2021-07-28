@@ -4,11 +4,12 @@ import { CreateFundingDTO } from './dto/create.dto';
 import { UpdateFundingDto } from './dto/edit.dto';
 import { FundingModel } from './funding.model';
 import { ServiceModel } from './service.model';
-import { IFunder, IService } from './interface';
-import { MongooseUtil, ParseObjectIdPipe } from '../util';
+import { ModifyModel } from './modifier.model';
+import { IFunder, IService, IModify } from './interface';
+import { isValidObjectId, MongooseUtil, ParseObjectIdPipe } from '../util';
 import { AddressService } from '../address';
 import { FundingSanitizer } from './interceptor';
-import { FundingDTO, ServiceDTO, UpdateServiceDto, CreateServiceDto } from './dto';
+import { FundingDTO, ServiceDTO, UpdateServiceDto, CreateServiceDto, CreateModifierDto, UpdateModifierDto, ModifyDTO } from './dto';
 import { HistoryDto } from '../history/dto';
 import { AuthNService } from 'src/authN';
 import { IComment } from '../comment';
@@ -33,11 +34,13 @@ export class FundingService {
 
   ) {
     this.model = FundingModel;
+    this.modifyModel = ModifyModel;
     this.serviceModel = ServiceModel;
     this.mongooseUtil = new MongooseUtil();
   }
   private model: Model<IFunder>;
   private serviceModel: Model<IService>;
+  private modifyModel: Model<IModify>;
 
   private mongooseUtil: MongooseUtil;
 
@@ -52,7 +55,7 @@ export class FundingService {
         website: dto.website,
         contact: dto.contact,
         status: dto.status,
-        address: await this.addressService.getAddress(dto.address)
+        // address: await this.addressService.getAddress(dto.address)
       });
       await funder.save();
       return this.sanitizer.sanitize(funder);
@@ -78,20 +81,39 @@ export class FundingService {
         size: dto.size,
         min: dto.min,
         max: dto.max,
-        modifier: dto.modifier,
-        type: dto.type
       });
-
-      if (dto.credentialId) {
-        await this.credentialService.findOne(dto.credentialId);
-        service.credentials.push(dto.credentialId)
-      };
       await service.save();
       await this.historyService.create(serviceLog.createServiceTitle, _id);
       // return this.sanitizer.sanitize(service)
       return service;
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Service already exists');
+      throw e;
+    }
+
+  }
+
+  /** Create a new modifier */
+  async createModifier(dto: CreateModifierDto, _id: string): Promise<ModifyDTO> {
+    try {
+      const fundingService = await this.serviceModel.findOne({ _id });
+      this.checkFundingService(fundingService)
+      const modify = new this.modifyModel({
+        chargeRate: dto.chargeRate,
+        name: dto.name,
+        credential: await this.checkCredential(dto.credentialId)
+      })
+      fundingService.modifiers.push(modify)
+      await modify.save()
+      await fundingService.save()
+      return modify;
+      // fundingService.chargeTable.push({ chargeRate: dto.chargeRate, modifier: dto.modifier, credentials: await this.checkCredential(dto.credentialId) })
+      // await fundingService.save()
+      // return fundingService;
+      // await this.historyService.create(serviceLog.createServiceTitle, _id);
+      // return this.sanitizer.sanitize(fundingService)
+    } catch (e) {
+      this.mongooseUtil.checkDuplicateKey(e, 'Modifier already exists');
       throw e;
     }
 
@@ -121,7 +143,10 @@ export class FundingService {
     try {
       const funder = await this.model.findOne({ _id });
       this.checkFunder(funder);
-      const services = await this.serviceModel.find({ funderId: _id }).populate('serviceId').populate("credentials", 'name');
+      const services = await this.serviceModel.find({ funderId: _id }).populate('serviceId').populate({
+        path: 'modifiers',
+        populate: { path: 'credential' }
+      });
       // return this.sanitizer.sanitizeMany(services);
       return services
     } catch (e) {
@@ -177,8 +202,9 @@ export class FundingService {
       if (dto.website) funder.website = dto.website;
       if (dto.contact) funder.contact = dto.contact;
       if (dto.status) funder.status = dto.status;
-      if (dto.address)
-        funder.address = await this.addressService.getAddress(dto.address);
+      // if (dto.address)
+      //   funder.address = await this.addressService.getAddress(dto.address);
+      console.log(dto);
       await funder.save();
       return this.sanitizer.sanitize(funder);
     } catch (e) {
@@ -195,6 +221,7 @@ export class FundingService {
       // this.checkService(service);
       if (dto.name) service.name = dto.name;
       if (dto.rate) service.rate = dto.rate;
+      if (dto.cptCode) service.rate = dto.rate;
       if (dto.size) service.size = dto.size;
       if (dto.min) service.min = dto.min;
       if (dto.max) service.max = dto.max;
@@ -204,6 +231,42 @@ export class FundingService {
       // return this.sanitizer.sanitize(service);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Service already exists');
+      throw e;
+    }
+  }
+
+  /** Update the modifier */
+  async updateModifier(_id: string, dto: UpdateModifierDto): Promise<any> {
+    try {
+      // const service = await this.serviceModel.findOne({ _id: serviceId });
+      // this.checkFundingService(service);
+      const modifier = await this.modifyModel.findOne({ _id });
+      this.checkModify(modifier);
+      if (dto.chargeRate) modifier.chargeRate = dto.chargeRate;
+      if (dto.modifierName) modifier.name = dto.modifierName;
+      if (dto.credentialId) {
+        isValidObjectId(dto.credentialId)
+        await this.checkCredential(dto.credentialId)
+        modifier.credential = dto.credentialId
+      }
+     return await modifier.save()
+       
+      // const modifier: any = await this.serviceModel.findOne({ _id: serviceId }, { 'chargeTable': { $elemMatch: { '_id': dto.modifierId } } });
+      // const credential: any = await this.serviceModel.findOne({ _id: serviceId }, { 'chargeTable.credential': { $elemMatch: { '_id': dto.modifierId } } });
+
+      // console.log(modifier.chargeTable[0], ' aaaaaa');
+      // this.checkService(service);
+      // if (dto.chargeRate) modifier.chargeTable[0].chargeRate = dto.chargeRate;
+      // if (dto.modifierName) modifier.chargeTable[0].modifierName = dto.modifierName;
+
+
+      // if (dto.max) service.max = dto.max;
+      // await service.save();
+      // await this.historyService.create(serviceLog.updateServiceTitle, funder._id);
+      // return service;
+      // return this.sanitizer.sanitize(service);
+    } catch (e) {
+      this.mongooseUtil.checkDuplicateKey(e, 'Modifier already exists');
       throw e;
     }
   }
@@ -221,6 +284,17 @@ export class FundingService {
     if (!funder) {
       throw new HttpException(
         'Funder with this id was not found',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
+
+  /** Private methods */
+  /** if the fundingService is not found, throws an exception */
+  private checkFundingService(funder: IService) {
+    if (!funder) {
+      throw new HttpException(
+        'Funding Service with this id was not found',
         HttpStatus.NOT_FOUND,
       );
     }
@@ -246,5 +320,25 @@ export class FundingService {
         HttpStatus.NOT_FOUND,
       );
     }
+  }
+
+  /** Private methods */
+  /** if the modifier is not found, throws an exception */
+  private checkModify(modify: IModify) {
+    if (!modify) {
+      throw new HttpException(
+        'Modifier was not found',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
+
+
+  async checkCredential(credentialId: string): Promise<any> {
+    if (credentialId) {
+      const credential = await this.credentialService.findOne(credentialId);
+      return credentialId
+    };
+    return null
   }
 }

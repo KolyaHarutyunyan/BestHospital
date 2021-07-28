@@ -2,7 +2,7 @@ import { model, Schema, Types } from 'mongoose';
 import { IService } from './interface';
 
 export const serviceSchema = new Schema({
-    modifier: { type: String },
+    name: { type: String },
     displayCode: {type: String},
     category: {type: String}
 });
