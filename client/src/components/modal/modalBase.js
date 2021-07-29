@@ -17,7 +17,7 @@ export const SimpleModal = ({ openDefault, handleOpenClose, content, backdropCus
   const handleOpen = () => {
     setOpen(true);
   };
-  const handleClose = () => {
+  const handleOpenOrClose = () => {
     if (handleOpenClose) {
       handleOpenClose()
     } else {
@@ -34,11 +34,11 @@ export const SimpleModal = ({ openDefault, handleOpenClose, content, backdropCus
   return (
     <div>
       {addButton &&
-        <AddButton text={addButton} handleClick={handleOpen} />
+        <AddButton text={addButton} handleClick={handleOpenOrClose} />
       }
       <Modal
         open={openDefault}
-        onClose={handleClose}
+        onClose={handleOpenOrClose}
         aria-labelledby="spring-modal-title"
         aria-describedby="spring-modal-description"
         className={backdropCustom === true ? 'my-profile' : ''}
