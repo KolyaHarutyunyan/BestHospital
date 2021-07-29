@@ -1,12 +1,13 @@
 import { Route, Switch, Redirect } from "react-router-dom";
 import {
     Branches,
+    Staff,
     HumanResources,
     Customers,
     Factoring,
     Management,
     Authorities,
-    Agents, Carriers, FundingSource
+    Agents, Carriers, FundingSource,
 } from "@eachbase/pages";
 import React from "react";
 import {
@@ -28,10 +29,12 @@ export const Router = ({}) => {
 
       <Route path="/fundingSource" exact component={FundingSource} />
       {/*<Route path="/createOffice" exact component={CreateOfficeTable} />*/}
+      <Route path="/staff" exact component={Staff} />
 
-      {/*<Route path="/branches" component={Branches} />*/}
+      <Route path="/branches" component={Branches} />
       {/*<Route path="/createBranch" component={CreateBranchTable} />*/}
 
+      <Route path="/humanResources" component={HumanResources} />
       <Route path="/humanResources" component={HumanResources} />
       <Route path="/createAdmin" component={CreateAdminTable} />
 

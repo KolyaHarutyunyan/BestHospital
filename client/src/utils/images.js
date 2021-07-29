@@ -2,6 +2,7 @@ import doctors from '@eachbase/images/doctors.jpg'
 import phone from '@eachbase/images/phone.svg'
 import fundingSourcePassive from '@eachbase/images/icons/fundingSourcePassive.svg'
 import fundingSourceActive from '@eachbase/images/icons/fundingSourceActive.svg'
+import staffActive from '@eachbase/assets/images/icons/staffActive.svg'
 import addCircle from '@eachbase/images/icons/addCircle.svg'
 import fundingSourceOutline from '@eachbase/images/icons/fundingSourceOutline.svg'
 import roleManagementActive from '@eachbase/images/icons/roleManagementActive.svg'
@@ -60,6 +61,7 @@ export const Images = {
   phone: phone,
   fundingSourceActive:fundingSourceActive,
   fundingSourcePassive:fundingSourcePassive,
+  staffActive:staffActive,
   addCircle:addCircle,
   fundingSourceOutline:fundingSourceOutline,
   roleManagementActive:roleManagementActive,
