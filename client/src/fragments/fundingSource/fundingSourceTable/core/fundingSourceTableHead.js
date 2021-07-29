@@ -9,17 +9,22 @@ export const FundingSourceTableHead = ({}) => {
           <TableCell>
             <SearchAndFilter title={"Name"} />
           </TableCell>
+
           <TableCell>
             <SearchAndFilter
+            
                 type={'type'}
                 title={"Type"} />
           </TableCell>
+
           <TableCell>
             <SearchAndFilter title={"Address"} />
           </TableCell>
           <TableCell>
+
             <SearchAndFilter title={"Email"} />
           </TableCell>
+
           <TableCell>
             <SearchAndFilter
               custom={false}

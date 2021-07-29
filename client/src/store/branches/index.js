@@ -6,7 +6,5 @@ export { watchBranch } from './branches.saga';
 export const branchActions = {
   createBranch,
   getBranches
-
-
 }
 

@@ -17,7 +17,7 @@ export const authService = {
 
   getOfficeByIdService: ( id ) => axios.get(`/offices/${id}`),
 
-  activateOfficeService: ( id ) => axios.patch(`/offices/${id}/activate`),
+  activateOfficeService: ( id ) => axios.patch(`/offices/${id}/activate`, ),
 
   inactivateOfficeService: ( id ) => axios.patch(`/offices/${id}/inactivate`),
 

@@ -1,25 +1,25 @@
-import React, {useState} from "react";
-import {inputsStyle} from "./styles";
+import React, { useState } from "react";
+import { inputsStyle } from "./styles";
 import {
     FormControl,
     Input,
     InputAdornment,
     IconButton, OutlinedInput, InputLabel,
 } from "@material-ui/core";
-import {Visibility, VisibilityOff} from "@material-ui/icons";
-import {ErrMessage} from "../messages";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
+import { ErrMessage } from "../messages";
 
 export const PasswordInput = ({
-                                  name, variant,
-                                  handleChangePassword,
-                                  disabled,
-                                  value,
-                                  placeholder,
-                                  typeError,validator, sendBoolean, styles
+    name, variant,
+    handleChangePassword,
+    disabled,
+    value,
+    placeholder,
+    typeError, validator, sendBoolean, styles
 
-                              }) => {
+}) => {
     const classes = inputsStyle();
-        const [validEmail, setValidEmail] = useState(false);
+    const [validEmail, setValidEmail] = useState(false);
     const [values, setValues] = React.useState({
         amount: "",
         password: "",
@@ -29,12 +29,12 @@ export const PasswordInput = ({
     });
 
     const handleChanges = (prop) => (event) => {
-        setValues({...values, [prop]: event.target.value});
+        setValues({ ...values, [prop]: event.target.value });
         handleChangePassword(event);
     };
 
     const handleClickShowPassword = () => {
-        setValues({...values, showPassword: !values.showPassword});
+        setValues({ ...values, showPassword: !values.showPassword });
     };
 
     const handleMouseDownPassword = (event) => {
@@ -43,23 +43,23 @@ export const PasswordInput = ({
 
 
 
-        const chechValid = (e) => {
-            let Value = e.target.value;
-            if (Value.length >= 1) {
-                if (validator) {
-                    if (validator.test(Value)) {
-                        setValidEmail(false);
-                        sendBoolean(false);
-                    } else {
-                        setValidEmail(true);
-                        sendBoolean(true);
-                    }
+    const chechValid = (e) => {
+        let Value = e.target.value;
+        if (Value.length >= 1) {
+            if (validator) {
+                if (validator.test(Value)) {
+                    setValidEmail(false);
+                    sendBoolean(false);
+                } else {
+                    setValidEmail(true);
+                    sendBoolean(true);
                 }
             }
-        };
+        }
+    };
 
     return (
-        <div style={{...styles}}>
+        <div style={{ ...styles }}>
             {variant === 'accountPassword' ?
                 <FormControl className={classes.SignInInput} variant="outlined">
                     <InputLabel className={classes.inputShrink} htmlFor="outlined-adornment-password">{placeholder}</InputLabel>
@@ -82,17 +82,17 @@ export const PasswordInput = ({
                                     onMouseDown={handleMouseDownPassword}
                                 >
                                     {disabled === true ? (
-                                        <VisibilityOff/>
+                                        <VisibilityOff />
                                     ) : values.showPassword ? (
-                                        <Visibility/>
+                                        <Visibility />
                                     ) : (
-                                        <VisibilityOff/>
+                                        <VisibilityOff />
                                     )}
                                 </IconButton>
                             </InputAdornment>
                         }
                     />
-                    <ErrMessage type={"Pass"} text={typeError}/>
+                    <ErrMessage type={"Pass"} text={typeError} />
                 </FormControl>
                 :
                 <FormControl disabled={disabled} className={classes.SignInInput}>
@@ -117,20 +117,20 @@ export const PasswordInput = ({
                                     onMouseDown={handleMouseDownPassword}
                                 >
                                     {disabled === true ? (
-                                        <VisibilityOff/>
+                                        <VisibilityOff />
                                     ) : values.showPassword ? (
-                                        <Visibility/>
+                                        <Visibility />
                                     ) : (
-                                        <VisibilityOff/>
+                                        <VisibilityOff />
                                     )}
                                 </IconButton>
                             </InputAdornment>
                         }
                     />
-                    <ErrMessage type={"Pass"} text={typeError}/>
+                    <ErrMessage type={"Pass"} text={typeError} />
                 </FormControl>
             }
         </div>
     );
 }
-;
+    ;

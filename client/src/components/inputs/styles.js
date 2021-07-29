@@ -28,6 +28,7 @@ export const inputsStyle = makeStyles(() => ({
       fontWeight: "600",
       color: Colors.BackgroundBlue,
       marginRight: "8px",
+
     },
     "& img": {
       width: "18px",
@@ -38,7 +39,6 @@ export const inputsStyle = makeStyles(() => ({
 
   searchInput: {
     width: "100%",
-
     "@media (max-width: 1979px)": {
       marginBottom: "8px",
     },
@@ -99,7 +99,8 @@ export const inputsStyle = makeStyles(() => ({
       height:'48px'
     },
     '& .MuiInputLabel-outlined':{
-      marginTop:'-3px'
+      marginTop:'-3px',
+      color :Colors.TextPrimary
     },
     '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
       transform: 'translate(14px, -2px) scale(0.75)'
@@ -135,7 +136,7 @@ export const inputsStyle = makeStyles(() => ({
     color: '#F07379',
     fontSize: '14px',
     fontWeight: 600,
-    margin:'3px 0'
+    margin:'0px 0 10px'
   },
 
   inputShrink:{
