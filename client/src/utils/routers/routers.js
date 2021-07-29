@@ -11,6 +11,11 @@ export const superAdminRouters =
             "path": "/management"
         },
         {
+            "name": "Staff",
+            "icon": "Staff",
+            "path": "/staff"
+        },
+        {
             "name": "Branches",
             "icon": "Branches",
             "path": "/branches"
