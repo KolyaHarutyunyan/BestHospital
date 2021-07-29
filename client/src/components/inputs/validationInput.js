@@ -8,7 +8,7 @@ export const ValidationInput = ({
   multiline, style, className, autoComplete,
   typeError, Length, disabled,
   value, type, onChange, name,
-  label, validator, sendBoolean, variant, loader,styles, ...props
+  label, validator, sendBoolean, variant, loader, styles, ...props
 }) => {
   const classes = inputsStyle();
   const [validEmail, setValidEmail] = useState(false);
@@ -32,7 +32,7 @@ export const ValidationInput = ({
     <>
       <div className={style ? style : classes.SignInInput}>
         <TextField
-            style={{...styles}}
+          style={{ ...styles }}
           className={className ? className : classes.inputTextField}
           variant={variant}
           label={label}
@@ -55,7 +55,7 @@ export const ValidationInput = ({
 
           InputProps={{
             endAdornment: (
-              loader && <InputMinLoader/>
+              loader && <InputMinLoader />
             )
           }}
         />

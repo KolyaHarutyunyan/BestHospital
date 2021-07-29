@@ -4,8 +4,8 @@ import { API_BASE } from '@eachbase/store';
 
 export const initAxiosInterceptors = () => {
     axios.interceptors.request.use((config) => {
-        config.url = `https://polotms.eachbase.com/api${config.url}`;
-        // config.url = `http://localhost:8200/api${config.url}`;
+       // config.url = `https://polotms.eachbase.com/api${config.url}`;
+        config.url = `http://localhost:8200/api${config.url}`;
         if (config.auth) {
             const token = localStorage.getItem('access-token');
             if (!token) {

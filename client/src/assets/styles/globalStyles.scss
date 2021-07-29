@@ -21,3 +21,11 @@ input:-webkit-autofill {
   color: #545F7E
 }
 
+input {
+
+  &::placeholder {
+    color: #4B5C68 !important
+  }
+}
+
+

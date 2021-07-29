@@ -9,13 +9,28 @@ export const CreateChancel = ({
   classes,
 }) => {
   return (
-    <div className={classes}>
+    <div className={classes} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
       <Button
         style={{
           textTransform: "capitalize",
-          width: "238px",
+          width: "400px",
           height: "48px",
-          background: Colors.ThemeGreen,
+          background: Colors.ThemeGray,
+          borderRadius: "8px",
+          fontSize: "16px",
+          fontWeight: "600",
+          color: Colors.TextPrimary,
+        }}
+        onClick={onClose}
+      >
+        {chancel}
+      </Button>
+      <Button
+        style={{
+          textTransform: "capitalize",
+          width: "400px",
+          height: "48px",
+          background: Colors.BackgroundBlue,
           borderRadius: "8px",
           fontSize: "16px",
           fontWeight: "600",
@@ -24,22 +39,6 @@ export const CreateChancel = ({
         onClick={onCreate}
       >
         {create}
-      </Button>
-      <Button
-        style={{
-          textTransform: "capitalize",
-          width: "238px",
-          height: "48px",
-          background: Colors.ThemeGray,
-          borderRadius: "8px",
-          marginLeft: "16px",
-          fontSize: "16px",
-          fontWeight: "600",
-          color: Colors.TextPrimary,
-        }}
-        onClick={onClose}
-      >
-        {chancel}
       </Button>
     </div>
   );

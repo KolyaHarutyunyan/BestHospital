@@ -22,6 +22,7 @@ export const Agents = ({}) => {
       buttonsTab={true}
       buttonsTabAddButton={true}
       handleClick={() => history.push('/createAgent')}
+      addButtonText='gfgfg'
     >
       <AgentsTable />
     </TableWrapper>

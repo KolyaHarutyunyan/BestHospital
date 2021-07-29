@@ -26,7 +26,7 @@ function* createOffice(action) {
 function* editOffice(action) {
   try {
     const res = yield call( authService.editOfficeService, action.payload.body );
-    // window.location.replace('/fundingSource')
+    window.location.replace('/fundingSource')
   } catch (err) {
     console.log(err)
   }
@@ -34,20 +34,20 @@ function* editOffice(action) {
 
 function* getOffice({ action,type }) {
 
-  yield put(httpRequestsOnErrorsActions.removeError(type));
-  yield put(httpRequestsOnLoadActions.appendLoading(type));
+  // yield put(httpRequestsOnErrorsActions.removeError(type));
+  // yield put(httpRequestsOnLoadActions.appendLoading(type));
   try {
     const res = yield call( authService.getOfficesService );
     yield put({
       type: GET_OFFICES_SUCCESS,
       payload: res.data,
     });
-    yield put(httpRequestsOnLoadActions.removeLoading(type));
-    yield put(httpRequestsOnErrorsActions.removeError(type));
+    // yield put(httpRequestsOnLoadActions.removeLoading(type));
+    // yield put(httpRequestsOnErrorsActions.removeError(type));
 
   } catch (err) {
-    yield put(httpRequestsOnLoadActions.removeLoading(type));
-    yield put(httpRequestsOnErrorsActions.removeError(type));
+    // yield put(httpRequestsOnLoadActions.removeLoading(type));
+    // yield put(httpRequestsOnErrorsActions.removeError(type));
     console.log(err)
   }
 }
