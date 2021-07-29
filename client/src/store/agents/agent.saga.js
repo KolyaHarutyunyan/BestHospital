@@ -53,6 +53,4 @@ export const watchAgent = function* watchAgentSaga() {
   yield takeLatest( CREATE_AGENT, createAgent );
   yield takeLatest( GET_AGENTS, getAgents );
   yield takeLatest( GET_AGENT_BY_ID, getAgentById );
-
-
 };

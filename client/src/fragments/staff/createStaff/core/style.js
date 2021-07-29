@@ -1,5 +1,5 @@
 import {makeStyles} from "@material-ui/core/styles";
-import {Backgrounds} from "../../../../utils";
+import {Backgrounds,Colors} from "@eachbase/utils";
 
 export const createStaffModalStyle = makeStyles(() => ({
     modalDimensions: {
@@ -17,5 +17,20 @@ export const createStaffModalStyle = makeStyles(() => ({
         background: Backgrounds.headerLightBlue,
         paddingTop: '32px',
         paddingBottom: '10px'
+    },
+    flexContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    otherDetailsTitle: {
+        fontSize: '16px',
+        color: Colors.TextSecondary,
+        fontWeight: '600',
+        lineHeight: '22px',
+        paddingBottom: '20px',
+    },
+    titlePadding: {
+        paddingTop: '16px'
     }
 }));
