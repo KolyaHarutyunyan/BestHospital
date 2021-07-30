@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import {CreateFoundingSourceHeader, FoundingSourceHeader} from "./createFoundingSourceHeader";
 import { createFoundingSourceStyle } from "./styles";
 import { EmailValidator, ErrorText } from "@eachbase/utils";
+import {fundingSourceActions, officeActions} from "@eachbase/store";
+import {useDispatch} from "react-redux";
 // import SelectInput from "@material-ui/core/Select/SelectInput";
 
 export const CreateFundingSource = ({ handleClose }) => {
@@ -11,7 +13,7 @@ export const CreateFundingSource = ({ handleClose }) => {
 
 
     const classes = createFoundingSourceStyle()
-
+     const dispatch = useDispatch()
     const handleCheck = (bool) => {
         if (bool === true) {
             setError("Not valid email");
@@ -27,16 +29,20 @@ export const CreateFundingSource = ({ handleClose }) => {
 
 
     const handleCreate = () => {
-        // const data = {
-        //     "name": inputs.name,
-        //     "officeId": inputs.officeName,
-        //     "email": inputs.email,
-        //     "phoneNumber": phone,
-        //     "establishedDate": new Date(inputs.date).getTime(),
-        //     "address": fullAddress
-        // }
-        if (inputs.name && inputs.email && inputs.phone && inputs.type && inputs.contract && inputs.website) {
-            // dispatch(fundingSourceActions.createFundingSource(data))
+        const data = {
+            "name": inputs.name,
+            "email": inputs.email,
+            "phoneNumber": inputs.phone,
+            'type' : inputs.type,
+            'contact' : inputs.contact,
+            'website' : inputs.website,
+            "address": 'armenia yerevan',
+            "status": "INACTIVE"
+            // fullAddress
+        }
+        console.log(data,'8888888888888')
+        if (inputs.name && inputs.email && inputs.phone && inputs.type && inputs.contact && inputs.website) {
+             dispatch(fundingSourceActions.createFundingSource(data))
         }
         else {
             setError(
@@ -44,7 +50,7 @@ export const CreateFundingSource = ({ handleClose }) => {
                     !inputs.email ? 'email' :
                         !inputs.phone ? 'phone' :
                         !inputs.type ? 'type' :
-                        !inputs.contract ? 'contract' :
+                        !inputs.contact ? 'contact' :
                         !inputs.website ? 'website' :
                             'Input is not field'
 
@@ -57,7 +63,7 @@ export const CreateFundingSource = ({ handleClose }) => {
         { name: 'second' }
     ]
 
-    console.log(error, '9999999');
+
     return (
         <div className={classes.createFoundingSource}>
             <CreateFoundingSourceHeader handleClose={handleClose} title={'Add Funding Source'} />
@@ -74,7 +80,6 @@ export const CreateFundingSource = ({ handleClose }) => {
                             typeError={error === 'name' && ErrorText.field}
                         />
                         <ValidationInput
-                            // style={globalInputs.simpleInput}
                             validator={EmailValidator}
                             variant={"outlined"}
                             name={"email"}
@@ -96,7 +101,6 @@ export const CreateFundingSource = ({ handleClose }) => {
                             typeError={error === 'phone' && ErrorText.field}
                         />
                         <SelectInput
-                            // style={globalInputs.simpleInput}
                             name={"type"}
                             label={"Type*"}
                             handleSelect={handleChange}
@@ -109,11 +113,11 @@ export const CreateFundingSource = ({ handleClose }) => {
                         <ValidationInput
                             sendBoolean={handleCheck}
                             onChange={handleChange}
-                            value={inputs.contract}
+                            value={inputs.contact}
                             variant={"outlined"}
                             type={"text"}
                             label={"Contact Person"}
-                            name={'contract'}
+                            name={'contact'}
                             typeError={error === 'contract' && ErrorText.field}
                         />
                         <ValidationInput

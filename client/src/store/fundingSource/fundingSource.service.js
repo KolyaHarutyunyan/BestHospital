@@ -2,8 +2,10 @@ import axios from "axios";
 
 export const authService = {
 
-  createFundingSourceService: ( body ) => axios.post('/fundingSource', body),
+  createFundingSourceService: ( body ) => axios.post('/funding', body),
 
-  getFundingSourceService: ( ) => axios.get('/fundingSource',  ),
+  getFundingSourceService: ( ) => axios.get('/funding',  ),
+
+  getFoundingSourceById: (id)=> axios.get(`/funding/${id}`,)
 
 };

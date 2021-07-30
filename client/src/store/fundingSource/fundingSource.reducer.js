@@ -1,8 +1,10 @@
-import {GET_FUNDING_SOURCE_SUCCESS} from "./fundingSource.types";
+import {GET_FUNDING_SOURCE_BY_ID_SUCCESS, GET_FUNDING_SOURCE_SUCCESS} from "./fundingSource.types";
+import {paginate} from "@eachbase/utils";
 
 
 const initialState = {
-  fundingSourceList:[]
+  fundingSourceList:[],
+  fundingSourceItem :null
 };
 
 export const fundingSourceReducer = (state = initialState, action) => {
@@ -11,9 +13,13 @@ export const fundingSourceReducer = (state = initialState, action) => {
     case  GET_FUNDING_SOURCE_SUCCESS:
       return {
         ...state,
-        fundingSourceList: action.payload
-
-            // paginate((action.payload), 10),
+        fundingSourceList: paginate((action.payload), 10),
+      }
+    case  GET_FUNDING_SOURCE_BY_ID_SUCCESS:
+      console.log(action.payload.email,'reducer')
+      return {
+        ...state,
+        fundingSourceItem: action.payload,
       }
 
 

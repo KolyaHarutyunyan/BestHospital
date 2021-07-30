@@ -5,7 +5,6 @@ import {
 const initialState = [];
 
 export const httpRequestsOnSuccessReducer = (state = initialState, action) => {
-  console.log(action,'action')
   switch (action.type) {
     case APPEND_SUCCESS:
       return [...state, action.payload];

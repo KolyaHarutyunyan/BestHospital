@@ -8,14 +8,15 @@ import {Loader, PaginationItem} from "@eachbase/components";
 export const FundingSourceTable = ({}) => {
     const globalStyle = useGlobalStyles();
     const [page, setPage] = useState(1);
-    const {officesList, httpOnLoad} = useSelector((state) => ({
-        officesList: state.offices.officesList,
+    const {fundingSourceList, httpOnLoad} = useSelector((state) => ({
+        fundingSourceList: state.fundingSource.fundingSourceList,
         httpOnLoad: state.httpOnLoad,
     }));
     const changePage = (number) => {
         setPage(number);
     };
-    const list = officesList && officesList.length && officesList[page - 1]
+
+    const list = fundingSourceList && fundingSourceList.length && fundingSourceList[page - 1]
     return (
         <div className={globalStyle.tableWrapper}>
             <TableContainer component={Paper}>
@@ -39,7 +40,7 @@ export const FundingSourceTable = ({}) => {
                     text={'Showing 30 to 30 of 500 entries'}
                     handleReturn={(number) => changePage(number)}
                     page={page}
-                    count={officesList.length}
+                    count={fundingSourceList.length}
                 />
             </TableContainer>
         </div>
