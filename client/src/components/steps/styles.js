@@ -1,10 +1,16 @@
-import { makeStyles } from "@material-ui/core/styles";
-import {Backgrounds} from "../../utils";
-import {Colors} from "../../utils";
+import {makeStyles, withStyles} from "@material-ui/core/styles";
+import {Colors,Backgrounds} from "@eachbase/utils";
+import StepConnector from "@material-ui/core/StepConnector";
 
 export const stepStyles = makeStyles(() => ({
     stepHeader: {
-        background: Backgrounds.headerLightBlue
+        background: Backgrounds.headerLightBlue,
+    },
+    stepBody: {
+        padding: '32px 40px 40px 40px'
+    },
+    buttonsContainer: {
+        marginTop: '6px'
     }
 }));
 
@@ -58,4 +64,17 @@ export const useColorlibStepIconStyles = makeStyles({
         backgroundColor: '#347AF0',
     }
 });
+
+export const ColorlibConnector = withStyles({
+    alternativeLabel: {
+        top: 22,
+        left: 'calc(-50% + 38px)',
+        right: 'calc(50% + 38px)'
+    },
+
+    line: {
+        border: `1px dashed ${Colors.TextLight}`,
+        borderRadius: 'unset',
+    }
+})(StepConnector);
 

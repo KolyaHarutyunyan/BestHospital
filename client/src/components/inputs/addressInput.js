@@ -25,8 +25,6 @@ export const AddressInput = ({ handleSelectValue, disableLabels, Value, handleSe
   const Zip = inputs.zip ? inputs.zip : fullAddress.zip ? fullAddress.zip : ''
   const Street = fullAddress ? fullAddress.street : address ? address : ''
 
-
-
   const fullAddressCompleted = `${Street} ${City} ${States} ${Zip} ${Country}`
 
   const handleChangeAddress = (value) => { 

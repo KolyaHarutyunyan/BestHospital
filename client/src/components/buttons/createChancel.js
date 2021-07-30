@@ -7,13 +7,14 @@ export const CreateChancel = ({
   onCreate,
   onClose,
   classes,
+  buttonWidth
 }) => {
   return (
     <div className={classes} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
       <Button
         style={{
           textTransform: "capitalize",
-          width: "400px",
+          width: buttonWidth,
           height: "48px",
           background: Colors.ThemeGray,
           borderRadius: "8px",
@@ -28,7 +29,7 @@ export const CreateChancel = ({
       <Button
         style={{
           textTransform: "capitalize",
-          width: "400px",
+          width: buttonWidth,
           height: "48px",
           background: Colors.BackgroundBlue,
           borderRadius: "8px",
