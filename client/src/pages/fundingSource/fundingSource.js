@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import { TableWrapper } from "@eachbase/components";
 import { OfficesInfo, FundingSourceTable, CreateFundingSource, } from "@eachbase/fragments";
 import { useHistory } from "react-router-dom";
-import { officeActions } from "@eachbase/store";
+import {fundingSourceActions, officeActions} from "@eachbase/store";
 import { useDispatch, useSelector } from "react-redux";
+import {getFundingSource} from "../../store/fundingSource/fundingSource.action";
 
 export const FundingSource = ({ }) => {
   const dispatch = useDispatch()
   const history = useHistory()
   const [open, setOpen] = useState(false)
+
   useEffect(() => {
-    dispatch(officeActions.getOffices())
+    dispatch(fundingSourceActions.getFundingSource())
   }, []);
 
   const { officeById } = useSelector((state) => ({

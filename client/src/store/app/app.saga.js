@@ -4,7 +4,7 @@ import {watchPermission} from "../permissions";
 import {watchOffice} from "../offices";
 import {watchRole} from "../role";
 import {watchAdmin} from "../admin";
-import {watchBranch} from "../branches";
+import {watchFundingSource} from "../fundingSource";
 import {watchAgent} from "../agents";
 
 
@@ -15,6 +15,6 @@ export const appSaga = function* startForman() {
     yield fork(watchRole);
     yield fork(watchOffice);
     yield fork(watchPermission);
-    yield fork(watchBranch)
+    yield fork(watchFundingSource)
     yield fork(watchAgent)
 };

@@ -7,7 +7,10 @@ import {
     Factoring,
     Management,
     Authorities,
-    Agents, Carriers, FundingSource,
+    Agents,
+    Carriers,
+    FundingSource,
+    Single
 } from "@eachbase/pages";
 import React from "react";
 import {
@@ -19,6 +22,7 @@ import {
     CreateFactoringTable,
     CreateCarrier,
 } from "@eachbase/fragments";
+
 
 
 export const Router = ({}) => {
@@ -39,6 +43,7 @@ export const Router = ({}) => {
       <Route path="/createAdmin" component={CreateAdminTable} />
 
       <Route path="/management" component={Management} />
+      <Route path="/single" component={Single} />
 
       {/*<Route path="/customers" component={Customers} />*/}
 

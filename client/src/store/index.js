@@ -6,7 +6,7 @@ export { permissionsActions } from './permissions'
 export { roleActions } from './role'
 export { officeActions } from './offices'
 export { adminActions } from './admin'
-export { branchActions } from './branches'
+export { fundingSourceActions } from './fundingSource'
 export { agentActions } from './agents'
 
 export { httpRequestsOnSuccessActions } from './http_requests_on_success'

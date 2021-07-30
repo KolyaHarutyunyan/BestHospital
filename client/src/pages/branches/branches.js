@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import { useHistory } from "react-router-dom";
 import { BranchesTable } from "@eachbase/fragments";
 import { TableWrapper } from "@eachbase/components";
-import { branchActions } from "@eachbase/store";
+// import { branchActions } from "@eachbase/store";
 import {useDispatch, useSelector} from "react-redux";
 
 export const Branches = ({}) => {
@@ -10,7 +10,7 @@ export const Branches = ({}) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch( branchActions.getBranches())
+    // dispatch( branchActions.getBranches())
   }, []);
 
   return (

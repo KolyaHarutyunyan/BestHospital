@@ -29,7 +29,7 @@ export const CreateBranchTable = ({ }) => {
               handleChangeName ={setName}
           />
         }
-        parentLink={'/branches'}
+        parentLink={'/fundingSource'}
         parent={'Branches'}
         child={'Add Branch'}
       />

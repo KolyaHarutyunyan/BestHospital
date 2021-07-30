@@ -52,6 +52,7 @@ export const Backgrounds ={
   theme: '#438AFE 0% 0% no-repeat padding-box',
   themeDark: '#0000001A 0% 0% no-repeat padding-box',
   darkBlue : '#337BEFFF',
+  darkGrey : '#A3B2BD80',
 
   lightBlue: '#347AF01A 0% 0% no-repeat padding-box',
   blue: '#347AF0 0% 0% no-repeat padding-box',

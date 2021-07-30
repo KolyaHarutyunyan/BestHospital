@@ -8,6 +8,7 @@ export const CreateChancel = ({
   onClose,
   classes,
   buttonWidth
+
 }) => {
   return (
     <div className={classes} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>

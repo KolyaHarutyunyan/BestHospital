@@ -8,6 +8,7 @@ export { Customers } from "./customers";
 export { Factoring } from "./factoring";
 export { Management } from "./management";
 export { Authorities } from "./authorities";
+export { Single } from "./single";
 
 export { Agents } from './agents'
 export { Carriers } from './carriers'

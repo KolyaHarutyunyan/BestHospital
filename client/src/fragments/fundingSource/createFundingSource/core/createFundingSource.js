@@ -1,6 +1,6 @@
-import { AddressInput, ValidationInput, SelectInput, AddButton, AddModalButton, CreateChancel } from "@eachbase/components";
+import { AddressInput, ValidationInput, SelectInput,  CreateChancel } from "@eachbase/components";
 import React, { useState } from "react";
-import { FoundingSourceHeader } from "./foundingSourceHeader";
+import {CreateFoundingSourceHeader, FoundingSourceHeader} from "./createFoundingSourceHeader";
 import { createFoundingSourceStyle } from "./styles";
 import { EmailValidator, ErrorText } from "@eachbase/utils";
 // import SelectInput from "@material-ui/core/Select/SelectInput";
@@ -35,15 +35,18 @@ export const CreateFundingSource = ({ handleClose }) => {
         //     "establishedDate": new Date(inputs.date).getTime(),
         //     "address": fullAddress
         // }
-        if (inputs.name && inputs.email && inputs.phone) {
-            // dispatch(branchActions.createBranch(data))
+        if (inputs.name && inputs.email && inputs.phone && inputs.type && inputs.contract && inputs.website) {
+            // dispatch(fundingSourceActions.createFundingSource(data))
         }
         else {
             setError(
                 !inputs.name ? 'name' :
                     !inputs.email ? 'email' :
                         !inputs.phone ? 'phone' :
-                            'jhghjghjghhjghj'
+                        !inputs.type ? 'type' :
+                        !inputs.contract ? 'contract' :
+                        !inputs.website ? 'website' :
+                            'Input is not field'
 
             )
         }
@@ -57,7 +60,7 @@ export const CreateFundingSource = ({ handleClose }) => {
     console.log(error, '9999999');
     return (
         <div className={classes.createFoundingSource}>
-            <FoundingSourceHeader handleClose={handleClose} />
+            <CreateFoundingSourceHeader handleClose={handleClose} title={'Add Funding Source'} />
             <div className={classes.createFoundingSourceBody}>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <div style={{ width: 400 }}>
@@ -94,7 +97,7 @@ export const CreateFundingSource = ({ handleClose }) => {
                         />
                         <SelectInput
                             // style={globalInputs.simpleInput}
-                            name={"Type"}
+                            name={"type"}
                             label={"Type*"}
                             handleSelect={handleChange}
                             sendBoolean={handleCheck}
@@ -139,7 +142,8 @@ export const CreateFundingSource = ({ handleClose }) => {
                         create={"Add"}
                         chancel={"Cancel"}
                         onCreate={handleCreate}
-                        onClose={() => alert('reterterdfg')}
+                        onClose={handleClose}
+                        buttonWidth='400px'
                     />
                 </div>
             </div>
