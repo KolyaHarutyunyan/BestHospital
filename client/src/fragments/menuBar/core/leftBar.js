@@ -27,7 +27,6 @@ export const LeftBar = ({
     const classes = navBarStyles();
     const dispatch = useDispatch();
 
-
     return (
         <div>
             <div

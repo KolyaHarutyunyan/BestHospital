@@ -12,7 +12,7 @@ export const LeftBarImages =({ item, linkInfo })=>{
                     item.icon === "Staff"
                         ? linkInfo === item.path
                         ? Images.staffActive
-                        : Images.fundingSourcePassive
+                        : Images.staffPassive
                     : item.icon === "Branches"
                     ? linkInfo === item.path
                         ? Images.fundingSourceActive
