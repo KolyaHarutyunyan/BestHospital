@@ -19,7 +19,7 @@ import { IAuth, IToken } from './interface';
 import * as jwt from 'jsonwebtoken';
 import { MailerService, MailStatus } from '../mailer';
 import { IRole, RoleDTO, RoleService } from '../authZ/role';
-import { MongooseUtil } from 'src/util';
+import { MongooseUtil } from '../util';
 
 @Injectable()
 export class AuthNService {
