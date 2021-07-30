@@ -1,21 +1,18 @@
 import { Module } from '@nestjs/common';
+import { StaffModule } from '../staff';
+import { AuthNModule } from 'src/authN';
+import { AuthZModule } from 'src/authZ';
+import { FundingModule } from 'src/funding';
 import { MailerModule } from '../mailer';
 import { AppController } from './app.controller';
 import { DatabaseConnection } from './app.database';
 import { AppService } from './app.service';
-import { AuthNModule } from '../authN';
-import { AuthZModule } from '../authZ';
 import { AddressModule } from '../address';
-import { AdminModule } from '../admin';
+import { EmploymentModule } from '../employment';
 
 @Module({
-  imports: [ 
-    AuthNModule,
-    AuthZModule,
-    AddressModule,
-    AdminModule
-    ],
+  imports: [AuthNModule, AuthZModule, AddressModule, StaffModule, FundingModule, EmploymentModule],
   controllers: [AppController],
   providers: [AppService, DatabaseConnection],
 })
-export class AppModule {}
+export class AppModule { }

@@ -6,7 +6,9 @@ export const CreateChancel = ({
   chancel,
   onCreate,
   onClose,
-  classes, buttonWidth
+  classes,
+  buttonWidth
+
 }) => {
   return (
     <div className={classes} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>

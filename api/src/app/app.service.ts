@@ -9,6 +9,6 @@ export class AppService {
 
   @Get()
   getHello(): string {
-    return 'Welcome to the API of the Armat. Please visit https://armat.org/api-doc to see documentation about the possible endpoints';
+    return 'Hello World!';
   }
 }

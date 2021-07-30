@@ -1,0 +1,1 @@
+export { CommentDto } from './comment.dto'
