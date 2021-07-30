@@ -4,7 +4,7 @@ import {adminReducer} from "../admin";
 import {officeReducer} from "../offices";
 import {permissionsReducer} from "../permissions";
 import {roleReducer} from "../role";
-import {branchReducer} from "../branches";
+import {fundingSourceReducer} from "../fundingSource";
 import {agentReducer} from "../agents";
 import {httpRequestsOnLoadReducer} from "../http_requests_on_load";
 import {httpRequestsOnSuccessReducer} from "../http_requests_on_success";
@@ -29,7 +29,7 @@ export const appReducer = combineReducers({
     offices: officeReducer,
     permissions: permissionsReducer,
     roles: roleReducer,
-    branches: branchReducer,
+    fundingSource: fundingSourceReducer,
     agents: agentReducer,
 
 

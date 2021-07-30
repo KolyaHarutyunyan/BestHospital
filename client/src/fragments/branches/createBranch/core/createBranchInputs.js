@@ -9,7 +9,7 @@ import {
 } from "@eachbase/utils";
 import { AddressInput, CreateChancel, SelectInput, ValidationInput } from "@eachbase/components";
 import {useDispatch, useSelector} from "react-redux";
-import {branchActions, officeActions} from "@eachbase/store";
+import {fundingSourceActions, officeActions} from "@eachbase/store";
 
 export const CreateBranchInputs = ({ handleChangeName }) => {
   const globalStyle = useGlobalText();
@@ -56,7 +56,7 @@ export const CreateBranchInputs = ({ handleChangeName }) => {
       "address": fullAddress
     }
     if(inputs.name && inputs.officeName && inputs.email && phone && inputs.date && fullAddress){
-       dispatch(branchActions.createBranch(data))
+       // dispatch(fundingSourceActions.createFundingSource(data))
     }
     else{
       setError(
@@ -155,7 +155,7 @@ export const CreateBranchInputs = ({ handleChangeName }) => {
         create={"Create"}
         chancel={"Cancel"}
         onCreate={ handleCreate }
-        onClose={  () => history.push('/branches')}
+        onClose={  () => history.push('/fundingSource')}
       />
     </div>
   );

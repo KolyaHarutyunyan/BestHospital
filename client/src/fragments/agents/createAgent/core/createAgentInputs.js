@@ -21,9 +21,9 @@ export const CreateAgentInputs = ({handleChangeFirstName, handleChangeLastName})
     const [phone, setPhone] = useState('')
     const [fullAddress, setFullAddress] = useState('')
 
-    const {officesListReserve, branchesList} = useSelector((state) => ({
+    const {officesListReserve, fundingSourceList} = useSelector((state) => ({
         officesListReserve: state.offices.officesListReserve,
-        branchesList: state.branches.branchesList
+        fundingSourceList: state.branches.fundingSourceList
     }));
 
 
@@ -138,7 +138,7 @@ export const CreateAgentInputs = ({handleChangeFirstName, handleChangeLastName})
                         label={"Branch*"}
                         handleSelect={handleChange}
                         value={inputs.branch}
-                        list={branchesList}
+                        list={fundingSourceList}
                         typeError={error === 'branch' ? ErrorText.field : ''}
                         type={'id'}
 

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {CreateAgentInputs} from "./core";
 import {CreateWrapper} from "@eachbase/components";
 import {Images, useGlobalStyles} from "@eachbase/utils";
-import {branchActions, officeActions} from "@eachbase/store";
+import {fundingSourceActions, officeActions} from "@eachbase/store";
 import {useDispatch} from "react-redux";
 
 export const CreateAgent = ({}) => {
@@ -13,7 +13,7 @@ export const CreateAgent = ({}) => {
 
     useEffect(() => {
         dispatch(officeActions.getOffices())
-        dispatch(branchActions.getBranches())
+        // dispatch(fundingSourceActions.getBranches())
     }, []);
 
     return (

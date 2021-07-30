@@ -1,0 +1,13 @@
+
+/**Create fundingSource */
+export const CREATE_FUNDING_SOURCE = 'CREATE_FUNDING_SOURCE';
+export const CREATE_FUNDING_SOURCE_SUCCESS = 'CREATE_FUNDING_SOURCE_SUCCESS';
+
+
+/**Get fundingSource */
+export const GET_FUNDING_SOURCE = 'GET_FUNDING_SOURCE';
+export const GET_FUNDING_SOURCE_SUCCESS = 'GET_FUNDING_SOURCE_SUCCESS';
+
+
+
+

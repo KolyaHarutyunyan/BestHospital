@@ -150,7 +150,7 @@ export const buttonsStyle = makeStyles((theme) => ({
   closeCircleStyle: {
     width: "24px",
     height: "24px",
-    background: Backgrounds.gray,
+    background: Backgrounds.darkGrey,
     borderRadius: "40px",
     border: "none",
     display: "flex",
