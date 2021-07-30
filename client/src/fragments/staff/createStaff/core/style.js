@@ -32,5 +32,18 @@ export const createStaffModalStyle = makeStyles(() => ({
     },
     titlePadding: {
         paddingTop: '16px'
+    },
+    selectMargin: {
+        width: "100%",
+        marginRight: '16px',
+
+        "& .MuiFormLabel-root": {
+            fontSize: "16px",
+            color: `${Colors.TextPrimary}`,
+        },
+
+        "& .MuiInput-underline.Mui-error:after": {
+            borderBottomColor: `${Colors.ThemeRed}`,
+        },
     }
 }));

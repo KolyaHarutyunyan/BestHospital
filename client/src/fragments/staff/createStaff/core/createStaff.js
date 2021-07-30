@@ -35,6 +35,8 @@ export const CreateStaff = ({handleClose}) => {
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState({});
 
+    console.log(inputs,'inputs')
+
     const classes = createStaffModalStyle()
     const globalText = useGlobalTextStyles()
 
@@ -207,6 +209,7 @@ export const CreateStaff = ({handleClose}) => {
             />
             <div className={classes.flexContainer}>
                 <SelectInput
+                    style={classes.selectMargin}
                     name={"issuingState"}
                     label={"Issuing State*"}
                     handleSelect={handleChange}
@@ -229,13 +232,13 @@ export const CreateStaff = ({handleClose}) => {
             </div>
             <p className={`${classes.otherDetailsTitle} ${classes.titlePadding}`}>Other</p>
             <SelectInput
-                name={"issuingState"}
-                label={"Issuing State*"}
+                name={"department"}
+                label={"Department*"}
                 handleSelect={handleChange}
                 sendBoolean={handleCheck}
-                value={inputs.issuingState}
+                value={inputs.department}
                 list={departmentList}
-                typeError={error === 'issuingState' ? ErrorText.field : ''}
+                typeError={error === 'department' ? ErrorText.field : ''}
                 // type={'id'}
             />
             <SelectInput
@@ -270,6 +273,7 @@ export const CreateStaff = ({handleClose}) => {
             />
             <div className={classes.flexContainer}>
                 <SelectInput
+                    style={classes.selectMargin}
                     name={"gender"}
                     label={"Gender*"}
                     handleSelect={handleChange}
@@ -277,7 +281,6 @@ export const CreateStaff = ({handleClose}) => {
                     value={inputs.gender}
                     list={genderList}
                     typeError={error === 'gender' ? ErrorText.field : ''}
-                    // type={'id'}
                 />
                 <ValidationInput
                     variant={"outlined"}
