@@ -6,6 +6,7 @@ const modifierSchema = new Schema({
     chargeRate: { type: Number },
     credential: { type: Types.ObjectId, ref: 'Credential' },
     name: { type: String },
+    type: { type: Number, enum: TypeStatus }
 });
 
 export const ModifyModel = model<IModify>('Modifier', modifierSchema);

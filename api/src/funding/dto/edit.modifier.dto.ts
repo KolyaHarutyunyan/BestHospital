@@ -16,4 +16,7 @@ export class UpdateModifierDto {
     credentialName: string;
     @ApiProperty()
     credentialType: string;
+    @ApiProperty({ enum: TypeStatus })
+    // @IsEnum(TypeStatus)
+    type: number;
 }

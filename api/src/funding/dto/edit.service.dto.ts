@@ -4,6 +4,8 @@ import { AddressDTO } from '../../address';
 
 export class UpdateServiceDto {
     @ApiProperty()
+    globServiceId: string
+    @ApiProperty()
     @IsNotEmpty()
     @IsString()
     name: string;

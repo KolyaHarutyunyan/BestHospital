@@ -101,6 +101,7 @@ export class FundingService {
       const modify = new this.modifyModel({
         chargeRate: dto.chargeRate,
         name: dto.name,
+        type: dto.type,
         credential: await this.checkCredential(dto.credentialId)
       })
       fundingService.modifiers.push(modify)
@@ -204,7 +205,6 @@ export class FundingService {
       if (dto.status) funder.status = dto.status;
       // if (dto.address)
       //   funder.address = await this.addressService.getAddress(dto.address);
-      console.log(dto);
       await funder.save();
       return this.sanitizer.sanitize(funder);
     } catch (e) {
@@ -225,6 +225,9 @@ export class FundingService {
       if (dto.size) service.size = dto.size;
       if (dto.min) service.min = dto.min;
       if (dto.max) service.max = dto.max;
+      if (dto.globServiceId) {
+        service.serviceId = dto.globServiceId
+      }
       await service.save();
       await this.historyService.create(serviceLog.updateServiceTitle, funder._id);
       return service;
@@ -244,13 +247,14 @@ export class FundingService {
       this.checkModify(modifier);
       if (dto.chargeRate) modifier.chargeRate = dto.chargeRate;
       if (dto.modifierName) modifier.name = dto.modifierName;
+      if (dto.type) modifier.type = dto.type;
       if (dto.credentialId) {
         isValidObjectId(dto.credentialId)
         await this.checkCredential(dto.credentialId)
         modifier.credential = dto.credentialId
       }
-     return await modifier.save()
-       
+      return await modifier.save()
+
       // const modifier: any = await this.serviceModel.findOne({ _id: serviceId }, { 'chargeTable': { $elemMatch: { '_id': dto.modifierId } } });
       // const credential: any = await this.serviceModel.findOne({ _id: serviceId }, { 'chargeTable.credential': { $elemMatch: { '_id': dto.modifierId } } });
 
