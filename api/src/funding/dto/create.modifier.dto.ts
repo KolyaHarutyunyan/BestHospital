@@ -17,4 +17,7 @@ export class CreateModifierDto {
     @IsString()
     @IsNotEmpty()
     name: string;
+    @ApiProperty({ enum: TypeStatus })
+    @IsEnum(TypeStatus)
+    type: number;
 }

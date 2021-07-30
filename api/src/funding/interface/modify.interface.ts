@@ -5,4 +5,5 @@ export interface IModify extends Document {
     chargeRate: number,
     credential: any, 
     name: string,
+    type: Number
 }
