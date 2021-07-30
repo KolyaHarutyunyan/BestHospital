@@ -27,9 +27,9 @@ sudo service nginx start
 sudo service nginx status
 cd /var/www
 sudo rm -R html
-sudo mkdir poloTMS
-cd armat
-sudo mkdir api admin webapp config
+sudo mkdir wellness
+cd wellness
+sudo mkdir api webapp
 
 # install wordpress related libraries
 sudo apt install php -y 

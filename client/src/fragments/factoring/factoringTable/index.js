@@ -1,0 +1,1 @@
+export { FactoringTable } from "./factoringTable";

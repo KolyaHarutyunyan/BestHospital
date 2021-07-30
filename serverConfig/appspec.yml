@@ -1,16 +1,16 @@
 version: 0.0
 os: linux
 files:
-  - source: /wellnessDaisy.nginx.config
+  - source: /wellnessdaisy.nginx.config
     destination: /etc/nginx/sites-enabled/
   - source: /api
-    destination: /var/www/wellnessDaisy/api
-  # - source: /clientDist
-    # destination: /var/www/wellnessDaisy/webapp
+    destination: /var/www/wellnessdaisy/api
+  - source: /clientDist
+    destination: /var/www/wellnessdaisy/webapp
   # - source: /adminDist
   #   destination: /var/www/wellnessDaisy/admin
   - source: /.npmrc
-    destination: /var/www/wellnessDaisy/api
+    destination: /var/www/wellnessdaisy/api
 hooks:
   BeforeInstall:
     # - location: scripts/install_dependencies.sh

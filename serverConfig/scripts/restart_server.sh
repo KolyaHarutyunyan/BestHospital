@@ -2,13 +2,8 @@
 # restart the nginx server
 sudo service restart nginx
 # log the status 
-service nginx status
-
-# updating the .env file
-# cd /var/www/armat/api
-# npm install
-# sudo cp ../config/.env ./constants/
+# service nginx status
 
 # node restartsudo 
-cd /var/www/poloTMS/api
-sudo pm2 restart poloTMS
+cd /var/www/wellnessdaisy/api
+sudo pm2 restart wellnessdaisy

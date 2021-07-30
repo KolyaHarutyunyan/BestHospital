@@ -1,0 +1,1 @@
+export { SimpleToolTip } from './simpleToolTip'
