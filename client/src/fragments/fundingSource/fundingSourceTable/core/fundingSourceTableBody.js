@@ -21,7 +21,8 @@ export const FundingSourceTableBody = ({key, data }) => {
             </div>
           </TableCell>
           <TableCell>{'Type'}</TableCell>
-          <TableCell>{data.address.formattedAddress && data.address.formattedAddress}</TableCell>
+          {/*<TableCell>{data.address.formattedAddress && data.address.formattedAddress}</TableCell>*/}
+          <TableCell>'dsfsdfsdfsdfdsf'</TableCell>
           <TableCell>{data.email}</TableCell>
           <TableCell>{data.phoneNumber}</TableCell>
     </TableBodyComponent>
