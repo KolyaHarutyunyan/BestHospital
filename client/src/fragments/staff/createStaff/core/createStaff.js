@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {createStaffModalStyle} from "./style";
 import {Steps, CloseButton} from "@eachbase/components";
 import {useGlobalTextStyles} from "@eachbase/utils";
-import {AddressInput, ValidationInput, SelectInput, CreateChancel} from "@eachbase/components";
+import {AddressInput, ValidationInput, SelectInput} from "@eachbase/components";
 import {EmailValidator, ErrorText} from "@eachbase/utils";
 
 const steps = ['General Info', 'Address', 'Other Details']
@@ -26,7 +26,7 @@ const residencyList = [
 
 const genderList = [
     {name: 'Male'},
-    {name: 'Famele'},
+    {name: 'Female'},
     {name: 'Other'},
 ]
 
@@ -56,6 +56,7 @@ export const CreateStaff = ({handleClose}) => {
         ),
         error === e.target.name && setError(''),
     );
+
     const handleCreate = () => {
         // const data = {
         //     "name": inputs.name,

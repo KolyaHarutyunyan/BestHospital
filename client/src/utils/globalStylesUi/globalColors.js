@@ -9,6 +9,7 @@ export const Colors ={
   BackgroundPrimary :'#E6ECF3',
   BackgroundWhite :'#FFFFFF',
   BackgroundSecondary: '#F8FAFB',
+  BackgroundMango: '#FFC051',
 
   // Text colors
 
@@ -16,6 +17,7 @@ export const Colors ={
   TextSecondary:'#4B5C68',
   TextWhite:'#FFFFFF',
   TextLight:'#51566D80',
+  TextMiddleGray: '#4B5C68B3',
   TextGray:'#FFFFFF80',
   TextDarkGrey:'#2A374E80',
 
@@ -37,8 +39,6 @@ export const Shadow ={
   modalShadow: '0px 0px 6px #8A8A8A29',
   changeShadow: '0px 0px 6px #8A8A8A3D',
   blueButton: '0px 0px 6px #347AF04D'
-
-
 }
 
 export const Backgrounds ={
@@ -51,6 +51,7 @@ export const Backgrounds ={
   info: '#438AFE1A 0% 0% no-repeat padding-box',
   theme: '#438AFE 0% 0% no-repeat padding-box',
   themeDark: '#0000001A 0% 0% no-repeat padding-box',
+  catskillWhite: '#F2F4F8 0% 0% no-repeat padding-box',
   darkBlue : '#337BEFFF',
   darkGrey : '#A3B2BD80',
 

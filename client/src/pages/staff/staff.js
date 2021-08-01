@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
-import { TableWrapper} from "@eachbase/components";
+import {useHistory} from "react-router-dom";
+import {TableWrapper, Notes} from "@eachbase/components";
 import {OfficesInfo, StaffTable, CreateStaff,} from "@eachbase/fragments";
-import { useHistory } from "react-router-dom";
-import { officeActions } from "@eachbase/store";
-import {useDispatch, useSelector} from "react-redux";
 
+import {officeActions} from "@eachbase/store";
+import {useDispatch, useSelector} from "react-redux";
 
 export const Staff = ({}) => {
     const dispatch = useDispatch()
@@ -26,20 +26,21 @@ export const Staff = ({}) => {
         <>
             {/*{!officeById ?*/}
             {/*    (*/}
-                    <TableWrapper
-                        firstButton={"Active"}
-                        secondButton={"Inactive"}
-                        buttonsTab={true}
-                        buttonsTabAddButton={true}
-                        addButtonText={'Add Staff Member'}
-                        openCloseInfo={open}
-                        handleOpenClose={handleOpenClose}
-                        body={ <CreateStaff handleClose={handleOpenClose} /> }
-                    >
-                        <StaffTable/>
-                    </TableWrapper>
-                {/*)*/}
-                {/*: (<OfficesInfo info={officeById}/>)*/}
+            <TableWrapper
+                firstButton={"Active"}
+                secondButton={"Inactive"}
+                buttonsTab={true}
+                buttonsTabAddButton={true}
+                addButtonText={'Add Staff Member'}
+                openCloseInfo={open}
+                handleOpenClose={handleOpenClose}
+                body={<CreateStaff handleClose={handleOpenClose}/>}
+            >
+                <StaffTable/>
+            </TableWrapper>
+
+            {/*)*/}
+            {/*: (<OfficesInfo info={officeById}/>)*/}
         </>
     );
 }

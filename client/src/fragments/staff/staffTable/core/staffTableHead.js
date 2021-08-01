@@ -10,9 +10,7 @@ export const StaffTableHead = ({}) => {
                     <SearchAndFilter title={"Name"} />
                 </TableCell>
                 <TableCell>
-                    <SearchAndFilter
-                        type={'type'}
-                        title={"Type"} />
+                    <SearchAndFilter title={"Type"} />
                 </TableCell>
                 <TableCell>
                     <SearchAndFilter title={"Address"} />

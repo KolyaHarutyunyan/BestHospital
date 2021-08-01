@@ -3,6 +3,7 @@ import phone from '@eachbase/images/phone.svg'
 import fundingSourcePassive from '@eachbase/images/icons/fundingSourcePassive.svg'
 import fundingSourceActive from '@eachbase/images/icons/fundingSourceActive.svg'
 import staffActive from '@eachbase/assets/images/icons/staffActive.svg'
+import staffPassive from '@eachbase/assets/images/icons/staffPassive.svg';
 import addCircle from '@eachbase/images/icons/addCircle.svg'
 import fundingSourceOutline from '@eachbase/images/icons/fundingSourceOutline.svg'
 import roleManagementActive from '@eachbase/images/icons/roleManagementActive.svg'
@@ -62,6 +63,7 @@ export const Images = {
   fundingSourceActive:fundingSourceActive,
   fundingSourcePassive:fundingSourcePassive,
   staffActive:staffActive,
+  staffPassive: staffPassive,
   addCircle:addCircle,
   fundingSourceOutline:fundingSourceOutline,
   roleManagementActive:roleManagementActive,
