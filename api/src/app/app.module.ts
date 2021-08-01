@@ -9,9 +9,10 @@ import { DatabaseConnection } from './app.database';
 import { AppService } from './app.service';
 import { AddressModule } from '../address';
 import { EmploymentModule } from '../employment';
+import { ClientModule } from '../client';
 
 @Module({
-  imports: [AuthNModule, AuthZModule, AddressModule, StaffModule, FundingModule, EmploymentModule],
+  imports: [AuthNModule, AuthZModule, AddressModule, StaffModule, FundingModule, EmploymentModule, ClientModule],
   controllers: [AppController],
   providers: [AppService, DatabaseConnection],
 })
