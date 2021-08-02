@@ -23,7 +23,7 @@ import { CredentialService } from '../credential';
 @Injectable()
 export class FundingService {
   constructor(
-    private readonly addressService: AddressService,
+    // private readonly addressService: AddressService,
     private readonly service: ServiceService,
     private readonly commentService: CommentService,
     private readonly historyService: HistoryService,
@@ -187,6 +187,12 @@ export class FundingService {
   /** Get Funder By Id */
   async findOne(_id: string): Promise<FundingDTO> {
     const funder = await this.model.findOne({ _id });
+    this.checkFunder(funder);
+    return this.sanitizer.sanitize(funder);
+  }
+  /** Get Funder By Name */
+  async findByName(name: string): Promise<FundingDTO> {
+    const funder = await this.model.findOne({ name });
     this.checkFunder(funder);
     return this.sanitizer.sanitize(funder);
   }
