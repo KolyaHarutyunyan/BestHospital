@@ -106,6 +106,19 @@ export const inputsStyle = makeStyles(() => ({
       transform: 'translate(14px, -2px) scale(0.75)'
     },
   },
+  TextareaTextField:{
+    width:'100%',
+    resize: 'none',
+    height:'128px!important',
+    borderColor:Colors.BackgroundBlue,
+    padding: '13px 0 0 10px',
+    borderRadius: '4px',
+    '&::placeholder' : {
+      fontSize: '14px',
+      lineHeight: '19px',
+      color: Colors.TextMiddleGray
+    },
+  },
   inputTextFieldAutoHeight:{
     '& .MuiOutlinedInput-root':{
       // minHeight:'48px',

@@ -1,0 +1,2 @@
+export {tabsStyles} from './styles';
+export { SimpleTabs } from './tabs';

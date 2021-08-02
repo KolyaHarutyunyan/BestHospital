@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const SimpleModal = ({ openDefault, handleOpenClose, content, backdropCustom, addButton }) => {
+export const SimpleModal = ({status, openDefault, handleOpenClose, content, backdropCustom, addButton }) => {
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
@@ -31,11 +31,14 @@ export const SimpleModal = ({ openDefault, handleOpenClose, content, backdropCus
     </div>
   );
 
+  console.log(status,'status');
+
   return (
     <div>
       {addButton &&
         <AddButton text={addButton} handleClick={handleOpenOrClose} />
       }
+
       <Modal
         open={openDefault}
         onClose={handleOpenOrClose}

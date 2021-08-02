@@ -27,15 +27,12 @@ export const TableWrapper = ({
           {buttonsTabAddButton && (
             // RoleHooks(PermissionsList.ADD_OFFICES_BUTTON) &&
             <div className={classes.addButton}>
-
               <SimpleModal
                 addButton={addButtonText}
                 content={body}
                 handleOpenClose={handleOpenClose}
                 openDefault={openCloseInfo}
               />
-
-
             </div>
           )}
         </div>

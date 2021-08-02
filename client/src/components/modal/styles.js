@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { Colors } from "@eachbase/utils";
+import {Backgrounds, Colors} from "@eachbase/utils";
 
 export const modalsStyle = makeStyles(() => ({
   closeButton:{
@@ -18,6 +18,24 @@ export const modalsStyle = makeStyles(() => ({
   deleteInfo:{
     color:Colors.ThemeRed,
     fontSize: '18px',
+  },
+  inactiveModalBody: {
+    width: '480px',
+    padding: '40px',
+    borderRadius: '8px',
+    backgroundColor: 'white',
+    position: 'relative'
+  },
+  positionedButton: {
+    position: 'absolute',
+    right: '0',
+    top: '8px',
+  },
+  inactiveModalInfo: {
+    fontSize: '16px',
+    color: Colors.TextSecondary,
+    lineHeight: '24px',
+    padding: '16px 0 24px'
   }
 }));
 
