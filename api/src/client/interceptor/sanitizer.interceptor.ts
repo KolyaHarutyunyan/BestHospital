@@ -22,9 +22,9 @@ export class ClientSanitizer implements ISanitize {
             familyLanguage: client.familyLanguage,
             gender: client.gender,
             birthday: client.birthday,
-            status: client.status,
+            status: client.status
         };
-        if(client.enrollments[0] != undefined) clientDTO.enrollment = client.enrollments[0]["fundingSource"]
+        if(client.enrollment) clientDTO.enrollment = client.enrollment;
         return clientDTO;
     }
 

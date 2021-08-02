@@ -23,9 +23,9 @@ export class ClientDTO {
     gender: string;
     @ApiProperty()
     birthday: string;
+    @ApiProperty()
+    enrollment?: string;
     @ApiProperty({ enum: ClientStatus })
     @IsEnum(ClientStatus)
     status: number;
-    @ApiProperty()
-    enrollment?: string;
 }

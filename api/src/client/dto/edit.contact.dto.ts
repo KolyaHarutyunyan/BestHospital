@@ -1,11 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsEnum, IsNotEmpty, IsPhoneNumber, IsUrl } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsPhoneNumber, IsString, IsUrl } from 'class-validator';
+import { ClientStatus } from '../client.constants';
 
-export class ContactDTO {
-    @ApiProperty()
-    clientId?: string;
-    @ApiProperty()
-    id: string;
+export class UpdateContactDto {
     @ApiProperty()
     firstName: string;
     @ApiProperty()
@@ -14,4 +11,6 @@ export class ContactDTO {
     relationship: string;
     @ApiProperty()
     phoneNumber: string;
+    // address
 }
+

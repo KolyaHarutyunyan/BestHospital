@@ -12,6 +12,7 @@ export class ContactSanitizer implements ISanitize {
 
     sanitize(contact: IContact): ContactDTO {
         const contactDTO: ContactDTO = {
+            id: contact.id,
             firstName: contact.firstName,
             lastName: contact.lastName,
             relationship: contact.relationship,
