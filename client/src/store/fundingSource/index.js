@@ -1,11 +1,26 @@
-import {createFundingSource, getFundingSource, getFundingSourceById,} from "./fundingSource.action";
+import {
+    createFundingSource,
+    getFundingSource,
+    getFundingSourceById,
+    getFoundingSourceServiceById,
+    createFoundingSourceServiceById,
+    getFundingSourceHistoriesById,
+    getFundingSourceServ,
+    createFundingSourceServ, getFundingSourceServById
+} from "./fundingSource.action";
 
-export { fundingSourceReducer } from './fundingSource.reducer';
-export { watchFundingSource } from './fundingSource.saga';
+export {fundingSourceReducer} from './fundingSource.reducer';
+export {watchFundingSource} from './fundingSource.saga';
 
 export const fundingSourceActions = {
-  createFundingSource,
-  getFundingSource,
-  getFundingSourceById,
+    createFundingSource,
+    getFundingSource,
+    getFundingSourceById,
+    getFoundingSourceServiceById,
+    createFoundingSourceServiceById,
+    getFundingSourceHistoriesById,
+    getFundingSourceServ,
+    getFundingSourceServById,
+    createFundingSourceServ
 }
 

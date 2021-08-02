@@ -3,13 +3,13 @@ import { TableBodyComponent } from "@eachbase/components";
 import { TableCell } from "@material-ui/core";
 import { Images, useGlobalStyles } from "@eachbase/utils";
 import {useDispatch} from "react-redux";
-import {officeActions} from "@eachbase/store";
+import {fundingSourceActions} from "@eachbase/store";
 
 export const FundingSourceTableBody = ({key, data }) => {
   const globalClasses = useGlobalStyles()
   const dispatch = useDispatch()
   const handleOpenOfficeInfo =(id)=>{
-    dispatch(officeActions.getOfficeById(id))
+     dispatch(fundingSourceActions.getFundingSourceById(id))
   }
 
   return (
