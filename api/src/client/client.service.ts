@@ -3,13 +3,22 @@ import { CreateClientDTO, UpdateClientDto } from './dto';
 import { MongooseUtil } from '../util';
 import { Model, Types } from 'mongoose';
 import { ClientModel } from './client.model';
+import { ClientAuthorizationModel } from './clientAuthorization.model';
 import { ClientContactModel } from './clientContact.model';
 import { ClientEnrollmentModel } from './clientEnrollment.model';
+import { ClientAuthorizationServiceModel } from './clientAuthorizationService.model'
 import { FundingService } from '../funding';
+import { ServiceService } from '../service';
 
-import { ClientSanitizer, ContactSanitizer, EnrollmentSanitizer } from './interceptor';
+import { IAuthorization, IAuthorizationService } from './interface';
+
+import { ClientSanitizer, ContactSanitizer, EnrollmentSanitizer, AuthorizationSanitizer, AuthorizationServiceSanitizer } from './interceptor';
 import { IClient, IContact, IEnrollment } from './interface';
-import { ClientDTO, CreateContactDTO, ContactDTO, CreateEnrollmentDTO, EnrollmentDTO, UpdateEnrollmentDto, UpdateContactDto } from './dto';
+import {
+  ClientDTO, CreateContactDTO, ContactDTO, CreateEnrollmentDTO, EnrollmentDTO,
+  UpdateEnrollmentDto, UpdateContactDto, AuthorizationDTO, CreateAuthorizationDTO,
+  CreateAuthorizationServiceDTO, AuthorizationServiceDTO
+} from './dto';
 
 @Injectable()
 export class ClientService {
@@ -18,18 +27,27 @@ export class ClientService {
     private readonly sanitizer: ClientSanitizer,
     private readonly contactSanitizer: ContactSanitizer,
     private readonly enrollmentSanitizer: EnrollmentSanitizer,
-    private readonly fundingService: FundingService
+    private readonly authorizationSanitizer: AuthorizationSanitizer,
+    private readonly authorizationServiceSanitizer: AuthorizationServiceSanitizer,
+
+
+    private readonly fundingService: FundingService,
+    private readonly service: ServiceService
+
 
   ) {
     this.model = ClientModel;
     this.contactModel = ClientContactModel;
     this.enrollmentModel = ClientEnrollmentModel;
-
+    this.clientAuthorizationModel = ClientAuthorizationModel;
+    this.clientAuthorizationServiceModel = ClientAuthorizationServiceModel;
     this.mongooseUtil = new MongooseUtil();
   }
   private model: Model<IClient>;
   private contactModel: Model<IContact>;
   private enrollmentModel: Model<IEnrollment>;
+  private clientAuthorizationModel: Model<IAuthorization>;
+  private clientAuthorizationServiceModel: Model<IAuthorizationService>;
 
   private mongooseUtil: MongooseUtil;
 
@@ -290,6 +308,69 @@ export class ClientService {
     this.checkContact(contact);
     return contact._id;
   }
+
+
+
+
+
+  /** Create a new authorization */
+  createAuthorization = async (_id: string, funderId: string, dto: CreateAuthorizationDTO): Promise<AuthorizationDTO> => {
+    try {
+      let startDate = new Date(dto.startDate);
+      this.checkTime(startDate);
+      let endDate = new Date(dto.endDate);
+      this.checkTime(endDate);
+
+      const client = await this.model.findOne({ _id });
+      this.checkClient(client);
+
+      const funder = await this.fundingService.findOne(funderId);
+
+      let authorization = new this.clientAuthorizationModel({
+        authorizationId: dto.authorizationId,
+        clientId: client._id,
+        fundingSource: funder.name,
+        // address: await this.addressService.getAddress(dto.address),
+      });
+      authorization.startDate = startDate.toLocaleDateString()
+      authorization.endDate = endDate.toLocaleDateString()
+
+      await authorization.save();
+      return this.authorizationSanitizer.sanitize(authorization);
+    } catch (e) {
+      console.log(e);
+      this.mongooseUtil.checkDuplicateKey(e, 'Client already exists');
+      throw e;
+    }
+  }
+  /** Create a new authorization service */
+  createAuthorizationService = async (_id: string, fundingServiceId: string, dto: CreateAuthorizationServiceDTO): Promise<AuthorizationServiceDTO> => {
+    try {
+      const modifiers = [];
+      const client = await this.model.findOne({ _id });
+      this.checkClient(client);
+      const fundingService = await this.fundingService.findOneService(fundingServiceId);
+      if (fundingService.modifiers.length != []) {
+        fundingService.modifiers.map(modifier => modifiers.push(modifier.name))
+      }
+      let authorizationService = new this.clientAuthorizationServiceModel({
+        total: dto.total,
+        completed: dto.completed,
+        available: dto.available,
+        clientId: client._id,
+        service: fundingService.name,
+        modifiers
+        // address: await this.addressService.getAddress(dto.address),
+      });
+      await authorizationService.save();
+      return this.authorizationServiceSanitizer.sanitize(authorizationService);
+    } catch (e) {
+      console.log(e);
+      this.mongooseUtil.checkDuplicateKey(e, 'Authorization Service already exists');
+      throw e;
+    }
+  }
+
   /** Private methods */
   /** if the date is not valid, throws an exception */
   private checkTime(date: Date) {

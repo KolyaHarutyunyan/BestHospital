@@ -4,4 +4,10 @@ export { ClientSanitizer } from './sanitizer.interceptor';
 export { ContactSanitizer } from './contactSanitizer.interceptor';
 
 //Enrollmetn
-export {EnrollmentSanitizer} from './enrollment.sanitizer'
+export { EnrollmentSanitizer } from './enrollment.sanitizer'
+
+//Authorization
+export { AuthorizationSanitizer } from './authorization.sanitizier';
+
+//Authorization Service
+export { AuthorizationServiceSanitizer } from './authorizationService.sanitizier';

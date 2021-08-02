@@ -12,11 +12,14 @@ import { CommentService } from 'src/comment';
 import { ServiceModule } from '../service'
 import { FundingSanitizer } from 'src/funding/interceptor';
 import { AddressSanitizer } from 'src/address';
+import { AuthorizationSanitizer, AuthorizationServiceSanitizer } from './interceptor'
 
 @Module({
   imports: [ServiceModule],
   controllers: [ClientController],
-  providers: [ClientService, FundingService, HistoryService, CredentialService, CommentService, ClientSanitizer, ContactSanitizer, FundingSanitizer, HistorySanitizer, AddressSanitizer, EnrollmentSanitizer],
+  providers: [ClientService, FundingService, HistoryService, CredentialService,
+    CommentService, ClientSanitizer, ContactSanitizer, FundingSanitizer,
+    HistorySanitizer, AddressSanitizer, EnrollmentSanitizer, AuthorizationSanitizer, AuthorizationServiceSanitizer],
   exports: [ClientService]
 })
 export class ClientModule { }

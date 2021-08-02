@@ -150,7 +150,7 @@ export class FundingController {
     const modifier = await this.fundingService.updateModifier(modifyId, updateModifierDto);
     return modifier;
   }
-  
+
 
   /** Delete the funder */
   @Delete(':id')

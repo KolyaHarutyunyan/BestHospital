@@ -190,6 +190,13 @@ export class FundingService {
     this.checkFunder(funder);
     return this.sanitizer.sanitize(funder);
   }
+  /** Get Funder Service By Id */
+  async findOneService(_id: string): Promise<any> {
+    const fundingService = await this.serviceModel.findOne({ _id }).populate('modifiers');
+    this.checkFundingService(fundingService);
+    return fundingService;
+    // return this.sanitizer.sanitize(funder);
+  }
   /** Get Funder By Name */
   async findByName(name: string): Promise<FundingDTO> {
     const funder = await this.model.findOne({ name });
