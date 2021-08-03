@@ -1,7 +1,7 @@
 import {Paper, Table, TableContainer} from "@material-ui/core";
 import {StaffTableBody, StaffTableHead} from "./core";
 import {useGlobalStyles} from "@eachbase/utils";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import {Loader, PaginationItem} from "@eachbase/components";
 
@@ -12,6 +12,7 @@ export const StaffTable = ({}) => {
         adminsList: state.admins.adminsList,
         httpOnLoad: state.httpOnLoad
     }));
+
     const changePage = (number) => {
         setPage(number);
     };

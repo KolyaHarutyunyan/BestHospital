@@ -4,9 +4,9 @@ import {Steps, CloseButton} from "@eachbase/components";
 import {useGlobalTextStyles} from "@eachbase/utils";
 import {AddressInput, ValidationInput, SelectInput} from "@eachbase/components";
 import {EmailValidator, ErrorText} from "@eachbase/utils";
-import {createAdmin} from "../../../../store/admin/admin.action";
 import {adminActions} from "../../../../store";
 import {useDispatch} from "react-redux";
+
 
 const steps = ['General Info', 'Address', 'Other Details']
 
@@ -33,12 +33,13 @@ const genderList = [
     {name: 'Other'},
 ]
 
+
+
 export const CreateStaff = ({handleClose}) => {
 
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState({});
-const dispatch = useDispatch()
-    console.log(inputs,'inputs')
+    const dispatch = useDispatch()
 
     const classes = createStaffModalStyle()
     const globalText = useGlobalTextStyles()
@@ -62,52 +63,59 @@ const dispatch = useDispatch()
 
     const handleCreate = () => {
         const data = {
-            "name": inputs.name,
-            "officeId": inputs.officeName,
-            "email": inputs.email,
-            "phoneNumber": phone,
-            "establishedDate": new Date(inputs.date).getTime(),
-            "address": fullAddress
+            "firstName": inputs.firstName,
+            "middleName": inputs.middleName,
+            "lastName": inputs.lastName,
+            "email": inputs.primaryEmail,
+            "secondaryEmail": inputs.secondaryEmail,
+            "phone": inputs.primaryPhoneNumber,
+            "secondaryPhone": inputs.secondaryPhoneNumber,
+            "state": 'state',
+            'gender': inputs.gender,
+            'birthday': inputs.birthDate,
+            'residency': 'residency',
+            'ssn': 0
         }
-        // if (inputs.firstName &&
-        //     inputs.middleName &&
-        //     inputs.lastName &&
-        //     inputs.primaryEmail &&
-        //     inputs.secondaryEmail &&
-        //     inputs.primaryPhoneNumber &&
-        //     inputs.secondaryPhoneNumber &&
-        //     inputs.driverLicense &&
-        //     inputs.issuingState &&
-        //     inputs.expirationDate &&
-        //     inputs.department &&
-        //     inputs.supervisor &&
-        //     inputs.residencyStatus &&
-        //     inputs.ssnNumber &&
-        //     inputs.gender &&
-        //     inputs.birthDate
-        // ) {
-            dispatch(adminActions.createAdmin(data))
-        // } else {
-        //     setError(
-        //         !inputs.firstName ? 'firstName' :
-        //             !inputs.middleName ? 'middleNAme' :
-        //              !inputs.lastName ? 'lastName' :
-        //               !inputs.primaryEmail ? 'primaryEmail' :
-        //               !inputs.secondaryEmail ? 'secondaryEmail' :
-        //               !inputs.primaryPhoneNumber ? 'primaryPhoneNumber' :
-        //               !inputs.secondaryPhoneNumber ? 'secondaryPhoneNumber' :
-        //                !inputs.driverLicense ? 'driverLicense' :
-        //                !inputs.issuingState ? 'issuingState' :
-        //                !inputs.expirationDate ? 'expirationDate' :
-        //                !inputs.department ? 'department' :
-        //                 !inputs.supervisor ? 'supervisor' :
-        //                 !inputs.residencyStatus ? 'residencyStatus' :
-        //                 !inputs.ssnNumber ? 'ssnNumber' :
-        //                 !inputs.gender ? 'gender' :
-        //                 !inputs.birthDate ? 'birthDate' :
-        //                  'Input is not field'
-        //     )
-        // }
+        if (inputs.firstName &&
+            inputs.middleName &&
+            inputs.lastName &&
+            inputs.primaryEmail &&
+            inputs.secondaryEmail &&
+            inputs.primaryPhoneNumber &&
+            inputs.secondaryPhoneNumber &&
+            inputs.driverLicense &&
+            inputs.issuingState &&
+            inputs.expirationDate &&
+            inputs.department &&
+            inputs.supervisor &&
+            inputs.residencyStatus &&
+            inputs.ssnNumber &&
+            inputs.gender &&
+            inputs.birthDate
+        ) {
+        dispatch(adminActions.createAdmin(data))
+        handleClose()
+        } else {
+            setError(
+                !inputs.firstName ? 'firstName' :
+                    !inputs.middleName ? 'middleName' :
+                     !inputs.lastName ? 'lastName' :
+                      !inputs.primaryEmail ? 'primaryEmail' :
+                      // !inputs.secondaryEmail ? 'secondaryEmail' :
+                      !inputs.primaryPhoneNumber ? 'primaryPhoneNumber' :
+                      // !inputs.secondaryPhoneNumber ? 'secondaryPhoneNumber' :
+                       !inputs.driverLicense ? 'driverLicense' :
+                       !inputs.issuingState ? 'issuingState' :
+                       !inputs.expirationDate ? 'expirationDate' :
+                       !inputs.department ? 'department' :
+                        !inputs.supervisor ? 'supervisor' :
+                        // !inputs.residencyStatus ? 'residencyStatus' :
+                        !inputs.ssnNumber ? 'ssnNumber' :
+                        !inputs.gender ? 'gender' :
+                        !inputs.birthDate ? 'birthDate' :
+                         'Input is not field'
+            )
+        }
     }
     const firstStep = (
         <React.Fragment>
@@ -163,7 +171,7 @@ const dispatch = useDispatch()
                 variant={"outlined"}
                 name={"secondaryEmail"}
                 type={"email"}
-                label={"Secondary Email*"}
+                label={"Secondary Email"}
                 typeError={error === 'secondaryEmail' ? ErrorText.field : error === 'Not valid email' ? 'Not valid email' : ''}
                 sendBoolean={handleCheck}
                 value={inputs.secondaryEmail}
@@ -185,7 +193,7 @@ const dispatch = useDispatch()
                 value={inputs.secondaryPhoneNumber}
                 variant={"outlined"}
                 type={"number"}
-                label={"Secondary Phone Number*"}
+                label={"Secondary Phone Number"}
                 name={'secondaryPhoneNumber'}
                 typeError={error === 'secondaryPhoneNumber' && ErrorText.field}
             />
@@ -257,7 +265,7 @@ const dispatch = useDispatch()
             />
             <SelectInput
                 name={"residencyStatus"}
-                label={"Residency Status*"}
+                label={"Residency Status"}
                 handleSelect={handleChange}
                 sendBoolean={handleCheck}
                 value={inputs.residencyStatus}
@@ -307,6 +315,7 @@ const dispatch = useDispatch()
                 <CloseButton handleCLic={handleClose}/>
             </div>
             <Steps
+                handleClick={handleCreate}
                 firstStep={firstStep}
                 secondStep={secondStep}
                 thirdStep={thirdStep}

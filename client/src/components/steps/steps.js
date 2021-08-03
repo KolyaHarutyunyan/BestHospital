@@ -10,7 +10,7 @@ import {stepStyles, useStyles, useColorlibStepIconStyles, ColorlibConnector} fro
 import checkmark from "@eachbase/assets/images/icons/checkmark.svg";
 import {CreateChancel} from "@eachbase/components";
 
-export const Steps = ({stepTitles, handleClose, firstStep, secondStep, thirdStep}) => {
+export const Steps = ({handleClick, stepTitles, handleClose, firstStep, secondStep, thirdStep}) => {
 
     const classes = useStyles();
     const stepsStyles = stepStyles()
@@ -20,7 +20,7 @@ export const Steps = ({stepTitles, handleClose, firstStep, secondStep, thirdStep
         if (activeStep !== stepTitles.length - 1) {
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
         } else {
-            alert('send request')
+            handleClick()
         }
     };
 

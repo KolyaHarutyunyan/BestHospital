@@ -7,7 +7,7 @@ import axios from "axios";
 
 export const authService = {
 
-  createAdminService: ( body ) => axios.post(`/staff`, body),
+  createAdminService: ( body ) => axios.post(`/staff/superAdmin`, body),
 
   getAdminsService: ( ) => axios.get('/staff' ),
 
