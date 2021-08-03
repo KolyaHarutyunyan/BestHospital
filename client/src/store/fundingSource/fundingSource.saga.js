@@ -24,6 +24,7 @@ import {httpRequestsOnLoadActions} from "../http_requests_on_load";
 function* createFundingSource(action) {
     try {
         const res = yield call(authService.createFundingSourceService, action.payload.body);
+        console.log(res,'reeeeeeees')
         window.location.replace('/fundingSource')
     } catch (err) {
         console.log(err)
@@ -54,7 +55,6 @@ function* getFundingSource({action, type}) {
 function* getFundingSourceById(action) {
     // yield put(httpRequestsOnErrorsActions.removeError(type));
     // yield put(httpRequestsOnLoadActions.appendLoading(type));
-    console.log(action.payload, 'saga');
 
     try {
         const res = yield call(authService.getFoundingSourceByIdService, action.payload);

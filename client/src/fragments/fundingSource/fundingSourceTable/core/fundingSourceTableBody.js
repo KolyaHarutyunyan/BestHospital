@@ -4,12 +4,14 @@ import { TableCell } from "@material-ui/core";
 import { Images, useGlobalStyles } from "@eachbase/utils";
 import {useDispatch} from "react-redux";
 import {fundingSourceActions} from "@eachbase/store";
+import {useHistory} from "react-router-dom";
 
 export const FundingSourceTableBody = ({key, data }) => {
   const globalClasses = useGlobalStyles()
   const dispatch = useDispatch()
+    const history = useHistory()
   const handleOpenOfficeInfo =(id)=>{
-     dispatch(fundingSourceActions.getFundingSourceById(id))
+      history.push(`/fundingSource/${id}`)
   }
 
   return (
@@ -22,7 +24,7 @@ export const FundingSourceTableBody = ({key, data }) => {
           </TableCell>
           <TableCell>{'Type'}</TableCell>
           {/*<TableCell>{data.address.formattedAddress && data.address.formattedAddress}</TableCell>*/}
-          <TableCell>'dsfsdfsdfsdfdsf'</TableCell>
+          <TableCell>Armenia Yerevan</TableCell>
           <TableCell>{data.email}</TableCell>
           <TableCell>{data.phoneNumber}</TableCell>
     </TableBodyComponent>

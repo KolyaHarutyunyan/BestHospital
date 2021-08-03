@@ -10,7 +10,7 @@ import {
     Agents,
     Carriers,
     FundingSource,
-    Single
+    Single, FundingSourceSingle
 } from "@eachbase/pages";
 import React from "react";
 import {
@@ -32,6 +32,7 @@ export const Router = ({}) => {
       {/*<Route path='/' exact component={Offices}/>*/}
 
       <Route path="/fundingSource" exact component={FundingSource} />
+      <Route path="/fundingSource/:id" exact component={FundingSourceSingle} />
       {/*<Route path="/createOffice" exact component={CreateOfficeTable} />*/}
       <Route path="/staff" exact component={Staff} />
 

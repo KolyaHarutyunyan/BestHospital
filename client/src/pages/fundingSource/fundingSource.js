@@ -13,10 +13,8 @@ export const FundingSource = ({}) => {
     const [open, setOpen] = useState(false)
 
 
-
-
     useEffect(() => {
-         dispatch(fundingSourceActions.getFundingSource())
+        dispatch(fundingSourceActions.getFundingSource())
     }, []);
 
     const {officeById} = useSelector((state) => ({
@@ -45,9 +43,10 @@ export const FundingSource = ({}) => {
                     >
 
                         <FundingSourceTable/>
-                        <button onClick={()=> {
+                        <button onClick={() => {
                             dispatch(fundingSourceActions.createFoundingSourceServiceById('610183a4dcc59c21f0792c35'))
-                        }}>click</button>
+                        }}>click
+                        </button>
                     </TableWrapper>
                 )
                 : (<OfficesInfo info={officeById}/>)
