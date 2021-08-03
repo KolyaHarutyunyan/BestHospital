@@ -46,6 +46,19 @@ export const wrapperStyle = makeStyles(() => ({
       marginTop:'24px',
       height:'444px'
     },
+  },
+
+  //tableWrapperGeneralInfo
+
+  inactiveActiveHeader: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: '31px'
+  },
+  breadcrumb: {
+    margin: 0
   }
 
 }));

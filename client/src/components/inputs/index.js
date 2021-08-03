@@ -4,5 +4,6 @@ export { SearchAndFilter } from "./searchAndFilter";
 export { Switcher } from "./switcher";
 export { SelectInputWidthTags } from "./selectInputWidthTags";
 export { CheckboxesTags } from "./autocompleteSelectInput";
-export { AddressInput } from './addressInput'
-export { SelectInput } from './selectInput'
+export { AddressInput } from './addressInput';
+export { SelectInput } from './selectInput';
+export { Textarea } from './textarea';
