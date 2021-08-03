@@ -136,7 +136,7 @@ export class ClientController {
       @Body() createAuthorizationDTO: CreateAuthorizationDTO) {
       return this.clientService.createAuthorization(id, funderId, createAuthorizationDTO);
     }
-
+    
     /** Create a new authorization service */
     @Post(':id/fundingService/:fundingServiceId/authorization/service')
     @Public()
