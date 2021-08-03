@@ -3,13 +3,14 @@ import { TableBodyComponent } from "@eachbase/components";
 import { TableCell } from "@material-ui/core";
 import { Images, useGlobalStyles } from "@eachbase/utils";
 import {useDispatch} from "react-redux";
-import {officeActions} from "@eachbase/store";
+import {adminActions, officeActions} from "@eachbase/store";
+import {getAdminById} from "../../../../store/admin/admin.action";
 
 export const StaffTableBody = ({key, data }) => {
     const globalClasses = useGlobalStyles()
     const dispatch = useDispatch()
     const handleOpenOfficeInfo =(id)=>{
-        dispatch(officeActions.getOfficeById(id))
+        dispatch(adminActions.getAdminById(id))
     }
 
     return (
@@ -21,7 +22,7 @@ export const StaffTableBody = ({key, data }) => {
                 </div>
             </TableCell>
             <TableCell>{'Type'}</TableCell>
-            <TableCell>{data.address.formattedAddress && data.address.formattedAddress}</TableCell>
+            <TableCell>{data.address   && data.address.formattedAddress && data.address.formattedAddress}</TableCell>
             <TableCell>{data.email}</TableCell>
             <TableCell>{data.phoneNumber}</TableCell>
         </TableBodyComponent>

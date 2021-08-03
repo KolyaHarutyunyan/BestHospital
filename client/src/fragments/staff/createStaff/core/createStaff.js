@@ -4,6 +4,9 @@ import {Steps, CloseButton} from "@eachbase/components";
 import {useGlobalTextStyles} from "@eachbase/utils";
 import {AddressInput, ValidationInput, SelectInput} from "@eachbase/components";
 import {EmailValidator, ErrorText} from "@eachbase/utils";
+import {createAdmin} from "../../../../store/admin/admin.action";
+import {adminActions} from "../../../../store";
+import {useDispatch} from "react-redux";
 
 const steps = ['General Info', 'Address', 'Other Details']
 
@@ -34,7 +37,7 @@ export const CreateStaff = ({handleClose}) => {
 
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState({});
-
+const dispatch = useDispatch()
     console.log(inputs,'inputs')
 
     const classes = createStaffModalStyle()
@@ -58,53 +61,53 @@ export const CreateStaff = ({handleClose}) => {
     );
 
     const handleCreate = () => {
-        // const data = {
-        //     "name": inputs.name,
-        //     "officeId": inputs.officeName,
-        //     "email": inputs.email,
-        //     "phoneNumber": phone,
-        //     "establishedDate": new Date(inputs.date).getTime(),
-        //     "address": fullAddress
-        // }
-        if (inputs.firstName &&
-            inputs.middleName &&
-            inputs.lastName &&
-            inputs.primaryEmail &&
-            inputs.secondaryEmail &&
-            inputs.primaryPhoneNumber &&
-            inputs.secondaryPhoneNumber &&
-            inputs.driverLicense &&
-            inputs.issuingState &&
-            inputs.expirationDate &&
-            inputs.department &&
-            inputs.supervisor &&
-            inputs.residencyStatus &&
-            inputs.ssnNumber &&
-            inputs.gender &&
-            inputs.birthDate
-        ) {
-            // dispatch(fundingSourceActions.createFundingSource(data))
-        } else {
-            setError(
-                !inputs.firstName ? 'firstName' :
-                    !inputs.middleName ? 'middleNAme' :
-                     !inputs.lastName ? 'lastName' :
-                      !inputs.primaryEmail ? 'primaryEmail' :
-                      !inputs.secondaryEmail ? 'secondaryEmail' :
-                      !inputs.primaryPhoneNumber ? 'primaryPhoneNumber' :
-                      !inputs.secondaryPhoneNumber ? 'secondaryPhoneNumber' :
-                       !inputs.driverLicense ? 'driverLicense' :
-                       !inputs.issuingState ? 'issuingState' :
-                       !inputs.expirationDate ? 'expirationDate' :
-                       !inputs.department ? 'department' :
-                        !inputs.supervisor ? 'supervisor' :
-                        !inputs.residencyStatus ? 'residencyStatus' :
-                        !inputs.ssnNumber ? 'ssnNumber' :
-                        !inputs.gender ? 'gender' :
-                        !inputs.birthDate ? 'birthDate' :
-                         'Input is not field'
-            )
+        const data = {
+            "name": inputs.name,
+            "officeId": inputs.officeName,
+            "email": inputs.email,
+            "phoneNumber": phone,
+            "establishedDate": new Date(inputs.date).getTime(),
+            "address": fullAddress
         }
+        // if (inputs.firstName &&
+        //     inputs.middleName &&
+        //     inputs.lastName &&
+        //     inputs.primaryEmail &&
+        //     inputs.secondaryEmail &&
+        //     inputs.primaryPhoneNumber &&
+        //     inputs.secondaryPhoneNumber &&
+        //     inputs.driverLicense &&
+        //     inputs.issuingState &&
+        //     inputs.expirationDate &&
+        //     inputs.department &&
+        //     inputs.supervisor &&
+        //     inputs.residencyStatus &&
+        //     inputs.ssnNumber &&
+        //     inputs.gender &&
+        //     inputs.birthDate
+        // ) {
+            dispatch(adminActions.createAdmin(data))
+        // } else {
+        //     setError(
+        //         !inputs.firstName ? 'firstName' :
+        //             !inputs.middleName ? 'middleNAme' :
+        //              !inputs.lastName ? 'lastName' :
+        //               !inputs.primaryEmail ? 'primaryEmail' :
+        //               !inputs.secondaryEmail ? 'secondaryEmail' :
+        //               !inputs.primaryPhoneNumber ? 'primaryPhoneNumber' :
+        //               !inputs.secondaryPhoneNumber ? 'secondaryPhoneNumber' :
+        //                !inputs.driverLicense ? 'driverLicense' :
+        //                !inputs.issuingState ? 'issuingState' :
+        //                !inputs.expirationDate ? 'expirationDate' :
+        //                !inputs.department ? 'department' :
+        //                 !inputs.supervisor ? 'supervisor' :
+        //                 !inputs.residencyStatus ? 'residencyStatus' :
+        //                 !inputs.ssnNumber ? 'ssnNumber' :
+        //                 !inputs.gender ? 'gender' :
+        //                 !inputs.birthDate ? 'birthDate' :
+        //                  'Input is not field'
+        //     )
+        // }
     }
     const firstStep = (
         <React.Fragment>

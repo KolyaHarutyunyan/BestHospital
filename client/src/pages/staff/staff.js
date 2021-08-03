@@ -3,7 +3,7 @@ import {useHistory} from "react-router-dom";
 import {TableWrapper, SimpleTabs, Card, Notes, TableWrapperGeneralInfo, InactiveModal} from "@eachbase/components";
 import {OfficesInfo, StaffTable, CreateStaff,} from "@eachbase/fragments";
 
-import {officeActions} from "@eachbase/store";
+import {adminActions, officeActions} from "@eachbase/store";
 import {useDispatch, useSelector} from "react-redux";
 import otherDetails from '@eachbase/assets/images/icons/otherDetails.svg'
 
@@ -12,9 +12,17 @@ export const Staff = ({general}) => {
     const dispatch = useDispatch()
     const history = useHistory()
     const [open, setOpen] = useState(false)
+
+
     useEffect(() => {
-        dispatch(officeActions.getOffices())
+        dispatch(adminActions.getAdmins())
     }, []);
+
+    const {adminInfoById} = useSelector((state)=>({
+            adminInfoById: state.admins.adminInfoById
+        })
+    )
+
 
     // const {officeById} = useSelector((state)=>({
     //         officeById: state.offices.officeById,
@@ -118,21 +126,21 @@ export const Staff = ({general}) => {
 
     return (
         <>
-            {/*{!officeById ?*/}
-            {/*    (*/}
-            {/*<TableWrapper*/}
-            {/*    firstButton={"Active"}*/}
-            {/*    secondButton={"Inactive"}*/}
-            {/*    buttonsTab={true}*/}
-            {/*    buttonsTabAddButton={true}*/}
-            {/*    addButtonText={'Add Staff Member'}*/}
-            {/*    openCloseInfo={open}*/}
-            {/*    handleOpenClose={handleOpenClose}*/}
-            {/*    body={<CreateStaff handleClose={handleOpenClose}/>}*/}
-            {/*>*/}
-            {/*    <StaffTable/>*/}
-            {/*</TableWrapper>*/}
+            {!adminInfoById ?
 
+            <TableWrapper
+                firstButton={"Active"}
+                secondButton={"Inactive"}
+                buttonsTab={true}
+                buttonsTabAddButton={true}
+                addButtonText={'Add Staff Member'}
+                openCloseInfo={open}
+                handleOpenClose={handleOpenClose}
+                body={<CreateStaff handleClose={handleOpenClose}/>}
+            >
+                <StaffTable/>
+            </TableWrapper>
+:
             <TableWrapperGeneralInfo
                 status='inactive'
                 buttonsTabAddButton={true}
@@ -146,8 +154,8 @@ export const Staff = ({general}) => {
                 </div>
             </TableWrapperGeneralInfo>
 
-            {/*)*/}
-            {/*: (<OfficesInfo info={officeById}/>)*/}
+            }
+            {/*// : (<OfficesInfo info={officeById}/>)*/}
 
 
         </>
