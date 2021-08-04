@@ -31,8 +31,6 @@ export const SimpleModal = ({status, openDefault, handleOpenClose, content, back
     </div>
   );
 
-  console.log(status,'status');
-
   return (
     <div>
       {addButton &&

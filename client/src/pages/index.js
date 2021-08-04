@@ -9,6 +9,7 @@ export { Factoring } from "./factoring";
 export { Management } from "./management";
 export { Authorities } from "./authorities";
 export { Single } from "./single";
+export { SingleStaff } from './staff';
 
 export { Agents } from './agents'
 export { Carriers } from './carriers'
