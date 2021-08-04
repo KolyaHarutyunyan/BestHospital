@@ -6,6 +6,7 @@ import staffActive from '@eachbase/assets/images/icons/staffActive.svg'
 import staffPassive from '@eachbase/assets/images/icons/staffPassive.svg';
 import addCircle from '@eachbase/images/icons/addCircle.svg'
 import fundingSourceOutline from '@eachbase/images/icons/fundingSourceOutline.svg'
+import staffOutline from '@eachbase/images/icons/staffOutline.svg'
 import roleManagementActive from '@eachbase/images/icons/roleManagementActive.svg'
 import roleManagementPassive from '@eachbase/images/icons/roleManagementPassive.svg'
 import addYellowIcon from '@eachbase/images/icons/addYellowIcon.svg'
@@ -114,5 +115,5 @@ export const Images = {
   factoringBold:factoringBold,
   carrier:carrier,
   carrierBold:carrierBold,
-
+  staffOutline: staffOutline
 }

@@ -4,6 +4,9 @@ import {Steps, CloseButton} from "@eachbase/components";
 import {useGlobalTextStyles} from "@eachbase/utils";
 import {AddressInput, ValidationInput, SelectInput} from "@eachbase/components";
 import {EmailValidator, ErrorText} from "@eachbase/utils";
+import {adminActions} from "../../../../store";
+import {useDispatch} from "react-redux";
+
 
 const steps = ['General Info', 'Address', 'Other Details']
 
@@ -30,12 +33,13 @@ const genderList = [
     {name: 'Other'},
 ]
 
+
+
 export const CreateStaff = ({handleClose}) => {
 
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState({});
-
-    console.log(inputs,'inputs')
+    const dispatch = useDispatch()
 
     const classes = createStaffModalStyle()
     const globalText = useGlobalTextStyles()
@@ -58,14 +62,20 @@ export const CreateStaff = ({handleClose}) => {
     );
 
     const handleCreate = () => {
-        // const data = {
-        //     "name": inputs.name,
-        //     "officeId": inputs.officeName,
-        //     "email": inputs.email,
-        //     "phoneNumber": phone,
-        //     "establishedDate": new Date(inputs.date).getTime(),
-        //     "address": fullAddress
-        // }
+        const data = {
+            "firstName": inputs.firstName,
+            "middleName": inputs.middleName,
+            "lastName": inputs.lastName,
+            "email": inputs.primaryEmail,
+            "secondaryEmail": inputs.secondaryEmail,
+            "phone": inputs.primaryPhoneNumber,
+            "secondaryPhone": inputs.secondaryPhoneNumber,
+            "state": 'state',
+            'gender': inputs.gender,
+            'birthday': inputs.birthDate,
+            'residency': 'residency',
+            'ssn': 0
+        }
         if (inputs.firstName &&
             inputs.middleName &&
             inputs.lastName &&
@@ -83,22 +93,23 @@ export const CreateStaff = ({handleClose}) => {
             inputs.gender &&
             inputs.birthDate
         ) {
-            // dispatch(fundingSourceActions.createFundingSource(data))
+        dispatch(adminActions.createAdmin(data))
+        handleClose()
         } else {
             setError(
                 !inputs.firstName ? 'firstName' :
-                    !inputs.middleName ? 'middleNAme' :
+                    !inputs.middleName ? 'middleName' :
                      !inputs.lastName ? 'lastName' :
                       !inputs.primaryEmail ? 'primaryEmail' :
-                      !inputs.secondaryEmail ? 'secondaryEmail' :
+                      // !inputs.secondaryEmail ? 'secondaryEmail' :
                       !inputs.primaryPhoneNumber ? 'primaryPhoneNumber' :
-                      !inputs.secondaryPhoneNumber ? 'secondaryPhoneNumber' :
+                      // !inputs.secondaryPhoneNumber ? 'secondaryPhoneNumber' :
                        !inputs.driverLicense ? 'driverLicense' :
                        !inputs.issuingState ? 'issuingState' :
                        !inputs.expirationDate ? 'expirationDate' :
                        !inputs.department ? 'department' :
                         !inputs.supervisor ? 'supervisor' :
-                        !inputs.residencyStatus ? 'residencyStatus' :
+                        // !inputs.residencyStatus ? 'residencyStatus' :
                         !inputs.ssnNumber ? 'ssnNumber' :
                         !inputs.gender ? 'gender' :
                         !inputs.birthDate ? 'birthDate' :
@@ -160,7 +171,7 @@ export const CreateStaff = ({handleClose}) => {
                 variant={"outlined"}
                 name={"secondaryEmail"}
                 type={"email"}
-                label={"Secondary Email*"}
+                label={"Secondary Email"}
                 typeError={error === 'secondaryEmail' ? ErrorText.field : error === 'Not valid email' ? 'Not valid email' : ''}
                 sendBoolean={handleCheck}
                 value={inputs.secondaryEmail}
@@ -182,7 +193,7 @@ export const CreateStaff = ({handleClose}) => {
                 value={inputs.secondaryPhoneNumber}
                 variant={"outlined"}
                 type={"number"}
-                label={"Secondary Phone Number*"}
+                label={"Secondary Phone Number"}
                 name={'secondaryPhoneNumber'}
                 typeError={error === 'secondaryPhoneNumber' && ErrorText.field}
             />
@@ -254,7 +265,7 @@ export const CreateStaff = ({handleClose}) => {
             />
             <SelectInput
                 name={"residencyStatus"}
-                label={"Residency Status*"}
+                label={"Residency Status"}
                 handleSelect={handleChange}
                 sendBoolean={handleCheck}
                 value={inputs.residencyStatus}
@@ -304,6 +315,7 @@ export const CreateStaff = ({handleClose}) => {
                 <CloseButton handleCLic={handleClose}/>
             </div>
             <Steps
+                handleClick={handleCreate}
                 firstStep={firstStep}
                 secondStep={secondStep}
                 thirdStep={thirdStep}

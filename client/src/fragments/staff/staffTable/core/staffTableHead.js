@@ -7,10 +7,7 @@ export const StaffTableHead = ({}) => {
         <TableHeadComponent>
             {<>
                 <TableCell>
-                    <SearchAndFilter title={"Name"} />
-                </TableCell>
-                <TableCell>
-                    <SearchAndFilter title={"Type"} />
+                    <SearchAndFilter title={"Full Name"} />
                 </TableCell>
                 <TableCell>
                     <SearchAndFilter title={"Address"} />
