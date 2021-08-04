@@ -1,11 +1,16 @@
 import React, {useEffect, useState} from "react";
-import {SimpleTabs, Card, Notes, TableWrapperGeneralInfo, InactiveModal} from "@eachbase/components";
+import {SimpleTabs,  Notes, TableWrapperGeneralInfo, InactiveModal} from "@eachbase/components";
 import {adminActions, fundingSourceActions} from "@eachbase/store";
 import {useDispatch, useSelector} from "react-redux";
-import otherDetails from '@eachbase/assets/images/icons/otherDetails.svg';
-import {useLocation, useParams} from "react-router-dom";
-import {CardItem} from "../../../components/card/cardItem";
-import {FundingSourceGeneral, FundingSourceSingleHeader} from "./core";
+import { useParams} from "react-router-dom";
+import {
+    FundingSourceSingleGeneral,
+    FundingSourceSingleHeader,
+    FundingSourceSingleServices,
+    FundingSourceSingleNotes,
+    FundingSourceSingleHistories
+} from "./core";
+
 
 export const FundingSourceItem = ({general}) => {
     const dispatch = useDispatch()
@@ -28,67 +33,31 @@ export const FundingSourceItem = ({general}) => {
     const handleOpenClose = () => {
         setOpen(!open)
     }
-    // component
-    const [inputField, setInputField] = useState('')
-    console.log(inputField, 'inputField');
+
+
+
     const tabsLabels = [
         {label: 'General Information'},
         {label: 'Services'},
         {label: 'Notes'},
         {label: 'History'}
     ]
-    const headerTitles = [
-        {
-            title: 'title 1',
-            sortable: true
-        },
-        {
-            title: 'title 2',
-            sortable: true
-        },
-        {
-            title: 'title 3',
-            sortable: false
-        },
-    ];
-    const bodyTitles = [
-        {
-            title: 'body title 1',
-        },
-        {
-            title: 'body title 2',
-        },
-        {
-            title: 'b t 3',
-        }
-    ]
-    const thirdTab = () => {
-        return (
-            <div>
-                Third screen
-                <input type="text"
-                       onChange={
-                           (e) => setInputField(e.target.value)
-                       }
-                />
-            </div>
-        )
-    }
+
+
     const tabsContent = [
         {
-            tabComponent: <FundingSourceGeneral data={data}/>
+            tabComponent: <FundingSourceSingleGeneral data={data}/>
         },
         {
-            tabComponent: (<Notes bodyTitles={bodyTitles} headerTitles={headerTitles}/>)
+            tabComponent: <FundingSourceSingleServices/>
         },
         {
-            tabComponent: thirdTab()
+            tabComponent: <FundingSourceSingleNotes />
         },
         {
-            tabComponent: thirdTab()
+            tabComponent: <FundingSourceSingleHistories />
         },
     ];
-    // component
 
 
 
@@ -97,6 +66,8 @@ export const FundingSourceItem = ({general}) => {
             <TableWrapperGeneralInfo
                 title={data?.name}
                 status='inactive'
+                parent='Funding Source'
+                parentLink='/fundingSource'
                 buttonsTabAddButton={true}
                 activeInactiveText={'Inactive'}
                 openCloseInfo={open}
@@ -104,11 +75,13 @@ export const FundingSourceItem = ({general}) => {
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
                 <div style={{backgroundColor: 'white', padding: '20px'}}>
-                   <FundingSourceSingleHeader title={data?.name} activeTab={activeTab} />
+                    <FundingSourceSingleHeader title={data?.name} activeTab={activeTab}/>
                     <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
                 </div>
             </TableWrapperGeneralInfo>
-            {/*// : (<OfficesInfo info={officeById}/>)*/}
+            {/*// : (<OfficesInfo info={officeById}/>)*/
+            }
         </>
-    );
+    )
+        ;
 }

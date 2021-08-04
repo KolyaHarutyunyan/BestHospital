@@ -6,7 +6,8 @@ import {
     createFoundingSourceServiceById,
     getFundingSourceHistoriesById,
     getFundingSourceServ,
-    createFundingSourceServ, getFundingSourceServById
+    createFundingSourceServ,
+    getFundingSourceServById
 } from "./fundingSource.action";
 
 export {fundingSourceReducer} from './fundingSource.reducer';

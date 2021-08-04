@@ -116,7 +116,7 @@ function* getFundingSourceHistoriesById(action) {
     } catch (error) {
         // yield put(httpRequestsOnLoadActions.removeLoading(type));
         // yield put(httpRequestsOnErrorsActions.removeError(type));
-        console.log(error)
+        console.log(error, 'eeeeeerrrrrrr')
     }
 }
 

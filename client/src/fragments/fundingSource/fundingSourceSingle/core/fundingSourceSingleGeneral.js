@@ -1,7 +1,7 @@
 import React from "react";
 import {Card} from "../../../../components";
 
-export const FundingSourceGeneral = ({data}) => {
+export const FundingSourceSingleGeneral = ({data}) => {
     return (
         <div>
             <div style={{display: 'flex', justifyContent: "space-between"}}>

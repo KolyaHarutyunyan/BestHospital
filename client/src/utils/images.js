@@ -57,6 +57,8 @@ import agentsFill from '@eachbase/images/icons/agentsFill.svg'
 import factoringBold from '@eachbase/images/icons/factoringBold.svg'
 import carrier from '@eachbase/images/icons/carrier.svg'
 import carrierBold from '@eachbase/images/icons/carrierBold.svg'
+import remove from '@eachbase/images/icons/remove.svg'
+
 
 export const Images = {
   doctors: doctors,
@@ -115,5 +117,6 @@ export const Images = {
   factoringBold:factoringBold,
   carrier:carrier,
   carrierBold:carrierBold,
-  staffOutline: staffOutline
+  staffOutline: staffOutline,
+  remove : remove
 }
