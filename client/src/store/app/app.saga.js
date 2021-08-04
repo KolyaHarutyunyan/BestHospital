@@ -1,4 +1,4 @@
-import { fork } from 'redux-saga/effects';
+import { fork  } from 'redux-saga/effects';
 import { watchAuth } from '../auth';
 import {watchPermission} from "../permissions";
 import {watchOffice} from "../offices";
