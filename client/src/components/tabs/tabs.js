@@ -40,7 +40,7 @@ function a11yProps(index) {
     };
 }
 
-export const SimpleTabs = ({tabsLabels, tabsContent}) => {
+export const SimpleTabs = ({tabsLabels, tabsContent, setActiveTab}) => {
     const tabStyle = tabsStyles()
     const [value, setValue] = React.useState(0);
 
@@ -61,7 +61,7 @@ export const SimpleTabs = ({tabsLabels, tabsContent}) => {
                     {
                         tabsLabels && tabsLabels.map((tabLabel, index)=>{
                             return (
-                                <Tab onClick={()=> console.log(index,'index')} className={tabStyle.tabLabel} label={tabLabel.label} {...a11yProps(index)} />
+                                <Tab onClick={()=> setActiveTab(index)} className={tabStyle.tabLabel} label={tabLabel.label} {...a11yProps(index)} />
                             )
                         })
                     }

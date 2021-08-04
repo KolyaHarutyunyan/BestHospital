@@ -37,10 +37,9 @@ export const CreateFundingSource = ({ handleClose }) => {
             'contact' : inputs.contact,
             'website' : inputs.website,
             "address": 'armenia yerevan',
-            "status": "INACTIVE"
+            "status": 1
             // fullAddress
         }
-        console.log(data,'8888888888888')
         if (inputs.name && inputs.email && inputs.phone && inputs.type && inputs.contact && inputs.website) {
              dispatch(fundingSourceActions.createFundingSource(data))
         }
