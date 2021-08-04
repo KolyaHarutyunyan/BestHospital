@@ -18,7 +18,7 @@ export const OfficesInfo = ({handleClose, info}) => {
         }
     }, [])
 
-    const handleSwitch =()=>{     
+    const handleSwitch =()=>{
         if( switchBoolean ){
             dispatch(officeActions.inactivateOffice(info.id))
             setSwitchBoolean(false)
@@ -49,7 +49,7 @@ export const OfficesInfo = ({handleClose, info}) => {
                     </CreateWrapperHead>
                 }
                 body={
-                    <OfficeInfoTable 
+                    <OfficeInfoTable
                       handleChangeName={setOfficeName}
                       info={info}
                     />
