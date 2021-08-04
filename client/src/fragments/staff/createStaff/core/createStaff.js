@@ -33,8 +33,6 @@ const genderList = [
     {name: 'Other'},
 ]
 
-
-
 export const CreateStaff = ({handleClose}) => {
 
     const [error, setError] = useState("");
