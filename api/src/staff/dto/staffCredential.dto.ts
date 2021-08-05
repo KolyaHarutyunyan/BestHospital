@@ -6,5 +6,5 @@ export class StaffCredentialDTO {
     @ApiProperty()
     credentialId: string;
     @ApiProperty({ required: false })
-    expirationDate?: String;
+    expirationDate?: string;
 }

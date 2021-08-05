@@ -1,10 +1,11 @@
 import { Document } from 'mongoose';
+import { TerminationDTO } from '../../termination';
 
 export interface IEmployment extends Document {
-    staffId: string;
+    id: string;
     departmentId: string;
-    termination: string;
-    schedule: string;
+    termination: TerminationDTO;
+    schedule: number;
     supervisor: string;
-    date: String;
+    date: string;
 }

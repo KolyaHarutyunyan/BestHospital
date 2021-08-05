@@ -5,20 +5,21 @@ import {
   Param,
   Patch,
   Post,
+  Delete,
   UseGuards,
 } from '@nestjs/common';
 import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { StaffService } from './staff.service';
-import { StaffDTO, CreateStaffDto, EditStaffDTO, CreateStaffCredentialDto, StaffCredentialDTO } from './dto';
+import { StaffDTO, CreateStaffDto, EditStaffDTO, CreateStaffCredentialDto, EditStaffCredentialDTO, StaffCredentialDTO } from './dto';
 import { ACCESS_TOKEN } from '../authN';
 import { Public, ParseObjectIdPipe } from '../util';
 import { AuthZGuard, PermissionList } from 'src/authZ';
 
 @Controller('staff')
-@ApiTags('Admin Endpoints')
+@ApiTags('Staff Endpoints')
 @ApiHeader({ name: ACCESS_TOKEN })
 export class StaffController {
-  constructor(private readonly staffService: StaffService) {}
+  constructor(private readonly staffService: StaffService) { }
 
   /** Create a new admin */
   // @Post()
@@ -30,8 +31,21 @@ export class StaffController {
   //   return admin;
   // }
 
-  /** Edit an admin */
+
+  /** Create a new staff */
+  @Post()
+  @ApiOkResponse({ type: StaffDTO })
+  @Public()
+  async createSuperAdmin(
+    @Body() createStaffDTO: CreateStaffDto,
+  ): Promise<StaffDTO> {
+    const admin = await this.staffService.create(createStaffDTO);
+    return admin;
+  }
+
+  /** Edit a staff */
   @Patch(':id')
+  @ApiOkResponse({ type: StaffDTO })
   @Public()
   @ApiOkResponse({ type: StaffDTO })
   async edit(
@@ -42,27 +56,7 @@ export class StaffController {
     return admin;
   }
 
-  /** Create a new admin */
-  @Post('superAdmin')
-  @Public()
-  async createSuperAdmin(
-    @Body() createStaffDTO: CreateStaffDto,
-  ): Promise<StaffDTO> {
-    const admin = await this.staffService.create(createStaffDTO);
-    return admin;
-  }
-
-    /** Create a new staff credential */
-    @Post('staffCredential')
-    @Public()
-    async createStaffCredential(
-      @Body() createStaffCredentialDTO: CreateStaffCredentialDto,
-    ): Promise<StaffCredentialDTO> {
-      const staffCredential = await this.staffService.createStaffCredential(createStaffCredentialDTO);
-      return staffCredential;
-    }
-  
-  /** Get All Users */
+  /** Get All Staffs */
   @Get()
   @Public()
   @ApiOkResponse({ type: [StaffDTO] })
@@ -70,7 +64,7 @@ export class StaffController {
     return await this.staffService.getUsers();
   }
 
-  /** Get the user profile */
+  /** Get the staff profile */
   @Get(':id')
   @ApiOkResponse({ type: StaffDTO })
   @Public()
@@ -78,5 +72,54 @@ export class StaffController {
     @Param('id', ParseObjectIdPipe) userId: string,
   ): Promise<StaffDTO> {
     return await this.staffService.getProfile(userId);
+  }
+
+
+
+
+
+
+
+  /** Create a new staff credential */
+  @Post('credential')
+  @ApiOkResponse({ type: StaffCredentialDTO })
+  @Public()
+  async createStaffCredential(
+    @Body() createStaffCredentialDTO: CreateStaffCredentialDto,
+  ): Promise<StaffCredentialDTO> {
+    const staffCredential = await this.staffService.createStaffCredential(createStaffCredentialDTO);
+    return staffCredential;
+  }
+
+  /** Get the crednetial profile */
+  @Get(':id/credential')
+  @ApiOkResponse({ type: StaffCredentialDTO })
+  @Public()
+  async findCredential(
+    @Param('id', ParseObjectIdPipe) staffId: string,
+  ): Promise<StaffCredentialDTO> {
+    return await this.staffService.findCredential(staffId);
+  }
+  /** Edit a credential */
+  @Patch(':id/credential')
+  @Public()
+  @ApiOkResponse({ type: StaffCredentialDTO })
+  async editCredential(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Body() dto: EditStaffCredentialDTO,
+  ): Promise<StaffCredentialDTO> {
+    const credential = await this.staffService.editCredential(id, dto);
+    return credential;
+  }
+
+  /** Delete a credential */
+  @Delete(':id/credential')
+  @Public()
+  @ApiOkResponse({ type: 'string' })
+  async deleteCredential(
+    @Param('id', ParseObjectIdPipe) id: string
+  ): Promise<string> {
+    const credential = await this.staffService.deleteCredential(id);
+    return credential;
   }
 }

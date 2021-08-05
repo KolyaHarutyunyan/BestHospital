@@ -2,8 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ApiTags } from '@nestjs/swagger';
 import { ParseObjectIdPipe, Public } from '../util';
 import { ClientService } from './client.service';
-import { CreateClientDTO, UpdateClientDto, CreateContactDTO, ContactDTO, EnrollmentDTO,
-   CreateEnrollmentDTO, UpdateEnrollmentDto, UpdateContactDto, AuthorizationDTO, CreateAuthorizationDTO, CreateAuthorizationServiceDTO } from './dto';
+import {
+  CreateClientDTO, UpdateClientDto, CreateContactDTO, ContactDTO, EnrollmentDTO,
+  CreateEnrollmentDTO, UpdateEnrollmentDto, UpdateContactDto, AuthorizationDTO, CreateAuthorizationDTO, CreateAuthorizationServiceDTO
+} from './dto';
 
 @Controller('client')
 @ApiTags('Client Endpoints')
@@ -127,52 +129,52 @@ export class ClientController {
 
 
 
-    /** Create a new authorization */
-    @Post(':id/funder/:funderId/authorization')
-    @Public()
-    createAuthorization(
-      @Param('id', ParseObjectIdPipe) id: string,
-      @Param('funderId', ParseObjectIdPipe) funderId: string,
-      @Body() createAuthorizationDTO: CreateAuthorizationDTO) {
-      return this.clientService.createAuthorization(id, funderId, createAuthorizationDTO);
-    }
-    
-    /** Create a new authorization service */
-    @Post(':id/fundingService/:fundingServiceId/authorization/service')
-    @Public()
-    createAuthorizationService(
-      @Param('id', ParseObjectIdPipe) id: string,
-      @Param('fundingServiceId', ParseObjectIdPipe) fundingServiceId: string,
-      @Body() createAuthorizationServiceDTO: CreateAuthorizationServiceDTO) {
-      return this.clientService.createAuthorizationService(id, fundingServiceId, createAuthorizationServiceDTO);
-    }
-    // /**Get All Contacts */
-    // @Get(':id/contacts')
-    // @Public()
-    // findAllAuthorization(
-    //   @Param('id', ParseObjectIdPipe) id: string) {
-    //   return this.clientService.findAllAuthorization(id);
-    // }
-    // /**Get Contact By Id */
-    // @Get('contact/:contactId')
-    // @Public()
-    // findContact(
-    //   @Param('contactId', ParseObjectIdPipe) contactId: string) {
-    //   return this.clientService.findContact(contactId);
-    // }
-  
-    // /** Update Contact By Id */
-    // @Patch('contact/:contactId')
-    // @Public()
-    // updateContact(@Param('contactId', ParseObjectIdPipe) contactId: string,
-    //   @Body() updateContactDto: UpdateContactDto) {
-    //   return this.clientService.updateContact(contactId, updateContactDto);
-    // }
-  
-    // /** Delete Contact By Id */
-    // @Delete('contact/:contactId')
-    // @Public()
-    // removeContact(@Param('contactId', ParseObjectIdPipe) contactId: string) {
-    //   return this.clientService.removeContact(contactId);
-    // }
+  /** Create a new authorization */
+  @Post(':id/funder/:funderId/authorization')
+  @Public()
+  createAuthorization(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Param('funderId', ParseObjectIdPipe) funderId: string,
+    @Body() createAuthorizationDTO: CreateAuthorizationDTO) {
+    return this.clientService.createAuthorization(id, funderId, createAuthorizationDTO);
+  }
+
+  /** Create a new authorization service */
+  @Post(':id/fundingService/:fundingServiceId/authorization/service')
+  @Public()
+  createAuthorizationService(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Param('fundingServiceId', ParseObjectIdPipe) fundingServiceId: string,
+    @Body() createAuthorizationServiceDTO: CreateAuthorizationServiceDTO) {
+    return this.clientService.createAuthorizationService(id, fundingServiceId, createAuthorizationServiceDTO);
+  }
+  // /**Get All Contacts */
+  // @Get(':id/contacts')
+  // @Public()
+  // findAllAuthorization(
+  //   @Param('id', ParseObjectIdPipe) id: string) {
+  //   return this.clientService.findAllAuthorization(id);
+  // }
+  // /**Get Contact By Id */
+  // @Get('contact/:contactId')
+  // @Public()
+  // findContact(
+  //   @Param('contactId', ParseObjectIdPipe) contactId: string) {
+  //   return this.clientService.findContact(contactId);
+  // }
+
+  // /** Update Contact By Id */
+  // @Patch('contact/:contactId')
+  // @Public()
+  // updateContact(@Param('contactId', ParseObjectIdPipe) contactId: string,
+  //   @Body() updateContactDto: UpdateContactDto) {
+  //   return this.clientService.updateContact(contactId, updateContactDto);
+  // }
+
+  // /** Delete Contact By Id */
+  // @Delete('contact/:contactId')
+  // @Public()
+  // removeContact(@Param('contactId', ParseObjectIdPipe) contactId: string) {
+  //   return this.clientService.removeContact(contactId);
+  // }
 }
