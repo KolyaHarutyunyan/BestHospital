@@ -8,7 +8,7 @@ export const authService = {
 
     getFoundingSourceByIdService: (id) => axios.get(`/funding/${id}`,),
 
-    getFoundingSourceServiceByIdService: (id) => axios.get(`/funding/${id}/service`,),
+    getFoundingSourceServiceByIdService: (id) => axios.get(`/funding/${id}/service`),
 
     createFoundingSourceServiceByIdService: (id, body) => axios.post(`/funding/${id}/service`, body),
 

@@ -82,5 +82,32 @@ export const cardStyle = makeStyles(() => ({
             paddingLeft: '8px',
             lineHeight: '36px'
         },
+    },
+    historyCardStyle : {
+        width: '100%',
+        padding: '16px',
+        background : '#F2F4F8',
+        marginBottom: 16,
+        borderRadius : 8
+    },
+    historyCardDateStyle: {
+        color: Colors.ThemeBlue,
+        fontSize: 14,
+        fontWeight: 600,
+        marginBottom: 16
+    },
+    historyCardBoxStyle : {
+        width : '100%',
+        background : Colors.BackgroundWhite,
+        borderRadius : 8,
+        padding : '16px 32px',
+        display: "flex",
+        alignItems: 'center',
+        marginTop : 8,
+        fontSize : 14,
+        color : Colors.TextPrimary
+    },
+    historyCardBoxTimeStyle: {
+        minWidth : 200
     }
 }));

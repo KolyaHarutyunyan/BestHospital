@@ -63,6 +63,7 @@ import otherDetailsIcon from '@eachbase/images/icons/otherDetails.svg'
 import remove from "@eachbase/images/icons/remove.svg"
 
 
+
 export const Images = {
   doctors: doctors,
   phone: phone,

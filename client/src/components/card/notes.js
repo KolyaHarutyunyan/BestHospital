@@ -9,9 +9,9 @@ import {PaginationItem} from "../pagination";
 
 import { makeStyles } from "@material-ui/core/styles";
 
-export const Notes = ({headerTitles, bodyTitles}) => {
+export const Notes = ({data,headerTitles, bodyTitles, pagination, defaultStyle}) => {
 
-    const officesStyle = makeStyles(() => ({
+    const officesStyle = makeStyles(({}) => ({
         thWidth: {
             '&:last-child': {
                 width: '7%'
@@ -36,6 +36,12 @@ export const Notes = ({headerTitles, bodyTitles}) => {
     };
     // const list = officesList && officesList.length && officesList[page - 1]
 
+
+
+    let obj = {
+
+    }
+
     return (
         <div className={globalStyle.tableWrapper}>
             <TableContainer>
@@ -48,7 +54,7 @@ export const Notes = ({headerTitles, bodyTitles}) => {
                         {
                             headerTitles && headerTitles.map((headerItem, index) => {
                                 return (
-                                    <TableCell key={index} className={classes.thWidth}>
+                                    <TableCell key={index} className={defaultStyle  ? null : classes.thWidth}>
                                         <SearchAndFilter title={headerItem.title} custom={headerItem.sortable}/>
                                     </TableCell>
                                 )
@@ -58,20 +64,31 @@ export const Notes = ({headerTitles, bodyTitles}) => {
 
                     <TableBodyComponent>
                         {
-                            bodyTitles && bodyTitles.map((item, index) => {
+                            data && data.map((item, index) => {
+                                const allowed = ['name', 'size', 'min', 'max']
+                                const filtered = Object.keys(item)
+                                    .filter(key => allowed.includes(key))
+                                    .reduce((obj, key) => {
+                                        obj[key] = item[key];
+                                        return obj;
+                                    }, {});
+                                console.log(filtered,'tttttttarrrar')
                                 return (
-                                    <TableCell key={index}>{item.title}</TableCell>
+
+                                    <>
+                                        <TableCell key={index}>  {'fghg'}  </TableCell>
+                                    </>
                                 )
                             })
                         }
                     </TableBodyComponent>
                 </Table>
-                <PaginationItem
+                {pagination &&  <PaginationItem
                     text={`Showing 30 to 30 of 200 entries`}
                     handleReturn={(number) => changePage(number)}
                     page={page}
                     count={officesList.length}
-                />
+                />}
             </TableContainer>
         </div>
     )
