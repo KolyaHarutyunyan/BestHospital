@@ -8,19 +8,20 @@ export const Card = ({cardInfo,color, title,icon, showHeader, width}) => {
     return (
         <div className={classes.card} style={width && {width: width, 'max-width' : 563} }>
             {showHeader && <CardHeader color={color} title={title} icon={icon}/>}
-            {
-                cardInfo && cardInfo.map((item,index)=>{
-                    return (
-                        <CardItem
-                            key={index}
-                            title={item.title}
-                            value={item.value}
-                            width ={width}
-                        />
-                    )
-                })
-            }
-
+            <div className={classes.cardBody}>
+                {
+                    cardInfo && cardInfo.map((item,index)=>{
+                        return (
+                            <CardItem
+                                key={index}
+                                title={item.title}
+                                value={item.value}
+                                width ={width}
+                            />
+                        )
+                    })
+                }
+            </div>
         </div>
     )
 }

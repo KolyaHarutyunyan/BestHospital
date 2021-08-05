@@ -50,6 +50,16 @@ export const cardStyle = makeStyles(() => ({
         height: '4px',
         borderRadius: '0 0 8px 8px',
     },
+    cardBody: {
+        maxHeight: 404,
+        overflowY: 'scroll',
+        overflow: 'hidden',
+        msOverflowStyle: 'none',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none'
+        },
+    },
     cardItem: {
         width: '100%',
         height: '48px',

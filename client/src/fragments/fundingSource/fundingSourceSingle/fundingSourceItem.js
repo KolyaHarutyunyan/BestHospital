@@ -75,8 +75,8 @@ export const FundingSourceItem = ({general}) => {
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
                 <div style={{backgroundColor: 'white', padding: '20px'}}>
-                    <FundingSourceSingleHeader title={data?.name} activeTab={activeTab}/>
-                    <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
+                   <FundingSourceSingleHeader title={data?.name} activeTab={activeTab} />
+                   <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
                 </div>
             </TableWrapperGeneralInfo>
             {/*// : (<OfficesInfo info={officeById}/>)*/

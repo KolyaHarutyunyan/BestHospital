@@ -18,7 +18,7 @@ export const superAdminRouters =
         {
             "name": "Branches",
             "icon": "Branches",
-            "path": "/fundingSource"
+            "path": "/single"
         },
         {
             "name": "Human Resources",
