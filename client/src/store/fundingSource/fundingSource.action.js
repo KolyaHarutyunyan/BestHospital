@@ -8,6 +8,7 @@ import {
     GET_FUNDING_SOURCE_SERV,
     CREATE_FUNDING_SOURCE_SERV,
     GET_FUNDING_SOURCE_SERV_BY_ID,
+    EDIT_FUNDING_SOURCE,
 } from "./fundingSource.types";
 
 export const createFundingSource = (body) => {
@@ -16,6 +17,15 @@ export const createFundingSource = (body) => {
         payload: {body}
     }
 }
+
+export const editFundingSource = (id,body) => {
+    console.log(id, body, 'action')
+    return {
+        type: EDIT_FUNDING_SOURCE,
+        payload: {id,body}
+    }
+}
+
 
 export const getFundingSource = () => {
     return {
@@ -42,7 +52,15 @@ export const createFoundingSourceServiceById = (id, body) => {
             id ,
             body
         }
-
+    }
+}
+export const createFoundingSourceServiceModifier = (id, body) => {
+    return {
+        type: CREATE_FUNDING_SOURCE_SERVICE_MODIFIER,
+        payload: {
+            id ,
+            body
+        }
     }
 }
 export const getFundingSourceHistoriesById = (id) => {

@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 // import Hello from './Hello';
 import { toast, ToastContainer } from 'react-toastify';
 import Transition from 'react-transition-group/Transition';
-// import './style.css';
+
 
 const ZoomInAndOut = ({ children, position, ...props }) => (
    <div></div>

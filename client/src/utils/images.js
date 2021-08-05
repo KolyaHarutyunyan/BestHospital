@@ -61,7 +61,7 @@ import generalInfoIcon from '@eachbase/images/icons/generalInfo.svg'
 import address from '@eachbase/images/icons/address.svg'
 import otherDetailsIcon from '@eachbase/images/icons/otherDetails.svg'
 import remove from "@eachbase/images/icons/remove.svg"
-
+import addLight from '@eachbase/images/icons/addLight.svg'
 
 
 export const Images = {
@@ -125,5 +125,6 @@ export const Images = {
   generalInfoIcon: generalInfoIcon,
   address: address,
   otherDetailsIcon: otherDetailsIcon,
-  remove: remove
+  remove: remove,
+  addLight : addLight
 }

@@ -1,15 +1,15 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {fundingSourceSingleStyles} from "./styles";
 import {Images} from "@eachbase/utils";
-import {AddButton, AddModalButton} from "@eachbase/components";
-import {fundingSourceActions} from "../../../../store";
+import {AddButton, AddModalButton, SimpleModal} from "@eachbase/components";
+import {fundingSourceActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 import {useDispatch} from "react-redux";
-import {getFoundingSourceServiceById} from "../../../../store/fundingSource/fundingSource.action";
+import {FundingSourceGeneralEdit, FundingSourceServiceAdd, FundingSourceServiceEdit} from "./modals";
 
 
-export const FundingSourceSingleHeader = ({handleOpenClose, activeTab, title}) => {
-
+export const FundingSourceSingleHeader = ({activeTab, title}) => {
+    const [open, setOpen] = useState(false)
     const dispatch = useDispatch()
     let params = useParams()
     useEffect(() => {
@@ -24,21 +24,33 @@ export const FundingSourceSingleHeader = ({handleOpenClose, activeTab, title}) =
 
 
     const classes = fundingSourceSingleStyles()
+
+    const handleOpenClose = () => {
+        setOpen(!open)
+    }
+
+
     return (
         <div className={classes.fundingSourceSingleHeaderStyles} style={{marginBottom: 34}}>
+
             <div className={classes.fundingSourceSingleHeaderStyles}>
                 <img src={Images.fundingSourceActive} className={classes.foundingIcon} alt="founding"/>
                 <p className={classes.title}>{title && title}</p>
             </div>
+            <SimpleModal
+                openDefault={open}
+                handleOpenClose={handleOpenClose}
+                content={ activeTab === 0 ?
+                    <FundingSourceGeneralEdit/> : activeTab===1 ?
+                        <FundingSourceServiceAdd /> : activeTab===2 ?
+                            <FundingSourceServiceEdit/> : null }/>
             {activeTab === 0 ?
-                <AddModalButton text='Edit' btnStyles={{height: 36, width: 74}}/>
+                <AddModalButton handleClick={handleOpenClose} text='Edit' btnStyles={{height: 36, width: 74}}/>
                 : activeTab >= 3 ?
                     <div style={{height: 36, width: 74}}/> :
                     <AddButton
                         text={activeTab === 1 ? 'Add Service' : activeTab === 2 ? 'Add Note' : ''}
                         handleClick={handleOpenClose}/>}
-            {/*<AddButton/>*/}
-
         </div>
     )
 }

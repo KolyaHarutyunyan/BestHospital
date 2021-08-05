@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
-import {Colors} from "../../../../utils";
-import {FundingSourceSinglePTModifiers} from "./fundingSourceSinglePTModifiers";
+import {Colors} from "@eachbase/utils";
+
 
 export const fundingSourceSingleStyles = makeStyles(() => ({
 
@@ -31,6 +31,7 @@ export const fundingSourceSingleStyles = makeStyles(() => ({
     fundingSourceSinglePTModifiersTitleStyles: {
         fontSize : 24,
         color : Colors.TextPrimary,
-        fontWeight : "bold"
-    }
+        fontWeight : "bold",
+    },
+
 }));

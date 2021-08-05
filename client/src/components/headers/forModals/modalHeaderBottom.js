@@ -1,17 +1,17 @@
 import React from 'react';
-import {createFoundingSourceStyle} from "./styles";
+import {modalHeadersStyle} from "./styles";
 
-const CreateFundingSourceHeaderBottom = () => {
-    const classes = createFoundingSourceStyle()
+export const ModalHeaderBottom = () => {
+    const classes = modalHeadersStyle()
     return (
         <div className={classes.createFundingSourceHeaderBottom}>
             <div className={classes.createFundingSourceHeaderBottomLine}></div>
-            <div className={classes.createFundingSourceHeaderBottomBlock} >
-              <div className={classes.createFundingSourceHeaderBottomPosition} >
-                  <div className={classes.createFundingSourceHeaderBottomCircle}>
-                      <p>1</p>
-                  </div>
-              </div>
+            <div className={classes.createFundingSourceHeaderBottomBlock}>
+                <div className={classes.createFundingSourceHeaderBottomPosition}>
+                    <div className={classes.createFundingSourceHeaderBottomCircle}>
+                        <p>1</p>
+                    </div>
+                </div>
                 <p className={classes.createFundingSourceHeaderBottomText}>General Information</p>
             </div>
             <div className={classes.createFundingSourceHeaderBottomBlock}>
@@ -24,4 +24,3 @@ const CreateFundingSourceHeaderBottom = () => {
     );
 };
 
-export default CreateFundingSourceHeaderBottom;

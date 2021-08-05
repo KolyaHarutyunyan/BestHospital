@@ -1,14 +1,14 @@
-import {Colors} from "@eachbase/utils";
-import {makeStyles} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
+import { Colors } from "@eachbase/utils";
 
-
-export const createFoundingSourceStyle = makeStyles(() => ({
+export const modalHeadersStyle = makeStyles(() => ({
 
     createFoundingSource: {
         width: 920,
         background: Colors.BackgroundWhite,
         borderRadius: '8px',
         overflow: "hidden",
+        padding: 100,
         '@media (max-width: 1280px)': {
             width: '896px'
         }
@@ -78,3 +78,5 @@ export const createFoundingSourceStyle = makeStyles(() => ({
         background: Colors.BackgroundPrimary,
     }
 }));
+
+

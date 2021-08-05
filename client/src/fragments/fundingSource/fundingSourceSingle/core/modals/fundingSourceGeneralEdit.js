@@ -3,13 +3,27 @@ import React, {useState} from "react";
 import {createFoundingSourceStyle} from "./styles";
 import {EmailValidator, ErrorText} from "@eachbase/utils";
 import {fundingSourceActions, officeActions} from "@eachbase/store";
-import {useDispatch} from "react-redux";
+import {useDispatch,useSelector} from "react-redux";
+import {editFundingSource} from "../../../../../store/fundingSource/fundingSource.action";
+import {useParams} from "react-router-dom";
+// import SelectInput from "@material-ui/core/Select/SelectInput";
 
-
-export const CreateFundingSource = ({handleClose}) => {
+export const FundingSourceGeneralEdit = ({handleClose}) => {
+    const prevData = useSelector(state=>state.fundingSource.fundingSourceItem)
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState({});
+    const [inputs, setInputs] = useState({
+        name : prevData.name,
+        email : prevData.email,
+        phoneNumber: +prevData.phoneNumber,
+        'type': prevData.type,
+        'contact': prevData.contact,
+        'website': prevData.website,
+        "status": 1
+
+    });
     const [fullAddress, setFullAddress] = useState(null)
+
+
 
     const classes = createFoundingSourceStyle()
     const dispatch = useDispatch()
@@ -31,20 +45,20 @@ export const CreateFundingSource = ({handleClose}) => {
         const data = {
             "name": inputs.name,
             "email": inputs.email,
-            "phoneNumber": inputs.phone,
+            "phoneNumber": +inputs.phoneNumber,
             'type': inputs.type,
             'contact': inputs.contact,
             'website': inputs.website,
-            "address": fullAddress,
+            "address": 'default',
             "status": 1
         }
-        if (inputs.name && inputs.email && inputs.phone && inputs.type && inputs.contact && inputs.website) {
-            dispatch(fundingSourceActions.createFundingSource(data))
+        if (inputs.name && inputs.email && inputs.phoneNumber && inputs.type && inputs.contact && inputs.website) {
+            dispatch(fundingSourceActions.editFundingSource(prevData.id, data))
         } else {
             setError(
                 !inputs.name ? 'name' :
                     !inputs.email ? 'email' :
-                        !inputs.phone ? 'phone' :
+                        !inputs.phoneNumber ? 'phoneNumber' :
                             !inputs.type ? 'type' :
                                 !inputs.contact ? 'contact' :
                                     !inputs.website ? 'website' :
@@ -61,7 +75,7 @@ export const CreateFundingSource = ({handleClose}) => {
 
     return (
         <div className={classes.createFoundingSource}>
-            <ModalHeader headerBottom={true} handleClose={handleClose} title={'Add Funding Source'}/>
+            <ModalHeader handleClose={handleClose} title={'Edit Funding Source'} headerBottom={true} />
             <div className={classes.createFoundingSourceBody}>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
                     <div style={{width: 400}}>
@@ -88,12 +102,12 @@ export const CreateFundingSource = ({handleClose}) => {
                         <ValidationInput
                             sendBoolean={handleCheck}
                             onChange={handleChange}
-                            value={inputs.phone}
+                            value={inputs.phoneNumber}
                             variant={"outlined"}
                             type={"number"}
                             label={"Phone Number*"}
-                            name={'phone'}
-                            typeError={error === 'phone' && ErrorText.field}
+                            name={'phoneNumber'}
+                            typeError={error === 'phoneNumber' && ErrorText.field}
                         />
                         <SelectInput
                             name={"type"}
@@ -133,12 +147,8 @@ export const CreateFundingSource = ({handleClose}) => {
                 </div>
                 <div style={{display: "flex", justifyContent: 'space-between'}}>
 
-                    {/* <button onClick={handleCreate}>click</button> */}
-                    {/* <button onClick={handleCreate}>click</button> */}
-                    {/* <AddModalButton handleClick={handleCreate} text={'Add'} styles={{width: '400px'}} /> */}
                     <CreateChancel
-                        // classes={globalInputs.buttonsStyle}
-                        create={"Add"}
+                        create={"Save"}
                         chancel={"Cancel"}
                         onCreate={handleCreate}
                         onClose={handleClose}

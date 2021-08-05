@@ -3,6 +3,10 @@
 export const CREATE_FUNDING_SOURCE = 'CREATE_FUNDING_SOURCE';
 export const CREATE_FUNDING_SOURCE_SUCCESS = 'CREATE_FUNDING_SOURCE_SUCCESS';
 
+/**Edit fundingSource */
+export const EDIT_FUNDING_SOURCE = 'EDIT_FUNDING_SOURCE';
+
+
 
 /**Get fundingSource */
 export const GET_FUNDING_SOURCE = 'GET_FUNDING_SOURCE';
@@ -20,6 +24,9 @@ export const GET_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS = 'GET_FUNDING_SOURCE_SERV
 
 /**Create fundingSourceServicesById */
 export const CREATE_FUNDING_SOURCE_SERVICE_BY_ID = 'CREATE_FUNDING_SOURCE_SERVICE_BY_ID';
+
+/**Create fundingSourceServicesModifier */
+export const CREATE_FUNDING_SOURCE_SERVICE_MODIFIER = 'CREATE_FUNDING_SOURCE_SERVICE_BY_ID';
 
 
 /**Get fundingSourceHistoriesById */
