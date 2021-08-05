@@ -4,8 +4,8 @@ import {Steps, CloseButton} from "@eachbase/components";
 import {useGlobalTextStyles} from "@eachbase/utils";
 import {AddressInput, ValidationInput, SelectInput} from "@eachbase/components";
 import {EmailValidator, ErrorText} from "@eachbase/utils";
-import {adminActions} from "../../../../store";
-import {useDispatch} from "react-redux";
+import {adminActions} from "@eachbase/store";
+import {useDispatch, useSelector} from "react-redux";
 
 
 const steps = ['General Info', 'Address', 'Other Details']
@@ -33,10 +33,18 @@ const genderList = [
     {name: 'Other'},
 ]
 
-export const CreateStaff = ({handleClose}) => {
+
+export const CreateStaff = ({handleClose, editGeneralInfo}) => {
+    const staffGeneral = useSelector(state => state.admins.adminInfoById);
 
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState({});
+    const [inputs, setInputs] = useState(staffGeneral ? staffGeneral : {});
+
+    const [fullAddress, setFullAddress] = useState('')
+
+    const disabledOne = inputs.firstName && inputs.middleName && error !== 'Not valid email' && inputs.lastName && inputs.email && inputs.phone
+    const disableSecond = !fullAddress.length
+
     const dispatch = useDispatch()
 
     const classes = createStaffModalStyle()
@@ -64,57 +72,57 @@ export const CreateStaff = ({handleClose}) => {
             "firstName": inputs.firstName,
             "middleName": inputs.middleName,
             "lastName": inputs.lastName,
-            "email": inputs.primaryEmail,
+            "email": inputs.email,
             "secondaryEmail": inputs.secondaryEmail,
-            "phone": inputs.primaryPhoneNumber,
-            "secondaryPhone": inputs.secondaryPhoneNumber,
+            "phone": inputs.phone,
+            "secondaryPhone": inputs.secondaryPhone,
             "state": 'state',
             'gender': inputs.gender,
-            'birthday': inputs.birthDate,
+            'birthday': inputs.birthday,
             'residency': 'residency',
             'ssn': 0
         }
         if (inputs.firstName &&
             inputs.middleName &&
             inputs.lastName &&
-            inputs.primaryEmail &&
-            inputs.secondaryEmail &&
-            inputs.primaryPhoneNumber &&
-            inputs.secondaryPhoneNumber &&
-            inputs.driverLicense &&
-            inputs.issuingState &&
-            inputs.expirationDate &&
-            inputs.department &&
+            inputs.email &&
+            // inputs.secondaryEmail &&
+            inputs.phone &&
+            // inputs.secondaryPhone &&
+            // inputs.driverLicense &&
+            // inputs.issuingState &&
+            // inputs.expirationDate &&
+            // inputs.department &&
             inputs.supervisor &&
-            inputs.residencyStatus &&
-            inputs.ssnNumber &&
+            // inputs.residencyStatus &&
+            // inputs.ssn &&
             inputs.gender &&
-            inputs.birthDate
+            inputs.birthday
         ) {
-        dispatch(adminActions.createAdmin(data))
-        handleClose()
+            staffGeneral ? dispatch(adminActions.editAdmin(data, staffGeneral.id)) : dispatch(adminActions.createAdmin(data))
+            handleClose()
+
         } else {
+
             setError(
                 !inputs.firstName ? 'firstName' :
                     !inputs.middleName ? 'middleName' :
-                     !inputs.lastName ? 'lastName' :
-                      !inputs.primaryEmail ? 'primaryEmail' :
-                      // !inputs.secondaryEmail ? 'secondaryEmail' :
-                      !inputs.primaryPhoneNumber ? 'primaryPhoneNumber' :
-                      // !inputs.secondaryPhoneNumber ? 'secondaryPhoneNumber' :
-                       !inputs.driverLicense ? 'driverLicense' :
-                       !inputs.issuingState ? 'issuingState' :
-                       !inputs.expirationDate ? 'expirationDate' :
-                       !inputs.department ? 'department' :
-                        !inputs.supervisor ? 'supervisor' :
-                        // !inputs.residencyStatus ? 'residencyStatus' :
-                        !inputs.ssnNumber ? 'ssnNumber' :
-                        !inputs.gender ? 'gender' :
-                        !inputs.birthDate ? 'birthDate' :
-                         'Input is not field'
+                        !inputs.lastName ? 'lastName' :
+                            !inputs.email ? 'email' :
+                                !inputs.phone ? 'phone' :
+                                    // !inputs.driverLicense ? 'driverLicense' :
+                                    //     !inputs.issuingState ? 'issuingState' :
+                                    //         !inputs.expirationDate ? 'expirationDate' :
+                                    //             !inputs.department ? 'department' :
+                                    //                 !inputs.supervisor ? 'supervisor' :
+                                    //                     !inputs.ssn ? 'ssn' :
+                                                            !inputs.gender ? 'gender' :
+                                                                !inputs.birthday ? 'birthday' :
+                                                                    'Input is not field'
             )
         }
     }
+
     const firstStep = (
         <React.Fragment>
             <ValidationInput
@@ -154,12 +162,12 @@ export const CreateStaff = ({handleClose}) => {
                 // style={globalInputs.simpleInput}
                 validator={EmailValidator}
                 variant={"outlined"}
-                name={"primaryEmail"}
+                name={"email"}
                 type={"email"}
                 label={"Primary Email*"}
-                typeError={error === 'primaryEmail' ? ErrorText.field : error === 'Not valid email' ? 'Not valid email' : ''}
+                typeError={error === 'email' ? ErrorText.field : error === 'Not valid email' ? 'Not valid email' : ''}
                 sendBoolean={handleCheck}
-                value={inputs.primaryEmail}
+                value={inputs.email}
                 onChange={handleChange}
             />
 
@@ -178,29 +186,29 @@ export const CreateStaff = ({handleClose}) => {
             <ValidationInput
                 sendBoolean={handleCheck}
                 onChange={handleChange}
-                value={inputs.primaryPhoneNumber}
+                value={inputs.phone}
                 variant={"outlined"}
                 type={"number"}
                 label={"Primary Phone Number*"}
-                name={'primaryPhoneNumber'}
-                typeError={error === 'primaryPhoneNumber' && ErrorText.field}
+                name={'phone'}
+                typeError={error === 'phone' && ErrorText.field}
             />
             <ValidationInput
                 sendBoolean={handleCheck}
                 onChange={handleChange}
-                value={inputs.secondaryPhoneNumber}
+                value={inputs.secondaryPhone}
                 variant={"outlined"}
                 type={"number"}
                 label={"Secondary Phone Number"}
-                name={'secondaryPhoneNumber'}
-                typeError={error === 'secondaryPhoneNumber' && ErrorText.field}
+                name={'secondaryPhone'}
+                typeError={error === 'secondaryPhone' && ErrorText.field}
             />
         </React.Fragment>
     )
 
     const secondStep = (
         <React.Fragment>
-            <AddressInput Value='Street Address*' flex='block'/>
+            <AddressInput handleSelectValue={setFullAddress} Value={'Street Address*'} flex='block'/>
         </React.Fragment>
     )
 
@@ -275,11 +283,11 @@ export const CreateStaff = ({handleClose}) => {
                 variant={"outlined"}
                 sendBoolean={handleCheck}
                 onChange={handleChange}
-                value={inputs.ssnNumber}
+                value={inputs.ssn}
                 type={"number"}
                 label={"SSN Number*"}
-                name='ssnNumber'
-                typeError={error === 'ssnNumber' && ErrorText.field}
+                name='ssn'
+                typeError={error === 'ssn' && ErrorText.field}
             />
             <div className={classes.flexContainer}>
                 <SelectInput
@@ -296,11 +304,11 @@ export const CreateStaff = ({handleClose}) => {
                     variant={"outlined"}
                     sendBoolean={handleCheck}
                     onChange={handleChange}
-                    value={inputs.birthDate}
+                    value={inputs.birthday}
                     type={"date"}
                     label={"Date of Birth*"}
-                    name='birthDate'
-                    typeError={error === 'birthDate' && ErrorText.field}
+                    name='birthday'
+                    typeError={error === 'birthday' && ErrorText.field}
                 />
             </div>
         </React.Fragment>
@@ -313,12 +321,16 @@ export const CreateStaff = ({handleClose}) => {
                 <CloseButton handleCLic={handleClose}/>
             </div>
             <Steps
+                editGeneralInfo={editGeneralInfo}
                 handleClick={handleCreate}
                 firstStep={firstStep}
                 secondStep={secondStep}
                 thirdStep={thirdStep}
                 stepTitles={steps}
-                handleClose={handleClose}/>
+                handleClose={handleClose}
+                disabledOne={disabledOne}
+                disableSecond={disableSecond}
+            />
         </div>
     );
 };
