@@ -105,7 +105,7 @@ export const FundingSourceItem = ({general}) => {
             >
                 <div style={{backgroundColor: 'white', padding: '20px'}}>
                    <FundingSourceSingleHeader title={data?.name} activeTab={activeTab} />
-                    <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
+                   <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
                 </div>
             </TableWrapperGeneralInfo>
             {/*// : (<OfficesInfo info={officeById}/>)*/}

@@ -10,7 +10,9 @@ export const TableWrapperGeneralInfo =
          body,
          openCloseInfo,
          handleOpenClose,
-        title
+         title,
+         parent,
+         parentLink
      }) => {
         const classes = wrapperStyle();
 
@@ -18,7 +20,8 @@ export const TableWrapperGeneralInfo =
             <React.Fragment>
                 {/* { RoleHooks(PermissionsList.ADD_OFFICES_BUTTON_TAB) && */}
                 <div className={classes.inactiveActiveHeader}>
-                    <CustomBreadcrumbs className={classes.breadcrumb} parent='Funding Source' child={title} parentLink='/fundingSource'/>
+                    <CustomBreadcrumbs className={classes.breadcrumb} parent={parent} child={title}
+                                       parentLink={parentLink}/>
                     <AddModalButton text='inactive' handleClick={handleOpenClose}/>
                 </div>
                 {/* } */}
