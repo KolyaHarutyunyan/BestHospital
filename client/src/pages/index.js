@@ -3,6 +3,7 @@ export { HomePage } from "./home";
 export { FundingSource,FundingSourceSingle } from "./fundingSource";
 export { Branches } from "./branches";
 export { Staff } from "./staff";
+export { Client } from "./client";
 export { HumanResources } from "./humanResources";
 export { Customers } from "./customers";
 export { Factoring } from "./factoring";
