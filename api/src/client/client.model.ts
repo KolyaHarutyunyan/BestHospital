@@ -13,9 +13,8 @@ const ClientSchema = new Schema({
     familyLanguage: { type: String },
     gender: { type: String },
     birthday: { type: String },
-    contacts: [{ type: Types.ObjectId, ref: 'ClientContact' }],
-    enrollments: [{ type: Types.ObjectId, ref: 'ClientEnrollment' }],
     status: { type: Number, enum: ClientStatus },
+    enrollment: { type: String },
     createdDate: { type: Date, default: Date.now() },
     updatedDate: { type: Date, default: null }
     // address: addressSchema,

@@ -4,6 +4,7 @@ import { IContact } from './interface/clientContact.interface';
 // adminId: { type: Types.ObjectId, ref: 'auth' },
 
 const ContactSchema = new Schema({
+    clientId: {type: Types.ObjectId, ref: 'Client'},
     firstName: { type: String },
     lastName: { type: String },
     relationship: { type: String },

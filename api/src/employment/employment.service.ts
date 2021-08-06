@@ -1,18 +1,18 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateEmploymentDto } from './dto/create.dto';
-import { UpdateEmploymentDto } from './dto/update-employment.dto';
 import { MongooseUtil } from '../util';
 import { Model, Types } from 'mongoose';
 import { EmploymentModel } from './employment.model';
 import { IEmployment } from "./interface";
 import { StaffService } from "../staff/staff.service";
+import { DepartmentService } from '../department/department.service';
+import { EmploymentDto, CreateEmploymentDto } from './dto';
 
 @Injectable()
 export class EmploymentService {
   constructor(
-    // private readonly terminationService: TerminationService,
-    // private readonly sanitizer: EmploymentSanitizer,
     private readonly staffService: StaffService,
+    private readonly departmentService: DepartmentService,
+
 
   ) {
     this.model = EmploymentModel;
@@ -21,24 +21,35 @@ export class EmploymentService {
   private model: Model<IEmployment>;
   private mongooseUtil: MongooseUtil;
 
-  async create(dto: CreateEmploymentDto) {
+  async create(dto: CreateEmploymentDto): Promise<EmploymentDto> {
     try {
-      const staff = await this.staffService.findById(dto.userId);
+      if (dto.termination.date) {
+        const date = new Date(dto.termination.date);
+        this.checkTime(date);
+        dto.termination.date = date.toLocaleDateString()
+      }
+      const staff = await this.staffService.findById(dto.staffId);
       let employment = new this.model({
-        _id: dto.userId,
+        _id: dto.staffId,
         schedule: dto.schedule,
+        termination: dto.termination
       });
       if (dto.date) {
         const date = new Date(dto.date);
         this.checkTime(date);
         employment.date = date.toLocaleDateString()
       }
-      if (dto.supervisor) {
-        const staff = await this.staffService.findById(dto.supervisor);
-        employment.supervisor = dto.supervisor
+      if (dto.supervisor == dto.staffId) {
+        throw new HttpException(
+          'staff@ inq@ ir manager@ chi karox linel chnayac hayastanum hnaravor e',
+          HttpStatus.NOT_FOUND,
+        );
       }
+      const findStaff = await this.staffService.findById(dto.supervisor);
+      employment.supervisor = dto.supervisor;
+
       if (dto.departmentId) {
-        //check department
+        let departmen = await this.departmentService.findOne(dto.departmentId)
         employment.departmentId = dto.departmentId;
       }
       await employment.save();
@@ -55,16 +66,28 @@ export class EmploymentService {
     return `This action returns all employment`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} employment`;
+  async findOne(_id: string): Promise<EmploymentDto> {
+    let employment = await this.model.findById({ _id })
+    this.checkEmployment(employment)
+    return employment;
   }
 
-  update(id: number, updateEmploymentDto: UpdateEmploymentDto) {
-    return `This action updates a #${id} employment`;
-  }
+  // update(id: number, updateEmploymentDto: UpdateEmploymentDto) {
+  //   return `This action updates a #${id} employment`;
+  // }
 
   remove(id: number) {
     return `This action removes a #${id} employment`;
+  }
+  /** Private methods */
+  /** if the employment is not valid, throws an exception */
+  private checkEmployment(employment: IEmployment) {
+    if (!employment) {
+      throw new HttpException(
+        'Profile with this id was not found',
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
   /** Private methods */
   /** if the date is not valid, throws an exception */

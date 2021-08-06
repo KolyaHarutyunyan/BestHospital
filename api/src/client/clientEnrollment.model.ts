@@ -3,6 +3,7 @@ import { addressSchema } from '../address';
 import { IEnrollment } from './interface/clientEnrollment.interface';
 
 const ClientEnrollmentSchema = new Schema({
+    clientId: { type: Types.ObjectId, ref: 'Client' },
     fundingSource: { type: String },
     primary: { type: Boolean },
     startDate: { type: Date },

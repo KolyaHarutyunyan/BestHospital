@@ -1,12 +1,11 @@
 import { Document } from 'mongoose';
 import { IAddress } from '../../address';
 
-export interface IEnrollment extends Document {
+export interface IAuthorization extends Document {
     id: string;
     clientId: string;
+    authorizationId: string;
     fundingSource: string;
-    primary: boolean;
     startDate: string;
-    terminationDate: string;
-    enrollmentId?: string;
+    endDate: string;
 }

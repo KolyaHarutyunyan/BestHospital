@@ -10,9 +10,10 @@ import { AppService } from './app.service';
 import { AddressModule } from '../address';
 import { EmploymentModule } from '../employment';
 import { ClientModule } from '../client';
+import { DepartmentModule } from '../department/department.module';
 
 @Module({
-  imports: [AuthNModule, AuthZModule, AddressModule, StaffModule, FundingModule, EmploymentModule, ClientModule],
+  imports: [AuthNModule, AuthZModule, AddressModule, StaffModule, FundingModule, EmploymentModule, ClientModule, DepartmentModule],
   controllers: [AppController],
   providers: [AppService, DatabaseConnection],
 })

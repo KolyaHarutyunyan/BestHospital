@@ -1,17 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsEnum, IsNotEmpty, IsPhoneNumber, IsUrl } from 'class-validator';
 
-export class EnrollmentDTO {
+export class AuthorizationServiceDTO {
     @ApiProperty()
     id: string;
     @ApiProperty()
     clientId: string;
     @ApiProperty()
-    primary: boolean;
+    service: string;
     @ApiProperty()
-    startDate: string;
+    modifiers: string;
     @ApiProperty()
-    terminationDate: string;
+    total: string;
     @ApiProperty()
-    fundingSource: string
+    completed: string;
+    @ApiProperty()
+    available: string;
 }

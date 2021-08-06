@@ -12,6 +12,8 @@ export class EnrollmentSanitizer implements ISanitize {
 
     sanitize(enrollment: IEnrollment): EnrollmentDTO {
         const enrollmentDTO: EnrollmentDTO = {
+            id: enrollment.id,
+            clientId: enrollment.clientId,
             primary: enrollment.primary,
             startDate: enrollment.startDate,
             terminationDate: enrollment.terminationDate,

@@ -37,8 +37,6 @@ export class CreateClientDTO {
     @IsNotEmpty()
     @IsString()
     birthday: Date;
-    @IsString()
-    contacts: string;
     @ApiProperty({ enum: ClientStatus })
     @IsEnum(ClientStatus)
     status: number;

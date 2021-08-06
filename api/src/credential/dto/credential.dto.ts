@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum } from 'class-validator';
 import {CredentialsStatus} from '../credential.constants';
 
-export class StaffDTO {
+export class CredentialDTO {
   @ApiProperty()
   id: string;
   @ApiProperty()

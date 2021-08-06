@@ -28,33 +28,47 @@ export class CredentialService {
 
       await credential.save();
       return credential;
-      // return this.sanitizer.sanitize(user);
+      // return this.sanitizer.sanitize(credential);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Credential already exists');
       throw e;
     }
   }
 
-  findAll() {
-    return `This action returns all credential`;
+  /** Get All Credential */
+  async findAll() {
+    try {
+      const credential = await this.model.find({});
+      this.checkCredential(credential[0]);
+      return credential;
+      // return this.sanitizer.sanitizeMany(credential);
+    }
+    catch (e) {
+      throw e
+    }
   }
 
   /** Get Credential By Id */
   async findOne(_id): Promise<ICredential> {
-    const credential = await this.model.findOne({ _id });
-    this.checkCredential(credential);
-    return credential;
-    // return this.sanitizer.sanitize(funder);
+    try {
+      const credential = await this.model.findOne({ _id });
+      this.checkCredential(credential);
+      return credential;
+      // return this.sanitizer.sanitize(credential);
+    }
+    catch (e) {
+      throw e
+    }
   }
 
 
-  update(id: number, updateCredentialDto: UpdateCredentialDto) {
-    return `This action updates a #${id} credential`;
-  }
+  // update(id: number, updateCredentialDto: UpdateCredentialDto) {
+  //   return `This action updates a #${id} credential`;
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} credential`;
-  }
+  // remove(id: number) {
+  //   return `This action removes a #${id} credential`;
+  // }
   /** Private methods */
   /** if the comment is not found, throws an exception */
   private checkCredential(credential: ICredential) {

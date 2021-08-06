@@ -11,7 +11,5 @@ export interface IClient extends Document {
     gender: string;
     status: number;
     birthday: string;
-    contacts: Array<Object>;
-    enrollments: Array<Object>;
-    enrollment: string
+    enrollment: string;
 }
