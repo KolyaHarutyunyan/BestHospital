@@ -6,7 +6,7 @@ export class CreateCredentialDto {
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
-    name: number;
+    name: string;
     @ApiProperty({ enum: CredentialsStatus })
     @IsNotEmpty()
     @IsEnum(CredentialsStatus)
