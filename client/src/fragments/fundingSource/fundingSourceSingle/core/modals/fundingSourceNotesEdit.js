@@ -4,26 +4,26 @@ import {ErrorText, useGlobalTextStyles} from "@eachbase/utils";
 import {AddModalButton, CloseButton} from "@eachbase/components/buttons";
 import {ValidationInput, Textarea} from "@eachbase/components/inputs";
 
-export const FundingSourceNotesAdd = ({handleOpenClose }) => {
+export const FundingSourceNotesEdit = ({handleOpenClose }) => {
 
     const classes = modalsStyle()
     const globalText = useGlobalTextStyles()
 
     return (
         <div className={classes.inactiveModalBody}>
-            <h1 className={`${globalText.modalTitle}`}>Add a New Note</h1>
+            <h1 className={`${globalText.modalTitle}`}>Inactivate Name Surname?</h1>
             <div className={classes.positionedButton}>
                 <CloseButton handleCLic={handleOpenClose}/>
             </div>
-            <p className={classes.inactiveModalInfo}>Please fulfill the below fields to add a comment.</p>
+            <p className={classes.inactiveModalInfo}>Name Surname will be notified about the inactivation reason after inactivation.</p>
             <ValidationInput
                 variant={"outlined"}
                 // sendBoolean={handleCheck}
                 onChange={()=>alert('change')}
                 // value={inputs.birthDate}
-                type={"text"}
-                label={" Subject*"}
-                name='subject*'
+                type={"date"}
+                label={"Inactivation Date*"}
+                name='inactivationDate'
                 // typeError={error === 'birthDate' && ErrorText.field}
             />
             <Textarea
@@ -31,11 +31,11 @@ export const FundingSourceNotesAdd = ({handleOpenClose }) => {
                 variant={"outlined"}
                 // sendBoolean={handleCheck}
                 onChange={()=>console.log('change')}
-                label={"Add your comment here ..."}
-                name=''
+                label={"Write inactivation reason here..."}
+                name='inactiveReason'
                 // typeError={error === 'birthDate' && ErrorText.field}
             />
-            <AddModalButton text='Add' handleClick={handleOpenClose} />
+            <AddModalButton text='Inactivate' handleClick={handleOpenClose} />
         </div>
     );
 }

@@ -5,7 +5,12 @@ import {AddButton, AddModalButton, SimpleModal} from "@eachbase/components";
 import {fundingSourceActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 import {useDispatch} from "react-redux";
-import {FundingSourceGeneralEdit, FundingSourceServiceAdd, FundingSourceServiceEdit} from "./modals";
+import {
+    FundingSourceGeneralEdit,
+    FundingSourceNotesAdd,
+    FundingSourceServiceAdd,
+    FundingSourceServiceEdit
+} from "./modals";
 
 
 export const FundingSourceSingleHeader = ({activeTab, title}) => {
@@ -43,7 +48,7 @@ export const FundingSourceSingleHeader = ({activeTab, title}) => {
                 content={ activeTab === 0 ?
                     <FundingSourceGeneralEdit/> : activeTab===1 ?
                         <FundingSourceServiceAdd /> : activeTab===2 ?
-                            <FundingSourceServiceEdit/> : null }/>
+                            <FundingSourceNotesAdd/> : null }/>
             {activeTab === 0 ?
                 <AddModalButton handleClick={handleOpenClose} text='Edit' btnStyles={{height: 36, width: 74}}/>
                 : activeTab >= 3 ?
