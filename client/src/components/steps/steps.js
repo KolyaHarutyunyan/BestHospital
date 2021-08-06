@@ -10,16 +10,18 @@ import {stepStyles, useStyles, useColorlibStepIconStyles, ColorlibConnector} fro
 import checkmark from "@eachbase/assets/images/icons/checkmark.svg";
 import {CreateChancel} from "@eachbase/components";
 
-export const Steps = ({handleClick, stepTitles, handleClose, firstStep, secondStep, thirdStep}) => {
+export const Steps = ({disableSecond,disabledOne, handleClick, stepTitles, handleClose, firstStep, secondStep, thirdStep}) => {
 
     const classes = useStyles();
     const stepsStyles = stepStyles()
     const [activeStep, setActiveStep] = React.useState(0);
-
+    console.log(disableSecond,'disabledOne');
     const handleNext = () => {
         if (activeStep !== stepTitles.length - 1) {
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        } else {
+            console.log('aaaa')
+        }
+        else {
             handleClick()
         }
     };
@@ -56,7 +58,6 @@ export const Steps = ({handleClick, stepTitles, handleClose, firstStep, secondSt
         );
 
     }
-
     return (
         <div className={classes.root}>
             <Stepper className={stepsStyles.stepHeader} alternativeLabel activeStep={activeStep}
@@ -81,6 +82,7 @@ export const Steps = ({handleClick, stepTitles, handleClose, firstStep, secondSt
                         chancel={"Cancel"}
                         onClose={handleClose}
                         onCreate={handleNext}
+                        disabled={activeStep === 0 ? !disabledOne : activeStep === 1 ? disableSecond : false}
                     />
                 </div>
             </div>

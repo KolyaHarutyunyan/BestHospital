@@ -7,15 +7,17 @@ import axios from "axios";
 
 export const authService = {
 
-  createAdminService: ( body ) => axios.post(`/staff/superAdmin`, body),
+    createAdminService: (body) => axios.post(`/staff/superAdmin`, body),
 
-  getAdminsService: ( ) => axios.get('/staff' ),
+    editAdminByIdService: (id, body) => axios.patch(`/staff/${id}`, body),
 
-  getAdminByIdService: ( id ) => axios.get(`/staff/${id}`, ),
+    getAdminsService: () => axios.get('/staff'),
 
-  activateAdminService:( id ) => axios.patch(`/authn/${id.id}/activate`, ),
+    getAdminByIdService: (id) => axios.get(`/staff/${id}`,),
 
-  inactivateAdminService:( id ) => axios.patch(`/authn/${id.id}/inactivate` ),
+    activateAdminService: (id) => axios.patch(`/authn/${id.id}/activate`,),
+
+    inactivateAdminService: (id) => axios.patch(`/authn/${id.id}/inactivate`),
 
 
 };

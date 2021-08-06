@@ -5,7 +5,8 @@ import {
   getAdmins,
   clearAdminById,
   activateAdmin,
-  inactivateAdmin
+  inactivateAdmin,
+  editAdmin
 } from "./admin.action";
 
 export { adminReducer } from './admin.reducer';
@@ -17,7 +18,7 @@ export const adminActions = {
   getAdminById,
   clearAdminById,
   filterAdmins,
-
+  editAdmin,
 
   activateAdmin,
   inactivateAdmin

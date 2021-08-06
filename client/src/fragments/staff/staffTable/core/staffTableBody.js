@@ -6,7 +6,7 @@ import {useDispatch} from "react-redux";
 import {adminActions, officeActions} from "@eachbase/store";
 import {useHistory} from "react-router-dom";
 
-export const StaffTableBody = ({key, data }) => {
+export const StaffTableBody = ({index, data }) => {
     const globalClasses = useGlobalStyles()
     const dispatch = useDispatch()
 
@@ -18,7 +18,7 @@ export const StaffTableBody = ({key, data }) => {
     }
 
     return (
-        <TableBodyComponent handleOpenInfo = {() => handleOpenOfficeInfo(data.id)} key={key}>
+        <TableBodyComponent handleOpenInfo = {() => handleOpenOfficeInfo(data.id)} index={index}>
             <TableCell>
                 <div className={globalClasses.InfoAndImage}>
                     <img src={Images.staffOutline} alt={"funding"} />

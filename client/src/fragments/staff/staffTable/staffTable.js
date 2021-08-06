@@ -31,8 +31,9 @@ export const StaffTable = ({}) => {
                         :
                         list.length && list.map((item, i) => (
                             <StaffTableBody
-                                data={item}
                                 key={i}
+                                data={item}
+                                index={i}
                             />
                         ))}
                 </Table>

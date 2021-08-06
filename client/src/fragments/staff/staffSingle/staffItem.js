@@ -1,6 +1,14 @@
 import React, {useEffect, useState} from "react";
 import {Redirect, Route, Switch, useHistory, useParams} from "react-router-dom";
-import {SimpleTabs, Card, Notes, TableWrapperGeneralInfo, InactiveModal} from "@eachbase/components";
+import {
+    SimpleTabs,
+    Card,
+    Notes,
+    TableWrapperGeneralInfo,
+    InactiveModal,
+    TabsHeader,
+    SimpleModal
+} from "@eachbase/components";
 import {adminActions, officeActions} from "@eachbase/store";
 import {StaffGeneral, StaffHistory, StaffCredentials, StaffEmployment, StaffAccess} from "./core";
 import {useDispatch, useSelector} from "react-redux";
@@ -17,10 +25,6 @@ export const StaffItem = ({general}) => {
         dispatch(adminActions.getAdminById(params.id))
     }, []);
 
-    const {adminInfoById} = useSelector((state) => ({
-            adminInfoById: state.admins.adminInfoById
-        })
-    )
     const staffGeneral = useSelector(state => state.admins.adminInfoById)
 
     // const {officeById} = useSelector((state)=>({
@@ -126,6 +130,7 @@ export const StaffItem = ({general}) => {
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
                 <div style={{backgroundColor: 'white', padding: '20px'}}>
+                    <TabsHeader editModal={true} />
                     <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
                 </div>
             </TableWrapperGeneralInfo>

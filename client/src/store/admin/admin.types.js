@@ -3,6 +3,12 @@
 export const CREATE_ADMIN = 'CREATE_ADMIN';
 export const CREATE_ADMIN_SUCCESS = 'CREATE_ADMIN_SUCCESS';
 
+
+/**Edit Admin by id */
+export const EDIT_ADMIN_BY_ID_SUCCESS = 'EDIT_ADMIN_BY_ID_SUCCESS';
+export const EDIT_ADMIN_BY_ID = 'EDIT_ADMIN_BY_ID';
+
+
 /**Get Admins */
 export const GET_ADMINS = 'GET_ADMINS';
 export const GET_ADMINS_SUCCESS = 'GET_ADMINS_SUCCESS';
