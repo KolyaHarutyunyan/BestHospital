@@ -17,7 +17,7 @@ export const FundingSourceItem = ({general}) => {
     const [open, setOpen] = useState(false)
     const params = useParams()
     const data = useSelector(state => state.fundingSource.fundingSourceItem)
-    const [activeTab, setActiveTab] = useState(0)
+    const [activeTab, setActiveTab] = useState(1)
 
 
     useEffect(() => {

@@ -6,7 +6,7 @@ import {fundingSourceActions, officeActions} from "@eachbase/store";
 import {useDispatch} from "react-redux";
 
 
-export const CreateFundingSource = ({handleClose}) => {
+export const FundingSourceServiceEdit = ({handleClose}) => {
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState({});
     const [fullAddress, setFullAddress] = useState(null)
@@ -61,18 +61,19 @@ export const CreateFundingSource = ({handleClose}) => {
 
     return (
         <div className={classes.createFoundingSource}>
-            <ModalHeader headerBottom={true} handleClose={handleClose} title={'Add Funding Source'}/>
+            <ModalHeader handleClose={handleClose} title={'Edit Service'} headerBottom={true}/>
             <div className={classes.createFoundingSourceBody}>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
                     <div style={{width: 400}}>
-                        <ValidationInput variant={"outlined"}
-                                         sendBoolean={handleCheck}
-                                         onChange={handleChange}
-                                         value={inputs.name}
-                                         type={"text"}
-                                         label={"Funding Source Name*"}
-                                         name='name'
-                                         typeError={error === 'name' && ErrorText.field}
+                        <ValidationInput
+                            variant={"outlined"}
+                            sendBoolean={handleCheck}
+                            onChange={handleChange}
+                            value={inputs.name}
+                            type={"text"}
+                            label={"Funding Source Name*"}
+                            name='name'
+                            typeError={error === 'name' && ErrorText.field}
                         />
                         <ValidationInput
                             validator={EmailValidator}
@@ -128,14 +129,11 @@ export const CreateFundingSource = ({handleClose}) => {
 
                     </div>
                     <div style={{width: 400}}>
-                        <AddressInput Value='Street Address*' flex='block' handleSelectValue={setFullAddress}/>
+
                     </div>
                 </div>
                 <div style={{display: "flex", justifyContent: 'space-between'}}>
 
-                    {/* <button onClick={handleCreate}>click</button> */}
-                    {/* <button onClick={handleCreate}>click</button> */}
-                    {/* <AddModalButton handleClick={handleCreate} text={'Add'} styles={{width: '400px'}} /> */}
                     <CreateChancel
                         // classes={globalInputs.buttonsStyle}
                         create={"Add"}

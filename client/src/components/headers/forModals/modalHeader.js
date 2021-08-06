@@ -1,15 +1,15 @@
 
 import React from "react";
 import { useGlobalTextStyles } from "@eachbase/utils";
-import { createFoundingSourceStyle } from './styles'
+import { modalHeadersStyle } from './styles'
 import { CloseButton } from "@eachbase/components";
-import CreateFundingSourceHeaderBottom from "./createFundingSourceHeaderBottom";
+import {ModalHeaderBottom} from "./modalHeaderBottom";
 
 
 
 
-export const CreateFoundingSourceHeader = ({handleClose,title}) => {
-    const classes = createFoundingSourceStyle()
+export const ModalHeader = ({handleClose,title, headerBottom}) => {
+    const classes = modalHeadersStyle()
     const globalStyle = useGlobalTextStyles()
 
     return (
@@ -18,7 +18,7 @@ export const CreateFoundingSourceHeader = ({handleClose,title}) => {
                 <CloseButton handleCLic={handleClose}  />
             </div>
             <p className={globalStyle.modalTitle}>{title}</p>
-            <CreateFundingSourceHeaderBottom />
+            {headerBottom &&  <ModalHeaderBottom />}
 
         </div>
     );

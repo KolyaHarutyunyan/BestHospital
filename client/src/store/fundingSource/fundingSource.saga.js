@@ -16,6 +16,7 @@ import {
     CREATE_FUNDING_SOURCE_SERV,
     GET_FUNDING_SOURCE_SERV_BY_ID_SUCCESS,
     GET_FUNDING_SOURCE_SERV_BY_ID,
+    CREATE_FUNDING_SOURCE_SERVICE_MODIFIER, EDIT_FUNDING_SOURCE,
 } from "./fundingSource.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
@@ -24,8 +25,18 @@ import {httpRequestsOnLoadActions} from "../http_requests_on_load";
 function* createFundingSource(action) {
     try {
         const res = yield call(authService.createFundingSourceService, action.payload.body);
+         window.location.replace('/fundingSource')
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+function* editFundingSource(action) {
+    console.log(action,'saaaaagaaaaa')
+    try {
+        const res = yield call(authService.editFundingSourceService, action.payload.id, action.payload.body);
         console.log(res,'reeeeeeees')
-        window.location.replace('/fundingSource')
+         window.location.replace(`/fundingSource/${action.payload.id}`)
     } catch (err) {
         console.log(err)
     }
@@ -100,6 +111,13 @@ function* createFundingSourceServicesById({payload}) {
     }
 }
 
+function* createFundingSourceServicesModifier({payload}) {
+    try {
+        const res = yield call(authService.createFoundingSourceServiceModifierService, payload.id, payload.body);
+    } catch (error) {
+
+    }
+}
 function* getFundingSourceHistoriesById(action) {
     // yield put(httpRequestsOnErrorsActions.removeError(type));
     // yield put(httpRequestsOnLoadActions.appendLoading(type));
@@ -170,10 +188,12 @@ function* creteFundingSourceServ({payload}) {
 
 export const watchFundingSource = function* watchFundingSourceSaga() {
     yield takeLatest(CREATE_FUNDING_SOURCE, createFundingSource);
+    yield takeLatest(EDIT_FUNDING_SOURCE, editFundingSource);
     yield takeLatest(GET_FUNDING_SOURCE, getFundingSource);
     yield takeLatest(GET_FUNDING_SOURCE_BY_ID, getFundingSourceById);
     yield takeLatest(GET_FUNDING_SOURCE_SERVICE_BY_ID, getFundingSourceServicesById);
     yield takeLatest(CREATE_FUNDING_SOURCE_SERVICE_BY_ID, createFundingSourceServicesById);
+    yield takeLatest(CREATE_FUNDING_SOURCE_SERVICE_MODIFIER, createFundingSourceServicesModifier);
     yield takeLatest(GET_FUNDING_SOURCE_HISTORIES_BY_ID, getFundingSourceHistoriesById);
     yield takeLatest(GET_FUNDING_SOURCE_SERV, getFundingSourceServ);
     yield takeLatest(CREATE_FUNDING_SOURCE_SERV, creteFundingSourceServ);

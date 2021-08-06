@@ -1,9 +1,11 @@
 import React, {useState} from "react";
-import {Notes} from "@eachbase/components";
+import {Notes, TableBodyComponent} from "@eachbase/components";
 import {fundingSourceSingleStyles} from "./styles";
+import {TableCell} from "@material-ui/core";
+import {Images} from "../../../../utils";
 
 
-export const FundingSourceSinglePTModifiers = () => {
+export const FundingSourceSinglePTModifiers = ({data}) => {
     const classes = fundingSourceSingleStyles()
     const headerTitles = [
         {
@@ -23,24 +25,23 @@ export const FundingSourceSinglePTModifiers = () => {
             sortable: false
         },
     ];
-    const bodyTitles = [
-        {
-            title: 'body title 1',
-        },
-        {
-            title: 'body title 2',
-        },
-        {
-            title: 'b t 3',
-        },
-        {
-            title: 'b t 3',
-        }
-    ]
+
+    let modifiersItem = (item,index) => {
+        return (
+            <TableBodyComponent key={index}>
+                <TableCell>  {item.name}  </TableCell>
+                <TableCell>  {item.credentialId}  </TableCell>
+                <TableCell>  {item.chargeRate}  </TableCell>
+                <TableCell>  {item.type}  </TableCell>
+
+            </TableBodyComponent>
+        )
+    }
+
     return (
         <div className={classes.fundingSourceSinglePTModifiersStyles}>
             <p className={classes.fundingSourceSinglePTModifiersTitleStyles}>PT Modifiers</p>
-            <Notes bodyTitles={bodyTitles} headerTitles={headerTitles} defaultStyle={true} />
+            <Notes data={data} items={modifiersItem} headerTitles={headerTitles} defaultStyle={true} />
         </div>
     )
 }

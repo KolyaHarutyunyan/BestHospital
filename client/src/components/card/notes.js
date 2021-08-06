@@ -9,7 +9,7 @@ import {PaginationItem} from "../pagination";
 
 import { makeStyles } from "@material-ui/core/styles";
 
-export const Notes = ({data,headerTitles, bodyTitles, pagination, defaultStyle}) => {
+export const Notes = ({data,headerTitles, bodyTitles, pagination, defaultStyle, items}) => {
 
     const officesStyle = makeStyles(({}) => ({
         thWidth: {
@@ -62,26 +62,15 @@ export const Notes = ({data,headerTitles, bodyTitles, pagination, defaultStyle})
                         }
                     </TableHeadComponent>
 
-                    <TableBodyComponent>
                         {
                             data && data.map((item, index) => {
-                                const allowed = ['name', 'size', 'min', 'max']
-                                const filtered = Object.keys(item)
-                                    .filter(key => allowed.includes(key))
-                                    .reduce((obj, key) => {
-                                        obj[key] = item[key];
-                                        return obj;
-                                    }, {});
-                                console.log(filtered,'tttttttarrrar')
                                 return (
-
                                     <>
-                                        <TableCell key={index}>  {'fghg'}  </TableCell>
+                                        {items(item,index)}
                                     </>
                                 )
                             })
                         }
-                    </TableBodyComponent>
                 </Table>
                 {pagination &&  <PaginationItem
                     text={`Showing 30 to 30 of 200 entries`}

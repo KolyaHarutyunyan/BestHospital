@@ -7,7 +7,9 @@ import {
     getFundingSourceHistoriesById,
     getFundingSourceServ,
     createFundingSourceServ,
-    getFundingSourceServById
+    getFundingSourceServById,
+    createFoundingSourceServiceModifier,
+    editFundingSource
 } from "./fundingSource.action";
 
 export {fundingSourceReducer} from './fundingSource.reducer';
@@ -22,6 +24,8 @@ export const fundingSourceActions = {
     getFundingSourceHistoriesById,
     getFundingSourceServ,
     getFundingSourceServById,
-    createFundingSourceServ
+    createFundingSourceServ,
+    createFoundingSourceServiceModifier,
+    editFundingSource
 }
 

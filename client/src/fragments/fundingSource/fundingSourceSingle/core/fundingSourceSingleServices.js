@@ -1,30 +1,14 @@
-import React, {useState} from "react";
-import {Notes} from "@eachbase/components";
+import React, {Fragment, useState} from "react";
+import {Notes, TableBodyComponent} from "@eachbase/components";
 import {FundingSourceSinglePTModifiers} from "./fundingSourceSinglePTModifiers";
 import {Images} from "@eachbase/utils";
 import {useSelector} from "react-redux";
 import {TableCell} from "@material-ui/core";
 
 export const FundingSourceSingleServices = () => {
-
     let data = useSelector(state => state.fundingSource.fundingSourceServices)
 
-
-      let newData =  data && data.map((item, index) => {
-            const allowed = ['name', 'size', 'min', 'max']
-            const filtered = Object.keys(item)
-                .filter(key => allowed.includes(key))
-                .reduce((obj, key) => {
-                    obj[key] = item[key];
-                    return obj;
-                }, {});
-            return (
-                filtered
-            )
-        })
-
-
-    console.log( newData, 'new' )
+    console.log(data,'data')
 
     const headerTitles = [
         {
@@ -52,35 +36,32 @@ export const FundingSourceSingleServices = () => {
             sortable: false
         },
     ];
-    const bodyTitles = [
-        {
-            name: 'name',
-        },
-        {
-            cptCode: 'CPT Code',
-        },
-        {
-            size: 'size',
-        }  ,
-        {
-            min: 'min',
-        } ,
-        {
-            max: 'max',
-        },
-        // {
-        //     title: (<>
-        //         <img src={Images.edit} alt="3333" style={{cursor:'pointer'}}/>
-        //         <img src={Images.remove} alt="sdasd" style={{marginLeft:16, cursor:'pointer'}}/>
-        //     </>),
-        // }
-    ]
+
+
+    let serviceItem = (item,index) => {
+        return (
+            <TableBodyComponent key={index}>
+                <TableCell>  {item.name}  </TableCell>
+                <TableCell>  {item.cptCode}  </TableCell>
+                <TableCell>  {item.size}  </TableCell>
+                <TableCell>  {item.min}  </TableCell>
+                <TableCell>  {item.max}  </TableCell>
+                <TableCell>
+                    <>
+                        <img src={Images.edit} alt="edit" style={{cursor: 'pointer'}} onClick={()=>alert(item._id)} />
+                        <img src={Images.remove} alt="delete" style={{marginLeft: 16, cursor: 'pointer'}} onClick={()=>alert(index)} />
+                    </>
+                </TableCell>
+            </TableBodyComponent>
+        )
+    }
+
     return (
-      <div style={{display:'flex', justifyContent:"space-between",marginTop: 50}}>
-       <div style={{marginTop : -32, width: '100%'}}>
-           <Notes data={newData} bodyTitles={bodyTitles} headerTitles={headerTitles} defaultStyle={true} />
-       </div>
-         <FundingSourceSinglePTModifiers />
-      </div>
+        <div style={{display: 'flex', justifyContent: "space-between", marginTop: 50}}>
+            <div style={{marginTop: -32, width: '100%'}}>
+                <Notes data={data} items={serviceItem}  headerTitles={headerTitles} defaultStyle={true}/>
+            </div>
+            <FundingSourceSinglePTModifiers data={data?.modifiers} />
+        </div>
     )
 }
