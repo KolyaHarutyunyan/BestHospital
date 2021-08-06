@@ -9,17 +9,16 @@ export const ClientTable = ({}) => {
     const globalStyle = useGlobalStyles();
     const [page, setPage] = useState(1);
 
-    
+
     const {clientList, httpOnLoad} = useSelector((state) => ({
-        clientList: state.clientList,
-        // httpOnLoad: state.httpOnLoad,
+        clientList: state.client.clientList,
+        httpOnLoad: state.httpOnLoad,
     }));
     const changePage = (number) => {
         setPage(number);
     };
-    console.log(clientList,'liiiist')
 
-    // const list = clientList && clientList.length && clientList[page - 1]
+
     return (
         <div className={globalStyle.tableWrapper}>
             <TableContainer component={Paper}>
@@ -29,21 +28,21 @@ export const ClientTable = ({}) => {
                     aria-label="a dense table"
                 >
                     <ClientTableHead/>
-                    {/*{httpOnLoad.length ?*/}
-                    {/*    <Loader/>*/}
-                    {/*    :*/}
-                    {/*    list.length && list.map((item, i) => (*/}
-                    {/*        <ClientTableBody*/}
-                    {/*            data={item}*/}
-                    {/*            key={i}*/}
-                    {/*        />*/}
-                    {/*    ))}*/}
+                    {httpOnLoad.length ?
+                        <Loader/>
+                        :
+                        clientList.length && clientList.map((item, i) => (
+                            <ClientTableBody
+                                data={item}
+                                key={i}
+                            />
+                        ))}
                 </Table>
                 <PaginationItem
                     text={'Showing 30 to 30 of 500 entries'}
                     handleReturn={(number) => changePage(number)}
                     page={page}
-                    // count={clientList.length}
+                    count={clientList.length}
                 />
             </TableContainer>
         </div>

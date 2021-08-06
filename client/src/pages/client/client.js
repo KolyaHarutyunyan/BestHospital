@@ -1,12 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {TableWrapper} from "@eachbase/components";
-import {OfficesInfo, FundingSourceTable, CreateFundingSource} from "@eachbase/fragments";
-
-
+import {OfficesInfo, ClientTable,CreateClient} from "@eachbase/fragments";
 import {useDispatch, useSelector} from "react-redux";
-import {ClientTable} from "@eachbase/fragments";
-import {clientActions} from "@eachbase/store/client";
 
+import {clientActions} from "@eachbase/store/client";
 
 
 export const Client = ({}) => {
@@ -37,7 +34,7 @@ export const Client = ({}) => {
                         addButtonText={'Add Client'}
                         handleOpenClose={handleOpenClose}
                         openCloseInfo={open}
-                        body={<p>add client</p> }
+                        body={<CreateClient/>}
                     >
 
                         <ClientTable/>
