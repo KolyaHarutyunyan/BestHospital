@@ -7,8 +7,8 @@ export const CreateChancel = ({
   onCreate,
   onClose,
   classes,
-  buttonWidth
-
+  buttonWidth,
+  disabled
 }) => {
   return (
     <div className={classes} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
@@ -39,6 +39,7 @@ export const CreateChancel = ({
           color: Colors.TextWhite,
         }}
         onClick={onCreate}
+        disabled={disabled}
       >
         {create}
       </Button>

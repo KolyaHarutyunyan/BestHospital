@@ -1,9 +1,9 @@
 import {
+    EDIT_ADMIN_BY_ID_SUCCESS,
     FILTER_BY_FIRST_NAME, GET_ADMIN_BY_ID, GET_ADMIN_BY_ID_CLEAR,
     GET_ADMIN_BY_ID_SUCCESS,
     GET_ADMINS,
     GET_ADMINS_SUCCESS,
-    CREATE_ADMIN_SUCCESS
 } from "./admin.types";
 import {paginate} from "@eachbase/utils";
 import {filterByFirstName} from "@eachbase/utils";
@@ -20,21 +20,17 @@ export const adminReducer = (state = initialState, action) => {
         case GET_ADMINS:
             return {...state, adminsList: '',}
 
-        // case CREATE_ADMIN_SUCCESS:
-        //     return {
-        //         ...state,
-        //
-        //         adminsListReserve: [action.payload,...initialState.adminsListReserve],
-        //
-        //
-        //         adminsList:  paginate((initialState.adminsListReserve),10)
-        //     }
-
         case GET_ADMINS_SUCCESS:
             return {
                 ...state,
                 adminsList: paginate((action.payload), 10),
                 adminsListReserve: action.payload,
+            }
+
+        case EDIT_ADMIN_BY_ID_SUCCESS:
+            return {
+                ...state,
+                adminInfoById: action.payload,
             }
 
         case  GET_ADMIN_BY_ID_SUCCESS:

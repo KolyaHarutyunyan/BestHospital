@@ -50,6 +50,7 @@ export const SimpleTabs = ({tabsLabels, tabsContent, setActiveTab}) => {
 
     return (
         <div className={tabStyle.root}>
+
             <AppBar className={tabStyle.tabHeader} position="static">
                 <Tabs
                     value={value}

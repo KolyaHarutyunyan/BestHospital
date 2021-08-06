@@ -38,4 +38,5 @@ export {CircleAndTitle} from './sections'
 export {Steps} from './steps';
 export {Card, Notes} from './card';
 export {SimpleTabs} from './tabs';
+export { TabsHeader } from './header';
 
