@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from "react";
-import {useHistory} from "react-router-dom";
 import {TableWrapper} from "@eachbase/components";
-import {OfficesInfo, StaffTable, CreateStaff,} from "@eachbase/fragments";
+import {StaffTable, CreateStaff,} from "@eachbase/fragments";
 
 import {adminActions} from "@eachbase/store";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 
 export const Staff = () => {
     const dispatch = useDispatch()
@@ -33,7 +32,6 @@ export const Staff = () => {
             >
                 <StaffTable/>
             </TableWrapper>
-            {/*// : (<OfficesInfo info={officeById}/>)*/}
         </>
     );
 }

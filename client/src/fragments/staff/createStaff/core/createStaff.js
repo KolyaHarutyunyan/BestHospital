@@ -42,6 +42,8 @@ export const CreateStaff = ({handleClose, editGeneralInfo}) => {
 
     const [fullAddress, setFullAddress] = useState('')
 
+    console.log(fullAddress,'full address');
+
     const disabledOne = inputs.firstName && inputs.middleName && error !== 'Not valid email' && inputs.lastName && inputs.email && inputs.phone
     const disableSecond = !fullAddress.length
 
