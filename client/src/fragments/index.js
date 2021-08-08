@@ -8,6 +8,7 @@ export {
 export { MenuBar } from "./menuBar";
 export { FundingSourceTable, CreateFundingSource, OfficesInfo } from "./fundingSource";
 export { StaffTable, CreateStaff} from "./staff";
+export { ClientTable,CreateClient} from "./client";
 export { BranchesTable, CreateBranchTable } from "./branches";
 export { HumanResourcesTable, CreateAdminTable, AdminInfo } from "./humanResources";
 export { CustomersTable } from "./customers";

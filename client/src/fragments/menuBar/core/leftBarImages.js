@@ -13,6 +13,10 @@ export const LeftBarImages =({ item, linkInfo })=>{
                         ? linkInfo === item.path
                         ? Images.staffActive
                         : Images.staffPassive
+                       : item.icon === "Client"
+                            ? linkInfo === item.path
+                                ? Images.clientActive
+                                : Images.clientActive
                     : item.icon === "Branches"
                     ? linkInfo === item.path
                         ? Images.fundingSourceActive
