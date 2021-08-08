@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { authActions } from "@eachbase/store";
+import {authActions, httpRequestsOnErrorsActions} from "@eachbase/store";
 import { loginFragments } from "./style";
 import {
   ErrMessage,
@@ -18,27 +18,26 @@ export const LoginModal = ({ handleForgot }) => {
   const [error, setError] = useState(null);
   const [validEmail, setValidEmail] = useState(false);
 
-  const { loginErr, loader } = useSelector((state) => ({
-    loginErr: state.auth.loginErr,
-    loader: state.auth.loader,
+  const {httpOnError, httpOnLoad } = useSelector((state) => ({
+    httpOnLoad: state.httpOnLoad,
+    httpOnSuccess: state.httpOnSuccess,
+    httpOnError: state.httpOnError
   }));
 
   const logInRequest = () => {
     const user = { email: login, password };
-    if (
-      validEmail === false &&
-      login &&
-      login !== "Not valid email" &&
-      password &&
-      password !== "notMath"
-    ) {
+    if (validEmail === false && login && login !== "Not valid email" && password && password !== "notMath") {
       dispatch(authActions.logIn(user));
     } else {
-      if (!login) {
-        setError("notMathLogin");
+
+      if(!login){
+        setError('notMathLogin')
       }
-      if (!password) {
-        setError("notMathPassword");
+      else if(validEmail === true){
+        setError('Not valid email')
+      }
+      else if(!password){
+        setError("notMathPassword")
       }
     }
   };
@@ -46,7 +45,7 @@ export const LoginModal = ({ handleForgot }) => {
   const handleChange = (ev) => {
     let { name, value } = ev.target;
     setError(null);
-
+    if(httpOnError.length) dispatch(httpRequestsOnErrorsActions.removeError('LOG_IN'))
     if (name === "email") {
       setLogin(value);
       dispatch(authActions.clearError());
@@ -64,60 +63,56 @@ export const LoginModal = ({ handleForgot }) => {
     }
   };
 
-  const NotMathEmail =
-    loginErr === "User with this email was not found"
-      ? "User with this email was not found"
-      : error === "notMathLogin"
-      ? "Input is not field"
-      : validEmail === "Not valid email"
-      ? "Not valid email"
-      : "";
+  const loginError =  httpOnError.length && httpOnError[0].error
+  const NotMathEmail = loginError === "User with this email was not found" ? "User with this email was not found"
+      : error === "notMathLogin" ? "Input is not field"
+          : validEmail === "Not valid email" ? "Not valid email"
+              : "";
 
-  const NotMathPassword =
-    loginErr === "user password does not match"
-      ? "User password does not match"
-      : error === "notMathPassword"
-      ? "Input is not field"
-      : "";
+  const NotMathPassword = loginError === "user password does not match" ? "User password does not match" :
+      error === "notMathPassword" ? "Input is not field" : "";
 
   return (
     <div className={classes.LoginModalWrapper}>
       <p>Sign in</p>
 
       <ValidationInput
-        validator={EmailValidator}
-        value={login}
-        onChange={handleChange}
-        sendBoolean={handleCheck}
-        typeError={NotMathEmail}
-        name={"email"}
-        type={"email"}
-        label={"Email"}
-        id={"email"}
-        autoComplete={"current-email"}
+          validator={EmailValidator}
+          value={login}
+          onChange={handleChange}
+          sendBoolean={handleCheck}
+          typeError={NotMathEmail}
+          name={"email"}
+          type={"email"}
+          label={"Email"}
+          id={"email"}
+          autoComplete={"current-email"}
       />
+
 
       <PasswordInput
-        handleChangePassword={handleChange}
-        type={"password"}
-        name={"password"}
-        disabled={false}
-        value={password}
-        onChange={handleChange}
-        typeError={NotMathPassword}
-        placeholder={"Password"}
+          styles={{marginTop:'25px'}}
+          handleChangePassword={handleChange}
+          type={"password"}
+          name={"password"}
+          disabled={false}
+          value={password}
+          onChange={handleChange}
+          typeError={NotMathPassword}
+          placeholder={"Password"}
       />
 
-      {/*<ErrMessage*/}
-      {/*  type={'login'}*/}
-      {/*  text={ NotMathPassword ? NotMathPassword : NotMathEmail ? NotMathEmail : '' }*/}
-      {/*/>*/}
+      <ErrMessage
+          type={'login'}
+          text={loginError === 'Check your email to activate your account' ? 'Check your email to activate your account' : ''  }
+      />
+
       <div className={classes.LoginModalButtons}>
         <SignIn
-          loader={loader}
-          handleClick={logInRequest}
-          width={"200px"}
-          text={"Sign In"}
+            loader={!!httpOnLoad.length}
+            handleClick={logInRequest}
+            width={"200px"}
+            text={"Sign In"}
         />
 
         <button onClick={handleForgot} className={classes.LoginModalForgot}>

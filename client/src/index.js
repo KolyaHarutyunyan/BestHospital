@@ -10,6 +10,7 @@ import {initAxiosInterceptors} from "@eachbase/utils";
 
 
 initAxiosInterceptors();
+
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>

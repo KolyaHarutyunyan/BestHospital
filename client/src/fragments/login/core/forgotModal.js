@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { EmailValidator } from '@eachbase/utils';
 import { loginFragments } from "./style";
-import { authActions } from "@eachbase/store";
+import {authActions, httpRequestsOnErrorsActions} from "@eachbase/store";
 import { SignIn, ValidationInput } from "@eachbase/components";
 
 export const ForgotModal = ({}) => {
@@ -12,11 +12,12 @@ export const ForgotModal = ({}) => {
   const [error, setError] = useState(null);
   const [validEmail, setValidEmail] = useState(false);
 
-  const { loginErr, getLinkLoading } = useSelector((state) => ({
-    loginErr: state.auth.loginErr,
-    loader: state.auth.loader,
-    getLinkLoading: state.auth.getLinkLoading,
+
+  const { httpOnError, httpOnLoad } = useSelector((state) => ({
+    httpOnLoad: state.httpOnLoad,
+    httpOnError: state.httpOnError
   }));
+
 
   const GetLink = () => {
     if (validEmail === false && email && email !== "Not valid email") {
@@ -27,10 +28,13 @@ export const ForgotModal = ({}) => {
       }
     }
   };
-
+  const loginError =  httpOnError.length && httpOnError[0].error
   const handleChange = (ev) => {
     setEmail(ev.target.value);
-    // dispatch (authActions.clearError ())
+    setError('')
+    if(loginError.length) {
+      dispatch(httpRequestsOnErrorsActions.removeError('GET_RECOVERY_LINK'))
+    }
   };
 
   const handleCheck = (bool) => {
@@ -38,17 +42,16 @@ export const ForgotModal = ({}) => {
       setValidEmail("Not valid email");
     } else {
       setValidEmail(false);
+      setError('')
     }
   };
 
   const NotMathEmail =
-    loginErr === "User with this email was not found"
-      ? "User with this email was not found"
-      : error === "notMathLogin"
-      ? "Input is not field"
-      : validEmail === "Not valid email"
-      ? "Not valid email"
-      : "";
+      loginError === "User with this email was not found" ? "User with this email was not found" :
+          loginError === 'Not Found' ? 'User with this email was not found' :
+              error === "notMathLogin" ? "Input is not field" :
+                  validEmail === "Not valid email" ? "Not valid email" :
+                      "";
 
   return (
     <div className={classes.LoginModalWrapper}>
@@ -60,24 +63,26 @@ export const ForgotModal = ({}) => {
 
       <div style={{ margin: "10px 0 20px 0" }}>
         <ValidationInput
-          validator={EmailValidator}
-          value={email}
-          onChange={handleChange}
-          sendBoolean={handleCheck}
-          typeError={NotMathEmail}
-          name={"email"}
-          type={"email"}
-          label={"Email"}
-          id={"email"}
-          autoComplete={"current-email"}
+            className={classes.inputMargins}
+            validator={EmailValidator}
+            value={email}
+            onChange={handleChange}
+            sendBoolean={handleCheck}
+            typeError={NotMathEmail}
+            name={"email"}
+            type={"email"}
+            label={"Email"}
+            id={"email"}
+            autoComplete={"current-email"}
         />
       </div>
 
       <SignIn
-        loader={getLinkLoading}
-        handleClick={GetLink}
-        width={"100%"}
-        text={"Get Recovery Link"}
+          margin={'15px 0 0 0'}
+          loader={httpOnLoad.length}
+          handleClick={GetLink}
+          width={"100%"}
+          text={"Get Recovery Link"}
       />
     </div>
   );
