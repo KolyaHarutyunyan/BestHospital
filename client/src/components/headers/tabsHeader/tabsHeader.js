@@ -2,9 +2,9 @@ import {tabsHeaderStyles} from "./styles";
 import {Images} from "@eachbase/utils";
 import {AddModalButton, SimpleModal} from "@eachbase/components";
 import React, {useState} from "react";
-import {CreateStaff} from "../../fragments";
+import {CreateStaff} from "@eachbase/fragments";
 
-export const TabsHeader = ({name, tags, avatar, editModal}) => {
+export const TabsHeader = ({activeTab, editModal}) => {
     const classes = tabsHeaderStyles()
     const [open, setOpen] = useState()
 

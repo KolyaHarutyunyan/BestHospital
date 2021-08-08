@@ -1,28 +1,28 @@
 import {
-  createAdmin,
-  filterAdmins,
-  getAdminById,
-  getAdmins,
-  clearAdminById,
-  activateAdmin,
-  inactivateAdmin,
-  editAdmin
+    createAdmin,
+    getAdminById,
+    getAdmins,
+    editAdminById,
+
+    createCredential,
+    getCredentialById,
+    editCredentialById,
+    deleteCredentialById
 } from "./admin.action";
 
-export { adminReducer } from './admin.reducer';
-export { watchAdmin } from './admin.saga';
+export {adminReducer} from './admin.reducer';
+export {watchAdmin} from './admin.saga';
 
 export const adminActions = {
-  createAdmin,
-  getAdmins,
-  getAdminById,
-  clearAdminById,
-  filterAdmins,
-  editAdmin,
+    createAdmin,
+    getAdmins,
+    getAdminById,
+    editAdminById,
 
-  activateAdmin,
-  inactivateAdmin
-
+    createCredential,
+    getCredentialById,
+    editCredentialById,
+    deleteCredentialById
 }
 
 

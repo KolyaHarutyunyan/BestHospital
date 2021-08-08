@@ -1,15 +1,21 @@
 import {call, put, takeLatest} from "redux-saga/effects";
 import {authService} from "./admin.service";
 import {
-    ACTIVATE_ADMIN,
     CREATE_ADMIN,
     GET_ADMIN_BY_ID,
     GET_ADMIN_BY_ID_SUCCESS,
     GET_ADMINS,
     GET_ADMINS_SUCCESS,
-    INACTIVATE_ADMIN,
     EDIT_ADMIN_BY_ID,
-    EDIT_ADMIN_BY_ID_SUCCESS
+    EDIT_ADMIN_BY_ID_SUCCESS,
+    CREATE_CREDENTIAL,
+    CREATE_CREDENTIAL_SUCCESS,
+    EDIT_CREDENTIAL_BY_ID_SUCCESS,
+    GET_CREDENTIAL_BY_ID,
+    GET_CREDENTIAL_BY_ID_SUCCESS,
+    EDIT_CREDENTIAL_BY_ID,
+    DELETE_CREDENTIAL_BY_ID,
+    DELETE_CREDENTIAL_BY_ID_SUCCESS,
 
 } from "./admin.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
@@ -18,9 +24,7 @@ import {httpRequestsOnLoadActions} from "../http_requests_on_load";
 function* createAdmin(action) {
     try {
         const res = yield call(authService.createAdminService, action.payload.body);
-        console.log(res, 'res')
 
-        // window.location.replace('/staff')
         yield put({
             type: GET_ADMINS,
         });
@@ -73,17 +77,54 @@ function* editAdminById(action) {
     }
 }
 
-function* activateAdmin(action) {
+function* createCredential(action) {
     try {
-        const res = yield call(authService.activateAdminService, action.payload);
+        const res = yield call(authService.createCredentialService, action.payload.body);
+        yield put({
+            type: CREATE_CREDENTIAL_SUCCESS,
+            payload: res.data,
+        });
     } catch (err) {
         console.log(err)
     }
 }
 
-function* inactivateAdmin(action) {
+function* getCredentialById(action) {
     try {
-        const res = yield call(authService.inactivateAdminService, action.payload);
+        const res = yield call(authService.getCredentialByIdService, action.payload.credentialId);
+
+        yield put({
+            type: GET_CREDENTIAL_BY_ID_SUCCESS,
+            payload: res.data,
+        });
+
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+function* editCredentialById(action) {
+    try {
+        const res = yield call(authService.editCredentialByIdService, action.payload.id, action.payload.body)
+
+        yield put({
+            type: EDIT_CREDENTIAL_BY_ID_SUCCESS,
+            payload: res.data,
+        });
+
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+function* deleteCredentialById(action) {
+    try {
+        const res = yield call(authService.deleteCredentialByIdService, action.payload.id.id)
+
+        yield put({
+            type: DELETE_CREDENTIAL_BY_ID_SUCCESS,
+        });
+
     } catch (err) {
         console.log(err)
     }
@@ -94,8 +135,8 @@ export const watchAdmin = function* watchAdminSaga() {
     yield takeLatest(GET_ADMINS, getAdmins);
     yield takeLatest(GET_ADMIN_BY_ID, getAdminById);
     yield takeLatest(EDIT_ADMIN_BY_ID, editAdminById)
-
-    yield takeLatest(ACTIVATE_ADMIN, activateAdmin);
-    yield takeLatest(INACTIVATE_ADMIN, inactivateAdmin);
-
+    yield takeLatest(CREATE_CREDENTIAL, createCredential)
+    yield takeLatest(GET_CREDENTIAL_BY_ID, getCredentialById)
+    yield takeLatest(EDIT_CREDENTIAL_BY_ID, editCredentialById)
+    yield takeLatest(DELETE_CREDENTIAL_BY_ID, deleteCredentialById)
 };

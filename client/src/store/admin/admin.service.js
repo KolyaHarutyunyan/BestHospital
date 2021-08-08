@@ -1,13 +1,8 @@
-// import { API_BASE } from '../constants';
 import axios from "axios";
-
-// const path = `${API_BASE}`;
-// const token = localStorage.getItem('access-token')
-// const header = { headers: { 'access-token': token } }
 
 export const authService = {
 
-    createAdminService: (body) => axios.post(`/staff/superAdmin`, body),
+    createAdminService: (body) => axios.post(`/staff`, body),
 
     editAdminByIdService: (id, body) => axios.patch(`/staff/${id}`, body),
 
@@ -15,9 +10,12 @@ export const authService = {
 
     getAdminByIdService: (id) => axios.get(`/staff/${id}`,),
 
-    activateAdminService: (id) => axios.patch(`/authn/${id.id}/activate`,),
+    createCredentialService: (body) => axios.post(`/staff/credential`, body),
 
-    inactivateAdminService: (id) => axios.patch(`/authn/${id.id}/inactivate`),
+    getCredentialByIdService: (id) => axios.get(`/staff/${id}/credential`,),
 
+    editCredentialByIdService: (id, body) => axios.patch(`/staff/${id}/credential`, body),
+
+    deleteCredentialByIdService: (id) => axios.delete(`/staff/${id}/credential`,),
 
 };

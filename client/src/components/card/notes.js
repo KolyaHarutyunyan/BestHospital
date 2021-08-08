@@ -9,7 +9,7 @@ import {PaginationItem} from "../pagination";
 
 import { makeStyles } from "@material-ui/core/styles";
 
-export const Notes = ({data,headerTitles, bodyTitles, pagination, defaultStyle, items}) => {
+export const Notes = ({data,headerTitles, pagination, defaultStyle, items}) => {
 
     const officesStyle = makeStyles(({}) => ({
         thWidth: {

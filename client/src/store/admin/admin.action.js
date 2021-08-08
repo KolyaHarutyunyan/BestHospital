@@ -1,13 +1,13 @@
 import {
-    ACTIVATE_ADMIN,
     CREATE_ADMIN,
-    EDIT_ADMIN, EDIT_ADMIN_BY_ID,
-    FILTER_BY_FIRST_NAME,
+    EDIT_ADMIN_BY_ID,
     GET_ADMIN_BY_ID,
-    GET_ADMIN_BY_ID_CLEAR,
-    GET_ADMINS, INACTIVATE_ADMIN
+    GET_ADMINS,
+    CREATE_CREDENTIAL,
+    GET_CREDENTIAL_BY_ID,
+    EDIT_CREDENTIAL_BY_ID,
+    DELETE_CREDENTIAL_BY_ID
 } from "./admin.types";
-import {ACTIVATE_OFFICE, INACTIVATE_OFFICE} from "../offices/offices.types";
 
 export const createAdmin = (body) => {
     return {
@@ -16,7 +16,7 @@ export const createAdmin = (body) => {
     }
 }
 
-export const editAdmin = (body, id) => {
+export const editAdminById = (body, id) => {
     return {
         type: EDIT_ADMIN_BY_ID,
         payload: {body, id}
@@ -36,30 +36,29 @@ export const getAdminById = (adminId) => {
     }
 }
 
-export const clearAdminById = () => {
+export const createCredential = (body) => {
     return {
-        type: GET_ADMIN_BY_ID_CLEAR,
+        type: CREATE_CREDENTIAL,
+        payload: {body}
     }
 }
 
-export const filterAdmins = (data) => {
+export const getCredentialById = (credentialId) => {
     return {
-        type: FILTER_BY_FIRST_NAME,
-        payload: {data}
+        type: GET_CREDENTIAL_BY_ID,
+        payload: {credentialId}
     }
 }
 
-
-export const activateAdmin = (id) => {
+export const editCredentialById = (body, id) => {
     return {
-        type: ACTIVATE_ADMIN,
-        payload: {id}
+        type: EDIT_CREDENTIAL_BY_ID,
+        payload: {body, id}
     }
 }
-
-export const inactivateAdmin = (id) => {
+export const deleteCredentialById = (id) => {
     return {
-        type: INACTIVATE_ADMIN,
+        type: DELETE_CREDENTIAL_BY_ID,
         payload: {id}
     }
 }

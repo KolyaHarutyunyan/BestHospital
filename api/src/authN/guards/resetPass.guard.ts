@@ -35,7 +35,7 @@ export class ResetPassGuard implements CanActivate {
   private checkToken(token: string) {
     if (!token) {
       throw new HttpException(
-        'reset-token header was not set',
+        'reset-token tabsHeader was not set',
         HttpStatus.UNAUTHORIZED,
       );
     }
