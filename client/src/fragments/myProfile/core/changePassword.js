@@ -13,8 +13,9 @@ export const ChangePassword = ({}) => {
     const [inputs, setInputs] = useState(false)
 
 
-    const { httpOnSuccess } = useSelector((state) => ({
-        httpOnSuccess: state.httpOnSuccess
+    const { httpOnSuccess, httpOnError } = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnError: state.httpOnError
     }));
 
 
@@ -60,7 +61,13 @@ export const ChangePassword = ({}) => {
 
                 {showInputs ?
                     <div>
-                        <Button className={classes.saveButton} onClick={handleChangePassword}>Save</Button>
+                        {httpOnError.length ?
+                            <div className={classes.miniLoader}>
+                            <MinLoader/>
+                            </div>
+                            :
+                            <Button className={classes.saveButton} onClick={handleChangePassword}>Save</Button>
+                        }
                         <Button className={classes.cancelButton} onClick={() => setShowInputs(false)}>Cancel</Button>
                     </div>
                     :

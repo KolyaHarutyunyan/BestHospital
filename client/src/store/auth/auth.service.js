@@ -12,8 +12,8 @@ export const authService = {
 
     getLink: (email) => axios.get(`/auth/forgotPassword/${email}` ),
 
-    resetPass: (passwords) => {
-        let endpoint = `${path}/auth/resetPassword`;
+    resetPass: ( passwords ) => {
+        let endpoint = `http://localhost:8200/api/authn/resetPassword`;
         const res = axios.post(endpoint,
 
           {

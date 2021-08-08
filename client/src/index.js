@@ -8,8 +8,10 @@ import {Provider} from "react-redux";
 import {store} from './store'
 import {initAxiosInterceptors} from "@eachbase/utils";
 
-
-initAxiosInterceptors();
+console.log(window.location.pathname,'wwwwww')
+if(window.location.pathname === '/login') {
+    initAxiosInterceptors();
+}
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>

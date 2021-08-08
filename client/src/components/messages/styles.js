@@ -18,6 +18,7 @@ export const errMessageStyle = makeStyles(() => ({
     fontSize: "14px",
     fontWeight: "600",
     color: "#F07379",
+    position:'absolute'
   },
 
   DoneMessage: {

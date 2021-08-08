@@ -139,4 +139,8 @@ export const myProfileFragment = makeStyles(() => ({
         padding:'6px 0',
     },
 
+    miniLoader:{
+        marginRight:'50px'
+    }
+
 }))
