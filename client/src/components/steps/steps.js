@@ -3,23 +3,18 @@ import clsx from 'clsx';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-import generalIcon from '@eachbase/assets/images/icons/generalInfo.svg';
-import address from '@eachbase/assets/images/icons/address.svg';
-import otherDetails from '@eachbase/assets/images/icons/otherDetails.svg';
+import {Images} from '@eachbase/utils';
 import {stepStyles, useStyles, useColorlibStepIconStyles, ColorlibConnector} from "./styles";
-import checkmark from "@eachbase/assets/images/icons/checkmark.svg";
 import {CreateChancel} from "@eachbase/components";
 
-export const Steps = ({disableSecond,disabledOne, handleClick, stepTitles, handleClose, firstStep, secondStep, thirdStep}) => {
+export const Steps = ({ disableSecond,disabledOne, handleClick, stepTitles, handleClose, firstStep, secondStep, thirdStep}) => {
 
     const classes = useStyles();
     const stepsStyles = stepStyles()
     const [activeStep, setActiveStep] = React.useState(0);
-    console.log(disableSecond,'disabledOne');
     const handleNext = () => {
         if (activeStep !== stepTitles.length - 1) {
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
-            console.log('aaaa')
         }
         else {
             handleClick()
@@ -35,11 +30,10 @@ export const Steps = ({disableSecond,disabledOne, handleClick, stepTitles, handl
         const {active, completed} = props;
 
         const icons = {
-            1: completed ? <img src={checkmark} alt={"checked"}/> : <img src={generalIcon} alt={"generalIcon"}/>,
-            2: completed ? <img src={checkmark} alt={"checked"}/> : <img src={address} alt={"address"}/>,
-            3: completed ? <img src={checkmark} alt={"checked"}/> : <img src={otherDetails} alt={"otherDetails"}/>,
+            1: completed ? <img src={Images.checkmark} alt={"checked"}/> : <img src={Images.generalInfoIcon} alt={"generalIcon"}/>,
+            2: completed ? <img src={Images.checkmark} alt={"checked"}/> : <img src={Images.address} alt={"address"}/>,
+            3: completed ? <img src={Images.checkmark} alt={"checked"}/> : <img src={Images.otherDetailsIcon} alt={"otherDetails"}/>,
         };
-        // change icons
 
         return (
             <div
@@ -86,9 +80,6 @@ export const Steps = ({disableSecond,disabledOne, handleClick, stepTitles, handl
                     />
                 </div>
             </div>
-
-            {/*<CreateChancel  />*/}
-
         </div>
     );
 }

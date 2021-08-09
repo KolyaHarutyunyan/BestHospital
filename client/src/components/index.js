@@ -36,7 +36,8 @@ export {CustomBreadcrumbs} from './breadcrumbs'
 export {PaginationItem} from './pagination'
 export {CircleAndTitle} from './sections'
 export {Steps} from './steps';
-export {Card, Notes} from './card';
+export {Card, Notes, HistoryCard} from './card';
 export {SimpleTabs} from './tabs';
-export {ModalHeader, TabsHeader} from './headers'
+export {ModalHeader, TabsHeader} from './headers';
+export {Role} from './role';
 

@@ -1,7 +1,9 @@
+import {Role} from '@eachbase/components';
+
 export const StaffAccess = () => {
     return (
         <div>
-            Access
+            <Role />
         </div>
     )
 }

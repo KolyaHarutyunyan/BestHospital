@@ -1,6 +1,5 @@
 import React from "react";
-import clsx from "clsx";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -8,17 +7,12 @@ import FormControl from "@material-ui/core/FormControl";
 import ListItemText from "@material-ui/core/ListItemText";
 import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
-import Chip from "@material-ui/core/Chip";
-import {Colors} from "../../utils";
+import {Colors} from "@eachbase/utils";
+import {withStyles} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
     width: "100%",
-    marginTop: "-20px",
-    marginBottom: "10px",
-    '& .MuiOutlinedInput-notchedOutline':{
-      borderColor:Colors.BackgroundBlue
-    },
   },
   chips: {
     display: "flex",
@@ -32,6 +26,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const CustomColorCheckbox = withStyles({
+  root: {
+    color: Colors.ThemeBlue,
+    "&$checked": {
+      color: Colors.BackgroundBlue
+    },
+  },
+  checked: {}
+})((props) => <Checkbox color="default" {...props} />);
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -43,34 +47,12 @@ const MenuProps = {
   },
 };
 
-
-function getStyles(name, personName, theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
-
 export function SelectInputWidthTags(permissionsList) {
   const classes = useStyles();
-  const theme = useTheme();
   const [personName, setPersonName] = React.useState([]);
 
   const handleChange = (event) => {
     setPersonName(event.target.value);
-  };
-
-  const handleChangeMultiple = (event) => {
-    const { options } = event.target;
-    const value = [];
-    for (let i = 0, l = options.length; i < l; i += 1) {
-      if (options[i].selected) {
-        value.push(options[i].value);
-      }
-    }
-    setPersonName(value);
   };
 
   return (
@@ -82,15 +64,17 @@ export function SelectInputWidthTags(permissionsList) {
           id="demo-mutiple-checkbox"
           multiple
           value={personName}
-          onChange={handleChangeMultiple}
+          onChange={handleChange}
           input={<Input />}
           renderValue={(selected) => selected.join(", ")}
           MenuProps={MenuProps}
+          variant='filled'
+          style={{border: '1px solid gray',height: 48,marginTop: 14}}
         >
           {permissionsList && permissionsList.permissionsList.map((name) => (
             <MenuItem key={name} value={name}>
-              <Checkbox checked={personName.indexOf(name) > -1} />
-              <ListItemText primary={name.title} />
+              <CustomColorCheckbox checked={personName.indexOf(name) > -1} onChange={handleChange} />
+              <ListItemText primary={name} />
             </MenuItem>
           ))}
         </Select>

@@ -7,7 +7,10 @@ export const stepStyles = makeStyles(() => ({
         background: Backgrounds.headerLightBlue,
     },
     stepBody: {
-        padding: '32px 40px 40px 40px'
+        padding: '32px 40px 40px 40px',
+        "@media (max-width: 1400px)": {
+            padding: '32px',
+        },
     },
     buttonsContainer: {
         marginTop: '6px'
