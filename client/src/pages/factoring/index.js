@@ -1,1 +1,0 @@
-export { Factoring } from "./factoring";
