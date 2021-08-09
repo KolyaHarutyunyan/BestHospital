@@ -62,7 +62,12 @@ import remove from "@eachbase/images/icons/remove.svg"
 import addLight from '@eachbase/images/icons/addLight.svg'
 import clientActive from '@eachbase/images/icons/clientActive.svg'
 import clients from '@eachbase/images/icons/clients.svg'
+import clientsPassive from '@eachbase/images/icons/clientsPassive.svg'
+import clientModalicon1 from '@eachbase/images/icons/clientModal1.svg'
+import clientModalicon2 from '@eachbase/images/icons/clientModal2.svg'
+import clientModalicon3 from '@eachbase/images/icons/clientModal3.svg'
 import checkmark from '@eachbase/images/icons/checkmark.svg'
+
 
 export const Images = {
     doctors: doctors,
@@ -78,6 +83,67 @@ export const Images = {
     addYellowIcon: addYellowIcon,
 
 
+
+  offices: offices,
+  officesGray: officesGray,
+  error: error,
+  aToZ: aToZ,
+  zToA: zToA,
+  yellowOffices: yellowOffices,
+  branches: branches,
+  branchesGray: branchesGray,
+  branchGreen: branchGreen,
+  branchFill: branchFillIcon,
+  humanResources: humanResources,
+  humanResourcesGray: humanResourcesGray,
+  humanResourcesYellow: humanResourcesYellow,
+  human: human,
+  customer: customer,
+  customerFill: customerFill,
+  customerGray: customerGray,
+  factoring: factoring,
+  factoringOutline: factoringOutline,
+  accessManagement: accessManagement,
+  accessManagementGray: accessManagementGray,
+  accessManagementUser: accessManagementUser,
+  checked: checked,
+  officeFillBold:officeFillBold,
+  factoringGray:factoringGray,
+  authorityFill:authorityFill,
+  authorityBlue:authorityBlue,
+  authorityBlueFill:authorityBlueFill,
+  userProfile:userProfile,
+  email:email,
+  bluePhone:bluePhone,
+  location:location,
+  edit:edit,
+  signOut:signOut,
+  authorityGray:authorityGray,
+  agents:agents,
+  carrierFill:carrierFill,
+  carrierGray:carrierGray,
+  agentsBlue:agentsBlue,
+  agentsFill:agentsFill,
+  factoringBold:factoringBold,
+  carrier:carrier,
+  carrierBold:carrierBold,
+  staffOutline: staffOutline,
+  generalInfoIcon: generalInfoIcon,
+  address: address,
+  otherDetailsIcon: otherDetailsIcon,
+  remove: remove,
+  addLight : addLight,
+  clientActive : clientActive,
+  clients : clients,
+  clientsPassive : clientsPassive,
+  clientModalicon1 :clientModalicon1,
+  clientModalicon2 :clientModalicon2,
+  clientModalicon3 :clientModalicon3,
+
+  
+  
+//   Need to change
+  
     offices: offices,
     officesGray: officesGray,
     error: error,
@@ -130,4 +196,5 @@ export const Images = {
     clientActive: clientActive,
     clients: clients,
     checkmark: checkmark
+
 }

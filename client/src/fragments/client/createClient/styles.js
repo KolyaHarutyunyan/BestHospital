@@ -5,13 +5,10 @@ import {makeStyles} from "@material-ui/core/styles";
 export const createClientStyle = makeStyles(() => ({
 
     createFoundingSource: {
-        width: 920,
+        width: 543,
         background: Colors.BackgroundWhite,
         borderRadius: '8px',
         overflow: "hidden",
-        '@media (max-width: 1280px)': {
-            width: '896px'
-        }
     },
     createFoundingSourceHeader: {
         width: "100%",
@@ -34,47 +31,5 @@ export const createClientStyle = makeStyles(() => ({
         padding: '40px',
 
     },
-    createFundingSourceHeaderBottom: {
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'space-between',
-        padding: '0 40px',
-        marginTop: 24,
-        position: 'relative'
-    },
-    createFundingSourceHeaderBottomBlock: {
-        display: "flex",
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    createFundingSourceHeaderBottomCircle: {
-        width: 32,
-        height: 32,
-        borderRadius: '50%',
-        display: 'flex',
-        alignItems: "center",
-        justifyContent: "center",
-        background: Colors.BackgroundBlue,
-        color: Colors.TextWhite,
-        marginBottom: 13,
-    },
-    createFundingSourceHeaderBottomText: {
-        fontSize: 18,
-        color: Colors.TextPrimary,
-        fontWeight: 600
-    },
-    createFundingSourceHeaderBottomLine: {
-        width: '75%',
-        borderTop: `1px dashed ${Colors.TextDarkGrey}`,
-        position: "absolute",
-        top:16,
-        margin: "auto",
-        left:0,
-        right :0
-    },
-    createFundingSourceHeaderBottomPosition: {
-        position:'relative',
-        width:64,
-        background: Colors.BackgroundPrimary,
-    }
+
 }));

@@ -13,7 +13,8 @@ import {
     Single,
     FundingSourceSingle,
     SingleStaff,
-    Client
+    Client,
+    ClientSingle
 } from "@eachbase/pages";
 import React from "react";
 import {
@@ -39,7 +40,8 @@ export const Router = ({}) => {
       <Route path="/staff/:id" exact component={SingleStaff} />
 
       <Route path="/branches" component={Branches} />
-      <Route path="/client" component={Client} />
+      <Route path="/client" exact component={Client} />
+      <Route path="/client/:id" exact component={ClientSingle} />
       {/*<Route path="/createBranch" component={CreateBranchTable} />*/}
 
       <Route path="/humanResources" component={HumanResources} />

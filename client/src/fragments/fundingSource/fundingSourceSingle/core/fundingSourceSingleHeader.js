@@ -45,9 +45,11 @@ export const FundingSourceSingleHeader = ({activeTab, title}) => {
                 openDefault={open}
                 handleOpenClose={handleOpenClose}
                 content={ activeTab === 0 ?
-                    <FundingSourceGeneralEdit/> : activeTab===1 ?
-                        <FundingSourceServiceAdd /> : activeTab===2 ?
-                            <FundingSourceNotesAdd/> : null }/>
+                    <FundingSourceGeneralEdit handleClose={handleOpenClose} />
+                    : activeTab===1 ?
+                        <FundingSourceServiceAdd handleClose={handleOpenClose} /> :
+                        activeTab===2 ?
+                            <FundingSourceNotesAdd handleClose={handleOpenClose} /> : null }/>
             {activeTab === 0 ?
                 <AddModalButton handleClick={handleOpenClose} text='Edit' btnStyles={{height: 36, width: 74}}/>
                 : activeTab >= 3 ?
