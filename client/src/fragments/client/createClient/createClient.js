@@ -1,15 +1,14 @@
 import React, {useState} from "react";
-import {AddressInput, ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
-import {createClientStyle, } from "./styles";
-import {EmailValidator, ErrorText} from "@eachbase/utils";
-// import {fundingSourceActions, officeActions} from "client/src/store";
+import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
+import {createClientStyle,} from "./styles";
+import {ErrorText} from "@eachbase/utils";
 import {useDispatch} from "react-redux";
 
 
 export const CreateClient = ({handleClose}) => {
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState({});
-    const [fullAddress, setFullAddress] = useState(null)
+    const [step, setStep] = useState('first')
 
     const classes = createClientStyle()
     const dispatch = useDispatch()
@@ -28,6 +27,7 @@ export const CreateClient = ({handleClose}) => {
 
 
     const handleCreate = () => {
+        setStep('second')
         const data = {
             "name": inputs.name,
             "email": inputs.email,
@@ -35,7 +35,6 @@ export const CreateClient = ({handleClose}) => {
             'type': inputs.type,
             'contact': inputs.contact,
             'website': inputs.website,
-            "address": fullAddress,
             "status": 1
         }
         if (inputs.name && inputs.email && inputs.phone && inputs.type && inputs.contact && inputs.website) {
@@ -61,16 +60,113 @@ export const CreateClient = ({handleClose}) => {
 
     return (
         <div className={classes.createFoundingSource}>
-            <ModalHeader headerBottom={true} handleClose={handleClose} title={'Add Client'}/>
+            <ModalHeader steps={step}  handleClose={handleClose} title={'Add Client'}/>
             <div className={classes.createFoundingSourceBody}>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
-                    <div style={{width: 400}}>
+                    {step === 'first' ? <div style={{width: 463}}>
+                        <ValidationInput
+                            variant={"outlined"}
+                            sendBoolean={handleCheck}
+                            onChange={handleChange}
+                            value={inputs.name}
+                            type={"text"}
+                            label={"First Name*"}
+                            name='name'
+                            typeError={error === 'name' && ErrorText.field}
+                        />
+                        <ValidationInput
+                            variant={"outlined"}
+                            sendBoolean={handleCheck}
+                            onChange={handleChange}
+                            value={inputs.email}
+                            type={"text"}
+                            label={"Middle Name"}
+                            name='mid'
+                            typeError={error === 'name' && ErrorText.field}
+                        />
+                        <ValidationInput
+                            variant={"outlined"}
+                            sendBoolean={handleCheck}
+                            onChange={handleChange}
+                            value={inputs.type}
+                            type={"text"}
+                            label={"Last Name*"}
+                            name='last'
+                            typeError={error === 'name' && ErrorText.field}
+                        />
+                        <ValidationInput
+                            variant={"outlined"}
+                            sendBoolean={handleCheck}
+                            onChange={handleChange}
+                            value={inputs.website}
+                            type={"text"}
+                            label={"Code*"}
+                            name='codde'
+                            typeError={error === 'name' && ErrorText.field}
+                        />
 
-
-                    </div>
-                    <div style={{width: 400}}>
-
-                    </div>
+                    </div> : <div style={{width: 463}}>
+                        <SelectInput
+                            name={"type"}
+                            label={"Type*"}
+                            handleSelect={handleChange}
+                            sendBoolean={handleCheck}
+                            value={inputs.type}
+                            list={list}
+                            typeError={error === 'type' ? ErrorText.field : ''}
+                            // type={'id'}
+                        />
+                        <ValidationInput
+                            variant={"outlined"}
+                            sendBoolean={handleCheck}
+                            onChange={handleChange}
+                            value={inputs.email}
+                            type={"date"}
+                            label={"Date of Birth*"}
+                            name='mid'
+                            typeError={error === 'name' && ErrorText.field}
+                        />
+                        <ValidationInput
+                            variant={"outlined"}
+                            sendBoolean={handleCheck}
+                            onChange={handleChange}
+                            value={inputs.type}
+                            type={"number"}
+                            label={"Age*"}
+                            name='last'
+                            typeError={error === 'name' && ErrorText.field}
+                        />
+                        <ValidationInput
+                            variant={"outlined"}
+                            sendBoolean={handleCheck}
+                            onChange={handleChange}
+                            value={inputs.website}
+                            type={"text"}
+                            label={"Ethnicity"}
+                            name='codde'
+                            typeError={error === 'name' && ErrorText.field}
+                        />
+                        <SelectInput
+                            name={"type"}
+                            label={"Language*"}
+                            handleSelect={handleChange}
+                            sendBoolean={handleCheck}
+                            value={inputs.type}
+                            list={list}
+                            typeError={error === 'type' ? ErrorText.field : ''}
+                            // type={'id'}
+                        />
+                        <SelectInput
+                            name={"type"}
+                            label={"Family Language*"}
+                            handleSelect={handleChange}
+                            sendBoolean={handleCheck}
+                            value={inputs.type}
+                            list={list}
+                            typeError={error === 'type' ? ErrorText.field : ''}
+                            // type={'id'}
+                        />
+                    </div>}
                 </div>
                 <div style={{display: "flex", justifyContent: 'space-between'}}>
 
@@ -81,7 +177,7 @@ export const CreateClient = ({handleClose}) => {
                         chancel={"Cancel"}
                         onCreate={handleCreate}
                         onClose={handleClose}
-                        buttonWidth='400px'
+                        buttonWidth='224px'
                     />
                 </div>
             </div>

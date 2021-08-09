@@ -65,14 +65,15 @@ export const CreateFundingSource = ({handleClose}) => {
             <div className={classes.createFoundingSourceBody}>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
                     <div style={{width: 400}}>
-                        <ValidationInput variant={"outlined"}
-                                         sendBoolean={handleCheck}
-                                         onChange={handleChange}
-                                         value={inputs.name}
-                                         type={"text"}
-                                         label={"Funding Source Name*"}
-                                         name='name'
-                                         typeError={error === 'name' && ErrorText.field}
+                        <ValidationInput
+                            variant={"outlined"}
+                            sendBoolean={handleCheck}
+                            onChange={handleChange}
+                            value={inputs.name}
+                            type={"text"}
+                            label={"Funding Source Name*"}
+                            name='name'
+                            typeError={error === 'name' && ErrorText.field}
                         />
                         <ValidationInput
                             validator={EmailValidator}

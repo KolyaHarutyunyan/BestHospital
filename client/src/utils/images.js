@@ -64,6 +64,10 @@ import remove from "@eachbase/images/icons/remove.svg"
 import addLight from '@eachbase/images/icons/addLight.svg'
 import  clientActive from '@eachbase/images/icons/clientActive.svg'
 import clients from '@eachbase/images/icons/clients.svg'
+import clientsPassive from '@eachbase/images/icons/clientsPassive.svg'
+import clientModalicon1 from '@eachbase/images/icons/clientModal1.svg'
+import clientModalicon2 from '@eachbase/images/icons/clientModal2.svg'
+import clientModalicon3 from '@eachbase/images/icons/clientModal3.svg'
 
 export const Images = {
   doctors: doctors,
@@ -129,5 +133,9 @@ export const Images = {
   remove: remove,
   addLight : addLight,
   clientActive : clientActive,
-  clients : clients
+  clients : clients,
+  clientsPassive : clientsPassive,
+  clientModalicon1 :clientModalicon1,
+  clientModalicon2 :clientModalicon2,
+  clientModalicon3 :clientModalicon3,
 }

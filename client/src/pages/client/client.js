@@ -8,6 +8,7 @@ import {clientActions} from "@eachbase/store/client";
 
 export const Client = ({}) => {
     const [open, setOpen] = useState(false)
+    const [step , setStep] = useState('first')
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(clientActions.getClients())
@@ -34,7 +35,7 @@ export const Client = ({}) => {
                         addButtonText={'Add Client'}
                         handleOpenClose={handleOpenClose}
                         openCloseInfo={open}
-                        body={<CreateClient/>}
+                        body={<CreateClient />}
                     >
 
                         <ClientTable/>

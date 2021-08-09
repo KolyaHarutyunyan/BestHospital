@@ -10,7 +10,7 @@ export const ClientTableBody = ({key, data}) => {
     const dispatch = useDispatch()
     const history = useHistory()
     const handleOpenOfficeInfo = (id) => {
-        // history.push(`/client/${id}`)
+         history.push(`/client/${id}`)
     }
     console.log(data, 'data')
     return (
