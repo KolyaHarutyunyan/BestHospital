@@ -1,17 +1,17 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
+import {adminActions} from "@eachbase/store";
+import {Images} from "@eachbase/utils";
+import {TableCell} from "@material-ui/core";
+import {StaffGeneral, StaffHistory, StaffCredentials, StaffEmployment, StaffAccess} from "./core";
 import {
     SimpleTabs,
     Notes,
     TableWrapperGeneralInfo,
     InactiveModal,
     TabsHeader,
-    TableBodyComponent
+    TableBodyComponent,
 } from "@eachbase/components";
-import {adminActions} from "@eachbase/store";
-import {Images} from "@eachbase/utils";
-import {TableCell} from "@material-ui/core";
-import {StaffGeneral, StaffHistory, StaffCredentials, StaffEmployment, StaffAccess} from "./core";
 import {useDispatch, useSelector} from "react-redux";
 
 export const StaffItem = () => {
@@ -77,11 +77,11 @@ export const StaffItem = () => {
             date: '06/11/2021',
             name: 'John Smith',
             subject: 'Service Request',
-            action: <img src={Images.remove} alt="delete" style={{ cursor: 'pointer'}} onClick={()=>alert(index)} />,
+            action: <img src={Images.remove} alt="delete" style={{cursor: 'pointer'}} onClick={() => alert(index)}/>,
         }
     ]
 
-    const notesItem = (item,index) => {
+    const notesItem = (item, index) => {
         return (
             <TableBodyComponent key={index}>
                 <TableCell>{item.date}</TableCell>
@@ -99,23 +99,22 @@ export const StaffItem = () => {
             tabComponent: (<StaffGeneral staffGeneral={staffGeneral}/>)
         },
         {
-            tabComponent: (<StaffEmployment />)
+            tabComponent: (<StaffEmployment/>)
         },
         {
-            tabComponent: (<StaffCredentials />)
+            tabComponent: (<StaffCredentials/>)
         },
         {
-            tabComponent: (<StaffAccess />)
+            tabComponent: (<StaffAccess/>)
         },
         {
-            tabComponent: (<Notes data={data} items={notesItem} headerTitles={headerTitles}/>)
+            tabComponent: (<Notes pagination={true} data={data} items={notesItem} headerTitles={headerTitles}/>)
         },
         {
-            tabComponent: (<StaffHistory />)
+            tabComponent: (<StaffHistory/>)
         },
     ];
 
-    // component
 
     return (
         <>
@@ -131,7 +130,7 @@ export const StaffItem = () => {
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
                 <div style={{backgroundColor: 'white', padding: '20px'}}>
-                    <TabsHeader editModal={true} activeTab={activeTab} />
+                    <TabsHeader editModal={true} activeTab={activeTab}/>
                     <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
                 </div>
             </TableWrapperGeneralInfo>

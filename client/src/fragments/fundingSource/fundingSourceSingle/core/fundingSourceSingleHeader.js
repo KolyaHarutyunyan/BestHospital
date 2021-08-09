@@ -37,7 +37,6 @@ export const FundingSourceSingleHeader = ({activeTab, title}) => {
 
     return (
         <div className={classes.fundingSourceSingleHeaderStyles} style={{marginBottom: 34}}>
-
             <div className={classes.fundingSourceSingleHeaderStyles}>
                 <img src={Images.fundingSourceActive} className={classes.foundingIcon} alt="founding"/>
                 <p className={classes.title}>{title && title}</p>

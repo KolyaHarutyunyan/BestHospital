@@ -1,15 +1,11 @@
 import React, {useState} from "react";
 import {Table, TableCell, TableContainer} from "@material-ui/core";
+import {makeStyles} from "@material-ui/core/styles";
 import {useGlobalStyles} from "@eachbase/utils";
-import {TableBodyComponent, TableHeadComponent} from "@eachbase/components";
-
-import {SearchAndFilter} from "../inputs";
+import {TableHeadComponent, SearchAndFilter, PaginationItem} from "@eachbase/components";
 import {useSelector} from "react-redux";
-import {PaginationItem} from "../pagination";
 
-import { makeStyles } from "@material-ui/core/styles";
-
-export const Notes = ({data,headerTitles, pagination, defaultStyle, items}) => {
+export const Notes = ({data, headerTitles, pagination, defaultStyle, items}) => {
 
     const officesStyle = makeStyles(({}) => ({
         thWidth: {
@@ -34,13 +30,6 @@ export const Notes = ({data,headerTitles, pagination, defaultStyle, items}) => {
     const changePage = (number) => {
         setPage(number);
     };
-    // const list = officesList && officesList.length && officesList[page - 1]
-
-
-
-    let obj = {
-
-    }
 
     return (
         <div className={globalStyle.tableWrapper}>
@@ -54,7 +43,7 @@ export const Notes = ({data,headerTitles, pagination, defaultStyle, items}) => {
                         {
                             headerTitles && headerTitles.map((headerItem, index) => {
                                 return (
-                                    <TableCell key={index} className={defaultStyle  ? null : classes.thWidth}>
+                                    <TableCell key={index} className={defaultStyle ? null : classes.thWidth}>
                                         <SearchAndFilter title={headerItem.title} custom={headerItem.sortable}/>
                                     </TableCell>
                                 )
@@ -62,17 +51,17 @@ export const Notes = ({data,headerTitles, pagination, defaultStyle, items}) => {
                         }
                     </TableHeadComponent>
 
-                        {
-                            data && data.map((item, index) => {
-                                return (
-                                    <>
-                                        {items(item,index)}
-                                    </>
-                                )
-                            })
-                        }
+                    {
+                        data && data.map((item, index) => {
+                            return (
+                                <>
+                                    {items(item, index)}
+                                </>
+                            )
+                        })
+                    }
                 </Table>
-                {pagination &&  <PaginationItem
+                {pagination && <PaginationItem
                     text={`Showing 30 to 30 of 200 entries`}
                     handleReturn={(number) => changePage(number)}
                     page={page}

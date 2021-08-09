@@ -13,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
 
 export const SimpleModal = ({status, openDefault, handleOpenClose, content, backdropCustom, addButton }) => {
   const [open, setOpen] = React.useState(false);
-
   const handleOpen = () => {
     setOpen(true);
   };

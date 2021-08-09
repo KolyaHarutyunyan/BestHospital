@@ -1,14 +1,13 @@
 import {cardStyle} from "./style";
 import moment from 'moment'
 
-
-export const HistoryCard = ({data}) => {
+export const HistoryCard = ({key, data}) => {
 
     let correctDate = moment(data.date).format('dddd, MMMM DD, YYYY')
     const classes = cardStyle()
 
     return (
-        <div className={classes.historyCardStyle}>
+        <div className={classes.historyCardStyle} key={key}>
             <p className={classes.historyCardDateStyle}>{correctDate}</p>
             <div className={classes.historyCardBoxStyle}>
                 <p className={classes.historyCardBoxTimeStyle}>{data.time}</p>

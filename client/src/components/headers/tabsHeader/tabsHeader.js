@@ -4,13 +4,14 @@ import {AddModalButton, SimpleModal} from "@eachbase/components";
 import React, {useState} from "react";
 import {CreateStaff} from "@eachbase/fragments";
 
-export const TabsHeader = ({activeTab, editModal}) => {
+export const TabsHeader = ({ editModal}) => {
     const classes = tabsHeaderStyles()
     const [open, setOpen] = useState()
 
     const handleOpenClose = () => {
         setOpen(!open)
     }
+
     return (
         <div>
             <ul className={classes.tabsWrapper}>
@@ -32,7 +33,7 @@ export const TabsHeader = ({activeTab, editModal}) => {
             <SimpleModal
                 openDefault={open}
                 handleOpenClose={handleOpenClose}
-                content={ editModal ? <CreateStaff editGeneralInfo={true} handleClose={handleOpenClose}/> : null}
+                content={ editModal ? <CreateStaff handleClose={handleOpenClose}/> : null}
             />
         </div>
     )

@@ -5,33 +5,33 @@ import { Colors, Images } from "@eachbase/utils";
 export const StaffGeneral = ({staffGeneral}) =>{
 
     const classes = serviceSingleStyles()
-
+    console.log(staffGeneral.birthday,'staffGeneral');
     const generalInfo = [
-        {title: 'First Name:', value: staffGeneral?.firstName},
-        {title: 'Middle Name:', value: staffGeneral?.middleName},
-        {title: 'Last Name:', value: staffGeneral?.lastName},
-        {title: 'Primary Email:', value: staffGeneral?.email},
-        {title: 'Secondary Email:', value: staffGeneral?.secondaryEmail},
-        {title: 'Primary Phone Number:', value: staffGeneral?.phone},
-        {title: 'Secondary Phone Number:', value: staffGeneral?.secondaryPhone},
+        {title: 'First Name', value: staffGeneral?.firstName},
+        {title: 'Middle Name', value: staffGeneral?.middleName},
+        {title: 'Last Name', value: staffGeneral?.lastName},
+        {title: 'Primary Email', value: staffGeneral?.email},
+        {title: 'Secondary Email', value: staffGeneral?.secondaryEmail},
+        {title: 'Primary Phone Number', value: staffGeneral?.phone},
+        {title: 'Secondary Phone Number', value: staffGeneral?.secondaryPhone},
     ]
     const addressInfo = [
-        {title: 'Street Address:', value: 'Street Address'},
-        {title: 'Country:', value: 'Country'},
-        {title: 'City:', value: 'City'},
-        {title: 'State:', value: staffGeneral.state},
-        {title: 'Zip Code:', value: 'Zip Code'},
+        {title: 'Street Address', value: 'Street Address'},
+        {title: 'Country', value: 'Country'},
+        {title: 'City', value: 'City'},
+        {title: 'State', value: staffGeneral?.state},
+        {title: 'Zip Code', value: 'Zip Code'},
     ]
     const otherDetails = [
-        {title: 'Driver License:', value: 'driving license'},
-        {title: 'Issuing State:', value: 'issuing state'},
-        {title: 'Expiration Date:', value: 'expiration date'},
-        {title: 'Department:', value: 'department'},
-        {title: 'Supervisor:', value: 'supervisor'},
-        {title: 'Residency Status:', value: staffGeneral?.residency},
-        {title: 'SSn Number:', value: staffGeneral?.ssn},
-        {title: 'Gender:', value: staffGeneral?.gender},
-        {title: 'Date of Birth:', value: staffGeneral?.birthday},
+        {title: 'Driver License', value: 'driving license'},
+        {title: 'Issuing State', value: 'issuing state'},
+        {title: 'Expiration Date', value: 'expiration date'},
+        {title: 'Department', value: 'department'},
+        {title: 'Supervisor', value: 'supervisor'},
+        {title: 'Residency Status', value: staffGeneral?.residency},
+        {title: 'SSn Number', value: staffGeneral?.ssn},
+        {title: 'Gender', value: staffGeneral?.gender},
+        {title: 'Date of Birth', value: staffGeneral?.birthday},
     ]
 
     return (

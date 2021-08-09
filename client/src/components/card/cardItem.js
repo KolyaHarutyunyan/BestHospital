@@ -6,7 +6,7 @@ export const CardItem = ({title,value,}) =>{
 
     return (
         <div className={classes.cardItem} >
-            <p>{title} :</p>
+            <p>{title}:</p>
             <p>{value}</p>
         </div>
     )
