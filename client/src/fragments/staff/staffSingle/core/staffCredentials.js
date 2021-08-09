@@ -1,8 +1,7 @@
-import {adminActions} from "../../../../store";
-import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 import {useParams} from "react-router-dom";
-import {deleteCredentialById} from "../../../../store/admin/admin.action";
+import {adminActions} from "@eachbase/store";
+import {useDispatch, useSelector} from "react-redux";
 
 const AddCredential = {
     staffId: '610bcdd691e2130e1a12371b',
@@ -44,18 +43,19 @@ export const StaffCredentials = () => {
 
     return (
         <div>
-            <button onClick={addCredential}>add credential</button>
-            <button onClick={editCredential}>edit credential</button>
-            <button onClick={removeCredential}>remove credential</button>
+            {/*<button onClick={addCredential}>add credential</button>*/}
+            {/*<button onClick={editCredential}>edit credential</button>*/}
+            {/*<button onClick={removeCredential}>remove credential</button>*/}
 
-            <div style={{marginTop: 40}}>
-                <>
-                    <p>{credentialData._id}</p>
-                    <p>{credentialData.credentialId}</p>
-                    <p>{credentialData.expirationDate}</p>
-                </>
+            {/*<div style={{marginTop: 40}}>*/}
+            {/*    <>*/}
+            {/*        <p>{credentialData._id}</p>*/}
+            {/*        <p>{credentialData.credentialId}</p>*/}
+            {/*        <p>{credentialData.expirationDate}</p>*/}
+            {/*    </>*/}
 
-            </div>
+            {/*</div>*/}
+            Credentials
         </div>
     )
 }

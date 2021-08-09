@@ -6,7 +6,7 @@ export const Card = ({cardInfo,color, title,icon, showHeader, width}) => {
 
     const classes = cardStyle()
     return (
-        <div className={classes.card} style={width && {width: width, 'max-width' : 563} }>
+        <div className={classes.card} style={width && {width: width, 'maxWidth' : 563} }>
             {showHeader && <CardHeader color={color} title={title} icon={icon}/>}
             <div className={classes.cardBody}>
                 {

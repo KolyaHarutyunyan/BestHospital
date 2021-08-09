@@ -24,7 +24,11 @@ export const modalsStyle = makeStyles(() => ({
     padding: '40px',
     borderRadius: '8px',
     backgroundColor: 'white',
-    position: 'relative'
+    position: 'relative',
+    '@media (max-width: 1400px)': {
+      width: '464px',
+      padding: '32px',
+    }
   },
   positionedButton: {
     position: 'absolute',

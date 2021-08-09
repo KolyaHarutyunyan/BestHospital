@@ -1,12 +1,10 @@
 import React, {useState} from "react";
 import {createStaffModalStyle} from "./style";
 import {Steps, CloseButton} from "@eachbase/components";
-import {useGlobalTextStyles} from "@eachbase/utils";
+import {useGlobalTextStyles, EmailValidator, ErrorText} from "@eachbase/utils";
 import {AddressInput, ValidationInput, SelectInput} from "@eachbase/components";
-import {EmailValidator, ErrorText} from "@eachbase/utils";
 import {adminActions} from "@eachbase/store";
 import {useDispatch, useSelector} from "react-redux";
-
 
 const steps = ['General Info', 'Address', 'Other Details']
 
@@ -34,15 +32,17 @@ const genderList = [
 ]
 
 
-export const CreateStaff = ({handleClose, editGeneralInfo}) => {
+export const CreateStaff = ({handleClose, resetData}) => {
     const staffGeneral = useSelector(state => state.admins.adminInfoById);
 
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(staffGeneral ? staffGeneral : {});
+    const [inputs, setInputs] = useState(resetData ? {} : staffGeneral ? staffGeneral : {});
+
+    console.log(inputs, 'inputs')
 
     const [fullAddress, setFullAddress] = useState('')
 
-    console.log(fullAddress,'full address');
+    console.log(fullAddress, 'full address');
 
     const disabledOne = inputs.firstName && inputs.middleName && error !== 'Not valid email' && inputs.lastName && inputs.email && inputs.phone
     const disableSecond = !fullAddress.length
@@ -71,37 +71,32 @@ export const CreateStaff = ({handleClose, editGeneralInfo}) => {
 
     const handleCreate = () => {
         const data = {
-            "firstName": inputs.firstName,
-            "middleName": inputs.middleName,
-            "lastName": inputs.lastName,
-            "email": inputs.email,
-            "secondaryEmail": inputs.secondaryEmail,
-            "phone": inputs.phone,
-            "secondaryPhone": inputs.secondaryPhone,
-            "state": 'state',
-            'gender': inputs.gender,
-            'birthday': inputs.birthday,
-            'residency': 'residency',
-            'ssn': 0
+            firstName: inputs.firstName,
+            middleName: inputs.middleName,
+            lastName: inputs.lastName,
+            email: inputs.email,
+            secondaryEmail: inputs.secondaryEmail,
+            phone: inputs.phone,
+            secondaryPhone: inputs.secondaryPhone,
+            state: 'state',
+            gender: inputs.gender,
+            birthday: inputs.birthday,
+            residency: 'residency',
+            ssn: 0,
+            status: 0,
+            address: fullAddress
         }
         if (inputs.firstName &&
             inputs.middleName &&
             inputs.lastName &&
             inputs.email &&
-            // inputs.secondaryEmail &&
             inputs.phone &&
-            // inputs.secondaryPhone &&
-            // inputs.driverLicense &&
-            // inputs.issuingState &&
-            // inputs.expirationDate &&
-            // inputs.department &&
             inputs.supervisor &&
-            // inputs.residencyStatus &&
-            // inputs.ssn &&
             inputs.gender &&
-            inputs.birthday
+            inputs.birthday &&
+            fullAddress
         ) {
-            staffGeneral ? dispatch(adminActions.editAdmin(data, staffGeneral.id)) : dispatch(adminActions.createAdmin(data))
+            staffGeneral ? dispatch(adminActions.editAdminById(data, staffGeneral.id)) : dispatch(adminActions.createAdmin(data))
             handleClose()
 
         } else {
@@ -112,15 +107,9 @@ export const CreateStaff = ({handleClose, editGeneralInfo}) => {
                         !inputs.lastName ? 'lastName' :
                             !inputs.email ? 'email' :
                                 !inputs.phone ? 'phone' :
-                                    // !inputs.driverLicense ? 'driverLicense' :
-                                    //     !inputs.issuingState ? 'issuingState' :
-                                    //         !inputs.expirationDate ? 'expirationDate' :
-                                    //             !inputs.department ? 'department' :
-                                    //                 !inputs.supervisor ? 'supervisor' :
-                                    //                     !inputs.ssn ? 'ssn' :
-                                                            !inputs.gender ? 'gender' :
-                                                                !inputs.birthday ? 'birthday' :
-                                                                    'Input is not field'
+                                    !inputs.gender ? 'gender' :
+                                        !inputs.birthday ? 'birthday' :
+                                            'Input is not filled'
             )
         }
     }
@@ -161,7 +150,6 @@ export const CreateStaff = ({handleClose, editGeneralInfo}) => {
             />
 
             <ValidationInput
-                // style={globalInputs.simpleInput}
                 validator={EmailValidator}
                 variant={"outlined"}
                 name={"email"}
@@ -174,7 +162,6 @@ export const CreateStaff = ({handleClose, editGeneralInfo}) => {
             />
 
             <ValidationInput
-                // style={globalInputs.simpleInput}
                 validator={EmailValidator}
                 variant={"outlined"}
                 name={"secondaryEmail"}
@@ -237,7 +224,6 @@ export const CreateStaff = ({handleClose, editGeneralInfo}) => {
                     value={inputs.issuingState}
                     list={issuingStateList}
                     typeError={error === 'issuingState' ? ErrorText.field : ''}
-                    // type={'id'}
                 />
                 <ValidationInput
                     variant={"outlined"}
@@ -259,7 +245,6 @@ export const CreateStaff = ({handleClose, editGeneralInfo}) => {
                 value={inputs.department}
                 list={departmentList}
                 typeError={error === 'department' ? ErrorText.field : ''}
-                // type={'id'}
             />
             <SelectInput
                 name={"supervisor"}
@@ -269,7 +254,6 @@ export const CreateStaff = ({handleClose, editGeneralInfo}) => {
                 value={inputs.supervisor}
                 list={supervisorList}
                 typeError={error === 'supervisor' ? ErrorText.field : ''}
-                // type={'id'}
             />
             <SelectInput
                 name={"residencyStatus"}
@@ -279,7 +263,6 @@ export const CreateStaff = ({handleClose, editGeneralInfo}) => {
                 value={inputs.residencyStatus}
                 list={residencyList}
                 typeError={error === 'residencyStatus' ? ErrorText.field : ''}
-                // type={'id'}
             />
             <ValidationInput
                 variant={"outlined"}
@@ -323,7 +306,6 @@ export const CreateStaff = ({handleClose, editGeneralInfo}) => {
                 <CloseButton handleCLic={handleClose}/>
             </div>
             <Steps
-                editGeneralInfo={editGeneralInfo}
                 handleClick={handleCreate}
                 firstStep={firstStep}
                 secondStep={secondStep}

@@ -74,21 +74,30 @@ export const cardStyle = makeStyles(() => ({
             fontSize: '14px',
             color: Colors.TextSecondary,
             fontWeight: '600',
-            lineHeight: '36px'
+            lineHeight: '36px',
+            maxWidth: '50%',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
         },
         '& p:last-child': {
             fontSize: '14px',
             color: Colors.TextMiddleGray,
             paddingLeft: '8px',
-            lineHeight: '36px'
+            lineHeight: '36px',
+            maxWidth: '50%',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+
         },
     },
-    historyCardStyle : {
+    historyCardStyle: {
         width: '100%',
         padding: '16px',
-        background : '#F2F4F8',
+        background: '#F2F4F8',
         marginBottom: 16,
-        borderRadius : 8
+        borderRadius: 8
     },
     historyCardDateStyle: {
         color: Colors.ThemeBlue,
@@ -96,18 +105,18 @@ export const cardStyle = makeStyles(() => ({
         fontWeight: 600,
         marginBottom: 16
     },
-    historyCardBoxStyle : {
-        width : '100%',
-        background : Colors.BackgroundWhite,
-        borderRadius : 8,
-        padding : '16px 32px',
+    historyCardBoxStyle: {
+        width: '100%',
+        background: Colors.BackgroundWhite,
+        borderRadius: 8,
+        padding: '16px 32px',
         display: "flex",
         alignItems: 'center',
-        marginTop : 8,
-        fontSize : 14,
-        color : Colors.TextPrimary
+        marginTop: 8,
+        fontSize: 14,
+        color: Colors.TextPrimary
     },
     historyCardBoxTimeStyle: {
-        minWidth : 200
+        minWidth: 200
     }
 }));

@@ -1,7 +1,7 @@
 import React, {} from "react";
-import {StaffItem} from "@eachbase/fragments/staff";
+import {StaffItem} from "@eachbase/fragments";
 
-export const SingleStaff = ({general}) => {
+export const SingleStaff = () => {
 
     return (
         <>
