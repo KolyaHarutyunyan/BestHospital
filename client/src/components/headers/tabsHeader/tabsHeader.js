@@ -1,10 +1,15 @@
 import {tabsHeaderStyles} from "./styles";
 import {Images} from "@eachbase/utils";
-import {AddModalButton, SimpleModal} from "@eachbase/components";
+import {AddButton, AddModalButton, SimpleModal} from "@eachbase/components";
 import React, {useState} from "react";
-import {CreateStaff} from "@eachbase/fragments";
+import {CreateStaff, StaffAddNotes} from "@eachbase/fragments";
 
-export const TabsHeader = ({ editModal}) => {
+const editButtonStyle = {
+    height: 36,
+    paddingInline: 24
+}
+
+export const TabsHeader = ({activeTab,}) => {
     const classes = tabsHeaderStyles()
     const [open, setOpen] = useState()
 
@@ -27,13 +32,17 @@ export const TabsHeader = ({ editModal}) => {
                     </div>
                 </li>
                 <li>
-                    <AddModalButton handleClick={() => setOpen(true)} text='edit'/>
+                    {
+                       activeTab === 0 ? <AddModalButton btnStyles={editButtonStyle} handleClick={() => setOpen(true)} text='edit'/> : activeTab === 4 ? <AddButton
+                           text='Add Note'
+                           handleClick={handleOpenClose}/> : null
+                    }
                 </li>
             </ul>
             <SimpleModal
                 openDefault={open}
                 handleOpenClose={handleOpenClose}
-                content={ editModal ? <CreateStaff handleClose={handleOpenClose}/> : null}
+                content={activeTab === 0 ?  <CreateStaff handleClose={handleOpenClose}/> : activeTab === 4 ? <StaffAddNotes handleClose={handleOpenClose} /> : null}
             />
         </div>
     )

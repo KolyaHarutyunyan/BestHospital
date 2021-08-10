@@ -9,6 +9,7 @@ export const Colors = {
     BackgroundSecondary: '#F8FAFB',
     BackgroundMango: '#FFC051',
     BackgroundWater: '#EBF2FD',
+    BackgroundCatskillWhite: '#F2F4F8',
 
     // Text colors
 
@@ -19,6 +20,7 @@ export const Colors = {
     TextMiddleGray: '#4B5C68B3',
     TextGray: '#FFFFFF80',
     TextDarkGrey: '#2A374E80',
+    TextCadetBlue: '#A3B2BD80',
 
     // Theme colors
 
@@ -30,6 +32,7 @@ export const Colors = {
     ThemeOrange: '#FFA330',
     ThemeGray: '#E6ECF380',
     ThemeBorder: '#51566DB3',
+    ThemeMangoOrange: '#FE7B43'
 }
 
 export const Shadow = {

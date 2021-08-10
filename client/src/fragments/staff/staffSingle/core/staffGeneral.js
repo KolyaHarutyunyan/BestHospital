@@ -5,7 +5,7 @@ import { Colors, Images } from "@eachbase/utils";
 export const StaffGeneral = ({staffGeneral}) =>{
 
     const classes = serviceSingleStyles()
-    console.log(staffGeneral.birthday,'staffGeneral');
+
     const generalInfo = [
         {title: 'First Name', value: staffGeneral?.firstName},
         {title: 'Middle Name', value: staffGeneral?.middleName},
