@@ -1,5 +1,6 @@
 import {
-    GET_CLIENTS_SUCCESS
+    GET_CLIENTS_SUCCESS,
+    CREATE_CLIENTS_SUCCESS
 } from "./client.types";
 import {paginate} from "@eachbase/utils";
 
@@ -15,8 +16,9 @@ export const clientReducer = (state = initialState, action) => {
         case  GET_CLIENTS_SUCCESS:
             return {
                 ...state,
-                clientList: action.payload
+                clientList: action.payload,
             }
+
 
 
         default:

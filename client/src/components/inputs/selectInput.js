@@ -4,7 +4,7 @@ import { InputMinLoader } from "./inputMiniLoader";
 import React from "react";
 
 
-export  const SelectInput =({className, loader, name, label, handleSelect, style, value, list, handleChangeCountryCode, typeError, type, disabled}) =>{
+export  const SelectInput =({className, loader, name, label, handleSelect, style, value, list, handleChangeCountryCode, typeError, type, disabled,language}) =>{
   const classes = inputsStyle();
 
 
@@ -44,13 +44,22 @@ export  const SelectInput =({className, loader, name, label, handleSelect, style
           }
         >
           <option aria-label="None" value="" />
-          {list.length && list.map((option,j) => (
-            <option data-key={option.code ? option.code : j } key={ j }
-                    value={ type === 'id' ? option.id : option.name}
-            >
-              {option.name}
-            </option>
-          ))}
+          {language ?
+              language.map((option,j) => (
+              <option data-key={option.code ? option.code : j } key={ j }
+                      value={ type === 'id' ? option.id : option}
+              >
+                {option}
+              </option>
+          )) :
+              list.length && list.map((option,j) => (
+                <option data-key={option.code ? option.code : j } key={ j }
+                        value={ type === 'id' ? option.id : option.name}
+                >
+                  {option.name}
+                </option>
+            ))
+          }
         </Select>
         <FormHelperText className={classes.errorText} >{typeError && typeError}</FormHelperText>
       </FormControl>

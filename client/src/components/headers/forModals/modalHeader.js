@@ -20,7 +20,7 @@ export const ModalHeader = ({handleClose,title, headerBottom,steps}) => {
             </div>
             <p className={globalStyle.modalTitle}>{title}</p>
             {steps &&  <ModalsTabs steps={steps} />}
-            {headerBottom &&  <ModalHeaderBottom steps={steps} />}
+            {headerBottom &&  <ModalHeaderBottom />}
 
         </div>
     );

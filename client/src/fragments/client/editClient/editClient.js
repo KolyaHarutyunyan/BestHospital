@@ -1,12 +1,12 @@
 import React, {useState} from "react";
 import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
-import {createClientStyle,} from "./styles";
+import {createClientStyle,} from "./../createClient/styles";
 import {ErrorText, languages} from "@eachbase/utils";
 import {useDispatch} from "react-redux";
 import {clientActions} from "@eachbase/store";
 
 
-export const CreateClient = ({handleClose}) => {
+export const EditClient = ({handleClose}) => {
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState({});
     const [step, setStep] = useState('first')
@@ -66,13 +66,7 @@ export const CreateClient = ({handleClose}) => {
                                         'Input is not field'
                 )
             }
-
-
-
-
         }
-
-
     }
 
     const list = [
@@ -83,7 +77,7 @@ export const CreateClient = ({handleClose}) => {
 
     return (
         <div className={classes.createFoundingSource}>
-            <ModalHeader steps={step} handleClose={handleClose} title={'Add Client'}/>
+            <ModalHeader steps={'second'} handleClose={handleClose} title={'Edit Client'}/>
             <div className={classes.createFoundingSourceBody}>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
                     {step === 'first' ? <div style={{width: 463}}>
