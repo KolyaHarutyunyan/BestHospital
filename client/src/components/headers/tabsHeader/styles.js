@@ -17,7 +17,7 @@ export const tabsHeaderStyles = makeStyles(() => ({
         height: 50,
         borderRadius: '50%',
         position: 'relative',
-        border: '1px solid blue',
+        border: `1px solid ${Colors.BackgroundBlue}`,
         objectFit: 'cover',
         padding: 3
     },

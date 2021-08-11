@@ -59,6 +59,6 @@ export const wrapperStyle = makeStyles(() => ({
   },
   breadcrumb: {
     margin: 0
-  }
+  },
 
 }));
