@@ -14,28 +14,28 @@ import {
 } from './auth.types';
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
+import {httpRequestsOnSuccessActions} from "../http_requests_on_success";
 
-function* logIn(payload) {
+function* logIn({payload,type}) {
+    yield put(httpRequestsOnErrorsActions.removeError(type));
+    yield put(httpRequestsOnLoadActions.appendLoading(type));
     try {
-        const res = yield call( authService.signIn, payload.payload );
+        const res = yield call( authService.signIn, payload );
         localStorage.setItem('access-token', res.data.token);
         localStorage.setItem('permissions', res.data.permissions);
         localStorage.setItem('poloUserInfo', JSON.stringify(res.data.user) );
-
         window.location.replace('/')
-
         yield put({
             type: LOG_IN_SUCCESS,
             payload: res.data,
         });
+        yield put(httpRequestsOnLoadActions.removeLoading(type));
+        yield put(httpRequestsOnErrorsActions.removeError(type));
 
     } catch (err) {
-
-        yield put({
-            type: LOG_IN_FAIL,
-            payload: err.response.data.message
-        });
-
+        yield put(httpRequestsOnErrorsActions.appendError(type, err.data.message))
+        yield put(httpRequestsOnLoadActions.removeLoading(type));
+        // yield put(httpRequestsOnErrorsActions.removeError(type));
     }
 }
 
@@ -55,55 +55,51 @@ function* logOut() {
     }
 }
 
-function* getLink(action) {
+function* getLink({payload, type}) {
+    yield put(httpRequestsOnErrorsActions.removeError(type));
+    yield put(httpRequestsOnLoadActions.appendLoading(type));
     try {
-        const res = yield call( authService.getLink, action.payload.email );
-
-        yield put({
-            type:GET_RECOVERY_LINK_SUCCESS,
-            payload: res.data,
-        })
-
+        yield call( authService.getLink, payload.email );
+        yield put(httpRequestsOnLoadActions.removeLoading(type));
+        yield put(httpRequestsOnErrorsActions.removeError(type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(type));
     } catch (err) {
-        yield put({
-            type:GET_RECOVERY_LINK_FAIL,
-        })
-
+        yield put(httpRequestsOnLoadActions.removeLoading(type));
+        yield put(httpRequestsOnErrorsActions.appendError(type, err.data.error));
     }
 }
 
-function* resetPassword(action) {
+function* resetPassword({payload, type}) {
+    yield put(httpRequestsOnErrorsActions.removeError(type));
+    yield put(httpRequestsOnLoadActions.appendLoading(type));
     try {
-        const res = yield call( authService.resetPass, action.payload.passwords );
-
+        const res = yield call( authService.resetPass, payload.passwords );
         localStorage.removeItem('Reset')
-        // window.location.reload()
-        yield put({
-            type:RESET_PASSWORD_SUCCESS,
-            payload: res.data,
-        })
+        window.location.reload()
+        yield put(httpRequestsOnLoadActions.removeLoading(type));
+        yield put(httpRequestsOnErrorsActions.removeError(type));
 
     } catch (err) {
-        // yield put({
-        //     type:GET_RECOVERY_LINK_FAIL,
-        // })
-
+        yield put(httpRequestsOnLoadActions.removeLoading(type));
+        yield put(httpRequestsOnErrorsActions.appendError(type, err.data.error));
     }
 }
 
 
-function* changePassword({action, type}){
+function* changePassword({payload, type}){
     yield put(httpRequestsOnErrorsActions.removeError(type));
     yield put(httpRequestsOnLoadActions.appendLoading(type));
     try{
 
-        const res = yield call( authService.changePasswordService, action.payload.data );
+        const res = yield call( authService.changePasswordService, payload.data );
         localStorage.setItem('access-token', res.data.accessToken);
         yield put(httpRequestsOnLoadActions.removeLoading(type));
         yield put(httpRequestsOnErrorsActions.removeError(type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(type));
 
     }catch (err){
-
+        yield put(httpRequestsOnLoadActions.removeLoading(type));
+        yield put(httpRequestsOnErrorsActions.removeError(type));
     }
 }
 
@@ -112,13 +108,10 @@ function* checkUser(action){
     try{
         const res = yield call( authService.checkUser, action.payload.data );
 
-
-
     }catch (err){
 
     }
 }
-
 
 export const watchAuth = function* watchUserAuth() {
     yield takeLatest( LOG_IN, logIn );

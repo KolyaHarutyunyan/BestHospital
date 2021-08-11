@@ -4,11 +4,12 @@ import { useGlobalTextStyles } from "@eachbase/utils";
 import { modalHeadersStyle } from './styles'
 import { CloseButton } from "@eachbase/components";
 import {ModalHeaderBottom} from "./modalHeaderBottom";
+import {ModalsTabs} from "@eachbase/components/tabs";
 
 
 
 
-export const ModalHeader = ({handleClose,title, headerBottom}) => {
+export const ModalHeader = ({handleClose,title, headerBottom,steps}) => {
     const classes = modalHeadersStyle()
     const globalStyle = useGlobalTextStyles()
 
@@ -18,6 +19,7 @@ export const ModalHeader = ({handleClose,title, headerBottom}) => {
                 <CloseButton handleCLic={handleClose}  />
             </div>
             <p className={globalStyle.modalTitle}>{title}</p>
+            {steps &&  <ModalsTabs steps={steps} />}
             {headerBottom &&  <ModalHeaderBottom />}
 
         </div>

@@ -5,7 +5,12 @@ export const createStaffModalStyle = makeStyles(() => ({
     modalDimensions: {
         width: '543px',
         background: 'white',
-        position: 'relative'
+        position: 'relative',
+        borderRadius: 8,
+        overflow: 'hidden',
+        "@media (max-width: 1400px)": {
+            width: '527px',
+        },
     },
     positionedButton: {
         position: 'absolute',

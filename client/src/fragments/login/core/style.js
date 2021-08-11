@@ -22,7 +22,9 @@ export const loginFragments = makeStyles(() => ({
       color: `${Colors.TextWhite}`,
     },
   },
-
+  inputMargins:{
+    marginTop:'10px'
+  },
   LoginHeadPhoneNumber: {
     "& a": {
       textDecoration: "none",
@@ -47,12 +49,12 @@ export const loginFragments = makeStyles(() => ({
 
     "@media (max-width: 1979px)": {
       width: "464px",
-      height: "301px",
+      height: "auto",
       padding: "22px 32px",
     },
     "@media (min-width: 1920px)": {
       width: "600px",
-      height: "321px",
+      height: "auto",
       padding: "40px",
     },
 

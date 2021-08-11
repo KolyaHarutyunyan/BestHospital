@@ -12,7 +12,7 @@ export const MyProfile = ({info}) => {
     const dispatch = useDispatch();
 
     const handleSignOut = () => {
-        dispatch (authActions.logOut ())
+        dispatch (authActions.logOut())
     };
 
     return (

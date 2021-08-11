@@ -1,23 +1,26 @@
 import React, {useEffect, useState} from "react";
-import {Redirect, Route, Switch, useHistory, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
+import {adminActions} from "@eachbase/store";
+import {Images} from "@eachbase/utils";
+import {TableCell} from "@material-ui/core";
+import {StaffGeneral, StaffHistory, StaffCredentials, StaffEmployment, StaffAccess} from "./core";
 import {
     SimpleTabs,
-    Card,
     Notes,
     TableWrapperGeneralInfo,
     InactiveModal,
     TabsHeader,
-    SimpleModal
+    TableBodyComponent,
 } from "@eachbase/components";
-import {adminActions, officeActions} from "@eachbase/store";
-import {StaffGeneral, StaffHistory, StaffCredentials, StaffEmployment, StaffAccess} from "./core";
 import {useDispatch, useSelector} from "react-redux";
-import {Images} from "@eachbase/utils";
+import { staffStyle } from "../../../pages/staff/styles";
 
-export const StaffItem = ({general}) => {
+export const StaffItem = () => {
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const [activeTab, setActiveTab] = useState(0)
+
+    const classes = staffStyle()
 
     const params = useParams()
 
@@ -27,15 +30,9 @@ export const StaffItem = ({general}) => {
 
     const staffGeneral = useSelector(state => state.admins.adminInfoById)
 
-    // const {officeById} = useSelector((state)=>({
-    //         officeById: state.offices.officeById,
-    //     })
-    // )
     const handleOpenClose = () => {
         setOpen(!open)
     }
-
-    // component
 
     const tabsLabels = [
         {
@@ -78,43 +75,48 @@ export const StaffItem = ({general}) => {
         },
     ];
 
-    const bodyTitles = [
+    const data = [
         {
-            title: '06/11/2021',
-        },
-        {
-            title: 'John Smith',
-        },
-        {
-            title: 'Service Request',
-        },
-        {
-            title: (<img src={Images.remove} alt=""/>),
+            date: '06/11/2021',
+            name: 'John Smith',
+            subject: 'Service Request',
+            action: <img src={Images.remove} alt="delete" style={{cursor: 'pointer'}} onClick={() => alert('click')}/>,
         }
     ]
+
+    const notesItem = (item, index) => {
+        return (
+            <TableBodyComponent key={index}>
+                <TableCell>{item.date}</TableCell>
+                <TableCell>{item.name}</TableCell>
+                <TableCell>{item.subject}</TableCell>
+                <TableCell>
+                    {item.action}
+                </TableCell>
+            </TableBodyComponent>
+        )
+    }
 
     const tabsContent = [
         {
             tabComponent: (<StaffGeneral staffGeneral={staffGeneral}/>)
         },
         {
-            tabComponent: (<StaffEmployment />)
+            tabComponent: (<StaffEmployment/>)
         },
         {
-            tabComponent: (<StaffCredentials />)
+            tabComponent: (<StaffCredentials/>)
         },
         {
-            tabComponent: (<StaffAccess />)
+            tabComponent: (<StaffAccess/>)
         },
         {
-            tabComponent: (<Notes bodyTitles={bodyTitles} headerTitles={headerTitles}/>)
+            tabComponent: (<Notes pagination={true} data={data} items={notesItem} headerTitles={headerTitles}/>)
         },
         {
-            tabComponent: (<StaffHistory />)
+            tabComponent: (<StaffHistory/>)
         },
     ];
-
-    // component
 
     return (
         <>
@@ -129,12 +131,11 @@ export const StaffItem = ({general}) => {
                 handleOpenClose={handleOpenClose}
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
-                <div style={{backgroundColor: 'white', padding: '20px'}}>
-                    <TabsHeader editModal={true} />
+                <div className={classes.staffSingleItem}>
+                    <TabsHeader activeTab={activeTab}/>
                     <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
                 </div>
             </TableWrapperGeneralInfo>
-            {/*// : (<OfficesInfo info={officeById}/>)*/}
         </>
     );
 }

@@ -43,10 +43,13 @@ export const FundingSource = ({}) => {
                     >
 
                         <FundingSourceTable/>
-                        <button onClick={() => {
-                            dispatch(fundingSourceActions.createFoundingSourceServiceById('610183a4dcc59c21f0792c35'))
-                        }}>click
-                        </button>
+
+                        {/*<button onClick={() => {*/}
+                        {/*    dispatch(fundingSourceActions.createFoundingSourceServiceById('610183a4dcc59c21f0792c35'))*/}
+                        {/*}}>click*/}
+                        {/*</button>*/}
+
+
                     </TableWrapper>
                 )
                 : (<OfficesInfo info={officeById}/>)

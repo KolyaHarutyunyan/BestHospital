@@ -10,13 +10,9 @@ import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { ErrMessage } from "../messages";
 
 export const PasswordInput = ({
-    name, variant,
-    handleChangePassword,
-    disabled,
-    value,
-    placeholder,
+    name, variant, handleChangePassword,
+    disabled, value, placeholder,
     typeError, validator, sendBoolean, styles
-
 }) => {
     const classes = inputsStyle();
     const [validEmail, setValidEmail] = useState(false);
@@ -44,6 +40,7 @@ export const PasswordInput = ({
 
 
     const chechValid = (e) => {
+        console.log('sdfasdasdsadasd')
         let Value = e.target.value;
         if (Value.length >= 1) {
             if (validator) {
@@ -99,6 +96,7 @@ export const PasswordInput = ({
 
                     <InputLabel htmlFor="outlined-adornment-password">{placeholder}</InputLabel>
                     <Input
+                        onBlur={(e) => chechValid(e)}
                         error={typeError}
                         className={classes.PasswordInput}
                         disabled={disabled}

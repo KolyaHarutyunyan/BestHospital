@@ -4,7 +4,7 @@ import {ErrorText, useGlobalTextStyles} from "@eachbase/utils";
 import {AddModalButton, CloseButton} from "@eachbase/components/buttons";
 import {ValidationInput, Textarea} from "@eachbase/components/inputs";
 
-export const FundingSourceNotesAdd = ({handleOpenClose }) => {
+export const FundingSourceNotesAdd = ({handleClose }) => {
 
     const classes = modalsStyle()
     const globalText = useGlobalTextStyles()
@@ -13,7 +13,7 @@ export const FundingSourceNotesAdd = ({handleOpenClose }) => {
         <div className={classes.inactiveModalBody}>
             <h1 className={`${globalText.modalTitle}`}>Add a New Note</h1>
             <div className={classes.positionedButton}>
-                <CloseButton handleCLic={handleOpenClose}/>
+                <CloseButton handleCLic={handleClose}/>
             </div>
             <p className={classes.inactiveModalInfo}>Please fulfill the below fields to add a comment.</p>
             <ValidationInput
@@ -35,7 +35,7 @@ export const FundingSourceNotesAdd = ({handleOpenClose }) => {
                 name=''
                 // typeError={error === 'birthDate' && ErrorText.field}
             />
-            <AddModalButton text='Add' handleClick={handleOpenClose} />
+            <AddModalButton text='Add'  />
         </div>
     );
 }

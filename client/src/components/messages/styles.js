@@ -5,19 +5,20 @@ export const errMessageStyle = makeStyles(() => ({
     display: "flex",
     justifyContent: "center",
     width: "100%",
-    marginTop: "10px",
+    margin: "3px 0 5px",
   },
 
   errMessageLeftPosition: {
     display: "flex",
     width: "100%",
-    marginTop: "10px",
+    margin: "3px 0 5px",
   },
 
   errMessageStyleText: {
-    fontSize: "14px",
+    fontSize: "12px",
     fontWeight: "600",
     color: "#F07379",
+    // position:'absolute'
   },
 
   DoneMessage: {

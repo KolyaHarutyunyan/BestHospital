@@ -1,18 +1,18 @@
 import React, {useEffect, useState} from "react";
-import {useHistory} from "react-router-dom";
 import {TableWrapper} from "@eachbase/components";
-import {OfficesInfo, StaffTable, CreateStaff,} from "@eachbase/fragments";
+import {StaffTable, CreateStaff,} from "@eachbase/fragments";
 
 import {adminActions} from "@eachbase/store";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 
 export const Staff = () => {
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
-
+    const resetData = true
 
     useEffect(() => {
-        dispatch(adminActions.getAdmins())
+        dispatch(adminActions.getAdmins());
+
     }, []);
 
     const handleOpenClose = () => {
@@ -29,11 +29,10 @@ export const Staff = () => {
                 addButtonText={'Add Staff Member'}
                 openCloseInfo={open}
                 handleOpenClose={handleOpenClose}
-                body={<CreateStaff handleClose={handleOpenClose}/>}
+                body={<CreateStaff resetData={resetData} handleClose={handleOpenClose}/>}
             >
                 <StaffTable/>
             </TableWrapper>
-            {/*// : (<OfficesInfo info={officeById}/>)*/}
         </>
     );
 }

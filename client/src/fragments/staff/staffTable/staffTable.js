@@ -1,9 +1,9 @@
+import React, {useState} from "react";
 import {Paper, Table, TableContainer} from "@material-ui/core";
-import {StaffTableBody, StaffTableHead} from "./core";
 import {useGlobalStyles} from "@eachbase/utils";
-import React, {useEffect, useState} from "react";
-import {useSelector} from "react-redux";
 import {Loader, PaginationItem} from "@eachbase/components";
+import {StaffTableBody, StaffTableHead} from "./core";
+import {useSelector} from "react-redux";
 
 export const StaffTable = ({}) => {
     const globalStyle = useGlobalStyles();

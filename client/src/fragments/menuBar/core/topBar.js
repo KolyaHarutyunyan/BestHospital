@@ -14,6 +14,7 @@ export const TopBar = ({handleClick, open}) => {
             url === "/createFundingSource" ? 'Add Office' :
                 url === "/branches" ? "Branches" :
                     url === "/staff" ? "Staff" :
+                        url === "/client" ? "Client" :
                         url === "/humanResources" ? "Human Resources" :
                             url === "/management" ? "Access Management" :
                                 url === "/customers" ? "Customer" :

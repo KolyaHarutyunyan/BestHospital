@@ -16,39 +16,8 @@ export const superAdminRouters =
             "path": "/staff"
         },
         {
-            "name": "Branches",
-            "icon": "Branches",
-            "path": "/single"
+            "name": "Client",
+            "icon": "Client",
+            "path": "/client"
         },
-        {
-            "name": "Human Resources",
-            "icon": "Human Resources",
-            "path": "/humanResources"
-        },
-
-        {
-            "name": "Customers",
-            "icon": "Customers",
-            "path": "/customers"
-        },
-        {
-            "name": "Factoring Companies",
-            "icon": "Factoring Companies",
-            "path": "/factoring"
-        },
-        {
-            "name": "MC Authorities",
-            "icon": "MC Authorities",
-            "path": "/authorities"
-        },
-        {
-            "name": "Carriers",
-            "icon": "Carriers",
-            "path": "/carriers"
-        },
-        {
-            "name": "Agents",
-            "icon": "Agents",
-            "path": "/agents"
-        }
     ]

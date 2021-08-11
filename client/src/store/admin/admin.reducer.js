@@ -1,24 +1,32 @@
 import {
     EDIT_ADMIN_BY_ID_SUCCESS,
-    FILTER_BY_FIRST_NAME, GET_ADMIN_BY_ID, GET_ADMIN_BY_ID_CLEAR,
+    GET_ADMIN_BY_ID,
     GET_ADMIN_BY_ID_SUCCESS,
     GET_ADMINS,
     GET_ADMINS_SUCCESS,
+    CREATE_CREDENTIAL_SUCCESS,
+    GET_CREDENTIAL_BY_ID_SUCCESS,
+    EDIT_CREDENTIAL_BY_ID_SUCCESS,
+    DELETE_CREDENTIAL_BY_ID_SUCCESS
 } from "./admin.types";
 import {paginate} from "@eachbase/utils";
-import {filterByFirstName} from "@eachbase/utils";
 
 const initialState = {
     adminsList: [],
     adminsListReserve: [],
     adminInfoById: '',
+    credentialById: {},
 };
 
 export const adminReducer = (state = initialState, action) => {
+
     switch (action.type) {
 
         case GET_ADMINS:
-            return {...state, adminsList: '',}
+            return {
+                ...state,
+                adminsList: '',
+            }
 
         case GET_ADMINS_SUCCESS:
             return {
@@ -38,25 +46,34 @@ export const adminReducer = (state = initialState, action) => {
                 ...state,
                 adminInfoById: action.payload,
             }
-
-        case  GET_ADMIN_BY_ID_CLEAR:
-            return {
-                ...state,
-                adminInfoById: '',
-            }
         case GET_ADMIN_BY_ID :
             return {
                 ...state,
                 adminInfoById: action.payload.adminId
             }
 
-        case FILTER_BY_FIRST_NAME:
+        case CREATE_CREDENTIAL_SUCCESS :
             return {
                 ...state,
-                adminsList: filterByFirstName(action.payload.data, state.adminsListReserve)
+                credentialById: action.payload
             }
 
+        case GET_CREDENTIAL_BY_ID_SUCCESS :
+            return {
+                ...state,
+                credentialById: action.payload
+            }
+        case EDIT_CREDENTIAL_BY_ID_SUCCESS :
+            return {
+                ...state,
+                credentialById: action.payload
+            }
 
+        case DELETE_CREDENTIAL_BY_ID_SUCCESS :
+            return {
+                ...state,
+                credentialById: ''
+            }
         default:
             return state;
     }

@@ -13,45 +13,14 @@ export const LeftBarImages =({ item, linkInfo })=>{
                         ? linkInfo === item.path
                         ? Images.staffActive
                         : Images.staffPassive
-                    : item.icon === "Branches"
-                    ? linkInfo === item.path
-                        ? Images.fundingSourceActive
-                        : Images.fundingSourcePassive
-                    : item.icon === "Human Resources"
-                        ? linkInfo === item.path
-                            ? Images.fundingSourceActive
-                            : Images.fundingSourcePassive
+                       : item.icon === "Client"
+                            ? linkInfo === item.path
+                                ? Images.clientActive
+                                : Images.clientsPassive
                         : item.icon === "Role Management"
                             ? linkInfo === item.path
                                 ? Images.roleManagementActive
                                 : Images.roleManagementPassive
-                            : item.icon === "Customers"
-                                ? linkInfo === item.path
-                                    ? Images.fundingSourceActive
-                                    : Images.fundingSourcePassive
-                                : item.icon === "Factoring Companies"
-                                    ? linkInfo === item.path
-                                        ? Images.fundingSourceActive
-                                        : Images.fundingSourcePassive
-                                    : item.icon === "Settings"
-                                        ? linkInfo === item.path
-                                            ? Images.fundingSourceActive
-                                            : Images.fundingSourcePassive
-                                        :
-                                        item.icon === "MC Authorities"
-                                            ? linkInfo === item.path
-                                            ? Images.fundingSourceActive
-                                            : Images.fundingSourcePassive
-                                            :
-                                            item.icon === "Carriers"
-                                                ? linkInfo === item.path
-                                                ? Images.fundingSourceActive
-                                                : Images.fundingSourcePassive
-                                                :
-                                                item.icon === "Agents"
-                                                    ? linkInfo === item.path
-                                                    ? Images.fundingSourceActive
-                                                    : Images.fundingSourcePassive
                                                     :
                                                     ''
             }

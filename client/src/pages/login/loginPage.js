@@ -17,10 +17,11 @@ export function LoginPage(props) {
   const [forgot, setForgot] = useState(false);
   const [resetToken, setResetToken] = useState("");
 
-  const { loginErr, loader, getLinkSuccess, resetSuccess, closeResetSuccess } =
+  const { httpOnSuccess,loginErr, loader, getLinkSuccess, resetSuccess, closeResetSuccess } =
     useSelector((state) => ({
       // loginErr: state.auth.loginErr,
       // loader: state.auth.loader,
+      httpOnSuccess: state.httpOnSuccess,
       getLinkSuccess: state.auth.getLinkSuccess,
       resetSuccess: state.auth.resetSuccess,
       closeResetSuccess: state.auth.closeResetSuccess,
@@ -29,13 +30,15 @@ export function LoginPage(props) {
   const handleForgot = () => {
     setForgot(true);
   };
-
-  const local = localStorage.getItem("Reset");
-  if (local && !resetToken) {
-    let resetToken = local.slice(local.search("resetToken"));
-    let slicedResetToken = resetToken.slice(11);
-    setResetToken(slicedResetToken);
-  }
+//register?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRhdm8ucGV0cm9zeWFuOTU5QGdtYWlsLmNvbSIsImlkIjoiNjEwZmUzNmFhOTZiNDkwZTA5YmIxNDkxIiwiaWF0IjoxNjI4NDMxMjE5fQ.YG_AjhZf_ezG8e953f-vU7EDRH2nlZ8qG0kXN3ZLmmU
+  const local = localStorage.getItem("Reset") ? localStorage.getItem("Reset") : ''
+    useEffect(() => {
+        if( local ){
+               const pos = local.slice(local.search('token='))
+               const registerToken = pos.substring(6)
+            setResetToken(registerToken)
+        }
+    }, []);
 
   useEffect(() => {
     if (resetSuccess) {
@@ -44,7 +47,7 @@ export function LoginPage(props) {
   }, [resetSuccess]);
 
   const ResetToken = resetSuccess === true ? true : !!resetToken;
-
+  const resetLink = httpOnSuccess.length && httpOnSuccess[0].type === "GET_RECOVERY_LINK"
   return (
     <div>
       <LoginHeader />
@@ -54,14 +57,14 @@ export function LoginPage(props) {
             <p>Customer<br />Management <br />System</p>
           </div>
 
-          {getLinkSuccess !== null ? (
-            <MessageScreen type={getLinkSuccess} />
+          {resetLink === true ? (
+              <MessageScreen type={resetLink} />
           ) : closeResetSuccess !== "close" && ResetToken ? (
-            <ResetModal resetToken={resetToken} />
+              <ResetModal resetToken={resetToken} />
           ) : forgot === false ? (
-            <LoginModal handleForgot={handleForgot} />
+              <LoginModal handleForgot={handleForgot} />
           ) : (
-            <ForgotModal />
+              <ForgotModal />
           )}
 
           {resetSuccess === true && (

@@ -122,7 +122,7 @@ export const buttonsStyle = makeStyles((theme) => ({
     color: Colors.TextWhite,
     textTransform: "capitalize",
     "&:hover": {
-      background: Backgrounds.hover,
+      background: Backgrounds.darkBlue,
     },
   },
 
