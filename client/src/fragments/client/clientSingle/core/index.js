@@ -1,5 +1,5 @@
 export { serviceSingleStyles } from './styles';
-export { StaffGeneral } from './staffGeneral';
+export { ClientGeneral } from './clientGeneral';
 export { StaffEmployment } from './staffEmployment';
 export { StaffCredentials } from './staffCredentials';
 export { StaffHistory } from './staffHistory';

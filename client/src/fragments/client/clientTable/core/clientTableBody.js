@@ -6,7 +6,7 @@ import {useDispatch} from "react-redux";
 import {useHistory} from "react-router-dom";
 import {clientActions} from "@eachbase/store/client";
 
-export const ClientTableBody = ({key, data, setEditClient,handleClose}) => {
+export const ClientTableBody = ({data, setEditClient, handleClose, setIndex, index}) => {
     const globalClasses = useGlobalStyles()
     const dispatch = useDispatch()
     const history = useHistory()
@@ -14,7 +14,7 @@ export const ClientTableBody = ({key, data, setEditClient,handleClose}) => {
         history.push(`/client/${id}`)
     }
     return (
-        <TableBodyComponent handleOpenInfo={() => handleOpenOfficeInfo(data.id)} key={key}>
+        <TableBodyComponent handleOpenInfo={() => handleOpenOfficeInfo(data.id)} key={index}>
             <TableCell>
                 <div className={globalClasses.InfoAndImage}>
                     <img src={Images.clients} alt={"client"}/>
@@ -30,6 +30,7 @@ export const ClientTableBody = ({key, data, setEditClient,handleClose}) => {
                 <>
                     <img src={Images.edit} alt="edit" style={{cursor: 'pointer'}} onClick={(e) => {
                         e.stopPropagation()
+                        setIndex(index)
                         setEditClient(data.id)
                         handleClose()
                     }}/>
