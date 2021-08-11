@@ -82,7 +82,7 @@ export class ClientService {
   /** returns all clients */
   async findAll(): Promise<ClientDTO[]> {
     try {
-      const clients = await this.model.find({}).populate({ path: 'enrollments', match: { primary: "true" }, select: "fundingSource" })
+      const clients = await this.model.find({}).populate({ path: 'enrollment', select: "name" })
       this.checkClient(clients[0]);
       return this.sanitizer.sanitizeMany(clients);
     } catch (e) {
@@ -91,7 +91,7 @@ export class ClientService {
   }
   /** Get Client By Id */
   async findOne(_id: string): Promise<ClientDTO> {
-    const client = await this.model.findOne({ _id }).populate({ path: 'enrollments', match: { primary: "true" }, select: "fundingSource" });
+    const client = await this.model.findOne({ _id }).populate({ path: 'enrollment', select: "name"});
     this.checkClient(client);
     return this.sanitizer.sanitize(client);
   }
@@ -165,7 +165,7 @@ export class ClientService {
       await enrollment.save();
 
       if (enrollment.primary) {
-        client.enrollment = funder.name;
+        client.enrollment = funderId;
         await client.save();
       }
       return this.enrollmentSanitizer.sanitize(enrollment);
@@ -188,7 +188,7 @@ export class ClientService {
     }
   }
   /** Update the Enrollment */
-  async updateEnrollment(_id: string, enrollmentId: string, dto: UpdateEnrollmentDto): Promise<EnrollmentDTO> {
+  async updateEnrollment(_id: string, enrollmentId: string, funderId: string, dto: UpdateEnrollmentDto): Promise<EnrollmentDTO> {
     try {
       const enrollment: any = await this.enrollmentModel.findOne({ _id: enrollmentId });
       this.checkEnrollment(enrollment);
@@ -219,7 +219,7 @@ export class ClientService {
       await enrollment.save()
 
       if (enrollment.primary) {
-        client.enrollment = enrollment.fundingSource;
+        client.enrollment = funderId;
         await client.save();
       }
 
