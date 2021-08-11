@@ -298,7 +298,7 @@ export const CreateStaff = ({handleClose, resetData}) => {
 
     return (
         <div className={classes.modalDimensions}>
-            <h1 className={`${globalText.modalTitle} ${classes.modalTitle}`}>Add Staff Member</h1>
+            <h1 className={`${globalText.modalTitle} ${classes.modalTitle}`}>{!staffGeneral ? 'Add Staff Member' : 'Edit Staff Member'}  </h1>
             <div className={classes.positionedButton}>
                 <CloseButton handleCLic={handleClose}/>
             </div>

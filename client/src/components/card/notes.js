@@ -5,7 +5,7 @@ import {useGlobalStyles} from "@eachbase/utils";
 import {TableHeadComponent, SearchAndFilter, PaginationItem} from "@eachbase/components";
 import {useSelector} from "react-redux";
 
-export const Notes = ({data, headerTitles, pagination, defaultStyle, items}) => {
+export const Notes = ({ data, headerTitles, pagination, defaultStyle, items}) => {
 
     const officesStyle = makeStyles(({}) => ({
         thWidth: {

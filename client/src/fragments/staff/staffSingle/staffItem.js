@@ -3,13 +3,12 @@ import {useParams} from "react-router-dom";
 import {adminActions} from "@eachbase/store";
 import {Images} from "@eachbase/utils";
 import {TableCell} from "@material-ui/core";
-import {StaffGeneral, StaffHistory, StaffCredentials, StaffEmployment, StaffAccess} from "./core";
+import {StaffGeneral, StaffHistory, StaffCredentials, StaffEmployment, StaffAccess, StaffItemHeader} from "./core";
 import {
     SimpleTabs,
     Notes,
     TableWrapperGeneralInfo,
     InactiveModal,
-    TabsHeader,
     TableBodyComponent,
 } from "@eachbase/components";
 import {useDispatch, useSelector} from "react-redux";
@@ -132,7 +131,7 @@ export const StaffItem = () => {
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
                 <div className={classes.staffSingleItem}>
-                    <TabsHeader activeTab={activeTab}/>
+                    <StaffItemHeader activeTab={activeTab}/>
                     <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
                 </div>
             </TableWrapperGeneralInfo>

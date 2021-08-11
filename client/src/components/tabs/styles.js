@@ -20,6 +20,7 @@ export const tabsStyles = makeStyles(() => ({
     },
     tabLabel: {
         fontSize: '14px',
+        textTransform: 'capitalize',
         color: Colors.TextSecondary,
         fontWeight: 'bold',
         lineHeight: '19px',

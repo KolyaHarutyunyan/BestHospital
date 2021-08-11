@@ -1,13 +1,14 @@
 import { Route, Switch, Redirect } from "react-router-dom";
 import {
-    Staff,
-    Management,
     FundingSource,
-    Single,
     FundingSourceSingle,
+    Management,
+    Staff,
     SingleStaff,
     Client,
-    ClientSingle
+    ClientSingle,
+    System,
+    Single
 } from "@eachbase/pages";
 import React from "react";
 
@@ -29,6 +30,7 @@ export const Router = ({}) => {
 
       <Route path="/single" component={Single} />
       <Route path="/management" component={Management} />
+      <Route path="/system" component={System} />
 
       <Redirect to={"/"} />
     </Switch>

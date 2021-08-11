@@ -16,6 +16,11 @@ export const superAdminRouters =
             "path": "/staff"
         },
         {
+            "name": "System",
+            "icon": "System",
+            "path": "/system"
+        },
+        {
             "name": "Client",
             "icon": "Client",
             "path": "/client"
