@@ -202,10 +202,7 @@ export class ClientService {
         this.checkTime(terminationDate);
         enrollment.terminationDate = dto.terminationDate.toLocaleDateString()
       };
-      if (dto.fundingSource) {
-        const funder = await this.fundingService.findByName(dto.fundingSource);
-        enrollment.fundingSource = funder.name
-      }
+  
       const client = await this.model.findById({ _id });
       this.checkClient(client);
       if (dto.primary) {
