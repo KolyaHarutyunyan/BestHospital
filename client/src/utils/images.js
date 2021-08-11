@@ -67,6 +67,9 @@ import clientModalicon1 from '@eachbase/images/icons/clientModal1.svg'
 import clientModalicon2 from '@eachbase/images/icons/clientModal2.svg'
 import clientModalicon3 from '@eachbase/images/icons/clientModal3.svg'
 import checkmark from '@eachbase/images/icons/checkmark.svg'
+import systemActive from '@eachbase/assets/images/icons/systemActive.svg'
+import systemPassive from '@eachbase/assets/images/icons/systemPassive.svg'
+import systemIcon from '@eachbase/assets/images/icons/systemIcon.svg'
 
 
 export const Images = {
@@ -138,6 +141,9 @@ export const Images = {
     clientModalicon1: clientModalicon1,
     clientModalicon2: clientModalicon2,
     clientModalicon3: clientModalicon3,
-    checkmark: checkmark
+    checkmark: checkmark,
+    systemActive: systemActive,
+    systemPassive: systemPassive,
+    systemIcon: systemIcon
 
 }

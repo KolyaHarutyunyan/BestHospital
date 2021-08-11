@@ -12,4 +12,5 @@ export { ClientTable,CreateClient} from "./client";
 export { HumanResourcesTable, CreateAdminTable, AdminInfo } from "./humanResources";
 export { CustomersTable } from "./customers";
 export { AccessManagement, AddRoleModal } from "./management";
+export { SystemItem } from './system'
 
