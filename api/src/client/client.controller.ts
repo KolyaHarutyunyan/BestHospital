@@ -66,16 +66,11 @@ export class ClientController {
   }
 
   /** Update Enrollment By Id */
-<<<<<<< HEAD
-  @Patch(':id/enrollment/:enrollmentId')
-  @Public()
-=======
   // @Patch(':id/enrollment/:enrollmentId')
   // @Public()
   // updateEnrollment(@Param('id', ParseObjectIdPipe) id: string, @Param('enrollmentId', ParseObjectIdPipe) enrollmentId: string, @Body() updateEnrollmentDto: UpdateEnrollmentDto) {
   //   return this.clientService.updateEnrollment(id, enrollmentId, updateEnrollmentDto);
   // }
->>>>>>> funding
   updateEnrollment(@Param('id', ParseObjectIdPipe) id: string, @Param('enrollmentId', ParseObjectIdPipe) enrollmentId: string, @Param('funderId', ParseObjectIdPipe) funderId: string, @Body() updateEnrollmentDto: UpdateEnrollmentDto) {
     return this.clientService.updateEnrollment(id, enrollmentId, funderId, updateEnrollmentDto);
   }

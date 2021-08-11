@@ -12,6 +12,4 @@ export class EnrollmentDTO {
     startDate: string;
     @ApiProperty()
     terminationDate: string;
-    @ApiProperty()
-    fundingSource: string
 }

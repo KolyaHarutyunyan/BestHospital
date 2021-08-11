@@ -17,7 +17,6 @@ export class EnrollmentSanitizer implements ISanitize {
             primary: enrollment.primary,
             startDate: enrollment.startDate,
             terminationDate: enrollment.terminationDate,
-            fundingSource: enrollment.fundingSource,
         };
         return enrollmentDTO;
     }
