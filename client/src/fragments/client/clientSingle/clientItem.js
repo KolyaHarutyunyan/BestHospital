@@ -8,11 +8,12 @@ import {
     TabsHeader,
     TableBodyComponent
 } from "@eachbase/components";
-import {adminActions} from "@eachbase/store";
+import {clientActions} from "@eachbase/store";
 import {Images} from "@eachbase/utils";
 import {TableCell} from "@material-ui/core";
-import {StaffGeneral, StaffHistory, StaffCredentials, StaffEmployment, StaffAccess} from "./core";
+import { StaffHistory, StaffCredentials, StaffEmployment, StaffAccess, ClientGeneral} from "./core";
 import {useDispatch, useSelector} from "react-redux";
+
 
 export const ClientItem = () => {
     const dispatch = useDispatch()
@@ -22,10 +23,13 @@ export const ClientItem = () => {
     const params = useParams()
 
     useEffect(() => {
-        dispatch(adminActions.getAdminById(params.id))
+        dispatch(clientActions.getClientsById(params.id))
     }, []);
 
-    const staffGeneral = useSelector(state => state.admins.adminInfoById)
+    const data = useSelector(state => state.client.clientItemInfo)
+
+
+    console.log(data,'state')
 
     const handleOpenClose = () => {
         setOpen(!open)
@@ -75,7 +79,7 @@ export const ClientItem = () => {
         },
     ];
 
-    const data = [
+    const datanot = [
         {
             date: '06/11/2021',
             name: 'John Smith',
@@ -99,7 +103,7 @@ export const ClientItem = () => {
 
     const tabsContent = [
         {
-            tabComponent: (<StaffGeneral staffGeneral={staffGeneral}/>)
+            tabComponent: (<ClientGeneral data={data}/>)
         },
         {
             tabComponent: (<StaffEmployment />)
@@ -111,7 +115,7 @@ export const ClientItem = () => {
             tabComponent: (<StaffAccess />)
         },
         {
-            tabComponent: (<Notes data={data} items={notesItem} headerTitles={headerTitles}/>)
+            tabComponent: (<Notes data={datanot} items={notesItem} headerTitles={headerTitles}/>)
         },
         {
             tabComponent: (<StaffHistory />)
@@ -125,7 +129,7 @@ export const ClientItem = () => {
             <TableWrapperGeneralInfo
                 status='inactive'
                 parent='Clients'
-                title='Alice'
+                title={data ? `${data?.firstName} ${data?.lastName}` : ''}
                 parentLink='/client'
                 buttonsTabAddButton={true}
                 activeInactiveText={'Inactive'}
@@ -134,7 +138,7 @@ export const ClientItem = () => {
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
                 <div style={{backgroundColor: 'white', padding: '20px'}}>
-                    <TabsHeader editModal={true} activeTab={activeTab} />
+                    <TabsHeader data={data} editModal={true} activeTab={activeTab} />
                     <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
                 </div>
             </TableWrapperGeneralInfo>

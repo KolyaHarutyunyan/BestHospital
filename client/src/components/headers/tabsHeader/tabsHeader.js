@@ -4,12 +4,14 @@ import {AddButton, AddModalButton, SimpleModal} from "@eachbase/components";
 import React, {useState} from "react";
 import {CreateStaff, StaffAddNotes} from "@eachbase/fragments";
 
+
+
+export const TabsHeader = ({activeTab,editModal, data}) => {
 const editButtonStyle = {
     height: 36,
     paddingInline: 24
 }
 
-export const TabsHeader = ({activeTab,}) => {
     const classes = tabsHeaderStyles()
     const [open, setOpen] = useState()
 
@@ -23,7 +25,7 @@ export const TabsHeader = ({activeTab,}) => {
                 <li>
                     <img src={Images.userProfile} alt="avatar" className={classes.avatar}/>
                     <div className={classes.nameContent}>
-                        <h1 className={classes.name}>Alice Johnson</h1>
+                        <h1 className={classes.name}>{data ? `${data?.firstName} ${data?.lastName}`: ''}</h1>
                         <div className={classes.tagContent}>
                             <p>Tag Name</p>
                             <p>Tag Name</p>

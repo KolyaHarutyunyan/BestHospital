@@ -4,6 +4,6 @@ export const serviceSingleStyles = makeStyles(() => ({
     // staff general
     staffGeneralWrapper: {
         display: 'flex',
-        justifyContent: 'space-between'
+        // justifyContent: 'space-between'
     }
 }));

@@ -196,7 +196,7 @@ export const CreateClient = ({handleClose}) => {
 
                     <CreateChancel
                         // classes={globalInputs.buttonsStyle}
-                        create={"Add"}
+                        create={step === 'first' ? 'Next' : "Add"}
                         chancel={"Cancel"}
                         onCreate={handleCreate}
                         onClose={handleClose}

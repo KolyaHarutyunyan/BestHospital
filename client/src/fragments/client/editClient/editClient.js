@@ -2,13 +2,26 @@ import React, {useState} from "react";
 import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
 import {createClientStyle,} from "./../createClient/styles";
 import {ErrorText, languages} from "@eachbase/utils";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {clientActions} from "@eachbase/store";
 
 
-export const EditClient = ({handleClose}) => {
+export const EditClient = ({handleClose,index,id}) => {
+    const data = useSelector(state=>state.client.clientList[index])
+    console.log(data,'dataaaaa')
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState({});
+    const [inputs, setInputs] = useState({
+        "firstName": data.firstName,
+        "middleName": data.middleName,
+        "lastName": data.lastName,
+        "ethnicity": data.ethnicity,
+        "code": data.code,
+        'language': data.language,
+        'familyLanguage': data.familyLanguage,
+        'gender': data.gender,
+        'birthday': data.birthday,
+        // 'age' : inputs.age,
+        });
     const [step, setStep] = useState('first')
 
     const classes = createClientStyle()
@@ -31,7 +44,6 @@ export const EditClient = ({handleClose}) => {
         if (step === 'first') {
             if (inputs.firstName && inputs.lastName && inputs.code) {
                 setStep('second')
-                // dispatch(fundingSourceActions.createFundingSource(data))
             } else {
                 setError(
                     !inputs.firstName ? 'firstName' :
@@ -42,7 +54,7 @@ export const EditClient = ({handleClose}) => {
             }
         } else if (step === 'second') {
             if (inputs.gender && inputs.birthday && inputs.age && inputs.ethnicity && inputs.language && inputs.familyLanguage) {
-                const data = {
+                const newData = {
                     "firstName": inputs.firstName,
                     "middleName": inputs.middleName,
                     "lastName": inputs.lastName,
@@ -55,7 +67,7 @@ export const EditClient = ({handleClose}) => {
                     // 'age' : inputs.age,
                     "status": 1
                 }
-                dispatch(clientActions.createClient(data))
+                dispatch(clientActions.editClient(newData,id ))
             } else {
                 setError(
                     !inputs.gender ? 'gender' :
@@ -74,6 +86,8 @@ export const EditClient = ({handleClose}) => {
         {name: 'female'}
     ]
 
+
+    console.log(inputs,'eeeeee')
 
     return (
         <div className={classes.createFoundingSource}>
@@ -171,7 +185,6 @@ export const EditClient = ({handleClose}) => {
                             value={inputs.language}
                             language={languages}
                             typeError={error === 'language' ? ErrorText.field : ''}
-                            // type={'id'}
                         />
                         <SelectInput
                             name={"familyLanguage"}
@@ -181,7 +194,6 @@ export const EditClient = ({handleClose}) => {
                             value={inputs.familyLanguage}
                             language={languages}
                             typeError={error === 'familyLanguage' ? ErrorText.field : ''}
-                            // type={'id'}
                         />
                     </div>}
                 </div>
@@ -189,8 +201,7 @@ export const EditClient = ({handleClose}) => {
 
 
                     <CreateChancel
-                        // classes={globalInputs.buttonsStyle}
-                        create={"Add"}
+                        create={step === 'first' ? 'Next' : "Add"}
                         chancel={"Cancel"}
                         onCreate={handleCreate}
                         onClose={handleClose}

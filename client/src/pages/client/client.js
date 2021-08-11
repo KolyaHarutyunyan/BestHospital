@@ -10,12 +10,13 @@ import {EditClient} from "../../fragments/client";
 export const Client = ({}) => {
     const [open, setOpen] = useState(false)
     const [editClient , setEditClient] = useState('')
+    const [index, setIndex] = useState(null)
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(clientActions.getClients())
     }, []);
 
-    console.log(editClient,'id')
+
     const {officeById} = useSelector((state) => ({
             officeById: state.offices.officeById,
         })
@@ -36,10 +37,9 @@ export const Client = ({}) => {
                         addButtonText={'Add Client'}
                         handleOpenClose={handleOpenClose}
                         openCloseInfo={open}
-                        body={editClient ? <EditClient handleClose={handleOpenClose} /> : <CreateClient handleClose={handleOpenClose}  />}
+                        body={editClient ? <EditClient id={editClient} index={index} handleClose={handleOpenClose} /> : <CreateClient handleClose={handleOpenClose}  />}
                     >
-
-                        <ClientTable setEditClient={setEditClient} handleClose={handleOpenClose} />
+                        <ClientTable setIndex={setIndex} setEditClient={setEditClient} handleClose={handleOpenClose} />
                     </TableWrapper>
                 )
                 : (<OfficesInfo info={officeById}/>)

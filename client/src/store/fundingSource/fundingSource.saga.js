@@ -32,7 +32,6 @@ function* createFundingSource(action) {
 }
 
 function* editFundingSource(action) {
-    console.log(action,'saaaaagaaaaa')
     try {
         const res = yield call(authService.editFundingSourceService, action.payload.id, action.payload.body);
         console.log(res,'reeeeeeees')
