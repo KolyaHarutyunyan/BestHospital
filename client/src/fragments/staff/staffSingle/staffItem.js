@@ -13,11 +13,14 @@ import {
     TableBodyComponent,
 } from "@eachbase/components";
 import {useDispatch, useSelector} from "react-redux";
+import { staffStyle } from "../../../pages/staff/styles";
 
 export const StaffItem = () => {
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const [activeTab, setActiveTab] = useState(0)
+
+    const classes = staffStyle()
 
     const params = useParams()
 
@@ -77,7 +80,7 @@ export const StaffItem = () => {
             date: '06/11/2021',
             name: 'John Smith',
             subject: 'Service Request',
-            action: <img src={Images.remove} alt="delete" style={{cursor: 'pointer'}} onClick={() => alert(index)}/>,
+            action: <img src={Images.remove} alt="delete" style={{cursor: 'pointer'}} onClick={() => alert('click')}/>,
         }
     ]
 
@@ -115,7 +118,6 @@ export const StaffItem = () => {
         },
     ];
 
-
     return (
         <>
             <TableWrapperGeneralInfo
@@ -129,8 +131,8 @@ export const StaffItem = () => {
                 handleOpenClose={handleOpenClose}
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
-                <div style={{backgroundColor: 'white', padding: '20px'}}>
-                    <TabsHeader editModal={true} activeTab={activeTab}/>
+                <div className={classes.staffSingleItem}>
+                    <TabsHeader activeTab={activeTab}/>
                     <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
                 </div>
             </TableWrapperGeneralInfo>

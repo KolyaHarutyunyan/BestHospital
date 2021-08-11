@@ -38,11 +38,8 @@ export const CreateStaff = ({handleClose, resetData}) => {
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(resetData ? {} : staffGeneral ? staffGeneral : {});
 
-    console.log(inputs, 'inputs')
-
     const [fullAddress, setFullAddress] = useState('')
 
-    console.log(fullAddress, 'full address');
 
     const disabledOne = inputs.firstName && inputs.middleName && error !== 'Not valid email' && inputs.lastName && inputs.email && inputs.phone
     const disableSecond = !fullAddress.length
