@@ -68,8 +68,8 @@ export class ClientController {
   /** Update Enrollment By Id */
   @Patch(':id/enrollment/:enrollmentId')
   @Public()
-  updateEnrollment(@Param('id', ParseObjectIdPipe) id: string, @Param('enrollmentId', ParseObjectIdPipe) enrollmentId: string, @Body() updateEnrollmentDto: UpdateEnrollmentDto) {
-    return this.clientService.updateEnrollment(id, enrollmentId, updateEnrollmentDto);
+  updateEnrollment(@Param('id', ParseObjectIdPipe) id: string, @Param('enrollmentId', ParseObjectIdPipe) enrollmentId: string, @Param('funderId', ParseObjectIdPipe) funderId: string, @Body() updateEnrollmentDto: UpdateEnrollmentDto) {
+    return this.clientService.updateEnrollment(id, enrollmentId, funderId, updateEnrollmentDto);
   }
 
   /** Delete Enrollment By Id */

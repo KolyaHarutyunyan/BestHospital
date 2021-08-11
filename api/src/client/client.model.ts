@@ -14,7 +14,7 @@ const ClientSchema = new Schema({
     gender: { type: String },
     birthday: { type: String },
     status: { type: Number, enum: ClientStatus },
-    enrollment: { type: String },
+    enrollment: { type: Types.ObjectId, ref: 'Funder' },
     createdDate: { type: Date, default: Date.now() },
     updatedDate: { type: Date, default: null }
     // address: addressSchema,

@@ -8,7 +8,5 @@ export class UpdateEnrollmentDto {
     @ApiProperty()
     terminationDate: Date;
     @ApiProperty()
-    fundingSource: string;
-    @ApiProperty()
     primary: string;
 }

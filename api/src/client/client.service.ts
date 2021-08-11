@@ -80,18 +80,29 @@ export class ClientService {
     }
   }
   /** returns all clients */
-  async findAll(): Promise<ClientDTO[]> {
+  async findAll(): Promise<any> {
     try {
-      const clients = await this.model.find({}).populate({ path: 'enrollments', match: { primary: "true" }, select: "fundingSource" })
-      this.checkClient(clients[0]);
-      return this.sanitizer.sanitizeMany(clients);
+     const clients = await this.model.aggregate([{
+        $lookup: { 
+        from: "clientenrollments", //or Races.collection.name
+        localField: "_id",
+        foreignField: "clientId",
+        as: "enrollment"
+        }
+      }
+    ]);
+      return clients
+      // const clients = await this.model.find({}).populate({ path: 'enrollment', select: "name"})
+      // console.log(clients);
+      // this.checkClient(clients[0]);
+      // return this.sanitizer.sanitizeMany(clients);
     } catch (e) {
       throw e;
     }
   }
   /** Get Client By Id */
   async findOne(_id: string): Promise<ClientDTO> {
-    const client = await this.model.findOne({ _id }).populate({ path: 'enrollments', match: { primary: "true" }, select: "fundingSource" });
+    const client = await this.model.findOne({ _id }).populate({ path: 'enrollment', select: "name"});
     this.checkClient(client);
     return this.sanitizer.sanitize(client);
   }
@@ -155,19 +166,18 @@ export class ClientService {
 
       let enrollment = new this.enrollmentModel({
         clientId,
+        funderId,
         primary: dto.primary,
         // startDate: dto.startDate,
       });
       enrollment.startDate = startDate.toLocaleDateString()
       enrollment.terminationDate = terminationDate.toLocaleDateString()
-      enrollment.fundingSource = funder.name;
-
       await enrollment.save();
 
-      if (enrollment.primary) {
-        client.enrollment = funder.name;
-        await client.save();
-      }
+      // if (enrollment.primary) {
+      //   client.enrollment = funder.id;
+      //   await client.save();
+      // }
       return this.enrollmentSanitizer.sanitize(enrollment);
 
     } catch (e) {
@@ -188,9 +198,11 @@ export class ClientService {
     }
   }
   /** Update the Enrollment */
-  async updateEnrollment(_id: string, enrollmentId: string, dto: UpdateEnrollmentDto): Promise<EnrollmentDTO> {
+  async updateEnrollment(_id: string, enrollmentId: string, funderId: string, dto: UpdateEnrollmentDto): Promise<EnrollmentDTO> {
     try {
       const enrollment: any = await this.enrollmentModel.findOne({ _id: enrollmentId });
+      const funder = await this.fundingService.findOne(funderId);
+
       this.checkEnrollment(enrollment);
       if (dto.startDate) {
         let startDate = new Date(dto.startDate);
@@ -202,10 +214,10 @@ export class ClientService {
         this.checkTime(terminationDate);
         enrollment.terminationDate = dto.terminationDate.toLocaleDateString()
       };
-      if (dto.fundingSource) {
-        const funder = await this.fundingService.findByName(dto.fundingSource);
-        enrollment.fundingSource = funder.name
-      }
+      // if (dto.fundingSource) {
+      //   const funder = await this.fundingService.findByName(dto.fundingSource);
+      //   enrollment.fundingSource = funder.name
+      // }
       const client = await this.model.findById({ _id });
       this.checkClient(client);
       if (dto.primary) {
@@ -219,7 +231,7 @@ export class ClientService {
       await enrollment.save()
 
       if (enrollment.primary) {
-        client.enrollment = enrollment.fundingSource;
+        client.enrollment = funder.id;
         await client.save();
       }
 
