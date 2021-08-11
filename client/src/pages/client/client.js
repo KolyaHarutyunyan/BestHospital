@@ -4,17 +4,18 @@ import {OfficesInfo, ClientTable,CreateClient} from "@eachbase/fragments";
 import {useDispatch, useSelector} from "react-redux";
 
 import {clientActions} from "@eachbase/store/client";
+import {EditClient} from "../../fragments/client";
 
 
 export const Client = ({}) => {
     const [open, setOpen] = useState(false)
-    const [step , setStep] = useState('first')
+    const [editClient , setEditClient] = useState('')
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(clientActions.getClients())
     }, []);
 
-
+    console.log(editClient,'id')
     const {officeById} = useSelector((state) => ({
             officeById: state.offices.officeById,
         })
@@ -35,10 +36,10 @@ export const Client = ({}) => {
                         addButtonText={'Add Client'}
                         handleOpenClose={handleOpenClose}
                         openCloseInfo={open}
-                        body={<CreateClient />}
+                        body={editClient ? <EditClient handleClose={handleOpenClose} /> : <CreateClient handleClose={handleOpenClose}  />}
                     >
 
-                        <ClientTable/>
+                        <ClientTable setEditClient={setEditClient} handleClose={handleOpenClose} />
                     </TableWrapper>
                 )
                 : (<OfficesInfo info={officeById}/>)

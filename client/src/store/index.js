@@ -7,6 +7,7 @@ export { roleActions } from './role'
 export { officeActions } from './offices'
 export { adminActions } from './admin'
 export { fundingSourceActions } from './fundingSource'
+export { clientActions } from './client'
 export { agentActions } from './agents'
 
 export { httpRequestsOnSuccessActions } from './http_requests_on_success'

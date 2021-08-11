@@ -25,7 +25,6 @@ export const modalHeadersStyle = makeStyles(() => ({
         alignItems: "center",
         justifyContent: "center",
         background: Colors.BackgroundBlue,
-        color: Colors.TextWhite,
         marginBottom: 8,
 
     },
@@ -48,10 +47,6 @@ export const modalHeadersStyle = makeStyles(() => ({
         left:0,
         right :0
     },
-    createFundingSourceHeaderBottomPosition: {
-        position:'relative',
-        width:45,
-        background: Colors.BackgroundPrimary,
-    }
+
 }));
 
