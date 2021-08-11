@@ -82,26 +82,9 @@ export class ClientService {
   /** returns all clients */
   async findAll(): Promise<any> {
     try {
-<<<<<<< HEAD
-     const clients = await this.model.aggregate([{
-        $lookup: { 
-        from: "clientenrollments", //or Races.collection.name
-        localField: "_id",
-        foreignField: "clientId",
-        as: "enrollment"
-        }
-      }
-    ]);
-      return clients
-      // const clients = await this.model.find({}).populate({ path: 'enrollment', select: "name"})
-      // console.log(clients);
-      // this.checkClient(clients[0]);
-      // return this.sanitizer.sanitizeMany(clients);
-=======
       const clients = await this.model.find({}).populate({ path: 'enrollment', select: "name" })
       this.checkClient(clients[0]);
       return this.sanitizer.sanitizeMany(clients);
->>>>>>> funding
     } catch (e) {
       throw e;
     }
@@ -180,17 +163,10 @@ export class ClientService {
       enrollment.terminationDate = terminationDate.toLocaleDateString()
       await enrollment.save();
 
-<<<<<<< HEAD
-      // if (enrollment.primary) {
-      //   client.enrollment = funder.id;
-      //   await client.save();
-      // }
-=======
       if (enrollment.primary) {
         client.enrollment = funderId;
         await client.save();
       }
->>>>>>> funding
       return this.enrollmentSanitizer.sanitize(enrollment);
 
     } catch (e) {
@@ -244,11 +220,7 @@ export class ClientService {
       await enrollment.save()
 
       if (enrollment.primary) {
-<<<<<<< HEAD
-        client.enrollment = funder.id;
-=======
         client.enrollment = funderId;
->>>>>>> funding
         await client.save();
       }
 
