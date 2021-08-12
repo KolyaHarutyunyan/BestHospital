@@ -5,7 +5,7 @@ import React, {useState} from "react";
 import {useSelector} from "react-redux";
 import {Loader, PaginationItem} from "@eachbase/components";
 
-export const ClientTable = ({setEditClient,handleClose,setIndex,setId}) => {
+export const ClientTable = ({setOpen,handleClose,setDeleteClient}) => {
     const globalStyle = useGlobalStyles();
     const [page, setPage] = useState(1);
 
@@ -35,9 +35,9 @@ export const ClientTable = ({setEditClient,handleClose,setIndex,setId}) => {
                             <ClientTableBody
                                 data={item}
                                 index = {i}
-                                setEditClient={setEditClient}
+                                setOpen={setOpen}
                                 handleClose={handleClose}
-                                setIndex={setIndex}
+                                setDeleteClient={setDeleteClient}
                             />
                         ))}
                 </Table>

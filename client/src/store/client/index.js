@@ -3,7 +3,7 @@ import {
     deleteClient,
     editClient,
     getClients,
-    getClientsById,
+    getClientsById, getClientsContacts,
 } from "./client.action";
 
 export {clientReducer} from './client.reducer';
@@ -15,5 +15,6 @@ export const clientActions = {
     deleteClient,
     getClientsById,
     editClient,
+    getClientsContacts
 }
 

@@ -1,13 +1,14 @@
 import {
     GET_CLIENTS_SUCCESS,
-    GET_CLIENT_BY_ID_SUCCESS
+    GET_CLIENT_BY_ID_SUCCESS, GET_CLIENT_CONTACTS_SUCCESS
 } from "./client.types";
 
 
 
 const initialState = {
     clientList: [],
-    clientItemInfo : {}
+    clientItemInfo : {},
+    clientContacts : []
 
 };
 
@@ -24,6 +25,11 @@ export const clientReducer = (state = initialState, action) => {
             return {
                 ...state,
                 clientItemInfo: action.payload,
+            }
+        case  GET_CLIENT_CONTACTS_SUCCESS:
+            return {
+                ...state,
+                clientContacts: action.payload,
             }
 
 

@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from "react";
-import {TableWrapper} from "@eachbase/components";
-import {OfficesInfo, ClientTable,CreateClient} from "@eachbase/fragments";
+import {DeleteElement, SimpleModal, TableWrapper} from "@eachbase/components";
+import {OfficesInfo, ClientTable, CreateClient} from "@eachbase/fragments";
 import {useDispatch, useSelector} from "react-redux";
-
+import {clientsStyle} from './styles'
 import {clientActions} from "@eachbase/store/client";
-import {EditClient} from "../../fragments/client";
+
 
 
 export const Client = ({}) => {
+    let classes = clientsStyle()
     const [open, setOpen] = useState(false)
-    const [editClient , setEditClient] = useState('')
-    const [index, setIndex] = useState(null)
+    const [deleteClient, setDeleteClient] = useState('')
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(clientActions.getClients())
@@ -22,8 +22,14 @@ export const Client = ({}) => {
         })
     )
     const handleOpenClose = () => {
+        setDeleteClient(null)
         setOpen(!open)
     }
+    const removeClient=()=>{
+         dispatch(clientActions.deleteClient(deleteClient.id))
+    }
+
+    console.log(deleteClient,'eererererr')
     return (
         <>
             {!officeById ?
@@ -37,9 +43,17 @@ export const Client = ({}) => {
                         addButtonText={'Add Client'}
                         handleOpenClose={handleOpenClose}
                         openCloseInfo={open}
-                        body={editClient ? <EditClient id={editClient} index={index} handleClose={handleOpenClose} /> : <CreateClient handleClose={handleOpenClose}  />}
+                        body={deleteClient ?
+                                <DeleteElement
+                                    handleDel={removeClient}
+                                    className={classes}
+                                    text={'Delete Client'}
+                                    info={deleteClient.firstName}
+                                handleClose={handleOpenClose}/>
+                           :
+                            <CreateClient handleClose={handleOpenClose}/>}
                     >
-                        <ClientTable setIndex={setIndex} setEditClient={setEditClient} handleClose={handleOpenClose} />
+                        <ClientTable  setDeleteClient={setDeleteClient} setOpen={setOpen} handleClose={handleOpenClose}/>
                     </TableWrapper>
                 )
                 : (<OfficesInfo info={officeById}/>)
