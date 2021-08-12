@@ -5,15 +5,15 @@ export class AuthorizationServiceDTO {
     @ApiProperty()
     id: string;
     @ApiProperty()
-    clientId: string;
+    authorizationId: string;
     @ApiProperty()
-    service: string;
+    serviceId: string;
     @ApiProperty()
-    modifiers: string;
+    total: number;
     @ApiProperty()
-    total: string;
+    modifiers: Array<string>;
     @ApiProperty()
-    completed: string;
+    completed: number;
     @ApiProperty()
-    available: string;
+    available: number;
 }

@@ -12,6 +12,7 @@ const ClientSchema = new Schema({
     language: { type: String },
     familyLanguage: { type: String },
     gender: { type: String },
+    age: { type: Number },
     birthday: { type: String },
     status: { type: Number, enum: ClientStatus },
     enrollment: { type: Types.ObjectId, ref: 'Funder' },

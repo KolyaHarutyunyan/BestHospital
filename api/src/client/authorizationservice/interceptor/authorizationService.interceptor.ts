@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { ISanitize } from '../../util';
-import { IAuthorizationService, IContact } from '../interface';
+import { ISanitize } from '../../../util';
+import { IAuthorizationService } from '../interface';
 import { AuthorizationServiceDTO } from '../dto'
-import { ContactDTO } from '../dto';
-// import { AddressSanitizer } from '../../address';
 
 @Injectable()
 export class AuthorizationServiceSanitizer implements ISanitize {
@@ -14,8 +12,8 @@ export class AuthorizationServiceSanitizer implements ISanitize {
     sanitize(authorizationService: IAuthorizationService): AuthorizationServiceDTO {
         const authorizationServiceDTO: AuthorizationServiceDTO = {
             id: authorizationService.id,
-            clientId: authorizationService.clientId,
-            service: authorizationService.service,
+            authorizationId: authorizationService.authorizationId,
+            serviceId: authorizationService.serviceId,
             modifiers: authorizationService.modifiers,
             total: authorizationService.total,
             completed: authorizationService.completed,
