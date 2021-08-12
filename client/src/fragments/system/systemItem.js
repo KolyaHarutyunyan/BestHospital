@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {SimpleTabs} from "@eachbase/components";
-import {SystemType, systemItemStyles, SystemItemHeader} from './core';
+import {SystemType, systemItemStyles, SystemItemHeader, Credentials, Departments} from './core';
 
 export const SystemItem = () => {
     const [activeTab, setActiveTab] = useState(0)
@@ -13,10 +13,10 @@ export const SystemItem = () => {
             label: 'Service Types'
         },
         {
-            label: 'Tab item'
+            label: 'Credentials'
         },
         {
-            label: 'Tab item'
+            label: 'Departments'
         }
     ]
 
@@ -30,10 +30,10 @@ export const SystemItem = () => {
             tabComponent: (<SystemType openModal={handleOpenClose}/>)
         },
         {
-            tabComponent: (<p>tab item</p>)
+            tabComponent: (<Credentials openModal={handleOpenClose} />)
         },
         {
-            tabComponent: (<p>tab item</p>)
+            tabComponent: (<Departments openModal={handleOpenClose} />)
         }
     ];
 

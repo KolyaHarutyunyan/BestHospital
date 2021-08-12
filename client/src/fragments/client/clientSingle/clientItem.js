@@ -11,9 +11,6 @@ import {clientActions} from "@eachbase/store";
 import {  ClientGeneral, ClientContact,TabsHeader} from "./core";
 import {useDispatch, useSelector} from "react-redux";
 
-
-
-
 export const ClientItem = () => {
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false)

@@ -1,81 +1,119 @@
 import React, {useState} from "react";
 import {modalsStyle,} from "@eachbase/components/modal/styles";
 import {useGlobalTextStyles} from "@eachbase/utils";
-import {AddModalButton, CloseButton, CreateChancel} from "@eachbase/components/buttons";
-import {ValidationInput} from "@eachbase/components/inputs";
+import {CloseButton, CreateChancel} from "@eachbase/components/buttons";
+import {SelectInput, ValidationInput} from "@eachbase/components/inputs";
+
+const inputSpacing = {
+    paddingBottom: 16,
+}
+
+const credentialLicenceList = [
+    {name: 'type'},
+    {name: 'type 1'},
+    {name: 'type 2'},
+    {name: 'type 3'},
+]
 
 export const SystemItemAddService = ({modalType, handleClose}) => {
 
-    const [mType, setMType] = useState(modalType)
+    const [mType] = useState(modalType)
+
+    const title = (mType) => {
+        if (mType === 'editService') {
+            return 'Edit Service Type'
+        } else if (mType === 'editCredential') {
+            return 'Edit Credential'
+        }
+        return 'Edit Department'
+    }
 
     const classes = modalsStyle()
     const globalText = useGlobalTextStyles()
 
-    const inputSpacing = {
-        paddingBottom: 16,
-    }
-
     const handleSubmit = () => {
-        if (mType === 'edit') {
-            alert('Edit Service Type')
-            handleClose()
-        } else if (modalType === 'infoModal') {
-            setMType('edit')
-        } else {
-            alert('Add service Type')
-            handleClose()
+        switch(mType) {
+            case 'editService':
+                alert('edit services')
+                break;
+            case 'editCredential':
+                alert('edit credentials')
+                break;
+            default:
+                alert('edit departments')
         }
+        handleClose()
     }
 
     return (
         <div className={classes.inactiveModalBody}>
-            <h1 className={`${globalText.modalTitle}`}>{mType === 'edit' ? 'Edit Service Type' : mType === 'infoModal' ? 'Function Behavioral Analysis' : ' Add a Service Type'}</h1>
+            <h1 className={`${globalText.modalTitle} ${classes.modalTitleMargin}`}>{title(mType)}</h1>
             <div className={classes.positionedButton}>
                 <CloseButton handleCLic={handleClose}/>
             </div>
-            <p className={classes.inactiveModalInfo}>
-                {!mType && 'To add a new service type in the system, please fulfill the below fields.'}
-            </p>
-            <ValidationInput
-                disabled={mType === 'infoModal'}
-                styles={inputSpacing}
-                variant={"outlined"}
-                onChange={() => alert('change')}
-                type={"text"}
-                label={"Service Name*"}
-                name='serviceName'
-            />
-            <ValidationInput
-                disabled={mType === 'infoModal'}
-                styles={inputSpacing}
-                variant={"outlined"}
-                onChange={() => alert('change')}
-                type={"text"}
-                label={"Display Name*"}
-                name='displayName'
-            />
-            <ValidationInput
-                disabled={mType === 'infoModal'}
-                styles={inputSpacing}
-                variant={"outlined"}
-                onChange={() => alert('change')}
-                type={"text"}
-                label={"category"}
-                name='category'
-            />
             {
-                mType === '' || mType === 'infoModal' ?
-                    <AddModalButton handleClick={handleSubmit} text={mType === '' ? `Add` : `Edit`}/> :
+                mType === 'editService' ?
                     <>
-                        <CreateChancel
-                            buttonWidth='192px'
-                            create='Save'
-                            chancel="Cancel"
-                            onClose={handleClose}
-                            onCreate={handleSubmit}
+                        <ValidationInput
+                            styles={inputSpacing}
+                            variant={"outlined"}
+                            onChange={() => alert('change')}
+                            type={"text"}
+                            label={"Service Name*"}
+                            name='serviceName'
                         />
-                    </>
+                        <ValidationInput
+                            styles={inputSpacing}
+                            variant={"outlined"}
+                            onChange={() => alert('change')}
+                            type={"text"}
+                            label={"Display Name*"}
+                            name='displayName'
+                        />
+                        <ValidationInput
+                            styles={inputSpacing}
+                            variant={"outlined"}
+                            onChange={() => alert('change')}
+                            type={"text"}
+                            label={"category"}
+                            name='category'
+                        />
+                    </> : mType === 'editCredential' ?
+                    <>
+                        <ValidationInput
+                            styles={inputSpacing}
+                            variant={"outlined"}
+                            onChange={() => alert('change')}
+                            type={"text"}
+                            label={"Credential Name*"}
+                            name='credentialName'
+                        />
+                        <SelectInput
+                            style={classes.credentialInputStyle}
+                            name={"issuingState"}
+                            placeholder={"Issuing State*"}
+                            list={credentialLicenceList}
+                        />
+                    </> :
+                    <ValidationInput
+                        styles={inputSpacing}
+                        variant={"outlined"}
+                        onChange={() => alert('change')}
+                        type={"text"}
+                        label={"Department Name*"}
+                        name='departmentName'
+                    />
             }
+            <>
+                <CreateChancel
+                    buttonWidth='192px'
+                    create='Save'
+                    chancel="Cancel"
+                    onClose={handleClose}
+                    onCreate={handleSubmit}
+                />
+            </>
+
         </div>
     );
 }

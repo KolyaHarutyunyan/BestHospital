@@ -1,10 +1,10 @@
-import React, {useState} from "react";
+import React from "react";
 import {systemItemStyles} from "./styles";
 import {Images} from "@eachbase/utils";
-import {AddButton, SimpleModal} from "@eachbase/components";
+import {SimpleModal} from "@eachbase/components";
 import {SystemItemAddService} from "./modals";
 
-export const SystemItemHeader = ({modalType, open ,handleOpenClose, activeTab}) => {
+export const SystemItemHeader = ({modalType, open ,handleOpenClose}) => {
 
     const classes = systemItemStyles()
 
@@ -17,14 +17,9 @@ export const SystemItemHeader = ({modalType, open ,handleOpenClose, activeTab}) 
             <SimpleModal
                 openDefault={open}
                 handleOpenClose={handleOpenClose}
-                content={activeTab === 0 ? <SystemItemAddService modalType={modalType} handleClose={handleOpenClose}/> : null
-
-                }
+                content={<SystemItemAddService modalType={modalType} handleClose={handleOpenClose}/>}
             />
-            {activeTab === 0 ?
-                <AddButton handleClick={()=> handleOpenClose('')} text='Add Service Type'/>
-                : null
-            }
         </div>
     )
 }
+

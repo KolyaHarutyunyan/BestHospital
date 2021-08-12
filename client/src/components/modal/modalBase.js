@@ -42,7 +42,11 @@ export const SimpleModal = ({status, openDefault, handleOpenClose, content, back
         aria-labelledby="spring-modal-title"
         aria-describedby="spring-modal-description"
         className={backdropCustom === true ? 'my-profile' : ''}
-        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{

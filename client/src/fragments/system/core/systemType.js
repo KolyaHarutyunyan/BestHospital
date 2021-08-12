@@ -1,7 +1,8 @@
-import {Notes, TableBodyComponent} from "@eachbase/components";
+import {Notes, TableBodyComponent, AddButton, ValidationInput} from "@eachbase/components";
 import {TableCell} from "@material-ui/core";
 import React from "react";
-import {Images} from "../../../utils";
+import {Images} from "@eachbase/utils";
+import { systemItemStyles} from './styles'
 
 const headerTitles = [
     {
@@ -24,9 +25,11 @@ const headerTitles = [
 
 export const SystemType = ({openModal}) => {
 
+    const classes = systemItemStyles()
+
     const notesItem = (item, index) => {
         return (
-            <TableBodyComponent key={index} handleClick={() =>openModal('infoModal')}>
+            <TableBodyComponent key={index}>
                 <TableCell>{item.date}</TableCell>
                 <TableCell>{item.name}</TableCell>
                 <TableCell>{item.subject}</TableCell>
@@ -52,22 +55,48 @@ export const SystemType = ({openModal}) => {
             subject: 'ABA',
             action:
                 <>
-                    <img src={Images.edit} style={{cursor: 'pointer'}} onClick={(e) => {
-                        e.stopPropagation();
-                        editService('edit')
-                    }
-                    } alt="edit"/>
-                    <img src={Images.remove} alt="delete" style={{cursor: 'pointer',marginLeft: 16}} onClick={(e) => {
-                        e.stopPropagation();
-                        removeItem()
-                    }}/>
+                    <img src={Images.edit} style={{cursor: 'pointer'}} onClick={()=> editService('editService')} alt="edit"/>
+                    <img src={Images.remove} alt="delete" style={{cursor: 'pointer',marginLeft: 16}} onClick={removeItem}/>
                 </>,
         }
     ]
 
-
+    const handleChange = (e) => {
+        console.log(e.target.value);
+    }
 
     return (
-        <Notes defaultStyle={true} data={data} pagination={true} items={notesItem} headerTitles={headerTitles}/>
+        <>
+            <div className={classes.flexContainer}>
+                <ValidationInput
+                    style={classes.systemInputStyles}
+                    onChange={handleChange}
+                    variant={"outlined"}
+                    name={"roleName"}
+                    type={"text"}
+                    placeholder={'Service Name*'}
+                />
+                <ValidationInput
+                    style={classes.systemInputStyles}
+                    onChange={handleChange}
+                    variant={"outlined"}
+                    name={"roleName"}
+                    type={"text"}
+                    placeholder={'Display Code*'}
+                />
+                <ValidationInput
+                    style={classes.systemInputStyles}
+                    onChange={handleChange}
+                    variant={"outlined"}
+                    name={"roleName"}
+                    type={"text"}
+                    placeholder={'Category'}
+                />
+                <AddButton handleClick={()=> alert('Add Service Type')} text='Add Service Type'/>
+            </div>
+            <p className={classes.title}>Service Type</p>
+            <Notes defaultStyle={true} data={data} pagination={true} items={notesItem} headerTitles={headerTitles}/>
+        </>
+
     )
 }

@@ -2,6 +2,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Colors } from "@eachbase/utils";
 
 export const inputsStyle = makeStyles(() => ({
+  select: {
+    '& select:focus':{
+      outline: 'none',
+      backgroundColor: 'white'
+    }
+  },
   SignInInput: {
     width: "100%",
     // marginBottom: "16px",
@@ -93,7 +99,7 @@ export const inputsStyle = makeStyles(() => ({
   inputTextField:{
     width:'100%',
     '& .MuiOutlinedInput-notchedOutline':{
-      borderColor:Colors.BackgroundBlue
+      borderColor:Colors.BackgroundBlue,
     },
     '& .MuiOutlinedInput-root':{
       height:'48px'
@@ -104,6 +110,9 @@ export const inputsStyle = makeStyles(() => ({
     },
     '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
       transform: 'translate(14px, -2px) scale(0.75)'
+    },
+    '&:hover .MuiOutlinedInput-notchedOutline':{
+      borderColor:Colors.BackgroundBlue,
     },
   },
   TextareaTextField:{

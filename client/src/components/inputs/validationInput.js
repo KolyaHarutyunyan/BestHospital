@@ -5,7 +5,7 @@ import { ErrMessage } from "../messages";
 import { InputMinLoader } from "./inputMiniLoader";
 
 export const ValidationInput = ({
-  multiline, style, className, autoComplete,
+  multiline, style, className, autoComplete,placeholder,
   typeError, Length, disabled,
   value, type, onChange, name,
   label, validator, sendBoolean, variant, loader, styles, ...props
@@ -37,6 +37,7 @@ export const ValidationInput = ({
           variant={variant}
           label={label}
           name={name}
+          placeholder={placeholder}
           type={type}
           value={value}
           InputLabelProps={{
