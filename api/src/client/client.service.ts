@@ -25,9 +25,7 @@ export class ClientService {
     private readonly contactSanitizer: ContactSanitizer,
 
     private readonly fundingService: FundingService,
-    private readonly service: ServiceService
-
-
+    private readonly service: ServiceService,
   ) {
     this.model = ClientModel;
     this.contactModel = ClientContactModel;
@@ -58,7 +56,7 @@ export class ClientService {
         // birthday: dto.birthday
         // address: await this.addressService.getAddress(dto.address),
       });
-      client.birthday = birthday.toLocaleDateString()
+      client.birthday = birthday.toLocaleDateString();
       await client.save();
       return this.sanitizer.sanitize(client);
     } catch (e) {
@@ -66,11 +64,13 @@ export class ClientService {
       this.mongooseUtil.checkDuplicateKey(e, 'Client already exists');
       throw e;
     }
-  }
+  };
   /** returns all clients */
   async findAll(): Promise<ClientDTO[]> {
     try {
-      const clients = await this.model.find({}).populate({ path: 'enrollment', select: "name" })
+      const clients = await this.model
+        .find({})
+        .populate({ path: 'enrollment', select: 'name' });
       this.checkClient(clients[0]);
       return this.sanitizer.sanitizeMany(clients);
     } catch (e) {
@@ -87,7 +87,6 @@ export class ClientService {
   /** Update the Client */
   async update(_id: string, dto: UpdateClientDto): Promise<ClientDTO> {
     try {
-
       const client = await this.model.findOne({ _id });
       this.checkClient(client);
       if (dto.firstName) client.firstName = dto.firstName;
@@ -103,8 +102,8 @@ export class ClientService {
       if (dto.birthday) {
         let birthday = new Date(dto.birthday);
         this.checkTime(birthday);
-        client.birthday = dto.birthday.toLocaleDateString()
-      };
+        client.birthday = dto.birthday.toLocaleDateString();
+      }
       if (dto.status) client.status = dto.status;
       // if (dto.address)
       //   funder.address = await this.addressService.getAddress(dto.address);
@@ -124,7 +123,10 @@ export class ClientService {
   }
 
   /** Create a new contact */
-  createContact = async (dto: CreateContactDTO, clientId: string): Promise<ContactDTO> => {
+  createContact = async (
+    dto: CreateContactDTO,
+    clientId: string,
+  ): Promise<ContactDTO> => {
     try {
       const client = await this.model.findById({ _id: clientId });
       this.checkClient(client);
@@ -143,7 +145,7 @@ export class ClientService {
       this.mongooseUtil.checkDuplicateKey(e, 'Contact already exists');
       throw e;
     }
-  }
+  };
 
   /** returns all contact */
   async findAllContacts(clientId: string): Promise<ContactDTO[]> {
