@@ -5,14 +5,13 @@ import {
     Notes,
     TableWrapperGeneralInfo,
     InactiveModal,
-    TabsHeader,
-    TableBodyComponent
 } from "@eachbase/components";
 import {clientActions} from "@eachbase/store";
-import {Images} from "@eachbase/utils";
-import {TableCell} from "@material-ui/core";
-import { StaffHistory, StaffCredentials, StaffEmployment, StaffAccess, ClientGeneral} from "./core";
+
+import {  ClientGeneral, ClientContact,TabsHeader} from "./core";
 import {useDispatch, useSelector} from "react-redux";
+
+
 
 
 export const ClientItem = () => {
@@ -29,7 +28,6 @@ export const ClientItem = () => {
     const data = useSelector(state => state.client.clientItemInfo)
 
 
-    console.log(data,'state')
 
     const handleOpenClose = () => {
         setOpen(!open)
@@ -60,65 +58,24 @@ export const ClientItem = () => {
 
     ]
 
-    const headerTitles = [
-        {
-            title: 'Date',
-            sortable: true
-        },
-        {
-            title: 'Creator Name',
-            sortable: true
-        },
-        {
-            title: 'Subject',
-            sortable: false
-        },
-        {
-            title: 'Action',
-            sortable: false
-        },
-    ];
-
-    const datanot = [
-        {
-            date: '06/11/2021',
-            name: 'John Smith',
-            subject: 'Service Request',
-            action: <img src={Images.remove} alt="delete" style={{ cursor: 'pointer'}} onClick={()=>alert(index)} />,
-        }
-    ]
-
-    const notesItem = (item,index) => {
-        return (
-            <TableBodyComponent key={index}>
-                <TableCell>{item.date}</TableCell>
-                <TableCell>{item.name}</TableCell>
-                <TableCell>{item.subject}</TableCell>
-                <TableCell>
-                    {item.action}
-                </TableCell>
-            </TableBodyComponent>
-        )
-    }
-
     const tabsContent = [
         {
             tabComponent: (<ClientGeneral data={data}/>)
         },
         {
-            tabComponent: (<StaffEmployment />)
+            tabComponent: ( <ClientContact data={data} /> )
         },
         {
-            tabComponent: (<StaffCredentials />)
+            tabComponent: ( <ClientContact data={data} />)
         },
         {
-            tabComponent: (<StaffAccess />)
+            tabComponent: (<ClientContact />)
         },
         {
-            tabComponent: (<Notes data={datanot} items={notesItem} headerTitles={headerTitles}/>)
+            tabComponent: (<ClientContact />)
         },
         {
-            tabComponent: (<StaffHistory />)
+            tabComponent: (<ClientContact />)
         },
     ];
 
@@ -138,7 +95,7 @@ export const ClientItem = () => {
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
                 <div style={{backgroundColor: 'white', padding: '20px'}}>
-                    <TabsHeader data={data} editModal={true} activeTab={activeTab} />
+                    <TabsHeader data={data}  activeTab={activeTab} />
                     <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
                 </div>
             </TableWrapperGeneralInfo>

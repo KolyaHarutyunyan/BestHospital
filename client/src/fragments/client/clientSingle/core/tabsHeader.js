@@ -1,4 +1,4 @@
-import {tabsHeaderStyles} from "./styles";
+import {serviceSingleStyles, tabsHeaderStyles} from "./styles";
 import {Images} from "@eachbase/utils";
 import {AddButton, AddModalButton, SimpleModal} from "@eachbase/components";
 import React, {useEffect, useState} from "react";
@@ -14,15 +14,19 @@ const editButtonStyle = {
     paddingInline: 24
 }
 
-export const TabsHeader = ({activeTab, editModal, data}) => {
+export const TabsHeader = ({activeTab,  data}) => {
 
-const params = useParams()
-    const classes = tabsHeaderStyles()
+    const params = useParams()
+    const classes = serviceSingleStyles()
     const [open, setOpen] = useState()
     const dispatch = useDispatch()
+
+
+
     useEffect(() => {
+
         if (activeTab === 1) {
-            dispatch(clientActions.getClientsContacts(params.id))
+             dispatch(clientActions.getClientsContacts(params.id))
         }
     }, [activeTab])
 
