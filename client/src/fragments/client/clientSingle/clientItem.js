@@ -14,7 +14,6 @@ import {TableCell} from "@material-ui/core";
 import { StaffHistory, StaffCredentials, StaffEmployment, StaffAccess, ClientGeneral} from "./core";
 import {useDispatch, useSelector} from "react-redux";
 
-
 export const ClientItem = () => {
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false)

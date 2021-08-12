@@ -2,6 +2,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import {Backgrounds, Colors} from "@eachbase/utils";
 
 export const modalsStyle = makeStyles(() => ({
+  modalTitleMargin: {
+    marginBottom: 25
+  },
   closeButton:{
     display:"flex",
     justifyContent:"flex-end",
@@ -40,6 +43,9 @@ export const modalsStyle = makeStyles(() => ({
     color: Colors.TextSecondary,
     lineHeight: '24px',
     padding: '16px 0 24px'
+  },
+  credentialInputStyle: {
+    marginBottom: 10
   }
 }));
 
