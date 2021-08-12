@@ -6,18 +6,32 @@ import { ClientModel } from './client.model';
 import { ClientAuthorizationModel } from './clientAuthorization.model';
 import { ClientContactModel } from './clientContact.model';
 import { ClientEnrollmentModel } from './clientEnrollment.model';
-import { ClientAuthorizationServiceModel } from './clientAuthorizationService.model'
+import { ClientAuthorizationServiceModel } from './clientAuthorizationService.model';
 import { FundingService } from '../funding';
 import { ServiceService } from '../service';
 
 import { IAuthorization, IAuthorizationService } from './interface';
 
-import { ClientSanitizer, ContactSanitizer, EnrollmentSanitizer, AuthorizationSanitizer, AuthorizationServiceSanitizer } from './interceptor';
+import {
+  ClientSanitizer,
+  ContactSanitizer,
+  EnrollmentSanitizer,
+  AuthorizationSanitizer,
+  AuthorizationServiceSanitizer,
+} from './interceptor';
 import { IClient, IContact, IEnrollment } from './interface';
 import {
-  ClientDTO, CreateContactDTO, ContactDTO, CreateEnrollmentDTO, EnrollmentDTO,
-  UpdateEnrollmentDto, UpdateContactDto, AuthorizationDTO, CreateAuthorizationDTO,
-  CreateAuthorizationServiceDTO, AuthorizationServiceDTO
+  ClientDTO,
+  CreateContactDTO,
+  ContactDTO,
+  CreateEnrollmentDTO,
+  EnrollmentDTO,
+  UpdateEnrollmentDto,
+  UpdateContactDto,
+  AuthorizationDTO,
+  CreateAuthorizationDTO,
+  CreateAuthorizationServiceDTO,
+  AuthorizationServiceDTO,
 } from './dto';
 
 @Injectable()
@@ -30,11 +44,8 @@ export class ClientService {
     private readonly authorizationSanitizer: AuthorizationSanitizer,
     private readonly authorizationServiceSanitizer: AuthorizationServiceSanitizer,
 
-
     private readonly fundingService: FundingService,
-    private readonly service: ServiceService
-
-
+    private readonly service: ServiceService,
   ) {
     this.model = ClientModel;
     this.contactModel = ClientContactModel;
@@ -70,7 +81,7 @@ export class ClientService {
         // birthday: dto.birthday
         // address: await this.addressService.getAddress(dto.address),
       });
-      client.birthday = birthday.toLocaleDateString()
+      client.birthday = birthday.toLocaleDateString();
       await client.save();
       return this.sanitizer.sanitize(client);
     } catch (e) {
@@ -78,11 +89,13 @@ export class ClientService {
       this.mongooseUtil.checkDuplicateKey(e, 'Client already exists');
       throw e;
     }
-  }
+  };
   /** returns all clients */
   async findAll(): Promise<ClientDTO[]> {
     try {
-      const clients = await this.model.find({}).populate({ path: 'enrollment', select: "name" })
+      const clients = await this.model
+        .find({})
+        .populate({ path: 'enrollment', select: 'name' });
       this.checkClient(clients[0]);
       return this.sanitizer.sanitizeMany(clients);
     } catch (e) {
@@ -91,7 +104,9 @@ export class ClientService {
   }
   /** Get Client By Id */
   async findOne(_id: string): Promise<ClientDTO> {
-    const client = await this.model.findOne({ _id }).populate({ path: 'enrollment', select: "name"});
+    const client = await this.model
+      .findOne({ _id })
+      .populate({ path: 'enrollment', select: 'name' });
     this.checkClient(client);
     return this.sanitizer.sanitize(client);
   }
@@ -99,7 +114,6 @@ export class ClientService {
   /** Update the Client */
   async update(_id: string, dto: UpdateClientDto): Promise<ClientDTO> {
     try {
-
       const client = await this.model.findOne({ _id });
       this.checkClient(client);
       if (dto.firstName) client.firstName = dto.firstName;
@@ -113,8 +127,8 @@ export class ClientService {
       if (dto.birthday) {
         let birthday = new Date(dto.birthday);
         this.checkTime(birthday);
-        client.birthday = dto.birthday.toLocaleDateString()
-      };
+        client.birthday = dto.birthday.toLocaleDateString();
+      }
       if (dto.status) client.status = dto.status;
       // if (dto.address)
       //   funder.address = await this.addressService.getAddress(dto.address);
@@ -134,7 +148,11 @@ export class ClientService {
   }
 
   /** Create a new enrollment */
-  createEnrollment = async (dto: CreateEnrollmentDTO, clientId: string, funderId: string): Promise<EnrollmentDTO> => {
+  createEnrollment = async (
+    dto: CreateEnrollmentDTO,
+    clientId: string,
+    funderId: string,
+  ): Promise<EnrollmentDTO> => {
     try {
       let startDate = new Date(dto.startDate);
       this.checkTime(startDate);
@@ -145,11 +163,14 @@ export class ClientService {
       const funder = await this.fundingService.findOne(funderId);
 
       if (dto.primary) {
-        const findEnrollment = await this.enrollmentModel.findOne({ clientId, primary: true });
+        const findEnrollment = await this.enrollmentModel.findOne({
+          clientId,
+          primary: true,
+        });
 
         if (findEnrollment !== null) {
           findEnrollment.primary = false;
-          await findEnrollment.save()
+          await findEnrollment.save();
         }
       }
 
@@ -158,8 +179,8 @@ export class ClientService {
         primary: dto.primary,
         // startDate: dto.startDate,
       });
-      enrollment.startDate = startDate.toLocaleDateString()
-      enrollment.terminationDate = terminationDate.toLocaleDateString()
+      enrollment.startDate = startDate.toLocaleDateString();
+      enrollment.terminationDate = terminationDate.toLocaleDateString();
       enrollment.fundingSource = funder.name;
 
       await enrollment.save();
@@ -169,13 +190,12 @@ export class ClientService {
         await client.save();
       }
       return this.enrollmentSanitizer.sanitize(enrollment);
-
     } catch (e) {
       console.log(e);
       this.mongooseUtil.checkDuplicateKey(e, 'Enrollment already exists');
       throw e;
     }
-  }
+  };
 
   /** returns all enrollment */
   async findAllEnrollment(clientId: string): Promise<any> {
@@ -188,32 +208,42 @@ export class ClientService {
     }
   }
   /** Update the Enrollment */
-  async updateEnrollment(_id: string, enrollmentId: string, funderId: string, dto: UpdateEnrollmentDto): Promise<EnrollmentDTO> {
+  async updateEnrollment(
+    _id: string,
+    enrollmentId: string,
+    funderId: string,
+    dto: UpdateEnrollmentDto,
+  ): Promise<EnrollmentDTO> {
     try {
-      const enrollment: any = await this.enrollmentModel.findOne({ _id: enrollmentId });
+      const enrollment: any = await this.enrollmentModel.findOne({
+        _id: enrollmentId,
+      });
       this.checkEnrollment(enrollment);
       if (dto.startDate) {
         let startDate = new Date(dto.startDate);
         this.checkTime(startDate);
-        enrollment.startDate = dto.startDate.toLocaleDateString()
-      };
+        enrollment.startDate = dto.startDate.toLocaleDateString();
+      }
       if (dto.terminationDate) {
         let terminationDate = new Date(dto.terminationDate);
         this.checkTime(terminationDate);
-        enrollment.terminationDate = dto.terminationDate.toLocaleDateString()
-      };
-  
+        enrollment.terminationDate = dto.terminationDate.toLocaleDateString();
+      }
+
       const client = await this.model.findById({ _id });
       this.checkClient(client);
       if (dto.primary) {
-        const findEnrollment = await this.enrollmentModel.findOne({ clientId: _id, primary: true });
+        const findEnrollment = await this.enrollmentModel.findOne({
+          clientId: _id,
+          primary: true,
+        });
         if (findEnrollment !== null) {
           findEnrollment.primary = false;
-          await findEnrollment.save()
+          await findEnrollment.save();
         }
       }
       enrollment.primary = dto.primary;
-      await enrollment.save()
+      await enrollment.save();
 
       if (enrollment.primary) {
         client.enrollment = funderId;
@@ -235,14 +265,17 @@ export class ClientService {
       const client = await this.model.findById({ _id: enrollment.clientId });
       this.checkClient(client);
       client.enrollment = '';
-      await enrollment.remove()
-      await client.save()
+      await enrollment.remove();
+      await client.save();
     }
     return enrollment._id;
   }
 
   /** Create a new contact */
-  createContact = async (dto: CreateContactDTO, clientId: string): Promise<ContactDTO> => {
+  createContact = async (
+    dto: CreateContactDTO,
+    clientId: string,
+  ): Promise<ContactDTO> => {
     try {
       const client = await this.model.findById({ _id: clientId });
       this.checkClient(client);
@@ -261,7 +294,7 @@ export class ClientService {
       this.mongooseUtil.checkDuplicateKey(e, 'Contact already exists');
       throw e;
     }
-  }
+  };
 
   /** returns all contact */
   async findAllContacts(clientId: string): Promise<ContactDTO[]> {
@@ -306,12 +339,12 @@ export class ClientService {
     return contact._id;
   }
 
-
-
-
-
   /** Create a new authorization */
-  createAuthorization = async (_id: string, funderId: string, dto: CreateAuthorizationDTO): Promise<AuthorizationDTO> => {
+  createAuthorization = async (
+    _id: string,
+    funderId: string,
+    dto: CreateAuthorizationDTO,
+  ): Promise<AuthorizationDTO> => {
     try {
       let startDate = new Date(dto.startDate);
       this.checkTime(startDate);
@@ -329,8 +362,8 @@ export class ClientService {
         fundingSource: funder.name,
         // address: await this.addressService.getAddress(dto.address),
       });
-      authorization.startDate = startDate.toLocaleDateString()
-      authorization.endDate = endDate.toLocaleDateString()
+      authorization.startDate = startDate.toLocaleDateString();
+      authorization.endDate = endDate.toLocaleDateString();
 
       await authorization.save();
       return this.authorizationSanitizer.sanitize(authorization);
@@ -339,16 +372,24 @@ export class ClientService {
       this.mongooseUtil.checkDuplicateKey(e, 'Client already exists');
       throw e;
     }
-  }
+  };
   /** Create a new authorization service */
-  createAuthorizationService = async (_id: string, fundingServiceId: string, dto: CreateAuthorizationServiceDTO): Promise<AuthorizationServiceDTO> => {
+  createAuthorizationService = async (
+    _id: string,
+    fundingServiceId: string,
+    dto: CreateAuthorizationServiceDTO,
+  ): Promise<AuthorizationServiceDTO> => {
     try {
       const modifiers = [];
       const client = await this.model.findOne({ _id });
       this.checkClient(client);
-      const fundingService = await this.fundingService.findOneService(fundingServiceId);
+      const fundingService = await this.fundingService.findOneService(
+        fundingServiceId,
+      );
       if (fundingService.modifiers.length != []) {
-        fundingService.modifiers.map(modifier => modifiers.push(modifier.name))
+        fundingService.modifiers.map((modifier) =>
+          modifiers.push(modifier.name),
+        );
       }
       let authorizationService = new this.clientAuthorizationServiceModel({
         total: dto.total,
@@ -356,17 +397,20 @@ export class ClientService {
         available: dto.available,
         clientId: client._id,
         service: fundingService.name,
-        modifiers
+        modifiers,
         // address: await this.addressService.getAddress(dto.address),
       });
       await authorizationService.save();
       return this.authorizationServiceSanitizer.sanitize(authorizationService);
     } catch (e) {
       console.log(e);
-      this.mongooseUtil.checkDuplicateKey(e, 'Authorization Service already exists');
+      this.mongooseUtil.checkDuplicateKey(
+        e,
+        'Authorization Service already exists',
+      );
       throw e;
     }
-  }
+  };
 
   /** Private methods */
   /** if the date is not valid, throws an exception */
