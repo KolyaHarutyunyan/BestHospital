@@ -13,19 +13,21 @@ export const ClientTableBody = ({data, setEditClient, handleClose, setIndex, ind
     const handleOpenOfficeInfo = (id) => {
         history.push(`/client/${id}`)
     }
+    console.log(data,'eeeee');
     return (
         <TableBodyComponent handleOpenInfo={() => handleOpenOfficeInfo(data.id)} key={index}>
+
             <TableCell>
                 <div className={globalClasses.InfoAndImage}>
                     <img src={Images.clients} alt={"client"}/>
-                    <p>{data.firstName} {data.lastName}</p>
+                    <p>{data?.firstName} {data?.lastName}</p>
                 </div>
             </TableCell>
-            <TableCell> {data.code} </TableCell>
-            <TableCell>{data.gender}</TableCell>
-            <TableCell>{data.birthday}</TableCell>
-            <TableCell>{data.status} </TableCell>
-            <TableCell>{data.enrollment}</TableCell>
+            <TableCell> {data?.code} </TableCell>
+            <TableCell>{data?.gender}</TableCell>
+            <TableCell>{data?.birthday}</TableCell>
+            <TableCell>{data?.status} </TableCell>
+            {/*<TableCell>{data?.enrollment}</TableCell>*/}
             <TableCell>
                 <>
                     <img src={Images.edit} alt="edit" style={{cursor: 'pointer'}} onClick={(e) => {
