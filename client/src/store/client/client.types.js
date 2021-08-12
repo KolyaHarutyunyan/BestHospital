@@ -15,5 +15,9 @@ export const EDIT_CLIENT = 'EDIT_CLIENT';
 export const GET_CLIENT_BY_ID = 'GET_CLIENT_BY_ID';
 export const GET_CLIENT_BY_ID_SUCCESS = 'GET_CLIENT_BY_ID_SUCCESS';
 
+/**get client contacts */
+export const GET_CLIENT_CONTACTS = 'GET_CLIENT_CONTACTS';
+export const GET_CLIENT_CONTACTS_SUCCESS = 'GET_CLIENT_CONTACTS_SUCCESS';
+
 
 

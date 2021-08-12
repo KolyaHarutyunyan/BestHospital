@@ -3,7 +3,7 @@ import {authService} from "./client.service";
 import {
     CREATE_CLIENT,
     DELETE_CLIENT, EDIT_CLIENT,
-    GET_CLIENT_BY_ID, GET_CLIENT_BY_ID_SUCCESS,
+    GET_CLIENT_BY_ID, GET_CLIENT_BY_ID_SUCCESS, GET_CLIENT_CONTACTS_SUCCESS,
     GET_CLIENTS,
     GET_CLIENTS_SUCCESS
 } from "./client.types";
@@ -45,8 +45,7 @@ function* deleteClient(action) {
 function* editClient(action) {
     try {
         const res = yield call(authService.editClientService, action);
-        console.log(res,'rrrrrrrrrrrrrrr')
-        // window.location.replace('/client')
+        window.location.replace('/client')
     } catch (err) {
         console.log(err, 'error')
     }
@@ -64,6 +63,19 @@ function* getClientById(action) {
     }
 }
 
+function* getClientContacts(action) {
+    try {
+        const res = yield call(authService.getClientContactsService, action);
+        console.log(res,'reeees')
+        yield put({
+            type: GET_CLIENT_CONTACTS_SUCCESS,
+            payload: res.data,
+        });
+    } catch (err) {
+        console.log(err, 'error')
+    }
+}
+
 
 export const watchClient = function* watchClientSaga() {
 
@@ -72,6 +84,7 @@ export const watchClient = function* watchClientSaga() {
     yield takeLatest(DELETE_CLIENT, deleteClient)
     yield takeLatest(EDIT_CLIENT, editClient)
     yield takeLatest(GET_CLIENT_BY_ID, getClientById)
+    yield takeLatest(GET_CLIENT_BY_ID, getClientContacts)
 
 
 };

@@ -4,22 +4,24 @@ import {createClientStyle,} from "./../createClient/styles";
 import {ErrorText, languages} from "@eachbase/utils";
 import {useDispatch, useSelector} from "react-redux";
 import {clientActions} from "@eachbase/store";
+import {useParams} from "react-router-dom";
 
 
-export const EditClient = ({handleClose,index,id}) => {
-    const data = useSelector(state=>state.client.clientList[index])
+export const EditClient = ({handleClose}) => {
+    let params = useParams()
+    const data = useSelector(state=>state.client.clientItemInfo)
     console.log(data,'dataaaaa')
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState({
-        "firstName": data.firstName,
-        "middleName": data.middleName,
-        "lastName": data.lastName,
-        "ethnicity": data.ethnicity,
-        "code": data.code,
-        'language': data.language,
-        'familyLanguage': data.familyLanguage,
-        'gender': data.gender,
-        'birthday': data.birthday,
+        "firstName": data?.firstName,
+        "middleName": data?.middleName,
+        "lastName": data?.lastName,
+        "ethnicity": data?.ethnicity,
+        "code": data?.code,
+        'language': data?.language,
+        'familyLanguage': data?.familyLanguage,
+        'gender': data?.gender,
+        'birthday': data?.birthday,
         // 'age' : inputs.age,
         });
     const [step, setStep] = useState('first')
@@ -63,11 +65,12 @@ export const EditClient = ({handleClose,index,id}) => {
                     'language': inputs.language,
                     'familyLanguage': inputs.familyLanguage,
                     'gender': inputs.gender,
-                    'birthday': inputs.birthday,
+                    // 'birthday': inputs.birthday,
                     // 'age' : inputs.age,
                     "status": 1
                 }
-                dispatch(clientActions.editClient(newData,id ))
+                dispatch(clientActions.editClient(newData,params.id ))
+                handleClose()
             } else {
                 setError(
                     !inputs.gender ? 'gender' :

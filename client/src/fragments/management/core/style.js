@@ -237,6 +237,7 @@ tableStyleRole: {
     display:'flex',
     flexDirection:'column',
     textAlign:'center',
+
   }
 
 }));
