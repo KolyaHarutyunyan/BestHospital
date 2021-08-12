@@ -16,7 +16,6 @@ export const ClientTableBody = ({data, setEditClient, handleClose, setIndex, ind
     console.log(data,'eeeee');
     return (
         <TableBodyComponent handleOpenInfo={() => handleOpenOfficeInfo(data.id)} key={index}>
-
             <TableCell>
                 <div className={globalClasses.InfoAndImage}>
                     <img src={Images.clients} alt={"client"}/>
