@@ -8,8 +8,9 @@ import {
 } from "@eachbase/components";
 import {clientActions} from "@eachbase/store";
 
-import {  ClientGeneral, ClientContact,TabsHeader} from "./core";
+import {  ClientGeneral, ClientContact,TabsHeader,ClientEnrollment} from "./core";
 import {useDispatch, useSelector} from "react-redux";
+
 
 export const ClientItem = () => {
     const dispatch = useDispatch()
@@ -63,7 +64,7 @@ export const ClientItem = () => {
             tabComponent: ( <ClientContact data={data} /> )
         },
         {
-            tabComponent: ( <ClientContact data={data} />)
+            tabComponent: ( <ClientEnrollment data={data} />)
         },
         {
             tabComponent: (<ClientContact />)

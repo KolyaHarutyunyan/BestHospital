@@ -3,3 +3,4 @@ export { ClientGeneral } from './clientGeneral';
 export { ClientContact } from './clientContact';
 export { ClientHistory } from './clientHistory';
 export { TabsHeader } from './tabsHeader';
+export { ClientEnrollment } from './clientEnrollment';
