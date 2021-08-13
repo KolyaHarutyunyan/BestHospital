@@ -1,18 +1,22 @@
+export class CreateAuthorizationDto {}
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDate, IsDateString, IsEmail, IsEnum, IsMongoId, IsNotEmpty, IsPhoneNumber, IsString, IsUrl } from 'class-validator';
-import { ClientStatus } from '../client.constants';
+import { AddressDTO } from '../../../address/dto';
 
-export class CreateAuthorizationServiceDTO {
+export class CreateAuthorizationDTO {
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
-    total: string;
+    authorizationId: string;
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
-    completed: string;
+    startDate: string;
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
-    available: string;
+    endDate: string;
+    @ApiProperty()
+    @IsNotEmpty()
+    address: string;
 }

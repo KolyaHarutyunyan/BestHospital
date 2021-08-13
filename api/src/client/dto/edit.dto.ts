@@ -20,6 +20,8 @@ export class UpdateClientDto {
     @ApiProperty()
     gender: string;
     @ApiProperty()
+    age: number;
+    @ApiProperty()
     birthday: Date;
     @ApiProperty({ enum: ClientStatus })
     status: number;

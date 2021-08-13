@@ -22,6 +22,8 @@ export class ClientDTO {
     @ApiProperty()
     gender: string;
     @ApiProperty()
+    age: number;
+    @ApiProperty()
     birthday: string;
     @ApiProperty()
     enrollment?: string;

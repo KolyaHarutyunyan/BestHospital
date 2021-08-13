@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ISanitize } from '../../util';
+import { ISanitize } from '../../../util';
 import { IEnrollment } from '../interface';
 import { EnrollmentDTO } from '../dto';
 // import { AddressSanitizer } from '../../address';
@@ -14,6 +14,7 @@ export class EnrollmentSanitizer implements ISanitize {
         const enrollmentDTO: EnrollmentDTO = {
             id: enrollment.id,
             clientId: enrollment.clientId,
+            funderId: enrollment.funderId,
             primary: enrollment.primary,
             startDate: enrollment.startDate,
             terminationDate: enrollment.terminationDate,
@@ -23,6 +24,7 @@ export class EnrollmentSanitizer implements ISanitize {
 
 
     sanitizeMany(enrollments: IEnrollment[]): EnrollmentDTO[] {
+        console.log(enrollments, 'hii');
         const enrollmentDTOs: EnrollmentDTO[] = [];
         for (let i = 0; i < enrollments.length; i++) {
             enrollmentDTOs.push(this.sanitize(enrollments[i]));

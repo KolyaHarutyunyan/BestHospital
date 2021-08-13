@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { ISanitize } from '../../util';
-import { IContact } from '../interface';
+import { ISanitize } from '../../../util';
 import { AuthorizationDTO } from '../dto';
 import { IAuthorization } from '../interface'
-// import { AddressSanitizer } from '../../address';
+import { AddressSanitizer } from '../../../address';
 
 @Injectable()
 export class AuthorizationSanitizer implements ISanitize {
     constructor(
-        //   private readonly addressSanitizer: AddressSanitizer
+          private readonly addressSanitizer: AddressSanitizer
     ) { }
 
     sanitize(authorization: IAuthorization): AuthorizationDTO {
@@ -16,9 +15,11 @@ export class AuthorizationSanitizer implements ISanitize {
             id: authorization.id,
             clientId: authorization.clientId,
             authorizationId: authorization.authorizationId,
-            fundingSource: authorization.fundingSource,
+            funderId: authorization.funderId,
             startDate: authorization.startDate,
             endDate: authorization.endDate,
+            address: this.addressSanitizer.sanitize(authorization.address)
+
         };
         return authorizationDTO;
     }

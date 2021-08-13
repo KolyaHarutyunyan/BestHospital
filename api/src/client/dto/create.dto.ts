@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsDateString, IsEmail, IsEnum, IsMongoId, IsNotEmpty, IsPhoneNumber, IsString, IsUrl } from 'class-validator';
+import { IsDate, IsDateString, IsEmail, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsPhoneNumber, IsString, IsUrl } from 'class-validator';
 import { ClientStatus } from '../client.constants';
 
 export class CreateClientDTO {
@@ -33,6 +33,10 @@ export class CreateClientDTO {
     @IsNotEmpty()
     @IsString()
     gender: string;
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsNumber()
+    age: number;
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
