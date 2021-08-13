@@ -21,7 +21,8 @@ export {
     CheckboxesTags,
     AddressInput,
     SelectInput,
-    Textarea
+    Textarea,
+    RadioButton
 } from "./inputs";
 export {Loader, MinLoader} from "./loader";
 export {GlobalLogo} from "./logo";

@@ -1,2 +1,2 @@
 export { StaffItem } from './staffItem';
-export { StaffAddNotes } from './core'
+export { StaffAddNotes, CredentialModal } from './core'

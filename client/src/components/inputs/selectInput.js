@@ -42,7 +42,7 @@ export const SelectInput = ({
                              error={typeError && true}>
                     <InputLabel htmlFor="outlined-age-native-simple">{label}</InputLabel>
                     <Select
-                       className={classes.select}
+                        className={classes.select}
                         disabled={disabled}
                         native
                         value={value ? value : current}

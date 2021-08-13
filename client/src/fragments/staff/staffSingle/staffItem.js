@@ -12,12 +12,15 @@ import {
     TableBodyComponent,
 } from "@eachbase/components";
 import {useDispatch, useSelector} from "react-redux";
-import { staffStyle } from "../../../pages/staff/styles";
+import {staffStyle} from "../../../pages/staff/styles";
 
 export const StaffItem = () => {
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const [activeTab, setActiveTab] = useState(0)
+
+    const [openCredModal, setOpenCredModal] = useState(false)
+    const [credModalType, setCredModalType] = useState('')
 
     const classes = staffStyle()
 
@@ -74,6 +77,11 @@ export const StaffItem = () => {
         },
     ];
 
+    const openCloseCredModal = (modalType) => {
+        setOpenCredModal(!openCredModal)
+        setCredModalType(modalType)
+    }
+
     const data = [
         {
             date: '06/11/2021',
@@ -104,7 +112,7 @@ export const StaffItem = () => {
             tabComponent: (<StaffEmployment/>)
         },
         {
-            tabComponent: (<StaffCredentials/>)
+            tabComponent: (<StaffCredentials openModal={openCloseCredModal}/>)
         },
         {
             tabComponent: (<StaffAccess/>)
@@ -131,7 +139,7 @@ export const StaffItem = () => {
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
                 <div className={classes.staffSingleItem}>
-                    <StaffItemHeader activeTab={activeTab}/>
+                    <StaffItemHeader credModalType={credModalType} openCloseCredModal={openCloseCredModal} openCredModal={openCredModal} activeTab={activeTab}/>
                     <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
                 </div>
             </TableWrapperGeneralInfo>
