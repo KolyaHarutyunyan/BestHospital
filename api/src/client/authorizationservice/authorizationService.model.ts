@@ -12,5 +12,5 @@ const AuthorizationServiceSchema = new Schema({
     updatedDate: { type: Date, default: null },
 });
 
-export const ClientAuthorizationServiceModel = model<IAuthorizationService>('ClientAuthorizationServicee', AuthorizationServiceSchema);
+export const ClientAuthorizationServiceModel = model<IAuthorizationService>('ClientAuthorizationService', AuthorizationServiceSchema);
 

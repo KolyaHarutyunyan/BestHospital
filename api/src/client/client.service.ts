@@ -4,7 +4,6 @@ import { MongooseUtil } from '../util';
 import { Model, Types } from 'mongoose';
 import { ClientModel } from './client.model';
 import { ClientContactModel } from './clientContact.model';
-import { ClientAuthorizationServiceModel } from './clientAuthorizationService.model'
 import { FundingService } from '../funding';
 import { ServiceService } from '../service';
 

@@ -27,7 +27,7 @@ export class EnrollmentService {
 
   private mongooseUtil: MongooseUtil;
 
-  async create(dto: CreateEnrollmentDTO, clientId: string, funderId: string):Promise<EnrollmentDTO> {
+  async create(dto: CreateEnrollmentDTO, clientId: string, funderId: string): Promise<EnrollmentDTO> {
     try {
       let startDate = new Date(dto.startDate);
       this.checkTime(startDate);
@@ -70,7 +70,7 @@ export class EnrollmentService {
     }
   }
 
-  async findAll(clientId: string):Promise<EnrollmentDTO[]> {
+  async findAll(clientId: string): Promise<EnrollmentDTO[]> {
     try {
       const enrollments = await this.model.find({ clientId }).populate({ path: 'funderId', select: 'name' });
       this.checkEnrollment(enrollments[0]);
@@ -79,16 +79,8 @@ export class EnrollmentService {
       throw e;
     }
   }
-  async checkPrimary(clientId) {
-    const findEnrollment = await this.model.findOne({ clientId, primary: true });
-    if (findEnrollment !== null) {
-      findEnrollment.primary = false;
-      await findEnrollment.save()
-    }
 
-  }
-
-  async update(_id: string, clientId: string, funderId: string, dto: UpdateEnrollmentDTO):Promise<EnrollmentDTO> {
+  async update(_id: string, clientId: string, funderId: string, dto: UpdateEnrollmentDTO): Promise<EnrollmentDTO> {
     try {
       const enrollment = await this.model.findById({ _id, clientId });
       this.checkEnrollment(enrollment);
@@ -106,11 +98,15 @@ export class EnrollmentService {
       };
 
       if (dto.primary) {
-        await this.checkPrimary(clientId)
+        const findEnrollment = await this.model.findOne({ clientId, primary: true });
+        if (findEnrollment !== null && enrollment.id != findEnrollment.id) {
+          findEnrollment.primary = false;
+          await findEnrollment.save()
+        }
       }
 
       enrollment.primary = dto.primary;
-      enrollment.funderId = funderId;
+      // enrollment.funderId = funderId;
       await enrollment.save()
       if (enrollment.primary) {
         client.enrollment = funderId;
@@ -124,7 +120,7 @@ export class EnrollmentService {
     }
   }
 
-  async remove(_id: string):Promise<string> {
+  async remove(_id: string): Promise<string> {
     const enrollment = await this.model.findById({ _id });
     this.checkEnrollment(enrollment);
     if (enrollment.primary) {
