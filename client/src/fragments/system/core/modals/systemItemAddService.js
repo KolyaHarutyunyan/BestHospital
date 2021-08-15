@@ -45,6 +45,10 @@ export const SystemItemAddService = ({modalType, handleClose}) => {
         handleClose()
     }
 
+    const handleChange = () =>{
+        console.log('handle Cahnge')
+    }
+
     return (
         <div className={classes.inactiveModalBody}>
             <h1 className={`${globalText.modalTitle} ${classes.modalTitleMargin}`}>{title(mType)}</h1>
@@ -93,6 +97,7 @@ export const SystemItemAddService = ({modalType, handleClose}) => {
                             name={"issuingState"}
                             placeholder={"Issuing State*"}
                             list={credentialLicenceList}
+                            handleSelect={handleChange}
                         />
                     </> :
                     <ValidationInput

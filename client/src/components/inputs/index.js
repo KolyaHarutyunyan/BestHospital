@@ -7,3 +7,4 @@ export { CheckboxesTags } from "./autocompleteSelectInput";
 export { AddressInput } from './addressInput';
 export { SelectInput } from './selectInput';
 export { Textarea } from './textarea';
+export { RadioButton } from './radio';

@@ -1,6 +1,6 @@
 import {
     GET_CLIENTS_SUCCESS,
-    GET_CLIENT_BY_ID_SUCCESS, GET_CLIENT_CONTACTS_SUCCESS
+    GET_CLIENT_BY_ID_SUCCESS, GET_CLIENT_CONTACTS_SUCCESS, GET_CLIENT_ENROLLMENT_SUCCESS
 } from "./client.types";
 
 
@@ -8,7 +8,8 @@ import {
 const initialState = {
     clientList: [],
     clientItemInfo : {},
-    clientContacts : []
+    clientContacts : [],
+    clientEnrollment : [],
 
 };
 
@@ -30,6 +31,11 @@ export const clientReducer = (state = initialState, action) => {
             return {
                 ...state,
                 clientContacts: action.payload,
+            }
+            case  GET_CLIENT_ENROLLMENT_SUCCESS:
+            return {
+                ...state,
+                clientEnrollment: action.payload,
             }
 
 

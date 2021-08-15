@@ -13,5 +13,9 @@ export const authService = {
 
     getClientContactsService: ({payload}) => axios.get(`/client/${payload.id}/contacts`, ),
 
+    createClientContactService: ({payload}) => axios.post(`/client/${payload.id}/contact`, payload.body),
+
+    getClientEnrollmentService: ({payload}) => axios.get(`/enrollment/client/${payload.id}`, ),
+
 
 };

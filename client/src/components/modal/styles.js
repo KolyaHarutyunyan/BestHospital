@@ -1,7 +1,22 @@
 import { makeStyles } from "@material-ui/core/styles";
-import {Backgrounds, Colors} from "@eachbase/utils";
+import {Shadow, Colors} from "@eachbase/utils";
 
 export const modalsStyle = makeStyles(() => ({
+  datePickerStyle: {
+    marginTop: 15
+  },
+  title: {
+    fontSize: 16,
+    color: Colors.TextSecondary,
+    fontWeight: 600,
+    paddingBottom: 16
+  },
+  checkboxWrapper: {
+    padding: 16,
+    boxShadow: `${Shadow.changeShadow}`,
+    borderColor: 8,
+    marginBottom: 16
+  },
   modalTitleMargin: {
     marginBottom: 25
   },

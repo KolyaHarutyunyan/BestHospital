@@ -8,6 +8,25 @@ export const inputsStyle = makeStyles(() => ({
       backgroundColor: 'white'
     }
   },
+  radio: {
+    color: Colors.BackgroundBlue,
+    '&:hover': {
+      backgroundColor: 'white'
+    },
+    '&$checked': {
+      color: Colors.BackgroundBlue,
+      '&:hover': {
+        backgroundColor: 'white'
+      },
+    }
+  },
+  radioInputLabel: {
+    fontSize: 16,
+    color: Colors.TextSecondary,
+  },
+  checked: {
+    color :'green'
+  },
   SignInInput: {
     width: "100%",
     // marginBottom: "16px",
