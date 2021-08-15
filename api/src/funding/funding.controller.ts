@@ -91,6 +91,13 @@ export class FundingController {
   async findAllServices(@Param('id', ParseObjectIdPipe) id: string): Promise<ServiceDTO[]> {
     return await this.fundingService.findAllServices(id);
   }
+  /** Get service by Id */
+  @Get(':serviceId/service')
+  @Public()
+  @ApiOkResponse({ type: [ServiceDTO] })
+  async findService(@Param('id', ParseObjectIdPipe) id: string): Promise<ServiceDTO[]> {
+    return await this.fundingService.findService(id);
+  }
 
   /** Get all comments */
   @Get(':id/comments')

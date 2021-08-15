@@ -1,6 +1,6 @@
-export class CreateAuthorizationserviceDto {}
+export class CreateAuthorizationserviceDto { }
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsDateString, IsEmail, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsPhoneNumber, IsString, IsUrl } from 'class-validator';
+import { IsArray, IsMongoId, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateAuthorizationServiceDTO {
     @ApiProperty()
@@ -15,4 +15,7 @@ export class CreateAuthorizationServiceDTO {
     @IsNotEmpty()
     @IsNumber()
     available: number;
+    @IsOptional()
+    @IsArray()
+    modifiers: Array<string>;
 }

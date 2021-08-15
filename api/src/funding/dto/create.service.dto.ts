@@ -12,7 +12,7 @@ export class CreateServiceDto {
     name: string;
     @ApiProperty()
     @IsNotEmpty()
-    @IsString()
+    @IsMongoId()
     serviceId: string;
     @ApiProperty()
     @IsNotEmpty()

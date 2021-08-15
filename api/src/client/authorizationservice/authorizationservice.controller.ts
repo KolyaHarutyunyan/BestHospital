@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ParseObjectIdPipe, Public } from '../../util';
 import { AuthorizationserviceService } from './authorizationservice.service';
-import { AuthorizationServiceDTO, CreateAuthorizationServiceDTO } from './dto';
+import { AuthorizationServiceDTO, CreateAuthorizationServiceDTO, UpdateAuthorizationserviceDTO } from './dto';
 
 @Controller('authorizationservice')
 @ApiTags('Authorization Service Endpoints')
@@ -11,6 +11,7 @@ export class AuthorizationserviceController {
 
   @Post('authorization/:authorizationId/fundingService/:fundingServiceId')
   @Public()
+  @ApiOkResponse({type: AuthorizationServiceDTO})
   create(
     @Param('authorizationId', ParseObjectIdPipe) authorizationId: string,
     @Param('fundingServiceId', ParseObjectIdPipe) fundingServiceId: string,
@@ -26,23 +27,29 @@ export class AuthorizationserviceController {
   //   @Body() createAuthorizationServiceDTO: CreateAuthorizationServiceDTO) {
   //   return this.clientService.createAuthorizationService(id, fundingServiceId, createAuthorizationServiceDTO);
   // }
-  // @Get()
-  // findAll() {
-  //   return this.authorizationserviceService.findAll();
-  // }
+  @Get('authorization/:authorizationId')
+  @ApiOkResponse({type: AuthorizationServiceDTO})
+  @Public()
+  findAll(@Param('authorizationId', ParseObjectIdPipe) authorizationId: string) {
+    return this.authorizationserviceService.findAll(authorizationId);
+  }
 
   // @Get(':id')
   // findOne(@Param('id') id: string) {
   //   return this.authorizationserviceService.findOne(+id);
   // }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateAuthorizationserviceDto: UpdateAuthorizationserviceDto) {
-  //   return this.authorizationserviceService.update(+id, updateAuthorizationserviceDto);
-  // }
+  @Patch(':id')
+  @Public()
+  @ApiOkResponse({type: AuthorizationServiceDTO})
+  update(@Param('id', ParseObjectIdPipe) id: string, @Body() updateAuthorizationserviceDto: UpdateAuthorizationserviceDTO) {
+    return this.authorizationserviceService.update(id, updateAuthorizationserviceDto);
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.authorizationserviceService.remove(+id);
-  // }
+  @Delete(':id')
+  @Public()
+  @ApiOkResponse({type: String})
+  remove(@Param('id',ParseObjectIdPipe) id: string) {
+    return this.authorizationserviceService.remove(id);
+  }
 }

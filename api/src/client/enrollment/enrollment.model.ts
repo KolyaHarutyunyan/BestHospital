@@ -4,7 +4,6 @@ import { IEnrollment } from './interface';
 const ClientEnrollmentSchema = new Schema({
     clientId: { type: Types.ObjectId, ref: 'Client' },
     funderId: {type: Types.ObjectId, ref: "Funder"},
-    fundingSource: { type: String },
     primary: { type: Boolean },
     startDate: { type: Date },
     terminationDate: { type: Date },
