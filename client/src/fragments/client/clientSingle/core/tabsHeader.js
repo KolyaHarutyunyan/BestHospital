@@ -3,10 +3,11 @@ import {Images} from "@eachbase/utils";
 import {AddButton, AddModalButton, SimpleModal} from "@eachbase/components";
 import React, {useEffect, useState} from "react";
 import {StaffAddNotes} from "@eachbase/fragments";
-import {EditClient} from "@eachbase/fragments/client";
+import {EditClient,AddContact} from "@eachbase/fragments/client";
 import {useDispatch, useSelector} from "react-redux";
 import {clientActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
+
 
 
 const editButtonStyle = {
@@ -14,7 +15,7 @@ const editButtonStyle = {
     paddingInline: 24
 }
 
-export const TabsHeader = ({activeTab,  data}) => {
+export const TabsHeader = ({activeTab, data}) => {
 
     const params = useParams()
     const classes = serviceSingleStyles()
@@ -22,17 +23,19 @@ export const TabsHeader = ({activeTab,  data}) => {
     const dispatch = useDispatch()
 
 
-
     useEffect(() => {
 
         if (activeTab === 1) {
-             dispatch(clientActions.getClientsContacts(params.id))
+
+        }
+        switch (activeTab) {
+            case 1 :  dispatch(clientActions.getClientsContacts(params.id))
+            case 2 :  dispatch(clientActions.getClientsEnrollment(params.id))
         }
     }, [activeTab])
 
 
-    const contacts = useSelector(state=> state.client)
-    console.log(contacts,'contacts')
+    const contacts = useSelector(state => state.client)
 
     const handleOpenClose = () => {
         setOpen(!open)
@@ -54,17 +57,34 @@ export const TabsHeader = ({activeTab,  data}) => {
                 </li>
                 <li>
                     {
-                        activeTab === 0 ? <AddModalButton btnStyles={editButtonStyle} handleClick={() => setOpen(true)}
-                                                          text='Edit'/> : activeTab === 4 ?
-                            <AddButton text='Add Note' handleClick={handleOpenClose}/> : null
+                        activeTab === 0 ?
+                            <AddModalButton btnStyles={editButtonStyle}
+                                            handleClick={() => setOpen(true)}
+                                            text='Edit'/> :
+                            activeTab !== 6 ?
+                                <AddButton text={activeTab === 1 ? 'Add Contact' :
+                                    activeTab === 2 ? 'Add Enrollments' :
+                                        activeTab === 3 ? 'Add Authorization' :
+                                            activeTab === 4 ? 'Add Availability Schedule' : 'Add Notes'
+                                } handleClick={handleOpenClose}/> : null
                     }
                 </li>
             </ul>
             <SimpleModal
                 openDefault={open}
                 handleOpenClose={handleOpenClose}
-                content={activeTab === 0 ? <EditClient handleClose={handleOpenClose}/> : activeTab === 4 ?
-                    <StaffAddNotes handleClose={handleOpenClose}/> : null}
+                content={activeTab === 0 ? <EditClient handleClose={handleOpenClose}/> :
+                    activeTab === 1 ?
+                       <AddContact />:
+                        activeTab === 2 ?
+                            <p>add Enrollment</p> :
+                            activeTab === 3 ?
+                                <p>add Auth</p> :
+                                activeTab === 4 ?
+                                    <p>add availab</p> :
+                                    activeTab === 5 ?
+                                        <p>add notes</p> : null
+                }
             />
         </div>
     )
