@@ -94,9 +94,9 @@ export class FundingService {
   }
 
   /** Create a new modifier */
-  async createModifier(dto: CreateModifierDto, _id: string): Promise<ModifyDTO> {
+  async createModifier(dto: CreateModifierDto, serviceId: string): Promise<ModifyDTO> {
     try {
-      const fundingService = await this.serviceModel.findOne({ _id });
+      const fundingService = await this.serviceModel.findOne({ _id: serviceId });
       this.checkFundingService(fundingService)
       const modify = new this.modifyModel({
         chargeRate: dto.chargeRate,
@@ -104,7 +104,7 @@ export class FundingService {
         type: dto.type,
         credential: await this.checkCredential(dto.credentialId)
       })
-      fundingService.modifiers.push(modify)
+      fundingService.modifiers.push(modify._id)
       await modify.save()
       await fundingService.save()
       return modify;
@@ -154,7 +154,31 @@ export class FundingService {
       throw e;
     }
   }
-
+    /** returns service by id */
+    async findService(_id: string): Promise<ServiceDTO[]> {
+      try {
+        const services = await this.serviceModel.find({ _id }).populate('serviceId').populate({
+          path: 'modifiers',
+          populate: { path: 'credential' }
+        });
+        // return this.sanitizer.sanitizeMany(services);
+        return services
+      } catch (e) {
+        throw e;
+      }
+    }
+  /** returns all services for client*/
+  async findAllServiceForClient(_id: string, fundingServiceId: string): Promise<ServiceDTO[]> {
+    try {
+      const funder = await this.model.findOne({ _id });
+      this.checkFunder(funder);
+      const services = await this.serviceModel.find({ funderId: _id, _id: fundingServiceId }).populate('modifiers');
+      // return this.sanitizer.sanitizeMany(services);
+      return services
+    } catch (e) {
+      throw e;
+    }
+  }
   /** returns all comments */
   async getComments(_id, skip, limit): Promise<any> {
     const funder = await this.model.findOne({ _id });
