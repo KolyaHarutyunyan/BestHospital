@@ -2,14 +2,14 @@ import {serviceSingleStyles} from "./styles";
 import {Images} from "@eachbase/utils";
 import {AddButton, AddModalButton, SimpleModal} from "@eachbase/components";
 import React, {useState} from "react";
-import {CreateStaff, StaffAddNotes} from "@eachbase/fragments";
+import {CreateStaff, StaffAddNotes, CredentialModal} from "@eachbase/fragments";
 
 const editButtonStyle = {
     height: 36,
     paddingInline: 24
 }
 
-export const StaffItemHeader = ({activeTab,}) => {
+export const StaffItemHeader = ({credModalType, openCloseCredModal, openCredModal, activeTab,}) => {
     const classes = serviceSingleStyles()
     const [open, setOpen] = useState()
 
@@ -33,16 +33,19 @@ export const StaffItemHeader = ({activeTab,}) => {
                 </li>
                 <li>
                     {
-                        activeTab === 0 ? <AddModalButton btnStyles={editButtonStyle} handleClick={() => setOpen(true)} text='edit'/> : activeTab === 4 ? <AddButton
-                            text='Add Note'
-                            handleClick={handleOpenClose}/> : null
+                        activeTab === 0 ?
+                            <AddModalButton btnStyles={editButtonStyle} handleClick={() => setOpen(true)} text='edit'/> : activeTab === 2 ?
+                            <AddButton text='Add Credential' handleClick={() => openCloseCredModal('addCredential')}  /> : activeTab === 4 ?
+                                <AddButton text='Add Note' handleClick={handleOpenClose}/> : null
                     }
                 </li>
             </ul>
             <SimpleModal
-                openDefault={open}
-                handleOpenClose={handleOpenClose}
-                content={activeTab === 0 ?  <CreateStaff handleClose={handleOpenClose}/> : activeTab === 4 ? <StaffAddNotes handleClose={handleOpenClose} /> : null}
+                openDefault={activeTab === 2 ? openCredModal : open}
+                handleOpenClose={activeTab === 2 ? ()=> openCloseCredModal() : handleOpenClose}
+                content={activeTab === 0 ?
+                    <CreateStaff handleClose={handleOpenClose}/> : activeTab === 2 ?
+                        <CredentialModal credModalType={credModalType} handleClose={() => openCloseCredModal()} /> : activeTab === 4 ? <StaffAddNotes handleClose={handleOpenClose} /> : null}
             />
         </div>
     )
