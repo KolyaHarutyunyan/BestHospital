@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDate, IsEmail, IsEnum, IsMongoId, IsNotEmpty, IsPhoneNumber, IsString, IsUrl } from 'class-validator';
-import { ClientStatus } from '../client.constants';
 
 export class CreateContactDTO {
     @ApiProperty()
@@ -21,4 +20,3 @@ export class CreateContactDTO {
     phoneNumber: string;
     // address
 }
-

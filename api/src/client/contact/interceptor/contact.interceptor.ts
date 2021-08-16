@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ISanitize } from '../../util';
+import { ISanitize } from '../../../util';
 import { IContact } from '../interface';
 import { ContactDTO } from '../dto';
 // import { AddressSanitizer } from '../../address';
