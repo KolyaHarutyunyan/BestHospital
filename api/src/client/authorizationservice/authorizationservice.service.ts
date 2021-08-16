@@ -14,10 +14,7 @@ import { FundingService } from '../../funding';
 export class AuthorizationserviceService {
   constructor(
     private readonly sanitizer: AuthorizationServiceSanitizer,
-
     private readonly fundingService: FundingService,
-
-
   ) {
     this.model = ClientAuthorizationServiceModel;
     this.authorizationModel = ClientAuthorizationModel;
@@ -25,7 +22,6 @@ export class AuthorizationserviceService {
   }
   private model: Model<IAuthorizationService>;
   private authorizationModel: Model<IAuthorization>;
-
   private mongooseUtil: MongooseUtil;
 
   async create(authorizationId: string, fundingServiceId: string, dto: CreateAuthorizationServiceDTO): Promise<AuthorizationServiceDTO> {
@@ -51,7 +47,6 @@ export class AuthorizationserviceService {
           }
         })
       }
-      console.log(fundingService);
       let authorizationService = new this.model({
         total: dto.total,
         completed: dto.completed,
