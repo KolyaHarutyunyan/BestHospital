@@ -1,6 +1,6 @@
 import {
     CREATE_CLIENT, CREATE_CLIENT_CONTACT,
-    DELETE_CLIENT, EDIT_CLIENT,
+    DELETE_CLIENT, EDIT_CLIENT, EDIT_CLIENT_CONTACT,
     GET_CLIENT_BY_ID, GET_CLIENT_CONTACTS, GET_CLIENT_ENROLLMENT,
     GET_CLIENTS,
 } from "./client.types";
@@ -54,6 +54,17 @@ export const getClientsContacts = (id) => {
 export const createClientContact = (body, id) => {
     return {
         type: CREATE_CLIENT_CONTACT,
+        payload: {
+            body,
+            id
+        }
+    }
+}
+
+
+export const editClientContact = (body, id) => {
+    return {
+        type: EDIT_CLIENT_CONTACT,
         payload: {
             body,
             id

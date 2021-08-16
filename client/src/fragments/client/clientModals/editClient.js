@@ -10,7 +10,6 @@ import {useParams} from "react-router-dom";
 export const EditClient = ({handleClose}) => {
     let params = useParams()
     const data = useSelector(state=>state.client.clientItemInfo)
-    console.log(data,'dataaaaa')
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState({
         "firstName": data?.firstName,
@@ -28,13 +27,7 @@ export const EditClient = ({handleClose}) => {
 
     const classes = createClientStyle()
     const dispatch = useDispatch()
-    const handleCheck = (bool) => {
-        if (bool === true) {
-            setError("Not valid email");
-        } else {
-            setError("");
-        }
-    };
+
 
     const handleChange = e => setInputs(
         prevState => ({...prevState, [e.target.name]: e.target.value}),
@@ -100,7 +93,6 @@ export const EditClient = ({handleClose}) => {
                     {step === 'first' ? <div style={{width: 463}}>
                         <ValidationInput
                             variant={"outlined"}
-                            sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.firstName}
                             type={"text"}
@@ -110,7 +102,6 @@ export const EditClient = ({handleClose}) => {
                         />
                         <ValidationInput
                             variant={"outlined"}
-                            sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.middleName}
                             type={"text"}
@@ -120,7 +111,6 @@ export const EditClient = ({handleClose}) => {
                         />
                         <ValidationInput
                             variant={"outlined"}
-                            sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.lastName}
                             type={"text"}
@@ -130,7 +120,6 @@ export const EditClient = ({handleClose}) => {
                         />
                         <ValidationInput
                             variant={"outlined"}
-                            sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.code}
                             type={"number"}
@@ -144,7 +133,6 @@ export const EditClient = ({handleClose}) => {
                             name={"gender"}
                             label={"Gender*"}
                             handleSelect={handleChange}
-                            sendBoolean={handleCheck}
                             value={inputs.gender}
                             list={list}
                             typeError={error === 'gender' ? ErrorText.field : ''}
@@ -152,7 +140,6 @@ export const EditClient = ({handleClose}) => {
                         />
                         <ValidationInput
                             variant={"outlined"}
-                            sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.birthday}
                             type={"date"}
@@ -162,7 +149,6 @@ export const EditClient = ({handleClose}) => {
                         />
                         <ValidationInput
                             variant={"outlined"}
-                            sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.age}
                             type={"number"}
@@ -172,7 +158,6 @@ export const EditClient = ({handleClose}) => {
                         />
                         <ValidationInput
                             variant={"outlined"}
-                            sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.ethnicity}
                             type={"text"}
@@ -184,7 +169,6 @@ export const EditClient = ({handleClose}) => {
                             name={"language"}
                             label={"Language*"}
                             handleSelect={handleChange}
-                            sendBoolean={handleCheck}
                             value={inputs.language}
                             language={languages}
                             typeError={error === 'language' ? ErrorText.field : ''}
@@ -193,7 +177,6 @@ export const EditClient = ({handleClose}) => {
                             name={"familyLanguage"}
                             label={"Family Language*"}
                             handleSelect={handleChange}
-                            sendBoolean={handleCheck}
                             value={inputs.familyLanguage}
                             language={languages}
                             typeError={error === 'familyLanguage' ? ErrorText.field : ''}

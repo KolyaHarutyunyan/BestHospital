@@ -9,7 +9,7 @@ import {ModalsTabs} from "@eachbase/components/tabs";
 
 
 
-export const ModalHeader = ({handleClose,title, headerBottom,steps}) => {
+export const ModalHeader = ({handleClose,title, headerBottom,steps, text}) => {
     const classes = modalHeadersStyle()
     const globalStyle = useGlobalTextStyles()
 
@@ -19,6 +19,7 @@ export const ModalHeader = ({handleClose,title, headerBottom,steps}) => {
                 <CloseButton handleCLic={handleClose}  />
             </div>
             <p className={globalStyle.modalTitle}>{title}</p>
+            {text && <p className={classes.modalText}>{text}</p>}
             {steps &&  <ModalsTabs steps={steps} />}
             {headerBottom &&  <ModalHeaderBottom />}
 
