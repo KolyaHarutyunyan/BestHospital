@@ -15,7 +15,13 @@ import {useDispatch, useSelector} from "react-redux";
 import {staffStyle} from "../../../pages/staff/styles";
 
 export const StaffItem = () => {
+
+    const credentialData = useSelector(state => state.admins.credentialById)
     const dispatch = useDispatch()
+
+    const params = useParams()
+
+
     const [open, setOpen] = useState(false)
     const [activeTab, setActiveTab] = useState(0)
 
@@ -23,12 +29,6 @@ export const StaffItem = () => {
     const [credModalType, setCredModalType] = useState('')
 
     const classes = staffStyle()
-
-    const params = useParams()
-
-    useEffect(() => {
-        dispatch(adminActions.getAdminById(params.id))
-    }, []);
 
     const staffGeneral = useSelector(state => state.admins.adminInfoById)
 
@@ -82,6 +82,10 @@ export const StaffItem = () => {
         setCredModalType(modalType)
     }
 
+    useEffect(() => {
+        dispatch(adminActions.getCredentialById(params.id))
+    }, [])
+
     const data = [
         {
             date: '06/11/2021',
@@ -112,7 +116,7 @@ export const StaffItem = () => {
             tabComponent: (<StaffEmployment/>)
         },
         {
-            tabComponent: (<StaffCredentials openModal={openCloseCredModal}/>)
+            tabComponent: (<StaffCredentials credentialData={credentialData} openModal={openCloseCredModal}/>)
         },
         {
             tabComponent: (<StaffAccess/>)

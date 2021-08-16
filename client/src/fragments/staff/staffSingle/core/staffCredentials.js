@@ -1,10 +1,11 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {adminActions} from "@eachbase/store";
 import {useDispatch, useSelector} from "react-redux";
 import {Notes, TableBodyComponent} from "@eachbase/components";
 import {TableCell} from "@material-ui/core";
 import {Images} from "@eachbase/utils";
+import moment from 'moment'
 
 const AddCredential = {
     staffId: '610bcdd691e2130e1a12371b',
@@ -25,11 +26,11 @@ const types = [
 ]
 
 
-export const StaffCredentials = ({openModal}) => {
+export const StaffCredentials = ({credentialData,openModal}) => {
 
-    // const dispatch = useDispatch()
+    const dispatch = useDispatch()
 
-    // const params = useParams();
+    const params = useParams()
 
     // const removeCredentialData = {
     //     id: params.id
@@ -38,23 +39,17 @@ export const StaffCredentials = ({openModal}) => {
     const editCredential = (modalType) => {
         openModal(modalType)
     }
-
-    // useEffect(() => {
-    //     dispatch(adminActions.getCredentialById(params.id))
-    // }, [])
+    console.log(credentialData,'cred Data');
 
     // const addCredential = () => {
     //     dispatch(adminActions.createCredential(AddCredential))
     // }
 
-    // const editCredential = () => {
-    //     dispatch(adminActions.editCredentialById(editCredentialData, params.id))
-    // };
+
     // const removeCredential = () => {
     //     dispatch(adminActions.deleteCredentialById(removeCredentialData))
     // }
 
-    // const credentialData = useSelector(state => state.admins.credentialById)
 
     const notesItem = (item, index) => {
         return (
@@ -71,9 +66,9 @@ export const StaffCredentials = ({openModal}) => {
     const data = [
         {
             name: 'HB',
-            type: 'License',
-            receivedDate: '06/20/2020',
-            expirationDate: '06/20/2021',
+            type: credentialData._v ? 'license' : 'noo license',
+            receivedDate: moment(credentialData.expirationDate).format('L'),
+            expirationDate: moment(credentialData.expirationDate).format('L'),
             action:
                 <>
                     <img
