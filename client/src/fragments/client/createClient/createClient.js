@@ -51,8 +51,8 @@ export const CreateClient = ({handleClose}) => {
                     'language': inputs.language,
                     'familyLanguage': inputs.familyLanguage,
                     'gender': inputs.gender,
-                    'birthday': inputs.birthday,
-                    // 'age' : inputs.age,
+                    "birthday": inputs.birthday,
+                     'age' : +inputs.age,
                     "status": 1
                 }
                 dispatch(clientActions.createClient(data))

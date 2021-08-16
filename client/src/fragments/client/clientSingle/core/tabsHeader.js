@@ -3,7 +3,7 @@ import {Images} from "@eachbase/utils";
 import {AddButton, AddModalButton, SimpleModal} from "@eachbase/components";
 import React, {useEffect, useState} from "react";
 import {StaffAddNotes} from "@eachbase/fragments";
-import {EditClient,AddContact} from "@eachbase/fragments/client";
+import {EditClient, AddContact, AddEnrollment} from "@eachbase/fragments/client";
 import {useDispatch, useSelector} from "react-redux";
 import {clientActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
@@ -75,9 +75,9 @@ export const TabsHeader = ({activeTab, data}) => {
                 handleOpenClose={handleOpenClose}
                 content={activeTab === 0 ? <EditClient handleClose={handleOpenClose}/> :
                     activeTab === 1 ?
-                       <AddContact />:
+                       <AddContact handleClose={handleOpenClose} />:
                         activeTab === 2 ?
-                            <p>add Enrollment</p> :
+                           <AddEnrollment handleClose={handleOpenClose}/> :
                             activeTab === 3 ?
                                 <p>add Auth</p> :
                                 activeTab === 4 ?

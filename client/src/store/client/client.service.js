@@ -11,9 +11,11 @@ export const authService = {
 
     getClientByIdService: ({payload}) => axios.get(`/client/${payload.id}`, ),
 
-    getClientContactsService: ({payload}) => axios.get(`/client/${payload.id}/contacts`, ),
+    getClientContactsService: ({payload}) => axios.get(`/contact/client/${payload.id}`, ),
 
-    createClientContactService: ({payload}) => axios.post(`/client/${payload.id}/contact`, payload.body),
+    createClientContactService: ({payload}) => axios.post(`/contact/client/${payload.id}`, payload.body),
+
+    editClientContactService: ({payload}) => axios.patch(`/contact/${payload.id}`, payload.body),
 
     getClientEnrollmentService: ({payload}) => axios.get(`/enrollment/client/${payload.id}`, ),
 

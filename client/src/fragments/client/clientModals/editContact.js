@@ -2,19 +2,26 @@ import React, {useState} from "react";
 import {ValidationInput, SelectInput, CreateChancel, ModalHeader, AddressInput} from "@eachbase/components";
 import {createClientStyle,} from "./styles";
 import {ErrorText, languages} from "@eachbase/utils";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {clientActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 
 
-export const AddContact = ({handleClose}) => {
+export const EditContact = ({handleClose, contactId}) => {
+    const data = useSelector(state=>state?.client?.clientContacts[contactId])
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState({});
+    const [inputs, setInputs] = useState({
+        firstName: data?.firstName,
+        lastName: data?.lastName,
+        phoneNumber: data?.phoneNumber,
+        relationship : data?.relationship
+    });
     const [step, setStep] = useState('first')
     const [fullAddress, setFullAddress] = useState(null)
     const classes = createClientStyle()
     const dispatch = useDispatch()
     const params = useParams()
+
 
 
     const handleChange = e => setInputs(
@@ -38,20 +45,16 @@ export const AddContact = ({handleClose}) => {
             }
         } else if (step === 'second') {
             if ('fullAddress') {
-                const data = {
+                const newData = {
                     "firstName": inputs.firstName,
                     "lastName": inputs.lastName,
                     "phoneNumber": inputs.phoneNumber,
                     "relationship": inputs.relationship,
                 }
-                dispatch(clientActions.createClientContact(data, params.id))
+                dispatch(clientActions.editClientContact(newData, data.id))
             } else {
                 setError(
-                    !inputs.gender ? 'gender' :
-                        !inputs.birthday ? 'birthday' :
-                            !inputs.age ? 'age' :
-                                !inputs.language ? 'language' :
-                                    !inputs.familyLanguage ? 'familyLanguage' :
+                    !inputs.firstName ? 'firstName' :
                                         'Input is not field'
                 )
             }
@@ -60,11 +63,10 @@ export const AddContact = ({handleClose}) => {
         }
     }
 
-    console.log(fullAddress,'adreeeeeeeeeeeeeeesssss')
 
     return (
         <div className={classes.createFoundingSource}>
-            <ModalHeader secondStepInfo={'Address'} steps={step} handleClose={handleClose} title={'Add Contact'}/>
+            <ModalHeader secondStepInfo={'Address'} steps={step} handleClose={handleClose} title={'Edit Contact'}/>
             <div className={classes.createFoundingSourceBody}>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
                     {step === 'first' ? <div style={{width: 463}}>
