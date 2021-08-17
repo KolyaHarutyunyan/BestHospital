@@ -7,7 +7,7 @@ export class CreateAuthorizationDTO {
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
-    authorizationId: string;
+    authId: string;
     @ApiProperty()
     @IsNotEmpty()
     @IsString()

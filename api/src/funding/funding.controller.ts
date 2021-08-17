@@ -36,7 +36,7 @@ export class FundingController {
   @Public()
   @ApiOkResponse({ type: ServiceDTO })
   async createService(@Param('id', ParseObjectIdPipe) id: string,
-    @Body() createServiceDTO: CreateServiceDto): Promise<ServiceDTO> {
+    @Body() createServiceDTO: CreateServiceDto) : Promise<ServiceDTO> {
     const staffId = '60f01ec194abb63ff8f0aa75';
     const service = await this.fundingService.createService(createServiceDTO, id);
     return service

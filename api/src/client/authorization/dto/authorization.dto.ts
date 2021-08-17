@@ -7,7 +7,7 @@ export class AuthorizationDTO {
     @ApiProperty()
     clientId: string;
     @ApiProperty()
-    authorizationId: string;
+    authId: string;
     @ApiProperty()
     funderId: string;
     @ApiProperty()

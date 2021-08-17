@@ -39,7 +39,7 @@ export class CreateClientDTO {
     age: number;
     @ApiProperty()
     @IsNotEmpty()
-    @IsString()
+    @IsDateString()
     birthday: Date;
     @ApiProperty({ enum: ClientStatus })
     @IsEnum(ClientStatus)

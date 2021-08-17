@@ -14,7 +14,7 @@ export class AuthorizationSanitizer implements ISanitize {
         const authorizationDTO: AuthorizationDTO = {
             id: authorization.id,
             clientId: authorization.clientId,
-            authorizationId: authorization.authorizationId,
+            authId: authorization.authId,
             funderId: authorization.funderId,
             startDate: authorization.startDate,
             endDate: authorization.endDate,
