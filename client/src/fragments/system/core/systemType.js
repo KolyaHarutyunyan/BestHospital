@@ -1,6 +1,5 @@
-import {Notes, TableBodyComponent, AddButton, ValidationInput} from "@eachbase/components";
 import {TableCell} from "@material-ui/core";
-import React from "react";
+import {Notes, TableBodyComponent, AddButton, ValidationInput} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
 import { systemItemStyles} from './styles'
 

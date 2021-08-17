@@ -1,11 +1,9 @@
-import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {adminActions} from "@eachbase/store";
-import {useDispatch, useSelector} from "react-redux";
-import {Notes, TableBodyComponent} from "@eachbase/components";
+import {useDispatch} from "react-redux";
 import {TableCell} from "@material-ui/core";
+import {Notes, TableBodyComponent} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
-import moment from 'moment'
+import moment from 'moment';
 
 const AddCredential = {
     staffId: '610bcdd691e2130e1a12371b',
@@ -28,10 +26,6 @@ const types = [
 
 export const StaffCredentials = ({credentialData,openModal}) => {
 
-    const dispatch = useDispatch()
-
-    const params = useParams()
-
     // const removeCredentialData = {
     //     id: params.id
     // }
@@ -40,11 +34,6 @@ export const StaffCredentials = ({credentialData,openModal}) => {
         openModal(modalType)
     }
     console.log(credentialData,'cred Data');
-
-    // const addCredential = () => {
-    //     dispatch(adminActions.createCredential(AddCredential))
-    // }
-
 
     // const removeCredential = () => {
     //     dispatch(adminActions.deleteCredentialById(removeCredentialData))

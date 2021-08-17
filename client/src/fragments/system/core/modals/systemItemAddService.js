@@ -46,7 +46,7 @@ export const SystemItemAddService = ({modalType, handleClose}) => {
     }
 
     const handleChange = () =>{
-        console.log('handle Cahnge')
+        console.log('handle Change')
     }
 
     return (

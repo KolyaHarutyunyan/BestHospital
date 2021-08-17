@@ -1,7 +1,7 @@
-import {AddButton, SelectInput, ValidationInput} from "@eachbase/components";
-import React from "react";
-import {systemItemStyles} from "./styles";
+import {AddButton, ValidationInput} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
+import {systemItemStyles} from "./styles";
+
 
 const credentialBtn = {
     maxWidth: '174px',

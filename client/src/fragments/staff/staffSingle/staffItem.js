@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {adminActions} from "@eachbase/store";
-import {Images} from "@eachbase/utils";
 import {TableCell} from "@material-ui/core";
+import {adminActions} from "@eachbase/store";
 import {StaffGeneral, StaffHistory, StaffCredentials, StaffEmployment, StaffAccess, StaffItemHeader} from "./core";
+import {Images} from "@eachbase/utils";
 import {
     SimpleTabs,
     Notes,
@@ -12,7 +12,7 @@ import {
     TableBodyComponent,
 } from "@eachbase/components";
 import {useDispatch, useSelector} from "react-redux";
-import {staffStyle} from "../../../pages/staff/styles";
+import {staffStyle} from "@eachbase/pages/staff/styles";
 
 export const StaffItem = () => {
 
@@ -84,6 +84,7 @@ export const StaffItem = () => {
 
     useEffect(() => {
         dispatch(adminActions.getCredentialById(params.id))
+        dispatch(adminActions.getAdminById(params.id))
     }, [])
 
     const data = [
