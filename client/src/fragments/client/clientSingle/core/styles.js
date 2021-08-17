@@ -50,5 +50,26 @@ export const serviceSingleStyles = makeStyles(() => ({
         '& p:not(:last-child)': {
             marginRight: 8
         }
-    }
+    },
+    select:{
+        width:'100%',
+        '& .MuiOutlinedInput-notchedOutline':{
+            borderColor:Colors.BackgroundBlue,
+        },
+        '& .MuiOutlinedInput-root':{
+            height:'36px',
+            marginTop : 10,
+            marginRight: 30,
+        },
+        '& .MuiInputLabel-outlined':{
+            marginTop:'-3px',
+            color :Colors.TextPrimary
+        },
+        '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+            transform: 'translate(14px, -2px) scale(0.75)'
+        },
+        '&:hover .MuiOutlinedInput-notchedOutline':{
+            borderColor:Colors.BackgroundBlue,
+        },
+    },
 }));
