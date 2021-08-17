@@ -7,11 +7,13 @@ import { ClientContactModel } from './contact.model';
 import { ContactSanitizer } from './interceptor';
 import { ClientModel } from '../client.model';
 import { IClient } from '../interface';
+import { AddressService } from '../../address';
 
 @Injectable()
 export class ContactService {
   constructor(
     private readonly sanitizer: ContactSanitizer,
+    private readonly addressService: AddressService,
   ) {
     this.model = ClientContactModel;
     this.clientModel = ClientModel;
@@ -35,6 +37,7 @@ export class ContactService {
         lastName: dto.lastName,
         relationship: dto.relationship,
         phoneNumber: dto.phoneNumber,
+        address: await this.addressService.getAddress(dto.address),
       });
       await contact.save();
       return this.sanitizer.sanitize(contact);
@@ -70,6 +73,8 @@ export class ContactService {
       if (dto.lastName) contact.lastName = dto.lastName;
       if (dto.relationship) contact.relationship = dto.relationship;
       if (dto.phoneNumber) contact.phoneNumber = dto.phoneNumber;
+      if (dto.address)
+        contact.address = await this.addressService.getAddress(dto.address);
       await contact.save();
       return this.sanitizer.sanitize(contact);
     } catch (e) {

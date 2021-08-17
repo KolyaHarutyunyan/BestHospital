@@ -10,6 +10,8 @@ export class UpdateContactDTO {
     relationship: string;
     @ApiProperty()
     phoneNumber: string;
-    // address
+    @ApiProperty()
+    @IsNotEmpty()
+    address: string;
 }
 

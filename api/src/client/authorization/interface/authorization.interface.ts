@@ -4,7 +4,7 @@ import { IAddress } from '../../../address';
 export interface IAuthorization extends Document {
     id: string;
     clientId: string;
-    authorizationId: string;
+    authId: string;
     funderId: string;
     startDate: string;
     endDate: string;

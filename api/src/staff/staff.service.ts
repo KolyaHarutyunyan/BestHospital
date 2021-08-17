@@ -162,7 +162,7 @@ export class StaffService {
   // find the credentials
   async findCredential(_id: string): Promise<StaffCredentialDTO> {
     try {
-      const staffCredentials = await this.staffCredentailModel.findById({ _id });
+      const staffCredentials = await this.staffCredentailModel.findById({ _id }).populate('credentialId');
       this.checkStaffCredential(staffCredentials)
       return staffCredentials;
     } catch (e) {

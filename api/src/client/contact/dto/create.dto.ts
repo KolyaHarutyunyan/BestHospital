@@ -18,5 +18,7 @@ export class CreateContactDTO {
     @IsNotEmpty()
     @IsPhoneNumber('US')
     phoneNumber: string;
-    // address
+    @ApiProperty()
+    @IsNotEmpty()
+    address: string;
 }

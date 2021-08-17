@@ -31,8 +31,8 @@ export class ClientService {
   /** Create a new client */
   create = async (dto: CreateClientDTO): Promise<ClientDTO> => {
     try {
-      let birthday = new Date(dto.birthday);
-      this.checkTime(birthday);
+      // let birthday = new Date(dto.birthday);
+      // this.checkTime(birthday);
 
       let client = new this.model({
         firstName: dto.firstName,
@@ -45,10 +45,10 @@ export class ClientService {
         gender: dto.gender,
         age: dto.age,
         status: dto.status,
-        // birthday: dto.birthday
+        birthday: dto.birthday
         // address: await this.addressService.getAddress(dto.address),
       });
-      client.birthday = birthday.toLocaleDateString();
+      // client.birthday = birthday.toLocaleDateString();
       await client.save();
       return this.sanitizer.sanitize(client);
     } catch (e) {
@@ -109,8 +109,10 @@ export class ClientService {
 
   /** Delete the Client */
   async remove(_id: string): Promise<string> {
-    const client = await this.model.findByIdAndDelete({ _id });
+    const client = await this.model.findById({ _id });
     this.checkClient(client);
+
+    await client.remove()
     return client._id;
   }
 

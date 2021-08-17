@@ -44,7 +44,7 @@ export class AuthorizationService {
       const funder = await this.fundingService.findOne(funderId);
 
       let authorization = new this.model({
-        authorizationId: dto.authorizationId,
+        authId: dto.authId,
         clientId: client._id,
         funderId: funder.id,
         address: await this.addressService.getAddress(dto.address),
@@ -73,8 +73,9 @@ export class AuthorizationService {
   }
 
   async remove(_id: string):Promise<string> {
-    const authorization = await this.model.findByIdAndDelete({ _id });
+    const authorization = await this.model.findById({ _id });
     this.checkAuthorization(authorization);
+    authorization.remove();
     return authorization._id;
   }
   /** Private methods */

@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { ISanitize } from '../../../util';
 import { IContact } from '../interface';
 import { ContactDTO } from '../dto';
-// import { AddressSanitizer } from '../../address';
+import { AddressSanitizer } from '../../../address';
 
 @Injectable()
 export class ContactSanitizer implements ISanitize {
     constructor(
-        //   private readonly addressSanitizer: AddressSanitizer
+          private readonly addressSanitizer: AddressSanitizer
     ) { }
 
     sanitize(contact: IContact): ContactDTO {
@@ -17,6 +17,7 @@ export class ContactSanitizer implements ISanitize {
             lastName: contact.lastName,
             relationship: contact.relationship,
             phoneNumber: contact.phoneNumber,
+            address: this.addressSanitizer.sanitize(contact.address)
         };
         return contactDTO;
     }
