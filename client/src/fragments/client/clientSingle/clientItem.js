@@ -4,19 +4,21 @@ import {
     SimpleTabs,
     Notes,
     TableWrapperGeneralInfo,
-    InactiveModal,
+    InactiveModal, SimpleModal,
 } from "@eachbase/components";
 import {clientActions} from "@eachbase/store";
 
-import {  ClientGeneral, ClientContact,TabsHeader,ClientEnrollment} from "./core";
+import {ClientGeneral, ClientContact, TabsHeader, ClientEnrollment} from "./core";
 import {useDispatch, useSelector} from "react-redux";
+import {EditContact} from "../clientModals";
 
 
 export const ClientItem = () => {
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const [activeTab, setActiveTab] = useState(0)
-
+    const [contactId, setContactId] = useState(null)
+    const [openModal, setOpenModal] = useState(false)
     const params = useParams()
 
     useEffect(() => {
@@ -26,9 +28,11 @@ export const ClientItem = () => {
     const data = useSelector(state => state.client.clientItemInfo)
 
 
-
     const handleOpenClose = () => {
         setOpen(!open)
+    }
+    const handleOpenCloseModal = () => {
+        setOpenModal(!openModal)
     }
 
     const tabsLabels = [
@@ -61,19 +65,19 @@ export const ClientItem = () => {
             tabComponent: (<ClientGeneral data={data}/>)
         },
         {
-            tabComponent: ( <ClientContact data={data} /> )
+            tabComponent: (<ClientContact data={data} handleOpenClose={handleOpenCloseModal} setContactId={setContactId}/>)
         },
         {
-            tabComponent: ( <ClientEnrollment data={data} />)
+            tabComponent: (<ClientEnrollment data={data}/>)
         },
         {
-            tabComponent: (<ClientContact />)
+            tabComponent: (<ClientContact/>)
         },
         {
-            tabComponent: (<ClientContact />)
+            tabComponent: (<ClientContact/>)
         },
         {
-            tabComponent: (<ClientContact />)
+            tabComponent: (<ClientContact/>)
         },
     ];
 
@@ -92,8 +96,9 @@ export const ClientItem = () => {
                 handleOpenClose={handleOpenClose}
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
+                <SimpleModal openDefault={openModal} content={<EditContact contactId={contactId} handleClose={handleOpenCloseModal}/>}/>
                 <div style={{backgroundColor: 'white', padding: '20px'}}>
-                    <TabsHeader data={data}  activeTab={activeTab} />
+                    <TabsHeader data={data} activeTab={activeTab} />
                     <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
                 </div>
             </TableWrapperGeneralInfo>

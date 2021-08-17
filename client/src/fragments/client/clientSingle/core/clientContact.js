@@ -3,9 +3,13 @@ import { serviceSingleStyles } from './styles';
 import { Colors, Images } from "@eachbase/utils";
 import {TableCell} from "@material-ui/core";
 import React from "react";
+import {useSelector} from "react-redux";
 
-export const ClientContact = ({data}) =>{
+export const ClientContact = ({data,setContactId,handleOpenClose}) =>{
     const classes = serviceSingleStyles()
+
+    const clients = useSelector(state=>state.client.clientContacts)
+    console.log(clients,'clieeeeeeentssssasasasa')
 
     const generalInfo = [
         {title: 'First Name', value: data?.firstName},
@@ -42,16 +46,20 @@ export const ClientContact = ({data}) =>{
     ];
 
 
-    let serviceItem = (item, index) => {
+    let clientContactItem = (item, index) => {
         return (
             <TableBodyComponent key={index}>
-                <TableCell><p style={{textOverflow: 'ellipsis', width: 100, overflow: 'hidden'}}>fghfgh</p></TableCell>
-                <TableCell>  fghfghfg  </TableCell>
-                <TableCell>  fghfghfg  </TableCell>
-                <TableCell>  fghfghfg  </TableCell>
+                <TableCell><p style={{textOverflow: 'ellipsis', width: 100, overflow: 'hidden'}}>{item.firstName}</p></TableCell>
+                <TableCell>  {item.lastName}  </TableCell>
+                <TableCell>  {item.relationship}  </TableCell>
+                <TableCell>  {item.phoneNumber}  </TableCell>
+                <TableCell>  {item.phoneNumber}  </TableCell>
                 <TableCell>
                     <>
-                        <img src={Images.edit} alt="edit" style={{cursor: 'pointer'}} onClick={() => alert(item._id)}/>
+                        <img src={Images.edit} alt="edit" style={{cursor: 'pointer'}} onClick={() => {
+                            setContactId(index)
+                            handleOpenClose()
+                        }}/>
                         <img src={Images.remove} alt="delete" style={{marginLeft: 16, cursor: 'pointer'}}
                              onClick={() => alert(index)}/>
                     </>
@@ -73,8 +81,8 @@ export const ClientContact = ({data}) =>{
             <div style={{width:24}} />
             <div style={{marginTop: -32, width: '100%'}}>
                 <Notes
-                    // data={data}
-                    items={serviceItem} headerTitles={headerTitles} defaultStyle={true}/>
+                     data={clients}
+                    items={clientContactItem} headerTitles={headerTitles} defaultStyle={true}/>
             </div>
 
         </div>

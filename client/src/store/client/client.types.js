@@ -22,6 +22,9 @@ export const GET_CLIENT_CONTACTS_SUCCESS = 'GET_CLIENT_CONTACTS_SUCCESS';
 /** Create client contact **/
 export const CREATE_CLIENT_CONTACT = 'CREATE_CLIENT_CONTACT'
 
+/** Edit client contact **/
+export const EDIT_CLIENT_CONTACT = 'EDIT_CLIENT_CONTACT'
+
 
 /**get client enrollment */
 export const GET_CLIENT_ENROLLMENT = 'GET_CLIENT_ENROLLMENT';

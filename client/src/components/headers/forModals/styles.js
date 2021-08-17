@@ -76,6 +76,13 @@ export const modalHeadersStyle = makeStyles(() => ({
         position:'relative',
         width:64,
         background: Colors.BackgroundPrimary,
+    },
+    modalText: {
+        color: Colors.TextPrimary,
+        fontSize: 16,
+        marginTop:16,
+        width:463,
+        lineHeight : 1.5
     }
 }));
 
