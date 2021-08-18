@@ -151,7 +151,7 @@ export const EditClient = ({handleClose}) => {
                             variant={"outlined"}
                             onChange={handleChange}
                             value={inputs.age}
-                            type={"number"}
+                            type={"text"}
                             label={"Age*"}
                             name='age'
                             typeError={error === 'age' && ErrorText.field}
