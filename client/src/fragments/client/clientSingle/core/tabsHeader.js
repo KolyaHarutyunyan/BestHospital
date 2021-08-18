@@ -20,7 +20,7 @@ export const TabsHeader = ({activeTab, data}) => {
     const params = useParams()
     const classes = serviceSingleStyles()
     const [open, setOpen] = useState()
-    const [inputs, setInputs] = useState({});
+    const [inputs, setInputs] = useState({active : 'active'});
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -35,7 +35,7 @@ export const TabsHeader = ({activeTab, data}) => {
     }, [activeTab])
 
 
-    const contacts = useSelector(state => state.client)
+
 
     const handleOpenClose = () => {
         setOpen(!open)
@@ -66,13 +66,17 @@ export const TabsHeader = ({activeTab, data}) => {
                     </div>
                 </li>
                 <li style={{display:'flex', alignItems:'center', }}>
-                    <SelectInput
-                        name={"fundingSource"}
-                        handleSelect={handleChange}
-                        value={inputs.fundingSource}
-                        list={list}
-                        className={classes.select}
-                    />
+                    { activeTab !== 6 &&
+                        <SelectInput
+                            name={"active"}
+                            handleSelect={handleChange}
+                            value={inputs.active}
+                            // label={inputs.active}
+                            list={list}
+                            className={classes.select}
+
+                        />
+                    }
 
                     {
                         activeTab === 0 ?

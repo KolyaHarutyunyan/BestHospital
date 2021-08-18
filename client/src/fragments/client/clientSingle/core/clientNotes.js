@@ -1,9 +1,9 @@
 import React, {useState} from "react";
-import {Notes} from "@eachbase/components";
-import {Images} from "@eachbase/utils";
+import {Notes} from "../../../../components";
+import {Images} from "../../../../utils";
 
 
-export const FundingSourceSingleNotes = () => {
+export const ClientNotes = () => {
 
     const headerTitles = [
         {

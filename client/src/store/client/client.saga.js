@@ -116,6 +116,19 @@ function* getClientEnrollment(action) {
     }
 }
 
+// function* getClientEnrollment(action) {
+//     try {
+//         const res = yield call(authService.getClientEnrollmentService, action);
+//         yield put({
+//             type: GET_CLIENT_ENROLLMENT_SUCCESS,
+//             payload: res.data,
+//         });
+//     } catch (err) {
+//         console.log(err, 'error get en roll')
+//     }
+// }
+
+
 
 export const watchClient = function* watchClientSaga() {
 

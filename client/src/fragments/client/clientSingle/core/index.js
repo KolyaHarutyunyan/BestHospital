@@ -4,3 +4,6 @@ export { ClientContact } from './clientContact';
 export { ClientHistory } from './clientHistory';
 export { TabsHeader } from './tabsHeader';
 export { ClientEnrollment } from './clientEnrollment';
+export { ClientNotes } from './clientNotes';
+export { ClientAvailabilitySchedule } from './clientAvailabilitySchedule';
+export { AvailableHours } from './availableHours';

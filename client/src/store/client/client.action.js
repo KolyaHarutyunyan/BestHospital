@@ -79,3 +79,10 @@ export const getClientsEnrollment = (id) => {
         payload: {id}
     }
 }
+
+// export const a1 = (id) => {
+//     return {
+//         type: GET_CLIENT_ENROLLMENT,
+//         payload: {id}
+//     }
+// }

@@ -38,7 +38,11 @@ export const clientReducer = (state = initialState, action) => {
                 clientEnrollment: action.payload,
             }
 
-
+        // case  GET_CLIENT_ENROLLMENT_SUCCESS:
+        //     return {
+        //         ...state,
+        //         clientEnrollment: action.payload,
+        //     }
         default:
             return state;
     }

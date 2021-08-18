@@ -2,74 +2,114 @@ import {makeStyles} from "@material-ui/core/styles";
 import {Colors} from "../../../../utils";
 
 export const serviceSingleStyles = makeStyles(() => ({
-    // staff general
-    staffGeneralWrapper: {
-        display: 'flex',
-        // justifyContent: 'space-between'
-    },
-    tabsWrapper: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: 36,
-        '& li:first-child': {
+        // staff general
+        staffGeneralWrapper: {
             display: 'flex',
-        }
-    },
-    avatar: {
-        width: 50,
-        height: 50,
-        borderRadius: '50%',
-        position: 'relative',
-        border: `1px solid ${Colors.BackgroundBlue}`,
-        objectFit: 'cover',
-        padding: 3
-    },
-    nameContent: {
-        marginLeft: 19
-    },
-    name: {
-        fontSize: 18,
-        color: Colors.TextSecondary,
-        fontWeight: 'bold',
-        lineHeight: '25px',
-        marginBottom: 8
-    },
-    tagContent: {
-        display: 'flex',
-        alignItems: 'center',
-        '& p': {
-            fontSize: 12,
+            // justifyContent: 'space-between'
+        },
+        tabsWrapper: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: 36,
+            '& li:first-child': {
+                display: 'flex',
+            }
+        },
+        avatar: {
+            width: 50,
+            height: 50,
+            borderRadius: '50%',
+            position: 'relative',
+            border: `1px solid ${Colors.BackgroundBlue}`,
+            objectFit: 'cover',
+            padding: 3
+        },
+        nameContent: {
+            marginLeft: 19
+        },
+        name: {
+            fontSize: 18,
             color: Colors.TextSecondary,
-            fontWeight: 600,
-            backgroundColor: Colors.BackgroundWater,
-            padding: '0 16px',
+            fontWeight: 'bold',
             lineHeight: '25px',
-            borderRadius: 13,
+            marginBottom: 8
         },
-        '& p:not(:last-child)': {
-            marginRight: 8
-        }
+        tagContent: {
+            display: 'flex',
+            alignItems: 'center',
+            '& p': {
+                fontSize: 12,
+                color: Colors.TextSecondary,
+                fontWeight: 600,
+                backgroundColor: Colors.BackgroundWater,
+                padding: '0 16px',
+                lineHeight: '25px',
+                borderRadius: 13,
+            },
+            '& p:not(:last-child)': {
+                marginRight: 8
+            }
+        },
+        select: {
+            width: '100%',
+            '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: Colors.BackgroundBlue,
+            },
+            '& .MuiOutlinedInput-root': {
+                height: '36px',
+                marginTop: 10,
+                marginRight: 30,
+            },
+            '& .MuiInputLabel-outlined': {
+                marginTop: '-3px',
+                color: Colors.TextPrimary
+            },
+            '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+                transform: 'translate(14px, -2px) scale(0.75)'
+            },
+            '&:hover .MuiOutlinedInput-notchedOutline': {
+                borderColor: Colors.BackgroundBlue,
+            },
+        },
+        availableHours: {
+            width: '100%',
+            borderRadius: 8,
+            boxShadow: '0 0 6px #8A8A8A3D',
+            padding: 16
+        },
+        availableHoursTitle: {
+            color: '#4B5C68',
+            fontSize: 18,
+            fontWeight: "bold"
+        },
+        availableHoursBox: {
+            width: 241,
+            boxShadow: '0px 0px 6px #8A8A8A3D',
+            borderRadius: 4,
+            margin: 8
+        },
+        availableHoursBoxHeader: {
+            width: '100%',
+            height: 40,
+            borderRadius: 4,
+            background: '#347AF01A',
+            display: 'flex',
+            alignItems: "center",
+            color: '#347AF0',
+            fontSize: 14,
+            fontWeight: "bold",
+            paddingLeft: 16,
+        },
+    availableHoursBoxBody:{
+            height: 162,
+            overflow : "auto",
+        padding :' 8px 0 8px 16px'
     },
-    select:{
-        width:'100%',
-        '& .MuiOutlinedInput-notchedOutline':{
-            borderColor:Colors.BackgroundBlue,
-        },
-        '& .MuiOutlinedInput-root':{
-            height:'36px',
-            marginTop : 10,
-            marginRight: 30,
-        },
-        '& .MuiInputLabel-outlined':{
-            marginTop:'-3px',
-            color :Colors.TextPrimary
-        },
-        '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
-            transform: 'translate(14px, -2px) scale(0.75)'
-        },
-        '&:hover .MuiOutlinedInput-notchedOutline':{
-            borderColor:Colors.BackgroundBlue,
-        },
-    },
-}));
+    availableHoursBoxBodyInfo: {
+            color : '#4B5C68',
+        fontSize : 14,
+        margin : '8px 0'
+    }
+    }))
+;
