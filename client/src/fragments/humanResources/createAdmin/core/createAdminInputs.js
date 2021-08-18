@@ -189,7 +189,7 @@ export const CreateAdminInputs = ({ handleChangeFirstName, handleChangeLastName,
       </div>
       {!info &&
       <CreateChancel
-          classes={globalInputs.buttonsStyle}
+          classes={[globalInputs.buttonsStyle]}
           create={"Create"}
           chancel={"Cancel"}
           onCreate={handleCreate}

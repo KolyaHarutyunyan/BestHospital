@@ -13,7 +13,7 @@ const AddCredential = {
 
 const editCredentialData = {
     credentialId: "610cf947776f5210843ccb54",
-    expirationDate: "05/05/2019"
+    expirationDate: "05/08/2019"
 }
 
 const types = [
@@ -54,8 +54,8 @@ export const StaffCredentials = ({credentialData,openModal}) => {
 
     const data = [
         {
-            name: 'HB',
-            type: credentialData._v ? 'license' : 'noo license',
+            name: credentialData.credentialId?.name,
+            type: credentialData.credentialId?.type,
             receivedDate: moment(credentialData.expirationDate).format('L'),
             expirationDate: moment(credentialData.expirationDate).format('L'),
             action:
