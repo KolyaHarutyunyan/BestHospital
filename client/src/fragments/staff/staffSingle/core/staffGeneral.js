@@ -1,6 +1,6 @@
 import { Card } from '@eachbase/components';
-import { serviceSingleStyles } from './styles';
 import { Colors, Images } from "@eachbase/utils";
+import { serviceSingleStyles } from './styles';
 
 export const StaffGeneral = ({staffGeneral}) =>{
 
@@ -60,6 +60,7 @@ export const StaffGeneral = ({staffGeneral}) =>{
                 color={Colors.ThemeRed}
                 icon={Images.otherDetailsIcon}
             />
+
         </div>
     )
 }

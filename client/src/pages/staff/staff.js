@@ -12,7 +12,6 @@ export const Staff = () => {
 
     useEffect(() => {
         dispatch(adminActions.getAdmins());
-
     }, []);
 
     const handleOpenClose = () => {
