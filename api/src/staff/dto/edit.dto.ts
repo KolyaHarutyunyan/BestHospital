@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsPhoneNumber, IsString } from 'class-validator';
+import { IsDateString, IsEmail, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
 import { UserStatus } from '../staff.constants';
 
 export class EditStaffDTO {
@@ -32,8 +32,9 @@ export class EditStaffDTO {
   @IsString()
   gender: string;
   @ApiProperty({ required: false })
-  @IsString()
-  birthday: string;
+  @IsOptional()
+  @IsDateString()
+  birthday: Date;
   @ApiProperty({ required: false })
   @IsString()
   residency: string;

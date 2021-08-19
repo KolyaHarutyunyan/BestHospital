@@ -12,7 +12,7 @@ export interface IStaff extends Document {
   secondaryPhone: string;
   state: string;
   gender: string;
-  birthday: string;
+  birthday: Date;
   residency: string;
   ssn: number;
   status: number;

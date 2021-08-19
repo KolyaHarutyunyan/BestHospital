@@ -23,7 +23,7 @@ export class StaffDTO {
   @ApiProperty()
   gender: string;
   @ApiProperty()
-  birthday: string;
+  birthday: Date;
   @ApiProperty()
   residency: string;
   @ApiProperty()
