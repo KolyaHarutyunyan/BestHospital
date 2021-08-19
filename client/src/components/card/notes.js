@@ -1,9 +1,9 @@
 import React, {useState} from "react";
+import {useSelector} from "react-redux";
 import {Table, TableCell, TableContainer} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import {useGlobalStyles} from "@eachbase/utils";
 import {TableHeadComponent, SearchAndFilter, PaginationItem} from "@eachbase/components";
-import {useSelector} from "react-redux";
+import {useGlobalStyles} from "@eachbase/utils";
 
 export const Notes = ({ data, headerTitles, pagination, defaultStyle, items}) => {
 

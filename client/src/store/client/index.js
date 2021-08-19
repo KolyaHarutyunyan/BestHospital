@@ -22,5 +22,8 @@ export const clientActions = {
     createClientContact,
     getClientsEnrollment,
     editClientContact,
+    // editClientContact,
+
+
 }
 

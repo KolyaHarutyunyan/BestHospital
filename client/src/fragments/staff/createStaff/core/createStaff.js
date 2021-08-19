@@ -84,7 +84,6 @@ export const CreateStaff = ({handleClose, resetData}) => {
             address: fullAddress
         }
         if (inputs.firstName &&
-            inputs.middleName &&
             inputs.lastName &&
             inputs.email &&
             inputs.phone &&
@@ -100,7 +99,6 @@ export const CreateStaff = ({handleClose, resetData}) => {
 
             setError(
                 !inputs.firstName ? 'firstName' :
-                    !inputs.middleName ? 'middleName' :
                         !inputs.lastName ? 'lastName' :
                             !inputs.email ? 'email' :
                                 !inputs.phone ? 'phone' :
@@ -130,7 +128,7 @@ export const CreateStaff = ({handleClose, resetData}) => {
                 onChange={handleChange}
                 value={inputs.middleName}
                 type={"text"}
-                label={"Middle Name*"}
+                label={"Middle Name"}
                 name='middleName'
                 typeError={error === 'middleName' && ErrorText.field}
             />

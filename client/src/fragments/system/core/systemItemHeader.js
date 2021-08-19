@@ -1,8 +1,7 @@
-import React from "react";
-import {systemItemStyles} from "./styles";
-import {Images} from "@eachbase/utils";
 import {SimpleModal} from "@eachbase/components";
+import {Images} from "@eachbase/utils";
 import {SystemItemAddService} from "./modals";
+import {systemItemStyles} from "./styles";
 
 export const SystemItemHeader = ({modalType, open ,handleOpenClose}) => {
 

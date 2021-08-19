@@ -8,7 +8,14 @@ import {
 } from "@eachbase/components";
 import {clientActions} from "@eachbase/store";
 
-import {ClientGeneral, ClientContact, TabsHeader, ClientEnrollment} from "./core";
+import {
+    ClientGeneral,
+    ClientContact,
+    TabsHeader,
+    ClientEnrollment,
+    ClientNotes,
+    ClientAvailabilitySchedule, ClientHistory
+} from "./core";
 import {useDispatch, useSelector} from "react-redux";
 import {EditContact} from "../clientModals";
 
@@ -74,10 +81,13 @@ export const ClientItem = () => {
             tabComponent: (<ClientContact/>)
         },
         {
-            tabComponent: (<ClientContact/>)
+            tabComponent: (<ClientAvailabilitySchedule />)
         },
         {
-            tabComponent: (<ClientContact/>)
+            tabComponent: (<ClientNotes/>)
+        },
+        {
+            tabComponent: (<ClientHistory/>)
         },
     ];
 

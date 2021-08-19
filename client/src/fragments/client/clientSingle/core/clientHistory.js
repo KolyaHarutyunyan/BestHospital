@@ -3,8 +3,8 @@ import {useSelector} from "react-redux";
 
 
 export const ClientHistory = ()=>{
-    let data = useSelector(state => state.fundingSource.fundingSourceHistories)
-    console.log(data,'datahistory')
+
+    let data = []
     return(
         <div style={{marginTop: 50}}>
             {data && data.map((item,index)=>{
@@ -12,8 +12,7 @@ export const ClientHistory = ()=>{
                     <HistoryCard data={item} />
                 )
             })}
-            {/*<HistoryCard />*/}
-            {/*<HistoryCard />*/}
+
         </div>
     )
 }

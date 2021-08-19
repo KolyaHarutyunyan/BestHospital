@@ -25,36 +25,33 @@ const radioData = [
     }
 ]
 
-const AddCredential = {
-    staffId: '610bcdd691e2130e1a12371b',
-    credentialId: '610cf947776f5210843ccb54',
-    expirationDate: '06/11/2021'
-}
+
 
 const editCredentialData = {
     credentialId: "610cf947776f5210843ccb54",
-    expirationDate: "05/05/2019"
+    expirationDate: "09/001/2019"
 }
-
 
 const checkboxStyle = {display: 'flex', alignItems: 'center', flexDirection: 'row'}
 
 export const CredentialModal = ({credModalType, handleClose}) => {
 
-    const classes = modalsStyle()
-    const globalText = useGlobalTextStyles()
-
-
-    const [mType, setMType] = useState(credModalType)
-    const [checkboxValue, setCheckboxValue] = useState('nonExpiring');
-
     const params = useParams()
 
     const dispatch = useDispatch()
 
-    const credentialData = useSelector(state => state.admins.credentialById)
+    const classes = modalsStyle()
+    const globalText = useGlobalTextStyles()
 
-    console.log(credentialData,'credentialData');
+    const AddCredential = {
+        staffId: params.id,
+        credentialId: '610cf947776f5210843ccb54',
+        expirationDate: '06/11/2021'
+    }
+
+    const [mType, setMType] = useState(credModalType)
+    const [checkboxValue, setCheckboxValue] = useState('nonExpiring');
+
 
     useEffect(() => {
         dispatch(adminActions.getCredentialById(params.id))
@@ -96,9 +93,7 @@ export const CredentialModal = ({credModalType, handleClose}) => {
             default:
                 handleClose()
         }
-
     }
-
 
     return (
         <div className={classes.inactiveModalBody}>
