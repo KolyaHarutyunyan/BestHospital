@@ -17,7 +17,8 @@ export const SelectInput = ({
                                 typeError,
                                 type,
                                 disabled,
-                                language
+                                language,
+                                styles
                             }) => {
     const classes = inputsStyle();
 
@@ -42,6 +43,7 @@ export const SelectInput = ({
                              error={typeError && true}>
                     <InputLabel htmlFor="outlined-age-native-simple">{label}</InputLabel>
                     <Select
+                        style={{...styles}}
                         className={classes.select}
                         disabled={disabled}
                         native

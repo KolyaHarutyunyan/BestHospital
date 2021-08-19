@@ -177,7 +177,7 @@ export const inputsStyle = makeStyles(() => ({
     color: '#F07379',
     fontSize: '14px',
     fontWeight: 600,
-    margin:'0px 0 10px'
+    margin:'0px 0 8px'
   },
 
   inputShrink:{

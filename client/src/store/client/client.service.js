@@ -17,9 +17,11 @@ export const authService = {
 
     editClientContactService: ({payload}) => axios.patch(`/contact/${payload.id}`, payload.body),
 
+    deleteClientContactService: ({payload}) => axios.delete(`/contact/${payload.id}`),
+
     getClientEnrollmentService: ({payload}) => axios.get(`/enrollment/client/${payload.id}`, ),
 
-    // a1: ({payload}) => axios.get(`/enrollment/client/${payload.id}`, ),
+
 
 
 };

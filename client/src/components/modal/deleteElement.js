@@ -52,7 +52,8 @@ export const DeleteElement = ({className, text, info, handleDel, handleClose}) =
                         }}
                         onClick={handleClose}
                     >
-                        Chancel
+                        Cancel
+
                     </Button>
                 </div>
             </div>

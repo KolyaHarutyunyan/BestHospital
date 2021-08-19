@@ -12,7 +12,7 @@ export const ClientTableBody = ({data,setOpen, index, setDeleteClient}) => {
     const handleOpenOfficeInfo = (id) => {
         history.push(`/client/${id}`)
     }
-    console.log(data,'eeeee');
+
     return (
         <TableBodyComponent handleOpenInfo={() => handleOpenOfficeInfo(data.id)} key={index}>
             <TableCell>
