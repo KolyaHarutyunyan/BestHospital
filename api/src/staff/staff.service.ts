@@ -153,9 +153,11 @@ export class StaffService {
   getUsers = async (status: number): Promise<any> => {
     if (status == 0) {
       const admins = await this.model.find({ status: 0 });
+      this.checkStaff(admins[0])
       return this.sanitizer.sanitizeMany(admins);
     }
     const admins = await this.model.find({status: 1});
+    this.checkStaff(admins[0])
     return this.sanitizer.sanitizeMany(admins);
   };
 
@@ -208,7 +210,7 @@ export class StaffService {
   private checkStaff(staff: IStaff) {
     if (!staff) {
       throw new HttpException(
-        'Profile with this id was not found',
+        'Staff with this id was not found',
         HttpStatus.NOT_FOUND,
       );
     }
@@ -218,7 +220,7 @@ export class StaffService {
   private checkStaffCredential(credential: IStaffCredential) {
     if (!credential) {
       throw new HttpException(
-        'Profile with this id was not found',
+        'Staff Credential with this id was not found',
         HttpStatus.NOT_FOUND,
       );
     }

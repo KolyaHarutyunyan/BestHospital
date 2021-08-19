@@ -82,7 +82,6 @@ export class FundingController {
   async findAll(
     @Query('skip') skip: number,
     @Query('limit') limit: number): Promise<FundingDTO[]> {
-    console.log('ok');
     return await this.fundingService.findAll(skip, limit);
   }
 
