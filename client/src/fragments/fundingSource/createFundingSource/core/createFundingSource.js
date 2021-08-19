@@ -57,7 +57,9 @@ export const CreateFundingSource = ({handleClose}) => {
         {name: 'first'},
         {name: 'second'}
     ]
-
+    let aaa = {
+        marginBottom: 8
+    }
 
     return (
         <div className={classes.createFoundingSource}>
@@ -66,6 +68,7 @@ export const CreateFundingSource = ({handleClose}) => {
                 <div style={{display: "flex", justifyContent: "space-between"}}>
                     <div style={{width: 400}}>
                         <ValidationInput
+                            styles={aaa}
                             variant={"outlined"}
                             sendBoolean={handleCheck}
                             onChange={handleChange}
@@ -76,6 +79,7 @@ export const CreateFundingSource = ({handleClose}) => {
                             typeError={error === 'name' && ErrorText.field}
                         />
                         <ValidationInput
+                            styles={aaa}
                             validator={EmailValidator}
                             variant={"outlined"}
                             name={"email"}
@@ -87,6 +91,7 @@ export const CreateFundingSource = ({handleClose}) => {
                             onChange={handleChange}
                         />
                         <ValidationInput
+                            styles={aaa}
                             sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.phone}
@@ -97,6 +102,7 @@ export const CreateFundingSource = ({handleClose}) => {
                             typeError={error === 'phone' && ErrorText.field}
                         />
                         <SelectInput
+                            styles={aaa}
                             name={"type"}
                             label={"Type*"}
                             handleSelect={handleChange}
@@ -107,6 +113,7 @@ export const CreateFundingSource = ({handleClose}) => {
                             // type={'id'}
                         />
                         <ValidationInput
+                            styles={aaa}
                             sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.contact}
@@ -117,6 +124,7 @@ export const CreateFundingSource = ({handleClose}) => {
                             typeError={error === 'contract' && ErrorText.field}
                         />
                         <ValidationInput
+                            styles={aaa}
                             sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.website}
@@ -129,7 +137,7 @@ export const CreateFundingSource = ({handleClose}) => {
 
                     </div>
                     <div style={{width: 400}}>
-                        <AddressInput Value='Street Address*' flex='block' handleSelectValue={setFullAddress}/>
+                        <AddressInput styles={aaa} Value='Street Address*' flex='block' handleSelectValue={setFullAddress}/>
                     </div>
                 </div>
                 <div style={{display: "flex", justifyContent: 'space-between'}}>

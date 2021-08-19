@@ -25,12 +25,14 @@ export const CREATE_CLIENT_CONTACT = 'CREATE_CLIENT_CONTACT'
 /** Edit client contact **/
 export const EDIT_CLIENT_CONTACT = 'EDIT_CLIENT_CONTACT'
 
+/** Delete client contact **/
+export const DELETE_CLIENT_CONTACT = 'DELETE_CLIENT_CONTACT'
+
+
 
 /**get client enrollment */
 export const GET_CLIENT_ENROLLMENT = 'GET_CLIENT_ENROLLMENT';
 export const GET_CLIENT_ENROLLMENT_SUCCESS = 'GET_CLIENT_ENROLLMENT_SUCCESS';
 
-// /**get client enrollment */
-// export const GET_CLIENT_ENROLLMENT = 'GET_CLIENT_ENROLLMENT';
-// export const GET_CLIENT_ENROLLMENT_SUCCESS = 'GET_CLIENT_ENROLLMENT_SUCCESS';
+
 

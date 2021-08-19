@@ -43,6 +43,7 @@ export const AddContact = ({handleClose}) => {
                     "lastName": inputs.lastName,
                     "phoneNumber": inputs.phoneNumber,
                     "relationship": inputs.relationship,
+                    address : fullAddress
                 }
                 dispatch(clientActions.createClientContact(data, params.id))
             } else {

@@ -50,6 +50,7 @@ export const EditContact = ({handleClose, contactId}) => {
                     "lastName": inputs.lastName,
                     "phoneNumber": inputs.phoneNumber,
                     "relationship": inputs.relationship,
+                    address : fullAddress
                 }
                 dispatch(clientActions.editClientContact(newData, data.id))
             } else {

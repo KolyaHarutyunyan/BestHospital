@@ -1,5 +1,5 @@
 import {makeStyles} from "@material-ui/core/styles";
-import {Colors} from "../../../../utils";
+import {Backgrounds, Colors} from "../../../../utils";
 
 export const serviceSingleStyles = makeStyles(() => ({
         // staff general
@@ -110,6 +110,16 @@ export const serviceSingleStyles = makeStyles(() => ({
             color : '#4B5C68',
         fontSize : 14,
         margin : '8px 0'
+    },
+    deleteModal:{
+        width:'500px',
+        height: "auto",
+        background: Backgrounds.whiteModal,
+        borderRadius: "8px",
+        padding:'8px 0 40px 0',
+        display:'flex',
+        flexDirection:'column',
+        textAlign:'center',
     }
     }))
 ;

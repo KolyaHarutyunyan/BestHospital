@@ -11,7 +11,7 @@ import {
     GET_CLIENT_ENROLLMENT_SUCCESS,
     GET_CLIENTS,
     GET_CLIENTS_SUCCESS,
-    CREATE_CLIENT_CONTACT, EDIT_CLIENT_CONTACT
+    CREATE_CLIENT_CONTACT, EDIT_CLIENT_CONTACT, DELETE_CLIENT_CONTACT
 } from "./client.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
@@ -87,16 +87,29 @@ function* getClientContacts(action) {
 function* createClientContact(action) {
     try {
         const res = yield call(authService.createClientContactService, action);
-         // window.location.replace('/client')
+        console.log(res,'reessss')
+          // window.location.replace('/client')
     } catch (err) {
         console.log(err, 'error add client')
     }
 }
 
 function* editClientContact(action) {
+    console.log(action.payload.id,'aaaaction')
     try {
         const res = yield call(authService.editClientContactService, action);
         console.log(res,'resss edit contact')
+         window.location.replace(`/client/`)
+    } catch (err) {
+        console.log(err, 'error edit client')
+    }
+}
+
+
+function* deleteClientContact(action) {
+    try {
+        const res = yield call(authService.deleteClientContactService, action);
+        console.log(res,'resss delete contact')
         // window.location.replace('/client')
     } catch (err) {
         console.log(err, 'error edit client')
@@ -116,17 +129,7 @@ function* getClientEnrollment(action) {
     }
 }
 
-// function* getClientEnrollment(action) {
-//     try {
-//         const res = yield call(authService.getClientEnrollmentService, action);
-//         yield put({
-//             type: GET_CLIENT_ENROLLMENT_SUCCESS,
-//             payload: res.data,
-//         });
-//     } catch (err) {
-//         console.log(err, 'error get en roll')
-//     }
-// }
+
 
 
 
@@ -140,6 +143,7 @@ export const watchClient = function* watchClientSaga() {
     yield takeLatest(GET_CLIENT_CONTACTS, getClientContacts)
     yield takeLatest(CREATE_CLIENT_CONTACT, createClientContact)
     yield takeLatest(EDIT_CLIENT_CONTACT, editClientContact)
+    yield takeLatest(DELETE_CLIENT_CONTACT, deleteClientContact)
     yield takeLatest(GET_CLIENT_ENROLLMENT, getClientEnrollment)
 
 

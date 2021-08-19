@@ -1,28 +1,35 @@
 import {AddressInput, ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {createFoundingSourceStyle} from "./styles";
 import {EmailValidator, ErrorText} from "@eachbase/utils";
 import {fundingSourceActions, officeActions} from "@eachbase/store";
-import {useDispatch,useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {editFundingSource} from "../../../../../store/fundingSource/fundingSource.action";
 import {useParams} from "react-router-dom";
 // import SelectInput from "@material-ui/core/Select/SelectInput";
 
 export const FundingSourceGeneralEdit = ({handleClose}) => {
-    const prevData = useSelector(state=>state.fundingSource.fundingSourceItem)
+    const prevData = useSelector(state => state.fundingSource.fundingSourceItem)
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState({
-        name : prevData.name,
-        email : prevData.email,
+        name: prevData.name,
+        email: prevData.email,
         phoneNumber: +prevData.phoneNumber,
         'type': prevData.type,
         'contact': prevData.contact,
         'website': prevData.website,
+        address: prevData.address,
         "status": 1
 
     });
-    const [fullAddress, setFullAddress] = useState(null)
 
+    //55
+
+    useEffect(() => {
+
+    }, [])
+
+    const [fullAddress, setFullAddress] = useState(null)
 
 
     const classes = createFoundingSourceStyle()
@@ -49,8 +56,8 @@ export const FundingSourceGeneralEdit = ({handleClose}) => {
             'type': inputs.type,
             'contact': inputs.contact,
             'website': inputs.website,
-            "address": 'default',
-            "status": 1
+            "address": fullAddress,
+            "status": 1,
         }
         if (inputs.name && inputs.email && inputs.phoneNumber && inputs.type && inputs.contact && inputs.website) {
             dispatch(fundingSourceActions.editFundingSource(prevData.id, data))
@@ -72,23 +79,29 @@ export const FundingSourceGeneralEdit = ({handleClose}) => {
         {name: 'second'}
     ]
 
+    const inputMargin = {
+        marginBottom: 8
+    }
 
     return (
         <div className={classes.createFoundingSource}>
-            <ModalHeader handleClose={handleClose} title={'Edit Funding Source'} headerBottom={true} />
+            <ModalHeader handleClose={handleClose} title={'Edit Funding Source'} headerBottom={true}/>
             <div className={classes.createFoundingSourceBody}>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
                     <div style={{width: 400}}>
-                        <ValidationInput variant={"outlined"}
-                                         sendBoolean={handleCheck}
-                                         onChange={handleChange}
-                                         value={inputs.name}
-                                         type={"text"}
-                                         label={"Funding Source Name*"}
-                                         name='name'
-                                         typeError={error === 'name' && ErrorText.field}
+                        <ValidationInput
+                            styles={inputMargin}
+                            variant={"outlined"}
+                            sendBoolean={handleCheck}
+                            onChange={handleChange}
+                            value={inputs.name}
+                            type={"text"}
+                            label={"Funding Source Name*"}
+                            name='name'
+                            typeError={error === 'name' && ErrorText.field}
                         />
                         <ValidationInput
+                            styles={inputMargin}
                             validator={EmailValidator}
                             variant={"outlined"}
                             name={"email"}
@@ -100,6 +113,7 @@ export const FundingSourceGeneralEdit = ({handleClose}) => {
                             onChange={handleChange}
                         />
                         <ValidationInput
+                            styles={inputMargin}
                             sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.phoneNumber}
@@ -110,6 +124,7 @@ export const FundingSourceGeneralEdit = ({handleClose}) => {
                             typeError={error === 'phoneNumber' && ErrorText.field}
                         />
                         <SelectInput
+                            styles={inputMargin}
                             name={"type"}
                             label={"Type*"}
                             handleSelect={handleChange}
@@ -120,6 +135,7 @@ export const FundingSourceGeneralEdit = ({handleClose}) => {
                             // type={'id'}
                         />
                         <ValidationInput
+                            styles={inputMargin}
                             sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.contact}
@@ -130,6 +146,7 @@ export const FundingSourceGeneralEdit = ({handleClose}) => {
                             typeError={error === 'contract' && ErrorText.field}
                         />
                         <ValidationInput
+                            styles={inputMargin}
                             sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.website}
@@ -142,7 +159,7 @@ export const FundingSourceGeneralEdit = ({handleClose}) => {
 
                     </div>
                     <div style={{width: 400}}>
-                        <AddressInput Value='Street Address*' flex='block' handleSelectValue={setFullAddress}/>
+                        <AddressInput styles={inputMargin} Value={inputs?.address?.street} flex='block' handleSelectValue={setFullAddress}/>
                     </div>
                 </div>
                 <div style={{display: "flex", justifyContent: 'space-between'}}>

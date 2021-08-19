@@ -10,7 +10,7 @@ import { Country, State, City } from 'country-state-city';
 
 
 const path = `${API_BASE}`;
-export const AddressInput = ({ handleSelectValue, disableLabels, Value, handleSendAddresses, info, disabled, flex }) => {
+export const AddressInput = ({styles, handleSelectValue, disableLabels, Value, handleSendAddresses, info, disabled, flex }) => {
   const classes = inputsStyle();
   const globalInputs = useGlobalStyles();
   const [address, setAddress] = useState("");
@@ -56,14 +56,12 @@ export const AddressInput = ({ handleSelectValue, disableLabels, Value, handleSe
   const disable = false;
   const placeholder = Value ? Value : "Physical Address*";
 
-
   return (
     <div style={{ display: flex ? flex : 'flex', width: '100%' }}>
       <PlacesAutocomplete value={address} onChange={handleChangeAddress} onSelect={(ev) => handleSelect(ev)}>
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <div className={globalInputs.simpleInput}>
+          <div style={{...styles}} className={globalInputs.simpleInput}>
             <input
-
               className={classes.searchAddress}
               {...getInputProps({
                 placeholder: placeholder,
@@ -97,6 +95,7 @@ export const AddressInput = ({ handleSelectValue, disableLabels, Value, handleSe
 
 
       <SelectInput
+        styles={{...styles}}
         style={globalInputs.simpleInput}
         name={"country"}
         label={"Country*"}
@@ -106,10 +105,10 @@ export const AddressInput = ({ handleSelectValue, disableLabels, Value, handleSe
         value={Country}
         list={CountryList}
         disabled={disabled}
-
       />
 
       <ValidationInput
+          styles={{...styles}}
         style={globalInputs.simpleInput}
         variant={"outlined"}
         name={"city"}
@@ -123,6 +122,7 @@ export const AddressInput = ({ handleSelectValue, disableLabels, Value, handleSe
 
 
       <SelectInput
+          styles={{...styles}}
         style={globalInputs.simpleInput}
         name={"state"}
         label={"State"}
@@ -135,6 +135,7 @@ export const AddressInput = ({ handleSelectValue, disableLabels, Value, handleSe
       />
 
       <ValidationInput
+          styles={{...styles}}
         variant={"outlined"}
         name={"zip"}
         type={"number"}

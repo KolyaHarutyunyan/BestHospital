@@ -2,6 +2,7 @@ import React from "react";
 import {Card} from "../../../../components";
 
 export const FundingSourceSingleGeneral = ({data}) => {
+    console.log(data,'dataaaaaaa')
     return (
         <div>
             <div style={{display: 'flex', justifyContent: "space-between"}}>
@@ -18,11 +19,11 @@ export const FundingSourceSingleGeneral = ({data}) => {
                 ]}
                       width={'32.5%'}/>
                 <Card cardInfo={[
-                    {title: 'Street Address', value: 'Center',},
-                    {title: 'Country', value : 'Armenia'},
-                    {title: 'City',value: "Yerevan"},
-                    {title: 'State',value: "Yerevan"},
-                    {title: 'Zip Code',value: "005"},
+                    {title: 'Street Address', value: data?.address?.street,},
+                    {title: 'Country', value : data?.address?.country,},
+                    {title: 'City',value: data?.address?.city,},
+                    {title: 'State',value: data?.address?.state,},
+                    {title: 'Zip Code',value: data?.address?.zip,},
                 ]}
                       width={'32.5%'}/>
             </div>
