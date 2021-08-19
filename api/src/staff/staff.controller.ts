@@ -7,8 +7,12 @@ import {
   Post,
   Delete,
   UseGuards,
+  Query,
+  ParseIntPipe,
+  ParseArrayPipe,
+  ValidationPipe,
 } from '@nestjs/common';
-import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { StaffService } from './staff.service';
 import { StaffDTO, CreateStaffDto, EditStaffDTO, CreateStaffCredentialDto, EditStaffCredentialDTO, StaffCredentialDTO } from './dto';
 import { ACCESS_TOKEN } from '../authN';
@@ -60,8 +64,15 @@ export class StaffController {
   @Get()
   @Public()
   @ApiOkResponse({ type: [StaffDTO] })
-  async getUsers(): Promise<StaffDTO[]> {
-    return await this.staffService.getUsers();
+  @ApiQuery({
+    name: "status",
+    description: "status",
+    required: false,
+    type: Number
+  })
+  async getUsers(
+    @Query('status') status: number): Promise<StaffDTO[]> {
+    return await this.staffService.getUsers(status);
   }
 
   /** Get the staff profile */

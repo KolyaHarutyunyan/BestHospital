@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { AuthorizationDTO, CreateAuthorizationDTO } from './dto';
+import { AuthorizationDTO, CreateAuthorizationDTO, UpdateAuthorizationDTO } from './dto';
 import { IClient } from '../../client/interface';
 import { IAuthorization } from './interface';
 import { MongooseUtil } from '../../util';
@@ -33,11 +33,6 @@ export class AuthorizationService {
   /** Create a new authorization */
   create = async (clientId: string, funderId: string, dto: CreateAuthorizationDTO): Promise<AuthorizationDTO> => {
     try {
-      let startDate = new Date(dto.startDate);
-      this.checkTime(startDate);
-      let endDate = new Date(dto.endDate);
-      this.checkTime(endDate);
-
       const client = await this.clientModel.findById({ _id: clientId });
       this.checkClient(client);
 
@@ -47,10 +42,10 @@ export class AuthorizationService {
         authId: dto.authId,
         clientId: client._id,
         funderId: funder.id,
+        startDate: dto.startDate,
+        endDate: dto.endDate,
         address: await this.addressService.getAddress(dto.address),
       });
-      authorization.startDate = startDate.toLocaleDateString()
-      authorization.endDate = endDate.toLocaleDateString()
 
       await authorization.save();
       return this.sanitizer.sanitize(authorization);
@@ -60,7 +55,23 @@ export class AuthorizationService {
       throw e;
     }
   }
-  
+  // update the authorization
+  async update(_id: string, dto: UpdateAuthorizationDTO): Promise<AuthorizationDTO> {
+    try {
+      const authorization = await this.model.findById({ _id });
+      this.checkAuthorization(authorization)
+      if (dto.startDate) authorization.startDate = dto.startDate;
+      if (dto.endDate) authorization.endDate = dto.endDate;
+      if (dto.authId) authorization.authId = dto.authId
+      if (dto.status) authorization.status = dto.status;
+      if (dto.address) authorization.address = await this.addressService.getAddress(dto.address);
+      await authorization.save()
+      return this.sanitizer.sanitize(authorization);
+    } catch (e) {
+      this.mongooseUtil.checkDuplicateKey(e, 'Authorization already exists');
+      throw e;
+    }
+  }
   async findAll(clientId: string): Promise<AuthorizationDTO[]> {
     try {
       const authorizations = await this.model.find({ clientId }).populate({ path: 'funderId', select: "name" });
@@ -72,27 +83,18 @@ export class AuthorizationService {
     }
   }
 
-  async remove(_id: string):Promise<string> {
+  async remove(_id: string): Promise<string> {
     const authorization = await this.model.findById({ _id });
     this.checkAuthorization(authorization);
     authorization.remove();
     return authorization._id;
   }
-  /** Private methods */
-  /** if the date is not valid, throws an exception */
-  private checkTime(date: Date) {
-    if (isNaN(date.getTime())) {
-      throw new HttpException(
-        'Date with this format was not found',
-        HttpStatus.NOT_FOUND,
-      );
-    }
-  }
+
   /** if the client is not found, throws an exception */
   private checkClient(client: IClient) {
     if (!client) {
       throw new HttpException(
-        'Profile with this id was not found',
+        'Client with this id was not found',
         HttpStatus.NOT_FOUND,
       );
     }
@@ -101,7 +103,7 @@ export class AuthorizationService {
   private checkAuthorization(authorization: IAuthorization) {
     if (!authorization) {
       throw new HttpException(
-        'Profile with this id was not found',
+        'Authorization with this id was not found',
         HttpStatus.NOT_FOUND,
       );
     }

@@ -11,6 +11,6 @@ export interface IClient extends Document {
     gender: string;
     age: number;
     status: number;
-    birthday: string;
+    birthday: Date;
     enrollment: string;
 }

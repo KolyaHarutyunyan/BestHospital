@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsEmail, IsEnum, IsNotEmpty, IsNumber, IsPhoneNumber, IsString } from 'class-validator';
-import { MongooseUtil, ParseObjectIdPipe } from '../../util';
+import { IsDateString, IsOptional } from 'class-validator';
 
 export class EditStaffCredentialDTO {
   @ApiProperty()
   credentialId?: string;
   @ApiProperty({ required: false })
-  expirationDate?: string;
+  @IsOptional()
+  @IsDateString()
+  expirationDate: Date;
 }

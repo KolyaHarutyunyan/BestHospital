@@ -28,6 +28,8 @@ export class StaffDTO {
   residency: string;
   @ApiProperty()
   ssn: number;
+  @ApiProperty()
+  status: number;
   @ApiProperty({ type: AddressDTO })
   address: AddressDTO;
 }

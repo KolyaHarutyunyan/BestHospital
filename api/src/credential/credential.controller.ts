@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { CredentialService } from './credential.service';
-import { CreateCredentialDto, CredentialDTO } from './dto'
-import { UpdateCredentialDto } from './dto/update-credential.dto';
+import { CreateCredentialDto, CredentialDTO, UpdateCredentialDTO } from './dto'
 import { Public, ParseObjectIdPipe } from '../util';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
@@ -31,11 +30,12 @@ export class CredentialController {
     return this.credentialService.findOne(id);
   }
 
-  // @Patch(':id')
-  // @Public()
-  // update(@Param('id', ParseObjectIdPipe) id: string, @Body() updateCredentialDto: UpdateCredentialDto) {
-  //   return this.credentialService.update(+id, updateCredentialDto);
-  // }
+  @Patch(':id')
+  @ApiOkResponse({ type: CredentialDTO })
+  @Public()
+  update(@Param('id', ParseObjectIdPipe) id: string, @Body() updateCredentialDto: UpdateCredentialDTO) {
+    return this.credentialService.update(id, updateCredentialDto);
+  }
 
   // @Delete(':id')
   // @Public()

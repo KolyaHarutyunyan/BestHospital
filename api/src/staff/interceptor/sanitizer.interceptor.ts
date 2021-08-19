@@ -19,6 +19,7 @@ export class StaffSanitizer implements ISanitize {
       phone: user.phone,
       secondaryPhone: user.secondaryPhone,
       state: user.state,
+      status: user.status,
       gender: user.gender,
       birthday: user.birthday,
       residency: user.residency,

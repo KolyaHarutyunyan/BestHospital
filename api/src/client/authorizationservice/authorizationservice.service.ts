@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Body, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { MongooseUtil } from '../../util';
 import { AuthorizationServiceSanitizer } from './interceptor/authorizationService.interceptor';
 import { AuthorizationServiceDTO, CreateAuthorizationServiceDTO, UpdateAuthorizationserviceDTO } from './dto';
@@ -26,7 +26,35 @@ export class AuthorizationserviceService {
 
   async create(authorizationId: string, fundingServiceId: string, dto: CreateAuthorizationServiceDTO): Promise<AuthorizationServiceDTO> {
     try {
-      const modifiers = [];
+      let modifiers = [];
+      let brokenModifiers = [];
+
+      if (dto.modifiers) {
+        const findAuthorizationService: any = await this.model.find({ authorizationId: authorizationId, serviceId: fundingServiceId }).populate('modifiers');
+        if (findAuthorizationService) {
+          findAuthorizationService.forEach(item => {
+            item.modifiers.map(modifier => {
+              modifiers.push(modifier._id)
+            })
+          })
+          let dtoM = dto.modifiers;
+          for (let i = 0; i < dtoM.length; i++) {
+            for (let j = 0; j < modifiers.length; j++) {
+              if (dtoM[i] == modifiers[j]) {
+                brokenModifiers.push(dtoM[i])
+              }
+            }
+          }
+          if(brokenModifiers.length !== 0){
+            throw new HttpException(
+              `Modifier received ${brokenModifiers}`,
+              HttpStatus.NOT_FOUND,
+            );
+          }
+          modifiers = [];
+        }
+      }
+
       const authorization = await this.authorizationModel.findOne({ _id: authorizationId });
       this.checkAuthorization(authorization);
       const fundingService: any = await this.fundingService.findAllServiceForClient(authorization.funderId, fundingServiceId);
@@ -36,6 +64,14 @@ export class AuthorizationserviceService {
           HttpStatus.NOT_FOUND,
         );
       }
+
+      if (dto.modifiers && fundingService[0].modifiers.length == []) {
+        throw new HttpException(
+          'Current Funding service has not modifier',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
       if (dto.modifiers && fundingService[0].modifiers.length != []) {
         fundingService[0].modifiers.map(modifier => modifiers.push(modifier.id))
         dto.modifiers.map(modifier => {
@@ -47,10 +83,18 @@ export class AuthorizationserviceService {
           }
         })
       }
+
+      else {
+        throw new HttpException(
+          'Incorrect modifier',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
       let authorizationService = new this.model({
         total: dto.total,
-        completed: dto.completed,
-        available: dto.available,
+        // completed: dto.completed,
+        // available: dto.available,
         authorizationId: authorization.id,
         serviceId: fundingService[0].id,
         modifiers: dto.modifiers
@@ -74,7 +118,7 @@ export class AuthorizationserviceService {
     }
   }
 
-  async update(_id: string, dto: UpdateAuthorizationserviceDTO):Promise<AuthorizationServiceDTO> {
+  async update(_id: string, dto: UpdateAuthorizationserviceDTO): Promise<AuthorizationServiceDTO> {
     try {
       const modifiers = [];
       const authorizationService = await this.model.findById({ _id, authorizationId: dto.authorizationId });
@@ -90,46 +134,47 @@ export class AuthorizationserviceService {
         );
       }
 
-      if (dto.modifiers && fundingService[0].modifiers.length != []) {    
-        fundingService[0].modifiers.map(modifier => modifiers.push(modifier.id));
-        console.log(modifiers);
-         dto.modifiers.map(modifier => {
-          if (!modifiers.includes(modifier)) {
-            throw new HttpException(
-              'Invalid modifier',
-              HttpStatus.NOT_FOUND,
-            );
-          }
-        })
-        authorizationService.modifiers = dto.modifiers;
-        authorizationService.serviceId = dto.fundingServiceId;
-      }
-      if (dto.available) {
-        authorizationService.available = dto.available;
-      }
-      if (dto.completed) {
-        authorizationService.completed = dto.completed;
-      }
+      // if (dto.modifiers && fundingService[0].modifiers.length != []) {    
+      //   fundingService[0].modifiers.map(modifier => modifiers.push(modifier.id));
+      //    dto.modifiers.map(modifier => {
+      //     if (!modifiers.includes(modifier)) {
+      //       throw new HttpException(
+      //         'Invalid modifier',
+      //         HttpStatus.NOT_FOUND,
+      //       );
+      //     }
+      //   })
+      //   authorizationService.modifiers = dto.modifiers;
+      //   authorizationService.serviceId = dto.fundingServiceId;
+      // }
+
+
+      // if (dto.available) {
+      //   authorizationService.available = dto.available;
+      // }
+      // if (dto.completed) {
+      //   authorizationService.completed = dto.completed;
+      // }
       if (dto.total) {
         authorizationService.total = dto.total;
       }
 
       await authorizationService.save()
-       
+
       return this.sanitizer.sanitize(authorizationService);
     } catch (e) {
-      this.mongooseUtil.checkDuplicateKey(e, 'Client already exists');
+      this.mongooseUtil.checkDuplicateKey(e, 'Authorization Service already exists');
       throw e;
     }
   }
 
   async remove(_id: string) {
-    try{
+    try {
       const authorizationService = await this.model.findByIdAndDelete({ _id });
       this.checkAuthorizationService(authorizationService);
       return authorizationService._id;
     }
-    catch(e){
+    catch (e) {
       throw e
     }
   }
@@ -138,7 +183,7 @@ export class AuthorizationserviceService {
   private checkAuthorization(authorization: IAuthorization) {
     if (!authorization) {
       throw new HttpException(
-        'Profile with this id was not found',
+        'Authorization with this id was not found',
         HttpStatus.NOT_FOUND,
       );
     }
@@ -146,7 +191,7 @@ export class AuthorizationserviceService {
   private checkAuthorizationService(authorizationService: IAuthorizationService) {
     if (!authorizationService) {
       throw new HttpException(
-        'Profile with this id was not found',
+        'Authorization Service with this id was not found',
         HttpStatus.NOT_FOUND,
       );
     }

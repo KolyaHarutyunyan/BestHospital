@@ -18,6 +18,7 @@ export class AuthorizationSanitizer implements ISanitize {
             funderId: authorization.funderId,
             startDate: authorization.startDate,
             endDate: authorization.endDate,
+            status: authorization.status,
             address: this.addressSanitizer.sanitize(authorization.address)
 
         };

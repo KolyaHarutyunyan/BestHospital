@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Public, ParseObjectIdPipe } from '../../util';
 import { AuthorizationService } from './authorization.service';
-import { AuthorizationDTO, CreateAuthorizationDTO } from './dto';
+import { AuthorizationDTO, CreateAuthorizationDTO, UpdateAuthorizationDTO } from './dto';
 
 @Controller('authorization')
 @ApiTags("Authorization Endpoints")
@@ -22,10 +22,16 @@ export class AuthorizationController {
   @Get(':client/:clientId')
   @ApiOkResponse({ type: AuthorizationDTO })
   @Public()
-  findAll( @Param('clientId', ParseObjectIdPipe) clientId: string) {
+  findAll(@Param('clientId', ParseObjectIdPipe) clientId: string) {
     return this.authorizationService.findAll(clientId);
   }
 
+  @Patch(':id')
+  @Public()
+  @ApiOkResponse({ type: AuthorizationDTO })
+  update(@Param('id', ParseObjectIdPipe) id: string, @Body() updateAuthorizationserviceDto: UpdateAuthorizationDTO) {
+    return this.authorizationService.update(id, updateAuthorizationserviceDto);
+  }
   @Delete(':id')
   @ApiOkResponse({ type: String })
   @Public()

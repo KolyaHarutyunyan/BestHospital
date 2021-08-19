@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { AddressDTO } from '../../../address/dto';
+import { AuthorizationStatus } from '../authorization.constants';
 
 export class AuthorizationDTO {
     @ApiProperty()
@@ -11,9 +12,11 @@ export class AuthorizationDTO {
     @ApiProperty()
     funderId: string;
     @ApiProperty()
-    startDate: string;
+    startDate: Date;
     @ApiProperty()
-    endDate: string;
+    endDate: Date;
     @ApiProperty({ type: AddressDTO })
     address: AddressDTO;
+    @ApiProperty({ enum: AuthorizationStatus })
+    status: number
 }

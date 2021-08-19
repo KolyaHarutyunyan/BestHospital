@@ -68,24 +68,20 @@ export class StaffService {
   /** Create a new staff credential */
   createStaffCredential = async (dto: CreateStaffCredentialDto): Promise<StaffCredentialDTO> => {
     try {
-      isValidObjectId(dto.staffId)
-      isValidObjectId(dto.credentialId)
       const staff = await this.model.findById({ _id: dto.staffId });
       this.checkStaff(staff);
       const credential = await this.credentialService.findOne(dto.credentialId);
       let staffCredential = new this.staffCredentailModel({
         _id: dto.staffId,
-        credentialId: dto.credentialId
+        credentialId: dto.credentialId,
+        expirationDate: dto.expirationDate
       });
-      if (dto.expirationDate) {
-        const expirationDate = new Date(dto.expirationDate);
-        this.checkTime(expirationDate);
-        staffCredential.expirationDate = expirationDate.toLocaleDateString()
-      }
+
       await staffCredential.save();
       return staffCredential;
       // return this.sanitizer.sanitize(user);
     } catch (e) {
+      this.mongooseUtil.checkDuplicateKey(e, 'staff credential already exists');
       throw e;
     }
   };
@@ -95,7 +91,7 @@ export class StaffService {
     await this.credentialService.create(dto);
   };
 
-  /** Edit a new user */
+  /** Edit a Staff */
   edit = async (id: string, dto: EditStaffDTO): Promise<StaffDTO> => {
     try {
       const admin = await this.model.findOne({ _id: id });
@@ -122,7 +118,7 @@ export class StaffService {
       await admin.save()
       return this.sanitizer.sanitize(admin);
     } catch (e) {
-      this.mongooseUtil.checkDuplicateKey(e, 'User already exists');
+      this.mongooseUtil.checkDuplicateKey(e, 'Staff already exists');
       throw e;
     }
   };
@@ -154,8 +150,12 @@ export class StaffService {
   };
 
   /** returns all users */
-  getUsers = async (): Promise<StaffDTO[]> => {
-    const admins = await this.model.find();
+  getUsers = async (status: number): Promise<any> => {
+    if (status == 0) {
+      const admins = await this.model.find({ status: 0 });
+      return this.sanitizer.sanitizeMany(admins);
+    }
+    const admins = await this.model.find({status: 1});
     return this.sanitizer.sanitizeMany(admins);
   };
 
@@ -177,9 +177,7 @@ export class StaffService {
       const staffCredential = await this.staffCredentailModel.findById({ _id });
       this.checkStaffCredential(staffCredential);
       if (dto.expirationDate) {
-        const expirationDate = new Date(dto.expirationDate);
-        this.checkTime(expirationDate);
-        staffCredential.expirationDate = expirationDate.toLocaleDateString()
+        staffCredential.expirationDate = dto.expirationDate;
       }
       if (dto.credentialId) {
         const globCredential = await this.credentialService.findOne(dto.credentialId);
@@ -221,16 +219,6 @@ export class StaffService {
     if (!credential) {
       throw new HttpException(
         'Profile with this id was not found',
-        HttpStatus.NOT_FOUND,
-      );
-    }
-  }
-  /** Private methods */
-  /** if the date is not valid, throws an exception */
-  private checkTime(date: Date) {
-    if (isNaN(date.getTime())) {
-      throw new HttpException(
-        'Date with this format was not found',
         HttpStatus.NOT_FOUND,
       );
     }

@@ -6,18 +6,18 @@ export class UpdateAuthorizationserviceDTO {
     @IsOptional()
     @IsNumber()
     total: number;
-    @ApiProperty()
-    @IsOptional()
-    @IsNumber()
-    completed: number;
-    @ApiProperty()
-    @IsOptional()
-    @IsNumber()
-    available: number;
-    @ApiProperty({required: false})
-    @IsOptional()
-    @IsArray()
-    modifiers: Array<string>;
+    // @ApiProperty()
+    // @IsOptional()
+    // @IsNumber()
+    // completed: number;
+    // @ApiProperty()
+    // @IsOptional()
+    // @IsNumber()
+    // available: number;
+    // @ApiProperty({required: false})
+    // @IsOptional()
+    // @IsArray()
+    // modifiers: Array<string>;
     @ApiProperty()
     @IsMongoId()
     authorizationId: string;

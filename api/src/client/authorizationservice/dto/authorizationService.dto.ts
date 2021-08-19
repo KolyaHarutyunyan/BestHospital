@@ -12,8 +12,8 @@ export class AuthorizationServiceDTO {
     total: number;
     @ApiProperty()
     modifiers: Array<string>;
-    @ApiProperty()
-    completed: number;
-    @ApiProperty()
-    available: number;
+    // @ApiProperty()
+    // completed: number;
+    // @ApiProperty()
+    // available: number;
 }

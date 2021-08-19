@@ -57,7 +57,9 @@ export class FundingController {
   @Post(':id/comment')
   @Public()
   @ApiOkResponse({ type: CommentDto })
-  async addComment(@Param('id', ParseObjectIdPipe) id: string, @Body('text') text: string): Promise<any> {
+  async addComment(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Body() text: string): Promise<any> {
     return await this.fundingService.addComment(id, text);
   }
 

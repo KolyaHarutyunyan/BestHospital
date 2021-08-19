@@ -13,20 +13,25 @@ export class CommentService {
     this.model = CommentModel;
     this.mongooseUtil = new MongooseUtil();
   }
-  private model: Model<IComment>;
+  private model: Model<any>;
   private mongooseUtil: MongooseUtil;
-  async create(funderId: string, text: string): Promise<CommentDto> {
+  async create(funderId: string, text: any): Promise<any> {
     try {
+
+      const getComment = await this.model.find({onModel: "Staff"})
+      console.log(getComment);
+      return
+      console.log(text);
       const data = {
         user: '60f01ec194abb63ff8f0aa75',
-        text
+        // text.text
       }
       const comment = new this.model({
-        text,
-        funder: funderId,
+        text: text.text,
+        resource: funderId,
+        onModel: 'Funder',
         user: data.user
       });
-
       await comment.save();
       return comment
       // return this.sanitizer.sanitize(funder);

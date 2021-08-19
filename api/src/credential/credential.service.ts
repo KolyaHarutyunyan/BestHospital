@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateCredentialDto } from './dto/create.dto';
-import { UpdateCredentialDto } from './dto/update-credential.dto';
+import { CreateCredentialDto, CredentialDTO, UpdateCredentialDTO } from './dto';
 import { ICredential } from './interface';
 import { CredentialModel } from './credential.model'
 import { Model } from 'mongoose';
@@ -19,7 +18,7 @@ export class CredentialService {
   private mongooseUtil: MongooseUtil;
 
   // create a new Credential
-  async create(dto: CreateCredentialDto) {
+  async create(dto: CreateCredentialDto): Promise<CredentialDTO> {
     try {
       let credential = new this.model({
         name: dto.name,
@@ -36,7 +35,7 @@ export class CredentialService {
   }
 
   /** Get All Credential */
-  async findAll() {
+  async findAll():Promise<CredentialDTO[]> {
     try {
       const credential = await this.model.find({});
       this.checkCredential(credential[0]);
@@ -49,7 +48,7 @@ export class CredentialService {
   }
 
   /** Get Credential By Id */
-  async findOne(_id): Promise<ICredential> {
+  async findOne(_id): Promise<CredentialDTO> {
     try {
       const credential = await this.model.findOne({ _id });
       this.checkCredential(credential);
@@ -61,14 +60,26 @@ export class CredentialService {
     }
   }
 
-
-  // update(id: number, updateCredentialDto: UpdateCredentialDto) {
-  //   return `This action updates a #${id} credential`;
-  // }
+  async update(_id: string, dto: UpdateCredentialDTO): Promise<CredentialDTO> {
+    try {
+      let credential = await this.model.findById({ _id })
+      this.checkCredential(credential)
+      if (dto.name) credential.name = dto.name;
+      if (dto.type) credential.type = dto.type;
+      
+      await credential.save();
+      return credential;
+    }
+    catch (e) {
+      this.mongooseUtil.checkDuplicateKey(e, 'Credential already exists');
+      throw e;
+    }
+  }
 
   // remove(id: number) {
   //   return `This action removes a #${id} credential`;
   // }
+
   /** Private methods */
   /** if the comment is not found, throws an exception */
   private checkCredential(credential: ICredential) {

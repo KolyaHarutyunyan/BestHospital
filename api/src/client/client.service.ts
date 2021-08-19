@@ -31,9 +31,6 @@ export class ClientService {
   /** Create a new client */
   create = async (dto: CreateClientDTO): Promise<ClientDTO> => {
     try {
-      // let birthday = new Date(dto.birthday);
-      // this.checkTime(birthday);
-
       let client = new this.model({
         firstName: dto.firstName,
         middleName: dto.middleName,
@@ -48,7 +45,6 @@ export class ClientService {
         birthday: dto.birthday
         // address: await this.addressService.getAddress(dto.address),
       });
-      // client.birthday = birthday.toLocaleDateString();
       await client.save();
       return this.sanitizer.sanitize(client);
     } catch (e) {
@@ -92,9 +88,7 @@ export class ClientService {
       if (dto.age) client.age = dto.age;
 
       if (dto.birthday) {
-        let birthday = new Date(dto.birthday);
-        this.checkTime(birthday);
-        client.birthday = dto.birthday.toLocaleDateString();
+        client.birthday = dto.birthday
       }
       if (dto.status) client.status = dto.status;
       // if (dto.address)

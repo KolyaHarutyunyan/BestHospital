@@ -7,14 +7,15 @@ export class CreateAuthorizationServiceDTO {
     @IsNotEmpty()
     @IsNumber()
     total: number;
+    // @ApiProperty()
+    // @IsNotEmpty()
+    // @IsNumber()
+    // completed: number;
+    // @ApiProperty()
+    // @IsNotEmpty()
+    // @IsNumber()
+    // available: number;
     @ApiProperty()
-    @IsNotEmpty()
-    @IsNumber()
-    completed: number;
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsNumber()
-    available: number;
     @IsOptional()
     @IsArray()
     modifiers: Array<string>;

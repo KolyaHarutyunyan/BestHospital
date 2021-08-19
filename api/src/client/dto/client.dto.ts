@@ -24,10 +24,9 @@ export class ClientDTO {
     @ApiProperty()
     age: number;
     @ApiProperty()
-    birthday: string;
+    birthday: Date;
     @ApiProperty()
     enrollment?: string;
     @ApiProperty({ enum: ClientStatus })
-    @IsEnum(ClientStatus)
     status: number;
 }

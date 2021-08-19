@@ -6,7 +6,8 @@ export interface IAuthorization extends Document {
     clientId: string;
     authId: string;
     funderId: string;
-    startDate: string;
-    endDate: string;
+    startDate: Date;
+    endDate: Date;
     address: IAddress;
+    status: number;
 }
