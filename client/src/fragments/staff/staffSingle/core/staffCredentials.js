@@ -1,8 +1,7 @@
-import {useParams} from "react-router-dom";
-import {useDispatch} from "react-redux";
+import React, {useState} from "react";
 import {TableCell} from "@material-ui/core";
-import {Notes, TableBodyComponent} from "@eachbase/components";
-import {Images} from "@eachbase/utils";
+import {DeleteElement, Notes, SimpleModal, TableBodyComponent} from "@eachbase/components";
+import {Images, Backgrounds} from "@eachbase/utils";
 import moment from 'moment';
 
 const AddCredential = {
@@ -23,21 +22,30 @@ const types = [
     {name: 'type 3'},
 ]
 
+export const StaffCredentials = ({credentialData, openModal}) => {
 
-export const StaffCredentials = ({credentialData,openModal}) => {
+    const [open, setOpen] = useState(false)
 
     // const removeCredentialData = {
     //     id: params.id
     // }
 
+    const handleClose = () =>{
+        setOpen(false)
+    }
+
     const editCredential = (modalType) => {
         openModal(modalType)
     }
-    console.log(credentialData,'cred Data');
-
+    console.log(credentialData, 'cred Data');
     // const removeCredential = () => {
     //     dispatch(adminActions.deleteCredentialById(removeCredentialData))
     // }
+
+    const removeCredential = () => {
+        handleClose()
+        alert('remove Credential');
+    }
 
 
     const notesItem = (item, index) => {
@@ -52,12 +60,17 @@ export const StaffCredentials = ({credentialData,openModal}) => {
         )
     }
 
+    const receivedData = credentialData.expirationDate
+    const expirationDate = credentialData.expirationDate
+
+    console.log(moment(undefined).format('L'), 'aaaa');
+
     const data = [
         {
             name: credentialData.credentialId?.name,
             type: credentialData.credentialId?.type,
-            receivedDate: moment(credentialData.expirationDate).format('L'),
-            expirationDate: moment(credentialData.expirationDate).format('L'),
+            receivedDate: receivedData && moment(credentialData.expirationDate).format('L'),
+            expirationDate: expirationDate && moment(credentialData.expirationDate).format('L'),
             action:
                 <>
                     <img
@@ -74,7 +87,7 @@ export const StaffCredentials = ({credentialData,openModal}) => {
                         style={{cursor: 'pointer', marginLeft: 16}}
                         onClick={(e) => {
                             e.stopPropagation();
-                            alert('remove Credential')
+                            setOpen(true)
                         }
                         }
                     />
@@ -108,6 +121,11 @@ export const StaffCredentials = ({credentialData,openModal}) => {
     return (
         <div>
             <Notes defaultStyle={true} data={data} pagination={true} items={notesItem} headerTitles={headerTitles}/>
+            <SimpleModal
+                openDefault={open}
+                handleOpenClose={handleClose}
+                content={<DeleteElement handleClose={handleClose} handleDel={removeCredential} />}
+            />
         </div>
     )
 }

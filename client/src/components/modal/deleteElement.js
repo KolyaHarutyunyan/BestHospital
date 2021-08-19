@@ -5,13 +5,13 @@ import {Colors, useGlobalTextStyles} from "@eachbase/utils";
 import {modalsStyle} from "./styles";
 
 
-export const DeleteElement = ({className, text, info, handleDel, handleClose}) => {
+export const DeleteElement = ({text, info, handleDel, handleClose}) => {
 
     const classes = modalsStyle()
     const globalText = useGlobalTextStyles();
 
     return (
-        <div className={className.deleteModal}>
+        <div className={classes.deleteModal}>
             <div className={classes.closeButton}>
                 <CloseButton handleCLic={handleClose}/>
             </div>
