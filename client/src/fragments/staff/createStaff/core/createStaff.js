@@ -41,7 +41,7 @@ export const CreateStaff = ({handleClose, resetData}) => {
     const [fullAddress, setFullAddress] = useState('')
 
 
-    const disabledOne = inputs.firstName && inputs.middleName && error !== 'Not valid email' && inputs.lastName && inputs.email && inputs.phone
+    const disabledOne = inputs.firstName && error !== 'Not valid email' && inputs.lastName && inputs.email && inputs.phone
     const disableSecond = !fullAddress.length
 
     const dispatch = useDispatch()
@@ -65,24 +65,26 @@ export const CreateStaff = ({handleClose, resetData}) => {
         ),
         error === e.target.name && setError(''),
     );
-
     const handleCreate = () => {
         const data = {
             firstName: inputs.firstName,
-            middleName: inputs.middleName,
+            middleName: inputs.middleName ? inputs.middleName : '',
             lastName: inputs.lastName,
             email: inputs.email,
-            secondaryEmail: inputs.secondaryEmail,
-            phone: inputs.phone,
-            secondaryPhone: inputs.secondaryPhone,
+            secondaryEmail: inputs.secondaryEmail ? inputs.secondaryEmail : '',
+            phone: `+${inputs.phone}`,
+            secondaryPhone: inputs.secondaryPhone ? inputs.secondaryPhone : '',
             state: 'state',
             gender: inputs.gender,
-            birthday: inputs.birthday,
+            birthday: new Date(inputs.birthday).toISOString(),
             residency: 'residency',
             ssn: 0,
-            status: 0,
+            status: 1,
             address: fullAddress
         }
+
+        console.log(data, 'data')
+
         if (inputs.firstName &&
             inputs.lastName &&
             inputs.email &&

@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import {Shadow, Colors} from "@eachbase/utils";
+import {Shadow, Colors, Backgrounds} from "@eachbase/utils";
 
 export const modalsStyle = makeStyles(() => ({
   datePickerStyle: {
@@ -61,6 +61,16 @@ export const modalsStyle = makeStyles(() => ({
   },
   credentialInputStyle: {
     marginBottom: 10
+  },
+  deleteModal:{
+    width:'500px',
+    height: "auto",
+    background: Backgrounds.whiteModal,
+    borderRadius: "8px",
+    padding:'8px 0 40px 0',
+    display:'flex',
+    flexDirection:'column',
+    textAlign:'center',
   }
 }));
 

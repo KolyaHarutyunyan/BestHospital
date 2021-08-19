@@ -29,7 +29,7 @@ const radioData = [
 
 const editCredentialData = {
     credentialId: "610cf947776f5210843ccb54",
-    expirationDate: "09/001/2019"
+    expirationDate: new Date("09-05-2019").toISOString()
 }
 
 const checkboxStyle = {display: 'flex', alignItems: 'center', flexDirection: 'row'}
@@ -40,13 +40,14 @@ export const CredentialModal = ({credModalType, handleClose}) => {
 
     const dispatch = useDispatch()
 
+
     const classes = modalsStyle()
     const globalText = useGlobalTextStyles()
 
     const AddCredential = {
         staffId: params.id,
-        credentialId: '610cf947776f5210843ccb54',
-        expirationDate: '06/11/2021'
+        credentialId: '611e47e3dd4a01497ff559dc',
+        expirationDate: new Date('06-11-2021').toISOString()
     }
 
     const [mType, setMType] = useState(credModalType)
@@ -56,6 +57,7 @@ export const CredentialModal = ({credModalType, handleClose}) => {
     useEffect(() => {
         dispatch(adminActions.getCredentialById(params.id))
     }, [])
+
 
     // const removeCredentialData = {
     //     id: params.id
