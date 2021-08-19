@@ -18,10 +18,10 @@ import { AuthorizationserviceModule } from './authorizationservice/authorization
 import { ContactModule } from './contact/contact.module';
 
 @Module({
-  imports: [ServiceModule, EnrollmentModule, AuthorizationModule, AuthorizationserviceModule, ContactModule],
+  imports: [ServiceModule, EnrollmentModule, AuthorizationModule, AuthorizationserviceModule, ContactModule, FundingModule],
   controllers: [ClientController],
-  providers: [ClientService, FundingService, HistoryService, CredentialService,
-    CommentService, ClientSanitizer, FundingSanitizer,
+  providers: [ClientService, HistoryService, CredentialService,
+    CommentService, ClientSanitizer,
     HistorySanitizer, AddressSanitizer],
   exports: [ClientService]
 })

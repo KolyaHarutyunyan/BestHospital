@@ -7,7 +7,7 @@ import { ServiceModel } from './service.model';
 import { ModifyModel } from './modifier.model';
 import { IFunder, IService, IModify } from './interface';
 import { isValidObjectId, MongooseUtil, ParseObjectIdPipe } from '../util';
-import { AddressService } from '../address';
+import { AddressService } from '../address/address.service';
 import { FundingSanitizer } from './interceptor';
 import { FundingDTO, ServiceDTO, UpdateServiceDto, CreateServiceDto, CreateModifierDto, UpdateModifierDto, ModifyDTO } from './dto';
 import { HistoryDto } from '../history/dto';
@@ -23,7 +23,7 @@ import { CredentialService } from '../credential';
 @Injectable()
 export class FundingService {
   constructor(
-    // private readonly addressService: AddressService,
+    private readonly addressService: AddressService,
     private readonly service: ServiceService,
     private readonly commentService: CommentService,
     private readonly historyService: HistoryService,
@@ -55,7 +55,7 @@ export class FundingService {
         website: dto.website,
         contact: dto.contact,
         status: dto.status,
-        // address: await this.addressService.getAddress(dto.address)
+        address: await this.addressService.getAddress(dto.address)
       });
       await funder.save();
       return this.sanitizer.sanitize(funder);
@@ -80,7 +80,7 @@ export class FundingService {
         cptCode: dto.cptCode,
         size: dto.size,
         min: dto.min,
-        max: dto.max,
+        max: dto.max
       });
       await service.save();
       await this.historyService.create(serviceLog.createServiceTitle, _id);
@@ -154,19 +154,19 @@ export class FundingService {
       throw e;
     }
   }
-    /** returns service by id */
-    async findService(_id: string): Promise<ServiceDTO[]> {
-      try {
-        const services = await this.serviceModel.find({ _id }).populate('serviceId').populate({
-          path: 'modifiers',
-          populate: { path: 'credential' }
-        });
-        // return this.sanitizer.sanitizeMany(services);
-        return services
-      } catch (e) {
-        throw e;
-      }
+  /** returns service by id */
+  async findService(_id: string): Promise<ServiceDTO[]> {
+    try {
+      const services = await this.serviceModel.find({ _id }).populate('serviceId').populate({
+        path: 'modifiers',
+        populate: { path: 'credential' }
+      });
+      // return this.sanitizer.sanitizeMany(services);
+      return services
+    } catch (e) {
+      throw e;
     }
+  }
   /** returns all services for client*/
   async findAllServiceForClient(_id: string, fundingServiceId: string): Promise<ServiceDTO[]> {
     try {
@@ -240,8 +240,8 @@ export class FundingService {
       if (dto.website) funder.website = dto.website;
       if (dto.contact) funder.contact = dto.contact;
       if (dto.status) funder.status = dto.status;
-      // if (dto.address)
-      //   funder.address = await this.addressService.getAddress(dto.address);
+      if (dto.address)
+        funder.address = await this.addressService.getAddress(dto.address);
       await funder.save();
       return this.sanitizer.sanitize(funder);
     } catch (e) {

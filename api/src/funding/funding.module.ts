@@ -5,7 +5,7 @@ import { CommentService } from '../comment/comment.service';
 import { CredentialService } from '../credential/credential.service';
 
 import { FundingController } from './funding.controller';
-import { AddressModule } from '../address';
+import { AddressModule, AddressService } from '../address';
 import { AuthNModule } from '../authN';
 import { ServiceModule } from '../service';
 import { CommentModule } from '../comment';
