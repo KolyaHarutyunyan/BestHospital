@@ -8,6 +8,9 @@ export const SystemItem = () => {
     const [modalType, setModalType] = useState('')
     const classes = systemItemStyles()
 
+    const [deleteModalOpened, setDeleteModalOpened] = useState(false)
+    const [deletedId,setDeletedId] = useState('')
+
     const tabsLabels = [
         {
             label: 'Service Types'
@@ -25,22 +28,39 @@ export const SystemItem = () => {
         setOpen(!open)
     }
 
+    const handleDeletedOpenClose = () =>{
+        setDeleteModalOpened(false)
+    }
+
+    const handleRemoveItem = (type) =>{
+        setDeleteModalOpened(true)
+        setDeletedId(type)
+    }
+
     const tabsContent = [
         {
-            tabComponent: (<SystemType openModal={handleOpenClose}/>)
+            tabComponent: (<SystemType removeItem={handleRemoveItem} openModal={handleOpenClose}/>)
         },
         {
-            tabComponent: (<Credentials openModal={handleOpenClose} />)
+            tabComponent: (<Credentials removeItem={handleRemoveItem} openModal={handleOpenClose} />)
         },
         {
-            tabComponent: (<Departments openModal={handleOpenClose} />)
+            tabComponent: (<Departments removeItem={handleRemoveItem} openModal={handleOpenClose} />)
         }
     ];
 
 
     return (
         <div className={classes.systemItemWrapper}>
-            <SystemItemHeader modalType={modalType} open={open} handleOpenClose={handleOpenClose} activeTab={activeTab}/>
+            <SystemItemHeader
+                deletedId={deletedId}
+                deleteModalOpened={deleteModalOpened}
+                handleDeletedOpenClose={handleDeletedOpenClose}
+
+                modalType={modalType}
+                open={open}
+                handleOpenClose={handleOpenClose}
+                activeTab={activeTab}/>
             <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
         </div>
     );

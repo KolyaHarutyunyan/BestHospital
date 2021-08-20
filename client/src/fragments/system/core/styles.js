@@ -72,4 +72,10 @@ export const systemItemStyles = makeStyles(() => ({
     headerSize: {
         width: '49%'
     },
+    icons: {
+        cursor: 'pointer',
+        '& img:last-child':{
+            marginLeft: 16
+        }
+    }
 }));

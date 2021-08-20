@@ -22,7 +22,7 @@ const headerTitles = [
     },
 ];
 
-export const SystemType = ({openModal}) => {
+export const SystemType = ({removeItem, openModal}) => {
 
     const classes = systemItemStyles()
 
@@ -39,10 +39,6 @@ export const SystemType = ({openModal}) => {
         )
     }
 
-    const removeItem = () =>{
-        alert('remove item')
-    }
-
     const editService = (modalType) =>{
         openModal(modalType)
     }
@@ -53,10 +49,10 @@ export const SystemType = ({openModal}) => {
             name: 'FBA',
             subject: 'ABA',
             action:
-                <>
-                    <img src={Images.edit} style={{cursor: 'pointer'}} onClick={()=> editService('editService')} alt="edit"/>
-                    <img src={Images.remove} alt="delete" style={{cursor: 'pointer',marginLeft: 16}} onClick={removeItem}/>
-                </>,
+                <div className={classes.icons}>
+                    <img src={Images.edit} onClick={()=> editService('editService')} alt="edit"/>
+                    <img src={Images.remove} alt="delete" onClick={() => removeItem('service')}/>
+                </div>,
         }
     ]
 

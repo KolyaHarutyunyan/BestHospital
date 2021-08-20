@@ -52,13 +52,13 @@ export const Notes = ({ data, headerTitles, pagination, defaultStyle, items}) =>
                     </TableHeadComponent>
 
                     {
-                        data && data.map((item, index) => {
+                        data.length ? data.map((item, index) => {
                             return (
                                 <>
                                     {items(item, index)}
                                 </>
                             )
-                        })
+                        }) : null
                     }
                 </Table>
                 {pagination && <PaginationItem

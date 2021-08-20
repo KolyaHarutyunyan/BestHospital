@@ -31,6 +31,7 @@ export const SelectInput = ({
         setCurrent(event.target.value);
 
         const selectedIndex = event.target.options.selectedIndex;
+        console.log(event, 'event');
         if (handleChangeCountryCode) {
             handleChangeCountryCode(event.target.options[selectedIndex].getAttribute('data-key'))
         }

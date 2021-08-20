@@ -8,6 +8,12 @@ export const inputsStyle = makeStyles(() => ({
       backgroundColor: 'white'
     }
   },
+  selectPlaceholder: {
+    '& .MuiSelect-select:focus':{
+      outline: 'none',
+      backgroundColor: 'white'
+    }
+  },
   radio: {
     color: Colors.BackgroundBlue,
     '&:hover': {

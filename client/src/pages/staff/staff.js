@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {TableWrapper} from "@eachbase/components";
-import {StaffTable, CreateStaff,} from "@eachbase/fragments";
+import {CreateStaff, StaffTable,} from "@eachbase/fragments";
 
 import {adminActions} from "@eachbase/store";
 import {useDispatch} from "react-redux";

@@ -8,3 +8,4 @@ export { AddressInput } from './addressInput';
 export { SelectInput } from './selectInput';
 export { Textarea } from './textarea';
 export { RadioButton } from './radio';
+export { SelectInputPlaceholder } from './selectInputPlaceholder'
