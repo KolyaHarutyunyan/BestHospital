@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
-import {SimpleTabs,  Notes, TableWrapperGeneralInfo, InactiveModal} from "@eachbase/components";
+import {SimpleTabs, Notes, TableWrapperGeneralInfo, InactiveModal} from "@eachbase/components";
 import {adminActions, fundingSourceActions} from "@eachbase/store";
 import {useDispatch, useSelector} from "react-redux";
-import { useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {
     FundingSourceSingleGeneral,
     FundingSourceSingleHeader,
@@ -10,31 +10,25 @@ import {
     FundingSourceSingleNotes,
     FundingSourceSingleHistories
 } from "./core";
+import {fundingSourceItemStyle} from "./styles";
 
 
-export const FundingSourceItem = ({general}) => {
+export const FundingSourceItem = ({}) => {
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const params = useParams()
     const data = useSelector(state => state.fundingSource.fundingSourceItem)
     const [activeTab, setActiveTab] = useState(0)
-
+    const classes = fundingSourceItemStyle()
 
     useEffect(() => {
         dispatch(adminActions.getAdmins())
         dispatch(fundingSourceActions.getFundingSourceById(params.id))
     }, []);
 
-    const {adminInfoById} = useSelector((state) => ({
-            adminInfoById: state.admins.adminInfoById
-        })
-    )
-
     const handleOpenClose = () => {
         setOpen(!open)
     }
-
-
 
     const tabsLabels = [
         {label: 'General Information'},
@@ -43,23 +37,12 @@ export const FundingSourceItem = ({general}) => {
         {label: 'History'}
     ]
 
-
     const tabsContent = [
-        {
-            tabComponent: <FundingSourceSingleGeneral data={data}/>
-        },
-        {
-            tabComponent: <FundingSourceSingleServices/>
-        },
-        {
-            tabComponent: <FundingSourceSingleNotes />
-        },
-        {
-            tabComponent: <FundingSourceSingleHistories />
-        },
+        {tabComponent: <FundingSourceSingleGeneral data={data}/>},
+        {tabComponent: <FundingSourceSingleServices/>},
+        {tabComponent: <FundingSourceSingleNotes/>},
+        {tabComponent: <FundingSourceSingleHistories/>},
     ];
-
-
 
     return (
         <>
@@ -74,14 +57,15 @@ export const FundingSourceItem = ({general}) => {
                 handleOpenClose={handleOpenClose}
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
-                <div style={{backgroundColor: 'white', padding: '20px'}}>
-                   <FundingSourceSingleHeader title={data?.name} activeTab={activeTab} />
-                   <SimpleTabs  setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
+                <div className={classes.fundingSourceItemHeader}>
+                    <FundingSourceSingleHeader title={data?.name} activeTab={activeTab}/>
+                    <SimpleTabs
+                        setActiveTab={setActiveTab}
+                        tabsLabels={tabsLabels}
+                        tabsContent={tabsContent}/>
                 </div>
             </TableWrapperGeneralInfo>
-            {/*// : (<OfficesInfo info={officeById}/>)*/
-            }
+
         </>
     )
-        ;
 }

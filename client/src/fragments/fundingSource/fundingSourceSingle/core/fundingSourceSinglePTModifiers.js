@@ -1,9 +1,7 @@
-import React, {useState} from "react";
+import React from "react";
 import {Notes, TableBodyComponent} from "@eachbase/components";
 import {fundingSourceSingleStyles} from "./styles";
 import {TableCell} from "@material-ui/core";
-import {Images} from "../../../../utils";
-
 
 export const FundingSourceSinglePTModifiers = ({data}) => {
     const classes = fundingSourceSingleStyles()

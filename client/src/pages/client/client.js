@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {DeleteElement, SimpleModal, TableWrapper} from "@eachbase/components";
+import {DeleteElement,  TableWrapper} from "@eachbase/components";
 import {OfficesInfo, ClientTable, CreateClient} from "@eachbase/fragments";
 import {useDispatch, useSelector} from "react-redux";
 import {clientsStyle} from './styles'
@@ -28,8 +28,6 @@ export const Client = ({}) => {
     const removeClient=()=>{
          dispatch(clientActions.deleteClient(deleteClient.id))
     }
-
-    console.log(deleteClient,'eererererr')
     return (
         <>
             {!officeById ?

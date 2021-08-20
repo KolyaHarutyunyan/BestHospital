@@ -5,10 +5,10 @@ import React, {useState} from "react";
 import {useSelector} from "react-redux";
 import {Loader, PaginationItem} from "@eachbase/components";
 
+
 export const ClientTable = ({setOpen,handleClose,setDeleteClient}) => {
     const globalStyle = useGlobalStyles();
     const [page, setPage] = useState(1);
-
 
     const {clientList, httpOnLoad} = useSelector((state) => ({
         clientList: state.client.clientList,

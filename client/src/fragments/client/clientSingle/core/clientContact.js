@@ -1,19 +1,17 @@
+import React, {useState} from "react";
 import {Card, DeleteElement, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
 import {serviceSingleStyles} from './styles';
 import {Colors, Images} from "@eachbase/utils";
 import {TableCell} from "@material-ui/core";
-import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {clientActions} from "@eachbase/store";
 
 export const ClientContact = ({data, setContactId, handleOpenClose}) => {
     const classes = serviceSingleStyles()
     const clientContacts = useSelector(state => state.client.clientContacts)
-    const [deleteContacts, setDeleteContacts] = useState()
     const dispatch = useDispatch()
     const [openClose, setOpenClose] = useState(false)
     const [index, setIndex] = useState(null)
-
 
 
     const generalInfo = [
@@ -51,11 +49,11 @@ export const ClientContact = ({data, setContactId, handleOpenClose}) => {
     ];
 
 
-    let openCloseModal = ()=>{
+    let openCloseModal = () => {
         setOpenClose(!openClose)
     }
 
-    let deleteContact = ()=>{
+    let deleteContact = () => {
         dispatch(clientActions.deleteClientContact(clientContacts[index].id))
         setOpenClose(!openClose)
     }
@@ -63,24 +61,22 @@ export const ClientContact = ({data, setContactId, handleOpenClose}) => {
     let clientContactItem = (item, index) => {
         return (
             <TableBodyComponent key={index}>
-                <TableCell><p style={{textOverflow: 'ellipsis', width: 100, overflow: 'hidden'}}>{item.firstName}</p>
-                </TableCell>
+                <TableCell><p className={classes.tableName}>{item.firstName}</p></TableCell>
                 <TableCell>  {item.lastName}  </TableCell>
                 <TableCell>  {item.relationship}  </TableCell>
                 <TableCell>  {item.phoneNumber}  </TableCell>
                 <TableCell>  {item.phoneNumber}  </TableCell>
                 <TableCell>
                     <>
-                        <img src={Images.edit} alt="edit" style={{cursor: 'pointer'}} onClick={() => {
+                        <img src={Images.edit} alt="edit" className={classes.iconStyle} onClick={() => {
                             setContactId(index)
                             handleOpenClose()
                         }}/>
-                        <img src={Images.remove} alt="delete" style={{marginLeft: 16, cursor: 'pointer'}}
-                             onClick={()=>{
+                        <img src={Images.remove} alt="delete" className={classes.iconDeleteStyle}
+                             onClick={() => {
                                  setOpenClose(!openClose)
-                                 setIndex(index)}
-
-                             }/>
+                                 setIndex(index)
+                             }}/>
                     </>
                 </TableCell>
             </TableBodyComponent>
@@ -93,12 +89,11 @@ export const ClientContact = ({data, setContactId, handleOpenClose}) => {
                 content={
                     <DeleteElement
                         handleDel={deleteContact}
-                        className={classes}
                         text={'Delete Client'}
-                        info={index!==null && clientContacts[index].firstName}
+                        info={index !== null && clientContacts[index].firstName}
                         handleClose={openCloseModal}/>
                 }
-                openDefault={openClose} />
+                openDefault={openClose}/>
             <Card
                 width='32.5%'
                 cardInfo={generalInfo}
@@ -107,11 +102,13 @@ export const ClientContact = ({data, setContactId, handleOpenClose}) => {
                 color={Colors.BackgroundBlue}
                 icon={Images.generalInfoIcon}
             />
-            <div style={{width: 24}}/>
-            <div style={{marginTop: -32, width: '100%'}}>
+            <div className={classes.clearBoth}/>
+            <div className={classes.notesWrap}>
                 <Notes
                     data={clientContacts}
-                    items={clientContactItem} headerTitles={headerTitles} defaultStyle={true}/>
+                    items={clientContactItem}
+                    headerTitles={headerTitles}
+                    defaultStyle={true}/>
             </div>
 
         </div>

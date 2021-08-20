@@ -9,6 +9,12 @@ export const fundingSourceSingleStyles = makeStyles(() => ({
         justifyContent:'space-between',
         alignItems: "center"
     },
+    fundingSourceSingleHeaderWrapStyles : {
+        marginBottom : 34,
+        display: 'flex',
+        justifyContent:'space-between',
+        alignItems: "center",
+    },
     title : {
         fontSize: '18px',
         color:Colors.TextPrimary,
@@ -33,5 +39,26 @@ export const fundingSourceSingleStyles = makeStyles(() => ({
         color : Colors.TextPrimary,
         fontWeight : "bold",
     },
+    fundingSourceSingleGeneralStyles : {
+        display: 'flex',
+        justifyContent: "space-between"
+    },
+    clear : {
+        height: 36, width: 74
+    },
+    iconCursor : {
+        cursor  : 'pointer'
+    },
+    iconCursordelete : {
+        marginLeft: 16,
+        cursor  : 'pointer'
+    },
+    tableTitle : {
+        width: 100,
+        textOverflow: 'ellipsis',
+        overflow: 'hidden'
+    }
 
 }));
+
+export const btnStyles={height: 36, width: 74}

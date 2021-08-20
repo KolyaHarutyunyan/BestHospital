@@ -2,13 +2,13 @@ import React from "react";
 import {TableBodyComponent} from "@eachbase/components";
 import {TableCell} from "@material-ui/core";
 import {Images, useGlobalStyles} from "@eachbase/utils";
-import {useDispatch} from "react-redux";
 import {useHistory} from "react-router-dom";
+import {clientStyles} from "./styles";
 
 export const ClientTableBody = ({data,setOpen, index, setDeleteClient}) => {
     const globalClasses = useGlobalStyles()
-    const dispatch = useDispatch()
     const history = useHistory()
+    const classes = clientStyles()
     const handleOpenOfficeInfo = (id) => {
         history.push(`/client/${id}`)
     }
@@ -27,7 +27,7 @@ export const ClientTableBody = ({data,setOpen, index, setDeleteClient}) => {
             <TableCell>{data?.status} </TableCell>
             <TableCell>{data?.enrollment?.name}</TableCell>
             <TableCell>
-                    <img src={Images.remove} alt="delete" style={{ cursor: 'pointer'}}
+                    <img src={Images.remove} alt="delete" className={classes.iconCursor}
                          onClick={(e) => {
                              e.stopPropagation()
                              setDeleteClient({id:data.id, firstName: data.firstName})

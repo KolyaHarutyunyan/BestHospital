@@ -3,7 +3,6 @@ import {makeStyles} from "@material-ui/core/styles";
 
 
 export const createFoundingSourceStyle = makeStyles(() => ({
-
     createFoundingSource: {
         width: 920,
         background: Colors.BackgroundWhite,
@@ -32,7 +31,13 @@ export const createFoundingSourceStyle = makeStyles(() => ({
     createFoundingSourceBody: {
         width: '100%',
         padding: '40px',
-
+    },
+    createFoundingSourceBodyBlock: {
+        display: "flex",
+        justifyContent: "space-between"
+    },
+    createFoundingSourceBodyBox: {
+        width: 400
     },
     createFundingSourceHeaderBottom: {
         width: '100%',
@@ -67,14 +72,18 @@ export const createFoundingSourceStyle = makeStyles(() => ({
         width: '75%',
         borderTop: `1px dashed ${Colors.TextDarkGrey}`,
         position: "absolute",
-        top:16,
+        top: 16,
         margin: "auto",
-        left:0,
-        right :0
+        left: 0,
+        right: 0
     },
     createFundingSourceHeaderBottomPosition: {
-        position:'relative',
-        width:64,
+        position: 'relative',
+        width: 64,
         background: Colors.BackgroundPrimary,
-    }
+    },
 }));
+
+export const inputStyle = {
+    marginBottom: 8
+}

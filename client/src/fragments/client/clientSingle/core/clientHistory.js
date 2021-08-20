@@ -1,12 +1,13 @@
 import {HistoryCard} from "@eachbase/components/card";
-import {useSelector} from "react-redux";
+import {serviceSingleStyles} from "./styles";
+
 
 
 export const ClientHistory = ()=>{
-
+    const classes = serviceSingleStyles()
     let data = []
     return(
-        <div style={{marginTop: 50}}>
+        <div className={classes.clientHistory}>
             {data && data.map((item,index)=>{
                 return(
                     <HistoryCard data={item} />

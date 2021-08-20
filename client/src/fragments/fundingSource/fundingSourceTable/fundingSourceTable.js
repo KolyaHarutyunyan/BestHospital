@@ -1,7 +1,7 @@
+import React, {useState} from "react";
 import {Paper, Table, TableContainer} from "@material-ui/core";
 import {FundingSourceTableBody, FundingSourceTableHead} from "./core";
 import {useGlobalStyles} from "@eachbase/utils";
-import React, {useState} from "react";
 import {useSelector} from "react-redux";
 import {Loader, PaginationItem} from "@eachbase/components";
 

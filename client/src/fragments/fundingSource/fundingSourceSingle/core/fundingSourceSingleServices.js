@@ -1,15 +1,14 @@
-import React, {Fragment, useState} from "react";
+import React  from "react";
 import {Notes, TableBodyComponent} from "@eachbase/components";
 import {FundingSourceSinglePTModifiers} from "./fundingSourceSinglePTModifiers";
 import {Images} from "@eachbase/utils";
 import {useSelector} from "react-redux";
 import {TableCell} from "@material-ui/core";
+import {fundingSourceSingleStyles} from "./styles";
 
 export const FundingSourceSingleServices = () => {
-    let data = useSelector(state => state.fundingSource.fundingSourceServices)
-
-    console.log(data, 'data')
-
+    const data = useSelector(state => state.fundingSource.fundingSourceServices)
+    const classes = fundingSourceSingleStyles()
     const headerTitles = [
         {
             title: 'Service',
@@ -41,16 +40,15 @@ export const FundingSourceSingleServices = () => {
     let serviceItem = (item, index) => {
         return (
             <TableBodyComponent key={index}>
-                <TableCell><p style={{textOverflow: 'ellipsis', width: 100, overflow: 'hidden'}}>{item.name}</p></TableCell>
+                <TableCell><p className={classes.tableTitle}>{item.name}</p></TableCell>
                 <TableCell>  {item.cptCode}  </TableCell>
                 <TableCell>  {item.size}  </TableCell>
                 <TableCell>  {item.min}  </TableCell>
                 <TableCell>  {item.max}  </TableCell>
                 <TableCell>
                     <>
-                        <img src={Images.edit} alt="edit" style={{cursor: 'pointer'}} onClick={() => alert(item._id)}/>
-                        <img src={Images.remove} alt="delete" style={{marginLeft: 16, cursor: 'pointer'}}
-                             onClick={() => alert(index)}/>
+                        <img src={Images.edit} alt="edit" className={classes.iconCursor} onClick={() => alert(item._id)}/>
+                        <img src={Images.remove} alt="delete" className={classes.iconCursordelete} onClick={() => alert(index)}/>
                     </>
                 </TableCell>
             </TableBodyComponent>

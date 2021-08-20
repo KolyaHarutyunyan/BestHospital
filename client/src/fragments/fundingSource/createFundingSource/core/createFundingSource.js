@@ -1,8 +1,8 @@
 import {AddressInput, ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
 import React, {useState} from "react";
-import {createFoundingSourceStyle} from "./styles";
+import {createFoundingSourceStyle, inputStyle} from "./styles";
 import {EmailValidator, ErrorText} from "@eachbase/utils";
-import {fundingSourceActions, officeActions} from "@eachbase/store";
+import {fundingSourceActions,} from "@eachbase/store";
 import {useDispatch} from "react-redux";
 
 
@@ -57,18 +57,15 @@ export const CreateFundingSource = ({handleClose}) => {
         {name: 'first'},
         {name: 'second'}
     ]
-    let aaa = {
-        marginBottom: 8
-    }
 
     return (
         <div className={classes.createFoundingSource}>
             <ModalHeader headerBottom={true} handleClose={handleClose} title={'Add Funding Source'}/>
             <div className={classes.createFoundingSourceBody}>
-                <div style={{display: "flex", justifyContent: "space-between"}}>
-                    <div style={{width: 400}}>
+                <div className={classes.createFoundingSourceBodyBlock}>
+                    <div className={classes.createFoundingSourceBodyBox}>
                         <ValidationInput
-                            styles={aaa}
+                            styles={inputStyle}
                             variant={"outlined"}
                             sendBoolean={handleCheck}
                             onChange={handleChange}
@@ -79,7 +76,7 @@ export const CreateFundingSource = ({handleClose}) => {
                             typeError={error === 'name' && ErrorText.field}
                         />
                         <ValidationInput
-                            styles={aaa}
+                            styles={inputStyle}
                             validator={EmailValidator}
                             variant={"outlined"}
                             name={"email"}
@@ -91,7 +88,7 @@ export const CreateFundingSource = ({handleClose}) => {
                             onChange={handleChange}
                         />
                         <ValidationInput
-                            styles={aaa}
+                            styles={inputStyle}
                             sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.phone}
@@ -102,7 +99,7 @@ export const CreateFundingSource = ({handleClose}) => {
                             typeError={error === 'phone' && ErrorText.field}
                         />
                         <SelectInput
-                            styles={aaa}
+                            styles={inputStyle}
                             name={"type"}
                             label={"Type*"}
                             handleSelect={handleChange}
@@ -110,10 +107,9 @@ export const CreateFundingSource = ({handleClose}) => {
                             value={inputs.type}
                             list={list}
                             typeError={error === 'type' ? ErrorText.field : ''}
-                            // type={'id'}
                         />
                         <ValidationInput
-                            styles={aaa}
+                            styles={inputStyle}
                             sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.contact}
@@ -124,7 +120,7 @@ export const CreateFundingSource = ({handleClose}) => {
                             typeError={error === 'contract' && ErrorText.field}
                         />
                         <ValidationInput
-                            styles={aaa}
+                            styles={inputStyle}
                             sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.website}
@@ -136,17 +132,16 @@ export const CreateFundingSource = ({handleClose}) => {
                         />
 
                     </div>
-                    <div style={{width: 400}}>
-                        <AddressInput styles={aaa} Value='Street Address*' flex='block' handleSelectValue={setFullAddress}/>
+                    <div className={classes.createFoundingSourceBodyBox}>
+                        <AddressInput
+                            styles={inputStyle}
+                            Value='Street Address*'
+                            flex='block'
+                            handleSelectValue={setFullAddress}/>
                     </div>
                 </div>
-                <div style={{display: "flex", justifyContent: 'space-between'}}>
-
-                    {/* <button onClick={handleCreate}>click</button> */}
-                    {/* <button onClick={handleCreate}>click</button> */}
-                    {/* <AddModalButton handleClick={handleCreate} text={'Add'} styles={{width: '400px'}} /> */}
+                <div className={classes.createFoundingSourceBodyBlock}>
                     <CreateChancel
-                        // classes={globalInputs.buttonsStyle}
                         create={"Add"}
                         chancel={"Cancel"}
                         onCreate={handleCreate}

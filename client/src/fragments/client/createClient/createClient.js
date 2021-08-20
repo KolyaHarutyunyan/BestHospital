@@ -13,13 +13,7 @@ export const CreateClient = ({handleClose}) => {
 
     const classes = createClientStyle()
     const dispatch = useDispatch()
-    const handleCheck = (bool) => {
-        if (bool === true) {
-            setError("Not valid email");
-        } else {
-            setError("");
-        }
-    };
+
 
     const handleChange = e => setInputs(
         prevState => ({...prevState, [e.target.name]: e.target.value}),
@@ -31,7 +25,6 @@ export const CreateClient = ({handleClose}) => {
         if (step === 'first') {
             if (inputs.firstName && inputs.lastName && inputs.code) {
                 setStep('second')
-                // dispatch(fundingSourceActions.createFundingSource(data))
             } else {
                 setError(
                     !inputs.firstName ? 'firstName' :
@@ -66,20 +59,13 @@ export const CreateClient = ({handleClose}) => {
                                         'Input is not field'
                 )
             }
-
-
-
-
         }
-
-
     }
 
     const list = [
         {name: 'male'},
         {name: 'female'}
     ]
-
 
     return (
         <div className={classes.createFoundingSource}>
@@ -89,17 +75,15 @@ export const CreateClient = ({handleClose}) => {
                     {step === 'first' ? <div style={{width: 463}}>
                         <ValidationInput
                             variant={"outlined"}
-                            sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.firstName}
                             type={"text"}
-                            label={"First Name*"}
+                            label={"First Name"}
                             name='firstName'
                             typeError={error === 'firstName' && ErrorText.field}
                         />
                         <ValidationInput
                             variant={"outlined"}
-                            sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.middleName}
                             type={"text"}
@@ -109,7 +93,6 @@ export const CreateClient = ({handleClose}) => {
                         />
                         <ValidationInput
                             variant={"outlined"}
-                            sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.lastName}
                             type={"text"}
@@ -119,7 +102,6 @@ export const CreateClient = ({handleClose}) => {
                         />
                         <ValidationInput
                             variant={"outlined"}
-                            sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.code}
                             type={"number"}
@@ -133,15 +115,12 @@ export const CreateClient = ({handleClose}) => {
                             name={"gender"}
                             label={"Gender*"}
                             handleSelect={handleChange}
-                            sendBoolean={handleCheck}
                             value={inputs.gender}
                             list={list}
                             typeError={error === 'gender' ? ErrorText.field : ''}
-                            // type={'id'}
                         />
                         <ValidationInput
                             variant={"outlined"}
-                            sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.birthday}
                             type={"date"}
@@ -151,7 +130,6 @@ export const CreateClient = ({handleClose}) => {
                         />
                         <ValidationInput
                             variant={"outlined"}
-                            sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.age}
                             type={"text"}
@@ -161,7 +139,6 @@ export const CreateClient = ({handleClose}) => {
                         />
                         <ValidationInput
                             variant={"outlined"}
-                            sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.ethnicity}
                             type={"text"}
@@ -173,21 +150,17 @@ export const CreateClient = ({handleClose}) => {
                             name={"language"}
                             label={"Language*"}
                             handleSelect={handleChange}
-                            sendBoolean={handleCheck}
                             value={inputs.language}
                             language={languages}
                             typeError={error === 'language' ? ErrorText.field : ''}
-                            // type={'id'}
                         />
                         <SelectInput
                             name={"familyLanguage"}
                             label={"Family Language*"}
                             handleSelect={handleChange}
-                            sendBoolean={handleCheck}
                             value={inputs.familyLanguage}
                             language={languages}
                             typeError={error === 'familyLanguage' ? ErrorText.field : ''}
-                            // type={'id'}
                         />
                     </div>}
                 </div>
@@ -195,7 +168,6 @@ export const CreateClient = ({handleClose}) => {
 
 
                     <CreateChancel
-                        // classes={globalInputs.buttonsStyle}
                         create={step === 'first' ? 'Next' : "Add"}
                         chancel={"Cancel"}
                         onCreate={handleCreate}

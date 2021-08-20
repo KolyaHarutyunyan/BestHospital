@@ -1,12 +1,10 @@
 import {AddressInput, ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
-import React, {useEffect, useState} from "react";
-import {createFoundingSourceStyle} from "./styles";
+import React, {useState} from "react";
+import {foundingSourceModalStyle,inputStyle} from "./styles";
 import {EmailValidator, ErrorText} from "@eachbase/utils";
-import {fundingSourceActions, officeActions} from "@eachbase/store";
+import {fundingSourceActions} from "@eachbase/store";
 import {useDispatch, useSelector} from "react-redux";
-import {editFundingSource} from "../../../../../store/fundingSource/fundingSource.action";
-import {useParams} from "react-router-dom";
-// import SelectInput from "@material-ui/core/Select/SelectInput";
+
 
 export const FundingSourceGeneralEdit = ({handleClose}) => {
     const prevData = useSelector(state => state.fundingSource.fundingSourceItem)
@@ -20,19 +18,9 @@ export const FundingSourceGeneralEdit = ({handleClose}) => {
         'website': prevData.website,
         address: prevData.address,
         "status": 1
-
     });
-
-    //55
-
-    useEffect(() => {
-
-    }, [])
-
     const [fullAddress, setFullAddress] = useState(null)
-
-
-    const classes = createFoundingSourceStyle()
+    const classes = foundingSourceModalStyle()
     const dispatch = useDispatch()
     const handleCheck = (bool) => {
         if (bool === true) {
@@ -79,18 +67,16 @@ export const FundingSourceGeneralEdit = ({handleClose}) => {
         {name: 'second'}
     ]
 
-    const inputMargin = {
-        marginBottom: 8
-    }
+
 
     return (
         <div className={classes.createFoundingSource}>
             <ModalHeader handleClose={handleClose} title={'Edit Funding Source'} headerBottom={true}/>
             <div className={classes.createFoundingSourceBody}>
-                <div style={{display: "flex", justifyContent: "space-between"}}>
-                    <div style={{width: 400}}>
+                <div className={classes.foundingSourceModalsBodyBlock}>
+                    <div className={classes.foundingSourceModalsBodyBox}>
                         <ValidationInput
-                            styles={inputMargin}
+                            styles={inputStyle}
                             variant={"outlined"}
                             sendBoolean={handleCheck}
                             onChange={handleChange}
@@ -101,7 +87,7 @@ export const FundingSourceGeneralEdit = ({handleClose}) => {
                             typeError={error === 'name' && ErrorText.field}
                         />
                         <ValidationInput
-                            styles={inputMargin}
+                            styles={inputStyle}
                             validator={EmailValidator}
                             variant={"outlined"}
                             name={"email"}
@@ -113,7 +99,7 @@ export const FundingSourceGeneralEdit = ({handleClose}) => {
                             onChange={handleChange}
                         />
                         <ValidationInput
-                            styles={inputMargin}
+                            styles={inputStyle}
                             sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.phoneNumber}
@@ -124,7 +110,7 @@ export const FundingSourceGeneralEdit = ({handleClose}) => {
                             typeError={error === 'phoneNumber' && ErrorText.field}
                         />
                         <SelectInput
-                            styles={inputMargin}
+                            styles={inputStyle}
                             name={"type"}
                             label={"Type*"}
                             handleSelect={handleChange}
@@ -132,10 +118,9 @@ export const FundingSourceGeneralEdit = ({handleClose}) => {
                             value={inputs.type}
                             list={list}
                             typeError={error === 'type' ? ErrorText.field : ''}
-                            // type={'id'}
                         />
                         <ValidationInput
-                            styles={inputMargin}
+                            styles={inputStyle}
                             sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.contact}
@@ -146,7 +131,7 @@ export const FundingSourceGeneralEdit = ({handleClose}) => {
                             typeError={error === 'contract' && ErrorText.field}
                         />
                         <ValidationInput
-                            styles={inputMargin}
+                            styles={inputStyle}
                             sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.website}
@@ -158,12 +143,14 @@ export const FundingSourceGeneralEdit = ({handleClose}) => {
                         />
 
                     </div>
-                    <div style={{width: 400}}>
-                        <AddressInput styles={inputMargin} Value={inputs?.address?.street} flex='block' handleSelectValue={setFullAddress}/>
+                    <div className={classes.foundingSourceModalsBodyBox}>
+                        <AddressInput
+                            styles={inputStyle}
+                            flex='block'
+                            handleSelectValue={setFullAddress}/>
                     </div>
                 </div>
-                <div style={{display: "flex", justifyContent: 'space-between'}}>
-
+                <div className={classes.foundingSourceModalsBodyBlock}>
                     <CreateChancel
                         create={"Save"}
                         chancel={"Cancel"}

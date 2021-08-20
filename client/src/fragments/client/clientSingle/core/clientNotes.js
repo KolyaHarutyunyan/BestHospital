@@ -1,10 +1,11 @@
-import React, {useState} from "react";
-import {Notes} from "../../../../components";
-import {Images} from "../../../../utils";
+import React from "react";
+import {Notes} from "@eachbase/components";
+import {Images} from "@eachbase/utils";
+import {serviceSingleStyles} from "./styles";
 
 
 export const ClientNotes = () => {
-
+    const classes  =serviceSingleStyles()
     const headerTitles = [
         {
             title: 'Date',
@@ -34,7 +35,7 @@ export const ClientNotes = () => {
             title: 'Service Request',
         },
         {
-            title: <img src={Images.remove} alt="sdasd" style={{ cursor: 'pointer'}}/>,
+            title: <img src={Images.remove} alt="icon" className={classes.iconStyle}/>,
         }
     ]
     return (

@@ -1,11 +1,9 @@
 import {makeStyles} from "@material-ui/core/styles";
-import {Backgrounds, Colors} from "../../../../utils";
+import {Backgrounds, Colors} from "@eachbase/utils";
 
 export const serviceSingleStyles = makeStyles(() => ({
-        // staff general
         staffGeneralWrapper: {
             display: 'flex',
-            // justifyContent: 'space-between'
         },
         tabsWrapper: {
             display: 'flex',
@@ -78,6 +76,15 @@ export const serviceSingleStyles = makeStyles(() => ({
             boxShadow: '0 0 6px #8A8A8A3D',
             padding: 16
         },
+        availableHoursHedaer: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center', marginBottom: 16
+        },
+        availableHoursBlock: {
+            display: 'flex',
+            flexWrap: "wrap"
+        },
         availableHoursTitle: {
             color: '#4B5C68',
             fontSize: 18,
@@ -101,25 +108,63 @@ export const serviceSingleStyles = makeStyles(() => ({
             fontWeight: "bold",
             paddingLeft: 16,
         },
-    availableHoursBoxBody:{
+        availableHoursBoxBody: {
             height: 162,
-            overflow : "auto",
-        padding :' 8px 0 8px 16px'
-    },
-    availableHoursBoxBodyInfo: {
-            color : '#4B5C68',
-        fontSize : 14,
-        margin : '8px 0'
-    },
-    deleteModal:{
-        width:'500px',
-        height: "auto",
-        background: Backgrounds.whiteModal,
-        borderRadius: "8px",
-        padding:'8px 0 40px 0',
+            overflow: "auto",
+            padding: ' 8px 0 8px 16px'
+        },
+        availableHoursBoxBodyInfo: {
+            color: '#4B5C68',
+            fontSize: 14,
+            margin: '8px 0'
+        },
+        deleteModal: {
+            width: '500px',
+            height: "auto",
+            background: Backgrounds.whiteModal,
+            borderRadius: "8px",
+            padding: '8px 0 40px 0',
+            display: 'flex',
+            flexDirection: 'column',
+            textAlign: 'center',
+        },
+        clearBoth: {
+            width: 24
+        },
+        tableName: {
+            textOverflow: 'ellipsis',
+            width: 100,
+            overflow: 'hidden'
+        },
+        tableID: {
+            textOverflow: 'ellipsis',
+            width: 60,
+            overflow: 'hidden'
+        },
+        iconStyle: {
+            cursor: "pointer"
+        },
+        iconDeleteStyle: {
+            cursor: "pointer",
+            marginLeft: 16
+        },
+        notesWrap: {
+            marginTop: -32,
+            width: '100%'
+        },
+        clientHistory: {
+            marginTop: 50,
+        },
+    headerRight :{
         display:'flex',
-        flexDirection:'column',
-        textAlign:'center',
-    }
+        alignItems:'center',
+    },
+
+
     }))
 ;
+
+export const editButtonStyle = {
+    height: 36,
+    paddingInline: 24,
+}
