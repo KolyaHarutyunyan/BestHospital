@@ -1,11 +1,16 @@
-import {SimpleModal} from "@eachbase/components";
+import {DeleteElement, SimpleModal} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
 import {SystemItemAddService} from "./modals";
 import {systemItemStyles} from "./styles";
+import React from "react";
 
-export const SystemItemHeader = ({modalType, open ,handleOpenClose}) => {
+export const SystemItemHeader = ({handleDeletedOpenClose, deletedId, deleteModalOpened, modalType, open ,handleOpenClose}) => {
 
     const classes = systemItemStyles()
+
+    const deleteItem = ()=>{
+        alert(deletedId)
+    }
 
     return (
         <div className={[`${classes.systemHeaderStyles} ${classes.spaceBottom}`]}>
@@ -17,6 +22,11 @@ export const SystemItemHeader = ({modalType, open ,handleOpenClose}) => {
                 openDefault={open}
                 handleOpenClose={handleOpenClose}
                 content={<SystemItemAddService modalType={modalType} handleClose={handleOpenClose}/>}
+            />
+            <SimpleModal
+                openDefault={deleteModalOpened}
+                handleOpenClose={handleDeletedOpenClose}
+                content={<DeleteElement info={deletedId} handleDel={deleteItem} handleClose={handleDeletedOpenClose} />}
             />
         </div>
     )

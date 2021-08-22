@@ -33,16 +33,12 @@ const credentials = [
     },
 ]
 
-export const Departments = ({openModal}) => {
+export const Departments = ({removeItem, openModal}) => {
 
     const classes = systemItemStyles()
 
     const handleChange = (e) => {
         console.log(e.target.value);
-    }
-
-    const removeItem = () => {
-        alert('remove department item')
     }
 
     const editDepartment = (modalType) => {
@@ -71,11 +67,10 @@ export const Departments = ({openModal}) => {
                                 <p>
                                     <span>{credentialItem.name}</span>
                                     {credentialItem.type}</p>
-                                <div>
-                                    <img src={Images.edit} style={{cursor: 'pointer'}}
+                                <div className={classes.icons}>
+                                    <img src={Images.edit}
                                          onClick={(e) => editDepartment('editDepartment')} alt="edit"/>
-                                    <img src={Images.remove} alt="delete" style={{cursor: 'pointer', marginLeft: 16}}
-                                         onClick={removeItem}/>
+                                    <img src={Images.remove} alt="delete" onClick={() => removeItem('department')}/>
                                 </div>
                             </div>
                         )

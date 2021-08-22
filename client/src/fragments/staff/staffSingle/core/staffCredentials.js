@@ -1,26 +1,8 @@
 import React, {useState} from "react";
 import {TableCell} from "@material-ui/core";
 import {DeleteElement, Notes, SimpleModal, TableBodyComponent} from "@eachbase/components";
-import {Images, Backgrounds} from "@eachbase/utils";
+import {Images} from "@eachbase/utils";
 import moment from 'moment';
-
-const AddCredential = {
-    staffId: '610bcdd691e2130e1a12371b',
-    credentialId: '610cf947776f5210843ccb54',
-    expirationDate: '06/11/2021'
-}
-
-const editCredentialData = {
-    credentialId: "610cf947776f5210843ccb54",
-    expirationDate: "05/08/2019"
-}
-
-const types = [
-    {name: 'type'},
-    {name: 'type 1'},
-    {name: 'type 2'},
-    {name: 'type 3'},
-]
 
 export const StaffCredentials = ({credentialData, openModal}) => {
 
@@ -37,7 +19,6 @@ export const StaffCredentials = ({credentialData, openModal}) => {
     const editCredential = (modalType) => {
         openModal(modalType)
     }
-    console.log(credentialData, 'cred Data');
     // const removeCredential = () => {
     //     dispatch(adminActions.deleteCredentialById(removeCredentialData))
     // }
@@ -62,8 +43,6 @@ export const StaffCredentials = ({credentialData, openModal}) => {
 
     const receivedData = credentialData.expirationDate
     const expirationDate = credentialData.expirationDate
-
-    console.log(moment(undefined).format('L'), 'aaaa');
 
     const data = [
         {
@@ -120,7 +99,9 @@ export const StaffCredentials = ({credentialData, openModal}) => {
 
     return (
         <div>
-            <Notes defaultStyle={true} data={data} pagination={true} items={notesItem} headerTitles={headerTitles}/>
+            {
+                credentialData && <Notes defaultStyle={true} data={credentialData && data} pagination={true} items={notesItem} headerTitles={headerTitles}/>
+            }
             <SimpleModal
                 openDefault={open}
                 handleOpenClose={handleClose}

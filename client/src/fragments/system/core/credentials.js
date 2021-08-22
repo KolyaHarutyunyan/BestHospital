@@ -2,6 +2,7 @@ import {AddButton, SelectInput, ValidationInput} from "@eachbase/components";
 import React from "react";
 import {systemItemStyles} from "./styles";
 import {Images} from "@eachbase/utils";
+import {SelectInputPlaceholder} from "@eachbase/components";
 
 const credentialBtn = {
     maxWidth: '174px',
@@ -40,16 +41,12 @@ const credentials = [
     },
 ]
 
-export const Credentials = ({openModal}) => {
+export const Credentials = ({removeItem,openModal}) => {
 
     const classes = systemItemStyles()
 
     const handleChange = (e) => {
         console.log(e.target.value);
-    }
-
-    const removeItem = () => {
-        alert('remove credential item')
     }
 
     const editCredential = (modalType) => {
@@ -67,10 +64,9 @@ export const Credentials = ({openModal}) => {
                     type={"text"}
                     placeholder={'Name*'}
                 />
-                <SelectInput
+                <SelectInputPlaceholder
                     style={classes.credentialInputStyle}
                     name={"issuingState"}
-                    placeholder={"Issuing State*"}
                     handleSelect={handleChange}
                     list={credentialsList}
                 />
@@ -89,7 +85,7 @@ export const Credentials = ({openModal}) => {
                                     <img src={Images.edit} style={{cursor: 'pointer'}}
                                          onClick={(e) => editCredential('editCredential')} alt="edit"/>
                                     <img src={Images.remove} alt="delete" style={{cursor: 'pointer', marginLeft: 16}}
-                                         onClick={removeItem}/>
+                                         onClick={() => removeItem('credential')}/>
                                 </div>
                             </div>
                         )
