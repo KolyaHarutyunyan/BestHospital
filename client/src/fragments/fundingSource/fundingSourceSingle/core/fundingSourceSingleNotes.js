@@ -1,10 +1,12 @@
-import React, {useState} from "react";
+import React  from "react";
 import {Notes} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
+import {fundingSourceSingleStyles} from "./styles";
 
 
 export const FundingSourceSingleNotes = () => {
 
+    const classes = fundingSourceSingleStyles()
     const headerTitles = [
         {
             title: 'Date',
@@ -34,7 +36,7 @@ export const FundingSourceSingleNotes = () => {
             title: 'Service Request',
         },
         {
-            title: <img src={Images.remove} alt="sdasd" style={{ cursor: 'pointer'}}/>,
+            title: <img src={Images.remove} alt="icon" className={classes.iconCursor} />,
         }
     ]
     return (

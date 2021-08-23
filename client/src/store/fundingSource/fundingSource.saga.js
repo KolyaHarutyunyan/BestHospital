@@ -16,7 +16,7 @@ import {
     CREATE_FUNDING_SOURCE_SERV,
     GET_FUNDING_SOURCE_SERV_BY_ID_SUCCESS,
     GET_FUNDING_SOURCE_SERV_BY_ID,
-    CREATE_FUNDING_SOURCE_SERVICE_MODIFIER, EDIT_FUNDING_SOURCE,
+    CREATE_FUNDING_SOURCE_SERVICE_MODIFIER, EDIT_FUNDING_SOURCE, EDIT_FUNDING_SOURCE_SERVICE,
 } from "./fundingSource.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
@@ -111,6 +111,14 @@ function* createFundingSourceServicesById({payload}) {
     }
 }
 
+function* editFundingSourceServices({payload}) {
+    try {
+        const res = yield call(authService.editFoundingSourceServiceService, payload.id, payload.body);
+    } catch (error) {
+
+    }
+}
+
 function* createFundingSourceServicesModifier({payload}) {
     try {
         const res = yield call(authService.createFoundingSourceServiceModifierService, payload.id, payload.body);
@@ -193,6 +201,7 @@ export const watchFundingSource = function* watchFundingSourceSaga() {
     yield takeLatest(GET_FUNDING_SOURCE_BY_ID, getFundingSourceById);
     yield takeLatest(GET_FUNDING_SOURCE_SERVICE_BY_ID, getFundingSourceServicesById);
     yield takeLatest(CREATE_FUNDING_SOURCE_SERVICE_BY_ID, createFundingSourceServicesById);
+    yield takeLatest(EDIT_FUNDING_SOURCE_SERVICE, editFundingSourceServices);
     yield takeLatest(CREATE_FUNDING_SOURCE_SERVICE_MODIFIER, createFundingSourceServicesModifier);
     yield takeLatest(GET_FUNDING_SOURCE_HISTORIES_BY_ID, getFundingSourceHistoriesById);
     yield takeLatest(GET_FUNDING_SOURCE_SERV, getFundingSourceServ);

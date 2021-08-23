@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {fundingSourceSingleStyles} from "./styles";
+import {btnStyles, fundingSourceSingleStyles} from "./styles";
 import {Images} from "@eachbase/utils";
 import {AddButton, AddModalButton, SimpleModal} from "@eachbase/components";
 import {fundingSourceActions} from "@eachbase/store";
@@ -9,14 +9,15 @@ import {
     FundingSourceGeneralEdit,
     FundingSourceNotesAdd,
     FundingSourceServiceAdd,
-    FundingSourceServiceEdit
 } from "./modals";
 
 
 export const FundingSourceSingleHeader = ({activeTab, title}) => {
     const [open, setOpen] = useState(false)
     const dispatch = useDispatch()
-    let params = useParams()
+    const params = useParams()
+    const classes = fundingSourceSingleStyles()
+
     useEffect(() => {
         if (activeTab === 1) {
             dispatch(fundingSourceActions.getFoundingSourceServiceById(params.id))
@@ -27,16 +28,12 @@ export const FundingSourceSingleHeader = ({activeTab, title}) => {
         }
     }, [activeTab])
 
-
-    const classes = fundingSourceSingleStyles()
-
     const handleOpenClose = () => {
         setOpen(!open)
     }
 
-
     return (
-        <div className={classes.fundingSourceSingleHeaderStyles} style={{marginBottom: 34}}>
+        <div className={classes.fundingSourceSingleHeaderWrapStyles}>
             <div className={classes.fundingSourceSingleHeaderStyles}>
                 <img src={Images.fundingSourceActive} className={classes.foundingIcon} alt="founding"/>
                 <p className={classes.title}>{title && title}</p>
@@ -51,9 +48,9 @@ export const FundingSourceSingleHeader = ({activeTab, title}) => {
                         activeTab === 2 ?
                             <FundingSourceNotesAdd handleClose={handleOpenClose}/> : null}/>
             {activeTab === 0 ?
-                <AddModalButton handleClick={handleOpenClose} text='Edit' btnStyles={{height: 36, width: 74}}/>
+                <AddModalButton handleClick={handleOpenClose} text='Edit' btnStyles={btnStyles}/>
                 : activeTab >= 3 ?
-                    <div style={{height: 36, width: 74}}/> :
+                    <div className={classes.clear}/> :
                     <AddButton
                         text={activeTab === 1 ? 'Add Service' : activeTab === 2 ? 'Add Note' : ''}
                         handleClick={handleOpenClose}/>}

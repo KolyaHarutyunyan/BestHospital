@@ -21,7 +21,7 @@ export const EditClient = ({handleClose}) => {
         'familyLanguage': data?.familyLanguage,
         'gender': data?.gender,
         'birthday': data?.birthday,
-        // 'age' : inputs.age,
+         'age' : data?.age,
         });
     const [step, setStep] = useState('first')
 
@@ -58,7 +58,7 @@ export const EditClient = ({handleClose}) => {
                     'language': inputs.language,
                     'familyLanguage': inputs.familyLanguage,
                     'gender': inputs.gender,
-                    // 'birthday': inputs.birthday,
+                  //   'birthday': new Date(inputs.birthday).toISOString(),
                     // 'age' : inputs.age,
                     "status": 1
                 }
@@ -76,21 +76,19 @@ export const EditClient = ({handleClose}) => {
             }
         }
     }
-
     const list = [
         {name: 'male'},
         {name: 'female'}
     ]
 
-
-    console.log(inputs,'eeeeee')
+    console.log(new Date(inputs.birthday).toISOString(),9999)
 
     return (
         <div className={classes.createFoundingSource}>
             <ModalHeader steps={'second'} handleClose={handleClose} title={'Edit Client'}/>
             <div className={classes.createFoundingSourceBody}>
-                <div style={{display: "flex", justifyContent: "space-between"}}>
-                    {step === 'first' ? <div style={{width: 463}}>
+                <div className={classes.clientModalBlock} >
+                    {step === 'first' ? <div className={classes.clientModalBox}>
                         <ValidationInput
                             variant={"outlined"}
                             onChange={handleChange}
@@ -136,7 +134,6 @@ export const EditClient = ({handleClose}) => {
                             value={inputs.gender}
                             list={list}
                             typeError={error === 'gender' ? ErrorText.field : ''}
-                            // type={'id'}
                         />
                         <ValidationInput
                             variant={"outlined"}
@@ -183,9 +180,7 @@ export const EditClient = ({handleClose}) => {
                         />
                     </div>}
                 </div>
-                <div style={{display: "flex", justifyContent: 'space-between'}}>
-
-
+                <div className={classes.clientModalBlock}>
                     <CreateChancel
                         create={step === 'first' ? 'Next' : "Add"}
                         chancel={"Cancel"}

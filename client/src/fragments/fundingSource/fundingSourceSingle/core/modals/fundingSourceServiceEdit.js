@@ -1,25 +1,16 @@
-import {AddressInput, ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
+import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
 import React, {useState} from "react";
-import {createFoundingSourceStyle} from "./styles";
-import {EmailValidator, ErrorText} from "@eachbase/utils";
-import {fundingSourceActions, officeActions} from "@eachbase/store";
+import {foundingSourceModalStyle} from "./styles";
+import {ErrorText, Images} from "@eachbase/utils";
 import {useDispatch} from "react-redux";
 
 
 export const FundingSourceServiceEdit = ({handleClose}) => {
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState({});
-    const [fullAddress, setFullAddress] = useState(null)
 
-    const classes = createFoundingSourceStyle()
-    const dispatch = useDispatch()
-    const handleCheck = (bool) => {
-        if (bool === true) {
-            setError("Not valid email");
-        } else {
-            setError("");
-        }
-    };
+
+    const classes = foundingSourceModalStyle()
 
     const handleChange = e => setInputs(
         prevState => ({...prevState, [e.target.name]: e.target.value}),
@@ -28,114 +19,143 @@ export const FundingSourceServiceEdit = ({handleClose}) => {
 
 
     const handleCreate = () => {
-        const data = {
-            "name": inputs.name,
-            "email": inputs.email,
-            "phoneNumber": inputs.phone,
-            'type': inputs.type,
-            'contact': inputs.contact,
-            'website': inputs.website,
-            "address": fullAddress,
-            "status": 1
-        }
-        if (inputs.name && inputs.email && inputs.phone && inputs.type && inputs.contact && inputs.website) {
-            dispatch(fundingSourceActions.createFundingSource(data))
+        const data = {}
+        if (inputs.name && inputs.cptCode && inputs.size && inputs.min && inputs.max) {
+            // dispatch(fundingSourceActions.createFundingSource(data))
         } else {
             setError(
                 !inputs.name ? 'name' :
-                    !inputs.email ? 'email' :
-                        !inputs.phone ? 'phone' :
-                            !inputs.type ? 'type' :
-                                !inputs.contact ? 'contact' :
-                                    !inputs.website ? 'website' :
-                                        'Input is not field'
+                    !inputs.cptCode ? 'cptCode' :
+                        !inputs.size ? 'size' :
+                            !inputs.min ? 'min' :
+                                !inputs.max ? 'max' :
+                                    'Input is not field'
             )
         }
     }
 
     const list = [
-        {name: 'first'},
-        {name: 'second'}
+        {name: 'service'},
+        {name: 'default'}
     ]
+
+
 
 
     return (
         <div className={classes.createFoundingSource}>
-            <ModalHeader handleClose={handleClose} title={'Edit Service'} headerBottom={true}/>
+            <ModalHeader handleClose={handleClose} title={'Edit Service'}/>
             <div className={classes.createFoundingSourceBody}>
-                <div style={{display: "flex", justifyContent: "space-between"}}>
-                    <div style={{width: 400}}>
-                        <ValidationInput
-                            variant={"outlined"}
-                            sendBoolean={handleCheck}
-                            onChange={handleChange}
-                            value={inputs.name}
-                            type={"text"}
-                            label={"Funding Source Name*"}
-                            name='name'
-                            typeError={error === 'name' && ErrorText.field}
-                        />
-                        <ValidationInput
-                            validator={EmailValidator}
-                            variant={"outlined"}
-                            name={"email"}
-                            type={"email"}
-                            label={"Email Address*"}
-                            typeError={error === 'email' ? ErrorText.field : error === 'Not valid email' ? 'Not valid email' : ''}
-                            sendBoolean={handleCheck}
-                            value={inputs.email}
-                            onChange={handleChange}
-                        />
-                        <ValidationInput
-                            sendBoolean={handleCheck}
-                            onChange={handleChange}
-                            value={inputs.phone}
-                            variant={"outlined"}
-                            type={"number"}
-                            label={"Phone Number*"}
-                            name={'phone'}
-                            typeError={error === 'phone' && ErrorText.field}
-                        />
+                <p className={classes.fundingSourceModalsTitle}>Service</p>
+                <div className={classes.foundingSourceModalsBodyBlock}>
+                    <div className={classes.foundingSourceModalsBodyBox}>
                         <SelectInput
-                            name={"type"}
-                            label={"Type*"}
+                            name={"name"}
+                            label={"Service*"}
                             handleSelect={handleChange}
-                            sendBoolean={handleCheck}
-                            value={inputs.type}
+                            value={inputs.name}
                             list={list}
-                            typeError={error === 'type' ? ErrorText.field : ''}
-                            // type={'id'}
+                            typeError={error === 'name' ? ErrorText.field : ''}
                         />
+                        <div className={classes.displayCodeBlock}>
+                            <p className={classes.displayCodeBlockText}>Display Code: <span
+                                className={classes.displayCode}>N/A</span></p>
+                            <p className={classes.displayCodeBlockText} style={{marginTop: 16}}>Display Code: <span
+                                className={classes.displayCode}>N/A</span></p>
+                        </div>
+                    </div>
+                    <div className={classes.foundingSourceModalsBodyBox}>
                         <ValidationInput
-                            sendBoolean={handleCheck}
                             onChange={handleChange}
-                            value={inputs.contact}
+                            value={inputs.cptCode}
                             variant={"outlined"}
                             type={"text"}
-                            label={"Contact Person"}
-                            name={'contact'}
-                            typeError={error === 'contract' && ErrorText.field}
+                            label={"CPT Code*"}
+                            name={'cptCode'}
+                            typeError={error === 'cptCode' && ErrorText.field}
                         />
                         <ValidationInput
-                            sendBoolean={handleCheck}
                             onChange={handleChange}
-                            value={inputs.website}
+                            value={inputs.size}
                             variant={"outlined"}
                             type={"text"}
-                            label={"Website"}
-                            name={'website'}
-                            typeError={error === 'website' && ErrorText.field}
+                            label={"Unit Size*"}
+                            name={'size'}
+                            typeError={error === 'size' && ErrorText.field}
                         />
-
+                        <div className={classes.foundingSourceModalsBodyBlock}>
+                            <ValidationInput
+                                onChange={handleChange}
+                                value={inputs.min}
+                                variant={"outlined"}
+                                type={"text"}
+                                label={"Min Unit*"}
+                                name={'min'}
+                                typeError={error === 'min' && ErrorText.field}
+                                styles={{width: 192}}
+                            />
+                            <ValidationInput
+                                onChange={handleChange}
+                                value={inputs.max}
+                                variant={"outlined"}
+                                type={"text"}
+                                label={"Min Unit*"}
+                                name={'max'}
+                                typeError={error === 'max' && ErrorText.field}
+                                styles={{width: 192, marginLeft: 10}}
+                            />
+                        </div>
                     </div>
-                    <div style={{width: 400}}>
 
-                    </div>
                 </div>
-                <div style={{display: "flex", justifyContent: 'space-between'}}>
-
+                <p className={classes.ModifiresTitle}>Modifiers</p>
+                <div className={classes.foundingSourceModalsBodyBlock}>
+                    <ValidationInput
+                        onChange={handleChange}
+                        value={inputs.website}
+                        variant={"outlined"}
+                        type={"text"}
+                        label={"Modifier Name"}
+                        name={'website'}
+                        typeError={error === 'website' && ErrorText.field}
+                        styles={{width: 198}}
+                    />
+                    <ValidationInput
+                        onChange={handleChange}
+                        value={inputs.website}
+                        variant={"outlined"}
+                        type={"text"}
+                        label={"Charge Rate*"}
+                        name={'website'}
+                        typeError={error === 'website' && ErrorText.field}
+                        styles={{width: 198}}
+                    />
+                    <SelectInput
+                        name={"type"}
+                        label={"Credential*"}
+                        handleSelect={handleChange}
+                        value={inputs.type}
+                        list={list}
+                        typeError={error === 'type' ? ErrorText.field : ''}
+                        styles={{width: 198}}
+                    />
+                    <div style={{width: 36}}/>
+                    <SelectInput
+                        name={"type"}
+                        label={"Type*"}
+                        handleSelect={handleChange}
+                        value={inputs.type}
+                        list={list}
+                        typeError={error === 'type' ? ErrorText.field : ''}
+                        styles={{width: 198,}}
+                    />
+                </div>
+                <div className={classes.addmodifiersBlock}>
+                    <img src={Images.addLight} alt="" className={classes.iconsCursor}/>
+                    <p className={classes.addMoreModifiersText}>Add more modifiers</p>
+                </div>
+                <div className={classes.foundingSourceModalsBodyBlock}>
                     <CreateChancel
-                        // classes={globalInputs.buttonsStyle}
                         create={"Add"}
                         chancel={"Cancel"}
                         onCreate={handleCreate}

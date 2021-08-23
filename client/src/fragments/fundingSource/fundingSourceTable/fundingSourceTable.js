@@ -1,7 +1,7 @@
+import React, {useState} from "react";
 import {Paper, Table, TableContainer} from "@material-ui/core";
 import {FundingSourceTableBody, FundingSourceTableHead} from "./core";
 import {useGlobalStyles} from "@eachbase/utils";
-import React, {useState} from "react";
 import {useSelector} from "react-redux";
 import {Loader, PaginationItem} from "@eachbase/components";
 
@@ -15,6 +15,8 @@ export const FundingSourceTable = ({}) => {
     const changePage = (number) => {
         setPage(number);
     };
+
+
 
     const list = fundingSourceList && fundingSourceList.length && fundingSourceList[page - 1]
     return (
@@ -37,7 +39,7 @@ export const FundingSourceTable = ({}) => {
                         ))}
                 </Table>
                 <PaginationItem
-                    text={'Showing 30 to 30 of 500 entries'}
+                    text={`Showing 1-7 of ${list.length} entries`}
                     handleReturn={(number) => changePage(number)}
                     page={page}
                     count={fundingSourceList.length}
@@ -46,3 +48,5 @@ export const FundingSourceTable = ({}) => {
         </div>
     );
 };
+
+

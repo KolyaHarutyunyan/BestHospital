@@ -24,7 +24,7 @@ export const fundingSourceReducer = (state = initialState, action) => {
         case  GET_FUNDING_SOURCE_SUCCESS:
             return {
                 ...state,
-                fundingSourceList: paginate((action.payload), 10),
+                fundingSourceList: paginate((action.payload), 5),
             }
 
         case  GET_FUNDING_SOURCE_BY_ID_SUCCESS:

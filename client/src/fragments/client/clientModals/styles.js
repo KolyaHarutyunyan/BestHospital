@@ -17,7 +17,7 @@ export const createClientStyle = makeStyles(() => ({
         display: "flex",
         flexDirection: 'column',
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
     },
     createFoundingSourceHeaderTop: {
         width: "100%",
@@ -29,7 +29,13 @@ export const createClientStyle = makeStyles(() => ({
     createFoundingSourceBody: {
         width: '100%',
         padding: '40px',
-
     },
+    clientModalBlock : {
+        display: "flex",
+        justifyContent: "space-between"
+    },
+    clientModalBox : {
+        width: 463
+    }
 
 }));

@@ -1,15 +1,14 @@
 import React, {useEffect, useState} from "react";
 import {TableWrapper} from "@eachbase/components";
 import {OfficesInfo, FundingSourceTable, CreateFundingSource,} from "@eachbase/fragments";
-import {useHistory} from "react-router-dom";
-import {fundingSourceActions, officeActions} from "@eachbase/store";
+import {fundingSourceActions} from "@eachbase/store";
 import {useDispatch, useSelector} from "react-redux";
-import {createFoundingSourceServiceById, getFundingSourceById} from "../../store/fundingSource/fundingSource.action";
+
 
 
 export const FundingSource = ({}) => {
     const dispatch = useDispatch()
-    const history = useHistory()
+
     const [open, setOpen] = useState(false)
 
 
@@ -21,7 +20,6 @@ export const FundingSource = ({}) => {
             officeById: state.offices.officeById,
         })
     )
-
 
     const handleOpenClose = () => {
         setOpen(!open)
@@ -43,17 +41,9 @@ export const FundingSource = ({}) => {
                     >
 
                         <FundingSourceTable/>
-
-                        {/*<button onClick={() => {*/}
-                        {/*    dispatch(fundingSourceActions.createFoundingSourceServiceById('610183a4dcc59c21f0792c35'))*/}
-                        {/*}}>click*/}
-                        {/*</button>*/}
-
-
                     </TableWrapper>
                 )
                 : (<OfficesInfo info={officeById}/>)
-
             }
         </>
     );

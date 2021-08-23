@@ -1,27 +1,20 @@
 import React, {useState} from "react";
-import {ValidationInput, SelectInput, CreateChancel, ModalHeader, AddressInput} from "@eachbase/components";
+import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
 import {createClientStyle,} from "./styles";
-import {ErrorText, languages} from "@eachbase/utils";
+import {ErrorText} from "@eachbase/utils";
 import {useDispatch} from "react-redux";
-import {clientActions} from "@eachbase/store";
-import {useParams} from "react-router-dom";
+
 
 
 export const AddEnrollment = ({handleClose}) => {
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState({});
-
-
-    const dispatch = useDispatch()
-    const params = useParams()
-
     const classes = createClientStyle()
 
     const handleChange = e => setInputs(
         prevState => ({...prevState, [e.target.name]: e.target.value}),
         error === e.target.name && setError(''),
     );
-
 
     const handleCreate = () => {
             if (inputs.firstName && inputs.lastName && inputs.phoneNumber && inputs.relationship) {
@@ -53,8 +46,8 @@ export const AddEnrollment = ({handleClose}) => {
                 text={'To add a new enrollment in the system, please fulfill the below fields.'}
             />
             <div className={classes.createFoundingSourceBody}>
-                <div style={{display: "flex", justifyContent: "space-between"}}>
-                  <div style={{width: 463}}>
+                <div className={classes.clientModalBlock}>
+                  <div className={classes.clientModalBox}>
                       <SelectInput
                           name={"fundingSource"}
                           label={"Funding Source*"}
@@ -92,7 +85,7 @@ export const AddEnrollment = ({handleClose}) => {
                       />
                         </div>
                 </div>
-                <div style={{display: "flex", justifyContent: 'space-between'}}>
+                <div className={classes.clientModalBlock}>
                     <CreateChancel
                         create={"Add"}
                         chancel={"Cancel"}
@@ -102,7 +95,6 @@ export const AddEnrollment = ({handleClose}) => {
                     />
                 </div>
             </div>
-
         </div>
     );
 };

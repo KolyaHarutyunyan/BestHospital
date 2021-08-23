@@ -1,11 +1,9 @@
 import React, {useState} from "react";
-import {ValidationInput, SelectInput, CreateChancel, ModalHeader, AddressInput} from "@eachbase/components";
+import {ValidationInput, CreateChancel, ModalHeader, AddressInput} from "@eachbase/components";
 import {createClientStyle,} from "./styles";
-import {ErrorText, languages} from "@eachbase/utils";
+import {ErrorText} from "@eachbase/utils";
 import {useDispatch, useSelector} from "react-redux";
 import {clientActions} from "@eachbase/store";
-import {useParams} from "react-router-dom";
-
 
 export const EditContact = ({handleClose, contactId}) => {
     const data = useSelector(state=>state?.client?.clientContacts[contactId])
@@ -20,8 +18,6 @@ export const EditContact = ({handleClose, contactId}) => {
     const [fullAddress, setFullAddress] = useState(null)
     const classes = createClientStyle()
     const dispatch = useDispatch()
-    const params = useParams()
-
 
 
     const handleChange = e => setInputs(
@@ -69,8 +65,8 @@ export const EditContact = ({handleClose, contactId}) => {
         <div className={classes.createFoundingSource}>
             <ModalHeader secondStepInfo={'Address'} steps={step} handleClose={handleClose} title={'Edit Contact'}/>
             <div className={classes.createFoundingSourceBody}>
-                <div style={{display: "flex", justifyContent: "space-between"}}>
-                    {step === 'first' ? <div style={{width: 463}}>
+                <div className={classes.clientModalBlock}>
+                    {step === 'first' ? <div className={classes.clientModalBox} >
                             <ValidationInput
                                 variant={"outlined"}
                                 onChange={handleChange}
@@ -109,11 +105,11 @@ export const EditContact = ({handleClose, contactId}) => {
                             />
 
                         </div> :
-                        <div style={{width: 463}}>
+                        <div className={classes.clientModalBox} >
                             <AddressInput flex={true} handleSelectValue={setFullAddress}/>
                         </div>}
                 </div>
-                <div style={{display: "flex", justifyContent: 'space-between'}}>
+                <div className={classes.clientModalBlock}>
                     <CreateChancel
                         create={step === 'first' ? 'Next' : "Add"}
                         chancel={"Cancel"}

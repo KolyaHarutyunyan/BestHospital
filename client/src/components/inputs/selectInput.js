@@ -37,6 +37,8 @@ export const SelectInput = ({
         }
     };
 
+    console.log(value,'valueeee')
+
     return (
         <>
             <div className={style ? style : classes.SignInInput}>

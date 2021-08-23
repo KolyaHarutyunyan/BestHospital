@@ -31,5 +31,11 @@ export const createClientStyle = makeStyles(() => ({
         padding: '40px',
 
     },
-
+    clientModalBlock : {
+        display: "flex",
+        justifyContent: "space-between"
+    },
+    clientModalBox : {
+        width: 463
+    }
 }));

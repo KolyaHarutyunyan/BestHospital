@@ -1,12 +1,12 @@
 import React from "react";
-import {AddModalButton, Card,} from '@eachbase/components';
+import {Card} from '@eachbase/components';
 import {serviceSingleStyles} from './styles';
 import {Colors, Images} from "@eachbase/utils";
 import {AvailableHours} from "./availableHours";
 
 
 
-export const ClientAvailabilitySchedule = ({data,}) => {
+export const ClientAvailabilitySchedule = ({data}) => {
     const classes = serviceSingleStyles()
 
 
@@ -28,9 +28,7 @@ export const ClientAvailabilitySchedule = ({data,}) => {
                 color={Colors.BackgroundBlue}
                 icon={Images.generalInfoIcon}
             />
-            <div style={{width: 24}}/>
-
-
+            <div className={classes.clearBoth}/>
            <AvailableHours />
 
         </div>

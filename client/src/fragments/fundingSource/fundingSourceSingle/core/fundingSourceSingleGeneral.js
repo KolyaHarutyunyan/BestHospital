@@ -1,11 +1,12 @@
 import React from "react";
-import {Card} from "../../../../components";
+import {Card} from "@eachbase/components";
+import {fundingSourceSingleStyles} from "./styles";
 
 export const FundingSourceSingleGeneral = ({data}) => {
-    console.log(data,'dataaaaaaa')
+    const classes = fundingSourceSingleStyles()
     return (
         <div>
-            <div style={{display: 'flex', justifyContent: "space-between"}}>
+            <div className={classes.fundingSourceSingleGeneralStyles}>
                 <Card cardInfo={[
                     {title: 'Name', value: data?.name,},
                     {title: 'Email Address', value: data?.email},

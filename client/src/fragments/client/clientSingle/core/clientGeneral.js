@@ -13,12 +13,11 @@ export const ClientGeneral = ({data}) =>{
     ]
 
     const otherDetails = [
-
-        {title: 'Gender:', value: data?.gender},
+        {title: 'Gender', value: data?.gender},
         {title: 'Date of Birth', value: data?.birthday},
         {title: 'Age', value: data?.age},
         {title: 'Ethnicity', value: data?.ethnicity},
-        {title: 'Language:', value: data?.language},
+        {title: 'Language', value: data?.language},
         {title: 'Family Language:', value: data?.familyLanguage},
     ]
 
@@ -32,7 +31,7 @@ export const ClientGeneral = ({data}) =>{
                 color={Colors.BackgroundBlue}
                 icon={Images.generalInfoIcon}
             />
-            <div style={{width:24}} />
+            <div className={classes.clearBoth} />
             <Card
                 width='32.5%'
                 cardInfo={otherDetails}

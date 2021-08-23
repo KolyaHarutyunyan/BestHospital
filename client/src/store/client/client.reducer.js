@@ -2,7 +2,7 @@ import {
     GET_CLIENTS_SUCCESS,
     GET_CLIENT_BY_ID_SUCCESS, GET_CLIENT_CONTACTS_SUCCESS, GET_CLIENT_ENROLLMENT_SUCCESS
 } from "./client.types";
-
+import {paginate} from "@eachbase/utils";
 
 
 const initialState = {
@@ -19,7 +19,7 @@ export const clientReducer = (state = initialState, action) => {
         case  GET_CLIENTS_SUCCESS:
             return {
                 ...state,
-                clientList: action.payload,
+                clientList: paginate((action.payload), 5) ,
             }
 
         case  GET_CLIENT_BY_ID_SUCCESS:

@@ -1,6 +1,6 @@
 import React from "react";
 import {modalsStyle} from "../../../../../components/modal/styles";
-import {ErrorText, useGlobalTextStyles} from "@eachbase/utils";
+import { useGlobalTextStyles} from "@eachbase/utils";
 import {AddModalButton, CloseButton} from "@eachbase/components/buttons";
 import {ValidationInput, Textarea} from "@eachbase/components/inputs";
 
@@ -18,22 +18,17 @@ export const FundingSourceNotesEdit = ({handleOpenClose }) => {
             <p className={classes.inactiveModalInfo}>Name Surname will be notified about the inactivation reason after inactivation.</p>
             <ValidationInput
                 variant={"outlined"}
-                // sendBoolean={handleCheck}
                 onChange={()=>alert('change')}
-                // value={inputs.birthDate}
                 type={"date"}
                 label={"Inactivation Date*"}
                 name='inactivationDate'
-                // typeError={error === 'birthDate' && ErrorText.field}
             />
             <Textarea
                 maxRows={6}
                 variant={"outlined"}
-                // sendBoolean={handleCheck}
                 onChange={()=>console.log('change')}
                 label={"Write inactivation reason here..."}
                 name='inactiveReason'
-                // typeError={error === 'birthDate' && ErrorText.field}
             />
             <AddModalButton text='Inactivate' handleClick={handleOpenClose} />
         </div>

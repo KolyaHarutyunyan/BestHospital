@@ -2,7 +2,8 @@ import React from "react";
 import { SearchAndFilter, TableHeadComponent } from "@eachbase/components";
 import { TableCell } from "@material-ui/core";
 
-export const ClientTableHead = ({}) => {
+export const ClientTableHead = () => {
+
   return (
     <TableHeadComponent>
       {<>

@@ -1,7 +1,7 @@
 import React, {useState} from "react";
-import {ValidationInput, SelectInput, CreateChancel, ModalHeader, AddressInput} from "@eachbase/components";
-import {createClientStyle,} from "./styles";
-import {ErrorText, languages} from "@eachbase/utils";
+import {ValidationInput, CreateChancel, ModalHeader, AddressInput} from "@eachbase/components";
+import {createClientStyle} from "./styles";
+import {ErrorText} from "@eachbase/utils";
 import {useDispatch} from "react-redux";
 import {clientActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
@@ -56,19 +56,15 @@ export const AddContact = ({handleClose}) => {
                                         'Input is not field'
                 )
             }
-
-
         }
     }
-
-    console.log(fullAddress,'adreeeeeeeeeeeeeeesssss')
 
     return (
         <div className={classes.createFoundingSource}>
             <ModalHeader secondStepInfo={'Address'} steps={step} handleClose={handleClose} title={'Add Contact'}/>
             <div className={classes.createFoundingSourceBody}>
-                <div style={{display: "flex", justifyContent: "space-between"}}>
-                    {step === 'first' ? <div style={{width: 463}}>
+                <div className={classes.clientModalBlock} >
+                    {step === 'first' ? <div className={classes.clientModalBox}>
                             <ValidationInput
                                 variant={"outlined"}
                                 onChange={handleChange}
@@ -105,13 +101,12 @@ export const AddContact = ({handleClose}) => {
                                 name='relationship'
                                 typeError={error === 'relationship' && ErrorText.field}
                             />
-
                         </div> :
-                        <div style={{width: 463}}>
+                        <div className={classes.clientModalBox}>
                             <AddressInput flex={true} handleSelectValue={setFullAddress}/>
                         </div>}
                 </div>
-                <div style={{display: "flex", justifyContent: 'space-between'}}>
+                <div className={classes.clientModalBlock} >
                     <CreateChancel
                         create={step === 'first' ? 'Next' : "Add"}
                         chancel={"Cancel"}
@@ -121,7 +116,6 @@ export const AddContact = ({handleClose}) => {
                     />
                 </div>
             </div>
-
         </div>
     );
 };
