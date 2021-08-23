@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import {modalsStyle} from "@eachbase/components/modal/styles";
-import {useGlobalTextStyles} from "@eachbase/utils";
+import {ErrorText, useGlobalTextStyles} from "@eachbase/utils";
 import {AddModalButton, CloseButton, CreateChancel} from "@eachbase/components/buttons";
 import {SelectInput, RadioButton, ValidationInput} from "@eachbase/components";
 import {useDispatch, useSelector} from "react-redux";
@@ -26,7 +26,6 @@ const radioData = [
 ]
 
 
-
 const editCredentialData = {
     credentialId: "610cf947776f5210843ccb54",
     expirationDate: new Date("09-05-2019").toISOString()
@@ -40,18 +39,20 @@ export const CredentialModal = ({credModalType, handleClose}) => {
 
     const dispatch = useDispatch()
 
-
     const classes = modalsStyle()
     const globalText = useGlobalTextStyles()
 
-    const AddCredential = {
-        staffId: params.id,
-        credentialId: '611e47e3dd4a01497ff559dc',
-        expirationDate: new Date('06-11-2021').toISOString()
-    }
+    // const AddCredential = {
+    //     staffId: params.id,
+    //     credentialId: '611e47e3dd4a01497ff559dc',
+    //     expirationDate: new Date('06-11-2021').toISOString()
+    // }
 
     const [mType, setMType] = useState(credModalType)
     const [checkboxValue, setCheckboxValue] = useState('nonExpiring');
+
+    const [error, setError] = useState("");
+    const [inputs, setInputs] = useState({});
 
     // const removeCredentialData = {
     //     id: params.id
@@ -73,24 +74,54 @@ export const CredentialModal = ({credModalType, handleClose}) => {
         return 'HB (License)'
     }
 
-    const handleSubmit = () => {
-        switch (mType) {
-            case 'addCredential':
-                dispatch(adminActions.createCredential(AddCredential))
-                handleClose()
-                break;
-            case 'editCredential':
-                dispatch(adminActions.editCredentialById(editCredentialData, params.id))
-                handleClose()
-                break;
-            case 'credentialPreview':
-                setMType('addCredential')
-                break;
-            default:
-                handleClose()
+    const handleCheck = (bool) => {
+        if (bool === true) {
+            setError("Not valid email");
+        } else {
+            setError("");
         }
-    }
+    };
 
+    const handleSubmit = () => {
+        const data = {
+            staffId: params.id,
+            credentialId: '611e47e3dd4a01497ff559dc',
+            expirationDate:inputs.expirationDate ? new Date(inputs.expirationDate).toISOString() : ''
+        }
+        if (inputs.expirationDate) {
+            switch (mType) {
+                case 'addCredential':
+                    dispatch(adminActions.createCredential(data))
+                    handleClose()
+                    break;
+                case 'editCredential':
+                    dispatch(adminActions.editCredentialById(editCredentialData, params.id))
+                    handleClose()
+                    break;
+                case 'credentialPreview':
+                    setMType('addCredential')
+                    break;
+                default:
+                    handleClose()
+            }
+
+        } else {
+            setError(
+                !inputs.expirationDate ? 'expirationDate' : 'Input is not filled'
+            )
+        }
+
+
+    }
+    const handleChange = e => setInputs(
+        prevState => (
+            {
+                ...prevState,
+                [e.target.name]: e.target.value
+            }
+        ),
+        error === e.target.name && setError(''),
+    );
     return (
         <div className={classes.inactiveModalBody}>
             <h1 className={`${globalText.modalTitle}`}>{title(mType)}</h1>
@@ -98,13 +129,27 @@ export const CredentialModal = ({credModalType, handleClose}) => {
                 <CloseButton handleCLic={handleClose}/>
             </div>
             <p className={classes.inactiveModalInfo}> {mType === 'addCredential' && 'Please fulfill the below fields to add a credential.'}</p>
-            <SelectInput
-                style={classes.credentialInputStyle}
-                name={"credential"}
-                placeholder={"Select Credential*"}
-                list={credentialList}
-                value={'value'}
-            />
+
+            {
+                mType === 'credentialPreview' ? <SelectInput
+                    style={classes.credentialInputStyle}
+                    name={"type"}
+                    placeholder={"Select Type*"}
+                    list={credentialList}
+                    value={inputs.type}
+                    disabled={true}
+                /> : <SelectInput
+                    style={classes.credentialInputStyle}
+                    name={"type"}
+                    placeholder={"Select Type*"}
+                    list={credentialList}
+                    value={inputs.type}
+                    handleSelect={handleChange}
+                    sendBoolean={handleCheck}
+                    typeError={error === 'issuingState' ? ErrorText.field : ''}
+                />
+            }
+
             <p className={classes.title}>Expiration</p>
             <div className={classes.checkboxWrapper}>
                 <RadioButton styles={checkboxStyle} value={checkboxValue} onChange={change} radioData={radioData}/>
@@ -113,10 +158,13 @@ export const CredentialModal = ({credModalType, handleClose}) => {
                     <ValidationInput
                         style={classes.datePickerStyle}
                         variant={"outlined"}
-                        value={'value'}
+                        value={inputs.expirationDate}
                         type={"date"}
-                        label={"Date of Birth*"}
-                        name='birthday'
+                        label={"Expiration Date*"}
+                        name='expirationDate'
+                        sendBoolean={handleCheck}
+                        onChange={handleChange}
+                        typeError={error === 'birthday' && ErrorText.field}
                     />
                 }
             </div>

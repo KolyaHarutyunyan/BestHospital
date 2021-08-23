@@ -5,7 +5,6 @@ import {Images} from "@eachbase/utils";
 import moment from 'moment';
 
 export const StaffCredentials = ({credentialData, openModal}) => {
-
     const [open, setOpen] = useState(false)
 
     // const removeCredentialData = {
@@ -96,7 +95,6 @@ export const StaffCredentials = ({credentialData, openModal}) => {
             sortable: false
         },
     ];
-
     return (
         <div>
             {
@@ -105,7 +103,7 @@ export const StaffCredentials = ({credentialData, openModal}) => {
             <SimpleModal
                 openDefault={open}
                 handleOpenClose={handleClose}
-                content={<DeleteElement handleClose={handleClose} handleDel={removeCredential} />}
+                content={<DeleteElement text='Delete Credential' info={credentialData && credentialData.credentialId.name} handleClose={handleClose} handleDel={removeCredential} />}
             />
         </div>
     )

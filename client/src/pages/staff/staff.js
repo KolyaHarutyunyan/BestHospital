@@ -8,7 +8,6 @@ import {useDispatch} from "react-redux";
 export const Staff = () => {
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
-    const resetData = true
 
     useEffect(() => {
         dispatch(adminActions.getAdmins());
@@ -28,7 +27,7 @@ export const Staff = () => {
                 addButtonText={'Add Staff Member'}
                 openCloseInfo={open}
                 handleOpenClose={handleOpenClose}
-                body={<CreateStaff resetData={resetData} handleClose={handleOpenClose}/>}
+                body={<CreateStaff resetData={true} handleClose={handleOpenClose}/>}
             >
                 <StaffTable/>
             </TableWrapper>

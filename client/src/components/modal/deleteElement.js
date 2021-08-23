@@ -9,7 +9,6 @@ export const DeleteElement = ({text, info, handleDel, handleClose}) => {
 
     const classes = modalsStyle()
     const globalText = useGlobalTextStyles();
-
     return (
         <div className={classes.deleteModal}>
             <div className={classes.closeButton}>
