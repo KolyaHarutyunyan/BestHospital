@@ -53,12 +53,6 @@ export const CredentialModal = ({credModalType, handleClose}) => {
     const [mType, setMType] = useState(credModalType)
     const [checkboxValue, setCheckboxValue] = useState('nonExpiring');
 
-
-    useEffect(() => {
-        dispatch(adminActions.getCredentialById(params.id))
-    }, [])
-
-
     // const removeCredentialData = {
     //     id: params.id
     // }

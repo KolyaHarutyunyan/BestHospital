@@ -22,7 +22,8 @@ export {
     AddressInput,
     SelectInput,
     Textarea,
-    RadioButton
+    RadioButton,
+    SelectInputPlaceholder
 } from "./inputs";
 export {Loader, MinLoader} from "./loader";
 export {GlobalLogo} from "./logo";

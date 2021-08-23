@@ -82,10 +82,6 @@ export const StaffItem = () => {
         setCredModalType(modalType)
     }
 
-    const aaa = () =>{
-        alert('edit credential 1')
-    }
-
     useEffect(() => {
         dispatch(adminActions.getCredentialById(params.id))
         dispatch(adminActions.getAdminById(params.id))
@@ -121,7 +117,7 @@ export const StaffItem = () => {
             tabComponent: (<StaffEmployment/>)
         },
         {
-            tabComponent: (<StaffCredentials removeCredential={aaa} credentialData={credentialData} openModal={openCloseCredModal}/>)
+            tabComponent: (<StaffCredentials credentialData={credentialData} openModal={openCloseCredModal}/>)
         },
         {
             tabComponent: (<StaffAccess/>)
