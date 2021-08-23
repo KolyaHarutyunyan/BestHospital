@@ -8,7 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 
 export const FundingSource = ({}) => {
     const dispatch = useDispatch()
-
+    const [type, setType] = useState(1)
     const [open, setOpen] = useState(false)
 
 
@@ -16,19 +16,23 @@ export const FundingSource = ({}) => {
         dispatch(fundingSourceActions.getFundingSource())
     }, []);
 
-    const {officeById} = useSelector((state) => ({
-            officeById: state.offices.officeById,
-        })
-    )
-
     const handleOpenClose = () => {
         setOpen(!open)
     }
+
+    const handleActiveOrInactive  =(type) =>{
+        setType(type)
+        if(type === 1){
+            dispatch(fundingSourceActions.getActiveOrInactive(1))
+        }else{
+            dispatch(fundingSourceActions.getActiveOrInactive(0))
+        }
+    }
     return (
         <>
-            {!officeById ?
-                (
                     <TableWrapper
+                        getActive={() => handleActiveOrInactive(1)}
+                        getInactive={() => handleActiveOrInactive(0) }
                         firstButton={"Active"}
                         secondButton={"Inactive"}
                         addButton={"Add Funding Source"}
@@ -42,9 +46,7 @@ export const FundingSource = ({}) => {
 
                         <FundingSourceTable/>
                     </TableWrapper>
-                )
-                : (<OfficesInfo info={officeById}/>)
-            }
+
         </>
     );
 }

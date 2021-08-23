@@ -6,11 +6,10 @@ import {fundingSourceActions,} from "@eachbase/store";
 import {useDispatch} from "react-redux";
 
 
-export const CreateFundingSource = ({handleClose}) => {
+export const CreateFundingSource = ({handleClose, info}) => {
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState({});
-    const [fullAddress, setFullAddress] = useState(null)
-
+    const [inputs, setInputs] = useState(info ? {...info} : {});
+    const [fullAddress, setFullAddress] = useState(info && info.address ? info.address.formattedAddress : null)
     const classes = createFoundingSourceStyle()
     const dispatch = useDispatch()
     const handleCheck = (bool) => {
@@ -20,8 +19,6 @@ export const CreateFundingSource = ({handleClose}) => {
             setError("");
         }
     };
-
-
 
     const handleChange = e => setInputs(
         prevState => ({...prevState, [e.target.name]: e.target.value}),
@@ -33,20 +30,24 @@ export const CreateFundingSource = ({handleClose}) => {
         const data = {
             "name": inputs.name,
             "email": inputs.email,
-            "phoneNumber": inputs.phone,
+            "phoneNumber": inputs.phoneNumber,
             'type': inputs.type,
             'contact': inputs.contact,
             'website': inputs.website,
             "address": fullAddress,
             "status": 1
         }
-        if (inputs.name && inputs.email && inputs.phone && inputs.type && inputs.contact && inputs.website) {
-            dispatch(fundingSourceActions.createFundingSource(data))
+        if (inputs.name && inputs.email && inputs.phoneNumber && inputs.type && inputs.contact && inputs.website) {
+            if(info){
+                dispatch(fundingSourceActions.editFundingSource(info.id, data))
+            }else {
+                dispatch(fundingSourceActions.createFundingSource(data))
+            }
         } else {
             setError(
                 !inputs.name ? 'name' :
                     !inputs.email ? 'email' :
-                        !inputs.phone ? 'phone' :
+                        !inputs.phoneNumber ? 'phoneNumber' :
                             !inputs.type ? 'type' :
                                 !inputs.contact ? 'contact' :
                                     !inputs.website ? 'website' :
@@ -59,12 +60,15 @@ export const CreateFundingSource = ({handleClose}) => {
         {name: 'first'},
         {name: 'second'}
     ]
-
-
+    const handleFullAddress = (ev) => {
+        setFullAddress(ev)
+        // httpOnError.length && dispatch(httpRequestsOnErrorsActions.removeError('CREATE_OFFICE'))
+        // if (error === 'address') setError('')
+    }
 
     return (
         <div className={classes.createFoundingSource}>
-            <ModalHeader headerBottom={true} handleClose={handleClose} title={'Add Funding Source'}/>
+            <ModalHeader headerBottom={true} handleClose={handleClose} title={info ? 'Edit Funding Source' : 'Add Funding Source'}/>
             <div className={classes.createFoundingSourceBody}>
                 <div className={classes.createFoundingSourceBodyBlock}>
                     <div className={classes.createFoundingSourceBodyBox}>
@@ -94,14 +98,13 @@ export const CreateFundingSource = ({handleClose}) => {
                         <ValidationInput
                             Length={11}
                             styles={inputStyle}
-
                             onChange={handleChange}
-                            value={inputs.phone}
+                            value={inputs.phoneNumber}
                             variant={"outlined"}
                             type={"number"}
                             label={"Phone Number*"}
-                            name={'phone'}
-                            typeError={error === 'phone' && ErrorText.field}
+                            name={'phoneNumber'}
+                            typeError={error === 'phoneNumber' && ErrorText.field}
                         />
                         <SelectInput
                             styles={inputStyle}
@@ -137,10 +140,12 @@ export const CreateFundingSource = ({handleClose}) => {
                     </div>
                     <div className={classes.createFoundingSourceBodyBox}>
                         <AddressInput
+                            errorBoolean={error === 'address' ? 'Input is not field' : ''}
+                            info={info && info.address ? info : ''}
+                            handleSelectValue={handleFullAddress}
                             styles={inputStyle}
-                            Value='Street Address*'
                             flex='block'
-                            handleSelectValue={setFullAddress}/>
+                        />
                     </div>
                 </div>
                 <div className={classes.createFoundingSourceBodyBlock}>

@@ -4,6 +4,9 @@ import {createClientStyle,} from "./styles";
 import {ErrorText, languages} from "@eachbase/utils";
 import {useDispatch} from "react-redux";
 import {clientActions} from "@eachbase/store";
+import {InputMinLoader} from "../../../components/inputs/inputMiniLoader";
+import TextField from "@material-ui/core/TextField";
+import {inputsStyle} from "../../../components/inputs/styles";
 
 
 export const CreateClient = ({handleClose}) => {
@@ -128,24 +131,31 @@ export const CreateClient = ({handleClose}) => {
                             name='birthday'
                             typeError={error === 'birthday' && ErrorText.field}
                         />
-                        <ValidationInput
+
+                        <TextField
+                            className={classes.inputTextField}
                             variant={"outlined"}
                             onChange={handleChange}
                             value={inputs.age}
-                            type={"text"}
                             label={"Age*"}
                             name='age'
                             typeError={error === 'age' && ErrorText.field}
+                            id="standard-basic"
+                            fullWidth
                         />
-                        <ValidationInput
+
+                        <TextField
+                            className={classes.inputTextField}
                             variant={"outlined"}
                             onChange={handleChange}
-                            value={inputs.ethnicity}
-                            type={"text"}
-                            label={"Ethnicity"}
+                            value={inputs.aethnicityge}
+                            label={"Ethnicity*"}
                             name='ethnicity'
                             typeError={error === 'ethnicity' && ErrorText.field}
+                            id="standard-basic"
+                            fullWidth
                         />
+
                         <SelectInput
                             name={"language"}
                             label={"Language*"}

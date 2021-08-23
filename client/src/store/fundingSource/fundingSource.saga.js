@@ -26,7 +26,6 @@ function* createFundingSource(action) {
     try {
         const res = yield call(authService.createFundingSourceService, action.payload.body);
          window.location.replace('/fundingSource')
-        console.log(res,'resss saga')
     } catch (err) {
         console.log(err)
     }
@@ -47,7 +46,6 @@ function* getFundingSource({action, type}) {
     yield put(httpRequestsOnLoadActions.appendLoading(type));
     try {
         const res = yield call(authService.getFundingSourceService);
-        console.log(res,'geeet')
         yield put({
             type: GET_FUNDING_SOURCE_SUCCESS,
             payload: res.data,
@@ -142,7 +140,6 @@ function* getFundingSourceHistoriesById(action) {
     } catch (error) {
         // yield put(httpRequestsOnLoadActions.removeLoading(type));
         // yield put(httpRequestsOnErrorsActions.removeError(type));
-        console.log(error, 'eeeeeerrrrrrr')
     }
 }
 

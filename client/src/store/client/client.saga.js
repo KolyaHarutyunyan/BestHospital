@@ -35,7 +35,6 @@ function* createClient(action) {
 
     try {
         const res = yield call(authService.createClientService, action);
-        console.log(res,'reeeeeeeeeeesssssss')
         window.location.replace('/client')
     } catch (err) {
         console.log(err, 'error create client')
@@ -53,7 +52,6 @@ function* deleteClient(action) {
 function* editClient(action) {
     try {
         const res = yield call(authService.editClientService, action);
-        console.log(res,'reessss edit ' )
         window.location.replace('/client')
     } catch (err) {
         console.log(err, 'error')
@@ -80,7 +78,7 @@ function* getClientContacts(action) {
             payload: res.data,
         });
     } catch (err) {
-        console.log(err, 'error contactsssss')
+
     }
 }
 
@@ -95,10 +93,8 @@ function* createClientContact(action) {
 }
 
 function* editClientContact(action) {
-    console.log(action.payload.id,'aaaaction')
     try {
         const res = yield call(authService.editClientContactService, action);
-        console.log(res,'resss edit contact')
          window.location.replace(`/client/`)
     } catch (err) {
         console.log(err, 'error edit client')

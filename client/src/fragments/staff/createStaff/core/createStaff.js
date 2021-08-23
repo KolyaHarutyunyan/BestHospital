@@ -84,7 +84,6 @@ export const CreateStaff = ({handleClose, resetData}) => {
             address: fullAddress
         }
 
-        console.log(data, 'data')
 
         if (inputs.firstName &&
             inputs.lastName &&
