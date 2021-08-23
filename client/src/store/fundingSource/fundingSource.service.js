@@ -15,6 +15,8 @@ export const authService = {
 
     createFoundingSourceServiceByIdService: (id, body) => axios.post(`/funding/${id}/service`, body),
 
+    editFoundingSourceServiceService: (id, body) => axios.patch(`/funding/service/${id}`, body),
+
     createFoundingSourceServiceModifierService: (id, body) => axios.post(`/funding/${id}/modifier`, body),
 
     getFundingSourceHistoriesByIdService: (id) => axios.get(`/funding/${id}/histories`,),

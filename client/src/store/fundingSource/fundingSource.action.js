@@ -8,7 +8,7 @@ import {
     GET_FUNDING_SOURCE_SERV,
     CREATE_FUNDING_SOURCE_SERV,
     GET_FUNDING_SOURCE_SERV_BY_ID,
-    EDIT_FUNDING_SOURCE,
+    EDIT_FUNDING_SOURCE, EDIT_FUNDING_SOURCE_SERVICE,
 } from "./fundingSource.types";
 
 export const createFundingSource = (body) => {
@@ -54,6 +54,17 @@ export const createFoundingSourceServiceById = (id, body) => {
         }
     }
 }
+
+export const editFoundingSourceServiceById = (id, body) => {
+    return {
+        type: EDIT_FUNDING_SOURCE_SERVICE,
+        payload: {
+            id ,
+            body
+        }
+    }
+}
+
 export const createFoundingSourceServiceModifier = (id, body) => {
     return {
         type: CREATE_FUNDING_SOURCE_SERVICE_MODIFIER,

@@ -18,6 +18,7 @@ export const ClientTable = ({setOpen,handleClose,setDeleteClient}) => {
         setPage(number);
     };
 
+    const list = clientList && clientList.length && clientList[page - 1]
 
     return (
         <div className={globalStyle.tableWrapper}>
@@ -31,7 +32,7 @@ export const ClientTable = ({setOpen,handleClose,setDeleteClient}) => {
                     {httpOnLoad.length ?
                         <Loader/>
                         :
-                        clientList.length && clientList.map((item, i) => (
+                        list.length && list.map((item, i) => (
                             <ClientTableBody
                                 data={item}
                                 index = {i}
@@ -42,7 +43,7 @@ export const ClientTable = ({setOpen,handleClose,setDeleteClient}) => {
                         ))}
                 </Table>
                 <PaginationItem
-                    text={'Showing 30 to 30 of 500 entries'}
+                    text={`Showing 1 to 1 of ${clientList.length} entries`}
                     handleReturn={(number) => changePage(number)}
                     page={page}
                     count={clientList.length}

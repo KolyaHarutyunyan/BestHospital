@@ -21,6 +21,8 @@ export const CreateFundingSource = ({handleClose}) => {
         }
     };
 
+
+
     const handleChange = e => setInputs(
         prevState => ({...prevState, [e.target.name]: e.target.value}),
         error === e.target.name && setError(''),
@@ -58,6 +60,8 @@ export const CreateFundingSource = ({handleClose}) => {
         {name: 'second'}
     ]
 
+
+
     return (
         <div className={classes.createFoundingSource}>
             <ModalHeader headerBottom={true} handleClose={handleClose} title={'Add Funding Source'}/>
@@ -88,8 +92,9 @@ export const CreateFundingSource = ({handleClose}) => {
                             onChange={handleChange}
                         />
                         <ValidationInput
+                            Length={11}
                             styles={inputStyle}
-                            sendBoolean={handleCheck}
+
                             onChange={handleChange}
                             value={inputs.phone}
                             variant={"outlined"}
@@ -103,14 +108,12 @@ export const CreateFundingSource = ({handleClose}) => {
                             name={"type"}
                             label={"Type*"}
                             handleSelect={handleChange}
-                            sendBoolean={handleCheck}
                             value={inputs.type}
                             list={list}
                             typeError={error === 'type' ? ErrorText.field : ''}
                         />
                         <ValidationInput
                             styles={inputStyle}
-                            sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.contact}
                             variant={"outlined"}

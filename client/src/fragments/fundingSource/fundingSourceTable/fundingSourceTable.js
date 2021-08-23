@@ -16,6 +16,8 @@ export const FundingSourceTable = ({}) => {
         setPage(number);
     };
 
+
+
     const list = fundingSourceList && fundingSourceList.length && fundingSourceList[page - 1]
     return (
         <div className={globalStyle.tableWrapper}>
@@ -37,7 +39,7 @@ export const FundingSourceTable = ({}) => {
                         ))}
                 </Table>
                 <PaginationItem
-                    text={'Showing 30 to 30 of 500 entries'}
+                    text={`Showing 1-7 of ${list.length} entries`}
                     handleReturn={(number) => changePage(number)}
                     page={page}
                     count={fundingSourceList.length}
@@ -46,3 +48,5 @@ export const FundingSourceTable = ({}) => {
         </div>
     );
 };
+
+

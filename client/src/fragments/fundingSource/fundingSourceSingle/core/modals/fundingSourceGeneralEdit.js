@@ -36,6 +36,8 @@ export const FundingSourceGeneralEdit = ({handleClose}) => {
     );
 
 
+    console.log(inputs,'inputs')
+
     const handleCreate = () => {
         const data = {
             "name": inputs.name,
