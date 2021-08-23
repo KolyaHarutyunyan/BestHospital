@@ -5,7 +5,6 @@ import { Images, useGlobalStyles } from "@eachbase/utils";
 import {useHistory} from "react-router-dom";
 
 export const FundingSourceTableBody = ({key, data }) => {
-    console.log(data,'body data')
   const globalClasses = useGlobalStyles()
     const history = useHistory()
   const handleOpenOfficeInfo =(id)=>{

@@ -16,9 +16,6 @@ export const AdminInfo = ({handleClose, info}) => {
     const dispatch = useDispatch()
 
 
-
-
-    console.log(info,'infoinfoinfoinfo')
     useEffect(() => {
         return () => {
             dispatch(adminActions.clearAdminById())

@@ -4,15 +4,16 @@ import {Images} from "@eachbase/utils";
 import {AddButton, AddModalButton, SimpleModal} from "@eachbase/components";
 import {fundingSourceActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {
     FundingSourceGeneralEdit,
     FundingSourceNotesAdd,
     FundingSourceServiceAdd,
 } from "./modals";
+import {CreateFundingSource} from "../../createFundingSource";
 
 
-export const FundingSourceSingleHeader = ({activeTab, title}) => {
+export const FundingSourceSingleHeader = ({activeTab, title, info}) => {
     const [open, setOpen] = useState(false)
     const dispatch = useDispatch()
     const params = useParams()
@@ -31,6 +32,7 @@ export const FundingSourceSingleHeader = ({activeTab, title}) => {
     const handleOpenClose = () => {
         setOpen(!open)
     }
+   const prevData = useSelector(state => state.fundingSource.fundingSourceItem)
 
     return (
         <div className={classes.fundingSourceSingleHeaderWrapStyles}>
@@ -42,7 +44,9 @@ export const FundingSourceSingleHeader = ({activeTab, title}) => {
                 openDefault={open}
                 handleOpenClose={handleOpenClose}
                 content={activeTab === 0 ?
-                    <FundingSourceGeneralEdit handleClose={handleOpenClose}/>
+                    <CreateFundingSource handleClose={handleOpenClose} info={prevData}/>
+
+                    // <FundingSourceGeneralEdit handleClose={handleOpenClose}/>
                     : activeTab === 1 ?
                         <FundingSourceServiceAdd handleClose={handleOpenClose}/> :
                         activeTab === 2 ?

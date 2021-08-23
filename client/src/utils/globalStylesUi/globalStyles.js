@@ -15,6 +15,9 @@ export const useGlobalStyles = makeStyles({
             boxShadow: 'none',
         },
     },
+    simpleInputFull: {
+        width: '100%',
+    },
     tableWrapper: {
         background: 'none',
         width: '100%',

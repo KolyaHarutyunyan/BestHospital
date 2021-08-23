@@ -8,7 +8,7 @@ import {
     GET_FUNDING_SOURCE_SERV,
     CREATE_FUNDING_SOURCE_SERV,
     GET_FUNDING_SOURCE_SERV_BY_ID,
-    EDIT_FUNDING_SOURCE, EDIT_FUNDING_SOURCE_SERVICE,
+    EDIT_FUNDING_SOURCE, EDIT_FUNDING_SOURCE_SERVICE, CREATE_FUNDING_SOURCE_SERVICE_MODIFIER, GET_ACTIVE_OR_INACTIVE,
 } from "./fundingSource.types";
 
 export const createFundingSource = (body) => {
@@ -19,7 +19,6 @@ export const createFundingSource = (body) => {
 }
 
 export const editFundingSource = (id,body) => {
-    console.log(id, body, 'action')
     return {
         type: EDIT_FUNDING_SOURCE,
         payload: {id,body}
@@ -99,5 +98,12 @@ export const createFundingSourceServ = (body) => {
     return {
         type: CREATE_FUNDING_SOURCE_SERV,
         payload : {body}
+    }
+}
+
+export const getActiveOrInactive = (type) =>{
+    return{
+        type:  GET_ACTIVE_OR_INACTIVE,
+        payload : {type}
     }
 }

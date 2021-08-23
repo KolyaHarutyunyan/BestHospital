@@ -38,7 +38,7 @@ export const Departments = ({removeItem, openModal}) => {
     const classes = systemItemStyles()
 
     const handleChange = (e) => {
-        console.log(e.target.value);
+
     }
 
     const editDepartment = (modalType) => {

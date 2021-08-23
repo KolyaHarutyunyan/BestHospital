@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { Colors } from "@eachbase/utils";
+import {Colors, Shadow} from "@eachbase/utils";
 
 export const inputsStyle = makeStyles(() => ({
   select: {
@@ -32,6 +32,9 @@ export const inputsStyle = makeStyles(() => ({
   },
   checked: {
     color :'green'
+  },
+  searchfAddressDescriptionText:{
+    fontSize:'16px',
   },
   SignInInput: {
     width: "100%",
@@ -178,6 +181,18 @@ export const inputsStyle = makeStyles(() => ({
     fontSize:'16px',
     width:'100%',
   },
+  searchAddressError:{
+    height:'48px',
+    border: `1px solid ${Colors.ThemeRed}`,
+    borderRadius: '4px',
+    padding: '18.5px 14px',
+    fontSize:'16px',
+    width:'100%',
+    '&::placeholder':{
+      color: Colors.ThemeRed,
+    },
+
+  },
 
   errorText:{
     color: '#F07379',
@@ -189,7 +204,18 @@ export const inputsStyle = makeStyles(() => ({
   inputShrink:{
     background:'white',
     padding:'0 6px'
-  }
+  },
+
+  valuesContainer:{
+    backgroundColor: "white",
+    boxShadow: Shadow.modalShadow,
+    height:'auto',
+    maxHeight:'300px',
+    overflow:'auto',
+    position:'absolute',
+    zIndex:'10',
+    width:'292px',
+  },
 
 }));
 

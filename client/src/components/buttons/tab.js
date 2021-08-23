@@ -2,7 +2,7 @@ import React from "react";
 import { Paper, Tab, Tabs } from "@material-ui/core";
 import { buttonsStyle } from "./styles";
 
-export const ButtonsTab = ({ first, second }) => {
+export const ButtonsTab = ({ first, second,getActive,getInactive  }) => {
   const classes = buttonsStyle();
 
   const [value, setValue] = React.useState(0);
@@ -30,8 +30,8 @@ export const ButtonsTab = ({ first, second }) => {
         onChange={handleChange}
         aria-label="disabled tabs example"
       >
-        <Tab style={{ width: "100px" }} label={first} />
-        <Tab style={{ width: "100px" }} label={second} />
+        <Tab style={{ width: "100px" }} label={first} onClick={getActive}/>
+        <Tab style={{ width: "100px" }} label={second} onClick={getInactive}/>
       </Tabs>
     </Paper>
   );

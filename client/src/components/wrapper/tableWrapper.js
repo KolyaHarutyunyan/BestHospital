@@ -11,7 +11,7 @@ export const TableWrapper = ({
   firstButton,
   secondButton,
   addButtonText, body,
-  openCloseInfo, handleOpenClose,
+  openCloseInfo, handleOpenClose,getActive,getInactive
 }) => {
   const classes = wrapperStyle();
 
@@ -22,7 +22,12 @@ export const TableWrapper = ({
       {buttonsTab && (
         <div className={classes.buttonsTabStyle}>
           {/* { RoleHooks(PermissionsList.ADD_OFFICES_BUTTON_TAB) && */}
-          <ButtonsTab first={firstButton} second={secondButton} />
+          <ButtonsTab
+              getActive={getActive}
+              getInactive={getInactive}
+              first={firstButton}
+              second={secondButton}
+          />
           {/* } */}
           {buttonsTabAddButton && (
             // RoleHooks(PermissionsList.ADD_OFFICES_BUTTON) &&

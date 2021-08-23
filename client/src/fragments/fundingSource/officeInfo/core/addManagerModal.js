@@ -24,7 +24,6 @@ export const AddManagerModal =({handleClose, permissionsList})=>{
 
     const addManager =()=>{
 
-        console.log(inputs,'inputs')
         // const permissionsList = []
         // for(let i of permissions){
         //     permissionsList.push(i.id)

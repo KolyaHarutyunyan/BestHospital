@@ -2,7 +2,7 @@ export { Colors, Shadow, Backgrounds, useGlobalStyles, useGlobalTextStyles, useG
 export { Images } from './images'
 export { EmailValidator, PasswordValidator } from './validation'
 export { superAdminRouters } from './routers'
-export { RoleHooks, PermissionsList, paginate, filterByFirstName, initAxiosInterceptors } from './hooks'
+export { RoleHooks, PermissionsList, paginate, filterByFirstName, initAxiosInterceptors, activeInactive } from './hooks'
 export { ErrorText } from './errorTexts'
 export { CountryList } from './jsons'
 export { languages } from './languages'

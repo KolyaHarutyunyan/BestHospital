@@ -9,7 +9,6 @@ import {
 } from "./role.types";
 
 export const createRole = (body) => {
-  console.log(body,'bbbb')
   return {
     type: CREATE_ROLE,
     payload: { body }
