@@ -50,7 +50,7 @@ export const StaffItemHeader = ({credModalType, openCloseCredModal, openCredModa
                 openDefault={activeTab === 2 ? openCredModal : open}
                 handleOpenClose={activeTab === 2 ? () => openCloseCredModal() : handleOpenClose}
                 content={activeTab === 0 ?
-                    <CreateStaff handleClose={handleOpenClose}/> : activeTab === 2 ?
+                    <CreateStaff resetData={false} handleClose={handleOpenClose}/> : activeTab === 2 ?
                         <CredentialModal credModalType={credModalType}
                                          handleClose={() => openCloseCredModal()}/> : activeTab === 4 ?
                             <StaffAddNotes handleClose={handleOpenClose}/> : null}

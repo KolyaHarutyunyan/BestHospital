@@ -1,7 +1,7 @@
 import {AddButton, SelectInput, ValidationInput} from "@eachbase/components";
-import React from "react";
+import React, {useState} from "react";
 import {systemItemStyles} from "./styles";
-import {Images} from "@eachbase/utils";
+import {ErrorText, Images} from "@eachbase/utils";
 import {SelectInputPlaceholder} from "@eachbase/components";
 
 const credentialBtn = {
@@ -45,13 +45,31 @@ export const Credentials = ({removeItem,openModal}) => {
 
     const classes = systemItemStyles()
 
-    const handleChange = (e) => {
-        console.log(e.target.value);
-    }
+    const [inputs, setInputs] = useState({});
+    const [error,setError] = useState('');
 
     const editCredential = (modalType) => {
         openModal(modalType)
     }
+
+    const handleCheck = (bool) => {
+        if (bool === true) {
+            setError("Not valid email");
+        } else {
+            setError("");
+        }
+    };
+    const handleChange = e => setInputs(
+        prevState => (
+            {
+                ...prevState,
+                [e.target.name]: e.target.value
+            }
+        ),
+        error === e.target.name && setError(''),
+    );
+
+    const isDisabled = inputs.name && inputs.type
 
     return (
         <>
@@ -59,18 +77,23 @@ export const Credentials = ({removeItem,openModal}) => {
                 <ValidationInput
                     style={classes.credentialInputStyle}
                     onChange={handleChange}
+                    sendBoolean={handleCheck}
+                    value={inputs.name}
                     variant={"outlined"}
-                    name={"Name"}
+                    name={"name"}
                     type={"text"}
                     placeholder={'Name*'}
                 />
                 <SelectInputPlaceholder
                     style={classes.credentialInputStyle}
-                    name={"issuingState"}
+                    name={"type"}
                     handleSelect={handleChange}
+                    sendBoolean={handleCheck}
+                    value={inputs.type}
                     list={credentialsList}
+                    typeError={error === 'issuingState' ? ErrorText.field : ''}
                 />
-                <AddButton styles={credentialBtn} handleClick={() => alert('Add Credential')} text='Add Credential'/>
+                <AddButton disabled={!isDisabled} styles={credentialBtn} handleClick={() => alert('Add Credential')} text='Add Credential'/>
             </div>
             <p className={classes.title}>Credentials</p>
             <div className={classes.credentialTable}>

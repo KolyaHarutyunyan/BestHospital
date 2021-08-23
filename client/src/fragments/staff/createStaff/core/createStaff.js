@@ -40,8 +40,8 @@ export const CreateStaff = ({handleClose, resetData}) => {
 
     const [fullAddress, setFullAddress] = useState('')
 
-
     const disabledOne = inputs.firstName && error !== 'Not valid email' && inputs.lastName && inputs.email && inputs.phone
+
     const disableSecond = !fullAddress.length
 
     const dispatch = useDispatch()
@@ -65,6 +65,7 @@ export const CreateStaff = ({handleClose, resetData}) => {
         ),
         error === e.target.name && setError(''),
     );
+
     const handleCreate = () => {
         const data = {
             firstName: inputs.firstName,
@@ -72,11 +73,11 @@ export const CreateStaff = ({handleClose, resetData}) => {
             lastName: inputs.lastName,
             email: inputs.email,
             secondaryEmail: inputs.secondaryEmail ? inputs.secondaryEmail : '',
-            phone: `+${inputs.phone}`,
+            phone: inputs.phone.startsWith('+') ? inputs.phone : `+${inputs.phone}`,
             secondaryPhone: inputs.secondaryPhone ? inputs.secondaryPhone : '',
             state: 'state',
             gender: inputs.gender,
-            birthday: new Date(inputs.birthday).toISOString(),
+            birthday: (inputs.birthday ? new Date(inputs.birthday).toISOString() : ''),
             residency: 'residency',
             ssn: 0,
             status: 1,
@@ -89,14 +90,12 @@ export const CreateStaff = ({handleClose, resetData}) => {
             inputs.lastName &&
             inputs.email &&
             inputs.phone &&
-            inputs.supervisor &&
             inputs.gender &&
             inputs.birthday &&
             fullAddress
         ) {
             staffGeneral ? dispatch(adminActions.editAdminById(data, staffGeneral.id)) : dispatch(adminActions.createAdmin(data))
             handleClose()
-
         } else {
 
             setError(
@@ -298,7 +297,7 @@ export const CreateStaff = ({handleClose, resetData}) => {
 
     return (
         <div className={classes.modalDimensions}>
-            <h1 className={`${globalText.modalTitle} ${classes.modalTitle}`}>{!staffGeneral ? 'Add Staff Member' : 'Edit Staff Member'}  </h1>
+            <h1 className={`${globalText.modalTitle} ${classes.modalTitle}`}>{resetData ? 'Add Staff Member' : 'Edit Staff Member'}  </h1>
             <div className={classes.positionedButton}>
                 <CloseButton handleCLic={handleClose}/>
             </div>

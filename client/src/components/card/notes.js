@@ -50,9 +50,8 @@ export const Notes = ({ data, headerTitles, pagination, defaultStyle, items}) =>
                             })
                         }
                     </TableHeadComponent>
-
                     {
-                        data.length ? data.map((item, index) => {
+                        data && data.length ? data.map((item, index) => {
                             return (
                                 <>
                                     {items(item, index)}

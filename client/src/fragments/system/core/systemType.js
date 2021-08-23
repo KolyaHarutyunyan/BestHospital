@@ -1,7 +1,8 @@
+import React, {useEffect, useState} from "react";
 import {TableCell} from "@material-ui/core";
 import {Notes, TableBodyComponent, AddButton, ValidationInput} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
-import { systemItemStyles} from './styles'
+import {systemItemStyles} from './styles'
 
 const headerTitles = [
     {
@@ -26,6 +27,9 @@ export const SystemType = ({removeItem, openModal}) => {
 
     const classes = systemItemStyles()
 
+    const [inputs, setInputs] = useState({});
+    const [error,setError] = useState('');
+
     const notesItem = (item, index) => {
         return (
             <TableBodyComponent key={index}>
@@ -39,7 +43,7 @@ export const SystemType = ({removeItem, openModal}) => {
         )
     }
 
-    const editService = (modalType) =>{
+    const editService = (modalType) => {
         openModal(modalType)
     }
 
@@ -50,15 +54,32 @@ export const SystemType = ({removeItem, openModal}) => {
             subject: 'ABA',
             action:
                 <div className={classes.icons}>
-                    <img src={Images.edit} onClick={()=> editService('editService')} alt="edit"/>
+                    <img src={Images.edit} onClick={() => editService('editService')} alt="edit"/>
                     <img src={Images.remove} alt="delete" onClick={() => removeItem('service')}/>
                 </div>,
         }
     ]
 
-    const handleChange = (e) => {
-        console.log(e.target.value);
-    }
+    const handleCheck = (bool) => {
+        if (bool === true) {
+            setError("Not valid email");
+        } else {
+            setError("");
+        }
+    };
+    const handleChange = e => setInputs(
+        prevState => (
+            {
+                ...prevState,
+                [e.target.name]: e.target.value
+            }
+        ),
+        error === e.target.name && setError(''),
+    );
+
+
+    const isDisabled = inputs.serviceName && inputs.displayName && inputs.category
+
 
     return (
         <>
@@ -66,28 +87,39 @@ export const SystemType = ({removeItem, openModal}) => {
                 <ValidationInput
                     style={classes.systemInputStyles}
                     onChange={handleChange}
+                    sendBoolean={handleCheck}
+                    value={inputs.serviceName}
                     variant={"outlined"}
-                    name={"roleName"}
+                    name={"serviceName"}
                     type={"text"}
                     placeholder={'Service Name*'}
                 />
                 <ValidationInput
                     style={classes.systemInputStyles}
                     onChange={handleChange}
+                    sendBoolean={handleCheck}
+                    value={inputs.displayName}
                     variant={"outlined"}
-                    name={"roleName"}
+                    name={"displayName"}
                     type={"text"}
                     placeholder={'Display Code*'}
                 />
                 <ValidationInput
                     style={classes.systemInputStyles}
                     onChange={handleChange}
+                    sendBoolean={handleCheck}
+                    value={inputs.category}
                     variant={"outlined"}
-                    name={"roleName"}
+                    name={"category"}
                     type={"text"}
                     placeholder={'Category'}
                 />
-                <AddButton handleClick={()=> alert('Add Service Type')} text='Add Service Type'/>
+                <AddButton
+                    disabled={!isDisabled}
+                    handleClick={() => alert('Add Service Type')}
+                    text='Add Service Type'
+                    styles={{background: isDisabled ? `#347AF0` : 'rgba(52,122,240,.5)'}}
+                />
             </div>
             <p className={classes.title}>Service Type</p>
             <Notes defaultStyle={true} data={data} pagination={true} items={notesItem} headerTitles={headerTitles}/>
