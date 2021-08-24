@@ -9,7 +9,7 @@ import { IFunder, IService, IModify } from './interface';
 import { isValidObjectId, MongooseUtil, ParseObjectIdPipe } from '../util';
 import { AddressService } from '../address/address.service';
 import { FundingSanitizer } from './interceptor';
-import { FundingDTO, ServiceDTO, UpdateServiceDto, CreateServiceDto, CreateModifierDto, UpdateModifierDto, ModifyDTO } from './dto';
+import { FundingDTO, ServiceDTO, UpdateServiceDto, CreateServiceDTO, CreateModifierDto, UpdateModifierDto, ModifyDTO } from './dto';
 import { HistoryDto } from '../history/dto';
 import { AuthNService } from 'src/authN';
 import { IComment } from '../comment';
@@ -66,7 +66,7 @@ export class FundingService {
   }
 
   /** Create a new service */
-  async createService(dto: CreateServiceDto, _id: string): Promise<ServiceDTO> {
+  async createService(dto: CreateServiceDTO, _id: string): Promise<ServiceDTO> {
     try {
       const funder = await this.model.findOne({ _id });
       this.checkFunder(funder)

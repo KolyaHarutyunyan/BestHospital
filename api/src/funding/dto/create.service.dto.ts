@@ -5,7 +5,7 @@ import { ModifierStatus, TypeStatus } from '../funding.constants';
 
 // import { FundingStatus } from '../funding.constants';
 
-export class CreateServiceDto {
+export class CreateServiceDTO {
     @ApiProperty()
     @IsNotEmpty()
     @IsString()

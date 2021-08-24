@@ -3,7 +3,7 @@ import { ApiHeader, ApiOkResponse, ApiOperation, ApiProperty, ApiQuery, ApiTags 
 import { FundingService } from './funding.service';
 import { HistoryService } from '../history/history.service';
 
-import { CreateFundingDTO, FundingDTO, UpdateFundingDto, ServiceDTO, UpdateServiceDto, CreateServiceDto, CreateModifierDto, UpdateModifierDto, ModifyDTO } from './dto';
+import { CreateFundingDTO, FundingDTO, UpdateFundingDto, ServiceDTO, UpdateServiceDto, CreateServiceDTO, CreateModifierDto, UpdateModifierDto, ModifyDTO } from './dto';
 import { HistoryDto } from '../history/dto';
 import { Public, ParseObjectIdPipe } from '../util';
 import { CommentDto } from '../comment/dto';
@@ -35,8 +35,9 @@ export class FundingController {
   @Post(':id/service')
   @Public()
   @ApiOkResponse({ type: ServiceDTO })
-  async createService(@Param('id', ParseObjectIdPipe) id: string,
-    @Body() createServiceDTO: CreateServiceDto) : Promise<ServiceDTO> {
+  async createService(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Body() createServiceDTO: CreateServiceDTO) : Promise<ServiceDTO> {
     const staffId = '60f01ec194abb63ff8f0aa75';
     const service = await this.fundingService.createService(createServiceDTO, id);
     return service
