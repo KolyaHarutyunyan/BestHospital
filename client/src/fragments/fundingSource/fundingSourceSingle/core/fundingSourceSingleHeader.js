@@ -5,11 +5,7 @@ import {AddButton, AddModalButton, SimpleModal} from "@eachbase/components";
 import {fundingSourceActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {
-    FundingSourceGeneralEdit,
-    FundingSourceNotesAdd,
-    FundingSourceServiceAdd,
-} from "./modals";
+import {FundingSourceNotesAdd, FundingSourceServiceAdd,} from "./modals";
 import {CreateFundingSource} from "../../createFundingSource";
 
 

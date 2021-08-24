@@ -61,7 +61,6 @@ export const createClientContact = (body, id) => {
     }
 }
 
-
 export const editClientContact = (body, id) => {
     return {
         type: EDIT_CLIENT_CONTACT,
@@ -81,6 +80,14 @@ export const deleteClientContact = ( id) => {
 }
 
 export const getClientsEnrollment = (id) => {
+    return {
+        type: GET_CLIENT_ENROLLMENT,
+        payload: {id}
+    }
+}
+
+
+export const getClientsAuthorizations = (id) => {
     return {
         type: GET_CLIENT_ENROLLMENT,
         payload: {id}

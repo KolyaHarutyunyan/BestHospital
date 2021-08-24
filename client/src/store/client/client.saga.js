@@ -7,11 +7,16 @@ import {
     GET_CLIENT_BY_ID,
     GET_CLIENT_BY_ID_SUCCESS,
     GET_CLIENT_CONTACTS,
-    GET_CLIENT_CONTACTS_SUCCESS, GET_CLIENT_ENROLLMENT,
+    GET_CLIENT_CONTACTS_SUCCESS,
+    GET_CLIENT_ENROLLMENT,
     GET_CLIENT_ENROLLMENT_SUCCESS,
     GET_CLIENTS,
     GET_CLIENTS_SUCCESS,
-    CREATE_CLIENT_CONTACT, EDIT_CLIENT_CONTACT, DELETE_CLIENT_CONTACT
+    CREATE_CLIENT_CONTACT,
+    EDIT_CLIENT_CONTACT,
+    DELETE_CLIENT_CONTACT,
+    GET_CLIENT_AUTHORIZATION,
+    GET_CLIENT_AUTHORIZATION_SUCCESS
 } from "./client.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
@@ -20,8 +25,10 @@ import {GET_FUNDING_SOURCE_BY_ID_SUCCESS} from "../fundingSource/fundingSource.t
 
 
 function* getClients() {
+
     try {
         const res = yield call(authService.getClientsService);
+        console.log(res,'res clients')
         yield put({
             type: GET_CLIENTS_SUCCESS,
             payload: res.data,
@@ -35,7 +42,8 @@ function* createClient(action) {
 
     try {
         const res = yield call(authService.createClientService, action);
-        window.location.replace('/client')
+        console.log(res,'create client')
+        // window.location.replace('/client')
     } catch (err) {
         console.log(err, 'error create client')
     }
@@ -86,7 +94,7 @@ function* createClientContact(action) {
     try {
         const res = yield call(authService.createClientContactService, action);
         console.log(res,'reessss')
-          // window.location.replace('/client')
+           window.location.replace('/client')
     } catch (err) {
         console.log(err, 'error add client')
     }
@@ -95,6 +103,7 @@ function* createClientContact(action) {
 function* editClientContact(action) {
     try {
         const res = yield call(authService.editClientContactService, action);
+        console.log(res, 'edit contact')
          window.location.replace(`/client/`)
     } catch (err) {
         console.log(err, 'error edit client')
@@ -116,6 +125,7 @@ function* deleteClientContact(action) {
 function* getClientEnrollment(action) {
     try {
         const res = yield call(authService.getClientEnrollmentService, action);
+        console.log(res,'sagaaaaaaa')
         yield put({
             type: GET_CLIENT_ENROLLMENT_SUCCESS,
             payload: res.data,
@@ -126,6 +136,18 @@ function* getClientEnrollment(action) {
 }
 
 
+function* getClientsAuthorizations(action) {
+    try {
+        const res = yield call(authService.getClientAuthrozationService, action);
+        console.log(res,'sagaaaaaaa')
+        yield put({
+            type: GET_CLIENT_AUTHORIZATION_SUCCESS,
+            payload: res.data,
+        });
+    } catch (err) {
+        console.log(err, 'authhhhhhhh get en roll')
+    }
+}
 
 
 
@@ -141,6 +163,7 @@ export const watchClient = function* watchClientSaga() {
     yield takeLatest(EDIT_CLIENT_CONTACT, editClientContact)
     yield takeLatest(DELETE_CLIENT_CONTACT, deleteClientContact)
     yield takeLatest(GET_CLIENT_ENROLLMENT, getClientEnrollment)
+    yield takeLatest(GET_CLIENT_AUTHORIZATION, getClientsAuthorizations)
 
 
 };

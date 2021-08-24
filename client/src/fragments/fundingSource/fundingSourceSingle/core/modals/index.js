@@ -1,4 +1,4 @@
-export {FundingSourceGeneralEdit } from './fundingSourceGeneralEdit'
+// export {FundingSourceGeneralEdit } from './fundingSourceGeneralEdit'
 export {FundingSourceServiceEdit } from './fundingSourceServiceEdit'
 export {FundingSourceServiceAdd } from './fundingSourceServiceAdd'
 export {FundingSourceNotesAdd } from './fundingSourceNotesAdd'

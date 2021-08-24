@@ -7,6 +7,7 @@ import {clientActions} from "@eachbase/store";
 
 export const EditContact = ({handleClose, contactId}) => {
     const data = useSelector(state=>state?.client?.clientContacts[contactId])
+
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState({
         firstName: data?.firstName,

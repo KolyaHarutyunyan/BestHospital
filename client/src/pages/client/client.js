@@ -49,7 +49,7 @@ export const Client = ({}) => {
                                     info={deleteClient.firstName}
                                 handleClose={handleOpenClose}/>
                            :
-                            <CreateClient handleClose={handleOpenClose}/>}
+                            <CreateClient title={'Add Client'} handleClose={handleOpenClose}/>}
                     >
                         <ClientTable  setDeleteClient={setDeleteClient} setOpen={setOpen} handleClose={handleOpenClose}/>
                     </TableWrapper>

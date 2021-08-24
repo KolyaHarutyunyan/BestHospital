@@ -2,16 +2,17 @@ import React, {useState} from "react";
 import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
 import {createClientStyle,} from "./styles";
 import {ErrorText, languages} from "@eachbase/utils";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {clientActions} from "@eachbase/store";
-import {InputMinLoader} from "../../../components/inputs/inputMiniLoader";
 import TextField from "@material-ui/core/TextField";
-import {inputsStyle} from "../../../components/inputs/styles";
+import {useParams} from "react-router-dom";
 
 
-export const CreateClient = ({handleClose}) => {
+export const CreateClient = ({handleClose, title}) => {
+    let params = useParams()
+    const info = useSelector(state => state.client.clientItemInfo)
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState({});
+    const [inputs, setInputs] = useState(info ? {...info} : {});
     const [step, setStep] = useState('first')
 
     const classes = createClientStyle()
@@ -48,10 +49,14 @@ export const CreateClient = ({handleClose}) => {
                     'familyLanguage': inputs.familyLanguage,
                     'gender': inputs.gender,
                     "birthday": inputs.birthday,
-                     'age' : +inputs.age,
+                    'age': +inputs.age,
                     "status": 1
                 }
-                dispatch(clientActions.createClient(data))
+                if (title === 'Add Client') {
+                    dispatch(clientActions.createClient(data))
+                } else if (title === 'Edit Client') {
+                    dispatch(clientActions.editClient(data, params.id))
+                }
             } else {
                 setError(
                     !inputs.gender ? 'gender' :
@@ -72,7 +77,7 @@ export const CreateClient = ({handleClose}) => {
 
     return (
         <div className={classes.createFoundingSource}>
-            <ModalHeader steps={step} handleClose={handleClose} title={'Add Client'}/>
+            <ModalHeader steps={step} handleClose={handleClose} title={title}/>
             <div className={classes.createFoundingSourceBody}>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
                     {step === 'first' ? <div style={{width: 463}}>
