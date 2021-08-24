@@ -1,46 +1,39 @@
 import React, {useState} from "react";
-import {Card, DeleteElement, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
+import { DeleteElement, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
 import {serviceSingleStyles} from './styles';
-import {Colors, Images} from "@eachbase/utils";
+import { Images} from "@eachbase/utils";
 import {TableCell} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
 import {clientActions} from "@eachbase/store";
 
-export const ClientContact = ({data, setContactId, handleOpenClose}) => {
+export const ClientAuthorization = ({ setContactId, handleOpenClose}) => {
     const classes = serviceSingleStyles()
-    const clientContacts = useSelector(state => state.client.clientContacts)
+    const clientsAuthorizations = useSelector(state => state.client.clientsAuthorizations)
     const dispatch = useDispatch()
     const [openClose, setOpenClose] = useState(false)
     const [index, setIndex] = useState(null)
 
 
 
-    const generalInfo = [
-        {title: 'First Name', value: data?.firstName},
-        {title: 'Middle Name', value: data?.middleName},
-        {title: 'Last Name', value: data?.lastName},
-        {title: 'Code', value: data?.code},
-    ]
-
     const headerTitles = [
         {
-            title: 'First Na...',
-            sortable: true
-        },
-        {
-            title: 'Last Name',
-            sortable: true
-        },
-        {
-            title: 'Relationship',
+            title: 'Auth #',
             sortable: false
         },
         {
-            title: 'Address',
+            title: 'Funding Source',
             sortable: true
         },
         {
-            title: 'Phone Num...',
+            title: 'Start Date',
+            sortable: false
+        },
+        {
+            title: 'End Date',
+            sortable: false
+        },
+        {
+            title: 'Status',
             sortable: false
         },
         {
@@ -54,12 +47,12 @@ export const ClientContact = ({data, setContactId, handleOpenClose}) => {
         setOpenClose(!openClose)
     }
 
-    let deleteContact = () => {
-        dispatch(clientActions.deleteClientContact(clientContacts[index].id))
+    let deleteAuthorization = () => {
+        dispatch(clientActions.deleteClientContact(clientsAuthorizations[index].id))
         setOpenClose(!openClose)
     }
 
-    let clientContactItem = (item, index) => {
+    let clientAuthorizationItem = (item, index) => {
         return (
             <TableBodyComponent key={index}>
                 <TableCell><p className={classes.tableName}>{item.firstName}</p></TableCell>
@@ -89,25 +82,17 @@ export const ClientContact = ({data, setContactId, handleOpenClose}) => {
             <SimpleModal
                 content={
                     <DeleteElement
-                        handleDel={deleteContact}
-                        text={'Delete Contact'}
-                        info={index !== null && clientContacts[index].firstName}
+                        handleDel={deleteAuthorization}
+                        text={'Delete Authorization'}
+                        info={index !== null && clientsAuthorizations[index].firstName}
                         handleClose={openCloseModal}/>
                 }
                 openDefault={openClose}/>
-            <Card
-                width='32.5%'
-                cardInfo={generalInfo}
-                showHeader={true}
-                title='General Info'
-                color={Colors.BackgroundBlue}
-                icon={Images.generalInfoIcon}
-            />
             <div className={classes.clearBoth}/>
             <div className={classes.notesWrap}>
                 <Notes
-                    data={clientContacts}
-                    items={clientContactItem}
+                    data={clientsAuthorizations}
+                    items={clientAuthorizationItem}
                     headerTitles={headerTitles}
                     defaultStyle={true}/>
             </div>

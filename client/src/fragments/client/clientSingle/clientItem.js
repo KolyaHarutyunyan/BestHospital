@@ -14,10 +14,11 @@ import {
     TabsHeader,
     ClientEnrollment,
     ClientNotes,
-    ClientAvailabilitySchedule, ClientHistory
+    ClientAvailabilitySchedule,
+    ClientHistory, ClientAuthorization
 } from "./core";
 import {useDispatch, useSelector} from "react-redux";
-import {EditContact} from "../clientModals";
+import {AddContact} from "../clientModals";
 import {clientItemStyles} from "./styles";
 
 
@@ -80,7 +81,7 @@ export const ClientItem = () => {
             tabComponent: (<ClientEnrollment data={data}/>)
         },
         {
-            tabComponent: (<ClientContact/>)
+            tabComponent: (<ClientAuthorization data={data}/>)
         },
         {
             tabComponent: (<ClientAvailabilitySchedule/>)
@@ -107,7 +108,7 @@ export const ClientItem = () => {
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
                 <SimpleModal openDefault={openModal}
-                             content={<EditContact contactId={contactId} handleClose={handleOpenCloseModal}/>}/>
+                             content={<AddContact title={'Edit Contact'} contactId={contactId} handleClose={handleOpenCloseModal}/>}/>
                 <div className={classes.headerWraperStyle}>
                     <TabsHeader data={data} activeTab={activeTab}/>
                     <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>

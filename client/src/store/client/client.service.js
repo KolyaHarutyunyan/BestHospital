@@ -21,7 +21,6 @@ export const authService = {
 
     getClientEnrollmentService: ({payload}) => axios.get(`/enrollment/client/${payload.id}`, ),
 
-
-
+    getClientAuthrozationService: ({payload}) => axios.get(`/authorization/client/${payload.id}`, ),
 
 };
