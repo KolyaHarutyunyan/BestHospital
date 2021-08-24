@@ -45,6 +45,7 @@ export class ClientService {
         birthday: dto.birthday
         // address: await this.addressService.getAddress(dto.address),
       });
+      
       await client.save();
       return this.sanitizer.sanitize(client);
     } catch (e) {

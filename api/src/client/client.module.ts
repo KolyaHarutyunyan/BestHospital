@@ -16,9 +16,10 @@ import { EnrollmentModule } from './enrollment/enrollment.module';
 import { AuthorizationModule } from './authorization/authorization.module';
 import { AuthorizationserviceModule } from './authorizationservice/authorizationservice.module';
 import { ContactModule } from './contact/contact.module';
+import { ScheduleModule } from '../schedule/schedule.module';
 
 @Module({
-  imports: [ServiceModule, EnrollmentModule, AuthorizationModule, AuthorizationserviceModule, ContactModule, FundingModule],
+  imports: [ServiceModule, EnrollmentModule, AuthorizationModule, AuthorizationserviceModule, ContactModule, FundingModule, ScheduleModule],
   controllers: [ClientController],
   providers: [ClientService, HistoryService, CredentialService,
     CommentService, ClientSanitizer,

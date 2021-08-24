@@ -33,7 +33,7 @@ export class UpdateClientDto {
     familyLanguage: string;
     @ApiProperty()
     @IsOptional()
-    @IsNumber()
+    @IsString()
     gender: string;
     @ApiProperty()
     @IsOptional()
