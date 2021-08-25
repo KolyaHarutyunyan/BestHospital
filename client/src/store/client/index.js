@@ -1,10 +1,13 @@
 import {
     createClient,
     createClientContact,
+    createClientEnrollment,
     deleteClient,
     deleteClientContact,
+    deleteClientEnrollment,
     editClient,
     editClientContact,
+    editClientEnrollment,
     getClients,
     getClientsAuthorizations,
     getClientsById,
@@ -24,8 +27,11 @@ export const clientActions = {
     getClientsContacts,
     createClientContact,
     getClientsEnrollment,
+    createClientEnrollment,
     deleteClientContact,
     editClientContact,
-    getClientsAuthorizations
+    getClientsAuthorizations,
+    editClientEnrollment,
+    deleteClientEnrollment
 }
 

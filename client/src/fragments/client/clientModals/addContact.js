@@ -2,13 +2,12 @@ import React, {useState} from "react";
 import {ValidationInput, CreateChancel, ModalHeader, AddressInput} from "@eachbase/components";
 import {createClientStyle} from "./styles";
 import {ErrorText} from "@eachbase/utils";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch,} from "react-redux";
 import {clientActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 
 
-export const AddContact = ({handleClose, contactId,title}) => {
-    const info = useSelector(state=>state?.client?.clientContacts[contactId])
+export const AddContact = ({handleClose, info}) => {
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {...info} : {});
     const [step, setStep] = useState('first')
@@ -46,9 +45,9 @@ export const AddContact = ({handleClose, contactId,title}) => {
                     "relationship": inputs.relationship,
                     address : fullAddress
                 }
-              if (title==='Add Contact'){
+              if (!info){
                    dispatch(clientActions.createClientContact(data, params.id))
-              }else if (title==='Edit Contact') {
+              }else if (info) {
                   dispatch(clientActions.editClientContact(data, info.id))
               }
             } else {
@@ -66,7 +65,7 @@ export const AddContact = ({handleClose, contactId,title}) => {
 
     return (
         <div className={classes.createFoundingSource}>
-            <ModalHeader secondStepInfo={'Address'} steps={step} handleClose={handleClose} title={title}/>
+            <ModalHeader secondStepInfo={'Address'} steps={step} handleClose={handleClose} title={info ? 'Edit Contact' : 'Add Contact'}/>
             <div className={classes.createFoundingSourceBody}>
                 <div className={classes.clientModalBlock} >
                     {step === 'first' ? <div className={classes.clientModalBox}>

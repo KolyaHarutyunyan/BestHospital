@@ -1,14 +1,20 @@
-import {Card, Notes, TableBodyComponent} from '@eachbase/components';
+import {Card, DeleteElement, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
 import {serviceSingleStyles} from './styles';
 import {Colors, Images} from "@eachbase/utils";
 import {TableCell} from "@material-ui/core";
-import React from "react";
-import {useSelector} from "react-redux";
+import React, {useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
+import {AddEnrollment} from "../../clientModals";
+import {clientActions} from "@eachbase/store";
 
 export const ClientEnrollment = ({data}) => {
     const classes = serviceSingleStyles()
+    const [toggleModal, setToggleModal] = useState(false)
+    const [index, setIndex] = useState(null)
+    const [delEdit, setDelEdit] = useState(null)
     const enrolments = useSelector(state => state.client.clientEnrollment)
+    const dispatch = useDispatch()
     const generalInfo = [
         {title: 'First Name', value: data?.firstName},
         {title: 'Middle Name', value: data?.middleName},
@@ -43,6 +49,10 @@ export const ClientEnrollment = ({data}) => {
         },
     ];
 
+    let deleteEnrollment = ()=>{
+        dispatch(clientActions.deleteClientEnrollment(enrolments[index].id))
+    }
+
     let enrollmentsItem = (item, index) => {
         let startDate = moment(item?.startDate).format('DD/MM/YYYY')
         let terminationDate = moment(item?.terminationDate).format('DD/MM/YYYY')
@@ -55,16 +65,40 @@ export const ClientEnrollment = ({data}) => {
                 <TableCell>  {terminationDate}  </TableCell>
                 <TableCell>
                     <>
-                        <img src={Images.edit} alt="edit" className={classes.iconStyle} onClick={() => alert(item.id)}/>
+                        <img src={Images.edit} alt="edit" className={classes.iconStyle}
+                             onClick={() => {
+                                 setDelEdit(true)
+                                 setToggleModal(!toggleModal)
+                                 setIndex(index)
+
+                             }}/>
                         <img src={Images.remove} alt="delete" className={classes.iconDeleteStyle}
-                             onClick={() => alert(index)}/>
+                             onClick={() => {
+                                 setDelEdit(false)
+                                 setToggleModal(!toggleModal)
+                                 setIndex(index)
+                             }}/>
                     </>
                 </TableCell>
             </TableBodyComponent>
         )
     }
+
+
+
     return (
         <div className={classes.staffGeneralWrapper}>
+            <SimpleModal
+                handleOpenClose={() => setToggleModal(!toggleModal)}
+                openDefault={toggleModal}
+                content={delEdit ? <AddEnrollment info={enrolments[index]} handleClose={() => setToggleModal(!toggleModal)}/>
+                : <DeleteElement
+                        text={'Delete Enrollment'}
+                        handleClose={() => setToggleModal(!toggleModal)}
+                        handleDel={deleteEnrollment}
+                    />
+                }
+            />
             <Card
                 width='32.5%'
                 cardInfo={generalInfo}

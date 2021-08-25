@@ -16,7 +16,7 @@ import {
     EDIT_CLIENT_CONTACT,
     DELETE_CLIENT_CONTACT,
     GET_CLIENT_AUTHORIZATION,
-    GET_CLIENT_AUTHORIZATION_SUCCESS
+    GET_CLIENT_AUTHORIZATION_SUCCESS, CREATE_CLIENT_ENROLLMENT, EDIT_CLIENT_ENROLLMENT, DELETE_CLIENT_ENROLLMENT
 } from "./client.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
@@ -117,7 +117,7 @@ function* deleteClientContact(action) {
         console.log(res,'resss delete contact')
         // window.location.replace('/client')
     } catch (err) {
-        console.log(err, 'error edit client')
+        console.log(err, 'error del client')
     }
 }
 
@@ -135,10 +135,39 @@ function* getClientEnrollment(action) {
     }
 }
 
+function* createClientEnrollment(action) {
+    try {
+        const res = yield call(authService.createClientEnrollmentService, action);
+        console.log(res,'reessss enrol',action)
+        window.location.replace('/client')
+    } catch (err) {
+        console.log(err, 'error create client')
+    }
+}
+
+function* editClientEnrollment(action) {
+    try {
+        const res = yield call(authService.editClientEnrollmentService, action);
+        console.log(res,'reessss enrol',action)
+         window.location.replace('/client')
+    } catch (err) {
+        console.log(err, 'error create client')
+    }
+}
+
+function* deleteClientEnrollment(action) {
+    try {
+        const res = yield call(authService.deleteClientEnrollmentService, action);
+        console.log(res,'resss delete enroll')
+         window.location.replace('/client')
+    } catch (err) {
+        console.log(err, 'error del enroll')
+    }
+}
 
 function* getClientsAuthorizations(action) {
     try {
-        const res = yield call(authService.getClientAuthrozationService, action);
+        const res = yield call(authService.getClientAuthorizationService, action);
         console.log(res,'sagaaaaaaa')
         yield put({
             type: GET_CLIENT_AUTHORIZATION_SUCCESS,
@@ -163,6 +192,9 @@ export const watchClient = function* watchClientSaga() {
     yield takeLatest(EDIT_CLIENT_CONTACT, editClientContact)
     yield takeLatest(DELETE_CLIENT_CONTACT, deleteClientContact)
     yield takeLatest(GET_CLIENT_ENROLLMENT, getClientEnrollment)
+    yield takeLatest(CREATE_CLIENT_ENROLLMENT, createClientEnrollment)
+    yield takeLatest(EDIT_CLIENT_ENROLLMENT, editClientEnrollment)
+    yield takeLatest(DELETE_CLIENT_ENROLLMENT, deleteClientEnrollment)
     yield takeLatest(GET_CLIENT_AUTHORIZATION, getClientsAuthorizations)
 
 
