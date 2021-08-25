@@ -29,7 +29,7 @@ export const SystemType = ({removeItem, openModal}) => {
 
     const [inputs, setInputs] = useState({});
     const [error,setError] = useState('');
-
+    console.log(inputs,'inputs');
     const notesItem = (item, index) => {
         return (
             <TableBodyComponent key={index}>
@@ -59,23 +59,16 @@ export const SystemType = ({removeItem, openModal}) => {
                 </div>,
         }
     ]
-
-    const handleCheck = (bool) => {
-        if (bool === true) {
-            setError("Not valid email");
-        } else {
-            setError("");
-        }
-    };
-    const handleChange = e => setInputs(
-        prevState => (
-            {
-                ...prevState,
-                [e.target.name]: e.target.value
-            }
-        ),
-        error === e.target.name && setError(''),
-    );
+    const handleChange = e =>{
+        setInputs(
+            prevState => (
+                {
+                    ...prevState,
+                    [e.target.name]: e.target.value
+                }
+            ));
+        error === e.target.name && setError('')
+    }
 
 
     const isDisabled = inputs.serviceName && inputs.displayName && inputs.category
@@ -87,7 +80,6 @@ export const SystemType = ({removeItem, openModal}) => {
                 <ValidationInput
                     style={classes.systemInputStyles}
                     onChange={handleChange}
-                    sendBoolean={handleCheck}
                     value={inputs.serviceName}
                     variant={"outlined"}
                     name={"serviceName"}
@@ -97,7 +89,6 @@ export const SystemType = ({removeItem, openModal}) => {
                 <ValidationInput
                     style={classes.systemInputStyles}
                     onChange={handleChange}
-                    sendBoolean={handleCheck}
                     value={inputs.displayName}
                     variant={"outlined"}
                     name={"displayName"}
@@ -107,7 +98,6 @@ export const SystemType = ({removeItem, openModal}) => {
                 <ValidationInput
                     style={classes.systemInputStyles}
                     onChange={handleChange}
-                    sendBoolean={handleCheck}
                     value={inputs.category}
                     variant={"outlined"}
                     name={"category"}
@@ -118,7 +108,6 @@ export const SystemType = ({removeItem, openModal}) => {
                     disabled={!isDisabled}
                     handleClick={() => alert('Add Service Type')}
                     text='Add Service Type'
-                    styles={{background: isDisabled ? `#347AF0` : 'rgba(52,122,240,.5)'}}
                 />
             </div>
             <p className={classes.title}>Service Type</p>

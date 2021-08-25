@@ -8,9 +8,11 @@ export const AddButton = ({disabled, styles, text, handleClick }) => {
 
     <Button
         disabled={disabled}
-        style={{...styles}}
+        style={{background: !disabled ? `#347AF0` : 'rgba(52,122,240,.5)',...styles}}
         className={classes.addButtonStyle}
-        onClick={handleClick}>
+        onClick={handleClick}
+        // styles={}
+    >
       <img src={Images.addCircle} alt={'icon'}/>
       {text}
     </Button>

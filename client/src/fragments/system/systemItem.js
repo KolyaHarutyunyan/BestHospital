@@ -56,7 +56,6 @@ export const SystemItem = () => {
                 deletedId={deletedId}
                 deleteModalOpened={deleteModalOpened}
                 handleDeletedOpenClose={handleDeletedOpenClose}
-
                 modalType={modalType}
                 open={open}
                 handleOpenClose={handleOpenClose}
