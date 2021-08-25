@@ -11,7 +11,7 @@ export class EnrollmentDTO {
     @ApiProperty()
     primary: boolean;
     @ApiProperty()
-    startDate: string;
+    startDate: Date;
     @ApiProperty()
-    terminationDate: string;
+    terminationDate: Date;
 }

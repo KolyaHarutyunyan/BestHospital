@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsDate, IsEmail, IsEnum, IsNotEmpty, IsPhoneNumber, IsString, IsUrl } from 'class-validator';
+import { IsBoolean, IsDate, IsDateString, IsEmail, IsEnum, IsNotEmpty, IsPhoneNumber, IsString, IsUrl } from 'class-validator';
 
 export class CreateEnrollmentDTO {
     @ApiProperty()
@@ -8,11 +8,11 @@ export class CreateEnrollmentDTO {
     primary: boolean;
     @ApiProperty()
     @IsNotEmpty()
-    @IsString()
-    startDate: string;
+    @IsDateString()
+    startDate: Date;
     @ApiProperty()
     @IsNotEmpty()
-    @IsString()
-    terminationDate: string;
+    @IsDateString()
+    terminationDate: Date;
 }
 

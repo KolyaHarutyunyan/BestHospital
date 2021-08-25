@@ -29,32 +29,24 @@ export class EnrollmentService {
 
   async create(dto: CreateEnrollmentDTO, clientId: string, funderId: string): Promise<EnrollmentDTO> {
     try {
-      let startDate = new Date(dto.startDate);
-      this.checkTime(startDate);
-      let terminationDate = new Date(dto.terminationDate);
-      this.checkTime(terminationDate);
       const client = await this.clientModel.findById({ _id: clientId });
       this.checkClient(client);
       const funder = await this.fundingService.findOne(funderId);
 
       if (dto.primary) {
         const findEnrollment = await this.model.findOne({ clientId, primary: true });
-
         if (findEnrollment !== null) {
           findEnrollment.primary = false;
           await findEnrollment.save()
         }
       }
-
       let enrollment = new this.model({
         clientId,
         funderId,
         primary: dto.primary,
-        // startDate: dto.startDate,
+        startDate: dto.startDate,
+        terminationDate: dto.terminationDate
       });
-      enrollment.startDate = startDate.toLocaleDateString()
-      enrollment.terminationDate = terminationDate.toLocaleDateString()
-
       await enrollment.save();
 
       if (enrollment.primary) {

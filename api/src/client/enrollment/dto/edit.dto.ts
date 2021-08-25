@@ -1,12 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsDate, IsDateString, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class UpdateEnrollmentDTO {
     @ApiProperty()
     @IsOptional()
-    startDate: string;
+    @IsDateString()
+    startDate: Date;
     @ApiProperty()
-    terminationDate: string;
+    @IsOptional()
+    @IsDateString()
+    terminationDate: Date;
     @ApiProperty()
     @IsNotEmpty()
     primary: boolean;
