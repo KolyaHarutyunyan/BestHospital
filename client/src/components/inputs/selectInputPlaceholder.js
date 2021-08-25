@@ -29,7 +29,6 @@ export const SelectInputPlaceholder = ({
     };
 
 
-
     return (
         <>
             <div className={style ? style : classes.SignInInput}>
@@ -47,25 +46,26 @@ export const SelectInputPlaceholder = ({
                             loader && <InputMinLoader/>
                         }
                     >
-                        <MenuItem value="" disabled style={{color: 'red'}}>
-                            Placeholder
+                        <MenuItem value="" disabled>
+                            Type*
                         </MenuItem>
-                           {language ?
-                                language.map((option, j) => (
-                                        <MenuItem data-key={option.code ? option.code : j} key={j}
-                                                  value={type === 'id' ? option.id : option}
-                                        >
-                                            {option}
-                                        </MenuItem>
-                                    )) :
-                                list.length && list.map((option, j) => (
-                                    <MenuItem data-key={option.code ? option.code : j} key={j}
-                                                  value={type === 'id' ? option.id : option.name}
-                                        >
-                                         {option.name}
-                                    </MenuItem>
-                                ))
-                           }
+                        {language ?
+                            language.map((option, j) => (
+                                <MenuItem data-key={option.code ? option.code : j} key={j}
+                                          value={type === 'id' ? option.id : option}
+                                >
+                                    {option}
+                                </MenuItem>
+                            )) :
+                            list.length && list.map((option, j) => (
+                                <MenuItem
+                                          data-key={option.code ? option.code : j} key={j}
+                                          value={type === 'id' ? option.id : option.name}
+                                >
+                                    {option.name}
+                                </MenuItem>
+                            ))
+                        }
                     </Select>
                 </FormControl>
             </div>

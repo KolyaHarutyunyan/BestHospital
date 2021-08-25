@@ -66,7 +66,9 @@ export const systemItemStyles = makeStyles(() => ({
         width: '100%',
         marginRight: 16,
         '& .MuiOutlinedInput-root': {
-            height: '36px!important'
+            height: '36px!important',
+            color: Colors.TextMiddleGray, // changeable
+            fontSize: 14
         },
     },
     headerSize: {

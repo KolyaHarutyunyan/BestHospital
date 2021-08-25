@@ -40,8 +40,9 @@ export const CreateStaff = ({handleClose, resetData}) => {
     const [error, setError] = useState("");
     const [errorSec, setErrorSec] = useState("");
     const [inputs, setInputs] = useState(resetData ? {} : staffGeneral ? staffGeneral : {});
-
     const [fullAddress, setFullAddress] = useState('')
+
+    console.log(inputs.birthday && moment(inputs.birthday).format())
 
     const disabledOne = inputs.firstName && error !== 'Not valid email' && inputs.lastName && inputs.email && inputs.phone
 
@@ -67,7 +68,7 @@ export const CreateStaff = ({handleClose, resetData}) => {
         }
     };
 
-    const handleChange = e =>{
+    const handleChange = e => {
         setInputs(
             prevState => (
                 {
@@ -111,12 +112,12 @@ export const CreateStaff = ({handleClose, resetData}) => {
 
             setError(
                 !inputs.firstName ? 'firstName' :
-                        !inputs.lastName ? 'lastName' :
-                            !inputs.email ? 'email' :
-                                !inputs.phone ? 'phone' :
-                                    !inputs.gender ? 'gender' :
-                                        !inputs.birthday ? 'birthday' :
-                                            'Input is not filled'
+                    !inputs.lastName ? 'lastName' :
+                        !inputs.email ? 'email' :
+                            !inputs.phone ? 'phone' :
+                                !inputs.gender ? 'gender' :
+                                    !inputs.birthday ? 'birthday' :
+                                        'Input is not filled'
             )
         }
     }
@@ -214,13 +215,7 @@ export const CreateStaff = ({handleClose, resetData}) => {
         <React.Fragment>
             <p className={classes.otherDetailsTitle}>Driver License</p>
             <ValidationInput
-                variant={"outlined"}
-                onChange={handleChange}
-                value={inputs.driverLicense}
-                type={"text"}
-                label={"Driver License*"}
-                name='driverLicense'
-                typeError={error === 'driverLicense' && ErrorText.field}
+
             />
             <div className={classes.flexContainer}>
                 <SelectInput
@@ -288,7 +283,8 @@ export const CreateStaff = ({handleClose, resetData}) => {
                 <ValidationInput
                     variant={"outlined"}
                     onChange={handleChange}
-                    value={inputs.birthday}
+                    // value={inputs.birthday}
+                    value={inputs.birthday && moment(inputs.birthday).format().substring(0, 10)}
                     type={"date"}
                     label={"Date of Birth*"}
                     name='birthday'

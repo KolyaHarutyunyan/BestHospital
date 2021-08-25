@@ -24,6 +24,8 @@ export const SystemItemAddService = ({modalType, handleClose}) => {
             return 'Edit Service Type'
         } else if (mType === 'editCredential') {
             return 'Edit Credential'
+        } else if (mType === 'editJobTitles') {
+            return 'Edit Job Title'
         }
         return 'Edit Department'
     }
@@ -32,7 +34,7 @@ export const SystemItemAddService = ({modalType, handleClose}) => {
     const globalText = useGlobalTextStyles()
 
     const handleSubmit = () => {
-        switch(mType) {
+        switch (mType) {
             case 'editService':
                 alert('edit services')
                 break;
@@ -45,7 +47,7 @@ export const SystemItemAddService = ({modalType, handleClose}) => {
         handleClose()
     }
 
-    const handleChange = () =>{
+    const handleChange = () => {
 
     }
 
@@ -83,31 +85,39 @@ export const SystemItemAddService = ({modalType, handleClose}) => {
                             name='category'
                         />
                     </> : mType === 'editCredential' ?
-                    <>
-                        <ValidationInput
-                            styles={inputSpacing}
-                            variant={"outlined"}
-                            onChange={() => alert('change')}
-                            type={"text"}
-                            label={"Credential Name*"}
-                            name='credentialName'
-                        />
-                        <SelectInput
-                            style={classes.credentialInputStyle}
-                            name={"issuingState"}
-                            placeholder={"Issuing State*"}
-                            list={credentialLicenceList}
-                            handleSelect={handleChange}
-                        />
-                    </> :
-                    <ValidationInput
-                        styles={inputSpacing}
-                        variant={"outlined"}
-                        onChange={() => alert('change')}
-                        type={"text"}
-                        label={"Department Name*"}
-                        name='departmentName'
-                    />
+                        <>
+                            <ValidationInput
+                                styles={inputSpacing}
+                                variant={"outlined"}
+                                onChange={() => alert('change')}
+                                type={"text"}
+                                label={"Credential Name*"}
+                                name='credentialName'
+                            />
+                            <SelectInput
+                                style={classes.credentialInputStyle}
+                                name={"issuingState"}
+                                placeholder={"Issuing State*"}
+                                list={credentialLicenceList}
+                                handleSelect={handleChange}
+                            />
+                        </> : mType === 'editCredential' ?
+                            <ValidationInput
+                                styles={inputSpacing}
+                                variant={"outlined"}
+                                onChange={() => alert('change')}
+                                type={"text"}
+                                label={"Department Name*"}
+                                name='departmentName'
+                            /> :
+                            <ValidationInput
+                                styles={inputSpacing}
+                                variant={"outlined"}
+                                onChange={() => alert('change')}
+                                type={"text"}
+                                label={"Job Title*"}
+                                name='jobTitle'
+                            />
             }
             <>
                 <CreateChancel

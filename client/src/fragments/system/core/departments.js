@@ -77,7 +77,7 @@ export const Departments = ({removeItem, openModal}) => {
                 {
                     credentials.map((credentialItem, index) => {
                         return (
-                            <div className={classes.item}>
+                            <div className={classes.item} key={index}>
                                 <p>
                                     <span>{credentialItem.name}</span>
                                     {credentialItem.type}</p>

@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {SimpleTabs} from "@eachbase/components";
-import {SystemType, systemItemStyles, SystemItemHeader, Credentials, Departments} from './core';
+import {SystemType, systemItemStyles, SystemItemHeader, Credentials, Departments, JobTitles} from './core';
 
 export const SystemItem = () => {
     const [activeTab, setActiveTab] = useState(0)
@@ -20,6 +20,9 @@ export const SystemItem = () => {
         },
         {
             label: 'Departments'
+        },
+        {
+            label: 'Job Titles'
         }
     ]
 
@@ -46,6 +49,9 @@ export const SystemItem = () => {
         },
         {
             tabComponent: (<Departments removeItem={handleRemoveItem} openModal={handleOpenClose} />)
+        },
+        {
+            tabComponent: (<JobTitles removeItem={handleRemoveItem} openModal={handleOpenClose} />)
         }
     ];
 

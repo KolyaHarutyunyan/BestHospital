@@ -29,11 +29,8 @@ export const ValidationInput = ({
     };
 
     let maxLength = (e) => {
-        if (Length){
-            return    e.target.value = e.target.value.slice(0, Length)
-        }
-        else {
-            return
+        if (Length) {
+            return e.target.value = e.target.value.slice(0, Length)
         }
     }
 
@@ -41,7 +38,7 @@ export const ValidationInput = ({
         <>
             <div className={style ? style : classes.SignInInput}>
                 <TextField
-                    onInput={(e) => maxLength(e) }
+                    onInput={(e) => maxLength(e)}
                     style={{...styles}}
                     className={className ? className : classes.inputTextField}
                     variant={variant}

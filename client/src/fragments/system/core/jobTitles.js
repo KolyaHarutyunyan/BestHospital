@@ -1,9 +1,8 @@
-import {AddButton, SelectInput, ValidationInput} from "@eachbase/components";
-import React, {useState} from "react";
+import {AddButton, ValidationInput} from "@eachbase/components";
+import {Images} from "@eachbase/utils";
 import {systemItemStyles} from "./styles";
-import {ErrorText, Images} from "@eachbase/utils";
-import {SelectInputPlaceholder} from "@eachbase/components";
-import moment from "moment";
+import {useState} from "react";
+
 
 const credentialBtn = {
     maxWidth: '174px',
@@ -11,13 +10,6 @@ const credentialBtn = {
     flex: '0 0 174px',
     padding: 0
 }
-
-const credentialsList = [
-    {name: 'type'},
-    {name: 'type 1'},
-    {name: 'type 2'},
-    {name: 'type 3'},
-]
 
 const credentials = [
     {
@@ -42,16 +34,12 @@ const credentials = [
     },
 ]
 
-export const Credentials = ({removeItem,openModal}) => {
+export const JobTitles = ({removeItem, openModal}) => {
 
     const classes = systemItemStyles()
 
-    const [inputs, setInputs] = useState({});
-    const [error,setError] = useState('');
-
-    const editCredential = (modalType) => {
-        openModal(modalType)
-    }
+    const [inputs, setInputs] = useState({})
+    const [error, setError] = useState('')
 
     const handleChange = e =>{
         setInputs(
@@ -64,7 +52,11 @@ export const Credentials = ({removeItem,openModal}) => {
         error === e.target.name && setError('')
     }
 
-    const isDisabled = inputs.name && inputs.type
+    const editDepartment = (modalType) => {
+        openModal(modalType)
+    }
+
+    const isDisabled = inputs.name
 
     return (
         <>
@@ -76,23 +68,11 @@ export const Credentials = ({removeItem,openModal}) => {
                     variant={"outlined"}
                     name={"name"}
                     type={"text"}
-                    placeholder={'Name*'}
+                    placeholder={'Job Titles*'}
                 />
-                <SelectInputPlaceholder
-                    style={classes.credentialInputStyle}
-                    name={"type"}
-                    handleSelect={handleChange}
-                    value={inputs.type}
-                    list={credentialsList}
-                    typeError={error === 'issuingState' ? ErrorText.field : ''}
-                />
-                <AddButton
-                    disabled={!isDisabled}
-                    styles={credentialBtn}
-                    handleClick={() => alert('Add Credential')} text='Add Credential'
-                />
+                <AddButton disabled={!isDisabled} styles={credentialBtn} handleClick={() => alert('Add Job Title')} text='Add Job Title'/>
             </div>
-            <p className={classes.title}>Credentials</p>
+            <p className={classes.title}>Job Titles</p>
             <div className={classes.credentialTable}>
                 {
                     credentials.map((credentialItem, index) => {
@@ -101,11 +81,10 @@ export const Credentials = ({removeItem,openModal}) => {
                                 <p>
                                     <span>{credentialItem.name}</span>
                                     {credentialItem.type}</p>
-                                <div>
-                                    <img src={Images.edit} style={{cursor: 'pointer'}}
-                                         onClick={(e) => editCredential('editCredential')} alt="edit"/>
-                                    <img src={Images.remove} alt="delete" style={{cursor: 'pointer', marginLeft: 16}}
-                                         onClick={() => removeItem('credential')}/>
+                                <div className={classes.icons}>
+                                    <img src={Images.edit}
+                                         onClick={(e) => editDepartment('editJobTitles')} alt="edit"/>
+                                    <img src={Images.remove} alt="delete" onClick={() => removeItem('jobTitles')}/>
                                 </div>
                             </div>
                         )

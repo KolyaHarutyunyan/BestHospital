@@ -29,7 +29,7 @@ export const SystemType = ({removeItem, openModal}) => {
 
     const [inputs, setInputs] = useState({});
     const [error,setError] = useState('');
-    console.log(inputs,'inputs');
+
     const notesItem = (item, index) => {
         return (
             <TableBodyComponent key={index}>
