@@ -104,9 +104,9 @@ export const buttonsStyle = makeStyles((theme) => ({
     "& img":{
       marginRight:'8px',
     },
-    "& p": {
-      fontSize: "32px",
-      marginRight: "8px",
+    "& span": {
+      fontSize: "14px",
+      color: 'white'
     },
   },
   addModalButtonStyle: {

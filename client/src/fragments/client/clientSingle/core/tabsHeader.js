@@ -1,15 +1,15 @@
-import {editButtonStyle, serviceSingleStyles,} from "./styles";
+import {editButtonStyle, serviceSingleStyles, inputStyle} from "./styles";
 import {Images} from "@eachbase/utils";
 import {AddButton, AddModalButton, SelectInput, SimpleModal} from "@eachbase/components";
 import React, {useEffect, useState} from "react";
-import {EditClient, AddContact, AddEnrollment} from "@eachbase/fragments/client";
+import {AddContact, AddEnrollment, CreateClient} from "@eachbase/fragments/client";
 import {useDispatch,} from "react-redux";
 import {clientActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
+import {AddAuthorization} from "../../clientModals/addAuthorization";
 
 
 export const TabsHeader = ({activeTab, data}) => {
-
     const params = useParams()
     const classes = serviceSingleStyles()
     const [open, setOpen] = useState()
@@ -60,16 +60,18 @@ export const TabsHeader = ({activeTab, data}) => {
                 <li className={classes.headerRight}>
                     {activeTab !== 6 &&
                     <SelectInput
+                        styles={inputStyle}
                         name={"active"}
                         handleSelect={handleChange}
                         value={inputs.active}
                         list={list}
-                        className={classes.select}
-
-                    />}
+                        className={classes.inputTextField}
+                    />
+                    }
                     {
                         activeTab === 0 ?
-                            <AddModalButton btnStyles={editButtonStyle} handleClick={() => setOpen(true)} text='Edit'/> :
+                            <AddModalButton btnStyles={editButtonStyle} handleClick={() => setOpen(true)}
+                                            text='Edit'/> :
                             activeTab !== 6 && activeTab !== 4 ?
                                 <AddButton text={activeTab === 1 ?
                                     'Add Contact' :
@@ -85,13 +87,13 @@ export const TabsHeader = ({activeTab, data}) => {
             <SimpleModal
                 openDefault={open}
                 handleOpenClose={handleOpenClose}
-                content={activeTab === 0 ? <EditClient handleClose={handleOpenClose}/> :
+                content={activeTab === 0 ? <CreateClient title={'Edit Client'} handleClose={handleOpenClose}/> :
                     activeTab === 1 ?
-                        <AddContact handleClose={handleOpenClose}/> :
+                        <AddContact title={'Add Contact'} handleClose={handleOpenClose}/> :
                         activeTab === 2 ?
                             <AddEnrollment handleClose={handleOpenClose}/> :
                             activeTab === 3 ?
-                                <p>add Auth</p> :
+                               <AddAuthorization /> :
                                 activeTab === 4 ?
                                     <p>add availab</p> :
                                     activeTab === 5 ?

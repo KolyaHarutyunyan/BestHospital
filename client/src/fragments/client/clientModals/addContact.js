@@ -2,14 +2,15 @@ import React, {useState} from "react";
 import {ValidationInput, CreateChancel, ModalHeader, AddressInput} from "@eachbase/components";
 import {createClientStyle} from "./styles";
 import {ErrorText} from "@eachbase/utils";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {clientActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 
 
-export const AddContact = ({handleClose}) => {
+export const AddContact = ({handleClose, contactId,title}) => {
+    const info = useSelector(state=>state?.client?.clientContacts[contactId])
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState({});
+    const [inputs, setInputs] = useState(info ? {...info} : {});
     const [step, setStep] = useState('first')
     const [fullAddress, setFullAddress] = useState(null)
     const classes = createClientStyle()
@@ -45,7 +46,11 @@ export const AddContact = ({handleClose}) => {
                     "relationship": inputs.relationship,
                     address : fullAddress
                 }
-                dispatch(clientActions.createClientContact(data, params.id))
+              if (title==='Add Contact'){
+                   dispatch(clientActions.createClientContact(data, params.id))
+              }else if (title==='Edit Contact') {
+                  dispatch(clientActions.editClientContact(data, info.id))
+              }
             } else {
                 setError(
                     !inputs.gender ? 'gender' :
@@ -61,7 +66,7 @@ export const AddContact = ({handleClose}) => {
 
     return (
         <div className={classes.createFoundingSource}>
-            <ModalHeader secondStepInfo={'Address'} steps={step} handleClose={handleClose} title={'Add Contact'}/>
+            <ModalHeader secondStepInfo={'Address'} steps={step} handleClose={handleClose} title={title}/>
             <div className={classes.createFoundingSourceBody}>
                 <div className={classes.clientModalBlock} >
                     {step === 'first' ? <div className={classes.clientModalBox}>
@@ -103,7 +108,11 @@ export const AddContact = ({handleClose}) => {
                             />
                         </div> :
                         <div className={classes.clientModalBox}>
-                            <AddressInput flex={true} handleSelectValue={setFullAddress}/>
+                            <AddressInput
+                                flex={true}
+                                handleSelectValue={setFullAddress}
+                                info={info && info.address ? info : ''}
+                            />
                         </div>}
                 </div>
                 <div className={classes.clientModalBlock} >

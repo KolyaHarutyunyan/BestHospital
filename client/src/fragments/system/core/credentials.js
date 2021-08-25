@@ -52,22 +52,16 @@ export const Credentials = ({removeItem,openModal}) => {
         openModal(modalType)
     }
 
-    const handleCheck = (bool) => {
-        if (bool === true) {
-            setError("Not valid email");
-        } else {
-            setError("");
-        }
-    };
-    const handleChange = e => setInputs(
-        prevState => (
-            {
-                ...prevState,
-                [e.target.name]: e.target.value
-            }
-        ),
-        error === e.target.name && setError(''),
-    );
+    const handleChange = e =>{
+        setInputs(
+            prevState => (
+                {
+                    ...prevState,
+                    [e.target.name]: e.target.value
+                }
+            ));
+        error === e.target.name && setError('')
+    }
 
     const isDisabled = inputs.name && inputs.type
 
@@ -77,7 +71,6 @@ export const Credentials = ({removeItem,openModal}) => {
                 <ValidationInput
                     style={classes.credentialInputStyle}
                     onChange={handleChange}
-                    sendBoolean={handleCheck}
                     value={inputs.name}
                     variant={"outlined"}
                     name={"name"}
@@ -88,12 +81,15 @@ export const Credentials = ({removeItem,openModal}) => {
                     style={classes.credentialInputStyle}
                     name={"type"}
                     handleSelect={handleChange}
-                    sendBoolean={handleCheck}
                     value={inputs.type}
                     list={credentialsList}
                     typeError={error === 'issuingState' ? ErrorText.field : ''}
                 />
-                <AddButton disabled={!isDisabled} styles={credentialBtn} handleClick={() => alert('Add Credential')} text='Add Credential'/>
+                <AddButton
+                    disabled={!isDisabled}
+                    styles={credentialBtn}
+                    handleClick={() => alert('Add Credential')} text='Add Credential'
+                />
             </div>
             <p className={classes.title}>Credentials</p>
             <div className={classes.credentialTable}>

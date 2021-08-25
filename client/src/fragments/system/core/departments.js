@@ -1,6 +1,7 @@
 import {AddButton, ValidationInput} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
 import {systemItemStyles} from "./styles";
+import {useState} from "react";
 
 
 const credentialBtn = {
@@ -37,13 +38,25 @@ export const Departments = ({removeItem, openModal}) => {
 
     const classes = systemItemStyles()
 
-    const handleChange = (e) => {
+    const [inputs, setInputs] = useState({})
+    const [error, setError] = useState('')
 
+    const handleChange = e =>{
+        setInputs(
+            prevState => (
+                {
+                    ...prevState,
+                    [e.target.name]: e.target.value
+                }
+            ));
+        error === e.target.name && setError('')
     }
 
     const editDepartment = (modalType) => {
         openModal(modalType)
     }
+
+    const isDisabled = inputs.name
 
     return (
         <>
@@ -51,12 +64,13 @@ export const Departments = ({removeItem, openModal}) => {
                 <ValidationInput
                     style={classes.credentialInputStyle}
                     onChange={handleChange}
+                    value={inputs.name}
                     variant={"outlined"}
-                    name={"Name"}
+                    name={"name"}
                     type={"text"}
                     placeholder={'Name*'}
                 />
-                <AddButton styles={credentialBtn} handleClick={() => alert('Add Department')} text='Add Department'/>
+                <AddButton disabled={!isDisabled} styles={credentialBtn} handleClick={() => alert('Add Department')} text='Add Department'/>
             </div>
             <p className={classes.title}>Departments</p>
             <div className={classes.credentialTable}>

@@ -5,6 +5,8 @@ import {useGlobalTextStyles, EmailValidator, ErrorText} from "@eachbase/utils";
 import {AddressInput, ValidationInput, SelectInput} from "@eachbase/components";
 import {adminActions} from "@eachbase/store";
 import {useDispatch, useSelector} from "react-redux";
+import {inputStyle} from "../../../fundingSource/createFundingSource/core/styles";
+import moment from "moment";
 
 const steps = ['General Info', 'Address', 'Other Details']
 
@@ -36,6 +38,7 @@ export const CreateStaff = ({handleClose, resetData}) => {
     const staffGeneral = useSelector(state => state.admins.adminInfoById);
 
     const [error, setError] = useState("");
+    const [errorSec, setErrorSec] = useState("");
     const [inputs, setInputs] = useState(resetData ? {} : staffGeneral ? staffGeneral : {});
 
     const [fullAddress, setFullAddress] = useState('')
@@ -56,15 +59,24 @@ export const CreateStaff = ({handleClose, resetData}) => {
             setError("");
         }
     };
-    const handleChange = e => setInputs(
-        prevState => (
-            {
-                ...prevState,
-                [e.target.name]: e.target.value
-            }
-        ),
-        error === e.target.name && setError(''),
-    );
+    const handleCheckSecondary = (bool) => {
+        if (bool === true) {
+            setErrorSec("Not valid email");
+        } else {
+            setErrorSec("");
+        }
+    };
+
+    const handleChange = e =>{
+        setInputs(
+            prevState => (
+                {
+                    ...prevState,
+                    [e.target.name]: e.target.value
+                }
+            ));
+        error === e.target.name && setError('')
+    }
 
     const handleCreate = () => {
         const data = {
@@ -108,12 +120,10 @@ export const CreateStaff = ({handleClose, resetData}) => {
             )
         }
     }
-
     const firstStep = (
         <React.Fragment>
             <ValidationInput
                 variant={"outlined"}
-                sendBoolean={handleCheck}
                 onChange={handleChange}
                 value={inputs.firstName}
                 type={"text"}
@@ -124,7 +134,6 @@ export const CreateStaff = ({handleClose, resetData}) => {
 
             <ValidationInput
                 variant={"outlined"}
-                sendBoolean={handleCheck}
                 onChange={handleChange}
                 value={inputs.middleName}
                 type={"text"}
@@ -135,7 +144,6 @@ export const CreateStaff = ({handleClose, resetData}) => {
 
             <ValidationInput
                 variant={"outlined"}
-                sendBoolean={handleCheck}
                 onChange={handleChange}
                 value={inputs.lastName}
                 type={"text"}
@@ -162,15 +170,15 @@ export const CreateStaff = ({handleClose, resetData}) => {
                 name={"secondaryEmail"}
                 type={"email"}
                 label={"Secondary Email"}
-                typeError={error === 'secondaryEmail' ? ErrorText.field : error === 'Not valid email' ? 'Not valid email' : ''}
-                sendBoolean={handleCheck}
+                typeError={errorSec === 'secondaryEmail' ? ErrorText.field : errorSec === 'Not valid email' ? 'Not valid email' : ''}
+                sendBoolean={handleCheckSecondary}
                 value={inputs.secondaryEmail}
                 onChange={handleChange}
             />
             <ValidationInput
-                sendBoolean={handleCheck}
+                Length={11}
                 onChange={handleChange}
-                value={inputs.phone}
+                value={inputs.phone && inputs.phone.replace('+', "")}
                 variant={"outlined"}
                 type={"number"}
                 label={"Primary Phone Number*"}
@@ -178,9 +186,9 @@ export const CreateStaff = ({handleClose, resetData}) => {
                 typeError={error === 'phone' && ErrorText.field}
             />
             <ValidationInput
-                sendBoolean={handleCheck}
+                Length={11}
                 onChange={handleChange}
-                value={inputs.secondaryPhone}
+                value={inputs.secondaryPhone && inputs.secondaryPhone.replace('+', '')}
                 variant={"outlined"}
                 type={"number"}
                 label={"Secondary Phone Number"}
@@ -192,7 +200,13 @@ export const CreateStaff = ({handleClose, resetData}) => {
 
     const secondStep = (
         <React.Fragment>
-            <AddressInput handleSelectValue={setFullAddress} Value={'Street Address*'} flex='block'/>
+            <AddressInput
+                handleSelectValue={setFullAddress}
+                Value={'Street Address*'}
+                flex='block'
+                info={staffGeneral && staffGeneral.address ? staffGeneral : ''}
+                styles={inputStyle}
+            />
         </React.Fragment>
     )
 
@@ -201,7 +215,6 @@ export const CreateStaff = ({handleClose, resetData}) => {
             <p className={classes.otherDetailsTitle}>Driver License</p>
             <ValidationInput
                 variant={"outlined"}
-                sendBoolean={handleCheck}
                 onChange={handleChange}
                 value={inputs.driverLicense}
                 type={"text"}
@@ -215,14 +228,12 @@ export const CreateStaff = ({handleClose, resetData}) => {
                     name={"issuingState"}
                     label={"Issuing State*"}
                     handleSelect={handleChange}
-                    sendBoolean={handleCheck}
                     value={inputs.issuingState}
                     list={issuingStateList}
                     typeError={error === 'issuingState' ? ErrorText.field : ''}
                 />
                 <ValidationInput
                     variant={"outlined"}
-                    sendBoolean={handleCheck}
                     onChange={handleChange}
                     value={inputs.expirationDate}
                     type={"date"}
@@ -236,7 +247,6 @@ export const CreateStaff = ({handleClose, resetData}) => {
                 name={"department"}
                 label={"Department*"}
                 handleSelect={handleChange}
-                sendBoolean={handleCheck}
                 value={inputs.department}
                 list={departmentList}
                 typeError={error === 'department' ? ErrorText.field : ''}
@@ -245,7 +255,6 @@ export const CreateStaff = ({handleClose, resetData}) => {
                 name={"supervisor"}
                 label={"Supervisor*"}
                 handleSelect={handleChange}
-                sendBoolean={handleCheck}
                 value={inputs.supervisor}
                 list={supervisorList}
                 typeError={error === 'supervisor' ? ErrorText.field : ''}
@@ -254,15 +263,12 @@ export const CreateStaff = ({handleClose, resetData}) => {
                 name={"residencyStatus"}
                 label={"Residency Status"}
                 handleSelect={handleChange}
-                sendBoolean={handleCheck}
                 value={inputs.residencyStatus}
                 list={residencyList}
                 typeError={error === 'residencyStatus' ? ErrorText.field : ''}
             />
             <ValidationInput
                 variant={"outlined"}
-                sendBoolean={handleCheck}
-                onChange={handleChange}
                 value={inputs.ssn}
                 type={"number"}
                 label={"SSN Number*"}
@@ -275,14 +281,12 @@ export const CreateStaff = ({handleClose, resetData}) => {
                     name={"gender"}
                     label={"Gender*"}
                     handleSelect={handleChange}
-                    sendBoolean={handleCheck}
                     value={inputs.gender}
                     list={genderList}
                     typeError={error === 'gender' ? ErrorText.field : ''}
                 />
                 <ValidationInput
                     variant={"outlined"}
-                    sendBoolean={handleCheck}
                     onChange={handleChange}
                     value={inputs.birthday}
                     type={"date"}
