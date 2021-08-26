@@ -14,6 +14,12 @@ export const FundingSourceSingleServices = () => {
     const [serviceIndex, setServiceIndex] = useState(0)
     const data = useSelector(state => state.fundingSource.fundingSourceServices)
     const classes = fundingSourceSingleStyles()
+
+    const { httpOnSuccess, httpOnError,httpOnLoad } = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnError: state.httpOnError,
+        httpOnLoad: state.httpOnLoad,
+    }));
     const headerTitles = [
         {
             title: 'Service',
@@ -45,6 +51,8 @@ export const FundingSourceSingleServices = () => {
     let serviceItem = (item, index) => {
         return (
             <TableBodyComponent key={index} handleClick={() => setServiceIndex(index)}>
+
+
                 <TableCell><p className={classes.tableTitle}>{item.name}</p></TableCell>
                 <TableCell>  {item.cptCode}  </TableCell>
                 <TableCell>  {item.size}  </TableCell>

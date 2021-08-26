@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {SimpleTabs, Notes, TableWrapperGeneralInfo, InactiveModal} from "@eachbase/components";
+import {SimpleTabs, Notes, TableWrapperGeneralInfo, InactiveModal, Loader} from "@eachbase/components";
 import {adminActions, fundingSourceActions} from "@eachbase/store";
 import {useDispatch, useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
@@ -37,11 +37,18 @@ export const FundingSourceItem = ({}) => {
         {label: 'History'}
     ]
 
+
+    const { httpOnSuccess, httpOnError,httpOnLoad } = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnError: state.httpOnError,
+        httpOnLoad: state.httpOnLoad,
+    }));
+
     const tabsContent = [
         {tabComponent: <FundingSourceSingleGeneral data={data}/>},
-        {tabComponent: <FundingSourceSingleServices/>},
-        {tabComponent: <FundingSourceSingleNotes/>},
-        {tabComponent: <FundingSourceSingleHistories/>},
+        {tabComponent:        httpOnLoad.length > 0 ? <Loader/> : <FundingSourceSingleServices/>},
+        {tabComponent:  httpOnLoad.length > 0 ? <Loader/> : <FundingSourceSingleNotes/>},
+        {tabComponent:  httpOnLoad.length > 0 ? <Loader/> :  <FundingSourceSingleHistories/>},
     ];
 
     return (

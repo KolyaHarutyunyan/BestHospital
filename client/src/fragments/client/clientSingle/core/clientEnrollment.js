@@ -1,7 +1,7 @@
-import {Card, DeleteElement, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
+import {Card, DeleteElement, Notes, RadioButton, SimpleModal, TableBodyComponent} from '@eachbase/components';
 import {serviceSingleStyles} from './styles';
 import {Colors, Images} from "@eachbase/utils";
-import {TableCell} from "@material-ui/core";
+import {FormControlLabel, Radio, TableCell} from "@material-ui/core";
 import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
@@ -52,13 +52,18 @@ export const ClientEnrollment = ({data}) => {
     let deleteEnrollment = ()=>{
         dispatch(clientActions.deleteClientEnrollment(enrolments[index].id))
     }
+    let editPrimary = (i)=>{
+        alert(i)
+    }
 
     let enrollmentsItem = (item, index) => {
         let startDate = moment(item?.startDate).format('DD/MM/YYYY')
         let terminationDate = moment(item?.terminationDate).format('DD/MM/YYYY')
         return (
             <TableBodyComponent key={index}>
-                <TableCell><p className={classes.tableName}>true</p></TableCell>
+                <TableCell>
+                    <Radio onChange={()=>editPrimary(index)}  checked={item.primary} classes={{root: classes.radio, checked: classes.checked}} />
+                </TableCell>
                 <TableCell>  {item.funderId?.name}  </TableCell>
                 <TableCell><p className={classes.tableID}>{item?.clientId}</p></TableCell>
                 <TableCell>  {startDate}  </TableCell>

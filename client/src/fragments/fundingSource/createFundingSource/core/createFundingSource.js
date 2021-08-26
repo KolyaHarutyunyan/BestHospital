@@ -1,9 +1,9 @@
 import {AddressInput, ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {createFoundingSourceStyle, inputStyle} from "./styles";
 import {EmailValidator, ErrorText} from "@eachbase/utils";
-import {fundingSourceActions,} from "@eachbase/store";
-import {useDispatch} from "react-redux";
+import {fundingSourceActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions,} from "@eachbase/store";
+import {useDispatch, useSelector} from "react-redux";
 
 
 export const CreateFundingSource = ({handleClose, info}) => {
@@ -12,6 +12,13 @@ export const CreateFundingSource = ({handleClose, info}) => {
     const [fullAddress, setFullAddress] = useState(info && info.address ? info.address.formattedAddress : null)
     const classes = createFoundingSourceStyle()
     const dispatch = useDispatch()
+    const { httpOnSuccess, httpOnError,httpOnLoad } = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnError: state.httpOnError,
+        httpOnLoad: state.httpOnLoad,
+    }));
+    const errorText = httpOnError.length && httpOnError[0].error
+    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_FUNDING_SOURCE'
     const handleCheck = (bool) => {
         if (bool === true) {
             setError("Not valid email");
@@ -23,6 +30,7 @@ export const CreateFundingSource = ({handleClose, info}) => {
     const handleChange = e => setInputs(
         prevState => ({...prevState, [e.target.name]: e.target.value}),
         error === e.target.name && setError(''),
+        e.target.name === 'email' &&  httpOnError.length  && dispatch(httpRequestsOnErrorsActions.removeError('EDIT_FUNDING_SOURCE'))
     );
 
 
@@ -66,6 +74,18 @@ export const CreateFundingSource = ({handleClose, info}) => {
         // if (error === 'address') setError('')
     }
 
+
+useEffect(()=>{
+
+    if (success){
+        handleClose()
+        dispatch(httpRequestsOnSuccessActions.removeSuccess('EDIT_FUNDING_SOURCE'))
+    }
+
+},[success])
+
+
+    console.log(httpOnLoad,'success')
     return (
         <div className={classes.createFoundingSource}>
             <ModalHeader headerBottom={true} handleClose={handleClose} title={info ? 'Edit Funding Source' : 'Add Funding Source'}/>
@@ -90,7 +110,8 @@ export const CreateFundingSource = ({handleClose, info}) => {
                             name={"email"}
                             type={"email"}
                             label={"Email Address*"}
-                            typeError={error === 'email' ? ErrorText.field : error === 'Not valid email' ? 'Not valid email' : ''}
+                            typeError={error === 'email' ? ErrorText.field : error === 'Not valid email' ? 'Not valid email' :
+                                errorText ? errorText : ''}
                             sendBoolean={handleCheck}
                             value={inputs.email}
                             onChange={handleChange}
@@ -150,6 +171,7 @@ export const CreateFundingSource = ({handleClose, info}) => {
                 </div>
                 <div className={classes.createFoundingSourceBodyBlock}>
                     <CreateChancel
+                        loader={ httpOnLoad.length > 0}
                         create={"Add"}
                         chancel={"Cancel"}
                         onCreate={handleCreate}

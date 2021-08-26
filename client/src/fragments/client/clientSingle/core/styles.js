@@ -178,6 +178,25 @@ export const serviceSingleStyles = makeStyles(() => ({
             borderColor:Colors.BackgroundBlue,
         },
     },
+    radio: {
+        color: '#D263E4',
+        '&:hover': {
+            backgroundColor: 'white'
+        },
+        '&$checked': {
+            color: '#D263E4',
+            '&:hover': {
+                backgroundColor: 'white'
+            },
+        }
+    },
+    radioInputLabel: {
+        fontSize: 16,
+        color: Colors.TextSecondary,
+    },
+    checked: {
+        color :'green'
+    },
 
     }))
 ;

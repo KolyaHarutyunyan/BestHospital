@@ -1,5 +1,6 @@
 import {Button} from "@material-ui/core";
 import {Colors} from "@eachbase/utils";
+import {MinLoader} from "../loader";
 
 
 export const CreateChancel = ({
@@ -9,9 +10,10 @@ export const CreateChancel = ({
                                   onClose,
                                   classes,
                                   buttonWidth,
-                                  disabled
+                                  disabled,
+                                  loader,
                               }) => {
-
+    console.log(loader,'loaderloaderloaderloader');
 
     return (
         <div className={classes}
@@ -52,7 +54,12 @@ export const CreateChancel = ({
                 onClick={onCreate}
                 disabled={disabled}
             >
-                {create}
+                { loader === true ?
+                    <MinLoader margin={'0'} color={Colors.TextWhite}/>
+                    :
+                    create
+                }
+
             </Button>
         </div>
     );
