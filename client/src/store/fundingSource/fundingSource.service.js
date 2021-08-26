@@ -7,7 +7,13 @@ export const authService = {
 
     editFundingSourceService: (id,body) => axios.patch(`/funding/${id}`, body),
 
-    getFundingSourceService: () => axios.get('/funding',),
+    getFundingSourceService: (status) => {
+        if (status || status === 0){
+            return  axios.get(`/funding/?status=${status}`)
+        } else {
+            return axios.get('/funding')
+        }
+    },
 
     getFoundingSourceByIdService: (id) => axios.get(`/funding/${id}`,),
 

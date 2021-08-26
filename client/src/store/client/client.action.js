@@ -1,7 +1,16 @@
 import {
-    CREATE_CLIENT, CREATE_CLIENT_CONTACT,
-    DELETE_CLIENT, DELETE_CLIENT_CONTACT, EDIT_CLIENT, EDIT_CLIENT_CONTACT,
-    GET_CLIENT_BY_ID, GET_CLIENT_CONTACTS, GET_CLIENT_ENROLLMENT,
+    CREATE_CLIENT,
+    CREATE_CLIENT_CONTACT,
+    CREATE_CLIENT_ENROLLMENT,
+    DELETE_CLIENT,
+    DELETE_CLIENT_CONTACT,
+    DELETE_CLIENT_ENROLLMENT,
+    EDIT_CLIENT,
+    EDIT_CLIENT_CONTACT,
+    EDIT_CLIENT_ENROLLMENT,
+    GET_CLIENT_BY_ID,
+    GET_CLIENT_CONTACTS,
+    GET_CLIENT_ENROLLMENT,
     GET_CLIENTS,
 } from "./client.types";
 
@@ -82,6 +91,37 @@ export const deleteClientContact = ( id) => {
 export const getClientsEnrollment = (id) => {
     return {
         type: GET_CLIENT_ENROLLMENT,
+        payload: {id}
+    }
+}
+
+export const createClientEnrollment = (body, id, funderId) => {
+    return {
+        type: CREATE_CLIENT_ENROLLMENT,
+        payload: {
+            body,
+            id,
+            funderId
+        }
+    }
+}
+
+export const editClientEnrollment = (body, clientId, funderId, id) => {
+    console.log(body, clientId, id, funderId, 'action')
+    return {
+        type: EDIT_CLIENT_ENROLLMENT,
+        payload: {
+            body,
+            clientId,
+            id,
+            funderId
+        }
+    }
+}
+
+export const deleteClientEnrollment = ( id) => {
+    return {
+        type: DELETE_CLIENT_ENROLLMENT,
         payload: {id}
     }
 }

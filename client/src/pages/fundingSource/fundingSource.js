@@ -20,14 +20,20 @@ export const FundingSource = ({}) => {
         setOpen(!open)
     }
 
-    const handleActiveOrInactive  =(type) =>{
-        setType(type)
-        if(type === 1){
-            dispatch(fundingSourceActions.getActiveOrInactive(1))
-        }else{
-            dispatch(fundingSourceActions.getActiveOrInactive(0))
-        }
+    const handleActiveOrInactive  =(status) =>{
+        dispatch(fundingSourceActions.getFundingSource(status))
     }
+
+
+    // const handleActiveOrInactive  =(type) =>{
+    //     setType(type)
+    //     if(type === 1){
+    //         dispatch(fundingSourceActions.getActiveOrInactive(1))
+    //     }else{
+    //         dispatch(fundingSourceActions.getActiveOrInactive(0))
+    //     }
+    // }
+
     return (
         <>
                     <TableWrapper

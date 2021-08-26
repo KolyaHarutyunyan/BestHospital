@@ -26,9 +26,10 @@ export const editFundingSource = (id,body) => {
 }
 
 
-export const getFundingSource = () => {
+export const getFundingSource = (status) => {
     return {
-        type: GET_FUNDING_SOURCE
+        type: GET_FUNDING_SOURCE,
+        payload : {status}
     }
 }
 

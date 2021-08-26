@@ -16,6 +16,8 @@ export const TabsHeader = ({activeTab, data}) => {
     const [inputs, setInputs] = useState({active: 'active'});
     const dispatch = useDispatch()
 
+
+
     useEffect(() => {
         if (activeTab === 1) {
 
@@ -87,7 +89,7 @@ export const TabsHeader = ({activeTab, data}) => {
             <SimpleModal
                 openDefault={open}
                 handleOpenClose={handleOpenClose}
-                content={activeTab === 0 ? <CreateClient title={'Edit Client'} handleClose={handleOpenClose}/> :
+                content={activeTab === 0 ? <CreateClient info={data}  handleClose={handleOpenClose}/> :
                     activeTab === 1 ?
                         <AddContact title={'Add Contact'} handleClose={handleOpenClose}/> :
                         activeTab === 2 ?

@@ -41,22 +41,23 @@ function* editFundingSource(action) {
 }
 
 
-function* getFundingSource({action, type}) {
-    yield put(httpRequestsOnErrorsActions.removeError(type));
-    yield put(httpRequestsOnLoadActions.appendLoading(type));
+function* getFundingSource(action) {
+    console.log(action,'action');
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
-        const res = yield call(authService.getFundingSourceService);
+        const res = yield call(authService.getFundingSourceService,action.payload.status);
         yield put({
             type: GET_FUNDING_SOURCE_SUCCESS,
             payload: res.data,
         });
-        yield put(httpRequestsOnLoadActions.removeLoading(type));
-        yield put(httpRequestsOnErrorsActions.removeError(type));
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.removeError(action.type));
 
 
     } catch (err) {
-        yield put(httpRequestsOnLoadActions.removeLoading(type));
-        yield put(httpRequestsOnErrorsActions.removeError(type));
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.removeError(action.type));
         console.log(err)
     }
 }
