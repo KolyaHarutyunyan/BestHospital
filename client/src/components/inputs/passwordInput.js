@@ -40,7 +40,7 @@ export const PasswordInput = ({
 
 
     const chechValid = (e) => {
-        console.log('sdfasdasdsadasd')
+
         let Value = e.target.value;
         if (Value.length >= 1) {
             if (validator) {

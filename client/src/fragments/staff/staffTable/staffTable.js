@@ -23,7 +23,7 @@ export const StaffTable = ({}) => {
         <div className={globalStyle.tableWrapper}>
 
             {
-                list ?
+                httpOnLoad.length ?  <Loader/>  :
                 <TableContainer component={Paper}>
                     <Table
                         className={globalStyle.table}
@@ -31,9 +31,7 @@ export const StaffTable = ({}) => {
                         aria-label="a dense table"
                     >
                         <StaffTableHead/>
-                        {httpOnLoad.length ?
-                            <Loader/>
-                            :
+                        {
                             list.length && list.map((item, i) => (
                                 <StaffTableBody
                                     key={i}
@@ -48,7 +46,7 @@ export const StaffTable = ({}) => {
                         page={page}
                         count={adminsList.length}
                     />
-                </TableContainer> : null
+                </TableContainer>
             }
         </div>
     );
