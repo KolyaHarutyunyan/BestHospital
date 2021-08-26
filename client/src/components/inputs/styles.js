@@ -130,7 +130,8 @@ export const inputsStyle = makeStyles(() => ({
       borderColor:Colors.BackgroundBlue,
     },
     '& .MuiOutlinedInput-root':{
-      height:'48px'
+      height:'48px',
+      color: Colors.TextPrimary
     },
     '& .MuiInputLabel-outlined':{
       marginTop:'-3px',

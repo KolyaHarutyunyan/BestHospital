@@ -128,7 +128,7 @@ export const CredentialModal = ({credModalType, handleClose}) => {
             <div className={classes.positionedButton}>
                 <CloseButton handleCLic={handleClose}/>
             </div>
-            <p className={classes.inactiveModalInfo}> {mType === 'addCredential' && 'Please fulfill the below fields to add a credential.'}</p>
+            <p className={classes.inactiveModalInfo}> {mType === 'addCredential' && 'Please fulfill the below fields to add a system.'}</p>
 
             {
                 mType === 'credentialPreview' ? <SelectInput

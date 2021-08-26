@@ -293,7 +293,7 @@ export class FundingService {
       return await modifier.save()
 
       // const modifier: any = await this.serviceModel.findOne({ _id: serviceId }, { 'chargeTable': { $elemMatch: { '_id': dto.modifierId } } });
-      // const credential: any = await this.serviceModel.findOne({ _id: serviceId }, { 'chargeTable.credential': { $elemMatch: { '_id': dto.modifierId } } });
+      // const system: any = await this.serviceModel.findOne({ _id: serviceId }, { 'chargeTable.system': { $elemMatch: { '_id': dto.modifierId } } });
 
       // console.log(modifier.chargeTable[0], ' aaaaaa');
       // this.checkService(service);
