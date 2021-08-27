@@ -65,7 +65,7 @@ export class StaffService {
     }
   };
 
-  /** Create a new staff system */
+  /** Create a new staff credential */
   createStaffCredential = async (dto: CreateStaffCredentialDto): Promise<StaffCredentialDTO> => {
     try {
       const staff = await this.model.findById({ _id: dto.staffId });
@@ -81,12 +81,12 @@ export class StaffService {
       return staffCredential;
       // return this.sanitizer.sanitize(user);
     } catch (e) {
-      this.mongooseUtil.checkDuplicateKey(e, 'staff system already exists');
+      this.mongooseUtil.checkDuplicateKey(e, 'staff credential already exists');
       throw e;
     }
   };
 
-  /** Create a new system */
+  /** Create a new credential */
   createCredential = async (dto: CreateCredentialDto): Promise<any> => {
     await this.credentialService.create(dto);
   };
@@ -216,7 +216,7 @@ export class StaffService {
     }
   }
   /** Private methods */
-  /** if the system is not valid, throws an exception */
+  /** if the credential is not valid, throws an exception */
   private checkStaffCredential(credential: IStaffCredential) {
     if (!credential) {
       throw new HttpException(

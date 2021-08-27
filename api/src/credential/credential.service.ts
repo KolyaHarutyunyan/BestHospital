@@ -27,7 +27,7 @@ export class CredentialService {
 
       await credential.save();
       return credential;
-      // return this.sanitizer.sanitize(system);
+      // return this.sanitizer.sanitize(credential);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Credential already exists');
       throw e;
@@ -40,7 +40,7 @@ export class CredentialService {
       const credential = await this.model.find({});
       this.checkCredential(credential[0]);
       return credential;
-      // return this.sanitizer.sanitizeMany(system);
+      // return this.sanitizer.sanitizeMany(credential);
     }
     catch (e) {
       throw e
@@ -53,7 +53,7 @@ export class CredentialService {
       const credential = await this.model.findOne({ _id });
       this.checkCredential(credential);
       return credential;
-      // return this.sanitizer.sanitize(system);
+      // return this.sanitizer.sanitize(credential);
     }
     catch (e) {
       throw e
@@ -77,7 +77,7 @@ export class CredentialService {
   }
 
   // remove(id: number) {
-  //   return `This action removes a #${id} system`;
+  //   return `This action removes a #${id} credential`;
   // }
 
   /** Private methods */
