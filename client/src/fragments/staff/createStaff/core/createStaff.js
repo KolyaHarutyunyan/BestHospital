@@ -34,8 +34,8 @@ const genderList = [
 ]
 
 
-export const CreateStaff = ({handleClose, resetData}) => {
-    const staffGeneral = useSelector(state => state.admins.adminInfoById);
+export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
+    // const staffGeneral = useSelector(state => state.admins.adminInfoById);
 
     const [error, setError] = useState("");
     const [errorSec, setErrorSec] = useState("");
@@ -93,7 +93,7 @@ export const CreateStaff = ({handleClose, resetData}) => {
             birthday: (inputs.birthday ? new Date(inputs.birthday).toISOString() : ''),
             residency: 'residency',
             ssn: 0,
-            status: 1,
+            status: staffGeneral ? staffGeneral.status : 1,
             address: fullAddress
         }
 
@@ -106,7 +106,9 @@ export const CreateStaff = ({handleClose, resetData}) => {
             inputs.birthday &&
             fullAddress
         ) {
-            staffGeneral ? dispatch(adminActions.editAdminById(data, staffGeneral.id)) : dispatch(adminActions.createAdmin(data))
+            staffGeneral ?
+                dispatch(adminActions.editAdminById(data, staffGeneral.id)) :
+                dispatch(adminActions.createAdmin(data))
             handleClose()
         } else {
 
@@ -215,7 +217,13 @@ export const CreateStaff = ({handleClose, resetData}) => {
         <React.Fragment>
             <p className={classes.otherDetailsTitle}>Driver License</p>
             <ValidationInput
-
+                variant={"outlined"}
+                onChange={handleChange}
+                value={inputs.driverLicense}
+                type={"text"}
+                label={"Driver License*"}
+                name='driverLicense'
+                typeError={error === 'driverLicense' && ErrorText.field}
             />
             <div className={classes.flexContainer}>
                 <SelectInput

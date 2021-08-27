@@ -3,22 +3,28 @@ import {modalsStyle,} from "@eachbase/components/modal/styles";
 import {useGlobalTextStyles} from "@eachbase/utils";
 import {CloseButton, CreateChancel} from "@eachbase/components/buttons";
 import {SelectInput, ValidationInput} from "@eachbase/components/inputs";
+import {systemActions} from "../../../../store";
+import {useDispatch} from "react-redux";
 
 const inputSpacing = {
     paddingBottom: 16,
 }
 
-const credentialLicenceList = [
-    {name: 'type'},
-    {name: 'type 1'},
-    {name: 'type 2'},
-    {name: 'type 3'},
+const credentialsList = [
+    {name: 'Degree'},
+    {name: 'Clearance'},
+    {name: 'licence'},
 ]
 
-export const SystemItemAddService = ({modalType, handleClose}) => {
+export const SystemItemAddService = ({modalId, modalType, handleClose}) => {
 
     const [mType] = useState(modalType)
+    const [mId] = useState(modalId)
 
+    const [inputs, setInputs] = useState({})
+    const dispatch = useDispatch()
+    const [error,setError] = useState('')
+    console.log(inputs,'inputs');
     const title = (mType) => {
         if (mType === 'editService') {
             return 'Edit Service Type'
@@ -33,23 +39,53 @@ export const SystemItemAddService = ({modalType, handleClose}) => {
     const classes = modalsStyle()
     const globalText = useGlobalTextStyles()
 
+    const checkType = (type) => {
+        if (type === 'Degree') {
+            return 0
+        } else if (type === 'Clearance') {
+            return 1
+        } else if (type === 'licence') {
+            return 2
+        }
+    }
+
     const handleSubmit = () => {
+        let credentialData = {
+            name: inputs.credentialName,
+            type: checkType(inputs.credentialType),
+        }
         switch (mType) {
             case 'editService':
                 alert('edit services')
                 break;
             case 'editCredential':
-                alert('edit credentials')
+                if (inputs.credentialType && inputs.credentialName){
+                    dispatch(systemActions.editCredentialByIdGlobal(credentialData,mId))
+                    handleClose()
+                }else {
+                    alert('error')
+                }
+                break;
+            case 'editJobTitles':
+                alert('edit job title')
                 break;
             default:
                 alert('edit departments')
         }
-        handleClose()
     }
 
-    const handleChange = () => {
-
+    const handleChange = e => {
+        setInputs(
+            prevState => (
+                {
+                    ...prevState,
+                    [e.target.name]: e.target.value
+                }
+            ));
+        error === e.target.name && setError('')
     }
+
+
 
     return (
         <div className={classes.inactiveModalBody}>
@@ -63,61 +99,69 @@ export const SystemItemAddService = ({modalType, handleClose}) => {
                         <ValidationInput
                             styles={inputSpacing}
                             variant={"outlined"}
-                            onChange={() => alert('change')}
+                            onChange={handleChange}
                             type={"text"}
                             label={"Service Name*"}
                             name='serviceName'
+                            value={inputs.serviceName}
                         />
                         <ValidationInput
                             styles={inputSpacing}
                             variant={"outlined"}
-                            onChange={() => alert('change')}
+                            onChange={handleChange}
                             type={"text"}
                             label={"Display Name*"}
                             name='displayName'
+                            value={inputs.displayName}
                         />
                         <ValidationInput
                             styles={inputSpacing}
                             variant={"outlined"}
-                            onChange={() => alert('change')}
+                            onChange={handleChange}
                             type={"text"}
                             label={"category"}
                             name='category'
+                            value={inputs.category}
                         />
                     </> : mType === 'editCredential' ?
                         <>
                             <ValidationInput
                                 styles={inputSpacing}
                                 variant={"outlined"}
-                                onChange={() => alert('change')}
+                                onChange={handleChange}
                                 type={"text"}
                                 label={"Credential Name*"}
                                 name='credentialName'
+                                value={inputs.credentialName}
                             />
                             <SelectInput
                                 style={classes.credentialInputStyle}
-                                name={"issuingState"}
-                                placeholder={"Issuing State*"}
-                                list={credentialLicenceList}
+                                name={"credentialType"}
+                                placeholder={"Type*"}
+                                list={credentialsList}
                                 handleSelect={handleChange}
+                                value={inputs.credentialType}
                             />
-                        </> : mType === 'editCredential' ?
+                        </> : mType === 'editDepartment' ?
                             <ValidationInput
                                 styles={inputSpacing}
                                 variant={"outlined"}
-                                onChange={() => alert('change')}
+                                onChange={handleChange}
                                 type={"text"}
                                 label={"Department Name*"}
                                 name='departmentName'
+                                value={inputs.departmentName}
                             /> :
                             <ValidationInput
                                 styles={inputSpacing}
                                 variant={"outlined"}
-                                onChange={() => alert('change')}
+                                onChange={handleChange}
                                 type={"text"}
                                 label={"Job Title*"}
                                 name='jobTitle'
+                                value={inputs.jobTitle}
                             />
+
             }
             <>
                 <CreateChancel

@@ -4,7 +4,7 @@ import {SystemItemAddService} from "./modals";
 import {systemItemStyles} from "./styles";
 import React from "react";
 
-export const SystemItemHeader = ({handleDeletedOpenClose, deletedId, deleteModalOpened, modalType, open ,handleOpenClose}) => {
+export const SystemItemHeader = ({modalId, handleDeletedOpenClose, deletedId, deleteModalOpened, modalType, open ,handleOpenClose}) => {
 
     const classes = systemItemStyles()
 
@@ -21,7 +21,7 @@ export const SystemItemHeader = ({handleDeletedOpenClose, deletedId, deleteModal
             <SimpleModal
                 openDefault={open}
                 handleOpenClose={handleOpenClose}
-                content={<SystemItemAddService modalType={modalType} handleClose={handleOpenClose}/>}
+                content={<SystemItemAddService modalId={modalId} modalType={modalType} handleClose={handleOpenClose}/>}
             />
             <SimpleModal
                 openDefault={deleteModalOpened}

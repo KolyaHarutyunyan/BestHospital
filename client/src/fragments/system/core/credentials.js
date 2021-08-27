@@ -3,7 +3,8 @@ import React, {useState} from "react";
 import {systemItemStyles} from "./styles";
 import {ErrorText, Images} from "@eachbase/utils";
 import {SelectInputPlaceholder} from "@eachbase/components";
-import moment from "moment";
+import {useDispatch} from "react-redux";
+import { systemActions } from "@eachbase/store";
 
 const credentialBtn = {
     maxWidth: '174px',
@@ -13,47 +14,23 @@ const credentialBtn = {
 }
 
 const credentialsList = [
-    {name: 'type'},
-    {name: 'type 1'},
-    {name: 'type 2'},
-    {name: 'type 3'},
+    {name: 'Degree'},
+    {name: 'Clearance'},
+    {name: 'licence'},
 ]
 
-const credentials = [
-    {
-        name: 'HB',
-        type: 'license'
-    },
-    {
-        name: 'HB',
-        type: 'license'
-    },
-    {
-        name: 'HB',
-        type: 'license'
-    },
-    {
-        name: 'HB',
-        type: 'license'
-    },
-    {
-        name: 'HB',
-        type: 'license'
-    },
-]
-
-export const Credentials = ({removeItem,openModal}) => {
-
+export const Credentials = ({removeItem, openModal,globalCredentials}) => {
+    const dispatch = useDispatch()
     const classes = systemItemStyles()
 
     const [inputs, setInputs] = useState({});
-    const [error,setError] = useState('');
+    const [error, setError] = useState('');
 
-    const editCredential = (modalType) => {
-        openModal(modalType)
+    const editCredential = (modalType, modalId) => {
+        openModal(modalType,modalId)
     }
 
-    const handleChange = e =>{
+    const handleChange = e => {
         setInputs(
             prevState => (
                 {
@@ -62,6 +39,42 @@ export const Credentials = ({removeItem,openModal}) => {
                 }
             ));
         error === e.target.name && setError('')
+    }
+
+    const checkType = (type) => {
+        if (type === 'Degree') {
+            return 0
+        } else if (type === 'Clearance') {
+            return 1
+        } else if (type === 'licence') {
+            return 2
+        }
+    }
+
+    const convertType = (index) =>{
+        if (index === 0) {
+            return 'Degree'
+        } else if (index === 1) {
+            return 'Clearance'
+        } else if (index === 2) {
+            return 'licence'
+        }
+    }
+
+    const handleSubmit = () => {
+        let data = {
+            name: inputs.name,
+            type: checkType(inputs.type)
+        }
+        if (inputs.name && inputs.type) {
+            dispatch(systemActions.createCredentialGlobal(data));
+        } else {
+            setError(
+                !inputs.name ? 'name' :
+                    !inputs.type ? 'type' :
+                        'Input is not filled'
+            )
+        }
     }
 
     const isDisabled = inputs.name && inputs.type
@@ -79,6 +92,7 @@ export const Credentials = ({removeItem,openModal}) => {
                     placeholder={'Name*'}
                 />
                 <SelectInputPlaceholder
+                    placeholder='Type'
                     style={classes.credentialInputStyle}
                     name={"type"}
                     handleSelect={handleChange}
@@ -89,23 +103,23 @@ export const Credentials = ({removeItem,openModal}) => {
                 <AddButton
                     disabled={!isDisabled}
                     styles={credentialBtn}
-                    handleClick={() => alert('Add Credential')} text='Add Credential'
+                    handleClick={handleSubmit} text='Add Credential'
                 />
             </div>
             <p className={classes.title}>Credentials</p>
             <div className={classes.credentialTable}>
                 {
-                    credentials.map((credentialItem, index) => {
+                    globalCredentials.map((credentialItem, index) => {
                         return (
                             <div className={classes.item} key={index}>
                                 <p>
-                                    <span>{credentialItem.name}</span>
-                                    {credentialItem.type}</p>
-                                <div>
-                                    <img src={Images.edit} style={{cursor: 'pointer'}}
-                                         onClick={(e) => editCredential('editCredential')} alt="edit"/>
-                                    <img src={Images.remove} alt="delete" style={{cursor: 'pointer', marginLeft: 16}}
-                                         onClick={() => removeItem('credential')}/>
+                                    <span>{`${credentialItem.name} - `}</span>
+                                    {convertType(credentialItem.type)}
+                                </p>
+                                <div className={classes.icons}>
+                                    <img src={Images.edit}
+                                         onClick={(e) => editCredential('editCredential',credentialItem._id)} alt="edit"/>
+                                    <img src={Images.remove} alt="delete" onClick={() => removeItem(credentialItem._id)}/>
                                 </div>
                             </div>
                         )

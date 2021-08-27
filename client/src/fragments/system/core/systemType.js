@@ -23,7 +23,7 @@ const headerTitles = [
     },
 ];
 
-export const SystemType = ({removeItem, openModal}) => {
+export const ServiceType = ({removeItem, openModal}) => {
 
     const classes = systemItemStyles()
 

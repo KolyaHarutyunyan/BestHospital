@@ -91,7 +91,7 @@ export class StaffController {
 
 
 
-  /** Create a new staff credential */
+  /** Create a new staff system */
   @Post('credential')
   @ApiOkResponse({ type: StaffCredentialDTO })
   @Public()
@@ -103,7 +103,7 @@ export class StaffController {
   }
 
   /** Get the crednetial profile */
-  @Get(':id/credential')
+  @Get(':id/system')
   @ApiOkResponse({ type: StaffCredentialDTO })
   @Public()
   async findCredential(
@@ -111,8 +111,8 @@ export class StaffController {
   ): Promise<StaffCredentialDTO> {
     return await this.staffService.findCredential(staffId);
   }
-  /** Edit a credential */
-  @Patch(':id/credential')
+  /** Edit a system */
+  @Patch(':id/system')
   @Public()
   @ApiOkResponse({ type: StaffCredentialDTO })
   async editCredential(
@@ -123,8 +123,8 @@ export class StaffController {
     return credential;
   }
 
-  /** Delete a credential */
-  @Delete(':id/credential')
+  /** Delete a system */
+  @Delete(':id/system')
   @Public()
   @ApiOkResponse({ type: 'string' })
   async deleteCredential(
