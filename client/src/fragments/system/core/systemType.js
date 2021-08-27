@@ -1,8 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, { useState} from "react";
 import {TableCell} from "@material-ui/core";
 import {Notes, TableBodyComponent, AddButton, ValidationInput} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
 import {systemItemStyles} from './styles'
+import {useDispatch} from "react-redux";
+import {systemActions} from "../../../store";
 
 const headerTitles = [
     {
@@ -23,43 +25,36 @@ const headerTitles = [
     },
 ];
 
-export const ServiceType = ({removeItem, openModal}) => {
-
+export const ServiceType = ({globalServices, removeItem, openModal}) => {
+    const [inputs, setInputs] = useState({});
+    const [error, setError] = useState('');
+    const isDisabled = inputs.name && inputs.displayCode && inputs.category
     const classes = systemItemStyles()
 
-    const [inputs, setInputs] = useState({});
-    const [error,setError] = useState('');
+    const dispatch = useDispatch()
 
     const notesItem = (item, index) => {
         return (
             <TableBodyComponent key={index}>
-                <TableCell>{item.date}</TableCell>
                 <TableCell>{item.name}</TableCell>
-                <TableCell>{item.subject}</TableCell>
-                <TableCell>
-                    {item.action}
+                <TableCell>{item.displayCode}</TableCell>
+                <TableCell>{item.category}</TableCell>
+                <TableCell>{item.action ? item.action :
+                    <div className={classes.icons}>
+                        <img src={Images.edit} onClick={() => editService('editService',item.id)} alt="edit"/>
+                        <img src={Images.remove} alt="delete" onClick={() => removeItem('service')}/>
+                    </div>
+                }
                 </TableCell>
             </TableBodyComponent>
         )
     }
 
-    const editService = (modalType) => {
-        openModal(modalType)
+    const editService = (modalType,modalId) => {
+        openModal(modalType,modalId)
     }
 
-    const data = [
-        {
-            date: 'Function Behavioral Analysis',
-            name: 'FBA',
-            subject: 'ABA',
-            action:
-                <div className={classes.icons}>
-                    <img src={Images.edit} onClick={() => editService('editService')} alt="edit"/>
-                    <img src={Images.remove} alt="delete" onClick={() => removeItem('service')}/>
-                </div>,
-        }
-    ]
-    const handleChange = e =>{
+    const handleChange = e => {
         setInputs(
             prevState => (
                 {
@@ -70,9 +65,18 @@ export const ServiceType = ({removeItem, openModal}) => {
         error === e.target.name && setError('')
     }
 
-
-    const isDisabled = inputs.serviceName && inputs.displayName && inputs.category
-
+    const handleSubmit = () =>{
+        let serviceData = {
+            name: inputs.name,
+            displayCode: inputs.displayCode,
+            category: inputs.category
+        }
+        if (inputs.name && inputs.displayCode && inputs.category) {
+            dispatch(systemActions.createServiceGlobal(serviceData))
+        }else {
+           alert('error')
+        }
+    }
 
     return (
         <>
@@ -80,18 +84,18 @@ export const ServiceType = ({removeItem, openModal}) => {
                 <ValidationInput
                     style={classes.systemInputStyles}
                     onChange={handleChange}
-                    value={inputs.serviceName}
+                    value={inputs.name}
                     variant={"outlined"}
-                    name={"serviceName"}
+                    name={"name"}
                     type={"text"}
                     placeholder={'Service Name*'}
                 />
                 <ValidationInput
                     style={classes.systemInputStyles}
                     onChange={handleChange}
-                    value={inputs.displayName}
+                    value={inputs.displayCode}
                     variant={"outlined"}
-                    name={"displayName"}
+                    name={"displayCode"}
                     type={"text"}
                     placeholder={'Display Code*'}
                 />
@@ -106,12 +110,13 @@ export const ServiceType = ({removeItem, openModal}) => {
                 />
                 <AddButton
                     disabled={!isDisabled}
-                    handleClick={() => alert('Add Service Type')}
+                    handleClick={handleSubmit}
                     text='Add Service Type'
                 />
             </div>
             <p className={classes.title}>Service Type</p>
-            <Notes defaultStyle={true} data={data} pagination={true} items={notesItem} headerTitles={headerTitles}/>
+            <Notes defaultStyle={true} data={globalServices} pagination={true} items={notesItem}
+                   headerTitles={headerTitles}/>
         </>
 
     )
