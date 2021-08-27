@@ -34,6 +34,14 @@ export const authService = {
     editClientAuthorizationService: ({payload}) =>  axios.patch(`/authorization/${payload.id}`, payload.body),
 
     deleteClientAuthorizationService: ({payload}) =>  axios.delete(`/authorization/${payload.id}`),
+
+    getClientAuthorizationServService: ({payload}) => axios.get(`/authorizationservice/authorization/${payload.id}` ),
+
+    createClientAuthorizationServService: ({payload}) => axios.post(`/authorizationservice/authorization/${payload.id}/fundingService/${payload.funderId}`, payload.body),
+
+    editClientAuthorizationServService: ({payload}) =>  axios.patch(`/authorizationservice/${payload.id}`, payload.body),
+
+    deleteClientAuthorizationServService: ({payload}) =>  axios.delete(`/authorizationservice/${payload.id}`),
 };
 
 

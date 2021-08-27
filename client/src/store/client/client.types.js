@@ -53,3 +53,16 @@ export const EDIT_CLIENT_AUTHORIZATION = 'EDIT_CLIENT_AUTHORIZATION';
 
 /**delete client Authorizations */
 export const DELETE_CLIENT_AUTHORIZATION = 'DELETE_CLIENT_AUTHORIZATION';
+
+/**get client Authorizations Service */
+export const GET_CLIENT_AUTHORIZATION_SERV = 'GET_CLIENT_AUTHORIZATION_SERV';
+export const GET_CLIENT_AUTHORIZATION_SERV_SUCCESS = 'GET_CLIENT_AUTHORIZATION_SERV_SUCCESS';
+
+/**create client Authorizations Service */
+export const CREATE_CLIENT_AUTHORIZATION_SERV = 'CREATE_CLIENT_AUTHORIZATION_SERV';
+
+/**edit client Authorizations service */
+export const EDIT_CLIENT_AUTHORIZATION_SERV = 'EDIT_CLIENT_AUTHORIZATION_SERV';
+
+/**delete client Authorizations service */
+export const DELETE_CLIENT_AUTHORIZATION_SERV = 'DELETE_CLIENT_AUTHORIZATION_SERV';

@@ -38,11 +38,13 @@ export const FundingSourceItem = ({}) => {
     ]
 
 
+
     const { httpOnSuccess, httpOnError,httpOnLoad } = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,
     }));
+
 
     const tabsContent = [
         {tabComponent: <FundingSourceSingleGeneral data={data}/>},
