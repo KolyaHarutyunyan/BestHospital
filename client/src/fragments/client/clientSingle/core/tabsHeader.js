@@ -1,12 +1,13 @@
 import {editButtonStyle, serviceSingleStyles, inputStyle} from "./styles";
 import {Images} from "@eachbase/utils";
-import {AddButton, AddModalButton, SelectInput, SimpleModal} from "@eachbase/components";
+import {AddButton, AddModalButton, SelectInput, SimpleModal,} from "@eachbase/components";
 import React, {useEffect, useState} from "react";
-import {AddContact, AddEnrollment, CreateClient} from "@eachbase/fragments/client";
+import {AddContact, AddEnrollment, CreateClient,AddAuthorization} from "@eachbase/fragments/client";
 import {useDispatch,} from "react-redux";
 import {clientActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
-import {AddAuthorization} from "../../clientModals/addAuthorization";
+
+
 
 
 export const TabsHeader = ({activeTab, data}) => {
@@ -19,14 +20,17 @@ export const TabsHeader = ({activeTab, data}) => {
 
 
     useEffect(() => {
-        if (activeTab === 1) {
 
-        }
         switch (activeTab) {
             case 1 :
                 dispatch(clientActions.getClientsContacts(params.id))
+                break
             case 2 :
                 dispatch(clientActions.getClientsEnrollment(params.id))
+                break
+            case 3 :
+                dispatch(clientActions.getClientsAuthorizations(params.id))
+                break
         }
     }, [activeTab])
 
@@ -91,11 +95,11 @@ export const TabsHeader = ({activeTab, data}) => {
                 handleOpenClose={handleOpenClose}
                 content={activeTab === 0 ? <CreateClient info={data}  handleClose={handleOpenClose}/> :
                     activeTab === 1 ?
-                        <AddContact title={'Add Contact'} handleClose={handleOpenClose}/> :
+                        <AddContact  handleClose={handleOpenClose}/> :
                         activeTab === 2 ?
                             <AddEnrollment handleClose={handleOpenClose}/> :
                             activeTab === 3 ?
-                               <AddAuthorization /> :
+                               <AddAuthorization handleClose={handleOpenClose} /> :
                                 activeTab === 4 ?
                                     <p>add availab</p> :
                                     activeTab === 5 ?

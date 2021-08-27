@@ -16,7 +16,10 @@ import {
     EDIT_CLIENT_CONTACT,
     DELETE_CLIENT_CONTACT,
     GET_CLIENT_AUTHORIZATION,
-    GET_CLIENT_AUTHORIZATION_SUCCESS, CREATE_CLIENT_ENROLLMENT, EDIT_CLIENT_ENROLLMENT, DELETE_CLIENT_ENROLLMENT
+    GET_CLIENT_AUTHORIZATION_SUCCESS,
+    CREATE_CLIENT_ENROLLMENT,
+    EDIT_CLIENT_ENROLLMENT,
+    DELETE_CLIENT_ENROLLMENT, CREATE_CLIENT_AUTHORIZATION, DELETE_CLIENT_AUTHORIZATION, EDIT_CLIENT_AUTHORIZATION
 } from "./client.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
@@ -42,8 +45,8 @@ function* createClient(action) {
 
     try {
         const res = yield call(authService.createClientService, action);
-        console.log(res,'create client')
-        // window.location.replace('/client')
+
+         window.location.replace('/client')
     } catch (err) {
         console.log(err, 'error create client')
     }
@@ -93,7 +96,6 @@ function* getClientContacts(action) {
 function* createClientContact(action) {
     try {
         const res = yield call(authService.createClientContactService, action);
-        console.log(res,'reessss')
            window.location.replace('/client')
     } catch (err) {
         console.log(err, 'error add client')
@@ -103,7 +105,6 @@ function* createClientContact(action) {
 function* editClientContact(action) {
     try {
         const res = yield call(authService.editClientContactService, action);
-        console.log(res, 'edit contact')
          window.location.replace(`/client/`)
     } catch (err) {
         console.log(err, 'error edit client')
@@ -114,8 +115,8 @@ function* editClientContact(action) {
 function* deleteClientContact(action) {
     try {
         const res = yield call(authService.deleteClientContactService, action);
-        console.log(res,'resss delete contact')
-        // window.location.replace('/client')
+
+         window.location.replace('/client')
     } catch (err) {
         console.log(err, 'error del client')
     }
@@ -125,7 +126,6 @@ function* deleteClientContact(action) {
 function* getClientEnrollment(action) {
     try {
         const res = yield call(authService.getClientEnrollmentService, action);
-        console.log(res,'sagaaaaaaa')
         yield put({
             type: GET_CLIENT_ENROLLMENT_SUCCESS,
             payload: res.data,
@@ -138,7 +138,6 @@ function* getClientEnrollment(action) {
 function* createClientEnrollment(action) {
     try {
         const res = yield call(authService.createClientEnrollmentService, action);
-        console.log(res,'reessss enrol',action)
         window.location.replace('/client')
     } catch (err) {
         console.log(err, 'error create client')
@@ -148,7 +147,6 @@ function* createClientEnrollment(action) {
 function* editClientEnrollment(action) {
     try {
         const res = yield call(authService.editClientEnrollmentService, action);
-        console.log(res,'reessss enrol',action)
          window.location.replace('/client')
     } catch (err) {
         console.log(err, 'error create client')
@@ -158,7 +156,6 @@ function* editClientEnrollment(action) {
 function* deleteClientEnrollment(action) {
     try {
         const res = yield call(authService.deleteClientEnrollmentService, action);
-        console.log(res,'resss delete enroll')
          window.location.replace('/client')
     } catch (err) {
         console.log(err, 'error del enroll')
@@ -168,7 +165,6 @@ function* deleteClientEnrollment(action) {
 function* getClientsAuthorizations(action) {
     try {
         const res = yield call(authService.getClientAuthorizationService, action);
-        console.log(res,'sagaaaaaaa')
         yield put({
             type: GET_CLIENT_AUTHORIZATION_SUCCESS,
             payload: res.data,
@@ -178,6 +174,33 @@ function* getClientsAuthorizations(action) {
     }
 }
 
+function* createClientsAuthorizations(action) {
+    try {
+        const res = yield call(authService.createClientAuthorizationService, action);
+        // window.location.replace('/client')
+    } catch (err) {
+        console.log(err, 'error create auth')
+    }
+}
+
+
+function* editClientAuthorizations(action) {
+    try {
+        const res = yield call(authService.editClientAuthorizationService, action);
+        window.location.replace('/client')
+    } catch (err) {
+        console.log(err, 'error create client')
+    }
+}
+
+function* deleteClientAuthorizations(action) {
+    try {
+        const res = yield call(authService.deleteClientAuthorizationService, action);
+         window.location.replace('/client')
+    } catch (err) {
+        console.log(err, 'error del enroll')
+    }
+}
 
 
 export const watchClient = function* watchClientSaga() {
@@ -196,6 +219,9 @@ export const watchClient = function* watchClientSaga() {
     yield takeLatest(EDIT_CLIENT_ENROLLMENT, editClientEnrollment)
     yield takeLatest(DELETE_CLIENT_ENROLLMENT, deleteClientEnrollment)
     yield takeLatest(GET_CLIENT_AUTHORIZATION, getClientsAuthorizations)
+    yield takeLatest(CREATE_CLIENT_AUTHORIZATION, createClientsAuthorizations)
+    yield takeLatest(EDIT_CLIENT_AUTHORIZATION, editClientAuthorizations)
+    yield takeLatest(DELETE_CLIENT_AUTHORIZATION, deleteClientAuthorizations)
 
 
 };

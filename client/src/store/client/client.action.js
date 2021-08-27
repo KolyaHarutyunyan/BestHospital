@@ -1,13 +1,13 @@
 import {
-    CREATE_CLIENT,
+    CREATE_CLIENT, CREATE_CLIENT_AUTHORIZATION,
     CREATE_CLIENT_CONTACT,
     CREATE_CLIENT_ENROLLMENT,
-    DELETE_CLIENT,
+    DELETE_CLIENT, DELETE_CLIENT_AUTHORIZATION,
     DELETE_CLIENT_CONTACT,
     DELETE_CLIENT_ENROLLMENT,
-    EDIT_CLIENT,
+    EDIT_CLIENT, EDIT_CLIENT_AUTHORIZATION,
     EDIT_CLIENT_CONTACT,
-    EDIT_CLIENT_ENROLLMENT,
+    EDIT_CLIENT_ENROLLMENT, GET_CLIENT_AUTHORIZATION,
     GET_CLIENT_BY_ID,
     GET_CLIENT_CONTACTS,
     GET_CLIENT_ENROLLMENT,
@@ -107,7 +107,7 @@ export const createClientEnrollment = (body, id, funderId) => {
 }
 
 export const editClientEnrollment = (body, clientId, funderId, id) => {
-    console.log(body, clientId, id, funderId, 'action')
+
     return {
         type: EDIT_CLIENT_ENROLLMENT,
         payload: {
@@ -127,9 +127,40 @@ export const deleteClientEnrollment = ( id) => {
 }
 
 
+
 export const getClientsAuthorizations = (id) => {
     return {
-        type: GET_CLIENT_ENROLLMENT,
+        type: GET_CLIENT_AUTHORIZATION,
+        payload: {id}
+    }
+}
+
+export const createClientsAuthorizations = (body, id, funderId) => {
+    return {
+        type: CREATE_CLIENT_AUTHORIZATION,
+        payload: {
+            body,
+            id,
+            funderId
+        }
+    }
+}
+
+export const editClientsAuthorizations = (body,  id) => {
+    console.log(body,  id,  'action')
+    return {
+        type: EDIT_CLIENT_AUTHORIZATION,
+        payload: {
+            body,
+            id,
+
+        }
+    }
+}
+
+export const deleteClientsAuthorization = ( id) => {
+    return {
+        type: DELETE_CLIENT_AUTHORIZATION,
         payload: {id}
     }
 }
