@@ -1,6 +1,7 @@
-import { combineReducers } from 'redux';
-import { authReducer } from "../auth";
+import {combineReducers} from 'redux';
+import {authReducer} from "../auth";
 import {adminReducer} from "../admin";
+import {systemReducer} from '../system';
 import {officeReducer} from "../offices";
 import {permissionsReducer} from "../permissions";
 import {roleReducer} from "../role";
@@ -33,8 +34,7 @@ export const appReducer = combineReducers({
     fundingSource: fundingSourceReducer,
     agents: agentReducer,
     client: clientReducer,
-
-
+    system: systemReducer,
 
     httpOnLoad: httpRequestsOnLoadReducer,
     httpOnSuccess: httpRequestsOnSuccessReducer,

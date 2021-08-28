@@ -34,7 +34,7 @@ const credentials = [
     },
 ]
 
-export const Departments = ({removeItem, openModal}) => {
+export const JobTitles = ({removeItem, openModal}) => {
 
     const classes = systemItemStyles()
 
@@ -68,11 +68,11 @@ export const Departments = ({removeItem, openModal}) => {
                     variant={"outlined"}
                     name={"name"}
                     type={"text"}
-                    placeholder={'Name*'}
+                    placeholder={'Job Titles*'}
                 />
-                <AddButton disabled={!isDisabled} styles={credentialBtn} handleClick={() => alert('Add Department')} text='Add Department'/>
+                <AddButton disabled={!isDisabled} styles={credentialBtn} handleClick={() => alert('Add Job Title')} text='Add Job Title'/>
             </div>
-            <p className={classes.title}>Departments</p>
+            <p className={classes.title}>Job Titles</p>
             <div className={classes.credentialTable}>
                 {
                     credentials.map((credentialItem, index) => {
@@ -83,8 +83,8 @@ export const Departments = ({removeItem, openModal}) => {
                                     {credentialItem.type}</p>
                                 <div className={classes.icons}>
                                     <img src={Images.edit}
-                                         onClick={(e) => editDepartment('editDepartment')} alt="edit"/>
-                                    <img src={Images.remove} alt="delete" onClick={() => removeItem('department')}/>
+                                         onClick={(e) => editDepartment('editJobTitles')} alt="edit"/>
+                                    <img src={Images.remove} alt="delete" onClick={() => removeItem('jobTitles')}/>
                                 </div>
                             </div>
                         )

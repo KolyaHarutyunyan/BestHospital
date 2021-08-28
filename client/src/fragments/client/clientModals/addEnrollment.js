@@ -1,15 +1,25 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
 import {createClientStyle,} from "./styles";
 import {ErrorText} from "@eachbase/utils";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {clientActions, fundingSourceActions} from '@eachbase/store';
+import {useParams} from "react-router-dom";
 
 
 
-export const AddEnrollment = ({handleClose}) => {
+export const AddEnrollment = ({handleClose, info}) => {
+    console.log(info,'infsoo')
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState({});
+    const [inputs, setInputs] = useState(info ? {...info, funding: info.funderId.name} : {});
     const classes = createClientStyle()
+    const params = useParams()
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(fundingSourceActions.getFundingSource())
+    }, []);
+    const fSelect = useSelector(state => state.fundingSource.fSelect)
+
 
     const handleChange = e => setInputs(
         prevState => ({...prevState, [e.target.name]: e.target.value}),
@@ -17,77 +27,78 @@ export const AddEnrollment = ({handleClose}) => {
     );
 
     const handleCreate = () => {
-            if (inputs.firstName && inputs.lastName && inputs.phoneNumber && inputs.relationship) {
-
-            } else {
-                setError(
-                    !inputs.firstName ? 'firstName' :
-                        !inputs.lastName ? 'lastName' :
-                            !inputs.phoneNumber ? 'phoneNumber' :
-                                !inputs.relationship ? 'relationship' :
-                                    'Input is not field'
-                )
-            }
-                const data = {
-
+        if (inputs.funding && inputs.startDate && inputs.terminationDate) {
+            let funderId;
+            fSelect.forEach(item => {
+                if (inputs.funding === item.name) {
+                    funderId = item.id
                 }
-                // dispatch(clientActions.createClientContact(data, params.id))
+            })
+            const data = {
+                "primary": true,
+                "startDate": inputs.startDate,
+                "terminationDate": inputs.terminationDate
             }
-    const list = [
-        {name: 'dfgd'},
-        {name: 'femdfgdfgdfgale'}
-    ]
+            if (info){
+                dispatch(clientActions.editClientEnrollment(data, params.id, funderId, info.id))
+            }else {
+                dispatch(clientActions.createClientEnrollment(data, params.id, funderId))
+            }
+            handleClose()
+        } else {
+            setError(
+                !inputs.funding ? 'funding' :
+                    !inputs.startDate ? 'startDate' :
+                        !inputs.terminationDate ? 'terminationDate' :
+                            'Input is not field'
+            )
+        }
+
+
+    }
+
 
     return (
         <div className={classes.createFoundingSource}>
             <ModalHeader
                 handleClose={handleClose}
-                title={'Add an Enrollment'}
+                title={info ? 'Edit an Enrollment' : 'Add an Enrollment'}
                 text={'To add a new enrollment in the system, please fulfill the below fields.'}
             />
             <div className={classes.createFoundingSourceBody}>
                 <div className={classes.clientModalBlock}>
-                  <div className={classes.clientModalBox}>
-                      <SelectInput
-                          name={"fundingSource"}
-                          label={"Funding Source*"}
-                          handleSelect={handleChange}
-                          value={inputs.fundingSource}
-                          list={list}
-                          typeError={error === 'fundingSource' ? ErrorText.field : ''}
-                      />
-                      <ValidationInput
-                          variant={"outlined"}
-                          onChange={handleChange}
-                          value={inputs.clientID}
-                          type={"text"}
-                          label={"Client ID"}
-                          name='clientID'
-                          typeError={error === 'clientID' && ErrorText.field}
-                      />
-                      <ValidationInput
-                          variant={"outlined"}
-                          onChange={handleChange}
-                          value={inputs.startDate}
-                          type={"date"}
-                          label={"Start Date*"}
-                          name='startDate'
-                          typeError={error === 'startDate' && ErrorText.field}
-                      />
-                      <ValidationInput
-                          variant={"outlined"}
-                          onChange={handleChange}
-                          value={inputs.terminatedDate}
-                          type={"date"}
-                          label={"Terminated Date*"}
-                          name='terminatedDate'
-                          typeError={error === 'terminatedDate' && ErrorText.field}
-                      />
-                        </div>
+                    <div className={classes.clientModalBox}>
+                        <SelectInput
+                            name={"funding"}
+                            label={info ? "Funding Source*" : ""}
+                            handleSelect={handleChange}
+                            value={inputs.funding}
+                            list={fSelect}
+                            typeError={error === 'funding' ? ErrorText.field : ''}
+                        />
+                        <ValidationInput
+                            variant={"outlined"}
+                            onChange={handleChange}
+                            value={inputs.startDate}
+                            type={"date"}
+                            label={"Start Date*"}
+                            name='startDate'
+                            typeError={error === 'startDate' && ErrorText.field}
+                        />
+                        <ValidationInput
+                            variant={"outlined"}
+                            onChange={handleChange}
+                            value={inputs.terminationDate}
+                            type={"date"}
+                            label={"Terminated Date*"}
+                            name='terminationDate'
+                            typeError={error === 'terminationDate' && ErrorText.field}
+                        />
+                    </div>
                 </div>
                 <div className={classes.clientModalBlock}>
                     <CreateChancel
-                        create={"Add"}
+                        create={info ? "Save" : "Add"}
                         chancel={"Cancel"}
                         onCreate={handleCreate}
                         onClose={handleClose}

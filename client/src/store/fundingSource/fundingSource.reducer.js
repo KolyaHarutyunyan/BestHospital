@@ -12,6 +12,7 @@ import {activeInactive} from "@eachbase/utils";
 
 const initialState = {
     fundingSourceList: [],
+    fSelect : [],
     fundingSourceListReserve: [],
     fundingSourceItem: null,
     fundingSourceServices: null,
@@ -26,6 +27,7 @@ export const fundingSourceReducer = (state = initialState, action) => {
         case  GET_FUNDING_SOURCE_SUCCESS:
             return {
                 ...state,
+                fSelect : action.payload,
                 fundingSourceList: paginate((activeInactive(action.payload, 1, 'founding')), 10),
                 fundingSourceListReserve:action.payload,
             }

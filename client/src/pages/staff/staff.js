@@ -17,9 +17,15 @@ export const Staff = () => {
         setOpen(!open)
     }
 
+    const getStaffMemberWithStatus = (status) => {
+        dispatch(adminActions.getAdmins(status));
+    }
+
     return (
         <>
             <TableWrapper
+                getActive={() => getStaffMemberWithStatus(1)}
+                getInactive={() => getStaffMemberWithStatus(0)}
                 firstButton={"Active"}
                 secondButton={"Inactive"}
                 buttonsTab={true}

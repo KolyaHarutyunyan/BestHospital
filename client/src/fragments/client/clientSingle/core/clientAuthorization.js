@@ -5,15 +5,18 @@ import { Images} from "@eachbase/utils";
 import {TableCell} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
 import {clientActions} from "@eachbase/store";
+import {AddAuthorization, AddEnrollment} from "../../clientModals";
 
-export const ClientAuthorization = ({ setContactId, handleOpenClose}) => {
+export const ClientAuthorization = ({  handleOpenClose}) => {
     const classes = serviceSingleStyles()
     const clientsAuthorizations = useSelector(state => state.client.clientsAuthorizations)
+
+    console.log(clientsAuthorizations,'zangvaaac')
     const dispatch = useDispatch()
     const [openClose, setOpenClose] = useState(false)
     const [index, setIndex] = useState(null)
-
-
+    const [delEdit, setDelEdit] = useState(null)
+    const [toggleModal, setToggleModal] = useState(false)
 
     const headerTitles = [
         {
@@ -43,32 +46,34 @@ export const ClientAuthorization = ({ setContactId, handleOpenClose}) => {
     ];
 
 
-    let openCloseModal = () => {
-        setOpenClose(!openClose)
-    }
+
 
     let deleteAuthorization = () => {
-        dispatch(clientActions.deleteClientContact(clientsAuthorizations[index].id))
+          dispatch(clientActions.deleteClientsAuthorization(clientsAuthorizations[index].id))
         setOpenClose(!openClose)
     }
 
     let clientAuthorizationItem = (item, index) => {
         return (
             <TableBodyComponent key={index}>
-                <TableCell><p className={classes.tableName}>{item.firstName}</p></TableCell>
-                <TableCell>  {item.lastName}  </TableCell>
-                <TableCell>  {item.relationship}  </TableCell>
-                <TableCell>  {item.phoneNumber}  </TableCell>
-                <TableCell>  {item.phoneNumber}  </TableCell>
+                <TableCell><p className={classes.tableName}>{item?.authId}</p></TableCell>
+                <TableCell>  {item?.funderId?.name}  </TableCell>
+                <TableCell>  {item.startDate}  </TableCell>
+                <TableCell>  {item.endDate}  </TableCell>
+                <TableCell>  {item?.status}  </TableCell>
                 <TableCell>
                     <>
-                        <img src={Images.edit} alt="edit" className={classes.iconStyle} onClick={() => {
-                            setContactId(index)
-                            handleOpenClose()
-                        }}/>
+                        <img src={Images.edit} alt="edit" className={classes.iconStyle}
+                             onClick={() => {
+                                 setDelEdit(true)
+                                 setToggleModal(!toggleModal)
+                                 setIndex(index)
+
+                             }}/>
                         <img src={Images.remove} alt="delete" className={classes.iconDeleteStyle}
                              onClick={() => {
-                                 setOpenClose(!openClose)
+                                 setDelEdit(false)
+                                 setToggleModal(!toggleModal)
                                  setIndex(index)
                              }}/>
                     </>
@@ -80,14 +85,16 @@ export const ClientAuthorization = ({ setContactId, handleOpenClose}) => {
     return (
         <div className={classes.staffGeneralWrapper}>
             <SimpleModal
-                content={
-                    <DeleteElement
-                        handleDel={deleteAuthorization}
+                handleOpenClose={() => setToggleModal(!toggleModal)}
+                openDefault={toggleModal}
+                content={delEdit ? <AddAuthorization info={clientsAuthorizations[index]} handleClose={() => setToggleModal(!toggleModal)}/>
+                    : <DeleteElement
                         text={'Delete Authorization'}
-                        info={index !== null && clientsAuthorizations[index].firstName}
-                        handleClose={openCloseModal}/>
+                        handleClose={() => setToggleModal(!toggleModal)}
+                        handleDel={deleteAuthorization}
+                    />
                 }
-                openDefault={openClose}/>
+                />
             <div className={classes.clearBoth}/>
             <div className={classes.notesWrap}>
                 <Notes

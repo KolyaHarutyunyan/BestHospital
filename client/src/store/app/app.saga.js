@@ -7,6 +7,7 @@ import {watchAdmin} from "../admin";
 import {watchFundingSource} from "../fundingSource";
 import {watchAgent} from "../agents";
 import {watchClient} from "../client";
+import {watchSystem} from "../system";
 
 
 /** Combined Sagas */
@@ -19,4 +20,5 @@ export const appSaga = function* startForman() {
     yield fork(watchFundingSource)
     yield fork(watchAgent)
     yield fork(watchClient)
+    yield fork(watchSystem)
 };

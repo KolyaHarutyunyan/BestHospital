@@ -23,9 +23,10 @@ export const editAdminById = (body, id) => {
     }
 }
 
-export const getAdmins = () => {
+export const getAdmins = (status) => {
     return {
-        type: GET_ADMINS
+        type: GET_ADMINS,
+        payload: {status}
     }
 }
 

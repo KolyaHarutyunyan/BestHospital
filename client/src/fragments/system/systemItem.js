@@ -1,13 +1,19 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {SimpleTabs} from "@eachbase/components";
-import {SystemType, systemItemStyles, SystemItemHeader, Credentials, Departments} from './core';
+import {ServiceType, systemItemStyles, SystemItemHeader, Credentials, Departments, JobTitles} from './core';
+import {useDispatch, useSelector} from "react-redux";
+import {systemActions} from "../../store";
 
 export const SystemItem = () => {
     const [activeTab, setActiveTab] = useState(0)
     const [open, setOpen] = useState(false)
     const [modalType, setModalType] = useState('')
+    const [modalId,setModalId] = useState('')
     const classes = systemItemStyles()
 
+    const globalCredentials = useSelector(state => state.system.credentials)
+
+    const dispatch = useDispatch()
     const [deleteModalOpened, setDeleteModalOpened] = useState(false)
     const [deletedId,setDeletedId] = useState('')
 
@@ -20,11 +26,15 @@ export const SystemItem = () => {
         },
         {
             label: 'Departments'
+        },
+        {
+            label: 'Job Titles'
         }
     ]
 
-    const handleOpenClose = (modalType) => {
+    const handleOpenClose = (modalType,modalId) => {
         setModalType(modalType);
+        setModalId(modalId)
         setOpen(!open)
     }
 
@@ -37,15 +47,22 @@ export const SystemItem = () => {
         setDeletedId(type)
     }
 
+    useEffect(()=>{
+        dispatch(systemActions.getCredential())
+    },[])
+
     const tabsContent = [
         {
-            tabComponent: (<SystemType removeItem={handleRemoveItem} openModal={handleOpenClose}/>)
+            tabComponent: (<ServiceType removeItem={handleRemoveItem} openModal={handleOpenClose}/>)
         },
         {
-            tabComponent: (<Credentials removeItem={handleRemoveItem} openModal={handleOpenClose} />)
+            tabComponent: (<Credentials globalCredentials={globalCredentials} removeItem={handleRemoveItem} openModal={handleOpenClose} />)
         },
         {
             tabComponent: (<Departments removeItem={handleRemoveItem} openModal={handleOpenClose} />)
+        },
+        {
+            tabComponent: (<JobTitles removeItem={handleRemoveItem} openModal={handleOpenClose} />)
         }
     ];
 
@@ -53,6 +70,7 @@ export const SystemItem = () => {
     return (
         <div className={classes.systemItemWrapper}>
             <SystemItemHeader
+                modalId={modalId}
                 deletedId={deletedId}
                 deleteModalOpened={deleteModalOpened}
                 handleDeletedOpenClose={handleDeletedOpenClose}

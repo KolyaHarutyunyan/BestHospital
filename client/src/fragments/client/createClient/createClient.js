@@ -8,9 +8,8 @@ import TextField from "@material-ui/core/TextField";
 import {useParams} from "react-router-dom";
 
 
-export const CreateClient = ({handleClose, title}) => {
+export const CreateClient = ({handleClose, info}) => {
     let params = useParams()
-    const info = useSelector(state => state.client.clientItemInfo)
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {...info} : {});
     const [step, setStep] = useState('first')
@@ -52,9 +51,9 @@ export const CreateClient = ({handleClose, title}) => {
                     'age': +inputs.age,
                     "status": 1
                 }
-                if (title === 'Add Client') {
+                if (!info) {
                     dispatch(clientActions.createClient(data))
-                } else if (title === 'Edit Client') {
+                } else if (info) {
                     dispatch(clientActions.editClient(data, params.id))
                 }
             } else {
@@ -77,7 +76,7 @@ export const CreateClient = ({handleClose, title}) => {
 
     return (
         <div className={classes.createFoundingSource}>
-            <ModalHeader steps={step} handleClose={handleClose} title={title}/>
+            <ModalHeader steps={step} handleClose={handleClose} title={info ? 'Edit Client' : 'Add Client'}/>
             <div className={classes.createFoundingSourceBody}>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
                     {step === 'first' ? <div style={{width: 463}}>

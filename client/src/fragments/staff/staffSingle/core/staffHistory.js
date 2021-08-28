@@ -14,7 +14,7 @@ export const StaffHistory = () => {
             funderId: '610183a4dcc59c21f0792c35',
             id: '610184a0dcc59c21f0792c3a',
             time: '8:24 pm',
-            title: 'update a new credential'
+            title: 'update a new system'
         }
     ]
     return(

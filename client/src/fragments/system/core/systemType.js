@@ -23,13 +23,13 @@ const headerTitles = [
     },
 ];
 
-export const SystemType = ({removeItem, openModal}) => {
+export const ServiceType = ({removeItem, openModal}) => {
 
     const classes = systemItemStyles()
 
     const [inputs, setInputs] = useState({});
     const [error,setError] = useState('');
-    console.log(inputs,'inputs');
+
     const notesItem = (item, index) => {
         return (
             <TableBodyComponent key={index}>

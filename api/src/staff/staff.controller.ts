@@ -102,7 +102,7 @@ export class StaffController {
     return staffCredential;
   }
 
-  /** Get the crednetial profile */
+  /** Get the credential profile */
   @Get(':id/credential')
   @ApiOkResponse({ type: StaffCredentialDTO })
   @Public()
@@ -111,8 +111,8 @@ export class StaffController {
   ): Promise<StaffCredentialDTO> {
     return await this.staffService.findCredential(staffId);
   }
-  /** Edit a credential */
-  @Patch(':id/credential')
+  /** Edit a system */
+  @Patch(':id/system')
   @Public()
   @ApiOkResponse({ type: StaffCredentialDTO })
   async editCredential(

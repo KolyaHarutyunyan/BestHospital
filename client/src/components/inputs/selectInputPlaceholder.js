@@ -3,6 +3,20 @@ import {Select, FormControl,} from "@material-ui/core";
 import {inputsStyle} from "./styles";
 import MenuItem from "@material-ui/core/MenuItem";
 import {InputMinLoader} from "./inputMiniLoader";
+import {makeStyles} from "@material-ui/core/styles";
+import {Colors} from "@eachbase/utils";
+
+const usePlaceholderStyles = makeStyles((theme) => ({
+    placeholder: {
+        color: Colors.TextMiddleGray,
+        opacity: .7
+    }
+}));
+
+const Placeholder = ({children}) => {
+    const classes = usePlaceholderStyles();
+    return <div className={classes.placeholder}>{children}</div>;
+};
 
 export const SelectInputPlaceholder = ({
                                            className,
@@ -12,22 +26,20 @@ export const SelectInputPlaceholder = ({
                                            style,
                                            value,
                                            list,
-                                           handleChangeCountryCode,
                                            typeError,
                                            type,
                                            language,
-                                           styles
+                                           styles,
+                                           placeholder
                                        }) => {
 
     const [current, setCurrent] = React.useState('');
-
     const classes = inputsStyle();
 
     const handleChange = (event) => {
         handleSelect(event)
         setCurrent(event.target.value);
     };
-
 
 
     return (
@@ -46,26 +58,27 @@ export const SelectInputPlaceholder = ({
                         endAdornment={
                             loader && <InputMinLoader/>
                         }
+                        renderValue={
+                            current !== "" ? undefined : () => <Placeholder>{placeholder}</Placeholder>
+                        }
                     >
-                        <MenuItem value="" disabled style={{color: 'red'}}>
-                            Placeholder
-                        </MenuItem>
-                           {language ?
-                                language.map((option, j) => (
-                                        <MenuItem data-key={option.code ? option.code : j} key={j}
-                                                  value={type === 'id' ? option.id : option}
-                                        >
-                                            {option}
-                                        </MenuItem>
-                                    )) :
-                                list.length && list.map((option, j) => (
-                                    <MenuItem data-key={option.code ? option.code : j} key={j}
-                                                  value={type === 'id' ? option.id : option.name}
-                                        >
-                                         {option.name}
-                                    </MenuItem>
-                                ))
-                           }
+                        {language ?
+                            language.map((option, j) => (
+                                <MenuItem data-key={option.code ? option.code : j} key={j}
+                                          value={type === 'id' ? option.id : option}
+                                >
+                                    {option}
+                                </MenuItem>
+                            )) :
+                            list.length && list.map((option, j) => (
+                                <MenuItem
+                                    data-key={option.code ? option.code : j} key={j}
+                                    value={type === 'id' ? option.id : option.name}
+                                >
+                                    {option.name}
+                                </MenuItem>
+                            ))
+                        }
                     </Select>
                 </FormControl>
             </div>

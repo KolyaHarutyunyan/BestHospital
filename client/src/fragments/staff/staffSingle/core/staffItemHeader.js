@@ -5,7 +5,7 @@ import React, {useEffect, useState} from "react";
 import {CreateStaff, StaffAddNotes, CredentialModal} from "@eachbase/fragments";
 import {adminActions} from "../../../../store";
 import {useParams} from "react-router-dom";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
 const editButtonStyle = {
     height: 36,
@@ -20,6 +20,11 @@ export const StaffItemHeader = ({credModalType, openCloseCredModal, openCredModa
     const handleOpenClose = () => {
         setOpen(!open)
     }
+
+    const {adminInfoById} = useSelector((state)=>({
+            adminInfoById: state.admins.adminInfoById
+        })
+    )
 
     return (
         <div>
@@ -50,7 +55,8 @@ export const StaffItemHeader = ({credModalType, openCloseCredModal, openCredModa
                 openDefault={activeTab === 2 ? openCredModal : open}
                 handleOpenClose={activeTab === 2 ? () => openCloseCredModal() : handleOpenClose}
                 content={activeTab === 0 ?
-                    <CreateStaff resetData={false} handleClose={handleOpenClose}/> : activeTab === 2 ?
+                    <CreateStaff staffGeneral={adminInfoById}
+                                 resetData={false} handleClose={handleOpenClose}/> : activeTab === 2 ?
                         <CredentialModal credModalType={credModalType}
                                          handleClose={() => openCloseCredModal()}/> : activeTab === 4 ?
                             <StaffAddNotes handleClose={handleOpenClose}/> : null}

@@ -130,7 +130,8 @@ export const inputsStyle = makeStyles(() => ({
       borderColor:Colors.BackgroundBlue,
     },
     '& .MuiOutlinedInput-root':{
-      height:'48px'
+      height:'48px',
+      color: Colors.TextPrimary
     },
     '& .MuiInputLabel-outlined':{
       marginTop:'-3px',
@@ -142,6 +143,10 @@ export const inputsStyle = makeStyles(() => ({
     '&:hover .MuiOutlinedInput-notchedOutline':{
       borderColor:Colors.BackgroundBlue,
     },
+    '& .MuiInputBase-input::placeholder':{
+      fontSize: 14,
+      color: Colors.TextMiddleGray
+    }
   },
   TextareaTextField:{
     width:'100%',

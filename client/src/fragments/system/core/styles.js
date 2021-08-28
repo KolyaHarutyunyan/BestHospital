@@ -21,6 +21,13 @@ export const systemItemStyles = makeStyles(() => ({
         borderRadius: 8,
         '&:not(:last-child)': {
             marginBottom: 8
+        },
+        '& > p ':{
+            fontSize:14,
+            color: Colors.TextPrimary,
+            '& span': {
+                fontWeight: 600,
+            }
         }
     },
     title: {
@@ -66,7 +73,9 @@ export const systemItemStyles = makeStyles(() => ({
         width: '100%',
         marginRight: 16,
         '& .MuiOutlinedInput-root': {
-            height: '36px!important'
+            height: '36px!important',
+            color: Colors.TextPrimary,
+            fontSize: 14
         },
     },
     headerSize: {
@@ -77,5 +86,5 @@ export const systemItemStyles = makeStyles(() => ({
         '& img:last-child':{
             marginLeft: 16
         }
-    }
+    },
 }));

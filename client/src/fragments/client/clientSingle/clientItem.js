@@ -15,7 +15,8 @@ import {
     ClientEnrollment,
     ClientNotes,
     ClientAvailabilitySchedule,
-    ClientHistory, ClientAuthorization
+    ClientHistory,
+    ClientAuthorization
 } from "./core";
 import {useDispatch, useSelector} from "react-redux";
 import {AddContact} from "../clientModals";
@@ -35,7 +36,7 @@ export const ClientItem = () => {
     }, []);
 
     const data = useSelector(state => state.client.clientItemInfo)
-
+    const clientContactItem = useSelector(state => state.client.clientContacts[contactId])
 
     const handleOpenClose = () => {
         setOpen(!open)
@@ -108,7 +109,7 @@ export const ClientItem = () => {
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
                 <SimpleModal openDefault={openModal}
-                             content={<AddContact title={'Edit Contact'} contactId={contactId} handleClose={handleOpenCloseModal}/>}/>
+                             content={<AddContact info={clientContactItem}  handleClose={handleOpenCloseModal}/>}/>
                 <div className={classes.headerWraperStyle}>
                     <TabsHeader data={data} activeTab={activeTab}/>
                     <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>

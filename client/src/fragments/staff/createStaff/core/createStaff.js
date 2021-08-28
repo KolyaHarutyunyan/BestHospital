@@ -34,14 +34,15 @@ const genderList = [
 ]
 
 
-export const CreateStaff = ({handleClose, resetData}) => {
-    const staffGeneral = useSelector(state => state.admins.adminInfoById);
+export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
+    // const staffGeneral = useSelector(state => state.admins.adminInfoById);
 
     const [error, setError] = useState("");
     const [errorSec, setErrorSec] = useState("");
     const [inputs, setInputs] = useState(resetData ? {} : staffGeneral ? staffGeneral : {});
-
     const [fullAddress, setFullAddress] = useState('')
+
+    console.log(inputs.birthday && moment(inputs.birthday).format())
 
     const disabledOne = inputs.firstName && error !== 'Not valid email' && inputs.lastName && inputs.email && inputs.phone
 
@@ -67,7 +68,7 @@ export const CreateStaff = ({handleClose, resetData}) => {
         }
     };
 
-    const handleChange = e =>{
+    const handleChange = e => {
         setInputs(
             prevState => (
                 {
@@ -92,7 +93,7 @@ export const CreateStaff = ({handleClose, resetData}) => {
             birthday: (inputs.birthday ? new Date(inputs.birthday).toISOString() : ''),
             residency: 'residency',
             ssn: 0,
-            status: 1,
+            status: staffGeneral ? staffGeneral.status : 1,
             address: fullAddress
         }
 
@@ -105,18 +106,20 @@ export const CreateStaff = ({handleClose, resetData}) => {
             inputs.birthday &&
             fullAddress
         ) {
-            staffGeneral ? dispatch(adminActions.editAdminById(data, staffGeneral.id)) : dispatch(adminActions.createAdmin(data))
+            staffGeneral ?
+                dispatch(adminActions.editAdminById(data, staffGeneral.id)) :
+                dispatch(adminActions.createAdmin(data))
             handleClose()
         } else {
 
             setError(
                 !inputs.firstName ? 'firstName' :
-                        !inputs.lastName ? 'lastName' :
-                            !inputs.email ? 'email' :
-                                !inputs.phone ? 'phone' :
-                                    !inputs.gender ? 'gender' :
-                                        !inputs.birthday ? 'birthday' :
-                                            'Input is not filled'
+                    !inputs.lastName ? 'lastName' :
+                        !inputs.email ? 'email' :
+                            !inputs.phone ? 'phone' :
+                                !inputs.gender ? 'gender' :
+                                    !inputs.birthday ? 'birthday' :
+                                        'Input is not filled'
             )
         }
     }
@@ -288,7 +291,8 @@ export const CreateStaff = ({handleClose, resetData}) => {
                 <ValidationInput
                     variant={"outlined"}
                     onChange={handleChange}
-                    value={inputs.birthday}
+                    // value={inputs.birthday}
+                    value={inputs.birthday && moment(inputs.birthday).format().substring(0, 10)}
                     type={"date"}
                     label={"Date of Birth*"}
                     name='birthday'

@@ -21,6 +21,19 @@ export const authService = {
 
     getClientEnrollmentService: ({payload}) => axios.get(`/enrollment/client/${payload.id}`, ),
 
-    getClientAuthrozationService: ({payload}) => axios.get(`/authorization/client/${payload.id}`, ),
+    createClientEnrollmentService: ({payload}) => axios.post(`/enrollment/client/${payload.id}/funder/${payload.funderId}`, payload.body),
 
+    editClientEnrollmentService: ({payload}) =>  axios.patch(`/enrollment/${payload.id}/client/${payload.clientId}/funder/${payload.funderId}`, payload.body),
+
+    deleteClientEnrollmentService: ({payload}) =>  axios.delete(`/enrollment/${payload.id}`),
+
+    getClientAuthorizationService: ({payload}) => axios.get(`/authorization/client/${payload.id}` ),
+
+    createClientAuthorizationService: ({payload}) => axios.post(`/authorization/client/${payload.id}/funder/${payload.funderId}`, payload.body),
+
+    editClientAuthorizationService: ({payload}) =>  axios.patch(`/authorization/${payload.id}`, payload.body),
+
+    deleteClientAuthorizationService: ({payload}) =>  axios.delete(`/authorization/${payload.id}`),
 };
+
+
