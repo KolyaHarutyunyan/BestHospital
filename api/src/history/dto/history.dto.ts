@@ -1,11 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsEnum, IsNotEmpty, IsPhoneNumber, IsString, IsUrl } from 'class-validator';
 
-export class HistoryDto {
+export class HistoryDTO {
     @ApiProperty()
     id: string;
     @ApiProperty()
-    funderId: string;
+    user: string;
+    @ApiProperty()
+    resource: string;
+    @ApiProperty()
+    onModel: string;
     @ApiProperty()
     title: string;
     @ApiProperty()

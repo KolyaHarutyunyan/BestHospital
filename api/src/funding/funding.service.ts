@@ -10,13 +10,13 @@ import { isValidObjectId, MongooseUtil, ParseObjectIdPipe } from '../util';
 import { AddressService } from '../address/address.service';
 import { FundingSanitizer } from './interceptor';
 import { FundingDTO, ServiceDTO, UpdateServiceDto, CreateServiceDTO, CreateModifierDto, UpdateModifierDto, ModifyDTO } from './dto';
-import { HistoryDto } from '../history/dto';
+import { HistoryDTO } from '../history/dto';
 import { AuthNService } from 'src/authN';
 import { IComment } from '../comment';
 import { IHistory } from '../history';
 
 import { ServiceService } from '../service';
-import { CommentService } from '../comment';
+// import { CommentService } from '../comment';
 import { HistoryService, serviceLog } from '../history';
 import { CredentialService } from '../credential';
 
@@ -25,7 +25,7 @@ export class FundingService {
   constructor(
     private readonly addressService: AddressService,
     private readonly service: ServiceService,
-    private readonly commentService: CommentService,
+    // private readonly commentService: CommentService,
     private readonly historyService: HistoryService,
     private readonly credentialService: CredentialService,
 
@@ -58,6 +58,7 @@ export class FundingService {
         address: await this.addressService.getAddress(dto.address)
       });
       await funder.save();
+      await this.historyService.create({resource: funder._id, onModel: "Funder", title: serviceLog.createFundingSource});
       return this.sanitizer.sanitize(funder);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Funder already exists');
@@ -68,7 +69,7 @@ export class FundingService {
   /** Create a new service */
   async createService(dto: CreateServiceDTO, _id: string): Promise<ServiceDTO> {
     try {
-      const funder = await this.model.findOne({ _id });
+      const funder = await this.model.findById({ _id });
       this.checkFunder(funder)
 
       const globService = await this.service.findOne(dto.serviceId);
@@ -83,7 +84,7 @@ export class FundingService {
         max: dto.max
       });
       await service.save();
-      await this.historyService.create(serviceLog.createServiceTitle, _id);
+      await this.historyService.create({resource: _id, onModel: "Funder", title: serviceLog.createServiceTitle});
       // return this.sanitizer.sanitize(service)
       return service;
     } catch (e) {
@@ -118,15 +119,6 @@ export class FundingService {
       throw e;
     }
 
-  }
-
-  /** Add a new comment */
-  async addComment(_id: string, text: string): Promise<any> {
-    const funder = await this.model.findOne({ _id });
-    this.checkFunder(funder);
-    const comment = await this.commentService.create(_id, text);
-    await this.historyService.create(serviceLog.createCommentTitle, _id);
-    return comment;
   }
 
   /** returns all funders */
@@ -179,38 +171,10 @@ export class FundingService {
       throw e;
     }
   }
-  /** returns all comments */
-  async getComments(_id, skip, limit): Promise<any> {
-    const funder = await this.model.findOne({ _id });
-    this.checkFunder(funder);
-    return await this.commentService.findAll(_id, skip, limit);
-  }
-
-  /** returns all histories */
-  async findAllHistories(_id: string): Promise<any> {
-    try {
-      const funder = await this.model.findOne({ _id });
-      this.checkFunder(funder);
-      return await this.historyService.findAll(_id);
-      // return this.sanitizer.sanitizeMany(histories);
-    } catch (e) {
-      throw e;
-    }
-  }
-
-  /** delete the comment */
-  async removeComment(_id: string, funderId: string): Promise<string> {
-    const funder = await this.model.findOne({ _id: funderId });
-    this.checkFunder(funder);
-    const comment = await this.commentService.remove(_id);
-    await this.historyService.create(serviceLog.deleteCommentTitle, _id);
-    return comment
-
-  }
 
   /** Get Funder By Id */
-  async findOne(_id: string): Promise<FundingDTO> {
-    const funder = await this.model.findOne({ _id });
+  async findById(_id: string): Promise<FundingDTO> {
+    const funder = await this.model.findById({ _id });
     this.checkFunder(funder);
     return this.sanitizer.sanitize(funder);
   }
@@ -243,6 +207,7 @@ export class FundingService {
       if (dto.address)
         funder.address = await this.addressService.getAddress(dto.address);
       await funder.save();
+      await this.historyService.create({resource: _id, onModel: "Funder", title: serviceLog.updateFundingSource});
       return this.sanitizer.sanitize(funder);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Funder already exists');
@@ -266,7 +231,7 @@ export class FundingService {
         service.serviceId = dto.globServiceId
       }
       await service.save();
-      await this.historyService.create(serviceLog.updateServiceTitle, funder._id);
+      await this.historyService.create({resource: funder._id, onModel: "Funder", title: serviceLog.updateServiceTitle});
       return service;
       // return this.sanitizer.sanitize(service);
     } catch (e) {

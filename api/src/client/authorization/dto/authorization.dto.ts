@@ -15,8 +15,8 @@ export class AuthorizationDTO {
     startDate: Date;
     @ApiProperty()
     endDate: Date;
-    @ApiProperty({ type: AddressDTO })
-    address: AddressDTO;
+    @ApiProperty()
+    location: string;
     @ApiProperty({ enum: AuthorizationStatus })
     status: number
 }

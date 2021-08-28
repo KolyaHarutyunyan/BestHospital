@@ -1,16 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { ISanitize } from '../../util';
 import { IHistory } from '..';
-import { HistoryDto } from '../dto';
+import { HistoryDTO } from '../dto';
 
 @Injectable()
 export class HistorySanitizer implements ISanitize {
   constructor() {}
 
-  sanitize(history: IHistory): HistoryDto {
-    const historyrDTO: HistoryDto = {
+  sanitize(history: IHistory): HistoryDTO {
+    const historyrDTO: HistoryDTO = {
       id: history.id,
-      funderId: history.funderId,
+      user: history.user,
+      resource: history.resource,
+      onModel: history.onModel,
       title: history.title,
       time: history.time,
       date: history.date
@@ -19,8 +21,8 @@ export class HistorySanitizer implements ISanitize {
   }
 
 
-  sanitizeMany(histories: IHistory[]): HistoryDto[] {
-    const historyDTOs: HistoryDto[] = [];
+  sanitizeMany(histories: IHistory[]): HistoryDTO[] {
+    const historyDTOs: HistoryDTO[] = [];
     for (let i = 0; i < histories.length; i++) {
         historyDTOs.push(this.sanitize(histories[i]));
     }

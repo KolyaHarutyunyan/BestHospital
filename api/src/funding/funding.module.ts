@@ -1,21 +1,18 @@
 import { Module } from '@nestjs/common';
 import { FundingService } from './funding.service';
-import { HistoryService } from '../history/history.service';
-import { CommentService } from '../comment/comment.service';
 import { CredentialService } from '../credential/credential.service';
 
 import { FundingController } from './funding.controller';
 import { AddressModule, AddressService } from '../address';
 import { AuthNModule } from '../authN';
 import { ServiceModule } from '../service';
-import { CommentModule } from '../comment';
-import { HistorySanitizer } from '../history'
 import { FundingSanitizer } from './interceptor';
+import { HistoryModule } from '../history/history.module';
 
 @Module({
-  imports: [AuthNModule, AddressModule, ServiceModule, CommentModule],
+  imports: [AuthNModule, AddressModule, ServiceModule, HistoryModule],
   controllers: [FundingController],
-  providers: [FundingService, HistoryService, CredentialService, CommentService, FundingSanitizer, HistorySanitizer],
+  providers: [FundingService, CredentialService, FundingSanitizer],
   exports: [FundingService],
 })
 export class FundingModule { }

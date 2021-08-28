@@ -26,8 +26,6 @@ export class AuthorizationService {
 
   private model: Model<IAuthorization>;
   private clientModel: Model<IClient>;
-
-
   private mongooseUtil: MongooseUtil;
 
   /** Create a new authorization */
@@ -36,7 +34,7 @@ export class AuthorizationService {
       const client = await this.clientModel.findById({ _id: clientId });
       this.checkClient(client);
 
-      const funder = await this.fundingService.findOne(funderId);
+      const funder = await this.fundingService.findById(funderId);
 
       let authorization = new this.model({
         authId: dto.authId,
@@ -44,7 +42,8 @@ export class AuthorizationService {
         funderId: funder.id,
         startDate: dto.startDate,
         endDate: dto.endDate,
-        address: await this.addressService.getAddress(dto.address),
+        status: dto.status,
+        location: dto.location
       });
 
       await authorization.save();
@@ -64,7 +63,7 @@ export class AuthorizationService {
       if (dto.endDate) authorization.endDate = dto.endDate;
       if (dto.authId) authorization.authId = dto.authId
       if (dto.status) authorization.status = dto.status;
-      if (dto.address) authorization.address = await this.addressService.getAddress(dto.address);
+      if (dto.location) authorization.location = dto.location
       await authorization.save()
       return this.sanitizer.sanitize(authorization);
     } catch (e) {

@@ -12,12 +12,14 @@ import { AddressService } from '../address';
 import { StaffCredentialModel } from './staffCredential.model';
 import { CreateCredentialDto } from '../credential';
 import { isValidObjectId } from '../util';
+import { HistoryService, serviceLog } from '../history';
 
 @Injectable()
 export class StaffService {
   constructor(
     private readonly addressService: AddressService,
     private readonly authnService: AuthNService,
+    private readonly historyService: HistoryService,
     private readonly credentialService: CredentialService,
     private readonly sanitizer: StaffSanitizer,
   ) {
@@ -57,6 +59,8 @@ export class StaffService {
           this.authnService.create(user._id, user.email),
         ])
       )[0];
+      
+      await this.historyService.create({ resource: user._id, onModel: "Staff", title: serviceLog.createStaff })
       return this.sanitizer.sanitize(user);
     } catch (e) {
       console.log(e);
@@ -116,6 +120,7 @@ export class StaffService {
       if (dto.address)
         admin.address = await this.addressService.getAddress(dto.address);
       await admin.save()
+      await this.historyService.create({ resource: admin._id, onModel: "Staff", title: serviceLog.updateStaff })
       return this.sanitizer.sanitize(admin);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Staff already exists');
@@ -156,7 +161,7 @@ export class StaffService {
       this.checkStaff(admins[0])
       return this.sanitizer.sanitizeMany(admins);
     }
-    const admins = await this.model.find({status: 1});
+    const admins = await this.model.find({ status: 1 });
     this.checkStaff(admins[0])
     return this.sanitizer.sanitizeMany(admins);
   };

@@ -5,9 +5,10 @@ import { AuthNModule } from '../authN';
 import { StaffSanitizer } from './interceptor';
 import { AddressModule } from 'src/address';
 import { CredentialModule, CredentialService } from '../credential';
+import { HistoryModule } from '../history/history.module';
 
 @Module({
-  imports: [AuthNModule, AddressModule, CredentialModule],
+  imports: [AuthNModule, AddressModule, CredentialModule, HistoryModule],
   providers: [StaffService, StaffSanitizer, CredentialService],
   controllers: [StaffController],
   exports: [StaffService],

@@ -19,7 +19,7 @@ export class AuthorizationSanitizer implements ISanitize {
             startDate: authorization.startDate,
             endDate: authorization.endDate,
             status: authorization.status,
-            address: this.addressSanitizer.sanitize(authorization.address)
+            location: authorization.location
 
         };
         return authorizationDTO;

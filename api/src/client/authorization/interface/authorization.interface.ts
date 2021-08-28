@@ -8,6 +8,6 @@ export interface IAuthorization extends Document {
     funderId: string;
     startDate: Date;
     endDate: Date;
-    address: IAddress;
+    location: string;
     status: number;
 }

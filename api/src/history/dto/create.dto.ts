@@ -1,17 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsEnum, IsNotEmpty, IsPhoneNumber, IsString, IsUrl } from 'class-validator';
+import { IsEmail, IsEnum, IsMongoId, IsNotEmpty, IsPhoneNumber, IsString, IsUrl } from 'class-validator';
+import { HistoryStatus } from '../history.constants';
 
-export class CreateHistoryDto {
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
-    funderId: string;
+export class CreateHistoryDTO {
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
     title: string;
+    @IsMongoId()
     @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
-    time: string;
+    resource: string;
+    @ApiProperty({ enum: HistoryStatus })
+    @IsEnum(HistoryStatus)
+    onModel: string;
 }

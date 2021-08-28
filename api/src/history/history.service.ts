@@ -1,8 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { MongooseUtil } from '../util';
-import { CreateHistoryDto } from './dto/create.dto';
-import { HistoryDto } from './dto/history.dto';
+import { CreateHistoryDTO, HistoryDTO } from './dto';
 import { HistoryModel } from './history.model';
 import { IHistory } from './interface';
 import { HistorySanitizer } from './interceptor';
@@ -10,6 +9,7 @@ import { HistorySanitizer } from './interceptor';
 @Injectable()
 export class HistoryService {
   constructor(
+
     private readonly sanitizer: HistorySanitizer
   ) {
     this.model = HistoryModel;
@@ -19,18 +19,18 @@ export class HistoryService {
   private mongooseUtil: MongooseUtil;
 
   /** Create a new history */
-  async create(title: string, funderId: string): Promise<CreateHistoryDto> {
+  async create(dto: CreateHistoryDTO): Promise<HistoryDTO> {
     try {
-      // get Admin firstName
-      const firstName = 'Edgar';
+      const user = "610ba0a7b8944a30bcb15da4";
+         const onMod = dto.onModel;
       const history = new this.model({
-        funderId,
-        title,
+        resource: dto.resource,
+        onModel: dto.onModel,
+        title: dto.title,
         time: this.formatAMPM(new Date()),
+        user,
       });
-      await history.save();
-
-      return
+     return await history.save();
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'History already exists');
       throw e;
@@ -38,10 +38,12 @@ export class HistoryService {
   }
 
   /** returns all histories */
-  async findAll(funderId: string): Promise<HistoryDto[]> {
+  async findAll(onModel: string, resource: string, skip: number, limit: number): Promise<HistoryDTO[]> {
     try {
-      const histories = await this.model.find({ funderId });
-      this.checkHistory(histories);
+      if (isNaN(skip)) skip = 0;
+      if (isNaN(limit)) limit = 10;
+      const histories = await this.model.find({ onModel, resource }).skip(skip).limit(limit).populate('user', 'firstName lastName');
+      this.checkHistory(histories[0])
       return this.sanitizer.sanitizeMany(histories);
     } catch (e) {
       throw e;
@@ -50,7 +52,7 @@ export class HistoryService {
 
   /** Private methods */
   /** if the history is not found, throws an exception */
-  private checkHistory(history: IHistory[]) {
+  private checkHistory(history: IHistory) {
     if (!history) {
       throw new HttpException(
         'History with this id was not found',

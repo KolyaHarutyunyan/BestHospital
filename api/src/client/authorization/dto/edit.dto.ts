@@ -17,9 +17,10 @@ export class UpdateAuthorizationDTO {
     @IsOptional()
     @IsDateString()
     endDate: Date;
-    @ApiProperty({ type: AddressDTO })
+    @ApiProperty()
+    @IsString()
     @IsOptional()
-    address: string;
+    location: string;
     @ApiProperty({ enum: AuthorizationStatus })
     @IsEnum(AuthorizationStatus)
     status: number;

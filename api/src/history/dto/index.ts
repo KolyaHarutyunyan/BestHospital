@@ -1,2 +1,2 @@
-export { CreateHistoryDto } from './create.dto';
-export { HistoryDto } from './history.dto';
+export { CreateHistoryDTO } from './create.dto';
+export { HistoryDTO } from './history.dto';

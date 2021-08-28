@@ -1,8 +1,35 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ParseObjectIdPipe, Public } from '../util';
 import { HistoryService } from './history.service';
-import { CreateHistoryDto } from './dto/create.dto';
+import { HistoryDTO } from './dto';
 
 @Controller('history')
+@ApiTags('History Endpoints')
 export class HistoryController {
-  constructor(private readonly historyService: HistoryService) {}
+  constructor(private readonly historyService: HistoryService) { }
+
+  @Get(':resourceId/:onModel')
+  @Public()
+  @ApiOkResponse({ type: HistoryDTO })
+  @ApiQuery({
+    name: "skip",
+    description: "where",
+    required: false,
+    type: Number
+  })
+  @ApiQuery({
+    name: "limit",
+    description: "how",
+    required: false,
+    type: Number
+  })
+  async findAll(
+    @Query('skip') skip: number,
+    @Query('limit') limit: number,
+    @Param('resourceId', ParseObjectIdPipe) resourceId: string,
+    @Param('onModel') onModel: string
+  ) {
+    return await this.historyService.findAll(onModel, resourceId, skip, limit);
+  }
 }

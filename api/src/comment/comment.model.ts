@@ -2,8 +2,8 @@ import { model, Schema, Types } from 'mongoose';
 import { IComment } from './interface';
 
 export const commentSchema = new Schema({
+    subject: {type: String},
     text: { type: String },
-    created: { type: Date, default: Date.now },
     resource: {
         type: Schema.Types.ObjectId,
         required: true,
@@ -16,7 +16,8 @@ export const commentSchema = new Schema({
         required: true,
         enum: ['Staff', 'Client', "Funder"]
     },
-    user: { type: Types.ObjectId, ref: 'Admin' }
+    user: { type: Types.ObjectId, ref: 'Staff' },
+    created: { type: Date, default: Date.now }
 
 });
 

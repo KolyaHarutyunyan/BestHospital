@@ -31,7 +31,7 @@ export class EnrollmentService {
     try {
       const client = await this.clientModel.findById({ _id: clientId });
       this.checkClient(client);
-      const funder = await this.fundingService.findOne(funderId);
+      const funder = await this.fundingService.findById(funderId);
 
       if (dto.primary) {
         const findEnrollment = await this.model.findOne({ clientId, primary: true });
@@ -78,16 +78,8 @@ export class EnrollmentService {
       this.checkEnrollment(enrollment);
       const client = await this.clientModel.findById({ _id: clientId });
       this.checkClient(client);
-      if (dto.startDate) {
-        let startDate = new Date(dto.startDate);
-        this.checkTime(startDate);
-        enrollment.startDate = startDate.toLocaleDateString()
-      };
-      if (dto.terminationDate) {
-        let terminationDate = new Date(dto.terminationDate);
-        this.checkTime(terminationDate);
-        enrollment.terminationDate = terminationDate.toLocaleDateString()
-      };
+      if (dto.startDate) enrollment.startDate = dto.startDate
+      if (dto.terminationDate) enrollment.terminationDate = dto.terminationDate
 
       if (dto.primary) {
         const findEnrollment = await this.model.findOne({ clientId, primary: true });

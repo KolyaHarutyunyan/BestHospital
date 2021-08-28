@@ -2,6 +2,7 @@ import { model, Schema, Types } from 'mongoose';
 import { addressSchema } from '../../address';
 import { IAuthorization } from './interface';
 import { ClientAuthorizationServiceModel } from '../authorizationservice/authorizationService.model';
+import { AuthorizationStatus } from './authorization.constants';
 
 const AuthorizationSchema = new Schema({
     clientId: { type: Types.ObjectId, ref: 'Client' },
@@ -9,9 +10,10 @@ const AuthorizationSchema = new Schema({
     funderId: { type: Types.ObjectId, ref: 'Funder' },
     startDate: { type: String },
     endDate: { type: String },
+    status: { type: Number, enum: AuthorizationStatus },
     createdDate: { type: Date, default: Date.now() },
     updatedDate: { type: Date, default: null },
-    address: addressSchema,
+    location: { type: String },
 });
 
 AuthorizationSchema.pre('remove', async function (next) {

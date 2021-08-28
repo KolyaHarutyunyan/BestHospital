@@ -5,9 +5,9 @@ import { Model, Types } from 'mongoose';
 import { ClientModel } from './client.model';
 import { FundingService } from '../funding';
 import { ServiceService } from '../service';
-
 import { ClientSanitizer } from './interceptor';
 import { IClient } from './interface';
+import { HistoryService, serviceLog } from '../history';
 import {
   ClientDTO,
 } from './dto';
@@ -17,7 +17,7 @@ export class ClientService {
   constructor(
     // private readonly addressService: AddressService,
     private readonly sanitizer: ClientSanitizer,
-
+    private readonly historyService: HistoryService,
     private readonly fundingService: FundingService,
     private readonly service: ServiceService,
   ) {
@@ -45,8 +45,10 @@ export class ClientService {
         birthday: dto.birthday
         // address: await this.addressService.getAddress(dto.address),
       });
-      
+
       await client.save();
+      await this.historyService.create({ resource: client._id, onModel: "Client", title: serviceLog.createClient })
+
       return this.sanitizer.sanitize(client);
     } catch (e) {
       console.log(e);
@@ -67,8 +69,8 @@ export class ClientService {
     }
   }
   /** Get Client By Id */
-  async findOne(_id: string): Promise<ClientDTO> {
-    const client = await this.model.findOne({ _id }).populate({ path: 'enrollment', select: "name" });
+  async findById(_id: string): Promise<ClientDTO> {
+    const client = await this.model.findById({ _id }).populate({ path: 'enrollment', select: "name" });
     this.checkClient(client);
     return this.sanitizer.sanitize(client);
   }
@@ -95,6 +97,7 @@ export class ClientService {
       // if (dto.address)
       //   funder.address = await this.addressService.getAddress(dto.address);
       await client.save();
+      await this.historyService.create({ resource: client._id, onModel: "Client", title: serviceLog.updateClient })
       return this.sanitizer.sanitize(client);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Client already exists');
@@ -125,7 +128,7 @@ export class ClientService {
   private checkClient(client: IClient) {
     if (!client) {
       throw new HttpException(
-        'Profile with this id was not found',
+        'Client with this id was not found',
         HttpStatus.NOT_FOUND,
       );
     }

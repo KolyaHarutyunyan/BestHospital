@@ -2,8 +2,11 @@ import { Document } from 'mongoose';
 import { IAddress } from '../../address';
 
 export interface IComment extends Document {
+  id: string;
+  subject: string;
   text: string;
-  created: Date;
+  resource: string;
+  onModel: string;
   user: string;
-  funder: any;
+  created: Date;
 }

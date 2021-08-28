@@ -1,12 +1,12 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
-import { ApiHeader, ApiOkResponse, ApiOperation, ApiProperty, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiOkResponse, ApiOperation, ApiProperty, ApiPropertyOptional, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { FundingService } from './funding.service';
 import { HistoryService } from '../history/history.service';
 
 import { CreateFundingDTO, FundingDTO, UpdateFundingDto, ServiceDTO, UpdateServiceDto, CreateServiceDTO, CreateModifierDto, UpdateModifierDto, ModifyDTO } from './dto';
-import { HistoryDto } from '../history/dto';
+import { HistoryDTO } from '../history/dto';
 import { Public, ParseObjectIdPipe } from '../util';
-import { CommentDto } from '../comment/dto';
+import { CreateCommentDTO } from './dto/comment.dto';
 
 @Controller('funding')
 @ApiTags('Funding Endpoints')
@@ -37,7 +37,7 @@ export class FundingController {
   @ApiOkResponse({ type: ServiceDTO })
   async createService(
     @Param('id', ParseObjectIdPipe) id: string,
-    @Body() createServiceDTO: CreateServiceDTO) : Promise<ServiceDTO> {
+    @Body() createServiceDTO: CreateServiceDTO): Promise<ServiceDTO> {
     const staffId = '60f01ec194abb63ff8f0aa75';
     const service = await this.fundingService.createService(createServiceDTO, id);
     return service
@@ -55,14 +55,16 @@ export class FundingController {
   }
 
   /** Add a new comment */
-  @Post(':id/comment')
-  @Public()
-  @ApiOkResponse({ type: CommentDto })
-  async addComment(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Body() text: string): Promise<any> {
-    return await this.fundingService.addComment(id, text);
-  }
+  // @Post(':id/comment')
+  // @Public()
+  // // @ApiOkResponse({ type: CommentDto })
+  // async addComment(
+  //   @Param('id', ParseObjectIdPipe) id: string,
+  //   @Body() dto: CreateCommentDTO): Promise<any> {
+  //   console.log(dto)
+  //   const user = "610ba0a7b8944a30bcb15da4"
+  //   return await this.fundingService.addComment(id, dto.text, user);
+  // }
 
   /** Get all funders */
   @Get()
@@ -102,29 +104,41 @@ export class FundingController {
   }
 
   /** Get all comments */
-  @Get(':id/comments')
-  @Public()
-  @ApiOkResponse({ type: [CommentDto] })
-  async getComments(@Param('id', ParseObjectIdPipe) id: string,
-    @Query('skip') skip: number,
-    @Query('limit') limit: number): Promise<CommentDto[]> {
-    return await this.fundingService.getComments(id, skip, limit);
-  }
+  // @Get(':id/comments')
+  // @Public()
+  // @ApiQuery({
+  //   name: "skip",
+  //   description: "where",
+  //   required: false,
+  //   type: Number
+  // })
+  // @ApiQuery({
+  //   name: "limit",
+  //   description: "how",
+  //   required: false,
+  //   type: Number
+  // })
+  // // @ApiOkResponse({ type: [CommentDto] })
+  // async getComments(@Param('id', ParseObjectIdPipe) id: string,
+  //   @Query('skip') skip: number,
+  //   @Query('limit') limit: number): Promise<any> {
+  //   return await this.fundingService.getComments(id, skip, limit);
+  // }
 
   /** Get all histories */
-  @Get(':id/histories')
-  @Public()
-  @ApiOkResponse({ type: [HistoryDto] })
-  async findAllHistories(@Param('id', ParseObjectIdPipe) id: string): Promise<any> {
-    return await this.fundingService.findAllHistories(id);
-  }
+  // @Get(':id/histories')
+  // @Public()
+  // @ApiOkResponse({ type: [HistoryDTO] })
+  // async findAllHistories(@Param('id', ParseObjectIdPipe) id: string): Promise<any> {
+  //   return await this.fundingService.findAllHistories(id);
+  // }
 
   /** Get Funder By Id */
   @Get(':id')
   @Public()
   @ApiOkResponse({ type: FundingDTO })
-  async findOne(@Param('id', ParseObjectIdPipe) id: string): Promise<FundingDTO> {
-    return await this.fundingService.findOne(id);
+  async findById(@Param('id', ParseObjectIdPipe) id: string): Promise<FundingDTO> {
+    return await this.fundingService.findById(id);
   }
 
   /** Edit the Funder */
@@ -170,12 +184,13 @@ export class FundingController {
   }
 
   /** Delete the comment */
-  @Delete(':funderId/comments/:id')
-  @Public()
-  @ApiOkResponse({ type: CommentDto })
-  async removeComment(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Param('funderId', ParseObjectIdPipe) funderId: string): Promise<string> {
-    return await this.fundingService.removeComment(id, funderId);
-  }
+  // @Delete(':id/comments/:commentId')
+  // @Public()
+  // // @ApiOkResponse({ type: CommentDto })
+  // async removeComment(
+  //   @Param('id', ParseObjectIdPipe) id: string,
+  //   @Param('commentId', ParseObjectIdPipe) commentId: string): Promise<string> {
+  //     const user = "610ba0a7b8944a30bcb15da4"
+  //   return await this.fundingService.removeComment(id, commentId, user);
+  // }
 }

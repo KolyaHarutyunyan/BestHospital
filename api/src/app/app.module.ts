@@ -11,9 +11,11 @@ import { AddressModule } from '../address';
 import { EmploymentModule } from '../employment';
 import { ClientModule } from '../client';
 import { DepartmentModule } from '../department/department.module';
+import { CommentModule } from '../comment/comment.module';
+import {HistoryModule} from '../history/history.module';
 
 @Module({
-  imports: [AuthNModule, AuthZModule, AddressModule, StaffModule, FundingModule, EmploymentModule, ClientModule, DepartmentModule],
+  imports: [AuthNModule, AuthZModule, AddressModule, StaffModule, FundingModule, EmploymentModule, ClientModule, DepartmentModule, CommentModule, HistoryModule],
   controllers: [AppController],
   providers: [AppService, DatabaseConnection],
 })

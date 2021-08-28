@@ -5,7 +5,7 @@ export interface IEnrollment extends Document {
     clientId: string;
     funderId: string;
     primary: boolean;
-    startDate: string;
-    terminationDate: string;
+    startDate: Date;
+    terminationDate: Date;
     enrollmentId?: string;
 }

@@ -8,7 +8,6 @@ import { ClientSanitizer } from './interceptor';
 //check
 import { HistorySanitizer, HistoryService } from 'src/history';
 import { CredentialService } from 'src/credential';
-import { CommentService } from 'src/comment';
 import { ServiceModule } from '../service'
 import { FundingSanitizer } from 'src/funding/interceptor';
 import { AddressSanitizer } from 'src/address';
@@ -22,7 +21,7 @@ import { ScheduleModule } from '../schedule/schedule.module';
   imports: [ServiceModule, EnrollmentModule, AuthorizationModule, AuthorizationserviceModule, ContactModule, FundingModule, ScheduleModule],
   controllers: [ClientController],
   providers: [ClientService, HistoryService, CredentialService,
-    CommentService, ClientSanitizer,
+     ClientSanitizer,
     HistorySanitizer, AddressSanitizer],
   exports: [ClientService]
 })

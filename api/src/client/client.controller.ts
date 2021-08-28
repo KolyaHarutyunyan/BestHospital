@@ -25,8 +25,8 @@ export class ClientController {
   /** Get Client By Id */
   @Get(':id')
   @Public()
-  findOne(@Param('id', ParseObjectIdPipe) id: string) {
-    return this.clientService.findOne(id);
+  findById(@Param('id', ParseObjectIdPipe) id: string) {
+    return this.clientService.findById(id);
   }
   /** Update Client By Id */
   @Patch(':id')
