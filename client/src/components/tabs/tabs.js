@@ -40,7 +40,7 @@ function a11yProps(index) {
     };
 }
 
-export const SimpleTabs = ({tabsLabels, tabsContent, setActiveTab}) => {
+export const SimpleTabs = ({tabsLabels, tabsContent, setActiveTab, setAuthActive}) => {
     const tabStyle = tabsStyles()
     const [value, setValue] = React.useState(0);
 
@@ -62,7 +62,10 @@ export const SimpleTabs = ({tabsLabels, tabsContent, setActiveTab}) => {
                     {
                         tabsLabels && tabsLabels.map((tabLabel, index)=>{
                             return (
-                                <Tab onClick={()=> setActiveTab(index)} className={tabStyle.tabLabel} label={tabLabel.label} {...a11yProps(index)} />
+                                <Tab onClick={()=> {
+                                    setAuthActive &&   setAuthActive(false)
+                                    setActiveTab(index)
+                                }}  className={tabStyle.tabLabel} label={tabLabel.label} {...a11yProps(index)} />
                             )
                         })
                     }

@@ -36,6 +36,38 @@ export const createClientStyle = makeStyles(() => ({
     },
     clientModalBox : {
         width: 463
-    }
+    },
+    inputInfo : {
+        fontSize : 18,
+        fontWeight : "bold",
+        marginBottom : 16
+    },
+    displayCodeBlock: {
+        width: '100%',
+        padding: "31px 16px",
+        background: Colors.BackgroundPrimary,
+        margin : "16px 0"
+    },
+    displayCodeBlock2 : {
+        width: '100%',
+        padding: "24px 16px",
+        margin : "16px 0",
+        boxShadow : '0px 0px 6px #347AF03D'
+    },
+    displayCodeBlockText: {
+        color: Colors.TextPrimary,
+        fontSize: 14,
+        fontWeight: 600,
+    },
+    availableModfiers : {
+        display : 'flex',
+        justifyContent  : 'center',
+        marginTop : 8
+    },
+    availableModfier : {
 
+    },
+    displayCode: {
+        color: '#4B5C68B3'
+    },
 }));

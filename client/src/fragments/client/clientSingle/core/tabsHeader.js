@@ -6,11 +6,12 @@ import {AddContact, AddEnrollment, CreateClient,AddAuthorization} from "@eachbas
 import {useDispatch,} from "react-redux";
 import {clientActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
+import {AddAuthorizationService} from "../../clientModals/addAuthorizationService";
 
 
 
 
-export const TabsHeader = ({activeTab, data}) => {
+export const TabsHeader = ({activeTab, data, authActive}) => {
     const params = useParams()
     const classes = serviceSingleStyles()
     const [open, setOpen] = useState()
@@ -79,7 +80,9 @@ export const TabsHeader = ({activeTab, data}) => {
                             <AddModalButton btnStyles={editButtonStyle} handleClick={() => setOpen(true)}
                                             text='Edit'/> :
                             activeTab !== 6 && activeTab !== 4 ?
-                                <AddButton text={activeTab === 1 ?
+                                <AddButton text={
+                                    authActive ? 'Add Authorization Service' :
+                                    activeTab === 1 ?
                                     'Add Contact' :
                                     activeTab === 2 ?
                                         'Add Enrollments' :
@@ -93,7 +96,8 @@ export const TabsHeader = ({activeTab, data}) => {
             <SimpleModal
                 openDefault={open}
                 handleOpenClose={handleOpenClose}
-                content={activeTab === 0 ? <CreateClient info={data}  handleClose={handleOpenClose}/> :
+                content={ authActive ? <AddAuthorizationService handleClose={handleOpenClose}/> :
+                    activeTab === 0 ? <CreateClient info={data}  handleClose={handleOpenClose}/> :
                     activeTab === 1 ?
                         <AddContact  handleClose={handleOpenClose}/> :
                         activeTab === 2 ?

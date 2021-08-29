@@ -7,7 +7,7 @@ import {clientActions, fundingSourceActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 
 
-export const AddAuthorization = ({handleClose, info}) => {
+export const AddAuthorizationService = ({handleClose, info}) => {
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {...info,funding: info.funderId.name, address : info.address.street} : {});
     const params = useParams()
@@ -69,69 +69,47 @@ export const AddAuthorization = ({handleClose, info}) => {
         <div className={classes.createFoundingSource}>
             <ModalHeader
                 handleClose={handleClose}
-                title={info ? "Edit Authorization" : 'Add Authorization'}
-                text={'Please fulfill the below fields to add an authorization.'}
+                title={info ? "Edit Authorization Service" : 'Add Authorization Service'}
+                text={'To add a new authorization service in the system, please fulfill the below fields.'}
             />
             <div className={classes.createFoundingSourceBody}>
                 <div className={classes.clientModalBlock}>
                     <div className={classes.clientModalBox}>
-                        <ValidationInput
-                            variant={"outlined"}
-                            onChange={handleChange}
-                            value={inputs.authId}
-                            type={"text"}
-                            label={"Auth#*"}
-                            name='authId'
-                            typeError={error === 'authId' && ErrorText.field}
-                        />
+                        <p className={classes.inputInfo}>Service</p>
                         <SelectInput
                             name={"funding"}
-                            label={"Funding Source*"}
+                            label={"Service Code*"}
                             handleSelect={handleChange}
                             value={inputs.funding}
                             list={fSelect}
                             typeError={error === 'funding' ? ErrorText.field : ''}
                         />
 
-                        <div style={{display: 'flex'}}>
-                            <ValidationInput
-                                variant={"outlined"}
-                                onChange={handleChange}
-                                value={inputs.startDate}
-                                type={"date"}
-                                label={"Start Date*"}
-                                name='startDate'
-                                typeError={error === 'startDate' && ErrorText.field}
-                            />
-                            <div style={{width: 16}}/>
-                            <ValidationInput
-                                variant={"outlined"}
-                                onChange={handleChange}
-                                value={inputs.endDate}
-                                type={"date"}
-                                label={"Terminated Date*"}
-                                name='endDate'
-                                typeError={error === 'endDate' && ErrorText.field}
-                            />
-
+                        <div className={classes.displayCodeBlock2}>
+                            <p className={classes.displayCodeBlockText}>Available Modfiers </p>
+                            <div className={classes.availableModfiers } >
+                                <p className={classes.availableModfier}>N/A</p>
+                            </div>
                         </div>
-                        <SelectInput
-                            name={"status"}
-                            label={"Status*"}
-                            handleSelect={handleChange}
-                            value={inputs.status}
-                            list={list}
-                            typeError={error === 'status' ? ErrorText.field : ''}
-                        />
+
+                        <p className={classes.inputInfo}>Availability</p>
                         <ValidationInput
                             variant={"outlined"}
                             onChange={handleChange}
                             value={inputs.address}
                             type={"text"}
-                            label={"Service Location*"}
+                            label={"Total Units*"}
                             name='address'
                             typeError={error === 'address' && ErrorText.field}
                         />
+                        <div className={classes.displayCodeBlock}>
+                            <p className={classes.displayCodeBlockText}>Completed Units: <span
+                                className={classes.displayCode}>N/A</span></p>
+                            <p className={classes.displayCodeBlockText} style={{marginTop: 16}}>Available Units: <span
+                                className={classes.displayCode}>N/A</span></p>
+                            <p className={classes.displayCodeBlockText} style={{marginTop: 16}}>Percent Utilization: <span
+                                className={classes.displayCode}>N/A</span></p>
+                        </div>
                     </div>
                 </div>
                 <div className={classes.clientModalBlock}>
