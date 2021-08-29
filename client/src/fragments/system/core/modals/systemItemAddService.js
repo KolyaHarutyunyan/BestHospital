@@ -24,7 +24,12 @@ export const SystemItemAddService = ({modalId, modalType, handleClose}) => {
     const [inputs, setInputs] = useState({})
     const dispatch = useDispatch()
     const [error,setError] = useState('')
+
+    const classes = modalsStyle()
+    const globalText = useGlobalTextStyles()
+
     console.log(inputs,'inputs');
+
     const title = (mType) => {
         if (mType === 'editService') {
             return 'Edit Service Type'
@@ -35,9 +40,6 @@ export const SystemItemAddService = ({modalId, modalType, handleClose}) => {
         }
         return 'Edit Department'
     }
-
-    const classes = modalsStyle()
-    const globalText = useGlobalTextStyles()
 
     const checkType = (type) => {
         if (type === 'Degree') {
@@ -54,9 +56,19 @@ export const SystemItemAddService = ({modalId, modalType, handleClose}) => {
             name: inputs.credentialName,
             type: checkType(inputs.credentialType),
         }
+        let serviceData = {
+            name: inputs.name,
+            displayCode:inputs.displayCode,
+            category: inputs.category
+        }
         switch (mType) {
             case 'editService':
-                alert('edit services')
+                if (inputs.name && inputs.displayCode && inputs.category){
+                    dispatch(systemActions.editServiceByIdGlobal(serviceData,mId))
+                    // handleClose()
+                }else {
+                    alert('error')
+                }
                 break;
             case 'editCredential':
                 if (inputs.credentialType && inputs.credentialName){
@@ -101,9 +113,9 @@ export const SystemItemAddService = ({modalId, modalType, handleClose}) => {
                             variant={"outlined"}
                             onChange={handleChange}
                             type={"text"}
-                            label={"Service Name*"}
-                            name='serviceName'
-                            value={inputs.serviceName}
+                            label={"Service Type*"}
+                            name='name'
+                            value={inputs.name}
                         />
                         <ValidationInput
                             styles={inputSpacing}
@@ -111,8 +123,8 @@ export const SystemItemAddService = ({modalId, modalType, handleClose}) => {
                             onChange={handleChange}
                             type={"text"}
                             label={"Display Name*"}
-                            name='displayName'
-                            value={inputs.displayName}
+                            name='displayCode'
+                            value={inputs.displayCode}
                         />
                         <ValidationInput
                             styles={inputSpacing}
@@ -165,6 +177,7 @@ export const SystemItemAddService = ({modalId, modalType, handleClose}) => {
             }
             <>
                 <CreateChancel
+                    loader={false}
                     buttonWidth='192px'
                     create='Save'
                     chancel="Cancel"
