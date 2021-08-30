@@ -60,7 +60,6 @@ export const StaffGeneral = ({staffGeneral}) =>{
                 color={Colors.ThemeRed}
                 icon={Images.otherDetailsIcon}
             />
-
         </div>
     )
 }

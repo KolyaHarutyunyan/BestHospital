@@ -53,15 +53,17 @@ function* getAdmins(action) {
 }
 
 function* getAdminById(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.getAdminByIdService, action.payload.adminId);
         yield put({
             type: GET_ADMIN_BY_ID_SUCCESS,
             payload: res.data,
         });
-
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
     } catch (err) {
         console.log(err)
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
     }
 }
 
@@ -123,7 +125,7 @@ function* editCredentialById(action) {
 
 function* deleteCredentialById(action) {
     try {
-        const res = yield call(authService.deleteCredentialByIdService, action.payload.id.id)
+        yield call(authService.deleteCredentialByIdService, action.payload.id.id)
 
         yield put({
             type: DELETE_CREDENTIAL_BY_ID_SUCCESS,

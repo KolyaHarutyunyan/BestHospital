@@ -3,7 +3,7 @@ import {modalsStyle,} from "@eachbase/components/modal/styles";
 import {useGlobalTextStyles} from "@eachbase/utils";
 import {CloseButton, CreateChancel} from "@eachbase/components/buttons";
 import {SelectInput, ValidationInput} from "@eachbase/components/inputs";
-import {systemActions} from "../../../../store";
+import {systemActions} from "@eachbase/store";
 import {useDispatch} from "react-redux";
 
 const inputSpacing = {
@@ -16,19 +16,16 @@ const credentialsList = [
     {name: 'licence'},
 ]
 
-export const SystemItemAddService = ({modalId, modalType, handleClose}) => {
-
+export const SystemItemAddService = ({modalInformation, modalType, handleClose}) => {
     const [mType] = useState(modalType)
-    const [mId] = useState(modalId)
+    const [mInformation] = useState(modalInformation)
+    const [inputs, setInputs] = useState(mInformation ? mInformation : {})
 
-    const [inputs, setInputs] = useState({})
     const dispatch = useDispatch()
     const [error,setError] = useState('')
 
     const classes = modalsStyle()
     const globalText = useGlobalTextStyles()
-
-    console.log(inputs,'inputs');
 
     const title = (mType) => {
         if (mType === 'editService') {
@@ -64,15 +61,15 @@ export const SystemItemAddService = ({modalId, modalType, handleClose}) => {
         switch (mType) {
             case 'editService':
                 if (inputs.name && inputs.displayCode && inputs.category){
-                    dispatch(systemActions.editServiceByIdGlobal(serviceData,mId))
-                    // handleClose()
+                    dispatch(systemActions.editServiceByIdGlobal(serviceData,mInformation.id))
+                    handleClose()
                 }else {
                     alert('error')
                 }
                 break;
             case 'editCredential':
                 if (inputs.credentialType && inputs.credentialName){
-                    dispatch(systemActions.editCredentialByIdGlobal(credentialData,mId))
+                    dispatch(systemActions.editCredentialByIdGlobal(credentialData,mInformation.credentialId))
                     handleClose()
                 }else {
                     alert('error')
@@ -96,8 +93,6 @@ export const SystemItemAddService = ({modalId, modalType, handleClose}) => {
             ));
         error === e.target.name && setError('')
     }
-
-
 
     return (
         <div className={classes.inactiveModalBody}>

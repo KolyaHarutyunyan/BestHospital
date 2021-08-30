@@ -1,8 +1,9 @@
 import { Button } from "@material-ui/core";
 import { buttonsStyle } from "./styles";
-import {Images} from "@eachbase/utils";
+import {Colors, Images} from "@eachbase/utils";
+import {MinLoader} from "../loader";
 
-export const AddButton = ({disabled, styles, text, handleClick }) => {
+export const AddButton = ({loader,disabled, styles, text, handleClick }) => {
   const classes = buttonsStyle();
   return (
 
@@ -13,8 +14,15 @@ export const AddButton = ({disabled, styles, text, handleClick }) => {
         onClick={handleClick}
         // styles={}
     >
-      <img src={Images.addCircle} alt={'icon'}/>
-      {text}
+      {
+        loader !== true && <img src={Images.addCircle} alt={'icon'}/>
+      }
+
+      { loader === true ?
+          <MinLoader margin={'0'} color={Colors.TextWhite}/>
+          :
+          text
+      }
     </Button>
   );
 };

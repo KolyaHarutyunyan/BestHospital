@@ -1,10 +1,10 @@
-import {AddButton, SelectInput, ValidationInput} from "@eachbase/components";
-import React, {useState} from "react";
+import {AddButton, ValidationInput} from "@eachbase/components";
+import React, {useEffect, useState} from "react";
 import {systemItemStyles} from "./styles";
 import {ErrorText, Images} from "@eachbase/utils";
 import {SelectInputPlaceholder} from "@eachbase/components";
-import {useDispatch} from "react-redux";
-import { systemActions } from "@eachbase/store";
+import {useDispatch, useSelector} from "react-redux";
+import {httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
 
 const credentialBtn = {
     maxWidth: '174px',
@@ -79,6 +79,23 @@ export const Credentials = ({removeItem, openModal,globalCredentials}) => {
 
     const isDisabled = inputs.name && inputs.type
 
+    const {httpOnLoad, httpOnSuccess } = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnLoad: state.httpOnLoad
+    }));
+
+    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_CREDENTIAL_GLOBAL'
+
+    useEffect(()=>{
+        if(success) {
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_CREDENTIAL_GLOBAL'))
+            setInputs({
+                name: '',
+                type: ''
+            })
+        }
+    },[success])
+
     return (
         <>
             <div className={`${classes.flexContainer} ${classes.headerSize}`}>
@@ -101,6 +118,7 @@ export const Credentials = ({removeItem, openModal,globalCredentials}) => {
                     typeError={error === 'issuingState' ? ErrorText.field : ''}
                 />
                 <AddButton
+                    loader={!!httpOnLoad.length}
                     disabled={!isDisabled}
                     styles={credentialBtn}
                     handleClick={handleSubmit} text='Add Credential'
@@ -118,7 +136,11 @@ export const Credentials = ({removeItem, openModal,globalCredentials}) => {
                                 </p>
                                 <div className={classes.icons}>
                                     <img src={Images.edit}
-                                         onClick={(e) => editCredential('editCredential',credentialItem._id)} alt="edit"/>
+                                         onClick={() => editCredential('editCredential', {
+                                             credentialId: credentialItem._id,
+                                             credentialName: credentialItem.name,
+                                             credentialType: convertType(credentialItem.type)
+                                         })} alt="edit"/>
                                     <img src={Images.remove} alt="delete" onClick={() => removeItem(credentialItem._id)}/>
                                 </div>
                             </div>
