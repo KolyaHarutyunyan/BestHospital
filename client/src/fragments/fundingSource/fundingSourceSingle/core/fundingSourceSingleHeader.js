@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {btnStyles, fundingSourceSingleStyles} from "./styles";
 import {Images} from "@eachbase/utils";
 import {AddButton, AddModalButton, SimpleModal} from "@eachbase/components";
-import {fundingSourceActions} from "@eachbase/store";
+import {fundingSourceActions, systemActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {FundingSourceNotesAdd, FundingSourceServiceAdd,} from "./modals";
@@ -11,6 +11,7 @@ import {CreateFundingSource} from "../../createFundingSource";
 
 export const FundingSourceSingleHeader = ({activeTab, title, info}) => {
     const [open, setOpen] = useState(false)
+    const globalServices = useSelector(state => state.system.services)
     const dispatch = useDispatch()
     const params = useParams()
     const classes = fundingSourceSingleStyles()
@@ -18,6 +19,8 @@ export const FundingSourceSingleHeader = ({activeTab, title, info}) => {
     useEffect(() => {
         if (activeTab === 1) {
             dispatch(fundingSourceActions.getFoundingSourceServiceById(params.id))
+            dispatch(systemActions.getServices())
+
         } else if (activeTab === 2) {
 
         } else if (activeTab === 3) {
@@ -28,7 +31,7 @@ export const FundingSourceSingleHeader = ({activeTab, title, info}) => {
     const handleOpenClose = () => {
         setOpen(!open)
     }
-   const prevData = useSelector(state => state.fundingSource.fundingSourceItem)
+    const prevData = useSelector(state => state.fundingSource.fundingSourceItem)
 
     return (
         <div className={classes.fundingSourceSingleHeaderWrapStyles}>
@@ -41,10 +44,8 @@ export const FundingSourceSingleHeader = ({activeTab, title, info}) => {
                 handleOpenClose={handleOpenClose}
                 content={activeTab === 0 ?
                     <CreateFundingSource handleClose={handleOpenClose} info={prevData}/>
-
-                    // <FundingSourceGeneralEdit handleClose={handleOpenClose}/>
                     : activeTab === 1 ?
-                        <FundingSourceServiceAdd handleClose={handleOpenClose}/> :
+                        <FundingSourceServiceAdd systemServices={globalServices} handleClose={handleOpenClose}/> :
                         activeTab === 2 ?
                             <FundingSourceNotesAdd handleClose={handleOpenClose}/> : null}/>
             {activeTab === 0 ?

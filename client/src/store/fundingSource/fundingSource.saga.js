@@ -115,8 +115,9 @@ function* getFundingSourceServicesById(action) {
 function* createFundingSourceServicesById({payload}) {
     try {
         const res = yield call(authService.createFoundingSourceServiceByIdService, payload.id, payload.body);
+        console.log(res,'reeeeeesssssssssssssssssss')
     } catch (error) {
-
+        console.log(error,'eeeeerererere')
     }
 }
 

@@ -1,12 +1,12 @@
 import React from 'react';
 import {modalHeadersStyle} from "./styles";
 
-export const ModalHeaderBottom = () => {
+export const ModalHeaderBottom = ({}) => {
     const classes = modalHeadersStyle()
     return (
-        <div className={classes.createFundingSourceHeaderBottom}>
+        <div className={classes.createFundingSourceHeaderBottom} >
             <div className={classes.createFundingSourceHeaderBottomLine} />
-            <div className={classes.createFundingSourceHeaderBottomBlock}>
+            <div className={classes.createFundingSourceHeaderBottomBlock}  >
                 <div className={classes.createFundingSourceHeaderBottomPosition}>
                     <div className={classes.createFundingSourceHeaderBottomCircle}>
                         <p>1</p>

@@ -76,7 +76,7 @@ export const CreateClient = ({handleClose, info}) => {
 
     return (
         <div className={classes.createFoundingSource}>
-            <ModalHeader steps={step} handleClose={handleClose} title={info ? 'Edit Client' : 'Add Client'}/>
+            <ModalHeader setStep={setStep} steps={step} handleClose={handleClose} title={info ? 'Edit Client' : 'Add Client'}/>
             <div className={classes.createFoundingSourceBody}>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
                     {step === 'first' ? <div style={{width: 463}}>

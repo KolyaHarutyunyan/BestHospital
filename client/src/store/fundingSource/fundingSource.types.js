@@ -18,36 +18,39 @@ export const GET_FUNDING_SOURCE_BY_ID = 'GET_FUNDING_SOURCE_BY_ID';
 export const GET_FUNDING_SOURCE_BY_ID_SUCCESS = 'GET_FUNDING_SOURCE_BY_ID_SUCCESS';
 
 
-/**Get fundingSourceServicesById */
+/**Get funding SourceServices By Id */
 export const GET_FUNDING_SOURCE_SERVICE_BY_ID = 'GET_FUNDING_SOURCE_SERVICE_BY_ID';
 export const GET_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS = 'GET_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS';
 
-/**Create fundingSourceServicesById */
+/**Create fundingSourceServices By Id */
 export const CREATE_FUNDING_SOURCE_SERVICE_BY_ID = 'CREATE_FUNDING_SOURCE_SERVICE_BY_ID';
 
-/**Edit fundingSourceServicesById */
+/**Edit funding Source Services By Id */
 export const EDIT_FUNDING_SOURCE_SERVICE = 'EDIT_FUNDING_SOURCE_SERVICE';
 
-/**Create fundingSourceServicesModifier */
+/**delete funding Source ServicesById */
+export const DELETE_FUNDING_SOURCE_SERVICE = 'DELETE_FUNDING_SOURCE_SERVICE';
+
+/**Create funding SourceServices Modifier */
 export const CREATE_FUNDING_SOURCE_SERVICE_MODIFIER = 'CREATE_FUNDING_SOURCE_SERVICE_BY_ID';
 
 
-/**Get fundingSourceHistoriesById */
+/**Get funding Source Histories By Id */
 export const GET_FUNDING_SOURCE_HISTORIES_BY_ID = 'GET_FUNDING_SOURCE_HISTORIES_BY_ID';
 export const GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS = 'GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS';
 
 
-/**Get fundingSourceServ */
+/**Get funding SourceServ */
 export const GET_FUNDING_SOURCE_SERV = 'GET_FUNDING_SOURCE_SERV';
 export const GET_FUNDING_SOURCE_SERV_SUCCESS = 'GET_FUNDING_SOURCE_SERV_SUCCESS';
 
 
-/**Get fundingSourceServById */
+/**Get funding SourceServById */
 export const GET_FUNDING_SOURCE_SERV_BY_ID = 'GET_FUNDING_SOURCE_SERV_BY_ID';
 export const GET_FUNDING_SOURCE_SERV_BY_ID_SUCCESS = 'GET_FUNDING_SOURCE_SERV_BY_ID_SUCCESS';
 
 
-/**Create fundingSourceServ */
+/**Create funding SourceServ */
 export const CREATE_FUNDING_SOURCE_SERV = 'CREATE_FUNDING_SOURCE_SERV';
 
 

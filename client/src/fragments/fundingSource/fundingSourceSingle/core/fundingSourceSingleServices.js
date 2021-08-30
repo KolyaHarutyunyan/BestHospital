@@ -80,7 +80,7 @@ export const FundingSourceSingleServices = () => {
         )
     }
 
-    console.log(data, 'dataaaaaa')
+
 
     return (
         <div style={{display: 'flex', justifyContent: "space-between", marginTop: 50}}>

@@ -3,14 +3,13 @@ import {modalHeadersStyle} from "./styles";
 import {Images} from "@eachbase/utils";
 
 
-export const ModalsTabs = ({steps}) => {
-    console.log(steps, 'erererer')
+export const ModalsTabs = ({steps, setStep}) => {
     const classes = modalHeadersStyle()
     return (
         <div className={classes.createFundingSourceHeaderBottom}>
             <div className={classes.createFundingSourceHeaderBottomLine}/>
             <div className={classes.createFundingSourceHeaderBottomBlock}>
-                <div className={classes.createFundingSourceHeaderBottomPosition}>
+                <div onClick={()=>setStep('first')} style={steps!=='first' ? {cursor: 'pointer'}: null}>
                     <div className={classes.createFundingSourceHeaderBottomCircle}>
                         <img src={steps === 'first' ? Images.clientModalicon1 : Images.clientModalicon3} alt="icon"
                              className={classes.modalsTabsIcons}/>
