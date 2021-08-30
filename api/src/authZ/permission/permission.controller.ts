@@ -32,7 +32,7 @@ export class PermissionController {
 
   /** add a new permission the list of persmissons in the system */
   @Post()
-  @ApiBody({ type: AddPermissionDTO })
+  @ApiBody({ type: [AddPermissionDTO] })
   @ApiOkResponse({ type: PermissionDTO })
   @Public()
   async addPermissions(
