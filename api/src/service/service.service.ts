@@ -59,7 +59,7 @@ export class ServiceService {
     }
   }
 
-  /** Update the funder */
+  /** Update the Service */
   async update(_id: string, dto: UpdateServiceDto): Promise<ServiceDTO> {
     try {
       const service = await this.model.findOne({ _id });
@@ -75,8 +75,8 @@ export class ServiceService {
     }
   }
 
-  /** Delete the funder */
-  async remove(_id: number) {
+  /** Delete the service */
+  async remove(_id: string) {
     const service = await this.model.findByIdAndDelete({ _id });
     this.checkService(service);
     return service._id;

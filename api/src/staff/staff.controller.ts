@@ -25,17 +25,6 @@ import { AuthZGuard, PermissionList } from 'src/authZ';
 export class StaffController {
   constructor(private readonly staffService: StaffService) { }
 
-  /** Create a new admin */
-  // @Post()
-  // @Public()
-  // @ApiOkResponse({ type: StaffDTO })
-  // async create(@Body() createStaffDTO: CreateStaffDto): Promise<StaffDTO> {
-  //   console.log('ok');
-  //   const admin = await this.staffService.create(createStaffDTO);
-  //   return admin;
-  // }
-
-
   /** Create a new staff */
   @Post()
   @ApiOkResponse({ type: StaffDTO })
@@ -84,12 +73,6 @@ export class StaffController {
   ): Promise<StaffDTO> {
     return await this.staffService.getProfile(userId);
   }
-
-
-
-
-
-
 
   /** Create a new staff credential */
   @Post('credential')

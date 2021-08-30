@@ -33,14 +33,16 @@ export class ServiceController {
   }
 
   @Patch(':id')
+  @Public()
   @ApiOkResponse({ type: ServiceDTO })
   update(@Param('id') id: string, @Body() updateServiceDto: UpdateServiceDto) {
     return this.serviceService.update(id, updateServiceDto);
   }
 
   @Delete(':id')
+  @Public()
   @ApiOkResponse({ type: ServiceDTO })
   remove(@Param('id') id: string) {
-    return this.serviceService.remove(+id);
+    return this.serviceService.remove(id);
   }
 }
