@@ -70,7 +70,7 @@ import checkmark from '@eachbase/images/icons/checkmark.svg'
 import systemActive from '@eachbase/assets/images/icons/systemActive.svg'
 import systemPassive from '@eachbase/assets/images/icons/systemPassive.svg'
 import systemIcon from '@eachbase/assets/images/icons/systemIcon.svg'
-
+import authIcon from '@eachbase/assets/images/icons/authIcon.svg'
 
 export const Images = {
     doctors: doctors,
@@ -144,6 +144,6 @@ export const Images = {
     checkmark: checkmark,
     systemActive: systemActive,
     systemPassive: systemPassive,
-    systemIcon: systemIcon
-
+    systemIcon: systemIcon,
+    authIcon : authIcon
 }

@@ -16,7 +16,7 @@ import {
     ClientNotes,
     ClientAvailabilitySchedule,
     ClientHistory,
-    ClientAuthorization
+    ClientAuthorization, ClientAuthorizationItem
 } from "./core";
 import {useDispatch, useSelector} from "react-redux";
 import {AddContact} from "../clientModals";
@@ -29,6 +29,8 @@ export const ClientItem = () => {
     const [activeTab, setActiveTab] = useState(0)
     const [contactId, setContactId] = useState(null)
     const [openModal, setOpenModal] = useState(false)
+    const [authItemIndex, setAuthItemIndex] = useState(null)
+    const [authActive, setAuthActive] = useState(false)
     const params = useParams()
     const classes = clientItemStyles()
     useEffect(() => {
@@ -36,6 +38,8 @@ export const ClientItem = () => {
     }, []);
 
     const data = useSelector(state => state.client.clientItemInfo)
+    const authItemData = useSelector(state => state.client.clientsAuthorizations[authItemIndex])
+    console.log(authItemData, 'aaaaaauth')
     const clientContactItem = useSelector(state => state.client.clientContacts[contactId])
 
     const handleOpenClose = () => {
@@ -82,7 +86,9 @@ export const ClientItem = () => {
             tabComponent: (<ClientEnrollment data={data}/>)
         },
         {
-            tabComponent: (<ClientAuthorization data={data}/>)
+            tabComponent: (!authActive ?
+                <ClientAuthorization setAuthItemIndex={setAuthItemIndex} setAuthActive={setAuthActive} data={data}/> :
+                <ClientAuthorizationItem data={authItemData}/>)
         },
         {
             tabComponent: (<ClientAvailabilitySchedule/>)
@@ -109,10 +115,10 @@ export const ClientItem = () => {
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
                 <SimpleModal openDefault={openModal}
-                             content={<AddContact info={clientContactItem}  handleClose={handleOpenCloseModal}/>}/>
+                             content={<AddContact info={clientContactItem} handleClose={handleOpenCloseModal}/>}/>
                 <div className={classes.headerWraperStyle}>
-                    <TabsHeader data={data} activeTab={activeTab}/>
-                    <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
+                    <TabsHeader authActive={authActive}  data={data} activeTab={activeTab} />
+                    <SimpleTabs setAuthActive={setAuthActive} setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
                 </div>
             </TableWrapperGeneralInfo>
         </>

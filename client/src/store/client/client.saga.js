@@ -19,7 +19,14 @@ import {
     GET_CLIENT_AUTHORIZATION_SUCCESS,
     CREATE_CLIENT_ENROLLMENT,
     EDIT_CLIENT_ENROLLMENT,
-    DELETE_CLIENT_ENROLLMENT, CREATE_CLIENT_AUTHORIZATION, DELETE_CLIENT_AUTHORIZATION, EDIT_CLIENT_AUTHORIZATION
+    DELETE_CLIENT_ENROLLMENT,
+    CREATE_CLIENT_AUTHORIZATION,
+    DELETE_CLIENT_AUTHORIZATION,
+    EDIT_CLIENT_AUTHORIZATION,
+    GET_CLIENT_AUTHORIZATION_SERV_SUCCESS,
+    GET_CLIENT_AUTHORIZATION_SERV,
+    CREATE_CLIENT_AUTHORIZATION_SERV,
+    EDIT_CLIENT_AUTHORIZATION_SERV, DELETE_CLIENT_AUTHORIZATION_SERV
 } from "./client.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
@@ -203,6 +210,48 @@ function* deleteClientAuthorizations(action) {
 }
 
 
+
+function* getClientsAuthorizationsServ(action) {
+    try {
+        const res = yield call(authService.getClientAuthorizationServService, action);
+        yield put({
+            type: GET_CLIENT_AUTHORIZATION_SERV_SUCCESS,
+            payload: res.data,
+        });
+    } catch (err) {
+        console.log(err, 'authhhhhhhh get en roll')
+    }
+}
+
+function* createClientsAuthorizationsServ(action) {
+    try {
+        const res = yield call(authService.createClientAuthorizationServService, action);
+        // window.location.replace('/client')
+    } catch (err) {
+        console.log(err, 'error create auth')
+    }
+}
+
+
+function* editClientAuthorizationsServ(action) {
+    try {
+        const res = yield call(authService.editClientAuthorizationServService, action);
+        window.location.replace('/client')
+    } catch (err) {
+        console.log(err, 'error create client')
+    }
+}
+
+function* deleteClientAuthorizationsServ(action) {
+    try {
+        const res = yield call(authService.deleteClientAuthorizationServService, action);
+        window.location.replace('/client')
+    } catch (err) {
+        console.log(err, 'error del enroll')
+    }
+}
+
+
 export const watchClient = function* watchClientSaga() {
 
     yield takeLatest(GET_CLIENTS, getClients)
@@ -222,6 +271,10 @@ export const watchClient = function* watchClientSaga() {
     yield takeLatest(CREATE_CLIENT_AUTHORIZATION, createClientsAuthorizations)
     yield takeLatest(EDIT_CLIENT_AUTHORIZATION, editClientAuthorizations)
     yield takeLatest(DELETE_CLIENT_AUTHORIZATION, deleteClientAuthorizations)
+    yield takeLatest(GET_CLIENT_AUTHORIZATION_SERV, getClientsAuthorizationsServ)
+    yield takeLatest(CREATE_CLIENT_AUTHORIZATION_SERV, createClientsAuthorizationsServ)
+    yield takeLatest(EDIT_CLIENT_AUTHORIZATION_SERV, editClientAuthorizationsServ)
+    yield takeLatest(DELETE_CLIENT_AUTHORIZATION_SERV, deleteClientAuthorizationsServ)
 
 
 };

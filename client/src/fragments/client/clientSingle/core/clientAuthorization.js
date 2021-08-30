@@ -7,7 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {clientActions} from "@eachbase/store";
 import {AddAuthorization, AddEnrollment} from "../../clientModals";
 
-export const ClientAuthorization = ({  handleOpenClose}) => {
+export const ClientAuthorization = ({ setAuthActive, setAuthItemIndex}) => {
     const classes = serviceSingleStyles()
     const clientsAuthorizations = useSelector(state => state.client.clientsAuthorizations)
 
@@ -55,7 +55,10 @@ export const ClientAuthorization = ({  handleOpenClose}) => {
 
     let clientAuthorizationItem = (item, index) => {
         return (
-            <TableBodyComponent key={index}>
+            <TableBodyComponent key={index} handleClick={()=> {
+                setAuthItemIndex(index)
+                setAuthActive(true)
+            } }  >
                 <TableCell><p className={classes.tableName}>{item?.authId}</p></TableCell>
                 <TableCell>  {item?.funderId?.name}  </TableCell>
                 <TableCell>  {item.startDate}  </TableCell>
@@ -64,14 +67,16 @@ export const ClientAuthorization = ({  handleOpenClose}) => {
                 <TableCell>
                     <>
                         <img src={Images.edit} alt="edit" className={classes.iconStyle}
-                             onClick={() => {
+                             onClick={(e) => {
+                                 e.stopPropagation()
                                  setDelEdit(true)
                                  setToggleModal(!toggleModal)
                                  setIndex(index)
 
                              }}/>
                         <img src={Images.remove} alt="delete" className={classes.iconDeleteStyle}
-                             onClick={() => {
+                             onClick={(e) => {
+                                 e.stopPropagation()
                                  setDelEdit(false)
                                  setToggleModal(!toggleModal)
                                  setIndex(index)

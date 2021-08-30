@@ -5,17 +5,19 @@ import {useDispatch, useSelector} from "react-redux";
 import {systemActions} from "../../store";
 
 export const SystemItem = () => {
+
     const [activeTab, setActiveTab] = useState(0)
     const [open, setOpen] = useState(false)
     const [modalType, setModalType] = useState('')
-    const [modalId,setModalId] = useState('')
+    const [modalId, setModalId] = useState('')
     const classes = systemItemStyles()
 
     const globalCredentials = useSelector(state => state.system.credentials)
+    const globalServices = useSelector(state => state.system.services)
 
     const dispatch = useDispatch()
     const [deleteModalOpened, setDeleteModalOpened] = useState(false)
-    const [deletedId,setDeletedId] = useState('')
+    const [deletedId, setDeletedId] = useState('')
 
     const tabsLabels = [
         {
@@ -32,37 +34,40 @@ export const SystemItem = () => {
         }
     ]
 
-    const handleOpenClose = (modalType,modalId) => {
+    const handleOpenClose = (modalType, modalId) => {
         setModalType(modalType);
         setModalId(modalId)
         setOpen(!open)
     }
 
-    const handleDeletedOpenClose = () =>{
+    const handleDeletedOpenClose = () => {
         setDeleteModalOpened(false)
     }
 
-    const handleRemoveItem = (type) =>{
+    const handleRemoveItem = (type) => {
         setDeleteModalOpened(true)
         setDeletedId(type)
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(systemActions.getCredential())
-    },[])
+        dispatch(systemActions.getServices())
+    }, [])
 
     const tabsContent = [
         {
-            tabComponent: (<ServiceType removeItem={handleRemoveItem} openModal={handleOpenClose}/>)
+            tabComponent: (<ServiceType globalServices={globalServices} removeItem={handleRemoveItem}
+                                        openModal={handleOpenClose}/>)
         },
         {
-            tabComponent: (<Credentials globalCredentials={globalCredentials} removeItem={handleRemoveItem} openModal={handleOpenClose} />)
+            tabComponent: (<Credentials globalCredentials={globalCredentials} removeItem={handleRemoveItem}
+                                        openModal={handleOpenClose}/>)
         },
         {
-            tabComponent: (<Departments removeItem={handleRemoveItem} openModal={handleOpenClose} />)
+            tabComponent: (<Departments removeItem={handleRemoveItem} openModal={handleOpenClose}/>)
         },
         {
-            tabComponent: (<JobTitles removeItem={handleRemoveItem} openModal={handleOpenClose} />)
+            tabComponent: (<JobTitles removeItem={handleRemoveItem} openModal={handleOpenClose}/>)
         }
     ];
 
