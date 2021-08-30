@@ -17,7 +17,4 @@ export class CreateCommentDTO {
     @ApiProperty({ enum: CommentStatus })
     @IsEnum(CommentStatus)
     onModel: string;
-    // @IsMongoId()
-    // @ApiProperty()
-    // user: string;
 }

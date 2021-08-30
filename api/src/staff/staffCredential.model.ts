@@ -4,12 +4,9 @@ import { UserStatus } from './staff.constants';
 import { IStaffCredential } from './interface';
 
 const StaffCredentialSchema = new Schema({
+    staffId: { type: Types.ObjectId, ref: 'Staff' },
     credentialId: { type: Types.ObjectId, ref: 'Credential' },
     expirationDate: { type: Date, default: null},
-    // availability: {type: Number, enum: UserAvailabilityStatus}
-    // termination: terminationSchema,
-    // credentailStatus: { type: Number, enum: CredentialsStatus }
-    // employmentId: { type: Types.ObjectId, ref: 'Employment' },
 });
 
 export const StaffCredentialModel = model<IStaffCredential>('StaffCredential', StaffCredentialSchema);

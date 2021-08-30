@@ -76,7 +76,7 @@ export class StaffService {
       this.checkStaff(staff);
       const credential = await this.credentialService.findOne(dto.credentialId);
       let staffCredential = new this.staffCredentailModel({
-        _id: dto.staffId,
+        staffId: dto.staffId,
         credentialId: dto.credentialId,
         expirationDate: dto.expirationDate
       });
