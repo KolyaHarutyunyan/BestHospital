@@ -1,10 +1,17 @@
-import React, { useState} from "react";
+import React, {useEffect, useState} from "react";
 import {TableCell} from "@material-ui/core";
 import {Notes, TableBodyComponent, AddButton, ValidationInput} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
 import {systemItemStyles} from './styles'
-import {useDispatch} from "react-redux";
-import {systemActions} from "../../../store";
+import {useDispatch, useSelector} from "react-redux";
+import {httpRequestsOnSuccessActions, systemActions} from "../../../store";
+
+const credentialBtn = {
+    maxWidth: '174px',
+    width: '100%',
+    flex: '0 0 174px',
+    padding: 0
+}
 
 const headerTitles = [
     {
@@ -41,8 +48,8 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
                 <TableCell>{item.category}</TableCell>
                 <TableCell>{item.action ? item.action :
                     <div className={classes.icons}>
-                        <img src={Images.edit} onClick={() => editService('editService',item.id)} alt="edit"/>
-                        <img src={Images.remove} alt="delete" onClick={() => removeItem('service')}/>
+                        <img src={Images.edit} onClick={() => editService('editService',{id:item.id,name:item.name,category: item.category,displayCode: item.displayCode})} alt="edit"/>
+                        <img src={Images.remove} alt="delete" onClick={() => removeItem({id: item.id,name: item.name})}/>
                     </div>
                 }
                 </TableCell>
@@ -50,8 +57,8 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
         )
     }
 
-    const editService = (modalType,modalId) => {
-        openModal(modalType,modalId)
+    const editService = (modalType,modalInformation) => {
+        openModal(modalType,modalInformation)
     }
 
     const handleChange = e => {
@@ -77,6 +84,24 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
            alert('error')
         }
     }
+
+    const {httpOnLoad, httpOnSuccess } = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnLoad: state.httpOnLoad
+    }));
+
+    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_SERVICE_GLOBAL'
+
+    useEffect(()=>{
+        if(success) {
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_SERVICE_GLOBAL'))
+            setInputs({
+                name: '',
+                displayCode: '',
+                category: ''
+            })
+        }
+    },[success])
 
     return (
         <>
@@ -109,6 +134,8 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
                     placeholder={'Category'}
                 />
                 <AddButton
+                    styles={credentialBtn}
+                    loader={!!httpOnLoad.length}
                     disabled={!isDisabled}
                     handleClick={handleSubmit}
                     text='Add Service Type'

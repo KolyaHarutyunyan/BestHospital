@@ -35,7 +35,6 @@ export const editCredentialByIdGlobal = (body, id) => {
 // service
 
 export const createServiceGlobal = (body) => {
-    console.log(body,'body');
     return {
         type: CREATE_SERVICE_GLOBAL,
         payload: {body}
@@ -49,17 +48,16 @@ export const getServices = () => {
 }
 
 export const editServiceByIdGlobal = (body, id) => {
-    console.log(body,id,'system action')
     return {
         type: EDIT_SERVICE_BY_ID_GLOBAL,
         payload: {body, id}
     }
 }
 
-export const deleteServiceByIdGlobal = (body, id) => {
+export const deleteServiceByIdGlobal = (id) => {
     return {
         type: DELETE_SERVICE_BY_ID_GLOBAL,
-        payload: {body, id}
+        payload: {id}
     }
 }
 

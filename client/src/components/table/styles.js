@@ -5,10 +5,7 @@ export const tableStyle = makeStyles(() => ({
   tableHead: {
     boxShadow: '0px 0px 12px #0052E01A',
     borderRadius:'8px',
-
     background: Backgrounds.headerLightBlue,
-
-
 
     "& .MuiTableCell-sizeSmall": {
       fontSize: "14px",
@@ -49,10 +46,12 @@ export const tableStyle = makeStyles(() => ({
     },
 
     "& .MuiTableCell-sizeSmall:last-child": {
-      paddingTop: "11px",
+      paddingTop: "12px",
       fontSize: "16px",
       lineHeight: "30px",
       color: "#545F7E",
+      display: 'flex',
+      alignItems: 'center'
     },
 
     "& MuiSwitch-track": {

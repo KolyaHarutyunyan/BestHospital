@@ -48,7 +48,7 @@ export const FundingSourceItem = ({}) => {
 
     const tabsContent = [
         {tabComponent: <FundingSourceSingleGeneral data={data}/>},
-        {tabComponent:        httpOnLoad.length > 0 ? <Loader/> : <FundingSourceSingleServices/>},
+        {tabComponent:  httpOnLoad.length > 0 ? <Loader/> : <FundingSourceSingleServices/>},
         {tabComponent:  httpOnLoad.length > 0 ? <Loader/> : <FundingSourceSingleNotes/>},
         {tabComponent:  httpOnLoad.length > 0 ? <Loader/> :  <FundingSourceSingleHistories/>},
     ];
