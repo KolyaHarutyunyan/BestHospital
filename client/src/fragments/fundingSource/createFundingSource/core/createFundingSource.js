@@ -1,6 +1,6 @@
 import {AddressInput, ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
 import React, {useEffect, useState} from "react";
-import {createFoundingSourceStyle, inputStyle} from "./styles";
+import {createFoundingSourceStyle} from "./styles";
 import {EmailValidator, ErrorText} from "@eachbase/utils";
 import {fundingSourceActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions,} from "@eachbase/store";
 import {useDispatch, useSelector} from "react-redux";
@@ -19,6 +19,7 @@ export const CreateFundingSource = ({handleClose, info}) => {
     }));
     const errorText = httpOnError.length && httpOnError[0].error
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_FUNDING_SOURCE'
+    const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_FUNDING_SOURCE'
     const handleCheck = (bool) => {
         if (bool === true) {
             setError("Not valid email");
@@ -76,16 +77,17 @@ export const CreateFundingSource = ({handleClose, info}) => {
 
 
 useEffect(()=>{
-
     if (success){
         handleClose()
         dispatch(httpRequestsOnSuccessActions.removeSuccess('EDIT_FUNDING_SOURCE'))
     }
+    if (successCreate){
+        handleClose()
+        dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_FUNDING_SOURCE'))
+    }
+},[success,successCreate])
 
-},[success])
 
-
-    console.log(httpOnLoad,'success')
     return (
         <div className={classes.createFoundingSource}>
             <ModalHeader headerBottom={true} handleClose={handleClose} title={info ? 'Edit Funding Source' : 'Add Funding Source'}/>
@@ -93,7 +95,6 @@ useEffect(()=>{
                 <div className={classes.createFoundingSourceBodyBlock}>
                     <div className={classes.createFoundingSourceBodyBox}>
                         <ValidationInput
-                            styles={inputStyle}
                             variant={"outlined"}
                             sendBoolean={handleCheck}
                             onChange={handleChange}
@@ -104,7 +105,6 @@ useEffect(()=>{
                             typeError={error === 'name' && ErrorText.field}
                         />
                         <ValidationInput
-                            styles={inputStyle}
                             validator={EmailValidator}
                             variant={"outlined"}
                             name={"email"}
@@ -118,7 +118,6 @@ useEffect(()=>{
                         />
                         <ValidationInput
                             Length={11}
-                            styles={inputStyle}
                             onChange={handleChange}
                             value={inputs.phoneNumber}
                             variant={"outlined"}
@@ -128,7 +127,6 @@ useEffect(()=>{
                             typeError={error === 'phoneNumber' && ErrorText.field}
                         />
                         <SelectInput
-                            styles={inputStyle}
                             name={"type"}
                             label={"Type*"}
                             handleSelect={handleChange}
@@ -137,7 +135,6 @@ useEffect(()=>{
                             typeError={error === 'type' ? ErrorText.field : ''}
                         />
                         <ValidationInput
-                            styles={inputStyle}
                             onChange={handleChange}
                             value={inputs.contact}
                             variant={"outlined"}
@@ -147,7 +144,6 @@ useEffect(()=>{
                             typeError={error === 'contract' && ErrorText.field}
                         />
                         <ValidationInput
-                            styles={inputStyle}
                             sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.website}
@@ -164,7 +160,6 @@ useEffect(()=>{
                             errorBoolean={error === 'address' ? 'Input is not field' : ''}
                             info={info && info.address ? info : ''}
                             handleSelectValue={handleFullAddress}
-                            styles={inputStyle}
                             flex='block'
                         />
                     </div>

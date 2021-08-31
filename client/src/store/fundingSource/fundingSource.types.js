@@ -55,3 +55,17 @@ export const CREATE_FUNDING_SOURCE_SERV = 'CREATE_FUNDING_SOURCE_SERV';
 
 
 export const GET_ACTIVE_OR_INACTIVE = 'GET_ACTIVE_OR_INACTIVE'
+
+/**Get funding Source Notes */
+export const GET_FUNDING_SOURCE_NOTES = 'GET_FUNDING_SOURCE_NOTES';
+export const GET_FUNDING_SOURCE_NOTES_SUCCESS = 'GET_FUNDING_SOURCE_NOTES_SUCCESS';
+
+/**create funding Source Notes */
+export const CREATE_FUNDING_SOURCE_NOTE = 'CREATE_FUNDING_SOURCE_NOTE';
+
+/**edit funding Source Notes */
+export const EDIT_FUNDING_SOURCE_NOTE = 'EDIT_FUNDING_SOURCE_NOTE';
+
+/**delete funding Source Notes */
+export const DELETE_FUNDING_SOURCE_NOTE = 'DELETE_FUNDING_SOURCE_NOTE';
+

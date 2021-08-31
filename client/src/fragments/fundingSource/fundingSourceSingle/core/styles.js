@@ -54,9 +54,10 @@ export const fundingSourceSingleStyles = makeStyles(() => ({
         cursor  : 'pointer'
     },
     tableTitle : {
-        width: 100,
+        width: 130,
         textOverflow: 'ellipsis',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        height : 19
     }
 
 }));

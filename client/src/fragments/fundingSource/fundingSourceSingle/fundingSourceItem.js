@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {SimpleTabs, Notes, TableWrapperGeneralInfo, InactiveModal, Loader} from "@eachbase/components";
-import {adminActions, fundingSourceActions} from "@eachbase/store";
+import {adminActions, fundingSourceActions, systemActions} from "@eachbase/store";
 import {useDispatch, useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
 import {
@@ -18,12 +18,22 @@ export const FundingSourceItem = ({}) => {
     const [open, setOpen] = useState(false)
     const params = useParams()
     const data = useSelector(state => state.fundingSource.fundingSourceItem)
+    const servicesData = useSelector(state => state.fundingSource.fundingSourceServices)
+    const historiesData = useSelector(state => state.fundingSource.fundingSourceHistories)
+    const notesData = useSelector(state => state.fundingSource.fundingSourceNotes)
+    const globalServices = useSelector(state => state.system.services)
     const [activeTab, setActiveTab] = useState(0)
     const classes = fundingSourceItemStyle()
+
+
 
     useEffect(() => {
         dispatch(adminActions.getAdmins())
         dispatch(fundingSourceActions.getFundingSourceById(params.id))
+        dispatch(fundingSourceActions.getFoundingSourceServiceById(params.id))
+        dispatch(fundingSourceActions.getFundingSourceHistoriesById(params.id,'Funder'))
+        dispatch(fundingSourceActions.getFundingSourceNotes(params.id,'Funder'))
+        dispatch(systemActions.getServices())
     }, []);
 
     const handleOpenClose = () => {
@@ -38,8 +48,7 @@ export const FundingSourceItem = ({}) => {
     ]
 
 
-
-    const { httpOnSuccess, httpOnError,httpOnLoad } = useSelector((state) => ({
+    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,
@@ -47,10 +56,10 @@ export const FundingSourceItem = ({}) => {
 
 
     const tabsContent = [
-        {tabComponent: <FundingSourceSingleGeneral data={data}/>},
-        {tabComponent:  httpOnLoad.length > 0 ? <Loader/> : <FundingSourceSingleServices/>},
-        {tabComponent:  httpOnLoad.length > 0 ? <Loader/> : <FundingSourceSingleNotes/>},
-        {tabComponent:  httpOnLoad.length > 0 ? <Loader/> :  <FundingSourceSingleHistories/>},
+        {tabComponent: httpOnLoad.length > 0 ? <Loader/> : <FundingSourceSingleGeneral data={data}/>},
+        {tabComponent: <FundingSourceSingleServices data={servicesData} globalServices={globalServices}/>},
+        {tabComponent: <FundingSourceSingleNotes data={notesData}/>},
+        {tabComponent: <FundingSourceSingleHistories data={historiesData}/>},
     ];
 
     return (

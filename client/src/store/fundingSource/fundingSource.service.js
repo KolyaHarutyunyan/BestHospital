@@ -24,15 +24,19 @@ export const authService = {
 
     editFoundingSourceServiceService: (id, body) => axios.patch(`/funding/service/${id}`, body),
 
-    deleteFoundingSourceServiceByIdService: (id) => axios.get(`/funding/${id}/`,),
+    deleteFoundingSourceServiceByIdService: (id) => axios.delete(`/funding/${id}/`,),
 
     createFoundingSourceServiceModifierService: (id, body) => axios.post(`/funding/${id}/modifier`, body),
 
-    getFundingSourceHistoriesByIdService: (id) => axios.get(`/funding/${id}/histories`,),
+    getFundingSourceHistoriesByIdService: (id,onModal) => axios.get(`/history/${id}/${onModal}`,),
 
+    getFundingSourceNotesService: (id,onModal) => axios.get(`/comment/${id}/${onModal}`,),
 
+    createFoundingSourceNoteService: ( body) => axios.post(`/comment`, body),
 
+    editFoundingSourceNoteService: (id, body) => axios.patch(`/comment/${id}`, body),
 
+    deleteFoundingSourceNoteService: (id) => axios.delete(`/comment/${id}/comments`,),
 
     // getFundingSourceServService: () => axios.get(`/service`,),
     //

@@ -4,7 +4,7 @@ import {
     GET_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
     GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS,
     GET_FUNDING_SOURCE_SERV_SUCCESS,
-    GET_FUNDING_SOURCE_SERV_BY_ID_SUCCESS, GET_ACTIVE_OR_INACTIVE
+    GET_FUNDING_SOURCE_SERV_BY_ID_SUCCESS, GET_ACTIVE_OR_INACTIVE, GET_FUNDING_SOURCE_NOTES_SUCCESS
 } from "./fundingSource.types";
 import {paginate} from "@eachbase/utils";
 import {activeInactive} from "@eachbase/utils";
@@ -16,7 +16,8 @@ const initialState = {
     fundingSourceListReserve: [],
     fundingSourceItem: null,
     fundingSourceServices: null,
-    fundingSourceHistories: null,
+    fundingSourceHistories: [],
+    fundingSourceNotes: [],
     services: null,
     servicesItem : null
 };
@@ -28,7 +29,7 @@ export const fundingSourceReducer = (state = initialState, action) => {
             return {
                 ...state,
                 fSelect : action.payload,
-                fundingSourceList: paginate((activeInactive(action.payload, 1, 'founding')), 10),
+                fundingSourceList: paginate((activeInactive(action.payload, 1, 'founding')), 20),
                 fundingSourceListReserve:action.payload,
             }
 
@@ -59,6 +60,11 @@ export const fundingSourceReducer = (state = initialState, action) => {
             return {
                 ...state,
                 servicesItem: action.payload
+            }
+        case  GET_FUNDING_SOURCE_NOTES_SUCCESS:
+            return {
+                ...state,
+                fundingSourceNotes: action.payload
             }
 
         case GET_ACTIVE_OR_INACTIVE:

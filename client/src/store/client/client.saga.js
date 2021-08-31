@@ -26,7 +26,8 @@ import {
     GET_CLIENT_AUTHORIZATION_SERV_SUCCESS,
     GET_CLIENT_AUTHORIZATION_SERV,
     CREATE_CLIENT_AUTHORIZATION_SERV,
-    EDIT_CLIENT_AUTHORIZATION_SERV, DELETE_CLIENT_AUTHORIZATION_SERV
+    EDIT_CLIENT_AUTHORIZATION_SERV,
+    DELETE_CLIENT_AUTHORIZATION_SERV
 } from "./client.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";

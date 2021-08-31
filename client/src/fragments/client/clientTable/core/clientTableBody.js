@@ -4,6 +4,7 @@ import {TableCell} from "@material-ui/core";
 import {Images, useGlobalStyles} from "@eachbase/utils";
 import {useHistory} from "react-router-dom";
 import {clientStyles} from "./styles";
+import moment from "moment";
 
 export const ClientTableBody = ({data,setOpen, index, setDeleteClient}) => {
     const globalClasses = useGlobalStyles()
@@ -23,7 +24,7 @@ export const ClientTableBody = ({data,setOpen, index, setDeleteClient}) => {
             </TableCell>
             <TableCell> {data?.code} </TableCell>
             <TableCell>{data?.gender}</TableCell>
-            <TableCell>{data?.birthday}</TableCell>
+            <TableCell>{moment(data?.birthday).format('DD/MM/YYYY')}</TableCell>
             <TableCell>{data?.status} </TableCell>
             <TableCell>{data?.enrollment?.name}</TableCell>
             <TableCell>
