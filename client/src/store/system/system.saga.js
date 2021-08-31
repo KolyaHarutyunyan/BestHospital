@@ -13,6 +13,7 @@ import {
 } from "./system.type";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
 import {httpRequestsOnSuccessActions} from "../http_requests_on_success";
+import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 
 function* createCredentialGlobal(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
@@ -26,6 +27,7 @@ function* createCredentialGlobal(action) {
     } catch (err) {
         console.log(err)
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
 }
 
@@ -69,6 +71,7 @@ function* createServiceGlobal(action) {
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
         console.log(err)
     }
 }

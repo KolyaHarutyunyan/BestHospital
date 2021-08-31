@@ -6,7 +6,7 @@
   min-height: 36px!important;
 }
 .MuiAppBar-colorPrimary{
-   background: #FFFFFF 0% 0% no-repeat padding-box!important;
+   background: #FFFFFF 0 0 no-repeat padding-box!important;
 }
 
 .my-profile{
@@ -24,6 +24,17 @@ input {
 
   &::placeholder {
     color: #4B5C68 !important
+  }
+}
+
+.success {
+  .Toastify__progress-bar--default {
+    background: #00C851;
+  }
+}
+.error {
+  .Toastify__progress-bar--default {
+    background:#D72525;
   }
 }
 

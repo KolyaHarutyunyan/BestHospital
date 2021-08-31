@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {TableCell} from "@material-ui/core";
-import {Notes, TableBodyComponent, AddButton, ValidationInput} from "@eachbase/components";
+import {Notes, TableBodyComponent, AddButton, ValidationInput, Toast} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
 import {systemItemStyles} from './styles'
 import {useDispatch, useSelector} from "react-redux";
-import {httpRequestsOnSuccessActions, systemActions} from "../../../store";
+import {httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
 
 const credentialBtn = {
     maxWidth: '174px',
@@ -33,8 +33,10 @@ const headerTitles = [
 ];
 
 export const ServiceType = ({globalServices, removeItem, openModal}) => {
+
     const [inputs, setInputs] = useState({});
     const [error, setError] = useState('');
+
     const isDisabled = inputs.name && inputs.displayCode && inputs.category
     const classes = systemItemStyles()
 
@@ -85,12 +87,15 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
         }
     }
 
-    const {httpOnLoad, httpOnSuccess } = useSelector((state) => ({
+    const {httpOnError, httpOnLoad, httpOnSuccess } = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
-        httpOnLoad: state.httpOnLoad
+        httpOnLoad: state.httpOnLoad,
+        httpOnError: state.httpOnError
     }));
 
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_SERVICE_GLOBAL'
+
+    const errorText = httpOnError.length && httpOnError[0].type === 'CREATE_SERVICE_GLOBAL'
 
     useEffect(()=>{
         if(success) {
@@ -100,8 +105,12 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
                 displayCode: '',
                 category: ''
             })
+        }else if(errorText){
+            dispatch(httpRequestsOnErrorsActions.removeError('CREATE_SERVICE_GLOBAL'))
         }
     },[success])
+
+    let errorMessage = success ? 'success' : 'error'
 
     return (
         <>
@@ -142,8 +151,13 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
                 />
             </div>
             <p className={classes.title}>Service Type</p>
-            <Notes defaultStyle={true} data={globalServices} pagination={true} items={notesItem}
+
+            <Notes defaultStyle={true} data={globalServices} pagination={false} items={notesItem}
                    headerTitles={headerTitles}/>
+            <Toast
+                type={success ? 'success' : errorText ? 'error' : '' }
+                text={errorMessage}
+                info={success ? success : errorText ? errorText : ''}/>
         </>
     )
 }

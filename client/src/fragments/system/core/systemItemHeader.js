@@ -29,7 +29,7 @@ export const SystemItemHeader = ({deletedName, modalInformation, handleDeletedOp
             <SimpleModal
                 openDefault={deleteModalOpened}
                 handleOpenClose={handleDeletedOpenClose}
-                content={<DeleteElement info={deletedName} handleDel={deleteItem} handleClose={handleDeletedOpenClose} />}
+                content={<DeleteElement text='some information' info={deletedName} handleDel={deleteItem} handleClose={handleDeletedOpenClose} />}
             />
         </div>
     )

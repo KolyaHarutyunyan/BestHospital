@@ -1,4 +1,4 @@
-import {CloseButton, CreateChancel} from "../buttons";
+import {CloseButton} from "../buttons";
 import React from "react";
 import {Button} from "@material-ui/core";
 import {Colors, useGlobalTextStyles} from "@eachbase/utils";
@@ -16,9 +16,8 @@ export const DeleteElement = ({text, info, handleDel, handleClose}) => {
             </div>
 
             <div className={classes.deleteModalWrapper}>
-                <p className={globalText.modalTitle}>{text}</p>
-                <p className={globalText.modalText}>Are you sure? You wont delete <span
-                    className={classes.deleteInfo}>{info}</span></p>
+                <p className={globalText.modalTitle}>{info}</p>
+                <p className={globalText.modalText}>{text}</p>
 
 
                 <div className={classes.buttons}>
@@ -27,24 +26,8 @@ export const DeleteElement = ({text, info, handleDel, handleClose}) => {
                             textTransform: "capitalize",
                             width: "100%",
                             height: "48px",
-                            background: Colors.ThemeRed,
-                            borderRadius: "8px",
-                            fontSize: "16px",
-                            fontWeight: "600",
-                            color: Colors.TextWhite
-                        }}
-                        onClick={handleDel}
-                    >
-                        Delete
-                    </Button>
-                    <Button
-                        style={{
-                            textTransform: "capitalize",
-                            width: "100%",
-                            height: "48px",
                             background: Colors.ThemeGray,
                             borderRadius: "8px",
-                            marginLeft: "16px",
                             fontSize: "16px",
                             fontWeight: "600",
                             color: Colors.TextPrimary
@@ -52,7 +35,22 @@ export const DeleteElement = ({text, info, handleDel, handleClose}) => {
                         onClick={handleClose}
                     >
                         Cancel
-
+                    </Button>
+                    <Button
+                        style={{
+                            textTransform: "capitalize",
+                            width: "100%",
+                            height: "48px",
+                            background: Colors.ThemeRed,
+                            borderRadius: "8px",
+                            marginLeft: "16px",
+                            fontSize: "16px",
+                            fontWeight: "600",
+                            color: Colors.TextWhite
+                        }}
+                        onClick={handleDel}
+                    >
+                        Delete
                     </Button>
                 </div>
             </div>

@@ -70,7 +70,10 @@ export const Departments = ({removeItem, openModal}) => {
                     type={"text"}
                     placeholder={'Name*'}
                 />
-                <AddButton disabled={!isDisabled} styles={credentialBtn} handleClick={() => alert('Add Department')} text='Add Department'/>
+                <AddButton
+                    disabled={!isDisabled}
+                    styles={credentialBtn}
+                    handleClick={() => alert('Add Department')} text='Add Department'/>
             </div>
             <p className={classes.title}>Departments</p>
             <div className={classes.credentialTable}>
@@ -83,7 +86,7 @@ export const Departments = ({removeItem, openModal}) => {
                                     {credentialItem.type}</p>
                                 <div className={classes.icons}>
                                     <img src={Images.edit}
-                                         onClick={(e) => editDepartment('editDepartment')} alt="edit"/>
+                                         onClick={() => editDepartment('editDepartment')} alt="edit"/>
                                     <img src={Images.remove} alt="delete" onClick={() => removeItem('department')}/>
                                 </div>
                             </div>

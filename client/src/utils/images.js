@@ -71,6 +71,9 @@ import systemActive from '@eachbase/assets/images/icons/systemActive.svg'
 import systemPassive from '@eachbase/assets/images/icons/systemPassive.svg'
 import systemIcon from '@eachbase/assets/images/icons/systemIcon.svg'
 import authIcon from '@eachbase/assets/images/icons/authIcon.svg'
+import errorIcon from '@eachbase/assets/images/icons/errorIcon.svg'
+import successIcon from '@eachbase/assets/images/icons/successIcon.svg'
+import infoIcon from '@eachbase/assets/images/icons/informationIcon.svg'
 
 export const Images = {
     doctors: doctors,
@@ -145,5 +148,8 @@ export const Images = {
     systemActive: systemActive,
     systemPassive: systemPassive,
     systemIcon: systemIcon,
-    authIcon : authIcon
+    authIcon: authIcon,
+    errorIcon: errorIcon,
+    successIcon: successIcon,
+    infoIcon: infoIcon
 }
