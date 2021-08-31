@@ -40,7 +40,8 @@ export const systemItemStyles = makeStyles(() => ({
         padding: 20,
         backgroundColor: 'white',
         minHeight: '100%',
-        borderRadius: 8
+        borderRadius: 8,
+        position: 'relative'
     },
     systemHeaderStyles: {
         display: 'flex',

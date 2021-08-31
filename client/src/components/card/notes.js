@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {useSelector} from "react-redux";
 import {Table, TableCell, TableContainer} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
-import {TableHeadComponent, SearchAndFilter, PaginationItem} from "@eachbase/components";
+import {TableHeadComponent, SearchAndFilter, PaginationItem, NoItemText} from "@eachbase/components";
 import {useGlobalStyles} from "@eachbase/utils";
 
 export const Notes = ({ data, headerTitles, pagination, defaultStyle, items}) => {
@@ -58,9 +58,12 @@ export const Notes = ({ data, headerTitles, pagination, defaultStyle, items}) =>
                                     {items(item, index)}
                                 </>
                             )
-                        }) : null
+                        }) :null
                     }
                 </Table>
+                {
+                    !data.length ? <NoItemText text='No Items Yet' /> : null
+                }
                 {pagination && <PaginationItem
                     text={`Showing 30 to 30 of 200 entries`}
                     handleReturn={(number) => changePage(number)}

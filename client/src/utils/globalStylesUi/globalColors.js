@@ -18,6 +18,7 @@ export const Colors = {
     TextWhite: '#FFFFFF',
     TextLight: '#51566D80',
     TextMiddleGray: '#4B5C68B3',
+    TextLightGray: '#4B5C6880',
     TextGray: '#FFFFFF80',
     TextDarkGrey: '#2A374E80',
     TextCadetBlue: '#A3B2BD80',
