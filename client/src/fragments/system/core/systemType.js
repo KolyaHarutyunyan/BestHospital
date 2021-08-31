@@ -145,6 +145,5 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
             <Notes defaultStyle={true} data={globalServices} pagination={true} items={notesItem}
                    headerTitles={headerTitles}/>
         </>
-
     )
 }

@@ -11,7 +11,7 @@ export const errMessageStyle = makeStyles(() => ({
   errMessageLeftPosition: {
     display: "flex",
     width: "100%",
-    margin: "3px 0 5px",
+    margin: "7px 0 9px",
   },
 
   errMessageStyleText: {

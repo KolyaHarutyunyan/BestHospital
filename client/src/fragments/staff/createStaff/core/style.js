@@ -33,10 +33,10 @@ export const createStaffModalStyle = makeStyles(() => ({
         color: Colors.TextSecondary,
         fontWeight: '600',
         lineHeight: '22px',
-        paddingBottom: '20px',
+        paddingBottom: '18px',
     },
     titlePadding: {
-        paddingTop: '16px'
+        paddingTop: '3px'
     },
     selectMargin: {
         width: "100%",
