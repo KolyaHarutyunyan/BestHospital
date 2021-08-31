@@ -172,7 +172,7 @@ useEffect(()=>{
                 <div className={classes.createFoundingSourceBodyBlock}>
                     <CreateChancel
                         loader={ httpOnLoad.length > 0}
-                        create={"Add"}
+                        create={info? "Save" :  "Add"}
                         chancel={"Cancel"}
                         onCreate={handleCreate}
                         onClose={handleClose}

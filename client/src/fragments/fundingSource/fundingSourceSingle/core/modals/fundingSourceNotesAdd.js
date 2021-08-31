@@ -4,7 +4,7 @@ import { useGlobalTextStyles} from "@eachbase/utils";
 import {AddModalButton, CloseButton} from "@eachbase/components/buttons";
 import {ValidationInput, Textarea} from "@eachbase/components/inputs";
 
-export const FundingSourceNotesAdd = ({handleClose }) => {
+export const FundingSourceNotesAdd = ({handleClose, info }) => {
 
     const classes = modalsStyle()
     const globalText = useGlobalTextStyles()
