@@ -1,16 +1,12 @@
 import React, { useState } from "react";
 import PlacesAutocomplete from "react-places-autocomplete";
 import { inputsStyle } from "./styles";
-import { API_BASE } from "@eachbase/store";
 import axios from "axios";
 import { CountryList, useGlobalStyles } from "@eachbase/utils";
 import { SelectInput, ValidationInput } from "@eachbase/components";
-import { Country, State, City } from 'country-state-city';
+import { State } from 'country-state-city';
 
-
-
-const path = `${API_BASE}`;
-export const AddressInput = ({styles, handleSelectValue, disableLabels, Value, handleSendAddresses, info, disabled, flex, oneInput, errorBoolean }) => {
+export const AddressInput = ({handleSelectValue, info, disabled, flex, oneInput, errorBoolean }) => {
     const classes = inputsStyle();
     const globalInputs = useGlobalStyles();
     const [address, setAddress] = useState("");
@@ -35,7 +31,7 @@ export const AddressInput = ({styles, handleSelectValue, disableLabels, Value, h
         }
     };
 
-    const handleSelect = async (value, ev) => {
+    const handleSelect = async (value) => {
         setAddress(value);
         setLoading(true)
         await axios.post(`/address`, {address: value})
@@ -107,7 +103,6 @@ export const AddressInput = ({styles, handleSelectValue, disableLabels, Value, h
         <>
 
       <SelectInput
-        styles={{...styles}}
         style={globalInputs.simpleInput}
         name={"country"}
         label={"Country*"}
