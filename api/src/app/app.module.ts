@@ -14,9 +14,10 @@ import { DepartmentModule } from '../department/department.module';
 import { CommentModule } from '../comment/comment.module';
 import { HistoryModule } from '../history/history.module';
 import { JobModule } from '../job/job.module';
+import { SCredentialModule } from '../staff/credential/scredential.module';
 
 @Module({
-  imports: [AuthNModule, AuthZModule, AddressModule, StaffModule, FundingModule, EmploymentModule, ClientModule, DepartmentModule, CommentModule, HistoryModule, JobModule],
+  imports: [AuthNModule, AuthZModule, AddressModule, StaffModule, FundingModule, EmploymentModule, ClientModule, DepartmentModule, CommentModule, HistoryModule, JobModule, SCredentialModule],
   controllers: [AppController],
   providers: [AppService, DatabaseConnection],
 })

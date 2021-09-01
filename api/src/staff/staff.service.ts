@@ -1,18 +1,17 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ObjectID } from "mongodb";
 import { Model, Types } from 'mongoose';
-import { StaffDTO, CreateStaffDto, EditStaffDTO, CreateStaffCredentialDto, StaffCredentialDTO, EditStaffCredentialDTO } from './dto';
+import { StaffDTO, CreateStaffDto, EditStaffDTO } from './dto';
 import { StaffSanitizer } from './interceptor';
-import { IStaff, IStaffCredential } from './interface';
+import { IStaff } from './interface';
 import { StaffModel } from './staff.model';
 import { AuthNService } from '../authN';
-import { CredentialService } from '../credential';
 import { MongooseUtil } from '../util';
 import { AddressService } from '../address';
-import { StaffCredentialModel } from './staffCredential.model';
 import { CreateCredentialDto } from '../credential';
-import { isValidObjectId } from '../util';
 import { HistoryService, serviceLog } from '../history';
+import { UserStatus } from './staff.constants';
+import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
 
 @Injectable()
 export class StaffService {
@@ -20,15 +19,13 @@ export class StaffService {
     private readonly addressService: AddressService,
     private readonly authnService: AuthNService,
     private readonly historyService: HistoryService,
-    private readonly credentialService: CredentialService,
+    // private readonly credentialService: CredentialService,
     private readonly sanitizer: StaffSanitizer,
   ) {
     this.model = StaffModel;
-    this.staffCredentailModel = StaffCredentialModel;
     this.mongooseUtil = new MongooseUtil();
   }
   private model: Model<IStaff>;
-  private staffCredentailModel: Model<IStaffCredential>;
   private mongooseUtil: MongooseUtil;
 
   /** Create a new user */
@@ -50,7 +47,6 @@ export class StaffService {
         birthday: dto.birthday,
         residency: dto.residency,
         ssn: dto.ssn,
-        status: dto.status,
         address: await this.addressService.getAddress(dto.address),
       });
       user = (
@@ -69,31 +65,10 @@ export class StaffService {
     }
   };
 
-  /** Create a new staff credential */
-  createStaffCredential = async (dto: CreateStaffCredentialDto): Promise<StaffCredentialDTO> => {
-    try {
-      const staff = await this.model.findById({ _id: dto.staffId });
-      this.checkStaff(staff);
-      const credential = await this.credentialService.findOne(dto.credentialId);
-      let staffCredential = new this.staffCredentailModel({
-        staffId: dto.staffId,
-        credentialId: dto.credentialId,
-        expirationDate: dto.expirationDate
-      });
-
-      await staffCredential.save();
-      return staffCredential;
-      // return this.sanitizer.sanitize(user);
-    } catch (e) {
-      this.mongooseUtil.checkDuplicateKey(e, 'staff credential already exists');
-      throw e;
-    }
-  };
-
   /** Create a new credential */
-  createCredential = async (dto: CreateCredentialDto): Promise<any> => {
-    await this.credentialService.create(dto);
-  };
+  // createCredential = async (dto: CreateCredentialDto): Promise<any> => {
+  //   await this.credentialService.create(dto);
+  // };
 
   /** Edit a Staff */
   edit = async (id: string, dto: EditStaffDTO): Promise<StaffDTO> => {
@@ -115,7 +90,6 @@ export class StaffService {
       if (dto.ssn) admin.ssn = dto.ssn;
       if (dto.middleName) admin.middleName = dto.middleName;
       if (dto.email) admin.email = dto.email;
-      if (dto.status) admin.status = dto.status;
       if (dto.secondaryEmail) admin.secondaryEmail = dto.secondaryEmail;
       if (dto.address)
         admin.address = await this.addressService.getAddress(dto.address);
@@ -166,60 +140,36 @@ export class StaffService {
     return this.sanitizer.sanitizeMany(admins);
   };
 
-  // find the credentials
-  async findCredential(staffId: string): Promise<StaffCredentialDTO[]> {
-    try {
-      const staffCredentials = await this.staffCredentailModel.find({ staffId }).populate('credentialId');
-      this.checkStaffCredential(staffCredentials[0])
-      return staffCredentials;
-    } catch (e) {
-      console.log(e);
-      throw e;
+  /** Set Status of a staff Inactive*/
+  setStatusInactive = async (
+    _id: string,
+    status: number,
+    dto: CreateTerminationDto
+  ): Promise<StaffDTO> => {
+    const staff = await this.model.findById({ _id });
+    this.checkStaff(staff);
+    staff.termination.date = dto.date;
+    staff.status = status;
+    if (dto.reason) {
+      staff.termination.reason = dto.reason;
     }
-  }
-  // find the credential
-  async findCredentialById(_id: string): Promise<StaffCredentialDTO> {
-    try {
-      const staffCredential = await this.staffCredentailModel.findById({ _id }).populate('credentialId');
-      this.checkStaffCredential(staffCredential)
-      return staffCredential;
-    } catch (e) {
-      console.log(e);
-      throw e;
-    }
-  }
+    await staff.save();
+    return this.sanitizer.sanitize(staff);
+  };
 
-  // edit the credentials
-  async editCredential(_id: string, dto: EditStaffCredentialDTO): Promise<StaffCredentialDTO> {
-    try {
-      const staffCredential = await this.staffCredentailModel.findById({ _id });
-      this.checkStaffCredential(staffCredential);
-      if (dto.expirationDate) {
-        staffCredential.expirationDate = dto.expirationDate;
-      }
-      if (dto.credentialId) {
-        const globCredential = await this.credentialService.findOne(dto.credentialId);
-        staffCredential.credentialId = dto.credentialId;
-      }
-      await staffCredential.save()
-      return staffCredential;
-    } catch (e) {
-      console.log(e);
-      throw e;
-    }
-  }
-
-  // delete the credentials
-  async deleteCredential(_id: string): Promise<string> {
-    try {
-      const staffCredential = await this.staffCredentailModel.findByIdAndDelete({ _id });
-      this.checkStaffCredential(staffCredential);
-      return staffCredential._id;
-    } catch (e) {
-      console.log(e);
-      throw e;
-    }
-  }
+  /** Set Status of a staff Active */
+  setStatusActive = async (
+    id: string,
+    status: number,
+  ): Promise<StaffDTO> => {
+    const staff = await this.model.findOneAndUpdate(
+      { _id: id },
+      { $set: { status: status } },
+      { new: true },
+    );
+    this.checkStaff(staff);
+    return this.sanitizer.sanitize(staff);
+  };
 
   /** Private methods */
   /** if the admin is not found, throws an exception */
@@ -227,16 +177,6 @@ export class StaffService {
     if (!staff) {
       throw new HttpException(
         'Staff with this id was not found',
-        HttpStatus.NOT_FOUND,
-      );
-    }
-  }
-  /** Private methods */
-  /** if the credential is not valid, throws an exception */
-  private checkStaffCredential(credential: IStaffCredential) {
-    if (!credential) {
-      throw new HttpException(
-        'Staff Credential with this id was not found',
         HttpStatus.NOT_FOUND,
       );
     }

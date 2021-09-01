@@ -2,11 +2,13 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { JobService } from './job.service';
 import { CreateJobDTO, UpdateJobDTO, JobDTO } from './dto';
 import { ParseObjectIdPipe, Public } from '../util';
+import { ApiTags } from '@nestjs/swagger';
 
 
 @Controller('job')
+@ApiTags('Job Endpoints')
 export class JobController {
-  constructor(private readonly jobService: JobService) {}
+  constructor(private readonly jobService: JobService) { }
 
   @Post()
   @Public()
@@ -28,13 +30,13 @@ export class JobController {
 
   @Patch(':id')
   @Public()
-  update(@Param('id',  ParseObjectIdPipe) id: string, @Body() updateJobDto: UpdateJobDTO) {
+  update(@Param('id', ParseObjectIdPipe) id: string, @Body() updateJobDto: UpdateJobDTO) {
     return this.jobService.update(id, updateJobDto);
   }
 
   @Delete(':id')
   @Public()
-  remove(@Param('id',  ParseObjectIdPipe) id: string) {
+  remove(@Param('id', ParseObjectIdPipe) id: string) {
     return this.jobService.remove(id);
   }
 }

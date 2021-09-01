@@ -51,9 +51,6 @@ export class EditStaffDTO {
   @IsNumber()
   @IsOptional()
   ssn: number;
-  @ApiProperty({ enum: UserStatus, required: false })
-  @IsEnum(UserStatus)
-  status: number;
   @ApiProperty({ required: false })
   address: string;
 }

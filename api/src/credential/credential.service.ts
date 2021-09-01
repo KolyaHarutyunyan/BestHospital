@@ -3,8 +3,7 @@ import { CreateCredentialDto, CredentialDTO, UpdateCredentialDTO } from './dto';
 import { ICredential } from './interface';
 import { CredentialModel } from './credential.model'
 import { Model } from 'mongoose';
-import { Public, ParseObjectIdPipe, MongooseUtil } from '../util';
-import { CredentialsStatus } from '../credential';
+import { MongooseUtil } from '../util';
 
 @Injectable()
 export class CredentialService {

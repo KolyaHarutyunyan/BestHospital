@@ -49,9 +49,6 @@ export class CreateStaffDto {
   @IsNotEmpty()
   @IsNumber()
   ssn: number;
-  @ApiProperty({ enum: UserStatus })
-  @IsEnum(UserStatus)
-  status: number;
   @ApiProperty({ type: AddressDTO })
   address: string;
 }
