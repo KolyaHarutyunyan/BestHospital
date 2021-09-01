@@ -35,7 +35,7 @@ export class CommentController {
   async findAll(
     @Query('skip') skip: number,
     @Query('limit') limit: number,
-    @Param('resourceId', ParseObjectIdPipe) resourceId: string,
+    @Param('resourceId') resourceId: string,
     @Param('onModel') onModel: string
   ) {
     return await this.commentService.findAll(onModel, resourceId, skip, limit);

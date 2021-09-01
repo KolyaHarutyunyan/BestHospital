@@ -1,8 +1,8 @@
 import { model, Schema, Types } from 'mongoose';
-import { ISchedule } from './interface';
+import { IAvailability } from './interface';
 
 
-const ScheduleSchema = new Schema({
+const AvailabilitySchema = new Schema({
     monday: [{ from: { type: String }, to: { type: String }, available: { type: Boolean } }],
     tuesday: [{ from: { type: String }, to: { type: String }, available: { type: Boolean } }],
     owner: {
@@ -20,4 +20,4 @@ const ScheduleSchema = new Schema({
 });
 
 
-export const ScheduleModel = model<ISchedule>('Schedule', ScheduleSchema);
+export const AvailabilityModel = model<IAvailability>('Availability', AvailabilitySchema);

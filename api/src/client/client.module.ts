@@ -15,10 +15,10 @@ import { EnrollmentModule } from './enrollment/enrollment.module';
 import { AuthorizationModule } from './authorization/authorization.module';
 import { AuthorizationserviceModule } from './authorizationservice/authorizationservice.module';
 import { ContactModule } from './contact/contact.module';
-import { ScheduleModule } from '../schedule/schedule.module';
+import { AvailabilityModule } from '../availability/availability.module';
 
 @Module({
-  imports: [ServiceModule, EnrollmentModule, AuthorizationModule, AuthorizationserviceModule, ContactModule, FundingModule, ScheduleModule],
+  imports: [ServiceModule, EnrollmentModule, AuthorizationModule, AuthorizationserviceModule, ContactModule, FundingModule, AvailabilityModule],
   controllers: [ClientController],
   providers: [ClientService, HistoryService, CredentialService,
      ClientSanitizer,

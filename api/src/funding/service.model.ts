@@ -11,7 +11,6 @@ const chargeSchema = new Schema({
 export const serviceSchema = new Schema({
     funderId: { type: Types.ObjectId, ref: 'Funder' },
     serviceId: { type: Types.ObjectId, ref: 'Service' },
-    modifiers: [{type: Types.ObjectId, ref: 'Modifier'}],
     name: { type: String },
     rate: { type: Number },
     cptCode: { type: Number },

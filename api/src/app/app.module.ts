@@ -12,10 +12,11 @@ import { EmploymentModule } from '../employment';
 import { ClientModule } from '../client';
 import { DepartmentModule } from '../department/department.module';
 import { CommentModule } from '../comment/comment.module';
-import {HistoryModule} from '../history/history.module';
+import { HistoryModule } from '../history/history.module';
+import { JobModule } from '../job/job.module';
 
 @Module({
-  imports: [AuthNModule, AuthZModule, AddressModule, StaffModule, FundingModule, EmploymentModule, ClientModule, DepartmentModule, CommentModule, HistoryModule],
+  imports: [AuthNModule, AuthZModule, AddressModule, StaffModule, FundingModule, EmploymentModule, ClientModule, DepartmentModule, CommentModule, HistoryModule, JobModule],
   controllers: [AppController],
   providers: [AppService, DatabaseConnection],
 })
