@@ -4,6 +4,8 @@ export class StaffCredentialDTO {
     @ApiProperty()
     _id: string;
     @ApiProperty()
+    staffId: string;
+    @ApiProperty()
     credentialId: string;
     @ApiProperty({ required: false })
     expirationDate: Date;

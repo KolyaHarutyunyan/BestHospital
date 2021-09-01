@@ -59,7 +59,7 @@ export class StaffService {
           this.authnService.create(user._id, user.email),
         ])
       )[0];
-      
+
       await this.historyService.create({ resource: user._id, onModel: "Staff", title: serviceLog.createStaff })
       return this.sanitizer.sanitize(user);
     } catch (e) {
@@ -167,11 +167,22 @@ export class StaffService {
   };
 
   // find the credentials
-  async findCredential(_id: string): Promise<StaffCredentialDTO> {
+  async findCredential(staffId: string): Promise<StaffCredentialDTO[]> {
     try {
-      const staffCredentials = await this.staffCredentailModel.findById({ _id }).populate('credentialId');
-      this.checkStaffCredential(staffCredentials)
+      const staffCredentials = await this.staffCredentailModel.find({ staffId }).populate('credentialId');
+      this.checkStaffCredential(staffCredentials[0])
       return staffCredentials;
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
+  // find the credential
+  async findCredentialById(_id: string): Promise<StaffCredentialDTO> {
+    try {
+      const staffCredential = await this.staffCredentailModel.findById({ _id }).populate('credentialId');
+      this.checkStaffCredential(staffCredential)
+      return staffCredential;
     } catch (e) {
       console.log(e);
       throw e;

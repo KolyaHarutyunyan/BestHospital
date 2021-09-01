@@ -87,12 +87,21 @@ export class StaffController {
 
   /** Get the credential profile */
   @Get(':id/credential')
-  @ApiOkResponse({ type: StaffCredentialDTO })
+  @ApiOkResponse({ type: [StaffCredentialDTO] })
   @Public()
   async findCredential(
     @Param('id', ParseObjectIdPipe) staffId: string,
-  ): Promise<StaffCredentialDTO> {
+  ): Promise<StaffCredentialDTO[]> {
     return await this.staffService.findCredential(staffId);
+  }
+  /** Get the credential profile By Id */
+  @Get('/credential/:credentialId')
+  @ApiOkResponse({ type: StaffCredentialDTO })
+  @Public()
+  async findCredentialById(
+    @Param('credentialId', ParseObjectIdPipe) credentialId: string,
+  ): Promise<StaffCredentialDTO> {
+    return await this.staffService.findCredentialById(credentialId);
   }
   /** Edit a system */
   @Patch(':id/system')
