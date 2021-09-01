@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {TableCell} from "@material-ui/core";
 import {adminActions} from "@eachbase/store";
-import {StaffGeneral, StaffHistory, StaffCredentials, StaffEmployment, StaffAccess, StaffItemHeader} from "./core";
+import {StaffGeneral, StaffHistory, StaffCredentials, StaffEmployment, StaffAccess, StaffItemHeader, StaffAvailability} from "./core";
 import {Images} from "@eachbase/utils";
 import {
     SimpleTabs,
@@ -48,6 +48,9 @@ export const StaffItem = () => {
         },
         {
             label: 'Access'
+        },
+        {
+            label: 'Availability'
         },
         {
             label: 'Notes'
@@ -126,6 +129,9 @@ export const StaffItem = () => {
         },
         {
             tabComponent: (<StaffAccess/>)
+        },
+        {
+            tabComponent: (<StaffAvailability staffGeneral={staffGeneral} />)
         },
         {
             tabComponent: (<Notes pagination={true} data={data} items={notesItem} headerTitles={headerTitles}/>)
