@@ -42,4 +42,6 @@ export {Card, Notes, HistoryCard} from './card';
 export {SimpleTabs} from './tabs';
 export {ModalHeader, TabsHeader} from './headers';
 export {Role} from './role';
+export {Toast} from './toast'
+export {NoItemText} from './noItem'
 

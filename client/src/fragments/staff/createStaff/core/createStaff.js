@@ -4,7 +4,7 @@ import {Steps, CloseButton} from "@eachbase/components";
 import {useGlobalTextStyles, EmailValidator, ErrorText} from "@eachbase/utils";
 import {AddressInput, ValidationInput, SelectInput} from "@eachbase/components";
 import {adminActions} from "@eachbase/store";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {inputStyle} from "../../../fundingSource/createFundingSource/core/styles";
 import moment from "moment";
 
@@ -41,8 +41,6 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
     const [errorSec, setErrorSec] = useState("");
     const [inputs, setInputs] = useState(resetData ? {} : staffGeneral ? staffGeneral : {});
     const [fullAddress, setFullAddress] = useState('')
-
-    console.log(inputs.birthday && moment(inputs.birthday).format())
 
     const disabledOne = inputs.firstName && error !== 'Not valid email' && inputs.lastName && inputs.email && inputs.phone
 

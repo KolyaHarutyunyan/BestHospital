@@ -23,7 +23,7 @@ export const clientReducer = (state = initialState, action) => {
         case  GET_CLIENTS_SUCCESS:
             return {
                 ...state,
-                clientList: paginate((action.payload), 5) ,
+                clientList: paginate((action.payload), 10) ,
             }
 
         case  GET_CLIENT_BY_ID_SUCCESS:

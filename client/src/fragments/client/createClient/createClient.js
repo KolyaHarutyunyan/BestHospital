@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
 import {createClientStyle,} from "./styles";
 import {ErrorText, languages} from "@eachbase/utils";
@@ -13,7 +13,6 @@ export const CreateClient = ({handleClose, info}) => {
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {...info} : {});
     const [step, setStep] = useState('first')
-
     const classes = createClientStyle()
     const dispatch = useDispatch()
 
@@ -23,6 +22,17 @@ export const CreateClient = ({handleClose, info}) => {
         error === e.target.name && setError(''),
     );
 
+
+    useEffect(() => {
+        let today = new Date();
+        if (inputs.birthday){
+            let birthDate = new Date(inputs.birthday);
+            let age = today.getFullYear() - birthDate.getFullYear();
+            setInputs({...inputs, age})
+        }
+
+
+    },[inputs.birthday])
 
     const handleCreate = () => {
         if (step === 'first') {
@@ -71,12 +81,15 @@ export const CreateClient = ({handleClose, info}) => {
 
     const list = [
         {name: 'male'},
-        {name: 'female'}
+        {name: 'female'},
+        {name: 'other'}
     ]
+
 
     return (
         <div className={classes.createFoundingSource}>
-            <ModalHeader steps={step} handleClose={handleClose} title={info ? 'Edit Client' : 'Add Client'}/>
+            <ModalHeader setStep={setStep} steps={step} handleClose={handleClose}
+                         title={info ? 'Edit Client' : 'Add Client'}/>
             <div className={classes.createFoundingSourceBody}>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
                     {step === 'first' ? <div style={{width: 463}}>

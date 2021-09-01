@@ -7,6 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
 import {AddEnrollment} from "../../clientModals";
 import {clientActions} from "@eachbase/store";
+import {useParams} from "react-router-dom";
 
 export const ClientEnrollment = ({data}) => {
     const classes = serviceSingleStyles()
@@ -15,6 +16,7 @@ export const ClientEnrollment = ({data}) => {
     const [delEdit, setDelEdit] = useState(null)
     const enrolments = useSelector(state => state.client.clientEnrollment)
     const dispatch = useDispatch()
+    const params = useParams()
     const generalInfo = [
         {title: 'First Name', value: data?.firstName},
         {title: 'Middle Name', value: data?.middleName},
@@ -53,7 +55,7 @@ export const ClientEnrollment = ({data}) => {
         dispatch(clientActions.deleteClientEnrollment(enrolments[index].id))
     }
     let editPrimary = (i)=>{
-        alert(i)
+        dispatch(clientActions.editClientEnrollment({primary: true}, params.id, enrolments[i].funderId._id, enrolments[i].id))
     }
 
     let enrollmentsItem = (item, index) => {

@@ -30,9 +30,12 @@ export const useGlobalStyles = makeStyles({
         },
     },
     table: {
-        borderCollapse: 'separate',
-        borderSpacing: '0px 14px',
-        padding: '5px'
+        '&.MuiTable-root': {
+            borderCollapse: 'separate',
+            borderSpacing: '0px 14px',
+            padding: '5px'
+        },
+
     },
     tableWrapperSmall: {
         height: '100%',
@@ -124,6 +127,15 @@ export const useGlobalStyles = makeStyles({
             fontSize: '14px',
             fontWeight: '600',
         }
+    },
+    noData: {
+        fontSize: 18,
+        color: Colors.TextLightGray,
+        fontWeight: 'bold',
+        position: 'absolute',
+        bottom: 254,
+        left: '50%',
+        transform: 'translate(-50%)'
     }
 
 });

@@ -5,6 +5,7 @@ import StepConnector from "@material-ui/core/StepConnector";
 export const stepStyles = makeStyles(() => ({
     stepHeader: {
         background: Backgrounds.headerLightBlue,
+        padding: '24px 0 36px 0'
     },
     stepBody: {
         padding: '32px 40px 40px 40px',
@@ -13,7 +14,7 @@ export const stepStyles = makeStyles(() => ({
         },
     },
     buttonsContainer: {
-        marginTop: '6px'
+        marginTop: 0
     }
 }));
 

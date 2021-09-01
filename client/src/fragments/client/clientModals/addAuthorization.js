@@ -9,7 +9,7 @@ import {useParams} from "react-router-dom";
 
 export const AddAuthorization = ({handleClose, info}) => {
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info,funding: info.funderId.name, address : info.address.street} : {});
+    const [inputs, setInputs] = useState(info ? {...info,funding: info.funderId.name, address : info.address?.street} : {});
     const params = useParams()
     const dispatch = useDispatch()
     useEffect(() => {

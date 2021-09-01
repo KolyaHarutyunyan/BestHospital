@@ -38,7 +38,10 @@ export const systemItemStyles = makeStyles(() => ({
     },
     systemItemWrapper: {
         padding: 20,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        minHeight: '100%',
+        borderRadius: 8,
+        position: 'relative'
     },
     systemHeaderStyles: {
         display: 'flex',
@@ -83,6 +86,7 @@ export const systemItemStyles = makeStyles(() => ({
     },
     icons: {
         cursor: 'pointer',
+        display: 'flex',
         '& img:last-child':{
             marginLeft: 16
         }

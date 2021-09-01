@@ -9,7 +9,7 @@ import {
     Notes,
     TableWrapperGeneralInfo,
     InactiveModal,
-    TableBodyComponent,
+    TableBodyComponent, Loader,
 } from "@eachbase/components";
 import {useDispatch, useSelector} from "react-redux";
 import {staffStyle} from "@eachbase/pages/staff/styles";
@@ -109,9 +109,14 @@ export const StaffItem = () => {
         )
     }
 
+    const {httpOnLoad } = useSelector((state) => ({
+        adminsList: state.admins.adminsList,
+        httpOnLoad: state.httpOnLoad
+    }));
+
     const tabsContent = [
         {
-            tabComponent: (<StaffGeneral staffGeneral={staffGeneral}/>)
+            tabComponent: (httpOnLoad.length ? <Loader /> : <StaffGeneral staffGeneral={staffGeneral}/>)
         },
         {
             tabComponent: (<StaffEmployment/>)

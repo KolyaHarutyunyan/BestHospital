@@ -8,7 +8,15 @@ import {
     GET_FUNDING_SOURCE_SERV,
     CREATE_FUNDING_SOURCE_SERV,
     GET_FUNDING_SOURCE_SERV_BY_ID,
-    EDIT_FUNDING_SOURCE, EDIT_FUNDING_SOURCE_SERVICE, CREATE_FUNDING_SOURCE_SERVICE_MODIFIER, GET_ACTIVE_OR_INACTIVE,
+    EDIT_FUNDING_SOURCE,
+    EDIT_FUNDING_SOURCE_SERVICE,
+    CREATE_FUNDING_SOURCE_SERVICE_MODIFIER,
+    GET_ACTIVE_OR_INACTIVE,
+    DELETE_FUNDING_SOURCE_SERVICE,
+    GET_FUNDING_SOURCE_NOTES,
+    CREATE_FUNDING_SOURCE_NOTE,
+    EDIT_FUNDING_SOURCE_NOTE,
+    DELETE_FUNDING_SOURCE_NOTE,
 } from "./fundingSource.types";
 
 export const createFundingSource = (body) => {
@@ -60,8 +68,15 @@ export const editFoundingSourceServiceById = (id, body) => {
         type: EDIT_FUNDING_SOURCE_SERVICE,
         payload: {
             id ,
-            body
+
         }
+    }
+}
+
+export const deleteFoundingSourceServiceById = (id, body) => {
+    return {
+        type: DELETE_FUNDING_SOURCE_SERVICE,
+        payload: {id }
     }
 }
 
@@ -74,10 +89,10 @@ export const createFoundingSourceServiceModifier = (id, body) => {
         }
     }
 }
-export const getFundingSourceHistoriesById = (id) => {
+export const getFundingSourceHistoriesById = (id,onModal) => {
     return {
         type: GET_FUNDING_SOURCE_HISTORIES_BY_ID,
-        payload: id
+        payload: {id,onModal}
     }
 }
 
@@ -106,5 +121,46 @@ export const getActiveOrInactive = (type) =>{
     return{
         type:  GET_ACTIVE_OR_INACTIVE,
         payload : {type}
+    }
+}
+
+
+export const getFundingSourceNotes = (id,onModal) => {
+    return {
+        type: GET_FUNDING_SOURCE_NOTES,
+        payload: {id,onModal}
+    }
+}
+
+
+export const createFoundingSourceNote = ( body) => {
+    console.log(body,'action')
+    return {
+        type: CREATE_FUNDING_SOURCE_NOTE,
+        payload: {
+            body
+        }
+    }
+}
+
+export const editFoundingSourceNote = (id, body) => {
+    console.log(id,body,'action')
+    return {
+        type: EDIT_FUNDING_SOURCE_NOTE,
+        payload: {
+            body,
+            id
+        }
+    }
+}
+
+export const deleteFoundingSourceNote = (id) => {
+    console.log(id,'action')
+    return {
+        type: DELETE_FUNDING_SOURCE_NOTE,
+        payload: {
+
+            id
+        }
     }
 }

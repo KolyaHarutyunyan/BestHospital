@@ -3,13 +3,16 @@ import {Images} from "@eachbase/utils";
 import {SystemItemAddService} from "./modals";
 import {systemItemStyles} from "./styles";
 import React from "react";
+import {useDispatch} from "react-redux";
+import {systemActions} from "../../../store";
 
-export const SystemItemHeader = ({modalId, handleDeletedOpenClose, deletedId, deleteModalOpened, modalType, open ,handleOpenClose}) => {
+export const SystemItemHeader = ({deletedName, modalInformation, handleDeletedOpenClose, deletedId, deleteModalOpened, modalType, open ,handleOpenClose}) => {
+    const dispatch = useDispatch()
 
     const classes = systemItemStyles()
-
     const deleteItem = ()=>{
-        alert(deletedId)
+        dispatch(systemActions.deleteServiceByIdGlobal(deletedId))
+        handleDeletedOpenClose()
     }
 
     return (
@@ -21,12 +24,12 @@ export const SystemItemHeader = ({modalId, handleDeletedOpenClose, deletedId, de
             <SimpleModal
                 openDefault={open}
                 handleOpenClose={handleOpenClose}
-                content={<SystemItemAddService modalId={modalId} modalType={modalType} handleClose={handleOpenClose}/>}
+                content={<SystemItemAddService modalInformation={modalInformation} modalType={modalType} handleClose={handleOpenClose}/>}
             />
             <SimpleModal
                 openDefault={deleteModalOpened}
                 handleOpenClose={handleDeletedOpenClose}
-                content={<DeleteElement info={deletedId} handleDel={deleteItem} handleClose={handleDeletedOpenClose} />}
+                content={<DeleteElement text='some information' info={deletedName} handleDel={deleteItem} handleClose={handleDeletedOpenClose} />}
             />
         </div>
     )

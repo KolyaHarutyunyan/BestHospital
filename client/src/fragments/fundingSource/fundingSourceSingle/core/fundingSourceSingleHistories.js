@@ -2,8 +2,8 @@ import {HistoryCard} from "@eachbase/components/card";
 import {useSelector} from "react-redux";
 
 
-export const FundingSourceSingleHistories = ()=>{
-    let data = useSelector(state => state.fundingSource.fundingSourceHistories)
+export const FundingSourceSingleHistories = ({data})=>{
+
 
     return(
         <div style={{marginTop: 50}}>

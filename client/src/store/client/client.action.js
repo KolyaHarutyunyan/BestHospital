@@ -202,3 +202,11 @@ export const deleteClientsAuthorizationServ = ( id) => {
         payload: {id}
     }
 }
+
+
+export const ClientsAuthorizationServNew = ( id) => {
+    return {
+        type: CLIENT_AUTHORIZATION_SERV_NEW,
+        payload: {id}
+    }
+}

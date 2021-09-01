@@ -9,7 +9,9 @@ export const SystemItem = () => {
     const [activeTab, setActiveTab] = useState(0)
     const [open, setOpen] = useState(false)
     const [modalType, setModalType] = useState('')
-    const [modalId, setModalId] = useState('')
+    const [modalInformation, setModalInformation] = useState('')
+    const [deletedName,setDeletedName] = useState()
+
     const classes = systemItemStyles()
 
     const globalCredentials = useSelector(state => state.system.credentials)
@@ -34,9 +36,9 @@ export const SystemItem = () => {
         }
     ]
 
-    const handleOpenClose = (modalType, modalId) => {
+    const handleOpenClose = (modalType, modalInformation) => {
         setModalType(modalType);
-        setModalId(modalId)
+        setModalInformation(modalInformation)
         setOpen(!open)
     }
 
@@ -44,9 +46,10 @@ export const SystemItem = () => {
         setDeleteModalOpened(false)
     }
 
-    const handleRemoveItem = (type) => {
+    const handleRemoveItem = (data) => {
         setDeleteModalOpened(true)
-        setDeletedId(type)
+        setDeletedId(data.id)
+        setDeletedName(data.name)
     }
 
     useEffect(() => {
@@ -71,11 +74,11 @@ export const SystemItem = () => {
         }
     ];
 
-
     return (
         <div className={classes.systemItemWrapper}>
             <SystemItemHeader
-                modalId={modalId}
+                deletedName={deletedName}
+                modalInformation={modalInformation}
                 deletedId={deletedId}
                 deleteModalOpened={deleteModalOpened}
                 handleDeletedOpenClose={handleDeletedOpenClose}

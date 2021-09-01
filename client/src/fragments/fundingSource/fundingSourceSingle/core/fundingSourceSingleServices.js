@@ -7,12 +7,11 @@ import {TableCell} from "@material-ui/core";
 import {fundingSourceSingleStyles} from "./styles";
 import {FundingSourceServiceAdd, FundingSourceServiceEdit} from "./modals";
 
-export const FundingSourceSingleServices = () => {
+export const FundingSourceSingleServices = ({data, globalServices}) => {
     const [toggleModal, setToggleModal] = useState(false)
     const [index, setIndex] = useState(null)
     const [delEdit, setDelEdit] = useState(null)
     const [serviceIndex, setServiceIndex] = useState(0)
-    const data = useSelector(state => state.fundingSource.fundingSourceServices)
     const classes = fundingSourceSingleStyles()
 
     const { httpOnSuccess, httpOnError,httpOnLoad } = useSelector((state) => ({
@@ -80,7 +79,7 @@ export const FundingSourceSingleServices = () => {
         )
     }
 
-    console.log(data, 'dataaaaaa')
+
 
     return (
         <div style={{display: 'flex', justifyContent: "space-between", marginTop: 50}}>

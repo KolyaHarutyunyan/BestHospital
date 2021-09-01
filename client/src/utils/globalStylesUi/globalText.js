@@ -2,7 +2,6 @@ import {makeStyles} from "@material-ui/core";
 import { Colors } from "./globalColors";
 
 export const useGlobalText = makeStyles({
-
     smallText:{
         fontSize:'18px',
         fontWeight:'600',
@@ -17,5 +16,4 @@ export const useGlobalText = makeStyles({
         fontSize:'14px',
         color: Colors.TextSecondary ,
     },
-
 })
