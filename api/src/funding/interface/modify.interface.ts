@@ -2,8 +2,9 @@ import { Document } from 'mongoose';
 
 export interface IModify extends Document {
     id: string;
+    serviceId: string, 
     chargeRate: number,
-    credential: any, 
+    credentialId: string, 
     name: string,
-    type: Number
+    type: number
 }

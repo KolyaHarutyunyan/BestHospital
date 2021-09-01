@@ -15,7 +15,6 @@ const initialState = {
     clientEnrollment : [],
     clientsAuthorizations : [],
     clientHistories : []
-
 };
 
 export const clientReducer = (state = initialState, action) => {

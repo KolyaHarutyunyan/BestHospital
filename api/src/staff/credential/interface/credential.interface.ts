@@ -1,7 +1,8 @@
 import { Document } from 'mongoose';
 
-export interface IStaffCredential extends Document {
+export interface ICredential extends Document {
     _id: string;
+    staffId: string,
     credentialId: string,
     expirationDate: Date
 }

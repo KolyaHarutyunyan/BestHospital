@@ -8,6 +8,6 @@ export { TabsHeader } from './tabsHeader';
 export { ClientEnrollment } from './clientEnrollment';
 export { ClientNotes } from './clientNotes';
 export { ClientAvailabilitySchedule } from './clientAvailabilitySchedule';
-export { AvailableHours } from './availableHours';
+export { AvailableHours } from '../../../../components/availability/availableHours';
 export { ClientAuthorization } from './clientAuthorization';
 export {ClientAuthorizationItem} from "./clientAuthorizationItem";

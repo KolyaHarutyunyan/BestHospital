@@ -9,7 +9,7 @@ import { IFunder, IService, IModify } from './interface';
 import { isValidObjectId, MongooseUtil, ParseObjectIdPipe } from '../util';
 import { AddressService } from '../address/address.service';
 import { FundingSanitizer } from './interceptor';
-import { FundingDTO, ServiceDTO, UpdateServiceDto, CreateServiceDTO, CreateModifierDto, UpdateModifierDto, ModifyDTO } from './dto';
+import { FundingDTO, ServiceDTO, UpdateServiceDto, CreateServiceDTO, CreateModifierDto, CreateModifiersDTO, UpdateModifierDto, ModifyDTO } from './dto';
 import { HistoryDTO } from '../history/dto';
 import { AuthNService } from 'src/authN';
 import { IComment } from '../comment';
@@ -58,7 +58,7 @@ export class FundingService {
         address: await this.addressService.getAddress(dto.address)
       });
       await funder.save();
-      await this.historyService.create({resource: funder._id, onModel: "Funder", title: serviceLog.createFundingSource});
+      await this.historyService.create({ resource: funder._id, onModel: "Funder", title: serviceLog.createFundingSource });
       return this.sanitizer.sanitize(funder);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Funder already exists');
@@ -84,7 +84,7 @@ export class FundingService {
         max: dto.max
       });
       await service.save();
-      await this.historyService.create({resource: _id, onModel: "Funder", title: serviceLog.createServiceTitle});
+      await this.historyService.create({ resource: _id, onModel: "Funder", title: serviceLog.createServiceTitle });
       // return this.sanitizer.sanitize(service)
       return service;
     } catch (e) {
@@ -95,20 +95,27 @@ export class FundingService {
   }
 
   /** Create a new modifier */
-  async createModifier(dto: CreateModifierDto, serviceId: string): Promise<ModifyDTO> {
+  async createModifier(dto: CreateModifiersDTO): Promise<any> {
     try {
-      const fundingService = await this.serviceModel.findOne({ _id: serviceId });
+      const fundingService = await this.serviceModel.findById({ _id: dto.serviceId });
       this.checkFundingService(fundingService)
-      const modify = new this.modifyModel({
-        chargeRate: dto.chargeRate,
-        name: dto.name,
-        type: dto.type,
-        credential: await this.checkCredential(dto.credentialId)
+
+      dto.modifiers.map(modifier => {
+        modifier.serviceId = fundingService._id;
       })
-      fundingService.modifiers.push(modify._id)
-      await modify.save()
-      await fundingService.save()
-      return modify;
+
+      const modifiers = await this.modifyModel.collection.insertMany(dto.modifiers);
+      return modifiers.ops
+      // fundingServiceId: fundingService._id,
+      // chargeRate: dto.chargeRate,
+      // name: dto.name,
+      // type: dto.type,
+      // credential: await this.checkCredential(dto.credentialId)
+      // return await modify.save()
+
+      // fundingService.modifiers.push(modify._id)
+
+      // await fundingService.save()
       // fundingService.chargeTable.push({ chargeRate: dto.chargeRate, modifier: dto.modifier, credentials: await this.checkCredential(dto.credentialId) })
       // await fundingService.save()
       // return fundingService;
@@ -122,24 +129,34 @@ export class FundingService {
   }
 
   /** returns all funders */
-  async findAll(skip: number, limit: number): Promise<FundingDTO[]> {
+  async findAll(skip: number, limit: number, status: number): Promise<any> {
 
-    if (isNaN(skip)) skip = 0;
-    if (isNaN(limit)) limit = 10;
+    if (status == 0) {
+      let [funders, count] = await Promise.all([
+        this.model.find({ status: 0 }).skip(skip).limit(limit),
+        this.model.countDocuments({status: 0})
+      ]);
+      const sanFun = this.sanitizer.sanitizeMany(funders);
+      return { funders: sanFun, count }
+    }
 
-    const funders = await this.model.find({}).skip(skip).limit(limit);
-    return this.sanitizer.sanitizeMany(funders);
+    let [funders, count] = await Promise.all([
+      this.model.find({ status: 1 }).skip(skip).limit(limit),
+      this.model.countDocuments({status: 1})
+    ]);
+    this.checkFunder(funders[0])
+
+    const sanFun = this.sanitizer.sanitizeMany(funders);
+    return { funders: sanFun, count }
   }
 
   /** returns all services */
   async findAllServices(_id: string): Promise<ServiceDTO[]> {
     try {
-      const funder = await this.model.findOne({ _id });
+      const funder = await this.model.findById({ _id });
       this.checkFunder(funder);
-      const services = await this.serviceModel.find({ funderId: _id }).populate('serviceId').populate({
-        path: 'modifiers',
-        populate: { path: 'credential' }
-      });
+      const services = await this.serviceModel.find({ funderId: _id })
+      this.checkFundingService(services[0])
       // return this.sanitizer.sanitizeMany(services);
       return services
     } catch (e) {
@@ -147,12 +164,14 @@ export class FundingService {
     }
   }
   /** returns service by id */
-  async findService(_id: string): Promise<ServiceDTO[]> {
+  async findService(_id: string): Promise<any> {
     try {
-      const services = await this.serviceModel.find({ _id }).populate('serviceId').populate({
-        path: 'modifiers',
-        populate: { path: 'credential' }
-      });
+      const services = await this.serviceModel.findById({ _id });
+      this.checkFundingService(services[0])
+      // const services = await this.serviceModel.find({ _id }).populate('serviceId').populate({
+      //   path: 'modifiers',
+      //   populate: { path: 'credential' }
+      // });
       // return this.sanitizer.sanitizeMany(services);
       return services
     } catch (e) {
@@ -178,6 +197,15 @@ export class FundingService {
     this.checkFunder(funder);
     return this.sanitizer.sanitize(funder);
   }
+
+  /** Get modifier By funding Service ID */
+  async findmodifier(_id: string): Promise<any> {
+    const modifiers = await this.modifyModel.find({ serviceId: _id });
+    this.checkModify(modifiers[0]);
+    return modifiers
+    // return this.sanitizer.sanitize(funder);
+  }
+
   /** Get Funder Service By Id */
   async findOneService(_id: string): Promise<any> {
     const fundingService = await this.serviceModel.findOne({ _id }).populate('modifiers');
@@ -207,7 +235,7 @@ export class FundingService {
       if (dto.address)
         funder.address = await this.addressService.getAddress(dto.address);
       await funder.save();
-      await this.historyService.create({resource: _id, onModel: "Funder", title: serviceLog.updateFundingSource});
+      await this.historyService.create({ resource: _id, onModel: "Funder", title: serviceLog.updateFundingSource });
       return this.sanitizer.sanitize(funder);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Funder already exists');
@@ -231,7 +259,7 @@ export class FundingService {
         service.serviceId = dto.globServiceId
       }
       await service.save();
-      await this.historyService.create({resource: funder._id, onModel: "Funder", title: serviceLog.updateServiceTitle});
+      await this.historyService.create({ resource: funder._id, onModel: "Funder", title: serviceLog.updateServiceTitle });
       return service;
       // return this.sanitizer.sanitize(service);
     } catch (e) {
@@ -245,15 +273,14 @@ export class FundingService {
     try {
       // const service = await this.serviceModel.findOne({ _id: serviceId });
       // this.checkFundingService(service);
-      const modifier = await this.modifyModel.findOne({ _id });
+      const modifier = await this.modifyModel.findById({ _id });
       this.checkModify(modifier);
       if (dto.chargeRate) modifier.chargeRate = dto.chargeRate;
-      if (dto.modifierName) modifier.name = dto.modifierName;
-      if (dto.type) modifier.type = dto.type;
+      if (dto.name) modifier.name = dto.name;
+      if (dto.type || dto.type === 0) modifier.type = dto.type;
       if (dto.credentialId) {
-        isValidObjectId(dto.credentialId)
         await this.checkCredential(dto.credentialId)
-        modifier.credential = dto.credentialId
+        modifier.credentialId = dto.credentialId
       }
       return await modifier.save()
 

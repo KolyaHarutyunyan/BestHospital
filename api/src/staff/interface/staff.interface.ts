@@ -16,5 +16,6 @@ export interface IStaff extends Document {
   residency: string;
   ssn: number;
   status: number;
+  termination?: any;
   address: IAddress;
 }

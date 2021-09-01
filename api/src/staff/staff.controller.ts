@@ -5,19 +5,15 @@ import {
   Param,
   Patch,
   Post,
-  Delete,
-  UseGuards,
   Query,
-  ParseIntPipe,
-  ParseArrayPipe,
-  ValidationPipe,
 } from '@nestjs/common';
 import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { StaffService } from './staff.service';
-import { StaffDTO, CreateStaffDto, EditStaffDTO, CreateStaffCredentialDto, EditStaffCredentialDTO, StaffCredentialDTO } from './dto';
+import { StaffDTO, CreateStaffDto, EditStaffDTO } from './dto';
 import { ACCESS_TOKEN } from '../authN';
 import { Public, ParseObjectIdPipe } from '../util';
-import { AuthZGuard, PermissionList } from 'src/authZ';
+import { UserStatus } from './staff.constants';
+import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
 
 @Controller('staff')
 @ApiTags('Staff Endpoints')
@@ -38,7 +34,6 @@ export class StaffController {
 
   /** Edit a staff */
   @Patch(':id')
-  @ApiOkResponse({ type: StaffDTO })
   @Public()
   @ApiOkResponse({ type: StaffDTO })
   async edit(
@@ -74,46 +69,34 @@ export class StaffController {
     return await this.staffService.getProfile(userId);
   }
 
-  /** Create a new staff credential */
-  @Post('credential')
-  @ApiOkResponse({ type: StaffCredentialDTO })
+  /** Inactivate a staff */
+  @Patch(':id/inactivate')
   @Public()
-  async createStaffCredential(
-    @Body() createStaffCredentialDTO: CreateStaffCredentialDto,
-  ): Promise<StaffCredentialDTO> {
-    const staffCredential = await this.staffService.createStaffCredential(createStaffCredentialDTO);
-    return staffCredential;
-  }
-
-  /** Get the credential profile */
-  @Get(':id/credential')
-  @ApiOkResponse({ type: StaffCredentialDTO })
-  @Public()
-  async findCredential(
+  @ApiOkResponse({ type: StaffDTO })
+  async inactivate(
     @Param('id', ParseObjectIdPipe) staffId: string,
-  ): Promise<StaffCredentialDTO> {
-    return await this.staffService.findCredential(staffId);
-  }
-  /** Edit a system */
-  @Patch(':id/system')
-  @Public()
-  @ApiOkResponse({ type: StaffCredentialDTO })
-  async editCredential(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Body() dto: EditStaffCredentialDTO,
-  ): Promise<StaffCredentialDTO> {
-    const credential = await this.staffService.editCredential(id, dto);
-    return credential;
+    @Body() dto: CreateTerminationDto,
+  ): Promise<StaffDTO> {
+    const staff = await this.staffService.setStatusInactive(
+      staffId,
+      0,
+      dto
+    );
+    return staff;
   }
 
-  /** Delete a credential */
-  @Delete(':id/credential')
+  /** Activated a staff */
+  @Patch(':id/activate')
   @Public()
-  @ApiOkResponse({ type: 'string' })
-  async deleteCredential(
-    @Param('id', ParseObjectIdPipe) id: string
-  ): Promise<string> {
-    const credential = await this.staffService.deleteCredential(id);
-    return credential;
+  @ApiOkResponse({ type: StaffDTO })
+  async activate(
+    @Param('id', ParseObjectIdPipe) staffId: string,
+  ): Promise<StaffDTO> {
+    const staff = await this.staffService.setStatusActive(
+      staffId,
+      1,
+    );
+    return staff;
   }
+
 }

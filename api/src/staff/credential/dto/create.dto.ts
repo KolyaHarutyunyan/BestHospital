@@ -1,8 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsDateString, IsEmail, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
-import { MongooseUtil, ParseObjectIdPipe } from '../../util';
+import { IsDateString, IsMongoId, IsNotEmpty, IsOptional } from 'class-validator';
 
-export class CreateStaffCredentialDto {
+export class CreateCredentialDTO {
   @ApiProperty()
   @IsNotEmpty()
   @IsMongoId()

@@ -3,8 +3,7 @@ import { CreateCredentialDto, CredentialDTO, UpdateCredentialDTO } from './dto';
 import { ICredential } from './interface';
 import { CredentialModel } from './credential.model'
 import { Model } from 'mongoose';
-import { Public, ParseObjectIdPipe, MongooseUtil } from '../util';
-import { CredentialsStatus } from '../credential';
+import { MongooseUtil } from '../util';
 
 @Injectable()
 export class CredentialService {
@@ -50,7 +49,7 @@ export class CredentialService {
   /** Get Credential By Id */
   async findOne(_id): Promise<CredentialDTO> {
     try {
-      const credential = await this.model.findOne({ _id });
+      const credential = await this.model.findById({ _id });
       this.checkCredential(credential);
       return credential;
       // return this.sanitizer.sanitize(credential);
@@ -76,9 +75,13 @@ export class CredentialService {
     }
   }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} credential`;
-  // }
+   /** Delete the Credential */
+   async remove(_id: string): Promise<string> {
+    const credential = await this.model.findById({ _id });
+    this.checkCredential(credential);
+    await credential.remove()
+    return credential._id;
+  }
 
   /** Private methods */
   /** if the comment is not found, throws an exception */

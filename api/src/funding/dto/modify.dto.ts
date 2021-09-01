@@ -6,6 +6,8 @@ export class ModifyDTO {
     @IsNotEmpty()
     id: string
     @ApiProperty()
+    serviceId: string
+    @ApiProperty()
     @IsNotEmpty()
     @IsString()
     name: string

@@ -11,26 +11,21 @@ const credentialBtn = {
     padding: 0
 }
 
-const credentials = [
+const jobTitles = [
     {
-        name: 'HB',
-        type: 'license'
+        name: 'HH',
     },
     {
         name: 'HB',
-        type: 'license'
     },
     {
-        name: 'HB',
-        type: 'license'
+        name: 'HC',
     },
     {
-        name: 'HB',
-        type: 'license'
+        name: 'CH',
     },
     {
-        name: 'HB',
-        type: 'license'
+        name: 'BH',
     },
 ]
 
@@ -75,16 +70,14 @@ export const JobTitles = ({removeItem, openModal}) => {
             <p className={classes.title}>Job Titles</p>
             <div className={classes.credentialTable}>
                 {
-                    credentials.map((credentialItem, index) => {
+                    jobTitles.map((jobItem, index) => {
                         return (
                             <div className={classes.item} key={index}>
-                                <p>
-                                    <span>{credentialItem.name}</span>
-                                    {credentialItem.type}</p>
+                                <p>{jobItem.name}</p>
                                 <div className={classes.icons}>
                                     <img src={Images.edit}
                                          onClick={(e) => editDepartment('editJobTitles')} alt="edit"/>
-                                    <img src={Images.remove} alt="delete" onClick={() => removeItem('jobTitles')}/>
+                                    <img src={Images.remove} alt="delete" onClick={() => removeItem({id: 15,name:jobItem.name})}/>
                                 </div>
                             </div>
                         )

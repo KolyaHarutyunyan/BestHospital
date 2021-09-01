@@ -14,5 +14,4 @@ export interface IFunder extends Document {
     status: number;
     comments?: any;
     histories?: any
-
 }

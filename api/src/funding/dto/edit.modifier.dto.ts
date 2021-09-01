@@ -7,16 +7,19 @@ import { ModifierStatus, TypeStatus } from '../funding.constants';
 
 export class UpdateModifierDto {
     @ApiProperty()
+    @IsMongoId()
+    @IsOptional()
     credentialId: string;
     @ApiProperty()
-    modifierName: string;
+    @IsOptional()
+    @IsString()
+    name: string;
     @ApiProperty()
+    @IsNumber()
+    @IsOptional()
     chargeRate: number;
-    @ApiProperty()
-    credentialName: string;
-    @ApiProperty()
-    credentialType: string;
     @ApiProperty({ enum: TypeStatus })
-    // @IsEnum(TypeStatus)
+    @IsEnum(TypeStatus)
+    @IsOptional()
     type: number;
 }

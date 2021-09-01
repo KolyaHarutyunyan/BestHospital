@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDateString, IsOptional } from 'class-validator';
 
-export class EditStaffCredentialDTO {
+export class UpdateCredentialDTO {
   @ApiProperty()
   credentialId?: string;
   @ApiProperty({ required: false })

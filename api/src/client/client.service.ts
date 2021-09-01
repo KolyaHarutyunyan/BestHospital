@@ -56,18 +56,36 @@ export class ClientService {
       throw e;
     }
   };
+
   /** returns all clients */
-  async findAll(): Promise<ClientDTO[]> {
+  async findAll(skip: number, limit: number, status: number): Promise<any> {
     try {
-      const clients = await this.model
-        .find({})
-        .populate({ path: 'enrollment', select: 'name' });
+      if (status == 0) {
+        let [clients, count] = await Promise.all([
+          this.model
+            .find({ status: 0 })
+            .populate({ path: 'enrollment', select: 'name' }).skip(skip).limit(limit),
+          this.model.countDocuments({status: 0})
+        ]);
+        this.checkClient(clients[0]);
+        const sanClient = this.sanitizer.sanitizeMany(clients);
+        return { clients: sanClient, count }
+      }
+
+      let [clients, count] = await Promise.all([
+        this.model
+          .find({ status: 1 })
+          .populate({ path: 'enrollment', select: 'name' }).skip(skip).limit(limit),
+        this.model.countDocuments({status: 1})
+      ]);
       this.checkClient(clients[0]);
-      return this.sanitizer.sanitizeMany(clients);
+      const sanClient = this.sanitizer.sanitizeMany(clients);
+      return { clients: sanClient, count }
     } catch (e) {
       throw e;
     }
   }
+
   /** Get Client By Id */
   async findById(_id: string): Promise<ClientDTO> {
     const client = await this.model.findById({ _id }).populate({ path: 'enrollment', select: "name" });

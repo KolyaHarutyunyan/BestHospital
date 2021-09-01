@@ -44,4 +44,5 @@ export {ModalHeader, TabsHeader} from './headers';
 export {Role} from './role';
 export {Toast} from './toast'
 export {NoItemText} from './noItem'
+export { AvailableHours } from './availability'
 

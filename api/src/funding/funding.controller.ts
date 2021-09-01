@@ -3,7 +3,7 @@ import { ApiHeader, ApiOkResponse, ApiOperation, ApiProperty, ApiPropertyOptiona
 import { FundingService } from './funding.service';
 import { HistoryService } from '../history/history.service';
 
-import { CreateFundingDTO, FundingDTO, UpdateFundingDto, ServiceDTO, UpdateServiceDto, CreateServiceDTO, CreateModifierDto, UpdateModifierDto, ModifyDTO } from './dto';
+import { CreateFundingDTO, FundingDTO, UpdateFundingDto, ServiceDTO, UpdateServiceDto, CreateServiceDTO, CreateModifierDto, CreateModifiersDTO, UpdateModifierDto, ModifyDTO } from './dto';
 import { HistoryDTO } from '../history/dto';
 import { Public, ParseObjectIdPipe } from '../util';
 import { CreateCommentDTO } from './dto/comment.dto';
@@ -15,13 +15,6 @@ export class FundingController {
     private readonly fundingService: FundingService,
     private readonly historyService: HistoryService,
   ) { }
-  /** Test a new Test */
-  // @Get()
-  // @Public()
-  // @ApiOkResponse({ type: FundingDTO })
-  // async test(): Promise<string> {
-  //   return 'Hello World!'
-  // }
 
   /** Create a new funder */
   @Post()
@@ -44,27 +37,15 @@ export class FundingController {
   }
 
   /** Create a new modifier */
-  @Post(':id/modifier')
+  @Post('/modifier')
   @Public()
   @ApiOkResponse({ type: ServiceDTO })
-  async createModifier(@Param('id', ParseObjectIdPipe) id: string,
-    @Body() createModifierDTO: CreateModifierDto): Promise<ModifyDTO> {
+  async createModifier(
+    @Body() createModifierDTO: CreateModifiersDTO): Promise<ModifyDTO> {
     const staffId = '60f01ec194abb63ff8f0aa75';
-    const modifier = await this.fundingService.createModifier(createModifierDTO, id);
+    const modifier = await this.fundingService.createModifier(createModifierDTO);
     return modifier
   }
-
-  /** Add a new comment */
-  // @Post(':id/comment')
-  // @Public()
-  // // @ApiOkResponse({ type: CommentDto })
-  // async addComment(
-  //   @Param('id', ParseObjectIdPipe) id: string,
-  //   @Body() dto: CreateCommentDTO): Promise<any> {
-  //   console.log(dto)
-  //   const user = "610ba0a7b8944a30bcb15da4"
-  //   return await this.fundingService.addComment(id, dto.text, user);
-  // }
 
   /** Get all funders */
   @Get()
@@ -82,10 +63,17 @@ export class FundingController {
     required: false,
     type: Number
   })
+  @ApiQuery({
+    name: "status",
+    description: "status",
+    required: false,
+    type: Number
+  })
   async findAll(
     @Query('skip') skip: number,
-    @Query('limit') limit: number): Promise<FundingDTO[]> {
-    return await this.fundingService.findAll(skip, limit);
+    @Query('limit') limit: number,
+    @Query('status') status: number): Promise<FundingDTO[]> {
+    return await this.fundingService.findAll(skip, limit, status);
   }
 
   /** Get all services */
@@ -96,42 +84,12 @@ export class FundingController {
     return await this.fundingService.findAllServices(id);
   }
   /** Get service by Id */
-  @Get(':serviceId/service')
+  @Get('service/:serviceId')
   @Public()
   @ApiOkResponse({ type: [ServiceDTO] })
-  async findService(@Param('id', ParseObjectIdPipe) id: string): Promise<ServiceDTO[]> {
-    return await this.fundingService.findService(id);
+  async findService(@Param('serviceId', ParseObjectIdPipe) serviceId: string): Promise<ServiceDTO[]> {
+    return await this.fundingService.findService(serviceId);
   }
-
-  /** Get all comments */
-  // @Get(':id/comments')
-  // @Public()
-  // @ApiQuery({
-  //   name: "skip",
-  //   description: "where",
-  //   required: false,
-  //   type: Number
-  // })
-  // @ApiQuery({
-  //   name: "limit",
-  //   description: "how",
-  //   required: false,
-  //   type: Number
-  // })
-  // // @ApiOkResponse({ type: [CommentDto] })
-  // async getComments(@Param('id', ParseObjectIdPipe) id: string,
-  //   @Query('skip') skip: number,
-  //   @Query('limit') limit: number): Promise<any> {
-  //   return await this.fundingService.getComments(id, skip, limit);
-  // }
-
-  /** Get all histories */
-  // @Get(':id/histories')
-  // @Public()
-  // @ApiOkResponse({ type: [HistoryDTO] })
-  // async findAllHistories(@Param('id', ParseObjectIdPipe) id: string): Promise<any> {
-  //   return await this.fundingService.findAllHistories(id);
-  // }
 
   /** Get Funder By Id */
   @Get(':id')
@@ -139,6 +97,14 @@ export class FundingController {
   @ApiOkResponse({ type: FundingDTO })
   async findById(@Param('id', ParseObjectIdPipe) id: string): Promise<FundingDTO> {
     return await this.fundingService.findById(id);
+  }
+
+  /** Get Modifier By funding Service Id */
+  @Get('modifier/:fundingserviceId')
+  @Public()
+  @ApiOkResponse({ type: FundingDTO })
+  async findmodifier(@Param('fundingserviceId', ParseObjectIdPipe) fundingserviceId: string): Promise<FundingDTO> {
+    return await this.fundingService.findmodifier(fundingserviceId);
   }
 
   /** Edit the Funder */
