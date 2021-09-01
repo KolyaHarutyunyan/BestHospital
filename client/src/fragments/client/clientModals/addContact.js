@@ -65,7 +65,7 @@ export const AddContact = ({handleClose, info}) => {
 
     return (
         <div className={classes.createFoundingSource}>
-            <ModalHeader secondStepInfo={'Address'} steps={step} handleClose={handleClose} title={info ? 'Edit Contact' : 'Add Contact'}/>
+            <ModalHeader secondStepInfo={'Address'} setStep={setStep} steps={step} handleClose={handleClose} title={info ? 'Edit Contact' : 'Add Contact'}/>
             <div className={classes.createFoundingSourceBody}>
                 <div className={classes.clientModalBlock} >
                     {step === 'first' ? <div className={classes.clientModalBox}>
@@ -91,7 +91,7 @@ export const AddContact = ({handleClose, info}) => {
                                 variant={"outlined"}
                                 onChange={handleChange}
                                 value={inputs.phoneNumber}
-                                type={"text"}
+                                type={"number"}
                                 label={"Phone Number*"}
                                 name='phoneNumber'
                                 typeError={error === 'phoneNumber' && ErrorText.field}
@@ -116,7 +116,7 @@ export const AddContact = ({handleClose, info}) => {
                 </div>
                 <div className={classes.clientModalBlock} >
                     <CreateChancel
-                        create={step === 'first' ? 'Next' : "Add"}
+                        create={step === 'first' ? 'Next' : info ? 'Save' : "Add"}
                         chancel={"Cancel"}
                         onCreate={handleCreate}
                         onClose={handleClose}

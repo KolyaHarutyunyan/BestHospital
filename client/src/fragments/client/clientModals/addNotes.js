@@ -5,9 +5,11 @@ import {ValidationInput, Textarea} from "@eachbase/components/inputs";
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {fundingSourceActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions,} from "@eachbase/store";
-import {modalsStyle} from "../../../../../components/modal/styles";
+import {modalsStyle} from "../../../components/modal/styles";
 
-export const FundingSourceNotesAdd = ({handleClose, info}) => {
+
+export const AddNotes = ({handleClose, info}) => {
+
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {...info}:{});
 

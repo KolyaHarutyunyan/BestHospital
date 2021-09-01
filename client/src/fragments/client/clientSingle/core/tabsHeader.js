@@ -2,11 +2,12 @@ import {editButtonStyle, serviceSingleStyles, inputStyle} from "./styles";
 import {Images} from "@eachbase/utils";
 import {AddButton, AddModalButton, SelectInput, SimpleModal,} from "@eachbase/components";
 import React, {useEffect, useState} from "react";
-import {AddContact, AddEnrollment, CreateClient,AddAuthorization} from "@eachbase/fragments/client";
+import {AddContact, AddEnrollment, CreateClient,AddAuthorization,AddNotes} from "@eachbase/fragments/client";
 import {useDispatch,} from "react-redux";
-import {clientActions} from "@eachbase/store";
+
 import {useParams} from "react-router-dom";
 import {AddAuthorizationService} from "../../clientModals/addAuthorizationService";
+
 
 
 
@@ -24,13 +25,13 @@ export const TabsHeader = ({activeTab, data, authActive}) => {
 
         switch (activeTab) {
             case 1 :
-                dispatch(clientActions.getClientsContacts(params.id))
+                // dispatch(clientActions.getClientsContacts(params.id))
                 break
             case 2 :
-                dispatch(clientActions.getClientsEnrollment(params.id))
+                // dispatch(clientActions.getClientsEnrollment(params.id))
                 break
             case 3 :
-                dispatch(clientActions.getClientsAuthorizations(params.id))
+                // dispatch(clientActions.getClientsAuthorizations(params.id))
                 break
         }
     }, [activeTab])
@@ -107,7 +108,7 @@ export const TabsHeader = ({activeTab, data, authActive}) => {
                                 activeTab === 4 ?
                                     <p>add availab</p> :
                                     activeTab === 5 ?
-                                        <p>add notes</p> : null
+                                       <AddNotes /> : null
                 }
             />
         </div>

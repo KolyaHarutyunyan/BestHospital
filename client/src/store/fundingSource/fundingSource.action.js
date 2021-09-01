@@ -134,7 +134,7 @@ export const getFundingSourceNotes = (id,onModal) => {
 
 
 export const createFoundingSourceNote = ( body) => {
-    console.log(body,'action')
+
     return {
         type: CREATE_FUNDING_SOURCE_NOTE,
         payload: {
@@ -144,7 +144,7 @@ export const createFoundingSourceNote = ( body) => {
 }
 
 export const editFoundingSourceNote = (id, body) => {
-    console.log(id,body,'action')
+
     return {
         type: EDIT_FUNDING_SOURCE_NOTE,
         payload: {
@@ -155,7 +155,7 @@ export const editFoundingSourceNote = (id, body) => {
 }
 
 export const deleteFoundingSourceNote = (id) => {
-    console.log(id,'action')
+
     return {
         type: DELETE_FUNDING_SOURCE_NOTE,
         payload: {
