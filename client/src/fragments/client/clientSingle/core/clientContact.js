@@ -6,9 +6,9 @@ import {TableCell} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
 import {clientActions} from "@eachbase/store";
 
-export const ClientContact = ({data, setContactId, handleOpenClose}) => {
+export const ClientContact = ({data, setContactId, handleOpenClose, info}) => {
     const classes = serviceSingleStyles()
-    const clientContacts = useSelector(state => state.client.clientContacts)
+    // const clientContacts = useSelector(state => state.client.clientContacts)
     const dispatch = useDispatch()
     const [openClose, setOpenClose] = useState(false)
     const [index, setIndex] = useState(null)
@@ -55,7 +55,7 @@ export const ClientContact = ({data, setContactId, handleOpenClose}) => {
     }
 
     let deleteContact = () => {
-        dispatch(clientActions.deleteClientContact(clientContacts[index].id))
+        dispatch(clientActions.deleteClientContact(info[index].id))
         setOpenClose(!openClose)
     }
 
@@ -91,7 +91,7 @@ export const ClientContact = ({data, setContactId, handleOpenClose}) => {
                     <DeleteElement
                         handleDel={deleteContact}
                         text={'Delete Contact'}
-                        info={index !== null && clientContacts[index].firstName}
+                        info={index !== null && info[index].firstName}
                         handleClose={openCloseModal}/>
                 }
                 openDefault={openClose}/>
@@ -106,7 +106,7 @@ export const ClientContact = ({data, setContactId, handleOpenClose}) => {
             <div className={classes.clearBoth}/>
             <div className={classes.notesWrap}>
                 <Notes
-                    data={clientContacts}
+                    data={info}
                     items={clientContactItem}
                     headerTitles={headerTitles}
                     defaultStyle={true}/>

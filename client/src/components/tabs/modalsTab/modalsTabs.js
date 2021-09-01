@@ -3,7 +3,7 @@ import {modalHeadersStyle} from "./styles";
 import {Images} from "@eachbase/utils";
 
 
-export const ModalsTabs = ({steps, setStep}) => {
+export const ModalsTabs = ({steps, setStep, secondStepInfo}) => {
     const classes = modalHeadersStyle()
     return (
         <div className={classes.createFundingSourceHeaderBottom}>
@@ -23,7 +23,7 @@ export const ModalsTabs = ({steps, setStep}) => {
                         <img src={Images.clientModalicon2} alt="icon" className={classes.modalsTabsIcons}/>
                 </div>
                 <p style={{color: steps === 'first' && '#4B5C6880'}}
-                   className={classes.createFundingSourceHeaderBottomText}>Other Details</p>
+                   className={classes.createFundingSourceHeaderBottomText}> { secondStepInfo ? secondStepInfo : 'Other Details'}</p>
             </div>
         </div>
     );

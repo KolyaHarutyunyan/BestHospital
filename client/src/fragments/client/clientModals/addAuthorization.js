@@ -41,8 +41,8 @@ export const AddAuthorization = ({handleClose, info}) => {
             if (info) {
                 dispatch(clientActions.editClientsAuthorizations(data, info.id))
             } else {
-                console.log(params.id, 'client id')
-                console.log(funderId, 'fund id')
+
+
                 dispatch(clientActions.createClientsAuthorizations(data, params.id, funderId))
             }
             handleClose()

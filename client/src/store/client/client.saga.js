@@ -27,11 +27,14 @@ import {
     GET_CLIENT_AUTHORIZATION_SERV,
     CREATE_CLIENT_AUTHORIZATION_SERV,
     EDIT_CLIENT_AUTHORIZATION_SERV,
-    DELETE_CLIENT_AUTHORIZATION_SERV
+    DELETE_CLIENT_AUTHORIZATION_SERV, GET_CLIENT_HISTORIES_SUCCESS, GET_CLIENT_HISTORIES
 } from "./client.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
-import {GET_FUNDING_SOURCE_BY_ID_SUCCESS} from "../fundingSource/fundingSource.types";
+import {
+    GET_FUNDING_SOURCE_BY_ID_SUCCESS,
+    GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS
+} from "../fundingSource/fundingSource.types";
 
 
 
@@ -252,6 +255,28 @@ function* deleteClientAuthorizationsServ(action) {
     }
 }
 
+function* getClientHistories(action) {
+    // yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    // yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    try {
+        const res = yield call(authService.getClientHistoriesService, action.payload.id, action.payload.onModal);
+
+        yield put({
+            type: GET_CLIENT_HISTORIES_SUCCESS,
+            payload: res.data,
+        });
+        // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        // yield put(httpRequestsOnErrorsActions.removeError(action.type));
+
+
+    } catch (error) {
+        console.log(error,'eeeerrrrrorrrrrrr')
+        // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        // yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    }
+}
+
+
 
 export const watchClient = function* watchClientSaga() {
 
@@ -276,6 +301,7 @@ export const watchClient = function* watchClientSaga() {
     yield takeLatest(CREATE_CLIENT_AUTHORIZATION_SERV, createClientsAuthorizationsServ)
     yield takeLatest(EDIT_CLIENT_AUTHORIZATION_SERV, editClientAuthorizationsServ)
     yield takeLatest(DELETE_CLIENT_AUTHORIZATION_SERV, deleteClientAuthorizationsServ)
+    yield takeLatest(GET_CLIENT_HISTORIES, getClientHistories)
 
 
 };

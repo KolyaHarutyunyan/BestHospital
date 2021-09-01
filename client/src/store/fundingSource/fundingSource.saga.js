@@ -21,7 +21,10 @@ import {
     EDIT_FUNDING_SOURCE_SERVICE,
     GET_FUNDING_SOURCE_NOTES_SUCCESS,
     GET_FUNDING_SOURCE_NOTES,
-    CREATE_FUNDING_SOURCE_NOTE, EDIT_FUNDING_SOURCE_NOTE, DELETE_FUNDING_SOURCE_NOTE,
+    CREATE_FUNDING_SOURCE_NOTE,
+    EDIT_FUNDING_SOURCE_NOTE,
+    DELETE_FUNDING_SOURCE_NOTE,
+    CREATE_FUNDING_SOURCE_NOTES_SUCCESS,
 } from "./fundingSource.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
@@ -51,7 +54,7 @@ function* editFundingSource(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.editFundingSourceService, action.payload.id, action.payload.body);
-        console.log(res,'resssssssssss')
+
         yield put({
             type: GET_FUNDING_SOURCE_BY_ID_SUCCESS,
             payload: res.data,
@@ -129,7 +132,7 @@ function* getFundingSourceServicesById(action) {
 function* createFundingSourceServicesById({payload}) {
     try {
         const res = yield call(authService.createFoundingSourceServiceByIdService, payload.id, payload.body);
-        console.log(res,'reeeeeesssssssssssssssssss')
+
     } catch (error) {
         console.log(error,'eeeeerererere')
     }
@@ -155,7 +158,7 @@ function* getFundingSourceHistoriesById(action) {
     // yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.getFundingSourceHistoriesByIdService, action.payload.id, action.payload.onModal);
-        console.log(res,'reeeeeeessesese')
+
         yield put({
             type: GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS,
             payload: res.data,
@@ -177,7 +180,7 @@ function* getFundingSourceNotes(action) {
     // yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.getFundingSourceNotesService, action.payload.id, action.payload.onModal);
-        console.log(res,'reeeeeeessesese')
+
         yield put({
             type: GET_FUNDING_SOURCE_NOTES_SUCCESS,
             payload: res.data,
@@ -193,32 +196,55 @@ function* getFundingSourceNotes(action) {
     }
 }
 
-function* creteFundingSourceNote({payload}) {
+function* creteFundingSourceNote(action) {
 
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
-        const res = yield call(authService.createFoundingSourceNoteService, payload.body);
-        console.log(res,'esssooo')
+        const res = yield call(authService.createFoundingSourceNoteService, action.payload.body);
+
+        yield put({
+            type: CREATE_FUNDING_SOURCE_NOTES_SUCCESS,
+            payload: res.data,
+        });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (error) {
         console.log(error,'errrros')
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
     }
 }
 
-function* editFundingSourceNote({payload}) {
-    console.log(payload)
+
+
+
+function* editFundingSourceNote(action) {
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+
     try {
-        const res = yield call(authService.editFoundingSourceNoteService, payload.id, payload.body);
-        console.log(res,'esssooo')
+        const res = yield call(authService.editFoundingSourceNoteService, action.payload.id, action.payload.body);
+
+        yield put({
+            type: CREATE_FUNDING_SOURCE_NOTES_SUCCESS,
+            payload: res.data,
+        });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (error) {
-        console.log(error,'errrros')
+        console.log(error,'errrros edit not')
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
     }
 }
 
 
 function* deleteFundingSourceNote({payload}) {
-    console.log(payload)
+
     try {
         const res = yield call(authService.deleteFoundingSourceNoteService, payload.id);
-        console.log(res,'esssooo')
+
     } catch (error) {
         console.log(error,'errrros')
     }

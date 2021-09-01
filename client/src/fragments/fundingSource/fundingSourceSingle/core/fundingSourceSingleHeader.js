@@ -46,7 +46,7 @@ export const FundingSourceSingleHeader = ({activeTab, title, info}) => {
                     : activeTab === 1 ?
                         <FundingSourceServiceAdd systemServices={globalServices} handleClose={handleOpenClose}/> :
                         activeTab === 2 ?
-                            <FundingSourceNotesAdd info={prevData} handleClose={handleOpenClose}/> : null}/>
+                            <FundingSourceNotesAdd handleClose={handleOpenClose}/> : null}/>
             {activeTab === 0 ?
                 <AddModalButton handleClick={handleOpenClose} text='Edit' btnStyles={btnStyles}/>
                 : activeTab >= 3 ?

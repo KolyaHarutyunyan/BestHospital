@@ -35,13 +35,20 @@ export const ClientItem = () => {
     const classes = clientItemStyles()
     useEffect(() => {
         dispatch(clientActions.getClientsById(params.id))
+        dispatch(clientActions.getClientsContacts(params.id))
+        dispatch(clientActions.getClientsEnrollment(params.id))
+        dispatch(clientActions.getClientsAuthorizations(params.id))
+        dispatch(clientActions.getClientHistories(params.id, 'Client'))
     }, []);
 
     const data = useSelector(state => state.client.clientItemInfo)
     const authItemData = useSelector(state => state.client.clientsAuthorizations[authItemIndex])
-    console.log(authItemData, 'aaaaaauth')
-    const clientContactItem = useSelector(state => state.client.clientContacts[contactId])
 
+    const clientContactItem = useSelector(state => state.client.clientContacts[contactId])
+    const clientContact = useSelector(state => state.client.clientContacts)
+    const enrolments = useSelector(state => state.client.clientEnrollment)
+    const clientsAuthorizations = useSelector(state => state.client.clientsAuthorizations)
+    const clientsHistories = useSelector(state => state.client.clientHistories)
     const handleOpenClose = () => {
         setOpen(!open)
     }
@@ -79,15 +86,16 @@ export const ClientItem = () => {
             tabComponent: (<ClientGeneral data={data}/>)
         },
         {
-            tabComponent: (
-                <ClientContact data={data} handleOpenClose={handleOpenCloseModal} setContactId={setContactId}/>)
+            tabComponent: (<ClientContact info={clientContact} data={data} handleOpenClose={handleOpenCloseModal}
+                                          setContactId={setContactId}/>)
         },
         {
-            tabComponent: (<ClientEnrollment data={data}/>)
+            tabComponent: (<ClientEnrollment info={enrolments} data={data}/>)
         },
         {
             tabComponent: (!authActive ?
-                <ClientAuthorization setAuthItemIndex={setAuthItemIndex} setAuthActive={setAuthActive} data={data}/> :
+                <ClientAuthorization info={clientsAuthorizations} setAuthItemIndex={setAuthItemIndex}
+                                     setAuthActive={setAuthActive} data={data}/> :
                 <ClientAuthorizationItem data={authItemData}/>)
         },
         {
@@ -97,7 +105,7 @@ export const ClientItem = () => {
             tabComponent: (<ClientNotes/>)
         },
         {
-            tabComponent: (<ClientHistory/>)
+            tabComponent: (<ClientHistory  info={clientsHistories} />)
         },
     ];
 
@@ -115,10 +123,12 @@ export const ClientItem = () => {
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
                 <SimpleModal openDefault={openModal}
+                             handleOpenClose={handleOpenCloseModal}
                              content={<AddContact info={clientContactItem} handleClose={handleOpenCloseModal}/>}/>
                 <div className={classes.headerWraperStyle}>
-                    <TabsHeader authActive={authActive}  data={data} activeTab={activeTab} />
-                    <SimpleTabs setAuthActive={setAuthActive} setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
+                    <TabsHeader authActive={authActive} data={data} activeTab={activeTab}/>
+                    <SimpleTabs setAuthActive={setAuthActive} setActiveTab={setActiveTab} tabsLabels={tabsLabels}
+                                tabsContent={tabsContent}/>
                 </div>
             </TableWrapperGeneralInfo>
         </>

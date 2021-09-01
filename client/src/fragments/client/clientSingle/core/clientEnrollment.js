@@ -9,12 +9,11 @@ import {AddEnrollment} from "../../clientModals";
 import {clientActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 
-export const ClientEnrollment = ({data}) => {
+export const ClientEnrollment = ({data, info}) => {
     const classes = serviceSingleStyles()
     const [toggleModal, setToggleModal] = useState(false)
     const [index, setIndex] = useState(null)
     const [delEdit, setDelEdit] = useState(null)
-    const enrolments = useSelector(state => state.client.clientEnrollment)
     const dispatch = useDispatch()
     const params = useParams()
     const generalInfo = [
@@ -52,10 +51,10 @@ export const ClientEnrollment = ({data}) => {
     ];
 
     let deleteEnrollment = ()=>{
-        dispatch(clientActions.deleteClientEnrollment(enrolments[index].id))
+        dispatch(clientActions.deleteClientEnrollment(info[index].id))
     }
     let editPrimary = (i)=>{
-        dispatch(clientActions.editClientEnrollment({primary: true}, params.id, enrolments[i].funderId._id, enrolments[i].id))
+        dispatch(clientActions.editClientEnrollment({primary: true}, params.id, info[i].funderId._id, info[i].id))
     }
 
     let enrollmentsItem = (item, index) => {
@@ -98,7 +97,7 @@ export const ClientEnrollment = ({data}) => {
             <SimpleModal
                 handleOpenClose={() => setToggleModal(!toggleModal)}
                 openDefault={toggleModal}
-                content={delEdit ? <AddEnrollment info={enrolments[index]} handleClose={() => setToggleModal(!toggleModal)}/>
+                content={delEdit ? <AddEnrollment info={info[index]} handleClose={() => setToggleModal(!toggleModal)}/>
                 : <DeleteElement
                         text={'Delete Enrollment'}
                         handleClose={() => setToggleModal(!toggleModal)}
@@ -117,7 +116,7 @@ export const ClientEnrollment = ({data}) => {
             <div className={classes.clearBoth}/>
             <div className={classes.notesWrap}>
                 <Notes
-                    data={enrolments}
+                    data={info}
                     items={enrollmentsItem}
                     headerTitles={headerTitles}
                     defaultStyle={true}/>

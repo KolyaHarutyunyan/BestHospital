@@ -81,7 +81,6 @@ export const EditClient = ({handleClose}) => {
         {name: 'female'}
     ]
 
-    console.log(new Date(inputs.birthday).toISOString(),9999)
 
     return (
         <div className={classes.createFoundingSource}>
