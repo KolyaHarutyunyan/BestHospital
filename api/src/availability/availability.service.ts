@@ -1,24 +1,24 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { MongooseUtil } from '../util';
-import { CreateScheduleDTO, UpdateScheduleDTO } from './dto';
-import { ScheduleModel } from './schedule.model';
+import { CreateAvailabilityDTO, UpdateAvailabilityDTO } from './dto';
+import { AvailabilityModel } from './availability.model';
 
 @Injectable()
-export class ScheduleService {
+export class AvailabilityService {
   constructor(
     // private readonly addressService: AddressService,
     // private readonly sanitizer: ScheduleSanitizer,
 
   ) {
-    this.model = ScheduleModel;
+    this.model = AvailabilityModel;
     this.mongooseUtil = new MongooseUtil();
   }
   private model: Model<any>;
 
   private mongooseUtil: MongooseUtil;
 
-  async createSchedule(dto: CreateScheduleDTO, owner: string, onModel: string) {
+  async createSchedule(dto: CreateAvailabilityDTO, owner: string, onModel: string) {
     try {
       const findSchedule = await this.model.findOne({ owner });
 
@@ -56,7 +56,7 @@ export class ScheduleService {
     // var now = 9 + "." + 30;
     // var weekdays = [
     //    Sunday: [hours: {open: 9.30, close: 12.00, 15.30,22.00],
-    //     ["Monday", 8.30, 12.00, 15.30,19.00],
+    //    "Monday": [8.30, 12.00, 15.30,19.00, ],
     //     ["Tuesday", 8.30, 12.00, 15.30,19.00],
     //     ["Wednesday", 8.30, 12.00, 15.30,19.00],
     //     ["Thursday", 8.30, 12.00, 15.30,19.00],
@@ -96,7 +96,7 @@ export class ScheduleService {
     }
   }
 
- async update(_id: string, dto: UpdateScheduleDTO) {
+ async update(_id: string, dto: UpdateAvailabilityDTO) {
     try {
       const findSchedule = await this.model.findById({_id});
       this.checkSchedule(findSchedule);

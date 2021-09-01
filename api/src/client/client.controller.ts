@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ParseObjectIdPipe, Public } from '../util';
 import { ClientService } from './client.service';
 import {
+  ClientDTO,
   CreateClientDTO, UpdateClientDto
 } from './dto';
 
@@ -19,8 +20,30 @@ export class ClientController {
   /**Get All Clients */
   @Get()
   @Public()
-  findAll() {
-    return this.clientService.findAll();
+  @ApiOkResponse({ type: [ClientDTO] })
+  @ApiQuery({
+    name: "skip",
+    description: "where",
+    required: false,
+    type: Number
+  })
+  @ApiQuery({
+    name: "limit",
+    description: "how",
+    required: false,
+    type: Number
+  })
+  @ApiQuery({
+    name: "status",
+    description: "status",
+    required: false,
+    type: Number
+  })
+  findAll(
+    @Query('skip') skip: number,
+    @Query('status') status: number,
+    @Query('limit') limit: number,) {
+    return this.clientService.findAll(skip, limit, status);
   }
   /** Get Client By Id */
   @Get(':id')

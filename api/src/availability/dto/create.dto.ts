@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsDateString, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
-import { ScheduleStatus } from '../schedule.constants';
+import { ScheduleStatus } from '../availability.constants';
 
-export class CreateScheduleDTO {
+export class CreateAvailabilityDTO {
     @IsArray()
     @IsOptional()
     monday: Array<Object>

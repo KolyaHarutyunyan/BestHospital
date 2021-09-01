@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ParseObjectIdPipe, Public } from '../util';
 import { DepartmentService } from './department.service';
-import { CreateDepartmentDto, DepartmentDto } from './dto';
+import { CreateDepartmentDTO, DepartmentDTO, UpdateDepartmentDTO } from './dto';
 
 @Controller('department')
 @ApiTags('Department Endpoints')
@@ -11,30 +11,30 @@ export class DepartmentController {
 
   @Post()
   @Public()
-  @ApiOkResponse({type: DepartmentDto})
-  create(@Body() createDepartmentDto: CreateDepartmentDto) {
+  @ApiOkResponse({type: DepartmentDTO})
+  create(@Body() createDepartmentDto: CreateDepartmentDTO) {
     return this.departmentService.create(createDepartmentDto);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.departmentService.findAll();
-  // }
+  @Get()
+  findAll() {
+    return this.departmentService.findAll();
+  }
 
   @Get(':id')
   @Public()
-  @ApiOkResponse({type: DepartmentDto})
+  @ApiOkResponse({type: DepartmentDTO})
   findOne(@Param('id', ParseObjectIdPipe) id: string) {
     return this.departmentService.findOne(id);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateDepartmentDto: UpdateDepartmentDto) {
-  //   return this.departmentService.update(+id, updateDepartmentDto);
-  // }
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateDepartmentDto: UpdateDepartmentDTO) {
+    return this.departmentService.update(id, updateDepartmentDto);
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.departmentService.remove(+id);
-  // }
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.departmentService.remove(id);
+  }
 }

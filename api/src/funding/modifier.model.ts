@@ -3,8 +3,9 @@ import { IModify } from './interface';
 import { ModifierStatus, TypeStatus } from './funding.constants';
 
 const modifierSchema = new Schema({
+    serviceId: {type: Types.ObjectId, ref: 'FundingService'},
     chargeRate: { type: Number },
-    credential: { type: Types.ObjectId, ref: 'Credential' },
+    credentialId: { type: Types.ObjectId, ref: 'Credential' },
     name: { type: String },
     type: { type: Number, enum: TypeStatus }
 });

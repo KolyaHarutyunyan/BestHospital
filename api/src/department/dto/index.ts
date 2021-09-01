@@ -1,2 +1,3 @@
-export { CreateDepartmentDto } from './create.dto';
-export { DepartmentDto } from './department.dto';
+export { CreateDepartmentDTO } from './create.dto';
+export { DepartmentDTO } from './department.dto';
+export { UpdateDepartmentDTO } from './edit.dto';

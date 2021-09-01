@@ -155,7 +155,7 @@ export class StaffService {
   };
 
   /** returns all users */
-  getUsers = async (status: number): Promise<any> => {
+  getUsers = async (status: number): Promise<StaffDTO[]> => {
     if (status == 0) {
       const admins = await this.model.find({ status: 0 });
       this.checkStaff(admins[0])
