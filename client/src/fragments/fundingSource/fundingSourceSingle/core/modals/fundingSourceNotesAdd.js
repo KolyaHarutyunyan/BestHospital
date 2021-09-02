@@ -48,7 +48,7 @@ export const FundingSourceNotesAdd = ({handleClose, info}) => {
 
             }
             if(info){
-                dispatch(fundingSourceActions.editFoundingSourceNote(info.id,data))
+                dispatch(fundingSourceActions.editFoundingSourceNote(params.id, info.id, data))
             }else {
                 dispatch(fundingSourceActions.createFoundingSourceNote(data))
             }

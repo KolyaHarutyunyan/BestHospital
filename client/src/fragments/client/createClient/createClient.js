@@ -17,9 +17,6 @@ export const CreateClient = ({handleClose, info}) => {
     const classes = createClientStyle()
     const dispatch = useDispatch()
 
-
-    console.log(inputs,'iin')
-
     const handleChange = e => setInputs(
         prevState => ({...prevState, [e.target.name]: e.target.value}),
         error === e.target.name && setError(''),
