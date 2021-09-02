@@ -51,7 +51,7 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
                 <TableCell>{item.action ? item.action :
                     <div className={classes.icons}>
                         <img src={Images.edit} onClick={() => editService('editService',{id:item.id,name:item.name,category: item.category,displayCode: item.displayCode})} alt="edit"/>
-                        <img src={Images.remove} alt="delete" onClick={() => removeItem({id: item.id,name: item.name})}/>
+                        <img src={Images.remove} alt="delete" onClick={() => removeItem({id: item.id,name: item.name,type: 'editService'})}/>
                     </div>
                 }
                 </TableCell>

@@ -16,6 +16,8 @@ export const SystemItem = () => {
 
     const globalCredentials = useSelector(state => state.system.credentials)
     const globalServices = useSelector(state => state.system.services)
+    const globalDepartments = useSelector(state => state.system.departments)
+    const globalJobs = useSelector(state => state.system.jobs)
 
     const dispatch = useDispatch()
     const [deleteModalOpened, setDeleteModalOpened] = useState(false)
@@ -50,11 +52,14 @@ export const SystemItem = () => {
         setDeleteModalOpened(true)
         setDeletedId(data.id)
         setDeletedName(data.name)
+        setModalType(data.type);
     }
 
     useEffect(() => {
         dispatch(systemActions.getCredential())
         dispatch(systemActions.getServices())
+        dispatch(systemActions.getDepartments())
+        dispatch(systemActions.getJobs())
     }, [])
 
     const tabsContent = [
@@ -67,10 +72,10 @@ export const SystemItem = () => {
                                         openModal={handleOpenClose}/>)
         },
         {
-            tabComponent: (<Departments removeItem={handleRemoveItem} openModal={handleOpenClose}/>)
+            tabComponent: (<Departments globalDepartments={globalDepartments} removeItem={handleRemoveItem} openModal={handleOpenClose}/>)
         },
         {
-            tabComponent: (<JobTitles removeItem={handleRemoveItem} openModal={handleOpenClose}/>)
+            tabComponent: (<JobTitles globalJobs={globalJobs} removeItem={handleRemoveItem} openModal={handleOpenClose}/>)
         }
     ];
 
