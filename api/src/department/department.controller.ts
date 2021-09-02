@@ -17,6 +17,7 @@ export class DepartmentController {
   }
 
   @Get()
+  @Public()
   findAll() {
     return this.departmentService.findAll();
   }
@@ -29,11 +30,13 @@ export class DepartmentController {
   }
 
   @Patch(':id')
+  @Public()
   update(@Param('id') id: string, @Body() updateDepartmentDto: UpdateDepartmentDTO) {
     return this.departmentService.update(id, updateDepartmentDto);
   }
 
   @Delete(':id')
+  @Public()
   remove(@Param('id') id: string) {
     return this.departmentService.remove(id);
   }
