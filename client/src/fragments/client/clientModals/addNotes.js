@@ -4,29 +4,33 @@ import {AddModalButton, CloseButton} from "@eachbase/components/buttons";
 import {ValidationInput, Textarea} from "@eachbase/components/inputs";
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {fundingSourceActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions,} from "@eachbase/store";
+import {clientActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions,} from "@eachbase/store";
 import {modalsStyle} from "../../../components/modal/styles";
 
 
 export const AddNotes = ({handleClose, info}) => {
 
+    console.log(info,'info')
+
+
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info}:{});
+    const [inputs, setInputs] = useState(info ? {...info} : {});
 
     const params = useParams()
     const dispatch = useDispatch()
     const globalText = useGlobalTextStyles()
     const classes = modalsStyle()
 
-    const { httpOnSuccess, httpOnError,httpOnLoad } = useSelector((state) => ({
+    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,
     }));
     const errorText = httpOnError.length && httpOnError[0].error
-    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_FUNDING_SOURCE_NOTE'
-    const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_FUNDING_SOURCE_NOTE'
 
+
+    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_NOTE'
+    const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_CLIENT_NOTE'
 
 
     const handleChange = e => {
@@ -46,13 +50,15 @@ export const AddNotes = ({handleClose, info}) => {
                 "subject": inputs.subject,
                 'text': inputs.text,
                 'resource': params.id,
-                'onModel': 'Funder'
+                'onModel': 'Client'
 
             }
-            if(info){
-                dispatch(fundingSourceActions.editFoundingSourceNote(info.id,data))
-            }else {
-                dispatch(fundingSourceActions.createFoundingSourceNote( data))
+            if (info) {
+                dispatch(clientActions.editClientNote(params.id, info.id, data))
+                handleClose()
+            } else {
+                dispatch(clientActions.createClientNote(data))
+                handleClose()
             }
         } else {
             setError(
@@ -63,16 +69,16 @@ export const AddNotes = ({handleClose, info}) => {
         }
     }
 
-    useEffect(()=>{
-        if (success){
+    useEffect(() => {
+        if (success) {
             handleClose()
-            dispatch(httpRequestsOnSuccessActions.removeSuccess('EDIT_FUNDING_SOURCE_NOTE'))
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('EDIT_CLIENT_NOTE'))
         }
-        if (successCreate){
+        if (successCreate) {
             handleClose()
-            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_FUNDING_SOURCE_NOTE'))
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_CLIENT_NOTE'))
         }
-    },[success,successCreate])
+    }, [success, successCreate])
 
 
     return (
@@ -103,7 +109,7 @@ export const AddNotes = ({handleClose, info}) => {
             <AddModalButton
                 text={info ? 'Save' : 'Add'}
                 handleClick={handleCreate}
-                loader={ httpOnLoad.length > 0}
+                loader={httpOnLoad.length > 0}
             />
         </div>
     );

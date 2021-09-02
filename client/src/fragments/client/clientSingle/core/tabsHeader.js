@@ -108,7 +108,7 @@ export const TabsHeader = ({activeTab, data, authActive}) => {
                                 activeTab === 4 ?
                                     <p>add availab</p> :
                                     activeTab === 5 ?
-                                       <AddNotes /> : null
+                                       <AddNotes handleClose={handleOpenClose} /> : null
                 }
             />
         </div>
