@@ -1,7 +1,9 @@
-import {AddButton, ValidationInput} from "@eachbase/components";
+import {AddButton, NoItemText, Toast, ValidationInput} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
 import {systemItemStyles} from "./styles";
-import {useState} from "react";
+import React, {useEffect, useState} from "react";
+import {httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, systemActions} from "../../../store";
+import {useDispatch, useSelector} from "react-redux";
 
 
 const credentialBtn = {
@@ -11,31 +13,8 @@ const credentialBtn = {
     padding: 0
 }
 
-const departments = [
-    {
-        name: 'HB',
-        type: 'license'
-    },
-    {
-        name: 'HBC',
-        type: 'license'
-    },
-    {
-        name: 'HHH',
-        type: 'license'
-    },
-    {
-        name: 'BBBB',
-        type: 'license'
-    },
-    {
-        name: 'BCD',
-        type: 'license'
-    },
-]
-
-export const Departments = ({removeItem, openModal}) => {
-
+export const Departments = ({globalDepartments, removeItem, openModal}) => {
+    const dispatch = useDispatch()
     const classes = systemItemStyles()
 
     const [inputs, setInputs] = useState({})
@@ -52,11 +31,48 @@ export const Departments = ({removeItem, openModal}) => {
         error === e.target.name && setError('')
     }
 
-    const editDepartment = (modalType) => {
-        openModal(modalType)
+    const editDepartment = (modalType,modalId) => {
+        openModal(modalType,modalId)
+    }
+
+    const handleSubmit = () => {
+        let data = {
+            name: inputs.name,
+        }
+        if (inputs.name) {
+            dispatch(systemActions.createDepartmentGlobal(data));
+        } else {
+            setError(
+                !inputs.name ? 'name' :
+                        'Input is not filled'
+            )
+        }
     }
 
     const isDisabled = inputs.name
+
+    const {httpOnError, httpOnLoad, httpOnSuccess } = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnLoad: state.httpOnLoad,
+        httpOnError: state.httpOnError
+    }));
+
+    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_DEPARTMENT_GLOBAL'
+
+    const errorText = httpOnError.length && httpOnError[0].type === 'CREATE_DEPARTMENT_GLOBAL'
+
+    useEffect(()=>{
+        if(success) {
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_DEPARTMENT_GLOBAL'))
+            setInputs({
+                name: '',
+            })
+        }else if(errorText){
+            dispatch(httpRequestsOnErrorsActions.removeError('CREATE_DEPARTMENT_GLOBAL'))
+        }
+    },[success, errorText])
+
+    let errorMessage = success ? 'success' : 'error'
 
     return (
         <>
@@ -71,14 +87,15 @@ export const Departments = ({removeItem, openModal}) => {
                     placeholder={'Name*'}
                 />
                 <AddButton
+                    loader={!!httpOnLoad.length}
                     disabled={!isDisabled}
                     styles={credentialBtn}
-                    handleClick={() => alert('Add Department')} text='Add Department'/>
+                    handleClick={handleSubmit} text='Add Department'/>
             </div>
             <p className={classes.title}>Departments</p>
             <div className={classes.credentialTable}>
                 {
-                    departments.map((departmentItem, index) => {
+                    globalDepartments && globalDepartments.length ? globalDepartments.map((departmentItem, index) => {
                         return (
                             <div className={classes.item} key={index}>
                                 <p>
@@ -86,14 +103,25 @@ export const Departments = ({removeItem, openModal}) => {
                                     {departmentItem.type}</p>
                                 <div className={classes.icons}>
                                     <img src={Images.edit}
-                                         onClick={() => editDepartment('editDepartment')} alt="edit"/>
-                                    <img src={Images.remove} alt="delete" onClick={() => removeItem({id: 10, name: departmentItem.name})}/>
+                                         onClick={() => editDepartment('editDepartment',{
+                                             departmentName: departmentItem.name,
+                                             departmentID:departmentItem._id})
+                                         } alt="edit"/>
+                                    <img src={Images.remove} alt="delete"
+                                         onClick={() => removeItem({
+                                             id: departmentItem._id,
+                                             name: departmentItem.name,
+                                             type: 'editDepartment'})}/>
                                 </div>
                             </div>
                         )
-                    })
+                    }): <NoItemText text='No Items Yet' />
                 }
             </div>
+            <Toast
+                type={success ? 'success' : errorText ? 'error' : '' }
+                text={errorMessage}
+                info={success ? success : errorText ? errorText : ''}/>
         </>
     )
 }

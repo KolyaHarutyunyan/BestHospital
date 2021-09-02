@@ -2,10 +2,23 @@ import {
     createCredentialGlobal,
     getCredential,
     editCredentialByIdGlobal,
+    deleteCredentialByIdGlobal,
+
     createServiceGlobal,
     getServices,
     editServiceByIdGlobal,
     deleteServiceByIdGlobal,
+
+    createDepartmentGlobal,
+    getDepartments,
+    editDepartmentByIdGlobal,
+    deleteDepartmentByIdGlobal,
+
+    createJobGlobal,
+    getJobs,
+    editJobByIdGlobal,
+    deleteJobByIdGlobal,
+
 } from "./system.action";
 
 export {systemReducer} from './system.reducer';
@@ -15,8 +28,20 @@ export const systemActions = {
     createCredentialGlobal,
     getCredential,
     editCredentialByIdGlobal,
+    deleteCredentialByIdGlobal,
+
     createServiceGlobal,
     getServices,
     editServiceByIdGlobal,
-    deleteServiceByIdGlobal
+    deleteServiceByIdGlobal,
+
+    createDepartmentGlobal,
+    getDepartments,
+    editDepartmentByIdGlobal,
+    deleteDepartmentByIdGlobal,
+
+    createJobGlobal,
+    getJobs,
+    editJobByIdGlobal,
+    deleteJobByIdGlobal,
 }
