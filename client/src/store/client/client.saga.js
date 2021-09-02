@@ -27,25 +27,35 @@ import {
     GET_CLIENT_AUTHORIZATION_SERV,
     CREATE_CLIENT_AUTHORIZATION_SERV,
     EDIT_CLIENT_AUTHORIZATION_SERV,
-    DELETE_CLIENT_AUTHORIZATION_SERV, GET_CLIENT_HISTORIES_SUCCESS, GET_CLIENT_HISTORIES
+    DELETE_CLIENT_AUTHORIZATION_SERV,
+    GET_CLIENT_HISTORIES_SUCCESS,
+    GET_CLIENT_HISTORIES,
+    DELETE_CLIENT_NOTE,
+    EDIT_CLIENT_NOTE,
+    CREATE_CLIENT_NOTE,
+    GET_CLIENT_NOTES,
+    GET_CLIENT_NOTES_SUCCESS,
+    CREATE_CLIENT_NOTE_SUCCESS,
+    CREATE_CLIENT_CONTACT_SUCCESS, CREATE_CLIENT_SUCCESS
 } from "./client.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
 import {
+    CREATE_FUNDING_SOURCE_NOTES_SUCCESS,
     GET_FUNDING_SOURCE_BY_ID_SUCCESS,
-    GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS
+    GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS, GET_FUNDING_SOURCE_NOTES, GET_FUNDING_SOURCE_NOTES_SUCCESS
 } from "../fundingSource/fundingSource.types";
-
+import {httpRequestsOnSuccessActions} from "../http_requests_on_success";
 
 
 function* getClients() {
 
     try {
         const res = yield call(authService.getClientsService);
-        console.log(res,'res clients')
+        console.log(res, 'res clients')
         yield put({
             type: GET_CLIENTS_SUCCESS,
-            payload: res.data,
+            payload: res.data.clients,
         });
     } catch (err) {
         console.log(err)
@@ -56,8 +66,12 @@ function* createClient(action) {
 
     try {
         const res = yield call(authService.createClientService, action);
+        console.log(res,'res')
+        yield   put({
+            type: '22',
 
-         window.location.replace('/client')
+        })
+
     } catch (err) {
         console.log(err, 'error create client')
     }
@@ -66,11 +80,11 @@ function* createClient(action) {
 function* deleteClient(action) {
     try {
         const res = yield call(authService.deleteClientService, action);
-        window.location.replace('/client')
     } catch (err) {
         console.log(err, 'error')
     }
 }
+
 function* editClient(action) {
     try {
         const res = yield call(authService.editClientService, action);
@@ -107,16 +121,23 @@ function* getClientContacts(action) {
 function* createClientContact(action) {
     try {
         const res = yield call(authService.createClientContactService, action);
-           window.location.replace('/client')
+        yield put({
+            type: CREATE_CLIENT_CONTACT_SUCCESS,
+            payload: res.data,
+        });
     } catch (err) {
         console.log(err, 'error add client')
     }
 }
 
 function* editClientContact(action) {
+    console.log(action, 'aaaaaction')
     try {
         const res = yield call(authService.editClientContactService, action);
-         window.location.replace(`/client/`)
+        yield put({
+            type: GET_CLIENT_CONTACTS,
+            payload: {id: action.payload.paramsId},
+        });
     } catch (err) {
         console.log(err, 'error edit client')
     }
@@ -126,8 +147,10 @@ function* editClientContact(action) {
 function* deleteClientContact(action) {
     try {
         const res = yield call(authService.deleteClientContactService, action);
-
-         window.location.replace('/client')
+        yield put({
+            type: GET_CLIENT_CONTACTS,
+            payload: {id: action.payload.paramsId},
+        });
     } catch (err) {
         console.log(err, 'error del client')
     }
@@ -158,7 +181,7 @@ function* createClientEnrollment(action) {
 function* editClientEnrollment(action) {
     try {
         const res = yield call(authService.editClientEnrollmentService, action);
-         window.location.replace('/client')
+        window.location.replace('/client')
     } catch (err) {
         console.log(err, 'error create client')
     }
@@ -167,7 +190,7 @@ function* editClientEnrollment(action) {
 function* deleteClientEnrollment(action) {
     try {
         const res = yield call(authService.deleteClientEnrollmentService, action);
-         window.location.replace('/client')
+        window.location.replace('/client')
     } catch (err) {
         console.log(err, 'error del enroll')
     }
@@ -207,12 +230,11 @@ function* editClientAuthorizations(action) {
 function* deleteClientAuthorizations(action) {
     try {
         const res = yield call(authService.deleteClientAuthorizationService, action);
-         window.location.replace('/client')
+        window.location.replace('/client')
     } catch (err) {
         console.log(err, 'error del enroll')
     }
 }
-
 
 
 function* getClientsAuthorizationsServ(action) {
@@ -270,12 +292,92 @@ function* getClientHistories(action) {
 
 
     } catch (error) {
-        console.log(error,'eeeerrrrrorrrrrrr')
+        console.log(error, 'eeeerrrrrorrrrrrr')
         // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         // yield put(httpRequestsOnErrorsActions.removeError(action.type));
     }
 }
 
+function* getClientNotes(action) {
+    // yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    // yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    try {
+        const res = yield call(authService.getClientNotesService, action.payload.id, action.payload.onModal);
+        console.log(res, ' get cl notes')
+        yield put({
+            type: GET_CLIENT_NOTES_SUCCESS,
+            payload: res.data,
+        });
+        // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        // yield put(httpRequestsOnErrorsActions.removeError(action.type));
+
+
+    } catch (error) {
+        console.log(error, 'eeeerrrrrorrrrrrr')
+        // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        // yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    }
+}
+
+function* creteClientNote(action) {
+
+    // yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    // yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    try {
+        const res = yield call(authService.createClientNoteService, action.payload.body);
+        console.log(res, 'cl create note')
+        yield put({
+            type: CREATE_CLIENT_NOTE_SUCCESS,
+            payload: res.data,
+        });
+        // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        // yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+    } catch (error) {
+        // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        // yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
+    }
+}
+
+
+function* editClientNote(action) {
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+
+
+    try {
+        const res = yield call(authService.editClientNoteService, action.payload.id, action.payload.body);
+        console.log(res, 'edit note')
+        yield put({
+            type: GET_CLIENT_NOTES,
+            payload: {id: action.payload.fId, onModal: 'Client'}
+        });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+    } catch (error) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
+    }
+}
+
+
+function* deleteClientNote(action) {
+    // yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    // yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    try {
+        const res = yield call(authService.deleteClientNoteService, action.payload.id);
+        console.log(res, 'res del note')
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+        yield put({
+            type: GET_CLIENT_NOTES,
+            payload: {id: action.payload.fId, onModal: 'Client'}
+        });
+    } catch (error) {
+        console.log(error, 'del note')
+        // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        // yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
+    }
+}
 
 
 export const watchClient = function* watchClientSaga() {
@@ -302,6 +404,10 @@ export const watchClient = function* watchClientSaga() {
     yield takeLatest(EDIT_CLIENT_AUTHORIZATION_SERV, editClientAuthorizationsServ)
     yield takeLatest(DELETE_CLIENT_AUTHORIZATION_SERV, deleteClientAuthorizationsServ)
     yield takeLatest(GET_CLIENT_HISTORIES, getClientHistories)
+    yield takeLatest(GET_CLIENT_NOTES, getClientNotes)
+    yield takeLatest(CREATE_CLIENT_NOTE, creteClientNote)
+    yield takeLatest(EDIT_CLIENT_NOTE, editClientNote)
+    yield takeLatest(DELETE_CLIENT_NOTE, deleteClientNote)
 
 
 };

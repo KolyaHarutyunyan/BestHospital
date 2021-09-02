@@ -43,7 +43,7 @@ export const Client = ({}) => {
                         openCloseInfo={open}
                         body={deleteClient ?
                                 <DeleteElement
-                                    handleDel={removeClient}
+                                    handleDel={()=>alert('')}
                                     className={classes}
                                     text={'Delete Client'}
                                     info={deleteClient.firstName}

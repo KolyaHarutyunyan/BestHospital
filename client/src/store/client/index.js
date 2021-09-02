@@ -1,19 +1,19 @@
 import {
     createClient,
     createClientContact,
-    createClientEnrollment,
+    createClientEnrollment, createClientNote,
     createClientsAuthorizations, createClientsAuthorizationsServ,
     deleteClient,
     deleteClientContact,
-    deleteClientEnrollment, deleteClientsAuthorization, deleteClientsAuthorizationServ,
+    deleteClientEnrollment, deleteClientNote, deleteClientsAuthorization, deleteClientsAuthorizationServ,
     editClient,
     editClientContact,
-    editClientEnrollment, editClientsAuthorizations, editClientsAuthorizationsServ, getClientHistories,
+    editClientEnrollment, editClientNote, editClientsAuthorizations, editClientsAuthorizationsServ, getClientHistories,
     getClients,
     getClientsAuthorizations, getClientsAuthorizationsServ,
     getClientsById,
     getClientsContacts,
-    getClientsEnrollment,
+    getClientsEnrollment, getClientsNotes,
 } from "./client.action";
 
 export {clientReducer} from './client.reducer';
@@ -41,6 +41,10 @@ export const clientActions = {
     createClientsAuthorizationsServ,
     editClientsAuthorizationsServ,
     deleteClientsAuthorizationServ,
-    getClientHistories
+    getClientHistories,
+    getClientsNotes,
+    createClientNote,
+    editClientNote,
+    deleteClientNote
 }
 
