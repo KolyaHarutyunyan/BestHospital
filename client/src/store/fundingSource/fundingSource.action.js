@@ -125,15 +125,15 @@ export const getActiveOrInactive = (type) =>{
 }
 
 
-export const getFundingSourceNotes = (id,onModal) => {
+export const getFundingSourceNotes = ( id,onModal) => {
     return {
         type: GET_FUNDING_SOURCE_NOTES,
-        payload: {id,onModal}
+        payload: { id,onModal}
     }
 }
 
 
-export const createFoundingSourceNote = ( body) => {
+export const createFoundingSourceNote = (body) => {
 
     return {
         type: CREATE_FUNDING_SOURCE_NOTE,
@@ -143,24 +143,17 @@ export const createFoundingSourceNote = ( body) => {
     }
 }
 
-export const editFoundingSourceNote = (id, body) => {
+export const editFoundingSourceNote = (fId, id, body) => {
 
     return {
         type: EDIT_FUNDING_SOURCE_NOTE,
-        payload: {
-            body,
-            id
-        }
+        payload: {fId, body, id,}
     }
 }
 
-export const deleteFoundingSourceNote = (id) => {
-
+export const deleteFoundingSourceNote = (fId, id) => {
     return {
         type: DELETE_FUNDING_SOURCE_NOTE,
-        payload: {
-
-            id
-        }
+        payload: {fId, id}
     }
 }
