@@ -1,5 +1,5 @@
 export const activeInactive =(data,type,list)=>{
-    console.log(data,type,list,'data,type,listdata,type,listdata,type,list')
+
     if(list === 'founding'){
         return data.filter((item) => !item.status ? type === 0 && item :  item.status === type)
     }

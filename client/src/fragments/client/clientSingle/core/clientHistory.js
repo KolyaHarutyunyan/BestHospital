@@ -3,12 +3,12 @@ import {serviceSingleStyles} from "./styles";
 
 
 
-export const ClientHistory = ()=>{
+export const ClientHistory = ({info})=>{
     const classes = serviceSingleStyles()
-    let data = []
+
     return(
         <div className={classes.clientHistory}>
-            {data && data.map((item,index)=>{
+            {info && info.map((item,index)=>{
                 return(
                     <HistoryCard data={item} />
                 )

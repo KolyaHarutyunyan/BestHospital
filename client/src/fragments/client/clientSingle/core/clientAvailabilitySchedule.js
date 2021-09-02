@@ -2,9 +2,7 @@ import React from "react";
 import {Card} from '@eachbase/components';
 import {serviceSingleStyles} from './styles';
 import {Colors, Images} from "@eachbase/utils";
-import {AvailableHours} from "./availableHours";
-
-
+import {AvailableHours} from "../../../../components/availability/availableHours";
 
 export const ClientAvailabilitySchedule = ({data}) => {
     const classes = serviceSingleStyles()

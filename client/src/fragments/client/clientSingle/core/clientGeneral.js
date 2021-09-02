@@ -1,6 +1,7 @@
 import { Card } from '@eachbase/components';
 import { serviceSingleStyles } from './styles';
 import { Colors, Images } from "@eachbase/utils";
+import moment from "moment";
 
 export const ClientGeneral = ({data}) =>{
     const classes = serviceSingleStyles()
@@ -14,7 +15,7 @@ export const ClientGeneral = ({data}) =>{
 
     const otherDetails = [
         {title: 'Gender', value: data?.gender},
-        {title: 'Date of Birth', value: data?.birthday},
+        {title: 'Date of Birth', value: data?.birthday && moment(data?.birthday).format('DD MM YYYY') },
         {title: 'Age', value: data?.age},
         {title: 'Ethnicity', value: data?.ethnicity},
         {title: 'Language', value: data?.language},

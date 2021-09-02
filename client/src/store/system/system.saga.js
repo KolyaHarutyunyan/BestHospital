@@ -49,7 +49,7 @@ function* getCredential() {
 }
 
 function* editCredentialById(action) {
-    console.log(action,'action');
+
     try {
         yield call(systemService.editCredentialByIdGlobalService, action.payload.id, action.payload.body)
         yield put({

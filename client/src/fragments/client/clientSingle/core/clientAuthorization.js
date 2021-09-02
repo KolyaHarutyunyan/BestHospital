@@ -7,11 +7,11 @@ import {useDispatch, useSelector} from "react-redux";
 import {clientActions} from "@eachbase/store";
 import {AddAuthorization, AddEnrollment} from "../../clientModals";
 
-export const ClientAuthorization = ({ setAuthActive, setAuthItemIndex}) => {
+export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex}) => {
     const classes = serviceSingleStyles()
-    const clientsAuthorizations = useSelector(state => state.client.clientsAuthorizations)
+    // const clientsAuthorizations = useSelector(state => state.client.clientsAuthorizations)
 
-    console.log(clientsAuthorizations,'zangvaaac')
+
     const dispatch = useDispatch()
     const [openClose, setOpenClose] = useState(false)
     const [index, setIndex] = useState(null)
@@ -49,7 +49,7 @@ export const ClientAuthorization = ({ setAuthActive, setAuthItemIndex}) => {
 
 
     let deleteAuthorization = () => {
-          dispatch(clientActions.deleteClientsAuthorization(clientsAuthorizations[index].id))
+          dispatch(clientActions.deleteClientsAuthorization(info[index].id))
         setOpenClose(!openClose)
     }
 
@@ -92,7 +92,7 @@ export const ClientAuthorization = ({ setAuthActive, setAuthItemIndex}) => {
             <SimpleModal
                 handleOpenClose={() => setToggleModal(!toggleModal)}
                 openDefault={toggleModal}
-                content={delEdit ? <AddAuthorization info={clientsAuthorizations[index]} handleClose={() => setToggleModal(!toggleModal)}/>
+                content={delEdit ? <AddAuthorization info={info[index]} handleClose={() => setToggleModal(!toggleModal)}/>
                     : <DeleteElement
                         text={'Delete Authorization'}
                         handleClose={() => setToggleModal(!toggleModal)}
@@ -103,7 +103,7 @@ export const ClientAuthorization = ({ setAuthActive, setAuthItemIndex}) => {
             <div className={classes.clearBoth}/>
             <div className={classes.notesWrap}>
                 <Notes
-                    data={clientsAuthorizations}
+                    data={info}
                     items={clientAuthorizationItem}
                     headerTitles={headerTitles}
                     defaultStyle={true}/>

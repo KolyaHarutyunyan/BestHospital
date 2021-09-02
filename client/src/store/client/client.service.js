@@ -42,6 +42,8 @@ export const authService = {
     editClientAuthorizationServService: ({payload}) =>  axios.patch(`/authorizationservice/${payload.id}`, payload.body),
 
     deleteClientAuthorizationServService: ({payload}) =>  axios.delete(`/authorizationservice/${payload.id}`),
+
+    getClientHistoriesService: (id,onModal) => axios.get(`/history/${id}/${onModal}`,),
 };
 
 

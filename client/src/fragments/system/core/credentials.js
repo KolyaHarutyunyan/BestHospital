@@ -147,7 +147,7 @@ export const Credentials = ({removeItem, openModal,globalCredentials}) => {
                                              credentialName: credentialItem.name,
                                              credentialType: convertType(credentialItem.type)
                                          })} alt="edit"/>
-                                    <img src={Images.remove} alt="delete" onClick={() => removeItem(credentialItem._id)}/>
+                                    <img src={Images.remove} alt="delete" onClick={() => removeItem({id: credentialItem._id.id,name: credentialItem.name} )}/>
                                 </div>
                             </div>
                         )

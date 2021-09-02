@@ -6,21 +6,23 @@ import {useDispatch, useSelector} from "react-redux";
 import {clientActions} from "@eachbase/store";
 import TextField from "@material-ui/core/TextField";
 import {useParams} from "react-router-dom";
+import moment from "moment";
 
 
 export const CreateClient = ({handleClose, info}) => {
     let params = useParams()
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info} : {});
+    const [inputs, setInputs] = useState(info ? {...info,birthday : moment(info?.birthday).format('YYYY-MM-DD') } : {});
     const [step, setStep] = useState('first')
     const classes = createClientStyle()
     const dispatch = useDispatch()
-
 
     const handleChange = e => setInputs(
         prevState => ({...prevState, [e.target.name]: e.target.value}),
         error === e.target.name && setError(''),
     );
+
+
 
 
     useEffect(() => {
@@ -195,7 +197,7 @@ export const CreateClient = ({handleClose, info}) => {
 
 
                     <CreateChancel
-                        create={step === 'first' ? 'Next' : "Add"}
+                        create={step === 'first' ? 'Next' : info ? "Save" : "Add"}
                         chancel={"Cancel"}
                         onCreate={handleCreate}
                         onClose={handleClose}

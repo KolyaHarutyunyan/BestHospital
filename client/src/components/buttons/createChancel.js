@@ -13,7 +13,7 @@ export const CreateChancel = ({
                                   disabled,
                                   loader,
                               }) => {
-    console.log(loader,'loaderloaderloaderloader');
+
 
     return (
         <div className={classes}

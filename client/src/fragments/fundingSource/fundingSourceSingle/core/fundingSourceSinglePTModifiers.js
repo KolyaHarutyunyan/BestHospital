@@ -25,7 +25,7 @@ export const FundingSourceSinglePTModifiers = ({data, title}) => {
     ];
 
     let modifiersItem = (item,index) => {
-        console.log(item.credential.name,'555555')
+
         return (
             <TableBodyComponent key={index}>
                 <TableCell>  {item.name}  </TableCell>

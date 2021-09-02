@@ -46,7 +46,7 @@ export const StaffItemHeader = ({credModalType, openCloseCredModal, openCredModa
                             <AddModalButton btnStyles={editButtonStyle} handleClick={() => setOpen(true)}
                                             text='edit'/> : activeTab === 2 ?
                             <AddButton text='Add Credential'
-                                       handleClick={() => openCloseCredModal('addCredential')}/> : activeTab === 4 ?
+                                       handleClick={() => openCloseCredModal('addCredential')}/> : activeTab === 5 ?
                                 <AddButton text='Add Note' handleClick={handleOpenClose}/> : null
                     }
                 </li>
@@ -58,7 +58,7 @@ export const StaffItemHeader = ({credModalType, openCloseCredModal, openCredModa
                     <CreateStaff staffGeneral={adminInfoById}
                                  resetData={false} handleClose={handleOpenClose}/> : activeTab === 2 ?
                         <CredentialModal credModalType={credModalType}
-                                         handleClose={() => openCloseCredModal()}/> : activeTab === 4 ?
+                                         handleClose={() => openCloseCredModal()}/> : activeTab === 5 ?
                             <StaffAddNotes handleClose={handleOpenClose}/> : null}
             />
         </div>

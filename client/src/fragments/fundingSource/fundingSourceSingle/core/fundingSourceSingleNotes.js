@@ -7,10 +7,11 @@ import moment from "moment";
 import {FundingSourceNotesAdd} from "./modals";
 import { fundingSourceActions} from "@eachbase/store";
 import {useDispatch} from "react-redux";
+import {useParams} from "react-router-dom";
 
 
 export const FundingSourceSingleNotes = ({data}) => {
-    console.log(data,'dataaaassssss')
+    const params = useParams()
     const [toggleModal, setToggleModal] = useState(false)
     const [index, setIndex] = useState(null)
     const [delEdit, setDelEdit] = useState(null)
@@ -34,12 +35,11 @@ export const FundingSourceSingleNotes = ({data}) => {
             sortable: false
         },
     ];
-
     let notesItem = (item, index) => {
         return (
             <TableBodyComponent key={index} >
                 <TableCell> {moment(item?.created).format('DD/MM/YYYY')}</TableCell>
-                <TableCell><p className={classes.tableTitle}>{item?.user && item.user.firstName }</p>  </TableCell>
+                <TableCell><p className={classes.tableTitle}>{item?.user?.firstName ? item.user.firstName :  item?.user ? item.user : ''}</p>  </TableCell>
                 <TableCell>  <p className={classes.tableTitle}>{item?.text}</p>  </TableCell>
                 <TableCell>
                     <>
@@ -64,7 +64,7 @@ export const FundingSourceSingleNotes = ({data}) => {
     }
 
     let deleteNote = () => {
-        dispatch(fundingSourceActions.deleteFoundingSourceNote(data[index].id))
+        dispatch(fundingSourceActions.deleteFoundingSourceNote(params.id, data[index].id))
         setToggleModal(false)
     }
 

@@ -10,9 +10,10 @@ import {
     EDIT_CLIENT_ENROLLMENT, GET_CLIENT_AUTHORIZATION, GET_CLIENT_AUTHORIZATION_SERV,
     GET_CLIENT_BY_ID,
     GET_CLIENT_CONTACTS,
-    GET_CLIENT_ENROLLMENT,
+    GET_CLIENT_ENROLLMENT, GET_CLIENT_HISTORIES,
     GET_CLIENTS,
 } from "./client.types";
+import {GET_FUNDING_SOURCE_HISTORIES_BY_ID} from "../fundingSource/fundingSource.types";
 
 
 export const getClients = () => {
@@ -147,7 +148,7 @@ export const createClientsAuthorizations = (body, id, funderId) => {
 }
 
 export const editClientsAuthorizations = (body,  id) => {
-    console.log(body,  id,  'action')
+
     return {
         type: EDIT_CLIENT_AUTHORIZATION,
         payload: {
@@ -185,7 +186,7 @@ export const createClientsAuthorizationsServ = (body, id, funderId) => {
 }
 
 export const editClientsAuthorizationsServ = (body,  id) => {
-    console.log(body,  id,  'action')
+
     return {
         type: EDIT_CLIENT_AUTHORIZATION_SERV,
         payload: {
@@ -204,9 +205,10 @@ export const deleteClientsAuthorizationServ = ( id) => {
 }
 
 
-export const ClientsAuthorizationServNew = ( id) => {
+export const getClientHistories = (id,onModal) => {
+
     return {
-        type: CLIENT_AUTHORIZATION_SERV_NEW,
-        payload: {id}
+        type: GET_CLIENT_HISTORIES,
+        payload: {id,onModal}
     }
 }
