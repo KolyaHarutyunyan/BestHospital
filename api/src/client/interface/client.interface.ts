@@ -10,7 +10,6 @@ export interface IClient extends Document {
     language: string;
     familyLanguage: string;
     gender: string;
-    age: number;
     status: number;
     birthday: Date;
     termination: ITermination;

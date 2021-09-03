@@ -21,7 +21,6 @@ export class ClientSanitizer implements ISanitize {
             language: client.language,
             familyLanguage: client.familyLanguage,
             gender: client.gender,
-            age: client.age,
             birthday: client.birthday,
             termination: client.termination,
             status: client.status
@@ -29,7 +28,7 @@ export class ClientSanitizer implements ISanitize {
         if (client.enrollment) clientDTO.enrollment = client.enrollment;
         return clientDTO;
     }
-    
+
     sanitizeMany(clients: IClient[]): ClientDTO[] {
         const clientDTOs: ClientDTO[] = [];
         for (let i = 0; i < clients.length; i++) {

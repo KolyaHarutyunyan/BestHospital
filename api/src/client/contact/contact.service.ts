@@ -94,7 +94,7 @@ export class ContactService {
   private checkContact(contact: IContact) {
     if (!contact) {
       throw new HttpException(
-        'Profile with this id was not found',
+        'Client contact with this id was not found',
         HttpStatus.NOT_FOUND,
       );
     }

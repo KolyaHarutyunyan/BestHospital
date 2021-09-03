@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsEmail, IsEnum, IsMongoId, IsNotEmpty, IsPhoneNumber, IsString, IsUrl } from 'class-validator';
+import { IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
+import { AddressDTO } from '../../../address';
 
 export class CreateContactDTO {
     @ApiProperty()
@@ -18,7 +19,7 @@ export class CreateContactDTO {
     @IsNotEmpty()
     @IsPhoneNumber('US')
     phoneNumber: string;
-    @ApiProperty()
+    @ApiProperty({type: AddressDTO})
     @IsNotEmpty()
     address: string;
 }

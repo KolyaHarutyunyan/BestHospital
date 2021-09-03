@@ -41,7 +41,6 @@ export class ClientService {
         language: dto.language,
         familyLanguage: dto.familyLanguage,
         gender: dto.gender,
-        age: dto.age,
         status: dto.status,
         birthday: dto.birthday
         // address: await this.addressService.getAddress(dto.address),
@@ -107,7 +106,6 @@ export class ClientService {
       if (dto.language) client.language = dto.language;
       if (dto.familyLanguage) client.familyLanguage = dto.familyLanguage;
       if (dto.gender) client.gender = dto.gender;
-      if (dto.age) client.age = dto.age;
 
       if (dto.birthday) {
         client.birthday = dto.birthday

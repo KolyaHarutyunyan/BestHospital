@@ -35,10 +35,6 @@ export class CreateClientDTO {
     gender: string;
     @ApiProperty()
     @IsNotEmpty()
-    @IsNumber()
-    age: number;
-    @ApiProperty()
-    @IsNotEmpty()
     @IsDateString()
     birthday: Date;
     @ApiProperty({ enum: ClientStatus })

@@ -37,10 +37,6 @@ export class UpdateClientDto {
     gender: string;
     @ApiProperty()
     @IsOptional()
-    @IsNumber()
-    age: number;
-    @ApiProperty()
-    @IsOptional()
     @IsDateString()
     birthday: Date;
     @ApiProperty({ enum: ClientStatus })
