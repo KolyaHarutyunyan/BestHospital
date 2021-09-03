@@ -5,7 +5,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import {TableHeadComponent, SearchAndFilter, PaginationItem, NoItemText} from "@eachbase/components";
 import {useGlobalStyles} from "@eachbase/utils";
 
-export const Notes = ({data, headerTitles, pagination, defaultStyle, items}) => {
+export const Notes = ({data, headerTitles, pagination, defaultStyle, items,noItemsYet}) => {
 
     const officesStyle = makeStyles(({}) => ({
         thWidth: {
@@ -61,7 +61,9 @@ export const Notes = ({data, headerTitles, pagination, defaultStyle, items}) => 
                         }) : null
                     }
                 </Table>
-                {!data && <NoItemText text='No Items Yet'/>}
+
+                {!noItemsYet && !data && <NoItemText text='No Items Yet'/>}
+
                 {pagination && <PaginationItem
                     text={`Showing 30 to 30 of 200 entries`}
                     handleReturn={(number) => changePage(number)}

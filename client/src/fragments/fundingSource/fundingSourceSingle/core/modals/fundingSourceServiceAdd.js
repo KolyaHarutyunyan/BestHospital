@@ -5,14 +5,18 @@ import {ErrorText, Images} from "@eachbase/utils";
 import {useDispatch} from "react-redux";
 import {fundingSourceActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
+import {FundingSourceModifiersAdd} from "./fundingSourceModifiersAdd";
 
 
-export const FundingSourceServiceAdd = ({handleClose, systemServices}) => {
+export const FundingSourceServiceAdd = ({handleClose, systemServices, globalCredentials}) => {
+
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState({});
     const [sysServiceItem, setSysServiceItem] = useState(null);
+    const [postModifiers , setPostModifiers] = useState()
     const params = useParams()
     let dispatch = useDispatch()
+
 
 
     const classes = foundingSourceModalStyle()
@@ -38,7 +42,8 @@ export const FundingSourceServiceAdd = ({handleClose, systemServices}) => {
 
 
 
-    const handleCreate = () => {
+    const handleCreate = async () => {
+
         if (inputs.name && inputs.cptCode && inputs.size && inputs.min && inputs.max) {
             const data = {
                 "name": inputs.name,
@@ -49,7 +54,13 @@ export const FundingSourceServiceAdd = ({handleClose, systemServices}) => {
                 "min": +inputs.min,
                 "max": +inputs.max
             }
-             dispatch(fundingSourceActions.createFoundingSourceServiceById(params.id, data))
+            await dispatch(fundingSourceActions.createFoundingSourceServiceById(params.id, data))
+            await dispatch(fundingSourceActions.createFoundingSourceServiceModifier( {
+                "modifiers": [
+                    postModifiers
+                ],
+                "serviceId": "61306915d2cc1f0f3b7ec7a6"
+            }))
         } else {
             setError(
                 !inputs.name ? 'name' :
@@ -62,7 +73,6 @@ export const FundingSourceServiceAdd = ({handleClose, systemServices}) => {
         }
     }
 
-    let list = []
 
 
     return (
@@ -83,11 +93,11 @@ export const FundingSourceServiceAdd = ({handleClose, systemServices}) => {
                         <div className={classes.displayCodeBlock}>
                             <p className={classes.displayCodeBlockText}>Display Code: <span
                                 className={classes.displayCode}>
-                                {sysServiceItem !== null && sysServiceItem?.displayCode !== 'displayCode' ? sysServiceItem?.displayCode : 'N/A'}
+                                {sysServiceItem !== null && sysServiceItem?.displayCode !== 'displayCode' && inputs?.name !== '' ? sysServiceItem?.displayCode : 'N/A'}
                             </span></p>
                             <p className={classes.displayCodeBlockText} style={{marginTop: 16}}>Category: <span
                                 className={classes.displayCode}>
-                                {sysServiceItem !== null && sysServiceItem?.category !== 'category' ? sysServiceItem?.category : 'N/A'}
+                                {sysServiceItem !== null && sysServiceItem?.category !== 'category'  && inputs?.name !== '' ? sysServiceItem?.category : 'N/A'}
                             </span></p>
                         </div>
                     </div>
@@ -135,52 +145,13 @@ export const FundingSourceServiceAdd = ({handleClose, systemServices}) => {
                     </div>
 
                 </div>
-                <p className={classes.ModifiresTitle}>Modifiers</p>
-                <div className={classes.foundingSourceModalsBodyBlock}>
-                    <ValidationInput
-                        onChange={handleChange}
-                        value={inputs.website}
-                        variant={"outlined"}
-                        type={"text"}
-                        label={"Modifier Name"}
-                        name={'website'}
-                        typeError={error === 'website' && ErrorText.field}
-                        styles={{width: 198}}
-                    />
-                    <ValidationInput
-                        onChange={handleChange}
-                        value={inputs.website}
-                        variant={"outlined"}
-                        type={"text"}
-                        label={"Charge Rate*"}
-                        name={'website'}
-                        typeError={error === 'website' && ErrorText.field}
-                        styles={{width: 198}}
-                    />
-                    <SelectInput
-                        name={"type"}
-                        label={"Credential*"}
-                        handleSelect={handleChange}
-                        value={inputs.type}
-                        list={list}
-                        typeError={error === 'type' ? ErrorText.field : ''}
-                        styles={{width: 198}}
-                    />
-                    <div style={{width: 36}}/>
-                    <SelectInput
-                        name={"type"}
-                        label={"Type*"}
-                        handleSelect={handleChange}
-                        value={inputs.type}
-                        list={list}
-                        typeError={error === 'type' ? ErrorText.field : ''}
-                        styles={{width: 198,}}
-                    />
-                </div>
-                <div className={classes.addmodifiersBlock}>
-                    <img src={Images.addLight} alt="" className={classes.iconsCursor}/>
-                    <p className={classes.addMoreModifiersText}>Add more modifiers</p>
-                </div>
+
+
+            <FundingSourceModifiersAdd  setPostModifiers={setPostModifiers} globalCredentials={globalCredentials} />
+
+
+
+
                 <div className={classes.foundingSourceModalsBodyBlock}>
                     <CreateChancel
                         create={"Add"}

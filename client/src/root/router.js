@@ -17,7 +17,7 @@ export const Router = ({}) => {
   return (
 
     <Switch>
-      {/*<Route path='/' exact component={Offices}/>*/}
+      <Route path='/' exact component={FundingSource}/>
 
       <Route path="/fundingSource" exact component={FundingSource} />
       <Route path="/fundingSource/:id" exact component={FundingSourceSingle} />

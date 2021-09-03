@@ -12,6 +12,7 @@ import {CreateFundingSource} from "../../createFundingSource";
 export const FundingSourceSingleHeader = ({activeTab, title, info}) => {
     const [open, setOpen] = useState(false)
     const globalServices = useSelector(state => state.system.services)
+    const globalCredentials = useSelector(state => state.system.credentials)
     const dispatch = useDispatch()
     const params = useParams()
     const classes = fundingSourceSingleStyles()
@@ -20,6 +21,7 @@ export const FundingSourceSingleHeader = ({activeTab, title, info}) => {
         if (activeTab === 1) {
             dispatch(systemActions.getServices())
 
+            dispatch(systemActions.getCredential())
         } else if (activeTab === 2) {
 
         } else if (activeTab === 3) {
@@ -44,7 +46,7 @@ export const FundingSourceSingleHeader = ({activeTab, title, info}) => {
                 content={activeTab === 0 ?
                     <CreateFundingSource handleClose={handleOpenClose} info={prevData}/>
                     : activeTab === 1 ?
-                        <FundingSourceServiceAdd systemServices={globalServices} handleClose={handleOpenClose}/> :
+                        <FundingSourceServiceAdd systemServices={globalServices} globalCredentials={globalCredentials} handleClose={handleOpenClose}/> :
                         activeTab === 2 ?
                             <FundingSourceNotesAdd handleClose={handleOpenClose}/> : null}/>
             {activeTab === 0 ?

@@ -8,15 +8,22 @@ export const authService = {
 
     editFundingSourceService: (id,body) => axios.patch(`/funding/${id}`, body),
 
-    getFundingSourceService: (status) => {
-        if (status || status === 0){
-            return  axios.get(`/funding/?status=${status}`)
+    getFundingSourceService: ({data}) => {
+        console.log(data,'status')
+        if (data ){
+            return  axios.get(`/funding/?skip=${data.start}&&limit=${data.end}&&status=${data.status}`)
         } else {
             return axios.get('/funding')
         }
     },
 
     getFoundingSourceByIdService: (id) => axios.get(`/funding/${id}`,),
+
+
+
+
+
+
 
     getFoundingSourceServiceByIdService: (id) => axios.get(`/funding/${id}/service`),
 
@@ -26,7 +33,21 @@ export const authService = {
 
     deleteFoundingSourceServiceByIdService: (id) => axios.delete(`/funding/${id}/`,),
 
-    createFoundingSourceServiceModifierService: (id, body) => axios.post(`/funding/${id}/modifier`, body),
+
+
+
+
+
+
+
+    createFoundingSourceServiceModifierService: (body) => axios.post(`/funding/modifier`, body),
+
+
+
+
+
+
+
 
     getFundingSourceHistoriesByIdService: (id,onModal) => axios.get(`/history/${id}/${onModal}`,),
 
