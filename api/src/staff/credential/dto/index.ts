@@ -1,3 +1,3 @@
-export { CreateCredentialDTO } from './create.dto';
-export { UpdateCredentialDTO } from './edit.dto';
-export { CredentialDTO } from './credential.dto';
+export { SCreateCredentialDTO } from './create.dto';
+export { SUpdateCredentialDTO } from './edit.dto';
+export { SCredentialDTO } from './credential.dto';

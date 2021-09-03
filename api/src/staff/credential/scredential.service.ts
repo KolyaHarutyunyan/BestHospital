@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CredentialDTO, CreateCredentialDTO, UpdateCredentialDTO } from './dto';
+import { SCredentialDTO, SCreateCredentialDTO, SUpdateCredentialDTO } from './dto';
 import { CredentialService } from '../../credential';
 import { StaffService } from '..';
 import { StaffCredentialModel } from './scredential.model'
@@ -21,7 +21,7 @@ export class SCredentialService {
   private mongooseUtil: MongooseUtil;
 
   /** Create a new staff credential */
-  create = async (dto: CreateCredentialDTO): Promise<CredentialDTO> => {
+  create = async (dto: SCreateCredentialDTO): Promise<SCredentialDTO> => {
     try {
       await this.staffService.findById(dto.staffId);
       const credential = await this.credentialService.findOne(dto.credentialId);
@@ -41,7 +41,7 @@ export class SCredentialService {
   };
 
   // edit the credentials
-  async edit(_id: string, dto: UpdateCredentialDTO): Promise<CredentialDTO> {
+  async edit(_id: string, dto: SUpdateCredentialDTO): Promise<SCredentialDTO> {
     try {
       const credential = await this.model.findById({ _id });
       this.checkCredential(credential);
@@ -73,7 +73,7 @@ export class SCredentialService {
   }
 
   // find the credentials By Staff Id
-  async find(staffId: string): Promise<CredentialDTO[]> {
+  async find(staffId: string): Promise<SCredentialDTO[]> {
     try {
       const credential = await this.model.find({ staffId }).populate('credentialId');
       this.checkCredential(credential[0])
@@ -85,7 +85,7 @@ export class SCredentialService {
   }
 
   // find the credential By Id
-  async findById(_id: string): Promise<CredentialDTO> {
+  async findById(_id: string): Promise<SCredentialDTO> {
     try {
       const credential = await this.model.findById({ _id }).populate('credentialId');
       this.checkCredential(credential)

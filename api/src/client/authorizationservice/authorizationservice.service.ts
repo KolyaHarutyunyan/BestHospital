@@ -1,7 +1,7 @@
 import { Body, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { MongooseUtil } from '../../util';
 import { AuthorizationServiceSanitizer } from './interceptor/authorizationService.interceptor';
-import { AuthorizationServiceDTO, CreateAuthorizationServiceDTO, UpdateAuthorizationserviceDTO } from './dto';
+import { AuthorizationServiceDTO, CreateAuthorizationServiceDTO, UpdateAuthorizationserviceDTO, AuthorizationModifiersDTO } from './dto';
 import { Model } from 'mongoose';
 import { IAuthorizationService } from './interface';
 import { IAuthorization } from '../authorization/interface';
@@ -23,6 +23,51 @@ export class AuthorizationserviceService {
   private model: Model<IAuthorizationService>;
   private authorizationModel: Model<IAuthorization>;
   private mongooseUtil: MongooseUtil;
+  
+  async checkModifiers(authorizationId: string, fundingServiceId: string, dto: AuthorizationModifiersDTO): Promise<any> {
+    try{
+      let modifiers = [];
+      let brokenModifiers = [];
+
+      if (dto.modifiers) {
+        const findAuthorizationService: any = await this.model.find({ authorizationId: authorizationId, serviceId: fundingServiceId }).populate('modifiers');
+        if (findAuthorizationService) {
+          findAuthorizationService.forEach(item => {
+            item.modifiers.map(modifier => {
+              modifiers.push(modifier._id)
+            })
+          })
+          let dtoM = dto.modifiers;
+          for (let i = 0; i < dtoM.length; i++) {
+            for (let j = 0; j < modifiers.length; j++) {
+              if (dtoM[i] == modifiers[j]) {
+                brokenModifiers.push(dtoM[i])
+              }
+            }
+          }
+          if(brokenModifiers.length !== 0){
+            throw new HttpException(
+              `Modifier received ${brokenModifiers}`,
+              HttpStatus.NOT_FOUND,
+            );
+          }
+          return new HttpException('modifiers are free', HttpStatus.ACCEPTED)
+        }
+        throw new HttpException(
+          `authorization services not found`,
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      throw new HttpException(
+        `modifiers was not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    catch(e){
+      throw e
+    }
+  }
+
 
   async create(authorizationId: string, fundingServiceId: string, dto: CreateAuthorizationServiceDTO): Promise<AuthorizationServiceDTO> {
     try {
@@ -57,23 +102,23 @@ export class AuthorizationserviceService {
 
       const authorization = await this.authorizationModel.findOne({ _id: authorizationId });
       this.checkAuthorization(authorization);
-      const fundingService: any = await this.fundingService.findAllServiceForClient(authorization.funderId, fundingServiceId);
-      if (!fundingService.length) {
-        throw new HttpException(
-          'Invalid fundingServiceId',
-          HttpStatus.NOT_FOUND,
-        );
-      }
+      const findModifiers: any = await this.fundingService.findmodifier(fundingServiceId);
+      // if (!fundingService.length) {
+      //   throw new HttpException(
+      //     'Invalid fundingServiceId',
+      //     HttpStatus.NOT_FOUND,
+      //   );
+      // }
 
-      if (dto.modifiers && fundingService[0].modifiers.length == []) {
+      if (dto.modifiers && findModifiers[0].length == []) {
         throw new HttpException(
           'Current Funding service has not modifier',
           HttpStatus.NOT_FOUND,
         );
       }
 
-      if (dto.modifiers && fundingService[0].modifiers.length != []) {
-        fundingService[0].modifiers.map(modifier => modifiers.push(modifier.id))
+      if (dto.modifiers && findModifiers[0].length != []) {
+        findModifiers.map(modifier => modifiers.push(modifier.id))
         dto.modifiers.map(modifier => {
           if (!modifiers.includes(modifier)) {
             throw new HttpException(
@@ -96,7 +141,7 @@ export class AuthorizationserviceService {
         // completed: dto.completed,
         // available: dto.available,
         authorizationId: authorization.id,
-        serviceId: fundingService[0].id,
+        serviceId: fundingServiceId,
         modifiers: dto.modifiers
       });
       await authorizationService.save();

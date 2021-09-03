@@ -1,11 +1,13 @@
-export class CreateAuthorizationserviceDto {}
+export class CreateAuthorizationserviceDto { }
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsArray,
   IsMongoId,
   IsNotEmpty,
   IsNumber,
   IsOptional,
+  ValidateNested,
 } from 'class-validator';
 
 export class CreateAuthorizationServiceDTO {
@@ -23,6 +25,12 @@ export class CreateAuthorizationServiceDTO {
   // available: number;
   @ApiProperty()
   @IsOptional()
+  @IsArray()
+  modifiers: Array<string>;
+}
+
+export class AuthorizationModifiersDTO {
+  @ApiProperty()
   @IsArray()
   modifiers: Array<string>;
 }

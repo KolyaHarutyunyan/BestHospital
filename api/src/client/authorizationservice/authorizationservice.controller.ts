@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ParseObjectIdPipe, Public } from '../../util';
 import { AuthorizationserviceService } from './authorizationservice.service';
-import { AuthorizationServiceDTO, CreateAuthorizationServiceDTO, UpdateAuthorizationserviceDTO } from './dto';
+import { AuthorizationModifiersDTO, AuthorizationServiceDTO, CreateAuthorizationServiceDTO, UpdateAuthorizationserviceDTO } from './dto';
 
 @Controller('authorizationservice')
 @ApiTags('Authorization Service Endpoints')
@@ -17,6 +17,15 @@ export class AuthorizationserviceController {
     @Param('fundingServiceId', ParseObjectIdPipe) fundingServiceId: string,
     @Body() createAuthorizationserviceDto: CreateAuthorizationServiceDTO) {
     return this.authorizationserviceService.create(authorizationId, fundingServiceId, createAuthorizationserviceDto);
+  }
+  @Post('authorization/:authorizationId/fundingService/:fundingServiceId/checkModifiers')
+  @Public()
+  @ApiOkResponse({type: AuthorizationServiceDTO})
+  checkModifiers(
+    @Param('authorizationId', ParseObjectIdPipe) authorizationId: string,
+    @Param('fundingServiceId', ParseObjectIdPipe) fundingServiceId: string,
+    @Body() createAuthorizationserviceDto: AuthorizationModifiersDTO) {
+    return this.authorizationserviceService.checkModifiers(authorizationId, fundingServiceId, createAuthorizationserviceDto);
   }
   /** Create a new authorization service */
   // @Post(':id/fundingService/:fundingServiceId/authorization/service')

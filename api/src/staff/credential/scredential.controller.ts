@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ParseObjectIdPipe, Public } from '../../util';
 import { SCredentialService } from './scredential.service';
-import { CredentialDTO, CreateCredentialDTO, UpdateCredentialDTO } from './dto';
+import { SCredentialDTO, SCreateCredentialDTO, SUpdateCredentialDTO } from './dto';
 
 @Controller('scredential')
 @ApiTags('Staff Credential Endpoints')
@@ -11,29 +11,29 @@ export class SCredentialController {
 
   /** Create a new staff credential */
   @Post()
-  @ApiOkResponse({ type: CredentialDTO })
+  @ApiOkResponse({ type: SCredentialDTO })
   @Public()
   async createStaffCredential(
-    @Body() dto: CreateCredentialDTO,
-  ): Promise<CredentialDTO> {
+    @Body() dto: SCreateCredentialDTO,
+  ): Promise<SCredentialDTO> {
     const credential = await this.credentialService.create(dto);
     return credential;
   }
 
-  /** Edit a system */
-  @Patch(':id/system')
+  /** Edit a scredential */
+  @Patch(':id')
   @Public()
-  @ApiOkResponse({ type: CredentialDTO })
+  @ApiOkResponse({ type: SCredentialDTO })
   async edit(
     @Param('id', ParseObjectIdPipe) id: string,
-    @Body() dto: UpdateCredentialDTO,
-  ): Promise<CredentialDTO> {
+    @Body() dto: SUpdateCredentialDTO,
+  ): Promise<SCredentialDTO> {
     const credential = await this.credentialService.edit(id, dto);
     return credential;
   }
 
   //  /** Delete a credential */
-  @Delete(':id/credential')
+  @Delete(':id')
   @Public()
   @ApiOkResponse({ type: 'string' })
   async delete(
@@ -45,21 +45,21 @@ export class SCredentialController {
 
   /** Get the credential profile */
   @Get('staff/:staffId/credential')
-  @ApiOkResponse({ type: [CredentialDTO] })
+  @ApiOkResponse({ type: [SCredentialDTO] })
   @Public()
   async find(
     @Param('staffId', ParseObjectIdPipe) staffId: string,
-  ): Promise<CredentialDTO[]> {
+  ): Promise<SCredentialDTO[]> {
     return await this.credentialService.find(staffId);
   }
 
   /** Get the credential profile By Id */
   @Get(':id')
-  @ApiOkResponse({ type: CredentialDTO })
+  @ApiOkResponse({ type: SCredentialDTO })
   @Public()
   async findById(
     @Param('id', ParseObjectIdPipe) id: string,
-  ): Promise<CredentialDTO> {
+  ): Promise<SCredentialDTO> {
     return await this.credentialService.findById(id);
   }
 }
