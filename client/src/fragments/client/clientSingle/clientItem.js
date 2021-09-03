@@ -21,6 +21,7 @@ import {
 import {useDispatch, useSelector} from "react-redux";
 import {AddContact} from "../clientModals";
 import {clientItemStyles} from "./styles";
+import {getClientsNotes} from "../../../store/client/client.action";
 
 
 export const ClientItem = () => {
@@ -39,6 +40,7 @@ export const ClientItem = () => {
         dispatch(clientActions.getClientsEnrollment(params.id))
         dispatch(clientActions.getClientsAuthorizations(params.id))
         dispatch(clientActions.getClientHistories(params.id, 'Client'))
+        dispatch(clientActions.getClientsNotes(params.id, 'Client'))
     }, []);
 
     const data = useSelector(state => state.client.clientItemInfo)
@@ -49,6 +51,7 @@ export const ClientItem = () => {
     const enrolments = useSelector(state => state.client.clientEnrollment)
     const clientsAuthorizations = useSelector(state => state.client.clientsAuthorizations)
     const clientsHistories = useSelector(state => state.client.clientHistories)
+    const clientsNotes = useSelector(state => state.client.clientsNotes)
     const handleOpenClose = () => {
         setOpen(!open)
     }
@@ -102,7 +105,7 @@ export const ClientItem = () => {
             tabComponent: (<ClientAvailabilitySchedule/>)
         },
         {
-            tabComponent: (<ClientNotes/>)
+            tabComponent: (<ClientNotes info={clientsNotes} />)
         },
         {
             tabComponent: (<ClientHistory  info={clientsHistories} />)

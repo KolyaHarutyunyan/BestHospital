@@ -99,9 +99,9 @@ export const Credentials = ({removeItem, openModal,globalCredentials}) => {
         }else if(errorText){
             dispatch(httpRequestsOnErrorsActions.removeError('CREATE_CREDENTIAL_GLOBAL'))
         }
-    },[success])
+    },[success, errorText])
     let errorMessage = success ? 'success' : 'error'
-    console.log(errorText,'errorText');
+
     return (
         <>
             <div className={`${classes.flexContainer} ${classes.headerSize}`}>
@@ -147,7 +147,7 @@ export const Credentials = ({removeItem, openModal,globalCredentials}) => {
                                              credentialName: credentialItem.name,
                                              credentialType: convertType(credentialItem.type)
                                          })} alt="edit"/>
-                                    <img src={Images.remove} alt="delete" onClick={() => removeItem({id: credentialItem._id.id,name: credentialItem.name} )}/>
+                                    <img src={Images.remove} alt="delete" onClick={() => removeItem({id: credentialItem._id,name: credentialItem.name,type: 'editCredential'} )}/>
                                 </div>
                             </div>
                         )

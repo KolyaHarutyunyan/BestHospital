@@ -19,11 +19,9 @@ export const systemItemStyles = makeStyles(() => ({
         height: 48,
         paddingInline: 32,
         borderRadius: 8,
-        '&:not(:last-child)': {
-            marginBottom: 8
-        },
-        '& > p ':{
-            fontSize:14,
+        marginBottom: 8,
+        '& > p ': {
+            fontSize: 14,
             color: Colors.TextPrimary,
             '& span': {
                 fontWeight: 600,
@@ -87,7 +85,7 @@ export const systemItemStyles = makeStyles(() => ({
     icons: {
         cursor: 'pointer',
         display: 'flex',
-        '& img:last-child':{
+        '& img:last-child': {
             marginLeft: 16
         }
     },

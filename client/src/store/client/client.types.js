@@ -4,6 +4,7 @@ export const GET_CLIENTS_SUCCESS = 'GET_CLIENTS_SUCCESS';
 
 /**Create clients */
 export const CREATE_CLIENT = 'CREATE_CLIENT';
+export const CREATE_CLIENT_SUCCESS = 'CREATE_CLIENT_SUCCESS';
 
 /**Delete clients */
 export const DELETE_CLIENT = 'CREATE_CLIENT';
@@ -21,6 +22,7 @@ export const GET_CLIENT_CONTACTS_SUCCESS = 'GET_CLIENT_CONTACTS_SUCCESS';
 
 /** Create client contact **/
 export const CREATE_CLIENT_CONTACT = 'CREATE_CLIENT_CONTACT'
+export const CREATE_CLIENT_CONTACT_SUCCESS = 'CREATE_CLIENT_CONTACT_SUCCESS'
 
 /** Edit client contact **/
 export const EDIT_CLIENT_CONTACT = 'EDIT_CLIENT_CONTACT'
@@ -71,3 +73,19 @@ export const DELETE_CLIENT_AUTHORIZATION_SERV = 'DELETE_CLIENT_AUTHORIZATION_SER
 /**get client histories */
 export const GET_CLIENT_HISTORIES = 'GET_CLIENT_HISTORIES';
 export const GET_CLIENT_HISTORIES_SUCCESS = 'GET_CLIENT_HISTORIES_SUCCESS';
+
+
+/**get client notes */
+export const GET_CLIENT_NOTES = 'GET_CLIENT_NOTES';
+export const GET_CLIENT_NOTES_SUCCESS = 'GET_CLIENT_NOTES_SUCCESS';
+
+
+/**create client notes */
+export const CREATE_CLIENT_NOTE = 'CREATE_CLIENT_NOTE';
+export const CREATE_CLIENT_NOTE_SUCCESS = 'CREATE_CLIENT_NOTE_SUCCESS';
+
+/**edit client notes */
+export const EDIT_CLIENT_NOTE = 'EDIT_CLIENT_NOTE';
+
+/**delete client notes */
+export const DELETE_CLIENT_NOTE = 'DELETE_CLIENT_NOTE';

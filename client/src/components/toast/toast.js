@@ -13,6 +13,7 @@ export const Toast = ({info, text, type}) => {
             <p className={classes.toastText}>{text}</p>
         </div>
 
+
     useEffect(() => {
         if (info) {
             toast(screen);

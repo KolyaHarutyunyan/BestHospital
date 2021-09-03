@@ -9,7 +9,7 @@ import {useParams} from "react-router-dom";
 
 export const AddContact = ({handleClose, info}) => {
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info} : {});
+    const [inputs, setInputs] = useState(info ? {...info, phoneNumber : info.phoneNumber ? info.phoneNumber.substring(1) : '' } : {});
     const [step, setStep] = useState('first')
     const [fullAddress, setFullAddress] = useState(null)
     const classes = createClientStyle()
@@ -41,14 +41,16 @@ export const AddContact = ({handleClose, info}) => {
                 const data = {
                     "firstName": inputs.firstName,
                     "lastName": inputs.lastName,
-                    "phoneNumber": inputs.phoneNumber,
+                    "phoneNumber": `+${inputs.phoneNumber}`,
                     "relationship": inputs.relationship,
                     address : fullAddress
                 }
               if (!info){
                    dispatch(clientActions.createClientContact(data, params.id))
+                   handleClose()
               }else if (info) {
-                  dispatch(clientActions.editClientContact(data, info.id))
+                  dispatch(clientActions.editClientContact(data, info.id, params.id))
+                  handleClose()
               }
             } else {
                 setError(
@@ -62,6 +64,9 @@ export const AddContact = ({handleClose, info}) => {
             }
         }
     }
+
+
+    console.log( inputs.phoneNumber,'phone')
 
     return (
         <div className={classes.createFoundingSource}>

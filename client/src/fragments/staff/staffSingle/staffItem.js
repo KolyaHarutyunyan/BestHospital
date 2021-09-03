@@ -18,9 +18,8 @@ export const StaffItem = () => {
 
     const credentialData = useSelector(state => state.admins.credentialById)
     const dispatch = useDispatch()
-
+    console.log(credentialData,'credential data');
     const params = useParams()
-
 
     const [open, setOpen] = useState(false)
     const [activeTab, setActiveTab] = useState(0)

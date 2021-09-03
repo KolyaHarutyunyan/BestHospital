@@ -17,11 +17,12 @@ const credentialsList = [
 ]
 
 export const SystemItemAddService = ({modalInformation, modalType, handleClose}) => {
+    const dispatch = useDispatch()
+
     const [mType] = useState(modalType)
     const [mInformation] = useState(modalInformation)
     const [inputs, setInputs] = useState(mInformation ? mInformation : {})
 
-    const dispatch = useDispatch()
     const [error,setError] = useState('')
 
     const classes = modalsStyle()
@@ -37,7 +38,6 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
         }
         return 'Edit Department'
     }
-
     const checkType = (type) => {
         if (type === 'Degree') {
             return 0
@@ -58,6 +58,12 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
             displayCode:inputs.displayCode,
             category: inputs.category
         }
+        let departmentData = {
+            name: inputs.departmentName,
+        }
+        let jobData = {
+            name: inputs.jobTitle,
+        }
         switch (mType) {
             case 'editService':
                 if (inputs.name && inputs.displayCode && inputs.category){
@@ -76,10 +82,18 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
                 }
                 break;
             case 'editJobTitles':
-                alert('edit job title')
+                if (inputs.jobTitle){
+                    dispatch(systemActions.editJobByIdGlobal(jobData,mInformation.jobId))
+                    handleClose()
+                }else {
+                    alert('error')
+                }
                 break;
             default:
-                alert('edit departments')
+                if (inputs.departmentName){
+                    dispatch(systemActions.editDepartmentByIdGlobal(departmentData,mInformation.departmentID))
+                    handleClose()
+                }
         }
     }
 
@@ -155,7 +169,6 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
                                 variant={"outlined"}
                                 onChange={handleChange}
                                 type={"text"}
-                                label={"Department Name*"}
                                 name='departmentName'
                                 value={inputs.departmentName}
                             /> :

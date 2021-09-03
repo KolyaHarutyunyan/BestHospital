@@ -5,14 +5,14 @@ import {Colors, Images} from "@eachbase/utils";
 import {TableCell} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
 import {clientActions} from "@eachbase/store";
+import {useParams} from "react-router-dom";
 
 export const ClientContact = ({data, setContactId, handleOpenClose, info}) => {
     const classes = serviceSingleStyles()
-    // const clientContacts = useSelector(state => state.client.clientContacts)
     const dispatch = useDispatch()
     const [openClose, setOpenClose] = useState(false)
     const [index, setIndex] = useState(null)
-
+    const params = useParams()
 
 
     const generalInfo = [
@@ -55,7 +55,8 @@ export const ClientContact = ({data, setContactId, handleOpenClose, info}) => {
     }
 
     let deleteContact = () => {
-        dispatch(clientActions.deleteClientContact(info[index].id))
+        dispatch(clientActions.deleteClientContact(info[index].id, params.id))
+        setIndex(null)
         setOpenClose(!openClose)
     }
 

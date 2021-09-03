@@ -1,7 +1,9 @@
-import {AddButton, ValidationInput} from "@eachbase/components";
+import {AddButton, NoItemText, Toast, ValidationInput} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
 import {systemItemStyles} from "./styles";
-import {useState} from "react";
+import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, systemActions} from "../../../store";
 
 
 const credentialBtn = {
@@ -11,26 +13,8 @@ const credentialBtn = {
     padding: 0
 }
 
-const jobTitles = [
-    {
-        name: 'HH',
-    },
-    {
-        name: 'HB',
-    },
-    {
-        name: 'HC',
-    },
-    {
-        name: 'CH',
-    },
-    {
-        name: 'BH',
-    },
-]
-
-export const JobTitles = ({removeItem, openModal}) => {
-
+export const JobTitles = ({globalJobs,removeItem, openModal}) => {
+    const dispatch = useDispatch()
     const classes = systemItemStyles()
 
     const [inputs, setInputs] = useState({})
@@ -47,11 +31,47 @@ export const JobTitles = ({removeItem, openModal}) => {
         error === e.target.name && setError('')
     }
 
-    const editDepartment = (modalType) => {
-        openModal(modalType)
+    const handleSubmit = () => {
+        let data = {
+            name: inputs.name,
+        }
+        if (inputs.name) {
+            dispatch(systemActions.createJobGlobal(data));
+        } else {
+            setError(
+                !inputs.name ? 'name' :
+                    'Input is not filled'
+            )
+        }
+    }
+
+    const editJob = (modalType,modalId) => {
+        openModal(modalType,modalId)
     }
 
     const isDisabled = inputs.name
+
+    const {httpOnError, httpOnLoad, httpOnSuccess } = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnLoad: state.httpOnLoad,
+        httpOnError: state.httpOnError
+    }));
+
+    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_JOB_GLOBAL'
+
+    const errorText = httpOnError.length && httpOnError[0].type === 'CREATE_JOB_GLOBAL'
+
+    useEffect(()=>{
+        if(success) {
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_JOB_GLOBAL'))
+            setInputs({
+                name: '',
+            })
+        }else if(errorText){
+            dispatch(httpRequestsOnErrorsActions.removeError('CREATE_JOB_GLOBAL'))
+        }
+    },[success, errorText])
+    let errorMessage = success ? 'success' : 'error'
 
     return (
         <>
@@ -65,25 +85,40 @@ export const JobTitles = ({removeItem, openModal}) => {
                     type={"text"}
                     placeholder={'Job Titles*'}
                 />
-                <AddButton disabled={!isDisabled} styles={credentialBtn} handleClick={() => alert('Add Job Title')} text='Add Job Title'/>
+                <AddButton
+                    disabled={!isDisabled}
+                    styles={credentialBtn}
+                    loader={!!httpOnLoad.length}
+                    handleClick={handleSubmit} text='Add Job Title'/>
             </div>
             <p className={classes.title}>Job Titles</p>
             <div className={classes.credentialTable}>
                 {
-                    jobTitles.map((jobItem, index) => {
+                    globalJobs && globalJobs.length ? globalJobs.map((jobItem, index) => {
                         return (
                             <div className={classes.item} key={index}>
                                 <p>{jobItem.name}</p>
                                 <div className={classes.icons}>
                                     <img src={Images.edit}
-                                         onClick={(e) => editDepartment('editJobTitles')} alt="edit"/>
-                                    <img src={Images.remove} alt="delete" onClick={() => removeItem({id: 15,name:jobItem.name})}/>
+                                         onClick={() => editJob('editJobTitles',{
+                                             jobTitle: jobItem.name,
+                                             jobId: jobItem._id
+                                         })} alt="edit"/>
+                                    <img src={Images.remove} alt="delete" onClick={() => removeItem({
+                                        id: jobItem._id,
+                                        name:jobItem.name,
+                                        type: 'editJobTitles'
+                                    })}/>
                                 </div>
                             </div>
                         )
-                    })
+                    }) : <NoItemText text='No Items Yet' />
                 }
             </div>
+            <Toast
+                type={success ? 'success' : errorText ? 'error' : '' }
+                text={errorMessage}
+                info={success ? success : errorText ? errorText : ''}/>
         </>
     )
 }

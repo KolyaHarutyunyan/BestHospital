@@ -6,7 +6,8 @@ export const clientItemStyles = makeStyles(() => ({
 
     headerWraperStyle : {
         backgroundColor: Colors.BackgroundWhite,
-        padding: '20px'
+        padding: '20px',
+        height: 'calc(100vh - 186px)'
     }
     }))
 ;
