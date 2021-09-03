@@ -11,11 +11,11 @@ import {
     CREATE_CREDENTIAL,
     CREATE_CREDENTIAL_SUCCESS,
     EDIT_CREDENTIAL_BY_ID_SUCCESS,
-    GET_CREDENTIAL_BY_ID,
-    GET_CREDENTIAL_BY_ID_SUCCESS,
+    GET_CREDENTIAL,
+    GET_CREDENTIAL_SUCCESS,
     EDIT_CREDENTIAL_BY_ID,
     DELETE_CREDENTIAL_BY_ID,
-    DELETE_CREDENTIAL_BY_ID_SUCCESS,
+    DELETE_CREDENTIAL_BY_ID_SUCCESS, CREATE_ADMIN_SUCCESS,
 
 } from "./admin.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
@@ -26,7 +26,7 @@ function* createAdmin(action) {
         yield call(authService.createAdminService, action.payload.body);
 
         yield put({
-            type: GET_ADMINS,
+            type: CREATE_ADMIN_SUCCESS,
         });
     } catch (err) {
         console.log(err.response, 'response')
@@ -83,7 +83,7 @@ function* createCredential(action) {
     try {
         const res = yield call(authService.createCredentialService, action.payload.body);
         yield put({
-            type: CREATE_CREDENTIAL_SUCCESS,
+            type: CREATE_CREDENTIAL,
             payload: res.data,
         });
     } catch (err) {
@@ -91,19 +91,19 @@ function* createCredential(action) {
     }
 }
 
-function* getCredentialById(action) {
-
+function* getCredential(action) {
+    console.log(action,'admin saga');
     try {
-        const res = yield call(authService.getCredentialByIdService, action.payload.credentialId);
+        const res = yield call(authService.getCredentialService, action.payload.credentialId);
         yield put({
-            type: GET_CREDENTIAL_BY_ID_SUCCESS,
+            type: GET_CREDENTIAL_SUCCESS,
             payload: res.data,
         });
 
     } catch (err) {
         console.log(err)
         yield put({
-            type: GET_CREDENTIAL_BY_ID_SUCCESS,
+            type: GET_CREDENTIAL_SUCCESS,
             payload: '',
         });
     }
@@ -142,7 +142,7 @@ export const watchAdmin = function* watchAdminSaga() {
     yield takeLatest(GET_ADMIN_BY_ID, getAdminById);
     yield takeLatest(EDIT_ADMIN_BY_ID, editAdminById)
     yield takeLatest(CREATE_CREDENTIAL, createCredential)
-    yield takeLatest(GET_CREDENTIAL_BY_ID, getCredentialById)
+    yield takeLatest(GET_CREDENTIAL, getCredential)
     yield takeLatest(EDIT_CREDENTIAL_BY_ID, editCredentialById)
     yield takeLatest(DELETE_CREDENTIAL_BY_ID, deleteCredentialById)
 };

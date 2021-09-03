@@ -274,6 +274,7 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
                 type={"number"}
                 label={"SSN Number*"}
                 name='ssn'
+                onChange={handleChange}
                 typeError={error === 'ssn' && ErrorText.field}
             />
             <div className={classes.flexContainer}>
@@ -289,7 +290,6 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
                 <ValidationInput
                     variant={"outlined"}
                     onChange={handleChange}
-                    // value={inputs.birthday}
                     value={inputs.birthday && moment(inputs.birthday).format().substring(0, 10)}
                     type={"date"}
                     label={"Date of Birth*"}

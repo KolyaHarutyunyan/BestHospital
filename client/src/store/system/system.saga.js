@@ -1,9 +1,9 @@
 import {call, put, takeLatest} from "redux-saga/effects";
 import {systemService} from "./system.service";
 import {
-    GET_CREDENTIAL_SUCCESS,
+    GET_CREDENTIAL_GLOBAL_SUCCESS,
     CREATE_CREDENTIAL_GLOBAL,
-    GET_CREDENTIAL,
+    GET_CREDENTIAL_GLOBAL,
     EDIT_CREDENTIAL_BY_ID_GLOBAL,
     DELETE_CREDENTIAL_BY_ID_GLOBAL,
 
@@ -35,7 +35,7 @@ function* createCredentialGlobal(action) {
     try {
         yield call(systemService.createCredentialGlobalService, action.payload.body);
         yield put({
-            type: GET_CREDENTIAL,
+            type: GET_CREDENTIAL_GLOBAL,
         });
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
@@ -46,18 +46,18 @@ function* createCredentialGlobal(action) {
     }
 }
 
-function* getCredential() {
+function* getCredentialGlobal() {
     try {
-        const res = yield call(systemService.getCredentialService);
+        const res = yield call(systemService.getCredentialGlobalService);
         yield put({
-            type: GET_CREDENTIAL_SUCCESS,
+            type: GET_CREDENTIAL_GLOBAL_SUCCESS,
             payload: res.data.reverse(),
         });
 
     } catch (err) {
         console.log(err)
         yield put({
-            type: GET_CREDENTIAL_SUCCESS,
+            type: GET_CREDENTIAL_GLOBAL_SUCCESS,
             payload: '',
         });
     }
@@ -68,7 +68,7 @@ function* editCredentialById(action) {
     try {
         yield call(systemService.editCredentialByIdGlobalService, action.payload.id, action.payload.body)
         yield put({
-            type: GET_CREDENTIAL,
+            type: GET_CREDENTIAL_GLOBAL,
         });
     } catch (err) {
         console.log(err)
@@ -79,7 +79,7 @@ function* deleteCredentialByIdGlobal(action) {
     try {
         yield call(systemService.deleteCredentialByIdService, action.payload.id)
         yield put({
-            type: GET_CREDENTIAL,
+            type: GET_CREDENTIAL_GLOBAL,
         });
 
     } catch (err) {
@@ -266,7 +266,7 @@ function* deleteJobByIdGlobal(action) {
 
 export const watchSystem = function* watchSystemSaga() {
     yield takeLatest(CREATE_CREDENTIAL_GLOBAL, createCredentialGlobal)
-    yield takeLatest(GET_CREDENTIAL, getCredential)
+    yield takeLatest(GET_CREDENTIAL_GLOBAL, getCredentialGlobal)
     yield takeLatest(EDIT_CREDENTIAL_BY_ID_GLOBAL, editCredentialById)
     yield takeLatest(DELETE_CREDENTIAL_BY_ID_GLOBAL, deleteCredentialByIdGlobal)
 

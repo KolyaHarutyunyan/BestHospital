@@ -1,6 +1,6 @@
 import {
     CREATE_CREDENTIAL_GLOBAL,
-    GET_CREDENTIAL,
+    GET_CREDENTIAL_GLOBAL,
     EDIT_CREDENTIAL_BY_ID_GLOBAL,
     CREATE_SERVICE_GLOBAL,
     GET_SERVICES,
@@ -26,9 +26,9 @@ export const createCredentialGlobal = (body) => {
     }
 }
 
-export const getCredential = () => {
+export const getCredentialGlobal = () => {
     return {
-        type: GET_CREDENTIAL,
+        type: GET_CREDENTIAL_GLOBAL,
     }
 }
 
