@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { CreateTerminationDto } from 'src/termination/dto/create-termination.dto';
 import { ParseObjectIdPipe, Public } from '../util';
 import { ClientService } from './client.service';
 import {
@@ -63,4 +64,35 @@ export class ClientController {
   remove(@Param('id', ParseObjectIdPipe) id: string) {
     return this.clientService.remove(id);
   }
+
+  /** Inactivate a client */
+  @Patch(':id/inactivate')
+  @Public()
+  @ApiOkResponse({ type: ClientDTO })
+  async inactivate(
+    @Param('id', ParseObjectIdPipe) clientId: string,
+    @Body() dto: CreateTerminationDto,
+  ): Promise<ClientDTO> {
+    const staff = await this.clientService.setStatusInactive(
+      clientId,
+      0,
+      dto
+    );
+    return staff;
+  }
+
+  /** Activated a funder */
+  @Patch(':id/activate')
+  @Public()
+  @ApiOkResponse({ type: ClientDTO })
+  async activate(
+    @Param('id', ParseObjectIdPipe) clientId: string,
+  ): Promise<ClientDTO> {
+    const client = await this.clientService.setStatusActive(
+      clientId,
+      1,
+    );
+    return client;
+  }
+
 }

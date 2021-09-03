@@ -148,6 +148,7 @@ export class StaffService {
   ): Promise<StaffDTO> => {
     const staff = await this.model.findById({ _id });
     this.checkStaff(staff);
+    
     staff.termination.date = dto.date;
     staff.status = status;
     if (dto.reason) {
@@ -164,7 +165,7 @@ export class StaffService {
   ): Promise<StaffDTO> => {
     const staff = await this.model.findOneAndUpdate(
       { _id: id },
-      { $set: { status: status } },
+      { $set: { status: status, termination: null } },
       { new: true },
     );
     this.checkStaff(staff);

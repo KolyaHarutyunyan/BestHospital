@@ -19,6 +19,7 @@ import { ServiceService } from '../service';
 // import { CommentService } from '../comment';
 import { HistoryService, serviceLog } from '../history';
 import { CredentialService } from '../credential';
+import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
 
 @Injectable()
 export class FundingService {
@@ -54,7 +55,6 @@ export class FundingService {
         type: dto.type,
         website: dto.website,
         contact: dto.contact,
-        status: dto.status,
         address: await this.addressService.getAddress(dto.address)
       });
       await funder.save();
@@ -134,7 +134,7 @@ export class FundingService {
     if (status == 0) {
       let [funders, count] = await Promise.all([
         this.model.find({ status: 0 }).skip(skip).limit(limit),
-        this.model.countDocuments({status: 0})
+        this.model.countDocuments({ status: 0 })
       ]);
       const sanFun = this.sanitizer.sanitizeMany(funders);
       return { funders: sanFun, count }
@@ -142,7 +142,7 @@ export class FundingService {
 
     let [funders, count] = await Promise.all([
       this.model.find({ status: 1 }).skip(skip).limit(limit),
-      this.model.countDocuments({status: 1})
+      this.model.countDocuments({ status: 1 })
     ]);
     this.checkFunder(funders[0])
 
@@ -231,7 +231,6 @@ export class FundingService {
       if (dto.name) funder.name = dto.name;
       if (dto.website) funder.website = dto.website;
       if (dto.contact) funder.contact = dto.contact;
-      if (dto.status) funder.status = dto.status;
       if (dto.address)
         funder.address = await this.addressService.getAddress(dto.address);
       await funder.save();
@@ -310,7 +309,39 @@ export class FundingService {
     this.checkFunder(funder);
     return funder._id;
   }
+  
+  /** Set Status of a Funder Inactive*/
+  setStatusInactive = async (
+    _id: string,
+    status: number,
+    dto: CreateTerminationDto
+  ): Promise<FundingDTO> => {
+    const funder = await this.model.findById({ _id });
+    this.checkFunder(funder);
 
+    funder.termination.date = dto.date;
+    funder.status = status;
+    if (dto.reason) {
+      funder.termination.reason = dto.reason;
+    }
+    await funder.save();
+    return this.sanitizer.sanitize(funder);
+  };
+
+  /** Set Status of a Funder Active */
+  setStatusActive = async (
+    id: string,
+    status: number,
+  ): Promise<FundingDTO> => {
+    const funder = await this.model.findOneAndUpdate(
+      { _id: id },
+      { $set: { status: status, termination: null } },
+      { new: true },
+    );
+    this.checkFunder(funder);
+    return this.sanitizer.sanitize(funder);
+  };
+  
   /** Private methods */
   /** if the funder is not found, throws an exception */
   private checkFunder(funder: IFunder) {

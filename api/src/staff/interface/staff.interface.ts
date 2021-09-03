@@ -1,5 +1,6 @@
 import { Document } from 'mongoose';
 import { IAddress } from '../../address';
+import { ITermination } from '../../termination/interface';
 
 export interface IStaff extends Document {
   id: string;
@@ -16,6 +17,6 @@ export interface IStaff extends Document {
   residency: string;
   ssn: number;
   status: number;
-  termination?: any;
+  termination: ITermination;
   address: IAddress;
 }

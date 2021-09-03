@@ -6,6 +6,11 @@ import { ClientAuthorizationModel } from './authorization/authorization.model';
 import { ClientAuthorizationServiceModel } from './authorizationservice/authorizationService.model';
 import { ClientEnrollmentModel } from './enrollment/enrollment.model';
 
+export const TerminationSchema = {
+    date: { type: Date },
+    reason: { type: String }
+  }
+  
 const ClientSchema = new Schema({
     firstName: { type: String },
     middleName: { type: String, default: null },
@@ -17,8 +22,9 @@ const ClientSchema = new Schema({
     gender: { type: String },
     age: { type: Number },
     birthday: { type: Date },
-    status: { type: Number, enum: ClientStatus },
+    status: { type: Number, enum: ClientStatus, default: 1 },
     enrollment: { type: Types.ObjectId, ref: 'Funder' },
+    termination: TerminationSchema,
     createdDate: { type: Date, default: Date.now() },
     updatedDate: { type: Date, default: null }
     // address: addressSchema,

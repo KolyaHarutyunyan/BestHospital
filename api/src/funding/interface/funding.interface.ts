@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+import { ITermination } from '../../termination/interface';
 import { IAddress } from '../../address';
 
 export interface IFunder extends Document {
@@ -12,6 +13,5 @@ export interface IFunder extends Document {
     website: string
     address: IAddress;
     status: number;
-    comments?: any;
-    histories?: any
+    termination: ITermination;
 }

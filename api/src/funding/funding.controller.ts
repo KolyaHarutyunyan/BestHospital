@@ -7,6 +7,7 @@ import { CreateFundingDTO, FundingDTO, UpdateFundingDto, ServiceDTO, UpdateServi
 import { HistoryDTO } from '../history/dto';
 import { Public, ParseObjectIdPipe } from '../util';
 import { CreateCommentDTO } from './dto/comment.dto';
+import { CreateTerminationDto } from 'src/termination/dto/create-termination.dto';
 
 @Controller('funding')
 @ApiTags('Funding Endpoints')
@@ -147,6 +148,36 @@ export class FundingController {
   @ApiOkResponse({ type: FundingDTO })
   async remove(@Param('id', ParseObjectIdPipe) id: string): Promise<FundingDTO> {
     return await this.fundingService.remove(id);
+  }
+
+  /** Inactivate a funder */
+  @Patch(':id/inactivate')
+  @Public()
+  @ApiOkResponse({ type: FundingDTO })
+  async inactivate(
+    @Param('id', ParseObjectIdPipe) funderId: string,
+    @Body() dto: CreateTerminationDto,
+  ): Promise<FundingDTO> {
+    const funder = await this.fundingService.setStatusInactive(
+      funderId,
+      0,
+      dto
+    );
+    return funder;
+  }
+
+  /** Activated a funder */
+  @Patch(':id/activate')
+  @Public()
+  @ApiOkResponse({ type: FundingDTO })
+  async activate(
+    @Param('id', ParseObjectIdPipe) funderId: string,
+  ): Promise<FundingDTO> {
+    const funder = await this.fundingService.setStatusActive(
+      funderId,
+      1,
+    );
+    return funder;
   }
 
   /** Delete the comment */

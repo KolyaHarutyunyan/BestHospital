@@ -29,4 +29,6 @@ export class ClientDTO {
     enrollment?: string;
     @ApiProperty({ enum: ClientStatus })
     status: number;
+    @ApiProperty()
+    termination: Object;
 }

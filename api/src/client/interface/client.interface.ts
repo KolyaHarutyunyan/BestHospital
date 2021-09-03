@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+import { ITermination } from '../../termination/interface';
 
 export interface IClient extends Document {
     firstName: string;
@@ -12,5 +13,6 @@ export interface IClient extends Document {
     age: number;
     status: number;
     birthday: Date;
+    termination: ITermination;
     enrollment: string;
 }
