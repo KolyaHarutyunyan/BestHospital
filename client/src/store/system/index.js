@@ -1,6 +1,6 @@
 import {
     createCredentialGlobal,
-    getCredential,
+    getCredentialGlobal,
     editCredentialByIdGlobal,
     deleteCredentialByIdGlobal,
 
@@ -26,7 +26,7 @@ export {watchSystem} from './system.saga';
 
 export const systemActions = {
     createCredentialGlobal,
-    getCredential,
+    getCredentialGlobal,
     editCredentialByIdGlobal,
     deleteCredentialByIdGlobal,
 

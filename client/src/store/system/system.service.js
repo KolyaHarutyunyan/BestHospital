@@ -4,7 +4,7 @@ export const systemService = {
 
     createCredentialGlobalService: (body) => axios.post(`/credential`, body),
 
-    getCredentialService: () => axios.get(`/credential`),
+    getCredentialGlobalService: () => axios.get(`/credential`),
 
     editCredentialByIdGlobalService: (id, body) => axios.patch(`/credential/${id}`, body),
 

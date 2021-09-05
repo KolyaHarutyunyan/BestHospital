@@ -4,7 +4,7 @@ import {
     GET_ADMIN_BY_ID,
     GET_ADMINS,
     CREATE_CREDENTIAL,
-    GET_CREDENTIAL_BY_ID,
+    GET_CREDENTIAL,
     EDIT_CREDENTIAL_BY_ID,
     DELETE_CREDENTIAL_BY_ID
 } from "./admin.types";
@@ -44,9 +44,9 @@ export const createCredential = (body) => {
     }
 }
 
-export const getCredentialById = (credentialId) => {
+export const getCredential = (credentialId) => {
     return {
-        type: GET_CREDENTIAL_BY_ID,
+        type: GET_CREDENTIAL,
         payload: {credentialId}
     }
 }

@@ -15,8 +15,8 @@ export const StaffCredentials = ({credentialData, openModal}) => {
         setOpen(false)
     }
 
-    const editCredential = (modalType) => {
-        openModal(modalType)
+    const editCredential = (modalType,globalCredentialId) => {
+        openModal(modalType,globalCredentialId)
     }
     // const removeCredential = () => {
     //     dispatch(adminActions.deleteCredentialById(removeCredentialData))
@@ -27,49 +27,47 @@ export const StaffCredentials = ({credentialData, openModal}) => {
         alert('remove Credential');
     }
 
-
     const notesItem = (item, index) => {
+        console.log(item,'item');
         return (
             <TableBodyComponent key={index} handleClick={() => editCredential('credentialPreview')}>
-                <TableCell>{item.name}</TableCell>
-                <TableCell>{item.type}</TableCell>
-                <TableCell>{item.receivedDate}</TableCell>
-                <TableCell>{item.expirationDate}</TableCell>
-                <TableCell>{item.action}</TableCell>
+                <TableCell>{item?.credentialId.name}</TableCell>
+                <TableCell>{item?.credentialId.type}</TableCell>
+                <TableCell>{item?.receivedDate}</TableCell>
+                <TableCell>{item.expirationDate && moment(credentialData.expirationDate).format('L')}</TableCell>
+                <TableCell>{
+                    <>
+                        <img
+                            src={Images.edit}
+                            style={{cursor: 'pointer'}}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                editCredential('editCredential', {id: item.credentialId._id})
+                            }
+                            } alt="edit"/>
+                        <img
+                            src={Images.remove}
+                            alt="delete"
+                            style={{cursor: 'pointer', marginLeft: 16}}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setOpen(true)
+                            }
+                            }
+                        />
+                    </>
+                }</TableCell>
             </TableBodyComponent>
         )
     }
 
-    const receivedData = credentialData.expirationDate
-    const expirationDate = credentialData.expirationDate
-
     const data = [
         {
-            name: credentialData.credentialId?.name,
-            type: credentialData.credentialId?.type,
-            receivedDate: receivedData && moment(credentialData.expirationDate).format('L'),
-            expirationDate: expirationDate && moment(credentialData.expirationDate).format('L'),
-            action:
-                <>
-                    <img
-                        src={Images.edit}
-                        style={{cursor: 'pointer'}}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            editCredential('editCredential')
-                        }
-                        } alt="edit"/>
-                    <img
-                        src={Images.remove}
-                        alt="delete"
-                        style={{cursor: 'pointer', marginLeft: 16}}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setOpen(true)
-                        }
-                        }
-                    />
-                </>,
+            name: credentialData?.credentialId?.name,
+            type: credentialData?.credentialId?.type,
+            // receivedDate: receivedData && moment(credentialData.expirationDate).format('L'),
+            // expirationDate: expirationDate && moment(credentialData.expirationDate).format('L'),
+
         }
     ]
 
@@ -98,12 +96,12 @@ export const StaffCredentials = ({credentialData, openModal}) => {
     return (
         <div>
             {
-                credentialData && <Notes defaultStyle={true} data={credentialData && data} pagination={true} items={notesItem} headerTitles={headerTitles}/>
+                credentialData && <Notes defaultStyle={true} data={credentialData} pagination={true} items={notesItem} headerTitles={headerTitles}/>
             }
             <SimpleModal
                 openDefault={open}
                 handleOpenClose={handleClose}
-                content={<DeleteElement text='Delete Credential' info={credentialData && credentialData.credentialId.name} handleClose={handleClose} handleDel={removeCredential} />}
+                content={<DeleteElement text='Delete Credential' info='info'  handleClose={handleClose} handleDel={removeCredential} />}
             />
         </div>
     )

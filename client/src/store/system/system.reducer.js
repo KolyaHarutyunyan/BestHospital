@@ -4,7 +4,7 @@ import {
     DELETE_CREDENTIAL_BY_ID_GLOBAL_SUCCESS, DELETE_DEPARTMENT_BY_ID_GLOBAL_SUCCESS, DELETE_JOB_BY_ID_GLOBAL_SUCCESS,
     DELETE_SERVICE_BY_ID_GLOBAL_SUCCESS,
     EDIT_CREDENTIAL_BY_ID_GLOBAL_SUCCESS, EDIT_DEPARTMENT_BY_ID_GLOBAL_SUCCESS, EDIT_JOB_BY_ID_GLOBAL_SUCCESS,
-    EDIT_SERVICE_BY_ID_GLOBAL_SUCCESS,
+    EDIT_SERVICE_BY_ID_GLOBAL_SUCCESS, GET_CREDENTIAL_GLOBAL_SUCCESS,
     GET_CREDENTIAL_SUCCESS, GET_DEPARTMENTS_SUCCESS, GET_JOBS_SUCCESS,
     GET_SERVICES_SUCCESS
 } from "./system.type";
@@ -30,7 +30,7 @@ export const systemReducer = (state = initialState, action) => {
                 credentialById: action.payload
             }
 
-        case GET_CREDENTIAL_SUCCESS :
+        case GET_CREDENTIAL_GLOBAL_SUCCESS :
             return {
                 ...state,
                 credentials: action.payload

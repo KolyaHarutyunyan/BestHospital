@@ -56,7 +56,7 @@ export const SystemItem = () => {
     }
 
     useEffect(() => {
-        dispatch(systemActions.getCredential())
+        dispatch(systemActions.getCredentialGlobal())
         dispatch(systemActions.getServices())
         dispatch(systemActions.getDepartments())
         dispatch(systemActions.getJobs())
