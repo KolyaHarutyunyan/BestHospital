@@ -7,8 +7,8 @@ import {TableCell} from "@material-ui/core";
 import {fundingSourceSingleStyles} from "./styles";
 import {FundingSourceServiceAdd, FundingSourceServiceEdit} from "./modals";
 
-export const FundingSourceSingleServices = ({data, globalServices}) => {
-    console.log(data.length,'daaataaaaa')
+export const FundingSourceSingleServices = ({data,}) => {
+    // console.log(data.length,'daaataaaaa')
     const [toggleModal, setToggleModal] = useState(false)
     const [index, setIndex] = useState(null)
     const [delEdit, setDelEdit] = useState(null)

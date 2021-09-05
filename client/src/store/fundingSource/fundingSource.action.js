@@ -34,10 +34,11 @@ export const editFundingSource = (id,body) => {
 }
 
 
-export const getFundingSource = (status) => {
+export const getFundingSource = (data) => {
+
     return {
         type: GET_FUNDING_SOURCE,
-        payload : {status}
+        payload : {data}
     }
 }
 
@@ -47,13 +48,17 @@ export const getFundingSourceById = (id) => {
         payload: id
     }
 }
+
+
 export const getFoundingSourceServiceById = (id) => {
+
     return {
         type: GET_FUNDING_SOURCE_SERVICE_BY_ID,
         payload: id
     }
 }
 export const createFoundingSourceServiceById = (id, body) => {
+    console.log(id, body)
     return {
         type: CREATE_FUNDING_SOURCE_SERVICE_BY_ID,
         payload: {
@@ -80,11 +85,11 @@ export const deleteFoundingSourceServiceById = (id, body) => {
     }
 }
 
-export const createFoundingSourceServiceModifier = (id, body) => {
+
+export const createFoundingSourceServiceModifier = ( body) => {
     return {
         type: CREATE_FUNDING_SOURCE_SERVICE_MODIFIER,
         payload: {
-            id ,
             body
         }
     }
@@ -97,12 +102,14 @@ export const getFundingSourceHistoriesById = (id,onModal) => {
 }
 
 export const getFundingSourceServ = () => {
+
     return {
         type: GET_FUNDING_SOURCE_SERV,
     }
 }
 
 export const getFundingSourceServById = (id) => {
+    alert('rrrr')
     return {
         type: GET_FUNDING_SOURCE_SERV_BY_ID,
         payload : id
