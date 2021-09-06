@@ -48,10 +48,12 @@ export class SCredentialService {
       if (dto.expirationDate) {
         credential.expirationDate = dto.expirationDate;
       }
-      if (dto.credentialId) {
-        const globCredential = await this.credentialService.findOne(dto.credentialId);
-        credential.credentialId = dto.credentialId;
+      else {
+        credential.expirationDate = null
       }
+      const globCredential = await this.credentialService.findOne(dto.credentialId);
+      credential.credentialId = dto.credentialId;
+
       await credential.save()
       return credential;
     } catch (e) {

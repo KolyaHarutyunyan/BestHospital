@@ -1,8 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsOptional } from 'class-validator';
+import { IsDateString, IsMongoId, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class SUpdateCredentialDTO {
   @ApiProperty()
+  @IsNotEmpty()
+  @IsMongoId()
   credentialId?: string;
   @ApiProperty({ required: false })
   @IsOptional()
