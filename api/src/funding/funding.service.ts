@@ -365,28 +365,6 @@ export class FundingService {
   }
 
   /** Private methods */
-  /** if the comment is not found, throws an exception */
-  private checkComment(comment: IComment) {
-    if (!comment) {
-      throw new HttpException(
-        'Comment was not found',
-        HttpStatus.NOT_FOUND,
-      );
-    }
-  }
-
-  /** Private methods */
-  /** if the history is not found, throws an exception */
-  private checkHistory(history: IHistory) {
-    if (!history) {
-      throw new HttpException(
-        'History was not found',
-        HttpStatus.NOT_FOUND,
-      );
-    }
-  }
-
-  /** Private methods */
   /** if the modifier is not found, throws an exception */
   private checkModify(modify: IModify) {
     if (!modify) {
@@ -396,7 +374,6 @@ export class FundingService {
       );
     }
   }
-
 
   async checkCredential(credentialId: string): Promise<any> {
     if (credentialId) {
