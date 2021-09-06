@@ -3,38 +3,35 @@ import {TableCell} from "@material-ui/core";
 import {DeleteElement, Notes, SimpleModal, TableBodyComponent} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
 import moment from 'moment';
+import {useDispatch} from "react-redux";
+import {adminActions} from "@eachbase/store";
 
 export const StaffCredentials = ({credentialData, openModal}) => {
     const [open, setOpen] = useState(false)
-
-    // const removeCredentialData = {
-    //     id: params.id
-    // }
+    const [deletedId, setDeletedId] = useState('')
+    const dispatch = useDispatch()
 
     const handleClose = () =>{
         setOpen(false)
     }
 
-    const editCredential = (modalType,globalCredentialId) => {
-        openModal(modalType,globalCredentialId)
+    const editCredential = (modalType,globalCredentialInfo) => {
+        openModal(modalType,globalCredentialInfo)
     }
-    // const removeCredential = () => {
-    //     dispatch(adminActions.deleteCredentialById(removeCredentialData))
-    // }
 
     const removeCredential = () => {
+        dispatch(adminActions.deleteCredentialById(deletedId))
         handleClose()
-        alert('remove Credential');
     }
 
     const notesItem = (item, index) => {
-        console.log(item,'item');
+        console.log(item.expirationDate,'expiration date ');
         return (
             <TableBodyComponent key={index} handleClick={() => editCredential('credentialPreview')}>
                 <TableCell>{item?.credentialId.name}</TableCell>
                 <TableCell>{item?.credentialId.type}</TableCell>
                 <TableCell>{item?.receivedDate}</TableCell>
-                <TableCell>{item.expirationDate && moment(credentialData.expirationDate).format('L')}</TableCell>
+                <TableCell>{item.expirationDate && moment(item.expirationDate).format('L')}</TableCell>
                 <TableCell>{
                     <>
                         <img
@@ -42,7 +39,13 @@ export const StaffCredentials = ({credentialData, openModal}) => {
                             style={{cursor: 'pointer'}}
                             onClick={(e) => {
                                 e.stopPropagation();
-                                editCredential('editCredential', {id: item.credentialId._id})
+                                editCredential('editCredential', {
+                                    id: item._id,
+                                    credId:item.credentialId._id,
+                                    type:item.credentialId.name,
+                                    expirationDate: item.expirationDate
+
+                                })
                             }
                             } alt="edit"/>
                         <img
@@ -51,7 +54,8 @@ export const StaffCredentials = ({credentialData, openModal}) => {
                             style={{cursor: 'pointer', marginLeft: 16}}
                             onClick={(e) => {
                                 e.stopPropagation();
-                                setOpen(true)
+                                setDeletedId(item._id)
+                                setOpen(true);
                             }
                             }
                         />
@@ -60,16 +64,6 @@ export const StaffCredentials = ({credentialData, openModal}) => {
             </TableBodyComponent>
         )
     }
-
-    const data = [
-        {
-            name: credentialData?.credentialId?.name,
-            type: credentialData?.credentialId?.type,
-            // receivedDate: receivedData && moment(credentialData.expirationDate).format('L'),
-            // expirationDate: expirationDate && moment(credentialData.expirationDate).format('L'),
-
-        }
-    ]
 
     const headerTitles = [
         {

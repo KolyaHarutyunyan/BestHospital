@@ -16,6 +16,6 @@ export const authService = {
 
     editCredentialByIdService: (id, body) => axios.patch(`/scredential/${id}`, body),
 
-    deleteCredentialByIdService: (id) => axios.delete(`/staff/${id}/credential`),
+    deleteCredentialByIdService: (id) => axios.delete(`/scredential/${id}`),
 
 };

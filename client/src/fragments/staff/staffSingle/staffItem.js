@@ -35,7 +35,7 @@ export const StaffItem = () => {
     const [openCredModal, setOpenCredModal] = useState(false)
     const [credModalType, setCredModalType] = useState('')
 
-    const [globalCredentialId,setGlobalCredentialId] = useState('')
+    const [globalCredentialInformation,setGlobalCredentialInformation] = useState({})
 
     const classes = staffStyle()
 
@@ -90,10 +90,10 @@ export const StaffItem = () => {
         },
     ];
 
-    const openCloseCredModal = (modalType, globalCredentialId) => {
+    const openCloseCredModal = (modalType, globalCredentialInfo) => {
         setOpenCredModal(!openCredModal)
         setCredModalType(modalType)
-        setGlobalCredentialId(globalCredentialId)
+        setGlobalCredentialInformation(globalCredentialInfo)
     }
 
     useEffect(() => {
@@ -167,7 +167,7 @@ export const StaffItem = () => {
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
                 <div className={classes.staffSingleItem}>
-                    <StaffItemHeader globalCredentialId={globalCredentialId} globalCredentials={globalCredentials} credModalType={credModalType}
+                    <StaffItemHeader globalCredentialInformation={globalCredentialInformation} globalCredentials={globalCredentials} credModalType={credModalType}
                                      openCloseCredModal={openCloseCredModal} openCredModal={openCredModal}
                                      activeTab={activeTab}/>
                     <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
