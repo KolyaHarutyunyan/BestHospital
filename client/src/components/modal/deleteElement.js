@@ -3,9 +3,10 @@ import React from "react";
 import {Button} from "@material-ui/core";
 import {Colors, useGlobalTextStyles} from "@eachbase/utils";
 import {modalsStyle} from "./styles";
+import {MinLoader} from "../loader";
 
 
-export const DeleteElement = ({text, info, handleDel, handleClose}) => {
+export const DeleteElement = ({text, info, handleDel, handleClose, loader}) => {
 
     const classes = modalsStyle()
     const globalText = useGlobalTextStyles();
@@ -50,7 +51,11 @@ export const DeleteElement = ({text, info, handleDel, handleClose}) => {
                         }}
                         onClick={handleDel}
                     >
-                        Delete
+                        {loader === true ?
+                            <MinLoader margin={'0'} color={Colors.TextWhite}/>
+                            :
+                            'Delete'
+                        }
                     </Button>
                 </div>
             </div>

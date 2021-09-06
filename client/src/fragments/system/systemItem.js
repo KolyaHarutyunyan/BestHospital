@@ -1,16 +1,49 @@
 import React, {useEffect, useState} from "react";
-import {SimpleTabs} from "@eachbase/components";
+import {SimpleTabs, Toast} from "@eachbase/components";
 import {ServiceType, systemItemStyles, SystemItemHeader, Credentials, Departments, JobTitles} from './core';
 import {useDispatch, useSelector} from "react-redux";
-import {systemActions} from "../../store";
+import {httpRequestsOnSuccessActions, systemActions} from "../../store";
 
 export const SystemItem = () => {
+    const {httpOnSuccess} = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnLoad: state.httpOnLoad,
+        httpOnError: state.httpOnError
+    }));
+
+    const success =
+        httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_SERVICE_BY_ID_GLOBAL' ? true :
+            httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CREDENTIAL_BY_ID_GLOBAL' ? true :
+                httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_DEPARTMENT_BY_ID_GLOBAL' ? true :
+                    httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CREDENTIAL_BY_ID_GLOBAL' ? true :
+                        httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_JOB_BY_ID_GLOBAL' ? true :
+                            httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_JOB_BY_ID_GLOBAL' ? true :
+                                httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_SERVICE_BY_ID_GLOBAL' ? true :
+                                    httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_DEPARTMENT_BY_ID_GLOBAL'
+
+
+    useEffect(() => {
+        if (success) {
+            dispatch(httpRequestsOnSuccessActions.removeSuccess(httpOnSuccess.length && httpOnSuccess[0].type))
+        }
+    }, [success]);
+
+    const errorText = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_SERVICE_BY_ID_GLOBAL' ? true :
+        httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CREDENTIAL_BY_ID_GLOBAL' ? true :
+            httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_DEPARTMENT_BY_ID_GLOBAL' ? true :
+                httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CREDENTIAL_BY_ID_GLOBAL' ? true :
+                    httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_JOB_BY_ID_GLOBAL' ? true :
+                        httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_JOB_BY_ID_GLOBAL' ? true :
+                            httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_SERVICE_BY_ID_GLOBAL' ? true :
+                                httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_DEPARTMENT_BY_ID_GLOBAL'
+    let errorMessage = success ? 'success' : 'error'
+
 
     const [activeTab, setActiveTab] = useState(0)
     const [open, setOpen] = useState(false)
     const [modalType, setModalType] = useState('')
     const [modalInformation, setModalInformation] = useState('')
-    const [deletedName,setDeletedName] = useState()
+    const [deletedName, setDeletedName] = useState()
 
     const classes = systemItemStyles()
 
@@ -72,10 +105,12 @@ export const SystemItem = () => {
                                         openModal={handleOpenClose}/>)
         },
         {
-            tabComponent: (<Departments globalDepartments={globalDepartments} removeItem={handleRemoveItem} openModal={handleOpenClose}/>)
+            tabComponent: (<Departments globalDepartments={globalDepartments} removeItem={handleRemoveItem}
+                                        openModal={handleOpenClose}/>)
         },
         {
-            tabComponent: (<JobTitles globalJobs={globalJobs} removeItem={handleRemoveItem} openModal={handleOpenClose}/>)
+            tabComponent: (
+                <JobTitles globalJobs={globalJobs} removeItem={handleRemoveItem} openModal={handleOpenClose}/>)
         }
     ];
 
@@ -92,6 +127,12 @@ export const SystemItem = () => {
                 handleOpenClose={handleOpenClose}
                 activeTab={activeTab}/>
             <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
+
+
+            <Toast
+                type={success ? 'success' : errorText ? 'error' : ''}
+                text={errorMessage}
+                info={success ? success : errorText ? errorText : ''}/>
         </div>
     );
 }

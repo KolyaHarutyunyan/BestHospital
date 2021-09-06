@@ -58,9 +58,8 @@ export const Departments = ({globalDepartments, removeItem, openModal}) => {
     }));
 
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_DEPARTMENT_GLOBAL'
-
     const errorText = httpOnError.length && httpOnError[0].type === 'CREATE_DEPARTMENT_GLOBAL'
-
+    const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_DEPARTMENT_GLOBAL'
     useEffect(()=>{
         if(success) {
             dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_DEPARTMENT_GLOBAL'))
@@ -87,7 +86,7 @@ export const Departments = ({globalDepartments, removeItem, openModal}) => {
                     placeholder={'Name*'}
                 />
                 <AddButton
-                    loader={!!httpOnLoad.length}
+                    loader={loader }
                     disabled={!isDisabled}
                     styles={credentialBtn}
                     handleClick={handleSubmit} text='Add Department'/>

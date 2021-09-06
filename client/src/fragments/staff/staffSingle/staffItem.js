@@ -42,6 +42,7 @@ export const StaffItem = () => {
     const staffGeneral = useSelector(state => state.admins.adminInfoById)
     const credentialData = useSelector(state => state.admins.credential)
     const globalCredentials = useSelector(state => state.system.credentials)
+
     const handleOpenClose = () => {
         setOpen(!open)
     }

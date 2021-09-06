@@ -84,10 +84,10 @@ export const Credentials = ({removeItem, openModal,globalCredentials}) => {
         httpOnLoad: state.httpOnLoad,
         httpOnError: state.httpOnError
     }));
-
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_CREDENTIAL_GLOBAL'
-
     const errorText = httpOnError.length && httpOnError[0].type === 'CREATE_CREDENTIAL_GLOBAL'
+    const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_CREDENTIAL_GLOBAL'
+
 
     useEffect(()=>{
         if(success) {
@@ -124,7 +124,7 @@ export const Credentials = ({removeItem, openModal,globalCredentials}) => {
                     typeError={error === 'issuingState' ? ErrorText.field : ''}
                 />
                 <AddButton
-                    loader={!!httpOnLoad.length}
+                    loader={ loader }
                     disabled={!isDisabled}
                     styles={credentialBtn}
                     handleClick={handleSubmit} text='Add Credential'

@@ -94,6 +94,7 @@ function* createCredential(action) {
 function* getCredential(action) {
     try {
         const res = yield call(authService.getCredentialService, action.payload.credentialId);
+        console.log(res,'res')
         yield put({
             type: GET_CREDENTIAL_SUCCESS,
             payload: res.data,
@@ -101,18 +102,12 @@ function* getCredential(action) {
 
     } catch (err) {
         console.log(err)
-        yield put({
-            type: GET_CREDENTIAL_SUCCESS,
-            payload: '',
-        });
     }
 }
 
 function* editCredentialById(action) {
-    console.log('edit edit edit')
     try {
         const res = yield call(authService.editCredentialByIdService, action.payload.id, action.payload.body)
-
         yield put({
             type: EDIT_CREDENTIAL_BY_ID_SUCCESS,
             payload: res.data,
@@ -124,7 +119,6 @@ function* editCredentialById(action) {
 }
 
 function* deleteCredentialById(action) {
-    console.log(action,'actioooon admin saga');
     try {
         yield call(authService.deleteCredentialByIdService, action.payload.id)
 

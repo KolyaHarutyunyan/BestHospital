@@ -24,12 +24,22 @@ export const StaffCredentials = ({credentialData, openModal}) => {
         handleClose()
     }
 
+    const convertType = (index) =>{
+        if (index === 0) {
+            return 'Degree'
+        } else if (index === 1) {
+            return 'Clearance'
+        } else if (index === 2) {
+            return 'licence'
+        }
+    }
+
+
     const notesItem = (item, index) => {
-        console.log(item.expirationDate,'expiration date ');
         return (
             <TableBodyComponent key={index} handleClick={() => editCredential('credentialPreview')}>
-                <TableCell>{item?.credentialId.name}</TableCell>
-                <TableCell>{item?.credentialId.type}</TableCell>
+                <TableCell>{item?.credentialId?.name}</TableCell>
+                <TableCell>{convertType(item?.credentialId?.type)}</TableCell>
                 <TableCell>{item?.receivedDate}</TableCell>
                 <TableCell>{item.expirationDate && moment(item.expirationDate).format('L')}</TableCell>
                 <TableCell>{
@@ -41,8 +51,8 @@ export const StaffCredentials = ({credentialData, openModal}) => {
                                 e.stopPropagation();
                                 editCredential('editCredential', {
                                     id: item._id,
-                                    credId:item.credentialId._id,
-                                    type:item.credentialId.name,
+                                    credId: item.credentialId?._id,
+                                    type:item.credentialId?.name,
                                     expirationDate: item.expirationDate
 
                                 })
@@ -90,7 +100,7 @@ export const StaffCredentials = ({credentialData, openModal}) => {
     return (
         <div>
             {
-                credentialData && <Notes defaultStyle={true} data={credentialData} pagination={true} items={notesItem} headerTitles={headerTitles}/>
+                credentialData.length && <Notes defaultStyle={true} data={credentialData} pagination={true} items={notesItem} headerTitles={headerTitles}/>
             }
             <SimpleModal
                 openDefault={open}

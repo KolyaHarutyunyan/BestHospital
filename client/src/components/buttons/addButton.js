@@ -2,9 +2,17 @@ import { Button } from "@material-ui/core";
 import { buttonsStyle } from "./styles";
 import {Colors, Images} from "@eachbase/utils";
 import {MinLoader} from "../loader";
+import {useSelector} from "react-redux";
 
-export const AddButton = ({loader,disabled, styles, text, handleClick }) => {
+export const AddButton = ({loader,disabled, styles, text, handleClick,type }) => {
   const classes = buttonsStyle();
+
+  const {httpOnLoad,}  = useSelector((state) => ({
+    httpOnLoad: state.httpOnLoad,
+  }));
+
+  const load = httpOnLoad.length && httpOnLoad[0]
+
   return (
 
     <Button
@@ -18,7 +26,7 @@ export const AddButton = ({loader,disabled, styles, text, handleClick }) => {
         loader !== true && <img src={Images.addCircle} alt={'icon'}/>
       }
 
-      { loader === true ?
+      { load === type ?
           <MinLoader margin={'0'} color={Colors.TextWhite}/>
           :
           text
