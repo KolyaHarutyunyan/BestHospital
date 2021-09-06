@@ -1,8 +1,16 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {TableCell} from "@material-ui/core";
-import {adminActions} from "@eachbase/store";
-import {StaffGeneral, StaffHistory, StaffCredentials, StaffEmployment, StaffAccess, StaffItemHeader, StaffAvailability} from "./core";
+import {adminActions, systemActions} from "@eachbase/store";
+import {
+    StaffGeneral,
+    StaffHistory,
+    StaffCredentials,
+    StaffEmployment,
+    StaffAccess,
+    StaffItemHeader,
+    StaffAvailability
+} from "./core";
 import {Images} from "@eachbase/utils";
 import {
     SimpleTabs,
@@ -16,9 +24,9 @@ import {staffStyle} from "@eachbase/pages/staff/styles";
 
 export const StaffItem = () => {
 
-    const credentialData = useSelector(state => state.admins.credentialById)
+
     const dispatch = useDispatch()
-    console.log(credentialData,'credential data');
+
     const params = useParams()
 
     const [open, setOpen] = useState(false)
@@ -27,10 +35,13 @@ export const StaffItem = () => {
     const [openCredModal, setOpenCredModal] = useState(false)
     const [credModalType, setCredModalType] = useState('')
 
+    const [globalCredentialId,setGlobalCredentialId] = useState('')
+
     const classes = staffStyle()
 
     const staffGeneral = useSelector(state => state.admins.adminInfoById)
-
+    const credentialData = useSelector(state => state.admins.credential)
+    const globalCredentials = useSelector(state => state.system.credentials)
     const handleOpenClose = () => {
         setOpen(!open)
     }
@@ -79,14 +90,16 @@ export const StaffItem = () => {
         },
     ];
 
-    const openCloseCredModal = (modalType) => {
+    const openCloseCredModal = (modalType, globalCredentialId) => {
         setOpenCredModal(!openCredModal)
         setCredModalType(modalType)
+        setGlobalCredentialId(globalCredentialId)
     }
 
     useEffect(() => {
-        dispatch(adminActions.getCredentialById(params.id))
+        dispatch(adminActions.getCredential(params.id))
         dispatch(adminActions.getAdminById(params.id))
+        dispatch(systemActions.getCredentialGlobal())
     }, [])
 
     const data = [
@@ -111,14 +124,14 @@ export const StaffItem = () => {
         )
     }
 
-    const {httpOnLoad } = useSelector((state) => ({
+    const {httpOnLoad} = useSelector((state) => ({
         adminsList: state.admins.adminsList,
         httpOnLoad: state.httpOnLoad
     }));
 
     const tabsContent = [
         {
-            tabComponent: (httpOnLoad.length ? <Loader /> : <StaffGeneral staffGeneral={staffGeneral}/>)
+            tabComponent: (httpOnLoad.length ? <Loader/> : <StaffGeneral staffGeneral={staffGeneral}/>)
         },
         {
             tabComponent: (<StaffEmployment/>)
@@ -130,7 +143,7 @@ export const StaffItem = () => {
             tabComponent: (<StaffAccess/>)
         },
         {
-            tabComponent: (<StaffAvailability staffGeneral={staffGeneral} />)
+            tabComponent: (<StaffAvailability staffGeneral={staffGeneral}/>)
         },
         {
             tabComponent: (<Notes pagination={true} data={data} items={notesItem} headerTitles={headerTitles}/>)
@@ -154,7 +167,9 @@ export const StaffItem = () => {
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
                 <div className={classes.staffSingleItem}>
-                    <StaffItemHeader credModalType={credModalType} openCloseCredModal={openCloseCredModal} openCredModal={openCredModal} activeTab={activeTab}/>
+                    <StaffItemHeader globalCredentialId={globalCredentialId} globalCredentials={globalCredentials} credModalType={credModalType}
+                                     openCloseCredModal={openCloseCredModal} openCredModal={openCredModal}
+                                     activeTab={activeTab}/>
                     <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
                 </div>
             </TableWrapperGeneralInfo>

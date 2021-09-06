@@ -24,7 +24,7 @@ import {
     CREATE_FUNDING_SOURCE_NOTE,
     EDIT_FUNDING_SOURCE_NOTE,
     DELETE_FUNDING_SOURCE_NOTE,
-    CREATE_FUNDING_SOURCE_NOTES_SUCCESS,
+    CREATE_FUNDING_SOURCE_NOTES_SUCCESS, CREATE_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
 } from "./fundingSource.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
@@ -73,10 +73,11 @@ function* getFundingSource(action) {
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
-        const res = yield call(authService.getFundingSourceService,action.payload.status);
+        const res = yield call(authService.getFundingSourceService,action.payload);
+        console.log(res.data.funders,'res')
         yield put({
             type: GET_FUNDING_SOURCE_SUCCESS,
-            payload: res.data.funders,
+            payload: res.data,
         });
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.removeError(action.type));
@@ -115,6 +116,7 @@ function* getFundingSourceServicesById(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.getFoundingSourceServiceByIdService, action.payload);
+        console.log(res,'get services all')
         yield put({
             type: GET_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
             payload: res.data,
@@ -124,6 +126,7 @@ function* getFundingSourceServicesById(action) {
 
 
     } catch (error) {
+        console.log(error,'errr get servicees')
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.removeError(action.type));
     }
@@ -132,8 +135,13 @@ function* getFundingSourceServicesById(action) {
 function* createFundingSourceServicesById({payload}) {
     try {
         const res = yield call(authService.createFoundingSourceServiceByIdService, payload.id, payload.body);
-
+        console.log(res,'create service')
+        yield put({
+            type: CREATE_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
+            payload: res.data,
+        });
     } catch (error) {
+        console.log(error, 'err create services')
     }
 }
 
@@ -147,9 +155,10 @@ function* editFundingSourceServices({payload}) {
 
 function* createFundingSourceServicesModifier({payload}) {
     try {
-        const res = yield call(authService.createFoundingSourceServiceModifierService, payload.id, payload.body);
+        const res = yield call(authService.createFoundingSourceServiceModifierService, payload.body);
+        console.log(res,'create modifier')
     } catch (error) {
-
+        console.log(error,'create modifier')
     }
 }
 function* getFundingSourceHistoriesById(action) {

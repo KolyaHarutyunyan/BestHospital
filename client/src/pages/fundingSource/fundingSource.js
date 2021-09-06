@@ -10,10 +10,10 @@ export const FundingSource = ({}) => {
     const dispatch = useDispatch()
     const [type, setType] = useState(1)
     const [open, setOpen] = useState(false)
-
+    const [status, setStatus] = useState(1)
 
     useEffect(() => {
-        dispatch(fundingSourceActions.getFundingSource())
+        dispatch(fundingSourceActions.getFundingSource({ status : status, start : 1, end : 10 }))
     }, []);
 
     const handleOpenClose = () => {
@@ -22,6 +22,7 @@ export const FundingSource = ({}) => {
 
     const handleActiveOrInactive  =(status) =>{
         dispatch(fundingSourceActions.getFundingSource(status))
+        setStatus(status)
     }
 
 
@@ -50,7 +51,7 @@ export const FundingSource = ({}) => {
                         body={<CreateFundingSource handleClose={handleOpenClose}/>}
                     >
 
-                        <FundingSourceTable/>
+                        <FundingSourceTable status ={status}/>
                     </TableWrapper>
 
         </>

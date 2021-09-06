@@ -12,7 +12,7 @@ const editButtonStyle = {
     paddingInline: 24
 }
 
-export const StaffItemHeader = ({credModalType, openCloseCredModal, openCredModal, activeTab,}) => {
+export const StaffItemHeader = ({globalCredentialId, globalCredentials, credModalType, openCloseCredModal, openCredModal, activeTab,}) => {
 
     const classes = serviceSingleStyles()
     const [open, setOpen] = useState()
@@ -57,7 +57,7 @@ export const StaffItemHeader = ({credModalType, openCloseCredModal, openCredModa
                 content={activeTab === 0 ?
                     <CreateStaff staffGeneral={adminInfoById}
                                  resetData={false} handleClose={handleOpenClose}/> : activeTab === 2 ?
-                        <CredentialModal credModalType={credModalType}
+                        <CredentialModal globalCredentialId={globalCredentialId} globalCredentials={globalCredentials} credModalType={credModalType}
                                          handleClose={() => openCloseCredModal()}/> : activeTab === 5 ?
                             <StaffAddNotes handleClose={handleOpenClose}/> : null}
             />
