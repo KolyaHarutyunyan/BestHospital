@@ -144,7 +144,7 @@ export class FundingService {
       this.model.find({ status: 1 }).skip(skip).limit(limit),
       this.model.countDocuments({ status: 1 })
     ]);
-    this.checkFunder(funders[0])
+    // this.checkFunder(funders[0])
 
     const sanFun = this.sanitizer.sanitizeMany(funders);
     return { funders: sanFun, count }
