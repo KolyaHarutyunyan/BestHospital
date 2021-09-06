@@ -34,3 +34,4 @@ export class AuthorizationModifiersDTO {
   @IsArray()
   modifiers: Array<string>;
 }
+// @IsIn(values: any[])

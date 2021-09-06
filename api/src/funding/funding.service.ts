@@ -250,7 +250,7 @@ export class FundingService {
       // this.checkService(service);
       if (dto.name) service.name = dto.name;
       if (dto.rate) service.rate = dto.rate;
-      if (dto.cptCode) service.rate = dto.rate;
+      if (dto.cptCode) service.cptCode = dto.cptCode;
       if (dto.size) service.size = dto.size;
       if (dto.min) service.min = dto.min;
       if (dto.max) service.max = dto.max;
