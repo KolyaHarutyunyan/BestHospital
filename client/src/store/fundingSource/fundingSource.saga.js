@@ -24,7 +24,11 @@ import {
     CREATE_FUNDING_SOURCE_NOTE,
     EDIT_FUNDING_SOURCE_NOTE,
     DELETE_FUNDING_SOURCE_NOTE,
-    CREATE_FUNDING_SOURCE_NOTES_SUCCESS, CREATE_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
+    CREATE_FUNDING_SOURCE_NOTES_SUCCESS,
+    CREATE_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
+    GET_FUNDING_SOURCE_SERVICE_MODIFIERS,
+    GET_FUNDING_SOURCE_SERVICE_MODIFIERS_SUCCESS,
+    GET_FUNDING_SOURCE_SERVICE_MODIFIERS_ERR,
 } from "./fundingSource.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
@@ -135,11 +139,20 @@ function* getFundingSourceServicesById(action) {
 function* createFundingSourceServicesById({payload}) {
     try {
         const res = yield call(authService.createFoundingSourceServiceByIdService, payload.id, payload.body);
-        console.log(res,'create service')
+
         yield put({
             type: CREATE_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
             payload: res.data,
         });
+
+const body ={
+    modifiers:payload.modifier,
+    serviceId:res.data._id,
+}
+       yield put({
+           type:CREATE_FUNDING_SOURCE_SERVICE_MODIFIER,
+           payload:{body}
+       })
     } catch (error) {
         console.log(error, 'err create services')
     }
@@ -147,20 +160,51 @@ function* createFundingSourceServicesById({payload}) {
 
 function* editFundingSourceServices({payload}) {
     try {
-        const res = yield call(authService.editFoundingSourceServiceService, payload.id, payload.body);
+        const res = yield call(authService.editFoundingSourceServiceService, payload.id, payload.body,);
+        console.log(res,'resresres')
+        const body ={
+            modifiers:payload.modifier,
+            serviceId:res.data._id,
+        }
+        yield put({
+            type:CREATE_FUNDING_SOURCE_SERVICE_MODIFIER,
+            payload:{body}
+        })
     } catch (error) {
-
+        console.log(error, 'err edit services')
     }
 }
 
 function* createFundingSourceServicesModifier({payload}) {
     try {
+
         const res = yield call(authService.createFoundingSourceServiceModifierService, payload.body);
-        console.log(res,'create modifier')
     } catch (error) {
-        console.log(error,'create modifier')
     }
 }
+
+function* getFundingSourceServicesModifier({payload}) {
+
+    try {
+        const res = yield call(authService.getFoundingSourceServiceModifierService, payload);
+        yield put({
+            type: GET_FUNDING_SOURCE_SERVICE_MODIFIERS_SUCCESS,
+            payload: res.data,
+        });
+        console.log(res, 'get modifier')
+
+
+    } catch (error) {
+        yield put({
+            type: GET_FUNDING_SOURCE_SERVICE_MODIFIERS_ERR,
+            payload: error,
+        });
+        console.log(error, 'get modifier')
+    }
+}
+
+
+
 function* getFundingSourceHistoriesById(action) {
     // yield put(httpRequestsOnErrorsActions.removeError(action.type));
     // yield put(httpRequestsOnLoadActions.appendLoading(action.type));
@@ -321,6 +365,7 @@ export const watchFundingSource = function* watchFundingSourceSaga() {
     yield takeLatest(CREATE_FUNDING_SOURCE_SERVICE_BY_ID, createFundingSourceServicesById);
     yield takeLatest(EDIT_FUNDING_SOURCE_SERVICE, editFundingSourceServices);
     yield takeLatest(CREATE_FUNDING_SOURCE_SERVICE_MODIFIER, createFundingSourceServicesModifier);
+    yield takeLatest(GET_FUNDING_SOURCE_SERVICE_MODIFIERS, getFundingSourceServicesModifier);
     yield takeLatest(GET_FUNDING_SOURCE_HISTORIES_BY_ID, getFundingSourceHistoriesById);
     yield takeLatest(GET_FUNDING_SOURCE_SERV, getFundingSourceServ);
     yield takeLatest(CREATE_FUNDING_SOURCE_SERV, creteFundingSourceServ);

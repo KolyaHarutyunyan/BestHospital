@@ -8,12 +8,12 @@ import {useDispatch, useSelector} from "react-redux";
 
 export const FundingSource = ({}) => {
     const dispatch = useDispatch()
-    const [type, setType] = useState(1)
     const [open, setOpen] = useState(false)
+    const [page, setPage] = useState(1)
     const [status, setStatus] = useState(1)
 
     useEffect(() => {
-        dispatch(fundingSourceActions.getFundingSource({ status : status, start : 1, end : 10 }))
+        dispatch(fundingSourceActions.getFundingSource({ status : status, start : 0, end : 10 }))
     }, []);
 
     const handleOpenClose = () => {
@@ -21,22 +21,16 @@ export const FundingSource = ({}) => {
     }
 
     const handleActiveOrInactive  =(status) =>{
-        dispatch(fundingSourceActions.getFundingSource(status))
         setStatus(status)
+        if(status === 0){
+            dispatch(fundingSourceActions.getFundingSource({status: status, start: 0, end: 10}))
+        }else {
+            dispatch(fundingSourceActions.getFundingSource({status: status, start: page, end: 10}))
+        }
+
     }
 
-
-    // const handleActiveOrInactive  =(type) =>{
-    //     setType(type)
-    //     if(type === 1){
-    //         dispatch(fundingSourceActions.getActiveOrInactive(1))
-    //     }else{
-    //         dispatch(fundingSourceActions.getActiveOrInactive(0))
-    //     }
-    // }
-
     return (
-        <>
                     <TableWrapper
                         getActive={() => handleActiveOrInactive(1)}
                         getInactive={() => handleActiveOrInactive(0) }
@@ -51,9 +45,7 @@ export const FundingSource = ({}) => {
                         body={<CreateFundingSource handleClose={handleOpenClose}/>}
                     >
 
-                        <FundingSourceTable status ={status}/>
+                        <FundingSourceTable handleGetPage={setPage}  status ={status}/>
                     </TableWrapper>
-
-        </>
     );
 }

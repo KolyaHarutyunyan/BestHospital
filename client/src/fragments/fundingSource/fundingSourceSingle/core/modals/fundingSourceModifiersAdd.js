@@ -7,11 +7,12 @@ import {fundingSourceActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 
 
-export const FundingSourceModifiersAdd = ({setPostModifiers, globalCredentials}) => {
+export const FundingSourceModifiersAdd = ({setPostModifiers, globalCredentials,modifiersServ,edit}) => {
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState({});
-    const [modifiers, setModifiers] = useState([]);
+    const [modifiers, setModifiers] = useState( modifiersServ? [...modifiersServ] :  []);
     const [credentialID, setCredentialID] = useState(null)
+    const [btnStyle, setBtnStyle] = useState(false)
 
 
 
@@ -26,38 +27,45 @@ export const FundingSourceModifiersAdd = ({setPostModifiers, globalCredentials})
 
     }
 
-    console.log(modifiers,'oooo')
+
 
     useEffect(() => {
-        globalCredentials.length > 0 && globalCredentials.forEach((item, index) => {
+        globalCredentials &&  globalCredentials.length > 0 && globalCredentials.forEach((item, index) => {
             if (inputs.credentialId === item.name) {
                 setCredentialID(item._id)
             }
+
             if (inputs.credentialId && inputs.chargeRate && inputs.name && inputs.type  ) {
-                if (inputs.credentialId !== '0' && inputs.chargeRate !== ' ' && inputs.name !== ' ' && inputs.type !== '0') {
+                if (inputs.credentialId !== '0' && inputs.chargeRate !== ' ' && inputs.name !== ' ' ) {
+                    setBtnStyle(true)
+
 
                     setPostModifiers([...modifiers, {
                         "credentialId": credentialID,
-                        "chargeRate": 1,
+                        "chargeRate": +inputs.chargeRate,
                         "name": inputs.name,
-                        'type': 1
+                        'type': +inputs.type
                     }])
+
+
                 }
             }else {
                 setPostModifiers(null)
+                setBtnStyle(false)
             }
         })
 
     }, [inputs])
 
     const handleCreate = () => {
+        setBtnStyle(false)
         if (inputs.credentialId && inputs.chargeRate && inputs.name && inputs.type  ) {
             if ( inputs.credentialId !=='0' && inputs.chargeRate !== ' ' && inputs.name !==' ' && inputs.type !== '0'){
                 setModifiers([...modifiers,{
                     "credentialId": credentialID,
-                    "chargeRate": inputs.chargeRate,
+                    "chargeRate": +inputs.chargeRate,
                     "name": inputs.name,
-                    'type': inputs.type
+                    'type': +inputs.type
                 }])
                 setInputs({name : ' ', chargeRate : ' ' , credentialId : credentialID, type : '0' })
             }
@@ -68,7 +76,7 @@ export const FundingSourceModifiersAdd = ({setPostModifiers, globalCredentials})
                 "credentialId": inputs.credentialId,
                 "chargeRate": inputs.chargeRate,
                 "name": inputs.name,
-                'type': inputs.type
+                'type': +inputs.type
             }
 
         } else {
@@ -82,7 +90,7 @@ export const FundingSourceModifiersAdd = ({setPostModifiers, globalCredentials})
         }
     }
 
-    let list = [{name: "11"}]
+    let list = [{name: 0,}, {name: 1}]
 
 
 
@@ -106,7 +114,7 @@ export const FundingSourceModifiersAdd = ({setPostModifiers, globalCredentials})
                     onChange={handleChange}
                     value={ inputs.chargeRate}
                     variant={"outlined"}
-                    type={"text"}
+                    type={"number"}
                     label={"Charge Rate*"}
                     name={'chargeRate'}
                     typeError={error === 'chargeRate' && ErrorText.field}
@@ -143,8 +151,11 @@ export const FundingSourceModifiersAdd = ({setPostModifiers, globalCredentials})
                             label={"Modifier Name"}
                             name={'name'}
                             styles={{width: 198}}
+                            disabled={true}
+
                         />
                         <ValidationInput
+                            disabled={true}
                             onChange={handleChange}
                             value={ item.chargeRate}
                             variant={"outlined"}
@@ -155,6 +166,7 @@ export const FundingSourceModifiersAdd = ({setPostModifiers, globalCredentials})
                             styles={{width: 198}}
                         />
                         <SelectInput
+                            disabled={true}
                             name={"credentialId"}
                             label={"Credential*"}
                             handleSelect={handleChange}
@@ -164,6 +176,7 @@ export const FundingSourceModifiersAdd = ({setPostModifiers, globalCredentials})
                         />
                         <div style={{width: 36}}/>
                         <SelectInput
+                            disabled={true}
                             name={"type"}
                             label={"Type*"}
                             handleSelect={handleChange}
@@ -176,8 +189,8 @@ export const FundingSourceModifiersAdd = ({setPostModifiers, globalCredentials})
             })}
 
             <div className={classes.addmodifiersBlock} onClick={handleCreate}>
-                <img src={Images.addLight} alt="" className={classes.iconsCursor}/>
-                <p className={classes.addMoreModifiersText}>Add more modifiers</p>
+                <img src={btnStyle ? Images.addLight2 : Images.addLight} alt="" className={classes.iconsCursor}/>
+                <p className={classes.addMoreModifiersText} style={btnStyle ? {color: '#347AF0'} : {color : "#347AF080"}}>Add more modifiers</p>
             </div>
         </div>
 

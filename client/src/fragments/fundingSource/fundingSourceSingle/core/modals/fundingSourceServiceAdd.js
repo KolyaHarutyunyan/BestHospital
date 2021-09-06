@@ -2,37 +2,39 @@ import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbas
 import React, {useEffect, useState} from "react";
 import {foundingSourceModalStyle} from "./styles";
 import {ErrorText, Images} from "@eachbase/utils";
-import {useDispatch} from "react-redux";
-import {fundingSourceActions} from "@eachbase/store";
+import {useDispatch, useSelector} from "react-redux";
+import {fundingSourceActions, systemActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 import {FundingSourceModifiersAdd} from "./fundingSourceModifiersAdd";
 
 
-export const FundingSourceServiceAdd = ({handleClose, systemServices, globalCredentials}) => {
-
+export const FundingSourceServiceAdd = ({handleClose, info}) => {
+    console.log(info,'info')
+    const modifiersServ = useSelector(state=> state.fundingSource.modifiers)
+    const systemServices = useSelector(state => state.system.services)
+    const globalCredentials = useSelector(state => state.system.credentials)
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState({});
+    const [inputs, setInputs] = useState(info ? {...info} : {});
     const [sysServiceItem, setSysServiceItem] = useState(null);
-    const [postModifiers , setPostModifiers] = useState()
+    const [postModifiers, setPostModifiers] = useState()
     const params = useParams()
     let dispatch = useDispatch()
-
-
-
     const classes = foundingSourceModalStyle()
+
 
     const handleChange = e => {
         setInputs(
             prevState => ({...prevState, [e.target.name]: e.target.value}),
             error === e.target.name && setError(''),
         );
-
-
     }
 
+    useEffect(()=>{
+        dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(info?._id))
+    },[])
 
     useEffect(() => {
-        systemServices.length > 0 && systemServices.forEach((item, index) => {
+        systemServices && systemServices.length > 0 && systemServices.forEach((item, index) => {
             if (inputs.name === item.name) {
                 setSysServiceItem(item)
             }
@@ -41,9 +43,7 @@ export const FundingSourceServiceAdd = ({handleClose, systemServices, globalCred
     }, [inputs])
 
 
-
-    const handleCreate = async () => {
-
+    const handleCreate = () => {
         if (inputs.name && inputs.cptCode && inputs.size && inputs.min && inputs.max) {
             const data = {
                 "name": inputs.name,
@@ -54,13 +54,22 @@ export const FundingSourceServiceAdd = ({handleClose, systemServices, globalCred
                 "min": +inputs.min,
                 "max": +inputs.max
             }
-            await dispatch(fundingSourceActions.createFoundingSourceServiceById(params.id, data))
-            await dispatch(fundingSourceActions.createFoundingSourceServiceModifier( {
-                "modifiers": [
-                    postModifiers
-                ],
-                "serviceId": "61306915d2cc1f0f3b7ec7a6"
-            }))
+            const modifier = postModifiers
+
+            if (!info){
+                dispatch(fundingSourceActions.createFoundingSourceServiceById(params.id, data, modifier))
+                // handleClose()
+            }else {
+                const newList = []
+                dispatch(fundingSourceActions.editFoundingSourceServiceById(info?._id, data, modifier))
+                // handleClose()
+            }
+            // dispatch(fundingSourceActions.createFoundingSourceServiceModifier({
+            //     "modifiers":
+            //         postModifiers
+            //     ,
+            //     "serviceId": info?._id
+            // }))
         } else {
             setError(
                 !inputs.name ? 'name' :
@@ -74,10 +83,9 @@ export const FundingSourceServiceAdd = ({handleClose, systemServices, globalCred
     }
 
 
-
     return (
         <div className={classes.createFoundingSource}>
-            <ModalHeader handleClose={handleClose} title={'Add a New Service'}/>
+            <ModalHeader handleClose={handleClose} title={info ? "Edit Service" : 'Add a New Service'}/>
             <div className={classes.createFoundingSourceBody}>
                 <p className={classes.fundingSourceModalsTitle}>Service</p>
                 <div className={classes.foundingSourceModalsBodyBlock}>
@@ -87,8 +95,8 @@ export const FundingSourceServiceAdd = ({handleClose, systemServices, globalCred
                             label={"Service*"}
                             handleSelect={handleChange}
                             value={inputs.name}
-                            list={systemServices ? systemServices : []}
                             typeError={error === 'name' ? ErrorText.field : ''}
+                            list={systemServices ? systemServices : []}
                         />
                         <div className={classes.displayCodeBlock}>
                             <p className={classes.displayCodeBlockText}>Display Code: <span
@@ -97,7 +105,7 @@ export const FundingSourceServiceAdd = ({handleClose, systemServices, globalCred
                             </span></p>
                             <p className={classes.displayCodeBlockText} style={{marginTop: 16}}>Category: <span
                                 className={classes.displayCode}>
-                                {sysServiceItem !== null && sysServiceItem?.category !== 'category'  && inputs?.name !== '' ? sysServiceItem?.category : 'N/A'}
+                                {sysServiceItem !== null && sysServiceItem?.category !== 'category' && inputs?.name !== '' ? sysServiceItem?.category : 'N/A'}
                             </span></p>
                         </div>
                     </div>
@@ -147,14 +155,12 @@ export const FundingSourceServiceAdd = ({handleClose, systemServices, globalCred
                 </div>
 
 
-            <FundingSourceModifiersAdd  setPostModifiers={setPostModifiers} globalCredentials={globalCredentials} />
-
-
+                <FundingSourceModifiersAdd edit={!!info} modifiersServ={modifiersServ} setPostModifiers={setPostModifiers} globalCredentials={globalCredentials}/>
 
 
                 <div className={classes.foundingSourceModalsBodyBlock}>
                     <CreateChancel
-                        create={"Add"}
+                        create={info ? 'Save' : "Add"}
                         chancel={"Cancel"}
                         onCreate={handleCreate}
                         onClose={handleClose}
