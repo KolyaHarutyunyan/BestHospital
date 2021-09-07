@@ -32,10 +32,10 @@ export const FundingSourceSinglePTModifiers = ({data, title}) => {
 
         return (
             <TableBodyComponent key={index}>
-                <TableCell>  {item.name}  </TableCell>
-                <TableCell>  {item.credential.name}  </TableCell>
-                <TableCell>  {item.chargeRate}  </TableCell>
-                <TableCell>  {item.type}  </TableCell>
+                <TableCell>  {item?.name}  </TableCell>
+                <TableCell>  {item?.credentialId}  </TableCell>
+                <TableCell>  {item?.chargeRate}  </TableCell>
+                <TableCell>  {item?.type}  </TableCell>
 
             </TableBodyComponent>
         )

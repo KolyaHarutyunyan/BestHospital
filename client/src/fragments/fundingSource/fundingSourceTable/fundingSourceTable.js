@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {Loader, PaginationItem} from "@eachbase/components";
 import {fundingSourceActions} from "@eachbase/store";
 
-export const FundingSourceTable = ({ status }) => {
+export const FundingSourceTable = ({ status, handleGetPage }) => {
     const globalStyle = useGlobalStyles();
     const [page, setPage] = useState(1);
     const dispatch = useDispatch()
@@ -16,13 +16,10 @@ export const FundingSourceTable = ({ status }) => {
     }));
     const changePage = (number) => {
         setPage(number)
-        console.log(number,'number')
-        let start = number > 1 ? number -1  + '1'    : number
-        let end = number > 2 ?  number + '0' : 0
-        console.log(end,'end')
-        dispatch(fundingSourceActions.getFundingSource({ status : status, start : end, end : 10 }))
-
-
+        let start = number > 2 ?  number + '0' : 0
+        dispatch(fundingSourceActions.getFundingSource({ status : status, start : start, end : 10 }))
+        console.log(start,'start')
+        handleGetPage(start)
     };
 
 

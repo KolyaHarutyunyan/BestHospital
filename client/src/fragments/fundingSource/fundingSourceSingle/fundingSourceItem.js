@@ -34,6 +34,7 @@ export const FundingSourceItem = ({}) => {
         dispatch(fundingSourceActions.getFundingSourceHistoriesById(params.id,'Funder'))
         dispatch(fundingSourceActions.getFundingSourceNotes(params.id,'Funder'))
         dispatch(systemActions.getServices())
+        dispatch(systemActions.getCredentialGlobal())
     }, []);
 
     const handleOpenClose = () => {
