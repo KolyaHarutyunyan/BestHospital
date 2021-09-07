@@ -94,7 +94,6 @@ function* createCredential(action) {
 function* getCredential(action) {
     try {
         const res = yield call(authService.getCredentialService, action.payload.credentialId);
-        console.log(res,'res')
         yield put({
             type: GET_CREDENTIAL_SUCCESS,
             payload: res.data,

@@ -33,12 +33,13 @@ export const Colors = {
     ThemeOrange: '#FFA330',
     ThemeGray: '#E6ECF380',
     ThemeBorder: '#51566DB3',
-    ThemeMangoOrange: '#FE7B43'
+    ThemeMangoOrange: '#FE7B43',
 }
 
 export const Shadow = {
     normal: '0px 0px 12px #0052E01A',
     menuShadow: '0px 3px 6px #347AF01A',
+    noteModalShadow: '0px 0px 6px #347AF033',
     modalShadow: '0px 0px 6px #8A8A8A29',
     changeShadow: '0px 0px 6px #8A8A8A3D',
     blueButton: '0px 0px 6px #347AF04D'

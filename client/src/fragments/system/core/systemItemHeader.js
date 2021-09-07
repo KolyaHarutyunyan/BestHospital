@@ -48,10 +48,10 @@ export const SystemItemHeader = ({
 
     const loader = httpOnLoad.length &&
     httpOnLoad[0] === 'DELETE_SERVICE_BY_ID_GLOBAL' ? true :
-      httpOnLoad[0] === 'EDIT_CREDENTIAL_BY_ID_GLOBAL' ? true :
-        httpOnLoad[0] === 'DELETE_CREDENTIAL_BY_ID_GLOBAL' ? true :
-            httpOnLoad[0] === 'DELETE_DEPARTMENT_BY_ID_GLOBAL' ? true :
-                httpOnLoad[0] === 'DELETE_JOB_BY_ID_GLOBAL'
+        httpOnLoad[0] === 'EDIT_CREDENTIAL_BY_ID_GLOBAL' ? true :
+            httpOnLoad[0] === 'DELETE_CREDENTIAL_BY_ID_GLOBAL' ? true :
+                httpOnLoad[0] === 'DELETE_DEPARTMENT_BY_ID_GLOBAL' ? true :
+                    httpOnLoad[0] === 'DELETE_JOB_BY_ID_GLOBAL'
 
     useEffect(() => {
         if (success) {
@@ -70,7 +70,7 @@ export const SystemItemHeader = ({
             <SimpleModal
                 openDefault={open}
                 handleOpenClose={handleOpenClose}
-                content={<SystemItemAddService  modalInformation={modalInformation} modalType={modalType}
+                content={<SystemItemAddService modalInformation={modalInformation} modalType={modalType}
                                                handleClose={handleOpenClose}/>}
             />
             <SimpleModal

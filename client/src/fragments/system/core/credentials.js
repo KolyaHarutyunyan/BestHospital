@@ -88,7 +88,6 @@ export const Credentials = ({removeItem, openModal,globalCredentials}) => {
     const errorText = httpOnError.length && httpOnError[0].type === 'CREATE_CREDENTIAL_GLOBAL'
     const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_CREDENTIAL_GLOBAL'
 
-
     useEffect(()=>{
         if(success) {
             dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_CREDENTIAL_GLOBAL'))
@@ -100,7 +99,8 @@ export const Credentials = ({removeItem, openModal,globalCredentials}) => {
             dispatch(httpRequestsOnErrorsActions.removeError('CREATE_CREDENTIAL_GLOBAL'))
         }
     },[success, errorText])
-    let errorMessage = success ? 'success' : 'error'
+
+    let errorMessage = success ? 'Successfully added' : 'Something went wrong'
 
     return (
         <>
@@ -124,6 +124,7 @@ export const Credentials = ({removeItem, openModal,globalCredentials}) => {
                     typeError={error === 'issuingState' ? ErrorText.field : ''}
                 />
                 <AddButton
+                    type={'CREATE_CREDENTIAL_GLOBAL'}
                     loader={ loader }
                     disabled={!isDisabled}
                     styles={credentialBtn}
@@ -156,7 +157,7 @@ export const Credentials = ({removeItem, openModal,globalCredentials}) => {
 
             </div>
             <Toast
-                type={success ? 'success' : errorText ? 'error' : '' }
+                type={success ? 'Successfully added' : errorText ? 'Something went wrong' : '' }
                 text={errorMessage}
                 info={success ? success : errorText ? errorText : ''}/>
         </>

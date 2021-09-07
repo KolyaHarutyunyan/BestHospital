@@ -36,7 +36,8 @@ export const SystemItem = () => {
                         httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_JOB_BY_ID_GLOBAL' ? true :
                             httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_SERVICE_BY_ID_GLOBAL' ? true :
                                 httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_DEPARTMENT_BY_ID_GLOBAL'
-    let errorMessage = success ? 'success' : 'error'
+
+    let errorMessage = success ? 'Success' : 'Something went wrong'
 
 
     const [activeTab, setActiveTab] = useState(0)
@@ -109,8 +110,7 @@ export const SystemItem = () => {
                                         openModal={handleOpenClose}/>)
         },
         {
-            tabComponent: (
-                <JobTitles globalJobs={globalJobs} removeItem={handleRemoveItem} openModal={handleOpenClose}/>)
+            tabComponent: (<JobTitles globalJobs={globalJobs} removeItem={handleRemoveItem} openModal={handleOpenClose}/>)
         }
     ];
 
@@ -127,10 +127,8 @@ export const SystemItem = () => {
                 handleOpenClose={handleOpenClose}
                 activeTab={activeTab}/>
             <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
-
-
             <Toast
-                type={success ? 'success' : errorText ? 'error' : ''}
+                type={success ? 'Successfully added' : errorText ? 'Something went wrong' : ''}
                 text={errorMessage}
                 info={success ? success : errorText ? errorText : ''}/>
         </div>
