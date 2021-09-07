@@ -11,14 +11,14 @@ import {fundingSourceActions, httpRequestsOnSuccessActions} from "../../../../st
 export const FundingSourceSingleServices = ({data,}) => {
 
 
-
     const [toggleModal, setToggleModal] = useState(false)
     const [index, setIndex] = useState(null)
     const [delEdit, setDelEdit] = useState(null)
     const [serviceIndex, setServiceIndex] = useState(0)
+    const [accept, setAcept] = useState(false)
     const classes = fundingSourceSingleStyles()
     const dispatch = useDispatch()
-    const modifiers = useSelector(state=> state.fundingSource.modifiers)
+    const modifiers = useSelector(state => state.fundingSource.modifiers)
 
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
@@ -30,21 +30,20 @@ export const FundingSourceSingleServices = ({data,}) => {
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'GET_FUNDING_SOURCE_SERVICE_MODIFIERS'
 
 
-    useEffect(()=>{
-        if (success){
+    useEffect(() => {
+        if (success) {
             // handleClose()
             dispatch(httpRequestsOnSuccessActions.removeSuccess('GET_FUNDING_SOURCE_SERVICE_MODIFIERS'))
         }
 
-    },[success])
-
+    }, [success])
 
 
     useEffect(() => {
         dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(data[serviceIndex]._id))
-    },[serviceIndex])
+    }, [serviceIndex])
 
-    console.log(success,'succes mods')
+    console.log(success, 'succes mods')
 
 
     const headerTitles = [
@@ -77,7 +76,7 @@ export const FundingSourceSingleServices = ({data,}) => {
 
     let serviceItem = (item, index) => {
         return (
-            <TableBodyComponent key={index} handleClick={() => setServiceIndex(index)  } >
+            <TableBodyComponent key={index} handleClick={() => setServiceIndex(index)}>
 
 
                 <TableCell><p className={classes.tableTitle}>{item.name}</p></TableCell>
@@ -87,12 +86,13 @@ export const FundingSourceSingleServices = ({data,}) => {
                 <TableCell>  {item.max}  </TableCell>
                 <TableCell>
                     <>
-                        {!success ?    <img src={Images.edit} alt="edit" className={classes.iconCursor}
-                                           onClick={(e) => {
-                                               setIndex(index)
-                                               setDelEdit('edit')
-                                               setToggleModal(!toggleModal)
-                                           }}/> : <MinLoader margin={'0'} color={Colors.TextWhite}/>}
+                        {!httpOnLoad.length > 0 ?
+                            <img src={Images.edit} alt="edit" className={classes.iconCursor}
+                                 onClick={(e) => {
+                                     setIndex(index)
+                                     setDelEdit('edit')
+                                     setToggleModal(!toggleModal)
+                                 }}/> : <MinLoader margin={'0'} color={Colors.TextPrimary}/>}
                         <img src={Images.remove} alt="delete" className={classes.iconCursordelete}
                              onClick={(e) => {
                                  e.stopPropagation()
@@ -117,7 +117,7 @@ export const FundingSourceSingleServices = ({data,}) => {
                         info={index !== null ? data[index].name : ''}
                         text={'Delete Service'}
                         handleClose={() => setToggleModal(!toggleModal)}/> :
-                    <FundingSourceServiceAdd modifiersID={ modifiers} info={data[index]}
+                    <FundingSourceServiceAdd modifiersID={modifiers} info={data[index]}
                                              handleClose={() => setToggleModal(!toggleModal)}/>}
             />
             <div style={{marginTop: -32, width: '100%'}}>
