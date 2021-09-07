@@ -17,8 +17,6 @@ export const StaffTable = ({}) => {
         setPage(number);
     };
 
-    const list = adminsList && adminsList.length && adminsList[page - 1]
-
     return (
         <div className={globalStyle.tableWrapper}>
 
@@ -32,7 +30,7 @@ export const StaffTable = ({}) => {
                     >
                         <StaffTableHead/>
                         {
-                            list.length && list.map((item, i) => (
+                            adminsList.length && adminsList.map((item, i) => (
                                 <StaffTableBody
                                     key={i}
                                     data={item}

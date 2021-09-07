@@ -19,14 +19,7 @@ const initialState = {
 };
 
 export const adminReducer = (state = initialState, action) => {
-
     switch (action.type) {
-
-        case GET_ADMINS:
-            return {
-                ...state,
-            }
-
         case CREATE_ADMIN_SUCCESS:
             return {
                 ...state,
@@ -36,7 +29,7 @@ export const adminReducer = (state = initialState, action) => {
         case GET_ADMINS_SUCCESS:
             return {
                 ...state,
-                adminsList: paginate((action.payload), 10),
+                adminsList: action.payload,
                 adminsListReserve: action.payload,
             }
 

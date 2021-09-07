@@ -58,6 +58,7 @@ export const editCredentialById = (body, id) => {
     }
 }
 export const deleteCredentialById = (id) => {
+    console.log(id,'id admin extion' );
     return {
         type: DELETE_CREDENTIAL_BY_ID,
         payload: {id}

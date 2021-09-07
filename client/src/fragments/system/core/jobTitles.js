@@ -56,10 +56,9 @@ export const JobTitles = ({globalJobs,removeItem, openModal}) => {
         httpOnLoad: state.httpOnLoad,
         httpOnError: state.httpOnError
     }));
-
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_JOB_GLOBAL'
-
     const errorText = httpOnError.length && httpOnError[0].type === 'CREATE_JOB_GLOBAL'
+    const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_JOB_GLOBAL'
 
     useEffect(()=>{
         if(success) {
@@ -86,9 +85,10 @@ export const JobTitles = ({globalJobs,removeItem, openModal}) => {
                     placeholder={'Job Titles*'}
                 />
                 <AddButton
+                    type={'CREATE_JOB_GLOBAL'}
                     disabled={!isDisabled}
                     styles={credentialBtn}
-                    loader={!!httpOnLoad.length}
+                    loader={ loader }
                     handleClick={handleSubmit} text='Add Job Title'/>
             </div>
             <p className={classes.title}>Job Titles</p>

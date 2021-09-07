@@ -23,10 +23,10 @@ import {httpRequestsOnLoadActions} from "../http_requests_on_load";
 
 function* createAdmin(action) {
     try {
-        yield call(authService.createAdminService, action.payload.body);
-
+       const res = yield call(authService.createAdminService, action.payload.body);
         yield put({
             type: CREATE_ADMIN_SUCCESS,
+            payload: res.data
         });
     } catch (err) {
         console.log(err.response, 'response')
@@ -83,7 +83,7 @@ function* createCredential(action) {
     try {
         const res = yield call(authService.createCredentialService, action.payload.body);
         yield put({
-            type: CREATE_CREDENTIAL,
+            type: CREATE_CREDENTIAL_SUCCESS,
             payload: res.data,
         });
     } catch (err) {
@@ -92,9 +92,9 @@ function* createCredential(action) {
 }
 
 function* getCredential(action) {
-    console.log(action,'admin saga');
     try {
         const res = yield call(authService.getCredentialService, action.payload.credentialId);
+        console.log(res,'res')
         yield put({
             type: GET_CREDENTIAL_SUCCESS,
             payload: res.data,
@@ -102,17 +102,12 @@ function* getCredential(action) {
 
     } catch (err) {
         console.log(err)
-        yield put({
-            type: GET_CREDENTIAL_SUCCESS,
-            payload: '',
-        });
     }
 }
 
 function* editCredentialById(action) {
     try {
         const res = yield call(authService.editCredentialByIdService, action.payload.id, action.payload.body)
-
         yield put({
             type: EDIT_CREDENTIAL_BY_ID_SUCCESS,
             payload: res.data,
@@ -125,7 +120,7 @@ function* editCredentialById(action) {
 
 function* deleteCredentialById(action) {
     try {
-        yield call(authService.deleteCredentialByIdService, action.payload.id.id)
+        yield call(authService.deleteCredentialByIdService, action.payload.id)
 
         yield put({
             type: DELETE_CREDENTIAL_BY_ID_SUCCESS,

@@ -64,25 +64,34 @@ function* getCredentialGlobal() {
 }
 
 function* editCredentialById(action) {
-
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         yield call(systemService.editCredentialByIdGlobalService, action.payload.id, action.payload.body)
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         yield put({
             type: GET_CREDENTIAL_GLOBAL,
         });
     } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
         console.log(err)
     }
 }
 
 function* deleteCredentialByIdGlobal(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         yield call(systemService.deleteCredentialByIdService, action.payload.id)
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         yield put({
             type: GET_CREDENTIAL_GLOBAL,
         });
 
     } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
         console.log(err)
     }
 }
@@ -123,26 +132,38 @@ function* getServices() {
 }
 
 function* editServiceByIdGlobal(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         yield call(systemService.editServiceByIdGlobalService, action.payload.id, action.payload.body)
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         yield put({
             type: GET_SERVICES,
         });
 
     } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
         console.log(err)
     }
 }
 
 function* deleteServiceByIdGlobal(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         yield call(systemService.deleteServiceByIdService, action.payload.id)
+
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+
         yield put({
             type: GET_SERVICES,
         });
 
     } catch (err) {
         console.log(err)
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
 }
 
@@ -182,25 +203,35 @@ function* getDepartments() {
 }
 
 function* editDepartmentByIdGlobal(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         yield call(systemService.editDepartmentByIdGlobalService, action.payload.id, action.payload.body)
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         yield put({
             type: GET_DEPARTMENTS,
         });
 
     } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
         console.log(err)
     }
 }
 
 function* deleteDepartmentByIdGlobal(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         yield call(systemService.deleteDepartmentByIdService, action.payload.id)
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         yield put({
             type: GET_DEPARTMENTS,
         });
 
     } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
         console.log(err)
     }
 }
@@ -241,25 +272,35 @@ function* getJobs() {
 }
 
 function* editJobByIdGlobal(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         yield call(systemService.editJobByIdGlobalService, action.payload.id, action.payload.body)
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         yield put({
             type: GET_JOBS,
         });
 
     } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
         console.log(err)
     }
 }
 
 function* deleteJobByIdGlobal(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         yield call(systemService.deleteJobByIdService, action.payload.id)
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         yield put({
             type: GET_JOBS,
         });
 
     } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
         console.log(err)
     }
 }
