@@ -7,7 +7,7 @@ import {fundingSourceActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 
 
-export const FundingSourceModifiersAdd = ({setPostModifiers, globalCredentials,modifiersServ,edit}) => {
+export const FundingSourceModifiersAdd = ({setPostModifiers, globalCredentials,modifiersServ,addNewMod ,setGetLastMod}) => {
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState({});
     const [modifiers, setModifiers] = useState( modifiersServ? [...modifiersServ] :  []);
@@ -15,6 +15,7 @@ export const FundingSourceModifiersAdd = ({setPostModifiers, globalCredentials,m
     const [btnStyle, setBtnStyle] = useState(false)
 
 
+    console.log(modifiersServ,'modders')
 
     const classes = foundingSourceModalStyle()
 
@@ -46,6 +47,12 @@ export const FundingSourceModifiersAdd = ({setPostModifiers, globalCredentials,m
                         "name": inputs.name,
                         'type': +inputs.type
                     }])
+                    setGetLastMod({
+                        "credentialId": credentialID,
+                        "chargeRate": +inputs.chargeRate,
+                        "name": inputs.name,
+                        'type': +inputs.type
+                    })
 
 
                 }
@@ -60,24 +67,25 @@ export const FundingSourceModifiersAdd = ({setPostModifiers, globalCredentials,m
     const handleCreate = () => {
         setBtnStyle(false)
         if (inputs.credentialId && inputs.chargeRate && inputs.name && inputs.type  ) {
-            if ( inputs.credentialId !=='0' && inputs.chargeRate !== ' ' && inputs.name !==' ' && inputs.type !== '0'){
+            if ( inputs.credentialId !=='0' && inputs.chargeRate !== ' ' && inputs.name !==' ' ){
+                setGetLastMod(null)
                 setModifiers([...modifiers,{
                     "credentialId": credentialID,
                     "chargeRate": +inputs.chargeRate,
                     "name": inputs.name,
                     'type': +inputs.type
                 }])
+                addNewMod({
+                    "credentialId": credentialID,
+                    "chargeRate": +inputs.chargeRate,
+                    "name": inputs.name,
+                    'type': +inputs.type
+                })
                 setInputs({name : ' ', chargeRate : ' ' , credentialId : credentialID, type : '0' })
             }
 
 
 
-            const data = {
-                "credentialId": inputs.credentialId,
-                "chargeRate": inputs.chargeRate,
-                "name": inputs.name,
-                'type': +inputs.type
-            }
 
         } else {
             setError(

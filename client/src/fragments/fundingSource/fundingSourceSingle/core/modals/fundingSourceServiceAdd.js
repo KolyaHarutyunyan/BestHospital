@@ -8,18 +8,28 @@ import {useParams} from "react-router-dom";
 import {FundingSourceModifiersAdd} from "./fundingSourceModifiersAdd";
 
 
-export const FundingSourceServiceAdd = ({handleClose, info}) => {
-    console.log(info,'info')
-    const modifiersServ = useSelector(state=> state.fundingSource.modifiers)
+export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
+
+
+
     const systemServices = useSelector(state => state.system.services)
     const globalCredentials = useSelector(state => state.system.credentials)
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {...info} : {});
     const [sysServiceItem, setSysServiceItem] = useState(null);
     const [postModifiers, setPostModifiers] = useState()
+    const [modifiersEdit, setModifiersEdit] = useState([]);
+    const [getLastMod, setGetLastMod] = useState(null);
     const params = useParams()
     let dispatch = useDispatch()
     const classes = foundingSourceModalStyle()
+
+
+
+    let addNewMod = (newMod)=>{
+        setModifiersEdit([...modifiersEdit, newMod])
+    }
+
 
 
     const handleChange = e => {
@@ -29,9 +39,13 @@ export const FundingSourceServiceAdd = ({handleClose, info}) => {
         );
     }
 
-    useEffect(()=>{
-        dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(info?._id))
-    },[])
+    // useEffect(()=>{
+    //     if (info !== undefined){
+    //
+    //         console.log(info,'info')
+    //         dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(info?._id))
+    //     }
+    // },[])
 
     useEffect(() => {
         systemServices && systemServices.length > 0 && systemServices.forEach((item, index) => {
@@ -44,6 +58,7 @@ export const FundingSourceServiceAdd = ({handleClose, info}) => {
 
 
     const handleCreate = () => {
+        console.log(getLastMod,'laaast')
         if (inputs.name && inputs.cptCode && inputs.size && inputs.min && inputs.max) {
             const data = {
                 "name": inputs.name,
@@ -54,14 +69,16 @@ export const FundingSourceServiceAdd = ({handleClose, info}) => {
                 "min": +inputs.min,
                 "max": +inputs.max
             }
-            const modifier = postModifiers
 
+            if (getLastMod){
+                postModifiers?.push(getLastMod)
+                modifiersEdit?.push(getLastMod)
+            }
             if (!info){
-                dispatch(fundingSourceActions.createFoundingSourceServiceById(params.id, data, modifier))
+                dispatch(fundingSourceActions.createFoundingSourceServiceById(params.id, data, postModifiers))
                 // handleClose()
             }else {
-                const newList = []
-                dispatch(fundingSourceActions.editFoundingSourceServiceById(info?._id, data, modifier))
+                dispatch(fundingSourceActions.editFoundingSourceServiceById(info?._id, data, modifiersEdit))
                 // handleClose()
             }
             // dispatch(fundingSourceActions.createFoundingSourceServiceModifier({
@@ -155,7 +172,13 @@ export const FundingSourceServiceAdd = ({handleClose, info}) => {
                 </div>
 
 
-                <FundingSourceModifiersAdd edit={!!info} modifiersServ={modifiersServ} setPostModifiers={setPostModifiers} globalCredentials={globalCredentials}/>
+                <FundingSourceModifiersAdd
+                    addNewMod={addNewMod}
+                    modifiersServ={modifiersID}
+                    setPostModifiers={setPostModifiers}
+                    globalCredentials={globalCredentials}
+                    setGetLastMod = {setGetLastMod}
+                />
 
 
                 <div className={classes.foundingSourceModalsBodyBlock}>
