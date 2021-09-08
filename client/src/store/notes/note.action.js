@@ -25,9 +25,9 @@ export const editGlobalNote = (fId, id, body,onModel) => {
     }
 }
 
-export const deleteGlobalNote = (fId, id) => {
+export const deleteGlobalNote = (id, SId,onModel) => {
     return {
         type: DELETE_GLOBAL_NOTE,
-        payload: {fId, id}
+        payload: {id, SId, onModel}
     }
 }

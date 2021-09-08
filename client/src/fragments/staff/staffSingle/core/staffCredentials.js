@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {TableCell} from "@material-ui/core";
-import {DeleteElement, Notes, SimpleModal, TableBodyComponent} from "@eachbase/components";
+import {DeleteElement, NoItemText, Notes, SimpleModal, TableBodyComponent} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
 import moment from 'moment';
 import {useDispatch} from "react-redux";
@@ -11,12 +11,12 @@ export const StaffCredentials = ({credentialData, openModal}) => {
     const [deletedId, setDeletedId] = useState('')
     const dispatch = useDispatch()
 
-    const handleClose = () =>{
+    const handleClose = () => {
         setOpen(false)
     }
 
-    const editCredential = (modalType,globalCredentialInfo) => {
-        openModal(modalType,globalCredentialInfo)
+    const editCredential = (modalType, globalCredentialInfo) => {
+        openModal(modalType, globalCredentialInfo)
     }
 
     const removeCredential = () => {
@@ -24,7 +24,7 @@ export const StaffCredentials = ({credentialData, openModal}) => {
         handleClose()
     }
 
-    const convertType = (index) =>{
+    const convertType = (index) => {
         if (index === 0) {
             return 'Degree'
         } else if (index === 1) {
@@ -33,7 +33,6 @@ export const StaffCredentials = ({credentialData, openModal}) => {
             return 'licence'
         }
     }
-
 
     const notesItem = (item, index) => {
         return (
@@ -52,7 +51,7 @@ export const StaffCredentials = ({credentialData, openModal}) => {
                                 editCredential('editCredential', {
                                     id: item._id,
                                     credId: item.credentialId?._id,
-                                    type:item.credentialId?.name,
+                                    type: item.credentialId?.name,
                                     expirationDate: item.expirationDate
 
                                 })
@@ -97,15 +96,23 @@ export const StaffCredentials = ({credentialData, openModal}) => {
             sortable: false
         },
     ];
+
     return (
         <div>
             {
-                credentialData.length && <Notes defaultStyle={true} data={credentialData} pagination={true} items={notesItem} headerTitles={headerTitles}/>
+                credentialData.length ? <Notes
+                        defaultStyle={true}
+                        data={credentialData}
+                        pagination={true}
+                        items={notesItem}
+                        headerTitles={headerTitles}/> :
+                    <NoItemText text='No Items Yet'/>
             }
             <SimpleModal
                 openDefault={open}
                 handleOpenClose={handleClose}
-                content={<DeleteElement text='Delete Credential' info='info'  handleClose={handleClose} handleDel={removeCredential} />}
+                content={<DeleteElement text='Delete Credential' info='info' handleClose={handleClose}
+                                        handleDel={removeCredential}/>}
             />
         </div>
     )

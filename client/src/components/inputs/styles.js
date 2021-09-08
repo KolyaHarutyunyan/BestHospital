@@ -145,7 +145,7 @@ export const inputsStyle = makeStyles(() => ({
     },
     '& .MuiInputBase-input::placeholder':{
       fontSize: 14,
-      color: Colors.TextMiddleGray
+      color: Colors.TextLightGray
     }
   },
   TextareaTextField:{
@@ -158,7 +158,7 @@ export const inputsStyle = makeStyles(() => ({
     '&::placeholder' : {
       fontSize: '14px',
       lineHeight: '19px',
-      color: Colors.TextMiddleGray
+      color: Colors.TextLightGray
     },
   },
   inputTextFieldAutoHeight:{

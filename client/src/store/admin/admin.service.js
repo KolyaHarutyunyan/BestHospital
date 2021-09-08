@@ -6,8 +6,13 @@ export const authService = {
 
     editAdminByIdService: (id, body) => axios.patch(`/staff/${id}`, body),
 
-    getAdminsService: (status) => status || status === 0 ? axios.get(`/staff/?status=${status}`) : axios.get(`/staff/`),
-
+    getAdminsService: ({data}) => {
+        if (data) {
+            return axios.get(`/staff/?skip=${data.start}&&limit=${data.end}&&status=${data.status}`)
+        } else {
+            return axios.get('/staff')
+        }
+    },
     getAdminByIdService: (id) => axios.get(`/staff/${id}`),
 
     createCredentialService: (body) => axios.post(`/scredential`, body),

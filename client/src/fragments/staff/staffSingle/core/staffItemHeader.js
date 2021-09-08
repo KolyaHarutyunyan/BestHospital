@@ -1,8 +1,8 @@
 import {serviceSingleStyles} from "./styles";
 import {Images} from "@eachbase/utils";
-import {AddButton, AddModalButton, SimpleModal} from "@eachbase/components";
+import {AddButton, AddModalButton, SimpleModal,AddNotes} from "@eachbase/components";
 import React, {} from "react";
-import {CreateStaff, StaffAddNotes, CredentialModal} from "@eachbase/fragments";
+import {CreateStaff, CredentialModal} from "@eachbase/fragments";
 import {useSelector} from "react-redux";
 
 const editButtonStyle = {
@@ -52,7 +52,7 @@ export const StaffItemHeader = ({noteModalTypeInfo, openModal, handleOpenClose, 
                                  resetData={false} handleClose={handleOpenClose}/> : activeTab === 2 ?
                         <CredentialModal globalCredentialInformation={globalCredentialInformation} globalCredentials={globalCredentials} credModalType={credModalType}
                                          handleClose={() => openCloseCredModal()}/> : activeTab === 5 ?
-                            <StaffAddNotes noteModalTypeInfo={noteModalTypeInfo} handleClose={handleOpenClose}/> : null}
+                            <AddNotes model='Staff' noteModalTypeInfo={noteModalTypeInfo} handleClose={handleOpenClose}/> : null}
             />
         </div>
     )
