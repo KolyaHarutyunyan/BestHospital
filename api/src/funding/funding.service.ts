@@ -133,7 +133,7 @@ export class FundingService {
 
     if (status == 0) {
       let [funders, count] = await Promise.all([
-        this.model.find({ status: 0 }).skip(skip).limit(limit),
+        (await this.model.find({ status: 0 }).skip(skip).limit(limit)).reverse(),
         this.model.countDocuments({ status: 0 })
       ]);
       const sanFun = this.sanitizer.sanitizeMany(funders);
@@ -141,7 +141,7 @@ export class FundingService {
     }
 
     let [funders, count] = await Promise.all([
-      this.model.find({ status: 1 }).skip(skip).limit(limit),
+      (await this.model.find({ status: 1 }).skip(skip).limit(limit)).reverse(),
       this.model.countDocuments({ status: 1 })
     ]);
     // this.checkFunder(funders[0])

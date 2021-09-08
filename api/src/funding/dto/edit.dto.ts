@@ -26,6 +26,7 @@ export class UpdateFundingDto {
     website: string
     @ApiProperty()
     @IsNotEmpty()
+    @IsPhoneNumber('US')
     phoneNumber: string;
     @ApiProperty({ type: AddressDTO })
     @IsOptional()
