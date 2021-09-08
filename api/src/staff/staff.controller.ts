@@ -49,14 +49,28 @@ export class StaffController {
   @Public()
   @ApiOkResponse({ type: [StaffDTO] })
   @ApiQuery({
+    name: "skip",
+    description: "where",
+    required: false,
+    type: Number
+  })
+  @ApiQuery({
+    name: "limit",
+    description: "how",
+    required: false,
+    type: Number
+  })
+  @ApiQuery({
     name: "status",
     description: "status",
     required: false,
     type: Number
   })
   async getUsers(
+    @Query('skip') skip: number,
+    @Query('limit') limit: number,
     @Query('status') status: number): Promise<StaffDTO[]> {
-    return await this.staffService.getUsers(status);
+    return await this.staffService.getUsers(skip, limit, status);
   }
 
   /** Get the staff profile */

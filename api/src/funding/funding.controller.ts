@@ -130,7 +130,6 @@ export class FundingController {
     return service
   }
 
-
   /** Edit the Modifier */
   @Patch(':modifyId/modifier')
   @Public()
@@ -140,7 +139,6 @@ export class FundingController {
     const modifier = await this.fundingService.updateModifier(modifyId, updateModifierDto);
     return modifier;
   }
-
 
   /** Delete the funder */
   @Delete(':id')
@@ -179,15 +177,4 @@ export class FundingController {
     );
     return funder;
   }
-
-  /** Delete the comment */
-  // @Delete(':id/comments/:commentId')
-  // @Public()
-  // // @ApiOkResponse({ type: CommentDto })
-  // async removeComment(
-  //   @Param('id', ParseObjectIdPipe) id: string,
-  //   @Param('commentId', ParseObjectIdPipe) commentId: string): Promise<string> {
-  //     const user = "610ba0a7b8944a30bcb15da4"
-  //   return await this.fundingService.removeComment(id, commentId, user);
-  // }
 }

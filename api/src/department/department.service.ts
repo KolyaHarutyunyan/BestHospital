@@ -27,7 +27,7 @@ export class DepartmentService {
     }
   }
 
- async findAll():Promise<DepartmentDTO[]> {
+  async findAll(): Promise<DepartmentDTO[]> {
     try {
       const departments = await this.model.find();
       this.checkDepartment(departments[0]);

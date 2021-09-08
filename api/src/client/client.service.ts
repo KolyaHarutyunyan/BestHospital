@@ -78,7 +78,6 @@ export class ClientService {
           .populate({ path: 'enrollment', select: 'name' }).sort({ '_id': 1 }).skip(skip).limit(limit),
         this.model.countDocuments({ status: 1 })
       ]);
-      this.checkClient(clients[0]);
       const sanClient = this.sanitizer.sanitizeMany(clients);
       return { clients: sanClient, count }
     } catch (e) {
@@ -106,7 +105,6 @@ export class ClientService {
       if (dto.language) client.language = dto.language;
       if (dto.familyLanguage) client.familyLanguage = dto.familyLanguage;
       if (dto.gender) client.gender = dto.gender;
-
       if (dto.birthday) {
         client.birthday = dto.birthday
       }
@@ -126,7 +124,6 @@ export class ClientService {
   async remove(_id: string): Promise<string> {
     const client = await this.model.findById({ _id });
     this.checkClient(client);
-
     await client.remove()
     return client._id;
   }
@@ -182,5 +179,4 @@ export class ClientService {
       );
     }
   }
-
 }

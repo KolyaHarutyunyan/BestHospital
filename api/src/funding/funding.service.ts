@@ -71,7 +71,6 @@ export class FundingService {
     try {
       const funder = await this.model.findById({ _id });
       this.checkFunder(funder)
-
       const globService = await this.service.findOne(dto.serviceId);
       let service = new this.serviceModel({
         funderId: _id,
@@ -99,38 +98,19 @@ export class FundingService {
     try {
       const fundingService = await this.serviceModel.findById({ _id: dto.serviceId });
       this.checkFundingService(fundingService)
-
       dto.modifiers.map(modifier => {
         modifier.serviceId = fundingService._id;
       })
-
       const modifiers = await this.modifyModel.collection.insertMany(dto.modifiers);
       return modifiers.ops
-      // fundingServiceId: fundingService._id,
-      // chargeRate: dto.chargeRate,
-      // name: dto.name,
-      // type: dto.type,
-      // credential: await this.checkCredential(dto.credentialId)
-      // return await modify.save()
-
-      // fundingService.modifiers.push(modify._id)
-
-      // await fundingService.save()
-      // fundingService.chargeTable.push({ chargeRate: dto.chargeRate, modifier: dto.modifier, credentials: await this.checkCredential(dto.credentialId) })
-      // await fundingService.save()
-      // return fundingService;
-      // await this.historyService.create(serviceLog.createServiceTitle, _id);
-      // return this.sanitizer.sanitize(fundingService)
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Modifier already exists');
       throw e;
     }
-
   }
 
   /** returns all funders */
   async findAll(skip: number, limit: number, status: number): Promise<any> {
-
     if (status == 0) {
       let [funders, count] = await Promise.all([
         this.model.find({ status: 0 }).sort({ '_id': -1 }).skip(skip).limit(limit),
@@ -144,8 +124,6 @@ export class FundingService {
       (await this.model.find({ status: 1 }).sort({ '_id': 1 }).skip(skip).limit(limit)).reverse(),
       this.model.countDocuments({ status: 1 })
     ]);
-    // this.checkFunder(funders[0])
-
     const sanFun = this.sanitizer.sanitizeMany(funders);
     return { funders: sanFun, count }
   }
@@ -168,11 +146,6 @@ export class FundingService {
     try {
       const services = await this.serviceModel.findById({ _id });
       this.checkFundingService(services[0])
-      // const services = await this.serviceModel.find({ _id }).populate('serviceId').populate({
-      //   path: 'modifiers',
-      //   populate: { path: 'credential' }
-      // });
-      // return this.sanitizer.sanitizeMany(services);
       return services
     } catch (e) {
       throw e;
@@ -282,21 +255,6 @@ export class FundingService {
         modifier.credentialId = dto.credentialId
       }
       return await modifier.save()
-
-      // const modifier: any = await this.serviceModel.findOne({ _id: serviceId }, { 'chargeTable': { $elemMatch: { '_id': dto.modifierId } } });
-      // const system: any = await this.serviceModel.findOne({ _id: serviceId }, { 'chargeTable.credential': { $elemMatch: { '_id': dto.modifierId } } });
-
-      // console.log(modifier.chargeTable[0], ' aaaaaa');
-      // this.checkService(service);
-      // if (dto.chargeRate) modifier.chargeTable[0].chargeRate = dto.chargeRate;
-      // if (dto.modifierName) modifier.chargeTable[0].modifierName = dto.modifierName;
-
-
-      // if (dto.max) service.max = dto.max;
-      // await service.save();
-      // await this.historyService.create(serviceLog.updateServiceTitle, funder._id);
-      // return service;
-      // return this.sanitizer.sanitize(service);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Modifier already exists');
       throw e;

@@ -12,8 +12,6 @@ export class EmploymentService {
   constructor(
     private readonly staffService: StaffService,
     private readonly departmentService: DepartmentService,
-
-
   ) {
     this.model = EmploymentModel;
     this.mongooseUtil = new MongooseUtil();
@@ -71,10 +69,6 @@ export class EmploymentService {
     this.checkEmployment(employment)
     return employment;
   }
-
-  // update(id: number, updateEmploymentDto: UpdateEmploymentDto) {
-  //   return `This action updates a #${id} employment`;
-  // }
 
   remove(id: number) {
     return `This action removes a #${id} employment`;

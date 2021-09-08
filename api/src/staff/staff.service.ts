@@ -65,11 +65,6 @@ export class StaffService {
     }
   };
 
-  /** Create a new credential */
-  // createCredential = async (dto: CreateCredentialDto): Promise<any> => {
-  //   await this.credentialService.create(dto);
-  // };
-
   /** Edit a Staff */
   edit = async (id: string, dto: EditStaffDTO): Promise<StaffDTO> => {
     try {
@@ -129,15 +124,22 @@ export class StaffService {
   };
 
   /** returns all users */
-  getUsers = async (status: number): Promise<StaffDTO[]> => {
+  getUsers = async (skip: number, limit: number, status: number): Promise<any> => {
     if (status == 0) {
-      const admins = await this.model.find({ status: 0 });
-      this.checkStaff(admins[0])
-      return this.sanitizer.sanitizeMany(admins);
+      let [staff, count] = await Promise.all([
+        this.model.find({ status: 0 }).sort({ '_id': -1 }).skip(skip).limit(limit),
+        this.model.countDocuments({ status: 0 })
+      ]);
+      const sanFun = this.sanitizer.sanitizeMany(staff);
+      return { staff: sanFun, count }
     }
-    const admins = await this.model.find({ status: 1 });
-    this.checkStaff(admins[0])
-    return this.sanitizer.sanitizeMany(admins);
+
+    let [staff, count] = await Promise.all([
+      (await this.model.find({ status: 1 }).sort({ '_id': 1 }).skip(skip).limit(limit)).reverse(),
+      this.model.countDocuments({ status: 1 })
+    ]);
+    const sanFun = this.sanitizer.sanitizeMany(staff);
+    return { staff: sanFun, count }
   };
 
   /** Set Status of a staff Inactive*/
@@ -148,7 +150,6 @@ export class StaffService {
   ): Promise<StaffDTO> => {
     const staff = await this.model.findById({ _id });
     this.checkStaff(staff);
-    
     staff.termination.date = dto.date;
     staff.status = status;
     if (dto.reason) {
