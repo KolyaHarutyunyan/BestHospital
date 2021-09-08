@@ -61,6 +61,9 @@ export const FundingSourceNotesAdd = ({handleClose, info}) => {
         }
     }
 
+    console.log(httpOnLoad,'note successs')
+
+
     useEffect(()=>{
         if (success){
             handleClose()

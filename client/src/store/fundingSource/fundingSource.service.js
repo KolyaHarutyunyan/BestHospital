@@ -6,23 +6,17 @@ export const authService = {
     createFundingSourceService: (body) => axios.post('/funding', body),
 
 
-    editFundingSourceService: (id,body) => axios.patch(`/funding/${id}`, body),
+    editFundingSourceService: (id, body) => axios.patch(`/funding/${id}`, body),
 
     getFundingSourceService: ({data}) => {
-        console.log(data,'status')
-        if (data ){
-            return  axios.get(`/funding/?skip=${data.start}&&limit=${data.end}&&status=${data.status}`)
+        if (data) {
+            return axios.get(`/funding/?skip=${data.start}&&limit=${data.end}&&status=${data.status}`)
         } else {
             return axios.get('/funding')
         }
     },
 
     getFoundingSourceByIdService: (id) => axios.get(`/funding/${id}`,),
-
-
-
-
-
 
 
     getFoundingSourceServiceByIdService: (id) => axios.get(`/funding/${id}/service`),
@@ -34,26 +28,16 @@ export const authService = {
     deleteFoundingSourceServiceByIdService: (id) => axios.delete(`/funding/${id}/`,),
 
 
-
-
-
-
-
-
     createFoundingSourceServiceModifierService: (body) => axios.post(`/funding/modifier`, body),
 
+    getFoundingSourceServiceModifierService: (id) => axios.get(`/funding/modifier/${id}`),
 
 
+    getFundingSourceHistoriesByIdService: (id, onModal) => axios.get(`/history/${id}/${onModal}`,),
 
+    getFundingSourceNotesService: (id, onModal) => axios.get(`/comment/${id}/${onModal}`,),
 
-
-
-
-    getFundingSourceHistoriesByIdService: (id,onModal) => axios.get(`/history/${id}/${onModal}`,),
-
-    getFundingSourceNotesService: (id,onModal) => axios.get(`/comment/${id}/${onModal}`,),
-
-    createFoundingSourceNoteService: ( body) => axios.post(`/comment`, body),
+    createFoundingSourceNoteService: (body) => axios.post(`/comment`, body),
 
     editFoundingSourceNoteService: (id, body) => axios.patch(`/comment/${id}`, body),
 

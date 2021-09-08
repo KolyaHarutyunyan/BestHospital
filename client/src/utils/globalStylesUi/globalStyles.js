@@ -1,7 +1,64 @@
 import {makeStyles, Switch, withStyles} from '@material-ui/core';
-import {Backgrounds as Background, Colors} from "./globalColors";
+import {Backgrounds as Background, Colors, Shadow} from "./globalColors";
 
 export const useGlobalStyles = makeStyles({
+    previewModal: {
+        position: 'absolute',
+        width: 395,
+        top: '20px',
+        height: 'calc(100% - 94px)',
+        background: 'white',
+        padding: 16,
+        boxShadow: Shadow.noteModalShadow,
+        transition: '.7s',
+        borderRadius: 8,
+        '& h1': {
+            fontSize: 18,
+            color: Colors.BackgroundBlue,
+            fontWeight: 'bold',
+            paddingBottom: 5
+        },
+        '& > p': {
+            fontSize: 14,
+            color: Colors.TextSecondary,
+            lineHeight: '24px',
+            padding: 16,
+            backgroundColor: Colors.BackgroundWater,
+            borderRadius: 8,
+            height: 'calc(100% - 130px)'
+        },
+        '& > div' : {
+            marginBottom: 20
+        },
+        '& > div > p' : {
+            fontSize: 14,
+            color: Colors.TextSecondary,
+        },
+        '& > span': {
+            display: 'block',
+            fontSize: 14,
+            color: Colors.TextLightGray,
+            paddingBottom: 32,
+        },
+    },
+    dateContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    positionedButton: {
+        position: 'absolute',
+        right: '0',
+        top: '8px',
+    },
+    icons: {
+        cursor: 'pointer',
+        display: 'flex',
+        '& img:last-child': {
+            marginLeft: 16
+        }
+    },
+
     tableStyle: {
         background: 'red',
         height: '100%',
@@ -27,6 +84,8 @@ export const useGlobalStyles = makeStyles({
         '& .MuiTableContainer-root': {
             boxShadow: 'none',
             background: 'none',
+            position: 'relative',
+            overflow: 'hidden'
         },
     },
     table: {
@@ -195,4 +254,5 @@ export const AntSwitch = withStyles((theme) => ({
         backgroundColor: theme.palette.grey[400],
     },
     checked: {},
+
 }))(Switch);

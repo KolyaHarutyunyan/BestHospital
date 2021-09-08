@@ -1,10 +1,10 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {modalsStyle,} from "@eachbase/components/modal/styles";
 import {useGlobalTextStyles} from "@eachbase/utils";
 import {CloseButton, CreateChancel} from "@eachbase/components/buttons";
 import {SelectInput, ValidationInput} from "@eachbase/components/inputs";
-import {systemActions} from "@eachbase/store";
-import {useDispatch} from "react-redux";
+import {clientActions, httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
+import {useDispatch, useSelector} from "react-redux";
 
 const inputSpacing = {
     paddingBottom: 16,
@@ -19,11 +19,12 @@ const credentialsList = [
 export const SystemItemAddService = ({modalInformation, modalType, handleClose}) => {
     const dispatch = useDispatch()
 
+
     const [mType] = useState(modalType)
     const [mInformation] = useState(modalInformation)
     const [inputs, setInputs] = useState(mInformation ? mInformation : {})
 
-    const [error,setError] = useState('')
+    const [error, setError] = useState('')
 
     const classes = modalsStyle()
     const globalText = useGlobalTextStyles()
@@ -55,7 +56,7 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
         }
         let serviceData = {
             name: inputs.name,
-            displayCode:inputs.displayCode,
+            displayCode: inputs.displayCode,
             category: inputs.category
         }
         let departmentData = {
@@ -66,33 +67,33 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
         }
         switch (mType) {
             case 'editService':
-                if (inputs.name && inputs.displayCode && inputs.category){
-                    dispatch(systemActions.editServiceByIdGlobal(serviceData,mInformation.id))
-                    handleClose()
-                }else {
+                if (inputs.name && inputs.displayCode && inputs.category) {
+                    dispatch(systemActions.editServiceByIdGlobal(serviceData, mInformation.id))
+                    // handleClose()
+                } else {
                     alert('error')
                 }
                 break;
             case 'editCredential':
-                if (inputs.credentialType && inputs.credentialName){
-                    dispatch(systemActions.editCredentialByIdGlobal(credentialData,mInformation.credentialId))
-                    handleClose()
-                }else {
+                if (inputs.credentialType && inputs.credentialName) {
+                    dispatch(systemActions.editCredentialByIdGlobal(credentialData, mInformation.credentialId))
+                    // handleClose()
+                } else {
                     alert('error')
                 }
                 break;
             case 'editJobTitles':
-                if (inputs.jobTitle){
-                    dispatch(systemActions.editJobByIdGlobal(jobData,mInformation.jobId))
-                    handleClose()
-                }else {
+                if (inputs.jobTitle) {
+                    dispatch(systemActions.editJobByIdGlobal(jobData, mInformation.jobId))
+                    // handleClose()
+                } else {
                     alert('error')
                 }
                 break;
             default:
-                if (inputs.departmentName){
-                    dispatch(systemActions.editDepartmentByIdGlobal(departmentData,mInformation.departmentID))
-                    handleClose()
+                if (inputs.departmentName) {
+                    dispatch(systemActions.editDepartmentByIdGlobal(departmentData, mInformation.departmentID))
+                    // handleClose()
                 }
         }
     }
@@ -107,6 +108,33 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
             ));
         error === e.target.name && setError('')
     }
+
+
+    const {httpOnLoad, httpOnSuccess} = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnLoad: state.httpOnLoad,
+        httpOnError: state.httpOnError
+    }));
+
+    const success =
+        httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CREDENTIAL_BY_ID_GLOBAL' ? true :
+            httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_JOB_BY_ID_GLOBAL' ? true :
+                httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_DEPARTMENT_BY_ID_GLOBAL' ? true :
+                    httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_SERVICE_BY_ID_GLOBAL'
+
+
+    useEffect(() => {
+        if (success) {
+            dispatch(httpRequestsOnSuccessActions.removeSuccess(httpOnSuccess.length && httpOnSuccess[0].type))
+            handleClose()
+        }
+    }, [success]);
+
+    const loader =
+          httpOnLoad.length && httpOnLoad[0] === 'EDIT_CREDENTIAL_BY_ID_GLOBAL' ? true :
+            httpOnLoad.length && httpOnLoad[0] === 'EDIT_JOB_BY_ID_GLOBAL' ? true :
+              httpOnLoad.length && httpOnLoad[0] === 'EDIT_SERVICE_BY_ID_GLOBAL' ? true :
+                httpOnLoad.length && httpOnLoad[0] === 'EDIT_DEPARTMENT_BY_ID_GLOBAL'
 
     return (
         <div className={classes.inactiveModalBody}>
@@ -185,7 +213,10 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
             }
             <>
                 <CreateChancel
-                    loader={false}
+                    loader={
+                        loader
+
+                    }
                     buttonWidth='192px'
                     create='Save'
                     chancel="Cancel"

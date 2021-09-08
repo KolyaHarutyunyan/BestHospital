@@ -4,7 +4,7 @@ import {Images} from "@eachbase/utils";
 import {serviceSingleStyles} from "./styles";
 import {TableCell} from "@material-ui/core";
 import moment from "moment"
-import {clientActions, fundingSourceActions} from "@eachbase/store";
+import {clientActions} from "@eachbase/store";
 import {useDispatch} from "react-redux";
 import {useParams} from "react-router-dom";
 import {FundingSourceNotesAdd} from "../../../fundingSource/fundingSourceSingle/core/modals";
@@ -43,7 +43,7 @@ export const ClientNotes = ({ info}) => {
             <TableBodyComponent key={index} >
                 <TableCell> {moment(item?.created).format('DD/MM/YYYY')}</TableCell>
                 <TableCell><p className={classes.tableTitle}>{item?.user?.firstName ? item.user.firstName :  item?.user ? item.user : ''}</p>  </TableCell>
-                <TableCell>  <p className={classes.tableTitle}>{item?.text}</p>  </TableCell>
+                <TableCell><p className={classes.tableTitle}>{item?.text}</p></TableCell>
                 <TableCell>
                     <>
                         <img src={Images.edit} alt="edit" className={classes.iconCursor}

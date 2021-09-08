@@ -1,25 +1,18 @@
 import {serviceSingleStyles} from "./styles";
 import {Images} from "@eachbase/utils";
 import {AddButton, AddModalButton, SimpleModal} from "@eachbase/components";
-import React, {useEffect, useState} from "react";
+import React, {} from "react";
 import {CreateStaff, StaffAddNotes, CredentialModal} from "@eachbase/fragments";
-import {adminActions} from "../../../../store";
-import {useParams} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 
 const editButtonStyle = {
     height: 36,
     paddingInline: 24
 }
 
-export const StaffItemHeader = ({globalCredentialId, globalCredentials, credModalType, openCloseCredModal, openCredModal, activeTab,}) => {
+export const StaffItemHeader = ({noteModalTypeInfo, openModal, handleOpenClose, globalCredentialInformation, globalCredentials, credModalType, openCloseCredModal, openCredModal, activeTab,}) => {
 
     const classes = serviceSingleStyles()
-    const [open, setOpen] = useState()
-
-    const handleOpenClose = () => {
-        setOpen(!open)
-    }
 
     const {adminInfoById} = useSelector((state)=>({
             adminInfoById: state.admins.adminInfoById
@@ -43,7 +36,7 @@ export const StaffItemHeader = ({globalCredentialId, globalCredentials, credModa
                 <li>
                     {
                         activeTab === 0 ?
-                            <AddModalButton btnStyles={editButtonStyle} handleClick={() => setOpen(true)}
+                            <AddModalButton btnStyles={editButtonStyle} handleClick={handleOpenClose}
                                             text='edit'/> : activeTab === 2 ?
                             <AddButton text='Add Credential'
                                        handleClick={() => openCloseCredModal('addCredential')}/> : activeTab === 5 ?
@@ -52,14 +45,14 @@ export const StaffItemHeader = ({globalCredentialId, globalCredentials, credModa
                 </li>
             </ul>
             <SimpleModal
-                openDefault={activeTab === 2 ? openCredModal : open}
+                openDefault={activeTab === 2 ? openCredModal : openModal}
                 handleOpenClose={activeTab === 2 ? () => openCloseCredModal() : handleOpenClose}
                 content={activeTab === 0 ?
                     <CreateStaff staffGeneral={adminInfoById}
                                  resetData={false} handleClose={handleOpenClose}/> : activeTab === 2 ?
-                        <CredentialModal globalCredentialId={globalCredentialId} globalCredentials={globalCredentials} credModalType={credModalType}
+                        <CredentialModal globalCredentialInformation={globalCredentialInformation} globalCredentials={globalCredentials} credModalType={credModalType}
                                          handleClose={() => openCloseCredModal()}/> : activeTab === 5 ?
-                            <StaffAddNotes handleClose={handleOpenClose}/> : null}
+                            <StaffAddNotes noteModalTypeInfo={noteModalTypeInfo} handleClose={handleOpenClose}/> : null}
             />
         </div>
     )

@@ -53,8 +53,6 @@ export const authService = {
 
     deleteClientNoteService: (id) => axios.delete(`/comment/${id}/comments`,),
 
-
-
 };
 
 

@@ -2,10 +2,11 @@ import React, {useState, useEffect} from "react";
 import {modalsStyle} from "@eachbase/components/modal/styles";
 import {ErrorText, useGlobalTextStyles} from "@eachbase/utils";
 import {AddModalButton, CloseButton, CreateChancel} from "@eachbase/components/buttons";
-import {SelectInput, RadioButton, ValidationInput, SelectInputPlaceholder} from "@eachbase/components";
-import {useDispatch, useSelector} from "react-redux";
+import {SelectInput, RadioButton, ValidationInput} from "@eachbase/components";
+import {useDispatch} from "react-redux";
 import {adminActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
+import moment from "moment";
 
 const radioData = [
     {
@@ -18,15 +19,9 @@ const radioData = [
     }
 ]
 
-
-// const editCredentialData = {
-//     credentialId: "610cf947776f5210843ccb54",
-//     expirationDate: new Date("09-05-2019").toISOString()
-// }
-
 const checkboxStyle = {display: 'flex', alignItems: 'center', flexDirection: 'row'}
 
-export const CredentialModal = ({globalCredentialId, globalCredentials, credModalType, handleClose}) => {
+export const CredentialModal = ({globalCredentialInformation, globalCredentials, credModalType, handleClose}) => {
     const dispatch = useDispatch()
     const params = useParams()
 
@@ -37,17 +32,9 @@ export const CredentialModal = ({globalCredentialId, globalCredentials, credModa
     const [checkboxValue, setCheckboxValue] = useState('nonExpiring');
 
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState({});
+    const [inputs, setInputs] = useState(globalCredentialInformation ? globalCredentialInformation : {});
 
     const [globalCredId, setGlobalCredId] = useState('')
-
-    // const removeCredentialData = {
-    //     id: params.id
-    // }
-    // const removeCredential = () => {
-    //     dispatch(adminActions.deleteCredentialById(removeCredentialData))
-    // }
-
 
     const change = (event) => {
         setCheckboxValue(event.target.value);
@@ -83,63 +70,45 @@ export const CredentialModal = ({globalCredentialId, globalCredentials, credModa
     }, [inputs.type])
 
     const handleSubmit = () => {
-        let data,editData
-        if (inputs.expirationDate){
-            data = {
-                staffId: params.id,
-                credentialId: globalCredId,
-                expirationDate: new Date(inputs.expirationDate).toISOString()
-            }
-            editData = {
-                credentialId: globalCredentialId,
-                expirationDate: new Date(inputs.expirationDate).toISOString()
-            }
-        }else {
-            data = {
-                staffId: params.id,
-                credentialId: globalCredId,
-            }
-            editData = {
-                credentialId: globalCredentialId,
-            }
+        let data, editData
+
+        data = {
+            staffId: params.id,
+            credentialId: globalCredId,
+            expirationDate: inputs.expirationDate ? new Date(inputs.expirationDate).toISOString() : null
+        }
+        editData = {
+            credentialId: globalCredId ? globalCredId : globalCredentialInformation?.credId,
+            expirationDate: (inputs.expirationDate && checkboxValue === 'expiring') ? new Date(inputs.expirationDate).toISOString() : null
         }
 
-        if (inputs.type) {
-            switch (mType) {
-                case 'addCredential':
-                    console.log(data,'data data')
-                    dispatch(adminActions.createCredential(data))
-                    handleClose()
-                    break;
-                case 'editCredential':
-                    console.log(editData,'edit data')
-                    dispatch(adminActions.editCredentialById(editData,params.id))
-                    handleClose()
-                    break;
-                case 'credentialPreview':
-                    setMType('addCredential')
-                    break;
-                default:
-                    handleClose()
-            }
-
-        } else {
-            setError(
-                !inputs.expirationDate ? 'expirationDate' : 'Input is not filled'
-            )
+        switch (mType) {
+            case 'addCredential':
+                dispatch(adminActions.createCredential(data))
+                handleClose()
+                break;
+            case 'editCredential':
+                dispatch(adminActions.editCredentialById(editData, globalCredentialInformation?.id))
+                handleClose()
+                break;
+            case 'credentialPreview':
+                setMType('editCredential')
+                break;
+            default:
+                handleClose()
         }
-
 
     }
-    const handleChange = e => setInputs(
-        prevState => (
-            {
-                ...prevState,
-                [e.target.name]: e.target.value
-            }
-        ),
-        error === e.target.name && setError(''),
-    );
+    const handleChange = e => {
+        setInputs(
+            prevState => (
+                {
+                    ...prevState,
+                    [e.target.name]: e.target.value
+                }
+            ));
+        error === e.target.name && setError('')
+    }
     return (
         <div className={classes.inactiveModalBody}>
             <h1 className={`${globalText.modalTitle}`}>{title(mType)}</h1>
@@ -156,7 +125,7 @@ export const CredentialModal = ({globalCredentialId, globalCredentials, credModa
                     list={globalCredentials}
                     value={inputs.type}
                     disabled={true}
-                /> : <SelectInputPlaceholder
+                /> : <SelectInput
                     style={classes.credentialInputStyle}
                     name={"type"}
                     placeholder={"Select Credential*"}
@@ -176,9 +145,9 @@ export const CredentialModal = ({globalCredentialId, globalCredentials, credModa
                     <ValidationInput
                         style={classes.datePickerStyle}
                         variant={"outlined"}
-                        value={inputs.expirationDate}
+                        value={inputs.expirationDate && moment(inputs.expirationDate).format().substring(0, 10)}
                         type={"date"}
-                        label={"Expiration Date*"}
+                        // label={"Expiration Date*"}
                         name='expirationDate'
                         sendBoolean={handleCheck}
                         onChange={handleChange}

@@ -24,7 +24,11 @@ import {
     CREATE_FUNDING_SOURCE_NOTE,
     EDIT_FUNDING_SOURCE_NOTE,
     DELETE_FUNDING_SOURCE_NOTE,
-    CREATE_FUNDING_SOURCE_NOTES_SUCCESS, CREATE_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
+    CREATE_FUNDING_SOURCE_NOTES_SUCCESS,
+    CREATE_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
+    GET_FUNDING_SOURCE_SERVICE_MODIFIERS,
+    GET_FUNDING_SOURCE_SERVICE_MODIFIERS_SUCCESS,
+    GET_FUNDING_SOURCE_SERVICE_MODIFIERS_ERR,
 } from "./fundingSource.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
@@ -43,7 +47,7 @@ function* createFundingSource(action) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
-        console.log(err,'ers')
+        console.log(err, 'ers')
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
     }
@@ -63,7 +67,7 @@ function* editFundingSource(action) {
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message  ));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
         console.log(err)
     }
 }
@@ -73,8 +77,8 @@ function* getFundingSource(action) {
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
-        const res = yield call(authService.getFundingSourceService,action.payload);
-        console.log(res.data.funders,'res')
+        const res = yield call(authService.getFundingSourceService, action.payload);
+        console.log(res.data.funders, 'res')
         yield put({
             type: GET_FUNDING_SOURCE_SUCCESS,
             payload: res.data,
@@ -116,7 +120,7 @@ function* getFundingSourceServicesById(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.getFoundingSourceServiceByIdService, action.payload);
-        console.log(res,'get services all')
+        console.log(res, 'get services all')
         yield put({
             type: GET_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
             payload: res.data,
@@ -126,7 +130,7 @@ function* getFundingSourceServicesById(action) {
 
 
     } catch (error) {
-        console.log(error,'errr get servicees')
+        console.log(error, 'errr get servicees')
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.removeError(action.type));
     }
@@ -135,11 +139,20 @@ function* getFundingSourceServicesById(action) {
 function* createFundingSourceServicesById({payload}) {
     try {
         const res = yield call(authService.createFoundingSourceServiceByIdService, payload.id, payload.body);
-        console.log(res,'create service')
+
         yield put({
             type: CREATE_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
             payload: res.data,
         });
+
+        const body = {
+            modifiers: payload.modifier,
+            serviceId: res.data._id,
+        }
+        yield put({
+            type: CREATE_FUNDING_SOURCE_SERVICE_MODIFIER,
+            payload: {body}
+        })
     } catch (error) {
         console.log(error, 'err create services')
     }
@@ -147,23 +160,65 @@ function* createFundingSourceServicesById({payload}) {
 
 function* editFundingSourceServices({payload}) {
     try {
-        const res = yield call(authService.editFoundingSourceServiceService, payload.id, payload.body);
+        const res = yield call(authService.editFoundingSourceServiceService, payload.id, payload.body,);
+        console.log(res, 'resresres')
+        const body = {
+            modifiers: payload.modifier,
+            serviceId: res.data._id,
+        }
+        yield put({
+            type: CREATE_FUNDING_SOURCE_SERVICE_MODIFIER,
+            payload: {body}
+        })
     } catch (error) {
-
+        console.log(error, 'err edit services')
     }
 }
 
 function* createFundingSourceServicesModifier({payload}) {
     try {
+
         const res = yield call(authService.createFoundingSourceServiceModifierService, payload.body);
-        console.log(res,'create modifier')
+        console.log(res, 'res mod')
     } catch (error) {
-        console.log(error,'create modifier')
+        console.log(error, 'res mod')
     }
 }
+
+
+
+
+
+
+function* getFundingSourceServicesModifier(action) {
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    try {
+        const res = yield call(authService.getFoundingSourceServiceModifierService, action.payload);
+        yield put({
+            type: GET_FUNDING_SOURCE_SERVICE_MODIFIERS_SUCCESS,
+            payload: res.data,
+        });
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.removeError(action.type));
+        console.log(res, 'get modifier')
+
+
+    } catch (error) {
+        yield put({
+            type: GET_FUNDING_SOURCE_SERVICE_MODIFIERS_ERR,
+            payload: error,
+        });
+        console.log(error, 'get modifier')
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    }
+}
+
+
 function* getFundingSourceHistoriesById(action) {
-    // yield put(httpRequestsOnErrorsActions.removeError(action.type));
-    // yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+
     try {
         const res = yield call(authService.getFundingSourceHistoriesByIdService, action.payload.id, action.payload.onModal);
 
@@ -171,20 +226,13 @@ function* getFundingSourceHistoriesById(action) {
             type: GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS,
             payload: res.data,
         });
-        // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        // yield put(httpRequestsOnErrorsActions.removeError(action.type));
 
 
-    } catch (error) {
-        // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        // yield put(httpRequestsOnErrorsActions.removeError(action.type));
-    }
+
+    } catch (error) {}
 }
 
-
 function* getFundingSourceNotes(action) {
-    // yield put(httpRequestsOnErrorsActions.removeError(action.type));
-    // yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.getFundingSourceNotesService, action.payload.id, action.payload.onModal);
 
@@ -192,15 +240,7 @@ function* getFundingSourceNotes(action) {
             type: GET_FUNDING_SOURCE_NOTES_SUCCESS,
             payload: res.data,
         });
-        // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        // yield put(httpRequestsOnErrorsActions.removeError(action.type));
-
-
-    } catch (error) {
-        console.log(error,'eeeerrrrrorrrrrrr')
-        // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        // yield put(httpRequestsOnErrorsActions.removeError(action.type));
-    }
+    } catch (error) {}
 }
 
 function* creteFundingSourceNote(action) {
@@ -223,8 +263,6 @@ function* creteFundingSourceNote(action) {
 }
 
 
-
-
 function* editFundingSourceNote(action) {
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
@@ -234,7 +272,7 @@ function* editFundingSourceNote(action) {
         const res = yield call(authService.editFoundingSourceNoteService, action.payload.id, action.payload.body);
         yield put({
             type: GET_FUNDING_SOURCE_NOTES,
-            payload:{id : action.payload.fId, onModal : 'Funder'}
+            payload: {id: action.payload.fId, onModal: 'Funder'}
         });
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
@@ -254,14 +292,13 @@ function* deleteFundingSourceNote(action) {
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         yield put({
             type: GET_FUNDING_SOURCE_NOTES,
-            payload:{id : action.payload.fId, onModal : 'Funder'}
+            payload: {id: action.payload.fId, onModal: 'Funder'}
         });
     } catch (error) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
     }
 }
-
 
 
 function* getFundingSourceServ(action) {
@@ -321,6 +358,7 @@ export const watchFundingSource = function* watchFundingSourceSaga() {
     yield takeLatest(CREATE_FUNDING_SOURCE_SERVICE_BY_ID, createFundingSourceServicesById);
     yield takeLatest(EDIT_FUNDING_SOURCE_SERVICE, editFundingSourceServices);
     yield takeLatest(CREATE_FUNDING_SOURCE_SERVICE_MODIFIER, createFundingSourceServicesModifier);
+    yield takeLatest(GET_FUNDING_SOURCE_SERVICE_MODIFIERS, getFundingSourceServicesModifier);
     yield takeLatest(GET_FUNDING_SOURCE_HISTORIES_BY_ID, getFundingSourceHistoriesById);
     yield takeLatest(GET_FUNDING_SOURCE_SERV, getFundingSourceServ);
     yield takeLatest(CREATE_FUNDING_SOURCE_SERV, creteFundingSourceServ);
