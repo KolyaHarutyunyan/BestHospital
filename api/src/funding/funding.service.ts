@@ -133,7 +133,7 @@ export class FundingService {
 
     if (status == 0) {
       let [funders, count] = await Promise.all([
-        (await this.model.find({ status: 0 }).skip(skip).limit(limit)).reverse(),
+        this.model.find({ status: 0 }).sort({ '_id': -1 }).skip(skip).limit(limit),
         this.model.countDocuments({ status: 0 })
       ]);
       const sanFun = this.sanitizer.sanitizeMany(funders);
@@ -141,7 +141,7 @@ export class FundingService {
     }
 
     let [funders, count] = await Promise.all([
-      (await this.model.find({ status: 1 }).skip(skip).limit(limit)).reverse(),
+      (await this.model.find({ status: 1 }).sort({ '_id': 1 }).skip(skip).limit(limit)).reverse(),
       this.model.countDocuments({ status: 1 })
     ]);
     // this.checkFunder(funders[0])
@@ -309,7 +309,7 @@ export class FundingService {
     this.checkFunder(funder);
     return funder._id;
   }
-  
+
   /** Set Status of a Funder Inactive*/
   setStatusInactive = async (
     _id: string,
@@ -341,7 +341,7 @@ export class FundingService {
     this.checkFunder(funder);
     return this.sanitizer.sanitize(funder);
   };
-  
+
   /** Private methods */
   /** if the funder is not found, throws an exception */
   private checkFunder(funder: IFunder) {
