@@ -42,7 +42,7 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
     // useEffect(()=>{
     //     if (info !== undefined){
     //
-    //         console.log(info,'info')
+
     //         dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(info?._id))
     //     }
     // },[])
@@ -58,7 +58,7 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
 
 
     const handleCreate = () => {
-        console.log(getLastMod,'laaast')
+
         if (inputs.name && inputs.cptCode && inputs.size && inputs.min && inputs.max) {
             const data = {
                 "name": inputs.name,
@@ -75,11 +75,11 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
                 modifiersEdit?.push(getLastMod)
             }
             if (!info){
-                dispatch(fundingSourceActions.createFoundingSourceServiceById(params.id, data, postModifiers))
-                // handleClose()
+                dispatch(fundingSourceActions.createFoundingSourceServiceById(params.id, data, modifiersEdit))
+                 // handleClose()
             }else {
                 dispatch(fundingSourceActions.editFoundingSourceServiceById(info?._id, data, modifiersEdit))
-                // handleClose()
+                 handleClose()
             }
             // dispatch(fundingSourceActions.createFoundingSourceServiceModifier({
             //     "modifiers":

@@ -2,21 +2,38 @@ import React, {useEffect, useState} from "react";
 import {btnStyles, fundingSourceSingleStyles} from "./styles";
 import {Images} from "@eachbase/utils";
 import {AddButton, AddModalButton, SimpleModal} from "@eachbase/components";
-import {systemActions} from "@eachbase/store";
-import {useParams} from "react-router-dom";
+
 import {useDispatch, useSelector} from "react-redux";
 import {FundingSourceNotesAdd, FundingSourceServiceAdd,} from "./modals";
 import {CreateFundingSource} from "../../createFundingSource";
+import {httpRequestsOnSuccessActions} from "@eachbase/store";
 
 
 export const FundingSourceSingleHeader = ({activeTab, title, info}) => {
     const [open, setOpen] = useState(false)
-    const globalServices = useSelector(state => state.system.services)
-    const globalCredentials = useSelector(state => state.system.credentials)
-    // const dispatch = useDispatch()
-    const params = useParams()
-    const classes = fundingSourceSingleStyles()
+    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnError: state.httpOnError,
+        httpOnLoad: state.httpOnLoad,
+    }));
 
+    const dispatch = useDispatch()
+    const handleOpenClose = () => {
+        setOpen(!open)
+    }
+
+
+    const successServ = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_FUNDING_SOURCE_SERVICE_BY_ID'
+
+    useEffect(() => {
+        if (successServ) {
+            setOpen(false)
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_FUNDING_SOURCE_SERVICE_BY_ID'))
+        }
+
+    }, [successServ])
+
+    const classes = fundingSourceSingleStyles()
     useEffect(() => {
         if (activeTab === 1) {
 
@@ -27,9 +44,7 @@ export const FundingSourceSingleHeader = ({activeTab, title, info}) => {
         }
     }, [activeTab])
 
-    const handleOpenClose = () => {
-        setOpen(!open)
-    }
+
     const prevData = useSelector(state => state.fundingSource.fundingSourceItem)
 
     return (

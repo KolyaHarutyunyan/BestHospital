@@ -20,11 +20,11 @@ const initialState = {
     fSelect : [],
     fundingSourceListReserve: [],
     fundingSourceItem: null,
-    fundingSourceServices: null,
+    fundingSourceServices: [],
     fundingSourceHistories: [],
     fundingSourceNotes: [],
     services: null,
-    servicesItem : null,
+    servicesItem : [],
     modifiers : []
 };
 

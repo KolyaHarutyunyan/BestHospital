@@ -52,7 +52,7 @@ function* getClients() {
 
     try {
         const res = yield call(authService.getClientsService);
-        console.log(res, 'res clients')
+
         yield put({
             type: GET_CLIENTS_SUCCESS,
             payload: res.data.clients,
@@ -63,34 +63,52 @@ function* getClients() {
 }
 
 function* createClient(action) {
-
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.createClientService, action);
-        console.log(res,'res')
-        yield   put({
-            type: '22',
 
-        })
+        // yield put({
+        //     type: GET_CLIENTS_SUCCESS,
+        //     payload: res.data,
+        // });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
 
     } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
         console.log(err, 'error create client')
     }
 }
 
 function* deleteClient(action) {
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.deleteClientService, action);
+
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
         console.log(err, 'error')
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
     }
 }
 
 function* editClient(action) {
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.editClientService, action);
-        window.location.replace('/client')
+        console.log(res,'reeeeess edit client')
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
-        console.log(err, 'error')
+        console.log(err, 'error edit cl')
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
     }
 }
 

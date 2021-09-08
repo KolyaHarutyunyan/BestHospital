@@ -66,7 +66,7 @@ export const AddContact = ({handleClose, info}) => {
     }
 
 
-    console.log( inputs.phoneNumber,'phone')
+
 
     return (
         <div className={classes.createFoundingSource}>
