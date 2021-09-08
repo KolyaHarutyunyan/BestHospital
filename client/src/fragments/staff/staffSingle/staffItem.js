@@ -21,27 +21,33 @@ import {
 } from "@eachbase/components";
 import {useDispatch, useSelector} from "react-redux";
 import {staffStyle} from "@eachbase/pages/staff/styles";
+import {noteActions} from "../../../store/notes";
+import moment from "moment";
 
 export const StaffItem = () => {
 
-
     const dispatch = useDispatch()
-
     const params = useParams()
+    const classes = staffStyle()
 
     const [open, setOpen] = useState(false)
     const [activeTab, setActiveTab] = useState(0)
-
     const [openCredModal, setOpenCredModal] = useState(false)
     const [credModalType, setCredModalType] = useState('')
-
     const [globalCredentialInformation,setGlobalCredentialInformation] = useState({})
+    const [noteModalInfo, setNoteModalInfo] = useState({
+        right: '-1000px',
+        created: '',
+        subject: '',
+    })
+    const [noteModalTypeInfo, setNoteModalTypeInfo] = useState({})
 
-    const classes = staffStyle()
+    const [openModal, setOpenModal] = useState()
 
     const staffGeneral = useSelector(state => state.admins.adminInfoById)
     const credentialData = useSelector(state => state.admins.credential)
     const globalCredentials = useSelector(state => state.system.credentials)
+    const globalNotes = useSelector(state => state.note.notes)
 
     const handleOpenClose = () => {
         setOpen(!open)
@@ -101,25 +107,41 @@ export const StaffItem = () => {
         dispatch(adminActions.getCredential(params.id))
         dispatch(adminActions.getAdminById(params.id))
         dispatch(systemActions.getCredentialGlobal())
+        dispatch(noteActions.getGlobalNotes(params.id,'Staff'))
     }, [])
 
-    const data = [
-        {
-            date: '06/11/2021',
-            name: 'John Smith',
-            subject: 'Service Request',
-            action: <img src={Images.remove} alt="delete" style={{cursor: 'pointer'}} onClick={() => alert('click')}/>,
-        }
-    ]
+    const openNoteModal = (data) =>{
+        setNoteModalInfo({
+            right: '1px',
+            created: data?.created,
+            subject: data?.subject,
+            id: data?.id
+        })
+    }
+    const closeNoteModal = () =>{
+        setNoteModalInfo({
+            right: '-1000px',
+            created: '',
+            subject: '',
+            id: ''
+        })
+    }
 
     const notesItem = (item, index) => {
         return (
-            <TableBodyComponent key={index}>
-                <TableCell>{item.date}</TableCell>
-                <TableCell>{item.name}</TableCell>
-                <TableCell>{item.subject}</TableCell>
+            <TableBodyComponent key={index} handleClick={()=> openNoteModal({
+                created:item?.created,
+                subject: item?.subject,
+                id: item.id
+            })}>
+                <TableCell>{moment(item?.created).format('DD/MM/YYYY')}</TableCell>
+                <TableCell>{`${item?.user?.firstName} ${item?.user?.lastName}`}</TableCell>
+                <TableCell>{item?.subject}</TableCell>
                 <TableCell>
-                    {item.action}
+                    <img src={Images.remove} alt="delete" style={{cursor: 'pointer'}} onClick={(e) => {
+                        e.stopPropagation();
+                        alert('click')
+                    }} />
                 </TableCell>
             </TableBodyComponent>
         )
@@ -129,6 +151,11 @@ export const StaffItem = () => {
         adminsList: state.admins.adminsList,
         httpOnLoad: state.httpOnLoad
     }));
+
+    const handleOpenCloseNote = (data) => {
+        setNoteModalTypeInfo(data)
+        setOpenModal(!openModal)
+    }
 
     const tabsContent = [
         {
@@ -147,7 +174,7 @@ export const StaffItem = () => {
             tabComponent: (<StaffAvailability staffGeneral={staffGeneral}/>)
         },
         {
-            tabComponent: (<Notes pagination={true} data={data} items={notesItem} headerTitles={headerTitles}/>)
+            tabComponent: (<Notes editNote={handleOpenCloseNote} closeModal={closeNoteModal} noteModalInfo={noteModalInfo} showModal={true} pagination={true} data={globalNotes} items={notesItem} headerTitles={headerTitles}/>)
         },
         {
             tabComponent: (<StaffHistory/>)
@@ -168,7 +195,7 @@ export const StaffItem = () => {
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
                 <div className={classes.staffSingleItem}>
-                    <StaffItemHeader globalCredentialInformation={globalCredentialInformation} globalCredentials={globalCredentials} credModalType={credModalType}
+                    <StaffItemHeader noteModalTypeInfo={noteModalTypeInfo} handleOpenClose={handleOpenCloseNote} openModal={openModal} globalCredentialInformation={globalCredentialInformation} globalCredentials={globalCredentials} credModalType={credModalType}
                                      openCloseCredModal={openCloseCredModal} openCredModal={openCredModal}
                                      activeTab={activeTab}/>
                     <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>

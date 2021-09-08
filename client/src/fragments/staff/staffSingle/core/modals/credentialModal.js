@@ -2,8 +2,8 @@ import React, {useState, useEffect} from "react";
 import {modalsStyle} from "@eachbase/components/modal/styles";
 import {ErrorText, useGlobalTextStyles} from "@eachbase/utils";
 import {AddModalButton, CloseButton, CreateChancel} from "@eachbase/components/buttons";
-import {SelectInput, RadioButton, ValidationInput, SelectInputPlaceholder} from "@eachbase/components";
-import {useDispatch, useSelector} from "react-redux";
+import {SelectInput, RadioButton, ValidationInput} from "@eachbase/components";
+import {useDispatch} from "react-redux";
 import {adminActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 import moment from "moment";
@@ -18,12 +18,6 @@ const radioData = [
         value: 'expiring'
     }
 ]
-
-
-// const editCredentialData = {
-//     credentialId: "610cf947776f5210843ccb54",
-//     expirationDate: new Date("09-05-2019").toISOString()
-// }
 
 const checkboxStyle = {display: 'flex', alignItems: 'center', flexDirection: 'row'}
 
@@ -41,14 +35,6 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
     const [inputs, setInputs] = useState(globalCredentialInformation ? globalCredentialInformation : {});
 
     const [globalCredId, setGlobalCredId] = useState('')
-
-    // const removeCredentialData = {
-    //     id: params.id
-    // }
-    // const removeCredential = () => {
-    //     dispatch(adminActions.deleteCredentialById(removeCredentialData))
-    // }
-
 
     const change = (event) => {
         setCheckboxValue(event.target.value);
@@ -113,15 +99,16 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
         }
 
     }
-    const handleChange = e => setInputs(
-        prevState => (
-            {
-                ...prevState,
-                [e.target.name]: e.target.value
-            }
-        ),
-        error === e.target.name && setError(''),
-    );
+    const handleChange = e => {
+        setInputs(
+            prevState => (
+                {
+                    ...prevState,
+                    [e.target.name]: e.target.value
+                }
+            ));
+        error === e.target.name && setError('')
+    }
     return (
         <div className={classes.inactiveModalBody}>
             <h1 className={`${globalText.modalTitle}`}>{title(mType)}</h1>

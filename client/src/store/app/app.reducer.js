@@ -2,6 +2,7 @@ import {combineReducers} from 'redux';
 import {authReducer} from "../auth";
 import {adminReducer} from "../admin";
 import {systemReducer} from '../system';
+import {noteReducer} from "../notes";
 import {officeReducer} from "../offices";
 import {permissionsReducer} from "../permissions";
 import {roleReducer} from "../role";
@@ -35,6 +36,7 @@ export const appReducer = combineReducers({
     agents: agentReducer,
     client: clientReducer,
     system: systemReducer,
+    note: noteReducer,
 
     httpOnLoad: httpRequestsOnLoadReducer,
     httpOnSuccess: httpRequestsOnSuccessReducer,

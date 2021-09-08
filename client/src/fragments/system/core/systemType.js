@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {TableCell} from "@material-ui/core";
-import {Notes, TableBodyComponent, AddButton, ValidationInput} from "@eachbase/components";
+import {Notes, TableBodyComponent, AddButton, ValidationInput, Toast} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
 import {systemItemStyles} from './styles'
 import {useDispatch, useSelector} from "react-redux";
@@ -94,8 +94,8 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
     }));
 
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_SERVICE_GLOBAL'
-
     const errorText = httpOnError.length && httpOnError[0].type === 'CREATE_SERVICE_GLOBAL'
+    const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_SERVICE_GLOBAL'
 
     useEffect(()=>{
         if(success) {
@@ -110,7 +110,7 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
         }
     },[success])
 
-    // let errorMessage = success ? 'success' : 'error'
+    let errorMessage = success ? 'Successfully added' : 'Something went wrong'
 
     return (
         <>
@@ -143,11 +143,9 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
                     placeholder={'Category'}
                 />
                 <AddButton
+                    type={'CREATE_SERVICE_GLOBAL'}
                     styles={credentialBtn}
-                    loader={httpOnLoad &&
-                    httpOnLoad.length &&
-                    httpOnLoad[0] === 'CREATE_SERVICE_GLOBAL'
-                    }
+                    loader={ loader }
                     disabled={!isDisabled}
                     handleClick={handleSubmit}
                     text='Add Service Type'
@@ -157,10 +155,10 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
 
             <Notes defaultStyle={true} data={globalServices} pagination={false} items={notesItem}
                    headerTitles={headerTitles}/>
-            {/*<Toast*/}
-            {/*    type={success ? 'success' : errorText ? 'error' : '' }*/}
-            {/*    text={errorMessage}*/}
-            {/*    info={success ? success : errorText ? errorText : ''}/>*/}
+            <Toast
+                type={success ? 'Successfully added' : errorText ? 'Something went wrong' : '' }
+                text={errorMessage}
+                info={success ? success : errorText ? errorText : ''}/>
         </>
     )
 }

@@ -70,7 +70,8 @@ export const JobTitles = ({globalJobs,removeItem, openModal}) => {
             dispatch(httpRequestsOnErrorsActions.removeError('CREATE_JOB_GLOBAL'))
         }
     },[success, errorText])
-    let errorMessage = success ? 'success' : 'error'
+
+    let errorMessage = success ? 'Successfully added' : 'Something went wrong'
 
     return (
         <>
@@ -116,7 +117,7 @@ export const JobTitles = ({globalJobs,removeItem, openModal}) => {
                 }
             </div>
             <Toast
-                type={success ? 'success' : errorText ? 'error' : '' }
+                type={success ? 'Successfully added' : errorText ? 'Something went wrong' : '' }
                 text={errorMessage}
                 info={success ? success : errorText ? errorText : ''}/>
         </>

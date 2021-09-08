@@ -71,7 +71,7 @@ export const Departments = ({globalDepartments, removeItem, openModal}) => {
         }
     },[success, errorText])
 
-    let errorMessage = success ? 'success' : 'error'
+    let errorMessage = success ? 'Successfully added' : 'Something went wrong'
 
     return (
         <>
@@ -86,6 +86,7 @@ export const Departments = ({globalDepartments, removeItem, openModal}) => {
                     placeholder={'Name*'}
                 />
                 <AddButton
+                    type={'CREATE_DEPARTMENT_GLOBAL'}
                     loader={loader }
                     disabled={!isDisabled}
                     styles={credentialBtn}
@@ -118,7 +119,7 @@ export const Departments = ({globalDepartments, removeItem, openModal}) => {
                 }
             </div>
             <Toast
-                type={success ? 'success' : errorText ? 'error' : '' }
+                type={success ? 'Successfully added' : errorText ? 'Something went wrong' : '' }
                 text={errorMessage}
                 info={success ? success : errorText ? errorText : ''}/>
         </>
