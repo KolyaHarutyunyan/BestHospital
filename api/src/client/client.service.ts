@@ -64,7 +64,7 @@ export class ClientService {
         let [clients, count] = await Promise.all([
           this.model
             .find({ status: 0 })
-            .populate({ path: 'enrollment', select: 'name' }).skip(skip).limit(limit),
+            .populate({ path: 'enrollment', select: 'name' }).sort({ '_id': 1 }).skip(skip).limit(limit),
           this.model.countDocuments({ status: 0 })
         ]);
         this.checkClient(clients[0]);
@@ -75,7 +75,7 @@ export class ClientService {
       let [clients, count] = await Promise.all([
         this.model
           .find({ status: 1 })
-          .populate({ path: 'enrollment', select: 'name' }).skip(skip).limit(limit),
+          .populate({ path: 'enrollment', select: 'name' }).sort({ '_id': 1 }).skip(skip).limit(limit),
         this.model.countDocuments({ status: 1 })
       ]);
       this.checkClient(clients[0]);
