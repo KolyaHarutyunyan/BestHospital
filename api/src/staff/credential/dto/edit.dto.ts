@@ -12,5 +12,6 @@ export class SUpdateCredentialDTO {
   expirationDate: Date;
   @ApiProperty()
   @IsString()
+  @IsOptional()
   receiveData: string
 }
