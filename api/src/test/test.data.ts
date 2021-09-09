@@ -74,28 +74,26 @@ export const data = {
     modifier: [{
         modifiers: [
           {
-            credentialId: null,
+            credentialId: '60fd3d0f083d661f702d68db',
             chargeRate: 0,
+            serviceId: null,
             name: "string",
             type: 0
           },
           {
-            credentialId: null,
+            credentialId: '60fd3d0f083d661f702d68db',
             chargeRate: 10,
+            serviceId: null,
             name: "eeeh",
             type: 0
           }
         ],
         serviceId: null
       }],
-    branches: [
+    credential: [
         {
-            officeId: null,
-            name: 'Branch 1',
-            email: 'branch1@test.com',
-            phoneNumber: '2131122112',
-            establishedDate: 0,
-            address: '888 los angeles',
+            name: 'a',
+            type: 2
         },
         {
             officeId: null,
