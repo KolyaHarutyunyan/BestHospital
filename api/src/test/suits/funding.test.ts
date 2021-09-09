@@ -1,7 +1,7 @@
 import { FundingModule } from '../modules';
 import { data } from '../test.data';
 import { Util } from '../util';
-import { AppModule, GlobalServiceModule, ModifierModule } from '../modules';
+import { AppModule, GlobalServiceModule, ModifierModule, CredentialModule } from '../modules';
 
 export class FundingTest {
     static async addFundingWithCorrectData() {
@@ -9,11 +9,10 @@ export class FundingTest {
         const funder = await FundingModule.createFunding(data.funding[0]);
         const globService = await GlobalServiceModule.createGlobalService(data.globalService[0]);
         const service = await FundingModule.createFundingService(data.fundingService[0], funder.id, globService.id);
-        // const credential = await CredentialModule.createCredential(data.modifier[0], service.id, );
+        const credential = await CredentialModule.createCredential(data.credential[0]);
+        const modifier = await ModifierModule.createModifiers(data.modifier[0], service._id, credential._id);
 
-        // const modifier = await ModifierModule.createModifiers(data.modifier[0], service.id, credential.id);
-
-        if (service) {
+        if (modifier) {
             return true
         } else {
             return false
