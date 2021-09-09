@@ -83,7 +83,12 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
         if (inputs.name && inputs.displayCode && inputs.category) {
             dispatch(systemActions.createServiceGlobal(serviceData))
         }else {
-           alert('error')
+            setError(
+                !inputs.name ? 'name' :
+                    !inputs.displayCode ? 'displayCode' :
+                        !inputs.category ? 'category' :
+                                        'Input is not filled'
+            )
         }
     }
 

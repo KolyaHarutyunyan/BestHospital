@@ -39,7 +39,6 @@ export const SystemItem = () => {
 
     let errorMessage = success ? 'Success' : 'Something went wrong'
 
-
     const [activeTab, setActiveTab] = useState(0)
     const [open, setOpen] = useState(false)
     const [modalType, setModalType] = useState('')

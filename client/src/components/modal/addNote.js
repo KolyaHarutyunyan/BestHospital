@@ -29,7 +29,7 @@ export const AddNotes = ({model, noteModalTypeInfo, handleClose }) => {
             text: inputs.text,
             subject: inputs.subject,
             resource: params.id,
-            onModel: 'Staff'
+            onModel: model
         }
         if(inputs.subject){
             dispatch(noteActions.createGlobalNote(data))

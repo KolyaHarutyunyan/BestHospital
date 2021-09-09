@@ -1,12 +1,12 @@
 import React from "react";
-import {Select, FormControl,} from "@material-ui/core";
+import {Select, FormControl, FormHelperText,} from "@material-ui/core";
 import {inputsStyle} from "./styles";
 import MenuItem from "@material-ui/core/MenuItem";
 import {InputMinLoader} from "./inputMiniLoader";
 import {makeStyles} from "@material-ui/core/styles";
 import {Colors} from "@eachbase/utils";
 
-const usePlaceholderStyles = makeStyles((theme) => ({
+const usePlaceholderStyles = makeStyles(() => ({
     placeholder: {
         color: Colors.TextMiddleGray,
         opacity: .7
@@ -80,6 +80,7 @@ export const SelectInputPlaceholder = ({
                             ))
                         }
                     </Select>
+                    <FormHelperText className={classes.errorText}>{typeError && typeError}</FormHelperText>
                 </FormControl>
             </div>
         </>

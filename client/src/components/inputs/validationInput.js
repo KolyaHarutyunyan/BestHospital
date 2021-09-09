@@ -4,11 +4,11 @@ import TextField from "@material-ui/core/TextField";
 import {ErrMessage} from "../messages";
 import {InputMinLoader} from "./inputMiniLoader";
 
-export const ValidationInput = ({
+export const ValidationInput = ({errorMessageStyle,
                                     multiline, style, className, autoComplete, placeholder,
                                     typeError, Length, disabled,
                                     value, type, onChange, name,
-                                    label, validator, sendBoolean, variant, loader, styles, ...props
+                                    label, validator, sendBoolean, variant, loader, styles,
                                 }) => {
     const classes = inputsStyle();
     const [validEmail, setValidEmail] = useState(false);
@@ -67,7 +67,7 @@ export const ValidationInput = ({
                         )
                     }}
                 />
-                <ErrMessage text={typeError}/>
+                <ErrMessage style={errorMessageStyle} text={typeError}/>
             </div>
         </>
     );

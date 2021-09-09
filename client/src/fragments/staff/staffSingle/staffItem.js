@@ -33,9 +33,9 @@ export const StaffItem = () => {
     const [open, setOpen] = useState(false)
     const [activeTab, setActiveTab] = useState(0)
     const [openCredModal, setOpenCredModal] = useState(false)
-    const [openDelModal,setOpenDelModal] = useState(false)
+    const [openDelModal, setOpenDelModal] = useState(false)
     const [credModalType, setCredModalType] = useState('')
-    const [globalCredentialInformation,setGlobalCredentialInformation] = useState({})
+    const [globalCredentialInformation, setGlobalCredentialInformation] = useState({})
     const [noteModalData, setNoteModalData] = useState({})
 
     const [noteModalInfo, setNoteModalInfo] = useState({
@@ -112,11 +112,11 @@ export const StaffItem = () => {
         dispatch(adminActions.getCredential(params.id))
         dispatch(adminActions.getAdminById(params.id))
         dispatch(systemActions.getCredentialGlobal())
-        dispatch(noteActions.getGlobalNotes(params.id,'Staff'))
-        dispatch(fundingSourceActions.getFundingSourceHistoriesById(params.id,'Staff'))
+        dispatch(noteActions.getGlobalNotes(params.id, 'Staff'))
+        dispatch(fundingSourceActions.getFundingSourceHistoriesById(params.id, 'Staff'))
     }, [])
 
-    const openNoteModal = (data) =>{
+    const openNoteModal = (data) => {
         setNoteModalInfo({
             right: '1px',
             created: data?.created,
@@ -125,7 +125,7 @@ export const StaffItem = () => {
         })
     }
 
-    const closeNoteModal = () =>{
+    const closeNoteModal = () => {
         setNoteModalInfo({
             right: '-1000px',
             created: '',
@@ -136,8 +136,8 @@ export const StaffItem = () => {
 
     const notesItem = (item, index) => {
         return (
-            <TableBodyComponent key={index} handleClick={()=> openNoteModal({
-                created:item?.created,
+            <TableBodyComponent key={index} handleClick={() => openNoteModal({
+                created: item?.created,
                 subject: item?.subject,
                 id: item.id
             })}>
@@ -147,8 +147,8 @@ export const StaffItem = () => {
                 <TableCell>
                     <img src={Images.remove} alt="delete" style={{cursor: 'pointer'}} onClick={(e) => {
                         e.stopPropagation();
-                        handleOpenCloseDel({id: item.id,deletedName: item.subject})
-                    }} />
+                        handleOpenCloseDel({id: item.id, deletedName: item.subject})
+                    }}/>
                 </TableCell>
             </TableBodyComponent>
         )
@@ -182,27 +182,28 @@ export const StaffItem = () => {
         },
         {
             tabComponent: (globalNotes.length ? <Notes
-                closeModal={closeNoteModal}
-                noteModalInfo={noteModalInfo}
-                showModal={true} pagination={true}
-                data={globalNotes}
-                items={notesItem}
-                headerTitles={headerTitles}/>
-                :
-                    <NoItemText text='No Items Yet' />
+                        model='Staff'
+                        closeModal={closeNoteModal}
+                        noteModalInfo={noteModalInfo}
+                        showModal={true} pagination={true}
+                        data={globalNotes}
+                        items={notesItem}
+                        headerTitles={headerTitles}/>
+                    :
+                    <NoItemText text='No Items Yet'/>
             )
         },
         {
-            tabComponent: (<StaffHistory data={historiesData} />)
+            tabComponent: (<StaffHistory data={historiesData}/>)
         },
     ];
 
-    const handleOpenCloseDel = (data)=>{
+    const handleOpenCloseDel = (data) => {
         setNoteModalData(data)
         setOpenDelModal(!openDelModal)
     }
 
-    const handleDeleteNote = () =>{
+    const handleDeleteNote = () => {
         dispatch(noteActions.deleteGlobalNote(noteModalData.id, params.id, 'Staff'))
         setOpenDelModal(false)
         closeNoteModal()
@@ -222,7 +223,9 @@ export const StaffItem = () => {
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
                 <div className={classes.staffSingleItem}>
-                    <StaffItemHeader noteModalTypeInfo={noteModalTypeInfo} handleOpenClose={handleOpenCloseNote} openModal={openModal} globalCredentialInformation={globalCredentialInformation} globalCredentials={globalCredentials} credModalType={credModalType}
+                    <StaffItemHeader noteModalTypeInfo={noteModalTypeInfo} handleOpenClose={handleOpenCloseNote}
+                                     openModal={openModal} globalCredentialInformation={globalCredentialInformation}
+                                     globalCredentials={globalCredentials} credModalType={credModalType}
                                      openCloseCredModal={openCloseCredModal} openCredModal={openCredModal}
                                      activeTab={activeTab}/>
                     <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
@@ -230,7 +233,8 @@ export const StaffItem = () => {
                 <SimpleModal
                     openDefault={openDelModal}
                     handleOpenClose={handleOpenCloseDel}
-                    content={<DeleteElement text='some information' info={noteModalData?.deletedName} handleDel={handleDeleteNote} handleClose={handleOpenCloseDel}/>}
+                    content={<DeleteElement text='some information' info={noteModalData?.deletedName}
+                                            handleDel={handleDeleteNote} handleClose={handleOpenCloseDel}/>}
                 />
             </TableWrapperGeneralInfo>
         </>

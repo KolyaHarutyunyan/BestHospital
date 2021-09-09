@@ -2,9 +2,9 @@ import React, {useState, useEffect} from "react";
 import {modalsStyle} from "@eachbase/components/modal/styles";
 import {ErrorText, useGlobalTextStyles} from "@eachbase/utils";
 import {AddModalButton, CloseButton, CreateChancel} from "@eachbase/components/buttons";
-import {SelectInput, RadioButton, ValidationInput} from "@eachbase/components";
-import {useDispatch} from "react-redux";
-import {adminActions} from "@eachbase/store";
+import {SelectInput, RadioButton, ValidationInput, SelectInputPlaceholder, Toast} from "@eachbase/components";
+import {useDispatch, useSelector} from "react-redux";
+import {adminActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 import moment from "moment";
 
@@ -49,14 +49,6 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
         return 'HB (License)'
     }
 
-    const handleCheck = (bool) => {
-        if (bool === true) {
-            setError("Not valid email");
-        } else {
-            setError("");
-        }
-    };
-
     const getGlobalCredentialID = (name) => {
         for (let i = 0; i < globalCredentials.length; i++) {
             if (globalCredentials[i].name === name) {
@@ -75,20 +67,28 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
         data = {
             staffId: params.id,
             credentialId: globalCredId,
-            expirationDate: inputs.expirationDate ? new Date(inputs.expirationDate).toISOString() : null
+            expirationDate: inputs.expirationDate ? new Date(inputs.expirationDate).toISOString() : null,
+            receiveData: new Date().toISOString()
         }
         editData = {
             credentialId: globalCredId ? globalCredId : globalCredentialInformation?.credId,
-            expirationDate: (inputs.expirationDate && checkboxValue === 'expiring') ? new Date(inputs.expirationDate).toISOString() : null
+            expirationDate: (inputs.expirationDate && checkboxValue === 'expiring') ? new Date(inputs.expirationDate).toISOString() : null,
+            receiveData: ''
         }
 
         switch (mType) {
             case 'addCredential':
-                dispatch(adminActions.createCredential(data))
-                handleClose()
+                if(inputs.type){
+                    dispatch(adminActions.createCredential(data))
+                    handleClose()
+                }else {
+                    setError(
+                        !inputs.type ? 'type' : 'Input is not filled'
+                    )
+                }
                 break;
             case 'editCredential':
-                dispatch(adminActions.editCredentialById(editData, globalCredentialInformation?.id))
+                dispatch(adminActions.editCredentialById(editData, globalCredentialInformation?.id, params.id))
                 handleClose()
                 break;
             case 'credentialPreview':
@@ -99,6 +99,7 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
         }
 
     }
+
     const handleChange = e => {
         setInputs(
             prevState => (
@@ -109,6 +110,29 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
             ));
         error === e.target.name && setError('')
     }
+
+    const {httpOnError, httpOnLoad, httpOnSuccess } = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnLoad: state.httpOnLoad,
+        httpOnError: state.httpOnError
+    }));
+    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_CREDENTIAL'
+    const errorText = httpOnError.length && httpOnError[0].type === 'CREATE_CREDENTIAL'
+    const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_CREDENTIAL'
+
+    useEffect(()=>{
+        if(success) {
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_CREDENTIAL'))
+            setInputs({
+                name: '',
+                type: ''
+            })
+        }else if(errorText){
+            dispatch(httpRequestsOnErrorsActions.removeError('CREATE_CREDENTIAL'))
+        }
+    },[success, errorText])
+    console.log(success,'fhg gshfhasdg fg  sdgafhg sadg fhsajdgasdg fhjf gsahdg');
+    let errorMessage = success ? 'Successfully added' : 'Something went wrong'
     return (
         <div className={classes.inactiveModalBody}>
             <h1 className={`${globalText.modalTitle}`}>{title(mType)}</h1>
@@ -116,7 +140,6 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
                 <CloseButton handleCLic={handleClose}/>
             </div>
             <p className={classes.inactiveModalInfo}> {mType === 'addCredential' && 'Please fulfill the below fields to add a system.'}</p>
-
             {
                 mType === 'credentialPreview' ? <SelectInput
                     style={classes.credentialInputStyle}
@@ -125,16 +148,25 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
                     list={globalCredentials}
                     value={inputs.type}
                     disabled={true}
-                /> : <SelectInput
+                /> : mType === 'editCredential' ? <SelectInput
                     style={classes.credentialInputStyle}
                     name={"type"}
                     placeholder={"Select Credential*"}
                     list={globalCredentials}
                     value={inputs.type}
                     handleSelect={handleChange}
-                    sendBoolean={handleCheck}
-                    typeError={error === 'issuingState' ? ErrorText.field : ''}
-                />
+                    typeError={error === 'type' && ErrorText.field}
+                /> :
+                    <SelectInputPlaceholder
+                        style={classes.credentialInputStyle}
+                        name={"type"}
+                        placeholder={"Select Credential*"}
+                        list={globalCredentials}
+                        value={inputs.type}
+                        handleSelect={handleChange}
+                        typeError={error === 'type' && ErrorText.field}
+                    />
+
             }
 
             <p className={classes.title}>Expiration</p>
@@ -149,7 +181,6 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
                         type={"date"}
                         // label={"Expiration Date*"}
                         name='expirationDate'
-                        sendBoolean={handleCheck}
                         onChange={handleChange}
                         typeError={error === 'birthday' && ErrorText.field}
                     />
@@ -164,8 +195,13 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
                         chancel="Cancel"
                         onClose={handleClose}
                         onCreate={handleSubmit}
+                        loader={loader}
                     />
             }
+            <Toast
+                type={success ? 'Successfully added' : errorText ? 'Something went wrong' : ''}
+                text={errorMessage}
+                info={success ? success : errorText ? errorText : ''}/>
         </div>
     );
 }

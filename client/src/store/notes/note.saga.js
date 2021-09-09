@@ -33,7 +33,6 @@ function* creteGlobalNote(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(noteService.createGlobalNoteService, action.payload.body);
-
         yield put({
             type: CREATE_GLOBAL_NOTES_SUCCESS,
             payload: res.data,

@@ -53,7 +53,7 @@ export const adminReducer = (state = initialState, action) => {
         case CREATE_CREDENTIAL_SUCCESS :
             return {
                 ...state,
-                credentialById: action.payload
+                credential: [action.payload, ...state.credential]
             }
 
         case GET_CREDENTIAL_SUCCESS :

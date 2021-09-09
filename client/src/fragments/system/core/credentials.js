@@ -102,6 +102,8 @@ export const Credentials = ({removeItem, openModal,globalCredentials}) => {
 
     let errorMessage = success ? 'Successfully added' : 'Something went wrong'
 
+
+    console.log(success,'success success success');
     return (
         <>
             <div className={`${classes.flexContainer} ${classes.headerSize}`}>
