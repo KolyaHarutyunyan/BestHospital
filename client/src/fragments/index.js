@@ -7,7 +7,7 @@ export {
 } from "./login";
 export { MenuBar } from "./menuBar";
 export { FundingSourceTable, CreateFundingSource, OfficesInfo } from "./fundingSource";
-export { StaffTable, CreateStaff, StaffItem, StaffAddNotes, CredentialModal} from "./staff";
+export { StaffTable, CreateStaff, StaffItem, CredentialModal} from "./staff";
 export { ClientTable,CreateClient} from "./client";
 export { HumanResourcesTable, CreateAdminTable, AdminInfo } from "./humanResources";
 export { CustomersTable } from "./customers";

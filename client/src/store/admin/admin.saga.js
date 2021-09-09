@@ -37,10 +37,10 @@ function* getAdmins(action) {
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
-        const res = yield call(authService.getAdminsService, action.payload.status);
+        const res = yield call(authService.getAdminsService, action.payload);
         yield put({
             type: GET_ADMINS_SUCCESS,
-            payload: res.data.reverse(),
+            payload: res.data,
         });
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.removeError(action.type));

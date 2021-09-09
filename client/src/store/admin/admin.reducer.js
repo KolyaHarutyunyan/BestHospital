@@ -2,14 +2,12 @@ import {
     EDIT_ADMIN_BY_ID_SUCCESS,
     GET_ADMIN_BY_ID,
     GET_ADMIN_BY_ID_SUCCESS,
-    GET_ADMINS,
     GET_ADMINS_SUCCESS,
     CREATE_CREDENTIAL_SUCCESS,
     GET_CREDENTIAL_SUCCESS,
     EDIT_CREDENTIAL_BY_ID_SUCCESS,
     DELETE_CREDENTIAL_BY_ID_SUCCESS, CREATE_ADMIN_SUCCESS
 } from "./admin.types";
-import {paginate} from "@eachbase/utils";
 
 const initialState = {
     adminsList: [],
@@ -31,6 +29,8 @@ export const adminReducer = (state = initialState, action) => {
                 ...state,
                 adminsList: action.payload,
                 adminsListReserve: action.payload,
+                adminInfoById: '',
+                credential: [],
             }
 
         case EDIT_ADMIN_BY_ID_SUCCESS:
