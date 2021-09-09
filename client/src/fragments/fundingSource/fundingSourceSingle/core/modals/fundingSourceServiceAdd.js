@@ -76,6 +76,7 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
             }
             if (!info){
                 dispatch(fundingSourceActions.createFoundingSourceServiceById(params.id, data, modifiersEdit))
+
                  // handleClose()
             }else {
                 dispatch(fundingSourceActions.editFoundingSourceServiceById(info?._id, data, modifiersEdit))

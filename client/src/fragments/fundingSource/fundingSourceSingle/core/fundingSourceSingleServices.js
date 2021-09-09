@@ -1,12 +1,20 @@
 import React, {useEffect, useState} from "react";
-import {DeleteElement, Loader, MinLoader, Notes, SimpleModal, TableBodyComponent} from "@eachbase/components";
+import {
+    DeleteElement,
+    Loader,
+    MinLoader,
+    NoItemText,
+    Notes,
+    SimpleModal,
+    TableBodyComponent
+} from "@eachbase/components";
 import {FundingSourceSinglePTModifiers} from "./fundingSourceSinglePTModifiers";
 import {Colors, Images} from "@eachbase/utils";
 import {useDispatch, useSelector} from "react-redux";
 import {TableCell} from "@material-ui/core";
 import {fundingSourceSingleStyles} from "./styles";
 import {FundingSourceServiceAdd,} from "./modals";
-import {fundingSourceActions, httpRequestsOnSuccessActions} from "@eachbase/store";
+import {fundingSourceActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 
 export const FundingSourceSingleServices = ({data,}) => {
 
@@ -30,17 +38,31 @@ export const FundingSourceSingleServices = ({data,}) => {
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'GET_FUNDING_SOURCE_SERVICE_MODIFIERS'
 
 
-
+     console.log(httpOnError.length &&  httpOnError[0].error,'eror messsage')
 
     useEffect(() => {
-        if (success ) {
+
+          if (success ) {
+              dispatch(httpRequestsOnSuccessActions.removeSuccess('GET_FUNDING_SOURCE_SERVICE_MODIFIERS'))
+              if (accept){
+                  setToggleModal(!toggleModal)
+                  setAccept(false)
+              }
+          }
+
+    }, [success])
+
+    useEffect(() => {
+        if (httpOnError.length && httpOnError[0].error === 'Modifier was not found'){
             dispatch(httpRequestsOnSuccessActions.removeSuccess('GET_FUNDING_SOURCE_SERVICE_MODIFIERS'))
+            dispatch(httpRequestsOnErrorsActions.removeError())
             if (accept){
                 setToggleModal(!toggleModal)
                 setAccept(false)
             }
         }
-    }, [success])
+
+    }, [httpOnError])
 
 
 
@@ -154,8 +176,8 @@ export const FundingSourceSingleServices = ({data,}) => {
             <div style={{marginTop: -32, width: '100%'}}>
                 <Notes data={data} items={serviceItem} headerTitles={headerTitles} defaultStyle={true}/>
             </div>
-            <FundingSourceSinglePTModifiers data={modifiers}
-                                            title={data && data[serviceIndex]?.name}/>
+            {modifiers.length ? <FundingSourceSinglePTModifiers data={modifiers}
+                                             title={data && data[serviceIndex]?.name}/>  : <NoItemText text='' />}
         </div>
     )
 }

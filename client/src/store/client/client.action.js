@@ -87,10 +87,10 @@ export const editClientContact = (body, id,paramsId) => {
 }
 
 
-export const deleteClientContact = ( id,paramsId) => {
+export const deleteClientContact = ( id, paramsId) => {
     return {
         type: DELETE_CLIENT_CONTACT,
-        payload: {id,paramsId}
+        payload: {id, paramsId}
     }
 }
 
