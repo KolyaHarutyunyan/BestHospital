@@ -20,7 +20,7 @@ export const data = {
             status: 0
         },
         {
-            id: "6116a626aee275155032b87c",
+            id: "6139d4fc33e3ac6f14767a32",
             name: "ok",
             type: "s",
             contact: "s",
@@ -38,87 +38,56 @@ export const data = {
                 formattedAddress: "string"
             },
             status: 0
-        },
-        {
-            firstName: 'Admin',
-            lastName: 'Two',
-            username: 'Admin 2',
-            email: 'admin2@test.com',
-            phoneNumber: '8183421231',
-            ssn: 212312323,
-            dl: '2342342',
-            address: '1057 western ave glendale',
-            password: 'test_password1',
-        },
-        {
-            firstName: 'Admin',
-            lastName: 'Three',
-            username: 'Admin 3',
-            email: 'admin3@test.com',
-            phoneNumber: '8183421231',
-            ssn: 212312323,
-            dl: '2342342',
-            address: '1057 western ave glendale',
-            password: 'test_password1',
-        },
+        }
     ],
-    offices: [
+    fundingService: [
         {
-            name: 'First Office',
-            email: 'office1@test.com',
-            phoneNumber: '8184417656',
-            establishedDate: 0,
-            address: '1000 los angeles',
-        },
-        {
-            name: 'Second Office',
-            email: 'office1@test.com',
-            phoneNumber: '8184417656',
-            establishedDate: 0,
-            address: '1000 los angeles',
-        },
-        {
-            name: 'Thrid Office',
-            email: 'office1@test.com',
-            phoneNumber: '8184417656',
-            establishedDate: 0,
-            address: '1000 los angeles',
-        },
+            funderId: null,
+            id: "612e2b4543fc954ad068f356",
+            name: "string",
+            serviceId: null,
+            rate: 0,
+            cptCode: 0,
+            size: 0,
+            min: 0,
+            max: 0
+          },
+          {
+            funderId: null,
+            id: "612e2b4543fc954ad068f356",
+            name: "string",
+            serviceId: null,
+            rate: 0,
+            cptCode: 0,
+            size: 0,
+            min: 0,
+            max: 0
+          }
     ],
-    agents: [
+    globalService: [
         {
-            email: 'Agent1@test.com',
-            firstName: 'Agent',
-            lastName: 'One',
-            address: '100 Los angeles',
-            officeId: null,
-            branchId: null,
-        },
-        {
-            email: 'Agent2@test.com',
-            firstName: 'Agent',
-            lastName: 'Two',
-            address: '100 Los angeles',
-            officeId: null,
-            branchId: null,
-        },
-        {
-            email: 'Agent3@test.com',
-            firstName: 'Agent',
-            lastName: 'Three',
-            address: '100 Los angeles',
-            officeId: null,
-            branchId: null,
-        },
-        {
-            email: 'Agent4@test.com',
-            firstName: 'Agent',
-            lastName: 'Four',
-            address: '100 Los angeles',
-            officeId: null,
-            branchId: null,
-        },
+            name: "ok",
+            displayCode: "chokay",
+            category: 'ha lav okay',
+        }
     ],
+    modifier: [{
+        modifiers: [
+          {
+            credentialId: null,
+            chargeRate: 0,
+            name: "string",
+            type: 0
+          },
+          {
+            credentialId: null,
+            chargeRate: 10,
+            name: "eeeh",
+            type: 0
+          }
+        ],
+        serviceId: null
+      }],
     branches: [
         {
             officeId: null,

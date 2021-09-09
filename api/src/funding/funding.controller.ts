@@ -6,7 +6,6 @@ import { HistoryService } from '../history/history.service';
 import { CreateFundingDTO, FundingDTO, UpdateFundingDto, ServiceDTO, UpdateServiceDto, CreateServiceDTO, CreateModifierDto, CreateModifiersDTO, UpdateModifierDto, ModifyDTO } from './dto';
 import { HistoryDTO } from '../history/dto';
 import { Public, ParseObjectIdPipe } from '../util';
-import { CreateCommentDTO } from './dto/comment.dto';
 import { CreateTerminationDto } from 'src/termination/dto/create-termination.dto';
 
 @Controller('funding')

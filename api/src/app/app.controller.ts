@@ -1,4 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
+import { Public } from '../util';
 import { AppService } from './app.service';
 
 @Controller()
@@ -8,6 +9,11 @@ export class AppController {
   @Get()
   getHello(): string {
     return this.appService.getHello();
+  }
+  @Get('dropDatabase')
+  @Public()
+  async dropDatabase() {
+    await this.appService.dropDatabase();
   }
   // @Get()
   // @Render('./apiHome.html')

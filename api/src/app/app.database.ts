@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { connect, set } from 'mongoose';
+import { connect, Connection, set, connection } from 'mongoose';
 import { MONGO_CONN_STR } from './app.constants';
 
 @Injectable()
@@ -10,6 +10,7 @@ export class DatabaseConnection {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   };
+  private dbConnection: Connection;
 
   connect = () => {
     const options: any = {
@@ -26,5 +27,8 @@ export class DatabaseConnection {
       }
       console.log('database connected');
     });
+  };
+  dropDatabase = async () => {
+    await connection.dropDatabase();
   };
 }

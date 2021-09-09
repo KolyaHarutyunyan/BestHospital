@@ -9,4 +9,6 @@ export class SCredentialDTO {
     credentialId: string;
     @ApiProperty({ required: false })
     expirationDate: Date;
+    @ApiProperty()
+    receiveData: string
 }
