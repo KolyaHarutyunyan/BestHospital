@@ -26,7 +26,7 @@ export const Notes = ({
                           defaultStyle,
                           items,
                           noItemsYet,
-                          model
+                          model,
                       }) => {
 
     const officesStyle = makeStyles(({}) => ({
@@ -95,7 +95,7 @@ export const Notes = ({
                         }
                     </TableHeadComponent>
                     {
-                        data && data.length ? data.map((item, index) => {
+                        data ? data.map((item, index) => {
 
                             return (
                                 <>
@@ -154,7 +154,6 @@ export const Notes = ({
                             handleOpenClose={handleOpenClose}
                             content={<AddNotes model={model} noteModalTypeInfo={noteModalInfoEdit}
                                                handleClose={handleOpenClose}/>}
-                        />
                         <SimpleModal
                             openDefault={openDelModal}
                             handleOpenClose={handleOpenCloseDel}

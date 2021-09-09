@@ -4,9 +4,9 @@ import {
     SimpleTabs,
     Notes,
     TableWrapperGeneralInfo,
-    InactiveModal, SimpleModal,
+    InactiveModal, SimpleModal, NoItemText, Loader,
 } from "@eachbase/components";
-import {clientActions} from "@eachbase/store";
+import {clientActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 
 import {
     ClientGeneral,
@@ -21,7 +21,8 @@ import {
 import {useDispatch, useSelector} from "react-redux";
 import {AddContact} from "../clientModals";
 import {clientItemStyles} from "./styles";
-import {getClientsNotes} from "../../../store/client/client.action";
+import {noteActions} from "../../../store/notes";
+
 
 
 export const ClientItem = () => {
@@ -34,24 +35,48 @@ export const ClientItem = () => {
     const [authActive, setAuthActive] = useState(false)
     const params = useParams()
     const classes = clientItemStyles()
+
+
+
+    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnError: state.httpOnError,
+        httpOnLoad: state.httpOnLoad,
+    }));
+    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'GET_CLIENT_BY_ID'
+
+
+
+
+
+
     useEffect(() => {
         dispatch(clientActions.getClientsById(params.id))
         dispatch(clientActions.getClientsContacts(params.id))
         dispatch(clientActions.getClientsEnrollment(params.id))
         dispatch(clientActions.getClientsAuthorizations(params.id))
         dispatch(clientActions.getClientHistories(params.id, 'Client'))
-        dispatch(clientActions.getClientsNotes(params.id, 'Client'))
+        dispatch(noteActions.getGlobalNotes(params.id,'Client'))
+
     }, []);
+
+    useEffect(() => {
+        dispatch(httpRequestsOnSuccessActions.removeSuccess("GET_CLIENT_BY_ID"))
+    }, [success]);
+
 
     const data = useSelector(state => state.client.clientItemInfo)
     const authItemData = useSelector(state => state.client.clientsAuthorizations[authItemIndex])
-
     const clientContactItem = useSelector(state => state.client.clientContacts[contactId])
     const clientContact = useSelector(state => state.client.clientContacts)
     const enrolments = useSelector(state => state.client.clientEnrollment)
     const clientsAuthorizations = useSelector(state => state.client.clientsAuthorizations)
     const clientsHistories = useSelector(state => state.client.clientHistories)
-    const clientsNotes = useSelector(state => state.client.clientsNotes)
+    const clientsNotes = useSelector(state => state.note.notes)
+
+
+    console.log(clientsNotes,'rrrr')
+
     const handleOpenClose = () => {
         setOpen(!open)
     }
@@ -84,31 +109,41 @@ export const ClientItem = () => {
 
     ]
 
+
+
+
     const tabsContent = [
         {
-            tabComponent: (<ClientGeneral data={data}/>)
+            tabComponent: (httpOnLoad.length > 0 ? <Loader/> : <ClientGeneral data={data}/>)
         },
         {
-            tabComponent: (<ClientContact info={clientContact} data={data} handleOpenClose={handleOpenCloseModal}
-                                          setContactId={setContactId}/>)
+            tabComponent: (clientContact.length ?
+                <ClientContact info={clientContact}
+                               data={data}
+                               handleOpenClose={handleOpenCloseModal}
+                               setContactId={setContactId}/> : <NoItemText text={'No Contacts Yet'}/>)
         },
         {
-            tabComponent: (<ClientEnrollment info={enrolments} data={data}/>)
+            tabComponent: (enrolments.length ? <ClientEnrollment info={enrolments} data={data}/> :
+                <NoItemText text={'No Enrolments Yet'}/>)
         },
         {
-            tabComponent: (!authActive ?
-                <ClientAuthorization info={clientsAuthorizations} setAuthItemIndex={setAuthItemIndex}
-                                     setAuthActive={setAuthActive} data={data}/> :
-                <ClientAuthorizationItem data={authItemData}/>)
+            tabComponent: (clientsAuthorizations.length ? !authActive ?
+                <ClientAuthorization info={clientsAuthorizations}
+                                     setAuthItemIndex={setAuthItemIndex}
+                                     setAuthActive={setAuthActive}
+                                     data={data}/> :
+                <ClientAuthorizationItem data={authItemData}/> : <NoItemText text={'No AuthorizationItem Yet'}/>)
         },
         {
             tabComponent: (<ClientAvailabilitySchedule/>)
         },
         {
-            tabComponent: (<ClientNotes info={clientsNotes} />)
+            tabComponent: ( <ClientNotes data={clientsNotes} /> )
         },
         {
-            tabComponent: (<ClientHistory  info={clientsHistories} />)
+            tabComponent: (clientsHistories.length ? <ClientHistory info={clientsHistories}/> :
+                <NoItemText text={'No Histories  Yet'}/>)
         },
     ];
 

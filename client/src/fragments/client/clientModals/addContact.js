@@ -1,15 +1,18 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {ValidationInput, CreateChancel, ModalHeader, AddressInput} from "@eachbase/components";
 import {createClientStyle} from "./styles";
 import {ErrorText} from "@eachbase/utils";
-import {useDispatch,} from "react-redux";
-import {clientActions} from "@eachbase/store";
+import {useDispatch, useSelector,} from "react-redux";
+import {clientActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 
 
 export const AddContact = ({handleClose, info}) => {
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info, phoneNumber : info.phoneNumber ? info.phoneNumber.substring(1) : '' } : {});
+    const [inputs, setInputs] = useState(info ? {
+        ...info,
+        phoneNumber: info.phoneNumber ? info.phoneNumber.substring(1) : ''
+    } : {});
     const [step, setStep] = useState('first')
     const [fullAddress, setFullAddress] = useState(null)
     const classes = createClientStyle()
@@ -21,6 +24,32 @@ export const AddContact = ({handleClose, info}) => {
         prevState => ({...prevState, [e.target.name]: e.target.value}),
         error === e.target.name && setError(''),
     );
+
+
+    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnError: state.httpOnError,
+        httpOnLoad: state.httpOnLoad,
+    }));
+
+
+    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_CONTACT'
+    const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_CLIENT_CONTACT'
+
+    console.log(httpOnError, 111111111, 11, 'aaaaaaaaaaaa')
+
+    useEffect(() => {
+        if (success) {
+            handleClose()
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('EDIT_CLIENT_CONTACT'))
+            dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_CONTACTS'))
+        }
+        if (successCreate) {
+            handleClose()
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_CLIENT_CONTACT'))
+            dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_CONTACTS'))
+        }
+    }, [success, successCreate])
 
 
     const handleCreate = () => {
@@ -43,15 +72,15 @@ export const AddContact = ({handleClose, info}) => {
                     "lastName": inputs.lastName,
                     "phoneNumber": `+${inputs.phoneNumber}`,
                     "relationship": inputs.relationship,
-                    address : fullAddress
+                    address: fullAddress
                 }
-              if (!info){
-                   dispatch(clientActions.createClientContact(data, params.id))
-                   handleClose()
-              }else if (info) {
-                  dispatch(clientActions.editClientContact(data, info.id, params.id))
-                  handleClose()
-              }
+                if (!info) {
+                    dispatch(clientActions.createClientContact(data, params.id))
+
+                } else if (info) {
+                    dispatch(clientActions.editClientContact(data, info.id, params.id))
+
+                }
             } else {
                 setError(
                     !inputs.gender ? 'gender' :
@@ -66,13 +95,12 @@ export const AddContact = ({handleClose, info}) => {
     }
 
 
-
-
     return (
         <div className={classes.createFoundingSource}>
-            <ModalHeader secondStepInfo={'Address'} setStep={setStep} steps={step} handleClose={handleClose} title={info ? 'Edit Contact' : 'Add Contact'}/>
+            <ModalHeader secondStepInfo={'Address'} setStep={setStep} steps={step} handleClose={handleClose}
+                         title={info ? 'Edit Contact' : 'Add Contact'}/>
             <div className={classes.createFoundingSourceBody}>
-                <div className={classes.clientModalBlock} >
+                <div className={classes.clientModalBlock}>
                     {step === 'first' ? <div className={classes.clientModalBox}>
                             <ValidationInput
                                 variant={"outlined"}
@@ -119,8 +147,9 @@ export const AddContact = ({handleClose, info}) => {
                             />
                         </div>}
                 </div>
-                <div className={classes.clientModalBlock} >
+                <div className={classes.clientModalBlock}>
                     <CreateChancel
+                        loader={httpOnLoad.length > 0}
                         create={step === 'first' ? 'Next' : info ? 'Save' : "Add"}
                         chancel={"Cancel"}
                         onCreate={handleCreate}

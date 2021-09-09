@@ -1,8 +1,8 @@
 import {editButtonStyle, serviceSingleStyles, inputStyle} from "./styles";
 import {Images} from "@eachbase/utils";
-import {AddButton, AddModalButton, SelectInput, SimpleModal,} from "@eachbase/components";
+import {AddButton, AddModalButton, SelectInput, SimpleModal,AddNotes} from "@eachbase/components";
 import React, {useEffect, useState} from "react";
-import {AddContact, AddEnrollment, CreateClient,AddAuthorization,AddNotes} from "@eachbase/fragments/client";
+import {AddContact, AddEnrollment, CreateClient,AddAuthorization} from "@eachbase/fragments/client";
 import {useDispatch,} from "react-redux";
 
 import {useParams} from "react-router-dom";
@@ -108,7 +108,7 @@ export const TabsHeader = ({activeTab, data, authActive}) => {
                                 activeTab === 4 ?
                                     <p>add availab</p> :
                                     activeTab === 5 ?
-                                       <AddNotes handleClose={handleOpenClose} /> : null
+                                        <AddNotes model='Client'  handleClose={handleOpenClose}/>: null
                 }
             />
         </div>

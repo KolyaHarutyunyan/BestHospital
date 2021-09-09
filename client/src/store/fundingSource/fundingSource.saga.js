@@ -55,7 +55,7 @@ function* createFundingSource(action) {
 
 function* editFundingSource(action) {
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
-    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    // yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.editFundingSourceService, action.payload.id, action.payload.body);
 
@@ -218,9 +218,10 @@ function* getFundingSourceServicesModifier(action) {
             type: GET_FUNDING_SOURCE_SERVICE_MODIFIERS_ERR,
             payload: error,
         });
-        console.log(error, 'get modifier')
+        console.log(error.data.message, 'get modifier')
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.removeError(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
     }
 }
 

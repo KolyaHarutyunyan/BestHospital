@@ -4,5 +4,6 @@ export interface ICredential extends Document {
     _id: string;
     staffId: string,
     credentialId: string,
-    expirationDate: Date
+    expirationDate: Date,
+    receiveData: string
 }

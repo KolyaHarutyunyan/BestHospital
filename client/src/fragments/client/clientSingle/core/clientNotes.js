@@ -1,24 +1,36 @@
-import React, {useState} from "react";
-import {DeleteElement, Notes, SimpleModal, TableBodyComponent} from "@eachbase/components";
+import React, {useEffect, useState} from "react";
+import {DeleteElement, NoItemText, Notes, SimpleModal, TableBodyComponent} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
-import {serviceSingleStyles} from "./styles";
 import {TableCell} from "@material-ui/core";
-import moment from "moment"
-import {clientActions} from "@eachbase/store";
-import {useDispatch} from "react-redux";
+import moment from "moment";
+import {fundingSourceActions, httpRequestsOnSuccessActions} from "@eachbase/store";
+import {useDispatch, useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
-import {FundingSourceNotesAdd} from "../../../fundingSource/fundingSourceSingle/core/modals";
-import {AddNotes} from "../../clientModals";
-// import {AddNotes} from "../../clientModals";
+import {noteActions} from "@eachbase/store/notes";
 
 
-export const ClientNotes = ({ info}) => {
+export const ClientNotes = ({globalNotes, data}) => {
     const params = useParams()
     const [toggleModal, setToggleModal] = useState(false)
     const [index, setIndex] = useState(null)
     const [delEdit, setDelEdit] = useState(null)
     const dispatch = useDispatch()
-    const classes = serviceSingleStyles()
+    const [noteModalInfo, setNoteModalInfo] = useState({
+        right: '-1000px',
+        created: '',
+        subject: '',
+    })
+    const [noteModalData, setNoteModalData] = useState({})
+    const [openDelModal,setOpenDelModal] = useState(false)
+    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnError: state.httpOnError,
+        httpOnLoad: state.httpOnLoad,
+    }));
+
+
+    // const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_FUNDING_SOURCE_NOTE'
+
 
     const headerTitles = [
         {
@@ -38,57 +50,106 @@ export const ClientNotes = ({ info}) => {
             sortable: false
         },
     ];
+
+
+    // useEffect(() => {
+    //     if (success) {
+    //         setToggleModal(!toggleModal)
+    //         dispatch(httpRequestsOnSuccessActions.removeSuccess('DELETE_FUNDING_SOURCE_NOTE'))
+    //     }
+    //
+    // }, [success])
+
     let notesItem = (item, index) => {
         return (
-            <TableBodyComponent key={index} >
-                <TableCell> {moment(item?.created).format('DD/MM/YYYY')}</TableCell>
-                <TableCell><p className={classes.tableTitle}>{item?.user?.firstName ? item.user.firstName :  item?.user ? item.user : ''}</p>  </TableCell>
-                <TableCell><p className={classes.tableTitle}>{item?.text}</p></TableCell>
+            <TableBodyComponent key={index} handleClick={()=> openNoteModal({
+                created:item?.created,
+                subject: item?.subject,
+                id: item.id
+            })}>
+                <TableCell>{moment(item?.created).format('DD/MM/YYYY')}</TableCell>
+                <TableCell>{`${item?.user?.firstName} ${item?.user?.lastName}`}</TableCell>
+                <TableCell>{item?.subject}</TableCell>
                 <TableCell>
-                    <>
-                        <img src={Images.edit} alt="edit" className={classes.iconCursor}
-                             onClick={(e) => {
-                                 e.stopPropagation()
-                                 setIndex(index)
-                                 setDelEdit('edit')
-                                 setToggleModal(!toggleModal)
-                             }}/>
-                        <img src={Images.remove} alt="delete" className={classes.iconCursordelete}
-                             onClick={(e) => {
-                                 e.stopPropagation()
-                                 setIndex(index)
-                                 setDelEdit('del')
-                                 setToggleModal(!toggleModal)
-                             }}/>
-                    </>
+                    <img src={Images.remove} alt="delete" style={{cursor: 'pointer'}} onClick={(e) => {
+                        e.stopPropagation();
+                        handleOpenCloseDel({id: item.id,deletedName: item.subject})
+                    }} />
                 </TableCell>
             </TableBodyComponent>
         )
     }
 
-    let deleteNote = () => {
-        dispatch(clientActions.deleteClientNote(params.id, info[index].id))
-        setToggleModal(false)
-        setIndex(null)
+    const handleOpenCloseDel = (data)=>{
+        setNoteModalData(data)
+        setOpenDelModal(!openDelModal)
     }
 
+    let deleteNote = () => {
+        dispatch(fundingSourceActions.deleteFoundingSourceNote(params.id, data[index].id))
+    }
 
+    const openNoteModal = (data) =>{
+        setNoteModalInfo({
+            right: '1px',
+            created: data?.created,
+            subject: data?.subject,
+            id: data?.id
+        })
+    }
+
+    const closeNoteModal = () =>{
+        setNoteModalInfo({
+            right: '-1000px',
+            created: '',
+            subject: '',
+            id: ''
+        })
+    }
+    const handleDeleteNote = () =>{
+        dispatch(noteActions.deleteGlobalNote(noteModalData.id, params.id, 'Client'))
+        setOpenDelModal(false)
+        closeNoteModal()
+    }
     return (
         <>
+            {/*<SimpleModal*/}
+            {/*    openDefault={toggleModal}*/}
+            {/*    handleOpenClose={() => setToggleModal(!toggleModal)}*/}
+            {/*    content={delEdit === 'del' ?*/}
+            {/*        <DeleteElement*/}
+            {/*            loader={httpOnLoad.length > 0}*/}
+            {/*            handleDel={deleteNote}*/}
+            {/*            info={index !== null ? data[index].name : ''}*/}
+            {/*            text={'Delete Note'}*/}
+            {/*            handleClose={() => setToggleModal(!toggleModal)}/> :*/}
+            {/*        <FundingSourceNotesAdd*/}
+            {/*            info={data[index]}*/}
+            {/*            handleClose={() => setToggleModal(!toggleModal)}/>}*/}
+            {/*/>*/}
+            {/*<Notes */}
+            {/*    data={data} */}
+            {/*    items={notesItem} */}
+            {/*    headerTitles={headerTitles} */}
+            {/*    defaultStyle={true}*/}
+            {/*/>*/}
+            {
+                data ? <Notes
+                        model={'Client'}
+                        closeModal={closeNoteModal}
+                        noteModalInfo={noteModalInfo}
+                        showModal={true}
+                        pagination={true}
+                        data={data}
+                        items={notesItem}
+                        headerTitles={headerTitles}/> :
+                    <NoItemText text='No Notes Yet' />
+            }
             <SimpleModal
-                openDefault={toggleModal}
-                handleOpenClose={() => setToggleModal(!toggleModal)}
-                content={delEdit === 'del' ?
-                    <DeleteElement
-                        handleDel={deleteNote}
-                        info={index !== null ? info[index].name : ''}
-                        text={'Delete Note'}
-                        handleClose={() => setToggleModal(!toggleModal)}/> :
-                    <AddNotes
-                         info={info[index]}
-                        handleClose={() => setToggleModal(!toggleModal)} />}
+                openDefault={openDelModal}
+                handleOpenClose={handleOpenCloseDel}
+                content={<DeleteElement text='some information' info={noteModalData?.deletedName} handleDel={handleDeleteNote} handleClose={handleOpenCloseDel}/>}
             />
-            <Notes data={info} items={notesItem} headerTitles={headerTitles} defaultStyle={true}/>
         </>
 
     )

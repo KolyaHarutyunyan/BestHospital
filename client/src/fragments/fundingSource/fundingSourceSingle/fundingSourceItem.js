@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {SimpleTabs, Notes, TableWrapperGeneralInfo, InactiveModal, Loader} from "@eachbase/components";
-import {adminActions, fundingSourceActions, systemActions} from "@eachbase/store";
+import {SimpleTabs, Notes, TableWrapperGeneralInfo, InactiveModal, Loader, NoItemText} from "@eachbase/components";
+import {adminActions, fundingSourceActions, httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
 import {useDispatch, useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
 import {
@@ -11,6 +11,7 @@ import {
     FundingSourceSingleHistories
 } from "./core";
 import {fundingSourceItemStyle} from "./styles";
+import {noteActions} from "../../../store/notes";
 
 
 export const FundingSourceItem = ({}) => {
@@ -20,7 +21,7 @@ export const FundingSourceItem = ({}) => {
     const data = useSelector(state => state.fundingSource.fundingSourceItem)
     const servicesData = useSelector(state => state.fundingSource.fundingSourceServices)
     const historiesData = useSelector(state => state.fundingSource.fundingSourceHistories)
-    const notesData = useSelector(state => state.fundingSource.fundingSourceNotes)
+    const globalNotes = useSelector(state => state.note.notes)
     const globalServices = useSelector(state => state.system.services)
     const [activeTab, setActiveTab] = useState(0)
     const classes = fundingSourceItemStyle()
@@ -32,9 +33,12 @@ export const FundingSourceItem = ({}) => {
         dispatch(fundingSourceActions.getFundingSourceById(params.id))
         dispatch(fundingSourceActions.getFoundingSourceServiceById(params.id))
         dispatch(fundingSourceActions.getFundingSourceHistoriesById(params.id,'Funder'))
-        dispatch(fundingSourceActions.getFundingSourceNotes(params.id,'Funder'))
+        dispatch(noteActions.getGlobalNotes(params.id,'Funder'))
         dispatch(systemActions.getServices())
         dispatch(systemActions.getCredentialGlobal())
+
+
+        dispatch(httpRequestsOnSuccessActions.removeSuccess())
     }, []);
 
     const handleOpenClose = () => {
@@ -58,9 +62,9 @@ export const FundingSourceItem = ({}) => {
 
     const tabsContent = [
         {tabComponent: httpOnLoad.length > 0 ? <Loader/> : <FundingSourceSingleGeneral data={data}/>},
-        {tabComponent: <FundingSourceSingleServices data={servicesData} globalServices={globalServices}/>},
-        {tabComponent: <FundingSourceSingleNotes data={notesData}/>},
-        {tabComponent: <FundingSourceSingleHistories data={historiesData}/>},
+        {tabComponent: servicesData.length?  <FundingSourceSingleServices data={servicesData} globalServices={globalServices}/> :  <NoItemText text='No Services Yet' />},
+        {tabComponent: <FundingSourceSingleNotes data={globalNotes}/>},
+        {tabComponent: historiesData.length ?   <FundingSourceSingleHistories data={historiesData}/> :  <NoItemText text='No Histories Yet' />},
     ];
 
     return (

@@ -21,6 +21,7 @@ export const CreateFundingSource = ({handleClose, info}) => {
     const errorText = httpOnError.length && httpOnError[0].error
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_FUNDING_SOURCE'
     const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_FUNDING_SOURCE'
+
     const handleCheck = (bool) => {
         if (bool === true) {
             setError("Not valid email");
@@ -50,6 +51,7 @@ export const CreateFundingSource = ({handleClose, info}) => {
         if (inputs.name && inputs.email && inputs.phoneNumber && inputs.type && inputs.contact && inputs.website) {
             if(info){
                 dispatch(fundingSourceActions.editFundingSource(info.id, data))
+                // handleClose()
             }else {
                 dispatch(fundingSourceActions.createFundingSource(data))
             }
@@ -78,10 +80,12 @@ export const CreateFundingSource = ({handleClose, info}) => {
 
 
 
+    console.log(httpOnSuccess.length && httpOnSuccess, 'typeeeeeee')
+
 
 useEffect(()=>{
     if (success){
-        handleClose()
+         handleClose()
         dispatch(httpRequestsOnSuccessActions.removeSuccess('EDIT_FUNDING_SOURCE'))
     }
     if (successCreate){

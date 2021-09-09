@@ -28,11 +28,13 @@ export class SCredentialService {
       let staffCredential = new this.model({
         staffId: dto.staffId,
         credentialId: dto.credentialId,
-        expirationDate: dto.expirationDate
+        expirationDate: dto.expirationDate,
+        receiveData: dto.receiveData
       });
 
-      await staffCredential.save();
-      return staffCredential;
+      var staffC = await staffCredential.save();
+      staffC = await staffC.populate('credentialId').execPopulate()
+      return staffC;
       // return this.sanitizer.sanitize(user);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Staff credential already exists');
@@ -45,6 +47,9 @@ export class SCredentialService {
     try {
       const credential = await this.model.findById({ _id });
       this.checkCredential(credential);
+      if(dto.receiveData){
+        credential.receiveData = dto.receiveData;
+      }
       if (dto.expirationDate) {
         credential.expirationDate = dto.expirationDate;
       }

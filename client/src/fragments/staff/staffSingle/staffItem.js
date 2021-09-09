@@ -182,15 +182,18 @@ export const StaffItem = () => {
         },
         {
             tabComponent: (globalNotes.length ? <Notes
-                        model='Staff'
-                        closeModal={closeNoteModal}
-                        noteModalInfo={noteModalInfo}
-                        showModal={true} pagination={true}
-                        data={globalNotes}
-                        items={notesItem}
-                        headerTitles={headerTitles}/>
-                    :
-                    <NoItemText text='No Items Yet'/>
+
+
+                    model='Staff'
+                closeModal={closeNoteModal}
+                noteModalInfo={noteModalInfo}
+                showModal={true}
+                pagination={true}
+                data={globalNotes}
+                items={notesItem}
+                headerTitles={headerTitles}/>
+                :
+                    <NoItemText text='No Items Yet' />
             )
         },
         {

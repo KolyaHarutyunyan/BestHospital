@@ -10,13 +10,8 @@ import { isValidObjectId, MongooseUtil, ParseObjectIdPipe } from '../util';
 import { AddressService } from '../address/address.service';
 import { FundingSanitizer } from './interceptor';
 import { FundingDTO, ServiceDTO, UpdateServiceDto, CreateServiceDTO, CreateModifierDto, CreateModifiersDTO, UpdateModifierDto, ModifyDTO } from './dto';
-import { HistoryDTO } from '../history/dto';
 import { AuthNService } from 'src/authN';
-import { IComment } from '../comment';
-import { IHistory } from '../history';
-
 import { ServiceService } from '../service';
-// import { CommentService } from '../comment';
 import { HistoryService, serviceLog } from '../history';
 import { CredentialService } from '../credential';
 import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
@@ -29,8 +24,6 @@ export class FundingService {
     // private readonly commentService: CommentService,
     private readonly historyService: HistoryService,
     private readonly credentialService: CredentialService,
-
-
     private readonly sanitizer: FundingSanitizer,
 
   ) {
@@ -101,6 +94,7 @@ export class FundingService {
       dto.modifiers.map(modifier => {
         modifier.serviceId = fundingService._id;
       })
+      //checkCredential
       const modifiers = await this.modifyModel.collection.insertMany(dto.modifiers);
       return modifiers.ops
     } catch (e) {
@@ -219,8 +213,9 @@ export class FundingService {
   async updateService(serviceId: string, dto: UpdateServiceDto): Promise<ServiceDTO> {
     try {
       const service = await this.serviceModel.findOne({ _id: serviceId });
+      this.checkFundingService(service)
       const funder = await this.model.findOne({ _id: service.funderId });
-      // this.checkService(service);
+      this.checkFunder(funder)
       if (dto.name) service.name = dto.name;
       if (dto.rate) service.rate = dto.rate;
       if (dto.cptCode) service.cptCode = dto.cptCode;

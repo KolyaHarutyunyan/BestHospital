@@ -1,10 +1,10 @@
 import React, {useState} from "react";
-import {Card, DeleteElement, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
+import {Card, DeleteElement, NoItemText, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
 import {serviceSingleStyles} from './styles';
 import {Colors, Images} from "@eachbase/utils";
 import {TableCell} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
-import {clientActions} from "@eachbase/store";
+import {clientActions, httpRequestsOnErrorsActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 
 export const ClientContact = ({data, setContactId, handleOpenClose, info}) => {
@@ -13,6 +13,17 @@ export const ClientContact = ({data, setContactId, handleOpenClose, info}) => {
     const [openClose, setOpenClose] = useState(false)
     const [index, setIndex] = useState(null)
     const params = useParams()
+
+    const { httpOnSuccess, httpOnError,httpOnLoad } = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnError: state.httpOnError,
+        httpOnLoad: state.httpOnLoad,
+    }));
+
+    // Client contact with this id was not found
+
+    const errorText = httpOnError.length && httpOnError[0].error
+    console.log(httpOnError,'ers')
 
 
     const generalInfo = [
@@ -56,6 +67,7 @@ export const ClientContact = ({data, setContactId, handleOpenClose, info}) => {
 
     let deleteContact = () => {
         dispatch(clientActions.deleteClientContact(info[index].id, params.id))
+        dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_CONTACTS'))
         setIndex(null)
         setOpenClose(!openClose)
     }
@@ -90,6 +102,7 @@ export const ClientContact = ({data, setContactId, handleOpenClose, info}) => {
             <SimpleModal
                 content={
                     <DeleteElement
+                        loader={httpOnLoad.length > 0}
                         handleDel={deleteContact}
                         text={'Delete Contact'}
                         info={index !== null && info[index].firstName}
@@ -106,11 +119,11 @@ export const ClientContact = ({data, setContactId, handleOpenClose, info}) => {
             />
             <div className={classes.clearBoth}/>
             <div className={classes.notesWrap}>
-                <Notes
+                {errorText !== 'Client contact with this id was not found' ?  <Notes
                     data={info}
                     items={clientContactItem}
                     headerTitles={headerTitles}
-                    defaultStyle={true}/>
+                    defaultStyle={true}/> : <NoItemText text={'No Contacts Yet'} />}
             </div>
 
         </div>
