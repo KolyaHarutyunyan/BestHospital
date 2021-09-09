@@ -5,7 +5,7 @@ const StaffCredentialSchema = new Schema({
     staffId: { type: Types.ObjectId, ref: 'Staff' },
     credentialId: { type: Types.ObjectId, ref: 'Credential' },
     expirationDate: { type: Date, default: null },
-    receiveDate: { type: String }
+    receiveData: { type: String }
 });
 
 export const StaffCredentialModel = model<ICredential>('StaffCredential', StaffCredentialSchema);
