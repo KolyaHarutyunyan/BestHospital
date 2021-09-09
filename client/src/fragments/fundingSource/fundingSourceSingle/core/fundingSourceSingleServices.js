@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {TableCell} from "@material-ui/core";
 import {fundingSourceSingleStyles} from "./styles";
 import {FundingSourceServiceAdd,} from "./modals";
-import {fundingSourceActions, httpRequestsOnSuccessActions} from "../../../../store";
+import {fundingSourceActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 
 export const FundingSourceSingleServices = ({data,}) => {
 
@@ -15,7 +15,7 @@ export const FundingSourceSingleServices = ({data,}) => {
     const [index, setIndex] = useState(null)
     const [delEdit, setDelEdit] = useState(null)
     const [serviceIndex, setServiceIndex] = useState(0)
-    const [accept, setAcept] = useState(false)
+    const [accept, setAccept] = useState(false)
     const classes = fundingSourceSingleStyles()
     const dispatch = useDispatch()
     const modifiers = useSelector(state => state.fundingSource.modifiers)
@@ -30,20 +30,23 @@ export const FundingSourceSingleServices = ({data,}) => {
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'GET_FUNDING_SOURCE_SERVICE_MODIFIERS'
 
 
-    useEffect(() => {
-        if (success) {
-            // handleClose()
-            dispatch(httpRequestsOnSuccessActions.removeSuccess('GET_FUNDING_SOURCE_SERVICE_MODIFIERS'))
-        }
 
+
+    useEffect(() => {
+        if (success ) {
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('GET_FUNDING_SOURCE_SERVICE_MODIFIERS'))
+            if (accept){
+                setToggleModal(!toggleModal)
+                setAccept(false)
+            }
+        }
     }, [success])
 
 
-    useEffect(() => {
-        dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(data[serviceIndex]._id))
-    }, [serviceIndex])
 
-    console.log(success, 'succes mods')
+
+
+
 
 
     const headerTitles = [
@@ -74,10 +77,37 @@ export const FundingSourceSingleServices = ({data,}) => {
     ];
 
 
+    let onEdit = (index) =>{
+        setIndex(index)
+        setDelEdit('edit')
+        setAccept(true)
+        dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(data[serviceIndex]._id))
+    }
+
+
+
+
+    let onRow = (id,index)=>{
+        setServiceIndex(index)
+        dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(id))
+    }
+
+    useEffect(() => {
+        if (data){
+            dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(data[serviceIndex]._id))
+        }
+    }, [])
+
+
+    let deleteService = ()=>{
+        alert('wait Edgar')
+        dispatch(fundingSourceActions.deleteFoundingSourceServiceById(data[serviceIndex]._id))
+    }
+
+
     let serviceItem = (item, index) => {
         return (
-            <TableBodyComponent key={index} handleClick={() => setServiceIndex(index)}>
-
+            <TableBodyComponent active={index===serviceIndex} key={index} handleClick={() => onRow(item._id, index )}>
 
                 <TableCell><p className={classes.tableTitle}>{item.name}</p></TableCell>
                 <TableCell>  {item.cptCode}  </TableCell>
@@ -86,13 +116,12 @@ export const FundingSourceSingleServices = ({data,}) => {
                 <TableCell>  {item.max}  </TableCell>
                 <TableCell>
                     <>
-                        {!httpOnLoad.length > 0 ?
+                        {/*{!httpOnLoad.length > 0 ?*/}
                             <img src={Images.edit} alt="edit" className={classes.iconCursor}
-                                 onClick={(e) => {
-                                     setIndex(index)
-                                     setDelEdit('edit')
-                                     setToggleModal(!toggleModal)
-                                 }}/> : <MinLoader margin={'0'} color={Colors.TextPrimary}/>}
+                                 onClick={()=>onEdit(index)}/>
+                            {/*:*/}
+                            {/*<MinLoader margin={'0'} color={Colors.TextPrimary}/>*/}
+
                         <img src={Images.remove} alt="delete" className={classes.iconCursordelete}
                              onClick={(e) => {
                                  e.stopPropagation()
@@ -107,6 +136,7 @@ export const FundingSourceSingleServices = ({data,}) => {
     }
 
 
+
     return (
         <div style={{display: 'flex', justifyContent: "space-between", marginTop: 50}}>
             <SimpleModal
@@ -114,10 +144,11 @@ export const FundingSourceSingleServices = ({data,}) => {
                 handleOpenClose={() => setToggleModal(!toggleModal)}
                 content={delEdit === 'del' ?
                     <DeleteElement
-                        info={index !== null ? data[index].name : ''}
+                        handleDel={deleteService}
+                        info={ index !== null ? data[index].name : ''}
                         text={'Delete Service'}
                         handleClose={() => setToggleModal(!toggleModal)}/> :
-                    <FundingSourceServiceAdd modifiersID={modifiers} info={data[index]}
+                    <FundingSourceServiceAdd modifiersID={modifiers} info={data ?  data[index] : {}}
                                              handleClose={() => setToggleModal(!toggleModal)}/>}
             />
             <div style={{marginTop: -32, width: '100%'}}>

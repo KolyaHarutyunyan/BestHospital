@@ -77,6 +77,8 @@ export const CreateFundingSource = ({handleClose, info}) => {
     }
 
 
+
+
 useEffect(()=>{
     if (success){
         handleClose()
@@ -87,6 +89,7 @@ useEffect(()=>{
         dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_FUNDING_SOURCE'))
     }
 },[success,successCreate])
+
 
 
     return (
@@ -111,8 +114,7 @@ useEffect(()=>{
                             name={"email"}
                             type={"email"}
                             label={"Email Address*"}
-                            typeError={error === 'email' ? ErrorText.field : error === 'Not valid email' ? 'Not valid email' :
-                                errorText ? errorText : ''}
+                            typeError={error === 'email' ? ErrorText.field : error === 'Not valid email' ? 'Not valid email ' : ''}
                             sendBoolean={handleCheck}
                             value={inputs.email}
                             onChange={handleChange}
@@ -125,8 +127,10 @@ useEffect(()=>{
                             type={"number"}
                             label={"Phone Number*"}
                             name={'phoneNumber'}
-                            typeError={error === 'phoneNumber' && ErrorText.field}
+                            typeError={error === 'phoneNumber' ? ErrorText.field : errorText[0] === 'phoneNumber must be a valid phone number' ? 'phoneNumber must be a valid phone number' : ""}
                         />
+
+
                         <SelectInput
                             name={"type"}
                             label={"Type*"}

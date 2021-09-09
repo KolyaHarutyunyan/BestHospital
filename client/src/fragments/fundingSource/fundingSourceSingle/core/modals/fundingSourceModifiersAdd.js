@@ -15,7 +15,7 @@ export const FundingSourceModifiersAdd = ({setPostModifiers, globalCredentials,m
     const [btnStyle, setBtnStyle] = useState(false)
 
 
-    console.log(modifiersServ,'modders')
+
 
     const classes = foundingSourceModalStyle()
 
