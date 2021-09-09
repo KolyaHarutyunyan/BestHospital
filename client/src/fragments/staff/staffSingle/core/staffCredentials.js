@@ -5,11 +5,13 @@ import {Images} from "@eachbase/utils";
 import moment from 'moment';
 import {useDispatch} from "react-redux";
 import {adminActions} from "@eachbase/store";
+import {useParams} from "react-router-dom";
 
 export const StaffCredentials = ({credentialData, openModal}) => {
     const [open, setOpen] = useState(false)
     const [deletedId, setDeletedId] = useState('')
     const dispatch = useDispatch()
+    const params = useParams()
 
     const handleClose = () => {
         setOpen(false)
@@ -20,7 +22,7 @@ export const StaffCredentials = ({credentialData, openModal}) => {
     }
 
     const removeCredential = () => {
-        dispatch(adminActions.deleteCredentialById(deletedId))
+        dispatch(adminActions.deleteCredentialById(deletedId,params.id))
         handleClose()
     }
 
@@ -39,7 +41,7 @@ export const StaffCredentials = ({credentialData, openModal}) => {
             <TableBodyComponent key={index} handleClick={() => editCredential('credentialPreview')}>
                 <TableCell>{item?.credentialId?.name}</TableCell>
                 <TableCell>{convertType(item?.credentialId?.type)}</TableCell>
-                <TableCell>{item?.receivedDate}</TableCell>
+                <TableCell>{item?.receiveData && moment(item.receiveData).format('L')}</TableCell>
                 <TableCell>{item.expirationDate && moment(item.expirationDate).format('L')}</TableCell>
                 <TableCell>{
                     <>
@@ -53,7 +55,6 @@ export const StaffCredentials = ({credentialData, openModal}) => {
                                     credId: item.credentialId?._id,
                                     type: item.credentialId?.name,
                                     expirationDate: item.expirationDate
-
                                 })
                             }
                             } alt="edit"/>

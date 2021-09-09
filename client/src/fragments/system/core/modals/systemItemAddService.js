@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {modalsStyle,} from "@eachbase/components/modal/styles";
-import {useGlobalTextStyles} from "@eachbase/utils";
+import {ErrorText, useGlobalTextStyles} from "@eachbase/utils";
 import {CloseButton, CreateChancel} from "@eachbase/components/buttons";
 import {SelectInput, ValidationInput} from "@eachbase/components/inputs";
-import {clientActions, httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
+import {httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
 import {useDispatch, useSelector} from "react-redux";
 
 const inputSpacing = {
@@ -69,31 +69,44 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
             case 'editService':
                 if (inputs.name && inputs.displayCode && inputs.category) {
                     dispatch(systemActions.editServiceByIdGlobal(serviceData, mInformation.id))
-                    // handleClose()
                 } else {
-                    alert('error')
+                    setError(
+                        !inputs.name ? 'name' :
+                            !inputs.displayCode ? 'displayCode' :
+                                !inputs.category ? 'category' :
+                                    'Input is not filled'
+                    )
                 }
                 break;
             case 'editCredential':
                 if (inputs.credentialType && inputs.credentialName) {
                     dispatch(systemActions.editCredentialByIdGlobal(credentialData, mInformation.credentialId))
-                    // handleClose()
                 } else {
-                    alert('error')
+                    setError(
+                        !inputs.credentialType ? 'credentialType' :
+                            !inputs.credentialName ? 'credentialName' :
+                                    'Input is not filled'
+                    )
                 }
                 break;
             case 'editJobTitles':
                 if (inputs.jobTitle) {
                     dispatch(systemActions.editJobByIdGlobal(jobData, mInformation.jobId))
-                    // handleClose()
                 } else {
-                    alert('error')
+                    setError(
+                        !inputs.jobTitle ? 'jobTitle' :
+                                'Input is not filled'
+                    )
                 }
                 break;
             default:
                 if (inputs.departmentName) {
                     dispatch(systemActions.editDepartmentByIdGlobal(departmentData, mInformation.departmentID))
-                    // handleClose()
+                }else {
+                    setError(
+                        !inputs.departmentName ? 'departmentName' :
+                            'Input is not filled'
+                    )
                 }
         }
     }
@@ -153,6 +166,7 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
                             label={"Service Type*"}
                             name='name'
                             value={inputs.name}
+                            typeError={error === 'name' && ErrorText.field}
                         />
                         <ValidationInput
                             styles={inputSpacing}
@@ -162,6 +176,7 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
                             label={"Display Name*"}
                             name='displayCode'
                             value={inputs.displayCode}
+                            typeError={error === 'displayCode' && ErrorText.field}
                         />
                         <ValidationInput
                             styles={inputSpacing}
@@ -171,6 +186,7 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
                             label={"category"}
                             name='category'
                             value={inputs.category}
+                            typeError={error === 'category' && ErrorText.field}
                         />
                     </> : mType === 'editCredential' ?
                         <>
@@ -182,6 +198,7 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
                                 label={"Credential Name*"}
                                 name='credentialName'
                                 value={inputs.credentialName}
+                                typeError={error === 'credentialName' && ErrorText.field}
                             />
                             <SelectInput
                                 style={classes.credentialInputStyle}
@@ -190,6 +207,7 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
                                 list={credentialsList}
                                 handleSelect={handleChange}
                                 value={inputs.credentialType}
+                                typeError={error === 'credentialType' && ErrorText.field}
                             />
                         </> : mType === 'editDepartment' ?
                             <ValidationInput
@@ -199,6 +217,7 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
                                 type={"text"}
                                 name='departmentName'
                                 value={inputs.departmentName}
+                                typeError={error === 'departmentName' && ErrorText.field}
                             /> :
                             <ValidationInput
                                 styles={inputSpacing}
@@ -208,15 +227,13 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
                                 label={"Job Title*"}
                                 name='jobTitle'
                                 value={inputs.jobTitle}
+                                typeError={error === 'jobTitle' && ErrorText.field}
                             />
 
             }
             <>
                 <CreateChancel
-                    loader={
-                        loader
-
-                    }
+                    loader={loader}
                     buttonWidth='192px'
                     create='Save'
                     chancel="Cancel"
@@ -224,7 +241,6 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
                     onCreate={handleSubmit}
                 />
             </>
-
         </div>
     );
 }

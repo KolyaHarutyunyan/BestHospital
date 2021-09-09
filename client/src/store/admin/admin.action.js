@@ -51,16 +51,16 @@ export const getCredential = (credentialId) => {
     }
 }
 
-export const editCredentialById = (body, id) => {
+export const editCredentialById = (body, id, credentialId) => {
     return {
         type: EDIT_CREDENTIAL_BY_ID,
-        payload: {body, id}
+        payload: {body, id,credentialId}
     }
 }
-export const deleteCredentialById = (id) => {
+export const deleteCredentialById = (id,credentialId) => {
 
     return {
         type: DELETE_CREDENTIAL_BY_ID,
-        payload: {id}
+        payload: {id,credentialId}
     }
 }

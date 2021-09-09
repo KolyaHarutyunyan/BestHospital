@@ -26,7 +26,7 @@ export const Notes = ({
                           defaultStyle,
                           items,
                           noItemsYet,
-                            model
+                          model,
                       }) => {
 
     const officesStyle = makeStyles(({}) => ({
@@ -57,9 +57,9 @@ export const Notes = ({
     };
 
     const [open, setOpen] = useState(false);
-    const [openDelModal,setOpenDelModal] = useState(false)
+    const [openDelModal, setOpenDelModal] = useState(false)
     const [noteModalInfoEdit, setNoteModalInfoEdit] = useState({})
-    const [deletedData,setDeletedData] = useState('')
+    const [deletedData, setDeletedData] = useState('')
     const handleOpenClose = (data) => {
         setNoteModalInfoEdit(data)
         setOpen(!open)
@@ -69,7 +69,7 @@ export const Notes = ({
         setOpenDelModal(!openDelModal)
     }
 
-    const handleDelete = () =>{
+    const handleDelete = () => {
         dispatch(noteActions.deleteGlobalNote(deletedData.id, params.id, model))
         setOpenDelModal(false)
         closeModal()
@@ -130,7 +130,7 @@ export const Notes = ({
                                             subject: noteModalInfo.subject,
                                             id: noteModalInfo.id
                                         })} alt="edit"/>
-                                        <img src={Images.remove} alt="delete" onClick={()=> handleOpenCloseDel({
+                                        <img src={Images.remove} alt="delete" onClick={() => handleOpenCloseDel({
                                             id: noteModalInfo.id,
                                             deletedName: noteModalInfo.subject
                                         })}/>
@@ -152,12 +152,13 @@ export const Notes = ({
                         <SimpleModal
                             openDefault={open}
                             handleOpenClose={handleOpenClose}
-                            content={<AddNotes model={model} noteModalTypeInfo={noteModalInfoEdit} handleClose={handleOpenClose}/>}
-                        />
+                            content={<AddNotes model={model} noteModalTypeInfo={noteModalInfoEdit}
+                                               handleClose={handleOpenClose}/>}
                         <SimpleModal
                             openDefault={openDelModal}
                             handleOpenClose={handleOpenCloseDel}
-                            content={<DeleteElement text='some information' info={deletedData?.deletedName} handleDel={handleDelete} handleClose={handleOpenCloseDel}/>}
+                            content={<DeleteElement text='some information' info={deletedData?.deletedName}
+                                                    handleDel={handleDelete} handleClose={handleOpenCloseDel}/>}
                         />
                     </>
                 }

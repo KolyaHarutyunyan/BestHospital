@@ -74,7 +74,6 @@ export const SystemItemHeader = ({
                                                handleClose={handleOpenClose}/>}
             />
             <SimpleModal
-
                 openDefault={deleteModalOpened}
                 handleOpenClose={handleDeletedOpenClose}
                 content={<DeleteElement loader={loader} text='some information' info={deletedName}
