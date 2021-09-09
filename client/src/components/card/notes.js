@@ -26,6 +26,7 @@ export const Notes = ({
                           defaultStyle,
                           items,
                           noItemsYet,
+                            model
                       }) => {
 
     const officesStyle = makeStyles(({}) => ({
@@ -69,7 +70,7 @@ export const Notes = ({
     }
 
     const handleDelete = () =>{
-        dispatch(noteActions.deleteGlobalNote(deletedData.id, params.id, 'Staff'))
+        dispatch(noteActions.deleteGlobalNote(deletedData.id, params.id, model))
         setOpenDelModal(false)
         closeModal()
     }
@@ -94,7 +95,7 @@ export const Notes = ({
                         }
                     </TableHeadComponent>
                     {
-                        data && data.length ? data.map((item, index) => {
+                        data ? data.map((item, index) => {
 
                             return (
                                 <>
@@ -151,7 +152,7 @@ export const Notes = ({
                         <SimpleModal
                             openDefault={open}
                             handleOpenClose={handleOpenClose}
-                            content={<AddNotes model='Staff' noteModalTypeInfo={noteModalInfoEdit} handleClose={handleOpenClose}/>}
+                            content={<AddNotes model={model} noteModalTypeInfo={noteModalInfoEdit} handleClose={handleOpenClose}/>}
                         />
                         <SimpleModal
                             openDefault={openDelModal}

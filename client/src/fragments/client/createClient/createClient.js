@@ -10,6 +10,7 @@ import moment from "moment";
 
 
 export const CreateClient = ({handleClose, info}) => {
+
     let params = useParams()
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {...info,birthday : moment(info?.birthday).format('YYYY-MM-DD') } : {});
@@ -24,14 +25,13 @@ export const CreateClient = ({handleClose, info}) => {
     }));
 
      const success = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT'
-    const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_CLIENT'
+     const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_CLIENT'
 
     const handleChange = e => setInputs(
         prevState => ({...prevState, [e.target.name]: e.target.value}),
         error === e.target.name && setError(''),
     );
 
-    console.log(success,'suc for edit')
 
 
     useEffect(()=>{
