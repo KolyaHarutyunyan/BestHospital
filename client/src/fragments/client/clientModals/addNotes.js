@@ -10,7 +10,7 @@ import {modalsStyle} from "../../../components/modal/styles";
 
 export const AddNotes = ({handleClose, info}) => {
 
-    console.log(info,'info')
+
 
 
     const [error, setError] = useState("");

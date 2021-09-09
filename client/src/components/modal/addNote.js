@@ -6,25 +6,24 @@ import {useParams} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {noteActions} from "@eachbase/store/notes";
 
-export const StaffAddNotes = ({noteModalTypeInfo, handleClose }) => {
+
+export const AddNotes = ({model, noteModalTypeInfo, handleClose }) => {
     const dispatch = useDispatch()
     const classes = modalsStyle()
     const globalText = useGlobalTextStyles()
     const params = useParams()
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(noteModalTypeInfo ? noteModalTypeInfo : {});
+
     const handleChange = e => {
         setInputs(
             prevState => (
-                {
-                    ...prevState,
+                {...prevState,
                     [e.target.name]: e.target.value
                 }
             ));
         error === e.target.name && setError('')
     }
-
-
     const handleSubmit = () =>{
         let data = {
             text: inputs.text,
@@ -43,11 +42,10 @@ export const StaffAddNotes = ({noteModalTypeInfo, handleClose }) => {
             subject: inputs.subject,
         }
         if(inputs.subject){
-            dispatch(noteActions.editGlobalNote(params.id, noteModalTypeInfo.id, data, 'Staff'))
+            dispatch(noteActions.editGlobalNote(params.id, noteModalTypeInfo.id, data, model))
             handleClose()
         }
     }
-
     return (
         <div className={classes.inactiveModalBody}>
             <h1 className={`${globalText.modalTitle}`}>{noteModalTypeInfo?.modalType === 'editNote' ? 'Edit Note' : 'Add a New Note'}</h1>
@@ -59,7 +57,7 @@ export const StaffAddNotes = ({noteModalTypeInfo, handleClose }) => {
                 variant={"outlined"}
                 value={inputs.subject}
                 type={"text"}
-                label={"Subject*"}
+                placeholder={"Subject*"}
                 name='subject'
                 onChange={handleChange}
             />
@@ -74,7 +72,7 @@ export const StaffAddNotes = ({noteModalTypeInfo, handleClose }) => {
 
             {
                 noteModalTypeInfo?.modalType === 'editNote' ?  <AddModalButton handleClick={handleEdit} text='Edit'  /> :
-                <AddModalButton handleClick={handleSubmit} text='Add'  />
+                    <AddModalButton handleClick={handleSubmit} text='Add'  />
             }
         </div>
     );

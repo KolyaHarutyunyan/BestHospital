@@ -21,7 +21,10 @@ function* getGlobalNotes(action) {
 
 
     } catch (error) {
-        console.log(error)
+        yield put({
+            type: GET_GLOBAL_NOTES_SUCCESS,
+            payload: [],
+        });
     }
 }
 
@@ -70,7 +73,7 @@ function* deleteGlobalNote(action) {
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         yield put({
             type: GET_GLOBAL_NOTES,
-            payload:{id : action.payload.fId, onModal : 'Funder'}
+            payload:{id : action.payload.SId, onModel : action.payload.onModel}
         });
     } catch (error) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));

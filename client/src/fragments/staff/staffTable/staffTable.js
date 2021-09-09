@@ -3,9 +3,11 @@ import {Paper, Table, TableContainer} from "@material-ui/core";
 import {useGlobalStyles} from "@eachbase/utils";
 import {Loader, PaginationItem} from "@eachbase/components";
 import {StaffTableBody, StaffTableHead} from "./core";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {adminActions} from "@eachbase/store";
 
-export const StaffTable = ({}) => {
+export const StaffTable = ({status, handleGetPage}) => {
+    const dispatch = useDispatch()
     const globalStyle = useGlobalStyles();
     const [page, setPage] = useState(1);
     const { adminsList, httpOnLoad } = useSelector((state) => ({
@@ -14,12 +16,13 @@ export const StaffTable = ({}) => {
     }));
 
     const changePage = (number) => {
-        setPage(number);
+        setPage(number)
+        let start = number > 2 ?  number + '0' : 0
+        dispatch(adminActions.getAdmins({ status : status, start : start, end : 10 }))
+        handleGetPage(start)
     };
-
     return (
         <div className={globalStyle.tableWrapper}>
-
             {
                 httpOnLoad.length ?  <Loader/>  :
                 <TableContainer component={Paper}>
@@ -30,7 +33,7 @@ export const StaffTable = ({}) => {
                     >
                         <StaffTableHead/>
                         {
-                            adminsList.length && adminsList.map((item, i) => (
+                            adminsList?.staff && adminsList.staff.map((item, i) => (
                                 <StaffTableBody
                                     key={i}
                                     data={item}
@@ -39,10 +42,11 @@ export const StaffTable = ({}) => {
                             ))}
                     </Table>
                     <PaginationItem
-                        text={'Showing 30 to 30 of 500 entries'}
-                        handleReturn={(number) => changePage(number)}
+                        listLength={adminsList?.staff?.length}
                         page={page}
-                        count={adminsList.length}
+                        handleReturn={(number) => changePage(number)}
+                        count={adminsList?.count}
+                        entries={adminsList?.staff?.length}
                     />
                 </TableContainer>
             }

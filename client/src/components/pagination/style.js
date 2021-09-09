@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import {Backgrounds as Background, Colors} from "@eachbase/utils";
 
 export const paginationStyle = makeStyles ((theme) => ({
-  paginationWrapper: {
+  PaginationWrapper: {
     width: '100%',
     margin: '-7px 0 0 0 ',
     display:'flex',

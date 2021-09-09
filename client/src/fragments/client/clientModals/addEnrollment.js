@@ -9,7 +9,7 @@ import {useParams} from "react-router-dom";
 
 
 export const AddEnrollment = ({handleClose, info}) => {
-    console.log(info,'infsoo')
+
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {...info, funding: info.funderId.name} : {});
     const classes = createClientStyle()

@@ -3,7 +3,7 @@ import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbas
 import {createClientStyle,} from "./styles";
 import {ErrorText, languages} from "@eachbase/utils";
 import {useDispatch, useSelector} from "react-redux";
-import {clientActions} from "@eachbase/store";
+import {clientActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 import TextField from "@material-ui/core/TextField";
 import {useParams} from "react-router-dom";
 import moment from "moment";
@@ -17,10 +17,34 @@ export const CreateClient = ({handleClose, info}) => {
     const classes = createClientStyle()
     const dispatch = useDispatch()
 
+    const { httpOnSuccess, httpOnError,httpOnLoad } = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnError: state.httpOnError,
+        httpOnLoad: state.httpOnLoad,
+    }));
+
+     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT'
+    const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_CLIENT'
+
     const handleChange = e => setInputs(
         prevState => ({...prevState, [e.target.name]: e.target.value}),
         error === e.target.name && setError(''),
     );
+
+    console.log(success,'suc for edit')
+
+
+    useEffect(()=>{
+        if (success){
+            handleClose()
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('EDIT_CLIENT'))
+        }
+        if (successCreate){
+            handleClose()
+             dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_CLIENT'))
+        }
+    },[success,successCreate])
+
 
 
 
@@ -49,7 +73,7 @@ export const CreateClient = ({handleClose, info}) => {
                 )
             }
         } else if (step === 'second') {
-            if (inputs.gender && inputs.birthday && inputs.age && inputs.ethnicity && inputs.language && inputs.familyLanguage) {
+            if (inputs.gender && inputs.birthday  && inputs.ethnicity && inputs.language && inputs.familyLanguage) {
                 const data = {
                     "firstName": inputs.firstName,
                     "middleName": inputs.middleName,
@@ -72,7 +96,7 @@ export const CreateClient = ({handleClose, info}) => {
                 setError(
                     !inputs.gender ? 'gender' :
                         !inputs.birthday ? 'birthday' :
-                            !inputs.age ? 'age' :
+
                                 !inputs.language ? 'language' :
                                     !inputs.familyLanguage ? 'familyLanguage' :
                                         'Input is not field'
@@ -197,6 +221,7 @@ export const CreateClient = ({handleClose, info}) => {
 
 
                     <CreateChancel
+                        loader={ httpOnLoad.length > 0}
                         create={step === 'first' ? 'Next' : info ? "Save" : "Add"}
                         chancel={"Cancel"}
                         onCreate={handleCreate}

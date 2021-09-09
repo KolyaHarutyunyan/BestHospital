@@ -32,7 +32,7 @@ export {TableHeadComponent, TableBodyComponent} from "./table";
 export {
     TableWrapperGeneralInfo, TableWrapper, CreateWrapper, InfoWrapper, CreateWrapperHead, Management
 } from "./wrapper";
-export {SimpleModal, DeleteElement, InactiveModal} from './modal'
+export {SimpleModal, DeleteElement, InactiveModal, AddNotes} from './modal'
 export {SimpleToolTip} from './toolTip'
 export {CustomBreadcrumbs} from './breadcrumbs'
 export {PaginationItem} from './pagination'
