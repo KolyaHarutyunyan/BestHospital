@@ -6,10 +6,6 @@ import {SelectInput, ValidationInput} from "@eachbase/components/inputs";
 import {httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
 import {useDispatch, useSelector} from "react-redux";
 
-const inputSpacing = {
-    paddingBottom: 16,
-}
-
 const credentialsList = [
     {name: 'Degree'},
     {name: 'Clearance'},
@@ -159,7 +155,6 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
                 mType === 'editService' ?
                     <>
                         <ValidationInput
-                            styles={inputSpacing}
                             variant={"outlined"}
                             onChange={handleChange}
                             type={"text"}
@@ -169,7 +164,6 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
                             typeError={error === 'name' && ErrorText.field}
                         />
                         <ValidationInput
-                            styles={inputSpacing}
                             variant={"outlined"}
                             onChange={handleChange}
                             type={"text"}
@@ -179,7 +173,6 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
                             typeError={error === 'displayCode' && ErrorText.field}
                         />
                         <ValidationInput
-                            styles={inputSpacing}
                             variant={"outlined"}
                             onChange={handleChange}
                             type={"text"}
@@ -191,7 +184,6 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
                     </> : mType === 'editCredential' ?
                         <>
                             <ValidationInput
-                                styles={inputSpacing}
                                 variant={"outlined"}
                                 onChange={handleChange}
                                 type={"text"}
@@ -211,7 +203,6 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
                             />
                         </> : mType === 'editDepartment' ?
                             <ValidationInput
-                                styles={inputSpacing}
                                 variant={"outlined"}
                                 onChange={handleChange}
                                 type={"text"}
@@ -220,7 +211,6 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
                                 typeError={error === 'departmentName' && ErrorText.field}
                             /> :
                             <ValidationInput
-                                styles={inputSpacing}
                                 variant={"outlined"}
                                 onChange={handleChange}
                                 type={"text"}

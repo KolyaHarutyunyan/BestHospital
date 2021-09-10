@@ -16,8 +16,8 @@ export const StaffTable = ({status, handleGetPage}) => {
     }));
 
     const changePage = (number) => {
+        let start = number > 1 ? (number - 1) + '0' : 0;
         setPage(number)
-        let start = number > 2 ?  number + '0' : 0
         dispatch(adminActions.getAdmins({ status : status, start : start, end : 10 }))
         handleGetPage(start)
     };
@@ -25,7 +25,7 @@ export const StaffTable = ({status, handleGetPage}) => {
         <div className={globalStyle.tableWrapper}>
             {
                 httpOnLoad.length ?  <Loader/>  :
-                <TableContainer component={Paper}>
+                <TableContainer className={globalStyle.tableContainer} component={Paper}>
                     <Table
                         className={globalStyle.table}
                         size="small"

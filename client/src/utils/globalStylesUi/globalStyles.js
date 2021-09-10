@@ -6,7 +6,7 @@ export const useGlobalStyles = makeStyles({
         position: 'absolute',
         width: 395,
         top: '20px',
-        height: 'calc(100% - 94px)',
+        height: 'calc(100% - 380px)',
         background: 'white',
         padding: 16,
         boxShadow: Shadow.noteModalShadow,
@@ -76,6 +76,8 @@ export const useGlobalStyles = makeStyles({
         width: '100%',
     },
     tableWrapper: {
+        height: '100%',
+        minHeight: '80vh',
         background: 'none',
         width: '100%',
         borderRadius: '8px',
@@ -86,6 +88,15 @@ export const useGlobalStyles = makeStyles({
             background: 'none',
             position: 'relative',
             overflow: 'hidden'
+        },
+    },
+    tableContainer: {
+        display:'flex',
+        justifyContent:'space-between',
+        flexDirection:'column',
+        height:'80vh',
+        "@media (min-width: 1919px)": {
+            height:'83vh',
         },
     },
     table: {

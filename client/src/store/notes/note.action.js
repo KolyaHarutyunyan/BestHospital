@@ -9,7 +9,6 @@ export const getGlobalNotes = ( id,onModel) => {
 
 
 export const createGlobalNote = (body) => {
-
     return {
         type: CREATE_GLOBAL_NOTE,
         payload: {

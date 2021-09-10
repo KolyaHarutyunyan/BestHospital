@@ -200,10 +200,10 @@ export const inputsStyle = makeStyles(() => ({
   },
 
   errorText:{
-    color: '#F07379',
-    fontSize: '14px',
-    fontWeight: 600,
-    margin:'0px 0 16px'
+    color: '#F07379!important',
+    fontSize: '14px!important',
+    fontWeight: '600!important',
+    margin:'0px 0 16px!important'
   },
 
   inputShrink:{

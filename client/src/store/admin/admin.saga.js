@@ -14,7 +14,7 @@ import {
     GET_CREDENTIAL_SUCCESS,
     EDIT_CREDENTIAL_BY_ID,
     DELETE_CREDENTIAL_BY_ID,
-    CREATE_ADMIN_SUCCESS,
+    // CREATE_ADMIN_SUCCESS,
 
 } from "./admin.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
@@ -23,10 +23,10 @@ import {httpRequestsOnSuccessActions} from "../http_requests_on_success";
 
 function* createAdmin(action) {
     try {
-        const res = yield call(authService.createAdminService, action.payload.body);
+        yield call(authService.createAdminService, action.payload.body);
         yield put({
-            type: CREATE_ADMIN_SUCCESS,
-            payload: res.data
+            type: GET_ADMINS,
+            payload: {status:1, start: 0, end: 10}
         });
     } catch (err) {
         console.log(err.response, 'response')
@@ -83,14 +83,15 @@ function* createCredential(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.createCredentialService, action.payload.body);
-        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         yield put({
             type: CREATE_CREDENTIAL_SUCCESS,
             payload: res.data,
         });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
         console.log(err)
+
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
@@ -101,7 +102,7 @@ function* getCredential(action) {
     try {
         const res = yield call(authService.getCredentialService, action.payload.credentialId);
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+        // yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         yield put({
             type: GET_CREDENTIAL_SUCCESS,
             payload: res.data,

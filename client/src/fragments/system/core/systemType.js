@@ -5,6 +5,7 @@ import {Images} from "@eachbase/utils";
 import {systemItemStyles} from './styles'
 import {useDispatch, useSelector} from "react-redux";
 import {httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
+import {httpRequestsOnLoadActions} from "../../../store/http_requests_on_load";
 
 const credentialBtn = {
     maxWidth: '174px',
@@ -105,6 +106,7 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
     useEffect(()=>{
         if(success) {
             dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_SERVICE_GLOBAL'))
+            dispatch(httpRequestsOnLoadActions.removeLoading(httpOnLoad.length && httpOnLoad[0].type))
             setInputs({
                 name: '',
                 displayCode: '',
@@ -116,7 +118,6 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
     },[success])
 
     let errorMessage = success ? 'Successfully added' : 'Something went wrong'
-
     return (
         <>
             <div className={classes.flexContainer}>
@@ -157,7 +158,6 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
                 />
             </div>
             <p className={classes.title}>Service Type</p>
-
             <Notes defaultStyle={true} data={globalServices} pagination={false} items={notesItem}
                    headerTitles={headerTitles}/>
             <Toast

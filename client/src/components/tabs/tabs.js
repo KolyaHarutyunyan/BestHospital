@@ -8,18 +8,18 @@ import Box from '@material-ui/core/Box';
 import {tabsStyles} from "./styles";
 
 function TabPanel(props) {
-    const {children, value, index, ...other} = props;
+    const { children, value, index, ...other } = props;
 
     return (
         <div
             role="tabpanel"
             hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
+            id={`scrollable-force-tabpanel-${index}`}
+            aria-labelledby={`scrollable-force-tab-${index}`}
             {...other}
         >
             {value === index && (
-                <Box p={0} mt={4}>
+                <Box p={3}>
                     <Typography>{children}</Typography>
                 </Box>
             )}
@@ -35,8 +35,8 @@ TabPanel.propTypes = {
 
 function a11yProps(index) {
     return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
+        id: `scrollable-force-tab-${index}`,
+        'aria-controls': `scrollable-force-tabpanel-${index}`,
     };
 }
 
@@ -55,15 +55,17 @@ export const SimpleTabs = ({tabsLabels, tabsContent, setActiveTab, setAuthActive
                 <Tabs
                     value={value}
                     onChange={handleChange}
-                    aria-label="simple tabs example"
                     indicatorColor='primary'
                     className={tabStyle.collor}
+                    aria-label="scrollable force tabs example"
+                    scrollButtons="on"
+                    variant="scrollable"
                 >
                     {
                         tabsLabels && tabsLabels.map((tabLabel, index)=>{
                             return (
                                 <Tab onClick={()=> {
-                                    setAuthActive &&   setAuthActive(false)
+                                    setAuthActive && setAuthActive(false)
                                     setActiveTab(index)
                                 }}  className={tabStyle.tabLabel} label={tabLabel.label} {...a11yProps(index)} />
                             )

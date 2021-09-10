@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {Table, TableCell, TableContainer} from "@material-ui/core";
+import {Paper, Table, TableCell, TableContainer} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {
     TableHeadComponent,
@@ -9,12 +9,14 @@ import {
     NoItemText,
     CloseButton,
     SimpleModal,
-    AddNotes, DeleteElement
+    AddNotes, DeleteElement, Toast
 } from "@eachbase/components";
 import {Images, useGlobalStyles} from "@eachbase/utils";
 import moment from "moment";
 import {noteActions} from "../../store/notes";
 import {useParams} from "react-router-dom";
+import {httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "../../store";
+import {httpRequestsOnLoadActions} from "../../store/http_requests_on_load";
 
 export const Notes = ({
                           closeModal,
@@ -71,19 +73,53 @@ export const Notes = ({
 
     const handleDelete = () => {
         dispatch(noteActions.deleteGlobalNote(deletedData.id, params.id, model))
-        setOpenDelModal(false)
         closeModal()
     }
 
+    const {httpOnLoad, httpOnSuccess, httpOnError} = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnError: state.httpOnError,
+        httpOnLoad: state.httpOnLoad,
+    }));
+
+    const success =
+        httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_GLOBAL_NOTE' ? true :
+            httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_GLOBAL_NOTE' ? true :
+                httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_GLOBAL_NOTE'
+    const errorText =
+        httpOnError.length && httpOnError[0].type === 'CREATE_GLOBAL_NOTE' ? true :
+            httpOnError.length && httpOnError[0].type === 'EDIT_GLOBAL_NOTE' ? true :
+                httpOnError.length && httpOnError[0].type === 'DELETE_GLOBAL_NOTE'
+
+    const loader = httpOnLoad.length &&
+    httpOnLoad[0] === 'CREATE_GLOBAL_NOTE' ? true :
+        httpOnLoad[0] === 'EDIT_GLOBAL_NOTE' ? true :
+            httpOnLoad[0] === 'DELETE_GLOBAL_NOTE'
+
+    useEffect(() => {
+        if (success) {
+            dispatch(httpRequestsOnSuccessActions.removeSuccess(httpOnSuccess.length && httpOnSuccess[0].type))
+            dispatch(httpRequestsOnLoadActions.removeLoading(httpOnLoad.length && httpOnLoad[0].type))
+            setOpenDelModal(false)
+        }
+        if (errorText) {
+            dispatch(httpRequestsOnErrorsActions.removeError(httpOnError.length && httpOnError[0].type))
+        }
+    }, [success]);
+
+    console.log(loader, errorText, success);
+
+    let errorMessage = success ? 'Success' : 'Something went wrong'
+
     return (
         <div className={globalStyle.tableWrapper}>
-            <TableContainer>
+            <TableContainer className={globalStyle.tableContainer} component={Paper}>
                 <Table
                     className={globalStyle.table}
                     size="small"
                     aria-label="a dense table"
                 >
-                    <TableHeadComponent>
+                    <TableHeadComponent >
                         {
                             headerTitles && headerTitles.map((headerItem, index) => {
                                 return (
@@ -152,18 +188,23 @@ export const Notes = ({
                         <SimpleModal
                             openDefault={open}
                             handleOpenClose={handleOpenClose}
-                            content={<AddNotes model={model} noteModalTypeInfo={noteModalInfoEdit}
+                            content={<AddNotes closeModal={closeModal} model={model} noteModalTypeInfo={noteModalInfoEdit}
                                                handleClose={handleOpenClose}/>}
+                        />
                         <SimpleModal
                             openDefault={openDelModal}
                             handleOpenClose={handleOpenCloseDel}
-                            content={<DeleteElement text='some information' info={deletedData?.deletedName}
+                            content={<DeleteElement loader={loader} text='some information'
+                                                    info={deletedData?.deletedName}
                                                     handleDel={handleDelete} handleClose={handleOpenCloseDel}/>}
                         />
                     </>
                 }
-
             </TableContainer>
+            <Toast
+                type={success ? 'Successfully added' : errorText ? 'Something went wrong' : ''}
+                text={errorMessage}
+                info={success ? success : errorText ? errorText : ''}/>
         </div>
     )
 }
