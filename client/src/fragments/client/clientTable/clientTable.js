@@ -2,27 +2,38 @@ import {Paper, Table, TableContainer} from "@material-ui/core";
 import {ClientTableBody, ClientTableHead} from "./core";
 import {useGlobalStyles} from "@eachbase/utils";
 import React, {useState} from "react";
-import {useSelector} from "react-redux";
-import {Loader, PaginationItem} from "@eachbase/components";
+import {useDispatch, useSelector} from "react-redux";
+import {Loader, NoItemText, PaginationItem, Toast} from "@eachbase/components";
+import {clientActions,} from "@eachbase/store";
 
 
-export const ClientTable = ({setOpen,handleClose,setDeleteClient}) => {
+export const ClientTable = ({setOpen, handleClose, setDeleteClient, handleGetPage, status}) => {
     const globalStyle = useGlobalStyles();
     const [page, setPage] = useState(1);
-
-    const {clientList, httpOnLoad} = useSelector((state) => ({
+    const dispatch = useDispatch()
+    const {clientList, httpOnLoad, httpOnSuccess, httpOnError} = useSelector((state) => ({
         clientList: state.client.clientList,
         httpOnLoad: state.httpOnLoad,
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnError: state.httpOnError,
     }));
+
     const changePage = (number) => {
-        setPage(number);
+        let start = number > 1 ? (number - 1) + '0' : 0
+        setPage(number,)
+        dispatch(clientActions.getClients({status: status, start: start, end: 10}))
+        handleGetPage(start)
     };
 
-    const list = clientList && clientList.length && clientList[page - 1]
-
+    const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_CLIENT'
+    let errorMessage = successCreate ? 'Successfully added' : 'Something went wrong'
     return (
         <div className={globalStyle.tableWrapper}>
-            <TableContainer component={Paper}>
+            <Toast
+                type={'success'}
+                text={errorMessage}
+                info={successCreate}/>
+            {clientList ?  <TableContainer component={Paper}>
                 <Table
                     className={globalStyle.table}
                     size="small"
@@ -32,23 +43,25 @@ export const ClientTable = ({setOpen,handleClose,setDeleteClient}) => {
                     {httpOnLoad.length ?
                         <Loader/>
                         :
-                        list.length && list.map((item, i) => (
+                        clientList?.clients?.map((item, i) => (
                             <ClientTableBody
                                 data={item}
-                                index = {i}
+                                index={i}
                                 setOpen={setOpen}
                                 handleClose={handleClose}
                                 setDeleteClient={setDeleteClient}
                             />
                         ))}
                 </Table>
+
                 <PaginationItem
-                    text={`Showing 1 to 1 of ${clientList.length} entries`}
-                    handleReturn={(number) => changePage(number)}
+                    listLength={clientList?.clients?.length}
                     page={page}
-                    count={clientList.length}
+                    handleReturn={(number) => changePage(number)}
+                    count={clientList?.count}
+                    entries={clientList?.clients?.length}
                 />
-            </TableContainer>
+            </TableContainer> : <NoItemText text={'No Clients Yet'}/> }
         </div>
     );
 };

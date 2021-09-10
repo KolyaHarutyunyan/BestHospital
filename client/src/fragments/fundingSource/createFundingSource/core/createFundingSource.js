@@ -1,4 +1,4 @@
-import {AddressInput, ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
+import {AddressInput, ValidationInput, SelectInput, CreateChancel, ModalHeader, Toast} from "@eachbase/components";
 import React, {useEffect, useState} from "react";
 import {createFoundingSourceStyle} from "./styles";
 import {EmailValidator, ErrorText} from "@eachbase/utils";
@@ -8,7 +8,8 @@ import {useDispatch, useSelector} from "react-redux";
 
 export const CreateFundingSource = ({handleClose, info}) => {
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info} : {});
+    const [inputs, setInputs] = useState(info ? {...info,
+        phoneNumber: info.phoneNumber ? info.phoneNumber.substring(1) : ''} : {});
     const [fullAddress, setFullAddress] = useState(info && info.address ? info.address.formattedAddress : null)
     const classes = createFoundingSourceStyle()
     const dispatch = useDispatch()
@@ -41,7 +42,7 @@ export const CreateFundingSource = ({handleClose, info}) => {
         const data = {
             "name": inputs.name,
             "email": inputs.email,
-            "phoneNumber": inputs.phoneNumber,
+            "phoneNumber": `+${inputs.phoneNumber}`,
             'type': inputs.type,
             'contact': inputs.contact,
             'website': inputs.website,
@@ -51,7 +52,7 @@ export const CreateFundingSource = ({handleClose, info}) => {
         if (inputs.name && inputs.email && inputs.phoneNumber && inputs.type && inputs.contact && inputs.website) {
             if(info){
                 dispatch(fundingSourceActions.editFundingSource(info.id, data))
-                // handleClose()
+
             }else {
                 dispatch(fundingSourceActions.createFundingSource(data))
             }
@@ -80,7 +81,6 @@ export const CreateFundingSource = ({handleClose, info}) => {
 
 
 
-    console.log(httpOnSuccess.length && httpOnSuccess, 'typeeeeeee')
 
 
 useEffect(()=>{
@@ -96,15 +96,22 @@ useEffect(()=>{
 
 
 
+
+
     return (
         <div className={classes.createFoundingSource}>
+
+
+
+
+
+
             <ModalHeader headerBottom={true} handleClose={handleClose} title={info ? 'Edit Funding Source' : 'Add Funding Source'}/>
             <div className={classes.createFoundingSourceBody}>
                 <div className={classes.createFoundingSourceBodyBlock}>
                     <div className={classes.createFoundingSourceBodyBox}>
                         <ValidationInput
                             variant={"outlined"}
-                            sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.name}
                             type={"text"}
@@ -153,7 +160,6 @@ useEffect(()=>{
                             typeError={error === 'contract' && ErrorText.field}
                         />
                         <ValidationInput
-                            sendBoolean={handleCheck}
                             onChange={handleChange}
                             value={inputs.website}
                             variant={"outlined"}

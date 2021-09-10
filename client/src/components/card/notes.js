@@ -152,13 +152,17 @@ export const Notes = ({
                         <SimpleModal
                             openDefault={open}
                             handleOpenClose={handleOpenClose}
-                            content={<AddNotes model={model} noteModalTypeInfo={noteModalInfoEdit}
-                                               handleClose={handleOpenClose}/>}
+                            content={<AddNotes model={model}
+                                               noteModalTypeInfo={noteModalInfoEdit}
+                                               handleClose={handleOpenClose}/> }
+                            />
                         <SimpleModal
                             openDefault={openDelModal}
                             handleOpenClose={handleOpenCloseDel}
-                            content={<DeleteElement text='some information' info={deletedData?.deletedName}
-                                                    handleDel={handleDelete} handleClose={handleOpenCloseDel}/>}
+                            content={<DeleteElement text='some information'
+                                                    info={deletedData?.deletedName}
+                                                    handleDel={handleDelete}
+                                                    handleClose={handleOpenCloseDel}/>}
                         />
                     </>
                 }

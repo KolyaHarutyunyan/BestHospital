@@ -25,7 +25,7 @@ export const FundingSource = ({}) => {
         if(status === 0){
             dispatch(fundingSourceActions.getFundingSource({status: status, start: 0, end: 10}))
         }else {
-            dispatch(fundingSourceActions.getFundingSource({status: status, start: page, end: 10}))
+            dispatch(fundingSourceActions.getFundingSource({status: status, start: 0, end: 10}))
         }
 
     }
