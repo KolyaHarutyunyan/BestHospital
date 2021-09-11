@@ -1,7 +1,12 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {TableCell} from "@material-ui/core";
-import {adminActions, fundingSourceActions, systemActions} from "@eachbase/store";
+import {
+    adminActions,
+    fundingSourceActions,
+    httpRequestsOnSuccessActions,
+    systemActions
+} from "@eachbase/store";
 import {
     StaffGeneral,
     StaffHistory,
@@ -21,8 +26,9 @@ import {
 } from "@eachbase/components";
 import {useDispatch, useSelector} from "react-redux";
 import {staffStyle} from "@eachbase/pages/staff/styles";
-import {noteActions} from "../../../store/notes";
+import {noteActions} from "@eachbase/store/notes";
 import moment from "moment";
+import {httpRequestsOnLoadActions} from "../../../store/http_requests_on_load";
 
 export const StaffItem = () => {
 
@@ -79,7 +85,7 @@ export const StaffItem = () => {
         },
         {
             label: 'History'
-        }
+        },
 
     ]
 
@@ -101,6 +107,11 @@ export const StaffItem = () => {
             sortable: false
         },
     ];
+
+    const {httpOnLoad, httpOnSuccess} = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnLoad: state.httpOnLoad,
+    }));
 
     const openCloseCredModal = (modalType, globalCredentialInfo) => {
         setOpenCredModal(!openCredModal)
@@ -154,14 +165,15 @@ export const StaffItem = () => {
         )
     }
 
-    const {httpOnLoad} = useSelector((state) => ({
-        adminsList: state.admins.adminsList,
-        httpOnLoad: state.httpOnLoad
-    }));
-
     const handleOpenCloseNote = (data) => {
         setNoteModalTypeInfo(data)
         setOpenModal(!openModal)
+        setNoteModalInfo({
+            right: '-1000px',
+            created: '',
+            subject: '',
+            id: ''
+        })
     }
 
     const tabsContent = [
@@ -182,18 +194,16 @@ export const StaffItem = () => {
         },
         {
             tabComponent: (globalNotes.length ? <Notes
-
-
-                    model='Staff'
-                closeModal={closeNoteModal}
-                noteModalInfo={noteModalInfo}
-                showModal={true}
-                pagination={true}
-                data={globalNotes}
-                items={notesItem}
-                headerTitles={headerTitles}/>
-                :
-                    <NoItemText text='No Items Yet' />
+                        model='Staff'
+                        closeModal={closeNoteModal}
+                        noteModalInfo={noteModalInfo}
+                        showModal={true}
+                        pagination={true}
+                        data={globalNotes}
+                        items={notesItem}
+                        headerTitles={headerTitles}/>
+                    :
+                    <NoItemText text='No Items Yet'/>
             )
         },
         {
@@ -208,9 +218,22 @@ export const StaffItem = () => {
 
     const handleDeleteNote = () => {
         dispatch(noteActions.deleteGlobalNote(noteModalData.id, params.id, 'Staff'))
-        setOpenDelModal(false)
         closeNoteModal()
     }
+
+
+    const loader = httpOnLoad.length && httpOnLoad[0] === 'DELETE_GLOBAL_NOTE'
+
+    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_GLOBAL_NOTE'
+
+    useEffect(() => {
+        if (success) {
+            dispatch(httpRequestsOnSuccessActions.removeSuccess(httpOnSuccess.length && httpOnSuccess[0].type))
+            dispatch(httpRequestsOnLoadActions.removeLoading(httpOnLoad.length && httpOnLoad[0].type))
+            setOpenDelModal(false)
+        }
+    }, [success]);
+
 
     return (
         <>
@@ -236,7 +259,7 @@ export const StaffItem = () => {
                 <SimpleModal
                     openDefault={openDelModal}
                     handleOpenClose={handleOpenCloseDel}
-                    content={<DeleteElement text='some information' info={noteModalData?.deletedName}
+                    content={<DeleteElement loader={loader} text='some information' info={noteModalData?.deletedName}
                                             handleDel={handleDeleteNote} handleClose={handleOpenCloseDel}/>}
                 />
             </TableWrapperGeneralInfo>

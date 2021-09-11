@@ -15,7 +15,7 @@ export const tableStyle = makeStyles(() => ({
       padding: "8px 16px 8px 16px",
       border:'none',
       "@media (min-width: 1920px)": {
-        padding: "17px 24px 17px 24px",
+        padding: "12px 24px 12px 24px",
       },
     },
   },
@@ -43,7 +43,7 @@ export const tableStyle = makeStyles(() => ({
 
       padding: "8px 16px 8px 16px",
       "@media (min-width: 1920px)": {
-        padding: "16px 32px 16px 32px",
+        padding: "12px 32px 12px 32px",
       },
     },
 

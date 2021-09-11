@@ -30,7 +30,7 @@ function* getGlobalNotes(action) {
 
 function* creteGlobalNote(action) {
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
-    // yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(noteService.createGlobalNoteService, action.payload.body);
         yield put({
@@ -38,16 +38,16 @@ function* creteGlobalNote(action) {
             payload: res.data,
         });
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        // yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (error) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        // yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
 }
 
 function* editGlobalNote(action) {
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
-    // yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         yield call(noteService.editGlobalNoteService, action.payload.id, action.payload.body);
         yield put({
@@ -55,28 +55,28 @@ function* editGlobalNote(action) {
             payload:{ id : action.payload.fId, onModel : action.payload.onModel}
         });
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        // yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (error) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        // yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
 }
 
 
 function* deleteGlobalNote(action) {
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
-    // yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         yield call(noteService.deleteGlobalNoteService, action.payload.id);
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        // yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         yield put({
             type: GET_GLOBAL_NOTES,
             payload:{id : action.payload.SId, onModel : action.payload.onModel}
         });
     } catch (error) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
 }
 

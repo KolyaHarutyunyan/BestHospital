@@ -63,7 +63,6 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
 
     const handleSubmit = () => {
         let data, editData
-
         data = {
             staffId: params.id,
             credentialId: globalCredId,
@@ -116,6 +115,9 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
         httpOnLoad: state.httpOnLoad,
         httpOnError: state.httpOnError
     }));
+
+    console.log(httpOnSuccess,'httpOnSuccess');
+
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_CREDENTIAL'
     const errorText = httpOnError.length && httpOnError[0].type === 'CREATE_CREDENTIAL'
     const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_CREDENTIAL'
@@ -123,16 +125,13 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
     useEffect(()=>{
         if(success) {
             dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_CREDENTIAL'))
-            setInputs({
-                name: '',
-                type: ''
-            })
         }else if(errorText){
             dispatch(httpRequestsOnErrorsActions.removeError('CREATE_CREDENTIAL'))
         }
-    },[success, errorText])
-    console.log(success,'fhg gshfhasdg fg  sdgafhg sadg fhsajdgasdg fhjf gsahdg');
-    let errorMessage = success ? 'Successfully added' : 'Something went wrong'
+    },[success])
+
+    let errorMessage = success ? 'Successfully added' : 'Something went wrong';
+
     return (
         <div className={classes.inactiveModalBody}>
             <h1 className={`${globalText.modalTitle}`}>{title(mType)}</h1>

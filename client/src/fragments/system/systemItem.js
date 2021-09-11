@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {SimpleTabs, Toast} from "@eachbase/components";
 import {ServiceType, systemItemStyles, SystemItemHeader, Credentials, Departments, JobTitles} from './core';
 import {useDispatch, useSelector} from "react-redux";
-import {httpRequestsOnSuccessActions, systemActions} from "../../store";
+import {httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, systemActions} from "../../store";
 
 export const SystemItem = () => {
     const {httpOnSuccess} = useSelector((state) => ({
@@ -25,6 +25,8 @@ export const SystemItem = () => {
     useEffect(() => {
         if (success) {
             dispatch(httpRequestsOnSuccessActions.removeSuccess(httpOnSuccess.length && httpOnSuccess[0].type))
+        } if(errorText){
+            dispatch(httpRequestsOnErrorsActions.removeError(httpOnError.length && httpOnError[0].type))
         }
     }, [success]);
 

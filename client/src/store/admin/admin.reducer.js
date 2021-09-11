@@ -21,7 +21,7 @@ export const adminReducer = (state = initialState, action) => {
         case CREATE_ADMIN_SUCCESS:
             return {
                 ...state,
-                adminsList: [action.payload, ...state.adminsList]
+                adminsList: [...state.adminsList.staff ,action.payload ]
             }
 
         case GET_ADMINS_SUCCESS:
@@ -42,7 +42,7 @@ export const adminReducer = (state = initialState, action) => {
         case  GET_ADMIN_BY_ID_SUCCESS:
             return {
                 ...state,
-                adminInfoById: action.payload,
+                adminInfoById: action.payload.reverse(),
             }
         case GET_ADMIN_BY_ID :
             return {
