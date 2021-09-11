@@ -7,7 +7,7 @@ export const CREATE_CLIENT = 'CREATE_CLIENT';
 export const CREATE_CLIENT_SUCCESS = 'CREATE_CLIENT_SUCCESS';
 
 /**Delete clients */
-export const DELETE_CLIENT = 'CREATE_CLIENT';
+export const DELETE_CLIENT = 'DELETE_CLIENT';
 
 /**Edit clients */
 export const EDIT_CLIENT = 'EDIT_CLIENT';

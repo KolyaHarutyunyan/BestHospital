@@ -1,7 +1,19 @@
 import axios from "axios";
 
 export const authService = {
-    getClientsService: () => axios.get(`/client`,),
+    // getClientsService: () => axios.get(`/client`,),
+
+    getClientsService: ({data}) => {
+
+        if (data) {
+            return axios.get(`/client/?skip=${data.start}&&limit=${data.end}&&status=${data.status}`)
+        } else {
+            return axios.get('/client')
+        }
+    },
+
+
+
 
     createClientService: ({payload}) => axios.post(`/client`, payload.body),
 

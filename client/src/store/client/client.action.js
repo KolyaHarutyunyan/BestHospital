@@ -20,9 +20,11 @@ import {
 } from "../fundingSource/fundingSource.types";
 
 
-export const getClients = () => {
+export const getClients = (data) => {
+
     return {
-        type: GET_CLIENTS
+        type: GET_CLIENTS,
+        payload: {data}
     }
 }
 

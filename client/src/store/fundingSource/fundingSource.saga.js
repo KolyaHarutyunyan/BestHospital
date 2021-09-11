@@ -28,11 +28,12 @@ import {
     CREATE_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
     GET_FUNDING_SOURCE_SERVICE_MODIFIERS,
     GET_FUNDING_SOURCE_SERVICE_MODIFIERS_SUCCESS,
-    GET_FUNDING_SOURCE_SERVICE_MODIFIERS_ERR,
+    GET_FUNDING_SOURCE_SERVICE_MODIFIERS_ERR, EDIT_ACTIVE_OR_INACTIVE,
 } from "./fundingSource.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
 import {httpRequestsOnSuccessActions} from "../http_requests_on_success";
+
 
 
 function* createFundingSource(action) {
@@ -41,8 +42,8 @@ function* createFundingSource(action) {
     try {
         const res = yield call(authService.createFundingSourceService, action.payload.body);
         yield put({
-            type: GET_FUNDING_SOURCE_BY_ID_SUCCESS,
-            payload: res.data,
+            type: GET_FUNDING_SOURCE,
+            payload: { status : 1, start : 0, end : 10 },
         });
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
@@ -55,16 +56,16 @@ function* createFundingSource(action) {
 
 function* editFundingSource(action) {
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
-    // yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.editFundingSourceService, action.payload.id, action.payload.body);
-
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         yield put({
             type: GET_FUNDING_SOURCE_BY_ID_SUCCESS,
             payload: res.data,
         });
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
@@ -76,6 +77,7 @@ function* editFundingSource(action) {
 function* getFundingSource(action) {
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+
     try {
         const res = yield call(authService.getFundingSourceService, action.payload);
 
@@ -100,6 +102,7 @@ function* getFundingSourceById(action) {
 
     try {
         const res = yield call(authService.getFoundingSourceByIdService, action.payload);
+        console.log(res,'nor')
         yield put({
             type: GET_FUNDING_SOURCE_BY_ID_SUCCESS,
             payload: res.data,
@@ -310,6 +313,28 @@ function* deleteFundingSourceNote(action) {
 }
 
 
+
+function* editActiveOrInactive(action) {
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    try {
+        const res = yield call(authService.editActiveOrInactiveService, action.payload.id , action.payload.path, action.payload.status, action.payload.body , );
+        yield put({
+            type: action.payload.type,
+            payload: res.data,
+        });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+    } catch (error) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
+    }
+}
+
+
+
+
+
 function* getFundingSourceServ(action) {
     // yield put(httpRequestsOnErrorsActions.removeError(type));
     // yield put(httpRequestsOnLoadActions.appendLoading(type));
@@ -376,5 +401,6 @@ export const watchFundingSource = function* watchFundingSourceSaga() {
     yield takeLatest(CREATE_FUNDING_SOURCE_NOTE, creteFundingSourceNote);
     yield takeLatest(EDIT_FUNDING_SOURCE_NOTE, editFundingSourceNote);
     yield takeLatest(DELETE_FUNDING_SOURCE_NOTE, deleteFundingSourceNote);
+    yield takeLatest(EDIT_ACTIVE_OR_INACTIVE, editActiveOrInactive);
 
 };

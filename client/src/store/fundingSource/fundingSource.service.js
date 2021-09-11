@@ -1,5 +1,5 @@
 import axios from "axios";
-import {deleteFoundingSourceServiceById} from "./fundingSource.action";
+import {deleteFoundingSourceServiceById, editActiveOrInactive} from "./fundingSource.action";
 
 export const authService = {
 
@@ -42,6 +42,15 @@ export const authService = {
     editFoundingSourceNoteService: (id, body) => axios.patch(`/comment/${id}`, body),
 
     deleteFoundingSourceNoteService: (id) => axios.delete(`/comment/${id}/comments`,),
+
+
+
+
+    editActiveOrInactiveService: (id, path, status , body) => axios.patch(`/${path}/${id}/${status}`, body),
+
+
+
+
 
     // getFundingSourceServService: () => axios.get(`/service`,),
     //

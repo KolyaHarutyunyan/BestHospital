@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from "react";
-import {SimpleTabs, Notes, TableWrapperGeneralInfo, InactiveModal, Loader, NoItemText} from "@eachbase/components";
+import {
+    SimpleTabs,
+    Notes,
+    TableWrapperGeneralInfo,
+    InactiveModal,
+    Loader,
+    NoItemText,
+    Toast
+} from "@eachbase/components";
 import {adminActions, fundingSourceActions, httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
 import {useDispatch, useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
@@ -60,25 +68,38 @@ export const FundingSourceItem = ({}) => {
     }));
 
 
+
+    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_FUNDING_SOURCE'
+    let errorMessage = success ? 'Successfully Edited' : 'Something went wrong'
+
     const tabsContent = [
         {tabComponent: httpOnLoad.length > 0 ? <Loader/> : <FundingSourceSingleGeneral data={data}/>},
         {tabComponent: servicesData.length?  <FundingSourceSingleServices data={servicesData} globalServices={globalServices}/> :  <NoItemText text='No Services Yet' />},
-        {tabComponent: <FundingSourceSingleNotes data={globalNotes}/>},
+        {tabComponent: globalNotes.length ? <FundingSourceSingleNotes data={globalNotes}/> : <NoItemText text='No Notes Yet' />},
         {tabComponent: historiesData.length ?   <FundingSourceSingleHistories data={historiesData}/> :  <NoItemText text='No Histories Yet' />},
     ];
 
     return (
         <>
+            <Toast
+                type={'success'}
+                text={errorMessage}
+                info={success}/>
+
             <TableWrapperGeneralInfo
                 title={data?.name}
-                status='inactive'
+                status= {data?.status ===1 ? 'active' : 'inactive'}
+                activeInactiveText={data?.status !==1 ? 'active' : 'inactive'}
                 parent='Funding Source'
                 parentLink='/fundingSource'
                 buttonsTabAddButton={true}
-                activeInactiveText={'Inactive'}
                 openCloseInfo={open}
                 handleOpenClose={handleOpenClose}
-                body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
+                body={<InactiveModal info={{
+                    status : data?.status,
+                    path : 'funding',
+                    type : 'GET_FUNDING_SOURCE_BY_ID_SUCCESS'
+                }} handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
                 <div className={classes.fundingSourceItemHeader}>
                     <FundingSourceSingleHeader title={data?.name} activeTab={activeTab}/>

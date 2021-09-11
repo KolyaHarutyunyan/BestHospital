@@ -4,7 +4,7 @@ import {
     SimpleTabs,
     Notes,
     TableWrapperGeneralInfo,
-    InactiveModal, SimpleModal, NoItemText, Loader,
+    InactiveModal, SimpleModal, NoItemText, Loader, Toast,
 } from "@eachbase/components";
 import {clientActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 
@@ -75,7 +75,7 @@ export const ClientItem = () => {
     const clientsNotes = useSelector(state => state.note.notes)
 
 
-    console.log(clientsNotes,'rrrr')
+
 
     const handleOpenClose = () => {
         setOpen(!open)
@@ -139,7 +139,7 @@ export const ClientItem = () => {
             tabComponent: (<ClientAvailabilitySchedule/>)
         },
         {
-            tabComponent: ( <ClientNotes data={clientsNotes} /> )
+            tabComponent: (clientsNotes.length ?  <ClientNotes data={clientsNotes} /> : <NoItemText text={'No Notes  Yet'}/> )
         },
         {
             tabComponent: (clientsHistories.length ? <ClientHistory info={clientsHistories}/> :
@@ -147,18 +147,29 @@ export const ClientItem = () => {
         },
     ];
 
+    const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT'
+    let errorMessage = successEdit ? 'Successfully edited' : 'Something went wrong'
+
     return (
         <>
+            <Toast
+                type={'success'}
+                text={errorMessage}
+                info={successEdit}/>
             <TableWrapperGeneralInfo
-                status='inactive'
+                status= {data?.status ===1 ? 'active' : 'inactive'}
+                activeInactiveText={data?.status !==1 ? 'active' : 'inactive'}
                 parent='Clients'
                 title={data ? `${data?.firstName} ${data?.lastName}` : ''}
                 parentLink='/client'
                 buttonsTabAddButton={true}
-                activeInactiveText={'Inactive'}
                 openCloseInfo={open}
                 handleOpenClose={handleOpenClose}
-                body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
+                body={<InactiveModal info={{
+                    status : data?.status,
+                    path : 'client',
+                    type : 'GET_CLIENT_BY_ID_SUCCESS'
+                }} handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
                 <SimpleModal openDefault={openModal}
                              handleOpenClose={handleOpenCloseModal}

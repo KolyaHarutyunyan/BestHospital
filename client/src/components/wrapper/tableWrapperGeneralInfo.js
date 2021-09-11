@@ -12,13 +12,14 @@ export const TableWrapperGeneralInfo =
          handleOpenClose,
          title,
          parent,
-         parentLink
+         parentLink,
+         activeInactiveText
      }) => {
         const classes = wrapperStyle();
 
         const inactivateButtonStyle = {
             height: 36,
-            backgroundColor: Colors.ThemeRed,
+            backgroundColor: activeInactiveText ==="active" ? Colors.BackgroundBlue : Colors.ThemeRed,
             padding: '0 24px'
         }
 
@@ -27,7 +28,7 @@ export const TableWrapperGeneralInfo =
                 <div className={classes.inactiveActiveHeader}>
                     <CustomBreadcrumbs className={classes.breadcrumb} parent={parent} child={title}
                                        parentLink={parentLink}/>
-                    <AddModalButton btnStyles={inactivateButtonStyle} text='inactive' handleClick={handleOpenClose}/>
+                    <AddModalButton btnStyles={inactivateButtonStyle} text={activeInactiveText} handleClick={handleOpenClose}/>
                 </div>
                 <div className={classes.addButton}>
                     <SimpleModal

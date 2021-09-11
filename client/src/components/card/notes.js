@@ -188,6 +188,7 @@ export const Notes = ({
                         <SimpleModal
                             openDefault={open}
                             handleOpenClose={handleOpenClose}
+// <<<<<<< stafSytemChanegs
                             content={<AddNotes closeModal={closeModal} model={model} noteModalTypeInfo={noteModalInfoEdit}
                                                handleClose={handleOpenClose}/>}
                         />
@@ -197,7 +198,20 @@ export const Notes = ({
                             content={<DeleteElement loader={loader} text='some information'
                                                     info={deletedData?.deletedName}
                                                     handleDel={handleDelete} handleClose={handleOpenCloseDel}/>}
-                        />
+// =======
+//                             content={<AddNotes model={model}
+//                                                noteModalTypeInfo={noteModalInfoEdit}
+//                                                handleClose={handleOpenClose}/> }
+//                             />
+//                         <SimpleModal
+//                             openDefault={openDelModal}
+//                             handleOpenClose={handleOpenCloseDel}
+//                             content={<DeleteElement text='some information'
+//                                                     info={deletedData?.deletedName}
+//                                                     handleDel={handleDelete}
+//                                                     handleClose={handleOpenCloseDel}/>}
+// >>>>>>> develop
+//                         />
                     </>
                 }
             </TableContainer>
