@@ -2,13 +2,17 @@ import React, {useEffect, useState} from "react";
 import {TableWrapper} from "@eachbase/components";
 import {CreateStaff, StaffTable,} from "@eachbase/fragments";
 import {adminActions} from "@eachbase/store";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
 export const Staff = () => {
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const [page, setPage] = useState(1)
     const [status,setStatus] = useState(1)
+
+    const { adminsList } = useSelector((state) => ({
+        adminsList: state.admins.adminsList,
+    }));
 
     useEffect(() => {
         dispatch(adminActions.getAdmins({ status : status, start : 0, end : 10 }))
@@ -27,7 +31,6 @@ export const Staff = () => {
         }
 
     }
-
     return (
         <>
             <TableWrapper
@@ -40,7 +43,7 @@ export const Staff = () => {
                 addButtonText={'Add Staff Member'}
                 openCloseInfo={open}
                 handleOpenClose={handleOpenClose}
-                body={<CreateStaff resetData={true} handleClose={handleOpenClose}/>}
+                body={<CreateStaff adminsList={adminsList && adminsList.staff} resetData={true} handleClose={handleOpenClose}/>}
             >
                 <StaffTable handleGetPage={setPage}  status ={status} />
             </TableWrapper>

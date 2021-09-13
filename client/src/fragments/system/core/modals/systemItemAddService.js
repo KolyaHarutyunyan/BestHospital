@@ -14,8 +14,6 @@ const credentialsList = [
 
 export const SystemItemAddService = ({modalInformation, modalType, handleClose}) => {
     const dispatch = useDispatch()
-
-
     const [mType] = useState(modalType)
     const [mInformation] = useState(modalInformation)
     const [inputs, setInputs] = useState(mInformation ? mInformation : {})
@@ -119,7 +117,7 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
     }
 
 
-    const {httpOnLoad, httpOnSuccess} = useSelector((state) => ({
+    const {httpOnLoad, httpOnSuccess,httpOnError} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnLoad: state.httpOnLoad,
         httpOnError: state.httpOnError

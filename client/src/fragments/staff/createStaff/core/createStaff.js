@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {createStaffModalStyle} from "./style";
 import {Steps, CloseButton} from "@eachbase/components";
 import {useGlobalTextStyles, EmailValidator, ErrorText} from "@eachbase/utils";
@@ -7,6 +7,8 @@ import {adminActions} from "@eachbase/store";
 import {useDispatch} from "react-redux";
 import {inputStyle} from "../../../fundingSource/createFundingSource/core/styles";
 import moment from "moment";
+import {Autocomplete} from "@material-ui/lab";
+import {TextField} from "@material-ui/core";
 
 const steps = ['General Info', 'Address', 'Other Details']
 
@@ -19,8 +21,14 @@ const departmentList = [
     {name: '4'}
 ]
 const supervisorList = [
-    {name: '5'},
-    {name: '6'}
+    {
+        name: 'aaaaaaa',
+        id: '15'
+    },
+    {
+        name: 'bbbbbbb',
+        id: 16
+    }
 ]
 const residencyList = [
     {name: '7'},
@@ -34,13 +42,11 @@ const genderList = [
 ]
 
 
-export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
-    // const staffGeneral = useSelector(state => state.admins.adminInfoById);
-
+export const CreateStaff = ({adminsList, handleClose, resetData, staffGeneral}) => {
     const [error, setError] = useState("");
     const [errorSec, setErrorSec] = useState("");
     const [inputs, setInputs] = useState(resetData ? {} : staffGeneral ? staffGeneral : {});
-    const [fullAddress, setFullAddress] = useState('')
+    const [fullAddress, setFullAddress] = useState(staffGeneral ? staffGeneral.address.formattedAddress :'')
 
     const disabledOne = inputs.firstName && error !== 'Not valid email' && inputs.lastName && inputs.email && inputs.phone
 
@@ -107,7 +113,7 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
             staffGeneral ?
                 dispatch(adminActions.editAdminById(data, staffGeneral.id)) :
                 dispatch(adminActions.createAdmin(data))
-            handleClose()
+                handleClose()
         } else {
 
             setError(
@@ -121,6 +127,23 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
             )
         }
     }
+
+    const [supervisor, setSupervisor] = useState('')
+
+    const [id,setId] = useState('')
+
+    useEffect(()=>{
+        setId(getID(supervisor))
+    },[supervisor])
+
+    const getID = (data) => {
+        for (let i = 0; i < adminsList.length; i++){
+            if (adminsList[i].firstName === data){
+                return adminsList[i].id
+            }
+        }
+    }
+    console.log(id,'id');
     const firstStep = (
         <React.Fragment>
             <ValidationInput
@@ -205,7 +228,7 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
                 handleSelectValue={setFullAddress}
                 Value={'Street Address*'}
                 flex='block'
-                info={staffGeneral && staffGeneral.address ? staffGeneral : ''}
+                info={staffGeneral && staffGeneral ? staffGeneral : ''}
                 styles={inputStyle}
             />
         </React.Fragment>
@@ -252,13 +275,21 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
                 list={departmentList}
                 typeError={error === 'department' ? ErrorText.field : ''}
             />
-            <SelectInput
-                name={"supervisor"}
-                label={"Supervisor*"}
-                handleSelect={handleChange}
-                value={inputs.supervisor}
-                list={supervisorList}
-                typeError={error === 'supervisor' ? ErrorText.field : ''}
+            {/*<SelectInput*/}
+            {/*    name={"supervisor"}*/}
+            {/*    label={"Supervisor*"}*/}
+            {/*    handleSelect={handleChange}*/}
+            {/*    value={inputs.supervisor}*/}
+            {/*    list={adminsList}*/}
+            {/*    typeError={error === 'supervisor' ? ErrorText.field : ''}*/}
+            {/*/>*/}
+            <Autocomplete
+                onChange={(event, value) => setSupervisor(event?.target?.textContent)}
+                id="combo-box-demo"
+                options={adminsList}
+                getOptionLabel={(option) => option.firstName}
+                style={{ width: 300 }}
+                renderInput={(params) => <TextField {...params} label="Combo box" variant="outlined" />}
             />
             <SelectInput
                 name={"residencyStatus"}

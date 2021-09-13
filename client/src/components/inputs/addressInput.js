@@ -54,7 +54,7 @@ export const AddressInput = ({handleSelectValue, info, disabled, flex, oneInput,
     const stateList = code ? State.getStatesOfCountry(code) : State.getStatesOfCountry('US')
     const placeholder = info ? info.address.formattedAddress : "Physical Address*";
 
-  return (
+    return (
     <div style={{ display: flex ? flex : 'flex', width: '100%' }}>
         <PlacesAutocomplete value={address} onChange={handleChangeAddress} onSelect={(ev) => handleSelect(ev)}>
             {({getInputProps, suggestions, getSuggestionItemProps, loading}) => (
@@ -113,7 +113,7 @@ export const AddressInput = ({handleSelectValue, info, disabled, flex, oneInput,
         handleChangeCountryCode={setCode}
         loader={loading}
 
-        value={Country}
+        value={info ? info.address.country : Country}
         list={CountryList}
         disabled={disabled}
       />
@@ -128,7 +128,7 @@ export const AddressInput = ({handleSelectValue, info, disabled, flex, oneInput,
                 handleChangeAddress(e, 'other')
             }}
             onChange={handleChange}
-            value={City}
+            value={info ? info.address.city : City}
             loader={loading}
             disabled={disabled}
         />

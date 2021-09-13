@@ -42,7 +42,7 @@ export const adminReducer = (state = initialState, action) => {
         case  GET_ADMIN_BY_ID_SUCCESS:
             return {
                 ...state,
-                adminInfoById: action.payload.reverse(),
+                adminInfoById: action.payload
             }
         case GET_ADMIN_BY_ID :
             return {
