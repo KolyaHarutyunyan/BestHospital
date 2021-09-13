@@ -182,6 +182,9 @@ export const CreateClient = ({handleClose, info}) => {
                             value={inputs.age}
                             label={"Age*"}
                             name='age'
+                            InputLabelProps={{
+                                shrink:!!inputs.age,
+                            }}
                             typeError={error === 'age' && ErrorText.field}
                             id="standard-basic"
                             fullWidth

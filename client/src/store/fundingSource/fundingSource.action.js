@@ -59,7 +59,6 @@ export const getFoundingSourceServiceById = (id) => {
     }
 }
 export const createFoundingSourceServiceById = (id, body, modifier) => {
-    console.log(id, body)
     return {
         type: CREATE_FUNDING_SOURCE_SERVICE_BY_ID,
         payload: {
@@ -122,7 +121,6 @@ export const getFundingSourceServ = () => {
 }
 
 export const getFundingSourceServById = (id) => {
-    alert('rrrr')
     return {
         type: GET_FUNDING_SOURCE_SERV_BY_ID,
         payload: id

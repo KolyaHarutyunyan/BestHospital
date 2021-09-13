@@ -26,7 +26,7 @@ function* createAdmin(action) {
         yield call(authService.createAdminService, action.payload.body);
         yield put({
             type: GET_ADMINS,
-            payload: {status:1, start: 0, end: 10}
+            payload: { status : 1, start : 0, end : 10 },
         });
     } catch (err) {
         console.log(err.response, 'response')
