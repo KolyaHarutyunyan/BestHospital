@@ -16,6 +16,7 @@ export const tabsStyles = makeStyles(() => ({
         },
         '& .MuiTabs-flexContainer': {
             borderBottom: `4px solid ${Colors.BackgroundWater}`,
+
         },
     },
     tabLabel: {
