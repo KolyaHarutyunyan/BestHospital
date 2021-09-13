@@ -94,10 +94,7 @@ export const useGlobalStyles = makeStyles({
         display:'flex',
         justifyContent:'space-between',
         flexDirection:'column',
-        height:'80vh',
-        "@media (min-width: 1919px)": {
-            height:'83vh',
-        },
+        height:'92vh',
     },
     table: {
         '&.MuiTable-root': {

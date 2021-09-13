@@ -33,7 +33,7 @@ export const ClientTable = ({setOpen, handleClose, setDeleteClient, handleGetPag
                 type={'success'}
                 text={errorMessage}
                 info={successCreate}/>
-            {clientList ?  <TableContainer component={Paper}>
+            {clientList && clientList.count > 0 ?  <TableContainer component={Paper}>
                 <Table
                     className={globalStyle.table}
                     size="small"
@@ -64,4 +64,4 @@ export const ClientTable = ({setOpen, handleClose, setDeleteClient, handleGetPag
             </TableContainer> : <NoItemText text={'No Clients Yet'}/> }
         </div>
     );
-};
+}
