@@ -76,8 +76,8 @@ export const useGlobalStyles = makeStyles({
         width: '100%',
     },
     tableWrapper: {
-        height: '100%',
-        minHeight: '80vh',
+        // height: '100%',
+        // minHeight: '80vh',
         background: 'none',
         width: '100%',
         borderRadius: '8px',
@@ -91,10 +91,10 @@ export const useGlobalStyles = makeStyles({
         },
     },
     tableContainer: {
-        display:'flex',
-        justifyContent:'space-between',
-        flexDirection:'column',
-        height:'92vh',
+        // display:'flex',
+        // justifyContent:'space-between',
+        // flexDirection:'column',
+        // height:'92vh',
     },
     table: {
         '&.MuiTable-root': {
