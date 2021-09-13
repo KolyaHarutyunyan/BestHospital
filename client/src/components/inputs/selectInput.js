@@ -39,7 +39,7 @@ export const SelectInput = ({
 
     return (
         <>
-            <div className={style ? style : classes.SignInInput}>
+            <div style={{marginBottom:'8px'}} className={style ? style : classes.SignInInput}>
                 <FormControl variant="outlined" className={className ? className : classes.inputTextField}
                              error={typeError && true}>
                     <InputLabel htmlFor="outlined-age-native-simple">{label}</InputLabel>
