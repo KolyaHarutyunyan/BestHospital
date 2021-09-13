@@ -30,6 +30,8 @@ export const authService = {
 
     createFoundingSourceServiceModifierService: (body) => axios.post(`/funding/modifier`, body),
 
+    editFoundingSourceServiceModifierService: (id,body) => axios.patch(`/funding/${id}modifier`, body),
+
     getFoundingSourceServiceModifierService: (id) => axios.get(`/funding/modifier/${id}`),
 
 

@@ -28,7 +28,7 @@ import {
     CREATE_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
     GET_FUNDING_SOURCE_SERVICE_MODIFIERS,
     GET_FUNDING_SOURCE_SERVICE_MODIFIERS_SUCCESS,
-    GET_FUNDING_SOURCE_SERVICE_MODIFIERS_ERR, EDIT_ACTIVE_OR_INACTIVE,
+    GET_FUNDING_SOURCE_SERVICE_MODIFIERS_ERR, EDIT_ACTIVE_OR_INACTIVE, EDIT_FUNDING_SOURCE_SERVICE_MODIFIER,
 } from "./fundingSource.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
@@ -193,6 +193,20 @@ function* createFundingSourceServicesModifier({payload}) {
     }
 }
 
+
+
+function* editFundingSourceServicesModifier({payload}) {
+    console.log(payload.id, payload.body, 'sagaaaaa')
+
+
+    try {
+
+        const res = yield call(authService.editFoundingSourceServiceModifierService,payload.id, payload.body);
+        console.log(res,'reeeeesssss')
+    } catch (error) {
+        console.log(error, 'res mod')
+    }
+}
 
 
 
@@ -399,5 +413,6 @@ export const watchFundingSource = function* watchFundingSourceSaga() {
     yield takeLatest(EDIT_FUNDING_SOURCE_NOTE, editFundingSourceNote);
     yield takeLatest(DELETE_FUNDING_SOURCE_NOTE, deleteFundingSourceNote);
     yield takeLatest(EDIT_ACTIVE_OR_INACTIVE, editActiveOrInactive);
+    yield takeLatest(EDIT_FUNDING_SOURCE_SERVICE_MODIFIER, editFundingSourceServicesModifier);
 
 };

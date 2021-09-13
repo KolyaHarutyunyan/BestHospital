@@ -9,10 +9,7 @@ import {useParams} from "react-router-dom";
 
 export const AddContact = ({handleClose, info}) => {
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {
-        ...info,
-        phoneNumber: info.phoneNumber ? info.phoneNumber.substring(1) : ''
-    } : {});
+    const [inputs, setInputs] = useState(info ? {...info,} : {});
     const [step, setStep] = useState('first')
     const [fullAddress, setFullAddress] = useState(null)
     const classes = createClientStyle()
@@ -70,7 +67,7 @@ export const AddContact = ({handleClose, info}) => {
                 const data = {
                     "firstName": inputs.firstName,
                     "lastName": inputs.lastName,
-                    "phoneNumber": `+${inputs.phoneNumber}`,
+                    "phoneNumber": inputs.phoneNumber,
                     "relationship": inputs.relationship,
                     address: fullAddress
                 }
@@ -128,6 +125,7 @@ export const AddContact = ({handleClose, info}) => {
                                 typeError={error === 'lastName' && ErrorText.field}
                             />
                             <ValidationInput
+                                Length={11}
                                 variant={"outlined"}
                                 onChange={handleChange}
                                 value={inputs.phoneNumber}

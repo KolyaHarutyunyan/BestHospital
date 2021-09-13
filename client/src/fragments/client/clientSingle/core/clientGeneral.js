@@ -2,8 +2,21 @@ import { Card } from '@eachbase/components';
 import { serviceSingleStyles } from './styles';
 import { Colors, Images } from "@eachbase/utils";
 import moment from "moment";
+import {useEffect, useState} from "react";
 
 export const ClientGeneral = ({data}) =>{
+    let today = new Date();
+
+
+    const [otherDetails, setOtherDetails] = useState([
+        {title: 'Gender', value: data?.gender},
+        {title: 'Date of Birth', value: data?.birthday && moment(data?.birthday).format('DD MM YYYY') },
+        {title: 'Age', value  : data?.birthday ? today.getFullYear() - new Date(data.birthday).getFullYear() : ''} ,
+        {title: 'Ethnicity', value: data?.ethnicity},
+        {title: 'Language', value: data?.language},
+        {title: 'Family Language:', value: data?.familyLanguage},
+    ])
+
     const classes = serviceSingleStyles()
 
     const generalInfo = [
@@ -13,14 +26,6 @@ export const ClientGeneral = ({data}) =>{
         {title: 'Code', value: data?.code},
     ]
 
-    const otherDetails = [
-        {title: 'Gender', value: data?.gender},
-        {title: 'Date of Birth', value: data?.birthday && moment(data?.birthday).format('DD MM YYYY') },
-        {title: 'Age', value: data?.age},
-        {title: 'Ethnicity', value: data?.ethnicity},
-        {title: 'Language', value: data?.language},
-        {title: 'Family Language:', value: data?.familyLanguage},
-    ]
 
     return (
         <div className={classes.staffGeneralWrapper}>
