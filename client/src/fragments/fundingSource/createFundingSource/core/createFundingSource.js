@@ -8,8 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 
 export const CreateFundingSource = ({handleClose, info}) => {
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info,
-        phoneNumber: info.phoneNumber ? info.phoneNumber.substring(1) : ''} : {});
+    const [inputs, setInputs] = useState(info ? {...info }: {});
     const [fullAddress, setFullAddress] = useState(info && info.address ? info.address.formattedAddress : null)
     const classes = createFoundingSourceStyle()
     const dispatch = useDispatch()
@@ -42,7 +41,7 @@ export const CreateFundingSource = ({handleClose, info}) => {
         const data = {
             "name": inputs.name,
             "email": inputs.email,
-            "phoneNumber": `+${inputs.phoneNumber}`,
+            "phoneNumber": inputs.phoneNumber,
             'type': inputs.type,
             'contact': inputs.contact,
             'website': inputs.website,
@@ -131,6 +130,7 @@ useEffect(()=>{
                             onChange={handleChange}
                         />
                         <ValidationInput
+                            Length={11}
                             variant={"outlined"}
                             onChange={handleChange}
                             value={inputs.phoneNumber}

@@ -16,7 +16,10 @@ import {
     GET_FUNDING_SOURCE_NOTES,
     CREATE_FUNDING_SOURCE_NOTE,
     EDIT_FUNDING_SOURCE_NOTE,
-    DELETE_FUNDING_SOURCE_NOTE, GET_FUNDING_SOURCE_SERVICE_MODIFIERS, EDIT_ACTIVE_OR_INACTIVE,
+    DELETE_FUNDING_SOURCE_NOTE,
+    GET_FUNDING_SOURCE_SERVICE_MODIFIERS,
+    EDIT_ACTIVE_OR_INACTIVE,
+    EDIT_FUNDING_SOURCE_SERVICE_MODIFIER,
 } from "./fundingSource.types";
 
 export const createFundingSource = (body) => {
@@ -113,6 +116,21 @@ export const getFundingSourceHistoriesById = (id, onModal) => {
         payload: {id, onModal}
     }
 }
+
+
+
+export const editFoundingSourceModifier = (id, body) => {
+    console.log(id, body, 'action')
+    return {
+        type: EDIT_FUNDING_SOURCE_SERVICE_MODIFIER,
+        payload: {
+            id,
+            body,
+        }
+    }
+}
+
+
 
 export const getFundingSourceServ = () => {
 

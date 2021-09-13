@@ -1,4 +1,4 @@
-export {EditClient} from './editClient'
+
 export {AddContact} from './addContact'
 export {AddEnrollment} from './addEnrollment'
 export {AddAuthorization}  from  './addAuthorization'

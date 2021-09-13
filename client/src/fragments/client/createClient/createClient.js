@@ -49,16 +49,16 @@ export const CreateClient = ({handleClose, info}) => {
 
 
 
-    useEffect(() => {
-        let today = new Date();
-        if (inputs.birthday){
-            let birthDate = new Date(inputs.birthday);
-            let age = today.getFullYear() - birthDate.getFullYear();
-            setInputs({...inputs, age})
-        }
-
-
-    },[inputs.birthday])
+    // useEffect(() => {
+    //     let today = new Date();
+    //     if (inputs.birthday){
+    //         let birthDate = new Date(inputs.birthday);
+    //         let age = today.getFullYear() - birthDate.getFullYear();
+    //         setInputs({...inputs, age})
+    //     }
+    //
+    //
+    // },[inputs.birthday])
 
     const handleCreate = () => {
         if (step === 'first') {
@@ -84,7 +84,7 @@ export const CreateClient = ({handleClose, info}) => {
                     'familyLanguage': inputs.familyLanguage,
                     'gender': inputs.gender,
                     "birthday": inputs.birthday,
-                    'age': +inputs.age,
+                    // 'age': +inputs.age,
                     "status": 1
                 }
                 if (!info) {
@@ -175,17 +175,17 @@ export const CreateClient = ({handleClose, info}) => {
                             typeError={error === 'birthday' && ErrorText.field}
                         />
 
-                        <TextField
-                            className={classes.inputTextField}
-                            variant={"outlined"}
-                            onChange={handleChange}
-                            value={inputs.age}
-                            label={"Age*"}
-                            name='age'
-                            typeError={error === 'age' && ErrorText.field}
-                            id="standard-basic"
-                            fullWidth
-                        />
+                        {/*<TextField*/}
+                        {/*    className={classes.inputTextField}*/}
+                        {/*    variant={"outlined"}*/}
+                        {/*    onChange={handleChange}*/}
+                        {/*    value={inputs.age}*/}
+                        {/*    label={"Age*"}*/}
+                        {/*    name='age'*/}
+                        {/*    typeError={error === 'age' && ErrorText.field}*/}
+                        {/*    id="standard-basic"*/}
+                        {/*    fullWidth*/}
+                        {/*/>*/}
 
                         <TextField
                             className={classes.inputTextField}
