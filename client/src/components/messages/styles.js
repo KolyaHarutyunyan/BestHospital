@@ -41,4 +41,44 @@ export const errMessageStyle = makeStyles(() => ({
       color: "#252E48",
     },
   },
+
+  nameEllipsis:{
+    overflow:'hidden',
+    whiteSpace:'nowrap',
+    textOverflow:'ellipsis',
+    width:'100px',
+    textTransform:'uppercase',
+    "@media (min-width: 1919px)": {
+      width:'150px',
+    },
+  },
+
+  addressEllipsis:{
+    overflow:'hidden',
+    whiteSpace:'nowrap',
+    textOverflow:'ellipsis',
+    width:'200px',
+    "@media (min-width: 1919px)": {
+      width:'250px',
+    },
+  } ,
+  desc:{
+    overflow:'hidden',
+    whiteSpace:'nowrap',
+    textOverflow:'ellipsis',
+    width:'200px',
+    "@media (min-width: 1919px)": {
+      width:'250px',
+    },
+  } ,
+
+  emailEllipsis:{
+    overflow:'hidden',
+    whiteSpace:'nowrap',
+    textOverflow:'ellipsis',
+    width:'150px',
+    "@media (min-width: 1919px)": {
+      width:'200px',
+    },
+  },
 }));

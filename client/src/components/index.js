@@ -11,7 +11,7 @@ export {
     EditSaveButtons,
 } from "./buttons";
 export {Title} from "./titles";
-export {ErrMessage, HtmlTooltip} from "./messages";
+export {ErrMessage, HtmlTooltip, SlicedText} from "./messages";
 export {
     ValidationInput,
     PasswordInput,

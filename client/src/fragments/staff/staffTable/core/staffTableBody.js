@@ -1,6 +1,6 @@
 import React from "react";
 import {useHistory} from "react-router-dom";
-import {TableBodyComponent} from "@eachbase/components";
+import {SlicedText, TableBodyComponent} from "@eachbase/components";
 import {TableCell} from "@material-ui/core";
 import {Images, useGlobalStyles} from "@eachbase/utils";
 import {staffTableStyles} from "./styles";
@@ -18,12 +18,15 @@ export const StaffTableBody = ({index, data}) => {
             <TableCell className={classes.tableRow}>
                 <div className={globalClasses.InfoAndImage}>
                     <img src={Images.staffOutline} alt={"funding"}/>
-                    <p className={classes.firstNameStyle}>{data.firstName}</p>
+                    <SlicedText  type={'name'} size={10} data={data.firstName}/>
                 </div>
             </TableCell>
-            {/*<TableCell>{'address'}</TableCell>*/}
-            <TableCell className={classes.tableRow}>{(data.address   && data.address.formattedAddress ) ? data.address.formattedAddress : 'address'}</TableCell>
-            <TableCell className={classes.tableRow}>{data.email}</TableCell>
+            <TableCell className={classes.tableRow}>
+                <SlicedText type={'address'} size={20} data={(data.address   && data.address.formattedAddress ) ? data.address.formattedAddress : 'Not Set'}/>
+            </TableCell>
+            <TableCell className={classes.tableRow}>
+                <SlicedText type={'email'} size={15} data={data.email}/>
+            </TableCell>
             <TableCell className={classes.tableRow}>{data.phone}</TableCell>
         </TableBodyComponent>
     )
