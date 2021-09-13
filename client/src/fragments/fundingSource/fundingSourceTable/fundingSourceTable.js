@@ -37,20 +37,14 @@ export const FundingSourceTable = ({status, handleGetPage}) => {
 
     return (
         <div className={globalStyle.tableWrapper}>
-
-            <Toast
-                type={'success'}
-                text={errorMessage}
-                info={successCreate}/>
-            <TableContainer component={Paper}>
+            <TableContainer className={globalStyle.tableContainer} component={Paper}>
                 <Table
                     className={globalStyle.table}
                     size="small"
                     aria-label="a dense table"
                 >
                     <FundingSourceTableHead/>
-                    {httpOnLoad.length ?
-                        <Loader/>
+                    {httpOnLoad.length ? <Loader/>
                         :
                         fundingSourceList?.funders && fundingSourceList.funders.map((item, i) => (
                             <FundingSourceTableBody
@@ -67,6 +61,11 @@ export const FundingSourceTable = ({status, handleGetPage}) => {
                     entries={fundingSourceList?.funders?.length}
                 />
             </TableContainer>
+            <Toast
+                type={'success'}
+                text={errorMessage}
+                info={successCreate}/>
+
         </div>
     );
 };

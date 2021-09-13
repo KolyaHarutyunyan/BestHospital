@@ -48,7 +48,6 @@ function* createFundingSource(action) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
-        console.log(err, 'ers')
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
     }
@@ -92,7 +91,6 @@ function* getFundingSource(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.removeError(action.type));
-        console.log(err)
     }
 }
 
@@ -133,7 +131,6 @@ function* getFundingSourceServicesById(action) {
 
 
     } catch (error) {
-        console.log(error, 'errr get servicees')
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.removeError(action.type));
     }

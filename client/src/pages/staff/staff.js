@@ -11,7 +11,7 @@ export const Staff = () => {
     const [status,setStatus] = useState(1)
 
     useEffect(() => {
-        dispatch(adminActions.getAdmins({status: status, start: 0,end: 10}));
+        dispatch(adminActions.getAdmins({ status : status, start : 0, end : 10 }))
     }, []);
 
     const handleOpenClose = () => {
@@ -21,9 +21,9 @@ export const Staff = () => {
     const getStaffMemberWithStatus = (status) => {
         setStatus(status)
         if(status === 0){
-            dispatch(adminActions.getAdmins({status: status, start: 0,end: 10}))
+            dispatch(adminActions.getAdmins({status: 0, start: 0,end: 10}))
         }else {
-            dispatch(adminActions.getAdmins({status: status, start: page, end: 10}));
+            dispatch(adminActions.getAdmins({status: 1, start: 0, end: 10}));
         }
 
     }

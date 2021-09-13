@@ -32,8 +32,7 @@ export const StaffTable = ({status, handleGetPage}) => {
                         aria-label="a dense table"
                     >
                         <StaffTableHead/>
-                        {
-                            adminsList?.staff && adminsList.staff.map((item, i) => (
+                        { adminsList?.staff && adminsList.staff.map((item, i) => (
                                 <StaffTableBody
                                     key={i}
                                     data={item}
