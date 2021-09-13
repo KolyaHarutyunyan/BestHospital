@@ -17,10 +17,9 @@ export const AddButton = ({loader,disabled, styles, text, handleClick,type }) =>
 
     <Button
         disabled={disabled}
-        style={{background: !disabled ? `#347AF0!important` : 'rgba(52,122,240,.5)',...styles}}
+        style={{background: !disabled ? `#347AF0` : 'rgba(52,122,240,.5)',...styles}}
         className={classes.addButtonStyle}
         onClick={handleClick}
-        // styles={}
     >
       {
         loader !== true && <img src={Images.addCircle} alt={'icon'}/>

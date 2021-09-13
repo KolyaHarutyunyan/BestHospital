@@ -93,7 +93,7 @@ export const Credentials = ({removeItem, openModal,globalCredentials}) => {
             dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_CREDENTIAL_GLOBAL'))
             setInputs({
                 name: '',
-                type: ''
+                type: null
             })
         }else if(errorText){
             dispatch(httpRequestsOnErrorsActions.removeError('CREATE_CREDENTIAL_GLOBAL'))

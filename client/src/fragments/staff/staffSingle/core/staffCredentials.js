@@ -22,7 +22,7 @@ export const StaffCredentials = ({credentialData, openModal}) => {
     }
 
     const removeCredential = () => {
-        dispatch(adminActions.deleteCredentialById(deletedId,params.id))
+        dispatch(adminActions.deleteCredentialById(deletedId, params.id))
         handleClose()
     }
 
