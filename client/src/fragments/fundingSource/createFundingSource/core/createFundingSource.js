@@ -131,14 +131,13 @@ useEffect(()=>{
                             onChange={handleChange}
                         />
                         <ValidationInput
-                            Length={11}
+                            variant={"outlined"}
                             onChange={handleChange}
                             value={inputs.phoneNumber}
-                            variant={"outlined"}
                             type={"number"}
                             label={"Phone Number*"}
-                            name={'phoneNumber'}
-                            typeError={error === 'phoneNumber' ? ErrorText.field : errorText[0] === 'phoneNumber must be a valid phone number' ? 'phoneNumber must be a valid phone number' : ""}
+                            name='phoneNumber'
+                            typeError={error === 'phoneNumber' && ErrorText.field}
                         />
 
 
