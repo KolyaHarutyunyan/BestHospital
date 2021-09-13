@@ -202,7 +202,7 @@ export const Notes = ({
 //                             content={<AddNotes model={model}
 //                                                noteModalTypeInfo={noteModalInfoEdit}
 //                                                handleClose={handleOpenClose}/> }
-//                             />
+//
 //                         <SimpleModal
 //                             openDefault={openDelModal}
 //                             handleOpenClose={handleOpenCloseDel}
@@ -211,7 +211,7 @@ export const Notes = ({
 //                                                     handleDel={handleDelete}
 //                                                     handleClose={handleOpenCloseDel}/>}
 // >>>>>>> develop
-//                         />
+                        />
                     </>
                 }
             </TableContainer>
