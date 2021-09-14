@@ -1,14 +1,12 @@
 import React, {useEffect, useState} from "react";
 import {createStaffModalStyle} from "./style";
-import {Steps, CloseButton} from "@eachbase/components";
+import {Steps, CloseButton, Toast} from "@eachbase/components";
 import {useGlobalTextStyles, EmailValidator, ErrorText} from "@eachbase/utils";
 import {AddressInput, ValidationInput, SelectInput} from "@eachbase/components";
-import {adminActions} from "@eachbase/store";
-import {useDispatch} from "react-redux";
+import {adminActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
+import {useDispatch, useSelector} from "react-redux";
 import {inputStyle} from "../../../fundingSource/createFundingSource/core/styles";
 import moment from "moment";
-import {Autocomplete} from "@material-ui/lab";
-import {TextField} from "@material-ui/core";
 
 const steps = ['General Info', 'Address', 'Other Details']
 
@@ -42,7 +40,7 @@ const genderList = [
 ]
 
 
-export const CreateStaff = ({adminsList, handleClose, resetData, staffGeneral}) => {
+export const CreateStaff = ({globalDepartments,adminsList, handleClose, resetData, staffGeneral}) => {
     const [error, setError] = useState("");
     const [errorSec, setErrorSec] = useState("");
     const [inputs, setInputs] = useState(resetData ? {} : staffGeneral ? staffGeneral : {});
@@ -108,12 +106,14 @@ export const CreateStaff = ({adminsList, handleClose, resetData, staffGeneral}) 
             inputs.phone &&
             inputs.gender &&
             inputs.birthday &&
+            inputs.departments &&
+            inputs.supervisor &&
             fullAddress
         ) {
             staffGeneral ?
                 dispatch(adminActions.editAdminById(data, staffGeneral.id)) :
                 dispatch(adminActions.createAdmin(data))
-                handleClose()
+
         } else {
 
             setError(
@@ -123,27 +123,40 @@ export const CreateStaff = ({adminsList, handleClose, resetData, staffGeneral}) 
                             !inputs.phone ? 'phone' :
                                 !inputs.gender ? 'gender' :
                                     !inputs.birthday ? 'birthday' :
+                                        !inputs.departments ? 'departments' :
+                                            !inputs.supervisor ? 'supervisor' :
                                         'Input is not filled'
             )
         }
     }
 
-    const [supervisor, setSupervisor] = useState('')
+    const {httpOnSuccess,httpOnError} = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnError: state.httpOnError
+    }));
 
-    const [id,setId] = useState('')
+    const success =
+        httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_ADMIN' ? true :
+            httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_ADMIN_BY_ID'
 
-    useEffect(()=>{
-        setId(getID(supervisor))
-    },[supervisor])
+    const errorText =
+        httpOnError.length && httpOnError[0].type === 'CREATE_ADMIN' ? true :
+            httpOnError.length && httpOnError[0].type === 'EDIT_ADMIN_BY_ID'
 
-    const getID = (data) => {
-        for (let i = 0; i < adminsList.length; i++){
-            if (adminsList[i].firstName === data){
-                return adminsList[i].id
-            }
+    const errorMessage = success ? 'success' : httpOnError[0]?.error[0]
+
+    useEffect(() => {
+        if (success) {
+            dispatch(httpRequestsOnSuccessActions.removeSuccess(httpOnSuccess.length && httpOnSuccess[0].type))
+            handleClose()
+        } if(errorText){
+            dispatch(httpRequestsOnErrorsActions.removeError(httpOnError.length && httpOnError[0].type))
         }
-    }
-    console.log(id,'id');
+    }, [success]);
+
+    console.log(errorText,'errrrrrrrrrrrrrr');
+    console.log(success,'successssssss');
+
     const firstStep = (
         <React.Fragment>
             <ValidationInput
@@ -268,28 +281,22 @@ export const CreateStaff = ({adminsList, handleClose, resetData, staffGeneral}) 
             </div>
             <p className={`${classes.otherDetailsTitle} ${classes.titlePadding}`}>Other</p>
             <SelectInput
-                name={"department"}
+                name={"departments"}
                 label={"Department*"}
                 handleSelect={handleChange}
-                value={inputs.department}
-                list={departmentList}
-                typeError={error === 'department' ? ErrorText.field : ''}
+                value={inputs.departments}
+                list={globalDepartments}
+                typeError={error === 'departments' ? ErrorText.field : ''}
+                type={'id'}
             />
-            {/*<SelectInput*/}
-            {/*    name={"supervisor"}*/}
-            {/*    label={"Supervisor*"}*/}
-            {/*    handleSelect={handleChange}*/}
-            {/*    value={inputs.supervisor}*/}
-            {/*    list={adminsList}*/}
-            {/*    typeError={error === 'supervisor' ? ErrorText.field : ''}*/}
-            {/*/>*/}
-            <Autocomplete
-                onChange={(event, value) => setSupervisor(event?.target?.textContent)}
-                id="combo-box-demo"
-                options={adminsList}
-                getOptionLabel={(option) => option.firstName}
-                style={{ width: 300 }}
-                renderInput={(params) => <TextField {...params} label="Combo box" variant="outlined" />}
+            <SelectInput
+                name={"supervisor"}
+                label={"Supervisor*"}
+                handleSelect={handleChange}
+                value={inputs.supervisor}
+                list={adminsList}
+                type={'id'}
+                typeError={error === 'supervisor' ? ErrorText.field : ''}
             />
             <SelectInput
                 name={"residencyStatus"}
@@ -347,6 +354,10 @@ export const CreateStaff = ({adminsList, handleClose, resetData, staffGeneral}) 
                 disabledOne={disabledOne}
                 disableSecond={disableSecond}
             />
+            <Toast
+                type={success ? 'success' : errorText ? 'error' : ''}
+                text={errorMessage}
+                info={success ? success : errorText ? errorText : ''}/>
         </div>
     );
 };

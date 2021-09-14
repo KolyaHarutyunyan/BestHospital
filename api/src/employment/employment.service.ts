@@ -21,22 +21,13 @@ export class EmploymentService {
 
   async create(dto: CreateEmploymentDto): Promise<EmploymentDto> {
     try {
-      if (dto.termination.date) {
-        const date = new Date(dto.termination.date);
-        this.checkTime(date);
-        dto.termination.date = date.toLocaleDateString()
-      }
       const staff = await this.staffService.findById(dto.staffId);
       let employment = new this.model({
-        _id: dto.staffId,
+        staffId: dto.staffId,
         schedule: dto.schedule,
-        termination: dto.termination
+        termination: dto.termination,
+        date: dto.date
       });
-      if (dto.date) {
-        const date = new Date(dto.date);
-        this.checkTime(date);
-        employment.date = date.toLocaleDateString()
-      }
       if (dto.supervisor == dto.staffId) {
         throw new HttpException(
           'staff@ inq@ ir manager@ chi karox linel chnayac hayastanum hnaravor e',
@@ -78,12 +69,12 @@ export class EmploymentService {
   private checkEmployment(employment: IEmployment) {
     if (!employment) {
       throw new HttpException(
-        'Profile with this id was not found',
+        'Employment with this id was not found',
         HttpStatus.NOT_FOUND,
       );
     }
   }
-  /** Private methods */
+
   /** if the date is not valid, throws an exception */
   private checkTime(date: Date) {
     if (isNaN(date.getTime())) {

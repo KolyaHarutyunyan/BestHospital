@@ -3,9 +3,10 @@ import { TerminationDTO } from '../../termination';
 
 export interface IEmployment extends Document {
     id: string;
+    staffId: string;
     departmentId: string;
     termination: TerminationDTO;
     schedule: number;
     supervisor: string;
-    date: string;
+    date: Date;
 }

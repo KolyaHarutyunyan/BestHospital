@@ -46,7 +46,7 @@ export const errMessageStyle = makeStyles(() => ({
     overflow:'hidden',
     whiteSpace:'nowrap',
     textOverflow:'ellipsis',
-    width:'100px',
+    width:'150px',
     textTransform:'uppercase',
     "@media (min-width: 1919px)": {
       width:'150px',
@@ -70,8 +70,16 @@ export const errMessageStyle = makeStyles(() => ({
     "@media (min-width: 1919px)": {
       width:'250px',
     },
-  } ,
-
+  },
+  responsive:{
+    overflow:'hidden',
+    whiteSpace:'nowrap',
+    textOverflow:'ellipsis',
+    maxWidth:'200px',
+    "@media (min-width: 1919px)": {
+      maxWidth:'250px',
+    },
+  },
   emailEllipsis:{
     overflow:'hidden',
     whiteSpace:'nowrap',
