@@ -21,22 +21,13 @@ export class EmploymentService {
 
   async create(dto: CreateEmploymentDto): Promise<EmploymentDto> {
     try {
-      if (dto.termination.date) {
-        const date = new Date(dto.termination.date);
-        this.checkTime(date);
-        dto.termination.date = date.toLocaleDateString()
-      }
       const staff = await this.staffService.findById(dto.staffId);
       let employment = new this.model({
         _id: dto.staffId,
         schedule: dto.schedule,
-        termination: dto.termination
+        termination: dto.termination,
+        date: dto.date
       });
-      if (dto.date) {
-        const date = new Date(dto.date);
-        this.checkTime(date);
-        employment.date = date.toLocaleDateString()
-      }
       if (dto.supervisor == dto.staffId) {
         throw new HttpException(
           'staff@ inq@ ir manager@ chi karox linel chnayac hayastanum hnaravor e',

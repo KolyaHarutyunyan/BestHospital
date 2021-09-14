@@ -1,0 +1,9 @@
+export { FundingModule } from './funding.module';
+export { App } from './app.module';
+export { GlobalServiceModule } from './globService.module';
+export { ModifierModule } from './modifier.module';
+export { CredentialModule } from './credential.module';
+export { FundingServiceModule } from './fundingService.module';
+export { DepartmentModule } from './department.module';
+export { StaffModule } from './staff.module';
+export { CommentModule } from './comment.module';
