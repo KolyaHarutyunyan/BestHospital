@@ -27,7 +27,7 @@ export const FundingSourceSingleServices = ({data,}) => {
     const classes = fundingSourceSingleStyles()
     const dispatch = useDispatch()
     const modifiers = useSelector(state => state.fundingSource.modifiers)
-
+    const globalCredentials = useSelector(state => state.system.credentials)
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnError: state.httpOnError,
@@ -170,13 +170,13 @@ export const FundingSourceSingleServices = ({data,}) => {
                         info={ index !== null ? data[index].name : ''}
                         text={'Delete Service'}
                         handleClose={() => setToggleModal(!toggleModal)}/> :
-                    <FundingSourceServiceAdd modifiersID={modifiers} info={data ?  data[index] : {}}
+                    <FundingSourceServiceAdd  modifiersID={modifiers} info={data ?  data[index] : {}}
                                              handleClose={() => setToggleModal(!toggleModal)}/>}
             />
             <div style={{marginTop: -32, width: '100%'}}>
                 <Notes data={data} items={serviceItem} headerTitles={headerTitles} defaultStyle={true}/>
             </div>
-            {modifiers.length ? <FundingSourceSinglePTModifiers data={modifiers}
+            {modifiers.length ? <FundingSourceSinglePTModifiers globalCredentials={globalCredentials} data={modifiers}
                                              title={data && data[serviceIndex]?.name}/>  : <NoItemText text='' />}
         </div>
     )

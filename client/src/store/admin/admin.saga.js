@@ -35,7 +35,6 @@ function* createAdmin(action) {
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
 
     } catch (err) {
-        console.log(err, 'error')
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type,err.data.message));
     }

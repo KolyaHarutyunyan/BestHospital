@@ -7,7 +7,7 @@ import {fundingSourceActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 
 
-export const FundingSourceModifiersAdd = ({
+export const FundingSourceModifiersAdd = ({info,
                                               setPostModifiers,
                                               globalCredentials,
                                               modifiersServ,
@@ -19,8 +19,9 @@ export const FundingSourceModifiersAdd = ({
     const [inputs2, setInputs2] = useState({});
     const [modifiers, setModifiers] = useState(modifiersServ ? [...modifiersServ] : []);
     const [credentialID, setCredentialID] = useState(null)
+    const [credentialIDitem, setCredentialIDitem] = useState(null)
     const [btnStyle, setBtnStyle] = useState(false)
-    const [index, setIndex] = useState(0)
+    const [indexItem, setIndexItem] = useState(null)
     const dispatch = useDispatch()
 
 
@@ -36,10 +37,15 @@ export const FundingSourceModifiersAdd = ({
     }
 
     const handleChange2 = e => {
+        globalCredentials && globalCredentials.length > 0 && globalCredentials.forEach((item, index) => {
+            if (inputs2.credentialId === item.name) {
+                setCredentialIDitem(item._id)
+            }})
         setInputs2(
             prevState => ({...prevState, [e.target.name]: e.target.value}),
             error === e.target.name && setError(''),
         );
+
 
 
     }
@@ -80,6 +86,11 @@ export const FundingSourceModifiersAdd = ({
     }, [inputs])
 
     const handleCreate = () => {
+        if (inputs2.credentialId && inputs2.chargeRate && inputs2.name && inputs2.type) {
+            if (inputs2.credentialId !== '0' && inputs2.chargeRate !== ' ' && inputs2.name !== ' ') {
+                dispatch(fundingSourceActions.editFoundingSourceModifier(modifiers[indexItem]._id, inputs2))
+            }
+        }
         setBtnStyle(false)
         if (inputs.credentialId && inputs.chargeRate && inputs.name && inputs.type) {
             if (inputs.credentialId !== '0' && inputs.chargeRate !== ' ' && inputs.name !== ' ') {
@@ -114,22 +125,20 @@ export const FundingSourceModifiersAdd = ({
     let list = [{name: 0,}, {name: 1}]
 
 
-    console.log(globalCredentials[0]._id, 'log')
-
     let editModifier = (i) => {
-        setInputs2(modifiers[i])
-        console.log(modifiers[i],'mod i')
-        dispatch(fundingSourceActions.editFoundingSourceModifier(modifiers[i]._id, {
-            "credentialId": globalCredentials[0]._id,
-            "name": "string",
-            "chargeRate": 0,
-            "type": 0
-        }))
-        // editFoundingSourceModifier
+        if (i !== indexItem) {
+            setIndexItem(i)
+            setInputs2(modifiers[i])
+        }
+        if (inputs2.credentialId && inputs2.chargeRate && inputs2.name && inputs2.type) {
+            if (inputs2.credentialId !== '0' && inputs2.chargeRate !== ' ' && inputs2.name !== ' ') {
+                dispatch(fundingSourceActions.editFoundingSourceModifier(modifiers[i]._id, inputs2))
+            }
+        }
     }
 
 
-    console.log(inputs2, 'inp2')
+
 
     return (
         <div>
@@ -180,53 +189,98 @@ export const FundingSourceModifiersAdd = ({
             </div>
             {modifiers.map((item, index) => {
 
-                return (
-                    <div className={classes.foundingSourceModalsBodyBlock} onClick={() => editModifier(index)}>
-                        <ValidationInput
-                            onChange={handleChange2}
-                            value={item.name}
-                            variant={"outlined"}
-                            type={"text"}
-                            label={"Modifier Name"}
-                            name={'name'}
-                            styles={{width: 198}}
-                        />
-                        <div style={{width: 36}}/>
-                        <ValidationInput
-                            onChange={handleChange2}
-                            value={item.chargeRate}
-                            variant={"outlined"}
-                            type={"text"}
-                            label={"Charge Rate*"}
-                            name={'chargeRate'}
+                if (index === indexItem) {
+                    return (
+                        <div className={classes.foundingSourceModalsBodyBlock} onClick={() => editModifier(index)}>
+                            <ValidationInput
+                                onChange={handleChange2}
+                                value={inputs2?.name}
+                                variant={"outlined"}
+                                type={"text"}
+                                label={"Modifier Name"}
+                                name={'name'}
+                                styles={{width: 198}}
+                            />
+                            <div style={{width: 36}}/>
+                            <ValidationInput
+                                onChange={handleChange2}
+                                value={inputs2?.chargeRate}
+                                variant={"outlined"}
+                                type={"text"}
+                                label={"Charge Rate*"}
+                                name={'chargeRate'}
 
-                            styles={{width: 198}}
-                        />
-                        <div style={{width: 36}}/>
-                        <SelectInput
-                            name={"credentialId"}
-                            label={"Credential*"}
-                            handleSelect={handleChange2}
-                            value={globalCredentials.find(elem => elem._id === item.credentialId && elem._id).name}
-                            list={globalCredentials}
-                            styles={{width: 198}}
-                        />
-                        <div style={{width: 36}}/>
-                        <SelectInput
-                            name={"type"}
-                            label={"Type*"}
-                            handleSelect={handleChange2}
-                            value={item.type === 0 ? '0' : item.type}
-                            list={list}
-                            styles={{width: 198,}}
-                        />
-                    </div>
-                )
+                                styles={{width: 198}}
+                            />
+                            <div style={{width: 36}}/>
+                            <SelectInput
+                                name={"credentialId"}
+                                label={"Credential*"}
+                                handleSelect={handleChange2}
+                                value={globalCredentials.find(elem => elem._id === inputs2?.credentialId && elem._id)?.name}
+                                list={globalCredentials}
+                                styles={{width: 198}}
+                            />
+                            <div style={{width: 36}}/>
+                            <SelectInput
+                                name={"type"}
+                                label={"Type*"}
+                                handleSelect={handleChange2}
+                                value={inputs2?.type === 0 ? '0' : inputs2?.type}
+                                list={list}
+                                styles={{width: 198,}}
+                            />
+                        </div>
+                    )
+                } else {
+                    return (
+                        <div className={classes.foundingSourceModalsBodyBlock} onClick={() => editModifier(index)}>
+                            <ValidationInput
+                                onChange={handleChange2}
+                                value={item.name}
+                                variant={"outlined"}
+                                type={"text"}
+                                label={"Modifier Name"}
+                                name={'name'}
+                                styles={{width: 198}}
+                            />
+                            <div style={{width: 36}}/>
+                            <ValidationInput
+                                onChange={handleChange2}
+                                value={item.chargeRate}
+                                variant={"outlined"}
+                                type={"text"}
+                                label={"Charge Rate*"}
+                                name={'chargeRate'}
+
+                                styles={{width: 198}}
+                            />
+                            <div style={{width: 36}}/>
+                            <SelectInput
+                                name={"credentialId"}
+                                label={"Credential*"}
+                                handleSelect={handleChange2}
+                                value={globalCredentials.find(elem => elem._id === item.credentialId && elem._id).name}
+                                list={globalCredentials}
+                                styles={{width: 198}}
+                            />
+                            <div style={{width: 36}}/>
+                            <SelectInput
+                                name={"type"}
+                                label={"Type*"}
+                                handleSelect={handleChange2}
+                                value={item.type === 0 ? '0' : item.type}
+                                list={list}
+                                styles={{width: 198}}
+                            />
+                        </div>
+                    )
+                }
             })}
 
-            <div className={classes.addmodifiersBlock} onClick={handleCreate}>
-                <img src={btnStyle ? Images.addLight2 : Images.addLight} alt="" className={classes.iconsCursor}/>
-                <p className={classes.addMoreModifiersText}
+            <div className={classes.addmodifiersBlock} >
+                <img onClick={handleCreate} src={btnStyle ? Images.addLight2 : Images.addLight} alt="" className={classes.iconsCursor}/>
+                <p onClick={handleCreate} className={classes.addMoreModifiersText}
                    style={btnStyle ? {color: '#347AF0'} : {color: "#347AF080"}}>Add more modifiers</p>
             </div>
         </div>

@@ -7,7 +7,7 @@ import {TableCell} from "@material-ui/core";
 
 
 
-export const FundingSourceSinglePTModifiers = ({data, title}) => {
+export const FundingSourceSinglePTModifiers = ({data, title, globalCredentials}) => {
     const classes = fundingSourceSingleStyles()
     const headerTitles = [
         {
@@ -33,7 +33,7 @@ export const FundingSourceSinglePTModifiers = ({data, title}) => {
         return (
             <TableBodyComponent key={index}>
                 <TableCell>  {item?.name}  </TableCell>
-                <TableCell>  {item?.credentialId}  </TableCell>
+                <TableCell>  {globalCredentials.find(elem => elem._id === item.credentialId && elem._id).name}  </TableCell>
                 <TableCell>  {item?.chargeRate}  </TableCell>
                 <TableCell>  {item?.type}  </TableCell>
 
@@ -45,7 +45,7 @@ export const FundingSourceSinglePTModifiers = ({data, title}) => {
 
     return (
         <div className={classes.fundingSourceSinglePTModifiersStyles}>
-            <p className={classes.fundingSourceSinglePTModifiersTitleStyles}>{`${title} Charge Table`}</p>
+            <p className={classes.fundingSourceSinglePTModifiersTitleStyles}>{`${title && title} Charge Table`}</p>
             <Notes noItemsYet={true} data={data} items={modifiersItem} headerTitles={headerTitles} defaultStyle={true} />
         </div>
     )
