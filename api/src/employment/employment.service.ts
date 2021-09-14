@@ -69,12 +69,12 @@ export class EmploymentService {
   private checkEmployment(employment: IEmployment) {
     if (!employment) {
       throw new HttpException(
-        'Profile with this id was not found',
+        'Employment with this id was not found',
         HttpStatus.NOT_FOUND,
       );
     }
   }
-  /** Private methods */
+
   /** if the date is not valid, throws an exception */
   private checkTime(date: Date) {
     if (isNaN(date.getTime())) {
