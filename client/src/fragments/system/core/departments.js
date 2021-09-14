@@ -1,4 +1,4 @@
-import {AddButton, NoItemText, Toast, ValidationInput} from "@eachbase/components";
+import {AddButton, NoItemText, SlicedText, Toast, ValidationInput} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
 import {systemItemStyles} from "./styles";
 import React, {useEffect, useState} from "react";
@@ -99,7 +99,9 @@ export const Departments = ({globalDepartments, removeItem, openModal}) => {
                         return (
                             <div className={classes.item} key={index}>
                                 <p>
-                                    <span>{departmentItem.name}</span>
+                                    <span>
+                                        <SlicedText type={'responsive'} size={25} data={departmentItem.name}/>
+                                    </span>
                                     {departmentItem.type}</p>
                                 <div className={classes.icons}>
                                     <img src={Images.edit}

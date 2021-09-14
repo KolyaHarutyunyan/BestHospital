@@ -3,10 +3,10 @@ import {Backgrounds as Background, Colors, Shadow} from "./globalColors";
 
 export const useGlobalStyles = makeStyles({
     previewModal: {
-        position: 'absolute',
+        position: 'fixed',
         width: 395,
-        top: '20px',
-        height: 'calc(100% - 380px)',
+        top: 360,
+        height: 550,
         background: 'white',
         padding: 16,
         boxShadow: Shadow.noteModalShadow,
@@ -86,8 +86,8 @@ export const useGlobalStyles = makeStyles({
         '& .MuiTableContainer-root': {
             boxShadow: 'none',
             background: 'none',
-            position: 'relative',
-            overflow: 'hidden'
+            // position: 'relative',
+            // overflow: 'hidden'
         },
     },
     tableContainer: {

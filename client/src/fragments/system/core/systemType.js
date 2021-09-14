@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {TableCell} from "@material-ui/core";
-import {Notes, TableBodyComponent, AddButton, ValidationInput, Toast} from "@eachbase/components";
+import {Notes, TableBodyComponent, AddButton, ValidationInput, Toast, SlicedText} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
 import {systemItemStyles} from './styles'
 import {useDispatch, useSelector} from "react-redux";
@@ -46,9 +46,15 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
     const notesItem = (item, index) => {
         return (
             <TableBodyComponent key={index}>
-                <TableCell>{item.name}</TableCell>
-                <TableCell>{item.displayCode}</TableCell>
-                <TableCell>{item.category}</TableCell>
+                <TableCell>
+                    <SlicedText size={30} type={'name'} data={item.name}/>
+                </TableCell>
+                <TableCell>
+                    <SlicedText size={25} type={'email'} data={item.displayCode}/>
+                </TableCell>
+                <TableCell>
+                    <SlicedText size={25} type={'email'} data={item.category}/>
+                </TableCell>
                 <TableCell>{item.action ? item.action :
                     <div className={classes.icons}>
                         <img src={Images.edit} onClick={() => editService('editService',{id:item.id,name:item.name,category: item.category,displayCode: item.displayCode})} alt="edit"/>

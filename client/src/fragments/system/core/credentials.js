@@ -1,4 +1,4 @@
-import {AddButton, NoItemText, Toast, ValidationInput} from "@eachbase/components";
+import {AddButton, NoItemText, SlicedText, Toast, ValidationInput} from "@eachbase/components";
 import React, {useEffect, useState} from "react";
 import {systemItemStyles} from "./styles";
 import {ErrorText, Images,} from "@eachbase/utils";
@@ -139,9 +139,11 @@ export const Credentials = ({removeItem, openModal,globalCredentials}) => {
                     globalCredentials && globalCredentials.length ? globalCredentials.map((credentialItem, index) => {
                         return (
                             <div className={classes.item} key={index}>
-                                <p>
-                                    <span>{`${credentialItem.name} - `}</span>
-                                    {convertType(credentialItem.type)}
+                                <p style={{display: 'flex',alignItems: 'center'}}>
+                                    <span>
+                                        <SlicedText type={'responsive'} size={25} data={credentialItem.name}/>
+                                    </span>
+                                    {` - ${convertType(credentialItem.type)}`}
                                 </p>
                                 <div className={classes.icons}>
                                     <img src={Images.edit}

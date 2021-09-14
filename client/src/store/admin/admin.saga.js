@@ -22,14 +22,22 @@ import {httpRequestsOnLoadActions} from "../http_requests_on_load";
 import {httpRequestsOnSuccessActions} from "../http_requests_on_success";
 
 function* createAdmin(action) {
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         yield call(authService.createAdminService, action.payload.body);
         yield put({
             type: GET_ADMINS,
             payload: { status : 1, start : 0, end : 10 },
         });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.removeError(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+
     } catch (err) {
-        console.log(err.response, 'response')
+        console.log(err, 'error')
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type,err.data.message));
     }
 }
 

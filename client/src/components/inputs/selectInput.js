@@ -1,4 +1,4 @@
-import {InputLabel, Select, TextField, FormControl, InputAdornment, FormHelperText} from "@material-ui/core";
+import {InputLabel, Select, FormControl, FormHelperText} from "@material-ui/core";
 import {inputsStyle} from "./styles";
 import {InputMinLoader} from "./inputMiniLoader";
 import React from "react";
@@ -73,9 +73,9 @@ export const SelectInput = ({
                             )) :
                             list.length && list.map((option, j) => (
                                 <option data-key={option.code ? option.code : j} key={j}
-                                        value={type === 'id' ? option.id : option.name}
+                                        value={type === 'id' ? option.id || option._id : option.firstName || option.name}
                                 >
-                                    {option.name}
+                                    {option.firstName || option.name}
                                 </option>
                             ))
                         }

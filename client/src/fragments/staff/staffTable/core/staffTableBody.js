@@ -18,7 +18,7 @@ export const StaffTableBody = ({index, data}) => {
             <TableCell className={classes.tableRow}>
                 <div className={globalClasses.InfoAndImage}>
                     <img src={Images.staffOutline} alt={"funding"}/>
-                    <SlicedText  type={'name'} size={10} data={data.firstName}/>
+                    <SlicedText type={'name'} size={10} data={`${data.firstName} ${data.lastName}`}/>
                 </div>
             </TableCell>
             <TableCell className={classes.tableRow}>
