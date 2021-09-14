@@ -16,7 +16,6 @@ export const AddNotes = ({closeModal, model, noteModalTypeInfo, handleClose}) =>
     const params = useParams()
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(noteModalTypeInfo ? noteModalTypeInfo : {});
-
     const handleChange = e => {
         setInputs(
             prevState => (

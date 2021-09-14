@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {SimpleTabs, Toast} from "@eachbase/components";
-import {ServiceType, systemItemStyles, SystemItemHeader, Credentials, Departments, JobTitles} from './core';
+import {ServiceType, systemItemStyles, SystemItemHeader, Credentials, Departments, JobTitles, PayrollSetup} from './core';
 import {useDispatch, useSelector} from "react-redux";
 import {httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, systemActions} from "../../store";
 
@@ -72,6 +72,9 @@ export const SystemItem = () => {
         },
         {
             label: 'Job Titles'
+        },
+        {
+            label: 'Payroll Setup'
         }
     ]
 
@@ -114,6 +117,9 @@ export const SystemItem = () => {
         },
         {
             tabComponent: (<JobTitles globalJobs={globalJobs} removeItem={handleRemoveItem} openModal={handleOpenClose}/>)
+        },
+        {
+            tabComponent: (<PayrollSetup />)
         }
     ];
 

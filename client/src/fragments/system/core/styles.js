@@ -1,5 +1,5 @@
 import {makeStyles} from "@material-ui/core/styles";
-import {Colors} from "@eachbase/utils";
+import {Colors, Shadow} from "@eachbase/utils";
 
 export const systemItemStyles = makeStyles(() => ({
     credentialTable: {
@@ -89,4 +89,22 @@ export const systemItemStyles = makeStyles(() => ({
             marginLeft: 16
         }
     },
+    // Payroll Setup
+    tabContainer: {
+        display: 'inline-block',
+        backgroundColor: 'white',
+        boxShadow: Shadow.noteModalShadow,
+        lineHeight: 1,
+        borderRadius: 8
+    },
+    activeStepText: {
+
+    },
+    stepText: {
+        display: 'inline-block',
+        verticalAlign: 'middle',
+        padding: '7px 24px',
+        cursor: 'pointer'
+    }
+
 }));
