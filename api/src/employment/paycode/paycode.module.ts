@@ -3,9 +3,10 @@ import { PaycodeService } from './paycode.service';
 import { PaycodeController } from './paycode.controller';
 import { EmploymentModule } from '..';
 import { PayCodeSanitizer } from './interceptor/sanitizer.interceptor';
+import { PaycodetypeModule } from '../../paycodetype/paycodetype.module';
 
 @Module({
-  imports: [EmploymentModule],
+  imports: [EmploymentModule, PaycodetypeModule],
   controllers: [PaycodeController],
   providers: [PaycodeService, PayCodeSanitizer]
 })

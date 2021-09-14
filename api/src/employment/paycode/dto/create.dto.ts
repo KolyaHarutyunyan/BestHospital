@@ -10,15 +10,19 @@ export class CreatePaycodeDTO {
     @IsMongoId()
     @IsNotEmpty()
     payCodeTypeId: string;
+    @ApiProperty()
     @IsNumber()
     @IsNotEmpty()
     rate: number;
+    @ApiProperty()
     @IsBoolean()
     @IsNotEmpty()
     active: boolean;
+    @ApiProperty()
     @IsDateString()
     @IsNotEmpty()
     startDate: Date;
+    @ApiProperty()
     @IsDateString()
     @IsOptional()
     endDate?: Date;

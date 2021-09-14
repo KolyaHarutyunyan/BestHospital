@@ -3,7 +3,8 @@ import { IEmployment, ScheduleStatus } from '../employment';
 import { TerminationSchema } from '../termination';
 
 const EmploymentSchema = new Schema({
-    departmentId: { type: Types.ObjectId, ref: 'Department', require: false },
+    staffId: { type: Types.ObjectId, ref: 'Staff' },
+    departmentId: { type: Types.ObjectId, ref: 'Department' },
     supervisor: { type: Types.ObjectId, ref: 'Staff', default: null },
     schedule: { type: Number, enum: ScheduleStatus },
     termination: TerminationSchema,

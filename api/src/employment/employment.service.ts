@@ -23,7 +23,7 @@ export class EmploymentService {
     try {
       const staff = await this.staffService.findById(dto.staffId);
       let employment = new this.model({
-        _id: dto.staffId,
+        staffId: dto.staffId,
         schedule: dto.schedule,
         termination: dto.termination,
         date: dto.date

@@ -6,13 +6,13 @@ import { IPayCode } from './interface';
 import { PayCodeModel } from './paycode.model';
 import { EmploymentService } from '../employment.service';
 import { PayCodeSanitizer } from './interceptor/sanitizer.interceptor';
-
+import { PaycodetypeService } from '../../paycodetype/paycodetype.service';
 
 @Injectable()
 export class PaycodeService {
   constructor(
     private readonly employmentService: EmploymentService,
-    // private readonly PayCodeTypeService: PayCodeTypeService,
+    private readonly PayCodeTypeService: PaycodetypeService,
     private readonly sanitizer: PayCodeSanitizer,
 
   ) {
@@ -24,27 +24,41 @@ export class PaycodeService {
 
   async create(dto: CreatePaycodeDTO): Promise<PayCodeDTO> {
     const employment = await this.employmentService.findOne(dto.employmentId);
-    // const payCodeType = await this.PayCodeTypeService.findOne(dto.payCodeTypeId);
+    const payCodeType = await this.PayCodeTypeService.findOne(dto.payCodeTypeId);
 
     const paycode = new this.model({
       employmentId: employment.id,
-      // payCodeTypeId: paCodeType._id
+      payCodeTypeId: payCodeType.id,
       rate: dto.rate,
       active: dto.active,
       startDate: dto.startDate
     })
-    if(dto.endDate) paycode.endDate = dto.endDate
+    if (dto.endDate) paycode.endDate = dto.endDate
     await paycode.save()
     return this.sanitizer.sanitize(paycode)
   }
 
-  // findAll() {
-  //   return `This action returns all paycode`;
-  // }
+  async findAll(): Promise<PayCodeDTO[]> {
+    try {
+      const payCode = await this.model.find();
+      this.checkPayCode(payCode[0]);
+      return this.sanitizer.sanitizeMany(payCode)
+    }
+    catch (e) {
+      throw e
+    }
+  }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} paycode`;
-  // }
+  async findOne(_id: string): Promise<PayCodeDTO> {
+    try {
+      let payCode = await this.model.findById({ _id })
+      this.checkPayCode(payCode)
+      return this.sanitizer.sanitize(payCode)
+    }
+    catch (e) {
+      throw e
+    }
+  }
 
   // update(id: string, dto: UpdatePaycodeDTO) {
   //   return `This action updates a #${id} paycode`;

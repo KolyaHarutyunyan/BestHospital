@@ -7,6 +7,7 @@ import { TerminationDTO, CreateTerminationDto } from '../../termination';
 export class CreateEmploymentDto {
     @ApiProperty()
     @IsMongoId()
+    @IsNotEmpty()
     staffId: string;
     @ApiProperty({ required: false })
     // @IsMongoId()
