@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, DefaultValuePipe, Query } from '@nestjs/common';
 import { AvailabilityService } from './availability.service';
 import { CreateAvailabilityDTO, UpdateAvailabilityDTO } from './dto';
-import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ParseObjectIdPipe, Public } from '../util';
 
 @Controller('schedule')

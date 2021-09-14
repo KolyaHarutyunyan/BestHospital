@@ -25,7 +25,7 @@ export class DatabaseConnection {
       if (err) {
         console.log('error connecting to the db::: ', err);
       }
-      console.log('database connected');
+      console.log('database connected--', MONGO_CONN_STR);
     });
   };
   dropDatabase = async () => {

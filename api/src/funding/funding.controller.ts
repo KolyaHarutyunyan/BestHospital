@@ -146,7 +146,6 @@ export class FundingController {
   async remove(@Param('id', ParseObjectIdPipe) id: string): Promise<FundingDTO> {
     return await this.fundingService.remove(id);
   }
-
   /** Inactivate a funder */
   @Patch(':id/inactivate')
   @Public()

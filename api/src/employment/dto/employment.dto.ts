@@ -1,8 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
 import { ScheduleStatus } from "..";
-import { TerminationSchema } from '../../termination';
-import { TerminationDTO } from '../../termination';
+import { TerminationDTO, CreateTerminationDto } from '../../termination';
 
 export class EmploymentDto {
     @ApiProperty()
@@ -12,10 +11,10 @@ export class EmploymentDto {
     @ApiProperty({ required: false })
     departmentId?: string;
     @ApiProperty()
-    date?: string
+    date: Date
     @ApiProperty({ enum: ScheduleStatus })
     @IsEnum(ScheduleStatus)
     schedule: number;
     @ApiProperty({ type: TerminationDTO })
-    termination: TerminationDTO;
+    termination: CreateTerminationDto;
 }
