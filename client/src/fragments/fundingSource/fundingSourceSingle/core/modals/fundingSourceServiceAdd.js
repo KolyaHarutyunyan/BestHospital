@@ -174,6 +174,7 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
 
 
                 <FundingSourceModifiersAdd
+                    info={info}
                     addNewMod={addNewMod}
                     modifiersServ={modifiersID}
                     setPostModifiers={setPostModifiers}

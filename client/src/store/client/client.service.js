@@ -1,4 +1,5 @@
 import axios from "axios";
+import {getClientsAvailabilitySchedule} from "./client.action";
 
 export const authService = {
     // getClientsService: () => axios.get(`/client`,),
@@ -55,16 +56,17 @@ export const authService = {
 
     deleteClientAuthorizationServService: ({payload}) =>  axios.delete(`/authorizationservice/${payload.id}`),
 
-    getClientHistoriesService: (id,onModal) => axios.get(`/history/${id}/${onModal}`,),
+    getClientHistoriesService: (id,onModal) => axios.get(`/history/${id}/${onModal}`),
 
-    getClientNotesService: (id,onModal) => axios.get(`/comment/${id}/${onModal}`,),
+    getClientNotesService: (id,onModal) => axios.get(`/comment/${id}/${onModal}`),
 
     createClientNoteService: ( body) => axios.post(`/comment`, body),
 
     editClientNoteService: (id, body) => axios.patch(`/comment/${id}`, body),
 
-    deleteClientNoteService: (id) => axios.delete(`/comment/${id}/comments`,),
+    deleteClientNoteService: (id) => axios.delete(`/comment/${id}/comments`),
 
+    getClientsAvailabilityScheduleService: (id) => axios.get(`/schedule/${id}`),
 };
 
 

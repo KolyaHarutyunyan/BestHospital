@@ -10,7 +10,7 @@ import {
     editClientContact,
     editClientEnrollment, editClientNote, editClientsAuthorizations, editClientsAuthorizationsServ, getClientHistories,
     getClients,
-    getClientsAuthorizations, getClientsAuthorizationsServ,
+    getClientsAuthorizations, getClientsAuthorizationsServ, getClientsAvailabilitySchedule,
     getClientsById,
     getClientsContacts,
     getClientsEnrollment, getClientsNotes,
@@ -45,6 +45,7 @@ export const clientActions = {
     getClientsNotes,
     createClientNote,
     editClientNote,
-    deleteClientNote
+    deleteClientNote,
+    getClientsAvailabilitySchedule
 }
 

@@ -29,7 +29,7 @@ function* createAdmin(action) {
             payload: { status : 1, start : 0, end : 10 },
         });
     } catch (err) {
-        console.log(err.response, 'response')
+
     }
 }
 
