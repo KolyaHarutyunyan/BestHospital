@@ -4,4 +4,4 @@ export { SystemItemHeader } from './systemItemHeader';
 export { Credentials } from './credentials';
 export { Departments } from './departments';
 export { JobTitles } from './jobTitles';
-export { PayrollSetup } from './payrollSetup';
+export { PayrollSetup} from './payrollSetup/payrollSetup';

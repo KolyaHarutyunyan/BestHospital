@@ -13,7 +13,7 @@ export const RadioButton = ({styles,value,radioData, onChange}) => {
         <FormControl component="fieldset">
             <RadioGroup style={{...styles}} aria-label="gender" name="gender1" value={value} onChange={(ev)=> onChange(ev)}>
                 {
-                    radioData.map((item, index) => {
+                    radioData &&  radioData.map((item, index) => {
                         return (
                             <FormControlLabel className={classes.radioInputLabel} index={index} value={item.value} control={
                                 <Radio disableRipple classes={{root: classes.radio, checked: classes.checked}}/>
