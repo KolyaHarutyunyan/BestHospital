@@ -51,13 +51,30 @@ export class PaycodetypeService {
     return this.sanitizer.sanitize(payCodeType)
   }
 
-  // update(id: number, dto: UpdatePaycodetypeDto) {
-  //   return `This action updates a #${id} paycodetype`;
-  // }
+  async update(_id: string, dto: UpdatePayCodeTypeDTO): Promise<PayCodeTypeDTO> {
+    try {
+      const payCodeType = await this.model.findById({ _id });
+      this.checkPayCodeType(payCodeType);
+      if (dto.name) payCodeType.name = dto.name;
+      if (dto.type) payCodeType.type = dto.type;
+      if (dto.code) payCodeType.code = dto.code;
+      if (dto.overtime || dto.overtime === false) payCodeType.overtime = dto.overtime;
+      if (dto.pto || dto.pto === false) payCodeType.pto = dto.pto;
+      await payCodeType.save();
+      // await this.historyService.create({ resource: client._id, onModel: "Client", title: serviceLog.updateClient })
+      return this.sanitizer.sanitize(payCodeType);
+    } catch (e) {
+      this.mongooseUtil.checkDuplicateKey(e, 'Client already exists');
+      throw e;
+    }
+  }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} paycodetype`;
-  // }
+ async remove(_id: string): Promise<string> {
+    const payCodeType = await this.model.findById({ _id });
+    this.checkPayCodeType(payCodeType);
+    await payCodeType.remove()
+    return payCodeType._id;
+  }
 
   /** Private methods */
   /** if the employment is not valid, throws an exception */

@@ -3,10 +3,14 @@ import { Model } from 'mongoose';
 import { MongooseUtil } from '../util';
 import { CreateAvailabilityDTO, UpdateAvailabilityDTO } from './dto';
 import { AvailabilityModel } from './availability.model';
+import { ClientService } from '../client/client.service';
+import { StaffService } from '../staff';
 
 @Injectable()
 export class AvailabilityService {
   constructor(
+    private readonly Client: ClientService,
+    private readonly Staff: StaffService,
     // private readonly addressService: AddressService,
     // private readonly sanitizer: ScheduleSanitizer,
 
@@ -20,8 +24,9 @@ export class AvailabilityService {
 
   async createSchedule(dto: CreateAvailabilityDTO, owner: string, onModel: string) {
     try {
+      const onMod = onModel;
+      const resource = await this[onMod].findById(owner);
       const findSchedule = await this.model.findOne({ owner });
-
       if (!findSchedule) {
         const schedule = new this.model({
           owner,
@@ -34,18 +39,18 @@ export class AvailabilityService {
         }
         return await schedule.save();
       }
-//
-      for (var day in dto) {
-        dto[day].map(val => {
-          findSchedule[day].push(val)
-        })
-      }
-
+      
+        //
+        for (var day in dto) {
+          dto[day].map(val => {
+            findSchedule[day].push(val)
+          })
+        }
       return await findSchedule.save();
     }
     catch (e) {
       console.log(e);
-      this.mongooseUtil.checkDuplicateKey(e, 'Schedule already exists');
+      this.mongooseUtil.checkDuplicateKey(e, 'Availability already exists');
       throw e;
     }
     // const schedule = await this.model.findById('6120fd2e04abc764cc4b85d5');
@@ -85,9 +90,9 @@ export class AvailabilityService {
   async findOne(owner: string) {
     try {
       const schedule = await this.model
-        .findOne({owner})
+        .findOne({ owner })
         .populate("owner");
-        this.checkSchedule(schedule)
+      this.checkSchedule(schedule)
       return schedule
       // this.checkClient(clients[0]);
       // return this.sanitizer.sanitizeMany(clients);
@@ -96,15 +101,15 @@ export class AvailabilityService {
     }
   }
 
- async update(_id: string, dto: UpdateAvailabilityDTO) {
+  async update(_id: string, dto: UpdateAvailabilityDTO) {
     try {
-      const findSchedule = await this.model.findById({_id});
+      const findSchedule = await this.model.findById({ _id });
       this.checkSchedule(findSchedule);
 
       for (var day in dto) {
         dto[day].map(val => {
-          findSchedule[day].map(obj=>{
-            if(obj._id == val.id){
+          findSchedule[day].map(obj => {
+            if (obj._id == val.id) {
               obj.from = val.from;
               obj.to = val.to;
               obj.available = val.available
@@ -112,25 +117,25 @@ export class AvailabilityService {
           })
         })
       }
-     return await findSchedule.save()
- 
+      return await findSchedule.save()
+
     } catch (e) {
       throw e;
     }
   }
 
- async remove(_id: string):Promise<String> {
+  async remove(_id: string): Promise<String> {
     const schedule = await this.model.findByIdAndDelete({ _id });
     this.checkSchedule(schedule);
     return schedule._id;
   }
-    /** if the client is not found, throws an exception */
-    private checkSchedule(schedule: any) {
-      if (!schedule) {
-        throw new HttpException(
-          'Schedule with this id was not found',
-          HttpStatus.NOT_FOUND,
-        );
-      }
+  /** if the client is not found, throws an exception */
+  private checkSchedule(schedule: any) {
+    if (!schedule) {
+      throw new HttpException(
+        'Schedule with this id was not found',
+        HttpStatus.NOT_FOUND,
+      );
     }
+  }
 }

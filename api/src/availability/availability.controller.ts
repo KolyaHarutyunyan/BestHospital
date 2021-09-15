@@ -4,8 +4,8 @@ import { CreateAvailabilityDTO, UpdateAvailabilityDTO } from './dto';
 import { ApiOkResponse, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ParseObjectIdPipe, Public } from '../util';
 
-@Controller('schedule')
-@ApiTags('Schedule Endpoints')
+@Controller('availability')
+@ApiTags('Availability Endpoints')
 export class AvailabilityController {
   constructor(private readonly scheduleService: AvailabilityService) { }
 

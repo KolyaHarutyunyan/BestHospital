@@ -3,7 +3,7 @@ const dbs = {
   TEST_H: 'TEST_H',
   TEST_E: 'TEST_E',
 };
-const DB = dbs.DEV;
+const DB = dbs.TEST_E;
 
 export const MONGO_CONN_STR =
   `mongodb+srv://wellnessdaisy-mongo:!WELEachbase1!@testing.ykcxo.mongodb.net/${DB}?retryWrites=true&w=majority`;

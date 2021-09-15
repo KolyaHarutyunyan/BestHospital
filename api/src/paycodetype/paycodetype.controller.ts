@@ -30,13 +30,17 @@ export class PaycodetypeController {
     return await this.paycodetypeService.findOne(id);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updatePaycodetypeDto: UpdatePaycodetypeDto) {
-  //   return this.paycodetypeService.update(+id, updatePaycodetypeDto);
-  // }
+  @Patch(':id')
+  @Public()
+  @ApiOkResponse({type: PayCodeTypeDTO})
+  async update(@Param('id', ParseObjectIdPipe) id: string, @Body() updatePaycodetypeDto: UpdatePayCodeTypeDTO) {
+    return await this.paycodetypeService.update(id, updatePaycodetypeDto);
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.paycodetypeService.remove(+id);
-  // }
+  @Delete(':id')
+  @Public()
+  @ApiOkResponse({type: String})
+  async remove(@Param('id', ParseObjectIdPipe) id: string) {
+    return await this.paycodetypeService.remove(id);
+  }
 }

@@ -3,11 +3,12 @@ import { EmploymentService } from './employment.service';
 import { EmploymentController } from './employment.controller';
 import { StaffModule } from '../staff';
 import { DepartmentService } from '../department/department.service';
+import { EmploymentSanitizer } from './interceptor/employment.interceptor';
 
 @Module({
   imports: [StaffModule],
   controllers: [EmploymentController],
-  providers: [EmploymentService, DepartmentService],
+  providers: [EmploymentService, DepartmentService, EmploymentSanitizer],
   exports: [EmploymentService]
 })
 export class EmploymentModule { }

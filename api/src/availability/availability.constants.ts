@@ -1,4 +1,4 @@
 export const ScheduleStatus = {
-    CLIENT: "CLIENT",
-    STAFF: "STAFF"
+    CLIENT: "Client",
+    STAFF: "Staff"
 }

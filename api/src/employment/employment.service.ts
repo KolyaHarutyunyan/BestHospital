@@ -6,12 +6,14 @@ import { IEmployment } from "./interface";
 import { StaffService } from "../staff/staff.service";
 import { DepartmentService } from '../department/department.service';
 import { EmploymentDto, CreateEmploymentDto } from './dto';
+import { EmploymentSanitizer } from './interceptor/employment.interceptor';
 
 @Injectable()
 export class EmploymentService {
   constructor(
     private readonly staffService: StaffService,
     private readonly departmentService: DepartmentService,
+    private readonly sanitizer: EmploymentSanitizer
   ) {
     this.model = EmploymentModel;
     this.mongooseUtil = new MongooseUtil();
@@ -42,8 +44,7 @@ export class EmploymentService {
         employment.departmentId = dto.departmentId;
       }
       await employment.save();
-      return employment;
-      // return this.sanitizer.sanitize(user);
+      return this.sanitizer.sanitize(employment);
     } catch (e) {
       console.log(e);
       this.mongooseUtil.checkDuplicateKey(e, 'Employment already exists');
@@ -58,7 +59,7 @@ export class EmploymentService {
   async findOne(_id: string): Promise<EmploymentDto> {
     let employment = await this.model.findById({ _id })
     this.checkEmployment(employment)
-    return employment;
+    return this.sanitizer.sanitize(employment);
   }
 
   remove(id: number) {

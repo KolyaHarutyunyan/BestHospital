@@ -1,7 +1,7 @@
 import { model, Schema, Types } from 'mongoose';
 import { IEmployment, ScheduleStatus } from '../employment';
 import { PayCodeTypeStatus } from './paycodetypes.constants';
-// import { IPayCodeType } from './interface';
+import { IPayCodeType } from './interface';
 
 const PayCodeTypeSchema = new Schema({
     name: { type: String },
@@ -10,4 +10,4 @@ const PayCodeTypeSchema = new Schema({
     overtime: { type: Boolean },
     pto: { type: Boolean }
 });
-export const PayCodeTypeModel = model<any>('PayCodeType', PayCodeTypeSchema);
+export const PayCodeTypeModel = model<IPayCodeType>('PayCodeType', PayCodeTypeSchema);
