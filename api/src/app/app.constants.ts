@@ -5,6 +5,5 @@ const dbs = {
 };
 const DB = dbs.TEST_E;
 
-export const MONGO_CONN_STR =
-  `mongodb+srv://wellnessdaisy-mongo:!WELEachbase1!@testing.ykcxo.mongodb.net/${DB}?retryWrites=true&w=majority`;
+export const MONGO_CONN_STR = `mongodb+srv://wellnessdaisy-mongo:!WELEachbase1!@testing.ykcxo.mongodb.net/${DB}?retryWrites=true&w=majority`;
 export const port = 8200;

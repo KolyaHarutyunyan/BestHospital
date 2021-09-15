@@ -41,10 +41,7 @@ export class PermissionService {
       const newPermissions = await this.model.insertMany(permissionModels);
       return this.sanitizer.sanitizeMany(newPermissions);
     } catch (err) {
-      this.mongooseUtil.checkDuplicateKey(
-        err,
-        'Permission with this code exists',
-      );
+      this.mongooseUtil.checkDuplicateKey(err, 'Permission with this code exists');
       throw err;
     }
   }
@@ -56,10 +53,7 @@ export class PermissionService {
   }
 
   /** Updates the title and/or description of the permission */
-  async update(
-    permissionId: string,
-    updateDTO: UpdatePermissionDTO,
-  ): Promise<PermissionDTO> {
+  async update(permissionId: string, updateDTO: UpdatePermissionDTO): Promise<PermissionDTO> {
     const permission = await this.model.findById(permissionId);
     this.checkPermission(permission);
     this.updateFields(permission, updateDTO);
@@ -89,10 +83,7 @@ export class PermissionService {
   /** Throws an error if the permission is not found */
   private checkPermission(perm: IPermission) {
     if (!perm) {
-      throw new HttpException(
-        'Such permission was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Such permission was not found', HttpStatus.NOT_FOUND);
     }
   }
 }

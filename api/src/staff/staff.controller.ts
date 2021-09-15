@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { StaffService } from './staff.service';
 import { StaffDTO, CreateStaffDto, EditStaffDTO } from './dto';
@@ -14,21 +6,28 @@ import { ACCESS_TOKEN } from '../authN';
 import { Public, ParseObjectIdPipe } from '../util';
 import { UserStatus } from './staff.constants';
 import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
+import { CreateStaffDtoTest } from './dto/createTest.dto';
 
 @Controller('staff')
 @ApiTags('Staff Endpoints')
 @ApiHeader({ name: ACCESS_TOKEN })
 export class StaffController {
-  constructor(private readonly staffService: StaffService) { }
+  constructor(private readonly staffService: StaffService) {}
 
   /** Create a new staff */
   @Post()
   @ApiOkResponse({ type: StaffDTO })
   @Public()
-  async createSuperAdmin(
-    @Body() createStaffDTO: CreateStaffDto,
-  ): Promise<StaffDTO> {
+  async createSuperAdmin(@Body() createStaffDTO: CreateStaffDto): Promise<StaffDTO> {
     const admin = await this.staffService.create(createStaffDTO);
+    return admin;
+  }
+
+  @Post('test')
+  @ApiOkResponse({ type: StaffDTO })
+  @Public()
+  async create_test(@Body() createStaffDTO: CreateStaffDtoTest): Promise<StaffDTO> {
+    const admin = await this.staffService.create_test(createStaffDTO);
     return admin;
   }
 
@@ -49,27 +48,28 @@ export class StaffController {
   @Public()
   @ApiOkResponse({ type: [StaffDTO] })
   @ApiQuery({
-    name: "skip",
-    description: "where",
+    name: 'skip',
+    description: 'where',
     required: false,
-    type: Number
+    type: Number,
   })
   @ApiQuery({
-    name: "limit",
-    description: "how",
+    name: 'limit',
+    description: 'how',
     required: false,
-    type: Number
+    type: Number,
   })
   @ApiQuery({
-    name: "status",
-    description: "status",
+    name: 'status',
+    description: 'status',
     required: false,
-    type: Number
+    type: Number,
   })
   async getUsers(
     @Query('skip') skip: number,
     @Query('limit') limit: number,
-    @Query('status') status: number): Promise<StaffDTO[]> {
+    @Query('status') status: number,
+  ): Promise<StaffDTO[]> {
     return await this.staffService.getUsers(skip, limit, status);
   }
 
@@ -77,9 +77,7 @@ export class StaffController {
   @Get(':id')
   @ApiOkResponse({ type: StaffDTO })
   @Public()
-  async getAdminProfile(
-    @Param('id', ParseObjectIdPipe) userId: string,
-  ): Promise<StaffDTO> {
+  async getAdminProfile(@Param('id', ParseObjectIdPipe) userId: string): Promise<StaffDTO> {
     return await this.staffService.getProfile(userId);
   }
 
@@ -91,11 +89,7 @@ export class StaffController {
     @Param('id', ParseObjectIdPipe) staffId: string,
     @Body() dto: CreateTerminationDto,
   ): Promise<StaffDTO> {
-    const staff = await this.staffService.setStatusInactive(
-      staffId,
-      0,
-      dto
-    );
+    const staff = await this.staffService.setStatusInactive(staffId, 0, dto);
     return staff;
   }
 
@@ -103,14 +97,8 @@ export class StaffController {
   @Patch(':id/activate')
   @Public()
   @ApiOkResponse({ type: StaffDTO })
-  async activate(
-    @Param('id', ParseObjectIdPipe) staffId: string,
-  ): Promise<StaffDTO> {
-    const staff = await this.staffService.setStatusActive(
-      staffId,
-      1,
-    );
+  async activate(@Param('id', ParseObjectIdPipe) staffId: string): Promise<StaffDTO> {
+    const staff = await this.staffService.setStatusActive(staffId, 1);
     return staff;
   }
-
 }

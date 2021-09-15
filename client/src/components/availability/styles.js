@@ -53,4 +53,16 @@ export const availabilityStyles = makeStyles((theme) => ({
         fontSize: 14,
         margin: '8px 0'
     },
+    AddAvailabilityScheduel : {
+            width: '634px',
+            padding: '40px',
+            borderRadius: '8px',
+            backgroundColor: 'white',
+            position: 'relative',
+            '@media (max-width: 1400px)': {
+                width: '618px',
+                padding: '32px',
+
+        },
+    }
 }));

@@ -1,18 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsDateString,
-  IsEmail,
-  IsEnum,
-  IsNotEmpty,
-  IsNumber,
-  IsPhoneNumber,
-  IsString,
-} from 'class-validator';
+import { IsDateString, IsNotEmpty, IsNumber, IsPhoneNumber, IsString } from 'class-validator';
 import { UserDTO } from 'src/authN';
 import { AddressDTO } from '../../address';
-import { UserStatus } from '../staff.constants';
 
-export class CreateStaffDto {
+export class CreateStaffDtoTest {
+  @ApiProperty()
+  @IsNotEmpty()
+  password: string;
   @ApiProperty()
   @IsNotEmpty()
   @IsString()

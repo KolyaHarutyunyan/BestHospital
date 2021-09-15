@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {TableWrapper} from "@eachbase/components";
 import {CreateStaff, StaffTable,} from "@eachbase/fragments";
-import {adminActions} from "@eachbase/store";
+import {adminActions, systemActions} from "@eachbase/store";
 import {useDispatch, useSelector} from "react-redux";
 
 export const Staff = () => {
@@ -13,9 +13,11 @@ export const Staff = () => {
     const { adminsList } = useSelector((state) => ({
         adminsList: state.admins.adminsList,
     }));
+    const globalDepartments = useSelector(state => state.system.departments)
 
     useEffect(() => {
         dispatch(adminActions.getAdmins({ status : status, start : 0, end : 10 }))
+        dispatch(systemActions.getDepartments())
     }, []);
 
     const handleOpenClose = () => {
@@ -43,7 +45,7 @@ export const Staff = () => {
                 addButtonText={'Add Staff Member'}
                 openCloseInfo={open}
                 handleOpenClose={handleOpenClose}
-                body={<CreateStaff adminsList={adminsList && adminsList.staff} resetData={true} handleClose={handleOpenClose}/>}
+                body={<CreateStaff globalDepartments={globalDepartments} adminsList={adminsList && adminsList.staff} resetData={true} handleClose={handleOpenClose}/>}
             >
                 <StaffTable handleGetPage={setPage}  status ={status} />
             </TableWrapper>

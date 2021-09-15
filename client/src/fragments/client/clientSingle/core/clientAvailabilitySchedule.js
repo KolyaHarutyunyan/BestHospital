@@ -1,11 +1,18 @@
-import React from "react";
+import React, {useState} from "react";
 import {Card} from '@eachbase/components';
 import {serviceSingleStyles} from './styles';
 import {Colors, Images} from "@eachbase/utils";
-import {AvailableHours} from "../../../../components/availability/availableHours";
+import {AvailableHours} from "@eachbase/components/availability";
+
 
 export const ClientAvailabilitySchedule = ({data}) => {
+
+
+
+
     const classes = serviceSingleStyles()
+
+
 
 
     const generalInfo = [

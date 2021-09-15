@@ -3,6 +3,6 @@ import { RoleDTO } from '../../authZ';
 export class AuthResponseDTO {
   @ApiProperty()
   email: string;
-  @ApiProperty()
+  @ApiProperty({ type: [RoleDTO] })
   roles: string[] | RoleDTO[];
 }

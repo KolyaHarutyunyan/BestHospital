@@ -1,4 +1,4 @@
-import {AddButton, NoItemText, Toast, ValidationInput} from "@eachbase/components";
+import {AddButton, NoItemText, SlicedText, Toast, ValidationInput} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
 import {systemItemStyles} from "./styles";
 import React, {useEffect, useState} from "react";
@@ -98,7 +98,9 @@ export const JobTitles = ({globalJobs,removeItem, openModal}) => {
                     globalJobs && globalJobs.length ? globalJobs.map((jobItem, index) => {
                         return (
                             <div className={classes.item} key={index}>
-                                <p>{jobItem.name}</p>
+                                <p>
+                                    <SlicedText type={'responsive'} size={25} data= {jobItem.name}/>
+                                </p>
                                 <div className={classes.icons}>
                                     <img src={Images.edit}
                                          onClick={() => editJob('editJobTitles',{

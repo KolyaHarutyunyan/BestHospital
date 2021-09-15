@@ -100,7 +100,6 @@ function* getFundingSourceById(action) {
 
     try {
         const res = yield call(authService.getFoundingSourceByIdService, action.payload);
-        console.log(res,'nor')
         yield put({
             type: GET_FUNDING_SOURCE_BY_ID_SUCCESS,
             payload: res.data,
@@ -196,7 +195,7 @@ function* createFundingSourceServicesModifier({payload}) {
 
 
 function* editFundingSourceServicesModifier({payload}) {
-    console.log(payload.id, payload.body, 'sagaaaaa')
+    // console.log(payload.id, payload.body, 'sagaaaaa')
 
 
     try {

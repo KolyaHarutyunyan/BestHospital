@@ -7,24 +7,21 @@ import {
   RegistrationStatus,
 } from './authN.constants';
 import { AuthnModel } from './authN.model';
-import {
-  AuthDTO,
-  AuthResponseDTO,
-  ChangePassDTO,
-  ResetPassDTO,
-  SigninDTO,
-} from './dto';
+import { AuthDTO, AuthResponseDTO, ChangePassDTO, ResetPassDTO, SigninDTO, UserDTO } from './dto';
 import { AuthNSanitizer } from './interceptor';
 import { IAuth, IToken } from './interface';
 import * as jwt from 'jsonwebtoken';
 import { MailerService, MailStatus } from '../mailer';
-import { IRole, RoleDTO, RoleService } from '../authZ/role';
+import { RoleDTO, RoleService } from '../authZ/role';
 import { MongooseUtil } from '../util';
+import { AuthZService } from 'src/authZ';
+import { access } from './authN.access';
 
 @Injectable()
 export class AuthNService {
   constructor(
     private readonly roleService: RoleService,
+    private readonly authZService: AuthZService,
     private readonly mailerService: MailerService,
     private readonly sanitizer: AuthNSanitizer,
   ) {
@@ -55,6 +52,24 @@ export class AuthNService {
     }
   };
 
+  create_test = async (id: string, email: string, password: string): Promise<MailStatus> => {
+    try {
+      const auth = await new this.model({
+        _id: id,
+        email: email,
+        roles: [],
+        status: RegistrationStatus.ACTIVE,
+        session: false,
+        password: password,
+      }).save();
+      const regToken = await this.generateToken(auth, JWT_SECRET_REGISTER);
+      return;
+    } catch (e) {
+      this.mongooseUtil.checkDuplicateKey(e, 'User already exists');
+      throw e;
+    }
+  };
+
   /** Sends a new invitation email to the user */
   resendInvite = async (userId: string) => {
     const auth = await this.model.findById(userId);
@@ -63,9 +78,7 @@ export class AuthNService {
   };
 
   /** Complete registration */
-  completeRegistration = async (
-    resetPassDTO: ResetPassDTO,
-  ): Promise<AuthDTO> => {
+  completeRegistration = async (resetPassDTO: ResetPassDTO): Promise<AuthDTO> => {
     let auth = await this.model.findById(resetPassDTO.userId);
     this.canRegister(auth);
     this.confirmPassword(resetPassDTO.newPassword, resetPassDTO.confirmation);
@@ -102,9 +115,7 @@ export class AuthNService {
     let auth = await this.model.findOne({
       _id: changePassDTO.userId,
     });
-    const isPasswordCorrect = await auth.comparePassword(
-      changePassDTO.password,
-    );
+    const isPasswordCorrect = await auth.comparePassword(changePassDTO.password);
     this.checkPassword(isPasswordCorrect);
     this.confirmPassword(changePassDTO.newPassword, changePassDTO.confirmation);
     auth.password = changePassDTO.newPassword;
@@ -118,11 +129,7 @@ export class AuthNService {
     this.checkAuth(auth);
     const minutesToExpire = Math.floor(Date.now() / 1000) + 60 * 30; // 30 minutes to expire
     const expString = minutesToExpire.toString();
-    const token = await this.generateToken(
-      auth,
-      JWT_SECRET_FORGET_PASS,
-      expString,
-    );
+    const token = await this.generateToken(auth, JWT_SECRET_FORGET_PASS, expString);
     return await this.mailerService.sendForgetPasswordMail({
       token: token,
       email: auth.email,
@@ -144,27 +151,19 @@ export class AuthNService {
   };
 
   /** Get the auth in a sanitized version */
-  getAuth = async (id: string): Promise<AuthResponseDTO> => {
+  getAuth = async (id: string, user?: UserDTO): Promise<AuthResponseDTO> => {
+    if (user) {
+      this.authZService.enforcePermissions(access.GET_AUTH, user?.permissions);
+    }
     const auth = await this.model.findById(id).populate('roles');
     return this.sanitizer.sanitize(auth);
   };
 
   /** Inactivate user */
-  inactivate = async (id: string): Promise<string> => {
+  setStatus = async (id: string, status: RegistrationStatus): Promise<string> => {
     const auth = await this.model.findOneAndUpdate(
       { _id: id },
-      { $set: { status: RegistrationStatus.INACTIVE } },
-      { new: true },
-    );
-    this.checkAuth(auth);
-    return auth._id;
-  };
-
-  /** Activate user */
-  activate = async (id: string): Promise<string> => {
-    const auth = await this.model.findOneAndUpdate(
-      { _id: id },
-      { $set: { status: RegistrationStatus.ACTIVE } },
+      { $set: { status: status } },
       { new: true },
     );
     this.checkAuth(auth);
@@ -172,7 +171,8 @@ export class AuthNService {
   };
 
   /** Add Role to user */
-  addRole = async (id: string, roleId: string): Promise<AuthResponseDTO> => {
+  addRole = async (id: string, roleId: string, user?: UserDTO): Promise<AuthResponseDTO> => {
+    if (user.email) this.authZService.enforcePermissions(access.ADD_ROLE, user?.permissions);
     // eslint-disable-next-line prefer-const
     let [auth, role] = await Promise.all([
       this.model.findById(id),
@@ -185,7 +185,8 @@ export class AuthNService {
   };
 
   /** Remove Role from user */
-  removeRole = async (id: string, roleId: string): Promise<AuthResponseDTO> => {
+  removeRole = async (id: string, roleId: string, user?: UserDTO): Promise<AuthResponseDTO> => {
+    if (user.email) this.authZService.enforcePermissions(access.ADD_ROLE, user?.permissions);
     let auth = await this.model.findById(id);
     this.checkAuth(auth);
     auth.roles = this.getNewRoles(auth, roleId);
@@ -211,10 +212,8 @@ export class AuthNService {
 
   /** Removes the user token from the auth, clearing the user session */
   logout = async (id: string): Promise<string> => {
-    const auth = await this.model.findOneAndUpdate(
-      { _id: id },
-      { $set: { session: null } },
-    );
+    const auth = await this.model.findOneAndUpdate({ _id: id }, { $set: { session: null } });
+    this.checkAuth(auth);
     return auth.session;
   };
 
@@ -235,30 +234,21 @@ export class AuthNService {
   /** If the auth exits, throws already exits exception */
   private checkNotAuth(auth: IAuth) {
     if (auth) {
-      throw new HttpException(
-        'A user with this email exists',
-        HttpStatus.FOUND,
-      );
+      throw new HttpException('A user with this email exists', HttpStatus.FOUND);
     }
   }
 
   /** If auth does not exits, throws not found exception */
   private checkAuth(auth: IAuth) {
     if (!auth) {
-      throw new HttpException(
-        'User with this email was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('User with this email was not found', HttpStatus.NOT_FOUND);
     }
   }
 
   /** Check if the user is in an active status. if not, throw an exception */
   private checkActive(auth: IAuth) {
     if (auth.status === RegistrationStatus.PENDING) {
-      throw new HttpException(
-        'Check your email to activate your account',
-        HttpStatus.FORBIDDEN,
-      );
+      throw new HttpException('Check your email to activate your account', HttpStatus.FORBIDDEN);
     }
     if (auth.status === RegistrationStatus.INACTIVE) {
       throw new HttpException(
@@ -271,28 +261,22 @@ export class AuthNService {
   /** Checks if the token is the same as the session in the auth object */
   private verifySession(auth: IAuth, token: string) {
     if (auth.session != token) {
-      throw new HttpException(
-        'session is invalid, sign in again',
-        HttpStatus.UNAUTHORIZED,
-      );
+      throw new HttpException('session is invalid, sign in again', HttpStatus.UNAUTHORIZED);
     }
   }
 
   /** generates the response for signed in users */
   private async getSigninResponse(auth: IAuth): Promise<AuthDTO> {
-    const permissionCodeSet = await this.roleService.getUserPermissionSet(
-      auth.roles,
-    );
+    const permissionCodeSet = await this.roleService.getUserPermissionSet(auth.roles);
     const permissionCodes = Array.from(permissionCodeSet);
-    return { token: auth.session, permissions: permissionCodes };
+    return {
+      token: auth.session,
+      permissions: permissionCodes,
+    };
   }
 
   /** Generates a token using an IAuth object */
-  private async generateToken(
-    auth: IAuth,
-    secret: string,
-    expiration?: string,
-  ): Promise<string> {
+  private async generateToken(auth: IAuth, secret: string, expiration?: string): Promise<string> {
     const tokenEntity: IToken = {
       email: auth.email,
       id: auth.id,
@@ -307,10 +291,7 @@ export class AuthNService {
   /** Check the password and throw http exception if incorrect */
   private checkPassword = (isCorrect) => {
     if (!isCorrect) {
-      throw new HttpException(
-        'user password does not match',
-        HttpStatus.FORBIDDEN,
-      );
+      throw new HttpException('user password does not match', HttpStatus.FORBIDDEN);
     }
   };
 
@@ -332,20 +313,13 @@ export class AuthNService {
   /** checkDuplicateRole */
   private checkDuplicatRole(auth: IAuth, role: RoleDTO) {
     if (!role) {
-      throw new HttpException(
-        'Such role does not exist',
-        HttpStatus.NOT_ACCEPTABLE,
-      );
+      throw new HttpException('Such role does not exist', HttpStatus.NOT_ACCEPTABLE);
     }
     const roles = auth.roles;
     const roleId = role.id;
     for (let i = 0; i < roles.length; i++) {
       if (roles[i].toString() == roleId) {
-        console.log(roles[i], roleId);
-        throw new HttpException(
-          'This user already has this role',
-          HttpStatus.CONFLICT,
-        );
+        throw new HttpException('This user already has this role', HttpStatus.CONFLICT);
       }
     }
   }
@@ -362,9 +336,6 @@ export class AuthNService {
       }
       return newRoles;
     }
-    throw new HttpException(
-      'This user does not have roles',
-      HttpStatus.NO_CONTENT,
-    );
+    throw new HttpException('This user does not have roles', HttpStatus.NO_CONTENT);
   }
 }

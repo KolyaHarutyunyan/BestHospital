@@ -4,7 +4,6 @@ import { IAuth } from './interface/';
 import { RegistrationStatus } from './authN.constants';
 
 const authnSchema = new Schema({
-  _id: {type: String},
   email: { type: String, required: true, unique: true },
   password: { type: String },
   roles: [{ type: Types.ObjectId, ref: 'Role' }],

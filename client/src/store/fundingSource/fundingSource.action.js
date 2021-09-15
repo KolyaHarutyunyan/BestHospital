@@ -119,7 +119,7 @@ export const getFundingSourceHistoriesById = (id, onModal) => {
 
 
 export const editFoundingSourceModifier = (id, body) => {
-    console.log(id, body, 'action')
+
     return {
         type: EDIT_FUNDING_SOURCE_SERVICE_MODIFIER,
         payload: {

@@ -33,11 +33,9 @@ export class PermissionController {
   /** add a new permission the list of persmissons in the system */
   @Post()
   @ApiBody({ type: [AddPermissionDTO] })
-  @ApiOkResponse({ type: PermissionDTO })
+  @ApiOkResponse({ type: [PermissionDTO] })
   @Public()
-  async addPermissions(
-    @Body() permissions: AddPermissionDTO[],
-  ): Promise<PermissionDTO[]> {
+  async addPermissions(@Body() permissions: AddPermissionDTO[]): Promise<PermissionDTO[]> {
     return await this.permissionService.add(permissions);
   }
 
@@ -62,10 +60,7 @@ export class PermissionController {
     @Param('id') permissionId: string,
     @Body() permissionUpdateDTO: UpdatePermissionDTO,
   ): Promise<PermissionDTO> {
-    const permission = await this.permissionService.update(
-      permissionId,
-      permissionUpdateDTO,
-    );
+    const permission = await this.permissionService.update(permissionId, permissionUpdateDTO);
     return permission;
   }
 }

@@ -110,7 +110,6 @@ export const Notes = ({
     console.log(loader, errorText, success);
 
     let errorMessage = success ? 'Success' : 'Something went wrong'
-
     return (
         <div className={globalStyle.tableWrapper}>
             <TableContainer className={globalStyle.tableContainer} component={Paper}>
@@ -150,70 +149,64 @@ export const Notes = ({
                     page={page}
                     count={officesList.length}
                 />}
-          {
-    showModal &&
-    <>
-        <div className={globalStyle.previewModal} style={{right: noteModalInfo.right}}>
-            <h1>{noteModalInfo.subject}</h1>
-            <span>By John Smith</span>
-            <div className={globalStyle.dateContainer}>
-                <p>{moment(noteModalInfo?.created).format('DD/MM/YYYY')}</p>
-                <div>
-                    <div className={globalStyle.icons}>
-                        <img src={Images.edit} onClick={() => handleOpenClose({
-                            modalType: 'editNote',
-                            text: 'text text',
-                            subject: noteModalInfo.subject,
-                            id: noteModalInfo.id
-                        })} alt="edit"/>
-                        <img src={Images.remove} alt="delete" onClick={() => handleOpenCloseDel({
-                            id: noteModalInfo.id,
-                            deletedName: noteModalInfo.subject
-                        })}/>
-                    </div>
-                </div>
-            </div>
-            <p>Lorem Ipsum is simply dummy text
-                of the printing and typesetting industry.
-                Lorem Ipsum has been the industry's
-                standard dummy text ever since the 1500s,
-                when an unknown printer took a galley of
-                type and scrambled it to make a type specimen
-                book. It has survived not only five centuries,
-                but also the leap into electronic typesetting.</p>
-            <div className={globalStyle.positionedButton}>
-                <CloseButton handleCLic={closeModal}/>
-            </div>
-        </div>
-        <SimpleModal
-            openDefault={open}
-            handleOpenClose={handleOpenClose}
-            content={
-                <AddNotes
-                    closeModal={closeModal}
-                    model={model}
-                    noteModalTypeInfo={noteModalInfoEdit}
-                    handleClose={handleOpenClose}/>
-            }
-        />
-        <SimpleModal
-            openDefault={openDelModal}
-            handleOpenClose={handleOpenCloseDel}
-            content={
-                <DeleteElement
-                    loader={loader}
-                    text='some information'
-                    info={deletedData?.deletedName}
-                    handleDel={handleDelete}
-                    handleClose={handleOpenCloseDel}/>}
-            />
-    </>
-}
+
             </TableContainer>
             <Toast
                 type={success ? 'Successfully added' : errorText ? 'Something went wrong' : ''}
                 text={errorMessage}
                 info={success ? success : errorText ? errorText : ''}/>
+            {
+                showModal &&
+                <>
+                    <div className={globalStyle.previewModal} style={{right: noteModalInfo.right}}>
+                        <h1>{noteModalInfo.subject}</h1>
+                        <span>By John Smith</span>
+                        <div className={globalStyle.dateContainer}>
+                            <p>{moment(noteModalInfo?.created).format('DD/MM/YYYY')}</p>
+                            <div>
+                                <div className={globalStyle.icons}>
+                                    <img src={Images.edit} onClick={() => handleOpenClose({
+                                        modalType: 'editNote',
+                                        text: noteModalInfo.text,
+                                        subject: noteModalInfo.subject,
+                                        id: noteModalInfo.id
+                                    })} alt="edit"/>
+                                    <img src={Images.remove} alt="delete" onClick={() => handleOpenCloseDel({
+                                        id: noteModalInfo.id,
+                                        deletedName: noteModalInfo.subject
+                                    })}/>
+                                </div>
+                            </div>
+                        </div>
+                        <p>{noteModalInfo.text}</p>
+                        <div className={globalStyle.positionedButton}>
+                            <CloseButton handleCLic={closeModal}/>
+                        </div>
+                    </div>
+                    <SimpleModal
+                        openDefault={open}
+                        handleOpenClose={handleOpenClose}
+                        content={
+                            <AddNotes
+                                closeModal={closeModal}
+                                model={model}
+                                noteModalTypeInfo={noteModalInfoEdit}
+                                handleClose={handleOpenClose}/>
+                        }
+                    />
+                    <SimpleModal
+                        openDefault={openDelModal}
+                        handleOpenClose={handleOpenCloseDel}
+                        content={
+                            <DeleteElement
+                                loader={loader}
+                                text='some information'
+                                info={deletedData?.deletedName}
+                                handleDel={handleDelete}
+                                handleClose={handleOpenCloseDel}/>}
+                    />
+                </>
+            }
         </div>
     )
 }

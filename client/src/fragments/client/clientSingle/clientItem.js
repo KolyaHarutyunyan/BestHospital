@@ -56,6 +56,7 @@ export const ClientItem = () => {
         dispatch(clientActions.getClientsEnrollment(params.id))
         dispatch(clientActions.getClientsAuthorizations(params.id))
         dispatch(clientActions.getClientHistories(params.id, 'Client'))
+        dispatch(clientActions.getClientsAvailabilitySchedule(params.id,))
         dispatch(noteActions.getGlobalNotes(params.id,'Client'))
 
     }, []);

@@ -7,3 +7,5 @@ export { FundingServiceModule } from './fundingService.module';
 export { DepartmentModule } from './department.module';
 export { StaffModule } from './staff.module';
 export { CommentModule } from './comment.module';
+export { AuthZ } from './authZ';
+export { Auth } from './auth';
