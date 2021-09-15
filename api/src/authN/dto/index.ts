@@ -5,3 +5,4 @@ export { LogoutDTO } from './logout.dto';
 export { PassChangedDTO } from './passChanged.dto';
 export { ResetPassDTO } from './resetPass.dto';
 export { AuthResponseDTO } from './authResponse.dto';
+export { UserDTO } from './user.dto';

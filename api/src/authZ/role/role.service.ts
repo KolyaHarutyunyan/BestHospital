@@ -28,14 +28,13 @@ export class RoleService {
 
   /** Get a single role with permissions */
   async getRole(id: string): Promise<RoleDTO> {
-    const role = await this.roleModel
-      .findOne({ _id: id })
-      .populate('permissions');
+    const role = await this.roleModel.findOne({ _id: id }).populate('permissions');
     return this.sanitizer.sanitize(role);
   }
 
   /** Get the roles given by the roles array with their permissions, extracts permission codes and returns the aggregate as an array */
   async getUserPermissionSet(roles: string[]): Promise<Set<number>> {
+    if (!roles || roles.length < 1) return new Set<number>();
     const rolesWithPermissionCodes = await this.roleModel
       .find({
         _id: { $in: roles },
@@ -44,19 +43,14 @@ export class RoleService {
     const codeSet = new Set<number>();
     let rolePermissions: IPermission[];
     for (let i = 0; i < rolesWithPermissionCodes.length; i++) {
-      rolePermissions = (<unknown>(
-        rolesWithPermissionCodes[i].permissions
-      )) as IPermission[];
+      rolePermissions = (<unknown>rolesWithPermissionCodes[i].permissions) as IPermission[];
       rolePermissions.map((permission) => codeSet.add(permission.code));
     }
     return codeSet;
   }
 
   /** Create a new role and set the permission IDs */
-  async createRole(
-    createRoleDTO: CreateRoleDTO,
-    options?: CreateRoleOptions,
-  ): Promise<RoleDTO> {
+  async createRole(createRoleDTO: CreateRoleDTO, options?: CreateRoleOptions): Promise<RoleDTO> {
     let role: IRole = new this.roleModel({
       title: createRoleDTO.title,
       description: createRoleDTO.description,
@@ -67,19 +61,13 @@ export class RoleService {
       role = await (await role.save()).populate('permissions').execPopulate();
       return this.sanitizer.sanitize(role);
     } catch (err) {
-      this.mongooseUtil.checkDuplicateKey(
-        err,
-        'A role with this title already exists',
-      );
+      this.mongooseUtil.checkDuplicateKey(err, 'A role with this title already exists');
       throw err;
     }
   }
 
   /** Updates role details */
-  async updateRole(
-    roleId: string,
-    roleUpdateDTO: RoleUpdateDTO,
-  ): Promise<RoleDTO> {
+  async updateRole(roleId: string, roleUpdateDTO: RoleUpdateDTO): Promise<RoleDTO> {
     let role = await this.roleModel.findById(roleId);
     this.checkRole(role);
     this.updateRoleFields(role, roleUpdateDTO);
@@ -88,10 +76,7 @@ export class RoleService {
   }
 
   /** Add a permission to this role (only unique values will be added) */
-  async addPermissions(
-    roleId: string,
-    permissions: string[],
-  ): Promise<RoleDTO> {
+  async addPermissions(roleId: string, permissions: string[]): Promise<RoleDTO> {
     let role = await this.roleModel.findById(roleId);
     // create a unique set to check permission duplicas
     const permissionSet: Set<string> = new Set(role.permissions);
@@ -109,16 +94,9 @@ export class RoleService {
   }
 
   /** Remove permission from this role if it exists */
-  async removePermission(
-    roleId: string,
-    permissions: string[],
-  ): Promise<RoleDTO> {
+  async removePermission(roleId: string, permissions: string[]): Promise<RoleDTO> {
     const role = await this.roleModel
-      .findOneAndUpdate(
-        { _id: roleId },
-        { $pullAll: { permissions: permissions } },
-        { new: true },
-      )
+      .findOneAndUpdate({ _id: roleId }, { $pullAll: { permissions: permissions } }, { new: true })
       .populate('permissions');
     return this.sanitizer.sanitize(role);
   }
@@ -131,20 +109,14 @@ export class RoleService {
     if (deleted.n && deleted.n == 1) {
       return roleId;
     }
-    throw new HttpException(
-      'Role was not deleted',
-      HttpStatus.INTERNAL_SERVER_ERROR,
-    );
+    throw new HttpException('Role was not deleted', HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   /** Private API */
   /** Checks if the role is default  */
   private checkForDefaultRole(role: IRole) {
     if (role.isDefault) {
-      throw new HttpException(
-        'Default roles cannot be deleted',
-        HttpStatus.FORBIDDEN,
-      );
+      throw new HttpException('Default roles cannot be deleted', HttpStatus.FORBIDDEN);
     }
   }
 
@@ -158,10 +130,7 @@ export class RoleService {
   /** update role details */
   private updateRoleFields(role: IRole, roleUpdateDTO: RoleUpdateDTO) {
     if (!roleUpdateDTO) {
-      throw new HttpException(
-        'Role update details were not provided',
-        HttpStatus.NOT_MODIFIED,
-      );
+      throw new HttpException('Role update details were not provided', HttpStatus.NOT_MODIFIED);
     }
     if (roleUpdateDTO.title) {
       //update title

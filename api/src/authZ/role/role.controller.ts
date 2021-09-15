@@ -1,23 +1,9 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthNGuard } from '../../authN';
 import { Public } from '../../util/decorators';
 import { RoleService } from './role.service';
-import {
-  CreateRoleDTO,
-  RoleDTO,
-  RolePermissionsDTO,
-  RoleUpdateDTO,
-} from './dto';
+import { CreateRoleDTO, RoleDTO, RolePermissionsDTO, RoleUpdateDTO } from './dto';
 import { AuthZGuard } from '../guards';
 import { summaries } from './role.constants';
 

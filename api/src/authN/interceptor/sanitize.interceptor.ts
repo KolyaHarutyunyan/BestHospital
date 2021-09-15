@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IRole, RoleDTO } from '../../authZ/role';
-import { RoleSanitizer } from '../../authZ/role/interceptors';
+import { IRole, RoleDTO, RoleSanitizer } from '../../authZ/role';
 import { ISanitize } from '../../util';
 import { AuthResponseDTO } from '../dto';
 import { IAuth } from '../interface';
@@ -19,7 +18,6 @@ export class AuthNSanitizer implements ISanitize {
 
   /* Private Methods */
   private getRoles(roles: any): string[] | RoleDTO[] {
-    console.log(roles);
     if (!roles || roles.length < 1) {
       return [];
     }

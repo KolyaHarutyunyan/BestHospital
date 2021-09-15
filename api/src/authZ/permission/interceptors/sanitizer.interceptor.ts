@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { IPermission } from '../interface';
 import { PermissionDTO } from '../dto';
-import { ISanitize } from 'src/util';
+import { ISanitize } from '../../../util';
 
 @Injectable()
 export class PermissionSanitizer implements ISanitize {
