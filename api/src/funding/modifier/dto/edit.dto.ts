@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsEmpty, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString, IsUrl } from 'class-validator';
-import { ParseObjectIdPipe } from '../../util';
-import { ModifierStatus, TypeStatus } from '../funding.constants';
+import { ParseObjectIdPipe } from '../../../util';
+import { ModifierStatus, TypeStatus } from '../../funding.constants';
 
 // import { FundingStatus } from '../funding.constants';
 

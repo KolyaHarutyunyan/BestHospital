@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { ArrayContains, IsEmail, IsEmpty, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString, IsUrl, ValidateNested } from 'class-validator';
-import { ModifierStatus, TypeStatus } from '../funding.constants';
+import { ModifierStatus, TypeStatus } from '../../funding.constants';
 
 // import { FundingStatus } from '../funding.constants';
 

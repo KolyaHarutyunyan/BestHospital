@@ -34,12 +34,23 @@ export class CredentialService {
   }
 
   /** Get All Credential */
-  async findAll():Promise<CredentialDTO[]> {
+  async findAll(): Promise<CredentialDTO[]> {
     try {
       const credential = await this.model.find({});
       this.checkCredential(credential[0]);
       return credential;
       // return this.sanitizer.sanitizeMany(credential);
+    }
+    catch (e) {
+      throw e
+    }
+  }
+
+  /** Get All Credentials By Ids */
+  async findAllByIds(ids): Promise<CredentialDTO[]> {
+    try {
+      const credential = await this.model.find({ '_id': { $in: ids } });
+      return credential;
     }
     catch (e) {
       throw e
@@ -65,7 +76,7 @@ export class CredentialService {
       this.checkCredential(credential)
       if (dto.name) credential.name = dto.name;
       if (dto.type) credential.type = dto.type;
-      
+
       await credential.save();
       return credential;
     }
@@ -75,8 +86,8 @@ export class CredentialService {
     }
   }
 
-   /** Delete the Credential */
-   async remove(_id: string): Promise<string> {
+  /** Delete the Credential */
+  async remove(_id: string): Promise<string> {
     const credential = await this.model.findById({ _id });
     this.checkCredential(credential);
     await credential.remove()

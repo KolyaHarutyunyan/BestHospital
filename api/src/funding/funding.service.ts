@@ -4,12 +4,11 @@ import { CreateFundingDTO } from './dto/create.dto';
 import { UpdateFundingDto } from './dto/edit.dto';
 import { FundingModel } from './funding.model';
 import { ServiceModel } from './service.model';
-import { ModifyModel } from './modifier.model';
-import { IFunder, IService, IModify } from './interface';
+import { IFunder, IService } from './interface';
 import { isValidObjectId, MongooseUtil, ParseObjectIdPipe } from '../util';
 import { AddressService } from '../address/address.service';
 import { FundingSanitizer } from './interceptor';
-import { FundingDTO, ServiceDTO, UpdateServiceDto, CreateServiceDTO, CreateModifierDto, CreateModifiersDTO, UpdateModifierDto, ModifyDTO } from './dto';
+import { FundingDTO, ServiceDTO, UpdateServiceDto, CreateServiceDTO } from './dto';
 import { AuthNService } from 'src/authN';
 import { ServiceService } from '../service';
 import { HistoryService, serviceLog } from '../history';
@@ -28,13 +27,11 @@ export class FundingService {
 
   ) {
     this.model = FundingModel;
-    this.modifyModel = ModifyModel;
     this.serviceModel = ServiceModel;
     this.mongooseUtil = new MongooseUtil();
   }
   private model: Model<IFunder>;
   private serviceModel: Model<IService>;
-  private modifyModel: Model<IModify>;
 
   private mongooseUtil: MongooseUtil;
 
@@ -87,21 +84,21 @@ export class FundingService {
   }
 
   /** Create a new modifier */
-  async createModifier(dto: CreateModifiersDTO): Promise<any> {
-    try {
-      const fundingService = await this.serviceModel.findById({ _id: dto.serviceId });
-      this.checkFundingService(fundingService)
-      dto.modifiers.map(modifier => {
-        modifier.serviceId = fundingService._id;
-      })
-      //checkCredential
-      const modifiers = await this.modifyModel.collection.insertMany(dto.modifiers);
-      return modifiers.ops
-    } catch (e) {
-      this.mongooseUtil.checkDuplicateKey(e, 'Modifier already exists');
-      throw e;
-    }
-  }
+  // async createModifier(dto: CreateModifiersDTO): Promise<any> {
+  //   try {
+  //     const fundingService = await this.serviceModel.findById({ _id: dto.serviceId });
+  //     this.checkFundingService(fundingService)
+  //     dto.modifiers.map(modifier => {
+  //       modifier.serviceId = fundingService._id;
+  //     })
+  //     //checkCredential
+  //     const modifiers = await this.modifyModel.collection.insertMany(dto.modifiers);
+  //     return modifiers.ops
+  //   } catch (e) {
+  //     this.mongooseUtil.checkDuplicateKey(e, 'Modifier already exists');
+  //     throw e;
+  //   }
+  // }
 
   /** returns all funders */
   async findAll(skip: number, limit: number, status: number): Promise<any> {
@@ -139,7 +136,9 @@ export class FundingService {
   async findService(_id: string): Promise<any> {
     try {
       const services = await this.serviceModel.findById({ _id });
-      this.checkFundingService(services[0])
+      console.log(services);
+
+      this.checkFundingService(services)
       return services
     } catch (e) {
       throw e;
@@ -166,12 +165,12 @@ export class FundingService {
   }
 
   /** Get modifier By funding Service ID */
-  async findmodifier(_id: string): Promise<any> {
-    const modifiers = await this.modifyModel.find({ serviceId: _id });
-    this.checkModify(modifiers[0]);
-    return modifiers
-    // return this.sanitizer.sanitize(funder);
-  }
+  // async findmodifier(_id: string): Promise<any> {
+  //   const modifiers = await this.modifyModel.find({ serviceId: _id });
+  //   this.checkModify(modifiers[0]);
+  //   return modifiers
+  //   // return this.sanitizer.sanitize(funder);
+  // }
 
   /** Get Funder Service By Id */
   async findOneService(_id: string): Promise<any> {
@@ -236,25 +235,25 @@ export class FundingService {
   }
 
   /** Update the modifier */
-  async updateModifier(_id: string, dto: UpdateModifierDto): Promise<any> {
-    try {
-      // const service = await this.serviceModel.findOne({ _id: serviceId });
-      // this.checkFundingService(service);
-      const modifier = await this.modifyModel.findById({ _id });
-      this.checkModify(modifier);
-      if (dto.chargeRate) modifier.chargeRate = dto.chargeRate;
-      if (dto.name) modifier.name = dto.name;
-      if (dto.type || dto.type === 0) modifier.type = dto.type;
-      if (dto.credentialId) {
-        await this.checkCredential(dto.credentialId)
-        modifier.credentialId = dto.credentialId
-      }
-      return await modifier.save()
-    } catch (e) {
-      this.mongooseUtil.checkDuplicateKey(e, 'Modifier already exists');
-      throw e;
-    }
-  }
+  // async updateModifier(_id: string, dto: UpdateModifierDto): Promise<any> {
+  //   try {
+  //     // const service = await this.serviceModel.findOne({ _id: serviceId });
+  //     // this.checkFundingService(service);
+  //     const modifier = await this.modifyModel.findById({ _id });
+  //     this.checkModify(modifier);
+  //     if (dto.chargeRate) modifier.chargeRate = dto.chargeRate;
+  //     if (dto.name) modifier.name = dto.name;
+  //     if (dto.type || dto.type === 0) modifier.type = dto.type;
+  //     if (dto.credentialId) {
+  //       await this.checkCredential(dto.credentialId)
+  //       modifier.credentialId = dto.credentialId
+  //     }
+  //     return await modifier.save()
+  //   } catch (e) {
+  //     this.mongooseUtil.checkDuplicateKey(e, 'Modifier already exists');
+  //     throw e;
+  //   }
+  // }
 
   /** Delete the funder */
   async remove(_id: string): Promise<FundingDTO> {
@@ -317,22 +316,4 @@ export class FundingService {
     }
   }
 
-  /** Private methods */
-  /** if the modifier is not found, throws an exception */
-  private checkModify(modify: IModify) {
-    if (!modify) {
-      throw new HttpException(
-        'Modifier was not found',
-        HttpStatus.NOT_FOUND,
-      );
-    }
-  }
-
-  async checkCredential(credentialId: string): Promise<any> {
-    if (credentialId) {
-      const credential = await this.credentialService.findOne(credentialId);
-      return credentialId
-    };
-    return null
-  }
 }

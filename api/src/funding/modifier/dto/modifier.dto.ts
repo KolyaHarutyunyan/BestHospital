@@ -1,21 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsPhoneNumber, IsString, IsUrl } from 'class-validator';
+import { TypeStatus } from '../../funding.constants';
 
 export class ModifyDTO {
     @ApiProperty()
-    @IsNotEmpty()
     id: string
     @ApiProperty()
     serviceId: string
     @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
     name: string
+    @ApiProperty({ enum: TypeStatus })
+    type: number;
     @ApiProperty()
-    @IsNotEmpty()
-    @IsNumber()
     chargeRate: number
     @ApiProperty()
-    credential: string
-  
+    credentialId: string
 }

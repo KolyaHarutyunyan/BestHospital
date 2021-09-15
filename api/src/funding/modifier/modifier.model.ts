@@ -1,6 +1,6 @@
 import { model, Schema, Types } from 'mongoose';
-import { IModify } from './interface';
-import { ModifierStatus, TypeStatus } from './funding.constants';
+// import { IModify } from './interface';
+import { ModifierStatus, TypeStatus } from '../funding.constants';
 
 const modifierSchema = new Schema({
     serviceId: {type: Types.ObjectId, ref: 'FundingService'},
@@ -10,4 +10,4 @@ const modifierSchema = new Schema({
     type: { type: Number, enum: TypeStatus }
 });
 
-export const ModifyModel = model<IModify>('Modifier', modifierSchema);
+export const ModifyModel = model<any>('Modifier', modifierSchema);

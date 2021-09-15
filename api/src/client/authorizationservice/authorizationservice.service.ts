@@ -8,13 +8,15 @@ import { IAuthorization } from '../authorization/interface';
 import { ClientAuthorizationServiceModel } from './authorizationService.model';
 import { ClientAuthorizationModel } from '../authorization/authorization.model';
 import { FundingService } from '../../funding';
-
+import { ModifierService } from '../../funding/modifier/modifier.service';
 
 @Injectable()
 export class AuthorizationserviceService {
   constructor(
     private readonly sanitizer: AuthorizationServiceSanitizer,
     private readonly fundingService: FundingService,
+    private readonly modifierService: ModifierService,
+
   ) {
     this.model = ClientAuthorizationServiceModel;
     this.authorizationModel = ClientAuthorizationModel;
@@ -102,7 +104,7 @@ export class AuthorizationserviceService {
 
       const authorization = await this.authorizationModel.findOne({ _id: authorizationId });
       this.checkAuthorization(authorization);
-      const findModifiers: any = await this.fundingService.findmodifier(fundingServiceId);
+      const findModifiers: any = await this.modifierService.findByServiceId(fundingServiceId);
       // if (!fundingService.length) {
       //   throw new HttpException(
       //     'Invalid fundingServiceId',

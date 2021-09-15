@@ -1,10 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
-import { ApiHeader, ApiOkResponse, ApiOperation, ApiProperty, ApiPropertyOptional, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { FundingService } from './funding.service';
 import { HistoryService } from '../history/history.service';
 
-import { CreateFundingDTO, FundingDTO, UpdateFundingDto, ServiceDTO, UpdateServiceDto, CreateServiceDTO, CreateModifierDto, CreateModifiersDTO, UpdateModifierDto, ModifyDTO } from './dto';
-import { HistoryDTO } from '../history/dto';
+import { CreateFundingDTO, FundingDTO, UpdateFundingDto, ServiceDTO, UpdateServiceDto, CreateServiceDTO } from './dto';
 import { Public, ParseObjectIdPipe } from '../util';
 import { CreateTerminationDto } from 'src/termination/dto/create-termination.dto';
 
@@ -37,15 +36,15 @@ export class FundingController {
   }
 
   /** Create a new modifier */
-  @Post('/modifier')
-  @Public()
-  @ApiOkResponse({ type: ServiceDTO })
-  async createModifier(
-    @Body() createModifierDTO: CreateModifiersDTO): Promise<ModifyDTO> {
-    const staffId = '60f01ec194abb63ff8f0aa75';
-    const modifier = await this.fundingService.createModifier(createModifierDTO);
-    return modifier
-  }
+  // @Post('/modifier')
+  // @Public()
+  // @ApiOkResponse({ type: ServiceDTO })
+  // async createModifier(
+  //   @Body() createModifierDTO: CreateModifiersDTO): Promise<ModifyDTO> {
+  //   const staffId = '60f01ec194abb63ff8f0aa75';
+  //   const modifier = await this.fundingService.createModifier(createModifierDTO);
+  //   return modifier
+  // }
 
   /** Get all funders */
   @Get()
@@ -100,12 +99,12 @@ export class FundingController {
   }
 
   /** Get Modifier By funding Service Id */
-  @Get('modifier/:fundingserviceId')
-  @Public()
-  @ApiOkResponse({ type: FundingDTO })
-  async findmodifier(@Param('fundingserviceId', ParseObjectIdPipe) fundingserviceId: string): Promise<FundingDTO> {
-    return await this.fundingService.findmodifier(fundingserviceId);
-  }
+  // @Get('modifier/:fundingserviceId')
+  // @Public()
+  // @ApiOkResponse({ type: FundingDTO })
+  // async findmodifier(@Param('fundingserviceId', ParseObjectIdPipe) fundingserviceId: string): Promise<FundingDTO> {
+  //   return await this.fundingService.findmodifier(fundingserviceId);
+  // }
 
   /** Edit the Funder */
   @Patch(':id')
@@ -130,14 +129,14 @@ export class FundingController {
   }
 
   /** Edit the Modifier */
-  @Patch(':modifyId/modifier')
-  @Public()
-  // @ApiOkResponse({ type: FundingDTO })
-  async updateModify(@Param('modifyId', ParseObjectIdPipe) modifyId: string, @Body() updateModifierDto: UpdateModifierDto): Promise<any> {
-    const staffId = '60f01ec194abb63ff8f0aa75';
-    const modifier = await this.fundingService.updateModifier(modifyId, updateModifierDto);
-    return modifier;
-  }
+  // @Patch(':modifyId/modifier')
+  // @Public()
+  // // @ApiOkResponse({ type: FundingDTO })
+  // async updateModify(@Param('modifyId', ParseObjectIdPipe) modifyId: string, @Body() updateModifierDto: UpdateModifierDto): Promise<any> {
+  //   const staffId = '60f01ec194abb63ff8f0aa75';
+  //   const modifier = await this.fundingService.updateModifier(modifyId, updateModifierDto);
+  //   return modifier;
+  // }
 
   /** Delete the funder */
   @Delete(':id')
