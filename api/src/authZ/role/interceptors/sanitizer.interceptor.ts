@@ -1,12 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { IRole } from '../interface';
 import { RoleDTO } from '../dto';
-import { ISanitize } from 'src/util';
-import {
-  IPermission,
-  PermissionDTO,
-  PermissionSanitizer,
-} from '../../permission';
+import { ISanitize } from '../../../util';
+import { IPermission, PermissionDTO, PermissionSanitizer } from '../../permission';
 
 @Injectable()
 export class RoleSanitizer implements ISanitize {
@@ -38,11 +34,8 @@ export class RoleSanitizer implements ISanitize {
     }
     const permission = (permissions[0] as unknown) as IPermission;
     if (permission.title) {
-      console.log(permissions);
       //permission was populated
-      return this.permissionSanitizer.sanitizeMany(
-        (permissions as unknown) as IPermission[],
-      );
+      return this.permissionSanitizer.sanitizeMany((permissions as unknown) as IPermission[]);
     } else {
       //not populated
       return permissions;

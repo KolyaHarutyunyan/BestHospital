@@ -1,28 +1,7 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Patch,
-  Post,
-  UseGuards,
-  Headers,
-} from '@nestjs/common';
-import {
-  ApiBody,
-  ApiHeader,
-  ApiOkResponse,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-} from '@nestjs/swagger';
+import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { ApiBody, ApiHeader, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ParseObjectIdPipe, Public } from '../util';
-import {
-  ACCESS_TOKEN,
-  apiSummaries,
-  REGISTRATION_TOKEN,
-  RESET_TOKEN,
-} from './authN.constants';
+import { ACCESS_TOKEN, apiSummaries, REGISTRATION_TOKEN, RESET_TOKEN } from './authN.constants';
 import { AuthNService } from './authN.service';
 import {
   ChangePassDTO,
@@ -31,9 +10,10 @@ import {
   SigninDTO,
   AuthDTO,
   AuthResponseDTO,
+  UserDTO,
 } from './dto';
 import { ResetPassGuard, RegistrationGuard } from './guards';
-import { AuthZGuard, PermissionList } from '../authZ';
+// import { AuthZGuard, PermissionList } from '../authZ';
 
 @Controller('authn')
 @ApiTags('Authentication')
@@ -48,12 +28,8 @@ export class AuthNController {
   @ApiBody({ type: ResetPassDTO })
   @ApiOkResponse({ type: AuthDTO })
   @UseGuards(new RegistrationGuard())
-  async completeRegistration(
-    @Body() resetPassDTO: ResetPassDTO,
-  ): Promise<AuthDTO> {
-    const auth: AuthDTO = await this.authNService.completeRegistration(
-      resetPassDTO,
-    );
+  async completeRegistration(@Body() resetPassDTO: ResetPassDTO): Promise<AuthDTO> {
+    const auth: AuthDTO = await this.authNService.completeRegistration(resetPassDTO);
     return auth;
   }
 
@@ -81,9 +57,7 @@ export class AuthNController {
   @ApiBody({ type: ChangePassDTO })
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: PassChangedDTO })
-  async changePassword(
-    @Body() changePassDTO: ChangePassDTO,
-  ): Promise<PassChangedDTO> {
+  async changePassword(@Body() changePassDTO: ChangePassDTO): Promise<PassChangedDTO> {
     console.log(changePassDTO);
     const auth = await this.authNService.changePassword(changePassDTO);
     return new PassChangedDTO(auth.token);
@@ -109,55 +83,50 @@ export class AuthNController {
     return auth;
   }
 
-  /** Inactivate the user */
-  @Patch(':userId/inactivate')
-  @ApiParam({ name: 'userId' })
-  @ApiOkResponse({ type: String, description: 'Id of the user inactivated' })
-  @UseGuards(new AuthZGuard([PermissionList.MANAGE_ADMINS.code]))
-  async inactivateUser(@Param('userId') userId: string): Promise<string> {
-    const id = await this.authNService.inactivate(userId);
-    return id;
-  }
-
-  /** Inactivate the user */
-  @Patch(':userId/activate')
-  @ApiParam({ name: 'userId' })
-  @ApiOkResponse({ type: String, description: 'Id of the user activated' })
-  async activateUser(@Param('userId') userId: string): Promise<string> {
-    const id = await this.authNService.activate(userId);
-    return id;
-  }
-
   /** Add roles to user */
-  @Patch(':userId/addRole')
+  @Patch(':userId/:roleId/addRole')
   @Public()
+  @ApiOkResponse({ type: AuthResponseDTO })
   async addRole(
     @Param('userId') userId: string,
-    @Body('roleId') roleId: string,
+    @Param('roleId') roleId: string,
+    @Body('user') user: UserDTO,
   ): Promise<AuthResponseDTO> {
-    const auth = await this.authNService.addRole(userId, roleId);
+    const auth = await this.authNService.addRole(userId, roleId, user);
     return auth;
   }
 
   /** Remove roles to user */
-  @Patch(':userId/removeRole')
+  @Patch(':userId/:roleId/removeRole')
   @Public()
+  @ApiOkResponse({ type: AuthResponseDTO })
   async removeRole(
     @Param('userId') userId: string,
-    @Body('roleId') roleId: string,
+    @Param('roleId') roleId: string,
+    @Body('user') user: UserDTO,
   ): Promise<AuthResponseDTO> {
-    const auth = await this.authNService.removeRole(userId, roleId);
+    const auth = await this.authNService.removeRole(userId, roleId, user);
+    return auth;
+  }
+
+  /** The user can get their own auth with their access-token */
+  @Get('myAuth')
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: AuthResponseDTO })
+  async getMyAuth(@Body('user') user: UserDTO): Promise<AuthResponseDTO> {
+    const auth = await this.authNService.getAuth(user.id);
     return auth;
   }
 
   /** Get User Auth */
   @Get(':userId')
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: AuthResponseDTO })
   async getUserAuth(
     @Param('userId', ParseObjectIdPipe) userId: string,
-    // @Body('userId') userId: string, //TURN ON WHEN TOKENS ARE CONNECTED
+    @Body('user') user: UserDTO,
   ): Promise<AuthResponseDTO> {
-    const auth = await this.authNService.getAuth(userId);
+    const auth = await this.authNService.getAuth(userId, user);
     return auth;
   }
 
@@ -165,6 +134,7 @@ export class AuthNController {
   @Post('logout')
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: String, description: 'invalidated token' })
+  @Public()
   async logout(@Body('userId') userId: string): Promise<string> {
     const invalidatedToken = await this.authNService.logout(userId);
     return invalidatedToken;

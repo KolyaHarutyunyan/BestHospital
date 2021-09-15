@@ -16,15 +16,12 @@ export class ResetPassGuard implements CanActivate {
     try {
       const token = request.get('reset-token');
       this.checkToken(token);
-      const decoded: any = await jwt.verify(token, JWT_SECRET_FORGET_PASS);
+      const decoded: IToken = (await jwt.verify(token, JWT_SECRET_FORGET_PASS)) as IToken;
       request.body.userId = decoded.id;
       return true;
     } catch (err) {
       if (err.name === 'TokenExpiredError') {
-        throw new HttpException(
-          'Token is expired, request another reset',
-          HttpStatus.FORBIDDEN,
-        );
+        throw new HttpException('Token is expired, request another reset', HttpStatus.FORBIDDEN);
       }
       //unknown error
       throw err;
@@ -34,10 +31,7 @@ export class ResetPassGuard implements CanActivate {
   //private members
   private checkToken(token: string) {
     if (!token) {
-      throw new HttpException(
-        'reset-token tabsHeader was not set',
-        HttpStatus.UNAUTHORIZED,
-      );
+      throw new HttpException('reset-token header was not set', HttpStatus.UNAUTHORIZED);
     }
   }
 }

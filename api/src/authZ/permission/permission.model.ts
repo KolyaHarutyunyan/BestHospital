@@ -8,7 +8,4 @@ const permissionSchema = new Schema({
   code: { type: Number, required: true, unique: true },
 });
 
-export const PermissionModel = model<IPermission>(
-  'Permission',
-  permissionSchema,
-);
+export const PermissionModel = model<IPermission>('Permission', permissionSchema);

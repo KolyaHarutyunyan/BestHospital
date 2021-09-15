@@ -18,5 +18,10 @@
     "title": "OFFICE_MANAGEMENT",
     "description": "Can create, delete and update office related information",
     "code": 4
+  },
+  {
+    "title": "OFFICE_MANAGEMENT",
+    "description": "Can create, delete and update office related information",
+    "code": 5
   }
 ]

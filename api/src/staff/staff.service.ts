@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { ObjectID } from "mongodb";
 import { Model, Types } from 'mongoose';
 import { StaffDTO, CreateStaffDto, EditStaffDTO } from './dto';
 import { StaffSanitizer } from './interceptor';
@@ -12,6 +11,7 @@ import { CreateCredentialDto } from '../credential';
 import { HistoryService, serviceLog } from '../history';
 import { UserStatus } from './staff.constants';
 import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
+import { CreateStaffDtoTest } from './dto/createTest.dto';
 
 @Injectable()
 export class StaffService {
@@ -49,14 +49,53 @@ export class StaffService {
         ssn: dto.ssn,
         address: await this.addressService.getAddress(dto.address),
       });
+      user = (await Promise.all([user.save(), this.authnService.create(user._id, user.email)]))[0];
+
+      await this.historyService.create({
+        resource: user._id,
+        onModel: 'Staff',
+        title: serviceLog.createStaff,
+      });
+      return this.sanitizer.sanitize(user);
+    } catch (e) {
+      console.log(e);
+      this.mongooseUtil.checkDuplicateKey(e, 'User already exists');
+      throw e;
+    }
+  };
+
+  create_test = async (dto: CreateStaffDtoTest): Promise<StaffDTO> => {
+    try {
+      const _id = Types.ObjectId();
+
+      let user = new this.model({
+        _id,
+        email: dto.email,
+        secondaryEmail: dto.secondaryEmail,
+        firstName: dto.firstName,
+        lastName: dto.lastName,
+        middleName: dto.middleName,
+        phone: dto.phone,
+        secondaryPhone: dto.secondaryPhone,
+        state: dto.state,
+        gender: dto.gender,
+        birthday: dto.birthday,
+        residency: dto.residency,
+        ssn: dto.ssn,
+        address: await this.addressService.getAddress(dto.address),
+      });
       user = (
         await Promise.all([
           user.save(),
-          this.authnService.create(user._id, user.email),
+          this.authnService.create_test(user._id, user.email, dto.password),
         ])
       )[0];
 
-      await this.historyService.create({ resource: user._id, onModel: "Staff", title: serviceLog.createStaff })
+      await this.historyService.create({
+        resource: user._id,
+        onModel: 'Staff',
+        title: serviceLog.createStaff,
+      });
       return this.sanitizer.sanitize(user);
     } catch (e) {
       console.log(e);
@@ -86,10 +125,13 @@ export class StaffService {
       if (dto.middleName) admin.middleName = dto.middleName;
       if (dto.email) admin.email = dto.email;
       if (dto.secondaryEmail) admin.secondaryEmail = dto.secondaryEmail;
-      if (dto.address)
-        admin.address = await this.addressService.getAddress(dto.address);
-      await admin.save()
-      await this.historyService.create({ resource: admin._id, onModel: "Staff", title: serviceLog.updateStaff })
+      if (dto.address) admin.address = await this.addressService.getAddress(dto.address);
+      await admin.save();
+      await this.historyService.create({
+        resource: admin._id,
+        onModel: 'Staff',
+        title: serviceLog.updateStaff,
+      });
       return this.sanitizer.sanitize(admin);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Staff already exists');
@@ -108,7 +150,7 @@ export class StaffService {
   findById = async (_id: string): Promise<IStaff> => {
     try {
       const staff = await this.model.findById({ _id });
-      this.checkStaff(staff)
+      this.checkStaff(staff);
       return staff;
     } catch (e) {
       console.log(e);
@@ -126,27 +168,27 @@ export class StaffService {
   /** returns all users */
   getUsers = async (skip: number, limit: number, status: number): Promise<any> => {
     if (status == 0) {
-      let [staff, count] = await Promise.all([
-        this.model.find({ status: 0 }).sort({ '_id': -1 }).skip(skip).limit(limit),
-        this.model.countDocuments({ status: 0 })
+      const [staff, count] = await Promise.all([
+        this.model.find({ status: 0 }).sort({ _id: -1 }).skip(skip).limit(limit),
+        this.model.countDocuments({ status: 0 }),
       ]);
       const sanFun = this.sanitizer.sanitizeMany(staff);
-      return { staff: sanFun, count }
+      return { staff: sanFun, count };
     }
 
-    let [staff, count] = await Promise.all([
-      (await this.model.find({ status: 1 }).sort({ '_id': 1 }).skip(skip).limit(limit)).reverse(),
-      this.model.countDocuments({ status: 1 })
+    const [staff, count] = await Promise.all([
+      (await this.model.find({ status: 1 }).sort({ _id: 1 }).skip(skip).limit(limit)).reverse(),
+      this.model.countDocuments({ status: 1 }),
     ]);
     const sanFun = this.sanitizer.sanitizeMany(staff);
-    return { staff: sanFun, count }
+    return { staff: sanFun, count };
   };
 
   /** Set Status of a staff Inactive*/
   setStatusInactive = async (
     _id: string,
     status: number,
-    dto: CreateTerminationDto
+    dto: CreateTerminationDto,
   ): Promise<StaffDTO> => {
     const staff = await this.model.findById({ _id });
     this.checkStaff(staff);
@@ -160,10 +202,7 @@ export class StaffService {
   };
 
   /** Set Status of a staff Active */
-  setStatusActive = async (
-    id: string,
-    status: number,
-  ): Promise<StaffDTO> => {
+  setStatusActive = async (id: string, status: number): Promise<StaffDTO> => {
     const staff = await this.model.findOneAndUpdate(
       { _id: id },
       { $set: { status: status, termination: null } },
@@ -177,10 +216,7 @@ export class StaffService {
   /** if the admin is not found, throws an exception */
   private checkStaff(staff: IStaff) {
     if (!staff) {
-      throw new HttpException(
-        'Staff with this id was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Staff with this id was not found', HttpStatus.NOT_FOUND);
     }
   }
 }
