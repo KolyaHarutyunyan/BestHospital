@@ -55,7 +55,7 @@ export const FundingSourceSingleServices = ({data,}) => {
     useEffect(() => {
         if (httpOnError.length && httpOnError[0].error === 'Modifier was not found'){
             dispatch(httpRequestsOnSuccessActions.removeSuccess('GET_FUNDING_SOURCE_SERVICE_MODIFIERS'))
-            dispatch(httpRequestsOnErrorsActions.removeError())
+            dispatch(httpRequestsOnErrorsActions.removeError('GET_FUNDING_SOURCE_SERVICE_MODIFIERS'))
             if (accept){
                 setToggleModal(!toggleModal)
                 setAccept(false)
@@ -65,7 +65,7 @@ export const FundingSourceSingleServices = ({data,}) => {
     }, [httpOnError])
 
 
-
+    console.log(accept,'aaaaccccccc')
 
 
 

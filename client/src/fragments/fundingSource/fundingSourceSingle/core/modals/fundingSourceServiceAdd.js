@@ -79,7 +79,7 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
 
                  // handleClose()
             }else {
-                dispatch(fundingSourceActions.editFoundingSourceServiceById(info?._id, data, modifiersEdit))
+                dispatch(fundingSourceActions.editFoundingSourceServiceById(info?._id, data, modifiersEdit,params.id))
                  handleClose()
             }
             // dispatch(fundingSourceActions.createFoundingSourceServiceModifier({

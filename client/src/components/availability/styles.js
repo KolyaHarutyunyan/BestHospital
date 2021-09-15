@@ -64,5 +64,12 @@ export const availabilityStyles = makeStyles((theme) => ({
                 padding: '32px',
 
         },
-    }
+    },
+
+    availableHoursDayName : {
+        color: '#347AF0',
+        fontSize : 16,
+        fontWeight : "bold",
+        marginRight : 16
+    },
 }));
