@@ -2,19 +2,18 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ModifierService } from './modifier.service';
 import { ParseObjectIdPipe, Public } from '../../util';
 import { CreateModifierDto, CreateModifiersDTO, UpdateModifierDto, ModifyDTO } from './dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('modifier')
 @ApiTags('Modifier Endpoints')
 export class ModifierController {
   constructor(private readonly modifierService: ModifierService) { }
 
-  /** Create a new modifier */
   @Post()
   @Public()
-  // @ApiOkResponse({ type: ServiceDTO })
+  @ApiOkResponse({ type: [ModifyDTO] })
   async createModifier(
-    @Body() createModifierDTO: CreateModifiersDTO): Promise<ModifyDTO> {
+    @Body() createModifierDTO: CreateModifiersDTO): Promise<ModifyDTO[]> {
     const staffId = '60f01ec194abb63ff8f0aa75';
     const modifier = await this.modifierService.create(createModifierDTO);
     return modifier
@@ -22,8 +21,8 @@ export class ModifierController {
 
   @Get(':fundingserviceId')
   @Public()
-  // @ApiOkResponse({ type: FundingDTO })
-  async findByServiceId(@Param('fundingserviceId', ParseObjectIdPipe) fundingserviceId: string): Promise<any> {
+  @ApiOkResponse({ type: [ModifyDTO] })
+  async findByServiceId(@Param('fundingserviceId', ParseObjectIdPipe) fundingserviceId: string): Promise<ModifyDTO[]> {
     return await this.modifierService.findByServiceId(fundingserviceId);
   }
 
@@ -39,15 +38,17 @@ export class ModifierController {
 
   @Patch(':id')
   @Public()
-  // @ApiOkResponse({ type: FundingDTO })
+  @ApiOkResponse({ type: ModifyDTO })
   async updateModify(@Param('id', ParseObjectIdPipe) id: string, @Body() updateModifierDto: UpdateModifierDto): Promise<any> {
     const staffId = '60f01ec194abb63ff8f0aa75';
     const modifier = await this.modifierService.update(id, updateModifierDto);
     return modifier;
   }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.modifierService.remove(+id);
-  // }
+  @Delete(':id')
+  @Public()
+  @ApiOkResponse({type: String})
+  remove(@Param('id', ParseObjectIdPipe) id: string) {
+    return this.modifierService.remove(id);
+  }
 }

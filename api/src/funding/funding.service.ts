@@ -136,8 +136,6 @@ export class FundingService {
   async findService(_id: string): Promise<any> {
     try {
       const services = await this.serviceModel.findById({ _id });
-      console.log(services);
-
       this.checkFundingService(services)
       return services
     } catch (e) {

@@ -11,6 +11,10 @@ export class UpdateModifierDto {
     @IsOptional()
     credentialId: string;
     @ApiProperty()
+    @IsMongoId()
+    @IsOptional()
+    fundingServiceId: string;
+    @ApiProperty()
     @IsOptional()
     @IsString()
     name: string;

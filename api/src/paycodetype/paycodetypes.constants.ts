@@ -1,4 +1,6 @@
 export const PayCodeTypeStatus = {
-    HALF: "HALF",
-    FULL: "FULL",
+    Hourly: "Hourly",
+    Daily: "Daily",
+    Weekly: "Weekly",
+    Consecutive: "Consecutive"
 }

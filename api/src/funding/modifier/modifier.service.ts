@@ -23,12 +23,11 @@ export class ModifierService {
   private model: Model<any>;
 
   private mongooseUtil: MongooseUtil;
-  async create(dto: CreateModifiersDTO): Promise<any> {
+  
+  async create(dto: CreateModifiersDTO): Promise<ModifyDTO[]> {
     try {
       const credentials = [];
-
       const fundingService = await this.fundingService.findService(dto.serviceId);
-
       dto.modifiers.map(modifier => {
         credentials.push(modifier.credentialId)
         modifier.serviceId = fundingService._id;
@@ -36,10 +35,9 @@ export class ModifierService {
       const credential = await this.credentialService.findAllByIds(credentials);
       if(credentials.length !== credential.length){
         throw new HttpException(
-          'Modifier was not found',
+          'Credential was not found',
           HttpStatus.NOT_FOUND)
       }
-      //checkCredential
       const modifiers = await this.model.collection.insertMany(dto.modifiers);
       return modifiers.ops
     } catch (e) {
@@ -47,7 +45,7 @@ export class ModifierService {
       throw e;
     }
   }
-  async findByServiceId(fundingServiceId: string): Promise<any> {
+  async findByServiceId(fundingServiceId: string): Promise<ModifyDTO[]> {
     const modifiers = await this.model.find({ serviceId: fundingServiceId });
     this.checkModify(modifiers[0]);
     return this.sanitizer.sanitizeMany(modifiers);
@@ -71,6 +69,10 @@ export class ModifierService {
         const credential = await this.credentialService.findOne(dto.credentialId);
         modifier.credentialId = dto.credentialId
       }
+      if (dto.fundingServiceId) {
+        const fundingService = await this.fundingService.findService(dto.fundingServiceId)
+        modifier.serviceId = dto.fundingServiceId
+      }
       await modifier.save()
       return this.sanitizer.sanitize(modifier)
     } catch (e) {
@@ -79,9 +81,11 @@ export class ModifierService {
     }
   }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} modifier`;
-  // }
+  async remove(_id: string): Promise<string> {
+    const modifier = await this.model.findByIdAndDelete({ _id });
+    this.checkModify(modifier);
+    return modifier._id;
+  }
 
   /** Private methods */
   /** if the modifier is not found, throws an exception */
