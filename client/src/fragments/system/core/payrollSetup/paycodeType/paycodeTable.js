@@ -1,8 +1,10 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {PayrollSetupStyles} from '../styles';
 import {Notes, SlicedText, TableBodyComponent} from "@eachbase/components";
 import {TableCell} from "@material-ui/core";
 import {Images} from "@eachbase/utils";
+import {useDispatch, useSelector} from "react-redux";
+import {payrollActions} from "@eachbase/store/payroll";
 
 const headerTitles = [
     {
@@ -42,8 +44,14 @@ const data = [
 ]
 
 export const PayCodeTable = () => {
-
+    const dispatch = useDispatch()
     const classes = PayrollSetupStyles()
+
+    const globalPayCodes = useSelector(state => state.payroll.PayCodes)
+    console.log(globalPayCodes,'globalPayCodes');
+    useEffect(()=>{
+        dispatch(payrollActions.getPayCodeGlobal())
+    },[])
 
     const notesItem = (item, index) => {
         return (

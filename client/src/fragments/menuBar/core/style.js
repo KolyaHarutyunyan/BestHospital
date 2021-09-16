@@ -112,7 +112,7 @@ export const navBarStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
     padding: "90px 20px 24px 24px",
-    paddingBottom: "40px",
+    // paddingBottom: "40px",
     height:'100%',
     background: `${Colors.BackgroundSecondary} 0% 0% no-repeat padding-box`,
 

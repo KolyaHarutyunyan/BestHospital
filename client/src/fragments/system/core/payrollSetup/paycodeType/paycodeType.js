@@ -4,6 +4,7 @@ import {PayrollSetupStyles} from '../styles';
 import {ErrorText} from "@eachbase/utils";
 
 const payCodeType = [
+    {name: 'Hourly'},
     {name: 'Daily'},
     {name: 'Weekly'},
     {name: 'Consecutive'}

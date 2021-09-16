@@ -5,7 +5,9 @@ import {PayCodeType ,PayCodeTable} from "./paycodeType/";
 export const PayrollSetup = () => {
     const classes = PayrollSetupStyles()
 
-    const [activeStep, setActiveStep] = useState(0)
+    const [activeStep, setActiveStep] = useState(0);
+
+
 
     const showActiveStep = (activeStep) => {
         if (activeStep === 0) {

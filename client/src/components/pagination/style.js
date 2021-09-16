@@ -1,10 +1,10 @@
 import { makeStyles } from '@material-ui/core/styles';
 import {Backgrounds as Background, Colors} from "@eachbase/utils";
 
-export const paginationStyle = makeStyles ((theme) => ({
+export const paginationStyle = makeStyles (() => ({
   PaginationWrapper: {
     width: '100%',
-    margin: '-7px 0 0 0 ',
+    margin: '0',
     display:'flex',
     justifyContent:'space-between',
     alignItems:'center',

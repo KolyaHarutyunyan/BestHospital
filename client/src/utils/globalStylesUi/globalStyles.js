@@ -84,12 +84,20 @@ export const useGlobalStyles = makeStyles({
         marginTop: '16px',
         marginBottom: '24px',
         position: 'relative',
+        // display: 'flex',
+        // flexDirection: 'column',
+        // justifyContent: 'space-between',
         '& .MuiTableContainer-root': {
             boxShadow: 'none',
             background: 'none',
             // position: 'relative',
             // overflow: 'hidden'
         },
+    },
+    tableBack: {
+        width: '100%',
+        background: 'transparent',
+        boxShadow: 'none'
     },
     tableContainer: {
         // display:'flex',
