@@ -1,65 +1,73 @@
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import {Colors} from "@eachbase/utils";
 
 
 export const fundingSourceSingleStyles = makeStyles(() => ({
 
-    fundingSourceSingleHeaderStyles : {
+    fundingSourceSingleHeaderStyles: {
         display: 'flex',
-        justifyContent:'space-between',
+        justifyContent: 'space-between',
         alignItems: "center"
     },
-    fundingSourceSingleHeaderWrapStyles : {
-        marginBottom : 34,
+    fundingSourceSingleHeaderWrapStyles: {
+        marginBottom: 34,
         display: 'flex',
-        justifyContent:'space-between',
+        justifyContent: 'space-between',
         alignItems: "center",
     },
-    title : {
+    title: {
         fontSize: '18px',
-        color:Colors.TextPrimary,
-        fontWeight:'bold',
-        textTransform:'capitalize'
+        color: Colors.TextPrimary,
+        fontWeight: 'bold',
+        textTransform: 'capitalize'
     },
     foundingIcon: {
         width: 32,
         height: 32,
-        marginLeft:8
+        marginLeft: 8
     },
     fundingSourceSinglePTModifiersStyles: {
         width: '710px',
-        padding : 24,
-        borderRadius : 8,
-        border : '1px solid #347AF080',
+        padding: 24,
+        borderRadius: 8,
+        border: '1px solid #347AF080',
         marginLeft: 16,
         flex: '0 0 710px'
     },
     fundingSourceSinglePTModifiersTitleStyles: {
-        fontSize : 24,
-        color : Colors.TextPrimary,
-        fontWeight : "bold",
+        fontSize: 24,
+        color: Colors.TextPrimary,
+        fontWeight: "bold",
     },
-    fundingSourceSingleGeneralStyles : {
+    fundingSourceSingleGeneralStyles: {
         display: 'flex',
         justifyContent: "space-between"
     },
-    clear : {
+    clear: {
         height: 36, width: 74
     },
-    iconCursor : {
-        cursor  : 'pointer'
+    iconCursor: {
+        cursor: 'pointer'
     },
-    iconCursordelete : {
+    iconCursordelete: {
         marginLeft: 16,
-        cursor  : 'pointer'
+        cursor: 'pointer'
     },
-    tableTitle : {
+    tableTitle: {
         width: 130,
         textOverflow: 'ellipsis',
         overflow: 'hidden',
-        height : 19
-    }
-
+        height: 19
+    },
+    fundindService: {
+        display: 'flex',
+        justifyContent: "space-between",
+        marginTop: 50
+    },
+    fundindServiceItems : {
+        marginTop: -32,
+        width: '100%'
+    },
 }));
 
-export const btnStyles={height: 36, width: 74}
+export const btnStyles = {height: 36, width: 74}

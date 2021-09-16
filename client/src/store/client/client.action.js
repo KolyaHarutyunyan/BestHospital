@@ -1,16 +1,17 @@
 import {
+    CREATE_AVAILABILITY_SCHEDULE,
     CREATE_CLIENT,
     CREATE_CLIENT_AUTHORIZATION,
     CREATE_CLIENT_AUTHORIZATION_SERV,
     CREATE_CLIENT_CONTACT,
     CREATE_CLIENT_ENROLLMENT,
-    CREATE_CLIENT_NOTE,
+    CREATE_CLIENT_NOTE, DELETE_AVAILABILITY_SCHEDULE,
     DELETE_CLIENT,
     DELETE_CLIENT_AUTHORIZATION,
     DELETE_CLIENT_AUTHORIZATION_SERV,
     DELETE_CLIENT_CONTACT,
     DELETE_CLIENT_ENROLLMENT,
-    DELETE_CLIENT_NOTE,
+    DELETE_CLIENT_NOTE, EDIT_AVAILABILITY_SCHEDULE,
     EDIT_CLIENT,
     EDIT_CLIENT_AUTHORIZATION,
     EDIT_CLIENT_AUTHORIZATION_SERV,
@@ -19,7 +20,7 @@ import {
     EDIT_CLIENT_NOTE,
     GET_CLIENT_AUTHORIZATION,
     GET_CLIENT_AUTHORIZATION_SERV,
-    GET_CLIENT_AVAILABILITY_SCHEDULE,
+    GET_AVAILABILITY_SCHEDULE,
     GET_CLIENT_BY_ID,
     GET_CLIENT_CONTACTS,
     GET_CLIENT_ENROLLMENT,
@@ -27,11 +28,7 @@ import {
     GET_CLIENT_NOTES,
     GET_CLIENTS,
 } from "./client.types";
-import {
-    CREATE_FUNDING_SOURCE_NOTE, DELETE_FUNDING_SOURCE_NOTE,
-    EDIT_FUNDING_SOURCE_NOTE,
-    GET_FUNDING_SOURCE_HISTORIES_BY_ID
-} from "../fundingSource/fundingSource.types";
+
 
 
 export const getClients = (data) => {
@@ -266,9 +263,33 @@ export const deleteClientNote = (fId, id) => {
     }
 }
 
-export const getClientsAvailabilitySchedule = (id) => {
+export const getAvailabilitySchedule = (id) => {
     return {
-        type: GET_CLIENT_AVAILABILITY_SCHEDULE,
+        type: GET_AVAILABILITY_SCHEDULE,
         payload: {id}
+    }
+}
+
+export const editAvailabilitySchedule = ( id, body) => {
+
+    return {
+        type: EDIT_AVAILABILITY_SCHEDULE,
+        payload: { body, id,}
+    }
+}
+
+export const createAvailabilitySchedule = ( id, onModel, body) => {
+
+    return {
+        type: CREATE_AVAILABILITY_SCHEDULE,
+        payload: {onModel, body, id,}
+    }
+}
+
+export const deleteAvailabilitySchedule = ( id) => {
+
+    return {
+        type: DELETE_AVAILABILITY_SCHEDULE,
+        payload: { id,}
     }
 }

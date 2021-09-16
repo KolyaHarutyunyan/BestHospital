@@ -209,13 +209,9 @@ function* createFundingSourceServicesModifier({payload}) {
 
 
 function* editFundingSourceServicesModifier({payload}) {
-    // console.log(payload.id, payload.body, 'sagaaaaa')
-
-
     try {
 
         const res = yield call(authService.editFoundingSourceServiceModifierService,payload.id, payload.body);
-        console.log(res,'reeeeesssss')
     } catch (error) {
         console.log(error, 'res mod')
     }

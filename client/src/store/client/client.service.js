@@ -1,5 +1,5 @@
 import axios from "axios";
-import {getClientsAvailabilitySchedule} from "./client.action";
+
 
 export const authService = {
     // getClientsService: () => axios.get(`/client`,),
@@ -66,7 +66,13 @@ export const authService = {
 
     deleteClientNoteService: (id) => axios.delete(`/comment/${id}/comments`),
 
-    getClientsAvailabilityScheduleService: (id) => axios.get(`/schedule/${id}`),
+    getAvailabilityScheduleService: (id) => axios.get(`/availability/${id}`),
+
+    editAvailabilityScheduleService: (id, body) => axios.get(`/availability/${id}`, body),
+
+    createAvailabilityScheduleService: (id, onModel, body) => axios.post(`/availability/${id}/${onModel}`, body),
+
+    deleteAvailabilityScheduleService: (id) => axios.post(`/availability/${id}`),
 };
 
 

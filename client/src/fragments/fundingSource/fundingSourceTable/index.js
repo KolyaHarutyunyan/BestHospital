@@ -1,1 +1,1 @@
-export { FundingSourceTable } from "./fundingSourceTable";
+export {FundingSourceTable} from "./fundingSourceTable";

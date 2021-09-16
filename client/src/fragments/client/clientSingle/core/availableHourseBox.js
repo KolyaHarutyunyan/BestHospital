@@ -17,10 +17,6 @@ export const AvailableHourseBox = ({day, info}) => {
                                 <p className={classes.availableHoursBoxBodyInfo}>{`${item.from} - ${item.to}`} </p>
                             )
                         })}
-                        {/*<p className={classes.availableHoursBoxBodyInfo}>11:00 AM - 01:00 PM</p>*/}
-                        {/*<p className={classes.availableHoursBoxBodyInfo}>02:00 PM - 03:00 PM</p>*/}
-                        {/*<p className={classes.availableHoursBoxBodyInfo}>03:00 PM - 04:30 PM</p>*/}
-                        {/*<p className={classes.availableHoursBoxBodyInfo}>03:00 PM - 04:30 PM</p>*/}
                     </div>
 
         </div>

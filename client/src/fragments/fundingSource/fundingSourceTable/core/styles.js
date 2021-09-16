@@ -1,5 +1,3 @@
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 
-export const officesFragments = makeStyles(() => ({
-
-}));
+export const officesFragments = makeStyles(() => ({}));

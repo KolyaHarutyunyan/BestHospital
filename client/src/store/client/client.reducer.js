@@ -35,14 +35,7 @@ export const clientReducer = (state = initialState, action) => {
                 clientHistories : [],
                 clientsNotes : []
             }
-        // case  CREATE_CLIENT_SUCCESS:
-            // let arr = state.clientList[0].unshift(action.payload)
-            // let arr2 = [...state.clientList]
-            // arr2[0] = arr
-            // return {
-            //     ...state,
-            //       clientList:arr2
-            // }
+
 
         case  GET_CLIENT_BY_ID_SUCCESS:
             return {

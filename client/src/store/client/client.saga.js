@@ -38,16 +38,14 @@ import {
     CREATE_CLIENT_NOTE_SUCCESS,
     CREATE_CLIENT_CONTACT_SUCCESS,
     CREATE_CLIENT_SUCCESS,
-    GET_CLIENT_AVAILABILITY_SCHEDULE_SUCCESS,
-    GET_CLIENT_AVAILABILITY_SCHEDULE
+    GET_AVAILABILITY_SCHEDULE_SUCCESS,
+    GET_AVAILABILITY_SCHEDULE,
+    EDIT_AVAILABILITY_SCHEDULE,
+    CREATE_AVAILABILITY_SCHEDULE, DELETE_AVAILABILITY_SCHEDULE
 } from "./client.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
-import {
-    CREATE_FUNDING_SOURCE_NOTES_SUCCESS, GET_FUNDING_SOURCE,
-    GET_FUNDING_SOURCE_BY_ID_SUCCESS,
-    GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS, GET_FUNDING_SOURCE_NOTES, GET_FUNDING_SOURCE_NOTES_SUCCESS
-} from "../fundingSource/fundingSource.types";
+
 import {httpRequestsOnSuccessActions} from "../http_requests_on_success";
 
 
@@ -215,20 +213,31 @@ function* deleteClientContact(action) {
 function* getClientEnrollment(action) {
     try {
         const res = yield call(authService.getClientEnrollmentService, action);
+
         yield put({
             type: GET_CLIENT_ENROLLMENT_SUCCESS,
             payload: res.data,
         });
+
     } catch (err) {
-        console.log(err, 'error get en roll')
+
     }
 }
 
 function* createClientEnrollment(action) {
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.createClientEnrollmentService, action);
-        window.location.replace('/client')
+        yield put({
+            type: GET_CLIENT_ENROLLMENT,
+            payload: {id : action.payload.id},
+        });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
         console.log(err, 'error create client')
     }
 }
@@ -236,7 +245,7 @@ function* createClientEnrollment(action) {
 function* editClientEnrollment(action) {
     try {
         const res = yield call(authService.editClientEnrollmentService, action);
-        window.location.replace('/client')
+
     } catch (err) {
         console.log(err, 'error create client')
     }
@@ -437,11 +446,11 @@ function* deleteClientNote(action) {
 
 
 
-function* getClientsAvailabilitySchedule(action) {
+function* getAvailabilitySchedule(action) {
     // yield put(httpRequestsOnErrorsActions.removeError(action.type));
     // yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
-        const res = yield call(authService.getClientsAvailabilityScheduleService, action.payload.id, );
+        const res = yield call(authService.getAvailabilityScheduleService, action.payload.id, );
         console.log(res, 'get F S AVEL')
         // yield put({
         //     type: GET_CLIENT_AVAILABILITY_SCHEDULE_SUCCESS,
@@ -455,6 +464,35 @@ function* getClientsAvailabilitySchedule(action) {
         console.log(error, 'errr get F S AVEL')
         // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         // yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    }
+}
+
+function* editAvailabilitySchedule(action) {
+    try {
+        const res = yield call(authService.editAvailabilityScheduleService, action.payload.id, action.payload.body);
+
+    } catch (error) {
+
+
+    }
+}
+
+
+function* createAvailabilitySchedule(action) {
+    try {
+        const res = yield call(authService.createAvailabilityScheduleService, action.payload.id, action.payload.onModal, action.payload.body);
+    } catch (error) {
+
+    }
+}
+
+function* deleteAvailabilitySchedule(action) {
+    try {
+        const res = yield call(authService.createAvailabilityScheduleService, action.payload.id);
+
+    } catch (error) {
+
+
     }
 }
 
@@ -487,7 +525,10 @@ export const watchClient = function* watchClientSaga() {
     yield takeLatest(CREATE_CLIENT_NOTE, creteClientNote)
     yield takeLatest(EDIT_CLIENT_NOTE, editClientNote)
     yield takeLatest(DELETE_CLIENT_NOTE, deleteClientNote)
-    yield takeLatest(GET_CLIENT_AVAILABILITY_SCHEDULE, getClientsAvailabilitySchedule)
+    yield takeLatest(GET_AVAILABILITY_SCHEDULE, getAvailabilitySchedule)
+    yield takeLatest(EDIT_AVAILABILITY_SCHEDULE, editAvailabilitySchedule)
+    yield takeLatest(CREATE_AVAILABILITY_SCHEDULE, createAvailabilitySchedule)
+    yield takeLatest(DELETE_AVAILABILITY_SCHEDULE, deleteAvailabilitySchedule)
 
 
 };
