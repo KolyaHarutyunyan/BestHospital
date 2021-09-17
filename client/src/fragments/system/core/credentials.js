@@ -102,8 +102,6 @@ export const Credentials = ({removeItem, openModal,globalCredentials}) => {
 
     let errorMessage = success ? 'Successfully added' : 'Something went wrong'
 
-
-    console.log(success,'success success success');
     return (
         <>
             <div className={`${classes.flexContainer} ${classes.headerSize}`}>
@@ -161,7 +159,7 @@ export const Credentials = ({removeItem, openModal,globalCredentials}) => {
 
             </div>
             <Toast
-                type={success ? 'Successfully added' : errorText ? 'Something went wrong' : '' }
+                type={success ? 'success' : errorText ? 'error' : '' }
                 text={errorMessage}
                 info={success ? success : errorText ? errorText : ''}/>
         </>

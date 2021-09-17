@@ -35,7 +35,8 @@ export const PayrollSetupStyles = makeStyles(() => ({
         padding: '32px 32px 40px 32px',
         boxShadow: Shadow.noteModalShadow,
         borderRadius: 8,
-        width: '100%'
+        width: '100%',
+        background: 'white'
     },
     flexBox: {
         display: 'flex',
@@ -44,8 +45,9 @@ export const PayrollSetupStyles = makeStyles(() => ({
         marginBottom: 24
     },
     checkboxContainer: {
-        width: 210,
+        width: '50%',
         height: 86,
+        minWidth: 157,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -56,7 +58,19 @@ export const PayrollSetupStyles = makeStyles(() => ({
             fontSize: 14,
             color: Colors.TextSecondary,
             fontWeight: 600
-        }
+        },
+        '&:first-child':{
+            marginRight: 10,
+        },
+        '&:last-child':{
+            marginLeft: 10,
+        },
+    },
+    editModalTitle: {
+        fontSize:32,
+        color: Colors.TextSecondary,
+        fontWeight: 'bold',
+        marginBottom: 40
     },
     modalTitle: {
         fontSize: 18,

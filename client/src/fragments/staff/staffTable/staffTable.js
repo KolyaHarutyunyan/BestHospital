@@ -26,7 +26,7 @@ export const StaffTable = ({status, handleGetPage}) => {
             <Paper className={globalStyle.tableBack}>
                 {
                     httpOnLoad.length ? <Loader/> :
-                        <TableContainer style={{maxHeight: 'calc(100vh - 250px)'}} className={globalStyle.tableContainer} component={Paper}>
+                        <TableContainer style={{height: 'calc(100vh - 250px)'}} component={Paper}>
                             <Table
                                 stickyHeader
                                 className={globalStyle.table}

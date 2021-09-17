@@ -76,42 +76,33 @@ export const useGlobalStyles = makeStyles({
         width: '100%',
     },
     tableWrapper: {
-        // height: '100%',
-        // minHeight: '80vh',
         background: 'none',
         width: '100%',
         borderRadius: '8px',
         marginTop: '16px',
-        marginBottom: '24px',
+        // marginBottom: '24px',
         position: 'relative',
-        // display: 'flex',
-        // flexDirection: 'column',
-        // justifyContent: 'space-between',
         '& .MuiTableContainer-root': {
             boxShadow: 'none',
             background: 'none',
-            // position: 'relative',
-            // overflow: 'hidden'
+            msOverflowStyle: 'none',
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+                display: 'none'
+            }
         },
     },
     tableBack: {
         width: '100%',
         background: 'transparent',
-        boxShadow: 'none'
-    },
-    tableContainer: {
-        // display:'flex',
-        // justifyContent:'space-between',
-        // flexDirection:'column',
-        // height:'92vh',
-    },
+        boxShadow: 'none',
+},
     table: {
         '&.MuiTable-root': {
             borderCollapse: 'separate',
-            borderSpacing: '0px 14px',
+            borderSpacing: '0px 8px',
             padding: '5px'
         },
-
     },
     tableWrapperSmall: {
         height: '100%',
