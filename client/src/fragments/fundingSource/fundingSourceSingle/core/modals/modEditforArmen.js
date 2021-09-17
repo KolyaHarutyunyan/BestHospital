@@ -148,6 +148,7 @@ export const FundingSourceModifiersAdd = ({
         }
     }
 
+    console.log(inputs2, 'inputs2')
 
 
     return (

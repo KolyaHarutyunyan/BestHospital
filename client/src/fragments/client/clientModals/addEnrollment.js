@@ -15,10 +15,12 @@ export const AddEnrollment = ({handleClose, info}) => {
     const classes = createClientStyle()
     const params = useParams()
     const dispatch = useDispatch()
+
     useEffect(() => {
         dispatch(fundingSourceActions.getFundingSource())
     }, []);
-    const fSelect = useSelector(state => state.fundingSource.fSelect)
+    let fSelect= useSelector(state => state.fundingSource.fSelect.funders)
+
 
 
     const handleChange = e => setInputs(
@@ -69,11 +71,12 @@ export const AddEnrollment = ({handleClose, info}) => {
                 <div className={classes.clientModalBlock}>
                     <div className={classes.clientModalBox}>
                         <SelectInput
+                            language={null}
                             name={"funding"}
-                            label={info ? "Funding Source*" : ""}
+                            label={"Funding Source*" }
                             handleSelect={handleChange}
-                            value={inputs.funding}
-                            list={fSelect}
+                            value={inputs?.funding}
+                            list={fSelect ? fSelect :  []}
                             typeError={error === 'funding' ? ErrorText.field : ''}
                         />
                         <ValidationInput

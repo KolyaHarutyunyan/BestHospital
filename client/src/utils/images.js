@@ -75,6 +75,7 @@ import authIcon from '@eachbase/assets/images/icons/authIcon.svg'
 import errorIcon from '@eachbase/assets/images/icons/errorIcon.svg'
 import successIcon from '@eachbase/assets/images/icons/successIcon.svg'
 import infoIcon from '@eachbase/assets/images/icons/informationIcon.svg'
+import addHours from '@eachbase/assets/images/icons/addHours.svg'
 
 export const Images = {
     doctors: doctors,
@@ -88,7 +89,7 @@ export const Images = {
     roleManagementActive: roleManagementActive,
     roleManagementPassive: roleManagementPassive,
     addYellowIcon: addYellowIcon,
-
+    addHours : addHours,
 
     offices: offices,
     officesGray: officesGray,

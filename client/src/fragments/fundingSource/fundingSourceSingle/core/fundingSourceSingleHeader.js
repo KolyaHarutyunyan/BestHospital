@@ -1,15 +1,14 @@
 import React, {useEffect, useState} from "react";
 import {btnStyles, fundingSourceSingleStyles} from "./styles";
 import {Images} from "@eachbase/utils";
-import {AddButton, AddModalButton, SimpleModal,AddNotes} from "@eachbase/components";
-
+import {AddButton, AddModalButton, SimpleModal, AddNotes} from "@eachbase/components";
 import {useDispatch, useSelector} from "react-redux";
-import {FundingSourceNotesAdd, FundingSourceServiceAdd,} from "./modals";
+import {FundingSourceServiceAdd} from "./modals";
 import {CreateFundingSource} from "../../createFundingSource";
 import {httpRequestsOnSuccessActions} from "@eachbase/store";
 
 
-export const FundingSourceSingleHeader = ({activeTab, title, info}) => {
+export const FundingSourceSingleHeader = ({activeTab, title}) => {
     const [open, setOpen] = useState(false)
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
@@ -61,7 +60,7 @@ export const FundingSourceSingleHeader = ({activeTab, title, info}) => {
                     : activeTab === 1 ?
                         <FundingSourceServiceAdd handleClose={handleOpenClose}/> :
                         activeTab === 2 ?
-                            <AddNotes model='Funder'  handleClose={handleOpenClose}/> : null}/>
+                            <AddNotes model='Funder' handleClose={handleOpenClose}/> : null}/>
             {activeTab === 0 ?
                 <AddModalButton handleClick={handleOpenClose} text='Edit' btnStyles={btnStyles}/>
                 : activeTab >= 3 ?

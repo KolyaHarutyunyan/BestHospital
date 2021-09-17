@@ -46,8 +46,6 @@ export const authService = {
     deleteFoundingSourceNoteService: (id) => axios.delete(`/comment/${id}/comments`,),
 
 
-
-
     editActiveOrInactiveService: (id, path, status , body) => axios.patch(`/${path}/${id}/${status}`, body),
 
 

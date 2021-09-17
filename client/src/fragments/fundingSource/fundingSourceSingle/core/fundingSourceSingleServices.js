@@ -1,15 +1,13 @@
 import React, {useEffect, useState} from "react";
 import {
     DeleteElement,
-    Loader,
-    MinLoader,
     NoItemText,
     Notes,
     SimpleModal,
     TableBodyComponent
 } from "@eachbase/components";
 import {FundingSourceSinglePTModifiers} from "./fundingSourceSinglePTModifiers";
-import {Colors, Images} from "@eachbase/utils";
+import {Images} from "@eachbase/utils";
 import {useDispatch, useSelector} from "react-redux";
 import {TableCell} from "@material-ui/core";
 import {fundingSourceSingleStyles} from "./styles";
@@ -17,8 +15,6 @@ import {FundingSourceServiceAdd,} from "./modals";
 import {fundingSourceActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 
 export const FundingSourceSingleServices = ({data,}) => {
-
-
     const [toggleModal, setToggleModal] = useState(false)
     const [index, setIndex] = useState(null)
     const [delEdit, setDelEdit] = useState(null)
@@ -37,38 +33,27 @@ export const FundingSourceSingleServices = ({data,}) => {
 
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'GET_FUNDING_SOURCE_SERVICE_MODIFIERS'
 
-
-     console.log(httpOnError.length &&  httpOnError[0].error,'eror messsage')
-
     useEffect(() => {
-
-          if (success ) {
-              dispatch(httpRequestsOnSuccessActions.removeSuccess('GET_FUNDING_SOURCE_SERVICE_MODIFIERS'))
-              if (accept){
-                  setToggleModal(!toggleModal)
-                  setAccept(false)
-              }
-          }
-
+        if (success) {
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('GET_FUNDING_SOURCE_SERVICE_MODIFIERS'))
+            if (accept) {
+                setToggleModal(!toggleModal)
+                setAccept(false)
+            }
+        }
     }, [success])
 
     useEffect(() => {
-        if (httpOnError.length && httpOnError[0].error === 'Modifier was not found'){
+        if (httpOnError.length && httpOnError[0].error === 'Modifier was not found') {
             dispatch(httpRequestsOnSuccessActions.removeSuccess('GET_FUNDING_SOURCE_SERVICE_MODIFIERS'))
-            dispatch(httpRequestsOnErrorsActions.removeError())
-            if (accept){
+            dispatch(httpRequestsOnErrorsActions.removeError('GET_FUNDING_SOURCE_SERVICE_MODIFIERS'))
+            if (accept) {
                 setToggleModal(!toggleModal)
                 setAccept(false)
             }
         }
 
     }, [httpOnError])
-
-
-
-
-
-
 
 
     const headerTitles = [
@@ -99,38 +84,32 @@ export const FundingSourceSingleServices = ({data,}) => {
     ];
 
 
-    let onEdit = (index) =>{
+    let onEdit = (index) => {
         setIndex(index)
         setDelEdit('edit')
         setAccept(true)
         dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(data[serviceIndex]._id))
     }
 
-
-
-
-    let onRow = (id,index)=>{
+    let onRow = (id, index) => {
         setServiceIndex(index)
         dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(id))
     }
 
     useEffect(() => {
-        if (data){
+        if (data) {
             dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(data[serviceIndex]._id))
         }
     }, [])
 
-
-    let deleteService = ()=>{
+    let deleteService = () => {
         alert('wait Edgar')
         dispatch(fundingSourceActions.deleteFoundingSourceServiceById(data[serviceIndex]._id))
     }
 
-
     let serviceItem = (item, index) => {
         return (
-            <TableBodyComponent active={index===serviceIndex} key={index} handleClick={() => onRow(item._id, index )}>
-
+            <TableBodyComponent active={index === serviceIndex} key={index} handleClick={() => onRow(item._id, index)}>
                 <TableCell><p className={classes.tableTitle}>{item.name}</p></TableCell>
                 <TableCell>  {item.cptCode}  </TableCell>
                 <TableCell>  {item.size}  </TableCell>
@@ -138,12 +117,8 @@ export const FundingSourceSingleServices = ({data,}) => {
                 <TableCell>  {item.max}  </TableCell>
                 <TableCell>
                     <>
-                        {/*{!httpOnLoad.length > 0 ?*/}
-                            <img src={Images.edit} alt="edit" className={classes.iconCursor}
-                                 onClick={()=>onEdit(index)}/>
-                            {/*:*/}
-                            {/*<MinLoader margin={'0'} color={Colors.TextPrimary}/>*/}
-
+                        <img src={Images.edit} alt="edit" className={classes.iconCursor}
+                             onClick={() => onEdit(index)}/>
                         <img src={Images.remove} alt="delete" className={classes.iconCursordelete}
                              onClick={(e) => {
                                  e.stopPropagation()
@@ -158,26 +133,28 @@ export const FundingSourceSingleServices = ({data,}) => {
     }
 
 
-
     return (
-        <div style={{display: 'flex', justifyContent: "space-between", marginTop: 50}}>
+        <div className={classes.fundindService}>
             <SimpleModal
                 openDefault={toggleModal}
                 handleOpenClose={() => setToggleModal(!toggleModal)}
                 content={delEdit === 'del' ?
                     <DeleteElement
                         handleDel={deleteService}
-                        info={ index !== null ? data[index].name : ''}
+                        info={index !== null ? data[index].name : ''}
                         text={'Delete Service'}
                         handleClose={() => setToggleModal(!toggleModal)}/> :
-                    <FundingSourceServiceAdd  modifiersID={modifiers} info={data ?  data[index] : {}}
+                    <FundingSourceServiceAdd modifiersID={modifiers} info={data ? data[index] : {}}
                                              handleClose={() => setToggleModal(!toggleModal)}/>}
             />
-            <div style={{marginTop: -32, width: '100%'}}>
+            <div className={classes.fundindServiceItems}>
                 <Notes data={data} items={serviceItem} headerTitles={headerTitles} defaultStyle={true}/>
             </div>
-            {modifiers.length ? <FundingSourceSinglePTModifiers globalCredentials={globalCredentials} data={modifiers}
-                                             title={data && data[serviceIndex]?.name}/>  : <NoItemText text='' />}
+            {modifiers.length ? <FundingSourceSinglePTModifiers
+                    globalCredentials={globalCredentials}
+                    data={modifiers}
+                    title={data && data[serviceIndex]?.name}/> :
+                <NoItemText text=''/>}
         </div>
     )
 }

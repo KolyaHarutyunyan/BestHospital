@@ -72,13 +72,14 @@ export const createFoundingSourceServiceById = (id, body, modifier) => {
     }
 }
 
-export const editFoundingSourceServiceById = (id, body, modifier) => {
+export const editFoundingSourceServiceById = (id, body, modifier, fsId) => {
     return {
         type: EDIT_FUNDING_SOURCE_SERVICE,
         payload: {
             id,
             body,
-            modifier
+            modifier,
+            fsId
         }
     }
 }

@@ -1,17 +1,14 @@
 import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
 import React, {useEffect, useState} from "react";
 import {foundingSourceModalStyle} from "./styles";
-import {ErrorText, Images} from "@eachbase/utils";
+import {ErrorText} from "@eachbase/utils";
 import {useDispatch, useSelector} from "react-redux";
-import {fundingSourceActions, systemActions} from "@eachbase/store";
+import {fundingSourceActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 import {FundingSourceModifiersAdd} from "./fundingSourceModifiersAdd";
 
 
 export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
-
-
-
     const systemServices = useSelector(state => state.system.services)
     const globalCredentials = useSelector(state => state.system.credentials)
     const [error, setError] = useState("");
@@ -39,13 +36,7 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
         );
     }
 
-    // useEffect(()=>{
-    //     if (info !== undefined){
-    //54
 
-    //         dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(info?._id))
-    //     }
-    // },[])
 
     useEffect(() => {
         systemServices && systemServices.length > 0 && systemServices.forEach((item, index) => {
@@ -76,18 +67,11 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
             }
             if (!info){
                 dispatch(fundingSourceActions.createFoundingSourceServiceById(params.id, data, modifiersEdit))
-
-                 // handleClose()
             }else {
-                dispatch(fundingSourceActions.editFoundingSourceServiceById(info?._id, data, modifiersEdit))
+                dispatch(fundingSourceActions.editFoundingSourceServiceById(info?._id, data, modifiersEdit,params.id))
                  handleClose()
             }
-            // dispatch(fundingSourceActions.createFoundingSourceServiceModifier({
-            //     "modifiers":
-            //         postModifiers
-            //     ,
-            //     "serviceId": info?._id
-            // }))
+
         } else {
             setError(
                 !inputs.name ? 'name' :

@@ -1,12 +1,10 @@
 import React, {useEffect, useState} from "react";
-import {DeleteElement,  TableWrapper} from "@eachbase/components";
+import {DeleteElement, TableWrapper} from "@eachbase/components";
 import {OfficesInfo, ClientTable, CreateClient} from "@eachbase/fragments";
 import {useDispatch, useSelector} from "react-redux";
 import {clientsStyle} from './styles'
 import {clientActions} from "@eachbase/store/client";
-import {httpRequestsOnSuccessActions} from "../../store";
-
-
+import {httpRequestsOnSuccessActions} from "@eachbase/store";
 
 
 export const Client = ({}) => {
@@ -18,8 +16,7 @@ export const Client = ({}) => {
     const [status, setStatus] = useState(1)
 
 
-
-    const { httpOnSuccess, httpOnError,httpOnLoad } = useSelector((state) => ({
+    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,
@@ -28,22 +25,17 @@ export const Client = ({}) => {
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT'
 
 
-    console.log(httpOnSuccess,'suc')
-
-
-
     useEffect(() => {
-        dispatch(clientActions.getClients({ status : status, start : 0, end : 10 }))
+        dispatch(clientActions.getClients({status: status, start: 0, end: 10}))
     }, []);
 
-    const handleActiveOrInactive  =(status) =>{
+    const handleActiveOrInactive = (status) => {
         setStatus(status)
-        if(status === 0){
+        if (status === 0) {
             dispatch(clientActions.getClients({status: status, start: 0, end: 10}))
-        }else {
+        } else {
             dispatch(clientActions.getClients({status: status, start: 0, end: 10}))
         }
-
     }
 
     useEffect(() => {
@@ -59,20 +51,18 @@ export const Client = ({}) => {
         setDeleteClient(null)
         setOpen(!open)
     }
-    const removeClient=()=>{
-         dispatch(clientActions.deleteClient(deleteClient.id))
+    const removeClient = () => {
+        dispatch(clientActions.deleteClient(deleteClient.id))
     }
 
 
-    useEffect(()=>{
-        if (success){
+    useEffect(() => {
+        if (success) {
             handleOpenClose()
             dispatch(httpRequestsOnSuccessActions.removeSuccess('DELETE_CLIENT'))
         }
 
-    },[success])
-
-
+    }, [success])
 
     return (
         <>
@@ -80,7 +70,7 @@ export const Client = ({}) => {
                 (
                     <TableWrapper
                         getActive={() => handleActiveOrInactive(1)}
-                        getInactive={() => handleActiveOrInactive(0) }
+                        getInactive={() => handleActiveOrInactive(0)}
                         firstButton={"Active"}
                         secondButton={"Inactive"}
                         addButton={"Add Client"}
@@ -90,20 +80,20 @@ export const Client = ({}) => {
                         handleOpenClose={handleOpenClose}
                         openCloseInfo={open}
                         body={deleteClient ?
-                                <DeleteElement
-                                    handleDel={removeClient}
-                                    className={classes}
-                                    text={'Delete Client'}
-                                    info={deleteClient.firstName}
+                            <DeleteElement
+                                handleDel={removeClient}
+                                className={classes}
+                                text={'Delete Client'}
+                                info={deleteClient.firstName}
                                 handleClose={handleOpenClose}/>
-                           :
+                            :
                             <CreateClient title={'Add Client'} handleClose={handleOpenClose}/>}
                     >
-                        <ClientTable  status ={status} handleGetPage={setPage}  setDeleteClient={setDeleteClient} setOpen={setOpen} handleClose={handleOpenClose}/>
+                        <ClientTable status={status} handleGetPage={setPage} setDeleteClient={setDeleteClient}
+                                     setOpen={setOpen} handleClose={handleOpenClose}/>
                     </TableWrapper>
                 )
                 : (<OfficesInfo info={officeById}/>)
-
             }
         </>
     );
