@@ -29,7 +29,10 @@ export class RegistrationGuard implements CanActivate {
   /** Private Methods */
   private checkToken(token: string) {
     if (!token) {
-      throw new HttpException('reset-token header was not set', HttpStatus.UNAUTHORIZED);
+      throw new HttpException(
+        'reset-token header was not set',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
   }
 
@@ -43,7 +46,7 @@ export class RegistrationGuard implements CanActivate {
     }
     try {
       // Verify token
-      const decoded: IToken = (await jwt.verify(token, JWT_SECRET_REGISTER)) as IToken;
+      const decoded: IToken = await jwt.verify(token, JWT_SECRET_REGISTER);
       return decoded;
     } catch (err) {
       throw new HttpException(

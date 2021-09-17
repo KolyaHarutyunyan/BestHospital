@@ -11,6 +11,11 @@ export enum RegistrationStatus {
   INACTIVE = 3,
 }
 
+export enum UserType {
+  AGENT = 'AGENT',
+  ADMIN = 'ADMIN',
+}
+
 export const apiSummaries = {
   REGISTRATION: 'Used for completing registration.',
   RESEND_INVITE: 'Used to send another invite to the user.',

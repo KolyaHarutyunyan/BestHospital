@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
+import { UserDTO } from '.';
 
 export class ChangePassDTO {
   @ApiProperty()
@@ -13,5 +14,6 @@ export class ChangePassDTO {
   confirmation: string;
 
   //Set by the system
-  userId: string;
+  user?: UserDTO;
+  token?: string;
 }

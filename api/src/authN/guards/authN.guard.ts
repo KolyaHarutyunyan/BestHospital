@@ -40,9 +40,11 @@ export class AuthNGuard implements CanActivate {
       id: auth._id,
       email: auth.email,
       permissions: await this.roleService.getUserPermissionSet(auth.roles),
+      type: auth.userType,
       status: auth.status,
     };
     request.body.user = user;
+    request.body.token = token;
     request.user = user;
     return true;
   }
@@ -63,7 +65,7 @@ export class AuthNGuard implements CanActivate {
     }
     try {
       // Verify token
-      const decoded: IToken = (await jwt.verify(token, JWT_SECRET_SIGNIN)) as IToken;
+      const decoded: IToken = await jwt.verify(token, JWT_SECRET_SIGNIN);
       return decoded;
     } catch (err) {
       throw new HttpException(
