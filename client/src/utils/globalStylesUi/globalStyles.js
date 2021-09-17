@@ -83,12 +83,21 @@ export const useGlobalStyles = makeStyles({
         borderRadius: '8px',
         marginTop: '16px',
         marginBottom: '24px',
+        position: 'relative',
+        // display: 'flex',
+        // flexDirection: 'column',
+        // justifyContent: 'space-between',
         '& .MuiTableContainer-root': {
             boxShadow: 'none',
             background: 'none',
             // position: 'relative',
             // overflow: 'hidden'
         },
+    },
+    tableBack: {
+        width: '100%',
+        background: 'transparent',
+        boxShadow: 'none'
     },
     tableContainer: {
         // display:'flex',
@@ -200,7 +209,7 @@ export const useGlobalStyles = makeStyles({
         color: Colors.TextLightGray,
         fontWeight: 'bold',
         position: 'absolute',
-        bottom: 254,
+        top: '254px',
         left: '50%',
         transform: 'translate(-50%)'
     }

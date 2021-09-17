@@ -107,12 +107,11 @@ export const Notes = ({
         }
     }, [success]);
 
-    console.log(loader, errorText, success);
+    let errorMessage = success ? 'Success' : 'Something went wrong';
 
-    let errorMessage = success ? 'Success' : 'Something went wrong'
     return (
         <div className={globalStyle.tableWrapper}>
-            <TableContainer className={globalStyle.tableContainer} component={Paper}>
+            <TableContainer style={{maxHeight: 'calc(100vh - 450px)'}} className={globalStyle.tableContainer} component={Paper}>
                 <Table
                     className={globalStyle.table}
                     size="small"

@@ -16,7 +16,7 @@ export const Staff = () => {
     const globalDepartments = useSelector(state => state.system.departments)
 
     useEffect(() => {
-        dispatch(adminActions.getAdmins({ status : status, start : 0, end : 10 }))
+        dispatch(adminActions.getAdmins({ status : status, start : 0, end : 20 }))
         dispatch(systemActions.getDepartments())
     }, []);
 
@@ -27,9 +27,9 @@ export const Staff = () => {
     const getStaffMemberWithStatus = (status) => {
         setStatus(status)
         if(status === 0){
-            dispatch(adminActions.getAdmins({status: 0, start: 0,end: 10}))
+            dispatch(adminActions.getAdmins({status: 0, start: 0,end: 20}))
         }else {
-            dispatch(adminActions.getAdmins({status: 1, start: 0, end: 10}));
+            dispatch(adminActions.getAdmins({status: 1, start: 0, end: 20}));
         }
 
     }
