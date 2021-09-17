@@ -138,10 +138,10 @@ export const editClientEnrollment = (body, clientId, funderId, id) => {
     }
 }
 
-export const deleteClientEnrollment = ( id) => {
+export const deleteClientEnrollment = ( id, clientId) => {
     return {
         type: DELETE_CLIENT_ENROLLMENT,
-        payload: {id}
+        payload: {id,  clientId}
     }
 }
 
