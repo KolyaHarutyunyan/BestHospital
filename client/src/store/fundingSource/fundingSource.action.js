@@ -38,7 +38,6 @@ export const editFundingSource = (id, body) => {
 
 
 export const getFundingSource = (data) => {
-
     return {
         type: GET_FUNDING_SOURCE,
         payload: {data}

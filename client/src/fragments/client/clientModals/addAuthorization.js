@@ -9,13 +9,15 @@ import {useParams} from "react-router-dom";
 
 export const AddAuthorization = ({handleClose, info}) => {
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info,funding: info.funderId.name, address : info.address?.street} : {});
+    const [inputs, setInputs] = useState(info ? {...info, funding: info.funderId.name} : {});
     const params = useParams()
     const dispatch = useDispatch()
+
     useEffect(() => {
         dispatch(fundingSourceActions.getFundingSource())
     }, []);
-    const fSelect = useSelector(state => state.fundingSource.fSelect)
+    const fSelect = useSelector(state => state?.fundingSource?.fSelect?.funders)
+    console.log(fSelect, 'fs')
     const classes = createClientStyle()
 
     const handleChange = e => setInputs(
@@ -24,7 +26,7 @@ export const AddAuthorization = ({handleClose, info}) => {
     );
 
     const handleCreate = () => {
-        if (inputs.authId && inputs.funding && inputs.startDate && inputs.endDate && inputs.address && inputs.status) {
+        if (inputs.authId && inputs.funding && inputs.startDate && inputs.endDate && inputs.location && inputs.status) {
             let funderId;
             fSelect.forEach(item => {
                 if (inputs.funding === item.name) {
@@ -35,7 +37,7 @@ export const AddAuthorization = ({handleClose, info}) => {
                 "authId": inputs.authId,
                 "startDate": inputs.startDate,
                 "endDate": inputs.endDate,
-                "address": inputs.address,
+                "location": inputs.location,
                 "status": +inputs.status
             }
             if (info) {
@@ -52,7 +54,7 @@ export const AddAuthorization = ({handleClose, info}) => {
                     !inputs.funding ? 'funding' :
                         !inputs.startDate ? 'startDate' :
                             !inputs.endDate ? 'endDate' :
-                                !inputs.address ? 'address' :
+                                !inputs.location ? 'location' :
                                     !inputs.status ? 'status' :
                                         'Input is not field'
             )
@@ -89,7 +91,7 @@ export const AddAuthorization = ({handleClose, info}) => {
                             label={"Funding Source*"}
                             handleSelect={handleChange}
                             value={inputs.funding}
-                            list={fSelect}
+                            list={fSelect ? fSelect : []}
                             typeError={error === 'funding' ? ErrorText.field : ''}
                         />
 
@@ -126,11 +128,11 @@ export const AddAuthorization = ({handleClose, info}) => {
                         <ValidationInput
                             variant={"outlined"}
                             onChange={handleChange}
-                            value={inputs.address}
+                            value={inputs.location}
                             type={"text"}
                             label={"Service Location*"}
-                            name='address'
-                            typeError={error === 'address' && ErrorText.field}
+                            name='location'
+                            typeError={error === 'location' && ErrorText.field}
                         />
                     </div>
                 </div>

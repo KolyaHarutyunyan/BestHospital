@@ -1,13 +1,13 @@
 import React, {useState} from "react";
-import { DeleteElement, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
+import {Card, DeleteElement, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
 import {serviceSingleStyles} from './styles';
-import { Images} from "@eachbase/utils";
+import {Colors, Images} from "@eachbase/utils";
 import {TableCell} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
 import {clientActions} from "@eachbase/store";
 import {AddAuthorization, AddEnrollment} from "../../clientModals";
 
-export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex}) => {
+export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, data}) => {
     const classes = serviceSingleStyles()
     // const clientsAuthorizations = useSelector(state => state.client.clientsAuthorizations)
 
@@ -17,6 +17,14 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex}) => 
     const [index, setIndex] = useState(null)
     const [delEdit, setDelEdit] = useState(null)
     const [toggleModal, setToggleModal] = useState(false)
+
+
+    const generalInfo = [
+        {title: 'First Name', value: data?.firstName},
+        {title: 'Middle Name', value: data?.middleName},
+        {title: 'Last Name', value: data?.lastName},
+        {title: 'Code', value: data?.code},
+    ]
 
     const headerTitles = [
         {
@@ -100,8 +108,18 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex}) => 
                     />
                 }
                 />
+            <Card
+                width='234px'
+                cardInfo={generalInfo}
+                showHeader={true}
+                hideHeaderLine={false}
+                title='Authentications'
+                color={Colors.ThemeRed}
+                icon={Images.authIconGen}
+            />
             <div className={classes.clearBoth}/>
             <div className={classes.notesWrap}>
+
                 <Notes
                     data={info}
                     items={clientAuthorizationItem}

@@ -1,15 +1,16 @@
-import {Card, DeleteElement, Notes, RadioButton, SimpleModal, TableBodyComponent} from '@eachbase/components';
+import {Card, DeleteElement, Notes, RadioButton, SimpleModal, TableBodyComponent, Toast} from '@eachbase/components';
 import {serviceSingleStyles} from './styles';
 import {Colors, Images} from "@eachbase/utils";
 import {FormControlLabel, Radio, TableCell} from "@material-ui/core";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
 import {AddEnrollment} from "../../clientModals";
-import {clientActions} from "@eachbase/store";
+import {clientActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 
 export const ClientEnrollment = ({data, info}) => {
+
     const classes = serviceSingleStyles()
     const [toggleModal, setToggleModal] = useState(false)
     const [index, setIndex] = useState(null)
@@ -22,6 +23,13 @@ export const ClientEnrollment = ({data, info}) => {
         {title: 'Last Name', value: data?.lastName},
         {title: 'Code', value: data?.code},
     ]
+
+    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnError: state.httpOnError,
+        httpOnLoad: state.httpOnLoad,
+    }));
+
 
     const headerTitles = [
         {
@@ -51,8 +59,23 @@ export const ClientEnrollment = ({data, info}) => {
     ];
 
     let deleteEnrollment = ()=>{
-        dispatch(clientActions.deleteClientEnrollment(info[index].id))
+        dispatch(clientActions.deleteClientEnrollment(info[index].id, params.id))
+        dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_ENROLMENT'))
     }
+
+    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_ENROLLMENT'
+
+    useEffect(() => {
+        if (success) {
+            setToggleModal(!toggleModal)
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('DELETE_CLIENT_ENROLLMENT'))
+            dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_ENROLLMENT'))
+            dispatch(httpRequestsOnErrorsActions.removeError('DELETE_CLIENT_ENROLLMENT'))
+
+        }
+
+    }, [success])
+
     let editPrimary = (i)=>{
         dispatch(clientActions.editClientEnrollment({primary: true}, params.id, info[i].funderId._id, info[i].id))
     }
@@ -63,7 +86,10 @@ export const ClientEnrollment = ({data, info}) => {
         return (
             <TableBodyComponent key={index}>
                 <TableCell>
-                    <Radio onChange={()=>editPrimary(index)}  checked={item.primary} classes={{root: classes.radio, checked: classes.checked}} />
+                    <Radio onChange={(e)=>{
+                        e.stopPropagation()
+                        editPrimary(index)
+                    }}  checked={item.primary} classes={{root: classes.radio, checked: classes.checked}} />
                 </TableCell>
                 <TableCell>  {item.funderId?.name}  </TableCell>
                 <TableCell><p className={classes.tableID}>{item?.clientId}</p></TableCell>
@@ -72,17 +98,20 @@ export const ClientEnrollment = ({data, info}) => {
                 <TableCell>
                     <>
                         <img src={Images.edit} alt="edit" className={classes.iconStyle}
-                             onClick={() => {
+                             onClick={(e) => {
+                                 e.stopPropagation()
                                  setDelEdit(true)
                                  setToggleModal(!toggleModal)
                                  setIndex(index)
 
                              }}/>
                         <img src={Images.remove} alt="delete" className={classes.iconDeleteStyle}
-                             onClick={() => {
+                             onClick={(e) => {
+                                 e.stopPropagation()
                                  setDelEdit(false)
                                  setToggleModal(!toggleModal)
                                  setIndex(index)
+
                              }}/>
                     </>
                 </TableCell>
@@ -92,13 +121,21 @@ export const ClientEnrollment = ({data, info}) => {
 
 
 
+    let errorMessage = success ? 'Successfully Deleted'  : 'Something went wrong'
+
+
     return (
         <div className={classes.staffGeneralWrapper}>
+            <Toast
+                type={'success'}
+                text={errorMessage}
+                info={success }/>
             <SimpleModal
                 handleOpenClose={() => setToggleModal(!toggleModal)}
                 openDefault={toggleModal}
                 content={delEdit ? <AddEnrollment info={info[index]} handleClose={() => setToggleModal(!toggleModal)}/>
                 : <DeleteElement
+                        loader={httpOnLoad.length > 0}
                         text={'Delete Enrollment'}
                         handleClose={() => setToggleModal(!toggleModal)}
                         handleDel={deleteEnrollment}
