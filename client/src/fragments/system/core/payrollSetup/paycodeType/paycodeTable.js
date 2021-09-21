@@ -1,10 +1,9 @@
-import React, {useEffect} from "react";
+import React, {useState} from "react";
 import {PayrollSetupStyles} from '../styles';
-import {Notes, SlicedText, TableBodyComponent} from "@eachbase/components";
+import {Notes, SimpleModal, SlicedText, TableBodyComponent} from "@eachbase/components";
 import {TableCell} from "@material-ui/core";
 import {Images} from "@eachbase/utils";
-import {useDispatch, useSelector} from "react-redux";
-import {payrollActions} from "@eachbase/store/payroll";
+import {PayCodeType} from "./paycodeType";
 
 const headerTitles = [
     {
@@ -33,25 +32,16 @@ const headerTitles = [
     },
 ];
 
-const data = [
-    {
-        name: 'name',
-        code: 'code',
-        type: 'type',
-        overtime: 'overtime',
-        pto: 'pto'
-    }
-]
-
-export const PayCodeTable = () => {
-    const dispatch = useDispatch()
+export const PayCodeTable = ({globalPayCodes}) => {
     const classes = PayrollSetupStyles()
 
-    const globalPayCodes = useSelector(state => state.payroll.PayCodes)
-    console.log(globalPayCodes,'globalPayCodes');
-    useEffect(()=>{
-        dispatch(payrollActions.getPayCodeGlobal())
-    },[])
+    const [editModalOpenClose,setEditModalOpenClose] = useState(false)
+    const [editedData,setEditedData] = useState({})
+
+    const handleOpenClose = (data) => {
+        setEditedData(data)
+        setEditModalOpenClose(!editModalOpenClose)
+    }
 
     const notesItem = (item, index) => {
         return (
@@ -66,14 +56,21 @@ export const PayCodeTable = () => {
                     {item.type}
                 </TableCell>
                 <TableCell>
-                    {item.overtime}
+                    {item.overtime ? 'Yes' : 'No'}
                 </TableCell>
                 <TableCell>
-                    {item.pto}
+                    {item.pto ? 'Yes' : 'No'}
                 </TableCell>
                 <TableCell>{item.action ? item.action :
                     <div className={classes.icons}>
-                        <img src={Images.edit} onClick={() => alert('edit')} alt="edit"/>
+                        <img src={Images.edit} onClick={() => handleOpenClose({
+                            name: item.name,
+                            code: item.code,
+                            type: item.type,
+                            overtime: item.overtime,
+                            pto: item.pto,
+                            id: item.id
+                        })} alt="edit"/>
                         <img src={Images.remove} alt="delete"
                              onClick={() => alert('delete')}/>
                     </div>
@@ -82,8 +79,17 @@ export const PayCodeTable = () => {
             </TableBodyComponent>
         )
     }
+
     return (
-        <Notes defaultStyle={true} data={data} pagination={false} items={notesItem}
-               headerTitles={headerTitles}/>
+        <>
+            <Notes restHeight='328px' defaultStyle={true} data={globalPayCodes} pagination={false} items={notesItem}
+                   headerTitles={headerTitles}/>
+            <SimpleModal
+                openDefault={editModalOpenClose}
+                handleOpenClose={handleOpenClose}
+                content={<PayCodeType handleOpenClose={editedData && handleOpenClose} maxWidth='480px' editedData={editedData} handleClose={handleOpenClose}/>}
+            />
+        </>
+
     )
 }

@@ -3,6 +3,7 @@ import {SimpleTabs, Toast} from "@eachbase/components";
 import {ServiceType, systemItemStyles, SystemItemHeader, Credentials, Departments, JobTitles, PayrollSetup} from './core';
 import {useDispatch, useSelector} from "react-redux";
 import {httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, systemActions} from "../../store";
+import {payrollActions} from "../../store/payroll";
 
 export const SystemItem = () => {
     const {httpOnSuccess,httpOnError} = useSelector((state) => ({
@@ -55,6 +56,7 @@ export const SystemItem = () => {
     const globalServices = useSelector(state => state.system.services)
     const globalDepartments = useSelector(state => state.system.departments)
     const globalJobs = useSelector(state => state.system.jobs)
+    const globalPayCodes = useSelector(state => state.payroll.PayCodes)
 
     const dispatch = useDispatch()
     const [deleteModalOpened, setDeleteModalOpened] = useState(false)
@@ -100,6 +102,7 @@ export const SystemItem = () => {
         dispatch(systemActions.getServices())
         dispatch(systemActions.getDepartments())
         dispatch(systemActions.getJobs())
+        dispatch(payrollActions.getPayCodeGlobal())
     }, [])
 
     const tabsContent = [
@@ -119,7 +122,7 @@ export const SystemItem = () => {
             tabComponent: (<JobTitles globalJobs={globalJobs} removeItem={handleRemoveItem} openModal={handleOpenClose}/>)
         },
         {
-            tabComponent: (<PayrollSetup />)
+            tabComponent: (<PayrollSetup globalPayCodes={globalPayCodes} />)
         }
     ];
 
