@@ -39,6 +39,12 @@ export const FundingSourceModifiersAdd = ({
     // }
 
 
+
+
+
+
+
+
     const handleChange = e => {
         setInputs(
             prevState => ({...prevState, [e.target.name]: e.target.value}),
@@ -49,14 +55,20 @@ export const FundingSourceModifiersAdd = ({
     }
 
 
+
+
     // modifiers && modifiers.map(i=>states.push(useState(i)))
+
 
 
     const handleChange2 = (e, index,) => {
         const modObject = modifiers[index]
-        modifiers[index] = {...modObject, [e.target.name]: e.target.value}
+        modifiers[index] =  { ...modObject, [e.target.name]: e.target.value }
         setModifiers([...modifiers])
     }
+
+
+
 
 
 
@@ -66,30 +78,40 @@ export const FundingSourceModifiersAdd = ({
             if (inputs.credentialId === item.name) {
                 setCredentialID(item._id)
             }
+
             if (inputs.credentialId && inputs.chargeRate && inputs.name && inputs.type) {
                 if (inputs.credentialId !== '0' && inputs.chargeRate !== ' ' && inputs.name !== ' ') {
                     setBtnStyle(true)
-                    console.log(modifiers, 'arrrr')
+                    // let newArr = states.map(item=>item[0])
+                    console.log(modifiers,'arrrr')
                     setPostModifiers([...modifiers, {
                         "credentialId": credentialID,
                         "chargeRate": +inputs.chargeRate,
                         "name": inputs.name,
                         'type': +inputs.type
-                    }])
+                    }])                    // setModifiers([...modifiers, {
+                    //     "credentialId": credentialID,
+                    //     "chargeRate": +inputs.chargeRate,
+                    //     "name": inputs.name,
+                    //     'type': +inputs.type
+                    // }])
+
                     setGetLastMod({
                         "credentialId": credentialID,
                         "chargeRate": +inputs.chargeRate,
                         "name": inputs.name,
                         'type': +inputs.type
                     })
+
+
                 }
             } else {
-                setPostModifiers([...modifiers])
+                setPostModifiers(null)
                 setBtnStyle(false)
             }
         })
 
-    }, [inputs, modifiers])
+    }, [inputs])
 
     const handleCreate = () => {
         // if (inputs2.credentialId && inputs2.chargeRate && inputs2.name && inputs2.type) {
@@ -136,6 +158,9 @@ export const FundingSourceModifiersAdd = ({
     let list = [{name: 0,}, {name: 1}]
 
 
+
+
+
     let editModifier = (i) => {
         if (i !== indexItem) {
             setIndexItem(i)
@@ -145,11 +170,11 @@ export const FundingSourceModifiersAdd = ({
     }
 
 
-    const renderInputs = (item, index) => {
-        return (
-            <div className={classes.foundingSourceModalsBodyBlock} onClick={() => editModifier(index)}>
+    const renderInputs = (item,index)=>{
+        return(
+            <div className={classes.foundingSourceModalsBodyBlock} onClick={() => editModifier(index)} >
                 <ValidationInput
-                    onChange={(e) => handleChange2(e, index)}
+                    onChange={(e)=>handleChange2(e,index)}
                     value={item.name}
                     variant={"outlined"}
                     type={"text"}
@@ -159,7 +184,7 @@ export const FundingSourceModifiersAdd = ({
                 />
                 <div style={{width: 36}}/>
                 <ValidationInput
-                    onChange={(e) => handleChange2(e, index)}
+                    onChange={(e)=>handleChange2(e,index)}
                     value={item.chargeRate}
                     variant={"outlined"}
                     type={"text"}
@@ -172,7 +197,7 @@ export const FundingSourceModifiersAdd = ({
                 <SelectInput
                     name={"credentialId"}
                     label={"Credential*"}
-                    handleSelect={(e) => handleChange2(e, index)}
+                    handleSelect={(e)=>handleChange2(e,index)}
                     value={globalCredentials.find(elem => elem._id === item.credentialId && elem._id)?.name}
                     list={globalCredentials}
                     styles={{width: 198}}
@@ -181,7 +206,7 @@ export const FundingSourceModifiersAdd = ({
                 <SelectInput
                     name={"type"}
                     label={"Type*"}
-                    handleSelect={(e) => handleChange2(e, index)}
+                    handleSelect={(e)=>handleChange2(e,index)}
                     value={item.type === 0 ? '0' : item.type}
                     list={list}
                     styles={{width: 198}}
@@ -189,6 +214,10 @@ export const FundingSourceModifiersAdd = ({
             </div>
         )
     }
+
+
+
+
 
 
     return (
@@ -238,10 +267,10 @@ export const FundingSourceModifiersAdd = ({
                     styles={{width: 198,}}
                 />
             </div>
-            {modifiers && modifiers?.length>0 && modifiers.map((item, index) => {
+            {modifiers && modifiers.length && modifiers.map((item, index) => {
 
                 return (
-                    renderInputs(item, index)
+                    renderInputs(item,index)
                 )
 
             })}
@@ -250,7 +279,7 @@ export const FundingSourceModifiersAdd = ({
                 <img onClick={handleCreate} src={btnStyle ? Images.addLight2 : Images.addLight} alt=""
                      className={classes.iconsCursor}/>
                 <p onClick={handleCreate} className={classes.addMoreModifiersText}
-                   style={btnStyle ? {color: '#347AF0'} : {color: "#347AF080"}}>Add modifiers</p>
+                   style={btnStyle ? {color: '#347AF0'} : {color: "#347AF080"}}>Add more modifiers</p>
             </div>
         </div>
 

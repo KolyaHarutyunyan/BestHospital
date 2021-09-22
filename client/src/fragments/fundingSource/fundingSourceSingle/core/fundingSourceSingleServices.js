@@ -109,7 +109,7 @@ export const FundingSourceSingleServices = ({data,}) => {
 
     let serviceItem = (item, index) => {
         return (
-            <TableBodyComponent active={index === serviceIndex} key={index} handleClick={() => onRow(item._id, index)}>
+            <TableBodyComponent active={index === serviceIndex} key={index} handleOpenInfo={() => onRow(item._id, index)}>
                 <TableCell><p className={classes.tableTitle}>{item.name}</p></TableCell>
                 <TableCell>  {item.cptCode}  </TableCell>
                 <TableCell>  {item.size}  </TableCell>
