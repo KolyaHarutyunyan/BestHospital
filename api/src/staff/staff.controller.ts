@@ -23,14 +23,6 @@ export class StaffController {
     return admin;
   }
 
-  @Post('test')
-  @ApiOkResponse({ type: StaffDTO })
-  @Public()
-  async create_test(@Body() createStaffDTO: CreateStaffDtoTest): Promise<StaffDTO> {
-    const admin = await this.staffService.create_test(createStaffDTO);
-    return admin;
-  }
-
   /** Edit a staff */
   @Patch(':id')
   @Public()

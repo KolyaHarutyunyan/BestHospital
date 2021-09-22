@@ -4,7 +4,7 @@ import { StaffDTO, CreateStaffDto, EditStaffDTO } from './dto';
 import { StaffSanitizer } from './interceptor';
 import { IStaff } from './interface';
 import { StaffModel } from './staff.model';
-import { AuthNService } from '../authN';
+import { AuthNService, UserType } from '../authN';
 import { MongooseUtil } from '../util';
 import { AddressService } from '../address';
 import { CreateCredentialDto } from '../credential';
@@ -49,47 +49,7 @@ export class StaffService {
         ssn: dto.ssn,
         address: await this.addressService.getAddress(dto.address),
       });
-      user = (await Promise.all([user.save(), this.authnService.create(user._id, user.email)]))[0];
-
-      await this.historyService.create({
-        resource: user._id,
-        onModel: 'Staff',
-        title: serviceLog.createStaff,
-      });
-      return this.sanitizer.sanitize(user);
-    } catch (e) {
-      console.log(e);
-      this.mongooseUtil.checkDuplicateKey(e, 'User already exists');
-      throw e;
-    }
-  };
-
-  create_test = async (dto: CreateStaffDtoTest): Promise<StaffDTO> => {
-    try {
-      const _id = Types.ObjectId();
-
-      let user = new this.model({
-        _id,
-        email: dto.email,
-        secondaryEmail: dto.secondaryEmail,
-        firstName: dto.firstName,
-        lastName: dto.lastName,
-        middleName: dto.middleName,
-        phone: dto.phone,
-        secondaryPhone: dto.secondaryPhone,
-        state: dto.state,
-        gender: dto.gender,
-        birthday: dto.birthday,
-        residency: dto.residency,
-        ssn: dto.ssn,
-        address: await this.addressService.getAddress(dto.address),
-      });
-      user = (
-        await Promise.all([
-          user.save(),
-          this.authnService.create_test(user._id, user.email, dto.password),
-        ])
-      )[0];
+      user = (await Promise.all([user.save(), this.authnService.create(user._id, user.email, UserType.ADMIN)]))[0];
 
       await this.historyService.create({
         resource: user._id,

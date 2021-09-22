@@ -46,7 +46,7 @@ export class RegistrationGuard implements CanActivate {
     }
     try {
       // Verify token
-      const decoded: IToken = await jwt.verify(token, JWT_SECRET_REGISTER);
+      const decoded: any = await jwt.verify(token, JWT_SECRET_REGISTER);
       return decoded;
     } catch (err) {
       throw new HttpException(

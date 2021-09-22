@@ -16,7 +16,7 @@ export class ResetPassGuard implements CanActivate {
     try {
       const token = request.get('reset-token');
       this.checkToken(token);
-      const decoded: IToken = await jwt.verify(token, JWT_SECRET_FORGET_PASS);
+      const decoded: any = await jwt.verify(token, JWT_SECRET_FORGET_PASS);
       request.body.userId = decoded.id;
       return true;
     } catch (err) {
