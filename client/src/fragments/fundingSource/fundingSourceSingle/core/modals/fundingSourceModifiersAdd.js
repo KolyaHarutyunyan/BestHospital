@@ -7,7 +7,8 @@ import {fundingSourceActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 
 
-export const FundingSourceModifiersAdd = ({info,
+export const FundingSourceModifiersAdd = ({
+                                              info,
                                               setPostModifiers,
                                               globalCredentials,
                                               modifiersServ,
@@ -40,12 +41,12 @@ export const FundingSourceModifiersAdd = ({info,
         globalCredentials && globalCredentials.length > 0 && globalCredentials.forEach((item, index) => {
             if (inputs2.credentialId === item.name) {
                 setCredentialIDitem(item._id)
-            }})
+            }
+        })
         setInputs2(
             prevState => ({...prevState, [e.target.name]: e.target.value}),
             error === e.target.name && setError(''),
         );
-
 
 
     }
@@ -88,7 +89,12 @@ export const FundingSourceModifiersAdd = ({info,
     const handleCreate = () => {
         if (inputs2.credentialId && inputs2.chargeRate && inputs2.name && inputs2.type) {
             if (inputs2.credentialId !== '0' && inputs2.chargeRate !== ' ' && inputs2.name !== ' ') {
-                dispatch(fundingSourceActions.editFoundingSourceModifier(modifiers[indexItem]._id, inputs2))
+                dispatch(fundingSourceActions.editFoundingSourceModifier(modifiers[indexItem]._id, {
+                    name: inputs2.name,
+                    credentialID: inputs2.credentialId,
+                    type : inputs2.type,
+                    chargeRate : +inputs2.chargeRate
+                }))
             }
         }
         setBtnStyle(false)
@@ -132,11 +138,15 @@ export const FundingSourceModifiersAdd = ({info,
         }
         if (inputs2.credentialId && inputs2.chargeRate && inputs2.name && inputs2.type) {
             if (inputs2.credentialId !== '0' && inputs2.chargeRate !== ' ' && inputs2.name !== ' ') {
-                dispatch(fundingSourceActions.editFoundingSourceModifier(modifiers[i]._id, inputs2))
+                dispatch(fundingSourceActions.editFoundingSourceModifier(modifiers[i]._id, {
+                    name: inputs2.name,
+                    credentialID: inputs2.credentialId,
+                    type : inputs2.type,
+                    chargeRate : +inputs2.chargeRate
+                }))
             }
         }
     }
-
 
 
 
@@ -278,8 +288,9 @@ export const FundingSourceModifiersAdd = ({info,
                 }
             })}
 
-            <div className={classes.addmodifiersBlock} >
-                <img onClick={handleCreate} src={btnStyle ? Images.addLight2 : Images.addLight} alt="" className={classes.iconsCursor}/>
+            <div className={classes.addmodifiersBlock}>
+                <img onClick={handleCreate} src={btnStyle ? Images.addLight2 : Images.addLight} alt=""
+                     className={classes.iconsCursor}/>
                 <p onClick={handleCreate} className={classes.addMoreModifiersText}
                    style={btnStyle ? {color: '#347AF0'} : {color: "#347AF080"}}>Add more modifiers</p>
             </div>

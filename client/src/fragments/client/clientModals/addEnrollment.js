@@ -1,25 +1,63 @@
 import React, {useEffect, useState} from "react";
-import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
+import {ValidationInput, SelectInput, CreateChancel, ModalHeader, Toast} from "@eachbase/components";
 import {createClientStyle,} from "./styles";
 import {ErrorText} from "@eachbase/utils";
 import {useDispatch, useSelector} from "react-redux";
-import {clientActions, fundingSourceActions} from '@eachbase/store';
+import {
+    clientActions,
+    fundingSourceActions,
+    httpRequestsOnErrorsActions,
+    httpRequestsOnSuccessActions
+} from '@eachbase/store';
 import {useParams} from "react-router-dom";
-
+import moment from "moment";
 
 
 export const AddEnrollment = ({handleClose, info}) => {
+    console.log(info,'loooog')
+    // value: data?.birthday && moment(data?.birthday).format('DD MM YYYY')
 
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info, funding: info.funderId.name} : {});
+    const [inputs, setInputs] = useState(info ? {...info,
+        funding: info.funderId.name ,
+        startDate : info?.startDate && moment(info?.startDate).format('YYYY-MM-DD'),
+        terminationDate : info?.terminationDate && moment(info?.terminationDate).format('YYYY-MM-DD') } : {});
     const classes = createClientStyle()
     const params = useParams()
     const dispatch = useDispatch()
+
+
+    console.log(inputs,'inputs')
+
     useEffect(() => {
         dispatch(fundingSourceActions.getFundingSource())
     }, []);
-    const fSelect = useSelector(state => state.fundingSource.fSelect)
+    let fSelect = useSelector(state => state.fundingSource.fSelect.funders)
 
+
+    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnError: state.httpOnError,
+        httpOnLoad: state.httpOnLoad,
+    }));
+
+
+    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_ENROLLMENT'
+    const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_CLIENT_ENROLLMENT'
+
+
+    useEffect(() => {
+        if (success) {
+            handleClose()
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('EDIT_CLIENT_ENROLLMENT'))
+            dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_ENROLLMENT'))
+        }
+        if (successCreate) {
+            handleClose()
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_CLIENT_ENROLLMENT'))
+            dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_ENROLLMENT'))
+        }
+    }, [success, successCreate])
 
     const handleChange = e => setInputs(
         prevState => ({...prevState, [e.target.name]: e.target.value}),
@@ -39,12 +77,12 @@ export const AddEnrollment = ({handleClose, info}) => {
                 "startDate": inputs.startDate,
                 "terminationDate": inputs.terminationDate
             }
-            if (info){
+            if (info) {
                 dispatch(clientActions.editClientEnrollment(data, params.id, funderId, info.id))
-            }else {
+            } else {
                 dispatch(clientActions.createClientEnrollment(data, params.id, funderId))
             }
-            handleClose()
+            // handleClose()
         } else {
             setError(
                 !inputs.funding ? 'funding' :
@@ -58,8 +96,14 @@ export const AddEnrollment = ({handleClose, info}) => {
     }
 
 
+    const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_ENROLLMENT'
+    let errorMessage = successCreate ? 'Successfully added' : successEdit ? 'Successfully edited' : 'Something went wrong'
     return (
         <div className={classes.createFoundingSource}>
+            <Toast
+                type={'success'}
+                text={errorMessage}
+                info={successCreate || successEdit}/>
             <ModalHeader
                 handleClose={handleClose}
                 title={info ? 'Edit an Enrollment' : 'Add an Enrollment'}
@@ -69,11 +113,12 @@ export const AddEnrollment = ({handleClose, info}) => {
                 <div className={classes.clientModalBlock}>
                     <div className={classes.clientModalBox}>
                         <SelectInput
+                            language={null}
                             name={"funding"}
-                            label={info ? "Funding Source*" : ""}
+                            label={"Funding Source*"}
                             handleSelect={handleChange}
-                            value={inputs.funding}
-                            list={fSelect}
+                            value={inputs?.funding}
+                            list={fSelect ? fSelect : []}
                             typeError={error === 'funding' ? ErrorText.field : ''}
                         />
                         <ValidationInput
@@ -98,6 +143,7 @@ export const AddEnrollment = ({handleClose, info}) => {
                 </div>
                 <div className={classes.clientModalBlock}>
                     <CreateChancel
+                        loader={httpOnLoad.length > 0}
                         create={info ? "Save" : "Add"}
                         chancel={"Cancel"}
                         onCreate={handleCreate}

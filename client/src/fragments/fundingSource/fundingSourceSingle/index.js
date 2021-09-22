@@ -1,2 +1,2 @@
-export { FundingSourceItem } from "./fundingSourceItem";
+export {FundingSourceItem} from "./fundingSourceItem";
 

@@ -8,12 +8,12 @@ import {useDispatch, useSelector} from "react-redux";
 
 export const CreateFundingSource = ({handleClose, info}) => {
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info }: {});
+    const [inputs, setInputs] = useState(info ? {...info} : {});
     const [fullAddress, setFullAddress] = useState(info && info.address ? info.address.formattedAddress : null)
     const classes = createFoundingSourceStyle()
     const dispatch = useDispatch()
 
-    const { httpOnSuccess, httpOnError,httpOnLoad } = useSelector((state) => ({
+    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,
@@ -33,7 +33,7 @@ export const CreateFundingSource = ({handleClose, info}) => {
     const handleChange = e => setInputs(
         prevState => ({...prevState, [e.target.name]: e.target.value}),
         error === e.target.name && setError(''),
-        e.target.name === 'email' &&  httpOnError.length  && dispatch(httpRequestsOnErrorsActions.removeError('EDIT_FUNDING_SOURCE'))
+        e.target.name === 'email' && httpOnError.length && dispatch(httpRequestsOnErrorsActions.removeError('EDIT_FUNDING_SOURCE'))
     );
 
 
@@ -49,10 +49,10 @@ export const CreateFundingSource = ({handleClose, info}) => {
             "status": 1
         }
         if (inputs.name && inputs.email && inputs.phoneNumber && inputs.type && inputs.contact && inputs.website) {
-            if(info){
+            if (info) {
                 dispatch(fundingSourceActions.editFundingSource(info.id, data))
 
-            }else {
+            } else {
                 dispatch(fundingSourceActions.createFundingSource(data))
             }
         } else {
@@ -79,33 +79,21 @@ export const CreateFundingSource = ({handleClose, info}) => {
     }
 
 
-
-
-
-useEffect(()=>{
-    if (success){
-         handleClose()
-        dispatch(httpRequestsOnSuccessActions.removeSuccess('EDIT_FUNDING_SOURCE'))
-    }
-    if (successCreate){
-        handleClose()
-        dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_FUNDING_SOURCE'))
-    }
-},[success,successCreate])
-
-
-
-
+    useEffect(() => {
+        if (success) {
+            handleClose()
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('EDIT_FUNDING_SOURCE'))
+        }
+        if (successCreate) {
+            handleClose()
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_FUNDING_SOURCE'))
+        }
+    }, [success, successCreate])
 
     return (
         <div className={classes.createFoundingSource}>
-
-
-
-
-
-
-            <ModalHeader headerBottom={true} handleClose={handleClose} title={info ? 'Edit Funding Source' : 'Add Funding Source'}/>
+            <ModalHeader headerBottom={true} handleClose={handleClose}
+                         title={info ? 'Edit Funding Source' : 'Add Funding Source'}/>
             <div className={classes.createFoundingSourceBody}>
                 <div className={classes.createFoundingSourceBodyBlock}>
                     <div className={classes.createFoundingSourceBodyBox}>
@@ -139,8 +127,6 @@ useEffect(()=>{
                             name='phoneNumber'
                             typeError={error === 'phoneNumber' && ErrorText.field}
                         />
-
-
                         <SelectInput
                             name={"type"}
                             label={"Type*"}
@@ -167,7 +153,6 @@ useEffect(()=>{
                             name={'website'}
                             typeError={error === 'website' && ErrorText.field}
                         />
-
                     </div>
                     <div className={classes.createFoundingSourceBodyBox}>
                         <AddressInput
@@ -180,8 +165,8 @@ useEffect(()=>{
                 </div>
                 <div className={classes.createFoundingSourceBodyBlock}>
                     <CreateChancel
-                        loader={ httpOnLoad.length > 0}
-                        create={info? "Save" :  "Add"}
+                        loader={httpOnLoad.length > 0}
+                        create={info ? "Save" : "Add"}
                         chancel={"Cancel"}
                         onCreate={handleCreate}
                         onClose={handleClose}

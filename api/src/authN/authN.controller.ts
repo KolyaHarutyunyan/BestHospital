@@ -58,7 +58,6 @@ export class AuthNController {
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: PassChangedDTO })
   async changePassword(@Body() changePassDTO: ChangePassDTO): Promise<PassChangedDTO> {
-    console.log(changePassDTO);
     const auth = await this.authNService.changePassword(changePassDTO);
     return new PassChangedDTO(auth.token);
   }
@@ -134,9 +133,8 @@ export class AuthNController {
   @Post('logout')
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: String, description: 'invalidated token' })
-  @Public()
-  async logout(@Body('userId') userId: string): Promise<string> {
-    const invalidatedToken = await this.authNService.logout(userId);
+  async logout(@Body('user') user: UserDTO, @Body('token') token: string): Promise<string> {
+    const invalidatedToken = await this.authNService.logout(user.id, token);
     return invalidatedToken;
   }
 }

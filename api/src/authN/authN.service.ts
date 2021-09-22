@@ -5,6 +5,7 @@ import {
   JWT_SECRET_REGISTER,
   JWT_SECRET_SIGNIN,
   RegistrationStatus,
+  UserType,
 } from './authN.constants';
 import { AuthnModel } from './authN.model';
 import { AuthDTO, AuthResponseDTO, ChangePassDTO, ResetPassDTO, SigninDTO, UserDTO } from './dto';
@@ -34,7 +35,7 @@ export class AuthNService {
   private readonly sessionExpiration: string;
 
   /** Create a new auth */
-  create = async (id: string, email: string): Promise<MailStatus> => {
+  create = async (id: string, email: string, type: UserType): Promise<MailStatus> => {
     try {
       const auth = await new this.model({
         _id: id,
@@ -42,6 +43,7 @@ export class AuthNService {
         roles: [],
         status: RegistrationStatus.PENDING,
         session: false,
+        userType: type,
       }).save();
       const regToken = await this.generateToken(auth, JWT_SECRET_REGISTER);
       this.mailerService.sendInviteMail(auth.email, regToken);
@@ -52,7 +54,12 @@ export class AuthNService {
     }
   };
 
-  create_test = async (id: string, email: string, password: string): Promise<MailStatus> => {
+  create_test = async (
+    id: string,
+    email: string,
+    password: string,
+    type: UserType,
+  ): Promise<MailStatus> => {
     try {
       const auth = await new this.model({
         _id: id,
@@ -60,9 +67,10 @@ export class AuthNService {
         roles: [],
         status: RegistrationStatus.ACTIVE,
         session: false,
+        userType: type,
         password: password,
       }).save();
-      const regToken = await this.generateToken(auth, JWT_SECRET_REGISTER);
+      // const regToken = await this.generateToken(auth, JWT_SECRET_REGISTER);
       return;
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'User already exists');
@@ -79,14 +87,15 @@ export class AuthNService {
 
   /** Complete registration */
   completeRegistration = async (resetPassDTO: ResetPassDTO): Promise<AuthDTO> => {
-    let auth = await this.model.findById(resetPassDTO.userId);
+    let auth = await this.model.findById(resetPassDTO.user?.id);
     this.canRegister(auth);
     this.confirmPassword(resetPassDTO.newPassword, resetPassDTO.confirmation);
     auth.password = resetPassDTO.newPassword;
     auth.status = RegistrationStatus.ACTIVE;
-    auth.session = await this.getSigninToken(auth);
+    const token = await this.getSigninToken(auth);
+    auth.sessions.push(token);
     auth = await auth.save();
-    return this.getSigninResponse(auth);
+    return this.getSigninResponse(auth, token);
   };
 
   /** Signing in the user */
@@ -96,9 +105,10 @@ export class AuthNService {
     this.checkActive(auth);
     const isPasswordCorrect = await auth.comparePassword(signinDTO.password);
     this.checkPassword(isPasswordCorrect);
-    auth.session = await this.getSigninToken(auth);
+    const token = await this.getSigninToken(auth);
+    auth.sessions.push(token);
     auth = await auth.save();
-    return this.getSigninResponse(auth);
+    return this.getSigninResponse(auth, token);
   };
 
   /** Verify session */
@@ -106,21 +116,31 @@ export class AuthNService {
     const auth = await this.model.findById(authId);
     this.checkAuth(auth);
     this.checkActive(auth);
-    this.verifySession(auth, token);
+    if (!auth.sessions.includes(token)) {
+      throw new HttpException('session is invalid, sign in again', HttpStatus.UNAUTHORIZED);
+    }
     return auth;
   };
 
   /**  Changing the user password **/
   changePassword = async (changePassDTO: ChangePassDTO): Promise<AuthDTO> => {
     let auth = await this.model.findOne({
-      _id: changePassDTO.userId,
+      _id: changePassDTO.user?.id,
     });
     const isPasswordCorrect = await auth.comparePassword(changePassDTO.password);
     this.checkPassword(isPasswordCorrect);
     this.confirmPassword(changePassDTO.newPassword, changePassDTO.confirmation);
     auth.password = changePassDTO.newPassword;
+    const token = await this.getSigninToken(auth);
+    //clean the old token and replace it with a new one
+    const tokenIndex = auth.sessions.findIndex((element) => element === changePassDTO.token);
+    if (tokenIndex == -1) {
+      auth.sessions.push(token);
+    } else {
+      auth.sessions.splice(tokenIndex, 1, token);
+    }
     auth = await auth.save();
-    return await this.getSigninResponse(auth);
+    return await this.getSigninResponse(auth, token);
   };
 
   /** Forgot password. sends a link with a token to the users email to reset password*/
@@ -138,11 +158,11 @@ export class AuthNService {
 
   /** Resets users password */
   resetPassword = async (resetPassDTO: ResetPassDTO): Promise<AuthDTO> => {
-    let auth = await this.model.findOne({ _id: resetPassDTO.userId });
+    let auth = await this.model.findOne({ _id: resetPassDTO.user?.id });
     this.checkAuth(auth);
     auth.password = resetPassDTO.newPassword;
     auth = await auth.save();
-    return this.getSigninResponse(auth);
+    return this.getSigninResponse(auth, resetPassDTO.token);
   };
 
   /** find the auth object using its id */
@@ -155,7 +175,13 @@ export class AuthNService {
     if (user) {
       this.authZService.enforcePermissions(access.GET_AUTH, user?.permissions);
     }
-    const auth = await this.model.findById(id).populate('roles');
+    const auth = await this.model.findById(id).populate({
+      path: 'roles',
+      populate: {
+        path: 'permissions',
+      },
+    });
+
     return this.sanitizer.sanitize(auth);
   };
 
@@ -211,10 +237,10 @@ export class AuthNService {
   };
 
   /** Removes the user token from the auth, clearing the user session */
-  logout = async (id: string): Promise<string> => {
-    const auth = await this.model.findOneAndUpdate({ _id: id }, { $set: { session: null } });
+  logout = async (id: string, token): Promise<string> => {
+    const auth = await this.model.findOneAndUpdate({ _id: id }, { $pull: { sessions: token } });
     this.checkAuth(auth);
-    return auth.session;
+    return auth.sessions.find((e) => e === token);
   };
 
   /** Private methods */
@@ -228,13 +254,6 @@ export class AuthNService {
         'This profile is not eligable for registration completion at this time',
         HttpStatus.FORBIDDEN,
       );
-    }
-  }
-
-  /** If the auth exits, throws already exits exception */
-  private checkNotAuth(auth: IAuth) {
-    if (auth) {
-      throw new HttpException('A user with this email exists', HttpStatus.FOUND);
     }
   }
 
@@ -258,20 +277,14 @@ export class AuthNService {
     }
   }
 
-  /** Checks if the token is the same as the session in the auth object */
-  private verifySession(auth: IAuth, token: string) {
-    if (auth.session != token) {
-      throw new HttpException('session is invalid, sign in again', HttpStatus.UNAUTHORIZED);
-    }
-  }
-
   /** generates the response for signed in users */
-  private async getSigninResponse(auth: IAuth): Promise<AuthDTO> {
+  private async getSigninResponse(auth: IAuth, token: string): Promise<AuthDTO> {
     const permissionCodeSet = await this.roleService.getUserPermissionSet(auth.roles);
     const permissionCodes = Array.from(permissionCodeSet);
     return {
-      token: auth.session,
+      token,
       permissions: permissionCodes,
+      userType: auth.userType,
     };
   }
 

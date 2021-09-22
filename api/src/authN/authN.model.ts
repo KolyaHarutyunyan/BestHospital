@@ -1,14 +1,15 @@
 import { model, Schema, Types } from 'mongoose';
 import * as bcrypt from 'bcrypt';
-import { IAuth } from './interface/';
-import { RegistrationStatus } from './authN.constants';
+import { IAuth } from './interface';
+import { RegistrationStatus, UserType } from './authN.constants';
 
 const authnSchema = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String },
   roles: [{ type: Types.ObjectId, ref: 'Role' }],
   status: { type: Number, enum: RegistrationStatus, required: true },
-  session: { type: String },
+  sessions: [{ type: String }],
+  userType: { type: String, enum: UserType, requied: true },
 });
 
 const SALT_ROUNDS = 8;

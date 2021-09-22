@@ -47,7 +47,6 @@ export const errMessageStyle = makeStyles(() => ({
     whiteSpace:'nowrap',
     textOverflow:'ellipsis',
     width:'150px',
-    textTransform:'uppercase',
     "@media (min-width: 1919px)": {
       width:'150px',
     },

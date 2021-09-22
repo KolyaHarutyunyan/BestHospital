@@ -1,10 +1,8 @@
 import React, {useEffect, useState} from "react";
-import {DeleteElement, NoItemText, Notes, SimpleModal, TableBodyComponent} from "@eachbase/components";
+import {DeleteElement, Notes, SimpleModal, TableBodyComponent} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
-import {fundingSourceSingleStyles} from "./styles";
 import {TableCell} from "@material-ui/core";
 import moment from "moment";
-import {FundingSourceNotesAdd} from "./modals";
 import {fundingSourceActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 import {useDispatch, useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
@@ -15,7 +13,6 @@ export const FundingSourceSingleNotes = ({ data}) => {
     const params = useParams()
     const [toggleModal, setToggleModal] = useState(false)
     const [index, setIndex] = useState(null)
-    const [delEdit, setDelEdit] = useState(null)
     const dispatch = useDispatch()
     const [noteModalInfo, setNoteModalInfo] = useState({
         right: '-1000px',
@@ -29,12 +26,8 @@ export const FundingSourceSingleNotes = ({ data}) => {
         httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,
     }));
-
-
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_FUNDING_SOURCE_NOTE'
 
-
-    const classes = fundingSourceSingleStyles()
 
     const headerTitles = [
         {
@@ -54,7 +47,6 @@ export const FundingSourceSingleNotes = ({ data}) => {
             sortable: false
         },
     ];
-
 
     useEffect(() => {
         if (success) {
@@ -89,10 +81,6 @@ export const FundingSourceSingleNotes = ({ data}) => {
         setOpenDelModal(!openDelModal)
     }
 
-    let deleteNote = () => {
-        dispatch(fundingSourceActions.deleteFoundingSourceNote(params.id, data[index].id))
-    }
-
     const openNoteModal = (data) =>{
         setNoteModalInfo({
             right: '1px',
@@ -117,28 +105,7 @@ export const FundingSourceSingleNotes = ({ data}) => {
     }
     return (
         <>
-            {/*<SimpleModal*/}
-            {/*    openDefault={toggleModal}*/}
-            {/*    handleOpenClose={() => setToggleModal(!toggleModal)}*/}
-            {/*    content={delEdit === 'del' ?*/}
-            {/*        <DeleteElement*/}
-            {/*            loader={httpOnLoad.length > 0}*/}
-            {/*            handleDel={deleteNote}*/}
-            {/*            info={index !== null ? data[index].name : ''}*/}
-            {/*            text={'Delete Note'}*/}
-            {/*            handleClose={() => setToggleModal(!toggleModal)}/> :*/}
-            {/*        <FundingSourceNotesAdd*/}
-            {/*            info={data[index]}*/}
-            {/*            handleClose={() => setToggleModal(!toggleModal)}/>}*/}
-            {/*/>*/}
-            {/*<Notes */}
-            {/*    data={data} */}
-            {/*    items={notesItem} */}
-            {/*    headerTitles={headerTitles} */}
-            {/*    defaultStyle={true}*/}
-            {/*/>*/}
-
-                <Notes
+            <Notes
                     model={'Funder'}
                     closeModal={closeNoteModal}
                     noteModalInfo={noteModalInfo}
@@ -147,12 +114,10 @@ export const FundingSourceSingleNotes = ({ data}) => {
                     data={data}
                     items={notesItem}
                     headerTitles={headerTitles}/>
-
-
             <SimpleModal
                 openDefault={openDelModal}
                 handleOpenClose={handleOpenCloseDel}
-                content={<DeleteElement text='some information' info={noteModalData?.deletedName} handleDel={handleDeleteNote} handleClose={handleOpenCloseDel}/>}
+                content={<DeleteElement text='delete Note' info={noteModalData?.deletedName} handleDel={handleDeleteNote} handleClose={handleOpenCloseDel}/>}
             />
         </>
 

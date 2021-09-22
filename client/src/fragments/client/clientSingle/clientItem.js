@@ -21,7 +21,7 @@ import {
 import {useDispatch, useSelector} from "react-redux";
 import {AddContact} from "../clientModals";
 import {clientItemStyles} from "./styles";
-import {noteActions} from "../../../store/notes";
+import {noteActions} from "@eachbase/store/notes";
 
 
 
@@ -56,7 +56,7 @@ export const ClientItem = () => {
         dispatch(clientActions.getClientsEnrollment(params.id))
         dispatch(clientActions.getClientsAuthorizations(params.id))
         dispatch(clientActions.getClientHistories(params.id, 'Client'))
-        dispatch(clientActions.getClientsAvailabilitySchedule(params.id,))
+        // dispatch(clientActions.getClientsAvailabilitySchedule(params.id,))
         dispatch(noteActions.getGlobalNotes(params.id,'Client'))
 
     }, []);

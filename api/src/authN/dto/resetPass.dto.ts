@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { MaxLength, MinLength } from 'class-validator';
+import { UserDTO } from '.';
 
 export class ResetPassDTO {
   // password
   @ApiProperty({
     type: String,
-    description:
-      'must be at least 8 characters long, contain 1 uppercase 1 lowercase',
+    description: 'must be at least 8 characters long, contain 1 uppercase 1 lowercase',
   })
   @MinLength(8)
   @MaxLength(30)
@@ -19,5 +19,6 @@ export class ResetPassDTO {
   confirmation: string;
 
   // Following values are set by the system
-  userId: string;
+  user: UserDTO;
+  token: string;
 }

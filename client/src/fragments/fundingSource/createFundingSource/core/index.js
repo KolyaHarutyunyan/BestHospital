@@ -1,2 +1,2 @@
-export { createFoundingSourceStyle } from "./styles";
-export { CreateFundingSource } from "./createFundingSource";
+export {createFoundingSourceStyle} from "./styles";
+export {CreateFundingSource} from "./createFundingSource";

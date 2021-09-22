@@ -1,6 +1,6 @@
 import {cardStyle} from "./style";
 
-export const CardHeader = ({color, title, icon}) => {
+export const CardHeader = ({color, title, icon,hideHeaderLine}) => {
 
     const classes = cardStyle()
 
@@ -10,7 +10,7 @@ export const CardHeader = ({color, title, icon}) => {
                 <img src={icon} alt="g"/>
             </div>
             <p className={classes.cardTitle}>{title}</p>
-            <p className={classes.topLine} style={{backgroundColor: color ? color : 'gray'}}/>
+            {hideHeaderLine && <p className={classes.topLine} style={{backgroundColor: color ? color : 'gray'}}/>}
         </div>
     )
 }

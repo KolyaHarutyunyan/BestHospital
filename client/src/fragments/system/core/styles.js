@@ -7,7 +7,8 @@ export const systemItemStyles = makeStyles(() => ({
         alignItems: 'center',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-        marginTop: 16
+        marginTop: 16,
+        position: 'relative'
     },
     item: {
         width: '49%',
@@ -37,7 +38,7 @@ export const systemItemStyles = makeStyles(() => ({
     systemItemWrapper: {
         padding: 20,
         backgroundColor: 'white',
-        height:' calc(100vh - 130px)',
+        height: ' calc(100vh - 130px)',
         borderRadius: 8,
         position: 'relative'
     },
@@ -95,16 +96,22 @@ export const systemItemStyles = makeStyles(() => ({
         backgroundColor: 'white',
         boxShadow: Shadow.noteModalShadow,
         lineHeight: 1,
-        borderRadius: 8
+        borderRadius: 8,
     },
     activeStepText: {
-
+        backgroundColor: Colors.BackgroundBlue,
+        borderRadius: 8,
+        color: 'white!important'
     },
     stepText: {
+        fontSize: 14,
+        color: Colors.TextSecondary,
+        fontWeight: 600,
         display: 'inline-block',
         verticalAlign: 'middle',
-        padding: '7px 24px',
-        cursor: 'pointer'
-    }
+        padding: '9px 24px',
+        cursor: 'pointer',
+        margin: 2,
+    },
 
 }));

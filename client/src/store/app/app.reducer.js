@@ -3,6 +3,7 @@ import {authReducer} from "../auth";
 import {adminReducer} from "../admin";
 import {systemReducer} from '../system';
 import {noteReducer} from "../notes";
+import {payrollReducer} from "../payroll";
 import {officeReducer} from "../offices";
 import {permissionsReducer} from "../permissions";
 import {roleReducer} from "../role";
@@ -37,6 +38,7 @@ export const appReducer = combineReducers({
     client: clientReducer,
     system: systemReducer,
     note: noteReducer,
+    payroll: payrollReducer,
 
     httpOnLoad: httpRequestsOnLoadReducer,
     httpOnSuccess: httpRequestsOnSuccessReducer,

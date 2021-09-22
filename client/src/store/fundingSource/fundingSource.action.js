@@ -38,7 +38,6 @@ export const editFundingSource = (id, body) => {
 
 
 export const getFundingSource = (data) => {
-
     return {
         type: GET_FUNDING_SOURCE,
         payload: {data}
@@ -72,13 +71,14 @@ export const createFoundingSourceServiceById = (id, body, modifier) => {
     }
 }
 
-export const editFoundingSourceServiceById = (id, body, modifier) => {
+export const editFoundingSourceServiceById = (id, body, modifier, fsId) => {
     return {
         type: EDIT_FUNDING_SOURCE_SERVICE,
         payload: {
             id,
             body,
-            modifier
+            modifier,
+            fsId
         }
     }
 }

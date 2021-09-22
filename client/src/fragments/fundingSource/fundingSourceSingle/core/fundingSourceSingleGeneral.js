@@ -21,10 +21,10 @@ export const FundingSourceSingleGeneral = ({data}) => {
                       width={'32.5%'}/>
                 <Card cardInfo={[
                     {title: 'Street Address', value: data?.address?.street,},
-                    {title: 'Country', value : data?.address?.country,},
-                    {title: 'City',value: data?.address?.city,},
-                    {title: 'State',value: data?.address?.state,},
-                    {title: 'Zip Code',value: data?.address?.zip,},
+                    {title: 'Country', value: data?.address?.country,},
+                    {title: 'City', value: data?.address?.city,},
+                    {title: 'State', value: data?.address?.state,},
+                    {title: 'Zip Code', value: data?.address?.zip,},
                 ]}
                       width={'32.5%'}/>
             </div>

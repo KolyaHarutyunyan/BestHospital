@@ -5,8 +5,11 @@ export const tableStyle = makeStyles(() => ({
   tableHead: {
     boxShadow: '0px 0px 12px #0052E01A',
     borderRadius:'8px',
-    background: Backgrounds.headerLightBlue,
+    height: 51,
+    '& .MuiTableCell-stickyHeader':{
+      background: Backgrounds.headerLightBlue,
 
+    },
     "& .MuiTableCell-sizeSmall": {
       fontSize: "14px",
       fontWeight: "600",
@@ -20,12 +23,13 @@ export const tableStyle = makeStyles(() => ({
     },
   },
   tableBody:{
-    boxShadow: '0px 0px 12px #0052E01A',
-    borderRadius:'8px'
+
   },
   activeTableRow : {
   },
   tableRow: {
+    boxShadow: '0px 0px 12px #0052E01A',
+    borderRadius:'8px',
     "&:hover": {
       background: "#EAF2FF 0% 0% no-repeat padding-box",
     },

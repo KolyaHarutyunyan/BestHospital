@@ -19,6 +19,7 @@ import {httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "../../s
 import {httpRequestsOnLoadActions} from "../../store/http_requests_on_load";
 
 export const Notes = ({
+                          restHeight,
                           closeModal,
                           noteModalInfo,
                           showModal,
@@ -107,13 +108,13 @@ export const Notes = ({
         }
     }, [success]);
 
-    console.log(loader, errorText, success);
+    let errorMessage = success ? 'Success' : 'Something went wrong';
 
-    let errorMessage = success ? 'Success' : 'Something went wrong'
     return (
         <div className={globalStyle.tableWrapper}>
-            <TableContainer className={globalStyle.tableContainer} component={Paper}>
+            <TableContainer style={{maxHeight: `calc(100vh - ${restHeight})`}} className={globalStyle.tableContainer} component={Paper}>
                 <Table
+                    stickyHeader
                     className={globalStyle.table}
                     size="small"
                     aria-label="a dense table"
