@@ -1,14 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger"
 import { IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator"
-import { PayCodeTypeStatus } from '../../paycodetype/paycodetypes.constants';
+import {OvertimeStatus} from '../overtime.constants';
 
 export class CreateOvertimeDTO {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
     name: string;
-    @ApiProperty({ enum: PayCodeTypeStatus })
-    @IsEnum(PayCodeTypeStatus)
+    @ApiProperty({ enum: OvertimeStatus })
+    @IsEnum(OvertimeStatus)
     type: string;
     @ApiProperty()
     @IsNumber()
