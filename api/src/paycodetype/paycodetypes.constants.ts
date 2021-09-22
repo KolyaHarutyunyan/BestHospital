@@ -1,6 +1,5 @@
-export const PayCodeTypeStatus = {
-    Hourly: "Hourly",
-    Daily: "Daily",
-    Weekly: "Weekly",
-    Consecutive: "Consecutive"
+export enum PayCodeTypeStatus {
+    HOURLY = "HOURLY",
+    SALARY = "SALARY",
+    FIXED = "FIXED"
 }

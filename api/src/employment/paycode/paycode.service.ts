@@ -43,6 +43,7 @@ export class PaycodeService {
       const payCode = await this.model.find();
       this.checkPayCode(payCode[0]);
       return this.sanitizer.sanitizeMany(payCode)
+      // poopulate payCodeType
     }
     catch (e) {
       throw e
@@ -54,6 +55,8 @@ export class PaycodeService {
       let payCode = await this.model.findById({ _id })
       this.checkPayCode(payCode)
       return this.sanitizer.sanitize(payCode)
+      // poopulate payCodeType
+
     }
     catch (e) {
       throw e

@@ -18,9 +18,13 @@ import { SCredentialModule } from '../staff/credential/scredential.module';
 import { PaycodeModule } from '../employment/paycode/paycode.module';
 import { PaycodetypeModule } from '../paycodetype/paycodetype.module';
 import { AvailabilityModule } from '../availability/availability.module';
+import { OvertimeModule } from '../overtime/overtime.module';
+import { TimesheetModule } from '../staff/timesheet/timesheet.module';
 
 @Module({
-  imports: [AuthNModule, AuthZModule, AddressModule, StaffModule, FundingModule, EmploymentModule, ClientModule, DepartmentModule, CommentModule, HistoryModule, JobModule, SCredentialModule, PaycodeModule, PaycodetypeModule, AvailabilityModule],
+  imports: [AuthNModule, AuthZModule, AddressModule, StaffModule, FundingModule,
+    EmploymentModule, ClientModule, DepartmentModule, CommentModule, HistoryModule,
+    JobModule, SCredentialModule, PaycodeModule, PaycodetypeModule, AvailabilityModule, OvertimeModule, TimesheetModule],
   controllers: [AppController],
   providers: [AppService, DatabaseConnection],
 })

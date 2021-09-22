@@ -9,10 +9,3 @@ import { PaycodetypeService } from './paycodetype.service';
   exports: [PaycodetypeService]
 })
 export class PaycodetypeModule { }
-
-// @Module({
-//   imports: [EmploymentModule],
-//   controllers: [PaycodeController],
-//   providers: [PaycodeService, PayCodeSanitizer]
-// })
-// export class PaycodeModule { }

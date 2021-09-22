@@ -8,6 +8,7 @@ import { PaycodetypeModule } from '../../paycodetype/paycodetype.module';
 @Module({
   imports: [EmploymentModule, PaycodetypeModule],
   controllers: [PaycodeController],
-  providers: [PaycodeService, PayCodeSanitizer]
+  providers: [PaycodeService, PayCodeSanitizer],
+  exports: [PaycodeService]
 })
 export class PaycodeModule { }
