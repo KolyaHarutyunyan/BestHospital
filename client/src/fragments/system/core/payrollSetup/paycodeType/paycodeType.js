@@ -12,10 +12,9 @@ import {useDispatch} from "react-redux";
 import {payrollActions} from "@eachbase/store/payroll";
 
 const payCodeType = [
-    {name: 'Hourly'},
-    {name: 'Daily'},
-    {name: 'Weekly'},
-    {name: 'Consecutive'}
+    {name: 'HOURLY'},
+    {name: 'SALARY'},
+    {name: 'FIXED'},
 ]
 
 const payCodeBtn = {

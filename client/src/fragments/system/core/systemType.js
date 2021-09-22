@@ -5,7 +5,7 @@ import {Images} from "@eachbase/utils";
 import {systemItemStyles} from './styles'
 import {useDispatch, useSelector} from "react-redux";
 import {httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
-import {httpRequestsOnLoadActions} from "../../../store/http_requests_on_load";
+import {httpRequestsOnLoadActions} from "@eachbase/store/http_requests_on_load";
 
 const credentialBtn = {
     maxWidth: '174px',
