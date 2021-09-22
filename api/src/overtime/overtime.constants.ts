@@ -1,6 +1,6 @@
 export enum OvertimeStatus {
-    Daily =  "Daily",
-    Weekly = "Weekly",
-    Consecutive = "Consecutive"
+    DAILY =  "DAILY",
+    WEEKLY = "WEEKLY",
+    CONSECUTIVE = "CONSECUTIVE"
 }
 // Upercase
