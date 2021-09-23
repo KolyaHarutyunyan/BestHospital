@@ -75,14 +75,21 @@ function* getAdminById(action) {
 }
 
 function* editAdminById(action) {
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.editAdminByIdService, action.payload.id, action.payload.body);
         yield put({
             type: EDIT_ADMIN_BY_ID_SUCCESS,
             payload: res.data,
         });
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.removeError(action.type));
     } catch (err) {
         console.log(err)
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type,err.data.message));
     }
 }
 
