@@ -2,7 +2,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import {Colors, Shadow} from "@eachbase/utils";
 
 export const PayrollSetupStyles = makeStyles(() => ({
-    payCodeTypeWrapper: {
+    wrapper: {
       display: 'flex',
       alignItems: 'flex-start'
     },

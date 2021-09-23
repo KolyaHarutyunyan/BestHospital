@@ -3,6 +3,11 @@ import {
     getPayCodeGlobal,
     editPayCodeByIdGlobal,
     deletePayCodeByIdGlobal,
+
+    createOvertimeSettingsGlobal,
+    getOvertimeSettingsGlobal,
+    editOvertimeSettingsByIdGlobal,
+    deleteOvertimeSettingsByIdGlobal,
 } from "./payroll.action";
 
 export {payrollReducer} from './payroll.reducer';
@@ -13,4 +18,9 @@ export const payrollActions = {
     getPayCodeGlobal,
     editPayCodeByIdGlobal,
     deletePayCodeByIdGlobal,
+
+    createOvertimeSettingsGlobal,
+    getOvertimeSettingsGlobal,
+    editOvertimeSettingsByIdGlobal,
+    deleteOvertimeSettingsByIdGlobal,
 }

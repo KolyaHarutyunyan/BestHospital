@@ -57,6 +57,9 @@ export const SystemItem = () => {
     const globalDepartments = useSelector(state => state.system.departments)
     const globalJobs = useSelector(state => state.system.jobs)
     const globalPayCodes = useSelector(state => state.payroll.PayCodes)
+    const globalOvertimeSettings = useSelector(state => state.payroll.overtimeSettings)
+
+    console.log(globalOvertimeSettings,'globalOvertimeSettings');
 
     const dispatch = useDispatch()
     const [deleteModalOpened, setDeleteModalOpened] = useState(false)
@@ -103,6 +106,7 @@ export const SystemItem = () => {
         dispatch(systemActions.getDepartments())
         dispatch(systemActions.getJobs())
         dispatch(payrollActions.getPayCodeGlobal())
+        dispatch(payrollActions.getOvertimeSettingsGlobal())
     }, [])
 
     const tabsContent = [
@@ -122,7 +126,7 @@ export const SystemItem = () => {
             tabComponent: (<JobTitles globalJobs={globalJobs} removeItem={handleRemoveItem} openModal={handleOpenClose}/>)
         },
         {
-            tabComponent: (<PayrollSetup globalPayCodes={globalPayCodes} />)
+            tabComponent: (<PayrollSetup globalPayCodes={globalPayCodes} globalOvertimeSettings={globalOvertimeSettings} />)
         }
     ];
 
