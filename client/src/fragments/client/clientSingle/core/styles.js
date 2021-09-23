@@ -150,7 +150,29 @@ export const serviceSingleStyles = makeStyles(() => ({
     checked: {
         color :'green'
     },
-
+    authorizationServices : {
+            display : 'flex',
+            width : '100%',
+            justifyContent : 'space-between',
+        alignItems : "center",
+         padding : '24px 24px 0 '
+    },
+    authorizationServicesRight: {
+            display :'flex',
+          alignItems : "center"
+    },
+    authorizationServicesTitle : {
+            fontSize : 18,
+        color : Colors.TextPrimary,
+        fontWeight : "bold"
+    },
+    authorizationServicesText : {
+        fontSize : 14,
+        color : Colors.ThemeBlue,
+        fontWeight : "bold",
+        marginLeft : 8,
+        cursor : 'pointer'
+    }
     }))
 ;
 

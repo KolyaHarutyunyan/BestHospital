@@ -2,7 +2,7 @@ import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbas
 import React, {useEffect, useState} from "react";
 import {foundingSourceModalStyle} from "./styles";
 import {ErrorText, Images} from "@eachbase/utils";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {fundingSourceActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 
@@ -18,7 +18,6 @@ export const FundingSourceModifiersAdd = ({
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState({});
     const [inputs2, setInputs2] = useState({});
-
     const [modifiers, setModifiers] = useState(modifiersServ ? [...modifiersServ] : []);
 
     const states = []
@@ -39,6 +38,8 @@ export const FundingSourceModifiersAdd = ({
     // }
 
 
+    // console.log(modifiersServ[0].modifiers,'loooooooooooooog')
+
     const handleChange = e => {
         setInputs(
             prevState => ({...prevState, [e.target.name]: e.target.value}),
@@ -53,13 +54,28 @@ export const FundingSourceModifiersAdd = ({
 
 
     const handleChange2 = (e, index,) => {
-        const modObject = modifiers[index]
-        modifiers[index] = {...modObject, [e.target.name]: e.target.value}
-        setModifiers([...modifiers])
+      if (e.target.name==='chargeRate'){
+          const modObject = modifiers[index]
+          modifiers[index] = {...modObject, [e.target.name]: +e.target.value}
+          setModifiers([...modifiers])
+      }else if (e.target.name==='credentialId') {
+          const modObject = modifiers[index]
+          modifiers[index] = {...modObject, [e.target.name]:  globalCredentials.find(elem => elem.name === e.target.value )._id }
+          setModifiers([...modifiers])
+      }else {
+          const modObject = modifiers[index]
+          modifiers[index] = {...modObject, [e.target.name]: e.target.value}
+          setModifiers([...modifiers])
+      }
     }
 
+// useEffect(()=>{
+//     setPostModifiers([...modifiers])
+// },[])
 
-
+    useEffect(()=>{
+        setPostModifiers([...modifiers])
+    },[modifiers])
 
     useEffect(() => {
         globalCredentials && globalCredentials.length > 0 && globalCredentials.forEach((item, index) => {
@@ -69,7 +85,6 @@ export const FundingSourceModifiersAdd = ({
             if (inputs.credentialId && inputs.chargeRate && inputs.name && inputs.type) {
                 if (inputs.credentialId !== '0' && inputs.chargeRate !== ' ' && inputs.name !== ' ') {
                     setBtnStyle(true)
-                    console.log(modifiers, 'arrrr')
                     setPostModifiers([...modifiers, {
                         "credentialId": credentialID,
                         "chargeRate": +inputs.chargeRate,

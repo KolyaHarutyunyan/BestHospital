@@ -73,10 +73,23 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
 
             console.log(postModifiers,'mod post')
             console.log(modifiersEdit,'mod edit')
+
+
+            let arr = [{
+                chargeRate: 10,
+                credentialId: "6144929f60a9480dd1eb3409",
+                name: "p",
+                serviceId: "614c113a189ca67672af7b79",
+                type: 0
+            }]
+
+
+
+
              if (!info){
-                dispatch(fundingSourceActions.createFoundingSourceServiceById(params.id, data, postModifiers))
+                dispatch(fundingSourceActions.createFoundingSourceServiceById(params.id, data, arr))
             }else {
-                dispatch(fundingSourceActions.editFoundingSourceServiceById(info?._id, data, postModifiers,params.id))
+                dispatch(fundingSourceActions.editFoundingSourceServiceById(info?._id, data, arr,params.id))
                  handleClose()
             }
 

@@ -22,7 +22,7 @@ export const FundingSourceSingleServices = ({data,}) => {
     const [accept, setAccept] = useState(false)
     const classes = fundingSourceSingleStyles()
     const dispatch = useDispatch()
-    const modifiers = useSelector(state => state.fundingSource.modifiers)
+    const modifiers = useSelector(state => state.fundingSource?.modifiers[0]?.modifiers)
     const globalCredentials = useSelector(state => state.system.credentials)
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
@@ -30,6 +30,8 @@ export const FundingSourceSingleServices = ({data,}) => {
         httpOnLoad: state.httpOnLoad,
     }));
 
+
+    console.log(modifiers,'mooods')
 
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'GET_FUNDING_SOURCE_SERVICE_MODIFIERS'
 
@@ -150,7 +152,7 @@ export const FundingSourceSingleServices = ({data,}) => {
             <div className={classes.fundindServiceItems}>
                 <Notes data={data} items={serviceItem} headerTitles={headerTitles} defaultStyle={true}/>
             </div>
-            {modifiers.length ? <FundingSourceSinglePTModifiers
+            {modifiers && modifiers?.length >0 ? <FundingSourceSinglePTModifiers
                     globalCredentials={globalCredentials}
                     data={modifiers}
                     title={data && data[serviceIndex]?.name}/> :
