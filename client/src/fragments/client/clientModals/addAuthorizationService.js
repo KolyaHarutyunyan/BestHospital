@@ -7,15 +7,23 @@ import {clientActions, fundingSourceActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 
 
-export const AddAuthorizationService = ({handleClose, info}) => {
+
+export const AddAuthorizationService = ({handleClose, info, fundingId}) => {
+
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info,funding: info.funderId.name, address : info.address.street} : {});
+    const [inputs, setInputs] = useState(info ? {...info,funding: info?.funderId?.name} : {});
     const params = useParams()
     const dispatch = useDispatch()
+
     useEffect(() => {
-        dispatch(fundingSourceActions.getFundingSource())
+        dispatch(fundingSourceActions.getFoundingSourceServiceById(fundingId))
     }, []);
-    const fSelect = useSelector(state => state.fundingSource.fSelect)
+
+
+    const fSelect = useSelector(state => state.fundingSource.fundingSourceServices)
+
+
+
     const classes = createClientStyle()
 
     const handleChange = e => setInputs(

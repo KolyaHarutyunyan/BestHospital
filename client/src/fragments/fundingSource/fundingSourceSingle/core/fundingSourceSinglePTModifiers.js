@@ -5,6 +5,8 @@ import {TableCell} from "@material-ui/core";
 
 
 export const FundingSourceSinglePTModifiers = ({data, title, globalCredentials}) => {
+
+
     const classes = fundingSourceSingleStyles()
     const headerTitles = [
         {
@@ -25,11 +27,12 @@ export const FundingSourceSinglePTModifiers = ({data, title, globalCredentials})
         },
     ];
 
+
     let modifiersItem = (item,index) => {
         return (
             <TableBodyComponent key={index}>
                 <TableCell>  {item?.name}  </TableCell>
-                <TableCell>  {globalCredentials.find(elem => elem._id === item.credentialId && elem._id).name}  </TableCell>
+                <TableCell>  {globalCredentials.find(elem => elem?._id === item?.credentialId && elem?._id)?.name}  </TableCell>
                 <TableCell>  {item?.chargeRate}  </TableCell>
                 <TableCell>  {item?.type}  </TableCell>
             </TableBodyComponent>

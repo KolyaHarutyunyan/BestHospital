@@ -341,6 +341,7 @@ function* deleteClientAuthorizations(action) {
 function* getClientsAuthorizationsServ(action) {
     try {
         const res = yield call(authService.getClientAuthorizationServService, action);
+        console.log(res,'reeeeessssssss')
         yield put({
             type: GET_CLIENT_AUTHORIZATION_SERV_SUCCESS,
             payload: res.data,

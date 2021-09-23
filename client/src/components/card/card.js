@@ -2,7 +2,7 @@ import {CardItem} from "./cardItem";
 import {CardHeader} from "./cardHeader";
 import {cardStyle} from "./style";
 
-export const Card = ({cardInfo,color, title,icon, showHeader, width,hideHeaderLine}) => {
+export const Card = ({cardInfo,color, title,icon, showHeader, width,hideHeaderLine , auth}) => {
 
     const classes = cardStyle()
     return (
@@ -13,9 +13,11 @@ export const Card = ({cardInfo,color, title,icon, showHeader, width,hideHeaderLi
                     cardInfo && cardInfo.map((item,index)=>{
                         return (
                             <CardItem
+                                auth ={auth}
                                 key={index}
                                 title={item.title}
                                 value={item.value}
+                                authId={item?.authId}
                                 width ={width}
                             />
                         )

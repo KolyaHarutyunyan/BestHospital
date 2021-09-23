@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Card, DeleteElement, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
 import {serviceSingleStyles} from './styles';
 import {Colors, Images} from "@eachbase/utils";
@@ -6,45 +6,52 @@ import {TableCell} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
 import {clientActions} from "@eachbase/store";
 import {AddAuthorization, AddEnrollment} from "../../clientModals";
+import {AuthHeader} from "@eachbase/components/headers/auth/authHeader";
+import {AddAuthorizationService} from "../../clientModals/addAuthorizationService";
 
 export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, data}) => {
     const classes = serviceSingleStyles()
     // const clientsAuthorizations = useSelector(state => state.client.clientsAuthorizations)
 
 
+    console.log(info,'infooo')
+
     const dispatch = useDispatch()
     const [openClose, setOpenClose] = useState(false)
     const [index, setIndex] = useState(null)
     const [delEdit, setDelEdit] = useState(null)
     const [toggleModal, setToggleModal] = useState(false)
+    const [toggleModal2, setToggleModal2] = useState(false)
+    const [authIndex, setAuthIndex] = useState(0)
 
 
-    const generalInfo = [
-        {title: 'First Name', value: data?.firstName},
-        {title: 'Middle Name', value: data?.middleName},
-        {title: 'Last Name', value: data?.lastName},
-        {title: 'Code', value: data?.code},
-    ]
+useEffect(()=>{
+    dispatch(clientActions.getClientsAuthorizationsServ(info[0].id))
+},[])
 
     const headerTitles = [
         {
-            title: 'Auth #',
+            title: 'Service Code',
             sortable: false
         },
         {
-            title: 'Funding Source',
-            sortable: true
-        },
-        {
-            title: 'Start Date',
+            title: 'Modifiers',
             sortable: false
         },
         {
-            title: 'End Date',
+            title: 'Total Units',
             sortable: false
         },
         {
-            title: 'Status',
+            title: 'Completed Units',
+            sortable: false
+        },
+        {
+            title: 'Available Units',
+            sortable: false
+        },
+        {
+            title: 'Percent Utilization',
             sortable: false
         },
         {
@@ -54,19 +61,17 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, data
     ];
 
 
-
-
     let deleteAuthorization = () => {
-          dispatch(clientActions.deleteClientsAuthorization(info[index].id))
+        dispatch(clientActions.deleteClientsAuthorization(info[index].id))
         setOpenClose(!openClose)
     }
 
     let clientAuthorizationItem = (item, index) => {
         return (
-            <TableBodyComponent key={index} handleClick={()=> {
+            <TableBodyComponent key={index} handleClick={() => {
                 setAuthItemIndex(index)
                 setAuthActive(true)
-            } }  >
+            }}>
                 <TableCell><p className={classes.tableName}>{item?.authId}</p></TableCell>
                 <TableCell>  {item?.funderId?.name}  </TableCell>
                 <TableCell>  {item.startDate}  </TableCell>
@@ -100,26 +105,42 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, data
             <SimpleModal
                 handleOpenClose={() => setToggleModal(!toggleModal)}
                 openDefault={toggleModal}
-                content={delEdit ? <AddAuthorization info={info[index]} handleClose={() => setToggleModal(!toggleModal)}/>
+                content={delEdit ?
+                    <AddAuthorization info={info[index]} handleClose={() => setToggleModal(!toggleModal)}/>
                     : <DeleteElement
                         text={'Delete Authorization'}
                         handleClose={() => setToggleModal(!toggleModal)}
                         handleDel={deleteAuthorization}
                     />
                 }
-                />
+            />
+            <SimpleModal
+                handleOpenClose={() => setToggleModal2(!toggleModal2)}
+                openDefault={toggleModal2}
+                content={<AddAuthorizationService fundingId={info[0].funderId._id}  handleClose={() => setToggleModal(!toggleModal2)}/>
+
+                }
+            />
             <Card
                 width='234px'
-                cardInfo={generalInfo}
+                cardInfo={info}
                 showHeader={true}
                 hideHeaderLine={false}
                 title='Authentications'
                 color={Colors.ThemeRed}
                 icon={Images.authIconGen}
+                auth={true}
             />
             <div className={classes.clearBoth}/>
             <div className={classes.notesWrap}>
-
+                <AuthHeader/>
+                <div className={classes.authorizationServices}>
+                <p className={classes.authorizationServicesTitle}>Authorization Services</p>
+                    <div className={classes.authorizationServicesRight}>
+                        <img src={Images.addHours} alt="" className={classes.iconStyle} onClick={()=>setToggleModal2(!toggleModal2)} />
+                        <p className={classes.authorizationServicesText}>Add Authorization Service</p>
+                    </div>
+                </div>
                 <Notes
                     data={info}
                     items={clientAuthorizationItem}

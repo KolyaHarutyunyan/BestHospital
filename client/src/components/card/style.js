@@ -118,5 +118,6 @@ export const cardStyle = makeStyles(() => ({
     },
     historyCardBoxTimeStyle: {
         minWidth: 200
-    }
+    },
+
 }));
