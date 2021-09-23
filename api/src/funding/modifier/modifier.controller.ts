@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ModifierService } from './modifier.service';
 import { ParseObjectIdPipe, Public } from '../../util';
-import { CreateModifierDto, CreateModifiersDTO, UpdateModifierDto, ModifyDTO } from './dto';
+import { CreateModifierDto, CreateModifiersDTO, UpdateModifierDto, ModifyDTO, UpdateModifiersDto } from './dto';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('modifier')
@@ -38,8 +38,8 @@ export class ModifierController {
 
   @Patch(':id')
   @Public()
-  @ApiOkResponse({ type: ModifyDTO })
-  async updateModify(@Param('id', ParseObjectIdPipe) id: string, @Body() updateModifierDto: UpdateModifierDto): Promise<any> {
+  @ApiOkResponse({ type: UpdateModifiersDto })
+  async updateModify(@Param('id', ParseObjectIdPipe) id: string, @Body() updateModifierDto: UpdateModifiersDto): Promise<any> {
     const staffId = '60f01ec194abb63ff8f0aa75';
     const modifier = await this.modifierService.update(id, updateModifierDto);
     return modifier;

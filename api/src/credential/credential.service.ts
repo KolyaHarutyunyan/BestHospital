@@ -50,6 +50,7 @@ export class CredentialService {
   async findAllByIds(ids): Promise<CredentialDTO[]> {
     try {
       const credential = await this.model.find({ '_id': { $in: ids } });
+      console.log(credential);
       return credential;
     }
     catch (e) {
