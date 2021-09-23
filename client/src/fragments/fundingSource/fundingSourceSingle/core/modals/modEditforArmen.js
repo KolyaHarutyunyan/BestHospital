@@ -148,7 +148,6 @@ export const FundingSourceModifiersAdd = ({
         }
     }
 
-    console.log(inputs2, 'inputs2')
 
 
     return (
@@ -256,6 +255,9 @@ export const FundingSourceModifiersAdd = ({
                                 styles={{width: 198}}
                             />
                             <div style={{width: 36}}/>
+
+
+
                             <ValidationInput
                                 onChange={handleChange2}
                                 value={item.chargeRate}
@@ -266,6 +268,10 @@ export const FundingSourceModifiersAdd = ({
 
                                 styles={{width: 198}}
                             />
+
+
+
+
                             <div style={{width: 36}}/>
                             <SelectInput
                                 name={"credentialId"}

@@ -28,11 +28,11 @@ export const authService = {
     deleteFoundingSourceServiceByIdService: (id) => axios.delete(`/funding/${id}/`,),
 
 
-    createFoundingSourceServiceModifierService: (body) => axios.post(`/funding/modifier`, body),
+    createFoundingSourceServiceModifierService: (body) => axios.post(`/modifier`, body),
 
-    editFoundingSourceServiceModifierService: (id,body) => axios.patch(`/funding/${id}/modifier`, body),
+    editFoundingSourceServiceModifierService: (id,body) => axios.patch(`/modifier/${id}`, body),
 
-    getFoundingSourceServiceModifierService: (id) => axios.get(`/funding/modifier/${id}`),
+    getFoundingSourceServiceModifierService: (id) => axios.get(`/modifier/${id}`),
 
 
     getFundingSourceHistoriesByIdService: (id, onModal) => axios.get(`/history/${id}/${onModal}`,),
