@@ -197,10 +197,11 @@ function* editFundingSourceServices({payload}) {
 }
 
 function* createFundingSourceServicesModifier({payload}) {
+    console.log()
     try {
 
         const res = yield call(authService.createFoundingSourceServiceModifierService, payload.body);
-
+        console.log(res, 'create fon moooooood')
     } catch (error) {
         console.log(error, 'res mod')
     }
@@ -212,6 +213,7 @@ function* editFundingSourceServicesModifier({payload}) {
     try {
 
         const res = yield call(authService.editFoundingSourceServiceModifierService,payload.id, payload.body);
+        console.log(resss, 'edit funding source')
     } catch (error) {
         console.log(error, 'res mod')
     }
@@ -226,6 +228,7 @@ function* getFundingSourceServicesModifier(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.getFoundingSourceServiceModifierService, action.payload);
+        console.log(res,'reeesssssdfsdfsdfsdf')
         yield put({
             type: GET_FUNDING_SOURCE_SERVICE_MODIFIERS_SUCCESS,
             payload: res.data,

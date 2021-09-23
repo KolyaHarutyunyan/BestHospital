@@ -17,12 +17,16 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
     const [postModifiers, setPostModifiers] = useState()
     const [modifiersEdit, setModifiersEdit] = useState([]);
     const [getLastMod, setGetLastMod] = useState(null);
+
+
+
+
     const params = useParams()
     let dispatch = useDispatch()
+
+
+
     const classes = foundingSourceModalStyle()
-
-
-
     let addNewMod = (newMod)=>{
         setModifiersEdit([...modifiersEdit, newMod])
     }
@@ -48,8 +52,9 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
     }, [inputs])
 
 
-    const handleCreate = () => {
 
+
+    const handleCreate = () => {
         if (inputs.name && inputs.cptCode && inputs.size && inputs.min && inputs.max) {
             const data = {
                 "name": inputs.name,
@@ -62,13 +67,16 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
             }
 
             if (getLastMod){
-                postModifiers?.push(getLastMod)
-                modifiersEdit?.push(getLastMod)
+                // postModifiers?.push(getLastMod)
+                // modifiersEdit?.push(getLastMod)
             }
-            if (!info){
-                dispatch(fundingSourceActions.createFoundingSourceServiceById(params.id, data, modifiersEdit))
+
+            console.log(postModifiers,'mod post')
+            console.log(modifiersEdit,'mod edit')
+             if (!info){
+                dispatch(fundingSourceActions.createFoundingSourceServiceById(params.id, data, postModifiers))
             }else {
-                dispatch(fundingSourceActions.editFoundingSourceServiceById(info?._id, data, modifiersEdit,params.id))
+                dispatch(fundingSourceActions.editFoundingSourceServiceById(info?._id, data, postModifiers,params.id))
                  handleClose()
             }
 

@@ -10,4 +10,12 @@ export const payrollService = {
 
     deletePayCodeByIdService: (id) => axios.delete(`/paycodetype/${id}`),
 
+    createOvertimeSettingsGlobalService: (body) => axios.post(`/overtime`, body),
+
+    getOvertimeSettingsGlobalService: () => axios.get(`/overtime`),
+
+    editOvertimeSettingsByIdGlobalService: (id, body) => axios.patch(`/overtime/${id}`, body),
+
+    deleteOvertimeSettingsByIdService: (id) => axios.delete(`/overtime/${id}`),
+
 };
