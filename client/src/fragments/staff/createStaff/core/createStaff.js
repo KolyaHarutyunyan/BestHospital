@@ -14,20 +14,6 @@ const issuingStateList = [
     {name: '1'},
     {name: '2'}
 ]
-const departmentList = [
-    {name: '3'},
-    {name: '4'}
-]
-const supervisorList = [
-    {
-        name: 'aaaaaaa',
-        id: '15'
-    },
-    {
-        name: 'bbbbbbb',
-        id: 16
-    }
-]
 const residencyList = [
     {name: '7'},
     {name: '8'}
@@ -40,7 +26,7 @@ const genderList = [
 ]
 
 
-export const CreateStaff = ({globalDepartments,adminsList, handleClose, resetData, staffGeneral}) => {
+export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
     const [error, setError] = useState("");
     const [errorSec, setErrorSec] = useState("");
     const [inputs, setInputs] = useState(resetData ? {} : staffGeneral ? staffGeneral : {});
@@ -106,8 +92,6 @@ export const CreateStaff = ({globalDepartments,adminsList, handleClose, resetDat
             inputs.phone &&
             inputs.gender &&
             inputs.birthday &&
-            inputs.departments &&
-            inputs.supervisor &&
             fullAddress
         ) {
             staffGeneral ?
@@ -123,8 +107,6 @@ export const CreateStaff = ({globalDepartments,adminsList, handleClose, resetDat
                             !inputs.phone ? 'phone' :
                                 !inputs.gender ? 'gender' :
                                     !inputs.birthday ? 'birthday' :
-                                        !inputs.departments ? 'departments' :
-                                            !inputs.supervisor ? 'supervisor' :
                                         'Input is not filled'
             )
         }
@@ -146,6 +128,7 @@ export const CreateStaff = ({globalDepartments,adminsList, handleClose, resetDat
     const errorMessage = success ? 'success' : httpOnError[0]?.error[0]
 
     useEffect(() => {
+        console.log('aaaaaa')
         if (success) {
             dispatch(httpRequestsOnSuccessActions.removeSuccess(httpOnSuccess.length && httpOnSuccess[0].type))
             handleClose()
@@ -280,24 +263,6 @@ export const CreateStaff = ({globalDepartments,adminsList, handleClose, resetDat
                 />
             </div>
             <p className={`${classes.otherDetailsTitle} ${classes.titlePadding}`}>Other</p>
-            <SelectInput
-                name={"departments"}
-                label={"Department*"}
-                handleSelect={handleChange}
-                value={inputs.departments}
-                list={globalDepartments}
-                typeError={error === 'departments' ? ErrorText.field : ''}
-                type={'id'}
-            />
-            <SelectInput
-                name={"supervisor"}
-                label={"Supervisor*"}
-                handleSelect={handleChange}
-                value={inputs.supervisor}
-                list={adminsList}
-                type={'id'}
-                typeError={error === 'supervisor' ? ErrorText.field : ''}
-            />
             <SelectInput
                 name={"residencyStatus"}
                 label={"Residency Status"}

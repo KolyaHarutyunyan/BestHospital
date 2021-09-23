@@ -26,8 +26,6 @@ export const StaffGeneral = ({staffGeneral}) =>{
         {title: 'Driver License', value: 'driving license'},
         {title: 'Issuing State', value: 'issuing state'},
         {title: 'Expiration Date', value: 'expiration date'},
-        {title: 'Department', value: 'department'},
-        {title: 'Supervisor', value: 'supervisor'},
         {title: 'Residency Status', value: staffGeneral?.residency},
         {title: 'SSn Number', value: staffGeneral?.ssn},
         {title: 'Gender', value: staffGeneral?.gender},

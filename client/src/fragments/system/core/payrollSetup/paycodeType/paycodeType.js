@@ -4,7 +4,7 @@ import {
     RadioButton,
     SelectInputPlaceholder,
     SelectInput,
-    ValidationInput,
+    ValidationInput, CreateChancel,
 } from "@eachbase/components";
 import {PayrollSetupStyles} from '../styles';
 import {ErrorText} from "@eachbase/utils";
@@ -167,10 +167,19 @@ export const PayCodeType = ({handleOpenClose, editedData, maxWidth, marginRight,
                     <RadioButton styles={checkboxStyle} value={AccruePTO} onChange={changePTO} radioData={ptoData}/>
                 </div>
             </div>
-            <AddModalButton
-                handleClick={handleSubmit} text={editedData ? 'Edit Paycode Type' : 'Add Paycode Type'}
-                styles={payCodeBtn}
-            />
+            {
+                editedData ? <CreateChancel
+                    buttonWidth='192px'
+                    create='Save'
+                    chancel="Cancel"
+                    onClose={ handleOpenClose}
+                    onCreate={handleSubmit}
+                /> :
+                    <AddModalButton
+                        handleClick={handleSubmit} text={'Add Paycode Type'}
+                        styles={payCodeBtn}
+                    />
+            }
         </div>
     )
 }
