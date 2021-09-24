@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {AddModalButton, SimpleModal} from '@eachbase/components';
+import {AddModalButton, AvailabilitySchedule, SimpleModal} from '@eachbase/components';
 import {editButtonStyle, serviceSingleStyles} from '../../fragments/client/clientSingle/core/styles';
 import { availabilityStyles } from './styles'
 import {AddAvailabilityScheduel} from "../../fragments/client/clientModals";
@@ -21,7 +21,7 @@ export const AvailableHours = ({marginLeft}) => {
 
     return (
         <div className={classes.availableHours} style={{marginLeft: marginLeft ? marginLeft : '0'}}>
-            <SimpleModal openDefault={open} handleOpenClose={handleOpenClose} content={ <AddAvailabilityScheduel handleClose={handleOpenClose} /> } />
+            <SimpleModal openDefault={open} handleOpenClose={handleOpenClose} content={ <AvailabilitySchedule handleClose={handleOpenClose} /> } />
             <div className={classes.availableHoursHeader}>
                 <p className={classes.availableHoursTitle}>Available Hours</p>
                 <AddModalButton text='Edit' handleClick={handleOpenClose} btnStyles={editButtonStyle}/>
