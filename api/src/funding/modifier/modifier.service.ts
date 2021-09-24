@@ -60,10 +60,10 @@ export class ModifierService {
     // return this.sanitizer.sanitizeMany(modifiers);
   }
 
-  async update(_id: string, dto: UpdateModifiersDto): Promise<any> {
+  async update(fundingServiceId: string, dto: UpdateModifiersDto): Promise<any> {
     try {
       const credentials = [];
-      const modifier: any = await this.model.findById(_id);
+      const modifier: any = await this.model.findOne({ serviceId: fundingServiceId });
       this.checkModify(modifier);
       dto.modifiers.map(modifier => {
        credentials.indexOf(modifier.credentialId) === -1 ? credentials.push(modifier.credentialId) : null
@@ -81,12 +81,6 @@ export class ModifierService {
       this.mongooseUtil.checkDuplicateKey(e, 'Modifier already exists');
       throw e;
     }
-  }
-
-  async remove(_id: string): Promise<string> {
-    const modifier = await this.model.findByIdAndDelete({ _id });
-    this.checkModify(modifier);
-    return modifier._id;
   }
 
   /** Private methods */

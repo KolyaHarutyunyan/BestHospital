@@ -36,19 +36,13 @@ export class ModifierController {
   //   return this.modifierService.findOne(+id);
   // }
 
-  @Patch(':id')
+  @Patch(':fundingServiceId')
   @Public()
   @ApiOkResponse({ type: UpdateModifiersDto })
-  async updateModify(@Param('id', ParseObjectIdPipe) id: string, @Body() updateModifierDto: UpdateModifiersDto): Promise<any> {
+  async updateModify(@Param('fundingServiceId', ParseObjectIdPipe) fundingServiceId: string, @Body() updateModifierDto: UpdateModifiersDto): Promise<any> {
     const staffId = '60f01ec194abb63ff8f0aa75';
-    const modifier = await this.modifierService.update(id, updateModifierDto);
+    const modifier = await this.modifierService.update(fundingServiceId, updateModifierDto);
     return modifier;
   }
 
-  @Delete(':id')
-  @Public()
-  @ApiOkResponse({type: String})
-  remove(@Param('id', ParseObjectIdPipe) id: string) {
-    return this.modifierService.remove(id);
-  }
 }
