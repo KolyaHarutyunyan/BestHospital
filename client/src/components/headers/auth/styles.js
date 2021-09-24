@@ -29,7 +29,7 @@ export const authHeaderStyles = makeStyles(() => ({
         marginRight : 16
     },
     AuthHeaderTopLeftText : {
-        fontSize : 16,
+        fontSize : 14,
         color : Colors.TextPrimary,
     },
     iconStyle : {
