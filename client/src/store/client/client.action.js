@@ -165,22 +165,22 @@ export const createClientsAuthorizations = (body, id, funderId) => {
     }
 }
 
-export const editClientsAuthorizations = (body,  id) => {
+export const editClientsAuthorizations = (body,  id, clientId) => {
 
     return {
         type: EDIT_CLIENT_AUTHORIZATION,
         payload: {
             body,
             id,
-
+            clientId
         }
     }
 }
 
-export const deleteClientsAuthorization = ( id) => {
+export const deleteClientsAuthorization = ( id, clientId) => {
     return {
         type: DELETE_CLIENT_AUTHORIZATION,
-        payload: {id}
+        payload: {id, clientId}
     }
 }
 

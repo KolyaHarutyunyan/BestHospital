@@ -14,7 +14,6 @@ import moment from "moment";
 
 
 export const AddEnrollment = ({handleClose, info}) => {
-    console.log(info,'loooog')
     // value: data?.birthday && moment(data?.birthday).format('DD MM YYYY')
 
     const [error, setError] = useState("");
@@ -27,7 +26,6 @@ export const AddEnrollment = ({handleClose, info}) => {
     const dispatch = useDispatch()
 
 
-    console.log(inputs,'inputs')
 
     useEffect(() => {
         dispatch(fundingSourceActions.getFundingSource())

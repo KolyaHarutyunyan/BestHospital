@@ -23,7 +23,7 @@ export const ClientContact = ({data, setContactId, handleOpenClose, info}) => {
     // Client contact with this id was not found
 
     const errorText = httpOnError.length && httpOnError[0].error
-    console.log(httpOnError,'ers')
+
 
 
     const generalInfo = [

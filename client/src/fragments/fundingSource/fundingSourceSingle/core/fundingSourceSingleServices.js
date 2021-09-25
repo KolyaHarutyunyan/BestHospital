@@ -22,8 +22,9 @@ export const FundingSourceSingleServices = ({data,}) => {
     const [accept, setAccept] = useState(false)
     const classes = fundingSourceSingleStyles()
     const dispatch = useDispatch()
-    const modifiers = useSelector(state => state.fundingSource?.modifiers[0]?.modifiers)
+    const modifiers = useSelector(state => state.fundingSource?.modifiers.modifiers)
     const globalCredentials = useSelector(state => state.system.credentials)
+
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnError: state.httpOnError,
@@ -31,7 +32,6 @@ export const FundingSourceSingleServices = ({data,}) => {
     }));
 
 
-    // console.log(modifiers,'mooods')
 
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'GET_FUNDING_SOURCE_SERVICE_MODIFIERS'
 

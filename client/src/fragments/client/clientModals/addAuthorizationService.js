@@ -8,16 +8,21 @@ import {useParams} from "react-router-dom";
 
 
 
+
 export const AddAuthorizationService = ({handleClose, info, fundingId}) => {
 
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {...info,funding: info?.funderId?.name} : {});
+    const [modCheck, setModCheck] = useState([]);
     const params = useParams()
     const dispatch = useDispatch()
-
+    const modifiers = useSelector(state => state.fundingSource.modifiers.modifiers)
     useEffect(() => {
         dispatch(fundingSourceActions.getFoundingSourceServiceById(fundingId))
     }, []);
+
+
+
 
 
     const fSelect = useSelector(state => state.fundingSource.fundingSourceServices)
@@ -26,10 +31,18 @@ export const AddAuthorizationService = ({handleClose, info, fundingId}) => {
 
     const classes = createClientStyle()
 
-    const handleChange = e => setInputs(
-        prevState => ({...prevState, [e.target.name]: e.target.value}),
-        error === e.target.name && setError(''),
-    );
+    const handleChange = e => {
+        if(e.target.name==='funding'){
+            let id = fSelect.find(item=> item.name === e.target.value)._id
+          dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(id))
+        }
+        setInputs(
+            prevState => ({...prevState, [e.target.name]: e.target.value}),
+            error === e.target.name && setError(''),
+        )
+    };
+
+
 
     const handleCreate = () => {
         if (inputs.authId && inputs.funding && inputs.startDate && inputs.endDate && inputs.address && inputs.status) {
@@ -66,10 +79,27 @@ export const AddAuthorizationService = ({handleClose, info, fundingId}) => {
         }
     }
 
-    const list = [
-        {name: 1},
-        {name: 2}
-    ]
+    function onModifier  (index){
+     let arr = new Set([...modCheck])
+        if(arr.has(index)){
+            arr.delete(index)
+        }else {
+            arr.add(index)
+        }
+        let newArr = []
+        arr.forEach(item=>{
+            newArr.push(item)
+        })
+setModCheck( newArr)
+
+
+        console.log(modCheck)
+
+
+
+
+
+    }
 
 
     return (
@@ -95,7 +125,14 @@ export const AddAuthorizationService = ({handleClose, info, fundingId}) => {
                         <div className={classes.displayCodeBlock2}>
                             <p className={classes.displayCodeBlockText}>Available Modfiers </p>
                             <div className={classes.availableModfiers } >
-                                <p className={classes.availableModfier}>N/A</p>
+                                {modifiers && modifiers.length>0 ? modifiers.map((item,index)=>{
+
+                                    return(
+                                        <p className={classes.availableModfier} onClick={()=>onModifier(index)}
+                                           style={modCheck.includes(index)  ?  {background: '#347AF0', color : '#fff' } : {}} >
+                                            {item.name}</p>
+                                    )
+                                }) : <p>N/A</p>}
                             </div>
                         </div>
 

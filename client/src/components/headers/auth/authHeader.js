@@ -3,9 +3,8 @@ import {Images} from "../../../utils";
 import React from "react";
 
 
-export const AuthHeader = ({info,setToggleModal, toggleModal, setDelEdit}) => {
+export const AuthHeader = ({info,setToggleModal, toggleModal,  setDelEdit}) => {
 
-    console.log(info,'caaard')
 
     const classes = authHeaderStyles()
 
@@ -21,12 +20,12 @@ export const AuthHeader = ({info,setToggleModal, toggleModal, setDelEdit}) => {
                     <>
                         <img src={Images.edit} alt="edit" className={classes.iconStyle} onClick={() => {
                             setDelEdit(true)
-                            setToggleModal(!toggleModal )
+                            setToggleModal(!toggleModal)
 
                         }}/>
                         <img src={Images.remove} alt="delete" className={classes.iconDeleteStyle} onClick={() => {
                             setDelEdit(false)
-                            setToggleModal(!toggleModal )
+                            setToggleModal(!toggleModal)
 
                         }}/>
                     </>
