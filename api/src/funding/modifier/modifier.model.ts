@@ -11,7 +11,7 @@ export const modifier = {
 
 const modifierSchema = new Schema({
     serviceId: { type: Types.ObjectId, ref: 'FundingService' },
-    modifiers: []
+    modifiers: [modifier]
 });
 
 export const ModifyModel = model<any>('Modifier', modifierSchema);
