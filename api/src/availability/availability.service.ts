@@ -48,6 +48,8 @@ export class AvailabilityService {
       findSchedule['wednesday'] = [];
       findSchedule['thursday'] = [];
       findSchedule['friday'] = [];
+      findSchedule['saturday'] = [];
+      findSchedule['sunday'] = [];
       //
       for (var day in dto) {
         dto[day].map(val => {

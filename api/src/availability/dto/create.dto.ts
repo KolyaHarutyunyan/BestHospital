@@ -38,6 +38,14 @@ export class CreateAvailabilityDTO {
     @IsOptional()
     @ApiProperty({ type: [AvailableTypeDTO] })
     friday: Array<AvailableTypeDTO>
+    @IsArray()
+    @IsOptional()
+    @ApiProperty({ type: [AvailableTypeDTO] })
+    saturday: Array<AvailableTypeDTO>
+    @IsArray()
+    @IsOptional()
+    @ApiProperty({ type: [AvailableTypeDTO] })
+    sunday: Array<AvailableTypeDTO>
     // @ApiProperty({ enum: ScheduleStatus })
     // @IsEnum(ScheduleStatus)
     // @IsNotEmpty()

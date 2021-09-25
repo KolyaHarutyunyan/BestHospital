@@ -8,6 +8,8 @@ const AvailabilitySchema = new Schema({
     wednesday: [{ from: { type: String }, to: { type: String }, available: { type: Boolean } }],
     thursday: [{ from: { type: String }, to: { type: String }, available: { type: Boolean } }],
     friday: [{ from: { type: String }, to: { type: String }, available: { type: Boolean } }],
+    saturday: [{ from: { type: String }, to: { type: String }, available: { type: Boolean } }],
+    sunday: [{ from: { type: String }, to: { type: String }, available: { type: Boolean } }],
     owner: {
         type: Schema.Types.ObjectId,
         required: true,
