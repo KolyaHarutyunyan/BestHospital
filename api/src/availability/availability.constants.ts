@@ -1,4 +1,4 @@
-export const ScheduleStatus = {
-    CLIENT: "Client",
-    STAFF: "Staff"
+export enum ScheduleStatus {
+    CLIENT = "Client",
+    STAFF = "Staff"
 }
