@@ -43,6 +43,7 @@ export class AvailabilityService {
         //
         for (var day in dto) {
           dto[day].map(val => {
+            findSchedule[day] = []
             findSchedule[day].push(val)
           })
         }
@@ -101,34 +102,36 @@ export class AvailabilityService {
     }
   }
 
-  async update(_id: string, dto: UpdateAvailabilityDTO) {
-    try {
-      const findSchedule = await this.model.findById({ _id });
-      this.checkSchedule(findSchedule);
+  // async update(_id: string, dto: UpdateAvailabilityDTO) {
+  //   try {
+  //     const findSchedule = await this.model.findById({ _id });
+  //     this.checkSchedule(findSchedule);
 
-      for (var day in dto) {
-        dto[day].map(val => {
-          findSchedule[day].map(obj => {
-            if (obj._id == val.id) {
-              obj.from = val.from;
-              obj.to = val.to;
-              obj.available = val.available
-            }
-          })
-        })
-      }
-      return await findSchedule.save()
+  //     for (var day in dto) {
+  //       dto[day].map(val => {
+  //         findSchedule[day].map(obj => {
+  //           if (obj._id == val.id) {
+  //             obj.from = val.from;
+  //             obj.to = val.to;
+  //             obj.available = val.available
+  //           }
+  //         })
+  //       })
+  //     }
+  //     console.log(findSchedule);
 
-    } catch (e) {
-      throw e;
-    }
-  }
+  //     return await findSchedule.save()
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  // }
 
-  async remove(_id: string): Promise<String> {
-    const schedule = await this.model.findByIdAndDelete({ _id });
-    this.checkSchedule(schedule);
-    return schedule._id;
-  }
+  // async remove(_id: string): Promise<String> {
+  //   const schedule = await this.model.findByIdAndDelete({ _id });
+  //   this.checkSchedule(schedule);
+  //   return schedule._id;
+  // }
+
   /** if the client is not found, throws an exception */
   private checkSchedule(schedule: any) {
     if (!schedule) {

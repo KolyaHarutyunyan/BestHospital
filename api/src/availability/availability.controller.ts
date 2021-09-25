@@ -24,14 +24,14 @@ findOne(@Param('ownerId', ParseObjectIdPipe) owner: string) {
   return this.scheduleService.findOne(owner);
 }
 
-@Patch(':id')
-@Public()
-update(@Param('id', ParseObjectIdPipe) id: string, @Body() dto: UpdateAvailabilityDTO) {
-  return this.scheduleService.update(id, dto);
-}
+// @Patch(':id')
+// @Public()
+// update(@Param('id', ParseObjectIdPipe) id: string, @Body() dto: UpdateAvailabilityDTO) {
+//   return this.scheduleService.update(id, dto);
+// }
 
-@Delete(':id')
-remove(@Param('id', ParseObjectIdPipe) id: string) {
-  return this.scheduleService.remove(id);
-}
+// @Delete(':id')
+// remove(@Param('id', ParseObjectIdPipe) id: string) {
+//   return this.scheduleService.remove(id);
+// }
 }
