@@ -139,6 +139,12 @@ export const modalsStyle = makeStyles(() => ({
         margin: ' 0 16px 14px 8px',
         cursor: 'pointer'
     },
+    removeTimeBtn: {
+        color: Colors.ThemeRed,
+        fontSize: 14,
+        cursor: 'pointer',
+        margin: '0 8px'
+    },
     notAvailable: {
         fontSize: 14,
         // marginLeft : 8,
@@ -219,6 +225,15 @@ export const modalsStyle = makeStyles(() => ({
         color: Colors.BackgroundBlue,
         lineHeight: '20px',
         cursor: 'pointer'
+    },
+    timeInputStyle: {
+        // border: '1px solid gray',
+        '& .MuiInputBase-root::before':{
+            content: 'revert!important'
+        },
+        '& .MuiInputBase-root::after':{
+            content: 'revert!important'
+        }
     }
 }));
 

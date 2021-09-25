@@ -3,6 +3,7 @@ import {CloseButton, CreateChancel} from "../buttons";
 import {modalsStyle} from './styles'
 import {ValidationInput} from "../inputs";
 import {Images} from "@eachbase/utils";
+import moment from "moment";
 
 export const AvailabilitySchedule = ({handleClose}) => {
 
@@ -42,12 +43,14 @@ export const AvailabilitySchedule = ({handleClose}) => {
     const addNewRow = (key) => {
         let newObj = {...times};
         newObj[key].push({
-            from: '',
-            to: '',
+            from: moment().format('HH:mm'),
+            to: moment().format('HH:mm'),
             available: true,
         })
         setTime(newObj)
     }
+
+    console.log(times,'times')
 
     const changeData = (e, index, key) => {
         let obj = {...times}
@@ -97,6 +100,8 @@ export const AvailabilitySchedule = ({handleClose}) => {
                                             return (
                                                 <div key={index} className={classes.times}>
                                                     <ValidationInput
+                                                        className={classes.timeInputStyle}
+                                                        errorFalse={true}
                                                         disabled={!item.available}
                                                         name='from'
                                                         value={item.from}
@@ -104,15 +109,17 @@ export const AvailabilitySchedule = ({handleClose}) => {
                                                         onChange={(e) => {changeData(e, index,key)}}
                                                     />
                                                     <ValidationInput
+                                                        className={classes.timeInputStyle}
+                                                        errorFalse={true}
                                                         disabled={!item.available}
                                                         name='to'
                                                         value={item.to}
                                                         type="time"
                                                         onChange={(e) => {changeData(e, index,key)}}
                                                     />
-                                                    <span onClick={() => {
+                                                    <span className={classes.removeTimeBtn} onClick={() => {
                                                         removeRow(key,index)
-                                                    }}>remove</span>
+                                                    }}>Remove</span>
                                                     <input style={{'-webkit-appearance': 'auto'}} checked={!item.available} type="checkbox" name='available'
                                                            onChange={(e) => {
                                                                changeData(e, index,key)
