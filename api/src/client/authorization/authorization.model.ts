@@ -10,7 +10,7 @@ const AuthorizationSchema = new Schema({
     funderId: { type: Types.ObjectId, ref: 'Funder' },
     startDate: { type: String },
     endDate: { type: String },
-    status: { type: Number, enum: AuthorizationStatus },
+    status: { type: Number, enum: [AuthorizationStatus] },
     createdDate: { type: Date, default: Date.now() },
     updatedDate: { type: Date, default: null },
     location: { type: String },

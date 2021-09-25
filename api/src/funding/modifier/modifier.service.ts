@@ -54,9 +54,22 @@ export class ModifierService {
     }
   }
   async findByServiceId(fundingServiceId: string): Promise<ModifyDTO[]> {
-    const modifiers = await this.model.find({ serviceId: fundingServiceId });
-    this.checkModify(modifiers[0]);
+    const modifiers = await this.model.findOne({ serviceId: fundingServiceId });
+    this.checkModify(modifiers?.modifiers[0]);
+
     return modifiers
+    // return this.sanitizer.sanitizeMany(modifiers);
+  }
+
+  async findByServiceByIds(ids: string[], serviceId: string): Promise<ModifyDTO[]> {
+    const modifiers = await this.model.findOne({serviceId, 'modifiers._id': { $in: ids } });
+    console.log(modifiers, 'modifiers');
+    // this.checkModify(modifiers?.modifiers[0]);
+    return modifiers;
+    // const modifiers = await this.model.findOne({ serviceId: fundingServiceId });
+    // this.checkModify(modifiers?.modifiers[0]);
+
+    // return modifiers
     // return this.sanitizer.sanitizeMany(modifiers);
   }
 
@@ -66,7 +79,7 @@ export class ModifierService {
       const modifier: any = await this.model.findOne({ serviceId: fundingServiceId });
       this.checkModify(modifier);
       dto.modifiers.map(modifier => {
-       credentials.indexOf(modifier.credentialId) === -1 ? credentials.push(modifier.credentialId) : null
+        credentials.indexOf(modifier.credentialId) === -1 ? credentials.push(modifier.credentialId) : null
       })
       const credential = await this.credentialService.findAllByIds(credentials);
       if (credentials.length !== credential.length) {

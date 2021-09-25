@@ -25,14 +25,14 @@ export class AuthorizationserviceService {
   private model: Model<IAuthorizationService>;
   private authorizationModel: Model<IAuthorization>;
   private mongooseUtil: MongooseUtil;
-  
+
   async checkModifiers(authorizationId: string, fundingServiceId: string, dto: AuthorizationModifiersDTO): Promise<any> {
-    try{
+    try {
       let modifiers = [];
       let brokenModifiers = [];
 
       if (dto.modifiers) {
-        const findAuthorizationService: any = await this.model.find({ authorizationId: authorizationId, serviceId: fundingServiceId }).populate('modifiers');
+        const findAuthorizationService: any = await this.model.find({ authorizationId: authorizationId, serviceId: fundingServiceId }).populate('[modifiers]');
         if (findAuthorizationService) {
           findAuthorizationService.forEach(item => {
             item.modifiers.map(modifier => {
@@ -47,7 +47,7 @@ export class AuthorizationserviceService {
               }
             }
           }
-          if(brokenModifiers.length !== 0){
+          if (brokenModifiers.length !== 0) {
             throw new HttpException(
               `Modifier received ${brokenModifiers}`,
               HttpStatus.NOT_FOUND,
@@ -65,7 +65,7 @@ export class AuthorizationserviceService {
         HttpStatus.NOT_FOUND,
       );
     }
-    catch(e){
+    catch (e) {
       throw e
     }
   }
@@ -77,13 +77,14 @@ export class AuthorizationserviceService {
       let brokenModifiers = [];
 
       if (dto.modifiers) {
-        const findAuthorizationService: any = await this.model.find({ authorizationId: authorizationId, serviceId: fundingServiceId }).populate('modifiers');
-        if (findAuthorizationService) {
+        const findAuthorizationService: any = await this.model.find({ authorizationId: authorizationId, serviceId: fundingServiceId }).populate('[modifiers]');
+        if (findAuthorizationService.length != []) {
           findAuthorizationService.forEach(item => {
             item.modifiers.map(modifier => {
               modifiers.push(modifier._id)
             })
           })
+
           let dtoM = dto.modifiers;
           for (let i = 0; i < dtoM.length; i++) {
             for (let j = 0; j < modifiers.length; j++) {
@@ -92,7 +93,7 @@ export class AuthorizationserviceService {
               }
             }
           }
-          if(brokenModifiers.length !== 0){
+          if (brokenModifiers.length !== 0) {
             throw new HttpException(
               `Modifier received ${brokenModifiers}`,
               HttpStatus.NOT_FOUND,
@@ -101,7 +102,6 @@ export class AuthorizationserviceService {
           modifiers = [];
         }
       }
-
       const authorization = await this.authorizationModel.findOne({ _id: authorizationId });
       this.checkAuthorization(authorization);
       const findModifiers: any = await this.modifierService.findByServiceId(fundingServiceId);
@@ -112,15 +112,15 @@ export class AuthorizationserviceService {
       //   );
       // }
 
-      if (dto.modifiers && findModifiers[0].length == []) {
+      if (dto.modifiers && findModifiers.modifiers[0].length == []) {
         throw new HttpException(
           'Current Funding service has not modifier',
           HttpStatus.NOT_FOUND,
         );
       }
 
-      if (dto.modifiers && findModifiers[0].length != []) {
-        findModifiers.map(modifier => modifiers.push(modifier.id))
+      if (dto.modifiers && findModifiers.modifiers[0].length != []) {
+        findModifiers.modifiers.map(modifier => modifiers.push(modifier.id))
         dto.modifiers.map(modifier => {
           if (!modifiers.includes(modifier)) {
             throw new HttpException(
@@ -137,7 +137,7 @@ export class AuthorizationserviceService {
           HttpStatus.NOT_FOUND,
         );
       }
-
+   
       let authorizationService = new this.model({
         total: dto.total,
         // completed: dto.completed,
@@ -157,7 +157,28 @@ export class AuthorizationserviceService {
 
   async findAll(authorizationId: string): Promise<AuthorizationServiceDTO[]> {
     try {
-      const authorizationService = await this.model.find({ authorizationId }).populate('modifiers').populate('serviceId');
+      // let modifiers = []
+      const authorizationService: any = await this.model.find({ authorizationId }).populate("[modifiers]").populate('serviceId');
+      // const findModifiers: any = await this.modifierService.findByServiceId(authorizationService.serviceId._id);
+      // for(let i = 0; i < authorizationService.length; i++){
+      //   modifiers = authorizationService[i].modifiers;
+      //   console.log(modifiers, 'modifiersmodifiersmodifiersmodifiersmodifiersmodifiers');
+      //   const findModifiers: any = await this.modifierService.findByServiceByIds(modifiers, authorizationService[i].serviceId);
+      //   console.log(findModifiers, 'findModifiersfindModifiersfindModifiersfindModifiersfindModifiersfindModifiers');
+      //   authorizationService[i].modifiers = findModifiers
+      //   modifiers = []
+      // }
+      // console.log(authorizationService);
+      // authorizationService.map(authService =>{
+      //   modifiers = authService.modifiers;
+
+      // })
+      // authorizationService.map(service => {
+      //   test.indexOf(service.serviceId._id) === -1 ? test.push(service.serviceId._id) : null
+      // })
+      // const findModifiers: any = await this.modifierService.findByServiceByIds(test);
+      // console.log(findModifiers, 'findModifiers');
+      // console.log(authorizationService, 'authorizationService');
       this.checkAuthorizationService(authorizationService[0]);
       return this.sanitizer.sanitizeMany(authorizationService);
     } catch (e) {
