@@ -13,6 +13,7 @@ import {agentReducer} from "../agents";
 import {httpRequestsOnLoadReducer} from "../http_requests_on_load";
 import {httpRequestsOnSuccessReducer} from "../http_requests_on_success";
 import {httpRequestsOnErrorsReducer} from "../http_requests_on_errors";
+import {availabilityScheduleReducer} from "../availabilitySchedule";
 
 const initialState = {
     isLoading: false,
@@ -39,6 +40,7 @@ export const appReducer = combineReducers({
     system: systemReducer,
     note: noteReducer,
     payroll: payrollReducer,
+    availabilitySchedule: availabilityScheduleReducer,
 
     httpOnLoad: httpRequestsOnLoadReducer,
     httpOnSuccess: httpRequestsOnSuccessReducer,
