@@ -27,6 +27,12 @@ export class AvailabilityService {
       const onMod = onModel;
       const resource = await this[onMod].findById(owner);
       const findSchedule = await this.model.findOne({ owner });
+      findSchedule['monday'] = [];
+      findSchedule['tuesday'] = [];
+      findSchedule['wednesday'] = [];
+      findSchedule['thursday'] = [];
+      findSchedule['friday'] = [];
+
       if (!findSchedule) {
         const schedule = new this.model({
           owner,
@@ -43,7 +49,6 @@ export class AvailabilityService {
         //
         for (var day in dto) {
           dto[day].map(val => {
-            findSchedule[day] = []
             findSchedule[day].push(val)
           })
         }
