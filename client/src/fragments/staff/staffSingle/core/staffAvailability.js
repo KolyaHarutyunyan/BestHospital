@@ -6,7 +6,6 @@ import {Colors, Images} from "@eachbase/utils";
 export const StaffAvailability = ({staffGeneral}) => {
     const classes = serviceSingleStyles()
 
-
     const generalInfo = [
         {title: 'First Name', value: staffGeneral?.firstName},
         {title: 'Middle Name', value: staffGeneral?.middleName},
@@ -28,6 +27,7 @@ export const StaffAvailability = ({staffGeneral}) => {
                 icon={Images.generalInfoIcon}
             />
             <AvailableHours marginLeft='24px' />
+
         </div>
     )
 }
