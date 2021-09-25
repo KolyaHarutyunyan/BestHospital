@@ -94,8 +94,8 @@ export const useGlobalStyles = makeStyles({
     },
     tableBack: {
         width: '100%',
-        background: 'transparent',
-        boxShadow: 'none',
+        backgroundColor: 'transparent!important',
+        boxShadow: 'none!important',
 },
     table: {
         '&.MuiTable-root': {

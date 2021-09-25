@@ -14,7 +14,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, data
     // const clientsAuthorizations = useSelector(state => state.client.clientsAuthorizations)
 
 
-    console.log(info,'infooo')
+    console.log(info, 'infooo')
 
     const dispatch = useDispatch()
     const [openClose, setOpenClose] = useState(false)
@@ -25,9 +25,10 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, data
     const [authIndex, setAuthIndex] = useState(0)
 
 
-useEffect(()=>{
-    dispatch(clientActions.getClientsAuthorizationsServ(info[0].id))
-},[])
+
+    useEffect(() => {
+        dispatch(clientActions.getClientsAuthorizationsServ(info[authIndex].id))
+    }, [])
 
     const headerTitles = [
         {
@@ -61,12 +62,13 @@ useEffect(()=>{
     ];
 
 
+
     let deleteAuthorization = () => {
-        dispatch(clientActions.deleteClientsAuthorization(info[index].id))
+        dispatch(clientActions.deleteClientsAuthorization(info[authIndex].id))
         setOpenClose(!openClose)
     }
 
-    let clientAuthorizationItem = (item, index) => {
+    let clientAuthorizationServiceItem = (item, index) => {
         return (
             <TableBodyComponent key={index} handleClick={() => {
                 setAuthItemIndex(index)
@@ -106,7 +108,7 @@ useEffect(()=>{
                 handleOpenClose={() => setToggleModal(!toggleModal)}
                 openDefault={toggleModal}
                 content={delEdit ?
-                    <AddAuthorization info={info[index]} handleClose={() => setToggleModal(!toggleModal)}/>
+                    <AddAuthorization info={info[authIndex]} handleClose={() => setToggleModal(!toggleModal)}/>
                     : <DeleteElement
                         text={'Delete Authorization'}
                         handleClose={() => setToggleModal(!toggleModal)}
@@ -117,7 +119,8 @@ useEffect(()=>{
             <SimpleModal
                 handleOpenClose={() => setToggleModal2(!toggleModal2)}
                 openDefault={toggleModal2}
-                content={<AddAuthorizationService fundingId={info[0].funderId._id}  handleClose={() => setToggleModal(!toggleModal2)}/>
+                content={<AddAuthorizationService info={info} fundingId={info[authIndex].funderId._id}
+                                                  handleClose={() => setToggleModal2(!toggleModal2)}/>
 
                 }
             />
@@ -130,20 +133,23 @@ useEffect(()=>{
                 color={Colors.ThemeRed}
                 icon={Images.authIconGen}
                 auth={true}
+                active={authIndex}
+                click={setAuthIndex}
             />
             <div className={classes.clearBoth}/>
             <div className={classes.notesWrap}>
-                <AuthHeader/>
+                <AuthHeader  setDelEdit={setDelEdit} info={info[authIndex]} setToggleModal={setToggleModal} toggleModal={toggleModal}/>
                 <div className={classes.authorizationServices}>
-                <p className={classes.authorizationServicesTitle}>Authorization Services</p>
+                    <p className={classes.authorizationServicesTitle}>Authorization Services</p>
                     <div className={classes.authorizationServicesRight}>
-                        <img src={Images.addHours} alt="" className={classes.iconStyle} onClick={()=>setToggleModal2(!toggleModal2)} />
+                        <img src={Images.addHours} alt="" className={classes.iconStyle}
+                             onClick={() => setToggleModal2(!toggleModal2)}/>
                         <p className={classes.authorizationServicesText}>Add Authorization Service</p>
                     </div>
                 </div>
                 <Notes
                     data={info}
-                    items={clientAuthorizationItem}
+                    items={clientAuthorizationServiceItem}
                     headerTitles={headerTitles}
                     defaultStyle={true}/>
             </div>

@@ -77,6 +77,7 @@ import successIcon from '@eachbase/assets/images/icons/successIcon.svg'
 import infoIcon from '@eachbase/assets/images/icons/informationIcon.svg'
 import addHours from '@eachbase/assets/images/icons/addHours.svg'
 import authIconGen from '@eachbase/assets/images/icons/authIconGen.svg'
+import addIcon from '@eachbase/assets/images/icons/Add.svg';
 
 export const Images = {
     doctors: doctors,
@@ -90,8 +91,8 @@ export const Images = {
     roleManagementActive: roleManagementActive,
     roleManagementPassive: roleManagementPassive,
     addYellowIcon: addYellowIcon,
-    addHours : addHours,
-    authIconGen : authIconGen,
+    addHours: addHours,
+    authIconGen: authIconGen,
     offices: offices,
     officesGray: officesGray,
     error: error,
@@ -155,5 +156,6 @@ export const Images = {
     authIcon: authIcon,
     errorIcon: errorIcon,
     successIcon: successIcon,
-    infoIcon: infoIcon
+    infoIcon: infoIcon,
+    addIcon: addIcon
 }

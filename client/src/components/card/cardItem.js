@@ -1,15 +1,15 @@
 import {cardStyle} from "./style";
 
-export const CardItem = ({title, value, auth, authId}) => {
 
+export const CardItem = ({title, value, auth, authId, click, index, active}) => {
     const classes = cardStyle()
 
 
     return (
         <>
             {
-                auth ? <div className={classes.cardItem} style={{cursor: 'pointer'}}>
-                        <p>#{authId}</p>
+                auth ? <div onClick={()=>click(index)} className={classes.cardItem} style={active === index ? {background : "#347AF0",cursor: 'pointer'} : {cursor: 'pointer'}}>
+                        <p style={active === index ? {color : "white"} : {}}>#{authId}</p>
                     </div>
                     : <div className={classes.cardItem}>
                         <p>{title}:</p>

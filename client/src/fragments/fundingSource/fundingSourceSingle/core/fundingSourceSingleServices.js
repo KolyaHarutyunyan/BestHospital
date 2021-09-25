@@ -31,7 +31,7 @@ export const FundingSourceSingleServices = ({data,}) => {
     }));
 
 
-    console.log(modifiers,'mooods')
+    // console.log(modifiers,'mooods')
 
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'GET_FUNDING_SOURCE_SERVICE_MODIFIERS'
 
