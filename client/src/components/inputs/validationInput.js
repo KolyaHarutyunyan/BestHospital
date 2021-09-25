@@ -4,7 +4,7 @@ import TextField from "@material-ui/core/TextField";
 import {ErrMessage} from "../messages";
 import {InputMinLoader} from "./inputMiniLoader";
 
-export const ValidationInput = ({errorMessageStyle,
+export const ValidationInput = ({errorFalse, errorMessageStyle,
                                     multiline, style, className, autoComplete, placeholder,
                                     typeError, Length, disabled,
                                     value, type, onChange, name,
@@ -67,7 +67,11 @@ export const ValidationInput = ({errorMessageStyle,
                         )
                     }}
                 />
-                <ErrMessage style={errorMessageStyle} text={typeError}/>
+                {
+                    errorFalse ? null : <ErrMessage style={errorMessageStyle} text={typeError}/>
+                }
+
+
             </div>
         </>
     );
