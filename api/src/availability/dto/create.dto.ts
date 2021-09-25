@@ -4,11 +4,11 @@ import { ScheduleStatus } from '../availability.constants';
 
 export class AvailableTypeDTO {
     @ApiProperty()
-    @IsNumber()
+    @IsString()
     @IsNotEmpty()
     from: number;
     @ApiProperty()
-    @IsNumber()
+    @IsString()
     @IsNotEmpty()
     to: number;
     @ApiProperty()

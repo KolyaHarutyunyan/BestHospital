@@ -3,11 +3,11 @@ import { IAvailability } from './interface';
 
 
 const AvailabilitySchema = new Schema({
-    monday: [{ from: { type: Number }, to: { type: Number }, available: { type: Boolean } }],
-    tuesday: [{ from: { type: Number }, to: { type: Number }, available: { type: Boolean } }],
-    wednesday: [{ from: { type: Number }, to: { type: Number }, available: { type: Boolean } }],
-    thursday: [{ from: { type: Number }, to: { type: Number }, available: { type: Boolean } }],
-    friday: [{ from: { type: Number }, to: { type: Number }, available: { type: Boolean } }],
+    monday: [{ from: { type: String }, to: { type: String }, available: { type: Boolean } }],
+    tuesday: [{ from: { type: String }, to: { type: String }, available: { type: Boolean } }],
+    wednesday: [{ from: { type: String }, to: { type: String }, available: { type: Boolean } }],
+    thursday: [{ from: { type: String }, to: { type: String }, available: { type: Boolean } }],
+    friday: [{ from: { type: String }, to: { type: String }, available: { type: Boolean } }],
     owner: {
         type: Schema.Types.ObjectId,
         required: true,
