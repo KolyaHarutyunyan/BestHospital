@@ -5,7 +5,7 @@ import { availabilityStyles } from './styles'
 import {AddAvailabilityScheduel} from "../../fragments/client/clientModals";
 import {AvailableHourseBox} from "../../fragments/client/clientSingle/core/availableHourseBox";
 
-export const AvailableHours = ({marginLeft}) => {
+export const AvailableHours = ({onModel, availabilityData, marginLeft}) => {
     const [open, setOpen] = useState(false)
 
     const classes = availabilityStyles()
@@ -21,7 +21,7 @@ export const AvailableHours = ({marginLeft}) => {
 
     return (
         <div className={classes.availableHours} style={{marginLeft: marginLeft ? marginLeft : '0'}}>
-            <SimpleModal openDefault={open} handleOpenClose={handleOpenClose} content={ <AvailabilitySchedule handleClose={handleOpenClose} /> } />
+            <SimpleModal openDefault={open} handleOpenClose={handleOpenClose} content={ <AvailabilitySchedule onModel={onModel} availabilityData={availabilityData} handleClose={handleOpenClose} /> } />
             <div className={classes.availableHoursHeader}>
                 <p className={classes.availableHoursTitle}>Available Hours</p>
                 <AddModalButton text='Edit' handleClick={handleOpenClose} btnStyles={editButtonStyle}/>

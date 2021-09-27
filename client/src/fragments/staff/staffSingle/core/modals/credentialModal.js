@@ -110,28 +110,6 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
         error === e.target.name && setError('')
     }
 
-    const {httpOnError, httpOnLoad, httpOnSuccess } = useSelector((state) => ({
-        httpOnSuccess: state.httpOnSuccess,
-        httpOnLoad: state.httpOnLoad,
-        httpOnError: state.httpOnError
-    }));
-
-    console.log(httpOnSuccess,'httpOnSuccess');
-
-    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_CREDENTIAL'
-    const errorText = httpOnError.length && httpOnError[0].type === 'CREATE_CREDENTIAL'
-    const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_CREDENTIAL'
-
-    useEffect(()=>{
-        if(success) {
-            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_CREDENTIAL'))
-        }else if(errorText){
-            dispatch(httpRequestsOnErrorsActions.removeError('CREATE_CREDENTIAL'))
-        }
-    },[success])
-
-    let errorMessage = success ? 'Successfully added' : 'Something went wrong';
-
     return (
         <div className={classes.inactiveModalBody}>
             <h1 className={`${globalText.modalTitle}`}>{title(mType)}</h1>
@@ -178,7 +156,6 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
                         variant={"outlined"}
                         value={inputs.expirationDate && moment(inputs.expirationDate).format().substring(0, 10)}
                         type={"date"}
-                        // label={"Expiration Date*"}
                         name='expirationDate'
                         onChange={handleChange}
                         typeError={error === 'birthday' && ErrorText.field}
@@ -194,13 +171,8 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
                         chancel="Cancel"
                         onClose={handleClose}
                         onCreate={handleSubmit}
-                        loader={loader}
                     />
             }
-            <Toast
-                type={success ? 'Successfully added' : errorText ? 'Something went wrong' : ''}
-                text={errorMessage}
-                info={success ? success : errorText ? errorText : ''}/>
         </div>
     );
 }

@@ -29,6 +29,7 @@ import {staffStyle} from "@eachbase/pages/staff/styles";
 import {noteActions} from "@eachbase/store/notes";
 import moment from "moment";
 import {httpRequestsOnLoadActions} from "../../../store/http_requests_on_load";
+import {availabilityScheduleActions} from "@eachbase/store/availabilitySchedule";
 
 export const StaffItem = () => {
 
@@ -59,6 +60,7 @@ export const StaffItem = () => {
     const globalCredentials = useSelector(state => state.system.credentials)
     const globalNotes = useSelector(state => state.note.notes)
     const historiesData = useSelector(state => state.fundingSource.fundingSourceHistories)
+    const availabilityData = useSelector(state => state.availabilitySchedule.availabilitySchedule)
 
     const handleOpenClose = () => {
         setOpen(!open)
@@ -125,6 +127,7 @@ export const StaffItem = () => {
         dispatch(systemActions.getCredentialGlobal())
         dispatch(noteActions.getGlobalNotes(params.id, 'Staff'))
         dispatch(fundingSourceActions.getFundingSourceHistoriesById(params.id, 'Staff'))
+        dispatch(availabilityScheduleActions.getAvailabilitySchedule(params.id))
     }, [])
 
     const openNoteModal = (data) => {
@@ -191,7 +194,7 @@ export const StaffItem = () => {
             tabComponent: (<StaffAccess/>)
         },
         {
-            tabComponent: (<StaffAvailability staffGeneral={staffGeneral}/>)
+            tabComponent: (<StaffAvailability availabilityData={availabilityData} staffGeneral={staffGeneral}/>)
         },
         {
             tabComponent: (globalNotes.length ? <Notes

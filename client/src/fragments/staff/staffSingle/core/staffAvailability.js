@@ -3,7 +3,7 @@ import {Card, AvailableHours} from '@eachbase/components';
 import {serviceSingleStyles} from './styles';
 import {Colors, Images} from "@eachbase/utils";
 
-export const StaffAvailability = ({staffGeneral}) => {
+export const StaffAvailability = ({availabilityData, staffGeneral}) => {
     const classes = serviceSingleStyles()
 
     const generalInfo = [
@@ -26,7 +26,7 @@ export const StaffAvailability = ({staffGeneral}) => {
                 color={Colors.BackgroundBlue}
                 icon={Images.generalInfoIcon}
             />
-            <AvailableHours marginLeft='24px' />
+            <AvailableHours onModel='Staff' availabilityData={availabilityData} marginLeft='24px' />
 
         </div>
     )

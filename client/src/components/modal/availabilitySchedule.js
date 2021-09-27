@@ -4,10 +4,21 @@ import {modalsStyle} from './styles'
 import {ValidationInput} from "../inputs";
 import {Images} from "@eachbase/utils";
 import moment from "moment";
+import {Checkbox} from "@material-ui/core";
+import {useDispatch} from "react-redux";
+import {availabilityScheduleActions} from "@eachbase/store/availabilitySchedule";
+import {useParams} from "react-router-dom";
 
-export const AvailabilitySchedule = ({handleClose}) => {
+const inputStyle = {
+    widths: '111px'
+}
 
-    const [times, setTime] = useState({
+export const AvailabilitySchedule = ({availabilityData, onModel, handleClose}) => {
+
+    const dispatch = useDispatch()
+
+    const params = useParams()
+    const [times, setTime] = useState( {
         "monday": [],
         "tuesday": [],
         "wednesday": [],
@@ -17,7 +28,7 @@ export const AvailabilitySchedule = ({handleClose}) => {
         "sunday": [],
     })
 
-    const [error, setError] = useState('')
+    console.log(availabilityData,'availabilityData');
 
     const shortDayNames = (name) => {
         switch (name) {
@@ -50,16 +61,13 @@ export const AvailabilitySchedule = ({handleClose}) => {
         setTime(newObj)
     }
 
-    console.log(times,'times')
-
     const changeData = (e, index, key) => {
         let obj = {...times}
         obj[key][index][e.target.name] = e.target.value
-        if (e.target.value === 'on') {
+        if (e.target.value === '') {
             obj[key][index][e.target.name] = !e.target.checked;
         }
         setTime(obj)
-        error === e.target.name && setError('')
     }
 
     const removeRow = (key, index,) => {
@@ -68,8 +76,8 @@ export const AvailabilitySchedule = ({handleClose}) => {
         setTime(obj)
     }
 
-    const handleSubmit = () =>{
-        console.log(times,'times');
+    const handleSubmit = () => {
+        dispatch(availabilityScheduleActions.createAvailabilitySchedule(times, params.id, onModel))
     }
 
     return (
@@ -100,36 +108,57 @@ export const AvailabilitySchedule = ({handleClose}) => {
                                             return (
                                                 <div key={index} className={classes.times}>
                                                     <ValidationInput
+                                                        style={inputStyle}
                                                         className={classes.timeInputStyle}
                                                         errorFalse={true}
                                                         disabled={!item.available}
                                                         name='from'
                                                         value={item.from}
                                                         type="time"
-                                                        onChange={(e) => {changeData(e, index,key)}}
+                                                        onChange={(e) => {
+                                                            changeData(e, index, key)
+                                                        }}
                                                     />
+                                                    <p className={classes.smallLine}>-</p>
                                                     <ValidationInput
+                                                        style={inputStyle}
                                                         className={classes.timeInputStyle}
                                                         errorFalse={true}
                                                         disabled={!item.available}
                                                         name='to'
                                                         value={item.to}
                                                         type="time"
-                                                        onChange={(e) => {changeData(e, index,key)}}
+                                                        onChange={(e) => {
+                                                            changeData(e, index, key)
+                                                        }}
                                                     />
                                                     <span className={classes.removeTimeBtn} onClick={() => {
-                                                        removeRow(key,index)
+                                                        removeRow(key, index)
                                                     }}>Remove</span>
-                                                    <input style={{'-webkit-appearance': 'auto'}} checked={!item.available} type="checkbox" name='available'
-                                                           onChange={(e) => {
-                                                               changeData(e, index,key)
-                                                           }}/>
+                                                    <div>
+                                                        {/*<input style={{'-webkit-appearance': 'auto'}} checked={!item.available} type="checkbox" name='available'*/}
+                                                        {/*       onChange={(e) => {*/}
+                                                        {/*           changeData(e, index,key)*/}
+                                                        {/*       }}/>*/}
+
+                                                        <Checkbox
+                                                            checked={!item.available}
+                                                            name='available'
+                                                            className={classes.customCheckbox}
+                                                            onChange={(e) => {
+                                                                changeData(e, index, key)
+                                                            }}
+                                                        />
+                                                        <span className={classes.notAvailableText}>not available</span>
+                                                    </div>
                                                 </div>
                                             )
                                         })
                                     }
                                     {
-                                        times[key].length ? <span onClick={() => addNewRow(key)} className={classes.moreHoursBtn}>Add more hours</span> : null
+                                        times[key].length ?
+                                            <p onClick={() => addNewRow(key)} className={classes.moreHoursBtn}>Add more
+                                                hours</p> : null
                                     }
                                 </div>
                             </div>
@@ -137,14 +166,15 @@ export const AvailabilitySchedule = ({handleClose}) => {
                     })
                 }
             </div>
-            <CreateChancel
-                // loader={httpOnLoad.length > 0}
-                create={'Save'}
-                chancel={"Cancel"}
-                onCreate={handleSubmit}
-                onClose={handleClose}
-                buttonWidth='269px'
-            />
+            <div style={{padding: '20px 10px 0 10px'}}>
+                <CreateChancel
+                    create={'Save'}
+                    chancel={"Cancel"}
+                    onCreate={handleSubmit}
+                    onClose={handleClose}
+                    buttonWidth='269px'
+                />
+            </div>
         </div>
     );
 

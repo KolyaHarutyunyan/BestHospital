@@ -173,25 +173,32 @@ export const modalsStyle = makeStyles(() => ({
         color: Colors.TextSecondary,
         fontWeight: 'bold',
         lineHeight: '48px',
-        marginBottom: 40
+        marginBottom: 20
     },
     closeBtn: {
         position: 'absolute',
-        right: 0,
-        top: 8
+        right: 3,
+        top: 11
     },
     timeRow: {
         padding: '16px 24px',
         borderRadius: 8,
         boxShadow: Shadow.noteModalShadow,
-        marginBottom: 16,
-        display: 'flex'
+        display: 'flex',
+        '&:not(:last-child)':{
+            marginBottom: 16,
+        }
     },
     scrollable: {
         maxHeight: 550,
         padding: '10px',
         overflow: 'hidden',
-        overflowY: 'auto'
+        overflowY: 'auto',
+        msOverflowStyle: 'none',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none'
+        },
     },
     dayName: {
         fontSize: 16,
@@ -218,23 +225,55 @@ export const modalsStyle = makeStyles(() => ({
     },
     times: {
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginBottom: 8
     },
     moreHoursBtn: {
         fontSize: 14,
         color: Colors.BackgroundBlue,
         lineHeight: '20px',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        marginTop: 8,
+        display: 'inline-block'
     },
     timeInputStyle: {
-        // border: '1px solid gray',
+        border: `1px solid ${Colors.BackgroundBlue}`,
+        borderRadius: 8,
+        padding: '1px 5px',
         '& .MuiInputBase-root::before':{
             content: 'revert!important'
         },
         '& .MuiInputBase-root::after':{
             content: 'revert!important'
+        },
+        '& .Mui-disabled':{
+            color: Colors.TextLightGray
         }
+    },
+    smallLine: {
+        margin: '0 5px',
+        color: Colors.BackgroundBlue,
+    },
+    customCheckbox: {
+        color: Colors.BackgroundBlue,
+        padding: 0,
+        '&.Mui-checked':{
+            backgroundColor: 'white',
+            color: Colors.BackgroundBlue,
+        },
+        '& .MuiSvgIcon-root': {
+            width: 24,
+            height: 24
+        }
+    },
+    notAvailableText: {
+        fontSize: 14,
+        color: Colors.TextSecondary,
+        lineHeight: '20px',
+        textTransform: 'capitalize',
+        paddingLeft: 6
     }
+
 }));
 
 
