@@ -280,10 +280,8 @@ function* deleteClientEnrollment(action) {
 }
 
 function* getClientsAuthorizations(action) {
-    console.log(action.payload,'action')
     try {
         const res = yield call(authService.getClientAuthorizationService, action.payload.id);
-        console.log(res,'res get aauth')
         yield put({
             type: GET_CLIENT_AUTHORIZATION_SUCCESS,
             payload: res.data,
@@ -352,7 +350,7 @@ function* deleteClientAuthorizations(action) {
 function* getClientsAuthorizationsServ(action) {
     try {
         const res = yield call(authService.getClientAuthorizationServService, action);
-        console.log(res,'reeeeessssssss')
+
         yield put({
             type: GET_CLIENT_AUTHORIZATION_SERV_SUCCESS,
             payload: res.data,
@@ -376,7 +374,8 @@ function* createClientsAuthorizationsServ(action) {
 function* editClientAuthorizationsServ(action) {
     try {
         const res = yield call(authService.editClientAuthorizationServService, action);
-        window.location.replace('/client')
+
+        console.log(res , 'edit auth serv')
     } catch (err) {
         console.log(err, 'error create client')
     }

@@ -5,29 +5,49 @@ import {ErrorText} from "@eachbase/utils";
 import {useDispatch, useSelector} from "react-redux";
 import {clientActions, fundingSourceActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
-import {createClientsAuthorizationsServ} from "../../../store/client/client.action";
+import {editClientsAuthorizationsServ} from "../../../store/client/client.action";
+
 
 
 export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) => {
 
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info, funding: info?.funderId?.name} : {});
+    const [inputs, setInputs] = useState(info ? {...info, modifiers : info.serviceId.name} : {});
     const [modCheck, setModCheck] = useState([]);
-    const params = useParams()
+    const [ids, setids] = useState(null);
     const dispatch = useDispatch()
     const modifiers = useSelector(state => state.fundingSource.modifiers.modifiers)
+
+    const fSelect = useSelector(state => state.fundingSource.fundingSourceServices)
+
     useEffect(() => {
         dispatch(fundingSourceActions.getFoundingSourceServiceById(fundingId))
+        let funderId;
+        fSelect.forEach(item => {
+            if (inputs.modifiers === item.name) {
+                funderId = item._id
+            }
+
+        })
+        setids(funderId)
     }, []);
 
 
-    const fSelect = useSelector(state => state.fundingSource.fundingSourceServices)
+    console.log(info,'ioioioioioio')
+
+
+
+
+
+
+
 
 
     const classes = createClientStyle()
 
     const handleChange = e => {
         if (e.target.name === 'modifiers') {
+            setModCheck([])
             let id = fSelect.find(item => item.name === e.target.value)._id
             dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(id))
         }
@@ -39,30 +59,44 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
 
 
     const handleCreate = () => {
-        if (inputs.total && inputs.modifiers) {
-            // let funderId;
-            // fSelect.forEach(item => {
-            //     if (inputs.funding === item.name) {
-            //         funderId = item.id
-            //     }
-            // })
+
+        let modifiersPost = [];
+        modCheck.forEach(item => {
+
+            return   modifiers.forEach((item2, index2) => {
+                if (item===index2){
+                    modifiersPost.push(item2?._id)
+                }
+            })
+        })
+        let funderId;
+        fSelect.forEach(item => {
+            if (inputs.modifiers === item.name) {
+                funderId = item._id
+            }
+        })
+
+        if (inputs.total && modifiersPost?.length>0) {
             const data = {
                 "total": +inputs.total,
-                "modifiers": ['dgdfg','fdgdfg'],
+                "modifiers": modifiersPost,
 
             }
-            if (info) {
-                // dispatch(clientActions.editClientsAuthorizations(data, info.id))
-            } else {
+                dispatch(clientActions.createClientsAuthorizationsServ(data, authId, funderId,))
 
-                 dispatch(clientActions.createClientsAuthorizationsServ(data, authId, params.id, ))
-            }
             handleClose()
-        } else {
+        }else if(inputs.total && info){
+            dispatch(clientActions.editClientsAuthorizationsServ({
+                "total": inputs.total,
+                "fundingServiceId": funderId,
+                "authorizationId": authId,
+            }, info.id))
+            handleClose()
+        }else {
             setError(
                 !inputs.total ? 'total' :
-                !inputs.modifiers ? 'modifiers' :
-                    'Input is not field'
+                    !inputs.modifiers ? 'modifiers' :
+                        'Input is not field'
             )
         }
     }
@@ -107,7 +141,18 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
                         <div className={classes.displayCodeBlock2}>
                             <p className={classes.displayCodeBlockText}>Available Modfiers </p>
                             <div className={classes.availableModfiers}>
-                                {modifiers && modifiers.length > 0 ? modifiers.map((item, index) => {
+                                {info ? info?.modifiers && info?.modifiers?.length > 0 && info.modifiers.map((item, index) => {
+                                    return (
+                                        <div className={classes.availableModfier}
+                                           style={{
+                                               background: '#347AF080',
+                                               color: '#fff',
+                                               border : "none",
+                                               cursor : 'default'
+                                           }}> <p style={{width : 19, height : 20, overflow : 'hidden'}}>{item}</p> </div>
+                                    )
+                                })
+                                    :  modifiers && modifiers.length > 0 ? modifiers.map((item, index) => {
 
                                     return (
                                         <p className={classes.availableModfier} onClick={() => onModifier(index)}
@@ -117,7 +162,7 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
                                            } : {}}>
                                             {item.name}</p>
                                     )
-                                }) : <p>N/A</p>}
+                                }) : <p>N/A</p> }
                             </div>
                         </div>
 
@@ -125,21 +170,21 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
                         <ValidationInput
                             variant={"outlined"}
                             onChange={handleChange}
-                            value={inputs.total}
+                            value={inputs.total === 0 ?'0' : inputs.total}
                             type={"number"}
                             label={"Total Units*"}
                             name='total'
                             typeError={error === 'total' && ErrorText.field}
                         />
-                        <div className={classes.displayCodeBlock}>
-                            <p className={classes.displayCodeBlockText}>Completed Units: <span
-                                className={classes.displayCode}>N/A</span></p>
-                            <p className={classes.displayCodeBlockText} style={{marginTop: 16}}>Available Units: <span
-                                className={classes.displayCode}>N/A</span></p>
-                            <p className={classes.displayCodeBlockText} style={{marginTop: 16}}>Percent
-                                Utilization: <span
-                                    className={classes.displayCode}>N/A</span></p>
-                        </div>
+                        {/*<div className={classes.displayCodeBlock}>*/}
+                        {/*    <p className={classes.displayCodeBlockText}>Completed Units: <span*/}
+                        {/*        className={classes.displayCode}>N/A</span></p>*/}
+                        {/*    <p className={classes.displayCodeBlockText} style={{marginTop: 16}}>Available Units: <span*/}
+                        {/*        className={classes.displayCode}>N/A</span></p>*/}
+                        {/*    <p className={classes.displayCodeBlockText} style={{marginTop: 16}}>Percent*/}
+                        {/*        Utilization: <span*/}
+                        {/*            className={classes.displayCode}>N/A</span></p>*/}
+                        {/*</div>*/}
                     </div>
                 </div>
                 <div className={classes.clientModalBlock}>

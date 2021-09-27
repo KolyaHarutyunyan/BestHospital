@@ -10,7 +10,7 @@ import {AuthHeader} from "@eachbase/components/headers/auth/authHeader";
 import {AddAuthorizationService} from "../../clientModals/addAuthorizationService";
 import {useParams} from "react-router-dom";
 
-export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, data}) => {
+export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) => {
     const classes = serviceSingleStyles()
     // const clientsAuthorizations = useSelector(state => state.client.clientsAuthorizations)
 
@@ -19,12 +19,18 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, data
     const [openClose, setOpenClose] = useState(false)
     const [index, setIndex] = useState(null)
     const [delEdit, setDelEdit] = useState(null)
+    const [delEdit2, setDelEdit2] = useState(null)
     const [toggleModal, setToggleModal] = useState(false)
     const [toggleModal2, setToggleModal2] = useState(false)
+    const [toggleModal3, setToggleModal3] = useState(false)
     const [authIndex, setAuthIndex] = useState(0)
+    const [serviceIndex, setServiceIndex] = useState(null)
+    const services = useSelector(state => state.client.clientsAuthorizationsServices)
+
+
     const params = useParams()
 
-    console.log(info,'iiinfooooooo')
+
 
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
@@ -34,6 +40,11 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, data
 
 
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION'
+
+
+    useEffect(()=>{
+        dispatch(clientActions.getClientsAuthorizationsServ(info[authIndex].id))
+    },[authIndex])
 
 
     useEffect(() => {
@@ -47,9 +58,9 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, data
 
 
 
-    useEffect(() => {
-        dispatch(clientActions.getClientsAuthorizationsServ(info[authIndex].id))
-    }, [])
+    // useEffect(() => {
+    //     dispatch(clientActions.getClientsAuthorizationsServ(info[authIndex].id))
+    // }, [])
 
     const headerTitles = [
         {
@@ -64,18 +75,18 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, data
             title: 'Total Units',
             sortable: false
         },
-        {
-            title: 'Completed Units',
-            sortable: false
-        },
-        {
-            title: 'Available Units',
-            sortable: false
-        },
-        {
-            title: 'Percent Utilization',
-            sortable: false
-        },
+        // {
+        //     title: 'Completed Units',
+        //     sortable: false
+        // },
+        // {
+        //     title: 'Available Units',
+        //     sortable: false
+        // },
+        // {
+        //     title: 'Percent Utilization',
+        //     sortable: false
+        // },
         {
             title: 'Action',
             sortable: false,
@@ -92,28 +103,30 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, data
             <TableBodyComponent key={index} handleClick={() => {
                 setAuthItemIndex(index)
                 setAuthActive(true)
+
             }}>
-                <TableCell><p className={classes.tableName}>{item?.authId}</p></TableCell>
-                <TableCell>  {item?.funderId?.name}  </TableCell>
-                <TableCell>  {item.startDate}  </TableCell>
-                <TableCell>  {item.endDate}  </TableCell>
-                <TableCell>  {item?.status}  </TableCell>
+                <TableCell><p className={classes.tableName}>{item?.serviceId?.name}</p></TableCell>
+                <TableCell>  {item?.modifiers && item?.modifiers.length>0 && item?.modifiers[0]}  </TableCell>
+                <TableCell>  {item?.total}  </TableCell>
+                {/*<TableCell>  N/A  </TableCell>*/}
+                {/*<TableCell>  N/A  </TableCell>*/}
+                {/*<TableCell>  N/A  </TableCell>*/}
                 <TableCell>
                     <>
                         <img src={Images.edit} alt="edit" className={classes.iconStyle}
                              onClick={(e) => {
                                  e.stopPropagation()
-                                 // setDelEdit(true)
-                                 // setToggleModal(!toggleModal)
-                                 // setIndex(index)
+                                  setDelEdit2(true)
+                                 setServiceIndex(index)
+                                 setToggleModal3(!toggleModal3)
 
                              }}/>
                         <img src={Images.remove} alt="delete" className={classes.iconDeleteStyle}
                              onClick={(e) => {
                                  e.stopPropagation()
-                                 // setDelEdit(false)
-                                 // setToggleModal(!toggleModal)
-                                 // setIndex(index)
+                                 setDelEdit2(false)
+                                 setServiceIndex(index)
+                                  setToggleModal3(!toggleModal3)
                              }}/>
                     </>
                 </TableCell>
@@ -147,7 +160,20 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, data
                 handleOpenClose={() => setToggleModal2(!toggleModal2)}
                 openDefault={toggleModal2}
                 content={
-                <AddAuthorizationService authId={info[authIndex].id} handleClose={() => setToggleModal2(!toggleModal2)} fundingId={info[authIndex].funderId._id} />
+                <AddAuthorizationService   authId={info[authIndex].id} handleClose={() => setToggleModal2(!toggleModal2)} fundingId={info[authIndex].funderId._id} />
+                }
+
+            />
+            <SimpleModal
+                handleOpenClose={() => setToggleModal3(!toggleModal3)}
+                openDefault={toggleModal3}
+                content={ delEdit2 ?
+                    <AddAuthorizationService  info={services  && services[serviceIndex]} authId={info[authIndex].id} handleClose={() => setToggleModal3(!toggleModal3)} fundingId={info[authIndex].funderId._id} />
+                    : <DeleteElement
+                         info={`Delete ${services && services[serviceIndex]?.serviceId?.name}`}
+                        handleClose={() => setToggleModal3(!toggleModal3)}
+                        handleDel={alert}
+                    />
                 }
 
             />
@@ -175,7 +201,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, data
                     </div>
                 </div>
                 <Notes
-                    data={info}
+                    data={services}
                     items={clientAuthorizationServiceItem}
                     headerTitles={headerTitles}
                     defaultStyle={true}/>
