@@ -5,14 +5,13 @@ import {ErrorText} from "@eachbase/utils";
 import {useDispatch, useSelector} from "react-redux";
 import {clientActions, fundingSourceActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
+import {createClientsAuthorizationsServ} from "../../../store/client/client.action";
 
 
-
-
-export const AddAuthorizationService = ({handleClose, info, fundingId}) => {
+export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) => {
 
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info,funding: info?.funderId?.name} : {});
+    const [inputs, setInputs] = useState(info ? {...info, funding: info?.funderId?.name} : {});
     const [modCheck, setModCheck] = useState([]);
     const params = useParams()
     const dispatch = useDispatch()
@@ -22,19 +21,15 @@ export const AddAuthorizationService = ({handleClose, info, fundingId}) => {
     }, []);
 
 
-
-
-
     const fSelect = useSelector(state => state.fundingSource.fundingSourceServices)
-
 
 
     const classes = createClientStyle()
 
     const handleChange = e => {
-        if(e.target.name==='funding'){
-            let id = fSelect.find(item=> item.name === e.target.value)._id
-          dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(id))
+        if (e.target.name === 'modifiers') {
+            let id = fSelect.find(item => item.name === e.target.value)._id
+            dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(id))
         }
         setInputs(
             prevState => ({...prevState, [e.target.name]: e.target.value}),
@@ -43,60 +38,47 @@ export const AddAuthorizationService = ({handleClose, info, fundingId}) => {
     };
 
 
-
     const handleCreate = () => {
-        if (inputs.authId && inputs.funding && inputs.startDate && inputs.endDate && inputs.address && inputs.status) {
-            let funderId;
-            fSelect.forEach(item => {
-                if (inputs.funding === item.name) {
-                    funderId = item.id
-                }
-            })
+        if (inputs.total && inputs.modifiers) {
+            // let funderId;
+            // fSelect.forEach(item => {
+            //     if (inputs.funding === item.name) {
+            //         funderId = item.id
+            //     }
+            // })
             const data = {
-                "authId": inputs.authId,
-                "startDate": inputs.startDate,
-                "endDate": inputs.endDate,
-                "address": inputs.address,
-                "status": +inputs.status
+                "total": +inputs.total,
+                "modifiers": ['dgdfg','fdgdfg'],
+
             }
             if (info) {
-                dispatch(clientActions.editClientsAuthorizations(data, info.id))
+                // dispatch(clientActions.editClientsAuthorizations(data, info.id))
             } else {
 
-                dispatch(clientActions.createClientsAuthorizations(data, params.id, funderId))
+                 dispatch(clientActions.createClientsAuthorizationsServ(data, authId, params.id, ))
             }
             handleClose()
         } else {
             setError(
-                !inputs.authId ? 'authId' :
-                    !inputs.funding ? 'funding' :
-                        !inputs.startDate ? 'startDate' :
-                            !inputs.endDate ? 'endDate' :
-                                !inputs.address ? 'address' :
-                                    !inputs.status ? 'status' :
-                                        'Input is not field'
+                !inputs.total ? 'total' :
+                !inputs.modifiers ? 'modifiers' :
+                    'Input is not field'
             )
         }
     }
 
-    function onModifier  (index){
-     let arr = new Set([...modCheck])
-        if(arr.has(index)){
+    function onModifier(index) {
+        let arr = new Set([...modCheck])
+        if (arr.has(index)) {
             arr.delete(index)
-        }else {
+        } else {
             arr.add(index)
         }
         let newArr = []
-        arr.forEach(item=>{
+        arr.forEach(item => {
             newArr.push(item)
         })
-setModCheck( newArr)
-
-
-        console.log(modCheck)
-
-
-
+        setModCheck(newArr)
 
 
     }
@@ -114,22 +96,25 @@ setModCheck( newArr)
                     <div className={classes.clientModalBox}>
                         <p className={classes.inputInfo}>Service</p>
                         <SelectInput
-                            name={"funding"}
+                            name={"modifiers"}
                             label={"Service Code*"}
                             handleSelect={handleChange}
-                            value={inputs.funding}
+                            value={inputs.modifiers}
                             list={fSelect}
-                            typeError={error === 'funding' ? ErrorText.field : ''}
+                            typeError={error === 'modifiers' ? ErrorText.field : ''}
                         />
 
                         <div className={classes.displayCodeBlock2}>
                             <p className={classes.displayCodeBlockText}>Available Modfiers </p>
-                            <div className={classes.availableModfiers } >
-                                {modifiers && modifiers.length>0 ? modifiers.map((item,index)=>{
+                            <div className={classes.availableModfiers}>
+                                {modifiers && modifiers.length > 0 ? modifiers.map((item, index) => {
 
-                                    return(
-                                        <p className={classes.availableModfier} onClick={()=>onModifier(index)}
-                                           style={modCheck.includes(index)  ?  {background: '#347AF0', color : '#fff' } : {}} >
+                                    return (
+                                        <p className={classes.availableModfier} onClick={() => onModifier(index)}
+                                           style={modCheck.includes(index) ? {
+                                               background: '#347AF0',
+                                               color: '#fff'
+                                           } : {}}>
                                             {item.name}</p>
                                     )
                                 }) : <p>N/A</p>}
@@ -140,19 +125,20 @@ setModCheck( newArr)
                         <ValidationInput
                             variant={"outlined"}
                             onChange={handleChange}
-                            value={inputs.address}
-                            type={"text"}
+                            value={inputs.total}
+                            type={"number"}
                             label={"Total Units*"}
-                            name='address'
-                            typeError={error === 'address' && ErrorText.field}
+                            name='total'
+                            typeError={error === 'total' && ErrorText.field}
                         />
                         <div className={classes.displayCodeBlock}>
                             <p className={classes.displayCodeBlockText}>Completed Units: <span
                                 className={classes.displayCode}>N/A</span></p>
                             <p className={classes.displayCodeBlockText} style={{marginTop: 16}}>Available Units: <span
                                 className={classes.displayCode}>N/A</span></p>
-                            <p className={classes.displayCodeBlockText} style={{marginTop: 16}}>Percent Utilization: <span
-                                className={classes.displayCode}>N/A</span></p>
+                            <p className={classes.displayCodeBlockText} style={{marginTop: 16}}>Percent
+                                Utilization: <span
+                                    className={classes.displayCode}>N/A</span></p>
                         </div>
                     </div>
                 </div>

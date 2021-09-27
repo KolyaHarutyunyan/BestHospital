@@ -147,7 +147,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, data
                 handleOpenClose={() => setToggleModal2(!toggleModal2)}
                 openDefault={toggleModal2}
                 content={
-                <AddAuthorizationService handleClose={() => setToggleModal2(!toggleModal2)} fundingId={info[authIndex].funderId._id} />
+                <AddAuthorizationService authId={info[authIndex].id} handleClose={() => setToggleModal2(!toggleModal2)} fundingId={info[authIndex].funderId._id} />
                 }
 
             />
