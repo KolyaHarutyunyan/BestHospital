@@ -280,14 +280,16 @@ function* deleteClientEnrollment(action) {
 }
 
 function* getClientsAuthorizations(action) {
+    console.log(action.payload,'action')
     try {
-        const res = yield call(authService.getClientAuthorizationService, action);
+        const res = yield call(authService.getClientAuthorizationService, action.payload.id);
+        console.log(res,'res get aauth')
         yield put({
             type: GET_CLIENT_AUTHORIZATION_SUCCESS,
             payload: res.data,
         });
     } catch (err) {
-        console.log(err, 'authhhhhhhh get en roll')
+        console.log(err, 'err authhhhhhhh get ')
     }
 }
 
@@ -298,7 +300,7 @@ function* createClientsAuthorizations(action) {
         const res = yield call(authService.createClientAuthorizationService, action);
         yield put({
             type: GET_CLIENT_AUTHORIZATION,
-            payload: {id: action.payload.clientId},
+            payload: {id: action.payload.id},
         });
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
@@ -329,10 +331,19 @@ function* editClientAuthorizations(action) {
 }
 
 function* deleteClientAuthorizations(action) {
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.deleteClientAuthorizationService, action);
-        window.location.replace('/client')
+        yield put({
+            type: GET_CLIENT_AUTHORIZATION,
+            payload: {id: action.payload.clientId},
+        });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
         console.log(err, 'error del enroll')
     }
 }

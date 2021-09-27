@@ -40,7 +40,7 @@ export const authService = {
 
     deleteClientEnrollmentService: ({payload}) =>  axios.delete(`/enrollment/${payload.id}`),
 
-    getClientAuthorizationService: ({payload}) => axios.get(`/authorization/client/${payload.id}` ),
+    getClientAuthorizationService: (id) => axios.get(`/authorization/client/${id}` ),
 
     createClientAuthorizationService: ({payload}) => axios.post(`/authorization/client/${payload.id}/funder/${payload.funderId}`, payload.body),
 
