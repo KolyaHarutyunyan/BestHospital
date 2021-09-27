@@ -18,7 +18,7 @@ export const AvailabilitySchedule = ({availabilityData, onModel, handleClose}) =
     const dispatch = useDispatch()
 
     const params = useParams()
-    const [times, setTime] = useState( {
+    const [times, setTime] = useState(availabilityData ? availabilityData : {
         "monday": [],
         "tuesday": [],
         "wednesday": [],
@@ -27,8 +27,6 @@ export const AvailabilitySchedule = ({availabilityData, onModel, handleClose}) =
         "saturday": [],
         "sunday": [],
     })
-
-    console.log(availabilityData,'availabilityData');
 
     const shortDayNames = (name) => {
         switch (name) {
@@ -77,7 +75,8 @@ export const AvailabilitySchedule = ({availabilityData, onModel, handleClose}) =
     }
 
     const handleSubmit = () => {
-        dispatch(availabilityScheduleActions.createAvailabilitySchedule(times, params.id, onModel))
+        dispatch(availabilityScheduleActions.createAvailabilitySchedule(times, params.id, onModel));
+        handleClose();
     }
 
     return (
@@ -136,11 +135,6 @@ export const AvailabilitySchedule = ({availabilityData, onModel, handleClose}) =
                                                         removeRow(key, index)
                                                     }}>Remove</span>
                                                     <div>
-                                                        {/*<input style={{'-webkit-appearance': 'auto'}} checked={!item.available} type="checkbox" name='available'*/}
-                                                        {/*       onChange={(e) => {*/}
-                                                        {/*           changeData(e, index,key)*/}
-                                                        {/*       }}/>*/}
-
                                                         <Checkbox
                                                             checked={!item.available}
                                                             name='available'

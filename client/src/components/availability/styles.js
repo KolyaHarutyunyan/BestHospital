@@ -42,6 +42,7 @@ export const availabilityStyles = makeStyles((theme) => ({
         fontSize: 14,
         fontWeight: "bold",
         paddingLeft: 16,
+        textTransform: 'uppercase'
     },
     availableHoursBoxBody: {
         height: 162,
