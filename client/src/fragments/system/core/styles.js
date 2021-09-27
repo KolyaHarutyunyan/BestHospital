@@ -38,7 +38,7 @@ export const systemItemStyles = makeStyles(() => ({
     systemItemWrapper: {
         padding: 20,
         backgroundColor: 'white',
-        height: ' calc(100vh - 130px)',
+        height: ' calc(100vh - 115px)',
         borderRadius: 8,
         position: 'relative'
     },

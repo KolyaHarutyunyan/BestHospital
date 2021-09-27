@@ -73,7 +73,7 @@ export const OvertimeTable = ({globalOvertimeSettings}) => {
 
     return (
         <>
-            <Notes restHeight='328px' defaultStyle={true} data={globalOvertimeSettings} pagination={false} items={notesItem}
+            <Notes restHeight='360px' defaultStyle={true} data={globalOvertimeSettings} pagination={false} items={notesItem}
                    headerTitles={headerTitles}/>
             <SimpleModal
                 openDefault={editModalOpenClose}

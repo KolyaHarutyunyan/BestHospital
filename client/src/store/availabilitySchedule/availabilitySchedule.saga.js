@@ -2,14 +2,13 @@ import {call, put, takeLatest} from "redux-saga/effects";
 import {availabilityScheduleService} from "./availabilitySchedule.service";
 import {
     CREATE_AVAILABILITY_SCHEDULE_GLOBAL,
-    CREATE_AVAILABILITY_SCHEDULE_GLOBAL_SUCCESS,
     GET_AVAILABILITY_SCHEDULE_GLOBAL_SUCCESS,
     GET_AVAILABILITY_SCHEDULE_GLOBAL
 } from "./availabilitySchedule.type";
 
 function* getAvailabilitySchedule(action) {
     try {
-        const res = yield call(availabilityScheduleService.getAvailabilityScheduleService, action.payload.id,);
+        const res = yield call(availabilityScheduleService.getAvailabilityScheduleService, action.payload.id || action.payload,);
         yield put({
             type: GET_AVAILABILITY_SCHEDULE_GLOBAL_SUCCESS,
             payload: res.data,
@@ -23,10 +22,10 @@ function* getAvailabilitySchedule(action) {
 
 function* createAvailabilitySchedule(action) {
     try {
-        const res = yield call(availabilityScheduleService.createAvailabilityScheduleService, action);
+        yield call(availabilityScheduleService.createAvailabilityScheduleService, action);
         yield put({
-            type: CREATE_AVAILABILITY_SCHEDULE_GLOBAL_SUCCESS,
-            payload: res.data,
+            type: GET_AVAILABILITY_SCHEDULE_GLOBAL,
+            payload: action.payload.id,
         });
 
     } catch (error) {

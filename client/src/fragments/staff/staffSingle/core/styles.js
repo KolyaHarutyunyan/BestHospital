@@ -6,6 +6,7 @@ export const serviceSingleStyles = makeStyles(() => ({
     staffGeneralWrapper: {
         display: 'flex',
         justifyContent: 'space-between',
+        alignItems: 'flex-start'
     },
     // Access
     staffAccessWrapper: {

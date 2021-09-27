@@ -8,6 +8,7 @@ export const AvailableHours = ({onModel, availabilityData, marginLeft}) => {
     const [open, setOpen] = useState(false)
 
     const classes = availabilityStyles()
+
     const handleOpenClose = () => {
         setOpen(!open)
     }
@@ -42,7 +43,7 @@ export const AvailableHours = ({onModel, availabilityData, marginLeft}) => {
                 {
                     availabilityData &&  Object.keys(availabilityData).map((item, index)=>{
                         return (
-                            <AvailableHourseBox day={shortDayNames(item)} info={availabilityData[item]} />
+                            <AvailableHourseBox day={shortDayNames(item)} info={availabilityData && availabilityData[item]} />
                         )
                     })
                 }

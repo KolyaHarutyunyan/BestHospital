@@ -22,9 +22,9 @@ import {httpRequestsOnLoadActions} from "../http_requests_on_load";
 import {httpRequestsOnSuccessActions} from "../http_requests_on_success";
 
 function* createAdmin(action) {
-    yield put(httpRequestsOnErrorsActions.removeError(action.type));
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         yield call(authService.createAdminService, action.payload.body);
         yield put({
             type: GET_ADMINS,
@@ -32,7 +32,7 @@ function* createAdmin(action) {
         });
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.removeError(action.type));
-        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+
 
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
@@ -78,12 +78,13 @@ function* editAdminById(action) {
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         const res = yield call(authService.editAdminByIdService, action.payload.id, action.payload.body);
         yield put({
             type: EDIT_ADMIN_BY_ID_SUCCESS,
             payload: res.data,
         });
-        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.removeError(action.type));
     } catch (err) {

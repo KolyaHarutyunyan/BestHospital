@@ -5,6 +5,7 @@ export const tabsStyles = makeStyles(() => ({
     root: {
         flexGrow: 1,
         backgroundColor: 'white',
+        position: 'relative'
     },
     tabHeader: {
         background: 'white',

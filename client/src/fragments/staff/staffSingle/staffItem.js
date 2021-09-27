@@ -61,7 +61,6 @@ export const StaffItem = () => {
     const globalNotes = useSelector(state => state.note.notes)
     const historiesData = useSelector(state => state.fundingSource.fundingSourceHistories)
     const availabilityData = useSelector(state => state.availabilitySchedule.availabilitySchedule)
-
     const handleOpenClose = () => {
         setOpen(!open)
     }
