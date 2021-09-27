@@ -18,7 +18,8 @@ export const AvailabilitySchedule = ({availabilityData, onModel, handleClose}) =
     const dispatch = useDispatch()
 
     const params = useParams()
-    const [times, setTime] = useState(availabilityData ? availabilityData : {
+
+    const [times, setTime] = useState(Object.keys(availabilityData).length !== 0 ? availabilityData : {
         "monday": [],
         "tuesday": [],
         "wednesday": [],

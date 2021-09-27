@@ -1,21 +1,32 @@
-import { makeStyles } from "@material-ui/core/styles";
-import { Colors, Shadow } from "@eachbase/utils";
+import {makeStyles} from "@material-ui/core/styles";
+import {Colors, Shadow} from "@eachbase/utils";
 
-export const availabilityStyles = makeStyles((theme) => ({
+export const availabilityStyles = makeStyles(() => ({
     availableHours: {
         width: '100%',
         borderRadius: 8,
         boxShadow: Shadow.changeShadow,
-        padding: 16
+        padding: '16px 16px 16px 6px'
     },
     availableHoursHeader: {
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center', marginBottom: 16
+        alignItems: 'center',
+        marginBottom: 16,
+        paddingLeft: 10
     },
     availableHoursBlock: {
         display: 'flex',
-        flexWrap: "wrap"
+        flexWrap: "wrap",
+        overflow: 'hidden',
+        maxHeight: 505,
+        overflowY: 'scroll',
+        msOverflowStyle: 'none',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none'
+        },
+        paddingLeft: 10
     },
     availableHoursTitle: {
         color: Colors.TextSecondary,
@@ -27,9 +38,9 @@ export const availabilityStyles = makeStyles((theme) => ({
         boxShadow: Shadow.changeShadow,
         borderRadius: 4,
         marginBottom: 15,
-       '&:not(:last-child)':{
+        '&:not(:last-child)': {
             marginRight: 15
-       }
+        }
     },
     availableHoursBoxHeader: {
         width: '100%',
@@ -54,23 +65,23 @@ export const availabilityStyles = makeStyles((theme) => ({
         fontSize: 14,
         margin: '8px 0'
     },
-    AddAvailabilityScheduel : {
-            width: '634px',
-            padding: '40px',
-            borderRadius: '8px',
-            backgroundColor: 'white',
-            position: 'relative',
-            '@media (max-width: 1400px)': {
-                width: '618px',
-                padding: '32px',
+    AddAvailabilityScheduel: {
+        width: '634px',
+        padding: '40px',
+        borderRadius: '8px',
+        backgroundColor: 'white',
+        position: 'relative',
+        '@media (max-width: 1400px)': {
+            width: '618px',
+            padding: '32px',
 
         },
     },
 
-    availableHoursDayName : {
+    availableHoursDayName: {
         color: '#347AF0',
-        fontSize : 16,
-        fontWeight : "bold",
-        marginRight : 16
+        fontSize: 16,
+        fontWeight: "bold",
+        marginRight: 16
     },
 }));

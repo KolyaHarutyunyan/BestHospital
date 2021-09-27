@@ -38,7 +38,6 @@ export const deletePayCodeByIdGlobal = (id) => {
 
 
 export const createOvertimeSettingsGlobal = (body) => {
-    console.log(body,'body');
     return {
         type: CREATE_OVERTIME_SETTINGS_GLOBAL,
         payload: {body}

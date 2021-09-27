@@ -59,8 +59,6 @@ export const SystemItem = () => {
     const globalPayCodes = useSelector(state => state.payroll.PayCodes)
     const globalOvertimeSettings = useSelector(state => state.payroll.overtimeSettings)
 
-    console.log(globalOvertimeSettings,'globalOvertimeSettings');
-
     const dispatch = useDispatch()
     const [deleteModalOpened, setDeleteModalOpened] = useState(false)
     const [deletedId, setDeletedId] = useState('')

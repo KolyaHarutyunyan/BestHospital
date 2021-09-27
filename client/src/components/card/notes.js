@@ -5,7 +5,6 @@ import {makeStyles} from "@material-ui/core/styles";
 import {
     TableHeadComponent,
     SearchAndFilter,
-    PaginationItem,
     NoItemText,
     CloseButton,
     SimpleModal,
@@ -25,7 +24,6 @@ export const Notes = ({
                           showModal,
                           data,
                           headerTitles,
-                          pagination,
                           defaultStyle,
                           items,
                           noItemsYet,
@@ -144,12 +142,12 @@ export const Notes = ({
 
                 {!noItemsYet && !data && <NoItemText text='No Items Yet'/>}
 
-                {pagination && <PaginationItem
-                    text={`Showing 30 to 30 of 200 entries`}
-                    handleReturn={(number) => changePage(number)}
-                    page={page}
-                    count={officesList.length}
-                />}
+                {/*{pagination && <PaginationItem*/}
+                {/*    text={`Showing 30 to 30 of 200 entries`}*/}
+                {/*    handleReturn={(number) => changePage(number)}*/}
+                {/*    page={page}*/}
+                {/*    count={officesList.length}*/}
+                {/*/>}*/}
 
             </TableContainer>
             <Toast

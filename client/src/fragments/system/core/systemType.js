@@ -1,6 +1,14 @@
 import React, {useEffect, useState} from "react";
 import {TableCell} from "@material-ui/core";
-import {Notes, TableBodyComponent, AddButton, ValidationInput, Toast, SlicedText} from "@eachbase/components";
+import {
+    Notes,
+    TableBodyComponent,
+    AddButton,
+    ValidationInput,
+    Toast,
+    SlicedText,
+    NoItemText
+} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
 import {systemItemStyles} from './styles'
 import {useDispatch, useSelector} from "react-redux";
@@ -164,8 +172,14 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
                 />
             </div>
             <p className={classes.title}>Service Type</p>
-            <Notes defaultStyle={true} data={globalServices} pagination={false} items={notesItem}
-                   headerTitles={headerTitles}/>
+
+            {
+                globalServices.length ? <Notes defaultStyle={true} data={globalServices} pagination={false} items={notesItem}
+                                        headerTitles={headerTitles}/> :
+                <NoItemText text='No Items Yet'/>
+            }
+
+
             <Toast
                 type={success ? 'Successfully added' : errorText ? 'Something went wrong' : '' }
                 text={errorMessage}

@@ -82,7 +82,7 @@ export const PayCodeTable = ({globalPayCodes}) => {
 
     return (
         <>
-            <Notes restHeight='328px' defaultStyle={true} data={globalPayCodes} pagination={false} items={notesItem}
+            <Notes restHeight='360px' defaultStyle={true} data={globalPayCodes} pagination={false} items={notesItem}
                    headerTitles={headerTitles}/>
             <SimpleModal
                 openDefault={editModalOpenClose}

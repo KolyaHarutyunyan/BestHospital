@@ -114,7 +114,8 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
 
     const {httpOnSuccess,httpOnError} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
-        httpOnError: state.httpOnError
+        httpOnError: state.httpOnError,
+        httpLoad: state.httpLoad
     }));
 
     const success =
@@ -122,6 +123,10 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
             httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_ADMIN_BY_ID'
 
     const errorText =
+        httpOnError.length && httpOnError[0].type === 'CREATE_ADMIN' ? true :
+            httpOnError.length && httpOnError[0].type === 'EDIT_ADMIN_BY_ID'
+
+    const loading =
         httpOnError.length && httpOnError[0].type === 'CREATE_ADMIN' ? true :
             httpOnError.length && httpOnError[0].type === 'EDIT_ADMIN_BY_ID'
 
@@ -139,6 +144,7 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
 
     console.log(errorText,'errrrrrrrrrrrrrr');
     console.log(success,'successssssss');
+    console.log(loading,'loading');
 
     const firstStep = (
         <React.Fragment>
