@@ -365,6 +365,7 @@ function* getClientsAuthorizationsServ(action) {
 function* createClientsAuthorizationsServ(action) {
     try {
         const res = yield call(authService.createClientAuthorizationServService, action);
+        console.log(res,'reees create serv')
         // window.location.replace('/client')
     } catch (err) {
         console.log(err, 'error create auth')

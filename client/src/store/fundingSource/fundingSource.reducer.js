@@ -51,6 +51,7 @@ export const fundingSourceReducer = (state = initialState, action) => {
         case  GET_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS:
             return {
                 ...state,
+                modifiers:  [],
                 fundingSourceServices: action.payload.reverse()
             }
             case  CREATE_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS:
