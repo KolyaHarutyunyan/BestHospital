@@ -1,18 +1,22 @@
 import React, {useEffect, useState} from "react";
-import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
+import {ValidationInput, SelectInput, CreateChancel, ModalHeader, Toast} from "@eachbase/components";
 import {createClientStyle,} from "./styles";
 import {ErrorText} from "@eachbase/utils";
 import {useDispatch, useSelector} from "react-redux";
-import {clientActions, fundingSourceActions} from "@eachbase/store";
+import {
+    clientActions,
+    fundingSourceActions,
+    httpRequestsOnErrorsActions,
+    httpRequestsOnSuccessActions
+} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 import {editClientsAuthorizationsServ} from "../../../store/client/client.action";
-
 
 
 export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) => {
 
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info, modifiers : info.serviceId.name} : {});
+    const [inputs, setInputs] = useState(info ? {...info, modifiers: info.serviceId.name} : {});
     const [modCheck, setModCheck] = useState([]);
     const [ids, setids] = useState(null);
     const dispatch = useDispatch()
@@ -21,6 +25,7 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
     const fSelect = useSelector(state => state.fundingSource.fundingSourceServices)
 
     useEffect(() => {
+
         dispatch(fundingSourceActions.getFoundingSourceServiceById(fundingId))
         let funderId;
         fSelect.forEach(item => {
@@ -33,14 +38,31 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
     }, []);
 
 
-    console.log(info,'ioioioioioio')
+    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnError: state.httpOnError,
+        httpOnLoad: state.httpOnLoad,
+    }));
 
 
+    console.log(httpOnSuccess, 'auth serv add modal onssssssucessss')
+
+    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_AUTHORIZATION_SERV'
+    const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_CLIENT_AUTHORIZATION_SERV'
 
 
-
-
-
+    useEffect(() => {
+        if (success) {
+            handleClose()
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('EDIT_CLIENT_AUTHORIZATION_SERV'))
+            dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_AUTHORIZATION'))
+        }
+        if (successCreate) {
+            handleClose()
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_CLIENT_AUTHORIZATION_SERV'))
+            dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_AUTHORIZATION'))
+        }
+    }, [success, successCreate])
 
 
     const classes = createClientStyle()
@@ -49,7 +71,8 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
         if (e.target.name === 'modifiers') {
             setModCheck([])
             let id = fSelect.find(item => item.name === e.target.value)._id
-            dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(id))
+            dispatch(fundingSourceActions.getFoundingSourceServiceModifiersForClient(id))
+
         }
         setInputs(
             prevState => ({...prevState, [e.target.name]: e.target.value}),
@@ -63,8 +86,8 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
         let modifiersPost = [];
         modCheck.forEach(item => {
 
-            return   modifiers.forEach((item2, index2) => {
-                if (item===index2){
+            return modifiers.forEach((item2, index2) => {
+                if (item === index2) {
                     modifiersPost.push(item2?._id)
                 }
             })
@@ -76,23 +99,21 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
             }
         })
 
-        if (inputs.total && modifiersPost?.length>0) {
+        if (inputs.total && modifiersPost?.length > 0) {
             const data = {
                 "total": +inputs.total,
                 "modifiers": modifiersPost,
 
             }
-                dispatch(clientActions.createClientsAuthorizationsServ(data, authId, funderId,))
-
-            handleClose()
-        }else if(inputs.total && info){
+            dispatch(clientActions.getClientsAuthorizationsServModifiersCheck(data, authId, funderId,))
+            // dispatch(clientActions.createClientsAuthorizationsServ(data, authId, funderId,))
+        } else if (inputs.total && info) {
             dispatch(clientActions.editClientsAuthorizationsServ({
-                "total": inputs.total,
+                "total": +inputs.total,
                 "fundingServiceId": funderId,
                 "authorizationId": authId,
-            }, info.id))
-            handleClose()
-        }else {
+            }, info.id, authId))
+        } else {
             setError(
                 !inputs.total ? 'total' :
                     !inputs.modifiers ? 'modifiers' :
@@ -113,13 +134,18 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
             newArr.push(item)
         })
         setModCheck(newArr)
-
-
     }
 
 
+    const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_AUTHORIZATION_SERV'
+    let errorMessage = successCreate ? 'Successfully added' : successEdit ? 'Successfully edited' : 'Something went wrong'
+
     return (
         <div className={classes.createFoundingSource}>
+            <Toast
+                type={'success'}
+                text={errorMessage}
+                info={successCreate || successEdit}/>
             <ModalHeader
                 handleClose={handleClose}
                 title={info ? "Edit Authorization Service" : 'Add Authorization Service'}
@@ -144,25 +170,25 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
                                 {info ? info?.modifiers && info?.modifiers?.length > 0 && info.modifiers.map((item, index) => {
                                     return (
                                         <div className={classes.availableModfier}
-                                           style={{
-                                               background: '#347AF080',
-                                               color: '#fff',
-                                               border : "none",
-                                               cursor : 'default'
-                                           }}> <p style={{width : 19, height : 20, overflow : 'hidden'}}>{item}</p> </div>
+                                             style={{
+                                                 background: '#347AF080',
+                                                 color: '#fff',
+                                                 border: "none",
+                                                 cursor: 'default'
+                                             }}><p style={{width: 19, height: 20, overflow: 'hidden'}}>{item}</p></div>
                                     )
                                 })
-                                    :  modifiers && modifiers.length > 0 ? modifiers.map((item, index) => {
+                                    : modifiers && modifiers.length > 0 ? modifiers.map((item, index) => {
 
-                                    return (
-                                        <p className={classes.availableModfier} onClick={() => onModifier(index)}
-                                           style={modCheck.includes(index) ? {
-                                               background: '#347AF0',
-                                               color: '#fff'
-                                           } : {}}>
-                                            {item.name}</p>
-                                    )
-                                }) : <p>N/A</p> }
+                                        return (
+                                            <p className={classes.availableModfier} onClick={() => onModifier(index)}
+                                               style={modCheck.includes(index) ? {
+                                                   background: '#347AF0',
+                                                   color: '#fff'
+                                               } : {}}>
+                                                {item.name}</p>
+                                        )
+                                    }) : <p>N/A</p>}
                             </div>
                         </div>
 
@@ -170,7 +196,7 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
                         <ValidationInput
                             variant={"outlined"}
                             onChange={handleChange}
-                            value={inputs.total === 0 ?'0' : inputs.total}
+                            value={inputs.total === 0 ? '0' : inputs.total}
                             type={"number"}
                             label={"Total Units*"}
                             name='total'
@@ -189,6 +215,7 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
                 </div>
                 <div className={classes.clientModalBlock}>
                     <CreateChancel
+                        loader={httpOnLoad.length > 0}
                         create={info ? "Save" : 'Add'}
                         chancel={"Cancel"}
                         onCreate={handleCreate}

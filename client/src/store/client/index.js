@@ -22,7 +22,7 @@ import {
     getClientHistories,
     getClients,
     getClientsAuthorizations,
-    getClientsAuthorizationsServ,
+    getClientsAuthorizationsServ, getClientsAuthorizationsServModifiersCheck,
     getClientsById,
     getClientsContacts,
     getClientsEnrollment,
@@ -62,6 +62,7 @@ export const clientActions = {
     getAvailabilitySchedule,
     editAvailabilitySchedule,
     createAvailabilitySchedule,
-    deleteAvailabilitySchedule
+    deleteAvailabilitySchedule,
+    getClientsAuthorizationsServModifiersCheck
 }
 

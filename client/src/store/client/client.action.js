@@ -26,7 +26,7 @@ import {
     GET_CLIENT_ENROLLMENT,
     GET_CLIENT_HISTORIES,
     GET_CLIENT_NOTES,
-    GET_CLIENTS,
+    GET_CLIENTS, GET_CLIENT_AUTHORIZATION_MOD_CHECK,
 } from "./client.types";
 
 
@@ -191,6 +191,14 @@ export const getClientsAuthorizationsServ = (id) => {
     }
 }
 
+export const getClientsAuthorizationsServModifiersCheck = (body,id,funderId) => {
+    return {
+        type: GET_CLIENT_AUTHORIZATION_MOD_CHECK,
+        payload: {body,id,funderId}
+    }
+}
+
+
 
 export const createClientsAuthorizationsServ = (body, id, funderId) => {
     return {
@@ -203,22 +211,23 @@ export const createClientsAuthorizationsServ = (body, id, funderId) => {
     }
 }
 
-export const editClientsAuthorizationsServ = (body,  id) => {
+export const editClientsAuthorizationsServ = (body,  id, authID) => {
 
     return {
         type: EDIT_CLIENT_AUTHORIZATION_SERV,
         payload: {
             body,
             id,
+            authID
 
         }
     }
 }
 
-export const deleteClientsAuthorizationServ = ( id) => {
+export const deleteClientsAuthorizationServ = ( id, authID) => {
     return {
         type: DELETE_CLIENT_AUTHORIZATION_SERV,
-        payload: {id}
+        payload: {id, authID}
     }
 }
 

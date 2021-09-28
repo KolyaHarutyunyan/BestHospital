@@ -19,7 +19,7 @@ import {
     DELETE_FUNDING_SOURCE_NOTE,
     GET_FUNDING_SOURCE_SERVICE_MODIFIERS,
     EDIT_ACTIVE_OR_INACTIVE,
-    EDIT_FUNDING_SOURCE_SERVICE_MODIFIER,
+    EDIT_FUNDING_SOURCE_SERVICE_MODIFIER, GET_FUNDING_SOURCE_SERVICE_MODIFIERS_CLIENT,
 } from "./fundingSource.types";
 
 export const createFundingSource = (body) => {
@@ -105,6 +105,15 @@ export const getFoundingSourceServiceModifiers = (id) => {
 
     return {
         type: GET_FUNDING_SOURCE_SERVICE_MODIFIERS,
+        payload: id
+    }
+}
+
+
+export const getFoundingSourceServiceModifiersForClient = (id) => {
+
+    return {
+        type: GET_FUNDING_SOURCE_SERVICE_MODIFIERS_CLIENT,
         payload: id
     }
 }

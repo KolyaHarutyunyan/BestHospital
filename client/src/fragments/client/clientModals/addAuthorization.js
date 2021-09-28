@@ -33,6 +33,7 @@ export const AddAuthorization = ({handleClose, info}) => {
     const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_CLIENT_AUTHORIZATION'
 
 
+
     useEffect(() => {
         if (success) {
             handleClose()
@@ -97,6 +98,9 @@ export const AddAuthorization = ({handleClose, info}) => {
 
     const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_AUTHORIZATION'
     let errorMessage = successCreate ? 'Successfully added' : successEdit ? 'Successfully edited' : 'Something went wrong'
+
+
+    console.log(httpOnSuccess,'auth   modal onssssssucessss')
 
     return (
         <div className={classes.createFoundingSource}>

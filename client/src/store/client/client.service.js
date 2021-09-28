@@ -52,6 +52,8 @@ export const authService = {
 
     createClientAuthorizationServService: ({payload}) => axios.post(`/authorizationservice/authorization/${payload.id}/fundingService/${payload.funderId}`, payload.body),
 
+    getClientAuthorizationServCheckModService: ({payload}) => axios.post(`/authorizationservice/authorization/${payload.id}/fundingService/${payload.funderId}/checkModifiers`,payload.body),
+
     editClientAuthorizationServService: ({payload}) =>  axios.patch(`/authorizationservice/${payload.id}`, payload.body),
 
     deleteClientAuthorizationServService: ({payload}) =>  axios.delete(`/authorizationservice/${payload.id}`),
