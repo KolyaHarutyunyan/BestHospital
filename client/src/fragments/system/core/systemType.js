@@ -107,31 +107,22 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
         }
     }
 
-    const {httpOnError, httpOnLoad, httpOnSuccess } = useSelector((state) => ({
-        httpOnSuccess: state.httpOnSuccess,
+    const {httpOnLoad } = useSelector((state) => ({
         httpOnLoad: state.httpOnLoad,
-        httpOnError: state.httpOnError
     }));
 
-    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_SERVICE_GLOBAL'
-    const errorText = httpOnError.length && httpOnError[0].type === 'CREATE_SERVICE_GLOBAL'
     const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_SERVICE_GLOBAL'
-
     useEffect(()=>{
-        if(success) {
+        if(loader) {
             dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_SERVICE_GLOBAL'))
-            dispatch(httpRequestsOnLoadActions.removeLoading(httpOnLoad.length && httpOnLoad[0].type))
             setInputs({
                 name: '',
                 displayCode: '',
                 category: ''
             })
-        }else if(errorText){
-            dispatch(httpRequestsOnErrorsActions.removeError('CREATE_SERVICE_GLOBAL'))
         }
-    },[success])
+    },[loader])
 
-    let errorMessage = success ? 'Successfully added' : 'Something went wrong'
     return (
         <>
             <div className={classes.flexContainer}>
@@ -163,9 +154,9 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
                     placeholder={'Category'}
                 />
                 <AddButton
+                    loader={loader}
                     type={'CREATE_SERVICE_GLOBAL'}
                     styles={credentialBtn}
-                    loader={ loader }
                     disabled={!isDisabled}
                     handleClick={handleSubmit}
                     text='Add Service Type'
@@ -178,12 +169,6 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
                                         headerTitles={headerTitles}/> :
                 <NoItemText text='No Items Yet'/>
             }
-
-
-            <Toast
-                type={success ? 'Successfully added' : errorText ? 'Something went wrong' : '' }
-                text={errorMessage}
-                info={success ? success : errorText ? errorText : ''}/>
         </>
     )
 }

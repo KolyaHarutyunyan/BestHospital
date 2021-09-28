@@ -51,27 +51,19 @@ export const Departments = ({globalDepartments, removeItem, openModal}) => {
 
     const isDisabled = inputs.name
 
-    const {httpOnError, httpOnLoad, httpOnSuccess } = useSelector((state) => ({
-        httpOnSuccess: state.httpOnSuccess,
+    const {httpOnLoad } = useSelector((state) => ({
         httpOnLoad: state.httpOnLoad,
-        httpOnError: state.httpOnError
     }));
 
-    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_DEPARTMENT_GLOBAL'
-    const errorText = httpOnError.length && httpOnError[0].type === 'CREATE_DEPARTMENT_GLOBAL'
     const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_DEPARTMENT_GLOBAL'
     useEffect(()=>{
-        if(success) {
+        if(loader) {
             dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_DEPARTMENT_GLOBAL'))
             setInputs({
                 name: '',
             })
-        }else if(errorText){
-            dispatch(httpRequestsOnErrorsActions.removeError('CREATE_DEPARTMENT_GLOBAL'))
         }
-    },[success, errorText])
-
-    let errorMessage = success ? 'Successfully added' : 'Something went wrong'
+    },[loader])
 
     return (
         <>
@@ -120,10 +112,6 @@ export const Departments = ({globalDepartments, removeItem, openModal}) => {
                     }): <NoItemText text='No Items Yet' />
                 }
             </div>
-            <Toast
-                type={success ? 'Successfully added' : errorText ? 'Something went wrong' : '' }
-                text={errorMessage}
-                info={success ? success : errorText ? errorText : ''}/>
         </>
     )
 }

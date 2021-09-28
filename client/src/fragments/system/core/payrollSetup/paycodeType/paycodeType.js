@@ -81,6 +81,13 @@ export const PayCodeType = ({handleOpenClose, editedData, maxWidth, marginRight,
                 handleOpenClose()
             } else {
                 dispatch(payrollActions.createPayCodeGlobal(data))
+                setInputs({
+                    name: '',
+                    code: '',
+                    type: '',
+                })
+                setApplyOvertime('No')
+                setAccruePTO('No')
             }
 
         } else {

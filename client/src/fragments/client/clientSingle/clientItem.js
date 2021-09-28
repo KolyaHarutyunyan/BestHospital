@@ -22,6 +22,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {AddContact} from "../clientModals";
 import {clientItemStyles} from "./styles";
 import {noteActions} from "@eachbase/store/notes";
+import {availabilityScheduleActions} from "../../../store/availabilitySchedule";
 
 
 
@@ -58,6 +59,7 @@ export const ClientItem = () => {
         dispatch(clientActions.getClientHistories(params.id, 'Client'))
         // dispatch(clientActions.getClientsAvailabilitySchedule(params.id,))
         dispatch(noteActions.getGlobalNotes(params.id,'Client'))
+        dispatch(availabilityScheduleActions.getAvailabilitySchedule(params.id))
 
     }, []);
 
@@ -74,6 +76,7 @@ export const ClientItem = () => {
     const clientsAuthorizations = useSelector(state => state.client.clientsAuthorizations)
     const clientsHistories = useSelector(state => state.client.clientHistories)
     const clientsNotes = useSelector(state => state.note.notes)
+    const availabilityData = useSelector(state => state.availabilitySchedule.availabilitySchedule)
 
 
 
@@ -137,7 +140,7 @@ export const ClientItem = () => {
                 <ClientAuthorizationItem data={authItemData}/> : <NoItemText text={'No AuthorizationItem Yet'}/>)
         },
         {
-            tabComponent: (<ClientAvailabilitySchedule/>)
+            tabComponent: (<ClientAvailabilitySchedule availabilityData={availabilityData} />)
         },
         {
             tabComponent: (clientsNotes.length ?  <ClientNotes data={clientsNotes} /> : <NoItemText text={'No Notes  Yet'}/> )

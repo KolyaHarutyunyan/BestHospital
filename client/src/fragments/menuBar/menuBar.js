@@ -3,7 +3,10 @@ import { useTheme } from "@material-ui/core/styles";
 import { navBarStyles } from "./core/style";
 import { Router } from "../../root/router";
 import { TopBar, LeftBar } from "./core";
-import { useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {httpRequestsOnSuccessActions} from "@eachbase/store";
+import {Toast} from "@eachbase/components";
+import {ToastSuccess, ToastFail} from "@eachbase/utils";
 
 export const MenuBar = ({}) => {
   const classes = navBarStyles(),
@@ -14,6 +17,20 @@ export const MenuBar = ({}) => {
       setOpen(!open);
     };
 
+  const dispatch = useDispatch()
+
+    const {httpOnError, httpOnSuccess} = useSelector((state) => ({
+        httpOnLoad: state.httpOnLoad,
+        httpOnError: state.httpOnError,
+        httpOnSuccess: state.httpOnSuccess,
+    }));
+
+    const success = httpOnSuccess.length && httpOnSuccess[0].type
+    const error = httpOnError.length && httpOnError[0].type
+    const toastSuccess = ToastSuccess(success)
+    const toastFail = ToastFail(error)
+
+
   const { saveLink } = useSelector((state) => ({
     saveLink: state.auth.saveLink,
   }));
@@ -22,6 +39,18 @@ export const MenuBar = ({}) => {
     () => setLinkInfo(saveLink ? saveLink : window.location.pathname),
     [saveLink]
   );
+
+    useEffect(() => {
+        if (toastSuccess) {
+            dispatch(httpRequestsOnSuccessActions.removeSuccess( success ))
+        }
+    }, [toastSuccess]);
+
+    useEffect(() => {
+        if (toastFail) {
+            // dispatch(httpRequestsOnErrorsActions.removeError( error ))
+        }
+    }, [toastFail]);
 
   const setLinksStyle = () => {
     setLinkInfo(window.location.pathname);
@@ -42,6 +71,13 @@ export const MenuBar = ({}) => {
       <main className={classes.content}>
         <Router />
       </main>
+
+        <Toast
+            type={toastSuccess ? 'success' :toastFail ?  'error'  : ''}
+            text={toastSuccess ? toastSuccess : toastFail ? toastFail : ''}
+            info={toastSuccess ? !!toastSuccess : toastFail ? !! toastFail : ''}
+        />
+
     </div>
   );
 };
