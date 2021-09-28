@@ -87,10 +87,10 @@ export const FundingSourceItem = ({}) => {
 
     return (
         <>
-            <Toast
-                type={'success'}
-                text={errorMessage}
-                info={success}/>
+            {/*<Toast*/}
+            {/*    type={'success'}*/}
+            {/*    text={errorMessage}*/}
+            {/*    info={success}/>*/}
             <TableWrapperGeneralInfo
                 title={data?.name}
                 status={data?.status === 1 ? 'active' : 'inactive'}

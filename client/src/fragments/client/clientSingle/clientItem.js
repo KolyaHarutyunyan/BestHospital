@@ -140,7 +140,7 @@ export const ClientItem = () => {
                 <ClientAuthorizationItem data={authItemData}/> : <NoItemText text={'No AuthorizationItem Yet'}/>)
         },
         {
-            tabComponent: (<ClientAvailabilitySchedule availabilityData={availabilityData} />)
+            tabComponent: (<ClientAvailabilitySchedule data={data} availabilityData={availabilityData} />)
         },
         {
             tabComponent: (clientsNotes.length ?  <ClientNotes data={clientsNotes} /> : <NoItemText text={'No Notes  Yet'}/> )
@@ -151,15 +151,15 @@ export const ClientItem = () => {
         },
     ];
 
-    const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT'
-    let errorMessage = successEdit ? 'Successfully edited' : 'Something went wrong'
+    // const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT'
+    // let errorMessage = successEdit ? 'Successfully edited' : 'Something went wrong'
 
     return (
         <>
-            <Toast
-                type={'success'}
-                text={errorMessage}
-                info={successEdit}/>
+            {/*<Toast*/}
+            {/*    type={'success'}*/}
+            {/*    text={errorMessage}*/}
+            {/*    info={successEdit}/>*/}
             <TableWrapperGeneralInfo
                 status= {data?.status ===1 ? 'active' : 'inactive'}
                 activeInactiveText={data?.status !==1 ? 'active' : 'inactive'}

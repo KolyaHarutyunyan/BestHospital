@@ -14,7 +14,7 @@ import {useParams} from "react-router-dom";
 
 export const AddAuthorization = ({handleClose, info}) => {
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info, funding: info.funderId.name} : {});
+    const [inputs, setInputs] = useState(info ? {...info, funding: info.funderId.name, status : String(info.status)} : {});
     const params = useParams()
     const dispatch = useDispatch()
     const fSelect = useSelector(state => state?.fundingSource?.fSelect?.funders)
@@ -53,12 +53,12 @@ export const AddAuthorization = ({handleClose, info}) => {
 
 
     const handleChange = e => setInputs(
-        prevState => ({...prevState, [e.target.name]: e.target.value}),
+        prevState => ({...prevState, [e.target.name]: e.target.value === 0? '0' : e.target.value}),
         error === e.target.name && setError(''),
     );
 
     const handleCreate = () => {
-        if (inputs.authId && inputs.funding && inputs.startDate && inputs.endDate && inputs.location && inputs.status) {
+        if (inputs.authId && inputs.funding && inputs.startDate && inputs.endDate && inputs.location && inputs.status ) {
             let funderId;
             fSelect.forEach(item => {
                 if (inputs.funding === item.name) {
@@ -92,22 +92,22 @@ export const AddAuthorization = ({handleClose, info}) => {
     }
 
     const list = [
-        {name: 0},
+        {name: '0'},
         {name: 1}
     ]
-
-    const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_AUTHORIZATION'
-    let errorMessage = successCreate ? 'Successfully added' : successEdit ? 'Successfully edited' : 'Something went wrong'
+    //
+    // const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_AUTHORIZATION'
+    // let errorMessage = successCreate ? 'Successfully added' : successEdit ? 'Successfully edited' : 'Something went wrong'
 
 
     console.log(httpOnSuccess,'auth   modal onssssssucessss')
 
     return (
         <div className={classes.createFoundingSource}>
-            <Toast
-                type={'success'}
-                text={errorMessage}
-                info={successCreate || successEdit}/>
+            {/*<Toast*/}
+            {/*    type={'success'}*/}
+            {/*    text={errorMessage}*/}
+            {/*    info={successCreate || successEdit}/>*/}
             <ModalHeader
                 handleClose={handleClose}
                 title={info ? "Edit Authorization" : 'Add Authorization'}
@@ -160,7 +160,7 @@ export const AddAuthorization = ({handleClose, info}) => {
                             name={"status"}
                             label={"Status*"}
                             handleSelect={handleChange}
-                            value={inputs.status === 0 ? '0' : inputs.status}
+                            value={String(inputs.status)}
                             list={list}
                             typeError={error === 'status' ? ErrorText.field : ''}
                         />

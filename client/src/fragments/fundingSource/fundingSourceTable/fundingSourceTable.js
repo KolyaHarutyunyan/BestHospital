@@ -26,8 +26,8 @@ export const FundingSourceTable = ({status, handleGetPage}) => {
             handleGetPage(start)
         };
 
-        const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_FUNDING_SOURCE'
-        const errorMessage = successCreate ? 'Successfully added' : 'Something went wrong'
+        // const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_FUNDING_SOURCE'
+        // const errorMessage = successCreate ? 'Successfully added' : 'Something went wrong'
 
         return (
             <div className={globalStyle.tableWrapper}>
@@ -57,10 +57,10 @@ export const FundingSourceTable = ({status, handleGetPage}) => {
                         />
                     </TableContainer> : <NoItemText text={'No Funding source yet'}/>
                 }
-                <Toast
-                    type={'success'}
-                    text={errorMessage}
-                    info={successCreate}/>
+                {/*<Toast*/}
+                {/*    type={'success'}*/}
+                {/*    text={errorMessage}*/}
+                {/*    info={successCreate}/>*/}
             </div>
         );
     }
