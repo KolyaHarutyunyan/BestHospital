@@ -28,7 +28,10 @@ import {
     CREATE_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
     GET_FUNDING_SOURCE_SERVICE_MODIFIERS,
     GET_FUNDING_SOURCE_SERVICE_MODIFIERS_SUCCESS,
-    GET_FUNDING_SOURCE_SERVICE_MODIFIERS_ERR, EDIT_ACTIVE_OR_INACTIVE, EDIT_FUNDING_SOURCE_SERVICE_MODIFIER,
+    GET_FUNDING_SOURCE_SERVICE_MODIFIERS_ERR,
+    EDIT_ACTIVE_OR_INACTIVE,
+    EDIT_FUNDING_SOURCE_SERVICE_MODIFIER,
+    GET_FUNDING_SOURCE_SERVICE_MODIFIERS_CLIENT,
 } from "./fundingSource.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
@@ -258,6 +261,26 @@ function* getFundingSourceServicesModifier(action) {
     }
 }
 
+function* getFundingSourceServicesModifierClient(action) {
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type))
+    try {
+        const res = yield call(authService.getFoundingSourceServiceModifierService, action.payload);
+        console.log(res,'res')
+        yield put({
+            type: GET_FUNDING_SOURCE_SERVICE_MODIFIERS_SUCCESS,
+            payload: res.data,
+        });
+    } catch (error) {
+        yield put({
+            type: GET_FUNDING_SOURCE_SERVICE_MODIFIERS_ERR,
+            payload: error,
+        });
+        console.log(error.data.message, 'get modifier')
+    }
+}
+
 
 function* getFundingSourceHistoriesById(action) {
 
@@ -433,5 +456,6 @@ export const watchFundingSource = function* watchFundingSourceSaga() {
     yield takeLatest(DELETE_FUNDING_SOURCE_NOTE, deleteFundingSourceNote);
     yield takeLatest(EDIT_ACTIVE_OR_INACTIVE, editActiveOrInactive);
     yield takeLatest(EDIT_FUNDING_SOURCE_SERVICE_MODIFIER, editFundingSourceServicesModifier);
+    yield takeLatest(GET_FUNDING_SOURCE_SERVICE_MODIFIERS_CLIENT, getFundingSourceServicesModifierClient);
 
 };

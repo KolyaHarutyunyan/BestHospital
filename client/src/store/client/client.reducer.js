@@ -7,7 +7,10 @@ import {
     GET_CLIENT_HISTORIES_SUCCESS,
     GET_CLIENT_NOTES_SUCCESS,
     CREATE_CLIENT_NOTE_SUCCESS,
-    CREATE_CLIENT_CONTACT_SUCCESS, CREATE_CLIENT_SUCCESS, GET_CLIENT_AUTHORIZATION_SERV_SUCCESS
+    CREATE_CLIENT_CONTACT_SUCCESS,
+    CREATE_CLIENT_SUCCESS,
+    GET_CLIENT_AUTHORIZATION_SERV_SUCCESS,
+    GET_CLIENT_AUTHORIZATION_SERV_ERROR, GET_CLIENT_AUTHORIZATION_ERROR
 } from "./client.types";
 import {paginate} from "@eachbase/utils";
 
@@ -63,11 +66,23 @@ export const clientReducer = (state = initialState, action) => {
                 ...state,
                 clientsAuthorizations: action.payload,
             }
+            case  GET_CLIENT_AUTHORIZATION_ERROR:
+                return {
+                    ...state,
+                    clientsAuthorizations: [],
+                }
+
         case  GET_CLIENT_AUTHORIZATION_SERV_SUCCESS:
             return {
                 ...state,
                 clientsAuthorizationsServices: action.payload,
             }
+        case  GET_CLIENT_AUTHORIZATION_SERV_ERROR:
+            return {
+                ...state,
+                clientsAuthorizationsServices: [],
+            }
+
         case  GET_CLIENT_HISTORIES_SUCCESS:
             return {
                 ...state,

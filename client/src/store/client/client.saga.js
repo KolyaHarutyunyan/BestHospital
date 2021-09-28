@@ -41,7 +41,10 @@ import {
     GET_AVAILABILITY_SCHEDULE_SUCCESS,
     GET_AVAILABILITY_SCHEDULE,
     EDIT_AVAILABILITY_SCHEDULE,
-    CREATE_AVAILABILITY_SCHEDULE, DELETE_AVAILABILITY_SCHEDULE
+    CREATE_AVAILABILITY_SCHEDULE,
+    DELETE_AVAILABILITY_SCHEDULE,
+    GET_CLIENT_AUTHORIZATION_SERV_ERROR,
+    GET_CLIENT_AUTHORIZATION_ERROR, GET_CLIENT_AUTHORIZATION_MOD_CHECK
 } from "./client.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
@@ -287,6 +290,9 @@ function* getClientsAuthorizations(action) {
             payload: res.data,
         });
     } catch (err) {
+        yield put({
+            type: GET_CLIENT_AUTHORIZATION_ERROR,
+        });
         console.log(err, 'err authhhhhhhh get ')
     }
 }
@@ -337,6 +343,7 @@ function* deleteClientAuthorizations(action) {
             type: GET_CLIENT_AUTHORIZATION,
             payload: {id: action.payload.clientId},
         });
+        console.log(res,'res')
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
@@ -356,37 +363,80 @@ function* getClientsAuthorizationsServ(action) {
             payload: res.data,
         });
     } catch (err) {
-
+        yield put({
+            type: GET_CLIENT_AUTHORIZATION_SERV_ERROR,
+        });
     }
 }
 
 function* createClientsAuthorizationsServ(action) {
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.createClientAuthorizationServService, action);
         console.log(res,'reees create serv')
-        // window.location.replace('/client')
+        yield put({
+            type: GET_CLIENT_AUTHORIZATION_SERV,
+            payload: {id: action.payload.id},
+        });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
         console.log(err, 'error create auth')
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
     }
 }
 
 
+function*  getClientsAuthorizationsModCheck(action) {
+    console.log(action, 'aaaaaaa444444')
+    try {
+        const res = yield call(authService.getClientAuthorizationServCheckModService, action);
+        console.log(res,'reees check serv')
+
+
+    } catch (err) {
+        console.log(err, 'error create auth')
+
+    }
+}
+
 function* editClientAuthorizationsServ(action) {
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.editClientAuthorizationServService, action);
-
+        yield put({
+            type: GET_CLIENT_AUTHORIZATION_SERV,
+            payload: {id: action.payload.authID},
+        });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         console.log(res , 'edit auth serv')
     } catch (err) {
         console.log(err, 'error create client')
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
     }
 }
 
 function* deleteClientAuthorizationsServ(action) {
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.deleteClientAuthorizationServService, action);
-        window.location.replace('/client')
-    } catch (err) {
 
+        yield put({
+            type: GET_CLIENT_AUTHORIZATION_SERV,
+            payload: {id: action.payload.authID},
+        });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+        console.log(res,'res')
+    } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
     }
 }
 
@@ -576,6 +626,7 @@ export const watchClient = function* watchClientSaga() {
     yield takeLatest(EDIT_AVAILABILITY_SCHEDULE, editAvailabilitySchedule)
     yield takeLatest(CREATE_AVAILABILITY_SCHEDULE, createAvailabilitySchedule)
     yield takeLatest(DELETE_AVAILABILITY_SCHEDULE, deleteAvailabilitySchedule)
+    yield takeLatest(GET_CLIENT_AUTHORIZATION_MOD_CHECK, getClientsAuthorizationsModCheck)
 
 
 };

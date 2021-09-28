@@ -9,6 +9,7 @@ import {AddAuthorization, AddEnrollment} from "../../clientModals";
 import {AuthHeader} from "@eachbase/components/headers/auth/authHeader";
 import {AddAuthorizationService} from "../../clientModals/addAuthorizationService";
 import {useParams} from "react-router-dom";
+import {deleteClientsAuthorizationServ, editClientsAuthorizationsServ} from "../../../../store/client/client.action";
 
 export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) => {
     const classes = serviceSingleStyles()
@@ -40,6 +41,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
 
 
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION'
+    const successDelServ = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION_SERV'
 
 
     useEffect(()=>{
@@ -49,14 +51,22 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
 
     useEffect(() => {
         if (success) {
-            setToggleModal2(!toggleModal2)
+            setToggleModal(!toggleModal)
             dispatch(httpRequestsOnSuccessActions.removeSuccess('DELETE_CLIENT_AUTHORIZATION'))
             dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_AUTHORIZATION'))
         }
+    }, [success,])
 
-    }, [success])
+    useEffect(() => {
 
+        if (successDelServ) {
+             setToggleModal3(!toggleModal3)
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('DELETE_CLIENT_AUTHORIZATION_SERV'))
+            dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_AUTHORIZATION_SERV'))
+        }
+    }, [successDelServ])
 
+    console.log(httpOnSuccess,'auth eeeej  modal onssssssucessss')
 
     // useEffect(() => {
     //     dispatch(clientActions.getClientsAuthorizationsServ(info[authIndex].id))
@@ -96,6 +106,13 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
 
     let deleteAuthorization = () => {
         dispatch(clientActions.deleteClientsAuthorization(info[authIndex].id, params.id))
+        setAuthIndex(0)
+    }
+
+    let deleteAuthorizationServ = () => {
+        console.log(info[authIndex].id,'auth id')
+        dispatch(clientActions.deleteClientsAuthorizationServ(services[serviceIndex].id, info[authIndex].id ))
+        // setServiceIndex(0)
     }
 
     let clientAuthorizationServiceItem = (item, index) => {
@@ -150,9 +167,10 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
                     <AddAuthorization fundingId={info[authIndex].funderId._id} info={info[authIndex]}
                                       handleClose={() => setToggleModal(!toggleModal)}/>
                     : <DeleteElement
-                        info={`Delete ${info[authIndex].authId}`}
+                        loader={httpOnLoad.length > 0}
+                         info={`Delete ${info[authIndex].authId}`}
                         handleClose={() => setToggleModal(!toggleModal)}
-                        handleDel={alert}
+                        handleDel={deleteAuthorization}
                     />
                 }
             />
@@ -160,7 +178,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
                 handleOpenClose={() => setToggleModal2(!toggleModal2)}
                 openDefault={toggleModal2}
                 content={
-                <AddAuthorizationService   authId={info[authIndex].id} handleClose={() => setToggleModal2(!toggleModal2)} fundingId={info[authIndex].funderId._id} />
+                <AddAuthorizationService   authId={info[authIndex].id} handleClose={() => setToggleModal2(!toggleModal2)}  fundingId={info[authIndex].funderId._id} />
                 }
 
             />
@@ -172,7 +190,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
                     : <DeleteElement
                          info={`Delete ${services && services[serviceIndex]?.serviceId?.name}`}
                         handleClose={() => setToggleModal3(!toggleModal3)}
-                        handleDel={alert}
+                        handleDel={deleteAuthorizationServ}
                     />
                 }
 
