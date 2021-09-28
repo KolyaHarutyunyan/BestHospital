@@ -106,7 +106,6 @@ function* createCredential(action) {
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
         console.log(err)
-
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
@@ -130,27 +129,36 @@ function* getCredential(action) {
 }
 
 function* editCredentialById(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         yield call(authService.editCredentialByIdService, action.payload.id, action.payload.body)
         yield put({
             type: GET_CREDENTIAL,
             payload: {credentialId: action.payload.credentialId}
         });
-
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
         console.log(err)
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
 }
 
 function* deleteCredentialById(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         yield call(authService.deleteCredentialByIdService, action.payload.id)
         yield put({
             type: GET_CREDENTIAL,
             payload: {credentialId: action.payload.credentialId}
         });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
         console.log(err)
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
 }
 

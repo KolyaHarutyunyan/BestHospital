@@ -4,7 +4,6 @@ import {TableCell} from "@material-ui/core";
 import {
     adminActions,
     fundingSourceActions,
-    httpRequestsOnSuccessActions,
     systemActions
 } from "@eachbase/store";
 import {
@@ -28,7 +27,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {staffStyle} from "@eachbase/pages/staff/styles";
 import {noteActions} from "@eachbase/store/notes";
 import moment from "moment";
-import {httpRequestsOnLoadActions} from "../../../store/http_requests_on_load";
+import {httpRequestsOnLoadActions} from "@eachbase/store/http_requests_on_load";
 import {availabilityScheduleActions} from "@eachbase/store/availabilitySchedule";
 
 export const StaffItem = () => {
@@ -109,8 +108,7 @@ export const StaffItem = () => {
         },
     ];
 
-    const {httpOnLoad, httpOnSuccess} = useSelector((state) => ({
-        httpOnSuccess: state.httpOnSuccess,
+    const {httpOnLoad} = useSelector((state) => ({
         httpOnLoad: state.httpOnLoad,
     }));
 
@@ -149,7 +147,7 @@ export const StaffItem = () => {
     }
     const notesItem = (item, index) => {
         return (
-            <TableBodyComponent key={index} handleClick={() => openNoteModal({
+            <TableBodyComponent key={index} handleOpenInfo={() => openNoteModal({
                 created: item?.created,
                 subject: item?.subject,
                 id: item?.id,
@@ -227,15 +225,12 @@ export const StaffItem = () => {
 
     const loader = httpOnLoad.length && httpOnLoad[0] === 'DELETE_GLOBAL_NOTE'
 
-    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_GLOBAL_NOTE'
-
     useEffect(() => {
-        if (success) {
-            dispatch(httpRequestsOnSuccessActions.removeSuccess(httpOnSuccess.length && httpOnSuccess[0].type))
+        if (loader) {
             dispatch(httpRequestsOnLoadActions.removeLoading(httpOnLoad.length && httpOnLoad[0].type))
             setOpenDelModal(false)
         }
-    }, [success]);
+    }, [loader]);
 
 
     return (

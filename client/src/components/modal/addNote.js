@@ -5,7 +5,6 @@ import {modalsStyle} from "@eachbase/components/modal/styles";
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {noteActions} from "@eachbase/store/notes";
-import {httpRequestsOnSuccessActions} from "../../store";
 import {httpRequestsOnLoadActions} from "../../store/http_requests_on_load";
 
 
@@ -62,26 +61,20 @@ export const AddNotes = ({closeModal, model, noteModalTypeInfo, handleClose}) =>
         }
     }
 
-    const {httpOnLoad,httpOnSuccess} = useSelector((state) => ({
-        httpOnSuccess: state.httpOnSuccess,
+    const {httpOnLoad} = useSelector((state) => ({
         httpOnLoad: state.httpOnLoad,
     }));
-
-    const success =
-        httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_GLOBAL_NOTE' ? true :
-            httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_GLOBAL_NOTE'
 
     const loader =
         httpOnLoad.length && httpOnLoad[0] === 'CREATE_GLOBAL_NOTE' ? true :
             httpOnLoad.length && httpOnLoad[0] === 'EDIT_GLOBAL_NOTE'
 
     useEffect(() => {
-        if (success) {
-            dispatch(httpRequestsOnSuccessActions.removeSuccess(httpOnSuccess.length && httpOnSuccess[0].type))
-            dispatch(httpRequestsOnLoadActions.removeLoading(httpOnSuccess.length && httpOnSuccess[0].type))
+        if (loader) {
+            dispatch(httpRequestsOnLoadActions.removeLoading('CREATE_GLOBAL_NOTE' || 'EDIT_GLOBAL_NOTE'))
             handleClose()
         }
-    }, [success, loader]);
+    }, [loader]);
 
     return (
         <div className={classes.inactiveModalBody}>

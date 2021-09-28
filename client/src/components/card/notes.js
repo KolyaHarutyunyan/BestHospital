@@ -8,13 +8,13 @@ import {
     NoItemText,
     CloseButton,
     SimpleModal,
-    AddNotes, DeleteElement, Toast
+    AddNotes, DeleteElement
 } from "@eachbase/components";
 import {Images, useGlobalStyles} from "@eachbase/utils";
 import moment from "moment";
 import {noteActions} from "../../store/notes";
 import {useParams} from "react-router-dom";
-import {httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "../../store";
+import {httpRequestsOnSuccessActions} from "../../store";
 import {httpRequestsOnLoadActions} from "../../store/http_requests_on_load";
 
 export const Notes = ({
@@ -75,9 +75,8 @@ export const Notes = ({
         closeModal()
     }
 
-    const {httpOnLoad, httpOnSuccess, httpOnError} = useSelector((state) => ({
+    const {httpOnLoad, httpOnSuccess} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
-        httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,
     }));
 
@@ -85,10 +84,6 @@ export const Notes = ({
         httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_GLOBAL_NOTE' ? true :
             httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_GLOBAL_NOTE' ? true :
                 httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_GLOBAL_NOTE'
-    const errorText =
-        httpOnError.length && httpOnError[0].type === 'CREATE_GLOBAL_NOTE' ? true :
-            httpOnError.length && httpOnError[0].type === 'EDIT_GLOBAL_NOTE' ? true :
-                httpOnError.length && httpOnError[0].type === 'DELETE_GLOBAL_NOTE'
 
     const loader = httpOnLoad.length &&
     httpOnLoad[0] === 'CREATE_GLOBAL_NOTE' ? true :
@@ -101,12 +96,7 @@ export const Notes = ({
             dispatch(httpRequestsOnLoadActions.removeLoading(httpOnLoad.length && httpOnLoad[0].type))
             setOpenDelModal(false)
         }
-        if (errorText) {
-            dispatch(httpRequestsOnErrorsActions.removeError(httpOnError.length && httpOnError[0].type))
-        }
     }, [success]);
-
-    let errorMessage = success ? 'Success' : 'Something went wrong';
 
     return (
         <div className={globalStyle.tableWrapper}>
@@ -150,10 +140,7 @@ export const Notes = ({
                 {/*/>}*/}
 
             </TableContainer>
-            <Toast
-                type={success ? 'Successfully added' : errorText ? 'Something went wrong' : ''}
-                text={errorMessage}
-                info={success ? success : errorText ? errorText : ''}/>
+
             {
                 showModal &&
                 <>
