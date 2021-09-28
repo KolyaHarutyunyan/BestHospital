@@ -6,43 +6,6 @@ import {httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, systemActions
 import {payrollActions} from "../../store/payroll";
 
 export const SystemItem = () => {
-    const {httpOnSuccess,httpOnError} = useSelector((state) => ({
-        httpOnSuccess: state.httpOnSuccess,
-        httpOnLoad: state.httpOnLoad,
-        httpOnError: state.httpOnError
-    }));
-
-    const success =
-        httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_SERVICE_BY_ID_GLOBAL' ? true :
-            httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CREDENTIAL_BY_ID_GLOBAL' ? true :
-                httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_DEPARTMENT_BY_ID_GLOBAL' ? true :
-                    httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CREDENTIAL_BY_ID_GLOBAL' ? true :
-                        httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_JOB_BY_ID_GLOBAL' ? true :
-                            httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_JOB_BY_ID_GLOBAL' ? true :
-                                httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_SERVICE_BY_ID_GLOBAL' ? true :
-                                    httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_DEPARTMENT_BY_ID_GLOBAL'
-
-    const errorText = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_SERVICE_BY_ID_GLOBAL' ? true :
-        httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CREDENTIAL_BY_ID_GLOBAL' ? true :
-            httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_DEPARTMENT_BY_ID_GLOBAL' ? true :
-                httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CREDENTIAL_BY_ID_GLOBAL' ? true :
-                    httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_JOB_BY_ID_GLOBAL' ? true :
-                        httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_JOB_BY_ID_GLOBAL' ? true :
-                            httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_SERVICE_BY_ID_GLOBAL' ? true :
-                                httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_DEPARTMENT_BY_ID_GLOBAL'
-
-
-    useEffect(() => {
-        if (success) {
-            dispatch(httpRequestsOnSuccessActions.removeSuccess(httpOnSuccess.length && httpOnSuccess[0].type))
-        } if(errorText){
-            dispatch(httpRequestsOnErrorsActions.removeError(httpOnError.length && httpOnError[0].type))
-        }
-    }, [success]);
-
-
-
-    let errorMessage = success ? 'Success' : 'Something went wrong'
 
     const [activeTab, setActiveTab] = useState(0)
     const [open, setOpen] = useState(false)
@@ -141,10 +104,6 @@ export const SystemItem = () => {
                 handleOpenClose={handleOpenClose}
                 activeTab={activeTab}/>
             <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
-            <Toast
-                type={success ? 'Successfully added' : errorText ? 'Something went wrong' : ''}
-                text={errorMessage}
-                info={success ? success : errorText ? errorText : ''}/>
         </div>
     );
 }

@@ -20,7 +20,6 @@ export const DeleteElement = ({text, info, handleDel, handleClose, loader}) => {
                 <p className={globalText.modalTitle}>{info}</p>
                 <p className={globalText.modalText}>{text}</p>
 
-
                 <div className={classes.buttons}>
                     <Button
                         style={{

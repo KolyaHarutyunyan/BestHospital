@@ -71,8 +71,6 @@ export const PayCodeTable = ({globalPayCodes}) => {
                             pto: item.pto,
                             id: item.id
                         })} alt="edit"/>
-                        <img src={Images.remove} alt="delete"
-                             onClick={() => alert('delete')}/>
                     </div>
                 }
                 </TableCell>

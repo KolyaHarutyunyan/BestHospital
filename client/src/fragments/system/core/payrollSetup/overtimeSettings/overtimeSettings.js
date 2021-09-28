@@ -48,11 +48,17 @@ export const OvertimeSettings = ({handleOpenClose, editedData, maxWidth, marginR
         }
         if (inputs.name && inputs.type && inputs.threshold && inputs.multiplier) {
             if (editedData) {
-                console.log(data,'daaaata');
                 dispatch(payrollActions.editOvertimeSettingsByIdGlobal(data, editedData?.id));
                 handleOpenClose()
             } else {
                 dispatch(payrollActions.createOvertimeSettingsGlobal(data))
+                setInputs({
+                    name: '',
+                    type: '',
+                    threshold: '',
+                    multiplier: ''
+                })
+
             }
 
         } else {
