@@ -93,14 +93,14 @@ export const AddContact = ({handleClose, info}) => {
 
 
 
-    const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_CONTACT'
-    let errorMessage = successCreate ? 'Successfully added' : successEdit ? 'Successfully edited' : 'Something went wrong'
+    // const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_CONTACT'
+    // let errorMessage = successCreate ? 'Successfully added' : successEdit ? 'Successfully edited' : 'Something went wrong'
     return (
         <div className={classes.createFoundingSource}>
-            <Toast
-                type={'success'}
-                text={errorMessage}
-                info={successCreate || successEdit}/>
+            {/*<Toast*/}
+            {/*    type={'success'}*/}
+            {/*    text={errorMessage}*/}
+            {/*    info={successCreate || successEdit}/>*/}
             <ModalHeader secondStepInfo={'Address'} setStep={setStep} steps={step} handleClose={handleClose}
                          title={info ? 'Edit Contact' : 'Add Contact'}/>
             <div className={classes.createFoundingSourceBody}>

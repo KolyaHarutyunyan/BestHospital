@@ -25,14 +25,14 @@ export const ClientTable = ({setOpen, handleClose, setDeleteClient, handleGetPag
         handleGetPage(start)
     };
 
-    const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_CLIENT'
-    let errorMessage = successCreate ? 'Successfully added' : 'Something went wrong'
+    // const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_CLIENT'
+    // let errorMessage = successCreate ? 'Successfully added' : 'Something went wrong'
     return (
         <div className={globalStyle.tableWrapper}>
-            <Toast
-                type={'success'}
-                text={errorMessage}
-                info={successCreate}/>
+            {/*<Toast*/}
+            {/*    type={'success'}*/}
+            {/*    text={errorMessage}*/}
+            {/*    info={successCreate}/>*/}
             {clientList && clientList.count > 0 ?  <TableContainer component={Paper}>
                 <Table
                     className={globalStyle.table}

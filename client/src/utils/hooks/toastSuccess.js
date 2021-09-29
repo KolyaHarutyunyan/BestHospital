@@ -19,6 +19,7 @@ export const ToastSuccess = (success) => {
             success === 'CREATE_CREDENTIAL_GLOBAL' ? 'Successfully added credential settings' :
             success === 'CREATE_DEPARTMENT_GLOBAL' ? 'Successfully added department settings' :
             success === 'CREATE_JOB_GLOBAL' ? 'Successfully added job settings' :
+
             success === 'CREATE_CREDENTIAL' ? 'Successfully added credential' :
             success === 'EDIT_CREDENTIAL_BY_ID' ? 'Successfully edited credential' :
             success === 'DELETE_CREDENTIAL_BY_ID' ? 'Successfully deleted credential' :
@@ -28,6 +29,27 @@ export const ToastSuccess = (success) => {
             success === 'CREATE_ADMIN' ? 'Successfully added admin' :
             success === 'EDIT_ADMIN_BY_ID' ? 'Successfully edited admin' :
             success === 'CREATE_AVAILABILITY_SCHEDULE_GLOBAL' ? 'Successfully edited availability schedule' :
+
+            success === 'EDIT_FUNDING_SOURCE' ? 'Successfully edited Funding Source' :
+            success === 'CREATE_FUNDING_SOURCE' ? 'Successfully create Funding Source' :
+            success === 'CREATE_FUNDING_SOURCE_SERVICE_BY_ID' ? 'Successfully created Service' :
+            success === 'EDIT_FUNDING_SOURCE_SERVICE' ? 'Successfully edited Service' :
+            success === 'CREATE_CLIENT' ? 'Successfully created client' :
+            success === 'DELETE_CLIENT' ? 'Successfully deleted client' :
+            success === 'EDIT_CLIENT' ? 'Successfully edited client' :
+            success === 'EDIT_CLIENT_CONTACT' ? 'Successfully edited contact' :
+            success === 'CREATE_CLIENT_CONTACT' ? 'Successfully created contact' :
+            success === 'DELETE_CLIENT_CONTACT' ? 'Successfully deleted contact' :
+            success === 'EDIT_CLIENT_ENROLLMENT' ? 'Successfully edited enrollment' :
+            success === 'DELETE_CLIENT_ENROLLMENT' ? 'Successfully deleted enrollment' :
+            success === 'CREATE_CLIENT_ENROLLMENT' ? 'Successfully created enrollment' :
+            success === 'EDIT_CLIENT_AUTHORIZATION' ? 'Successfully edited authorization' :
+            success === 'CREATE_CLIENT_AUTHORIZATION' ? 'Successfully created authorization' :
+            success === 'EDIT_CLIENT_AUTHORIZATION_SERV' ? 'Successfully edited Service' :
+            success === 'CREATE_CLIENT_AUTHORIZATION_SERV' ? 'Successfully created Service' :
+            success === 'DELETE_CLIENT_AUTHORIZATION' ? 'Successfully deleted authorization' :
+            success === 'DELETE_CLIENT_AUTHORIZATION_SERV' ? 'Successfully deleted Service' :
+
             false
         )
     }
