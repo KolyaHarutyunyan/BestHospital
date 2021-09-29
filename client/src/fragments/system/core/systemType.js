@@ -1,19 +1,17 @@
 import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import {TableCell} from "@material-ui/core";
 import {
     Notes,
     TableBodyComponent,
     AddButton,
     ValidationInput,
-    Toast,
     SlicedText,
     NoItemText
 } from "@eachbase/components";
 import {Images} from "@eachbase/utils";
 import {systemItemStyles} from './styles'
-import {useDispatch, useSelector} from "react-redux";
-import {httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
-import {httpRequestsOnLoadActions} from "@eachbase/store/http_requests_on_load";
+import {httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
 
 const credentialBtn = {
     maxWidth: '174px',
@@ -112,6 +110,7 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
     }));
 
     const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_SERVICE_GLOBAL'
+
     useEffect(()=>{
         if(loader) {
             dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_SERVICE_GLOBAL'))

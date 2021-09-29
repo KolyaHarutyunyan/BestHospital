@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
-import {SimpleTabs, Toast} from "@eachbase/components";
+import {SimpleTabs} from "@eachbase/components";
 import {ServiceType, systemItemStyles, SystemItemHeader, Credentials, Departments, JobTitles, PayrollSetup} from './core';
 import {useDispatch, useSelector} from "react-redux";
-import {httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, systemActions} from "../../store";
-import {payrollActions} from "../../store/payroll";
+import {systemActions} from "@eachbase/store";
+import {payrollActions} from "@eachbase/store/payroll";
 
 export const SystemItem = () => {
 

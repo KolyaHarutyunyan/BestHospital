@@ -1,10 +1,9 @@
-import {AddButton, NoItemText, SlicedText, Toast, ValidationInput} from "@eachbase/components";
+import React, {useEffect, useState} from "react";
+import {AddButton, NoItemText, SlicedText, ValidationInput} from "@eachbase/components";
+import {useDispatch, useSelector} from "react-redux";
 import {Images} from "@eachbase/utils";
 import {systemItemStyles} from "./styles";
-import React, {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, systemActions} from "../../../store";
-
+import {httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
 
 const credentialBtn = {
     maxWidth: '174px',
@@ -54,6 +53,7 @@ export const JobTitles = ({globalJobs,removeItem, openModal}) => {
     const {httpOnLoad } = useSelector((state) => ({
         httpOnLoad: state.httpOnLoad,
     }));
+
     const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_JOB_GLOBAL'
 
     useEffect(()=>{

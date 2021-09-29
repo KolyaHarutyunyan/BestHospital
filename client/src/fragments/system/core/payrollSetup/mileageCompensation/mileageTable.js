@@ -3,26 +3,22 @@ import {PayrollSetupStyles} from '../styles';
 import {DeleteElement, Notes, SimpleModal, SlicedText, TableBodyComponent} from "@eachbase/components";
 import {TableCell} from "@material-ui/core";
 import {Images} from "@eachbase/utils";
-import {OvertimeSettings} from "./overtimeSettings";
+import { MileageCompensation } from "./mileageCompensation";
 import {useDispatch} from "react-redux";
 import {payrollActions} from "@eachbase/store/payroll";
 
 const headerTitles = [
     {
-        title: 'Name',
-        sortable: true
-    },
-    {
-        title: 'Type',
+        title: 'Mileage Compensation',
         sortable: false
     },
     {
-        title: 'Threshold',
-        sortable: true
+        title: 'Start Date',
+        sortable: false
     },
     {
-        title: 'Multiplier',
-        sortable: false
+        title: 'End Date',
+        sortable: true
     },
     {
         title: 'Action',
@@ -30,7 +26,7 @@ const headerTitles = [
     },
 ];
 
-export const OvertimeTable = ({globalOvertimeSettings}) => {
+export const MileageTable = () => {
     const classes = PayrollSetupStyles()
 
     const dispatch = useDispatch()
@@ -52,7 +48,7 @@ export const OvertimeTable = ({globalOvertimeSettings}) => {
     }
 
     const handleDeleteItem = () => {
-        dispatch(payrollActions.deleteOvertimeSettingsByIdGlobal(deletedInfo.id));
+        // dispatch(payrollActions.deleteOvertimeSettingsByIdGlobal(deletedInfo.id));
         setOpen(false)
     }
 
@@ -63,13 +59,10 @@ export const OvertimeTable = ({globalOvertimeSettings}) => {
                     <SlicedText size={30} type={'name'} data={item.name}/>
                 </TableCell>
                 <TableCell>
-                    {item.type}
+                    {item.startDate}
                 </TableCell>
                 <TableCell>
-                    {item.threshold}
-                </TableCell>
-                <TableCell>
-                    {item.multiplier}
+                    {item.endDate}
                 </TableCell>
                 <TableCell>{item.action ? item.action :
                     <div className={classes.icons}>
@@ -89,15 +82,21 @@ export const OvertimeTable = ({globalOvertimeSettings}) => {
         )
     }
 
+    const data = [{
+        name: 'aaaa',
+        startDate: 'dffsdf',
+        endDate: 'sdfdsfhgsdh'
+    }]
+
     return (
         <>
-            <Notes restHeight='360px' defaultStyle={true} data={globalOvertimeSettings} pagination={false}
+            <Notes restHeight='360px' defaultStyle={true} data={data} pagination={false}
                    items={notesItem}
                    headerTitles={headerTitles}/>
             <SimpleModal
                 openDefault={editModalOpenClose}
                 handleOpenClose={handleOpenClose}
-                content={<OvertimeSettings handleOpenClose={editedData && handleOpenClose} maxWidth='480px'
+                content={<MileageCompensation handleOpenClose={editedData && handleOpenClose} maxWidth='480px'
                                            editedData={editedData} handleClose={handleOpenClose}/>}
             />
             <SimpleModal

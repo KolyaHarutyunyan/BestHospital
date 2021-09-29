@@ -1,7 +1,7 @@
+import React from "react";
 import {serviceSingleStyles} from "./styles";
 import {Images} from "@eachbase/utils";
 import {AddButton, AddModalButton, SimpleModal, AddNotes} from "@eachbase/components";
-import React, {} from "react";
 import {CreateStaff, CredentialModal} from "@eachbase/fragments";
 import {useSelector} from "react-redux";
 
