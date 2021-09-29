@@ -77,17 +77,17 @@ export const fundingSourceReducer = (state = initialState, action) => {
                 servicesItem: action.payload
             }
 
-        case  GET_FUNDING_SOURCE_NOTES_SUCCESS :
-            return {
-                ...state,
-                fundingSourceNotes: action.payload.reverse()
-            }
-
-        case  CREATE_FUNDING_SOURCE_NOTES_SUCCESS:
-            return {
-                ...state,
-                fundingSourceNotes: [action.payload,...state.fundingSourceNotes, ]
-            }
+        // case  GET_FUNDING_SOURCE_NOTES_SUCCESS :
+        //     return {
+        //         ...state,
+        //         fundingSourceNotes: action.payload.reverse()
+        //     }
+        //
+        // case  CREATE_FUNDING_SOURCE_NOTES_SUCCESS:
+        //     return {
+        //         ...state,
+        //         fundingSourceNotes: [action.payload,...state.fundingSourceNotes, ]
+        //     }
 
         case GET_ACTIVE_OR_INACTIVE:
             return {

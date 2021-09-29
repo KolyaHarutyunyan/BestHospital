@@ -5,14 +5,11 @@ import {
     GET_CLIENT_ENROLLMENT_SUCCESS,
     GET_CLIENT_AUTHORIZATION_SUCCESS,
     GET_CLIENT_HISTORIES_SUCCESS,
-    GET_CLIENT_NOTES_SUCCESS,
-    CREATE_CLIENT_NOTE_SUCCESS,
     CREATE_CLIENT_CONTACT_SUCCESS,
-    CREATE_CLIENT_SUCCESS,
     GET_CLIENT_AUTHORIZATION_SERV_SUCCESS,
-    GET_CLIENT_AUTHORIZATION_SERV_ERROR, GET_CLIENT_AUTHORIZATION_ERROR
+    GET_CLIENT_AUTHORIZATION_SERV_ERROR,
+    GET_CLIENT_AUTHORIZATION_ERROR
 } from "./client.types";
-import {paginate} from "@eachbase/utils";
 
 
 const initialState = {
@@ -27,7 +24,6 @@ const initialState = {
 
 export const clientReducer = (state = initialState, action) => {
     switch (action.type) {
-
         case  GET_CLIENTS_SUCCESS:
             return {
                 ...state,
@@ -39,7 +35,6 @@ export const clientReducer = (state = initialState, action) => {
                 clientHistories : [],
                 clientsNotes : []
             }
-
 
         case  GET_CLIENT_BY_ID_SUCCESS:
             return {
@@ -87,16 +82,6 @@ export const clientReducer = (state = initialState, action) => {
             return {
                 ...state,
                 clientHistories: action.payload,
-            }
-            case  GET_CLIENT_NOTES_SUCCESS:
-            return {
-                ...state,
-                clientsNotes: action.payload,
-            }
-            case  CREATE_CLIENT_NOTE_SUCCESS:
-            return {
-                ...state,
-                clientsNotes: [...state.clientsNotes, action.payload],
             }
         default:
             return state;

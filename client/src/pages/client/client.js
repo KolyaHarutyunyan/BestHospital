@@ -51,9 +51,7 @@ export const Client = ({}) => {
         setDeleteClient(null)
         setOpen(!open)
     }
-    const removeClient = () => {
-        dispatch(clientActions.deleteClient(deleteClient.id))
-    }
+    const removeClient = () => dispatch(clientActions.deleteClient(deleteClient.id))
 
 
     useEffect(() => {
@@ -61,7 +59,6 @@ export const Client = ({}) => {
             handleOpenClose()
             dispatch(httpRequestsOnSuccessActions.removeSuccess('DELETE_CLIENT'))
         }
-
     }, [success])
 
     return (
@@ -86,11 +83,13 @@ export const Client = ({}) => {
                                 text={'Delete Client'}
                                 info={deleteClient.firstName}
                                 handleClose={handleOpenClose}/>
-                            :
-                            <CreateClient title={'Add Client'} handleClose={handleOpenClose}/>}
+                            : <CreateClient title={'Add Client'} handleClose={handleOpenClose}/>}
                     >
-                        <ClientTable status={status} handleGetPage={setPage} setDeleteClient={setDeleteClient}
-                                     setOpen={setOpen} handleClose={handleOpenClose}/>
+                        <ClientTable status={status}
+                                     handleGetPage={setPage}
+                                     setDeleteClient={setDeleteClient}
+                                     setOpen={setOpen}
+                                     handleClose={handleOpenClose}/>
                     </TableWrapper>
                 )
                 : (<OfficesInfo info={officeById}/>)

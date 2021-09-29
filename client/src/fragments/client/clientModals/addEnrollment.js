@@ -1,21 +1,19 @@
 import React, {useEffect, useState} from "react";
-import {ValidationInput, SelectInput, CreateChancel, ModalHeader, Toast} from "@eachbase/components";
+import {useParams} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import moment from "moment";
+import {ValidationInput, SelectInput, CreateChancel, ModalHeader,} from "@eachbase/components";
 import {createClientStyle,} from "./styles";
 import {ErrorText} from "@eachbase/utils";
-import {useDispatch, useSelector} from "react-redux";
 import {
     clientActions,
     fundingSourceActions,
     httpRequestsOnErrorsActions,
     httpRequestsOnSuccessActions
 } from '@eachbase/store';
-import {useParams} from "react-router-dom";
-import moment from "moment";
 
 
 export const AddEnrollment = ({handleClose, info}) => {
-    // value: data?.birthday && moment(data?.birthday).format('DD MM YYYY')
-
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {...info,
         funding: info.funderId.name ,
@@ -24,8 +22,6 @@ export const AddEnrollment = ({handleClose, info}) => {
     const classes = createClientStyle()
     const params = useParams()
     const dispatch = useDispatch()
-
-
 
     useEffect(() => {
         dispatch(fundingSourceActions.getFundingSource())
@@ -80,7 +76,6 @@ export const AddEnrollment = ({handleClose, info}) => {
             } else {
                 dispatch(clientActions.createClientEnrollment(data, params.id, funderId))
             }
-            // handleClose()
         } else {
             setError(
                 !inputs.funding ? 'funding' :
@@ -89,19 +84,10 @@ export const AddEnrollment = ({handleClose, info}) => {
                             'Input is not field'
             )
         }
-
-
     }
 
-
-    // const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_ENROLLMENT'
-    // let errorMessage = successCreate ? 'Successfully added' : successEdit ? 'Successfully edited' : 'Something went wrong'
     return (
         <div className={classes.createFoundingSource}>
-            {/*<Toast*/}
-            {/*    type={'success'}*/}
-            {/*    text={errorMessage}*/}
-            {/*    info={successCreate || successEdit}/>*/}
             <ModalHeader
                 handleClose={handleClose}
                 title={info ? 'Edit an Enrollment' : 'Add an Enrollment'}

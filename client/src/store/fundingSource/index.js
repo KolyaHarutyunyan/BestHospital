@@ -13,10 +13,6 @@ import {
     editFoundingSourceServiceById,
     getActiveOrInactive,
     deleteFoundingSourceServiceById,
-    getFundingSourceNotes,
-    createFoundingSourceNote,
-    editFoundingSourceNote,
-    deleteFoundingSourceNote,
     getFoundingSourceServiceModifiers,
     editActiveOrInactive,
     editFoundingSourceModifier,
@@ -43,10 +39,6 @@ export const fundingSourceActions = {
     deleteFoundingSourceServiceById,
     getActiveOrInactive,
     editActiveOrInactive,
-    getFundingSourceNotes,
-    createFoundingSourceNote,
-    editFoundingSourceNote,
-    deleteFoundingSourceNote,
     editFoundingSourceModifier,
     getFoundingSourceServiceModifiersForClient
 }

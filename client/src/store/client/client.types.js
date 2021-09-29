@@ -77,35 +77,5 @@ export const GET_CLIENT_HISTORIES = 'GET_CLIENT_HISTORIES';
 export const GET_CLIENT_HISTORIES_SUCCESS = 'GET_CLIENT_HISTORIES_SUCCESS';
 
 
-/**get client notes */
-export const GET_CLIENT_NOTES = 'GET_CLIENT_NOTES';
-export const GET_CLIENT_NOTES_SUCCESS = 'GET_CLIENT_NOTES_SUCCESS';
-
-
-/**create client notes */
-export const CREATE_CLIENT_NOTE = 'CREATE_CLIENT_NOTE';
-export const CREATE_CLIENT_NOTE_SUCCESS = 'CREATE_CLIENT_NOTE_SUCCESS';
-
-/**edit client notes */
-export const EDIT_CLIENT_NOTE = 'EDIT_CLIENT_NOTE';
-
-/**delete client notes */
-export const DELETE_CLIENT_NOTE = 'DELETE_CLIENT_NOTE';
-
-
-/**get  Availability Schedule */
-export const GET_AVAILABILITY_SCHEDULE = 'GET_AVAILABILITY_SCHEDULE';
-export const GET_AVAILABILITY_SCHEDULE_SUCCESS = 'GET_AVAILABILITY_SCHEDULE_SUCCESS';
-
-/**edit  Availability Schedule */
-export const EDIT_AVAILABILITY_SCHEDULE = 'EDIT_AVAILABILITY_SCHEDULE';
-
-/**create  Availability Schedule */
-export const CREATE_AVAILABILITY_SCHEDULE = 'CREATE_AVAILABILITY_SCHEDULE';
-
-/**delete  Availability Schedule */
-export const DELETE_AVAILABILITY_SCHEDULE = 'DELETE_AVAILABILITY_SCHEDULE';
-
-
 /**get  Auth Service Mo Check */
 export const GET_CLIENT_AUTHORIZATION_MOD_CHECK = 'GET_CLIENT_AUTHORIZATION_MOD_CHECK';

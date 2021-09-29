@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from "react";
-import {ValidationInput, SelectInput, CreateChancel, ModalHeader, Toast} from "@eachbase/components";
+import {useParams} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
 import {createClientStyle,} from "./styles";
 import {ErrorText} from "@eachbase/utils";
-import {useDispatch, useSelector} from "react-redux";
 import {
     clientActions,
     fundingSourceActions,
     httpRequestsOnErrorsActions,
     httpRequestsOnSuccessActions
 } from "@eachbase/store";
-import {useParams} from "react-router-dom";
 
 
 export const AddAuthorization = ({handleClose, info}) => {
@@ -20,19 +20,14 @@ export const AddAuthorization = ({handleClose, info}) => {
     const fSelect = useSelector(state => state?.fundingSource?.fSelect?.funders)
     const classes = createClientStyle()
 
-
-
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,
     }));
 
-
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_AUTHORIZATION'
     const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_CLIENT_AUTHORIZATION'
-
-
 
     useEffect(() => {
         if (success) {
@@ -77,7 +72,6 @@ export const AddAuthorization = ({handleClose, info}) => {
             } else {
                 dispatch(clientActions.createClientsAuthorizations(data, params.id, funderId))
             }
-            // handleClose()
         } else {
             setError(
                 !inputs.authId ? 'authId' :
@@ -95,19 +89,9 @@ export const AddAuthorization = ({handleClose, info}) => {
         {name: '0'},
         {name: 1}
     ]
-    //
-    // const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_AUTHORIZATION'
-    // let errorMessage = successCreate ? 'Successfully added' : successEdit ? 'Successfully edited' : 'Something went wrong'
-
-
-    console.log(httpOnSuccess,'auth   modal onssssssucessss')
 
     return (
         <div className={classes.createFoundingSource}>
-            {/*<Toast*/}
-            {/*    type={'success'}*/}
-            {/*    text={errorMessage}*/}
-            {/*    info={successCreate || successEdit}/>*/}
             <ModalHeader
                 handleClose={handleClose}
                 title={info ? "Edit Authorization" : 'Add Authorization'}
@@ -133,7 +117,6 @@ export const AddAuthorization = ({handleClose, info}) => {
                             list={fSelect ? fSelect : []}
                             typeError={error === 'funding' ? ErrorText.field : ''}
                         />
-
                         <div style={{display: 'flex'}}>
                             <ValidationInput
                                 variant={"outlined"}
@@ -154,7 +137,6 @@ export const AddAuthorization = ({handleClose, info}) => {
                                 name='endDate'
                                 typeError={error === 'endDate' && ErrorText.field}
                             />
-
                         </div>
                         <SelectInput
                             name={"status"}
