@@ -152,14 +152,14 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
     }
 
 
-    let errorMessage = success ? 'Successfully Deleted'  : 'Something went wrong'
+    // let errorMessage = success ? 'Successfully Deleted'  : 'Something went wrong'
 
     return (
         <div className={classes.staffGeneralWrapper}>
-            <Toast
-                type={'success'}
-                text={errorMessage}
-                info={success}/>
+            {/*<Toast*/}
+            {/*    type={'success'}*/}
+            {/*    text={errorMessage}*/}
+            {/*    info={success}/>*/}
             <SimpleModal
                 handleOpenClose={() => setToggleModal(!toggleModal)}
                 openDefault={toggleModal}
@@ -188,6 +188,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
                 content={ delEdit2 ?
                     <AddAuthorizationService  info={services  && services[serviceIndex]} authId={info[authIndex].id} handleClose={() => setToggleModal3(!toggleModal3)} fundingId={info[authIndex].funderId._id} />
                     : <DeleteElement
+                        loader={httpOnLoad.length > 0}
                          info={`Delete ${services && services[serviceIndex]?.serviceId?.name}`}
                         handleClose={() => setToggleModal3(!toggleModal3)}
                         handleDel={deleteAuthorizationServ}

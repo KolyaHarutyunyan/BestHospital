@@ -94,14 +94,14 @@ export const AddEnrollment = ({handleClose, info}) => {
     }
 
 
-    const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_ENROLLMENT'
-    let errorMessage = successCreate ? 'Successfully added' : successEdit ? 'Successfully edited' : 'Something went wrong'
+    // const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_ENROLLMENT'
+    // let errorMessage = successCreate ? 'Successfully added' : successEdit ? 'Successfully edited' : 'Something went wrong'
     return (
         <div className={classes.createFoundingSource}>
-            <Toast
-                type={'success'}
-                text={errorMessage}
-                info={successCreate || successEdit}/>
+            {/*<Toast*/}
+            {/*    type={'success'}*/}
+            {/*    text={errorMessage}*/}
+            {/*    info={successCreate || successEdit}/>*/}
             <ModalHeader
                 handleClose={handleClose}
                 title={info ? 'Edit an Enrollment' : 'Add an Enrollment'}

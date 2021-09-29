@@ -105,8 +105,8 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
                 "modifiers": modifiersPost,
 
             }
-            dispatch(clientActions.getClientsAuthorizationsServModifiersCheck(data, authId, funderId,))
-            // dispatch(clientActions.createClientsAuthorizationsServ(data, authId, funderId,))
+            //dispatch(clientActions.getClientsAuthorizationsServModifiersCheck(data, authId, funderId,))
+             dispatch(clientActions.createClientsAuthorizationsServ(data, authId, funderId,))
         } else if (inputs.total && info) {
             dispatch(clientActions.editClientsAuthorizationsServ({
                 "total": +inputs.total,
@@ -137,15 +137,15 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
     }
 
 
-    const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_AUTHORIZATION_SERV'
-    let errorMessage = successCreate ? 'Successfully added' : successEdit ? 'Successfully edited' : 'Something went wrong'
+    // const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_AUTHORIZATION_SERV'
+    // let errorMessage = successCreate ? 'Successfully added' : successEdit ? 'Successfully edited' : 'Something went wrong'
 
     return (
         <div className={classes.createFoundingSource}>
-            <Toast
-                type={'success'}
-                text={errorMessage}
-                info={successCreate || successEdit}/>
+            {/*<Toast*/}
+            {/*    type={'success'}*/}
+            {/*    text={errorMessage}*/}
+            {/*    info={successCreate || successEdit}/>*/}
             <ModalHeader
                 handleClose={handleClose}
                 title={info ? "Edit Authorization Service" : 'Add Authorization Service'}

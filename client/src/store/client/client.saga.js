@@ -205,6 +205,7 @@ function* deleteClientContact(action) {
             payload: {id: action.payload.paramsId},
         });
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
         console.log(err, 'error del client')
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));

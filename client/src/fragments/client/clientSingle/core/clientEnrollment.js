@@ -73,7 +73,6 @@ export const ClientEnrollment = ({data, info}) => {
             dispatch(httpRequestsOnErrorsActions.removeError('DELETE_CLIENT_ENROLLMENT'))
 
         }
-
     }, [success])
 
     let editPrimary = (i)=>{
@@ -121,22 +120,22 @@ export const ClientEnrollment = ({data, info}) => {
 
 
 
-    let errorMessage = success ? 'Successfully Deleted'  : 'Something went wrong'
+    // let errorMessage = success ? 'Successfully Deleted'  : 'Something went wrong'
 
 
     return (
         <div className={classes.staffGeneralWrapper}>
-            <Toast
-                type={'success'}
-                text={errorMessage}
-                info={success }/>
+            {/*<Toast*/}
+            {/*    type={'success'}*/}
+            {/*    text={errorMessage}*/}
+            {/*    info={success }/>*/}
             <SimpleModal
                 handleOpenClose={() => setToggleModal(!toggleModal)}
                 openDefault={toggleModal}
                 content={delEdit ? <AddEnrollment info={info[index]} handleClose={() => setToggleModal(!toggleModal)}/>
                 : <DeleteElement
                         loader={httpOnLoad.length > 0}
-                        text={'Delete Enrollment'}
+                        info={'Delete Enrollment'}
                         handleClose={() => setToggleModal(!toggleModal)}
                         handleDel={deleteEnrollment}
                     />

@@ -56,11 +56,11 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
         if (success) {
               handleClose()
             dispatch(httpRequestsOnSuccessActions.removeSuccess('EDIT_FUNDING_SOURCE_SERVICE'))
-            dispatch(httpRequestsOnErrorsActions.removeError('CREATE_FUNDING_SOURCE_SERVICE_BY_ID'))
+            dispatch(httpRequestsOnErrorsActions.removeError('EDIT_FUNDING_SOURCE_SERVICE'))
         }
         if (successCreate) {
              handleClose()
-            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_CLIENT_ENROLLMENT'))
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_FUNDING_SOURCE_SERVICE_BY_ID'))
             dispatch(httpRequestsOnErrorsActions.removeError('CREATE_FUNDING_SOURCE_SERVICE_BY_ID'))
         }
     }, [success, successCreate])
@@ -116,15 +116,15 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
         }
     }
 
-    const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_FUNDING_SOURCE_SERVICE'
-    let errorMessage = successCreate ? 'Successfully added' : successEdit ? 'Successfully edited' : 'Something went wrong'
+    // const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_FUNDING_SOURCE_SERVICE'
+    // let errorMessage = successCreate ? 'Successfully added' : successEdit ? 'Successfully edited' : 'Something went wrong'
 
     return (
         <div className={classes.createFoundingSource}>
-            <Toast
-                type={'success'}
-                text={errorMessage}
-                info={successCreate || successEdit}/>
+            {/*<Toast*/}
+            {/*    type={'success'}*/}
+            {/*    text={errorMessage}*/}
+            {/*    info={successCreate || successEdit}/>*/}
             <ModalHeader handleClose={handleClose} title={info ? "Edit Service" : 'Add a New Service'}/>
             <div className={classes.createFoundingSourceBody}>
                 <p className={classes.fundingSourceModalsTitle}>Service</p>
