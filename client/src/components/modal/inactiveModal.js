@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
-import {modalsStyle} from "./styles";
+import {useParams} from "react-router-dom";
 import {Colors, ErrorText, useGlobalTextStyles} from "@eachbase/utils";
+import {modalsStyle} from "./styles";
 import {AddModalButton, CloseButton} from "../buttons";
 import {ValidationInput, Textarea} from "../inputs";
 import {useDispatch, useSelector} from "react-redux";
-import {fundingSourceActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "../../store";
-import {useParams} from "react-router-dom";
+import {fundingSourceActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 
 export const InactiveModal = ({handleOpenClose, info}) => {
     const classes = modalsStyle()
@@ -20,7 +20,7 @@ export const InactiveModal = ({handleOpenClose, info}) => {
         httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,
     }));
-    const errorText = httpOnError.length && httpOnError[0].error
+
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_ACTIVE_OR_INACTIVE'
 
     const inactivateButtonStyle = {
@@ -49,10 +49,6 @@ export const InactiveModal = ({handleOpenClose, info}) => {
         }
     }
 
-
-
-
-
     useEffect(()=>{
         if (success){
             handleOpenClose()
@@ -60,12 +56,6 @@ export const InactiveModal = ({handleOpenClose, info}) => {
         }
 
     },[success])
-
-
-
-
-
-
 
     return (
         <div className={classes.inactiveModalBody}>

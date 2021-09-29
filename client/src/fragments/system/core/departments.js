@@ -1,9 +1,9 @@
-import {AddButton, NoItemText, SlicedText, Toast, ValidationInput} from "@eachbase/components";
+import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {AddButton, NoItemText, SlicedText, ValidationInput} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
 import {systemItemStyles} from "./styles";
-import React, {useEffect, useState} from "react";
-import {httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, systemActions} from "../../../store";
-import {useDispatch, useSelector} from "react-redux";
+import {httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
 
 
 const credentialBtn = {

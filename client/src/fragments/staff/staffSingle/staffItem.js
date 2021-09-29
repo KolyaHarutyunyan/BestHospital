@@ -21,7 +21,11 @@ import {
     Notes,
     TableWrapperGeneralInfo,
     InactiveModal,
-    TableBodyComponent, Loader, SimpleModal, DeleteElement, NoItemText,
+    TableBodyComponent,
+    Loader,
+    SimpleModal,
+    DeleteElement,
+    NoItemText,
 } from "@eachbase/components";
 import {useDispatch, useSelector} from "react-redux";
 import {staffStyle} from "@eachbase/pages/staff/styles";
@@ -145,6 +149,7 @@ export const StaffItem = () => {
             id: ''
         })
     }
+
     const notesItem = (item, index) => {
         return (
             <TableBodyComponent key={index} handleOpenInfo={() => openNoteModal({
@@ -222,7 +227,6 @@ export const StaffItem = () => {
         closeNoteModal()
     }
 
-
     const loader = httpOnLoad.length && httpOnLoad[0] === 'DELETE_GLOBAL_NOTE'
 
     useEffect(() => {
@@ -231,7 +235,6 @@ export const StaffItem = () => {
             setOpenDelModal(false)
         }
     }, [loader]);
-
 
     return (
         <>

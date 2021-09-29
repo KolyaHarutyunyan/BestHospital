@@ -1,10 +1,10 @@
-import {AddButton, NoItemText, SlicedText, Toast, ValidationInput} from "@eachbase/components";
 import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {AddButton, NoItemText, SlicedText, ValidationInput} from "@eachbase/components";
 import {systemItemStyles} from "./styles";
 import {ErrorText, Images,} from "@eachbase/utils";
 import {SelectInputPlaceholder} from "@eachbase/components";
-import {useDispatch, useSelector} from "react-redux";
-import {httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
+import {httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
 
 const credentialBtn = {
     maxWidth: '174px',
@@ -84,6 +84,7 @@ export const Credentials = ({removeItem, openModal,globalCredentials}) => {
     }));
 
     const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_CREDENTIAL_GLOBAL'
+
     useEffect(()=>{
         if(loader) {
             dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_CREDENTIAL_GLOBAL'))
