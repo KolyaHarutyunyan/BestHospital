@@ -17,12 +17,12 @@ export const inputsStyle = makeStyles(() => ({
   radio: {
     color: Colors.BackgroundBlue,
     '&:hover': {
-      backgroundColor: 'white'
+      backgroundColor: 'white!important'
     },
     '&$checked': {
-      color: Colors.BackgroundBlue,
+      color: `${Colors.BackgroundBlue}!important`,
       '&:hover': {
-        backgroundColor: 'white'
+        backgroundColor: 'white!important'
       },
     }
   },

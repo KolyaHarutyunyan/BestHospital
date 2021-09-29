@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {createStaffModalStyle} from "./style";
-import {Steps, CloseButton, Toast} from "@eachbase/components";
+import {Steps, CloseButton} from "@eachbase/components";
 import {useGlobalTextStyles, EmailValidator, ErrorText} from "@eachbase/utils";
 import {AddressInput, ValidationInput, SelectInput} from "@eachbase/components";
-import {adminActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
+import {adminActions, httpRequestsOnErrorsActions} from "@eachbase/store";
 import {useDispatch, useSelector} from "react-redux";
 import {inputStyle} from "../../../fundingSource/createFundingSource/core/styles";
 import moment from "moment";
@@ -126,25 +126,13 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
         httpOnError.length && httpOnError[0].type === 'CREATE_ADMIN' ? true :
             httpOnError.length && httpOnError[0].type === 'EDIT_ADMIN_BY_ID'
 
-    const loading =
-        httpOnError.length && httpOnError[0].type === 'CREATE_ADMIN' ? true :
-            httpOnError.length && httpOnError[0].type === 'EDIT_ADMIN_BY_ID'
-
-    const errorMessage = success ? 'success' : httpOnError[0]?.error[0]
-
     useEffect(() => {
-        console.log('aaaaaa')
         if (success) {
-            dispatch(httpRequestsOnSuccessActions.removeSuccess(httpOnSuccess.length && httpOnSuccess[0].type))
             handleClose()
         } if(errorText){
             dispatch(httpRequestsOnErrorsActions.removeError(httpOnError.length && httpOnError[0].type))
         }
     }, [success]);
-
-    console.log(errorText,'errrrrrrrrrrrrrr');
-    console.log(success,'successssssss');
-    console.log(loading,'loading');
 
     const firstStep = (
         <React.Fragment>
@@ -325,10 +313,6 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
                 disabledOne={disabledOne}
                 disableSecond={disableSecond}
             />
-            <Toast
-                type={success ? 'success' : errorText ? 'error' : ''}
-                text={errorMessage}
-                info={success ? success : errorText ? errorText : ''}/>
         </div>
     );
 };

@@ -12,6 +12,7 @@ export const useGlobalStyles = makeStyles({
         boxShadow: Shadow.noteModalShadow,
         transition: '.7s',
         borderRadius: 8,
+        zIndex: 10,
         '& h1': {
             fontSize: 18,
             color: Colors.BackgroundBlue,

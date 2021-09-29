@@ -5,6 +5,9 @@ import {
     GET_AVAILABILITY_SCHEDULE_GLOBAL_SUCCESS,
     GET_AVAILABILITY_SCHEDULE_GLOBAL
 } from "./availabilitySchedule.type";
+import {httpRequestsOnLoadActions} from "../http_requests_on_load";
+import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
+import {httpRequestsOnSuccessActions} from "../http_requests_on_success";
 
 function* getAvailabilitySchedule(action) {
     try {
@@ -21,8 +24,11 @@ function* getAvailabilitySchedule(action) {
 }
 
 function* createAvailabilitySchedule(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         yield call(availabilityScheduleService.createAvailabilityScheduleService, action);
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         yield put({
             type: GET_AVAILABILITY_SCHEDULE_GLOBAL,
             payload: action.payload.id,
@@ -30,6 +36,8 @@ function* createAvailabilitySchedule(action) {
 
     } catch (error) {
        console.log(error)
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
 }
 
