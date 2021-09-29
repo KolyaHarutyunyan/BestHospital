@@ -1,14 +1,11 @@
-import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
 import React, {useEffect, useState} from "react";
+import {ValidationInput, SelectInput,} from "@eachbase/components";
 import {foundingSourceModalStyle} from "./styles";
 import {ErrorText, Images} from "@eachbase/utils";
-import {useDispatch, useSelector} from "react-redux";
-import {fundingSourceActions} from "@eachbase/store";
-import {useParams} from "react-router-dom";
+
 
 
 export const FundingSourceModifiersAdd = ({
-                                              info,
                                               setPostModifiers,
                                               globalCredentials,
                                               modifiersServ,
@@ -19,26 +16,11 @@ export const FundingSourceModifiersAdd = ({
     const [inputs, setInputs] = useState({});
     const [inputs2, setInputs2] = useState({});
     const [modifiers, setModifiers] = useState(modifiersServ ? [...modifiersServ] : []);
-
-    const states = []
-
     const [credentialID, setCredentialID] = useState(null)
-    const [credentialIDitem, setCredentialIDitem] = useState(null)
     const [btnStyle, setBtnStyle] = useState(false)
     const [indexItem, setIndexItem] = useState(null)
-    const dispatch = useDispatch()
-
-
     const classes = foundingSourceModalStyle()
 
-    // const handleChange = (e, index, field) => {
-    //     const modObject = modifiers[index]
-    //     modifiers[index] =  { ...modObject, [field]: e.target.value }
-    //     setModifiers()
-    // }
-
-
-    // console.log(modifiersServ[0].modifiers,'loooooooooooooog')
 
     const handleChange = e => {
         setInputs(
@@ -48,10 +30,6 @@ export const FundingSourceModifiersAdd = ({
 
 
     }
-
-
-    // modifiers && modifiers.map(i=>states.push(useState(i)))
-
 
     const handleChange2 = (e, index,) => {
       if (e.target.name==='chargeRate'){
@@ -68,10 +46,6 @@ export const FundingSourceModifiersAdd = ({
           setModifiers([...modifiers])
       }
     }
-
-// useEffect(()=>{
-//     setPostModifiers([...modifiers])
-// },[])
 
     useEffect(()=>{
         setPostModifiers([...modifiers])
@@ -107,16 +81,6 @@ export const FundingSourceModifiersAdd = ({
     }, [inputs, modifiers])
 
     const handleCreate = () => {
-        // if (inputs2.credentialId && inputs2.chargeRate && inputs2.name && inputs2.type) {
-        //     if (inputs2.credentialId !== '0' && inputs2.chargeRate !== ' ' && inputs2.name !== ' ') {
-        //         dispatch(fundingSourceActions.editFoundingSourceModifier(modifiers[indexItem]._id, {
-        //             name: inputs2.name,
-        //             credentialID: inputs2.credentialId,
-        //             type : inputs2.type,
-        //             chargeRate : +inputs2.chargeRate
-        //         }))
-        //     }
-        // }
         setBtnStyle(false)
         if (inputs.credentialId && inputs.chargeRate && inputs.name && inputs.type) {
             if (inputs.credentialId !== '0' && inputs.chargeRate !== ' ' && inputs.name !== ' ') {
@@ -135,8 +99,6 @@ export const FundingSourceModifiersAdd = ({
                 })
                 setInputs({name: ' ', chargeRate: ' ', credentialId: credentialID, type: '0'})
             }
-
-
         } else {
             setError(
                 !inputs.name ? 'name' :
@@ -150,15 +112,12 @@ export const FundingSourceModifiersAdd = ({
 
     let list = [{name: 0,}, {name: 1}]
 
-
     let editModifier = (i) => {
         if (i !== indexItem) {
             setIndexItem(i)
             setInputs2(modifiers[i])
         }
-
     }
-
 
     const renderInputs = (item, index) => {
         return (
@@ -254,11 +213,9 @@ export const FundingSourceModifiersAdd = ({
                 />
             </div>
             {modifiers && modifiers?.length>0 && modifiers.map((item, index) => {
-
                 return (
                     renderInputs(item, index)
                 )
-
             })}
 
             <div className={classes.addmodifiersBlock}>

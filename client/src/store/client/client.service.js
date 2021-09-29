@@ -60,21 +60,6 @@ export const authService = {
 
     getClientHistoriesService: (id,onModal) => axios.get(`/history/${id}/${onModal}`),
 
-    getClientNotesService: (id,onModal) => axios.get(`/comment/${id}/${onModal}`),
-
-    createClientNoteService: ( body) => axios.post(`/comment`, body),
-
-    editClientNoteService: (id, body) => axios.patch(`/comment/${id}`, body),
-
-    deleteClientNoteService: (id) => axios.delete(`/comment/${id}/comments`),
-
-    getAvailabilityScheduleService: (id) => axios.get(`/availability/${id}`),
-
-    editAvailabilityScheduleService: (id, body) => axios.get(`/availability/${id}`, body),
-
-    createAvailabilityScheduleService: (id, onModel, body) => axios.post(`/availability/${id}/${onModel}`, body),
-
-    deleteAvailabilityScheduleService: (id) => axios.post(`/availability/${id}`),
 };
 
 

@@ -1,9 +1,9 @@
 import React, {useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import {Paper, Table, TableContainer} from "@material-ui/core";
 import {FundingSourceTableBody, FundingSourceTableHead} from "./core";
 import {useGlobalStyles} from "@eachbase/utils";
-import {useDispatch, useSelector} from "react-redux";
-import {Loader, NoItemText, PaginationItem, Toast} from "@eachbase/components";
+import {Loader, NoItemText, PaginationItem} from "@eachbase/components";
 import {fundingSourceActions} from "@eachbase/store";
 
 
@@ -26,14 +26,13 @@ export const FundingSourceTable = ({status, handleGetPage}) => {
             handleGetPage(start)
         };
 
-        // const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_FUNDING_SOURCE'
-        // const errorMessage = successCreate ? 'Successfully added' : 'Something went wrong'
-
         return (
             <div className={globalStyle.tableWrapper}>
+                <Paper className={globalStyle.tableBack}>
                 {fundingSourceList?.funders?.length ?
-                    <TableContainer className={globalStyle.tableContainer} component={Paper}>
+                    <TableContainer style={{height: 'calc(100vh - 250px)'}} className={globalStyle.tableContainer} component={Paper}>
                         <Table
+                            stickyHeader
                             className={globalStyle.table}
                             size="small"
                             aria-label="a dense table"
@@ -48,19 +47,16 @@ export const FundingSourceTable = ({status, handleGetPage}) => {
                                     />
                                 ))}
                         </Table>
-                        <PaginationItem
-                            listLength={fundingSourceList?.funders?.length}
-                            page={page}
-                            handleReturn={(number) => changePage(number)}
-                            count={fundingSourceList?.count}
-                            entries={fundingSourceList?.funders?.length}
-                        />
                     </TableContainer> : <NoItemText text={'No Funding source yet'}/>
                 }
-                {/*<Toast*/}
-                {/*    type={'success'}*/}
-                {/*    text={errorMessage}*/}
-                {/*    info={successCreate}/>*/}
+                    <PaginationItem
+                        listLength={fundingSourceList?.funders?.length}
+                        page={page}
+                        handleReturn={(number) => changePage(number)}
+                        count={fundingSourceList?.count}
+                        entries={fundingSourceList?.funders?.length}
+                    />
+                </Paper>
             </div>
         );
     }

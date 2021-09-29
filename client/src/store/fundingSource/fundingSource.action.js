@@ -13,13 +13,10 @@ import {
     CREATE_FUNDING_SOURCE_SERVICE_MODIFIER,
     GET_ACTIVE_OR_INACTIVE,
     DELETE_FUNDING_SOURCE_SERVICE,
-    GET_FUNDING_SOURCE_NOTES,
-    CREATE_FUNDING_SOURCE_NOTE,
-    EDIT_FUNDING_SOURCE_NOTE,
-    DELETE_FUNDING_SOURCE_NOTE,
     GET_FUNDING_SOURCE_SERVICE_MODIFIERS,
     EDIT_ACTIVE_OR_INACTIVE,
-    EDIT_FUNDING_SOURCE_SERVICE_MODIFIER, GET_FUNDING_SOURCE_SERVICE_MODIFIERS_CLIENT,
+    EDIT_FUNDING_SOURCE_SERVICE_MODIFIER,
+    GET_FUNDING_SOURCE_SERVICE_MODIFIERS_CLIENT,
 } from "./fundingSource.types";
 
 export const createFundingSource = (body) => {
@@ -50,7 +47,6 @@ export const getFundingSourceById = (id) => {
         payload: id
     }
 }
-
 
 
 export const getFoundingSourceServiceById = (id) => {
@@ -90,7 +86,6 @@ export const deleteFoundingSourceServiceById = (id) => {
     }
 }
 
-
 export const createFoundingSourceServiceModifier = (body) => {
     return {
         type: 'CREATE_FUNDING_SOURCE_SERVICE_MODIFIER',
@@ -99,7 +94,6 @@ export const createFoundingSourceServiceModifier = (body) => {
         }
     }
 }
-
 
 export const getFoundingSourceServiceModifiers = (id) => {
 
@@ -126,7 +120,6 @@ export const getFundingSourceHistoriesById = (id, onModal) => {
 }
 
 
-
 export const editFoundingSourceModifier = (id, body,fId) => {
 
     return {
@@ -138,8 +131,6 @@ export const editFoundingSourceModifier = (id, body,fId) => {
         }
     }
 }
-
-
 
 export const getFundingSourceServ = () => {
 
@@ -155,14 +146,12 @@ export const getFundingSourceServById = (id) => {
     }
 }
 
-
 export const createFundingSourceServ = (body) => {
     return {
         type: CREATE_FUNDING_SOURCE_SERV,
         payload: {body}
     }
 }
-
 
 export const getActiveOrInactive = (type) => {
     return {
@@ -175,39 +164,5 @@ export const editActiveOrInactive = (id, path, status, body, type) => {
     return {
         type: EDIT_ACTIVE_OR_INACTIVE,
         payload: {id, path, status, body, type}
-    }
-}
-
-
-export const getFundingSourceNotes = (id, onModal) => {
-    return {
-        type: GET_FUNDING_SOURCE_NOTES,
-        payload: {id, onModal}
-    }
-}
-
-
-export const createFoundingSourceNote = (body) => {
-
-    return {
-        type: CREATE_FUNDING_SOURCE_NOTE,
-        payload: {
-            body
-        }
-    }
-}
-
-export const editFoundingSourceNote = (fId, id, body) => {
-
-    return {
-        type: EDIT_FUNDING_SOURCE_NOTE,
-        payload: {fId, body, id,}
-    }
-}
-
-export const deleteFoundingSourceNote = (fId, id) => {
-    return {
-        type: DELETE_FUNDING_SOURCE_NOTE,
-        payload: {fId, id}
     }
 }

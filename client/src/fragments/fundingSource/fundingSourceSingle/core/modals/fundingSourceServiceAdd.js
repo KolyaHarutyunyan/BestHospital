@@ -1,10 +1,10 @@
-import {ValidationInput, SelectInput, CreateChancel, ModalHeader, Toast} from "@eachbase/components";
 import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {useParams} from "react-router-dom";
+import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
 import {foundingSourceModalStyle} from "./styles";
 import {ErrorText} from "@eachbase/utils";
-import {useDispatch, useSelector} from "react-redux";
 import {fundingSourceActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
-import {useParams} from "react-router-dom";
 import {FundingSourceModifiersAdd} from "./fundingSourceModifiersAdd";
 
 
@@ -17,15 +17,8 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
     const [postModifiers, setPostModifiers] = useState()
     const [modifiersEdit, setModifiersEdit] = useState([]);
     const [getLastMod, setGetLastMod] = useState(null);
-
-
-    // console.log(info,'000000')
-
-
     const params = useParams()
     let dispatch = useDispatch()
-
-
 
     const classes = foundingSourceModalStyle()
     let addNewMod = (newMod)=>{
@@ -38,12 +31,8 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
         httpOnLoad: state.httpOnLoad,
     }));
 
-
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_FUNDING_SOURCE_SERVICE'
     const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_FUNDING_SOURCE_SERVICE_BY_ID'
-
-
-    console.log(httpOnLoad,'iiii')
 
     const handleChange = e => {
         setInputs(
@@ -88,15 +77,6 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
                 "min": +inputs.min,
                 "max": +inputs.max
             }
-            if (getLastMod){
-                // postModifiers?.push(getLastMod)
-                // modifiersEdit?.push(getLastMod)
-            }
-
-            // console.log(postModifiers,'mod post')
-            // console.log(modifiersEdit,'mod edit')
-
-            // serviceId: "614c113a189ca67672af7b79",
             let arr = postModifiers
              if (!info){
                 dispatch(fundingSourceActions.createFoundingSourceServiceById(params.id, data, arr))
@@ -116,15 +96,8 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
         }
     }
 
-    // const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_FUNDING_SOURCE_SERVICE'
-    // let errorMessage = successCreate ? 'Successfully added' : successEdit ? 'Successfully edited' : 'Something went wrong'
-
     return (
         <div className={classes.createFoundingSource}>
-            {/*<Toast*/}
-            {/*    type={'success'}*/}
-            {/*    text={errorMessage}*/}
-            {/*    info={successCreate || successEdit}/>*/}
             <ModalHeader handleClose={handleClose} title={info ? "Edit Service" : 'Add a New Service'}/>
             <div className={classes.createFoundingSourceBody}>
                 <p className={classes.fundingSourceModalsTitle}>Service</p>
@@ -194,7 +167,6 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
 
                 </div>
 
-
                 <FundingSourceModifiersAdd
 
                     info={info}
@@ -204,7 +176,6 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
                     globalCredentials={globalCredentials}
                     setGetLastMod = {setGetLastMod}
                 />
-
 
                 <div className={classes.foundingSourceModalsBodyBlock}>
                     <CreateChancel
@@ -217,7 +188,6 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
                     />
                 </div>
             </div>
-
         </div>
     );
 };

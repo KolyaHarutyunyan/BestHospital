@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import {btnStyles, fundingSourceSingleStyles} from "./styles";
 import {Images} from "@eachbase/utils";
 import {AddButton, AddModalButton, SimpleModal, AddNotes} from "@eachbase/components";
-import {useDispatch, useSelector} from "react-redux";
 import {FundingSourceServiceAdd} from "./modals";
 import {CreateFundingSource} from "../../createFundingSource";
 import {httpRequestsOnSuccessActions} from "@eachbase/store";
@@ -10,19 +10,23 @@ import {httpRequestsOnSuccessActions} from "@eachbase/store";
 
 export const FundingSourceSingleHeader = ({activeTab, title}) => {
     const [open, setOpen] = useState(false)
+    const dispatch = useDispatch()
+    const prevData = useSelector(state => state.fundingSource.fundingSourceItem)
+    const classes = fundingSourceSingleStyles()
+
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,
     }));
-
-    const dispatch = useDispatch()
     const handleOpenClose = () => {
+
         setOpen(!open)
+
     }
 
-
     const successServ = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_FUNDING_SOURCE_SERVICE_BY_ID'
+
 
     useEffect(() => {
         if (successServ) {
@@ -31,20 +35,6 @@ export const FundingSourceSingleHeader = ({activeTab, title}) => {
         }
 
     }, [successServ])
-
-    const classes = fundingSourceSingleStyles()
-    useEffect(() => {
-        if (activeTab === 1) {
-
-        } else if (activeTab === 2) {
-
-        } else if (activeTab === 3) {
-
-        }
-    }, [activeTab])
-
-
-    const prevData = useSelector(state => state.fundingSource.fundingSourceItem)
 
     return (
         <div className={classes.fundingSourceSingleHeaderWrapStyles}>

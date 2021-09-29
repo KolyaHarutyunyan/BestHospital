@@ -29,7 +29,10 @@ export const createClientStyle = makeStyles(() => ({
     createFoundingSourceBody: {
         width: '100%',
         padding: '40px',
-
+    },
+    createFoundingSourceBodyFlex : {
+        display: "flex",
+        justifyContent: "space-between"
     },
     clientModalBlock : {
         display: "flex",

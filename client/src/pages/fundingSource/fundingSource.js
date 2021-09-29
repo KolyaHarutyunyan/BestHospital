@@ -5,7 +5,7 @@ import {fundingSourceActions} from "@eachbase/store";
 import {useDispatch} from "react-redux";
 
 
-export const FundingSource = ({}) => {
+export const FundingSource = () => {
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const [page, setPage] = useState(1)

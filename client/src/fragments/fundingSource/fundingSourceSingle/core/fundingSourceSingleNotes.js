@@ -1,18 +1,17 @@
 import React, {useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
+import moment from "moment";
 import {DeleteElement, Notes, SimpleModal, TableBodyComponent} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
 import {TableCell} from "@material-ui/core";
-import moment from "moment";
-import {fundingSourceActions, httpRequestsOnSuccessActions} from "@eachbase/store";
+import {httpRequestsOnSuccessActions} from "@eachbase/store";
 import {useDispatch, useSelector} from "react-redux";
-import {useParams} from "react-router-dom";
 import {noteActions} from "@eachbase/store/notes";
 
 
 export const FundingSourceSingleNotes = ({ data}) => {
     const params = useParams()
     const [toggleModal, setToggleModal] = useState(false)
-    const [index, setIndex] = useState(null)
     const dispatch = useDispatch()
     const [noteModalInfo, setNoteModalInfo] = useState({
         right: '-1000px',
@@ -27,7 +26,6 @@ export const FundingSourceSingleNotes = ({ data}) => {
         httpOnLoad: state.httpOnLoad,
     }));
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_FUNDING_SOURCE_NOTE'
-
 
     const headerTitles = [
         {
@@ -58,7 +56,7 @@ export const FundingSourceSingleNotes = ({ data}) => {
 
     let notesItem = (item, index) => {
         return (
-            <TableBodyComponent key={index} handleClick={()=> openNoteModal({
+            <TableBodyComponent key={index} handleOpenInfo={()=> openNoteModal({
                 created:item?.created,
                 subject: item?.subject,
                 id: item.id
@@ -106,6 +104,7 @@ export const FundingSourceSingleNotes = ({ data}) => {
     return (
         <>
             <Notes
+                    restHeight='360px'
                     model={'Funder'}
                     closeModal={closeNoteModal}
                     noteModalInfo={noteModalInfo}

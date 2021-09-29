@@ -1,16 +1,15 @@
 import React, {useEffect,  useState} from "react";
-import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
-import {createClientStyle,} from "./styles";
-import {ErrorText, languages} from "@eachbase/utils";
 import {useDispatch, useSelector} from "react-redux";
-import {clientActions, httpRequestsOnSuccessActions} from "@eachbase/store";
-import TextField from "@material-ui/core/TextField";
 import {useParams} from "react-router-dom";
 import moment from "moment";
+import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
+import TextField from "@material-ui/core/TextField";
+import {createClientStyle,} from "./styles";
+import {ErrorText, languages} from "@eachbase/utils";
+import {clientActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 
 
 export const CreateClient = ({handleClose, info}) => {
-
     let params = useParams()
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {...info,birthday : moment(info?.birthday).format('YYYY-MM-DD') } : {});
@@ -32,8 +31,6 @@ export const CreateClient = ({handleClose, info}) => {
         error === e.target.name && setError(''),
     );
 
-
-
     useEffect(()=>{
         if (success){
             handleClose()
@@ -45,20 +42,6 @@ export const CreateClient = ({handleClose, info}) => {
         }
     },[success,successCreate])
 
-
-
-
-
-    // useEffect(() => {
-    //     let today = new Date();
-    //     if (inputs.birthday){
-    //         let birthDate = new Date(inputs.birthday);
-    //         let age = today.getFullYear() - birthDate.getFullYear();
-    //         setInputs({...inputs, age})
-    //     }
-    //
-    //
-    // },[inputs.birthday])
 
     const handleCreate = () => {
         if (step === 'first') {
@@ -84,7 +67,6 @@ export const CreateClient = ({handleClose, info}) => {
                     'familyLanguage': inputs.familyLanguage,
                     'gender': inputs.gender,
                     "birthday": inputs.birthday,
-                    // 'age': +inputs.age,
                     "status": 1
                 }
                 if (!info) {
@@ -96,7 +78,6 @@ export const CreateClient = ({handleClose, info}) => {
                 setError(
                     !inputs.gender ? 'gender' :
                         !inputs.birthday ? 'birthday' :
-
                                 !inputs.language ? 'language' :
                                     !inputs.familyLanguage ? 'familyLanguage' :
                                         'Input is not field'
@@ -111,13 +92,11 @@ export const CreateClient = ({handleClose, info}) => {
         {name: 'other'}
     ]
 
-
     return (
         <div className={classes.createFoundingSource}>
-            <ModalHeader setStep={setStep} steps={step} handleClose={handleClose}
-                         title={info ? 'Edit Client' : 'Add Client'}/>
+            <ModalHeader setStep={setStep} steps={step} handleClose={handleClose} title={info ? 'Edit Client' : 'Add Client'}/>
             <div className={classes.createFoundingSourceBody}>
-                <div style={{display: "flex", justifyContent: "space-between"}}>
+                <div className={classes.createFoundingSourceBodyFlex}>
                     {step === 'first' ? <div style={{width: 463}}>
                         <ValidationInput
                             variant={"outlined"}
@@ -174,19 +153,6 @@ export const CreateClient = ({handleClose, info}) => {
                             name='birthday'
                             typeError={error === 'birthday' && ErrorText.field}
                         />
-
-                        {/*<TextField*/}
-                        {/*    className={classes.inputTextField}*/}
-                        {/*    variant={"outlined"}*/}
-                        {/*    onChange={handleChange}*/}
-                        {/*    value={inputs.age}*/}
-                        {/*    label={"Age*"}*/}
-                        {/*    name='age'*/}
-                        {/*    typeError={error === 'age' && ErrorText.field}*/}
-                        {/*    id="standard-basic"*/}
-                        {/*    fullWidth*/}
-                        {/*/>*/}
-
                         <TextField
                             className={classes.inputTextField}
                             variant={"outlined"}
@@ -198,7 +164,6 @@ export const CreateClient = ({handleClose, info}) => {
                             id="standard-basic"
                             fullWidth
                         />
-
                         <SelectInput
                             name={"language"}
                             label={"Language*"}
@@ -217,9 +182,7 @@ export const CreateClient = ({handleClose, info}) => {
                         />
                     </div>}
                 </div>
-                <div style={{display: "flex", justifyContent: 'space-between'}}>
-
-
+                <div className={classes.createFoundingSourceBodyFlex}>
                     <CreateChancel
                         loader={ httpOnLoad.length > 0}
                         create={step === 'first' ? 'Next' : info ? "Save" : "Add"}
@@ -230,7 +193,6 @@ export const CreateClient = ({handleClose, info}) => {
                     />
                 </div>
             </div>
-
         </div>
     );
 };

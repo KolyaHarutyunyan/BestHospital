@@ -1,13 +1,15 @@
 import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
 import {
     SimpleTabs,
     Notes,
     TableWrapperGeneralInfo,
-    InactiveModal, SimpleModal, NoItemText, Loader, Toast,
+    InactiveModal,
+    SimpleModal,
+    NoItemText, Loader,
 } from "@eachbase/components";
 import {clientActions, httpRequestsOnSuccessActions} from "@eachbase/store";
-
 import {
     ClientGeneral,
     ClientContact,
@@ -16,13 +18,12 @@ import {
     ClientNotes,
     ClientAvailabilitySchedule,
     ClientHistory,
-    ClientAuthorization, ClientAuthorizationItem
+    ClientAuthorization,
 } from "./core";
-import {useDispatch, useSelector} from "react-redux";
 import {AddContact} from "../clientModals";
 import {clientItemStyles} from "./styles";
 import {noteActions} from "@eachbase/store/notes";
-import {availabilityScheduleActions} from "../../../store/availabilitySchedule";
+import {availabilityScheduleActions} from "@eachbase/store/availabilitySchedule";
 
 
 
@@ -37,8 +38,6 @@ export const ClientItem = () => {
     const params = useParams()
     const classes = clientItemStyles()
 
-
-
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnError: state.httpOnError,
@@ -46,21 +45,14 @@ export const ClientItem = () => {
     }));
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'GET_CLIENT_BY_ID'
 
-
-
-
-
-
     useEffect(() => {
         dispatch(clientActions.getClientsById(params.id))
         dispatch(clientActions.getClientsContacts(params.id))
         dispatch(clientActions.getClientsEnrollment(params.id))
         dispatch(clientActions.getClientsAuthorizations(params.id))
         dispatch(clientActions.getClientHistories(params.id, 'Client'))
-        // dispatch(clientActions.getClientsAvailabilitySchedule(params.id,))
         dispatch(noteActions.getGlobalNotes(params.id,'Client'))
         dispatch(availabilityScheduleActions.getAvailabilitySchedule(params.id))
-
     }, []);
 
     useEffect(() => {
@@ -80,7 +72,6 @@ export const ClientItem = () => {
 
 
 
-
     const handleOpenClose = () => {
         setOpen(!open)
     }
@@ -89,32 +80,14 @@ export const ClientItem = () => {
     }
 
     const tabsLabels = [
-        {
-            label: 'General'
-        },
-        {
-            label: 'Contacts'
-        },
-        {
-            label: 'Enrollments'
-        },
-        {
-            label: 'Authorization'
-        },
-        {
-            label: 'Availability Schedule'
-        },
-        {
-            label: 'Notes'
-        },
-        {
-            label: 'History'
-        }
-
+        {label: 'General'},
+        {label: 'Contacts'},
+        {label: 'Enrollments'},
+        {label: 'Authorization'},
+        {label: 'Availability Schedule'},
+        {label: 'Notes'},
+        {label: 'History'}
     ]
-
-
-
 
     const tabsContent = [
         {
@@ -132,12 +105,11 @@ export const ClientItem = () => {
                 <NoItemText text={'No Enrolments Yet'}/>)
         },
         {
-            tabComponent: (clientsAuthorizations.length ? !authActive ?
+            tabComponent: (clientsAuthorizations.length ?
                 <ClientAuthorization info={clientsAuthorizations}
                                      setAuthItemIndex={setAuthItemIndex}
                                      setAuthActive={setAuthActive}
-                                     data={data}/> :
-                <ClientAuthorizationItem data={authItemData}/> : <NoItemText text={'No AuthorizationItem Yet'}/>)
+                                     data={data}/> : <NoItemText text={'No AuthorizationItem Yet'}/>)
         },
         {
             tabComponent: (<ClientAvailabilitySchedule data={data} availabilityData={availabilityData} />)
@@ -151,15 +123,8 @@ export const ClientItem = () => {
         },
     ];
 
-    // const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT'
-    // let errorMessage = successEdit ? 'Successfully edited' : 'Something went wrong'
-
     return (
         <>
-            {/*<Toast*/}
-            {/*    type={'success'}*/}
-            {/*    text={errorMessage}*/}
-            {/*    info={successEdit}/>*/}
             <TableWrapperGeneralInfo
                 status= {data?.status ===1 ? 'active' : 'inactive'}
                 activeInactiveText={data?.status !==1 ? 'active' : 'inactive'}

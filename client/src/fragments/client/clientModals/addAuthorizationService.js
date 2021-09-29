@@ -1,42 +1,33 @@
 import React, {useEffect, useState} from "react";
-import {ValidationInput, SelectInput, CreateChancel, ModalHeader, Toast} from "@eachbase/components";
+import {useDispatch, useSelector} from "react-redux";
+import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
 import {createClientStyle,} from "./styles";
 import {ErrorText} from "@eachbase/utils";
-import {useDispatch, useSelector} from "react-redux";
 import {
     clientActions,
     fundingSourceActions,
     httpRequestsOnErrorsActions,
     httpRequestsOnSuccessActions
 } from "@eachbase/store";
-import {useParams} from "react-router-dom";
-import {editClientsAuthorizationsServ} from "../../../store/client/client.action";
-
 
 export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) => {
-
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {...info, modifiers: info.serviceId.name} : {});
     const [modCheck, setModCheck] = useState([]);
-    const [ids, setids] = useState(null);
     const dispatch = useDispatch()
     const modifiers = useSelector(state => state.fundingSource.modifiers.modifiers)
-
     const fSelect = useSelector(state => state.fundingSource.fundingSourceServices)
+    const classes = createClientStyle()
 
     useEffect(() => {
-
         dispatch(fundingSourceActions.getFoundingSourceServiceById(fundingId))
         let funderId;
         fSelect.forEach(item => {
             if (inputs.modifiers === item.name) {
                 funderId = item._id
             }
-
         })
-        setids(funderId)
     }, []);
-
 
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
@@ -44,12 +35,8 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
         httpOnLoad: state.httpOnLoad,
     }));
 
-
-    console.log(httpOnSuccess, 'auth serv add modal onssssssucessss')
-
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_AUTHORIZATION_SERV'
     const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_CLIENT_AUTHORIZATION_SERV'
-
 
     useEffect(() => {
         if (success) {
@@ -64,8 +51,6 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
         }
     }, [success, successCreate])
 
-
-    const classes = createClientStyle()
 
     const handleChange = e => {
         if (e.target.name === 'modifiers') {
@@ -82,10 +67,8 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
 
 
     const handleCreate = () => {
-
         let modifiersPost = [];
         modCheck.forEach(item => {
-
             return modifiers.forEach((item2, index2) => {
                 if (item === index2) {
                     modifiersPost.push(item2?._id)
@@ -103,10 +86,9 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
             const data = {
                 "total": +inputs.total,
                 "modifiers": modifiersPost,
-
             }
-            //dispatch(clientActions.getClientsAuthorizationsServModifiersCheck(data, authId, funderId,))
-             dispatch(clientActions.createClientsAuthorizationsServ(data, authId, funderId,))
+
+            dispatch(clientActions.createClientsAuthorizationsServ(data, authId, funderId,))
         } else if (inputs.total && info) {
             dispatch(clientActions.editClientsAuthorizationsServ({
                 "total": +inputs.total,
@@ -136,16 +118,8 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
         setModCheck(newArr)
     }
 
-
-    // const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_AUTHORIZATION_SERV'
-    // let errorMessage = successCreate ? 'Successfully added' : successEdit ? 'Successfully edited' : 'Something went wrong'
-
     return (
         <div className={classes.createFoundingSource}>
-            {/*<Toast*/}
-            {/*    type={'success'}*/}
-            {/*    text={errorMessage}*/}
-            {/*    info={successCreate || successEdit}/>*/}
             <ModalHeader
                 handleClose={handleClose}
                 title={info ? "Edit Authorization Service" : 'Add Authorization Service'}
@@ -163,7 +137,6 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
                             list={fSelect}
                             typeError={error === 'modifiers' ? ErrorText.field : ''}
                         />
-
                         <div className={classes.displayCodeBlock2}>
                             <p className={classes.displayCodeBlockText}>Available Modfiers </p>
                             <div className={classes.availableModfiers}>
@@ -179,7 +152,6 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
                                     )
                                 })
                                     : modifiers && modifiers.length > 0 ? modifiers.map((item, index) => {
-
                                         return (
                                             <p className={classes.availableModfier} onClick={() => onModifier(index)}
                                                style={modCheck.includes(index) ? {
@@ -191,7 +163,6 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
                                     }) : <p>N/A</p>}
                             </div>
                         </div>
-
                         <p className={classes.inputInfo}>Availability</p>
                         <ValidationInput
                             variant={"outlined"}
@@ -202,15 +173,6 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
                             name='total'
                             typeError={error === 'total' && ErrorText.field}
                         />
-                        {/*<div className={classes.displayCodeBlock}>*/}
-                        {/*    <p className={classes.displayCodeBlockText}>Completed Units: <span*/}
-                        {/*        className={classes.displayCode}>N/A</span></p>*/}
-                        {/*    <p className={classes.displayCodeBlockText} style={{marginTop: 16}}>Available Units: <span*/}
-                        {/*        className={classes.displayCode}>N/A</span></p>*/}
-                        {/*    <p className={classes.displayCodeBlockText} style={{marginTop: 16}}>Percent*/}
-                        {/*        Utilization: <span*/}
-                        {/*            className={classes.displayCode}>N/A</span></p>*/}
-                        {/*</div>*/}
                     </div>
                 </div>
                 <div className={classes.clientModalBlock}>

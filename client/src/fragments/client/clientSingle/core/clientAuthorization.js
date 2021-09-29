@@ -1,24 +1,19 @@
 import React, {useEffect, useState} from "react";
-import {Card, DeleteElement, Notes, SimpleModal, TableBodyComponent, Toast} from '@eachbase/components';
+import {useParams} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {Card, DeleteElement, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
 import {serviceSingleStyles} from './styles';
 import {Colors, Images} from "@eachbase/utils";
 import {TableCell} from "@material-ui/core";
-import {useDispatch, useSelector} from "react-redux";
 import {clientActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
-import {AddAuthorization, AddEnrollment} from "../../clientModals";
+import {AddAuthorization} from "../../clientModals";
 import {AuthHeader} from "@eachbase/components/headers/auth/authHeader";
 import {AddAuthorizationService} from "../../clientModals/addAuthorizationService";
-import {useParams} from "react-router-dom";
-import {deleteClientsAuthorizationServ, editClientsAuthorizationsServ} from "../../../../store/client/client.action";
+
 
 export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) => {
     const classes = serviceSingleStyles()
-    // const clientsAuthorizations = useSelector(state => state.client.clientsAuthorizations)
-
-
     const dispatch = useDispatch()
-    const [openClose, setOpenClose] = useState(false)
-    const [index, setIndex] = useState(null)
     const [delEdit, setDelEdit] = useState(null)
     const [delEdit2, setDelEdit2] = useState(null)
     const [toggleModal, setToggleModal] = useState(false)
@@ -27,18 +22,13 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
     const [authIndex, setAuthIndex] = useState(0)
     const [serviceIndex, setServiceIndex] = useState(null)
     const services = useSelector(state => state.client.clientsAuthorizationsServices)
-
-
     const params = useParams()
-
-
 
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,
     }));
-
 
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION'
     const successDelServ = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION_SERV'
@@ -47,7 +37,6 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
     useEffect(()=>{
         dispatch(clientActions.getClientsAuthorizationsServ(info[authIndex].id))
     },[authIndex])
-
 
     useEffect(() => {
         if (success) {
@@ -66,11 +55,6 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
         }
     }, [successDelServ])
 
-    console.log(httpOnSuccess,'auth eeeej  modal onssssssucessss')
-
-    // useEffect(() => {
-    //     dispatch(clientActions.getClientsAuthorizationsServ(info[authIndex].id))
-    // }, [])
 
     const headerTitles = [
         {
@@ -85,18 +69,6 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
             title: 'Total Units',
             sortable: false
         },
-        // {
-        //     title: 'Completed Units',
-        //     sortable: false
-        // },
-        // {
-        //     title: 'Available Units',
-        //     sortable: false
-        // },
-        // {
-        //     title: 'Percent Utilization',
-        //     sortable: false
-        // },
         {
             title: 'Action',
             sortable: false,
@@ -110,9 +82,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
     }
 
     let deleteAuthorizationServ = () => {
-        console.log(info[authIndex].id,'auth id')
         dispatch(clientActions.deleteClientsAuthorizationServ(services[serviceIndex].id, info[authIndex].id ))
-        // setServiceIndex(0)
     }
 
     let clientAuthorizationServiceItem = (item, index) => {
@@ -120,14 +90,10 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
             <TableBodyComponent key={index} handleClick={() => {
                 setAuthItemIndex(index)
                 setAuthActive(true)
-
             }}>
                 <TableCell><p className={classes.tableName}>{item?.serviceId?.name}</p></TableCell>
                 <TableCell>  {item?.modifiers && item?.modifiers.length>0 && item?.modifiers[0]}  </TableCell>
                 <TableCell>  {item?.total}  </TableCell>
-                {/*<TableCell>  N/A  </TableCell>*/}
-                {/*<TableCell>  N/A  </TableCell>*/}
-                {/*<TableCell>  N/A  </TableCell>*/}
                 <TableCell>
                     <>
                         <img src={Images.edit} alt="edit" className={classes.iconStyle}
@@ -151,15 +117,8 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
         )
     }
 
-
-    // let errorMessage = success ? 'Successfully Deleted'  : 'Something went wrong'
-
     return (
         <div className={classes.staffGeneralWrapper}>
-            {/*<Toast*/}
-            {/*    type={'success'}*/}
-            {/*    text={errorMessage}*/}
-            {/*    info={success}/>*/}
             <SimpleModal
                 handleOpenClose={() => setToggleModal(!toggleModal)}
                 openDefault={toggleModal}
@@ -180,7 +139,6 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
                 content={
                 <AddAuthorizationService   authId={info[authIndex].id} handleClose={() => setToggleModal2(!toggleModal2)}  fundingId={info[authIndex].funderId._id} />
                 }
-
             />
             <SimpleModal
                 handleOpenClose={() => setToggleModal3(!toggleModal3)}
@@ -194,7 +152,6 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
                         handleDel={deleteAuthorizationServ}
                     />
                 }
-
             />
             <Card
                 width='234px'
@@ -220,12 +177,12 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
                     </div>
                 </div>
                 <Notes
+                    restHeight='560px'
                     data={services}
                     items={clientAuthorizationServiceItem}
                     headerTitles={headerTitles}
                     defaultStyle={true}/>
             </div>
-
         </div>
     )
 }

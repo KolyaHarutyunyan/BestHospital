@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import {
     DeleteElement,
     NoItemText,
@@ -8,7 +9,6 @@ import {
 } from "@eachbase/components";
 import {FundingSourceSinglePTModifiers} from "./fundingSourceSinglePTModifiers";
 import {Images} from "@eachbase/utils";
-import {useDispatch, useSelector} from "react-redux";
 import {TableCell} from "@material-ui/core";
 import {fundingSourceSingleStyles} from "./styles";
 import {FundingSourceServiceAdd,} from "./modals";
@@ -150,7 +150,7 @@ export const FundingSourceSingleServices = ({data,}) => {
                                              handleClose={() => setToggleModal(!toggleModal)}/>}
             />
             <div className={classes.fundindServiceItems}>
-                <Notes data={data} items={serviceItem} headerTitles={headerTitles} defaultStyle={true}/>
+                <Notes restHeight={'360px'} data={data} items={serviceItem} headerTitles={headerTitles} defaultStyle={true}/>
             </div>
             {modifiers && modifiers?.length >0 ? <FundingSourceSinglePTModifiers
                     globalCredentials={globalCredentials}

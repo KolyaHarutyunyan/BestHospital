@@ -1,5 +1,4 @@
 import axios from "axios";
-import {deleteFoundingSourceServiceById, editActiveOrInactive} from "./fundingSource.action";
 
 export const authService = {
 
@@ -18,15 +17,11 @@ export const authService = {
 
     getFoundingSourceByIdService: (id) => axios.get(`/funding/${id}`,),
 
-
     getFoundingSourceServiceByIdService: (id) => axios.get(`/funding/${id}/service`),
 
     createFoundingSourceServiceByIdService: (id, body) => axios.post(`/funding/${id}/service`, body),
 
     editFoundingSourceServiceService: (id, body) => axios.patch(`/funding/service/${id}`, body),
-
-    deleteFoundingSourceServiceByIdService: (id) => axios.delete(`/funding/${id}/`,),
-
 
     createFoundingSourceServiceModifierService: (body) => axios.post(`/modifier`, body),
 
@@ -34,27 +29,8 @@ export const authService = {
 
     getFoundingSourceServiceModifierService: (id) => axios.get(`/modifier/${id}`),
 
-
     getFundingSourceHistoriesByIdService: (id, onModal) => axios.get(`/history/${id}/${onModal}`,),
-
-    getFundingSourceNotesService: (id, onModal) => axios.get(`/comment/${id}/${onModal}`,),
-
-    createFoundingSourceNoteService: (body) => axios.post(`/comment`, body),
-
-    editFoundingSourceNoteService: (id, body) => axios.patch(`/comment/${id}`, body),
-
-    deleteFoundingSourceNoteService: (id) => axios.delete(`/comment/${id}/comments`,),
-
 
     editActiveOrInactiveService: (id, path, status , body) => axios.patch(`/${path}/${id}/${status}`, body),
 
-
-
-
-
-    // getFundingSourceServService: () => axios.get(`/service`,),
-    //
-    // createFundingSourceServService: (body) => axios.post(`/service`, body),
-    //
-    // getFundingSourceServByIdService: (id) => axios.post(`/service/${id}`, ),
 };
