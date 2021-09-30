@@ -52,13 +52,13 @@ export const ClientTable = ({setOpen, handleClose, setDeleteClient, handleGetPag
 
 
             </TableContainer> : <NoItemText text={'No Clients Yet'}/> }
-            <PaginationItem
+            {clientList?.clients &&     <PaginationItem
                 listLength={clientList?.clients?.length}
                 page={page}
                 handleReturn={(number) => changePage(number)}
                 count={clientList?.count}
                 entries={clientList?.clients?.length}
-            />
+            />}
         </div>
     );
 }

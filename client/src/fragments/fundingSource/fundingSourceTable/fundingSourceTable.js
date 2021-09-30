@@ -49,13 +49,13 @@ export const FundingSourceTable = ({status, handleGetPage}) => {
                         </Table>
                     </TableContainer> : <NoItemText text={'No Funding source yet'}/>
                 }
-                    <PaginationItem
+                    {fundingSourceList?.funders &&       <PaginationItem
                         listLength={fundingSourceList?.funders?.length}
                         page={page}
                         handleReturn={(number) => changePage(number)}
                         count={fundingSourceList?.count}
                         entries={fundingSourceList?.funders?.length}
-                    />
+                    />}
                 </Paper>
             </div>
         );
