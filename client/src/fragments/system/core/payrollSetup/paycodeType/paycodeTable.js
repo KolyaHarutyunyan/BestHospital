@@ -35,8 +35,8 @@ const headerTitles = [
 export const PayCodeTable = ({globalPayCodes}) => {
     const classes = PayrollSetupStyles()
 
-    const [editModalOpenClose,setEditModalOpenClose] = useState(false)
-    const [editedData,setEditedData] = useState({})
+    const [editModalOpenClose, setEditModalOpenClose] = useState(false)
+    const [editedData, setEditedData] = useState({})
 
     const handleOpenClose = (data) => {
         setEditedData(data)
@@ -85,7 +85,8 @@ export const PayCodeTable = ({globalPayCodes}) => {
             <SimpleModal
                 openDefault={editModalOpenClose}
                 handleOpenClose={handleOpenClose}
-                content={<PayCodeType handleOpenClose={editedData && handleOpenClose} maxWidth='480px' editedData={editedData} handleClose={handleOpenClose}/>}
+                content={<PayCodeType handleOpenClose={editedData && handleOpenClose} maxWidth='480px'
+                                      editedData={editedData} handleClose={handleOpenClose}/>}
             />
         </>
 

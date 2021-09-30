@@ -2,7 +2,6 @@ import {HtmlTooltip} from "./HtmlTool";
 import React from "react";
 import {errMessageStyle} from "./styles";
 
-
 export const SlicedText = ({data, size, type}) => {
     const globalText = errMessageStyle()
 

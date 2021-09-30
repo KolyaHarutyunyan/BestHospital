@@ -14,7 +14,6 @@ import {
     GET_CREDENTIAL_SUCCESS,
     EDIT_CREDENTIAL_BY_ID,
     DELETE_CREDENTIAL_BY_ID,
-    // CREATE_ADMIN_SUCCESS,
 
 } from "./admin.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";

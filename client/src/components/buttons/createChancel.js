@@ -2,7 +2,6 @@ import {Button} from "@material-ui/core";
 import {Colors} from "@eachbase/utils";
 import {MinLoader} from "../loader";
 
-
 export const CreateChancel = ({
                                   create,
                                   chancel,
@@ -13,7 +12,6 @@ export const CreateChancel = ({
                                   disabled,
                                   loader,
                               }) => {
-
 
     return (
         <div className={classes}
@@ -59,7 +57,6 @@ export const CreateChancel = ({
                     :
                     create
                 }
-
             </Button>
         </div>
     );

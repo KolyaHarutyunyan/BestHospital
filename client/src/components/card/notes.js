@@ -12,10 +12,10 @@ import {
 } from "@eachbase/components";
 import {Images, useGlobalStyles} from "@eachbase/utils";
 import moment from "moment";
-import {noteActions} from "../../store/notes";
+import {noteActions} from "@eachbase/store/notes";
 import {useParams} from "react-router-dom";
-import {httpRequestsOnSuccessActions} from "../../store";
-import {httpRequestsOnLoadActions} from "../../store/http_requests_on_load";
+import {httpRequestsOnSuccessActions} from "@eachbase/store";
+import {httpRequestsOnLoadActions} from "@eachbase/store/http_requests_on_load";
 
 export const Notes = ({
                           restHeight,
@@ -100,14 +100,15 @@ export const Notes = ({
 
     return (
         <div className={globalStyle.tableWrapper}>
-            <TableContainer style={{maxHeight: `calc(100vh - ${restHeight})`}} className={globalStyle.tableContainer} component={Paper}>
+            <TableContainer style={{maxHeight: `calc(100vh - ${restHeight})`}} className={globalStyle.tableContainer}
+                            component={Paper}>
                 <Table
                     stickyHeader
                     className={globalStyle.table}
                     size="small"
                     aria-label="a dense table"
                 >
-                    <TableHeadComponent >
+                    <TableHeadComponent>
                         {
                             headerTitles && headerTitles.map((headerItem, index) => {
                                 return (

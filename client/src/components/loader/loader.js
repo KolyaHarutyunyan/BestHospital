@@ -1,6 +1,6 @@
 import React from "react";
 import {CircularProgress} from "@material-ui/core";
-import {Colors} from "../../utils";
+import {Colors} from "@eachbase/utils";
 
 export const Loader = ({style}) => {
     return (

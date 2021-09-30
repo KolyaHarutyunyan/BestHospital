@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from "react";
-import {createStaffModalStyle} from "./style";
-import {Steps, CloseButton} from "@eachbase/components";
-import {useGlobalTextStyles, EmailValidator, ErrorText} from "@eachbase/utils";
-import {AddressInput, ValidationInput, SelectInput} from "@eachbase/components";
-import {adminActions, httpRequestsOnErrorsActions} from "@eachbase/store";
 import {useDispatch, useSelector} from "react-redux";
-import {inputStyle} from "../../../fundingSource/createFundingSource/core/styles";
 import moment from "moment";
+import {AddressInput, ValidationInput, SelectInput,Steps, CloseButton} from "@eachbase/components";
+import {createStaffModalStyle} from "./style";
+import {useGlobalTextStyles, EmailValidator, ErrorText} from "@eachbase/utils";
+import {adminActions, httpRequestsOnErrorsActions} from "@eachbase/store";
+import {inputStyle} from "../../../fundingSource/createFundingSource/core/styles";
 
 const steps = ['General Info', 'Address', 'Other Details']
 
@@ -24,7 +23,6 @@ const genderList = [
     {name: 'Female'},
     {name: 'Other'},
 ]
-
 
 export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
     const [error, setError] = useState("");
@@ -84,8 +82,6 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
             status: staffGeneral ? staffGeneral.status : 1,
             address: fullAddress
         }
-
-
         if (inputs.firstName &&
             inputs.lastName &&
             inputs.email &&
@@ -99,7 +95,6 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
                 dispatch(adminActions.createAdmin(data))
 
         } else {
-
             setError(
                 !inputs.firstName ? 'firstName' :
                     !inputs.lastName ? 'lastName' :

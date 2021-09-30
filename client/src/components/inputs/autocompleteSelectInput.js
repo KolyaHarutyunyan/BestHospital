@@ -30,12 +30,10 @@ export const  CheckboxesTags =({label,permissionsList,placeholder,handleChange,s
           {option.title}
         </React.Fragment>
       )}
-      // style={{ width: 500 }}
       renderInput={(params) => (
         <TextField
           {...params}
           error={typeError}
-          // inputProps={{ style : {height:'68px'}}}
           className={classes.inputTextFieldAutoHeight}
           variant="outlined"
           label={label}

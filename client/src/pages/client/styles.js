@@ -1,5 +1,5 @@
 import {makeStyles} from "@material-ui/core/styles";
-import {Backgrounds} from "../../utils";
+import {Backgrounds} from "@eachbase/utils";
 
 export const clientsStyle = makeStyles(() => ({
     deleteModal: {

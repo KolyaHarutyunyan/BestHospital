@@ -2,8 +2,6 @@ import { useSelector } from "react-redux";
 
 export const RoleHooks = ( elementPermission ) => {
 
-
-
   const { permissions } = useSelector((state) => ({
      permissions: state.auth.permissions,
    }));

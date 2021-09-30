@@ -8,8 +8,6 @@ export const SearchAndFilter = ({
   type,
   custom,
   handleClick,
-  handleSearch,
-  name,
 
 }) => {
   const classes = inputsStyle();

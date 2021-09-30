@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import {Backgrounds, Colors, Shadow} from "@eachbase/utils";
+import {Backgrounds, Shadow} from "@eachbase/utils";
 
 export const wrapperStyle = makeStyles(() => ({
   buttonsTabStyle: {
