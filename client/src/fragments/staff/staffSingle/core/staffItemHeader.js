@@ -4,6 +4,7 @@ import {Images} from "@eachbase/utils";
 import {AddButton, AddModalButton, SimpleModal, AddNotes} from "@eachbase/components";
 import {CreateStaff, CredentialModal} from "@eachbase/fragments";
 import {useSelector} from "react-redux";
+import {EmploymentModal} from "./modals";
 
 const editButtonStyle = {
     height: 36,
@@ -51,7 +52,9 @@ export const StaffItemHeader = ({
                             <AddModalButton btnStyles={editButtonStyle} handleClick={handleOpenClose}
                                             text='edit'/> : activeTab === 2 ?
                                 <AddButton text='Add Credential'
-                                           handleClick={() => openCloseCredModal('addCredential')}/> : activeTab === 5 ?
+                            handleClick={() => openCloseCredModal('addCredential')}/>
+                            : activeTab === 1 ?  <AddButton text='Add Employemnt' handleClick={handleOpenClose}/>
+                            : activeTab === 5 ?
                                     <AddButton text='Add Note' handleClick={handleOpenClose}/> : null
                     }
                 </li>
@@ -64,7 +67,9 @@ export const StaffItemHeader = ({
                                  resetData={false} handleClose={handleOpenClose}/> : activeTab === 2 ?
                         <CredentialModal globalCredentialInformation={globalCredentialInformation}
                                          globalCredentials={globalCredentials} credModalType={credModalType}
-                                         handleClose={() => openCloseCredModal()}/> : activeTab === 5 ?
+                                         handleClose={() => openCloseCredModal()}/>
+                        : activeTab === 1 ?     <EmploymentModal />
+                        : activeTab === 5 ?
                             <AddNotes model='Staff' noteModalTypeInfo={noteModalTypeInfo}
                                       handleClose={handleOpenClose}/> : null}
             />

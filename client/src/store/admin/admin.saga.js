@@ -13,7 +13,7 @@ import {
     GET_CREDENTIAL,
     GET_CREDENTIAL_SUCCESS,
     EDIT_CREDENTIAL_BY_ID,
-    DELETE_CREDENTIAL_BY_ID,
+    DELETE_CREDENTIAL_BY_ID, GET_EMPLOYMENT, CREATE_EMPLOYMENT, GET_EMPLOYMENT_SUCCESS,
     // CREATE_ADMIN_SUCCESS,
 
 } from "./admin.types";
@@ -162,6 +162,40 @@ function* deleteCredentialById(action) {
     }
 }
 
+
+function* getEmployment(action) {
+
+    try {
+        const res =  yield call(authService.getEmploymentService, action.payload.id)
+        console.log(res,'resesseseesesese employ')
+        yield put({
+            type: GET_EMPLOYMENT_SUCCESS,
+            payload: res.data
+        });
+
+    } catch (err) {
+        console.log(err, ' errr employmeny')
+
+    }
+}
+
+function* createEmployment(action) {
+
+    try {
+        yield call(authService.createEmploymentService, action.payload.body)
+        // yield put({
+        //     type: GET_CREDENTIAL,
+        //     payload: {credentialId: action.payload.credentialId}
+        // });
+        console.log(res,'resesseseesesese employ')
+    } catch (err) {
+        console.log(err, ' errr employmeny')
+
+    }
+}
+
+
+
 export const watchAdmin = function* watchAdminSaga() {
     yield takeLatest(CREATE_ADMIN, createAdmin);
     yield takeLatest(GET_ADMINS, getAdmins);
@@ -171,4 +205,6 @@ export const watchAdmin = function* watchAdminSaga() {
     yield takeLatest(GET_CREDENTIAL, getCredential)
     yield takeLatest(EDIT_CREDENTIAL_BY_ID, editCredentialById)
     yield takeLatest(DELETE_CREDENTIAL_BY_ID, deleteCredentialById)
+    yield takeLatest(GET_EMPLOYMENT, getEmployment)
+    yield takeLatest(CREATE_EMPLOYMENT, createEmployment)
 };
