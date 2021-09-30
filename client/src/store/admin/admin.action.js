@@ -6,7 +6,7 @@ import {
     CREATE_CREDENTIAL,
     GET_CREDENTIAL,
     EDIT_CREDENTIAL_BY_ID,
-    DELETE_CREDENTIAL_BY_ID
+    DELETE_CREDENTIAL_BY_ID, GET_EMPLOYMENT, CREATE_EMPLOYMENT
 } from "./admin.types";
 
 export const createAdmin = (body) => {
@@ -62,5 +62,19 @@ export const deleteCredentialById = (id,credentialId) => {
     return {
         type: DELETE_CREDENTIAL_BY_ID,
         payload: {id,credentialId}
+    }
+}
+
+export const getEmployment = (id) => {
+    return {
+        type: GET_EMPLOYMENT,
+        payload: {id}
+    }
+}
+
+export const createEmployment = (body) => {
+    return {
+        type: CREATE_EMPLOYMENT,
+        payload: {body}
     }
 }

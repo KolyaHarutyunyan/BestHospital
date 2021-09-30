@@ -129,6 +129,7 @@ export const StaffItem = () => {
         dispatch(noteActions.getGlobalNotes(params.id, 'Staff'))
         dispatch(fundingSourceActions.getFundingSourceHistoriesById(params.id, 'Staff'))
         dispatch(availabilityScheduleActions.getAvailabilitySchedule(params.id))
+        dispatch(adminActions.getEmployment(params.id))
     }, [])
 
     const openNoteModal = (data) => {
