@@ -63,8 +63,14 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
                 </TableCell>
                 <TableCell>{item.action ? item.action :
                     <div className={classes.icons}>
-                        <img src={Images.edit} onClick={() => editService('editService',{id:item.id,name:item.name,category: item.category,displayCode: item.displayCode})} alt="edit"/>
-                        <img src={Images.remove} alt="delete" onClick={() => removeItem({id: item.id,name: item.name,type: 'editService'})}/>
+                        <img src={Images.edit} onClick={() => editService('editService', {
+                            id: item.id,
+                            name: item.name,
+                            category: item.category,
+                            displayCode: item.displayCode
+                        })} alt="edit"/>
+                        <img src={Images.remove} alt="delete"
+                             onClick={() => removeItem({id: item.id, name: item.name, type: 'editService'})}/>
                     </div>
                 }
                 </TableCell>
@@ -72,8 +78,8 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
         )
     }
 
-    const editService = (modalType,modalInformation) => {
-        openModal(modalType,modalInformation)
+    const editService = (modalType, modalInformation) => {
+        openModal(modalType, modalInformation)
     }
 
     const handleChange = e => {
@@ -87,7 +93,7 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
         error === e.target.name && setError('')
     }
 
-    const handleSubmit = () =>{
+    const handleSubmit = () => {
         let serviceData = {
             name: inputs.name,
             displayCode: inputs.displayCode,
@@ -95,24 +101,24 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
         }
         if (inputs.name && inputs.displayCode && inputs.category) {
             dispatch(systemActions.createServiceGlobal(serviceData))
-        }else {
+        } else {
             setError(
                 !inputs.name ? 'name' :
                     !inputs.displayCode ? 'displayCode' :
                         !inputs.category ? 'category' :
-                                        'Input is not filled'
+                            'Input is not filled'
             )
         }
     }
 
-    const {httpOnLoad } = useSelector((state) => ({
+    const {httpOnLoad} = useSelector((state) => ({
         httpOnLoad: state.httpOnLoad,
     }));
 
     const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_SERVICE_GLOBAL'
 
-    useEffect(()=>{
-        if(loader) {
+    useEffect(() => {
+        if (loader) {
             dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_SERVICE_GLOBAL'))
             setInputs({
                 name: '',
@@ -120,7 +126,7 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
                 category: ''
             })
         }
-    },[loader])
+    }, [loader])
 
     return (
         <>
@@ -162,11 +168,11 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
                 />
             </div>
             <p className={classes.title}>Service Type</p>
-
             {
-                globalServices.length ? <Notes defaultStyle={true} data={globalServices} pagination={false} items={notesItem}
-                                        headerTitles={headerTitles}/> :
-                <NoItemText text='No Items Yet'/>
+                globalServices.length ?
+                    <Notes defaultStyle={true} data={globalServices} pagination={false} items={notesItem}
+                           headerTitles={headerTitles}/> :
+                    <NoItemText text='No Items Yet'/>
             }
         </>
     )

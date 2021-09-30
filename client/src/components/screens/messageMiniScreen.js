@@ -1,9 +1,9 @@
+import React from "react";
 import { screensStyle } from "./styles";
 import { CheckCircle } from "@material-ui/icons";
-import { Colors } from "../../utils";
-import React from "react";
+import { Colors } from "@eachbase/utils";
 
-export const MessageMiniScreen = ({ type, text }) => {
+export const MessageMiniScreen = ({ text }) => {
   const classes = screensStyle();
   return (
     <div className={classes.messageMiniScreen}>

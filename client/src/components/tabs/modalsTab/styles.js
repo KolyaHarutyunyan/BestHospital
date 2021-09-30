@@ -2,8 +2,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Colors } from "@eachbase/utils";
 
 export const modalHeadersStyle = makeStyles(() => ({
-
-
     createFundingSourceHeaderBottom: {
         width: '100%',
         display: 'flex',
@@ -46,7 +44,6 @@ export const modalHeadersStyle = makeStyles(() => ({
         margin: "auto",
         left:0,
         right :0
-    },
-
+    }
 }));
 

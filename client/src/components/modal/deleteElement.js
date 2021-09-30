@@ -5,7 +5,6 @@ import {Colors, useGlobalTextStyles} from "@eachbase/utils";
 import {modalsStyle} from "./styles";
 import {MinLoader} from "../loader";
 
-
 export const DeleteElement = ({text, info, handleDel, handleClose, loader}) => {
 
     const classes = modalsStyle()

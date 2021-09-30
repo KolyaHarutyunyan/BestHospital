@@ -4,7 +4,6 @@ import {cardStyle} from "./style";
 export const CardItem = ({title, value, auth, authId, click, index, active}) => {
     const classes = cardStyle()
 
-
     return (
         <>
             {

@@ -1,6 +1,5 @@
 import {wrapperStyle} from "./styles";
 
-
 export const Management =({head,body})=>{
     const classes = wrapperStyle()
     return(

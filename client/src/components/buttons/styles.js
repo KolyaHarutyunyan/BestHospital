@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core/styles";
 import { Backgrounds, Colors, Shadow } from "@eachbase/utils";
 
-export const buttonsStyle = makeStyles((theme) => ({
+export const buttonsStyle = makeStyles(() => ({
   buttonsTab: {
     '& .MuiPaper-root':{
       background: 'none',
@@ -164,20 +164,6 @@ export const buttonsStyle = makeStyles((theme) => ({
     lineHeight: "19px",
     color: Colors.TextPrimary,
   },
-
-  // create: {
-  //     width: '238px',
-  //     height: '48px',
-  //     background: Colors.ThemeGreen,
-  //     borderRadius: '8px',
-  // },
-  // chancel: {
-  //     width: '238px',
-  //     height: '48px',
-  //     background: Colors.ThemeGray,
-  //     borderRadius: '8px',
-  //     marginLeft: '16px',
-  // }
 
   editButtonStyle:{
     width: '73px',

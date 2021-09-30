@@ -4,8 +4,6 @@ import {DeleteElement, Notes, SimpleModal, SlicedText, TableBodyComponent} from 
 import {TableCell} from "@material-ui/core";
 import {Images} from "@eachbase/utils";
 import { MileageCompensation } from "./mileageCompensation";
-import {useDispatch} from "react-redux";
-import {payrollActions} from "@eachbase/store/payroll";
 
 const headerTitles = [
     {
@@ -29,8 +27,6 @@ const headerTitles = [
 export const MileageTable = () => {
     const classes = PayrollSetupStyles()
 
-    const dispatch = useDispatch()
-
     const [editModalOpenClose, setEditModalOpenClose] = useState(false)
     const [editedData, setEditedData] = useState({})
     const [deletedInfo, setDeletedInfo] = useState({})
@@ -48,7 +44,6 @@ export const MileageTable = () => {
     }
 
     const handleDeleteItem = () => {
-        // dispatch(payrollActions.deleteOvertimeSettingsByIdGlobal(deletedInfo.id));
         setOpen(false)
     }
 
@@ -68,10 +63,6 @@ export const MileageTable = () => {
                     <div className={classes.icons}>
                         <img src={Images.edit} onClick={() => handleOpenClose({
                             name: item.name,
-                            type: item.type,
-                            multiplier: item.multiplier,
-                            threshold: item.threshold,
-                            id: item.id
                         })} alt="edit"/>
                         <img src={Images.remove} alt="delete"
                              onClick={() => handleOpenCloseDelete({id: item.id, name: item.name})}/>
@@ -83,9 +74,9 @@ export const MileageTable = () => {
     }
 
     const data = [{
-        name: 'aaaa',
-        startDate: 'dffsdf',
-        endDate: 'sdfdsfhgsdh'
+        name: 'Name',
+        startDate: '10/10/10',
+        endDate: '11/11/11'
     }]
 
     return (

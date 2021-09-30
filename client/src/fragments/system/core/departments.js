@@ -5,7 +5,6 @@ import {Images} from "@eachbase/utils";
 import {systemItemStyles} from "./styles";
 import {httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
 
-
 const credentialBtn = {
     maxWidth: '174px',
     width: '100%',
@@ -20,7 +19,7 @@ export const Departments = ({globalDepartments, removeItem, openModal}) => {
     const [inputs, setInputs] = useState({})
     const [error, setError] = useState('')
 
-    const handleChange = e =>{
+    const handleChange = e => {
         setInputs(
             prevState => (
                 {
@@ -31,8 +30,8 @@ export const Departments = ({globalDepartments, removeItem, openModal}) => {
         error === e.target.name && setError('')
     }
 
-    const editDepartment = (modalType,modalId) => {
-        openModal(modalType,modalId)
+    const editDepartment = (modalType, modalId) => {
+        openModal(modalType, modalId)
     }
 
     const handleSubmit = () => {
@@ -44,26 +43,27 @@ export const Departments = ({globalDepartments, removeItem, openModal}) => {
         } else {
             setError(
                 !inputs.name ? 'name' :
-                        'Input is not filled'
+                    'Input is not filled'
             )
         }
     }
 
     const isDisabled = inputs.name
 
-    const {httpOnLoad } = useSelector((state) => ({
+    const {httpOnLoad} = useSelector((state) => ({
         httpOnLoad: state.httpOnLoad,
     }));
 
     const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_DEPARTMENT_GLOBAL'
-    useEffect(()=>{
-        if(loader) {
+
+    useEffect(() => {
+        if (loader) {
             dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_DEPARTMENT_GLOBAL'))
             setInputs({
                 name: '',
             })
         }
-    },[loader])
+    }, [loader])
 
     return (
         <>
@@ -79,7 +79,7 @@ export const Departments = ({globalDepartments, removeItem, openModal}) => {
                 />
                 <AddButton
                     type={'CREATE_DEPARTMENT_GLOBAL'}
-                    loader={loader }
+                    loader={loader}
                     disabled={!isDisabled}
                     styles={credentialBtn}
                     handleClick={handleSubmit} text='Add Department'/>
@@ -97,19 +97,21 @@ export const Departments = ({globalDepartments, removeItem, openModal}) => {
                                     {departmentItem.type}</p>
                                 <div className={classes.icons}>
                                     <img src={Images.edit}
-                                         onClick={() => editDepartment('editDepartment',{
+                                         onClick={() => editDepartment('editDepartment', {
                                              departmentName: departmentItem.name,
-                                             departmentID:departmentItem._id})
+                                             departmentID: departmentItem._id
+                                         })
                                          } alt="edit"/>
                                     <img src={Images.remove} alt="delete"
                                          onClick={() => removeItem({
                                              id: departmentItem._id,
                                              name: departmentItem.name,
-                                             type: 'editDepartment'})}/>
+                                             type: 'editDepartment'
+                                         })}/>
                                 </div>
                             </div>
                         )
-                    }): <NoItemText text='No Items Yet' />
+                    }) : <NoItemText text='No Items Yet'/>
                 }
             </div>
         </>

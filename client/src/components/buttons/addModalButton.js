@@ -1,7 +1,7 @@
 import {Button} from "@material-ui/core";
 import {buttonsStyle} from "./styles";
 import {MinLoader} from "../loader";
-import {Colors} from "../../utils";
+import {Colors} from "@eachbase/utils";
 import React from "react";
 
 export const AddModalButton = ({text, handleClick, styles , btnStyles ,loader}) => {

@@ -5,8 +5,7 @@ import {modalsStyle} from "@eachbase/components/modal/styles";
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {noteActions} from "@eachbase/store/notes";
-import {httpRequestsOnLoadActions} from "../../store/http_requests_on_load";
-
+import {httpRequestsOnLoadActions} from "@eachbase/store/http_requests_on_load";
 
 export const AddNotes = ({closeModal, model, noteModalTypeInfo, handleClose}) => {
     const dispatch = useDispatch()

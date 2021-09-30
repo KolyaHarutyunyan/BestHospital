@@ -17,7 +17,7 @@ export const MileageCompensation = ({marginTop,marginRight,maxWidth, editedData,
     const classes = PayrollSetupStyles()
     const dispatch = useDispatch()
 
-    const [inputs, setInputs] = useState({});
+    const [inputs, setInputs] = useState(editedData ? editedData :{});
     const [error, setError] = useState('');
 
     const handleChange = e => {
@@ -37,18 +37,16 @@ export const MileageCompensation = ({marginTop,marginRight,maxWidth, editedData,
             startDate: inputs.startDate
         }
         if (inputs.name && inputs.startDate) {
-            // if (editedData) {
-            //     dispatch(payrollActions.editOvertimeSettingsByIdGlobal(data, editedData?.id));
-            // } else {
-            //     dispatch(payrollActions.createOvertimeSettingsGlobal(data))
-            //     setInputs({
-            //         name: '',
-            //         startDate: '',
-            //     })
-            // }
-
-            console.log(data, 'data data')
-
+            if (editedData) {
+                alert('edited')
+                handleOpenClose()
+            } else {
+                alert('added')
+                setInputs({
+                    name: '',
+                    startDate: ''
+                })
+            }
         } else {
             setError(
                 !inputs.name ? 'name' :

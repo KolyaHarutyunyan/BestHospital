@@ -38,7 +38,6 @@ export const OvertimeSettings = ({handleOpenClose, editedData, maxWidth, marginR
             ));
         error === e.target.name && setError('')
     }
-
     const handleSubmit = () => {
         let data = {
             name: inputs.name,
@@ -86,7 +85,6 @@ export const OvertimeSettings = ({handleOpenClose, editedData, maxWidth, marginR
                             the system.</p>
                     </>
             }
-
             <ValidationInput
                 onChange={handleChange}
                 value={inputs.name}
@@ -147,8 +145,6 @@ export const OvertimeSettings = ({handleOpenClose, editedData, maxWidth, marginR
                         styles={overtimeBtn}
                     />
             }
-
-
         </div>
     )
 }

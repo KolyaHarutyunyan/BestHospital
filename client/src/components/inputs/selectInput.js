@@ -3,7 +3,6 @@ import {inputsStyle} from "./styles";
 import {InputMinLoader} from "./inputMiniLoader";
 import React from "react";
 
-
 export const SelectInput = ({
                                 className,
                                 loader,

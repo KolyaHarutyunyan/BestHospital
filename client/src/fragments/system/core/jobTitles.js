@@ -12,14 +12,14 @@ const credentialBtn = {
     padding: 0
 }
 
-export const JobTitles = ({globalJobs,removeItem, openModal}) => {
+export const JobTitles = ({globalJobs, removeItem, openModal}) => {
     const dispatch = useDispatch()
     const classes = systemItemStyles()
 
     const [inputs, setInputs] = useState({})
     const [error, setError] = useState('')
 
-    const handleChange = e =>{
+    const handleChange = e => {
         setInputs(
             prevState => (
                 {
@@ -44,26 +44,26 @@ export const JobTitles = ({globalJobs,removeItem, openModal}) => {
         }
     }
 
-    const editJob = (modalType,modalId) => {
-        openModal(modalType,modalId)
+    const editJob = (modalType, modalId) => {
+        openModal(modalType, modalId)
     }
 
     const isDisabled = inputs.name
 
-    const {httpOnLoad } = useSelector((state) => ({
+    const {httpOnLoad} = useSelector((state) => ({
         httpOnLoad: state.httpOnLoad,
     }));
 
     const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_JOB_GLOBAL'
 
-    useEffect(()=>{
-        if(loader) {
+    useEffect(() => {
+        if (loader) {
             dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_JOB_GLOBAL'))
             setInputs({
                 name: '',
             })
         }
-    },[loader])
+    }, [loader])
 
     return (
         <>
@@ -81,7 +81,7 @@ export const JobTitles = ({globalJobs,removeItem, openModal}) => {
                     type={'CREATE_JOB_GLOBAL'}
                     disabled={!isDisabled}
                     styles={credentialBtn}
-                    loader={ loader }
+                    loader={loader}
                     handleClick={handleSubmit} text='Add Job Title'/>
             </div>
             <p className={classes.title}>Job Titles</p>
@@ -91,23 +91,23 @@ export const JobTitles = ({globalJobs,removeItem, openModal}) => {
                         return (
                             <div className={classes.item} key={index}>
                                 <p>
-                                    <SlicedText type={'responsive'} size={25} data= {jobItem.name}/>
+                                    <SlicedText type={'responsive'} size={25} data={jobItem.name}/>
                                 </p>
                                 <div className={classes.icons}>
                                     <img src={Images.edit}
-                                         onClick={() => editJob('editJobTitles',{
+                                         onClick={() => editJob('editJobTitles', {
                                              jobTitle: jobItem.name,
                                              jobId: jobItem._id
                                          })} alt="edit"/>
                                     <img src={Images.remove} alt="delete" onClick={() => removeItem({
                                         id: jobItem._id,
-                                        name:jobItem.name,
+                                        name: jobItem.name,
                                         type: 'editJobTitles'
                                     })}/>
                                 </div>
                             </div>
                         )
-                    }) : <NoItemText text='No Items Yet' />
+                    }) : <NoItemText text='No Items Yet'/>
                 }
             </div>
         </>

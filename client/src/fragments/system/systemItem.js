@@ -1,6 +1,14 @@
 import React, {useEffect, useState} from "react";
 import {SimpleTabs} from "@eachbase/components";
-import {ServiceType, systemItemStyles, SystemItemHeader, Credentials, Departments, JobTitles, PayrollSetup} from './core';
+import {
+    ServiceType,
+    systemItemStyles,
+    SystemItemHeader,
+    Credentials,
+    Departments,
+    JobTitles,
+    PayrollSetup
+} from './core';
 import {useDispatch, useSelector} from "react-redux";
 import {systemActions} from "@eachbase/store";
 import {payrollActions} from "@eachbase/store/payroll";
@@ -84,10 +92,12 @@ export const SystemItem = () => {
                                         openModal={handleOpenClose}/>)
         },
         {
-            tabComponent: (<JobTitles globalJobs={globalJobs} removeItem={handleRemoveItem} openModal={handleOpenClose}/>)
+            tabComponent: (
+                <JobTitles globalJobs={globalJobs} removeItem={handleRemoveItem} openModal={handleOpenClose}/>)
         },
         {
-            tabComponent: (<PayrollSetup globalPayCodes={globalPayCodes} globalOvertimeSettings={globalOvertimeSettings} />)
+            tabComponent: (
+                <PayrollSetup globalPayCodes={globalPayCodes} globalOvertimeSettings={globalOvertimeSettings}/>)
         }
     ];
 
