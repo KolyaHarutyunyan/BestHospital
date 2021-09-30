@@ -291,11 +291,11 @@ export const watchFundingSource = function* watchFundingSourceSaga() {
     yield takeLatest(GET_FUNDING_SOURCE_SERVICE_BY_ID, getFundingSourceServicesById);
     yield takeLatest(CREATE_FUNDING_SOURCE_SERVICE_BY_ID, createFundingSourceServicesById);
     yield takeLatest(EDIT_FUNDING_SOURCE_SERVICE, editFundingSourceServices);
-    yield takeLatest(CREATE_FUNDING_SOURCE_SERVICE_MODIFIER, createFundingSourceServicesModifier);
+    // yield takeLatest(CREATE_FUNDING_SOURCE_SERVICE_MODIFIER, createFundingSourceServicesModifier);
     yield takeLatest(GET_FUNDING_SOURCE_SERVICE_MODIFIERS, getFundingSourceServicesModifier);
     yield takeLatest(GET_FUNDING_SOURCE_HISTORIES_BY_ID, getFundingSourceHistoriesById);
-    yield takeLatest(GET_FUNDING_SOURCE_SERV, getFundingSourceServ);
+    // yield takeLatest(GET_FUNDING_SOURCE_SERV, getFundingSourceServ);
     yield takeLatest(EDIT_ACTIVE_OR_INACTIVE, editActiveOrInactive);
-    yield takeLatest(EDIT_FUNDING_SOURCE_SERVICE_MODIFIER, editFundingSourceServicesModifier);
+    // yield takeLatest(EDIT_FUNDING_SOURCE_SERVICE_MODIFIER, editFundingSourceServicesModifier);
     yield takeLatest(GET_FUNDING_SOURCE_SERVICE_MODIFIERS_CLIENT, getFundingSourceServicesModifierClient);
 };
