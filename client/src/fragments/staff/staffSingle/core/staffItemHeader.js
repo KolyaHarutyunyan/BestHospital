@@ -31,7 +31,6 @@ export const StaffItemHeader = ({
         })
     )
 
-
     return (
         <div>
             <ul className={classes.tabsWrapper}>
@@ -50,26 +49,31 @@ export const StaffItemHeader = ({
                     {
                         activeTab === 0 ?
                             <AddModalButton btnStyles={editButtonStyle} handleClick={handleOpenClose}
-                                            text='edit'/> : activeTab === 2 ?
+                                            text='edit'/>
+                                            : activeTab === 2 ? <AddButton text='Add Timesheet'
+                                                                           handleClick={() => handleOpenClose}/>
+                                            : activeTab === 3 ?
                                 <AddButton text='Add Credential'
                             handleClick={() => openCloseCredModal('addCredential')}/>
                             : activeTab === 1 ?  <AddButton text='Add Employemnt' handleClick={handleOpenClose}/>
-                            : activeTab === 5 ?
+                            : activeTab === 6 ?
                                     <AddButton text='Add Note' handleClick={handleOpenClose}/> : null
                     }
                 </li>
             </ul>
             <SimpleModal
-                openDefault={activeTab === 2 ? openCredModal : openModal}
-                handleOpenClose={activeTab === 2 ? () => openCloseCredModal() : handleOpenClose}
+                openDefault={activeTab === 3 ? openCredModal : openModal}
+                handleOpenClose={activeTab === 3 ? () => openCloseCredModal() : handleOpenClose}
                 content={activeTab === 0 ?
                     <CreateStaff adminsList={adminsList && adminsList.staff} staffGeneral={adminInfoById}
-                                 resetData={false} handleClose={handleOpenClose}/> : activeTab === 2 ?
+                                 resetData={false} handleClose={handleOpenClose}/>
+                                 : activeTab === 2 ? <p>Timesheet</p>
+                                 : activeTab === 3 ?
                         <CredentialModal globalCredentialInformation={globalCredentialInformation}
                                          globalCredentials={globalCredentials} credModalType={credModalType}
                                          handleClose={() => openCloseCredModal()}/>
                         : activeTab === 1 ?     <EmploymentModal />
-                        : activeTab === 5 ?
+                        : activeTab === 6 ?
                             <AddNotes model='Staff' noteModalTypeInfo={noteModalTypeInfo}
                                       handleClose={handleOpenClose}/> : null}
             />
