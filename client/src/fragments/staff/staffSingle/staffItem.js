@@ -33,6 +33,7 @@ import {noteActions} from "@eachbase/store/notes";
 import moment from "moment";
 import {httpRequestsOnLoadActions} from "@eachbase/store/http_requests_on_load";
 import {availabilityScheduleActions} from "@eachbase/store/availabilitySchedule";
+import {StaffService} from "./core/staffService";
 
 export const StaffItem = () => {
 
@@ -83,6 +84,9 @@ export const StaffItem = () => {
         },
         {
             label: 'Availability'
+        },
+        {
+            label: 'Services'
         },
         {
             label: 'Notes'
@@ -198,6 +202,9 @@ export const StaffItem = () => {
         },
         {
             tabComponent: (<StaffAvailability availabilityData={availabilityData} staffGeneral={staffGeneral}/>)
+        },
+        {
+            tabComponent: (<StaffService />)
         },
         {
             tabComponent: (globalNotes.length ? <Notes

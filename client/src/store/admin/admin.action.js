@@ -6,7 +6,7 @@ import {
     CREATE_CREDENTIAL,
     GET_CREDENTIAL,
     EDIT_CREDENTIAL_BY_ID,
-    DELETE_CREDENTIAL_BY_ID, GET_EMPLOYMENT, CREATE_EMPLOYMENT
+    DELETE_CREDENTIAL_BY_ID, GET_EMPLOYMENT, CREATE_EMPLOYMENT, CREATE_SERVICE
 } from "./admin.types";
 
 export const createAdmin = (body) => {
@@ -75,6 +75,14 @@ export const getEmployment = (id) => {
 export const createEmployment = (body) => {
     return {
         type: CREATE_EMPLOYMENT,
+        payload: {body}
+    }
+}
+
+
+export const createService = (body) => {
+    return {
+        type: CREATE_SERVICE,
         payload: {body}
     }
 }

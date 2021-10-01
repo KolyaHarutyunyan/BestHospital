@@ -36,3 +36,6 @@ export const GET_EMPLOYMENT_SUCCESS = 'GET_EMPLOYMENT_SUCCESS'
 
 /**create employment */
 export const CREATE_EMPLOYMENT = 'CREATE_EMPLOYMENT'
+
+/**create service */
+export const CREATE_SERVICE = 'CREATE_SERVICE'

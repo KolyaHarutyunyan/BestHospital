@@ -29,5 +29,5 @@ export const authService = {
 
     createEmploymentService: (body) => axios.post(`/employment` , {body}),
 
-
+    createServService: (body) => axios.post(`/service` , {body}),
 };

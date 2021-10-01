@@ -6,23 +6,33 @@ import {Colors, ErrorText} from "@eachbase/utils";
 import {
     adminActions,
     clientActions,
-    fundingSourceActions,
+    // fundingSourceActions,
     httpRequestsOnErrorsActions,
-    httpRequestsOnSuccessActions
+    httpRequestsOnSuccessActions, systemActions
 } from "@eachbase/store";
 import {Checkbox} from "@material-ui/core";
 import {createClientStyle} from "@eachbase/fragments/client";
+import {getDepartments} from "../../../../../store/system/system.action";
 
 
 export const EmploymentModal = ({handleClose, info}) => {
 
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info, funding: info.funderId.name, status : String(info.status)} : {});
+    const [inputs, setInputs] = useState(info ? {...info, departmentId: info.departmentId.name, status : String(info.status)} : {});
+
     const params = useParams()
     const dispatch = useDispatch()
-    const fSelect = useSelector(state => state?.fundingSource?.fSelect?.funders)
-    const classes = createClientStyle
-    ()
+    const departments = useSelector(state => state.system.departments)
+    const staffList = useSelector(state => state.admins.adminsList.staff)
+    const classes = createClientStyle()
+
+
+    useEffect(() => {
+        dispatch(systemActions.getDepartments())
+    }, []);
+
+
+    console.log(staffList,'fsesesesesese')
 
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
@@ -46,9 +56,7 @@ export const EmploymentModal = ({handleClose, info}) => {
         }
     }, [success, successCreate])
 
-    useEffect(() => {
-        dispatch(fundingSourceActions.getFundingSource())
-    }, []);
+
 
 
     const handleChange = e => setInputs(
@@ -57,47 +65,52 @@ export const EmploymentModal = ({handleClose, info}) => {
     );
 
     const handleCreate = () => {
-        if (inputs.authId && inputs.funding && inputs.startDate && inputs.endDate && inputs.location && inputs.status ) {
-            let funderId;
-            fSelect.forEach(item => {
-                if (inputs.funding === item.name) {
-                    funderId = item.id
+
+        // if (inputs.authId && inputs.departmentId && inputs.startDate && inputs.endDate && inputs.location && inputs.status ) {
+            let depId;
+            let supervisorID;
+        departments.forEach(item => {
+                if (inputs.departmentId === item.name) {
+                    depId = item._id
                 }
             })
+        staffList.forEach(item => {
+            if (inputs.supervisor === item.firstName) {
+                supervisorID = item.id
+            }
+        })
+
+        console.log(supervisorID,'iiiididididididdi')
             const data = {
-                "staffId": "string",
-                "departmentId": "string",
-                "supervisor": "string",
+                "staffId": params.id ,
+                "departmentId":depId,
+                "supervisor": supervisorID,
                 "date": "2021-09-30T13:11:42.109Z",
                 "schedule": 0,
                 "termination": {
-                    "reason": "string",
+                    // "reason": "string",
                     "date": "2021-09-30T13:11:42.109Z"
                 }
             }
+        console.log(data,'datataaaaasdasdasdasd')
             if (info) {
-                dispatch(clientActions.editClientsAuthorizations(data, info.id, params.id))
+                // dispatch(clientActions.editClientsAuthorizations(data, info.id, params.id))
             } else {
-                dispatch(clientActions.createClientsAuthorizations(data, params.id, funderId))
-                dispatch(adminActions.createEmployment())
-            }
-        } else {
-            setError(
-                !inputs.authId ? 'authId' :
-                    !inputs.funding ? 'funding' :
-                        !inputs.startDate ? 'startDate' :
-                            !inputs.endDate ? 'endDate' :
-                                !inputs.location ? 'location' :
-                                    !inputs.status ? 'status' :
-                                        'Input is not field'
-            )
-        }
-    }
 
-    const list = [
-        {name: '0'},
-        {name: 1}
-    ]
+                dispatch(adminActions.createEmployment(data))
+            }
+        // } else {
+        //     setError(
+        //         !inputs.authId ? 'authId' :
+        //             !inputs.departmentId ? 'departmentId' :
+        //                 !inputs.startDate ? 'startDate' :
+        //                     !inputs.endDate ? 'endDate' :
+        //                         !inputs.location ? 'location' :
+        //                             !inputs.status ? 'status' :
+        //                                 'Input is not field'
+        //     )
+        // }
+    }
 
     return (
         <div className={classes.createFoundingSource}>
@@ -123,16 +136,16 @@ export const EmploymentModal = ({handleClose, info}) => {
                             label={"Supervisor*"}
                             handleSelect={handleChange}
                             value={inputs.supervisor}
-                            list={fSelect ? fSelect : []}
+                            list={staffList ? staffList : []}
                             typeError={error === 'supervisor' ? ErrorText.field : ''}
                         />
                         <SelectInput
-                            name={"department"}
+                            name={"departmentId"}
                             label={"Department*"}
                             handleSelect={handleChange}
-                            value={inputs.department}
-                            list={list}
-                            typeError={error === 'department' ? ErrorText.field : ''}
+                            value={inputs.departmentId}
+                            list={departments ? departments : []}
+                            typeError={error === 'departmentId' ? ErrorText.field : ''}
                         />
                         <ValidationInput
                             variant={"outlined"}

@@ -194,6 +194,20 @@ function* createEmployment(action) {
     }
 }
 
+function* createService(action) {
+
+    try {
+        yield call(authService.createEmploymentService, action.payload.body)
+        // yield put({
+        //     type: GET_CREDENTIAL,
+        //     payload: {credentialId: action.payload.credentialId}
+        // });
+        console.log(res,'resesseseesesese employ')
+    } catch (err) {
+        console.log(err, ' errr employmeny')
+
+    }
+}
 
 
 export const watchAdmin = function* watchAdminSaga() {
