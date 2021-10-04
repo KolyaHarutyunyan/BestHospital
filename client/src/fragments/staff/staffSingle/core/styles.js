@@ -1,5 +1,5 @@
 import {makeStyles} from "@material-ui/core/styles";
-import {Colors} from "@eachbase/utils";
+import {Colors, Shadow} from "@eachbase/utils";
 
 export const serviceSingleStyles = makeStyles(() => ({
     // General
@@ -69,11 +69,11 @@ export const serviceSingleStyles = makeStyles(() => ({
     rolePermissionContainer: {
         display: 'flex',
         alignItems: 'center',
-        '&:not(:last-child)':{
+        '&:not(:last-child)': {
             marginBottom: 8
         }
     },
-    rolePermissionName:{
+    rolePermissionName: {
         fontSize: 14,
         color: Colors.TextMiddleGray,
         lineHeight: '21px',
@@ -123,5 +123,72 @@ export const serviceSingleStyles = makeStyles(() => ({
         '& p:not(:last-child)': {
             marginRight: 8
         }
+    },
+
+    // timesheet
+
+    timesheetWrapper: {
+        display: 'flex',
+        alignItems: 'flex-start'
+    },
+    bcbaWrapper: {
+        padding: 16,
+        boxShadow: Shadow.noteModalShadow,
+        borderRadius: 8,
+        marginLeft: 16,
+        '& > p': {
+            fontSize: 14,
+            color: Colors.TextSecondary,
+            paddingBottom: 20
+        }
+    },
+    bcbaHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingBottom: 16,
+        '& h1': {
+            fontSize: 18,
+            color: Colors.TextSecondary,
+            fontWeight: 'bold',
+        }
+    },
+    dateEdite: {
+        display: 'flex',
+        alignItems: 'center',
+        '& p': {
+            fontSize: 14,
+            color: Colors.TextSecondary
+        },
+        '& img': {
+            cursor: 'pointer',
+            paddingLeft: 16
+        },
+    },
+    amountContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-end',
+        marginTop: 10,
+        '& p': {
+            fontSize: 14,
+            color: Colors.TextSecondary,
+            '& span': {
+                minWidth: 65,
+                display: 'inline-block',
+                textAlign: 'right',
+                paddingLeft: 10
+            }
+        }
+    },
+    hours: {
+        fontSize: 14,
+        color: Colors.TextSecondary,
+        fontWeight: '600'
+    },
+    amount: {
+        fontSize: 18,
+        color: Colors.TextSecondary,
+        fontWeight: 'bold'
     }
 }));

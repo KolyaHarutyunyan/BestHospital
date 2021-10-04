@@ -13,7 +13,7 @@ import {
     StaffEmployment,
     StaffAccess,
     StaffItemHeader,
-    StaffAvailability
+    StaffAvailability, StaffTimesheet
 } from "./core";
 import {Images} from "@eachbase/utils";
 import {
@@ -75,6 +75,9 @@ export const StaffItem = () => {
         },
         {
             label: 'Employment'
+        },
+        {
+            label: 'Timesheet'
         },
         {
             label: 'Credentials & Clearances'
@@ -193,6 +196,9 @@ export const StaffItem = () => {
         },
         {
             tabComponent: (<StaffEmployment/>)
+        },
+        {
+            tabComponent: (<StaffTimesheet>Timesheet</StaffTimesheet>)
         },
         {
             tabComponent: (<StaffCredentials credentialData={credentialData} openModal={openCloseCredModal}/>)
