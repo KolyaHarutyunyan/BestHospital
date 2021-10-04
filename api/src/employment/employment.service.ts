@@ -68,7 +68,7 @@ export class EmploymentService {
   }
   async update(_id: string, dto: UpdateEmploymentDto): Promise<EmploymentDto> {
     let employment = await this.model.findById({ _id })
-    this.checkEmployment(employment)
+    this.checkEmployment( employment)
     if (dto.title) employment.title = dto.title;
 
     if (dto.supervisor == employment._id) {
@@ -80,7 +80,8 @@ export class EmploymentService {
     }
     if (dto.supervisor) {
       let employment: any = await this.model.findOne({ staffId: dto.supervisor });
-      if (employment.length == []) {
+      
+      if (!employment) {
         throw new HttpException(
           'supervisor is not found',
           HttpStatus.NOT_FOUND,
