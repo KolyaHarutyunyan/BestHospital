@@ -1,18 +1,17 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {Card, DeleteElement, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
-// import {serviceSingleStyles} from './styles';
-import {Colors, Images} from "@eachbase/utils";
 import {TableCell} from "@material-ui/core";
-import {clientActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
-import {AuthHeader} from "@eachbase/components/headers/auth/authHeader";
-import {serviceSingleStyles} from "../../../client/clientSingle/core";
+import {Card, DeleteElement, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
 import {EmploymentModal, PaycodeModal} from "./modals";
+import {AuthHeader} from "@eachbase/components/headers/auth/authHeader";
+import {Colors, Images} from "@eachbase/utils";
+import {adminActions, clientActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
+import {serviceSingleStyles} from "@eachbase/fragments/client/clientSingle/core";
+import {getPayCode} from "../../../../store/admin/admin.action";
 
 
-export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, }) => {
-    let info = []
+export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
     const classes = serviceSingleStyles()
     const dispatch = useDispatch()
     const [delEdit, setDelEdit] = useState(null)
@@ -31,12 +30,15 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, }) => {
         httpOnLoad: state.httpOnLoad,
     }));
 
+
+
+
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION'
     const successDelServ = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION_SERV'
 
 
     useEffect(()=>{
-        dispatch(clientActions.getClientsAuthorizationsServ(info[authIndex]?.id))
+         dispatch(adminActions.getPayCode(info[authIndex]?.id))
     },[authIndex])
 
     useEffect(() => {
@@ -136,8 +138,10 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, }) => {
                 handleOpenClose={() => setToggleModal(!toggleModal)}
                 openDefault={toggleModal}
                 content={delEdit ?
-                    <EmploymentModal fundingId={info[authIndex]?.funderId?._id} info={info[authIndex]}
-                                      handleClose={() => setToggleModal(!toggleModal)}/>
+                    <EmploymentModal
+                        fundingId={info[authIndex]?.funderId?._id}
+                        info={info[authIndex]}
+                        handleClose={() => setToggleModal(!toggleModal)}/>
                     : <DeleteElement
                         loader={httpOnLoad.length > 0}
                         // info={`Delete ${info[authIndex].authId}`}
@@ -167,6 +171,7 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, }) => {
                 }
             />
             <Card
+                employment={true}
                 width='234px'
                 cardInfo={info}
                 showHeader={true}
