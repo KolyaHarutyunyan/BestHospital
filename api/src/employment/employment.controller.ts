@@ -14,7 +14,12 @@ export class EmploymentController {
   async create(@Body() createEmploymentDto: CreateEmploymentDto) {
     return await this.employmentService.create(createEmploymentDto);
   }
-
+  @Get()
+  @Public()
+  @ApiOkResponse({ type: [EmploymentDto] })
+  async findAll(@Param('staffId', ParseObjectIdPipe) staffId: string) {
+    return await this.employmentService.findAll(staffId);
+  }
   @Get(':id')
   @Public()
   @ApiOkResponse({ type: EmploymentDto })

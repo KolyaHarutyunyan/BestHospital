@@ -52,8 +52,10 @@ export class EmploymentService {
     }
   }
 
-  findAll() {
-    return `This action returns all employment`;
+  async findAll(staffId: string): Promise<EmploymentDto[]> {
+    const employments = await this.model.find({ staffId });
+    this.checkEmployment(employments[0])
+    return this.sanitizer.sanitizeMany(employments);
   }
 
   async findOne(_id: string): Promise<EmploymentDto> {
