@@ -56,7 +56,6 @@ export class PaycodeService {
       this.checkPayCode(payCode)
       return this.sanitizer.sanitize(payCode)
       // poopulate payCodeType
-
     }
     catch (e) {
       throw e

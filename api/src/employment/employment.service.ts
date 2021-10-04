@@ -28,8 +28,10 @@ export class EmploymentService {
         staffId: dto.staffId,
         schedule: dto.schedule,
         termination: dto.termination,
-        date: dto.date
+        date: dto.date,
+        title: dto.title
       });
+      console.log(dto)
       if (dto.supervisor == dto.staffId) {
         throw new HttpException(
           'staff@ inq@ ir manager@ chi karox linel chnayac hayastanum hnaravor e',
