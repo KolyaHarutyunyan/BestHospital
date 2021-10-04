@@ -38,9 +38,9 @@ export class PaycodeService {
     return this.sanitizer.sanitize(paycode)
   }
 
-  async findAll(): Promise<PayCodeDTO[]> {
+  async findAll(employmentId: string): Promise<PayCodeDTO[]> {
     try {
-      const payCode = await this.model.find();
+      const payCode = await this.model.find({ employmentId });
       this.checkPayCode(payCode[0]);
       return this.sanitizer.sanitizeMany(payCode)
       // poopulate payCodeType

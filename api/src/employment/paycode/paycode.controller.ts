@@ -16,11 +16,11 @@ export class PaycodeController {
     return await this.paycodeService.create(createPaycodeDto);
   }
 
-  @Get()
+  @Get('employment/:employmentId')
   @Public()
   @ApiOkResponse({ type: [PayCodeDTO] })
-  async findAll() {
-    return await this.paycodeService.findAll();
+  async findAll(@Param('employmentId', ParseObjectIdPipe) employmentId: string) {
+    return await this.paycodeService.findAll(employmentId);
   }
 
   @Get(':id')

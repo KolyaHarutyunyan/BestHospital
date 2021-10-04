@@ -4,29 +4,29 @@ import { ScheduleStatus } from "..";
 import { TerminationSchema } from '../../termination';
 import { TerminationDTO, CreateTerminationDto } from '../../termination';
 
-export class CreateEmploymentDto {
+export class UpdateEmploymentDto {
     @ApiProperty()
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     title: string;
-    @ApiProperty()
-    @IsMongoId()
-    @IsNotEmpty()
-    staffId: string;
     @ApiProperty({ required: false })
-    // @IsMongoId()
-    @IsOptional() @IsMongoId() @IsNotEmpty()
+    @IsOptional()
+    @IsMongoId()
+    @IsOptional()
     departmentId?: string;
     @ApiProperty()
     @IsMongoId()
+    @IsOptional()
     supervisor: string;
     @ApiProperty()
-    @IsNotEmpty()
     @IsDateString()
+    @IsOptional()
     date: Date;
     @ApiProperty({ enum: ScheduleStatus })
     @IsEnum(ScheduleStatus)
+    @IsOptional()
     schedule: number;
     @ApiProperty({ type: TerminationDTO })
+    @IsOptional()
     termination: CreateTerminationDto;
 }

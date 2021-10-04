@@ -11,6 +11,7 @@ export class EmploymentSanitizer implements ISanitize {
     sanitize(employment: IEmployment): EmploymentDto {
         const employmentDTO: EmploymentDto = {
             id: employment.id,
+            title: employment.title,
             staffId: employment.staffId,
             supervisor: employment.supervisor,
             departmentId: employment.departmentId,

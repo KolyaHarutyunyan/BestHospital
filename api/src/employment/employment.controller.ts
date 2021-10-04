@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { EmploymentService } from './employment.service';
 import { Public, ParseObjectIdPipe } from '../util';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { EmploymentDto, CreateEmploymentDto } from './dto';
+import { EmploymentDto, CreateEmploymentDto, UpdateEmploymentDto } from './dto';
 
 @Controller('employment')
 @ApiTags('Employment Endpoints')
@@ -25,5 +25,12 @@ export class EmploymentController {
   @ApiOkResponse({ type: EmploymentDto })
   async findOne(@Param('id', ParseObjectIdPipe) id: string) {
     return this.employmentService.findOne(id);
+  }
+  @Patch(':id')
+  @Public()
+  @ApiOkResponse({ type: EmploymentDto })
+  async update(@Param('id', ParseObjectIdPipe) id: string,
+    @Body() updateEmploymentDto: UpdateEmploymentDto) {
+    return await this.employmentService.update(id, updateEmploymentDto);
   }
 }

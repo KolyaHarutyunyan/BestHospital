@@ -7,6 +7,8 @@ export class EmploymentDto {
     @ApiProperty()
     id: string;
     @ApiProperty()
+    title: string;
+    @ApiProperty()
     staffId:string;
     @ApiProperty()
     supervisor: string;
