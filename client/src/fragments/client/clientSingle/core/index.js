@@ -1,5 +1,3 @@
-
-
 export { serviceSingleStyles } from './styles';
 export { ClientGeneral } from './clientGeneral';
 export { ClientContact } from './clientContact';
@@ -10,4 +8,3 @@ export { ClientNotes } from './clientNotes';
 export { ClientAvailabilitySchedule } from './clientAvailabilitySchedule';
 export { AvailableHours } from '../../../../components/availability/availableHours';
 export { ClientAuthorization } from './clientAuthorization';
-export {ClientAuthorizationItem} from "./clientAuthorizationItem";

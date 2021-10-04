@@ -1,12 +1,11 @@
+import { useState} from "react";
+import moment from "moment";
 import { Card } from '@eachbase/components';
 import { serviceSingleStyles } from './styles';
 import { Colors, Images } from "@eachbase/utils";
-import moment from "moment";
-import {useEffect, useState} from "react";
 
 export const ClientGeneral = ({data}) =>{
     let today = new Date();
-
 
     const [otherDetails, setOtherDetails] = useState([
         {title: 'Gender', value: data?.gender},
@@ -25,7 +24,6 @@ export const ClientGeneral = ({data}) =>{
         {title: 'Last Name', value: data?.lastName},
         {title: 'Code', value: data?.code},
     ]
-
 
     return (
         <div className={classes.staffGeneralWrapper}>

@@ -10,6 +10,7 @@ import staffOutline from '@eachbase/images/icons/staffOutline.svg'
 import roleManagementActive from '@eachbase/images/icons/roleManagementActive.svg'
 import roleManagementPassive from '@eachbase/images/icons/roleManagementPassive.svg'
 import addYellowIcon from '@eachbase/images/icons/addYellowIcon.svg'
+import employment from '@eachbase/images/icons/employment.svg'
 
 
 import offices from '@eachbase/images/offices.svg'
@@ -157,5 +158,7 @@ export const Images = {
     errorIcon: errorIcon,
     successIcon: successIcon,
     infoIcon: infoIcon,
-    addIcon: addIcon
+    addIcon: addIcon,
+    employment: employment,
+
 }

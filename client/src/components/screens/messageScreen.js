@@ -1,6 +1,6 @@
 import React from "react";
 import { screensStyle } from "./styles";
-import { CheckCircle, HighlightOff } from "@material-ui/icons";
+import { CheckCircle } from "@material-ui/icons";
 import { Colors, Images } from "@eachbase/utils";
 import { useDispatch } from "react-redux";
 import { authActions } from "@eachbase/store";

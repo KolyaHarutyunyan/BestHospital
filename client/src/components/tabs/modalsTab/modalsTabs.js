@@ -2,7 +2,6 @@ import React from 'react';
 import {modalHeadersStyle} from "./styles";
 import {Images} from "@eachbase/utils";
 
-
 export const ModalsTabs = ({steps, setStep, secondStepInfo}) => {
     const classes = modalHeadersStyle()
     return (

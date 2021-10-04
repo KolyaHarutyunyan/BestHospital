@@ -40,7 +40,7 @@ export const authService = {
 
     deleteClientEnrollmentService: ({payload}) =>  axios.delete(`/enrollment/${payload.id}`),
 
-    getClientAuthorizationService: ({payload}) => axios.get(`/authorization/client/${payload.id}` ),
+    getClientAuthorizationService: (id) => axios.get(`/authorization/client/${id}` ),
 
     createClientAuthorizationService: ({payload}) => axios.post(`/authorization/client/${payload.id}/funder/${payload.funderId}`, payload.body),
 
@@ -52,27 +52,14 @@ export const authService = {
 
     createClientAuthorizationServService: ({payload}) => axios.post(`/authorizationservice/authorization/${payload.id}/fundingService/${payload.funderId}`, payload.body),
 
+    getClientAuthorizationServCheckModService: ({payload}) => axios.post(`/authorizationservice/authorization/${payload.id}/fundingService/${payload.funderId}/checkModifiers`,payload.body),
+
     editClientAuthorizationServService: ({payload}) =>  axios.patch(`/authorizationservice/${payload.id}`, payload.body),
 
     deleteClientAuthorizationServService: ({payload}) =>  axios.delete(`/authorizationservice/${payload.id}`),
 
     getClientHistoriesService: (id,onModal) => axios.get(`/history/${id}/${onModal}`),
 
-    getClientNotesService: (id,onModal) => axios.get(`/comment/${id}/${onModal}`),
-
-    createClientNoteService: ( body) => axios.post(`/comment`, body),
-
-    editClientNoteService: (id, body) => axios.patch(`/comment/${id}`, body),
-
-    deleteClientNoteService: (id) => axios.delete(`/comment/${id}/comments`),
-
-    getAvailabilityScheduleService: (id) => axios.get(`/availability/${id}`),
-
-    editAvailabilityScheduleService: (id, body) => axios.get(`/availability/${id}`, body),
-
-    createAvailabilityScheduleService: (id, onModel, body) => axios.post(`/availability/${id}/${onModel}`, body),
-
-    deleteAvailabilityScheduleService: (id) => axios.post(`/availability/${id}`),
 };
 
 

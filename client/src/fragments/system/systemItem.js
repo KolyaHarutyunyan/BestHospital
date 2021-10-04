@@ -1,48 +1,19 @@
 import React, {useEffect, useState} from "react";
-import {SimpleTabs, Toast} from "@eachbase/components";
-import {ServiceType, systemItemStyles, SystemItemHeader, Credentials, Departments, JobTitles, PayrollSetup} from './core';
+import {SimpleTabs} from "@eachbase/components";
+import {
+    ServiceType,
+    systemItemStyles,
+    SystemItemHeader,
+    Credentials,
+    Departments,
+    JobTitles,
+    PayrollSetup
+} from './core';
 import {useDispatch, useSelector} from "react-redux";
-import {httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, systemActions} from "../../store";
-import {payrollActions} from "../../store/payroll";
+import {systemActions} from "@eachbase/store";
+import {payrollActions} from "@eachbase/store/payroll";
 
 export const SystemItem = () => {
-    const {httpOnSuccess,httpOnError} = useSelector((state) => ({
-        httpOnSuccess: state.httpOnSuccess,
-        httpOnLoad: state.httpOnLoad,
-        httpOnError: state.httpOnError
-    }));
-
-    const success =
-        httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_SERVICE_BY_ID_GLOBAL' ? true :
-            httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CREDENTIAL_BY_ID_GLOBAL' ? true :
-                httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_DEPARTMENT_BY_ID_GLOBAL' ? true :
-                    httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CREDENTIAL_BY_ID_GLOBAL' ? true :
-                        httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_JOB_BY_ID_GLOBAL' ? true :
-                            httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_JOB_BY_ID_GLOBAL' ? true :
-                                httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_SERVICE_BY_ID_GLOBAL' ? true :
-                                    httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_DEPARTMENT_BY_ID_GLOBAL'
-
-    const errorText = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_SERVICE_BY_ID_GLOBAL' ? true :
-        httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CREDENTIAL_BY_ID_GLOBAL' ? true :
-            httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_DEPARTMENT_BY_ID_GLOBAL' ? true :
-                httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CREDENTIAL_BY_ID_GLOBAL' ? true :
-                    httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_JOB_BY_ID_GLOBAL' ? true :
-                        httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_JOB_BY_ID_GLOBAL' ? true :
-                            httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_SERVICE_BY_ID_GLOBAL' ? true :
-                                httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_DEPARTMENT_BY_ID_GLOBAL'
-
-
-    useEffect(() => {
-        if (success) {
-            dispatch(httpRequestsOnSuccessActions.removeSuccess(httpOnSuccess.length && httpOnSuccess[0].type))
-        } if(errorText){
-            dispatch(httpRequestsOnErrorsActions.removeError(httpOnError.length && httpOnError[0].type))
-        }
-    }, [success]);
-
-
-
-    let errorMessage = success ? 'Success' : 'Something went wrong'
 
     const [activeTab, setActiveTab] = useState(0)
     const [open, setOpen] = useState(false)
@@ -58,8 +29,6 @@ export const SystemItem = () => {
     const globalJobs = useSelector(state => state.system.jobs)
     const globalPayCodes = useSelector(state => state.payroll.PayCodes)
     const globalOvertimeSettings = useSelector(state => state.payroll.overtimeSettings)
-
-    console.log(globalOvertimeSettings,'globalOvertimeSettings');
 
     const dispatch = useDispatch()
     const [deleteModalOpened, setDeleteModalOpened] = useState(false)
@@ -123,10 +92,12 @@ export const SystemItem = () => {
                                         openModal={handleOpenClose}/>)
         },
         {
-            tabComponent: (<JobTitles globalJobs={globalJobs} removeItem={handleRemoveItem} openModal={handleOpenClose}/>)
+            tabComponent: (
+                <JobTitles globalJobs={globalJobs} removeItem={handleRemoveItem} openModal={handleOpenClose}/>)
         },
         {
-            tabComponent: (<PayrollSetup globalPayCodes={globalPayCodes} globalOvertimeSettings={globalOvertimeSettings} />)
+            tabComponent: (
+                <PayrollSetup globalPayCodes={globalPayCodes} globalOvertimeSettings={globalOvertimeSettings}/>)
         }
     ];
 
@@ -143,10 +114,6 @@ export const SystemItem = () => {
                 handleOpenClose={handleOpenClose}
                 activeTab={activeTab}/>
             <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
-            <Toast
-                type={success ? 'Successfully added' : errorText ? 'Something went wrong' : ''}
-                text={errorMessage}
-                info={success ? success : errorText ? errorText : ''}/>
         </div>
     );
 }

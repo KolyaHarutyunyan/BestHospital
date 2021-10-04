@@ -35,8 +35,8 @@ const headerTitles = [
 export const PayCodeTable = ({globalPayCodes}) => {
     const classes = PayrollSetupStyles()
 
-    const [editModalOpenClose,setEditModalOpenClose] = useState(false)
-    const [editedData,setEditedData] = useState({})
+    const [editModalOpenClose, setEditModalOpenClose] = useState(false)
+    const [editedData, setEditedData] = useState({})
 
     const handleOpenClose = (data) => {
         setEditedData(data)
@@ -71,8 +71,6 @@ export const PayCodeTable = ({globalPayCodes}) => {
                             pto: item.pto,
                             id: item.id
                         })} alt="edit"/>
-                        <img src={Images.remove} alt="delete"
-                             onClick={() => alert('delete')}/>
                     </div>
                 }
                 </TableCell>
@@ -82,12 +80,13 @@ export const PayCodeTable = ({globalPayCodes}) => {
 
     return (
         <>
-            <Notes restHeight='328px' defaultStyle={true} data={globalPayCodes} pagination={false} items={notesItem}
+            <Notes restHeight='360px' defaultStyle={true} data={globalPayCodes} pagination={false} items={notesItem}
                    headerTitles={headerTitles}/>
             <SimpleModal
                 openDefault={editModalOpenClose}
                 handleOpenClose={handleOpenClose}
-                content={<PayCodeType handleOpenClose={editedData && handleOpenClose} maxWidth='480px' editedData={editedData} handleClose={handleOpenClose}/>}
+                content={<PayCodeType handleOpenClose={editedData && handleOpenClose} maxWidth='480px'
+                                      editedData={editedData} handleClose={handleOpenClose}/>}
             />
         </>
 

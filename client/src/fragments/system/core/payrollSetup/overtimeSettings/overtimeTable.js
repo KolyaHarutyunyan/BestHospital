@@ -1,9 +1,11 @@
 import React, {useState} from "react";
 import {PayrollSetupStyles} from '../styles';
-import {Notes, SimpleModal, SlicedText, TableBodyComponent} from "@eachbase/components";
+import {DeleteElement, Notes, SimpleModal, SlicedText, TableBodyComponent} from "@eachbase/components";
 import {TableCell} from "@material-ui/core";
 import {Images} from "@eachbase/utils";
 import {OvertimeSettings} from "./overtimeSettings";
+import {useDispatch} from "react-redux";
+import {payrollActions} from "@eachbase/store/payroll";
 
 const headerTitles = [
     {
@@ -31,13 +33,29 @@ const headerTitles = [
 export const OvertimeTable = ({globalOvertimeSettings}) => {
     const classes = PayrollSetupStyles()
 
-    const [editModalOpenClose,setEditModalOpenClose] = useState(false)
-    const [editedData,setEditedData] = useState({})
+    const dispatch = useDispatch()
+
+    const [editModalOpenClose, setEditModalOpenClose] = useState(false)
+    const [editedData, setEditedData] = useState({})
+    const [deletedInfo, setDeletedInfo] = useState({})
+
+    const [open, setOpen] = useState(false)
 
     const handleOpenClose = (data) => {
         setEditedData(data)
         setEditModalOpenClose(!editModalOpenClose)
     }
+
+    const handleOpenCloseDelete = (data) => {
+        setDeletedInfo(data)
+        setOpen(!open)
+    }
+
+    const handleDeleteItem = () => {
+        dispatch(payrollActions.deleteOvertimeSettingsByIdGlobal(deletedInfo.id));
+        setOpen(false)
+    }
+
     const notesItem = (item, index) => {
         return (
             <TableBodyComponent key={index}>
@@ -63,7 +81,7 @@ export const OvertimeTable = ({globalOvertimeSettings}) => {
                             id: item.id
                         })} alt="edit"/>
                         <img src={Images.remove} alt="delete"
-                             onClick={() => alert('delete')}/>
+                             onClick={() => handleOpenCloseDelete({id: item.id, name: item.name})}/>
                     </div>
                 }
                 </TableCell>
@@ -73,12 +91,25 @@ export const OvertimeTable = ({globalOvertimeSettings}) => {
 
     return (
         <>
-            <Notes restHeight='328px' defaultStyle={true} data={globalOvertimeSettings} pagination={false} items={notesItem}
+            <Notes restHeight='360px' defaultStyle={true} data={globalOvertimeSettings} pagination={false}
+                   items={notesItem}
                    headerTitles={headerTitles}/>
             <SimpleModal
                 openDefault={editModalOpenClose}
                 handleOpenClose={handleOpenClose}
-                content={<OvertimeSettings handleOpenClose={editedData && handleOpenClose} maxWidth='480px' editedData={editedData} handleClose={handleOpenClose}/>}
+                content={<OvertimeSettings handleOpenClose={editedData && handleOpenClose} maxWidth='480px'
+                                           editedData={editedData} handleClose={handleOpenClose}/>}
+            />
+            <SimpleModal
+                openDefault={open}
+                handleOpenClose={handleOpenCloseDelete}
+                content={<DeleteElement
+                    info={deletedInfo.name}
+                    text='some information'
+                    handleDel={handleDeleteItem}
+                    handleClose={handleOpenCloseDelete}
+                />
+                }
             />
         </>
 

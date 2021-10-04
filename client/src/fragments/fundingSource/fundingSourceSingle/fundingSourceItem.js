@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {useParams} from "react-router-dom";
 import {
     SimpleTabs,
     Notes,
@@ -6,11 +8,8 @@ import {
     InactiveModal,
     Loader,
     NoItemText,
-    Toast
 } from "@eachbase/components";
 import {adminActions, fundingSourceActions, httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
-import {useDispatch, useSelector} from "react-redux";
-import {useParams} from "react-router-dom";
 import {
     FundingSourceSingleGeneral,
     FundingSourceSingleHeader,
@@ -64,10 +63,6 @@ export const FundingSourceItem = ({}) => {
         httpOnLoad: state.httpOnLoad,
     }));
 
-
-    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_FUNDING_SOURCE'
-    let errorMessage = success ? 'Successfully Edited' : 'Something went wrong'
-
     const tabsContent = [
         {tabComponent: httpOnLoad.length > 0 ? <Loader/> : <FundingSourceSingleGeneral data={data}/>},
         {
@@ -87,10 +82,6 @@ export const FundingSourceItem = ({}) => {
 
     return (
         <>
-            <Toast
-                type={'success'}
-                text={errorMessage}
-                info={success}/>
             <TableWrapperGeneralInfo
                 title={data?.name}
                 status={data?.status === 1 ? 'active' : 'inactive'}

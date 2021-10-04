@@ -1,10 +1,10 @@
 import React from "react";
+import moment from "moment";
+import {useHistory} from "react-router-dom";
 import {TableBodyComponent} from "@eachbase/components";
 import {TableCell} from "@material-ui/core";
 import {Images, useGlobalStyles} from "@eachbase/utils";
-import {useHistory} from "react-router-dom";
 import {clientStyles} from "./styles";
-import moment from "moment";
 
 export const ClientTableBody = ({data,setOpen, index, setDeleteClient}) => {
     const globalClasses = useGlobalStyles()

@@ -1,9 +1,9 @@
-import {AddressInput, ValidationInput, SelectInput, CreateChancel, ModalHeader, Toast} from "@eachbase/components";
 import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {AddressInput, ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
 import {createFoundingSourceStyle} from "./styles";
 import {EmailValidator, ErrorText} from "@eachbase/utils";
 import {fundingSourceActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions,} from "@eachbase/store";
-import {useDispatch, useSelector} from "react-redux";
 
 
 export const CreateFundingSource = ({handleClose, info}) => {
@@ -72,10 +72,8 @@ export const CreateFundingSource = ({handleClose, info}) => {
         {name: 'first'},
         {name: 'second'}
     ]
-    const handleFullAddress = (ev) => {
-        setFullAddress(ev)
-        // httpOnError.length && dispatch(httpRequestsOnErrorsActions.removeError('CREATE_OFFICE'))
-        // if (error === 'address') setError('')
+    const handleFullAddress = (e) => {
+        setFullAddress(e)
     }
 
 

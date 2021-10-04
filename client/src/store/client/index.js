@@ -1,32 +1,27 @@
 import {
-    createAvailabilitySchedule,
     createClient,
     createClientContact,
     createClientEnrollment,
-    createClientNote,
     createClientsAuthorizations,
-    createClientsAuthorizationsServ, deleteAvailabilitySchedule,
+    createClientsAuthorizationsServ,
     deleteClient,
     deleteClientContact,
     deleteClientEnrollment,
-    deleteClientNote,
     deleteClientsAuthorization,
-    deleteClientsAuthorizationServ, editAvailabilitySchedule,
+    deleteClientsAuthorizationServ,
     editClient,
     editClientContact,
     editClientEnrollment,
-    editClientNote,
     editClientsAuthorizations,
     editClientsAuthorizationsServ,
-    getAvailabilitySchedule,
     getClientHistories,
     getClients,
     getClientsAuthorizations,
     getClientsAuthorizationsServ,
+    getClientsAuthorizationsServModifiersCheck,
     getClientsById,
     getClientsContacts,
     getClientsEnrollment,
-    getClientsNotes,
 } from "./client.action";
 
 export {clientReducer} from './client.reducer';
@@ -55,13 +50,6 @@ export const clientActions = {
     editClientsAuthorizationsServ,
     deleteClientsAuthorizationServ,
     getClientHistories,
-    getClientsNotes,
-    createClientNote,
-    editClientNote,
-    deleteClientNote,
-    getAvailabilitySchedule,
-    editAvailabilitySchedule,
-    createAvailabilitySchedule,
-    deleteAvailabilitySchedule
+    getClientsAuthorizationsServModifiersCheck
 }
 

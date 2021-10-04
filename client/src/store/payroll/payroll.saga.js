@@ -51,11 +51,11 @@ function* editPayCodeById(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         yield call(payrollService.editPayCodeByIdGlobalService, action.payload.id, action.payload.body)
-        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         yield put({
             type: GET_PAYCODE_GLOBAL,
         });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
@@ -67,12 +67,11 @@ function* deletePayCodeByIdGlobal(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         yield call(payrollService.deletePayCodeByIdService, action.payload.id)
-        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         yield put({
             type: GET_PAYCODE_GLOBAL,
         });
-
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
@@ -83,13 +82,18 @@ function* deletePayCodeByIdGlobal(action) {
 
 
 function* createOvertimeSettingsGlobal(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         yield call(payrollService.createOvertimeSettingsGlobalService, action.payload.body);
         yield put({
             type: GET_OVERTIME_SETTINGS_GLOBAL,
         });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
         console.log(err)
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
 }
 
@@ -107,24 +111,34 @@ function* getOvertimeSettingsGlobal() {
 }
 
 function* editOvertimeSettingsById(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         yield call(payrollService.editOvertimeSettingsByIdGlobalService, action.payload.id, action.payload.body)
         yield put({
             type: GET_OVERTIME_SETTINGS_GLOBAL,
         });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
         console.log(err)
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
 }
 
 function* deleteOvertimeSettingsByIdGlobal(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         yield call(payrollService.deleteOvertimeSettingsByIdService, action.payload.id)
         yield put({
             type: GET_OVERTIME_SETTINGS_GLOBAL,
         });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
         console.log(err)
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
 }
 

@@ -5,18 +5,17 @@ import {makeStyles} from "@material-ui/core/styles";
 import {
     TableHeadComponent,
     SearchAndFilter,
-    PaginationItem,
     NoItemText,
     CloseButton,
     SimpleModal,
-    AddNotes, DeleteElement, Toast
+    AddNotes, DeleteElement
 } from "@eachbase/components";
 import {Images, useGlobalStyles} from "@eachbase/utils";
 import moment from "moment";
-import {noteActions} from "../../store/notes";
+import {noteActions} from "@eachbase/store/notes";
 import {useParams} from "react-router-dom";
-import {httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "../../store";
-import {httpRequestsOnLoadActions} from "../../store/http_requests_on_load";
+import {httpRequestsOnSuccessActions} from "@eachbase/store";
+import {httpRequestsOnLoadActions} from "@eachbase/store/http_requests_on_load";
 
 export const Notes = ({
                           restHeight,
@@ -25,7 +24,6 @@ export const Notes = ({
                           showModal,
                           data,
                           headerTitles,
-                          pagination,
                           defaultStyle,
                           items,
                           noItemsYet,
@@ -77,9 +75,8 @@ export const Notes = ({
         closeModal()
     }
 
-    const {httpOnLoad, httpOnSuccess, httpOnError} = useSelector((state) => ({
+    const {httpOnLoad, httpOnSuccess} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
-        httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,
     }));
 
@@ -87,10 +84,6 @@ export const Notes = ({
         httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_GLOBAL_NOTE' ? true :
             httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_GLOBAL_NOTE' ? true :
                 httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_GLOBAL_NOTE'
-    const errorText =
-        httpOnError.length && httpOnError[0].type === 'CREATE_GLOBAL_NOTE' ? true :
-            httpOnError.length && httpOnError[0].type === 'EDIT_GLOBAL_NOTE' ? true :
-                httpOnError.length && httpOnError[0].type === 'DELETE_GLOBAL_NOTE'
 
     const loader = httpOnLoad.length &&
     httpOnLoad[0] === 'CREATE_GLOBAL_NOTE' ? true :
@@ -103,23 +96,19 @@ export const Notes = ({
             dispatch(httpRequestsOnLoadActions.removeLoading(httpOnLoad.length && httpOnLoad[0].type))
             setOpenDelModal(false)
         }
-        if (errorText) {
-            dispatch(httpRequestsOnErrorsActions.removeError(httpOnError.length && httpOnError[0].type))
-        }
     }, [success]);
-
-    let errorMessage = success ? 'Success' : 'Something went wrong';
 
     return (
         <div className={globalStyle.tableWrapper}>
-            <TableContainer style={{maxHeight: `calc(100vh - ${restHeight})`}} className={globalStyle.tableContainer} component={Paper}>
+            <TableContainer style={{maxHeight: `calc(100vh - ${restHeight})`}} className={globalStyle.tableContainer}
+                            component={Paper}>
                 <Table
                     stickyHeader
                     className={globalStyle.table}
                     size="small"
                     aria-label="a dense table"
                 >
-                    <TableHeadComponent >
+                    <TableHeadComponent>
                         {
                             headerTitles && headerTitles.map((headerItem, index) => {
                                 return (
@@ -144,18 +133,15 @@ export const Notes = ({
 
                 {!noItemsYet && !data && <NoItemText text='No Items Yet'/>}
 
-                {pagination && <PaginationItem
-                    text={`Showing 30 to 30 of 200 entries`}
-                    handleReturn={(number) => changePage(number)}
-                    page={page}
-                    count={officesList.length}
-                />}
+                {/*{pagination && <PaginationItem*/}
+                {/*    text={`Showing 30 to 30 of 200 entries`}*/}
+                {/*    handleReturn={(number) => changePage(number)}*/}
+                {/*    page={page}*/}
+                {/*    count={officesList.length}*/}
+                {/*/>}*/}
 
             </TableContainer>
-            <Toast
-                type={success ? 'Successfully added' : errorText ? 'Something went wrong' : ''}
-                text={errorMessage}
-                info={success ? success : errorText ? errorText : ''}/>
+
             {
                 showModal &&
                 <>

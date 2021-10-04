@@ -38,7 +38,6 @@ export const OvertimeSettings = ({handleOpenClose, editedData, maxWidth, marginR
             ));
         error === e.target.name && setError('')
     }
-
     const handleSubmit = () => {
         let data = {
             name: inputs.name,
@@ -48,11 +47,17 @@ export const OvertimeSettings = ({handleOpenClose, editedData, maxWidth, marginR
         }
         if (inputs.name && inputs.type && inputs.threshold && inputs.multiplier) {
             if (editedData) {
-                console.log(data,'daaaata');
                 dispatch(payrollActions.editOvertimeSettingsByIdGlobal(data, editedData?.id));
                 handleOpenClose()
             } else {
                 dispatch(payrollActions.createOvertimeSettingsGlobal(data))
+                setInputs({
+                    name: '',
+                    type: '',
+                    threshold: '',
+                    multiplier: ''
+                })
+
             }
 
         } else {
@@ -80,7 +85,6 @@ export const OvertimeSettings = ({handleOpenClose, editedData, maxWidth, marginR
                             the system.</p>
                     </>
             }
-
             <ValidationInput
                 onChange={handleChange}
                 value={inputs.name}
@@ -141,8 +145,6 @@ export const OvertimeSettings = ({handleOpenClose, editedData, maxWidth, marginR
                         styles={overtimeBtn}
                     />
             }
-
-
         </div>
     )
 }

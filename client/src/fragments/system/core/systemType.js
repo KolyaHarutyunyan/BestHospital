@@ -1,11 +1,17 @@
 import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import {TableCell} from "@material-ui/core";
-import {Notes, TableBodyComponent, AddButton, ValidationInput, Toast, SlicedText} from "@eachbase/components";
+import {
+    Notes,
+    TableBodyComponent,
+    AddButton,
+    ValidationInput,
+    SlicedText,
+    NoItemText
+} from "@eachbase/components";
 import {Images} from "@eachbase/utils";
 import {systemItemStyles} from './styles'
-import {useDispatch, useSelector} from "react-redux";
-import {httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
-import {httpRequestsOnLoadActions} from "@eachbase/store/http_requests_on_load";
+import {httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
 
 const credentialBtn = {
     maxWidth: '174px',
@@ -57,8 +63,14 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
                 </TableCell>
                 <TableCell>{item.action ? item.action :
                     <div className={classes.icons}>
-                        <img src={Images.edit} onClick={() => editService('editService',{id:item.id,name:item.name,category: item.category,displayCode: item.displayCode})} alt="edit"/>
-                        <img src={Images.remove} alt="delete" onClick={() => removeItem({id: item.id,name: item.name,type: 'editService'})}/>
+                        <img src={Images.edit} onClick={() => editService('editService', {
+                            id: item.id,
+                            name: item.name,
+                            category: item.category,
+                            displayCode: item.displayCode
+                        })} alt="edit"/>
+                        <img src={Images.remove} alt="delete"
+                             onClick={() => removeItem({id: item.id, name: item.name, type: 'editService'})}/>
                     </div>
                 }
                 </TableCell>
@@ -66,8 +78,8 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
         )
     }
 
-    const editService = (modalType,modalInformation) => {
-        openModal(modalType,modalInformation)
+    const editService = (modalType, modalInformation) => {
+        openModal(modalType, modalInformation)
     }
 
     const handleChange = e => {
@@ -81,7 +93,7 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
         error === e.target.name && setError('')
     }
 
-    const handleSubmit = () =>{
+    const handleSubmit = () => {
         let serviceData = {
             name: inputs.name,
             displayCode: inputs.displayCode,
@@ -89,41 +101,33 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
         }
         if (inputs.name && inputs.displayCode && inputs.category) {
             dispatch(systemActions.createServiceGlobal(serviceData))
-        }else {
+        } else {
             setError(
                 !inputs.name ? 'name' :
                     !inputs.displayCode ? 'displayCode' :
                         !inputs.category ? 'category' :
-                                        'Input is not filled'
+                            'Input is not filled'
             )
         }
     }
 
-    const {httpOnError, httpOnLoad, httpOnSuccess } = useSelector((state) => ({
-        httpOnSuccess: state.httpOnSuccess,
+    const {httpOnLoad} = useSelector((state) => ({
         httpOnLoad: state.httpOnLoad,
-        httpOnError: state.httpOnError
     }));
 
-    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_SERVICE_GLOBAL'
-    const errorText = httpOnError.length && httpOnError[0].type === 'CREATE_SERVICE_GLOBAL'
     const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_SERVICE_GLOBAL'
 
-    useEffect(()=>{
-        if(success) {
+    useEffect(() => {
+        if (loader) {
             dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_SERVICE_GLOBAL'))
-            dispatch(httpRequestsOnLoadActions.removeLoading(httpOnLoad.length && httpOnLoad[0].type))
             setInputs({
                 name: '',
                 displayCode: '',
                 category: ''
             })
-        }else if(errorText){
-            dispatch(httpRequestsOnErrorsActions.removeError('CREATE_SERVICE_GLOBAL'))
         }
-    },[success])
+    }, [loader])
 
-    let errorMessage = success ? 'Successfully added' : 'Something went wrong'
     return (
         <>
             <div className={classes.flexContainer}>
@@ -155,21 +159,21 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
                     placeholder={'Category'}
                 />
                 <AddButton
+                    loader={loader}
                     type={'CREATE_SERVICE_GLOBAL'}
                     styles={credentialBtn}
-                    loader={ loader }
                     disabled={!isDisabled}
                     handleClick={handleSubmit}
                     text='Add Service Type'
                 />
             </div>
             <p className={classes.title}>Service Type</p>
-            <Notes defaultStyle={true} data={globalServices} pagination={false} items={notesItem}
-                   headerTitles={headerTitles}/>
-            <Toast
-                type={success ? 'Successfully added' : errorText ? 'Something went wrong' : '' }
-                text={errorMessage}
-                info={success ? success : errorText ? errorText : ''}/>
+            {
+                globalServices.length ?
+                    <Notes defaultStyle={true} data={globalServices} pagination={false} items={notesItem}
+                           headerTitles={headerTitles}/> :
+                    <NoItemText text='No Items Yet'/>
+            }
         </>
     )
 }

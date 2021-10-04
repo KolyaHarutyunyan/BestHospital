@@ -20,6 +20,7 @@ import {
     GET_FUNDING_SOURCE_SERVICE_MODIFIERS,
     EDIT_ACTIVE_OR_INACTIVE,
     EDIT_FUNDING_SOURCE_SERVICE_MODIFIER,
+    GET_FUNDING_SOURCE_SERVICE_MODIFIERS_CLIENT,
 } from "./fundingSource.types";
 
 export const createFundingSource = (body) => {
@@ -109,6 +110,15 @@ export const getFoundingSourceServiceModifiers = (id) => {
     }
 }
 
+
+export const getFoundingSourceServiceModifiersForClient = (id) => {
+
+    return {
+        type: GET_FUNDING_SOURCE_SERVICE_MODIFIERS_CLIENT,
+        payload: id
+    }
+}
+
 export const getFundingSourceHistoriesById = (id, onModal) => {
     return {
         type: GET_FUNDING_SOURCE_HISTORIES_BY_ID,
@@ -170,35 +180,3 @@ export const editActiveOrInactive = (id, path, status, body, type) => {
 }
 
 
-export const getFundingSourceNotes = (id, onModal) => {
-    return {
-        type: GET_FUNDING_SOURCE_NOTES,
-        payload: {id, onModal}
-    }
-}
-
-
-export const createFoundingSourceNote = (body) => {
-
-    return {
-        type: CREATE_FUNDING_SOURCE_NOTE,
-        payload: {
-            body
-        }
-    }
-}
-
-export const editFoundingSourceNote = (fId, id, body) => {
-
-    return {
-        type: EDIT_FUNDING_SOURCE_NOTE,
-        payload: {fId, body, id,}
-    }
-}
-
-export const deleteFoundingSourceNote = (fId, id) => {
-    return {
-        type: DELETE_FUNDING_SOURCE_NOTE,
-        payload: {fId, id}
-    }
-}

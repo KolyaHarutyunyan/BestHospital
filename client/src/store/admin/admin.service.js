@@ -23,4 +23,11 @@ export const authService = {
 
     deleteCredentialByIdService: (id) => axios.delete(`/scredential/${id}`),
 
+
+
+    getEmploymentService: (id) => axios.get(`/employment/${id}`),
+
+    createEmploymentService: (body) => axios.post(`/employment` , {body}),
+
+    createServService: (body) => axios.post(`/service` , {body}),
 };

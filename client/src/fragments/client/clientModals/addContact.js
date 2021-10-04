@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
-import {ValidationInput, CreateChancel, ModalHeader, AddressInput, Toast} from "@eachbase/components";
+import {useDispatch, useSelector,} from "react-redux";
+import {useParams} from "react-router-dom";
+import {ValidationInput, CreateChancel, ModalHeader, AddressInput} from "@eachbase/components";
 import {createClientStyle} from "./styles";
 import {ErrorText} from "@eachbase/utils";
-import {useDispatch, useSelector,} from "react-redux";
 import {clientActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
-import {useParams} from "react-router-dom";
 
 
 export const AddContact = ({handleClose, info}) => {
@@ -29,11 +29,8 @@ export const AddContact = ({handleClose, info}) => {
         httpOnLoad: state.httpOnLoad,
     }));
 
-
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_CONTACT'
     const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_CLIENT_CONTACT'
-
-
 
     useEffect(() => {
         if (success) {
@@ -91,16 +88,8 @@ export const AddContact = ({handleClose, info}) => {
         }
     }
 
-
-
-    const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_CONTACT'
-    let errorMessage = successCreate ? 'Successfully added' : successEdit ? 'Successfully edited' : 'Something went wrong'
     return (
         <div className={classes.createFoundingSource}>
-            <Toast
-                type={'success'}
-                text={errorMessage}
-                info={successCreate || successEdit}/>
             <ModalHeader secondStepInfo={'Address'} setStep={setStep} steps={step} handleClose={handleClose}
                          title={info ? 'Edit Contact' : 'Add Contact'}/>
             <div className={classes.createFoundingSourceBody}>

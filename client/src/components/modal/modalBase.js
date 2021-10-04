@@ -4,13 +4,6 @@ import Modal from "@material-ui/core/Modal";
 import { Backdrop } from "@material-ui/core";
 import { AddButton } from "../buttons";
 
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    position: "absolute",
-  },
-}));
-
 export const SimpleModal = ({status, openDefault, handleOpenClose, content, backdropCustom, addButton }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {

@@ -1,28 +1,17 @@
-import React, {useState} from "react";
+import React from "react";
 import {Card} from '@eachbase/components';
 import {serviceSingleStyles} from './styles';
 import {Colors, Images} from "@eachbase/utils";
 import {AvailableHours} from "@eachbase/components/availability";
 
-
-export const ClientAvailabilitySchedule = ({data}) => {
-
-
-
-
+export const ClientAvailabilitySchedule = ({availabilityData, data}) => {
     const classes = serviceSingleStyles()
-
-
-
-
     const generalInfo = [
         {title: 'First Name', value: data?.firstName},
         {title: 'Middle Name', value: data?.middleName},
         {title: 'Last Name', value: data?.lastName},
         {title: 'Code', value: data?.code},
     ]
-
-
     return (
         <div className={classes.staffGeneralWrapper}>
             <Card
@@ -34,8 +23,7 @@ export const ClientAvailabilitySchedule = ({data}) => {
                 icon={Images.generalInfoIcon}
             />
             <div className={classes.clearBoth}/>
-           <AvailableHours />
-
+           <AvailableHours onModel='Client' availabilityData={availabilityData} />
         </div>
     )
 }

@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import {PayrollSetupStyles} from './styles';
-import {PayCodeType ,PayCodeTable} from "./paycodeType/";
-import { OvertimeTable, OvertimeSettings } from "./overtimeSettings";
+import {PayCodeType, PayCodeTable} from "./paycodeType/";
+import {OvertimeTable, OvertimeSettings} from "./overtimeSettings";
+import {MileageCompensation, MileageTable} from "./mileageCompensation";
 
 export const PayrollSetup = ({globalOvertimeSettings, globalPayCodes}) => {
     const classes = PayrollSetupStyles()
@@ -12,21 +13,27 @@ export const PayrollSetup = ({globalOvertimeSettings, globalPayCodes}) => {
         if (activeStep === 0) {
             return (
                 <div className={classes.wrapper}>
-                    <PayCodeType marginTop='30px' marginRight='16px' maxWidth='508px' />
-                    <PayCodeTable globalPayCodes={globalPayCodes} />
+                    <PayCodeType marginTop='30px' marginRight='16px' maxWidth='508px'/>
+                    <PayCodeTable globalPayCodes={globalPayCodes}/>
                 </div>
             )
         } else if (activeStep === 1) {
             return (
                 <div className={classes.wrapper}>
-                    <OvertimeSettings marginTop='30px' marginRight='16px' maxWidth='508px' />
-                    <OvertimeTable globalOvertimeSettings={globalOvertimeSettings} />
+                    <OvertimeSettings marginTop='30px' marginRight='16px' maxWidth='508px'/>
+                    <OvertimeTable globalOvertimeSettings={globalOvertimeSettings}/>
                 </div>
             )
         } else if (activeStep === 2) {
-            return <div>Mileage Compensation third screen</div>
+            return (
+                <div className={classes.wrapper}>
+                    <MileageCompensation marginTop='30px' marginRight='16px' maxWidth='508px'/>
+                    <MileageTable/>
+                </div>
+            )
         }
     }
+
     const changeActiveStep = (stepNumber) => {
         setActiveStep(stepNumber)
     }

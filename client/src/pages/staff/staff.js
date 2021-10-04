@@ -31,7 +31,6 @@ export const Staff = () => {
         }else {
             dispatch(adminActions.getAdmins({status: 1, start: 0, end: 20}));
         }
-
     }
     return (
         <>

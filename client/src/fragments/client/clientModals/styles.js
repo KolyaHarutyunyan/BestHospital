@@ -62,10 +62,15 @@ export const createClientStyle = makeStyles(() => ({
     availableModfiers : {
         display : 'flex',
         justifyContent  : 'center',
-        marginTop : 8
+        marginTop : 8,
+        flexWrap : 'wrap'
     },
     availableModfier : {
-
+        margin : "4px",
+        border: '1px solid #4B5C6880',
+        borderRadius: 14,
+        padding : '4px 16px',
+        cursor : 'pointer'
     },
     displayCode: {
         color: '#4B5C68B3'

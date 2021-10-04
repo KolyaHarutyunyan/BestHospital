@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import {
     DeleteElement,
     NoItemText,
@@ -8,7 +9,6 @@ import {
 } from "@eachbase/components";
 import {FundingSourceSinglePTModifiers} from "./fundingSourceSinglePTModifiers";
 import {Images} from "@eachbase/utils";
-import {useDispatch, useSelector} from "react-redux";
 import {TableCell} from "@material-ui/core";
 import {fundingSourceSingleStyles} from "./styles";
 import {FundingSourceServiceAdd,} from "./modals";
@@ -22,8 +22,9 @@ export const FundingSourceSingleServices = ({data,}) => {
     const [accept, setAccept] = useState(false)
     const classes = fundingSourceSingleStyles()
     const dispatch = useDispatch()
-    const modifiers = useSelector(state => state.fundingSource?.modifiers[0]?.modifiers)
+    const modifiers = useSelector(state => state.fundingSource?.modifiers.modifiers)
     const globalCredentials = useSelector(state => state.system.credentials)
+
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnError: state.httpOnError,
@@ -31,7 +32,6 @@ export const FundingSourceSingleServices = ({data,}) => {
     }));
 
 
-    // console.log(modifiers,'mooods')
 
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'GET_FUNDING_SOURCE_SERVICE_MODIFIERS'
 
@@ -150,7 +150,7 @@ export const FundingSourceSingleServices = ({data,}) => {
                                              handleClose={() => setToggleModal(!toggleModal)}/>}
             />
             <div className={classes.fundindServiceItems}>
-                <Notes data={data} items={serviceItem} headerTitles={headerTitles} defaultStyle={true}/>
+                <Notes restHeight={'360px'} data={data} items={serviceItem} headerTitles={headerTitles} defaultStyle={true}/>
             </div>
             {modifiers && modifiers?.length >0 ? <FundingSourceSinglePTModifiers
                     globalCredentials={globalCredentials}

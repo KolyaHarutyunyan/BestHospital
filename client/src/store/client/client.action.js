@@ -27,12 +27,11 @@ import {
     GET_CLIENT_HISTORIES,
     GET_CLIENT_NOTES,
     GET_CLIENTS,
+    GET_CLIENT_AUTHORIZATION_MOD_CHECK,
 } from "./client.types";
 
 
-
 export const getClients = (data) => {
-
     return {
         type: GET_CLIENTS,
         payload: {data}
@@ -46,7 +45,6 @@ export const createClient = (body) => {
     }
 }
 
-
 export const deleteClient = (id) => {
     return {
         type: DELETE_CLIENT,
@@ -57,10 +55,7 @@ export const deleteClient = (id) => {
 export const editClient = (body, id) => {
     return {
         type: EDIT_CLIENT,
-        payload: {
-            body,
-            id
-        }
+        payload: {body, id}
     }
 }
 
@@ -81,21 +76,14 @@ export const getClientsContacts = (id) => {
 export const createClientContact = (body, id) => {
     return {
         type: CREATE_CLIENT_CONTACT,
-        payload: {
-            body,
-            id
-        }
+        payload: {body, id}
     }
 }
 
 export const editClientContact = (body, id,paramsId) => {
     return {
         type: EDIT_CLIENT_CONTACT,
-        payload: {
-            body,
-            id,
-            paramsId
-        }
+        payload: {body, id, paramsId}
     }
 }
 
@@ -117,24 +105,14 @@ export const getClientsEnrollment = (id) => {
 export const createClientEnrollment = (body, id, funderId) => {
     return {
         type: CREATE_CLIENT_ENROLLMENT,
-        payload: {
-            body,
-            id,
-            funderId
-        }
+        payload: {body, id, funderId}
     }
 }
 
 export const editClientEnrollment = (body, clientId, funderId, id) => {
-
     return {
         type: EDIT_CLIENT_ENROLLMENT,
-        payload: {
-            body,
-            clientId,
-            id,
-            funderId
-        }
+        payload: {body, clientId, id, funderId}
     }
 }
 
@@ -144,8 +122,6 @@ export const deleteClientEnrollment = ( id, clientId) => {
         payload: {id,  clientId}
     }
 }
-
-
 
 export const getClientsAuthorizations = (id) => {
     return {
@@ -157,30 +133,21 @@ export const getClientsAuthorizations = (id) => {
 export const createClientsAuthorizations = (body, id, funderId) => {
     return {
         type: CREATE_CLIENT_AUTHORIZATION,
-        payload: {
-            body,
-            id,
-            funderId
-        }
+        payload: {body, id, funderId}
     }
 }
 
-export const editClientsAuthorizations = (body,  id) => {
-
+export const editClientsAuthorizations = (body,  id, clientId) => {
     return {
         type: EDIT_CLIENT_AUTHORIZATION,
-        payload: {
-            body,
-            id,
-
-        }
+        payload: {body, id, clientId}
     }
 }
 
-export const deleteClientsAuthorization = ( id) => {
+export const deleteClientsAuthorization = ( id, clientId) => {
     return {
         type: DELETE_CLIENT_AUTHORIZATION,
-        payload: {id}
+        payload: {id, clientId}
     }
 }
 
@@ -191,105 +158,38 @@ export const getClientsAuthorizationsServ = (id) => {
     }
 }
 
+export const getClientsAuthorizationsServModifiersCheck = (body,id,funderId) => {
+    return {
+        type: GET_CLIENT_AUTHORIZATION_MOD_CHECK,
+        payload: {body,id,funderId}
+    }
+}
 
 export const createClientsAuthorizationsServ = (body, id, funderId) => {
     return {
         type: CREATE_CLIENT_AUTHORIZATION_SERV,
-        payload: {
-            body,
-            id,
-            funderId
-        }
+        payload: {body, id, funderId}
     }
 }
 
-export const editClientsAuthorizationsServ = (body,  id) => {
-
+export const editClientsAuthorizationsServ = (body,  id, authID) => {
     return {
         type: EDIT_CLIENT_AUTHORIZATION_SERV,
-        payload: {
-            body,
-            id,
-
-        }
+        payload: {body, id, authID}
     }
 }
 
-export const deleteClientsAuthorizationServ = ( id) => {
+export const deleteClientsAuthorizationServ = ( id, authID) => {
     return {
         type: DELETE_CLIENT_AUTHORIZATION_SERV,
-        payload: {id}
+        payload: {id, authID}
     }
 }
 
-
 export const getClientHistories = (id,onModal) => {
-
     return {
         type: GET_CLIENT_HISTORIES,
         payload: {id,onModal}
     }
 }
 
-export const getClientsNotes = (id,onModal) => {
-    return {
-        type: GET_CLIENT_NOTES,
-        payload: {id,onModal}
-    }
-}
-
-export const createClientNote = (body) => {
-
-    return {
-        type: CREATE_CLIENT_NOTE,
-        payload: {
-            body
-        }
-    }
-}
-
-export const editClientNote = (fId, id, body) => {
-
-    return {
-        type: EDIT_CLIENT_NOTE,
-        payload: {fId, body, id,}
-    }
-}
-
-export const deleteClientNote = (fId, id) => {
-    return {
-        type: DELETE_CLIENT_NOTE,
-        payload: {fId, id}
-    }
-}
-
-export const getAvailabilitySchedule = (id) => {
-    return {
-        type: GET_AVAILABILITY_SCHEDULE,
-        payload: {id}
-    }
-}
-
-export const editAvailabilitySchedule = ( id, body) => {
-
-    return {
-        type: EDIT_AVAILABILITY_SCHEDULE,
-        payload: { body, id,}
-    }
-}
-
-export const createAvailabilitySchedule = ( id, onModel, body) => {
-
-    return {
-        type: CREATE_AVAILABILITY_SCHEDULE,
-        payload: {onModel, body, id,}
-    }
-}
-
-export const deleteAvailabilitySchedule = ( id) => {
-
-    return {
-        type: DELETE_AVAILABILITY_SCHEDULE,
-        payload: { id,}
-    }
-}

@@ -76,11 +76,18 @@ export const PayCodeType = ({handleOpenClose, editedData, maxWidth, marginRight,
             pto: AccruePTO === 'Yes'
         }
         if (inputs.name && inputs.type && inputs.code) {
-            if(editedData) {
+            if (editedData) {
                 dispatch(payrollActions.editPayCodeByIdGlobal(data, editedData?.id));
                 handleOpenClose()
             } else {
                 dispatch(payrollActions.createPayCodeGlobal(data))
+                setInputs({
+                    name: '',
+                    code: '',
+                    type: '',
+                })
+                setApplyOvertime('No')
+                setAccruePTO('No')
             }
 
         } else {
@@ -169,12 +176,12 @@ export const PayCodeType = ({handleOpenClose, editedData, maxWidth, marginRight,
             </div>
             {
                 editedData ? <CreateChancel
-                    buttonWidth='192px'
-                    create='Save'
-                    chancel="Cancel"
-                    onClose={ handleOpenClose}
-                    onCreate={handleSubmit}
-                /> :
+                        buttonWidth='192px'
+                        create='Save'
+                        chancel="Cancel"
+                        onClose={handleOpenClose}
+                        onCreate={handleSubmit}
+                    /> :
                     <AddModalButton
                         handleClick={handleSubmit} text={'Add Paycode Type'}
                         styles={payCodeBtn}

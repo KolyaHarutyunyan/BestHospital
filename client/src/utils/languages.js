@@ -32,5 +32,4 @@ export const languages = [
     'Thai',
     'Turkish',
     'Urdu',
-
 ];

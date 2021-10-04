@@ -5,7 +5,6 @@ import {Colors, useGlobalTextStyles} from "@eachbase/utils";
 import {modalsStyle} from "./styles";
 import {MinLoader} from "../loader";
 
-
 export const DeleteElement = ({text, info, handleDel, handleClose, loader}) => {
 
     const classes = modalsStyle()
@@ -19,7 +18,6 @@ export const DeleteElement = ({text, info, handleDel, handleClose, loader}) => {
             <div className={classes.deleteModalWrapper}>
                 <p className={globalText.modalTitle}>{info}</p>
                 <p className={globalText.modalText}>{text}</p>
-
 
                 <div className={classes.buttons}>
                     <Button

@@ -31,7 +31,6 @@ export const Textarea = (
 
     return (
         <>
-            {/*<div className={style ? style : classes.SignInInput}>*/}
                 <TextareaAutosize
                     maxRows={maxRows}
                     style={{...styles}}
@@ -58,7 +57,6 @@ export const Textarea = (
                     }}
                 />
                 <ErrMessage text={typeError}/>
-            {/*</div>*/}
         </>
     );
 };

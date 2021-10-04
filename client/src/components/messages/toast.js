@@ -1,12 +1,8 @@
 import React from 'react';
-import { render } from 'react-dom';
-// import Hello from './Hello';
 import { toast, ToastContainer } from 'react-toastify';
-import Transition from 'react-transition-group/Transition';
-
 
 const ZoomInAndOut = ({ children, position, ...props }) => (
-   <div></div>
+   <></>
 );
 
 function notify(){
@@ -23,7 +19,6 @@ const styles = {
 
 export const CustomToaster = () => (
     <div style={styles}>
-        {/*<Hello name="CodeSandbox" />*/}
         <h2>Start editing to see some magic happen {'\u2728'}</h2>
         <button onClick={notify}>Toast</button>
         <ToastContainer position="top-right"
