@@ -75,4 +75,7 @@ export const createClientStyle = makeStyles(() => ({
     displayCode: {
         color: '#4B5C68B3'
     },
+    paycodeBox : {
+
+    }
 }));

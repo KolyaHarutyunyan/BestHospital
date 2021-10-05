@@ -33,7 +33,7 @@ export const authService = {
     editEmploymentService: (body,id) => axios.patch(`/employment/${id}` , body),
 
 
-    getPayCodeService: (id) => axios.get(`/paycode/${id}`),
+    getPayCodeService: (id) => axios.get(`/paycode/employment/${id}`),
 
     createPayCodeService: (body) => axios.post(`/paycode`, body),
 };

@@ -242,17 +242,18 @@ function* createPayCode(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.createPayCodeService, action.payload.body)
-        yield put({
-            type: GET_PAY_CODE,
-            payload: {id : action.payload.id}
-        });
+        console.log(res,'ressss')
+        // yield put({
+        //     type: GET_PAY_CODE,
+        //     payload: {id : action.payload.id}
+        // });
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         console.log(res, 'resesseseesesese employ')
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        console.log(err, ' errr employmeny')
+        console.log(err, ' errr create paycode')
 
     }
 }

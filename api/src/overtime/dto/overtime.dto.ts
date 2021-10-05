@@ -13,5 +13,5 @@ export class OvertimeDTO {
     @ApiProperty()
     multiplier: number;
     @ApiProperty()
-    threshold: string;
+    threshold: number;
 }

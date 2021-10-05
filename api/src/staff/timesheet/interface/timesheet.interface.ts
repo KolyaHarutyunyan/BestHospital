@@ -6,5 +6,6 @@ export interface ITimeSheet {
     hours: number;
     amount: number;
     startDate: Date;
-    endDate: Date
+    endDate: Date;
+    createdDate: Date;
 }

@@ -6,7 +6,7 @@ import { CountryList, useGlobalStyles } from "@eachbase/utils";
 import { SelectInput, ValidationInput } from "@eachbase/components";
 import { State } from 'country-state-city';
 
-export const AddressInput = ({handleSelectValue, info, disabled, flex, oneInput, errorBoolean }) => {
+export const AddressInput = ({handleSelectValue, info, disabled, flex, oneInput, errorBoolean, auth }) => {
     const classes = inputsStyle();
     const globalInputs = useGlobalStyles();
     const [address, setAddress] = useState("");
@@ -51,8 +51,9 @@ export const AddressInput = ({handleSelectValue, info, disabled, flex, oneInput,
         handleSelectValue(fullAddressCompleted),
     );
 
+    let authPlaceHolder = info? info.location : 'Service Location'
     const stateList = code ? State.getStatesOfCountry(code) : State.getStatesOfCountry('US')
-    const placeholder = info ? info.address.formattedAddress : "Physical Address*";
+    const placeholder = auth ? authPlaceHolder :  info ? info.address.formattedAddress : "Physical Address*";
 
     return (
     <div style={{ display: flex ? flex : 'flex', width: '100%' }}>

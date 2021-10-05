@@ -72,6 +72,16 @@ export class EnrollmentService {
     }
   }
 
+  async findByFunder(funderId: string): Promise<EnrollmentDTO> {
+    try {
+      const enrollment = await this.model.findOne({ funderId });
+      this.checkEnrollment(enrollment);
+      return this.sanitizer.sanitize(enrollment);
+    } catch (e) {
+      throw e;
+    }
+  }
+
   async update(_id: string, clientId: string, funderId: string, dto: UpdateEnrollmentDTO): Promise<EnrollmentDTO> {
     try {
       const enrollment = await this.model.findById({ _id, clientId });

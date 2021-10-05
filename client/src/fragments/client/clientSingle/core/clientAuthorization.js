@@ -33,7 +33,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION'
     const successDelServ = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION_SERV'
 
-
+    console.log(info,'infuuuuuu')
     useEffect(()=>{
         dispatch(clientActions.getClientsAuthorizationsServ(info[authIndex].id))
     },[authIndex])
@@ -123,7 +123,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
                 handleOpenClose={() => setToggleModal(!toggleModal)}
                 openDefault={toggleModal}
                 content={delEdit ?
-                    <AddAuthorization fundingId={info[authIndex].funderId._id} info={info[authIndex]}
+                    <AddAuthorization fundingId={info[authIndex]?.funderId?._id} info={info[authIndex]}
                                       handleClose={() => setToggleModal(!toggleModal)}/>
                     : <DeleteElement
                         loader={httpOnLoad.length > 0}
@@ -137,14 +137,14 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
                 handleOpenClose={() => setToggleModal2(!toggleModal2)}
                 openDefault={toggleModal2}
                 content={
-                <AddAuthorizationService   authId={info[authIndex].id} handleClose={() => setToggleModal2(!toggleModal2)}  fundingId={info[authIndex].funderId._id} />
+                <AddAuthorizationService   authId={info[authIndex]?.id} handleClose={() => setToggleModal2(!toggleModal2)}  fundingId={info[authIndex].funderId?._id} />
                 }
             />
             <SimpleModal
                 handleOpenClose={() => setToggleModal3(!toggleModal3)}
                 openDefault={toggleModal3}
                 content={ delEdit2 ?
-                    <AddAuthorizationService  info={services  && services[serviceIndex]} authId={info[authIndex].id} handleClose={() => setToggleModal3(!toggleModal3)} fundingId={info[authIndex].funderId._id} />
+                    <AddAuthorizationService  info={services  && services[serviceIndex]} authId={info[authIndex].id} handleClose={() => setToggleModal3(!toggleModal3)} fundingId={info[authIndex].funderId?._id} />
                     : <DeleteElement
                         loader={httpOnLoad.length > 0}
                          info={`Delete ${services && services[serviceIndex]?.serviceId?.name}`}

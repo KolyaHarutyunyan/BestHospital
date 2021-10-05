@@ -17,7 +17,11 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
     const dispatch = useDispatch()
     const modifiers = useSelector(state => state.fundingSource.modifiers.modifiers)
     const fSelect = useSelector(state => state.fundingSource.fundingSourceServices)
+
     const classes = createClientStyle()
+
+
+    console.log(fundingId,'ttttttt')
 
     useEffect(() => {
         dispatch(fundingSourceActions.getFoundingSourceServiceById(fundingId))

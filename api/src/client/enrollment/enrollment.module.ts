@@ -7,6 +7,7 @@ import { EnrollmentSanitizer } from './interceptor/enrollment.sanitizer';
 @Module({
   imports: [FundingModule],
   controllers: [EnrollmentController],
-  providers: [EnrollmentService, EnrollmentSanitizer]
+  providers: [EnrollmentService, EnrollmentSanitizer],
+  exports: [EnrollmentService]
 })
 export class EnrollmentModule { }

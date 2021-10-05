@@ -47,7 +47,8 @@ export const ClientNotes = ({data}) => {
             <TableBodyComponent key={index} handleOpenInfo={()=> openNoteModal({
                 created:item?.created,
                 subject: item?.subject,
-                id: item.id
+                id: item?.id,
+                text: item?.text
             })}>
                 <TableCell>{moment(item?.created).format('DD/MM/YYYY')}</TableCell>
                 <TableCell>{`${item?.user?.firstName} ${item?.user?.lastName}`}</TableCell>
@@ -55,7 +56,7 @@ export const ClientNotes = ({data}) => {
                 <TableCell>
                     <img src={Images.remove} alt="delete" style={{cursor: 'pointer'}} onClick={(e) => {
                         e.stopPropagation();
-                        handleOpenCloseDel({id: item.id,deletedName: item.subject})
+                        handleOpenCloseDel({id: item.id,deletedName: item.subject, text: item.text})
                     }} />
                 </TableCell>
             </TableBodyComponent>
@@ -72,7 +73,8 @@ export const ClientNotes = ({data}) => {
             right: '1px',
             created: data?.created,
             subject: data?.subject,
-            id: data?.id
+            id: data?.id,
+            text: data?.text
         })
     }
 

@@ -9,13 +9,14 @@ import { AddressService } from '../../address';
 import { AuthorizationSanitizer } from './interceptor/authorization.sanitizer';
 import { ClientAuthorizationModel } from './authorization.model';
 import { ClientModel } from '../client.model';
+import { EnrollmentService } from '../enrollment';
 
 @Injectable()
 export class AuthorizationService {
   constructor(
     private readonly fundingService: FundingService,
     private readonly addressService: AddressService,
-
+    private readonly enrollmentService: EnrollmentService,
     private readonly sanitizer: AuthorizationSanitizer,
 
   ) {
@@ -34,12 +35,12 @@ export class AuthorizationService {
       const client = await this.clientModel.findById({ _id: clientId });
       this.checkClient(client);
 
-      const funder = await this.fundingService.findById(funderId);
-
+      const enrollmentFunder = await this.enrollmentService.findByFunder(funderId);
+      
       let authorization = new this.model({
         authId: dto.authId,
         clientId: client._id,
-        funderId: funder.id,
+        funderId: enrollmentFunder.id,
         startDate: dto.startDate,
         endDate: dto.endDate,
         status: dto.status,
@@ -74,6 +75,7 @@ export class AuthorizationService {
   async findAll(clientId: string): Promise<AuthorizationDTO[]> {
     try {
       const authorizations = await this.model.find({ clientId }).populate({ path: 'funderId', select: "name" });
+      console.log(authorizations);
       this.checkAuthorization(authorizations[0])
       return this.sanitizer.sanitizeMany(authorizations);
     }
