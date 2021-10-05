@@ -79,9 +79,9 @@ export class EmploymentService {
       );
     }
     if (dto.supervisor) {
-      let employment: any = await this.model.findOne({ staffId: dto.supervisor });
+      const staff = await this.staffService.findById(dto.supervisor);
       
-      if (!employment) {
+      if (!staff) {
         throw new HttpException(
           'supervisor is not found',
           HttpStatus.NOT_FOUND,
