@@ -133,13 +133,6 @@ export const Notes = ({
 
                 {!noItemsYet && !data && <NoItemText text='No Items Yet'/>}
 
-                {/*{pagination && <PaginationItem*/}
-                {/*    text={`Showing 30 to 30 of 200 entries`}*/}
-                {/*    handleReturn={(number) => changePage(number)}*/}
-                {/*    page={page}*/}
-                {/*    count={officesList.length}*/}
-                {/*/>}*/}
-
             </TableContainer>
 
             {

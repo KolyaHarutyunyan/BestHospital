@@ -1,5 +1,3 @@
 import {makeStyles} from "@material-ui/core/styles";
 
-export const systemStyles = makeStyles(() => ({
-
-}));
+export const systemStyles = makeStyles(() => ({}));

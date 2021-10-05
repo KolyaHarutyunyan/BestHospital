@@ -11,7 +11,7 @@ const editButtonStyle = {
     paddingInline: 24
 }
 
-export const StaffItemHeader = ({
+export const StaffItemHeader = ({   title,
                                     noteModalTypeInfo,
                                     openModal,
                                     handleOpenClose,
@@ -37,7 +37,7 @@ export const StaffItemHeader = ({
                 <li>
                     <img src={Images.userProfile} alt="avatar" className={classes.avatar}/>
                     <div className={classes.nameContent}>
-                        <h1 className={classes.name}>Alice Johnson</h1>
+                        <h1 className={classes.name}>{title}</h1>
                         <div className={classes.tagContent}>
                             <p>Tag Name</p>
                             <p>Tag Name</p>
@@ -56,7 +56,7 @@ export const StaffItemHeader = ({
                                 <AddButton text='Add Credential'
                             handleClick={() => openCloseCredModal('addCredential')}/>
                             : activeTab === 1 ?  <AddButton text='Add Employemnt' handleClick={handleOpenClose}/>
-                            : activeTab === 6 ?
+                            : activeTab === 7 ?
                                     <AddButton text='Add Note' handleClick={handleOpenClose}/> : null
                     }
                 </li>
@@ -73,7 +73,7 @@ export const StaffItemHeader = ({
                                          globalCredentials={globalCredentials} credModalType={credModalType}
                                          handleClose={() => openCloseCredModal()}/>
                         : activeTab === 1 ?     <EmploymentModal   handleClose={handleOpenClose} />
-                        : activeTab === 6 ?
+                        : activeTab === 7 ?
                             <AddNotes model='Staff' noteModalTypeInfo={noteModalTypeInfo}
                                       handleClose={handleOpenClose}/> : null}
             />

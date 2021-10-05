@@ -1,2 +1,2 @@
 export {Staff} from "./staff";
-export { SingleStaff } from './singleStaff';
+export {SingleStaff} from './singleStaff';
