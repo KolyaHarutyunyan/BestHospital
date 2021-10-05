@@ -31,9 +31,10 @@ export const EmploymentModal = ({handleClose, info}) => {
     const params = useParams()
     const dispatch = useDispatch()
     const departments = useSelector(state => state.system.departments)
-    const staffList = useSelector(state => state.admins.adminsList.staff)
+    const staffList = useSelector(state => state.admins.adminsList.staff)?.filter(item=>item.id !== params.id && item)
     const classes = createClientStyle()
 
+    console.log(staffList,'listt')
 
     useEffect(() => {
         dispatch(systemActions.getDepartments())
