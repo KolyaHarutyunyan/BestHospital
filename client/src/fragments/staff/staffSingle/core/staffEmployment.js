@@ -30,7 +30,7 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
         httpOnLoad: state.httpOnLoad,
     }));
 
-
+    console.log(info,'rtyrtyrt')
 
 
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION'
@@ -132,6 +132,8 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
         )
     }
 
+    console.log(info[authIndex].id, authIndex,'idddd')
+
     return (
         <div className={classes.staffGeneralWrapper}>
             <SimpleModal
@@ -154,14 +156,14 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
                 handleOpenClose={() => setToggleModal2(!toggleModal2)}
                 openDefault={toggleModal2}
                 content={
-                    <PaycodeModal  authId={info[authIndex]?.id} handleClose={() => setToggleModal2(!toggleModal2)}  fundingId={info[authIndex]?.funderId?._id} />
+                    <PaycodeModal employmentId={info[authIndex].id}  authId={info[authIndex]?.id} handleClose={() => setToggleModal2(!toggleModal2)}  fundingId={info[authIndex]?.funderId?._id} />
                 }
             />
             <SimpleModal
                 handleOpenClose={() => setToggleModal3(!toggleModal3)}
                 openDefault={toggleModal3}
                 content={ delEdit2 ?
-                    <PaycodeModal  info={services  && services[serviceIndex]} authId={info[authIndex]?.id} handleClose={() => setToggleModal3(!toggleModal3)} fundingId={info[authIndex]?.funderId?._id} />
+                    <PaycodeModal  info={services  && services[serviceIndex]} employmentId={info[authIndex]?.id} handleClose={() => setToggleModal3(!toggleModal3)} fundingId={info[authIndex]?.funderId?._id} />
                     : <DeleteElement
                         loader={httpOnLoad.length > 0}
                         info={`Delete ${services && services[serviceIndex]?.serviceId?.name}`}

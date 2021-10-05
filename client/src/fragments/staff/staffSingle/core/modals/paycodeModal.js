@@ -4,6 +4,7 @@ import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbas
 
 import {Colors, ErrorText} from "@eachbase/utils";
 import {
+    adminActions,
     clientActions,
     fundingSourceActions,
     httpRequestsOnErrorsActions,
@@ -11,17 +12,24 @@ import {
 } from "@eachbase/store";
 import {createClientStyle} from "@eachbase/fragments/client";
 import {Checkbox} from "@material-ui/core";
+import {payrollActions} from "../../../../../store/payroll";
+import {createPayCode} from "../../../../../store/admin/admin.action";
 
-export const PaycodeModal = ({handleClose, info, fundingId, authId}) => {
+export const PaycodeModal = ({handleClose, info, fundingId, employmentId, authId}) => {
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {...info, modifiers: info.serviceId.name} : {});
     const [modCheck, setModCheck] = useState([]);
+    const [payCode, setPayCode] = useState(null);
     const dispatch = useDispatch()
     const modifiers = useSelector(state => state.fundingSource.modifiers.modifiers)
     const fSelect = useSelector(state => state.fundingSource.fundingSourceServices)
     const classes = createClientStyle()
+    const globalPayCodes = useSelector(state => state.payroll.PayCodes)
+
+    console.log(payCode,'pay iddd11111')
 
     useEffect(() => {
+        dispatch(payrollActions.getPayCodeGlobal())
         dispatch(fundingSourceActions.getFoundingSourceServiceById(fundingId))
         let funderId;
         fSelect.forEach(item => {
@@ -55,9 +63,10 @@ export const PaycodeModal = ({handleClose, info, fundingId, authId}) => {
 
 
     const handleChange = e => {
-        if (e.target.name === 'modifiers') {
+        if (e.target.name === 'payCodeTypeId') {
             setModCheck([])
-            let id = fSelect.find(item => item.name === e.target.value)._id
+            setPayCode(globalPayCodes.find(item => item.name === e.target.value))
+            let id = fSelect.find(item => item.name === e.target.value)?._id
             dispatch(fundingSourceActions.getFoundingSourceServiceModifiersForClient(id))
 
         }
@@ -67,30 +76,35 @@ export const PaycodeModal = ({handleClose, info, fundingId, authId}) => {
         )
     };
 
+    console.log(payCode, 'paycode')
 
     const handleCreate = () => {
-        let modifiersPost = [];
-        modCheck.forEach(item => {
-            return modifiers.forEach((item2, index2) => {
-                if (item === index2) {
-                    modifiersPost.push(item2?._id)
-                }
-            })
-        })
-        let funderId;
-        fSelect.forEach(item => {
-            if (inputs.modifiers === item.name) {
-                funderId = item._id
-            }
-        })
+        // let modifiersPost = [];
+        // modCheck.forEach(item => {
+        //     return modifiers.forEach((item2, index2) => {
+        //         if (item === index2) {
+        //             modifiersPost.push(item2?._id)
+        //         }
+        //     })
+        // })
+        // let funderId;
+        // fSelect.forEach(item => {
+        //     if (inputs.modifiers === item.name) {
+        //         funderId = item._id
+        //     }
+        // })
 
-        if (inputs.total && modifiersPost?.length > 0) {
+        if (inputs.rate && inputs.payCodeTypeId && inputs.startDate && inputs.endDate) {
             const data = {
-                "total": +inputs.total,
-                "modifiers": modifiersPost,
+                "employmentId": employmentId,
+                "payCodeTypeId": payCode.id,
+                "rate": 0,
+                "active": true,
+                "startDate": inputs.startDate,
+                "endDate": inputs.endDate
             }
-
-            dispatch(clientActions.createClientsAuthorizationsServ(data, authId, funderId,))
+            console.log(data,'dataaaaaaaaa')
+            dispatch(adminActions.createPayCode(data))
         } else if (inputs.total && info) {
             dispatch(clientActions.editClientsAuthorizationsServ({
                 "total": +inputs.total,
@@ -99,26 +113,28 @@ export const PaycodeModal = ({handleClose, info, fundingId, authId}) => {
             }, info.id, authId))
         } else {
             setError(
-                !inputs.total ? 'total' :
-                    !inputs.modifiers ? 'modifiers' :
-                        'Input is not field'
+                !inputs.payCodeTypeId ? 'payCodeTypeId' :
+                    !inputs.rate ? 'rate' :
+                        !inputs.startDate ? 'startDate' :
+                            !inputs.endDate ? 'endDate' :
+                                'Input is not field'
             )
         }
     }
 
-    function onModifier(index) {
-        let arr = new Set([...modCheck])
-        if (arr.has(index)) {
-            arr.delete(index)
-        } else {
-            arr.add(index)
-        }
-        let newArr = []
-        arr.forEach(item => {
-            newArr.push(item)
-        })
-        setModCheck(newArr)
-    }
+    // function onModifier(index) {
+    //     let arr = new Set([...modCheck])
+    //     if (arr.has(index)) {
+    //         arr.delete(index)
+    //     } else {
+    //         arr.add(index)
+    //     }
+    //     let newArr = []
+    //     arr.forEach(item => {
+    //         newArr.push(item)
+    //     })
+    //     setModCheck(newArr)
+    // }
 
     return (
         <div className={classes.createFoundingSource}>
@@ -131,50 +147,51 @@ export const PaycodeModal = ({handleClose, info, fundingId, authId}) => {
                 <div className={classes.clientModalBlock}>
                     <div className={classes.clientModalBox}>
                         <SelectInput
-                            name={"modifiers"}
+                            name={"payCodeTypeId"}
                             label={"Name"}
                             handleSelect={handleChange}
                             value={inputs.modifiers}
-                            list={fSelect}
-                            typeError={error === 'modifiers' ? ErrorText.field : ''}
+                            list={globalPayCodes}
+                            typeError={error === 'payCodeTypeId' ? ErrorText.field : ''}
                         />
-                        <div className={classes.displayCodeBlock2}>
-                            <div className={classes.availableModfiers}>
-                                {info ? info?.modifiers && info?.modifiers?.length > 0 && info.modifiers.map((item, index) => {
-                                    return (
-                                        <div className={classes.availableModfier}
-                                             style={{
-                                                 background: '#347AF080',
-                                                 color: '#fff',
-                                                 border: "none",
-                                                 cursor: 'default'
-                                             }}><p style={{width: 19, height: 20, overflow: 'hidden'}}>{item}</p></div>
-                                    )
-                                })
-                                    : modifiers && modifiers.length > 0 ? modifiers.map((item, index) => {
-                                        return (
-                                            <p className={classes.availableModfier} onClick={() => onModifier(index)}
-                                               style={modCheck.includes(index) ? {
-                                                   background: '#347AF0',
-                                                   color: '#fff'
-                                               } : {}}>
-                                                {item.name}</p>
-                                        )
-                                    }) : <p>N/A</p>}
+                        <div className={classes.displayCodeBlock}>
+                            <div style={{display: "flex", marginBottom: 16, alignItems: 'center'}}>
+                                <p style={{
+                                    color: Colors.TextPrimary,
+                                    fontSize: 14,
+                                    fontWeight: 'bold',
+                                    marginRight: 8
+                                }}>Code:</p>
+                                <p style={{
+                                    color: '#4B5C68B3',
+                                    fontSize: 14,
+                                }}> {payCode?.code ? payCode.code : 'N/A'} </p>
+                            </div>
+                            <div style={{display: "flex", marginBottom: 16, alignItems: 'center'}}>
+                                <p style={{
+                                    color: Colors.TextPrimary,
+                                    fontSize: 14,
+                                    fontWeight: 'bold',
+                                    marginRight: 8
+                                }}>Type:</p>
+                                <p style={{
+                                    color: '#4B5C68B3',
+                                    fontSize: 14,
+                                }}>{payCode?.type ? payCode.type : 'N/A'}</p>
                             </div>
                         </div>
                         <ValidationInput
                             variant={"outlined"}
                             onChange={handleChange}
-                            value={inputs.total === 0 ? '0' : inputs.total}
+                            value={inputs.rate}
                             type={"number"}
                             label={"Rate*"}
-                            name='total'
-                            typeError={error === 'total' && ErrorText.field}
+                            name='rate'
+                            typeError={error === 'rate' && ErrorText.field}
                         />
-                        <div style={{display: 'flex', alignItems : "center", marginBottom: 16}}>
-                            <Checkbox color={Colors.ThemeBlue} />
-                            <p style={{color : Colors.TextPrimary, fontSize : 16, marginLeft : 10}}>Active Paycode</p>
+                        <div style={{display: 'flex', alignItems: "center", marginBottom: 16}}>
+                            <Checkbox color={Colors.ThemeBlue} checked={true}/>
+                            <p style={{color: Colors.TextPrimary, fontSize: 16, marginLeft: 10}}>Active Paycode</p>
                         </div>
                         <div style={{display: 'flex'}}>
                             <ValidationInput
@@ -192,7 +209,7 @@ export const PaycodeModal = ({handleClose, info, fundingId, authId}) => {
                                 onChange={handleChange}
                                 value={inputs.endDate}
                                 type={"date"}
-                                label={"Terminated Date*"}
+                                label={"End Date*"}
                                 name='endDate'
                                 typeError={error === 'endDate' && ErrorText.field}
                             />
