@@ -1,2 +1,2 @@
-export { System } from './system';
-export { systemStyles } from './styles';
+export {System} from './system';
+export {systemStyles} from './styles';

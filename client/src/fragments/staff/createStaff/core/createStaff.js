@@ -72,7 +72,7 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
             lastName: inputs.lastName,
             email: inputs.email,
             secondaryEmail: inputs.secondaryEmail ? inputs.secondaryEmail : '',
-            phone: inputs.phone.startsWith('+') ? inputs.phone : `+${inputs.phone}`,
+            phone: inputs.phone,
             secondaryPhone: inputs.secondaryPhone ? inputs.secondaryPhone : '',
             state: 'state',
             gender: inputs.gender,

@@ -66,6 +66,7 @@ export const StaffItem = () => {
     const historiesData = useSelector(state => state.fundingSource.fundingSourceHistories)
     const availabilityData = useSelector(state => state.availabilitySchedule.availabilitySchedule)
     const employments = useSelector(state => state.admins.employments)
+
     const handleOpenClose = () => {
         setOpen(!open)
     }
@@ -191,6 +192,7 @@ export const StaffItem = () => {
         })
     }
 
+
     const tabsContent = [
         {
             tabComponent: (httpOnLoad.length ? <Loader/> : <StaffGeneral staffGeneral={staffGeneral}/>)
@@ -256,7 +258,7 @@ export const StaffItem = () => {
             <TableWrapperGeneralInfo
                 status='inactive'
                 parent='Staff'
-                title='Staff Member Name'
+                title={staffGeneral?.firstName}
                 parentLink='/staff'
                 buttonsTabAddButton={true}
                 activeInactiveText={'Inactive'}
@@ -265,7 +267,7 @@ export const StaffItem = () => {
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
                 <div className={classes.staffSingleItem}>
-                    <StaffItemHeader noteModalTypeInfo={noteModalTypeInfo} handleOpenClose={handleOpenCloseNote}
+                    <StaffItemHeader title={`${staffGeneral?.firstName} ${staffGeneral?.lastName}`} noteModalTypeInfo={noteModalTypeInfo} handleOpenClose={handleOpenCloseNote}
                                      openModal={openModal} globalCredentialInformation={globalCredentialInformation}
                                      globalCredentials={globalCredentials} credModalType={credModalType}
                                      openCloseCredModal={openCloseCredModal} openCredModal={openCredModal}

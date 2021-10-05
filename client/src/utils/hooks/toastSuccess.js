@@ -49,7 +49,6 @@ export const ToastSuccess = (success) => {
             success === 'CREATE_CLIENT_AUTHORIZATION_SERV' ? 'Successfully created Service' :
             success === 'DELETE_CLIENT_AUTHORIZATION' ? 'Successfully deleted authorization' :
             success === 'DELETE_CLIENT_AUTHORIZATION_SERV' ? 'Successfully deleted Service' :
-
             false
         )
     }
