@@ -72,7 +72,7 @@ export const StaffItemHeader = ({
                         <CredentialModal globalCredentialInformation={globalCredentialInformation}
                                          globalCredentials={globalCredentials} credModalType={credModalType}
                                          handleClose={() => openCloseCredModal()}/>
-                        : activeTab === 1 ?     <EmploymentModal />
+                        : activeTab === 1 ?     <EmploymentModal   handleClose={handleOpenClose} />
                         : activeTab === 6 ?
                             <AddNotes model='Staff' noteModalTypeInfo={noteModalTypeInfo}
                                       handleClose={handleOpenClose}/> : null}

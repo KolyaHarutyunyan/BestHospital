@@ -13,7 +13,12 @@ import {
     GET_CREDENTIAL,
     GET_CREDENTIAL_SUCCESS,
     EDIT_CREDENTIAL_BY_ID,
-    DELETE_CREDENTIAL_BY_ID, GET_EMPLOYMENT, CREATE_EMPLOYMENT, GET_EMPLOYMENT_SUCCESS,
+    DELETE_CREDENTIAL_BY_ID,
+    GET_EMPLOYMENT,
+    CREATE_EMPLOYMENT,
+    GET_EMPLOYMENT_SUCCESS,
+    GET_PAY_CODE_SUCCESS,
+    GET_PAY_CODE, CREATE_PAY_CODE, EDIT_EMPLOYMENT,
     // CREATE_ADMIN_SUCCESS,
 
 } from "./admin.types";
@@ -28,7 +33,7 @@ function* createAdmin(action) {
         yield call(authService.createAdminService, action.payload.body);
         yield put({
             type: GET_ADMINS,
-            payload: { status : 1, start : 0, end : 10 },
+            payload: {status: 1, start: 0, end: 10},
         });
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.removeError(action.type));
@@ -36,7 +41,7 @@ function* createAdmin(action) {
 
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        yield put(httpRequestsOnErrorsActions.appendError(action.type,err.data.message));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
     }
 }
 
@@ -90,7 +95,7 @@ function* editAdminById(action) {
     } catch (err) {
         console.log(err)
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        yield put(httpRequestsOnErrorsActions.appendError(action.type,err.data.message));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
     }
 }
 
@@ -166,8 +171,8 @@ function* deleteCredentialById(action) {
 function* getEmployment(action) {
 
     try {
-        const res =  yield call(authService.getEmploymentService, action.payload.id)
-        console.log(res,'resesseseesesese employ')
+        const res = yield call(authService.getEmploymentService, action.payload.id)
+        console.log(res, 'resesseseesesese employ')
         yield put({
             type: GET_EMPLOYMENT_SUCCESS,
             payload: res.data
@@ -180,35 +185,78 @@ function* getEmployment(action) {
 }
 
 function* createEmployment(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    try {
+        const res = yield call(authService.createEmploymentService, action.payload.body)
+        yield put({
+            type: GET_EMPLOYMENT,
+            payload: {id : action.payload.id}
+        });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+        console.log(res, 'resesseseesesese employ')
+    } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
+        console.log(err, ' errr employmeny')
+
+    }
+}
+
+function* editEmployment(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    try {
+        const res = yield call(authService.editEmploymentService, action.payload.body, action.payload.id)
+        yield put({
+            type: GET_EMPLOYMENT,
+            payload: {id : action.payload.staffId}
+        });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+        console.log(res, 'resesseseesesese employ')
+    } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
+        console.log(err, ' errr employmeny')
+
+    }
+}
+
+function* getPayCode(action) {
 
     try {
-        yield call(authService.createEmploymentService, action.payload.body)
-        // yield put({
-        //     type: GET_CREDENTIAL,
-        //     payload: {credentialId: action.payload.credentialId}
-        // });
-        console.log(res,'resesseseesesese employ')
+        const res = yield call(authService.getPayCodeService, action.payload.id)
+        console.log(res, 'res pay code')
+        yield put({
+            type: GET_PAY_CODE_SUCCESS,
+            payload: res.data
+        });
+
     } catch (err) {
         console.log(err, ' errr employmeny')
 
     }
 }
 
-function* createService(action) {
 
+function* createPayCode(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
-        yield call(authService.createEmploymentService, action.payload.body)
-        // yield put({
-        //     type: GET_CREDENTIAL,
-        //     payload: {credentialId: action.payload.credentialId}
-        // });
-        console.log(res,'resesseseesesese employ')
+        const res = yield call(authService.createPayCodeService, action.payload.body)
+        yield put({
+            type: GET_PAY_CODE,
+            payload: {id : action.payload.id}
+        });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+        console.log(res, 'resesseseesesese employ')
     } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
         console.log(err, ' errr employmeny')
 
     }
 }
-
 
 export const watchAdmin = function* watchAdminSaga() {
     yield takeLatest(CREATE_ADMIN, createAdmin);
@@ -221,4 +269,8 @@ export const watchAdmin = function* watchAdminSaga() {
     yield takeLatest(DELETE_CREDENTIAL_BY_ID, deleteCredentialById)
     yield takeLatest(GET_EMPLOYMENT, getEmployment)
     yield takeLatest(CREATE_EMPLOYMENT, createEmployment)
+    yield takeLatest(EDIT_EMPLOYMENT, editEmployment)
+    yield takeLatest(GET_PAY_CODE, getPayCode)
+    yield takeLatest(CREATE_PAY_CODE, createPayCode)
+
 };

@@ -1,11 +1,10 @@
 import {authHeaderStyles} from "./styles";
 import {Colors, Images} from "@eachbase/utils";
 import React from "react";
+import moment from "moment";
 
 
 export const AuthHeader = ({info, setToggleModal, toggleModal, setDelEdit, empoloyment}) => {
-
-
     const classes = authHeaderStyles()
 
     return (
@@ -13,8 +12,10 @@ export const AuthHeader = ({info, setToggleModal, toggleModal, setDelEdit, empol
 
             <div className={classes.AuthHeaderTop}>
                 <div className={classes.AuthHeaderTopLeft}>
-                    <p className={classes.AuthHeaderTopLeftTitle}>{!empoloyment && '#'} {info?.authId}</p>
-                    <p className={classes.AuthHeaderTopLeftText}>{info?.startDate && `${info?.startDate} - ${info?.endDate}`}</p>
+                    <p className={classes.AuthHeaderTopLeftTitle}>{empoloyment ? info?.title : `# ${info?.authId}`}</p>
+                    {empoloyment ?
+                        <p className={classes.AuthHeaderTopLeftText}>{info?.date && `${moment(info?.date).format('DD MM YYYY')} - ${info?.termination?.date  ? moment(info?.termination?.date).format('DD MM YYYY') : 'Present'}`}</p>:
+                        <p className={classes.AuthHeaderTopLeftText}>{info?.startDate && `${info?.startDate} - ${info?.endDate}`}</p>}
                 </div>
                 <div className={classes.AuthHeaderTopRight} style={{display: 'flex', alignItems: 'center'}}>
                     <img src={Images.edit} alt="edit" className={classes.iconStyle} onClick={() => {
@@ -33,15 +34,15 @@ export const AuthHeader = ({info, setToggleModal, toggleModal, setDelEdit, empol
             <div className={classes.AuthHeaderBottom}>
                 <div className={classes.AuthHeaderBottomBox}>
                     <p className={classes.AuthHeaderBottomBoxTitle}> {empoloyment ? 'Supervisor:' : 'Funding Source:'} </p>
-                    <p className={classes.AuthHeaderBottomBoxText}>{info?.funderId?.name}</p>
+                    <p className={classes.AuthHeaderBottomBoxText}>{empoloyment ? info?.supervisor?.firstName : info?.funderId?.name}</p>
                 </div>
                 <div className={classes.AuthHeaderBottomBox}>
                     <p className={classes.AuthHeaderBottomBoxTitle}>{empoloyment ? 'Department:' : 'Status'}</p>
-                    <p className={classes.AuthHeaderBottomBoxText}>{info?.status}</p>
+                    <p className={classes.AuthHeaderBottomBoxText}>{empoloyment ? info?.departmentId?.name : info?.status}</p>
                 </div>
                 <div className={classes.AuthHeaderBottomBox}>
                     <p className={classes.AuthHeaderBottomBoxTitle}>{empoloyment ? "Employment Type:" : 'Service Location:'} </p>
-                    <p className={classes.AuthHeaderBottomBoxText}>{info?.location}</p>
+                    <p className={classes.AuthHeaderBottomBoxText}>{empoloyment ? info?.schedule : info?.location}</p>
                 </div>
             </div>
         </div>
