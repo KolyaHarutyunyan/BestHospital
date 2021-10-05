@@ -75,6 +75,7 @@ export class AuthorizationService {
   async findAll(clientId: string): Promise<AuthorizationDTO[]> {
     try {
       const authorizations = await this.model.find({ clientId }).populate({ path: 'funderId', select: "name" });
+      console.log(authorizations);
       this.checkAuthorization(authorizations[0])
       return this.sanitizer.sanitizeMany(authorizations);
     }
