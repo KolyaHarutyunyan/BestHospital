@@ -15,7 +15,7 @@ export class CreateOvertimeDTO {
     @IsNotEmpty()
     multiplier: number;
     @ApiProperty()
-    @IsString()
+    @IsNumber()
     @IsNotEmpty()
-    threshold: string;
+    threshold: number;
 }

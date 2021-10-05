@@ -16,7 +16,8 @@ export class TimeSheetSanitizer implements ISanitize {
             hours: timesheet.hours,
             amount: timesheet.amount,
             startDate: timesheet.startDate,
-            endDate: timesheet.endDate
+            endDate: timesheet.endDate,
+            createdDate: timesheet.createdDate
         };
         return timesheetDTO;
     }

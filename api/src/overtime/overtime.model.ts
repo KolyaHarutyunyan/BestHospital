@@ -7,6 +7,6 @@ const OverTimeSchema = new Schema({
     name: { type: String },
     type: { type: String, enum: OvertimeStatus },
     multiplier: { type: Number },
-    threshold: { type: String }
+    threshold: { type: Number }
 });
 export const OverTimeModel = model<IOverTime>('Overtime', OverTimeSchema);

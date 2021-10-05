@@ -16,7 +16,7 @@ export class UpdateOvertimeDTO {
     @IsOptional()
     multiplier: number;
     @ApiProperty()
-    @IsString()
+    @IsNumber()
     @IsOptional()
-    threshold: string;
+    threshold: number;
 }

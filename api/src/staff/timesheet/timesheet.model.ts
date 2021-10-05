@@ -8,7 +8,8 @@ const TimesheetSchema = new Schema({
     description: { type: String },
     hours: { type: Number },
     startDate: { type: Date, default: Date.now },
-    endDate: {type: Date, default: null}
+    endDate: {type: Date, default: null},
+    createdDate: {type: Date, default: Date.now}
 });
 
 export const TimeSheetModel = model<ITimeSheet>('Timesheet', TimesheetSchema);

@@ -17,4 +17,6 @@ export class TimeSheetDTO {
     startDate: Date
     @ApiProperty()
     endDate: Date;
+    @ApiProperty()
+    createdDate: Date;
 }

@@ -6,5 +6,5 @@ export interface IOverTime extends Document {
     name: string,
     type: string,
     multiplier: number,
-    threshold: string
+    threshold: number
 }
