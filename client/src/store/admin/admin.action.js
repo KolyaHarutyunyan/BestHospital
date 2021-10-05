@@ -6,7 +6,13 @@ import {
     CREATE_CREDENTIAL,
     GET_CREDENTIAL,
     EDIT_CREDENTIAL_BY_ID,
-    DELETE_CREDENTIAL_BY_ID, GET_EMPLOYMENT, CREATE_EMPLOYMENT, CREATE_SERVICE
+    DELETE_CREDENTIAL_BY_ID,
+    GET_EMPLOYMENT,
+    CREATE_EMPLOYMENT,
+    CREATE_SERVICE,
+    GET_PAY_CODE,
+    CREATE_PAY_CODE,
+    EDIT_EMPLOYMENT
 } from "./admin.types";
 
 export const createAdmin = (body) => {
@@ -72,17 +78,34 @@ export const getEmployment = (id) => {
     }
 }
 
-export const createEmployment = (body) => {
+export const createEmployment = (body,id) => {
     return {
         type: CREATE_EMPLOYMENT,
-        payload: {body}
+        payload: {body, id}
     }
 }
 
 
-export const createService = (body) => {
+export const editEmployment = (body,id,staffId) => {
     return {
-        type: CREATE_SERVICE,
-        payload: {body}
+        type: EDIT_EMPLOYMENT ,
+        payload: {body, id, staffId}
     }
 }
+
+
+export const getPayCode = (id) => {
+    return {
+        type: GET_PAY_CODE,
+        payload: {id}
+    }
+}
+
+export const createPayCode = (body,id) => {
+    return {
+        type: CREATE_PAY_CODE,
+        payload: {body,id}
+    }
+}
+
+

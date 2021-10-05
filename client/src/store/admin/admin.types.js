@@ -37,5 +37,13 @@ export const GET_EMPLOYMENT_SUCCESS = 'GET_EMPLOYMENT_SUCCESS'
 /**create employment */
 export const CREATE_EMPLOYMENT = 'CREATE_EMPLOYMENT'
 
-/**create service */
-export const CREATE_SERVICE = 'CREATE_SERVICE'
+/**edit employment */
+export const EDIT_EMPLOYMENT = 'EDIT_EMPLOYMENT'
+
+
+/**get Pay Code */
+export const GET_PAY_CODE = 'GET_PAY_CODE'
+export const GET_PAY_CODE_SUCCESS = 'GET_PAY_CODE_SUCCESS'
+
+/**create Pay Code */
+export const CREATE_PAY_CODE = 'CREATE_PAY_CODE'

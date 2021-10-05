@@ -25,9 +25,15 @@ export const authService = {
 
 
 
-    getEmploymentService: (id) => axios.get(`/employment/${id}`),
+    getEmploymentService: (id) => axios.get(`/employment/staff/${id}`),
 
-    createEmploymentService: (body) => axios.post(`/employment` , {body}),
+    createEmploymentService: (body) => axios.post(`/employment` , body),
 
-    createServService: (body) => axios.post(`/service` , {body}),
+
+    editEmploymentService: (body,id) => axios.patch(`/employment/${id}` , body),
+
+
+    getPayCodeService: (id) => axios.get(`/paycode/${id}`),
+
+    createPayCodeService: (body) => axios.post(`/paycode`, body),
 };

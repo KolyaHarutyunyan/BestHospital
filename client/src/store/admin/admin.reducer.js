@@ -6,7 +6,7 @@ import {
     CREATE_CREDENTIAL_SUCCESS,
     GET_CREDENTIAL_SUCCESS,
     EDIT_CREDENTIAL_BY_ID_SUCCESS,
-    DELETE_CREDENTIAL_BY_ID_SUCCESS, CREATE_ADMIN_SUCCESS, GET_EMPLOYMENT_SUCCESS
+    DELETE_CREDENTIAL_BY_ID_SUCCESS, CREATE_ADMIN_SUCCESS, GET_EMPLOYMENT_SUCCESS, GET_PAY_CODE_SUCCESS
 } from "./admin.types";
 
 const initialState = {
@@ -14,7 +14,8 @@ const initialState = {
     adminsListReserve: [],
     adminInfoById: '',
     credential: [],
-    employments : []
+    employments : [],
+    payCodes : []
 };
 
 export const adminReducer = (state = initialState, action) => {
@@ -32,6 +33,8 @@ export const adminReducer = (state = initialState, action) => {
                 adminsListReserve: action.payload,
                 adminInfoById: '',
                 credential: [],
+                employments: [],
+                payCodes:  []
             }
 
         case EDIT_ADMIN_BY_ID_SUCCESS:
@@ -77,6 +80,11 @@ export const adminReducer = (state = initialState, action) => {
             return {
                 ...state,
                 employments: action.payload
+            }
+        case GET_PAY_CODE_SUCCESS :
+            return {
+                ...state,
+                payCodes: action.payload
             }
         default:
             return state;

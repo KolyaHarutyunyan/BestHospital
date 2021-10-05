@@ -13,13 +13,21 @@ import {
 import {Checkbox} from "@material-ui/core";
 import {createClientStyle} from "@eachbase/fragments/client";
 import {getDepartments} from "../../../../../store/system/system.action";
+import {editEmployment} from "../../../../../store/admin/admin.action";
+import moment from "moment";
 
 
 export const EmploymentModal = ({handleClose, info}) => {
 
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info, departmentId: info.departmentId.name, status : String(info.status)} : {});
+    const [inputs, setInputs] = useState(info ? {...info,
+        supervisor : info.supervisor.firstName,
+        departmentId : info?.departmentId?.name,
+        startDate : moment(info?.date).format('YYYY-MM-DD'),
+        endDate : moment(info?.termination?.date).format('YYYY-MM-DD'),
+        employmentType : info?.schedule
 
+    } : {});
     const params = useParams()
     const dispatch = useDispatch()
     const departments = useSelector(state => state.system.departments)
@@ -32,7 +40,6 @@ export const EmploymentModal = ({handleClose, info}) => {
     }, []);
 
 
-    console.log(staffList,'fsesesesesese')
 
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
@@ -40,18 +47,18 @@ export const EmploymentModal = ({handleClose, info}) => {
         httpOnLoad: state.httpOnLoad,
     }));
 
-    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_AUTHORIZATION'
-    const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_CLIENT_AUTHORIZATION'
+    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_EMPLOYMENT'
+    const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_EMPLOYMENT'
 
     useEffect(() => {
         if (success) {
             handleClose()
-            dispatch(httpRequestsOnSuccessActions.removeSuccess('EDIT_CLIENT_AUTHORIZATION'))
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('EDIT_EMPLOYMENT'))
             dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_AUTHORIZATION'))
         }
         if (successCreate) {
             handleClose()
-            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_CLIENT_AUTHORIZATION'))
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_EMPLOYMENT'))
             dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_AUTHORIZATION'))
         }
     }, [success, successCreate])
@@ -64,53 +71,58 @@ export const EmploymentModal = ({handleClose, info}) => {
         error === e.target.name && setError(''),
     );
 
+
+
+
     const handleCreate = () => {
 
-        // if (inputs.authId && inputs.departmentId && inputs.startDate && inputs.endDate && inputs.location && inputs.status ) {
+        if (inputs.title && inputs.departmentId && inputs.supervisor  && inputs.endDate && inputs.startDate) {
             let depId;
             let supervisorID;
-        departments.forEach(item => {
+            departments.forEach(item => {
                 if (inputs.departmentId === item.name) {
                     depId = item._id
                 }
             })
-        staffList.forEach(item => {
-            if (inputs.supervisor === item.firstName) {
-                supervisorID = item.id
-            }
-        })
+            staffList &&     staffList.forEach(item => {
+                if (inputs.supervisor === item.firstName) {
+                    supervisorID = item.id
+                }
+            })
 
-        console.log(supervisorID,'iiiididididididdi')
             const data = {
-                "staffId": params.id ,
-                "departmentId":depId,
+                'title': inputs.title,
+                "staffId": params.id,
                 "supervisor": supervisorID,
-                "date": "2021-09-30T13:11:42.109Z",
-                "schedule": 0,
+                "departmentId": depId,
+                "date": inputs.startDate,
+                "schedule": +inputs.employmentType,
                 "termination": {
                     // "reason": "string",
-                    "date": "2021-09-30T13:11:42.109Z"
+                    "date": inputs.endDate
                 }
             }
-        console.log(data,'datataaaaasdasdasdasd')
-            if (info) {
-                // dispatch(clientActions.editClientsAuthorizations(data, info.id, params.id))
-            } else {
 
-                dispatch(adminActions.createEmployment(data))
-            }
-        // } else {
-        //     setError(
-        //         !inputs.authId ? 'authId' :
-        //             !inputs.departmentId ? 'departmentId' :
-        //                 !inputs.startDate ? 'startDate' :
-        //                     !inputs.endDate ? 'endDate' :
-        //                         !inputs.location ? 'location' :
-        //                             !inputs.status ? 'status' :
-        //                                 'Input is not field'
-        //     )
-        // }
+        if (info) {
+            console.log(data,'dataaaaaa')
+             dispatch(adminActions.editEmployment(data, info.id, params.id))
+        } else {
+            dispatch(adminActions.createEmployment(data, params.id))
+        }
     }
+
+    else {   setError(
+                !inputs.title ? 'title' :
+                    !inputs.supervisor ? 'supervisor' :
+                        !inputs.departmentId ? 'departmentId' :
+                                !inputs.startDate ? 'startDate' :
+                                    !inputs.endDate ? 'endDate' :
+                                            'Input is not field'
+            )
+        }
+        }
+
+
 
     return (
         <div className={classes.createFoundingSource}>
@@ -147,19 +159,19 @@ export const EmploymentModal = ({handleClose, info}) => {
                             list={departments ? departments : []}
                             typeError={error === 'departmentId' ? ErrorText.field : ''}
                         />
-                        <ValidationInput
-                            variant={"outlined"}
-                            onChange={handleChange}
-                            value={inputs.employmentType}
-                            type={"text"}
-                            label={"Employment Type*"}
+                        <SelectInput
                             name='employmentType'
+                            label={"Employment Type*"}
+                            handleSelect={handleChange}
+                           value={ String(inputs.employmentType) }
+                            list={ [{name: 0,} ,{name : 1}]}
                             typeError={error === 'employmentType' && ErrorText.field}
                         />
-                        <div style={{display: 'flex', alignItems : "center", marginBottom: 16}}>
-                            <Checkbox color={Colors.ThemeBlue} />
-                            <p style={{color : Colors.TextPrimary, fontSize : 16, marginLeft : 10}}>Currently works in this role</p>
-                        </div>
+
+                        {/*<div style={{display: 'flex', alignItems : "center", marginBottom: 16}}>*/}
+                        {/*    <Checkbox color={Colors.ThemeBlue} />*/}
+                        {/*    <p style={{color : Colors.TextPrimary, fontSize : 16, marginLeft : 10}}>Currently works in this role</p>*/}
+                        {/*</div>*/}
                         <div style={{display: 'flex'}}>
                             <ValidationInput
                                 variant={"outlined"}

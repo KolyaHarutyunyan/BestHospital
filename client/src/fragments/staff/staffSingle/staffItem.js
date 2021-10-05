@@ -65,6 +65,8 @@ export const StaffItem = () => {
     const globalNotes = useSelector(state => state.note.notes)
     const historiesData = useSelector(state => state.fundingSource.fundingSourceHistories)
     const availabilityData = useSelector(state => state.availabilitySchedule.availabilitySchedule)
+    const employments = useSelector(state => state.admins.employments)
+    console.log(employments,'eeemssss')
     const handleOpenClose = () => {
         setOpen(!open)
     }
@@ -195,7 +197,7 @@ export const StaffItem = () => {
             tabComponent: (httpOnLoad.length ? <Loader/> : <StaffGeneral staffGeneral={staffGeneral}/>)
         },
         {
-            tabComponent: (<StaffEmployment/>)
+            tabComponent: (<StaffEmployment info={employments}/>)
         },
         {
             tabComponent: (<StaffTimesheet>Timesheet</StaffTimesheet>)
