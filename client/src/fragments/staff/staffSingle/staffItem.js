@@ -213,7 +213,7 @@ export const StaffItem = () => {
             tabComponent: (<StaffAvailability availabilityData={availabilityData} staffGeneral={staffGeneral}/>)
         },
         {
-            tabComponent: (<StaffService />)
+            tabComponent: (<StaffService staffGeneral={staffGeneral} />)
         },
         {
             tabComponent: (globalNotes.length ? <Notes

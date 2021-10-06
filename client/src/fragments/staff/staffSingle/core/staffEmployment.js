@@ -9,6 +9,7 @@ import {Colors, Images} from "@eachbase/utils";
 import {adminActions, clientActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 import {serviceSingleStyles} from "@eachbase/fragments/client/clientSingle/core";
 import {getPayCode} from "../../../../store/admin/admin.action";
+import moment from "moment";
 
 
 export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
@@ -22,6 +23,7 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
     const [authIndex, setAuthIndex] = useState(0)
     const [serviceIndex, setServiceIndex] = useState(null)
     const services = useSelector(state => state.client.clientsAuthorizationsServices)
+    const payCodes = useSelector(state => state.admins.payCodes)
     const params = useParams()
 
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
@@ -30,7 +32,7 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
         httpOnLoad: state.httpOnLoad,
     }));
 
-    console.log(info,'rtyrtyrt')
+     console.log(payCodes,'payCodes')
 
 
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION'
@@ -39,6 +41,7 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
 
     useEffect(()=>{
          dispatch(adminActions.getPayCode(info[authIndex]?.id))
+        console.log('get')
     },[authIndex])
 
     useEffect(() => {
@@ -96,43 +99,28 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
         setAuthIndex(0)
     }
 
-    let deleteAuthorizationServ = () => {
-        dispatch(clientActions.deleteClientsAuthorizationServ(services[serviceIndex].id, info[authIndex].id ))
-    }
+    // let deleteAuthorizationServ = () => {
+    //     dispatch(clientActions.deleteClientsAuthorizationServ(services[serviceIndex].id, info[authIndex].id ))
+    // }
 
-    let clientAuthorizationServiceItem = (item, index) => {
+    let payCodeItem = (item, index) => {
         return (
             <TableBodyComponent key={index} handleClick={() => {
                 setAuthItemIndex(index)
                 setAuthActive(true)
             }}>
-                <TableCell><p className={classes.tableName}>{item?.serviceId?.name}</p></TableCell>
-                <TableCell>  {item?.modifiers && item?.modifiers.length>0 && item?.modifiers[0]}  </TableCell>
-                <TableCell>  {item?.total}  </TableCell>
-                <TableCell>
-                    <>
-                        <img src={Images.edit} alt="edit" className={classes.iconStyle}
-                             onClick={(e) => {
-                                 e.stopPropagation()
-                                 setDelEdit2(true)
-                                 setServiceIndex(index)
-                                 setToggleModal3(!toggleModal3)
-
-                             }}/>
-                        <img src={Images.remove} alt="delete" className={classes.iconDeleteStyle}
-                             onClick={(e) => {
-                                 e.stopPropagation()
-                                 setDelEdit2(false)
-                                 setServiceIndex(index)
-                                 setToggleModal3(!toggleModal3)
-                             }}/>
-                    </>
-                </TableCell>
+                <TableCell><p className={classes.tableName}>{item.payCodeTypeId.name}</p></TableCell>
+                <TableCell>  {item.payCodeTypeId.code} </TableCell>
+                <TableCell> {item.payCodeTypeId.type} </TableCell>
+                <TableCell>{item.rate} </TableCell>
+                <TableCell>{ moment(item.startDate).format('DD MM YYYY') } </TableCell>
+                <TableCell>{ moment(item.endDate).format('DD MM YYYY') } </TableCell>
+                <TableCell>{ Number(item.active) } </TableCell>
             </TableBodyComponent>
         )
     }
 
-    console.log(info[authIndex].id, authIndex,'idddd')
+    console.log(info[authIndex]?.id, authIndex,'idddd')
 
     return (
         <div className={classes.staffGeneralWrapper}>
@@ -162,14 +150,15 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
             <SimpleModal
                 handleOpenClose={() => setToggleModal3(!toggleModal3)}
                 openDefault={toggleModal3}
-                content={ delEdit2 ?
-                    <PaycodeModal  info={services  && services[serviceIndex]} employmentId={info[authIndex]?.id} handleClose={() => setToggleModal3(!toggleModal3)} fundingId={info[authIndex]?.funderId?._id} />
-                    : <DeleteElement
-                        loader={httpOnLoad.length > 0}
-                        info={`Delete ${services && services[serviceIndex]?.serviceId?.name}`}
-                        handleClose={() => setToggleModal3(!toggleModal3)}
-                        handleDel={deleteAuthorizationServ}
-                    />
+                content={
+                    // delEdit2 ?
+                    <PaycodeModal  info={payCodes  && payCodes[serviceIndex]} employmentId={info[authIndex]?.id} handleClose={() => setToggleModal3(!toggleModal3)} fundingId={info[authIndex]?.funderId?._id} />
+                    // : <DeleteElement
+                    //     loader={httpOnLoad.length > 0}
+                    //     info={`Delete ${services && services[serviceIndex]?.serviceId?.name}`}
+                    //     handleClose={() => setToggleModal3(!toggleModal3)}
+                    //     handleDel={deleteAuthorizationServ}
+                    // />
                 }
             />
             <Card
@@ -198,8 +187,8 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
                 </div>
                 <Notes
                     restHeight='560px'
-                    data={services}
-                    items={clientAuthorizationServiceItem}
+                    data={payCodes}
+                    items={payCodeItem}
                     headerTitles={headerTitles}
                     defaultStyle={true}/>
             </div>
