@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
+import {ValidationInput, SelectInput, CreateChancel, ModalHeader, AddressInput} from "@eachbase/components";
 import {createClientStyle,} from "./styles";
 import {ErrorText} from "@eachbase/utils";
 import {
@@ -14,17 +14,21 @@ import {
 
 export const AddAuthorization = ({handleClose, info}) => {
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info, funding: info.funderId.name, status : String(info.status)} : {});
+    const [inputs, setInputs] = useState(info ? {...info, funding: info.funderId?.name, status : String(info.status)} : {});
     const params = useParams()
     const dispatch = useDispatch()
-    const fSelect = useSelector(state => state?.fundingSource?.fSelect?.funders)
+    // const fSelect = useSelector(state => state?.fundingSource?.fSelect?.funders)
+    let enrolments = useSelector(state => state?.client?.clientEnrollment).map(item=> item.funderId )
     const classes = createClientStyle()
-
+    const [fullAddress, setFullAddress] = useState(info?.location ? info?.location : null )
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,
     }));
+
+
+    console.log(enrolments,'pppp')
 
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_AUTHORIZATION'
     const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_CLIENT_AUTHORIZATION'
@@ -53,18 +57,21 @@ export const AddAuthorization = ({handleClose, info}) => {
     );
 
     const handleCreate = () => {
-        if (inputs.authId && inputs.funding && inputs.startDate && inputs.endDate && inputs.location && inputs.status ) {
+        if (inputs.authId && inputs.funding && inputs.startDate && inputs.endDate && fullAddress && inputs.status ) {
             let funderId;
-            fSelect.forEach(item => {
+            enrolments.forEach(item => {
                 if (inputs.funding === item.name) {
-                    funderId = item.id
+                    funderId = item._id
                 }
             })
+            console.log(funderId,'iiid')
+            console.log(inputs.funding,'inpiti f')
+
             const data = {
                 "authId": inputs.authId,
                 "startDate": inputs.startDate,
                 "endDate": inputs.endDate,
-                "location": inputs.location,
+                "location": fullAddress,
                 "status": +inputs.status
             }
             if (info) {
@@ -78,7 +85,7 @@ export const AddAuthorization = ({handleClose, info}) => {
                     !inputs.funding ? 'funding' :
                         !inputs.startDate ? 'startDate' :
                             !inputs.endDate ? 'endDate' :
-                                !inputs.location ? 'location' :
+                                // !inputs.location ? 'location' :
                                     !inputs.status ? 'status' :
                                         'Input is not field'
             )
@@ -114,7 +121,7 @@ export const AddAuthorization = ({handleClose, info}) => {
                             label={"Funding Source*"}
                             handleSelect={handleChange}
                             value={inputs.funding}
-                            list={fSelect ? fSelect : []}
+                            list={enrolments ? enrolments : []}
                             typeError={error === 'funding' ? ErrorText.field : ''}
                         />
                         <div style={{display: 'flex'}}>
@@ -146,14 +153,21 @@ export const AddAuthorization = ({handleClose, info}) => {
                             list={list}
                             typeError={error === 'status' ? ErrorText.field : ''}
                         />
-                        <ValidationInput
-                            variant={"outlined"}
-                            onChange={handleChange}
-                            value={inputs.location}
-                            type={"text"}
-                            label={"Service Location*"}
-                            name='location'
-                            typeError={error === 'location' && ErrorText.field}
+                        {/*<ValidationInput*/}
+                        {/*    variant={"outlined"}*/}
+                        {/*    onChange={handleChange}*/}
+                        {/*    value={inputs.location}*/}
+                        {/*    type={"text"}*/}
+                        {/*    label={"Service Location*"}*/}
+                        {/*    name='location'*/}
+                        {/*    typeError={error === 'location' && ErrorText.field}*/}
+                        {/*/>*/}
+                        <AddressInput
+                            auth={true}
+                            oneInput={true}
+                            flex={true}
+                            handleSelectValue={setFullAddress}
+                            info={info? info : ''}
                         />
                     </div>
                 </div>

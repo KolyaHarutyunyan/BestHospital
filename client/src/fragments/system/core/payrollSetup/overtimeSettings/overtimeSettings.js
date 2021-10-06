@@ -42,7 +42,7 @@ export const OvertimeSettings = ({handleOpenClose, editedData, maxWidth, marginR
         let data = {
             name: inputs.name,
             type: inputs.type,
-            threshold: inputs.threshold,
+            threshold: parseInt(inputs.threshold),
             multiplier: parseInt(inputs.multiplier)
         }
         if (inputs.name && inputs.type && inputs.threshold && inputs.multiplier) {
@@ -65,11 +65,12 @@ export const OvertimeSettings = ({handleOpenClose, editedData, maxWidth, marginR
                 !inputs.name ? 'name' :
                     !inputs.type ? 'type' :
                         !inputs.threshold ? 'threshold' :
-                        !inputs.multiplier ? 'multiplier' :
-                            'Input is not filled'
+                            !inputs.multiplier ? 'multiplier' :
+                                'Input is not filled'
             )
         }
     }
+
     return (
         <div className={classes.payCodeType} style={{
             maxWidth: maxWidth,
@@ -91,13 +92,13 @@ export const OvertimeSettings = ({handleOpenClose, editedData, maxWidth, marginR
                 variant={"outlined"}
                 name={"name"}
                 type={"text"}
-                placeholder={'Name*'}
+                label={'Name*'}
                 typeError={error === 'name' ? ErrorText.field : ''}
             />
             {
                 (editedData) ?
                     <SelectInput
-                        placeholder='Type'
+                        label='Type'
                         name={"type"}
                         handleSelect={handleChange}
                         value={inputs.type}
@@ -120,7 +121,7 @@ export const OvertimeSettings = ({handleOpenClose, editedData, maxWidth, marginR
                 variant={"outlined"}
                 name={"threshold"}
                 type={"text"}
-                placeholder={'Threshold*'}
+                label={inputs.type === 'CONSECUTIVE' ? 'Threshold in days*' : inputs.type === undefined ? 'Threshold' : 'Threshold in hours*'}
                 typeError={error === 'threshold' ? ErrorText.field : ''}
             />
             <ValidationInput
@@ -129,17 +130,17 @@ export const OvertimeSettings = ({handleOpenClose, editedData, maxWidth, marginR
                 variant={"outlined"}
                 name={"multiplier"}
                 type={"number"}
-                placeholder={'Multiplier*'}
+                label={'Multiplier*'}
                 typeError={error === 'multiplier' ? ErrorText.field : ''}
             />
             {
                 editedData ? <CreateChancel
-                    buttonWidth='192px'
-                    create='Save'
-                    chancel="Cancel"
-                    onClose={ handleOpenClose}
-                    onCreate={handleSubmit}
-                /> :
+                        buttonWidth='192px'
+                        create='Save'
+                        chancel="Cancel"
+                        onClose={handleOpenClose}
+                        onCreate={handleSubmit}
+                    /> :
                     <AddModalButton
                         handleClick={handleSubmit} text={'Add Overtime Setting'}
                         styles={overtimeBtn}

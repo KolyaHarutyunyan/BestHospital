@@ -19,7 +19,7 @@ const credentialsList = [
     {name: 'licence'},
 ]
 
-export const Credentials = ({removeItem, openModal,globalCredentials}) => {
+export const Credentials = ({removeItem, openModal, globalCredentials}) => {
     const dispatch = useDispatch()
     const classes = systemItemStyles()
 
@@ -27,7 +27,7 @@ export const Credentials = ({removeItem, openModal,globalCredentials}) => {
     const [error, setError] = useState('');
 
     const editCredential = (modalType, modalId) => {
-        openModal(modalType,modalId)
+        openModal(modalType, modalId)
     }
 
     const handleChange = e => {
@@ -51,7 +51,7 @@ export const Credentials = ({removeItem, openModal,globalCredentials}) => {
         }
     }
 
-    const convertType = (index) =>{
+    const convertType = (index) => {
         if (index === 0) {
             return 'Degree'
         } else if (index === 1) {
@@ -79,20 +79,23 @@ export const Credentials = ({removeItem, openModal,globalCredentials}) => {
 
     const isDisabled = inputs.name && inputs.type
 
-    const {httpOnLoad } = useSelector((state) => ({
+    const {httpOnLoad} = useSelector((state) => ({
         httpOnLoad: state.httpOnLoad,
     }));
 
     const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_CREDENTIAL_GLOBAL'
 
-    useEffect(()=>{
-        if(loader) {
+    useEffect(() => {
+        if (loader) {
             dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_CREDENTIAL_GLOBAL'))
             setInputs({
                 name: '',
+                type: undefined
             })
         }
-    },[loader])
+    }, [loader])
+
+    console.log(inputs.type,'inputs');
 
     return (
         <>
@@ -129,7 +132,7 @@ export const Credentials = ({removeItem, openModal,globalCredentials}) => {
                     globalCredentials && globalCredentials.length ? globalCredentials.map((credentialItem, index) => {
                         return (
                             <div className={classes.item} key={index}>
-                                <p style={{display: 'flex',alignItems: 'center'}}>
+                                <p style={{display: 'flex', alignItems: 'center'}}>
                                     <span>
                                         <SlicedText type={'responsive'} size={25} data={credentialItem.name}/>
                                     </span>
@@ -142,11 +145,15 @@ export const Credentials = ({removeItem, openModal,globalCredentials}) => {
                                              credentialName: credentialItem.name,
                                              credentialType: convertType(credentialItem.type)
                                          })} alt="edit"/>
-                                    <img src={Images.remove} alt="delete" onClick={() => removeItem({id: credentialItem._id,name: credentialItem.name,type: 'editCredential'} )}/>
+                                    <img src={Images.remove} alt="delete" onClick={() => removeItem({
+                                        id: credentialItem._id,
+                                        name: credentialItem.name,
+                                        type: 'editCredential'
+                                    })}/>
                                 </div>
                             </div>
                         )
-                    }) : <NoItemText text='No Items Yet' />
+                    }) : <NoItemText text='No Items Yet'/>
                 }
 
             </div>
