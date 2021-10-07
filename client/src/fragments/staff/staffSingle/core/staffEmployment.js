@@ -144,7 +144,7 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
                 handleOpenClose={() => setToggleModal2(!toggleModal2)}
                 openDefault={toggleModal2}
                 content={
-                    <PaycodeModal employmentId={info[authIndex].id}  authId={info[authIndex]?.id} handleClose={() => setToggleModal2(!toggleModal2)}  fundingId={info[authIndex]?.funderId?._id} />
+                    <PaycodeModal employmentId={info[authIndex]?.id}  authId={info[authIndex]?.id} handleClose={() => setToggleModal2(!toggleModal2)}   />
                 }
             />
             <SimpleModal
@@ -152,7 +152,7 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
                 openDefault={toggleModal3}
                 content={
                     // delEdit2 ?
-                    <PaycodeModal  info={payCodes  && payCodes[serviceIndex]} employmentId={info[authIndex]?.id} handleClose={() => setToggleModal3(!toggleModal3)} fundingId={info[authIndex]?.funderId?._id} />
+                    <PaycodeModal  info={payCodes  && payCodes[serviceIndex]} employmentId={info[authIndex]?.id} handleClose={() => setToggleModal3(!toggleModal3)}  />
                     // : <DeleteElement
                     //     loader={httpOnLoad.length > 0}
                     //     info={`Delete ${services && services[serviceIndex]?.serviceId?.name}`}

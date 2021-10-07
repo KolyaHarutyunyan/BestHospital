@@ -171,7 +171,6 @@ function* getEmployment(action) {
 
     try {
         const res = yield call(authService.getEmploymentService, action.payload.id)
-        console.log(res, 'resesseseesesese employ')
         yield put({
             type: GET_EMPLOYMENT_SUCCESS,
             payload: res.data
@@ -193,7 +192,6 @@ function* createEmployment(action) {
         });
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-        console.log(res, 'resesseseesesese employ')
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
@@ -212,7 +210,6 @@ function* editEmployment(action) {
         });
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-        console.log(res, 'resesseseesesese employ')
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
@@ -224,7 +221,6 @@ function* editEmployment(action) {
 function* getPayCode(action) {
     try {
         const res = yield call(authService.getPayCodeService, action.payload.id)
-        console.log(res, 'get pay code')
         yield put({
             type: GET_PAY_CODE_SUCCESS,
             payload: res.data
@@ -245,14 +241,12 @@ function* createPayCode(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.createPayCodeService, action.payload.body)
-        console.log(res,'ressss')
         yield put({
             type: GET_PAY_CODE,
             payload: {id : action.payload.id}
         });
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-        console.log(res, 'create employ')
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));

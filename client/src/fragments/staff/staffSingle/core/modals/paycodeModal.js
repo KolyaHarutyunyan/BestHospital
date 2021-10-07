@@ -16,15 +16,12 @@ import {payrollActions} from "../../../../../store/payroll";
 
 
 
-export const PaycodeModal = ({handleClose, info, fundingId, employmentId, authId}) => {
+export const PaycodeModal = ({handleClose, info,employmentId, authId}) => {
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {...info, modifiers: info.serviceId.name} : {});
-    const [modCheck, setModCheck] = useState([]);
     const [checked, setChecked] = useState(true);
     const [payCode, setPayCode] = useState(null);
     const dispatch = useDispatch()
-    const modifiers = useSelector(state => state.fundingSource.modifiers.modifiers)
-    const fSelect = useSelector(state => state.fundingSource.fundingSourceServices)
     const classes = createClientStyle()
     const globalPayCodes = useSelector(state => state.payroll.PayCodes)
 
