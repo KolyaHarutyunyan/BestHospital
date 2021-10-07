@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {AddButton, NoItemText, SlicedText, ValidationInput} from "@eachbase/components";
-// import {systemItemStyles} from "./styles";
-import {ErrorText, Images,} from "@eachbase/utils";
+import {AddButton, Card, NoItemText, SlicedText} from "@eachbase/components";
+
+import {Colors, ErrorText, Images,} from "@eachbase/utils";
 import {SelectInputPlaceholder} from "@eachbase/components";
 import {httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
 import {systemItemStyles} from "../../../system/core";
+import {serviceSingleStyles} from "./styles";
 
 const credentialBtn = {
     maxWidth: '174px',
@@ -14,16 +15,12 @@ const credentialBtn = {
     padding: 0
 }
 
-const credentialsList = [
-    {name: 'Degree'},
-    {name: 'Clearance'},
-    {name: 'licence'},
-]
 
-export const StaffService = ({removeItem, openModal,globalCredentials}) => {
+export const StaffService = ({removeItem, openModal, staffGeneral}) => {
+  let  globalCredentials=[{name: 'fgdfg'}]
     const dispatch = useDispatch()
     const classes = systemItemStyles()
-
+    const classes2 = serviceSingleStyles()
     const [inputs, setInputs] = useState({});
     const [error, setError] = useState('');
 
@@ -34,10 +31,7 @@ export const StaffService = ({removeItem, openModal,globalCredentials}) => {
     const handleChange = e => {
         setInputs(
             prevState => (
-                {
-                    ...prevState,
-                    [e.target.name]: e.target.value
-                }
+                {...prevState, [e.target.name]: e.target.value}
             ));
         error === e.target.name && setError('')
     }
@@ -67,8 +61,8 @@ export const StaffService = ({removeItem, openModal,globalCredentials}) => {
             name: inputs.name,
             type: checkType(inputs.type)
         }
-        if (inputs.name && inputs.type) {
-            dispatch(systemActions.createCredentialGlobal(data));
+        if (inputs.name ) {
+            // dispatch(systemActions.createCredentialGlobal(data));
         } else {
             setError(
                 !inputs.name ? 'name' :
@@ -80,69 +74,73 @@ export const StaffService = ({removeItem, openModal,globalCredentials}) => {
 
     const isDisabled = inputs.name && inputs.type
 
-    const {httpOnLoad } = useSelector((state) => ({
-        httpOnLoad: state.httpOnLoad,
-    }));
+    const generalInfo = [
+        {title: 'First Name', value: staffGeneral?.firstName},
+        {title: 'Middle Name', value: staffGeneral?.middleName},
+        {title: 'Last Name', value: staffGeneral?.lastName},
+        {title: 'Primary Email', value: staffGeneral?.email},
+        {title: 'Secondary Email', value: staffGeneral?.secondaryEmail},
+        {title: 'Primary Phone Number', value: staffGeneral?.phone},
+        {title: 'Secondary Phone Number', value: staffGeneral?.secondaryPhone},
+    ]
 
-    const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_CREDENTIAL_GLOBAL'
-
-    useEffect(()=>{
-        if(loader) {
-            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_CREDENTIAL_GLOBAL'))
-            setInputs({
-                name: '',
-            })
-        }
-    },[loader])
 
     return (
-        <>
-            <div className={`${classes.flexContainer} ${classes.headerSize}`}>
-                <SelectInputPlaceholder
-                    placeholder='Service Type'
-                    style={classes.credentialInputStyle}
-                    name={"type"}
-                    handleSelect={handleChange}
-                    value={inputs.type}
-                    list={[]}
-                    typeError={error === 'issuingState' ? ErrorText.field : ''}
-                />
-                <AddButton
-                    loader={loader}
-                    type={'CREATE_CREDENTIAL_GLOBAL'}
-                    disabled={!isDisabled}
-                    styles={credentialBtn}
-                    handleClick={handleSubmit}
-                    text='Add Service Type'
-                />
-            </div>
-            <p className={classes.title}>Services</p>
-            <div className={classes.credentialTable}>
-                {
-                    globalCredentials && globalCredentials.length ? globalCredentials.map((credentialItem, index) => {
-                        return (
-                            <div className={classes.item} key={index}>
-                                <p style={{display: 'flex',alignItems: 'center'}}>
+        <div className={classes2.staffGeneralWrapper}>
+            <Card
+                width='49%'
+                cardInfo={generalInfo}
+                showHeader={true}
+                title='General Info'
+                color={Colors.BackgroundBlue}
+                icon={Images.generalInfoIcon}
+            />
+            <div className={`${classes.flexContainer} ${classes.headerSize}`} style={{marginLeft: 24, borderRadius : '8px' , boxShadow: '0px 0px 6px #8A8A8A3D', padding: 24, width: '100%', flexDirection: 'column'}}>
+                <p className={classes.title} style={{marginBottom : 24}}>Services</p>
+             <div style={{display: 'flex', width: "100%"}}>
+                 <SelectInputPlaceholder
+                     placeholder='Service Type'
+                     style={classes.credentialInputStyle2}
+                     name={"type"}
+                     handleSelect={handleChange}
+                     value={inputs.type}
+                     list={[]}
+                     typeError={error === 'issuingState' ? ErrorText.field : ''}
+                 />
+                 <AddButton
+                     // loader={loader}
+                     type={'CREATE_CREDENTIAL_GLOBAL'}
+                     // disabled={!isDisabled}
+                     styles={credentialBtn}
+                     handleClick={handleSubmit}
+                     text='Add Service Type'
+                 />
+             </div>
+                <div className={classes.credentialTable} style={{width: '100%'}}>
+                    {
+                        globalCredentials && globalCredentials.length ? globalCredentials.map((credentialItem, index) => {
+                            return (
+                                <div className={classes.item} key={index} style={{flex: '0 0 100%'}}>
+                                    <p style={{display: 'flex',alignItems: 'center'}}>
                                     <span>
                                         <SlicedText type={'responsive'} size={25} data={credentialItem.name}/>
                                     </span>
-                                    {` - ${convertType(credentialItem.type)}`}
-                                </p>
-                                <div className={classes.icons}>
-                                    <img src={Images.edit}
-                                         onClick={() => editCredential('editCredential', {
-                                             credentialId: credentialItem._id,
-                                             credentialName: credentialItem.name,
-                                             credentialType: convertType(credentialItem.type)
-                                         })} alt="edit"/>
-                                    <img src={Images.remove} alt="delete" onClick={() => removeItem({id: credentialItem._id,name: credentialItem.name,type: 'editCredential'} )}/>
+                                        {` - ${convertType(credentialItem.type)}`}
+                                    </p>
+                                    <div className={classes.icons}>
+                                        <img src={Images.remove} alt="delete"
+                                             // onClick={() => removeItem({id: credentialItem._id,name: credentialItem.name,type: 'editCredential'} )}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                        )
-                    }) : <NoItemText text='No Items Yet' />
-                }
+                            )
+                        }) : <NoItemText text='No Items Yet' />
+                    }
 
+                </div>
             </div>
-        </>
+
+
+        </div>
     )
 }

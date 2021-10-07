@@ -222,16 +222,19 @@ function* editEmployment(action) {
 }
 
 function* getPayCode(action) {
-
     try {
         const res = yield call(authService.getPayCodeService, action.payload.id)
-        console.log(res, 'res pay code')
+        console.log(res, 'get pay code')
         yield put({
             type: GET_PAY_CODE_SUCCESS,
             payload: res.data
         });
 
     } catch (err) {
+        yield put({
+            type: GET_PAY_CODE_SUCCESS,
+            payload: []
+        });
         console.log(err, ' errr employmeny')
 
     }
@@ -243,13 +246,13 @@ function* createPayCode(action) {
     try {
         const res = yield call(authService.createPayCodeService, action.payload.body)
         console.log(res,'ressss')
-        // yield put({
-        //     type: GET_PAY_CODE,
-        //     payload: {id : action.payload.id}
-        // });
+        yield put({
+            type: GET_PAY_CODE,
+            payload: {id : action.payload.id}
+        });
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-        console.log(res, 'resesseseesesese employ')
+        console.log(res, 'create employ')
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));

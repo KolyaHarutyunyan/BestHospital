@@ -80,6 +80,15 @@ export const systemItemStyles = makeStyles(() => ({
             fontSize: 14
         },
     },
+    credentialInputStyle2: {
+        width: 300,
+        marginRight: 16,
+        '& .MuiOutlinedInput-root': {
+            height: '36px!important',
+            color: Colors.TextPrimary,
+            fontSize: 14
+        },
+    },
     headerSize: {
         width: '49%'
     },
