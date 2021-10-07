@@ -11,6 +11,7 @@ export class StaffSanitizer implements ISanitize {
   sanitize(user: IStaff): StaffDTO {
     const userDTO: StaffDTO = {
       id: user.id,
+      service: user.service,
       firstName: user.firstName,
       middleName: user.middleName,
       lastName: user.lastName,

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { StaffService } from './staff.service';
 import { StaffDTO, CreateStaffDto, EditStaffDTO } from './dto';
@@ -12,7 +12,7 @@ import { CreateStaffDtoTest } from './dto/createTest.dto';
 @ApiTags('Staff Endpoints')
 @ApiHeader({ name: ACCESS_TOKEN })
 export class StaffController {
-  constructor(private readonly staffService: StaffService) {}
+  constructor(private readonly staffService: StaffService) { }
 
   /** Create a new staff */
   @Post()
@@ -92,5 +92,35 @@ export class StaffController {
   async activate(@Param('id', ParseObjectIdPipe) staffId: string): Promise<StaffDTO> {
     const staff = await this.staffService.setStatusActive(staffId, 1);
     return staff;
+  }
+
+  /** Create a new service */
+  @Post(':id/service/:serviceId')
+  @ApiOkResponse({ type: StaffDTO })
+  @Public()
+  async addService(
+    @Param('serviceId', ParseObjectIdPipe) serviceId: string,
+    @Param('id', ParseObjectIdPipe) id: string): Promise<StaffDTO> {
+    const service = await this.staffService.addService(id, serviceId);
+    return service;
+  }
+  /** Get service */
+  @Get(':id/service')
+  @ApiOkResponse({ type: StaffDTO })
+  @Public()
+  async getService(
+    @Param('id', ParseObjectIdPipe) id: string): Promise<StaffDTO> {
+    const service = await this.staffService.getService(id);
+    return service;
+  }
+  /** Delete a service */
+  @Delete(':id/service/:serviceId')
+  @ApiOkResponse({ type: String })
+  @Public()
+  async deleteService(
+    @Param('serviceId', ParseObjectIdPipe) serviceId: string,
+    @Param('id', ParseObjectIdPipe) id: string): Promise<string> {
+    const service = await this.staffService.deleteService(id, serviceId);
+    return service;
   }
 }

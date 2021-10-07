@@ -7,6 +7,7 @@ export interface IStaff extends Document {
   id: string;
   firstName: string;
   middleName: string;
+  service: Array<string>;
   lastName: string;
   email: string;
   secondaryEmail: string;
