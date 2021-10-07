@@ -12,11 +12,14 @@ import { HistoryService, serviceLog } from '../history';
 import { UserStatus } from './staff.constants';
 import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
 import { CreateStaffDtoTest } from './dto/createTest.dto';
+import { ServiceService } from '../service'
 
 @Injectable()
 export class StaffService {
   constructor(
     private readonly addressService: AddressService,
+    private readonly globalService: ServiceService,
+
     private readonly authnService: AuthNService,
     private readonly historyService: HistoryService,
     // private readonly credentialService: CredentialService,
@@ -63,7 +66,55 @@ export class StaffService {
       throw e;
     }
   };
+  /** add a new service */
+  addService = async (_id: string, serviceId: string): Promise<StaffDTO> => {
+    try {
+      let staff = await this.model.findById({ _id });
+      this.checkStaff(staff);
+      const service = await this.globalService.findOne(serviceId);
+      if (staff.service.indexOf(service.id) != -1) {
+        console.log(staff.service.indexOf(service.id))
+        throw new HttpException('Service already exist', HttpStatus.BAD_REQUEST)
+      }
+      staff.service.push(service.id)
+      staff = await (await staff.save()).populate('service').execPopulate();
 
+      return this.sanitizer.sanitize(staff);
+    } catch (e) {
+      console.log(e);
+      this.mongooseUtil.checkDuplicateKey(e, 'Staff Service already exists');
+      throw e;
+    }
+  };
+  /** delete a service */
+  deleteService = async (_id: string, serviceId: string): Promise<string> => {
+    try {
+      console.log(_id);
+      console.log(serviceId);
+      let staff = await this.model.updateOne({ _id }, { $pull: { service: serviceId  } });
+      console.log(staff);
+      if (staff.nModified) {
+        return serviceId;
+      }
+      throw new HttpException('service was not found', HttpStatus.NOT_FOUND);
+    } catch (e) {
+      console.log(e);
+      this.mongooseUtil.checkDuplicateKey(e, 'Staff Service already exists');
+      throw e;
+    }
+  };
+  /** get service */
+  getService = async (_id: string): Promise<StaffDTO> => {
+    try {
+      let staff = await this.model.findById({ _id }).populate('service');
+      this.checkStaff(staff);
+      return this.sanitizer.sanitize(staff);
+    } catch (e) {
+      console.log(e);
+      this.mongooseUtil.checkDuplicateKey(e, 'Staff Service already exists');
+      throw e;
+    }
+  };
   /** Edit a Staff */
   edit = async (id: string, dto: EditStaffDTO): Promise<StaffDTO> => {
     try {

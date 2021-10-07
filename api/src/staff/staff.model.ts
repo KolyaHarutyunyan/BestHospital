@@ -1,4 +1,4 @@
-import { model, Schema } from 'mongoose';
+import { model, Schema, Types } from 'mongoose';
 import { addressSchema } from '../address';
 // import { TerminationSchema } from '../termination';
 import { UserStatus } from './staff.constants';
@@ -16,6 +16,7 @@ export const LicenseSchema = {
 
 const StaffSchema = new Schema({
   email: { type: String, unique: true },
+  service: [{ type: Types.ObjectId, ref: 'Service' }],
   secondaryEmail: { type: String },
   firstName: { type: String },
   lastName: { type: String },

@@ -6,6 +6,8 @@ export class StaffDTO {
   @ApiProperty()
   id: string;
   @ApiProperty()
+  service: Array<string>;
+  @ApiProperty()
   firstName: string;
   @ApiProperty({ required: false })
   middleName: string;
