@@ -6,6 +6,7 @@ import {createStaffModalStyle} from "./style";
 import {useGlobalTextStyles, EmailValidator, ErrorText} from "@eachbase/utils";
 import {adminActions, httpRequestsOnErrorsActions} from "@eachbase/store";
 import {inputStyle} from "../../../fundingSource/createFundingSource/core/styles";
+import {logDOM} from "@testing-library/react";
 
 const steps = ['General Info', 'Address', 'Other Details']
 
@@ -29,6 +30,14 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
     const [errorSec, setErrorSec] = useState("");
     const [inputs, setInputs] = useState(resetData ? {} : staffGeneral ? staffGeneral : {});
     const [fullAddress, setFullAddress] = useState(staffGeneral ? staffGeneral.address.formattedAddress :'')
+
+    const [licenseData,setLicenseData] = useState({
+        license: {
+           driverLicense: 'string',
+           expirationDate: '2021-10-07T09:46:27.426Z',
+            state: 'string'
+        }
+    })
 
     const disabledOne = inputs.firstName && error !== 'Not valid email' && inputs.lastName && inputs.email && inputs.phone
 
@@ -77,10 +86,15 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
             state: 'state',
             gender: inputs.gender,
             birthday: (inputs.birthday ? new Date(inputs.birthday).toISOString() : ''),
-            residency: 'residency',
-            ssn: 0,
+            residency: inputs.residency,
+            ssn: parseInt(inputs.ssn),
             status: staffGeneral ? staffGeneral.status : 1,
-            address: fullAddress
+            address: fullAddress,
+            license: {
+                driverLicense: inputs.driverLicense,
+                expireDate: "2021-10-07T09:46:27.426Z",
+                state: inputs.state
+            }
         }
         if (inputs.firstName &&
             inputs.lastName &&
@@ -88,6 +102,8 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
             inputs.phone &&
             inputs.gender &&
             inputs.birthday &&
+            inputs.residency &&
+            inputs.ssn &&
             fullAddress
         ) {
             staffGeneral ?
@@ -112,6 +128,8 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
         httpOnError: state.httpOnError,
         httpLoad: state.httpLoad
     }));
+
+    console.log(inputs,'inputs');
 
     const success =
         httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_ADMIN' ? true :
@@ -234,12 +252,12 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
             <div className={classes.flexContainer}>
                 <SelectInput
                     style={classes.selectMargin}
-                    name={"issuingState"}
+                    name={"state"}
                     label={"Issuing State*"}
                     handleSelect={handleChange}
-                    value={inputs.issuingState}
+                    value={inputs.state}
                     list={issuingStateList}
-                    typeError={error === 'issuingState' ? ErrorText.field : ''}
+                    typeError={error === 'state' ? ErrorText.field : ''}
                 />
                 <ValidationInput
                     variant={"outlined"}
@@ -253,12 +271,12 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
             </div>
             <p className={`${classes.otherDetailsTitle} ${classes.titlePadding}`}>Other</p>
             <SelectInput
-                name={"residencyStatus"}
+                name={"residency"}
                 label={"Residency Status"}
                 handleSelect={handleChange}
-                value={inputs.residencyStatus}
+                value={inputs.residency}
                 list={residencyList}
-                typeError={error === 'residencyStatus' ? ErrorText.field : ''}
+                typeError={error === 'residency' ? ErrorText.field : ''}
             />
             <ValidationInput
                 variant={"outlined"}

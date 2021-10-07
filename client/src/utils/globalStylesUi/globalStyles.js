@@ -23,10 +23,17 @@ export const useGlobalStyles = makeStyles({
             fontSize: 14,
             color: Colors.TextSecondary,
             lineHeight: '24px',
-            padding: 16,
+            padding: '8px 16px 16px',
             backgroundColor: Colors.BackgroundWater,
             borderRadius: 8,
-            height: 'calc(100% - 130px)'
+            height: 'calc(100% - 130px)',
+            overflowY: 'scroll',
+            overflowX: 'hidden',
+            msOverflowStyle: 'none',
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+                display: 'none'
+            },
         },
         '& > div' : {
             marginBottom: 20
