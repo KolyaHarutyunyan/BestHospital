@@ -27,9 +27,6 @@ export const AddAuthorization = ({handleClose, info}) => {
         httpOnLoad: state.httpOnLoad,
     }));
 
-
-    console.log(enrolments,'pppp')
-
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_AUTHORIZATION'
     const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_CLIENT_AUTHORIZATION'
 
@@ -64,9 +61,6 @@ export const AddAuthorization = ({handleClose, info}) => {
                     funderId = item._id
                 }
             })
-            console.log(funderId,'iiid')
-            console.log(inputs.funding,'inpiti f')
-
             const data = {
                 "authId": inputs.authId,
                 "startDate": inputs.startDate,

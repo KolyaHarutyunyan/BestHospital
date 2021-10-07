@@ -33,7 +33,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION'
     const successDelServ = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION_SERV'
 
-    console.log(info,'infuuuuuu')
+
     useEffect(()=>{
         dispatch(clientActions.getClientsAuthorizationsServ(info[authIndex].id))
     },[authIndex])

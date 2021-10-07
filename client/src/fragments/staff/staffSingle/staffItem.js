@@ -198,7 +198,7 @@ export const StaffItem = () => {
             tabComponent: (httpOnLoad.length ? <Loader/> : <StaffGeneral staffGeneral={staffGeneral}/>)
         },
         {
-            tabComponent: (<StaffEmployment info={employments}/>)
+            tabComponent: (employments.length>0 ?  <StaffEmployment info={employments}/> : <NoItemText text='No Employments Yet' />)
         },
         {
             tabComponent: (<StaffTimesheet>Timesheet</StaffTimesheet>)

@@ -152,11 +152,10 @@ export const FundingSourceSingleServices = ({data,}) => {
             <div className={classes.fundindServiceItems}>
                 <Notes restHeight={'360px'} data={data} items={serviceItem} headerTitles={headerTitles} defaultStyle={true}/>
             </div>
-            {modifiers && modifiers?.length >0 ? <FundingSourceSinglePTModifiers
+            <FundingSourceSinglePTModifiers
                     globalCredentials={globalCredentials}
                     data={modifiers}
-                    title={data && data[serviceIndex]?.name}/> :
-                <NoItemText text=''/>}
+                    title={data && data[serviceIndex]?.name}/>
         </div>
     )
 }
