@@ -1,6 +1,7 @@
 import { Document } from 'mongoose';
 import { IAddress } from '../../address';
 import { ITermination } from '../../termination/interface';
+import { ILicense } from '../interface';
 
 export interface IStaff extends Document {
   id: string;
@@ -19,4 +20,5 @@ export interface IStaff extends Document {
   status: number;
   termination: ITermination;
   address: IAddress;
+  license: ILicense;
 }

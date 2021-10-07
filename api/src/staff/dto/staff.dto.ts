@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { AddressDTO } from '../../address';
+import { LicenseDTO } from './license.dto';
 
 export class StaffDTO {
   @ApiProperty()
@@ -34,4 +35,6 @@ export class StaffDTO {
   termination: Object;
   @ApiProperty({ type: AddressDTO })
   address: AddressDTO;
+  @ApiProperty({type: LicenseDTO})
+  license: LicenseDTO;
 }
