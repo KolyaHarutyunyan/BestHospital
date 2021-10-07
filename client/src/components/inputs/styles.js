@@ -153,8 +153,15 @@ export const inputsStyle = makeStyles(() => ({
     resize: 'none',
     height:'128px!important',
     borderColor:Colors.BackgroundBlue,
-    padding: '13px 0 0 10px',
+    padding: '2px 0 10px 10px',
     borderRadius: '4px',
+    overflow: 'unset!important',
+    msOverflowStyle: 'none',
+    scrollbarWidth: 'none',
+    '&::-webkit-scrollbar': {
+      display: 'none'
+    },
+
     '&::placeholder' : {
       fontSize: '14px',
       lineHeight: '19px',
