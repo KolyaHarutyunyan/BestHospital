@@ -32,7 +32,6 @@ export class StaffService {
   create = async (dto: CreateStaffDto): Promise<StaffDTO> => {
     try {
       const _id = Types.ObjectId();
-
       let user = new this.model({
         _id,
         email: dto.email,
@@ -47,6 +46,7 @@ export class StaffService {
         birthday: dto.birthday,
         residency: dto.residency,
         ssn: dto.ssn,
+        license: dto.license ? dto.license : {},
         address: await this.addressService.getAddress(dto.address),
       });
       user = (await Promise.all([user.save(), this.authnService.create(user._id, user.email, UserType.ADMIN)]))[0];
@@ -67,7 +67,7 @@ export class StaffService {
   /** Edit a Staff */
   edit = async (id: string, dto: EditStaffDTO): Promise<StaffDTO> => {
     try {
-      const admin = await this.model.findOne({ _id: id });
+      const admin: any = await this.model.findOne({ _id: id });
       this.checkStaff(admin);
       if (dto.email) {
         admin.email = dto.email;
@@ -85,6 +85,7 @@ export class StaffService {
       if (dto.middleName) admin.middleName = dto.middleName;
       if (dto.email) admin.email = dto.email;
       if (dto.secondaryEmail) admin.secondaryEmail = dto.secondaryEmail;
+      if (dto.license) { admin.license = dto.license }
       if (dto.address) admin.address = await this.addressService.getAddress(dto.address);
       await admin.save();
       await this.historyService.create({

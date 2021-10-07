@@ -8,6 +8,11 @@ export const TerminationSchema = {
   date: { type: Date },
   reason: { type: String }
 }
+export const LicenseSchema = {
+  driverLicense: { type: String },
+  expireDate: { type: String },
+  state: { type: String }
+}
 
 const StaffSchema = new Schema({
   email: { type: String, unique: true },
@@ -24,6 +29,7 @@ const StaffSchema = new Schema({
   ssn: { type: Number },
   status: { type: Number, enum: UserStatus, default: 1 },
   createdDate: { type: Date, default: Date.now },
+  license: LicenseSchema,
   // availability: {type: Number, enum: UserAvailabilityStatus}
   termination: TerminationSchema,
   // credentailStatus: { type: Number, enum: CredentialsStatus }

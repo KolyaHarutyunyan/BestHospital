@@ -25,6 +25,7 @@ export class StaffSanitizer implements ISanitize {
       residency: user.residency,
       ssn: user.ssn,
       termination: user.termination,
+      license: user.license,
       address: this.addressSanitizer.sanitize(user.address),
     };
     return userDTO;

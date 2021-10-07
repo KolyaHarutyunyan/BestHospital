@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsDateString,
   IsEmail,
@@ -7,10 +8,11 @@ import {
   IsNumber,
   IsPhoneNumber,
   IsString,
+  ValidateNested,
 } from 'class-validator';
 import { UserDTO } from 'src/authN';
 import { AddressDTO } from '../../address';
-import { UserStatus } from '../staff.constants';
+import {LicenseDTO} from './license.dto';
 
 export class CreateStaffDto {
   @ApiProperty()
@@ -60,7 +62,10 @@ export class CreateStaffDto {
   ssn: number;
   @ApiProperty({ type: AddressDTO })
   address: string;
-
+  @ApiProperty({ type: LicenseDTO })
+  @ValidateNested({ each: true })
+  @Type(() => LicenseDTO)
+  license: LicenseDTO;
   /** System set values */
   user: UserDTO;
 }

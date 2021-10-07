@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsEmail, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsDateString, IsEmail, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString, ValidateNested } from 'class-validator';
 import { UserStatus } from '../staff.constants';
+import { LicenseDTO } from './license.dto';
 
 export class EditStaffDTO {
   @ApiProperty()
@@ -53,4 +55,9 @@ export class EditStaffDTO {
   ssn: number;
   @ApiProperty({ required: false })
   address: string;
+  @ApiProperty({ type: LicenseDTO })
+  @ValidateNested({ each: true })
+  @Type(() => LicenseDTO)
+  @IsOptional()
+  license: LicenseDTO;
 }
