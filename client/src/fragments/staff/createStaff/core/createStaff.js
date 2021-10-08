@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
-import {AddressInput, ValidationInput, SelectInput,Steps, CloseButton} from "@eachbase/components";
+import {AddressInput, ValidationInput, SelectInput, Steps, CloseButton} from "@eachbase/components";
 import {createStaffModalStyle} from "./style";
 import {useGlobalTextStyles, EmailValidator, ErrorText} from "@eachbase/utils";
 import {adminActions, httpRequestsOnErrorsActions} from "@eachbase/store";
@@ -29,15 +29,7 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
     const [error, setError] = useState("");
     const [errorSec, setErrorSec] = useState("");
     const [inputs, setInputs] = useState(resetData ? {} : staffGeneral ? staffGeneral : {});
-    const [fullAddress, setFullAddress] = useState(staffGeneral ? staffGeneral.address.formattedAddress :'')
-
-    const [licenseData,setLicenseData] = useState({
-        license: {
-           driverLicense: 'string',
-           expirationDate: '2021-10-07T09:46:27.426Z',
-            state: 'string'
-        }
-    })
+    const [fullAddress, setFullAddress] = useState(staffGeneral ? staffGeneral.address.formattedAddress : '')
 
     const disabledOne = inputs.firstName && error !== 'Not valid email' && inputs.lastName && inputs.email && inputs.phone
 
@@ -90,13 +82,14 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
             ssn: parseInt(inputs.ssn),
             status: staffGeneral ? staffGeneral.status : 1,
             address: fullAddress,
-            license: {
-                driverLicense: inputs.driverLicense,
-                expireDate: "2021-10-07T09:46:27.426Z",
-                state: inputs.state
-            }
+            license: inputs?.driverLicense && inputs?.state && inputs?.expirationDate ? {
+                driverLicense: inputs?.driverLicense,
+                expireDate: inputs?.expirationDate ? new Date(inputs.expirationDate).toISOString() : '',
+                state: inputs?.state
+            } : {}
         }
-        if (inputs.firstName &&
+
+        if ((inputs.firstName &&
             inputs.lastName &&
             inputs.email &&
             inputs.phone &&
@@ -105,31 +98,46 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
             inputs.residency &&
             inputs.ssn &&
             fullAddress
-        ) {
-            staffGeneral ?
-                dispatch(adminActions.editAdminById(data, staffGeneral.id)) :
-                dispatch(adminActions.createAdmin(data))
-
+        )) {
+            if (inputs.driverLicense || inputs.state || inputs.expirationDate) {
+                if (inputs.driverLicense && inputs.state && inputs.expirationDate) {
+                    staffGeneral ?
+                        dispatch(adminActions.editAdminById(data, staffGeneral.id)) :
+                        dispatch(adminActions.createAdmin(data))
+                } else {
+                    setError(
+                        !inputs.driverLicense ? 'driverLicense' :
+                            !inputs.state ? 'state' :
+                                !inputs.expirationDate ? 'expirationDate' :
+                                    'Input is not filled'
+                    )
+                }
+            } else {
+                staffGeneral ?
+                    dispatch(adminActions.editAdminById(data, staffGeneral.id)) :
+                    dispatch(adminActions.createAdmin(data))
+            }
         } else {
             setError(
                 !inputs.firstName ? 'firstName' :
                     !inputs.lastName ? 'lastName' :
                         !inputs.email ? 'email' :
                             !inputs.phone ? 'phone' :
-                                !inputs.gender ? 'gender' :
-                                    !inputs.birthday ? 'birthday' :
-                                        'Input is not filled'
+                                !inputs.residency ? 'residency' :
+                                    !inputs.ssn ? 'ssn' :
+                                        !inputs.gender ? 'gender' :
+                                            !inputs.birthday ? 'birthday' :
+                                                'Input is not filled'
             )
         }
+
     }
 
-    const {httpOnSuccess,httpOnError} = useSelector((state) => ({
+    const {httpOnSuccess, httpOnError} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnError: state.httpOnError,
         httpLoad: state.httpLoad
     }));
-
-    console.log(inputs,'inputs');
 
     const success =
         httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_ADMIN' ? true :
@@ -142,7 +150,8 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
     useEffect(() => {
         if (success) {
             handleClose()
-        } if(errorText){
+        }
+        if (errorText) {
             dispatch(httpRequestsOnErrorsActions.removeError(httpOnError.length && httpOnError[0].type))
         }
     }, [success]);
