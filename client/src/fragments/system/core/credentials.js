@@ -90,7 +90,7 @@ export const Credentials = ({removeItem, openModal, globalCredentials}) => {
             dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_CREDENTIAL_GLOBAL'))
             setInputs({
                 name: '',
-                type: undefined
+                type: ''
             })
         }
     }, [loader])
@@ -116,7 +116,7 @@ export const Credentials = ({removeItem, openModal, globalCredentials}) => {
                     handleSelect={handleChange}
                     value={inputs.type}
                     list={credentialsList}
-                    typeError={error === 'issuingState' ? ErrorText.field : ''}
+                    typeError={error === 'type' ? ErrorText.field : ''}
                 />
                 <AddButton
                     loader={loader}
@@ -155,7 +155,6 @@ export const Credentials = ({removeItem, openModal, globalCredentials}) => {
                         )
                     }) : <NoItemText text='No Items Yet'/>
                 }
-
             </div>
         </>
     )

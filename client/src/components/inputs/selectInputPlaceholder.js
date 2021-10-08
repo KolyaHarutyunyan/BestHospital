@@ -41,7 +41,6 @@ export const SelectInputPlaceholder = ({
         setCurrent(event.target.value);
     };
 
-
     return (
         <>
             <div className={style ? style : classes.SignInInput}>

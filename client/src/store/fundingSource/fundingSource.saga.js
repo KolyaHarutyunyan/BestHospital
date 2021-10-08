@@ -208,7 +208,6 @@ function* editFundingSourceServicesModifier({payload}) {
 
 
 function* getFundingSourceServicesModifier(action) {
-    console.log('qweqweqweqweqweqweqweqweqwe dddddd')
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
