@@ -49,8 +49,8 @@ export class AuthorizationserviceService {
           }
           if (brokenModifiers.length !== 0) {
             throw new HttpException(
-              `Modifier received ${brokenModifiers}`,
-              HttpStatus.NOT_FOUND,
+              brokenModifiers,
+              HttpStatus.BAD_REQUEST,
             );
           }
           return new HttpException('modifiers are free', HttpStatus.ACCEPTED)
