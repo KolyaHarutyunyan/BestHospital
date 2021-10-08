@@ -7,6 +7,7 @@ import { AddressModule } from '../address';
 @Module({
   imports: [AddressModule],
   controllers: [OvertimeController],
-  providers: [OvertimeService, OvertimeSanitizer]
+  providers: [OvertimeService, OvertimeSanitizer],
+  exports: [OvertimeService]
 })
 export class OvertimeModule { }
