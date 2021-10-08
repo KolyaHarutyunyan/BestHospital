@@ -9,6 +9,7 @@ import {
     httpRequestsOnErrorsActions,
     httpRequestsOnSuccessActions
 } from "@eachbase/store";
+import {getClientsAuthorizationsServModifiersCheck} from "../../../store/client/client.action";
 
 export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) => {
     const [error, setError] = useState("");
@@ -28,6 +29,9 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
             }
         })
     }, []);
+
+
+
 
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
@@ -88,7 +92,8 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
                 "modifiers": modifiersPost,
             }
 
-            dispatch(clientActions.createClientsAuthorizationsServ(data, authId, funderId,))
+            // dispatch(clientActions.getClientsAuthorizationsServModifiersCheck(data, authId, funderId,))
+             dispatch(clientActions.createClientsAuthorizationsServ(data, authId, funderId,))
         } else if (inputs.total && info) {
             dispatch(clientActions.editClientsAuthorizationsServ({
                 "total": +inputs.total,

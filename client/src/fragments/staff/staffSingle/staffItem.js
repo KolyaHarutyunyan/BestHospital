@@ -66,6 +66,9 @@ export const StaffItem = () => {
     const historiesData = useSelector(state => state.fundingSource.fundingSourceHistories)
     const availabilityData = useSelector(state => state.availabilitySchedule.availabilitySchedule)
     const employments = useSelector(state => state.admins.employments)
+    const staffServices = useSelector(state => state.admins.staffServices.service)
+
+    console.log(staffServices,'staffServices')
 
     const handleOpenClose = () => {
         setOpen(!open)
@@ -139,6 +142,7 @@ export const StaffItem = () => {
         dispatch(fundingSourceActions.getFundingSourceHistoriesById(params.id, 'Staff'))
         dispatch(availabilityScheduleActions.getAvailabilitySchedule(params.id))
         dispatch(adminActions.getEmployment(params.id))
+        dispatch(adminActions.getStaffService(params.id))
     }, [])
 
     const openNoteModal = (data) => {
@@ -213,7 +217,7 @@ export const StaffItem = () => {
             tabComponent: (<StaffAvailability availabilityData={availabilityData} staffGeneral={staffGeneral}/>)
         },
         {
-            tabComponent: (<StaffService staffGeneral={staffGeneral} />)
+            tabComponent: ( <StaffService info={staffServices} staffGeneral={staffGeneral} />)
         },
         {
             tabComponent: (globalNotes.length ? <Notes

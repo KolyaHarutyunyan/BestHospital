@@ -114,12 +114,13 @@ function* getFundingSourceById(action) {
 function* getFundingSourceServicesById(action) {
     try {
         const res = yield call(authService.getFoundingSourceServiceByIdService, action.payload);
-
+        console.log(res,'resssssesesesese')
         yield put({
             type: GET_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
             payload: res.data,
         });
     } catch (error) {
+        console.log(error,'erererererererererer')
     }
 }
 

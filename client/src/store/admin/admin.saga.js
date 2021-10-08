@@ -18,7 +18,13 @@ import {
     CREATE_EMPLOYMENT,
     GET_EMPLOYMENT_SUCCESS,
     GET_PAY_CODE_SUCCESS,
-    GET_PAY_CODE, CREATE_PAY_CODE, EDIT_EMPLOYMENT,
+    GET_PAY_CODE,
+    CREATE_PAY_CODE,
+    EDIT_EMPLOYMENT,
+    CREATE_STAFF_SERVICE,
+    GET_STAFF_SERVICE_SUCCESS,
+    GET_STAFF_SERVICE,
+    DELETE_STAFF_SERVICE,
     // CREATE_ADMIN_SUCCESS,
 
 } from "./admin.types";
@@ -67,6 +73,7 @@ function* getAdminById(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.getAdminByIdService, action.payload.adminId);
+
         yield put({
             type: GET_ADMIN_BY_ID_SUCCESS,
             payload: res.data,
@@ -255,6 +262,64 @@ function* createPayCode(action) {
     }
 }
 
+
+function* getStaffService(action) {
+    try {
+        const res = yield call(authService.getStaffServService, action.payload.id)
+        console.log(res,'get taff srerv')
+        yield put({
+            type: GET_STAFF_SERVICE_SUCCESS,
+            payload: res.data
+        });
+
+    } catch (err) {
+        yield put({
+            type: GET_STAFF_SERVICE_SUCCESS,
+            payload: []
+        });
+        console.log(err, ' errr employmeny')
+
+    }
+}
+
+function* createStaffService(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    try {
+        const res = yield call(authService.createStaffServService, action.payload.id, action.payload.serviceId)
+        yield put({
+            type: GET_STAFF_SERVICE,
+            payload: {id : action.payload.id}
+        });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+    } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
+        console.log(err, ' errr create paycode')
+
+    }
+}
+
+function* delteStaffService(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    try {
+        const res = yield call(authService.deleteStaffServService, action.payload.id, action.payload.serviceId)
+        console.log(res,'deeeel service')
+        yield put({
+            type: GET_STAFF_SERVICE,
+            payload: {id : action.payload.id}
+        });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+    } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
+        console.log(err, ' errr del paycode')
+
+    }
+}
+
+
 export const watchAdmin = function* watchAdminSaga() {
     yield takeLatest(CREATE_ADMIN, createAdmin);
     yield takeLatest(GET_ADMINS, getAdmins);
@@ -269,5 +334,7 @@ export const watchAdmin = function* watchAdminSaga() {
     yield takeLatest(EDIT_EMPLOYMENT, editEmployment)
     yield takeLatest(GET_PAY_CODE, getPayCode)
     yield takeLatest(CREATE_PAY_CODE, createPayCode)
-
+    yield takeLatest(GET_STAFF_SERVICE, getStaffService)
+    yield takeLatest(CREATE_STAFF_SERVICE, createStaffService)
+    yield takeLatest(DELETE_STAFF_SERVICE, delteStaffService)
 };

@@ -115,6 +115,7 @@ function* createServiceGlobal(action) {
 }
 
 function* getServices() {
+
     try {
         const res = yield call(systemService.getServicesService);
         yield put({
