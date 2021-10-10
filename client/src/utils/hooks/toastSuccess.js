@@ -56,6 +56,10 @@ export const ToastSuccess = (success) => {
             success === 'DELETE_STAFF_SERVICE' ? 'Successfully deleted service' :
             success === 'CREATE_STAFF_SERVICE' ? 'Successfully created service' :
 
+
+            success === 'CREATE_ROLE' ? 'Role Was Created' :
+            success === 'DELETE_ROLE' ? 'Role Was Deleted' :
+
             false
         )
     }

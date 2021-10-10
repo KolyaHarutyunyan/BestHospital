@@ -1,49 +1,39 @@
 import { makeStyles } from "@material-ui/core/styles";
-import {Backgrounds, Colors, Shadow} from "@eachbase/utils";
+import { Backgrounds, Colors } from "@eachbase/utils";
 
 export const managementFragments = makeStyles(() => ({
+
   managementFragmentsStyle: {
     width: "100%",
     display: "flex",
-    marginTop: "24px"
+    marginTop: "24px",
   },
+
   managementFragmentsRole: {
     width: "45%",
     marginRight: "16px",
   },
 
-  paginate:{
-    marginTop:'20px'
-  },
   managementFragmentsPermissions: {
-    width: "55%",
+    width: "55%"
   },
 
   tableStyle: {
-    height: "600px",
+    height: "80vh",
     width: "100%",
-  },
-tableStyleRole: {
-    width: "100%",
-    background: Backgrounds.whiteModal,
+    background: "#FFFFFF 0% 0% no-repeat padding-box",
+    boxShadow: "0px 0px 6px #8A8A8A29",
+    borderRadius: "8px",
   },
 
   tableHeadStyle: {
-    background: Backgrounds.headerLightBlue,
-    borderRadius: "8px",
-    padding: "16px 32px 16px 32px",
-    border:'none',
-    height:'51px',
+    background: "#E6ECF3 0% 0% no-repeat padding-box",
+    borderRadius: "8px 8px 0px 0px",
+    padding: "8px 16px 8px 16px",
 
-  },
-
-  tableHeadRoleStyle: {
-    background: Backgrounds.headerLightBlue,
-    borderRadius: "8px",
-    padding: "8px 32px 8px 32px",
-    border:'none',
-    height:'51px',
-
+    "@media (min-width: 1920px)": {
+      padding: "16px 32px 16px 32px",
+    },
   },
 
   tableBodyStyle: {
@@ -54,12 +44,12 @@ tableStyleRole: {
     padding: "8px 10px 8px 16px",
 
     "@media (min-width: 1920px)": {
-      padding: "16px 26px 16px 32px"
+      padding: "16px 26px 16px 32px",
     },
 
     "& div:first-of-type": {
       display: "flex",
-      alignItems: "center"
+      alignItems: "center",
     },
 
     "& img": {
@@ -67,65 +57,59 @@ tableStyleRole: {
       height: "24px",
       marginRight: "4px",
       "@media (min-width: 1920px)": {
-        marginRight: "8px"
-      }
+        marginRight: "8px",
+      },
     },
     "& p": {
       fontSIze: "14px",
       lineHeight: "22px",
       fontWeight: "600",
-      color: Colors.TextSecondary
+      color: Colors.TextSecondary,
     },
 
     "& span": {
-       marginLeft:'40px',
-       fontSize:'12px',
+      marginLeft:'40px',
+      fontSize:'12px',
       color: Colors.TextPrimary,
-    }
+    },
   },
 
+
   tableBodyBottom: {
-    borderRadius:'8px',
-    marginTop:'4px',
-    background:Backgrounds.whiteModal,
-    boxShadow:Shadow.changeShadow,
+    borderBottom: `0.5px solid ${Colors.TextLight}`,
     cursor:'pointer',
     "& :hover": {
-      background: Backgrounds.grayHover,
+      background: Backgrounds.tableActiveDark,
     },
   },
   tableBodyBottomActive: {
-    borderRadius:'8px',
-    marginTop:'4px',
-    boxShadow:Shadow.changeShadow,
-    border:'1px solid #A3B2BD80',
-    background: Backgrounds.grayHover,
+    borderBottom: `0.5px solid ${Colors.TextLight}`,
+    background: Backgrounds.tableActive,
     cursor:'pointer',
-    "& :hover": {}
   },
 
   rolePermissionsStyle: {
-    // marginTop: "8px",
+    marginTop: "8px",
     display: "flex",
     alignItems: "center",
     "& p": {
       fontSize: "18px",
-      // lineHeight: "24px",
+      lineHeight: "24px",
       fontWeight: "bold",
       color: Colors.TextSecondary,
       textTransform: "uppercase",
       marginLeft: "8px",
       "@media (min-width: 1920px)": {
-        marginLeft: "16px"
-      }
-    }
+        marginLeft: "16px",
+      },
+    },
   },
 
   tablePermissionsBodyStyle: {
     padding: "0 16px 16px 16px",
     "@media (min-width: 1920px)": {
-      padding: "0 32px 32px 32px"
-    }
+      padding: "0 32px 32px 32px",
+    },
   },
 
   roleNameStyle: {
@@ -137,49 +121,43 @@ tableStyleRole: {
       lineHeight: "22px",
       fontWeight: "bold",
       color: Colors.TextSecondary,
-      textTransform: "uppercase"
+      textTransform: "uppercase",
     },
+
     padding: "25px 16px 25px 16px",
     "@media (min-width: 1920px)": {
-      padding: "33px 32px 25px 32px"
-    }
+      padding: "33px 32px 25px 32px",
+    },
   },
-  rolePermissionStyle:{
-    background: Backgrounds.whiteModal,
-    height:'630px',
-    borderRadius:'8px',
-    boxShadow:Shadow.changeShadow,
-    marginTop:'8px',
-  },
+
   tablePermissionsBodyContentStyle: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
     height: "50px",
-    background: Backgrounds.lightBlue,
+    background: "#E6ECF380 0% 0% no-repeat padding-box",
     padding: "8px 16px 8px 16px",
     marginBottom: "8px",
-    border:'none',
 
     "@media (min-width: 1920px)": {
-      padding: "16px 32px 16px 32px"
+      padding: "16px 32px 16px 32px",
     },
 
     "& div:first-of-type": {
       display: "flex",
-      alignItems: "center"
+      alignItems: "center",
     },
 
     "& img": {
       width: "18px",
-      height: "18px"
+      height: "18px",
     },
     "& p": {
       fontSize: "14px",
       lineHeight: "19px",
       color: Colors.TextPrimary,
-      marginLeft: "8px"
-    }
+      marginLeft: "8px",
+    },
   },
 
   addRoleModalWrapper: {
@@ -191,9 +169,7 @@ tableStyleRole: {
 
     "@media (min-width: 1920px)": {
       width: "580px",
-    }
-
-
+    },
   },
 
   addRoleModalWrapperClose:{
@@ -206,26 +182,44 @@ tableStyleRole: {
 
     "@media (min-width: 1920px)": {
       padding:'8px 40px 0 40px',
-    }
+    },
   },
 
   input:{
-    marginBottom:'6px',
+    '& .MuiOutlinedInput-root':{
+      height:'56px',
+    },
   },
 
   inputDescription:{
     height:'70px',
     marginTop:'16px',
+    width:'100%',
+    '& .MuiOutlinedInput-inputMultiline':{
+      maxHeight:'60px',
+    },
+    '& .MuiFormLabel-root':{
+      color:'rgba(0, 0, 0, 0.54)',
+    },
     '& .MuiOutlinedInput-notchedOutline':{
-      borderColor:Colors.BackgroundBlue
+      borderColor:Colors.ThemeBorder,
+    },
+    '& .MuiInputLabel-outlined':{
+      marginTop:'-3px',
+    },
+    '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+      transform: 'translate(14px, -2px) scale(0.75)',
+    },
+    '& .MuiOutlinedInput-root':{
+      height:'96px',
+      minHeight:'96px',
     },
   },
 
-  inputShrink:{
-      '& .MuiOutlinedInput-root':{
-        // height:'56px'
-      },
-
+  maxCharacter:{
+    fontSize:'12px',
+    color:Colors.TextPrimary,
+    margin:'26px 16px 0 16px',
   },
 
   deleteModal:{
@@ -237,7 +231,18 @@ tableStyleRole: {
     display:'flex',
     flexDirection:'column',
     textAlign:'center',
+  },
 
-  }
+  scroll:{
+    height:"calc(80vh - 90px)",
+    overflow:'auto',
+  },
+
+  noItemPaddings:{
+    padding: "25px 16px 25px 16px",
+    "@media (min-width: 1920px)": {
+      padding: "33px 32px 25px 32px",
+    },
+  },
 
 }));
