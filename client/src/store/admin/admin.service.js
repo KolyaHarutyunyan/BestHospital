@@ -36,4 +36,11 @@ export const authService = {
     getPayCodeService: (id) => axios.get(`/paycode/employment/${id}`),
 
     createPayCodeService: (body) => axios.post(`/paycode`, body),
+
+    getStaffServService: (id) => axios.get(`/staff/${id}/service`),
+
+    createStaffServService: (id,serviceId) => axios.post(`/staff/${id}/service/${serviceId}`),
+
+
+    deleteStaffServService: (id,serviceId) => axios.delete(`/staff/${id}/service/${serviceId}`),
 };

@@ -8,7 +8,7 @@ import {AuthHeader} from "@eachbase/components/headers/auth/authHeader";
 import {Colors, Images} from "@eachbase/utils";
 import {adminActions, clientActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 import {serviceSingleStyles} from "@eachbase/fragments/client/clientSingle/core";
-import {getPayCode} from "../../../../store/admin/admin.action";
+import {getAdmins, getPayCode} from "../../../../store/admin/admin.action";
 import moment from "moment";
 
 
@@ -41,7 +41,6 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
 
     useEffect(()=>{
          dispatch(adminActions.getPayCode(info[authIndex]?.id))
-        console.log('get')
     },[authIndex])
 
     useEffect(() => {

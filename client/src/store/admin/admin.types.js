@@ -47,3 +47,15 @@ export const GET_PAY_CODE_SUCCESS = 'GET_PAY_CODE_SUCCESS'
 
 /**create Pay Code */
 export const CREATE_PAY_CODE = 'CREATE_PAY_CODE'
+
+
+/** create staff service */
+export const CREATE_STAFF_SERVICE = 'CREATE_STAFF_SERVICE'
+
+/** get staff service */
+export const GET_STAFF_SERVICE = 'GET_STAFF_SERVICE'
+export const GET_STAFF_SERVICE_SUCCESS = 'GET_STAFF_SERVICE_SUCCESS'
+
+/** delete staff service */
+export const DELETE_STAFF_SERVICE = 'DELETE_STAFF_SERVICE'
+

@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {AddButton, Card, NoItemText, SlicedText} from "@eachbase/components";
-
+import {AddButton, Card, DeleteElement, NoItemText, SimpleModal, SlicedText} from "@eachbase/components";
 import {Colors, ErrorText, Images,} from "@eachbase/utils";
 import {SelectInputPlaceholder} from "@eachbase/components";
-import {httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
+import {adminActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
 import {systemItemStyles} from "../../../system/core";
 import {serviceSingleStyles} from "./styles";
+import {useParams} from "react-router-dom";
+import {AddAuthorization} from "../../../client";
+import {deleteStaffService} from "../../../../store/admin/admin.action";
 
 const credentialBtn = {
     maxWidth: '174px',
@@ -14,20 +16,44 @@ const credentialBtn = {
     flex: '0 0 174px',
     padding: 0
 }
-
-
-export const StaffService = ({removeItem, openModal, staffGeneral}) => {
-  let  globalCredentials=[{name: 'fgdfg'}]
+export const StaffService = ({removeItem, openModal, staffGeneral, info}) => {
     const dispatch = useDispatch()
     const classes = systemItemStyles()
     const classes2 = serviceSingleStyles()
     const [inputs, setInputs] = useState({});
     const [error, setError] = useState('');
+    const [index, setIndex] = useState(0);
+    const [toggleModal, setToggleModal] = useState(false);
+    const services = useSelector(state => state.system.services)
+ let params = useParams()
 
-    const editCredential = (modalType, modalId) => {
-        openModal(modalType,modalId)
-    }
+    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnError: state.httpOnError,
+        httpOnLoad: state.httpOnLoad,
+    }));
 
+    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_STAFF_SERVICE'
+    const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_STAFF_SERVICE'
+
+
+
+    useEffect(() => {
+        if (success) {
+            setToggleModal(!toggleModal)
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('DELETE_STAFF_SERVICE'))
+            dispatch(httpRequestsOnErrorsActions.removeError('GET_STAFF_SERVICE'))
+        }
+        if (successCreate) {
+            setToggleModal(!toggleModal)
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_STAFF_SERVICE'))
+            dispatch(httpRequestsOnErrorsActions.removeError('GET_STAFF_SERVICE'))
+        }
+    }, [success, successCreate])
+
+    useEffect(() => {
+        dispatch(systemActions.getServices())
+    }, [])
     const handleChange = e => {
         setInputs(
             prevState => (
@@ -36,44 +62,26 @@ export const StaffService = ({removeItem, openModal, staffGeneral}) => {
         error === e.target.name && setError('')
     }
 
-    const checkType = (type) => {
-        if (type === 'Degree') {
-            return 0
-        } else if (type === 'Clearance') {
-            return 1
-        } else if (type === 'licence') {
-            return 2
-        }
-    }
+    console.log(info,'infoinfoinfoinfoinfo')
 
-    const convertType = (index) =>{
-        if (index === 0) {
-            return 'Degree'
-        } else if (index === 1) {
-            return 'Clearance'
-        } else if (index === 2) {
-            return 'licence'
-        }
+
+
+    let deleteService = ()=>{
+        dispatch(adminActions.deleteStaffService(params.id, info[index]._id));
     }
 
     const handleSubmit = () => {
-        let data = {
-            name: inputs.name,
-            type: checkType(inputs.type)
-        }
-        if (inputs.name ) {
-            // dispatch(systemActions.createCredentialGlobal(data));
+
+        if (inputs.serviceType) {
+            let serviceID = services && services.length >0 && services.find(item => item.name == inputs.serviceType).id
+             dispatch(adminActions.createStaffService(params.id, serviceID));
         } else {
             setError(
-                !inputs.name ? 'name' :
-                    !inputs.type ? 'type' :
-                        'Input is not filled'
+                !inputs.serviceType ? 'serviceType' :
+                    'Input is not filled'
             )
         }
     }
-
-    const isDisabled = inputs.name && inputs.type
-
     const generalInfo = [
         {title: 'First Name', value: staffGeneral?.firstName},
         {title: 'Middle Name', value: staffGeneral?.middleName},
@@ -83,10 +91,20 @@ export const StaffService = ({removeItem, openModal, staffGeneral}) => {
         {title: 'Primary Phone Number', value: staffGeneral?.phone},
         {title: 'Secondary Phone Number', value: staffGeneral?.secondaryPhone},
     ]
-
-
     return (
         <div className={classes2.staffGeneralWrapper}>
+            <SimpleModal
+                handleOpenClose={() => setToggleModal(!toggleModal)}
+                openDefault={toggleModal}
+                content={
+                     <DeleteElement
+                        loader={httpOnLoad.length > 0}
+                        info={`${info &&  info[index]?.name}`}
+                        text={`delete Service`}
+                        handleClose={() => setToggleModal(!toggleModal)}
+                        handleDel={deleteService}
+                    />}
+            />
             <Card
                 width='49%'
                 cardInfo={generalInfo}
@@ -95,52 +113,58 @@ export const StaffService = ({removeItem, openModal, staffGeneral}) => {
                 color={Colors.BackgroundBlue}
                 icon={Images.generalInfoIcon}
             />
-            <div className={`${classes.flexContainer} ${classes.headerSize}`} style={{marginLeft: 24, borderRadius : '8px' , boxShadow: '0px 0px 6px #8A8A8A3D', padding: 24, width: '100%', flexDirection: 'column'}}>
-                <p className={classes.title} style={{marginBottom : 24}}>Services</p>
-             <div style={{display: 'flex', width: "100%"}}>
-                 <SelectInputPlaceholder
-                     placeholder='Service Type'
-                     style={classes.credentialInputStyle2}
-                     name={"type"}
-                     handleSelect={handleChange}
-                     value={inputs.type}
-                     list={[]}
-                     typeError={error === 'issuingState' ? ErrorText.field : ''}
-                 />
-                 <AddButton
-                     // loader={loader}
-                     type={'CREATE_CREDENTIAL_GLOBAL'}
-                     // disabled={!isDisabled}
-                     styles={credentialBtn}
-                     handleClick={handleSubmit}
-                     text='Add Service Type'
-                 />
-             </div>
+            <div className={`${classes.flexContainer} ${classes.headerSize}`} style={{
+                marginLeft: 24,
+                borderRadius: '8px',
+                boxShadow: '0px 0px 6px #8A8A8A3D',
+                padding: 24,
+                width: '100%',
+                flexDirection: 'column'
+            }}>
+                <p className={classes.title} style={{marginBottom: 24}}>Services</p>
+                <div style={{display: 'flex', width: "100%"}}>
+                    <SelectInputPlaceholder
+                        placeholder='Service Type'
+                        style={classes.credentialInputStyle2}
+                        name={"serviceType"}
+                        handleSelect={handleChange}
+                        value={inputs.serviceType}
+                        list={services}
+                        typeError={error === 'serviceType' ? ErrorText.field : ''}
+                    />
+                    <AddButton
+                        loader={httpOnLoad.length > 0}
+                        styles={credentialBtn}
+                        handleClick={handleSubmit}
+                        text='Add Service Type'
+                    />
+                </div>
                 <div className={classes.credentialTable} style={{width: '100%'}}>
                     {
-                        globalCredentials && globalCredentials.length ? globalCredentials.map((credentialItem, index) => {
+                        info && info.length ? info.map((item, index) => {
                             return (
                                 <div className={classes.item} key={index} style={{flex: '0 0 100%'}}>
-                                    <p style={{display: 'flex',alignItems: 'center'}}>
+                                    <p style={{display: 'flex', alignItems: 'center'}}>
                                     <span>
-                                        <SlicedText type={'responsive'} size={25} data={credentialItem.name}/>
+                                        <SlicedText type={'responsive'} size={25} data={item.name}/>
                                     </span>
-                                        {` - ${convertType(credentialItem.type)}`}
+                                        {/*{` - ${convertType(credentialItem.type)}`}*/}
                                     </p>
                                     <div className={classes.icons}>
                                         <img src={Images.remove} alt="delete"
-                                             // onClick={() => removeItem({id: credentialItem._id,name: credentialItem.name,type: 'editCredential'} )}
+                                             onClick={() => {
+                                                 setToggleModal(!toggleModal)
+                                                 setIndex(index)
+                                             }}
                                         />
                                     </div>
                                 </div>
                             )
-                        }) : <NoItemText text='No Items Yet' />
+                        }) : <NoItemText text='No Items Yet'/>
                     }
 
                 </div>
             </div>
-
-
         </div>
     )
 }
