@@ -12,7 +12,7 @@ import {getAdmins, getPayCode} from "../../../../store/admin/admin.action";
 import moment from "moment";
 
 
-export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
+export const StaffEmployment = ({setAuthActive, setAuthItemIndex, info}) => {
     const classes = serviceSingleStyles()
     const dispatch = useDispatch()
     const [delEdit, setDelEdit] = useState(null)
@@ -32,16 +32,16 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
         httpOnLoad: state.httpOnLoad,
     }));
 
-     console.log(payCodes,'payCodes')
+    console.log(payCodes, 'payCodes')
 
 
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION'
     const successDelServ = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION_SERV'
 
 
-    useEffect(()=>{
-         dispatch(adminActions.getPayCode(info[authIndex]?.id))
-    },[authIndex])
+    useEffect(() => {
+        dispatch(adminActions.getPayCode(info[authIndex]?.id))
+    }, [authIndex])
 
     useEffect(() => {
         if (success) {
@@ -112,14 +112,14 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
                 <TableCell>  {item.payCodeTypeId.code} </TableCell>
                 <TableCell> {item.payCodeTypeId.type} </TableCell>
                 <TableCell>{item.rate} </TableCell>
-                <TableCell>{ moment(item.startDate).format('DD MM YYYY') } </TableCell>
-                <TableCell>{ moment(item.endDate).format('DD MM YYYY') } </TableCell>
-                <TableCell>{ Number(item.active) } </TableCell>
+                <TableCell>{moment(item.startDate).format('DD MM YYYY')} </TableCell>
+                <TableCell>{moment(item.endDate).format('DD MM YYYY')} </TableCell>
+                <TableCell>{Number(item.active)} </TableCell>
             </TableBodyComponent>
         )
     }
 
-    console.log(info[authIndex]?.id, authIndex,'idddd')
+    console.log(info[authIndex]?.id, authIndex, 'idddd')
 
     return (
         <div className={classes.staffGeneralWrapper}>
@@ -143,21 +143,18 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
                 handleOpenClose={() => setToggleModal2(!toggleModal2)}
                 openDefault={toggleModal2}
                 content={
-                    <PaycodeModal employmentId={info[authIndex]?.id}  authId={info[authIndex]?.id} handleClose={() => setToggleModal2(!toggleModal2)}   />
+                    <PaycodeModal employmentId={info[authIndex]?.id} authId={info[authIndex]?.id}
+                                  handleClose={() => setToggleModal2(!toggleModal2)}/>
                 }
             />
             <SimpleModal
                 handleOpenClose={() => setToggleModal3(!toggleModal3)}
                 openDefault={toggleModal3}
                 content={
-                    // delEdit2 ?
-                    <PaycodeModal  info={payCodes  && payCodes[serviceIndex]} employmentId={info[authIndex]?.id} handleClose={() => setToggleModal3(!toggleModal3)}  />
-                    // : <DeleteElement
-                    //     loader={httpOnLoad.length > 0}
-                    //     info={`Delete ${services && services[serviceIndex]?.serviceId?.name}`}
-                    //     handleClose={() => setToggleModal3(!toggleModal3)}
-                    //     handleDel={deleteAuthorizationServ}
-                    // />
+                    <PaycodeModal
+                        info={payCodes && payCodes[serviceIndex]}
+                        employmentId={info[authIndex]?.id}
+                        handleClose={() => setToggleModal3(!toggleModal3)}/>
                 }
             />
             <Card
@@ -175,13 +172,15 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
             />
             <div className={classes.clearBoth}/>
             <div className={classes.notesWrap}>
-                <AuthHeader empoloyment={true} setDelEdit={setDelEdit} info={info[authIndex]}  setToggleModal={setToggleModal} toggleModal={toggleModal}/>
+                <AuthHeader empoloyment={true} setDelEdit={setDelEdit} info={info[authIndex]}
+                            setToggleModal={setToggleModal} toggleModal={toggleModal}/>
                 <div className={classes.authorizationServices}>
                     <p className={classes.authorizationServicesTitle}>Paycodes</p>
                     <div className={classes.authorizationServicesRight}>
                         <img src={Images.addHours} alt="" className={classes.iconStyle}
                              onClick={() => setToggleModal2(!toggleModal2)}/>
-                        <p onClick={() => setToggleModal2(!toggleModal2)} className={classes.authorizationServicesText}>Add Paycode</p>
+                        <p onClick={() => setToggleModal2(!toggleModal2)}
+                           className={classes.authorizationServicesText}>Add Paycode</p>
                     </div>
                 </div>
                 <Notes

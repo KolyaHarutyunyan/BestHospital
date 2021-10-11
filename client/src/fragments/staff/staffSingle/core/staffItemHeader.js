@@ -1,17 +1,19 @@
 import React from "react";
 import {serviceSingleStyles} from "./styles";
-import {Images} from "@eachbase/utils";
+import {Colors, Images} from "@eachbase/utils";
 import {AddButton, AddModalButton, SimpleModal, AddNotes} from "@eachbase/components";
 import {CreateStaff, CredentialModal} from "@eachbase/fragments";
 import {useSelector} from "react-redux";
 import {EmploymentModal} from "./modals";
+import {Switch} from "@material-ui/core";
 
 const editButtonStyle = {
     height: 36,
     paddingInline: 24
 }
 
-export const StaffItemHeader = ({   title,
+export const StaffItemHeader = ({
+                                    title,
                                     noteModalTypeInfo,
                                     openModal,
                                     handleOpenClose,
@@ -30,6 +32,12 @@ export const StaffItemHeader = ({   title,
             adminsList: state.admins.adminsList,
         })
     )
+
+
+    let changeSwitch = (e)=>{
+        console.log(e.target.checked)
+    }
+
 
     return (
         <div>
@@ -50,14 +58,20 @@ export const StaffItemHeader = ({   title,
                         activeTab === 0 ?
                             <AddModalButton btnStyles={editButtonStyle} handleClick={handleOpenClose}
                                             text='edit'/>
-                                            : activeTab === 2 ? <AddButton text='Add Timesheet'
-                                                                           handleClick={() => handleOpenClose}/>
-                                            : activeTab === 3 ?
+                            : activeTab === 2 ? <AddButton text='Add Timesheet'
+                                                           handleClick={() => handleOpenClose}/>
+                            : activeTab === 3 ?
                                 <AddButton text='Add Credential'
-                            handleClick={() => openCloseCredModal('addCredential')}/>
-                            : activeTab === 1 ?  <AddButton text='Add Employemnt' handleClick={handleOpenClose}/>
-                            : activeTab === 7 ?
-                                    <AddButton text='Add Note' handleClick={handleOpenClose}/> : null
+                                           handleClick={() => openCloseCredModal('addCredential')}/>
+                                : activeTab === 1 ? <div style={{display: 'flex', alignItems: "center"}}>
+                                        <p style={{color:Colors.ThemeBlue, fontWeight: 'bold'}}>Clinician</p>
+                                       <div style={{margin: '0 24px 0 8px'}}>
+                                           <Switch onChange={changeSwitch} color={"primary"} />
+                                       </div>
+                                        <AddButton text='Add Employemnt' handleClick={handleOpenClose}/>
+                                    </div>
+                                    : activeTab === 7 ?
+                                        <AddButton text='Add Note' handleClick={handleOpenClose}/> : null
                     }
                 </li>
             </ul>
@@ -67,15 +81,15 @@ export const StaffItemHeader = ({   title,
                 content={activeTab === 0 ?
                     <CreateStaff adminsList={adminsList && adminsList.staff} staffGeneral={adminInfoById}
                                  resetData={false} handleClose={handleOpenClose}/>
-                                 : activeTab === 2 ? <p>Timesheet</p>
-                                 : activeTab === 3 ?
-                        <CredentialModal globalCredentialInformation={globalCredentialInformation}
-                                         globalCredentials={globalCredentials} credModalType={credModalType}
-                                         handleClose={() => openCloseCredModal()}/>
-                        : activeTab === 1 ?     <EmploymentModal   handleClose={handleOpenClose} />
-                        : activeTab === 7 ?
-                            <AddNotes model='Staff' noteModalTypeInfo={noteModalTypeInfo}
-                                      handleClose={handleOpenClose}/> : null}
+                    : activeTab === 2 ? <p>Timesheet</p>
+                        : activeTab === 3 ?
+                            <CredentialModal globalCredentialInformation={globalCredentialInformation}
+                                             globalCredentials={globalCredentials} credModalType={credModalType}
+                                             handleClose={() => openCloseCredModal()}/>
+                            : activeTab === 1 ? <EmploymentModal handleClose={handleOpenClose}/>
+                                : activeTab === 7 ?
+                                    <AddNotes model='Staff' noteModalTypeInfo={noteModalTypeInfo}
+                                              handleClose={handleOpenClose}/> : null}
             />
         </div>
     )

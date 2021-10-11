@@ -59,3 +59,6 @@ export const GET_STAFF_SERVICE_SUCCESS = 'GET_STAFF_SERVICE_SUCCESS'
 /** delete staff service */
 export const DELETE_STAFF_SERVICE = 'DELETE_STAFF_SERVICE'
 
+/** is Clinician */
+export const IS_CLINICIAN = 'IS_CLINICIAN'
+

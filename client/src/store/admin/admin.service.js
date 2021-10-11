@@ -43,4 +43,7 @@ export const authService = {
 
 
     deleteStaffServService: (id,serviceId) => axios.delete(`/staff/${id}/service/${serviceId}`),
+
+
+    // isClinicianService: (id) => axios(``),
 };

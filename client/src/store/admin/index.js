@@ -9,7 +9,14 @@ import {
     editCredentialById,
     deleteCredentialById,
     getEmployment,
-    createEmployment, getPayCode, editEmployment, createPayCode, createStaffService, getStaffService, deleteStaffService
+    createEmployment,
+    getPayCode,
+    editEmployment,
+    createPayCode,
+    createStaffService,
+    getStaffService,
+    deleteStaffService,
+    isClinician
 } from "./admin.action";
 
 export {adminReducer} from './admin.reducer';
@@ -32,7 +39,8 @@ export const adminActions = {
     createPayCode,
     createStaffService,
     getStaffService,
-    deleteStaffService
+    deleteStaffService,
+    isClinician
 }
 
 

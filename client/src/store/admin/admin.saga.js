@@ -24,13 +24,14 @@ import {
     CREATE_STAFF_SERVICE,
     GET_STAFF_SERVICE_SUCCESS,
     GET_STAFF_SERVICE,
-    DELETE_STAFF_SERVICE,
-    // CREATE_ADMIN_SUCCESS,
+    DELETE_STAFF_SERVICE, IS_CLINICIAN,
+
 
 } from "./admin.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
 import {httpRequestsOnSuccessActions} from "../http_requests_on_success";
+
 
 function* createAdmin(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
@@ -320,6 +321,22 @@ function* delteStaffService(action) {
 }
 
 
+function* isClinician(action) {
+
+    try {
+        // const res = yield call(authService.isClinicianService, action.payload.id,)
+         console.log('deeeel service')
+        //
+        // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        // yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+    } catch (err) {
+        // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        // yield put(httpRequestsOnErrorsActions.appendError(action.type));
+        // console.log(err, ' errr del paycode')
+
+    }
+}
+
 export const watchAdmin = function* watchAdminSaga() {
     yield takeLatest(CREATE_ADMIN, createAdmin);
     yield takeLatest(GET_ADMINS, getAdmins);
@@ -337,4 +354,5 @@ export const watchAdmin = function* watchAdminSaga() {
     yield takeLatest(GET_STAFF_SERVICE, getStaffService)
     yield takeLatest(CREATE_STAFF_SERVICE, createStaffService)
     yield takeLatest(DELETE_STAFF_SERVICE, delteStaffService)
+    yield takeLatest(IS_CLINICIAN, isClinician)
 };
