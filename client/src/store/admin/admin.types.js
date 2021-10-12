@@ -59,3 +59,9 @@ export const GET_STAFF_SERVICE_SUCCESS = 'GET_STAFF_SERVICE_SUCCESS'
 /** delete staff service */
 export const DELETE_STAFF_SERVICE = 'DELETE_STAFF_SERVICE'
 
+/** get timesheet  */
+export const GET_TIMESHEET = 'GET_TIMESHEET'
+export const GET_TIMESHEET_SUCCESS = 'GET_TIMESHEET_SUCCESS'
+
+/** create timesheet */
+export const CREATE_TIMESHEET = 'CREATE_TIMESHEET'

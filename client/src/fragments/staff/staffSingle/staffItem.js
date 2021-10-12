@@ -68,8 +68,6 @@ export const StaffItem = () => {
     const employments = useSelector(state => state.admins.employments)
     const staffServices = useSelector(state => state.admins.staffServices.service)
 
-    console.log(staffServices,'staffServices')
-
     const handleOpenClose = () => {
         setOpen(!open)
     }
@@ -271,7 +269,9 @@ export const StaffItem = () => {
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
                 <div className={classes.staffSingleItem}>
-                    <StaffItemHeader title={`${staffGeneral?.firstName} ${staffGeneral?.lastName}`} noteModalTypeInfo={noteModalTypeInfo} handleOpenClose={handleOpenCloseNote}
+                    <StaffItemHeader title={`${staffGeneral?.firstName} ${staffGeneral?.lastName}`}
+                                     noteModalTypeInfo={noteModalTypeInfo}
+                                     handleOpenClose={handleOpenCloseNote}
                                      openModal={openModal} globalCredentialInformation={globalCredentialInformation}
                                      globalCredentials={globalCredentials} credModalType={credModalType}
                                      openCloseCredModal={openCloseCredModal} openCredModal={openCredModal}

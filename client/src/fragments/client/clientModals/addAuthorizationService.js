@@ -31,8 +31,6 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
     }, []);
 
 
-
-
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnError: state.httpOnError,

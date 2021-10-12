@@ -1,24 +1,18 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
+import moment from "moment";
 import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
-import {Colors, ErrorText} from "@eachbase/utils";
+import {ErrorText} from "@eachbase/utils";
 import {
     adminActions,
-    clientActions,
-    // fundingSourceActions,
     httpRequestsOnErrorsActions,
     httpRequestsOnSuccessActions, systemActions
 } from "@eachbase/store";
-import {Checkbox} from "@material-ui/core";
 import {createClientStyle} from "@eachbase/fragments/client";
-import {getDepartments} from "../../../../../store/system/system.action";
-import {editEmployment} from "../../../../../store/admin/admin.action";
-import moment from "moment";
 
 
 export const EmploymentModal = ({handleClose, info}) => {
-
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {...info,
         supervisor : info.supervisor.firstName,
@@ -26,7 +20,6 @@ export const EmploymentModal = ({handleClose, info}) => {
         startDate : moment(info?.date).format('YYYY-MM-DD'),
         endDate : moment(info?.termination?.date).format('YYYY-MM-DD'),
         employmentType : info?.schedule
-
     } : {});
     const params = useParams()
     const dispatch = useDispatch()
@@ -34,12 +27,9 @@ export const EmploymentModal = ({handleClose, info}) => {
     const staffList = useSelector(state => state.admins.adminsList.staff)?.filter(item=>item.id !== params.id && item)
     const classes = createClientStyle()
 
-    console.log(staffList,'listt')
-
     useEffect(() => {
         dispatch(systemActions.getDepartments())
     }, []);
-
 
 
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
@@ -65,18 +55,12 @@ export const EmploymentModal = ({handleClose, info}) => {
     }, [success, successCreate])
 
 
-
-
     const handleChange = e => setInputs(
         prevState => ({...prevState, [e.target.name]: e.target.value === 0? '0' : e.target.value}),
         error === e.target.name && setError(''),
     );
 
-
-
-
     const handleCreate = () => {
-
         if (inputs.title && inputs.departmentId && inputs.supervisor  && inputs.endDate && inputs.startDate) {
             let depId;
             let supervisorID;
@@ -103,9 +87,7 @@ export const EmploymentModal = ({handleClose, info}) => {
                     "date": inputs.endDate
                 }
             }
-
         if (info) {
-            console.log(data,'dataaaaaa')
              dispatch(adminActions.editEmployment(data, info.id, params.id))
         } else {
             dispatch(adminActions.createEmployment(data, params.id))
@@ -122,8 +104,6 @@ export const EmploymentModal = ({handleClose, info}) => {
             )
         }
         }
-
-
 
     return (
         <div className={classes.createFoundingSource}>

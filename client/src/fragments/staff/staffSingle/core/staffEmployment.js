@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
+import moment from "moment";
 import {TableCell} from "@material-ui/core";
 import {Card, DeleteElement, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
 import {EmploymentModal, PaycodeModal} from "./modals";
@@ -8,8 +9,6 @@ import {AuthHeader} from "@eachbase/components/headers/auth/authHeader";
 import {Colors, Images} from "@eachbase/utils";
 import {adminActions, clientActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 import {serviceSingleStyles} from "@eachbase/fragments/client/clientSingle/core";
-import {getAdmins, getPayCode} from "../../../../store/admin/admin.action";
-import moment from "moment";
 
 
 export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
@@ -31,9 +30,6 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
         httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,
     }));
-
-     console.log(payCodes,'payCodes')
-
 
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION'
     const successDelServ = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION_SERV'
@@ -98,10 +94,6 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
         setAuthIndex(0)
     }
 
-    // let deleteAuthorizationServ = () => {
-    //     dispatch(clientActions.deleteClientsAuthorizationServ(services[serviceIndex].id, info[authIndex].id ))
-    // }
-
     let payCodeItem = (item, index) => {
         return (
             <TableBodyComponent key={index} handleClick={() => {
@@ -119,8 +111,6 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
         )
     }
 
-    console.log(info[authIndex]?.id, authIndex,'idddd')
-
     return (
         <div className={classes.staffGeneralWrapper}>
             <SimpleModal
@@ -133,7 +123,6 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
                         handleClose={() => setToggleModal(!toggleModal)}/>
                     : <DeleteElement
                         loader={httpOnLoad.length > 0}
-                        // info={`Delete ${info[authIndex].authId}`}
                         handleClose={() => setToggleModal(!toggleModal)}
                         handleDel={deleteAuthorization}
                     />
@@ -143,22 +132,16 @@ export const StaffEmployment = ({ setAuthActive, setAuthItemIndex, info }) => {
                 handleOpenClose={() => setToggleModal2(!toggleModal2)}
                 openDefault={toggleModal2}
                 content={
-                    <PaycodeModal employmentId={info[authIndex]?.id}  authId={info[authIndex]?.id} handleClose={() => setToggleModal2(!toggleModal2)}   />
+                    <PaycodeModal employmentId={info[authIndex]?.id}  authId={info[authIndex]?.id}
+                                  handleClose={() => setToggleModal2(!toggleModal2)}   />
                 }
             />
             <SimpleModal
                 handleOpenClose={() => setToggleModal3(!toggleModal3)}
                 openDefault={toggleModal3}
                 content={
-                    // delEdit2 ?
-                    <PaycodeModal  info={payCodes  && payCodes[serviceIndex]} employmentId={info[authIndex]?.id} handleClose={() => setToggleModal3(!toggleModal3)}  />
-                    // : <DeleteElement
-                    //     loader={httpOnLoad.length > 0}
-                    //     info={`Delete ${services && services[serviceIndex]?.serviceId?.name}`}
-                    //     handleClose={() => setToggleModal3(!toggleModal3)}
-                    //     handleDel={deleteAuthorizationServ}
-                    // />
-                }
+                    <PaycodeModal  info={payCodes  && payCodes[serviceIndex]} employmentId={info[authIndex]?.id}
+                                   handleClose={() => setToggleModal3(!toggleModal3)}  />}
             />
             <Card
                 employment={true}
