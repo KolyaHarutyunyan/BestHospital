@@ -101,22 +101,17 @@ export class EmploymentService {
       employment.departmentId = dto.departmentId;
     }
     if (dto.schedule) employment.schedule = dto.schedule;
-
     if (!dto.active && !dto.endDate) {
       throw new HttpException(
         'endDate required field',
         HttpStatus.BAD_REQUEST,
       );
     }
-    console.log(dto.active, dto.endDate);
     if (dto.active && !dto.endDate) {
-      console.log('aaaaa');
       employment.endDate = "Precent"
     }
     if (dto.endDate && !dto.active) employment.endDate = dto.endDate;
-
     if (dto.startDate) employment.startDate = dto.startDate;
-
 
     employment = await employment.save();
     await employment.populate('departmentId', 'name').populate("supervisor", 'firstName').execPopulate();
