@@ -39,4 +39,6 @@ export class StaffDTO {
   address: AddressDTO;
   @ApiProperty({type: LicenseDTO})
   license: LicenseDTO;
+  @ApiProperty({type: Boolean})
+  clinical: boolean;
 }

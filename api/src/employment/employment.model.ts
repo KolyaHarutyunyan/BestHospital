@@ -9,7 +9,9 @@ const EmploymentSchema = new Schema({
     title: { type: String },
     schedule: { type: Number, enum: ScheduleStatus },
     termination: TerminationSchema,
-    date: { type: Date, default: Date.now }
+    active: { type: Boolean },
+    startDate: { type: Date, default: Date.now },
+    endDate: { type: Schema.Types.Mixed, default: "Precent" }
 });
 
 export const EmploymentModel = model<IEmployment>('Employment', EmploymentSchema);

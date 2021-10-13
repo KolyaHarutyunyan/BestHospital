@@ -23,7 +23,7 @@ export class UpdatePayCodeDTO {
     @IsOptional()
     startDate: Date;
     @ApiProperty()
-    @IsDateString()
+    // @IsDateString()
     @IsOptional()
     endDate?: Date;
 }

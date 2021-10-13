@@ -91,7 +91,7 @@ export class StaffService {
     try {
       console.log(_id);
       console.log(serviceId);
-      let staff = await this.model.updateOne({ _id }, { $pull: { service: serviceId  } });
+      let staff = await this.model.updateOne({ _id }, { $pull: { service: serviceId } });
       console.log(staff);
       if (staff.nModified) {
         return serviceId;
@@ -218,6 +218,16 @@ export class StaffService {
     const staff = await this.model.findOneAndUpdate(
       { _id: id },
       { $set: { status: status, termination: null } },
+      { new: true },
+    );
+    this.checkStaff(staff);
+    return this.sanitizer.sanitize(staff);
+  };
+  /** Set isClinical of a staff Active */
+  isClinical = async (id: string, status: boolean): Promise<StaffDTO> => {
+    const staff = await this.model.findOneAndUpdate(
+      { _id: id },
+      { $set: { clinical: status } },
       { new: true },
     );
     this.checkStaff(staff);
