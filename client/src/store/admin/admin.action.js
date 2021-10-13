@@ -12,6 +12,7 @@ import {
     GET_PAY_CODE,
     CREATE_PAY_CODE,
     EDIT_EMPLOYMENT, CREATE_STAFF_SERVICE, GET_STAFF_SERVICE, DELETE_STAFF_SERVICE, GET_TIMESHEET, CREATE_TIMESHEET
+
 } from "./admin.types";
 
 export const createAdmin = (body) => {
@@ -127,6 +128,12 @@ export const deleteStaffService = (id,serviceId) => {
         payload: {id, serviceId}
     }
 }
+
+
+
+export const isClinician = (id) => {
+    return {
+        type: IS_CLINICIAN,
 
 export const getTimesheet = (id) => {
     return {

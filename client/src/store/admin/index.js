@@ -16,6 +16,7 @@ import {
     createStaffService,
     getStaffService,
     deleteStaffService,
+    isClinician,
     getTimesheet, createTimesheet
 } from "./admin.action";
 
@@ -40,6 +41,7 @@ export const adminActions = {
     createStaffService,
     getStaffService,
     deleteStaffService,
+    isClinician,
     getTimesheet,
     createTimesheet
 }

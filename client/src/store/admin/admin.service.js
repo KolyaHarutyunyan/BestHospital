@@ -39,7 +39,12 @@ export const authService = {
 
     deleteStaffServService: (id,serviceId) => axios.delete(`/staff/${id}/service/${serviceId}`),
 
+
+
+    // isClinicianService: (id) => axios(``),
+
     getTimesheetService: (id) => axios.get(`/timesheet/staff/${id}`),
 
     createTimesheetService: (id,serviceId) => axios.post(`/timesheet`),
+
 };

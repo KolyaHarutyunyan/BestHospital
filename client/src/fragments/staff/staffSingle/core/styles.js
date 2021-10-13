@@ -40,7 +40,8 @@ export const serviceSingleStyles = makeStyles(() => ({
             backgroundColor: 'transparent',
             borderRadius: '50%',
             border: '1px solid white'
-        }
+        },
+
     },
 
     roleHeader: {
