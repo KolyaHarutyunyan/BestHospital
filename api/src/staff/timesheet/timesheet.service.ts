@@ -8,7 +8,6 @@ import { ITimeSheet } from './interface';
 import { TimeSheetModel } from './timesheet.model';
 import { TimeSheetSanitizer } from './interceptor';
 import { OvertimeService } from '../../overtime/overtime.service';
-import moment from 'moment';
 
 var bigAmount = 0;
 var dailyAmount = 0;
@@ -36,7 +35,7 @@ export class TimesheetService {
       const payCode: any = await this.payCodeService.findOne(dto.payCode);
       const overtime = await this.overtimeService.findAll();
       const total = await this.getTotalAmount(payCode, overtime, dto, bigAmount);
-
+     
       let timesheet = new this.model({
         staffId: staff._id,
         payCode: payCode.id,
@@ -46,8 +45,6 @@ export class TimesheetService {
         endDate: dto.endDate ? dto.endDate : null,
         totalAmount: bigAmount
       });
-      // console.log(timesheet);
-      // timesheet = await timesheet.save();
       timesheet = await (await timesheet.save()).populate({  path: 'payCode',
       populate: { path: 'payCodeTypeId' }}).execPopulate();
 
@@ -59,18 +56,15 @@ export class TimesheetService {
     }
   }
 
-
   async getTotalAmount(payCode, overtime, dto, totalAmount) {
     var maxMultiplier;
     if (payCode.payCodeTypeId.overtime) {
-      // if overtime false ??
       maxMultiplier = await this.getMaxMultiplier(overtime);
       if (maxMultiplier.type == 'DAILY') {
         const getDayTimesheet = await this.getDailyTimesheet(dto.startDate);
         if (getDayTimesheet.length == []) {
           bigAmount += dto.hours * payCode.rate;
           return
-
         }
         getDayTimesheet.map(timesheet => {
           dailyAmount += timesheet.hours
@@ -96,11 +90,10 @@ export class TimesheetService {
           const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
           dto.hours = difference;
           await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
-
         }
       }
       else if (maxMultiplier.type == 'WEEKLY') {
-        const week = await this.getWeekly();
+        const week = await this.getWeekly(dto.endDate);
         if (week.length == []) {
           bigAmount += dto.hours * payCode.rate;
           return
@@ -132,17 +125,18 @@ export class TimesheetService {
         }
       }
       else if (maxMultiplier.type == 'CONSECUTIVE') {
-        console.log('consecutive');
-        const consecutive = await this.getConsecutive(dto.hours);
+        const consecutive = await this.getConsecutive(dto.hours, dto.endDate);
         if (consecutive) {
+          console.log('1');
           bigAmount += payCode.rate * dto.hours;
           return
         }
+        console.log('2');
         bigAmount += dto.hours * maxMultiplier.multiplier * payCode.rate;
         return
       }
     }
-    // bigAmount += dto.hours * payCode.rate;
+    bigAmount += dto.hours * payCode.rate;
   }
   async getMaxMultiplier(overtime) {
     const maxMultiplier = overtime.reduce(function (prev, current) {
@@ -175,10 +169,10 @@ export class TimesheetService {
       throw e
     }
   }
-  async getWeekly(): Promise<any> {
+  async getWeekly(endDate): Promise<any> {
     try {
-      var curr = new Date; // get current date
-      var first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
+      var curr = new Date(endDate); // get current date
+      var first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week
       var last = first + 5; // last day is the first day + 6
       var firstday = new Date(curr.setDate(first));
       var lastday = new Date(curr.setDate(last));
@@ -191,22 +185,31 @@ export class TimesheetService {
       throw e
     }
   }
-  async getConsecutive(day): Promise<any> {
+  async getConsecutive(day, endDate): Promise<any> {
     try {
-      var curr = new Date;
-      var first = curr.getDate() - day;
+      let arr;
+      var curr = new Date(endDate);
+      var first = curr.getDate() - day + 1;
+      var last = curr.getDate() + 1;
+      const lastday = new Date(curr.setDate(last))
       var firstday = new Date(curr.setDate(first));
-      var lastday = new Date();
       const timesheets = await this.model.find({
         createdDate: { $gte: firstday, $lte: lastday }
-      });
-      return timesheets.length < day;
+      }).sort({ createdDate: - 1 }).select('createdDate');
+      arr = timesheets;
+      for (let j = 0; j < arr.length - 1; j++) {
+        let date = new Date(arr[j].createdDate);
+        let nextDate = new Date(arr[j + 1].createdDate);
+        if (date.getDay() == nextDate.getDay()) {
+          arr.splice(j, 1)
+        }
+      }
+      return arr.length < day;
     }
     catch (e) {
       throw e
     }
   }
-
 
   async findOne(_id: string): Promise<TimeSheetDTO> {
     try {
@@ -222,7 +225,7 @@ export class TimesheetService {
     }
   }
 
-  async findAll(staffId: string): Promise<any> {
+  async findAll(staffId: string): Promise<TimeSheetDTO[]> {
     try {
       const timesheet: any = await this.model.find({ staffId }).populate({
         path: 'payCode',

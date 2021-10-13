@@ -18,14 +18,14 @@ export class TimesheetController {
 
   @Get('staff/:staffId')
   @Public()
-  async findAll(@Param('staffId', ParseObjectIdPipe) staffId: string): Promise<any> {
+  async findAll(@Param('staffId', ParseObjectIdPipe) staffId: string): Promise<TimeSheetDTO[]> {
     return await this.timesheetService.findAll(staffId);
   }
 
   @Get(':id')
   @Public()
   @ApiOkResponse({ type: TimeSheetDTO })
-  async findOne(@Param('id', ParseObjectIdPipe) id: string) {
+  async findOne(@Param('id', ParseObjectIdPipe) id: string): Promise<TimeSheetDTO> {
     return await this.timesheetService.findOne(id);
   }
 
