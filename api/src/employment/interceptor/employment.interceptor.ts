@@ -15,7 +15,9 @@ export class EmploymentSanitizer implements ISanitize {
             staffId: employment.staffId,
             supervisor: employment.supervisor,
             departmentId: employment.departmentId,
-            date: employment.date,
+            startDate: employment.startDate,
+            endDate: employment.endDate,
+            active: employment.active,
             schedule: employment.schedule,
             termination: employment.termination
         };

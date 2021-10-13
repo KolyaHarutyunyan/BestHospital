@@ -28,10 +28,17 @@ export class EmploymentService {
         staffId: dto.staffId,
         schedule: dto.schedule,
         termination: dto.termination,
-        date: dto.date,
+        startDate: dto.startDate,
         title: dto.title
       });
-      console.log(dto)
+      if (!dto.active && !dto.endDate) {
+        throw new HttpException(
+          'endDate required field',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      if (dto.endDate && !dto.active) employment.endDate = dto.endDate;
+
       if (dto.supervisor == dto.staffId) {
         throw new HttpException(
           'staff@ inq@ ir manager@ chi karox linel chnayac hayastanum hnaravor e',
@@ -68,7 +75,7 @@ export class EmploymentService {
   }
   async update(_id: string, dto: UpdateEmploymentDto): Promise<EmploymentDto> {
     let employment = await this.model.findById({ _id })
-    this.checkEmployment( employment)
+    this.checkEmployment(employment)
     if (dto.title) employment.title = dto.title;
 
     if (dto.supervisor == employment._id) {
@@ -80,7 +87,7 @@ export class EmploymentService {
     }
     if (dto.supervisor) {
       const staff = await this.staffService.findById(dto.supervisor);
-      
+
       if (!staff) {
         throw new HttpException(
           'supervisor is not found',
@@ -94,6 +101,23 @@ export class EmploymentService {
       employment.departmentId = dto.departmentId;
     }
     if (dto.schedule) employment.schedule = dto.schedule;
+
+    if (!dto.active && !dto.endDate) {
+      throw new HttpException(
+        'endDate required field',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    console.log(dto.active, dto.endDate);
+    if (dto.active && !dto.endDate) {
+      console.log('aaaaa');
+      employment.endDate = "Precent"
+    }
+    if (dto.endDate && !dto.active) employment.endDate = dto.endDate;
+
+    if (dto.startDate) employment.startDate = dto.startDate;
+
+
     employment = await employment.save();
     await employment.populate('departmentId', 'name').populate("supervisor", 'firstName').execPopulate();
     return this.sanitizer.sanitize(employment);

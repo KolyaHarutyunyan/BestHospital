@@ -33,7 +33,13 @@ export class PaycodeService {
       active: dto.active,
       startDate: dto.startDate
     })
-    if (dto.endDate) paycode.endDate = dto.endDate
+    if (!dto.active && !dto.endDate) {
+      throw new HttpException(
+        'endDate required field',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (dto.endDate && !dto.active) paycode.endDate = dto.endDate
     await paycode.save()
     return this.sanitizer.sanitize(paycode)
   }
@@ -81,9 +87,17 @@ export class PaycodeService {
         await this.employmentService.findOne(dto.employmentId)
       }
       if (dto.rate) payCode.rate = dto.rate;
-      if (dto.active) payCode.active = dto.active;
+      if (!dto.active && !dto.endDate) {
+        throw new HttpException(
+          'endDate required field',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      if (dto.active && !dto.endDate) {
+        payCode.endDate = "Precent"
+      }
+      if (dto.endDate && !dto.active) payCode.endDate = dto.endDate;
       if (dto.startDate) payCode.startDate = dto.startDate;
-      if (dto.endDate) payCode.endDate = dto.endDate;
       payCode = await (await payCode.save()).populate('payCodeTypeId').execPopulate();
       return this.sanitizer.sanitize(payCode);
     }

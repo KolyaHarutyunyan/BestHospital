@@ -94,6 +94,15 @@ export class StaffController {
     return staff;
   }
 
+  /** IsClinical a staff */
+  @Patch(':id/:isClinical')
+  @Public()
+  @ApiOkResponse({ type: StaffDTO })
+  async isClinical(@Param('id', ParseObjectIdPipe) staffId: string,
+    @Param('isClinical') isClinical: boolean): Promise<StaffDTO> {
+    const staff = await this.staffService.isClinical(staffId, isClinical);
+    return staff;
+  }
   /** Create a new service */
   @Post(':id/service/:serviceId')
   @ApiOkResponse({ type: StaffDTO })

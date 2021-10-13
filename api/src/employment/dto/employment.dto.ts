@@ -15,7 +15,11 @@ export class EmploymentDto {
     @ApiProperty({ required: false })
     departmentId?: string;
     @ApiProperty()
-    date: Date
+    startDate: Date
+    @ApiProperty()
+    endDate: Date;
+    @ApiProperty({type: Boolean})
+    active: Boolean;
     @ApiProperty({ enum: ScheduleStatus })
     @IsEnum(ScheduleStatus)
     schedule: number;
