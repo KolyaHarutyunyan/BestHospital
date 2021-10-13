@@ -147,15 +147,6 @@ export const AddAuthorization = ({handleClose, info}) => {
                             list={list}
                             typeError={error === 'status' ? ErrorText.field : ''}
                         />
-                        {/*<ValidationInput*/}
-                        {/*    variant={"outlined"}*/}
-                        {/*    onChange={handleChange}*/}
-                        {/*    value={inputs.location}*/}
-                        {/*    type={"text"}*/}
-                        {/*    label={"Service Location*"}*/}
-                        {/*    name='location'*/}
-                        {/*    typeError={error === 'location' && ErrorText.field}*/}
-                        {/*/>*/}
                         <AddressInput
                             auth={true}
                             oneInput={true}

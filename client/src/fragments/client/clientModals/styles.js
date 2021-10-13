@@ -3,7 +3,6 @@ import {makeStyles} from "@material-ui/core/styles";
 
 
 export const createClientStyle = makeStyles(() => ({
-
     createFoundingSource: {
         width: 543,
         background: Colors.BackgroundWhite,

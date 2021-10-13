@@ -1,31 +1,22 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
-
-import {Colors, ErrorText} from "@eachbase/utils";
-import {
-    adminActions,
-    clientActions,
-    fundingSourceActions,
-    httpRequestsOnErrorsActions,
-    httpRequestsOnSuccessActions
-} from "@eachbase/store";
-import {createClientStyle} from "@eachbase/fragments/client";
 import {Checkbox} from "@material-ui/core";
-import {payrollActions} from "../../../../../store/payroll";
+import {Colors, ErrorText} from "@eachbase/utils";
+import {adminActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
+import {payrollActions} from "@eachbase/store/payroll";
+import {createClientStyle} from "@eachbase/fragments/client";
+import {staffModalsStyle} from "./styles";
 
-
-
-export const PaycodeModal = ({handleClose, info,employmentId, authId}) => {
+export const PaycodeModal = ({handleClose, info,employmentId}) => {
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {...info, modifiers: info.serviceId.name} : {});
     const [checked, setChecked] = useState(true);
     const [payCode, setPayCode] = useState(null);
     const dispatch = useDispatch()
     const classes = createClientStyle()
+    const classes_v2 = staffModalsStyle()
     const globalPayCodes = useSelector(state => state.payroll.PayCodes)
-
-
 
     useEffect(() => {
         dispatch(payrollActions.getPayCodeGlobal())
@@ -45,7 +36,6 @@ export const PaycodeModal = ({handleClose, info,employmentId, authId}) => {
             dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_PAY_CODE'))
             dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_AUTHORIZATION'))
         }
-
     }, [success])
 
 
@@ -59,10 +49,8 @@ export const PaycodeModal = ({handleClose, info,employmentId, authId}) => {
         )
     };
 
-
     let onCheck  = (e)=>{
         setChecked(e.target.checked)
-        console.log(e.target.checked,'eveeeent')
     }
 
     const handleCreate = () => {
@@ -75,7 +63,6 @@ export const PaycodeModal = ({handleClose, info,employmentId, authId}) => {
                 "startDate": inputs.startDate,
                 "endDate": inputs.endDate
             }
-            
             dispatch(adminActions.createPayCode(data, employmentId))
         }
          else {
@@ -108,29 +95,13 @@ export const PaycodeModal = ({handleClose, info,employmentId, authId}) => {
                             typeError={error === 'payCodeTypeId' ? ErrorText.field : ''}
                         />
                         <div className={classes.displayCodeBlock}>
-                            <div style={{display: "flex", marginBottom: 16, alignItems: 'center'}}>
-                                <p style={{
-                                    color: Colors.TextPrimary,
-                                    fontSize: 14,
-                                    fontWeight: 'bold',
-                                    marginRight: 8
-                                }}>Code:</p>
-                                <p style={{
-                                    color: '#4B5C68B3',
-                                    fontSize: 14,
-                                }}> {payCode?.code ? payCode.code : 'N/A'} </p>
+                            <div className={classes_v2.paycodeBox} >
+                                <p className={classes_v2.paycodeBoxTitle}>Code:</p>
+                                <p className={classes_v2.paycodeBoxText}> {payCode?.code ? payCode.code : ' N/A'} </p>
                             </div>
-                            <div style={{display: "flex", marginBottom: 16, alignItems: 'center'}}>
-                                <p style={{
-                                    color: Colors.TextPrimary,
-                                    fontSize: 14,
-                                    fontWeight: 'bold',
-                                    marginRight: 8
-                                }}>Type:</p>
-                                <p style={{
-                                    color: '#4B5C68B3',
-                                    fontSize: 14,
-                                }}>{payCode?.type ? payCode.type : 'N/A'}</p>
+                            <div className={classes_v2.paycodeBox} style={{marginBottom : 0}}>
+                                <p className={classes_v2.paycodeBoxTitle}>Type:</p>
+                                <p className={classes_v2.paycodeBoxText}>{payCode?.type ? payCode.type : 'N/A'}</p>
                             </div>
                         </div>
                         <ValidationInput
@@ -142,9 +113,9 @@ export const PaycodeModal = ({handleClose, info,employmentId, authId}) => {
                             name='rate'
                             typeError={error === 'rate' && ErrorText.field}
                         />
-                        <div style={{display: 'flex', alignItems: "center", marginBottom: 16}}>
+                        <div className={classes_v2.paycodeBox}>
                             <Checkbox defaultChecked={true} onClick={onCheck} color={Colors.ThemeBlue} />
-                            <p style={{color: Colors.TextPrimary, fontSize: 16, marginLeft: 10}}>Active Paycode</p>
+                            <p className={classes_v2.activePaycode}>Active Paycode</p>
                         </div>
                         <div style={{display: 'flex'}}>
                             <ValidationInput

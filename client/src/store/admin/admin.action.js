@@ -9,10 +9,9 @@ import {
     DELETE_CREDENTIAL_BY_ID,
     GET_EMPLOYMENT,
     CREATE_EMPLOYMENT,
-    CREATE_SERVICE,
     GET_PAY_CODE,
     CREATE_PAY_CODE,
-    EDIT_EMPLOYMENT, CREATE_STAFF_SERVICE, GET_STAFF_SERVICE, DELETE_STAFF_SERVICE
+    EDIT_EMPLOYMENT, CREATE_STAFF_SERVICE, GET_STAFF_SERVICE, DELETE_STAFF_SERVICE, GET_TIMESHEET, CREATE_TIMESHEET
 } from "./admin.types";
 
 export const createAdmin = (body) => {
@@ -64,7 +63,6 @@ export const editCredentialById = (body, id, credentialId) => {
     }
 }
 export const deleteCredentialById = (id,credentialId) => {
-
     return {
         type: DELETE_CREDENTIAL_BY_ID,
         payload: {id,credentialId}
@@ -127,5 +125,19 @@ export const deleteStaffService = (id,serviceId) => {
     return {
         type: DELETE_STAFF_SERVICE,
         payload: {id, serviceId}
+    }
+}
+
+export const getTimesheet = (id) => {
+    return {
+        type: GET_TIMESHEET,
+        payload: {id}
+    }
+}
+
+export const createTimesheet = (id) => {
+    return {
+        type: CREATE_TIMESHEET,
+        payload: {id}
     }
 }
