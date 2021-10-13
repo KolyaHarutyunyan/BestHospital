@@ -23,8 +23,8 @@ import {
     EDIT_EMPLOYMENT,
     CREATE_STAFF_SERVICE,
     GET_STAFF_SERVICE_SUCCESS,
-    GET_STAFF_SERVICE,
-    DELETE_STAFF_SERVICE, IS_CLINICIAN,
+    GET_STAFF_SERVICE, IS_CLINICIAN,
+    DELETE_STAFF_SERVICE, GET_TIMESHEET_SUCCESS, GET_TIMESHEET, CREATE_TIMESHEET,
 
 
 } from "./admin.types";
@@ -62,7 +62,6 @@ function* getAdmins(action) {
         });
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.removeError(action.type));
-
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.removeError(action.type));
@@ -74,7 +73,6 @@ function* getAdminById(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.getAdminByIdService, action.payload.adminId);
-
         yield put({
             type: GET_ADMIN_BY_ID_SUCCESS,
             payload: res.data,
@@ -128,7 +126,6 @@ function* getCredential(action) {
     try {
         const res = yield call(authService.getCredentialService, action.payload.credentialId);
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        // yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         yield put({
             type: GET_CREDENTIAL_SUCCESS,
             payload: res.data,
@@ -176,7 +173,6 @@ function* deleteCredentialById(action) {
 
 
 function* getEmployment(action) {
-
     try {
         const res = yield call(authService.getEmploymentService, action.payload.id)
         yield put({
@@ -233,14 +229,12 @@ function* getPayCode(action) {
             type: GET_PAY_CODE_SUCCESS,
             payload: res.data
         });
-
     } catch (err) {
         yield put({
             type: GET_PAY_CODE_SUCCESS,
             payload: []
         });
         console.log(err, ' errr employmeny')
-
     }
 }
 
@@ -259,7 +253,6 @@ function* createPayCode(action) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
         console.log(err, ' errr create paycode')
-
     }
 }
 
@@ -267,19 +260,16 @@ function* createPayCode(action) {
 function* getStaffService(action) {
     try {
         const res = yield call(authService.getStaffServService, action.payload.id)
-        console.log(res,'get taff srerv')
         yield put({
             type: GET_STAFF_SERVICE_SUCCESS,
             payload: res.data
         });
-
     } catch (err) {
         yield put({
             type: GET_STAFF_SERVICE_SUCCESS,
             payload: []
         });
         console.log(err, ' errr employmeny')
-
     }
 }
 
@@ -305,7 +295,6 @@ function* delteStaffService(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.deleteStaffServService, action.payload.id, action.payload.serviceId)
-        console.log(res,'deeeel service')
         yield put({
             type: GET_STAFF_SERVICE,
             payload: {id : action.payload.id}
@@ -321,6 +310,7 @@ function* delteStaffService(action) {
 }
 
 
+
 function* isClinician(action) {
 
     try {
@@ -334,6 +324,37 @@ function* isClinician(action) {
         // yield put(httpRequestsOnErrorsActions.appendError(action.type));
         // console.log(err, ' errr del paycode')
 
+
+function* getTimesheet(action) {
+    try {
+        const res = yield call(authService.getTimesheetService, action.payload.id)
+        console.log(res,'reeeeseeseses get timesheet')
+        yield put({
+            type: GET_TIMESHEET_SUCCESS,
+            payload: res.data
+        });
+    } catch (err) {
+        yield put({
+            type: GET_TIMESHEET_SUCCESS,
+            payload: []
+        });
+        console.log(err, ' errr employmeny')
+    }
+}
+
+function* createTimesheet(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    try {
+        const res = yield call(authService.createTimesheetService, action.payload.body)
+        yield put({
+            type: GET_TIMESHEET,
+            payload: {id : action.payload.id}
+        });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+    } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
 }
 
@@ -355,4 +376,6 @@ export const watchAdmin = function* watchAdminSaga() {
     yield takeLatest(CREATE_STAFF_SERVICE, createStaffService)
     yield takeLatest(DELETE_STAFF_SERVICE, delteStaffService)
     yield takeLatest(IS_CLINICIAN, isClinician)
+    yield takeLatest(GET_TIMESHEET, getTimesheet)
+    yield takeLatest(CREATE_TIMESHEET, createTimesheet)
 };

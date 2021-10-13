@@ -73,7 +73,6 @@ export const AddContact = ({handleClose, info}) => {
 
                 } else if (info) {
                     dispatch(clientActions.editClientContact(data, info.id, params.id))
-
                 }
             } else {
                 setError(

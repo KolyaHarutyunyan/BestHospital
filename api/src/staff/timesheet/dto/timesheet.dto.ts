@@ -19,4 +19,6 @@ export class TimeSheetDTO {
     endDate: Date;
     @ApiProperty()
     createdDate: Date;
+    @ApiProperty()
+    totalAmount: number
 }
