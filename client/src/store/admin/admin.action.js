@@ -134,7 +134,8 @@ export const deleteStaffService = (id,serviceId) => {
 export const isClinician = (id) => {
     return {
         type: IS_CLINICIAN,
-
+    }
+}
 export const getTimesheet = (id) => {
     return {
         type: GET_TIMESHEET,

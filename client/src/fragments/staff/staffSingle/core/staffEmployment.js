@@ -11,7 +11,7 @@ import {adminActions, clientActions, httpRequestsOnErrorsActions, httpRequestsOn
 import {serviceSingleStyles} from "@eachbase/fragments/client/clientSingle/core";
 
 
-export const StaffEmployment = ({setAuthActive, setAuthItemIndex, info}) => {
+export const StaffEmployment = ({setAuthActive,  info}) => {
     const classes = serviceSingleStyles()
     const dispatch = useDispatch()
     const [delEdit, setDelEdit] = useState(null)
@@ -20,6 +20,7 @@ export const StaffEmployment = ({setAuthActive, setAuthItemIndex, info}) => {
     const [toggleModal2, setToggleModal2] = useState(false)
     const [toggleModal3, setToggleModal3] = useState(false)
     const [authIndex, setAuthIndex] = useState(0)
+    const [paycodeIndex, setPaycodeIndex] = useState(0)
     const [serviceIndex, setServiceIndex] = useState(null)
     const services = useSelector(state => state.client.clientsAuthorizationsServices)
     const payCodes = useSelector(state => state.admins.payCodes)
@@ -91,14 +92,15 @@ export const StaffEmployment = ({setAuthActive, setAuthItemIndex, info}) => {
 
     let deleteAuthorization = () => {
         dispatch(clientActions.deleteClientsAuthorization(info[authIndex].id, params.id))
-        setAuthIndex(0)
+        // setAuthIndex(0)
     }
 
     let payCodeItem = (item, index) => {
         return (
-            <TableBodyComponent key={index} handleClick={() => {
-                setAuthItemIndex(index)
-                setAuthActive(true)
+            <TableBodyComponent key={index} handleOpenInfo={() => {
+                setPaycodeIndex(index)
+                setToggleModal3(!toggleModal3)
+
             }}>
                 <TableCell><p className={classes.tableName}>{item.payCodeTypeId.name}</p></TableCell>
                 <TableCell>  {item.payCodeTypeId.code} </TableCell>
@@ -141,9 +143,8 @@ export const StaffEmployment = ({setAuthActive, setAuthItemIndex, info}) => {
                 handleOpenClose={() => setToggleModal3(!toggleModal3)}
                 openDefault={toggleModal3}
                 content={
-
                     <PaycodeModal
-                        info={payCodes && payCodes[serviceIndex]}
+                        info={payCodes && payCodes[paycodeIndex]}
                         employmentId={info[authIndex]?.id}
                         handleClose={() => setToggleModal3(!toggleModal3)}/>
                 }

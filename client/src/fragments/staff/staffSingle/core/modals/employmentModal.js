@@ -3,13 +3,14 @@ import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
 import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
-import {ErrorText} from "@eachbase/utils";
+import {Colors, ErrorText} from "@eachbase/utils";
 import {
     adminActions,
     httpRequestsOnErrorsActions,
     httpRequestsOnSuccessActions, systemActions
 } from "@eachbase/store";
 import {createClientStyle} from "@eachbase/fragments/client";
+import {Checkbox} from "@material-ui/core";
 
 
 export const EmploymentModal = ({handleClose, info}) => {
@@ -21,11 +22,17 @@ export const EmploymentModal = ({handleClose, info}) => {
         endDate : moment(info?.termination?.date).format('YYYY-MM-DD'),
         employmentType : info?.schedule
     } : {});
+    const [checked, setChecked] = useState(true);
     const params = useParams()
     const dispatch = useDispatch()
     const departments = useSelector(state => state.system.departments)
     const staffList = useSelector(state => state.admins.adminsList.staff)?.filter(item=>item.id !== params.id && item)
     const classes = createClientStyle()
+
+
+    let onCheck  = (e)=>{
+        setChecked(e.target.checked)
+    }
 
     useEffect(() => {
         dispatch(systemActions.getDepartments())
@@ -61,7 +68,7 @@ export const EmploymentModal = ({handleClose, info}) => {
     );
 
     const handleCreate = () => {
-        if (inputs.title && inputs.departmentId && inputs.supervisor  && inputs.endDate && inputs.startDate) {
+        if (inputs.title && inputs.departmentId && inputs.supervisor  && checked ? "Present" : inputs.endDate && inputs.startDate) {
             let depId;
             let supervisorID;
             departments.forEach(item => {
@@ -84,9 +91,10 @@ export const EmploymentModal = ({handleClose, info}) => {
                 "schedule": +inputs.employmentType,
                 "termination": {
                     // "reason": "string",
-                    "date": inputs.endDate
+                    "date": inputs.endDate ? inputs.endDate : 'Present'
                 }
             }
+            console.log(data,'dataaaaa')
         if (info) {
              dispatch(adminActions.editEmployment(data, info.id, params.id))
         } else {
@@ -149,10 +157,10 @@ export const EmploymentModal = ({handleClose, info}) => {
                             typeError={error === 'employmentType' && ErrorText.field}
                         />
 
-                        {/*<div style={{display: 'flex', alignItems : "center", marginBottom: 16}}>*/}
-                        {/*    <Checkbox color={Colors.ThemeBlue} />*/}
-                        {/*    <p style={{color : Colors.TextPrimary, fontSize : 16, marginLeft : 10}}>Currently works in this role</p>*/}
-                        {/*</div>*/}
+                        <div style={{display: 'flex', alignItems : "center", marginBottom: 16}}>
+                            <Checkbox defaultChecked={true} onClick={onCheck} color={Colors.ThemeBlue} />
+                            <p style={{color : Colors.TextPrimary, fontSize : 16, marginLeft : 10}}>Currently works in this role</p>
+                        </div>
                         <div style={{display: 'flex'}}>
                             <ValidationInput
                                 variant={"outlined"}
@@ -164,15 +172,28 @@ export const EmploymentModal = ({handleClose, info}) => {
                                 typeError={error === 'startDate' && ErrorText.field}
                             />
                             <div style={{width: 16}}/>
+                            {/*<ValidationInput*/}
+                            {/*    variant={"outlined"}*/}
+                            {/*    onChange={handleChange}*/}
+                            {/*    value={inputs.endDate}*/}
+                            {/*    type={"date"}*/}
+                            {/*    label={"Terminated Date*"}*/}
+                            {/*    name='endDate'*/}
+                            {/*    typeError={error === 'endDate' && ErrorText.field}*/}
+                            {/*/>*/}
+
                             <ValidationInput
                                 variant={"outlined"}
+                                disabled={checked ?  true : false}
                                 onChange={handleChange}
-                                value={inputs.endDate}
-                                type={"date"}
-                                label={"Terminated Date*"}
+                                value={checked ? 'Present' : inputs.endDate}
+                                type={checked ? 'text' :"date"}
+                                label={"End Date*"}
                                 name='endDate'
                                 typeError={error === 'endDate' && ErrorText.field}
                             />
+
+
                         </div>
                     </div>
                 </div>

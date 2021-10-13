@@ -315,7 +315,7 @@ function* isClinician(action) {
 
     try {
         // const res = yield call(authService.isClinicianService, action.payload.id,)
-         console.log('deeeel service')
+        console.log('deeeel service')
         //
         // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         // yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
@@ -324,7 +324,8 @@ function* isClinician(action) {
         // yield put(httpRequestsOnErrorsActions.appendError(action.type));
         // console.log(err, ' errr del paycode')
 
-
+    }
+}
 function* getTimesheet(action) {
     try {
         const res = yield call(authService.getTimesheetService, action.payload.id)

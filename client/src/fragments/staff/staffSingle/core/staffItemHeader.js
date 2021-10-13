@@ -4,7 +4,7 @@ import {Colors, Images} from "@eachbase/utils";
 import {AddButton, AddModalButton, SimpleModal, AddNotes} from "@eachbase/components";
 import {CreateStaff, CredentialModal} from "@eachbase/fragments";
 import {useSelector} from "react-redux";
-import {EmploymentModal} from "./modals";
+import {EmploymentModal, TimesheetModal} from "./modals";
 import {Switch} from "@material-ui/core";
 
 const editButtonStyle = {
@@ -59,7 +59,8 @@ export const StaffItemHeader = ({
                             <AddModalButton btnStyles={editButtonStyle} handleClick={handleOpenClose}
                                             text='edit'/>
                             : activeTab === 2 ? <AddButton text='Add Timesheet'
-                                                           handleClick={() => handleOpenClose}/>
+                                                           handleClick={handleOpenClose}
+                            />
                             : activeTab === 3 ?
                                 <AddButton text='Add Credential'
                                            handleClick={() => openCloseCredModal('addCredential')}/>
@@ -81,7 +82,8 @@ export const StaffItemHeader = ({
                 content={activeTab === 0 ?
                     <CreateStaff adminsList={adminsList && adminsList.staff} staffGeneral={adminInfoById}
                                  resetData={false} handleClose={handleOpenClose}/>
-                    : activeTab === 2 ? <p>Timesheet</p>
+                    : activeTab === 2 ?
+                        <TimesheetModal handleClose={handleOpenClose}/>
                         : activeTab === 3 ?
                             <CredentialModal globalCredentialInformation={globalCredentialInformation}
                                              globalCredentials={globalCredentials} credModalType={credModalType}

@@ -191,5 +191,36 @@ export const serviceSingleStyles = makeStyles(() => ({
         fontSize: 18,
         color: Colors.TextSecondary,
         fontWeight: 'bold'
+    },
+    switcher : {
+        width : 232,
+        height : 32,
+        display : 'flex',
+        borderRadius : 8,
+        cursor : "pointer",
+        fontSize : 14,
+        fontWeight : 'bold',
+        boxShadow : "0px 0px 6px #347af033",
+        padding: 1
+    },
+    switcherActive : {
+        width : '50%',
+        display : 'flex',
+        alignItems : "center",
+        justifyContent : 'center',
+        borderRadius : 8,
+        color : '#fff',
+        background : Colors.ThemeBlue,
+        transition: '.5s'
+
+    } ,
+    switcherProcessed : {
+        width : '50%',
+        borderRadius : 8,
+        display : 'flex',
+        alignItems : "center",
+        justifyContent : 'center',
+        transition: '.5s',
+
     }
 }));
