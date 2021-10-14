@@ -62,7 +62,7 @@ export const TimesheetModal = ({handleClose, info,employmentId}) => {
                 "rate": +inputs.rate,
                 "active": checked,
                 "startDate": inputs.startDate,
-                "endDate":  inputs.endDate ? inputs.endDate : 'Precent'
+                "endDate":  inputs.endDate ? inputs.endDate : undefined
             }
             dispatch(adminActions.createPayCode(data, employmentId))
         }

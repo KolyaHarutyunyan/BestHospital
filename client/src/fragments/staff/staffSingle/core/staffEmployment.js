@@ -49,14 +49,12 @@ export const StaffEmployment = ({setAuthActive,  info}) => {
     }, [success,])
 
     useEffect(() => {
-
         if (successDelServ) {
             setToggleModal3(!toggleModal3)
             dispatch(httpRequestsOnSuccessActions.removeSuccess('DELETE_CLIENT_AUTHORIZATION_SERV'))
             dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_AUTHORIZATION_SERV'))
         }
     }, [successDelServ])
-
 
     const headerTitles = [
         {
@@ -88,8 +86,6 @@ export const StaffEmployment = ({setAuthActive,  info}) => {
             sortable: false,
         },
     ];
-
-
     let deleteAuthorization = () => {
         dispatch(clientActions.deleteClientsAuthorization(info[authIndex].id, params.id))
         // setAuthIndex(0)
@@ -148,7 +144,6 @@ export const StaffEmployment = ({setAuthActive,  info}) => {
                         employmentId={info[authIndex]?.id}
                         handleClose={() => setToggleModal3(!toggleModal3)}/>
                 }
-
             />
             <Card
                 employment={true}

@@ -54,7 +54,6 @@ export const PaycodeModal = ({handleClose, info,employmentId}) => {
         }
     },[])
 
-    console.log(payCode,'paaaycppppdededededede')
 
     const handleChange = e => {
         if (e.target.name === 'payCodeTypeId') {

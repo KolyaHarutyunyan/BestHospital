@@ -91,10 +91,9 @@ export const EmploymentModal = ({handleClose, info}) => {
                 "schedule": +inputs.employmentType,
                 "termination": {
                     // "reason": "string",
-                    "date": inputs.endDate ? inputs.endDate : 'Present'
+                    "date": inputs.endDate ? inputs.endDate : undefined
                 }
             }
-            console.log(data,'dataaaaa')
         if (info) {
              dispatch(adminActions.editEmployment(data, info.id, params.id))
         } else {
