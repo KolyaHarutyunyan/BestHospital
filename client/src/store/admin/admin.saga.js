@@ -175,7 +175,6 @@ function* deleteCredentialById(action) {
 
 
 function* getEmployment(action) {
-
     try {
         const res = yield call(authService.getEmploymentService, action.payload.id)
         yield put({
@@ -184,8 +183,7 @@ function* getEmployment(action) {
         });
 
     } catch (err) {
-        console.log(err, ' errr employmeny')
-
+        console.log(err,)
     }
 }
 
@@ -202,7 +200,7 @@ function* createEmployment(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        console.log(err, ' errr employmeny')
+        console.log(err)
 
     }
 }
@@ -220,7 +218,7 @@ function* editEmployment(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        console.log(err, ' errr employmeny')
+        console.log(err)
 
     }
 }
@@ -238,7 +236,7 @@ function* getPayCode(action) {
             type: GET_PAY_CODE_SUCCESS,
             payload: []
         });
-        console.log(err, ' errr employmeny')
+        console.log(err)
 
     }
 }
@@ -257,7 +255,7 @@ function* createPayCode(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        console.log(err, ' errr create paycode')
+        console.log(err)
 
     }
 }
@@ -266,7 +264,6 @@ function* createPayCode(action) {
 function* getStaffService(action) {
     try {
         const res = yield call(authService.getStaffServService, action.payload.id)
-        console.log(res,'get taff srerv')
         yield put({
             type: GET_STAFF_SERVICE_SUCCESS,
             payload: res.data
@@ -277,7 +274,7 @@ function* getStaffService(action) {
             type: GET_STAFF_SERVICE_SUCCESS,
             payload: []
         });
-        console.log(err, ' errr employmeny')
+        console.log(err)
 
     }
 }
@@ -295,7 +292,7 @@ function* createStaffService(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        console.log(err, ' errr create paycode')
+        console.log(err)
 
     }
 }
@@ -304,7 +301,6 @@ function* delteStaffService(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.deleteStaffServService, action.payload.id, action.payload.serviceId)
-        console.log(res,'deeeel service')
         yield put({
             type: GET_STAFF_SERVICE,
             payload: {id : action.payload.id}
@@ -314,7 +310,7 @@ function* delteStaffService(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        console.log(err, ' errr del paycode')
+        console.log(err)
 
     }
 }

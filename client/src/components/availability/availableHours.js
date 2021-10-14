@@ -33,12 +33,12 @@ export const AvailableHours = ({onModel, availabilityData, marginLeft}) => {
     }
 
     return (
-        <div className={classes.availableHours} style={{marginLeft: marginLeft ? marginLeft : '0'}}>
-            <SimpleModal openDefault={open} handleOpenClose={handleOpenClose} content={ <AvailabilitySchedule onModel={onModel} availabilityData={availabilityData} handleClose={handleOpenClose} /> } />
-            <div className={classes.availableHoursHeader}>
-                <p className={classes.availableHoursTitle}>Available Hours</p>
-                <AddModalButton text='Edit' handleClick={handleOpenClose} btnStyles={editButtonStyle}/>
-            </div>
+        <div className={classes.availableHours} style={{marginLeft: marginLeft ? marginLeft : '0',minHeight: 503}}>
+            {/*<SimpleModal openDefault={open} handleOpenClose={handleOpenClose} content={ <AvailabilitySchedule onModel={onModel} availabilityData={availabilityData} handleClose={handleOpenClose} /> } />*/}
+            {/*<div className={classes.availableHoursHeader}>*/}
+            {/*    <p className={classes.availableHoursTitle}>Available Hours</p>*/}
+            {/*    <AddModalButton text='Edit' handleClick={handleOpenClose} btnStyles={editButtonStyle}/>*/}
+            {/*</div>*/}
             <div className={classes.availableHoursBlock}>
                 {
                     availabilityData &&  Object.keys(availabilityData).map((item, index)=>{

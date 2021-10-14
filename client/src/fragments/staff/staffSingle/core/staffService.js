@@ -62,10 +62,6 @@ export const StaffService = ({removeItem, openModal, staffGeneral, info}) => {
         error === e.target.name && setError('')
     }
 
-    console.log(info,'infoinfoinfoinfoinfo')
-
-
-
     let deleteService = ()=>{
         dispatch(adminActions.deleteStaffService(params.id, info[index]._id));
     }
@@ -73,7 +69,7 @@ export const StaffService = ({removeItem, openModal, staffGeneral, info}) => {
     const handleSubmit = () => {
 
         if (inputs.serviceType) {
-            let serviceID = services && services.length >0 && services.find(item => item.name == inputs.serviceType).id
+            let serviceID = services && services.length >0 && services.find(item => item.name === inputs.serviceType).id
              dispatch(adminActions.createStaffService(params.id, serviceID));
         } else {
             setError(

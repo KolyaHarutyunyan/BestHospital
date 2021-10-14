@@ -6,7 +6,6 @@ import {createStaffModalStyle} from "./style";
 import {useGlobalTextStyles, EmailValidator, ErrorText} from "@eachbase/utils";
 import {adminActions, httpRequestsOnErrorsActions} from "@eachbase/store";
 import {inputStyle} from "../../../fundingSource/createFundingSource/core/styles";
-import {logDOM} from "@testing-library/react";
 
 const steps = ['General Info', 'Address', 'Other Details']
 

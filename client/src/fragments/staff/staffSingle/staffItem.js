@@ -68,8 +68,6 @@ export const StaffItem = () => {
     const employments = useSelector(state => state.admins.employments)
     const staffServices = useSelector(state => state.admins.staffServices.service)
 
-    console.log(staffServices,'staffServices')
-
     const handleOpenClose = () => {
         setOpen(!open)
     }
@@ -202,7 +200,8 @@ export const StaffItem = () => {
             tabComponent: (httpOnLoad.length ? <Loader/> : <StaffGeneral staffGeneral={staffGeneral}/>)
         },
         {
-            tabComponent: (employments.length>0 ?  <StaffEmployment info={employments}/> : <NoItemText text='No Employments Yet' />)
+            tabComponent: (employments.length > 0 ? <StaffEmployment info={employments}/> :
+                <NoItemText text='No Employments Yet'/>)
         },
         {
             tabComponent: (<StaffTimesheet>Timesheet</StaffTimesheet>)
@@ -217,7 +216,7 @@ export const StaffItem = () => {
             tabComponent: (<StaffAvailability availabilityData={availabilityData} staffGeneral={staffGeneral}/>)
         },
         {
-            tabComponent: ( <StaffService info={staffServices} staffGeneral={staffGeneral} />)
+            tabComponent: (<StaffService info={staffServices} staffGeneral={staffGeneral}/>)
         },
         {
             tabComponent: (globalNotes.length ? <Notes
@@ -271,7 +270,8 @@ export const StaffItem = () => {
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
                 <div className={classes.staffSingleItem}>
-                    <StaffItemHeader title={`${staffGeneral?.firstName} ${staffGeneral?.lastName}`} noteModalTypeInfo={noteModalTypeInfo} handleOpenClose={handleOpenCloseNote}
+                    <StaffItemHeader onModel='Staff' availabilityData={availabilityData} title={`${staffGeneral?.firstName} ${staffGeneral?.lastName}`}
+                                     noteModalTypeInfo={noteModalTypeInfo} handleOpenClose={handleOpenCloseNote}
                                      openModal={openModal} globalCredentialInformation={globalCredentialInformation}
                                      globalCredentials={globalCredentials} credModalType={credModalType}
                                      openCloseCredModal={openCloseCredModal} openCredModal={openCredModal}
