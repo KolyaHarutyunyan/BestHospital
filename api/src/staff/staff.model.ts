@@ -35,7 +35,8 @@ const StaffSchema = new Schema({
   termination: TerminationSchema,
   // credentailStatus: { type: Number, enum: CredentialsStatus }
   // employmentId: { type: Types.ObjectId, ref: 'Employment' },
-  address: addressSchema
+  address: addressSchema,
+  clinical: { type: Boolean }
 });
 
 export const StaffModel = model<IStaff>('Staff', StaffSchema);

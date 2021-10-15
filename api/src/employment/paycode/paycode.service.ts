@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { MongooseUtil } from '../../util';
-import { CreatePaycodeDTO, UpdatePaycodeDTO, PayCodeDTO } from './dto';
+import { CreatePaycodeDTO, UpdatePayCodeDTO, PayCodeDTO } from './dto';
 import { IPayCode } from './interface';
 import { PayCodeModel } from './paycode.model';
 import { EmploymentService } from '../employment.service';
@@ -33,23 +33,37 @@ export class PaycodeService {
       active: dto.active,
       startDate: dto.startDate
     })
-    if (dto.endDate) paycode.endDate = dto.endDate
+    if (!dto.active && !dto.endDate) {
+      throw new HttpException(
+        'endDate required field',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (dto.endDate && !dto.active) paycode.endDate = dto.endDate
     await paycode.save()
     return this.sanitizer.sanitize(paycode)
   }
 
-  async findAll(employmentId: string): Promise<PayCodeDTO[]> {
+  async findAllByEmployment(employmentId: string): Promise<PayCodeDTO[]> {
     try {
       const payCode = await this.model.find({ employmentId }).populate('payCodeTypeId');
       this.checkPayCode(payCode[0]);
       return this.sanitizer.sanitizeMany(payCode)
-      // poopulate payCodeType
     }
     catch (e) {
       throw e
     }
   }
-
+  async findAll(): Promise<PayCodeDTO[]> {
+    try {
+      const payCode = await this.model.find({}).populate('payCodeTypeId');
+      this.checkPayCode(payCode[0]);
+      return this.sanitizer.sanitizeMany(payCode)
+    }
+    catch (e) {
+      throw e
+    }
+  }
   async findOne(_id: string): Promise<PayCodeDTO> {
     try {
       let payCode = await this.model.findById({ _id }).populate('payCodeTypeId')
@@ -62,9 +76,35 @@ export class PaycodeService {
     }
   }
 
-  // update(id: string, dto: UpdatePaycodeDTO) {
-  //   return `This action updates a #${id} paycode`;
-  // }
+  async update(_id: string, dto: UpdatePayCodeDTO): Promise<PayCodeDTO> {
+    try {
+      let payCode = await this.model.findById(_id);
+      this.checkPayCode(payCode);
+      if (dto.payCodeTypeId) {
+        await this.PayCodeTypeService.findOne(dto.payCodeTypeId);
+      }
+      if (dto.employmentId) {
+        await this.employmentService.findOne(dto.employmentId)
+      }
+      if (dto.rate) payCode.rate = dto.rate;
+      if (!dto.active && !dto.endDate) {
+        throw new HttpException(
+          'endDate required field',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      if (dto.active && !dto.endDate) {
+        payCode.endDate = "Precent"
+      }
+      if (dto.endDate && !dto.active) payCode.endDate = dto.endDate;
+      if (dto.startDate) payCode.startDate = dto.startDate;
+      payCode = await (await payCode.save()).populate('payCodeTypeId').execPopulate();
+      return this.sanitizer.sanitize(payCode);
+    }
+    catch (e) {
+      throw e
+    }
+  }
 
   // remove(id: string) {
   //   return `This action removes a #${id} paycode`;
