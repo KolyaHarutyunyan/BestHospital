@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger"
-import { IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator"
+import { IsEnum, IsNotEmpty, IsNumber, IsPositive, IsString } from "class-validator"
 import {OvertimeStatus} from '../overtime.constants';
 
 export class CreateOvertimeDTO {
@@ -17,5 +17,6 @@ export class CreateOvertimeDTO {
     @ApiProperty()
     @IsNumber()
     @IsNotEmpty()
+    @IsPositive()
     threshold: number;
 }

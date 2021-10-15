@@ -118,7 +118,7 @@ export const data = {
       firstName: 'A',
       middleName: 'A',
       lastName: 'A',
-      email: 'A@gmail.com',
+      email: 'Asss@gmail.com',
       secondaryEmail: 'B@gmail.com',
       phone: '+14845219791',
       secondaryPhone: '+14845219791',
@@ -178,6 +178,150 @@ export const data = {
       onModel: null,
     },
   ],
+  overtime: [
+    {
+      name: "dto.name",
+      type: "DAILY",
+      multiplier: 3,
+      threshold: 10
+    },
+    {
+      name: "dto.name",
+      type: "dsds",
+      multiplier: 3,
+      threshold: 10
+    },
+    {
+      name: "dto.name",
+      type: "DAILY",
+      multiplier: 3,
+      threshold: 0
+    },
+  ],
+  timesheet: [
+    {
+      staffId: null,
+      payCode: null,
+      description: "Something",
+      hours: 10,
+      startDate: "2021-10-15T09:39:09.822Z",
+      endDate: "2021-10-15T09:39:09.822Z"
+    },
+    {
+      staffId: 'dsds85',
+      payCode: null,
+      description: "Something",
+      hours: 10,
+      startDate: "2021-10-15T09:39:09.822Z",
+      endDate: "2021-10-15T09:39:09.822Z"
+    },
+    {
+      staffId: null,
+      payCode: '456456ghg',
+      description: "Something",
+      hours: 10,
+      startDate: "2021-10-15T09:39:09.822Z",
+      endDate: "2021-10-15T09:39:09.822Z"
+    }
+  ],
+  payCode: [
+    {
+      employmentId: null,
+      payCodeTypeId: null,
+      rate: 50,
+      active: true,
+      startDate: "2021-10-15T09:39:09.822Z"
+    },
+    {
+      employmentId: 'fdfdf',
+      payCodeTypeId: null,
+      rate: 50,
+      active: true,
+      startDate: "2021-10-15T09:39:09.822Z"
+    },
+    {
+      employmentId: null,
+      payCodeTypeId: 'dsdsdsd',
+      rate: 50,
+      active: true,
+      startDate: "2021-10-15T09:39:09.822Z"
+    },
+  ],
+  payCodeType: [
+    {
+      name: "dto.name",
+      code: "dto.code",
+      type: "HOURLY",
+      overtime: true,
+      pto: true
+    },
+    {
+      name: "dto.name",
+      code: "dto.code",
+      type: "Hourlygf",
+      overtime: "dto.overtime",
+      pto: "dto.pto"
+    },
+  ],
+  employment: [
+    {
+      title: "string",
+      staffId: null,
+      departmentId: null,
+      supervisor: null,
+      startDate: "2021-10-15T10:45:41.052Z",
+      endDate: "2021-10-15T10:45:41.052Z",
+      active: true,
+      schedule: 0,
+      termination: {
+        "reason": "string",
+        "date": "2021-10-15T10:45:41.052Z"
+      }
+    },
+    {
+      title: "string",
+      staffId: 'dsd',
+      departmentId: null,
+      supervisor: null,
+      startDate: "2021-10-15T10:45:41.052Z",
+      endDate: "2021-10-15T10:45:41.052Z",
+      active: true,
+      schedule: 0,
+      termination: {
+        "reason": "string",
+        "date": "2021-10-15T10:45:41.052Z"
+      }
+    },
+    {
+      title: "string",
+      staffId: null,
+      departmentId: 'dfdf',
+      supervisor: null,
+      startDate: "2021-10-15T10:45:41.052Z",
+      endDate: "2021-10-15T10:45:41.052Z",
+      active: true,
+      schedule: 0,
+      termination: {
+        "reason": "string",
+        "date": "2021-10-15T10:45:41.052Z"
+      }
+    },
+    {
+      title: "string",
+      staffId: null,
+      departmentId: null,
+      supervisor: 'fdfd',
+      startDate: "2021-10-15T10:45:41.052Z",
+      endDate: "2021-10-15T10:45:41.052Z",
+      active: true,
+      schedule: 0,
+      termination: {
+        "reason": "string",
+        "date": "2021-10-15T10:45:41.052Z"
+      }
+    }
+  ],
+ 
   permissions: [
     {
       title: 'ALL_ACCESS',

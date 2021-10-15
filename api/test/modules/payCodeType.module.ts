@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { BASE_URL } from '../data';
 
-export class EmploymentModule {
-  static async createEmployment(employment) {
-    const res = await axios.post(BASE_URL + 'employment', employment);
+export class PayCodeTypeModule {
+  static async createPayCodeType(payCodeType) {
+    const res = await axios.post(BASE_URL + 'paycodetype', payCodeType);
     return res.data;
   }
   static async editFunding(funding, fundingId) {

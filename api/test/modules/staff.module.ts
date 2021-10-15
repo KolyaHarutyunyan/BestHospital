@@ -3,7 +3,7 @@ import { BASE_URL } from '../data';
 
 export class StaffModule {
   static async createStaff(staff) {
-    const res = await axios.post(BASE_URL + 'staff/test', staff);
+    const res = await axios.post(BASE_URL + 'staff', staff);
     return res.data;
   }
   static async editStaff(staff, id) {
