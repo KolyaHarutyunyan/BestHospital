@@ -62,24 +62,31 @@ export class TimesheetService {
       maxMultiplier = await this.getMaxMultiplier(overtime);
       if (maxMultiplier.type == 'DAILY') {
         const getDayTimesheet = await this.getDailyTimesheet(dto.startDate);
+        // if not find any daily timesheet
         if (getDayTimesheet.length == []) {
           bigAmount += dto.hours * payCode.rate;
           return
         }
+        // if find daily timesheets then count of hours ? :)
         getDayTimesheet.map(timesheet => {
           dailyAmount += timesheet.hours
         })
         dailyAmount += dto.hours;
+        // if dailyAmount less then maxMultiplier(overtime rule) then delete current maxMultiplier and skip that
         if (dailyAmount < maxMultiplier.threshold) {
           const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
+          // if can't find any maxMultiplier(overtime rule) then count by ordinary rate
           if (filteredDays.length == []) {
             bigAmount = bigAmount + dto.hours * payCode.rate;
             return bigAmount
           }
+          //skip current maxMultiplier(overtime rule) and find another maxMultiplier
           await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
         }
         else {
-          const difference = await dto.hours - maxMultiplier.threshold;
+          // count difference and get amount with rate
+          const difference = dto.hours - maxMultiplier.threshold;
+          // if difference less than 0 count rate and return, if not then call function again for calculating remaining hours
           if (difference < 0 || difference == 0) {
             maxMultiplier.threshold - dto.hours;
             bigAmount += dto.hours * payCode.rate * maxMultiplier.multiplier;
