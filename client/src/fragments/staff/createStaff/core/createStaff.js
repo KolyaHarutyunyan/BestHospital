@@ -30,6 +30,9 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
     const [inputs, setInputs] = useState(resetData ? {} : staffGeneral ? staffGeneral : {});
     const [fullAddress, setFullAddress] = useState(staffGeneral ? staffGeneral.address.formattedAddress : '')
 
+
+    const [license, setLicense] = useState(staffGeneral ? staffGeneral.license : {})
+
     const disabledOne = inputs.firstName && error !== 'Not valid email' && inputs.lastName && inputs.email && inputs.phone
 
     const disableSecond = !fullAddress.length
@@ -65,6 +68,19 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
         error === e.target.name && setError('')
     }
 
+    const handleChangeLicense = e => {
+        setLicense(
+            prevState => (
+                {
+                    ...prevState,
+                    [e.target.name]: e.target.value
+                }
+            ));
+        error === e.target.name && setError('')
+    }
+
+    console.log(license, 'license');
+
     const handleCreate = () => {
         const data = {
             firstName: inputs.firstName,
@@ -81,10 +97,10 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
             ssn: parseInt(inputs.ssn),
             status: staffGeneral ? staffGeneral.status : 1,
             address: fullAddress,
-            license: inputs?.driverLicense && inputs?.state && inputs?.expirationDate ? {
-                driverLicense: inputs?.driverLicense,
-                expireDate: inputs?.expirationDate ? new Date(inputs.expirationDate).toISOString() : '',
-                state: inputs?.state
+            license: license?.driverLicense && license?.state && license?.expireDate ? {
+                driverLicense: license?.driverLicense,
+                expireDate: license?.expireDate ? new Date(license.expireDate).toISOString() : '',
+                state: license?.state
             } : undefined
         }
 
@@ -98,16 +114,16 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
             inputs.ssn &&
             fullAddress
         )) {
-            if (inputs.driverLicense || inputs.state || inputs.expirationDate) {
-                if (inputs.driverLicense && inputs.state && inputs.expirationDate) {
+            if (license.driverLicense || license.state || license.expireDate) {
+                if (license.driverLicense && license.state && license.expireDate) {
                     staffGeneral ?
                         dispatch(adminActions.editAdminById(data, staffGeneral.id)) :
                         dispatch(adminActions.createAdmin(data))
                 } else {
                     setError(
-                        !inputs.driverLicense ? 'driverLicense' :
-                            !inputs.state ? 'state' :
-                                !inputs.expirationDate ? 'expirationDate' :
+                        !license.driverLicense ? 'driverLicense' :
+                            !license.state ? 'state' :
+                                !license.expireDate ? 'expirationDate' :
                                     'Input is not filled'
                     )
                 }
@@ -154,9 +170,6 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
             dispatch(httpRequestsOnErrorsActions.removeError(httpOnError.length && httpOnError[0].type))
         }
     }, [success]);
-
-
-    console.log(staffGeneral,'staffGeneral');
 
     const firstStep = (
         <React.Fragment>
@@ -253,8 +266,8 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
             <p className={classes.otherDetailsTitle}>Driver License</p>
             <ValidationInput
                 variant={"outlined"}
-                onChange={handleChange}
-                value={staffGeneral?.license?.driverLicense ? staffGeneral?.license?.driverLicense : inputs.driverLicense}
+                onChange={handleChangeLicense}
+                value={license ? license.driverLicense : ''}
                 type={"text"}
                 label={"Driver License*"}
                 name='driverLicense'
@@ -265,19 +278,19 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
                     style={classes.selectMargin}
                     name={"state"}
                     label={"Issuing State*"}
-                    handleSelect={handleChange}
-                    value={staffGeneral?.license?.state ? staffGeneral?.license?.state : inputs.state}
+                    handleSelect={handleChangeLicense}
+                    value={license ? license.state : ''}
                     list={issuingStateList}
                     typeError={error === 'state' ? ErrorText.field : ''}
                 />
                 <ValidationInput
                     variant={"outlined"}
-                    onChange={handleChange}
-                    value={staffGeneral?.license?.expireDate ? moment(staffGeneral?.license?.state).format().substring(0, 10) : inputs.expirationDate}
+                    onChange={handleChangeLicense}
+                    value={license?.expireDate && moment(license?.expireDate).format().substring(0, 10)}
                     type={"date"}
                     label={"Expiration Date*"}
-                    name='expirationDate'
-                    typeError={error === 'expirationDate' && ErrorText.field}
+                    name='expireDate'
+                    typeError={error === 'expireDate' && ErrorText.field}
                 />
             </div>
             <p className={`${classes.otherDetailsTitle} ${classes.titlePadding}`}>Other</p>
