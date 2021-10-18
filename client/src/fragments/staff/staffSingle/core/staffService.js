@@ -8,13 +8,14 @@ import {adminActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions,
 import {systemItemStyles} from "@eachbase/fragments/system/core";
 import {serviceSingleStyles} from "./styles";
 
+
 const credentialBtn = {
     maxWidth: '174px',
     width: '100%',
     flex: '0 0 174px',
     padding: 0
 }
-export const StaffService = ({ staffGeneral, info}) => {
+export const StaffService = ({staffGeneral, info}) => {
     const dispatch = useDispatch()
     const classes = systemItemStyles()
     const classes2 = serviceSingleStyles()
@@ -64,7 +65,7 @@ export const StaffService = ({ staffGeneral, info}) => {
 
     const handleSubmit = () => {
         if (inputs.serviceType) {
-            let serviceID = services && services.length >0 && services.find(item => item.name == inputs.serviceType).id
+            let serviceID = services && services.length >0 && services.find(item => item.name === inputs.serviceType).id
              dispatch(adminActions.createStaffService(params.id, serviceID));
         } else {
             setError(

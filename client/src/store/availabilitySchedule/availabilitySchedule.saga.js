@@ -14,7 +14,6 @@ import {httpRequestsOnSuccessActions} from "../http_requests_on_success";
 function* getAvailabilitySchedule(action) {
     try {
         const res = yield call(availabilityScheduleService.getAvailabilityScheduleService, action.payload.id || action.payload,);
-        console.log(res,'ressssssssssss')
         yield put({
             type: GET_AVAILABILITY_SCHEDULE_GLOBAL_SUCCESS,
             payload: res.data,

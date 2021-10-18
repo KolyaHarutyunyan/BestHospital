@@ -1,7 +1,7 @@
 import React from "react";
 import {serviceSingleStyles} from "./styles";
+import {AddButton, AddModalButton, SimpleModal, AddNotes, AvailabilitySchedule} from "@eachbase/components";
 import {Colors, Images} from "@eachbase/utils";
-import {AddButton, AddModalButton, SimpleModal, AddNotes} from "@eachbase/components";
 import {CreateStaff, CredentialModal} from "@eachbase/fragments";
 import {useSelector} from "react-redux";
 import {EmploymentModal, TimesheetModal} from "./modals";
@@ -13,6 +13,8 @@ const editButtonStyle = {
 }
 
 export const StaffItemHeader = ({
+                                    onModel,
+                                    availabilityData,
                                     title,
                                     noteModalTypeInfo,
                                     openModal,
@@ -59,7 +61,15 @@ export const StaffItemHeader = ({
                             <AddModalButton btnStyles={editButtonStyle} handleClick={handleOpenClose}
                                             text='edit'/>
                             : activeTab === 2 ? <AddButton text='Add Timesheet'
-                                                           handleClick={handleOpenClose}
+                                                           handleClick={() => handleOpenClose}/>
+                            : activeTab === 3 ?
+                                <AddButton text='Add Credential'
+                                           handleClick={() => openCloseCredModal('addCredential')}/>
+                                : activeTab === 5 ? <AddButton text='Available Hours' handleClick={handleOpenClose}/>
+                                    : activeTab === 1 ? <AddButton text='Add Employment' handleClick={handleOpenClose}/>
+                                        : activeTab === 7 ?
+                                            <AddButton text='Add Note' handleClick={handleOpenClose}
+
                             />
                             : activeTab === 3 ?
                                 <AddButton text='Add Credential'
@@ -82,6 +92,7 @@ export const StaffItemHeader = ({
                 content={activeTab === 0 ?
                     <CreateStaff adminsList={adminsList && adminsList.staff} staffGeneral={adminInfoById}
                                  resetData={false} handleClose={handleOpenClose}/>
+                    : activeTab === 2 ? <p>Timesheet</p>
                     : activeTab === 2 ?
                         <TimesheetModal handleClose={handleOpenClose}/>
                         : activeTab === 3 ?
@@ -91,7 +102,12 @@ export const StaffItemHeader = ({
                             : activeTab === 1 ? <EmploymentModal handleClose={handleOpenClose}/>
                                 : activeTab === 7 ?
                                     <AddNotes model='Staff' noteModalTypeInfo={noteModalTypeInfo}
-                                              handleClose={handleOpenClose}/> : null}
+                                              handleClose={handleOpenClose}/>
+                                    : activeTab === 5 ?
+                                        <AvailabilitySchedule onModel={onModel} availabilityData={availabilityData}
+                                                              handleClose={handleOpenClose}/>
+                                        : null}
+
             />
         </div>
     )
