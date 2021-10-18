@@ -7,7 +7,7 @@ export interface IService extends Document {
   modifiers: Array<Object>; 
   name: string;
   rate: number;
-  cptCode: number;
+  cptCode: string;
   size: number;
   min: number;
   max: number;

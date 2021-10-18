@@ -15,8 +15,8 @@ export class UpdateServiceDto {
     rate: number;
     @ApiProperty()
     @IsNotEmpty()
-    @IsNumber()
-    cptCode: number;
+    @IsString()
+    cptCode: string;
     @ApiProperty()
     @IsNotEmpty()
     @IsNumber()

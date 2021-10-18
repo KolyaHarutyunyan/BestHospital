@@ -13,7 +13,7 @@ export const serviceSchema = new Schema({
     serviceId: { type: Types.ObjectId, ref: 'Service' },
     name: { type: String },
     rate: { type: Number },
-    cptCode: { type: Number },
+    cptCode: { type: String },
     size: { type: Number },
     min: { type: Number },
     max: { type: Number }
