@@ -72,12 +72,13 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
                 "name": inputs.name,
                 "serviceId": sysServiceItem?.id,
                 "rate": 0,
-                "cptCode": +inputs.cptCode,
+                "cptCode": inputs.cptCode,
                 "size": +inputs.size,
                 "min": +inputs.min,
                 "max": +inputs.max
             }
             let arr = postModifiers
+            console.log(arr,'aaararararararararararar')
              if (!info){
                 dispatch(fundingSourceActions.createFoundingSourceServiceById(params.id, data, arr))
             }else {
@@ -127,7 +128,7 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
                             onChange={handleChange}
                             value={inputs.cptCode}
                             variant={"outlined"}
-                            type={"number"}
+                             type={"text"}
                             label={"CPT Code*"}
                             name={'cptCode'}
                             typeError={error === 'cptCode' && ErrorText.field}

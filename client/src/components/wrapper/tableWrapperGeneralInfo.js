@@ -28,7 +28,7 @@ export const TableWrapperGeneralInfo =
                 <div className={classes.inactiveActiveHeader}>
                     <CustomBreadcrumbs className={classes.breadcrumb} parent={parent} child={title}
                                        parentLink={parentLink}/>
-                    <AddModalButton btnStyles={inactivateButtonStyle} text={activeInactiveText} handleClick={handleOpenClose}/>
+                    {/*<AddModalButton btnStyles={inactivateButtonStyle} text={activeInactiveText} handleClick={handleOpenClose}/>*/}
                 </div>
                 <div className={classes.addButton}>
                     <SimpleModal
