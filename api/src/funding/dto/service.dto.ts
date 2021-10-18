@@ -3,38 +3,21 @@ import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsPhoneNumber, IsString, IsUrl }
 
 export class ServiceDTO {
     @ApiProperty()
-    @IsNotEmpty()
     id: string
     @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
     serviceId: string
     @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
     funderId: string;
     @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
     name: string;
     @ApiProperty()
-    @IsNotEmpty()
-    @IsNumber()
     rate: number;
     @ApiProperty()
-    @IsNotEmpty()
-    @IsNumber()
-    cptCode: number;
+    cptCode: string;
     @ApiProperty()
-    @IsNotEmpty()
-    @IsNumber()
     size: number;
     @ApiProperty()
-    @IsNotEmpty()
-    @IsNumber()
     min: number
     @ApiProperty()
-    @IsNotEmpty()
-    @IsNumber()
     max: number;
 }
