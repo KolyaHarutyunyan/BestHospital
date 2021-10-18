@@ -16,7 +16,7 @@ export const DeleteElement = ({text, info, handleDel, handleClose, loader}) => {
             </div>
 
             <div className={classes.deleteModalWrapper}>
-                <p className={globalText.modalTitle}>{info}</p>
+                <p className={globalText.modalTitle} style={{width : 400, overflow :'hidden', height : 52, textOverflow :'ellipsis'}}>{info}</p>
                 <p className={globalText.modalText}>{text}</p>
 
                 <div className={classes.buttons}>
