@@ -12,12 +12,10 @@ export const ChangePassword = ({}) => {
     const [showInputs, setShowInputs] = useState(false)
     const [inputs, setInputs] = useState(false)
 
-
     const { httpOnSuccess, httpOnError } = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnError: state.httpOnError
     }));
-
 
     const handleChange = e => setInputs(prevState =>
             ({...prevState, [e.target.name]: e.target.value}),
@@ -51,9 +49,8 @@ export const ChangePassword = ({}) => {
         }
     };
 
-
-
     const classes = myProfileFragment()
+
     return (
         <div className={classes.changePasswordWrapper}>
             <div className={classes.changePasswordContent}>

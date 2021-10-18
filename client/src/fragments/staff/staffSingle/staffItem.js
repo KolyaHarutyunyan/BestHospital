@@ -194,7 +194,6 @@ export const StaffItem = () => {
         })
     }
 
-
     const tabsContent = [
         {
             tabComponent: (httpOnLoad.length ? <Loader/> : <StaffGeneral staffGeneral={staffGeneral}/>)

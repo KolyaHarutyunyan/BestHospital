@@ -7,8 +7,6 @@ import {adminActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions,
 import {systemItemStyles} from "../../../system/core";
 import {serviceSingleStyles} from "./styles";
 import {useParams} from "react-router-dom";
-import {AddAuthorization} from "../../../client";
-import {deleteStaffService} from "../../../../store/admin/admin.action";
 
 const credentialBtn = {
     maxWidth: '174px',
@@ -16,7 +14,7 @@ const credentialBtn = {
     flex: '0 0 174px',
     padding: 0
 }
-export const StaffService = ({removeItem, openModal, staffGeneral, info}) => {
+export const StaffService = ({staffGeneral, info}) => {
     const dispatch = useDispatch()
     const classes = systemItemStyles()
     const classes2 = serviceSingleStyles()
@@ -67,7 +65,6 @@ export const StaffService = ({removeItem, openModal, staffGeneral, info}) => {
     }
 
     const handleSubmit = () => {
-
 
         if (inputs.serviceType) {
             let serviceID = services && services.length >0 && services.find(item => item.name === inputs.serviceType).id

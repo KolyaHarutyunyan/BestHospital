@@ -59,7 +59,7 @@ export const StaffItemHeader = ({
                                 <AddButton text='Add Credential'
                                            handleClick={() => openCloseCredModal('addCredential')}/>
                                 : activeTab === 5 ? <AddButton text='Available Hours' handleClick={handleOpenClose}/>
-                                    : activeTab === 1 ? <AddButton text='Add Employemnt' handleClick={handleOpenClose}/>
+                                    : activeTab === 1 ? <AddButton text='Add Employment' handleClick={handleOpenClose}/>
                                         : activeTab === 7 ?
                                             <AddButton text='Add Note' handleClick={handleOpenClose}/> : null
                     }
