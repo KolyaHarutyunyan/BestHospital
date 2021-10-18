@@ -7,7 +7,6 @@ import {SelectInputPlaceholder} from "@eachbase/components";
 import {adminActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
 import {systemItemStyles} from "@eachbase/fragments/system/core";
 import {serviceSingleStyles} from "./styles";
-import {useParams} from "react-router-dom";
 
 
 const credentialBtn = {

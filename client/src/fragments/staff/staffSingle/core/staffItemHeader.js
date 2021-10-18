@@ -1,6 +1,5 @@
 import React from "react";
 import {serviceSingleStyles} from "./styles";
-import {Images} from "@eachbase/utils";
 import {AddButton, AddModalButton, SimpleModal, AddNotes, AvailabilitySchedule} from "@eachbase/components";
 import {Colors, Images} from "@eachbase/utils";
 import {CreateStaff, CredentialModal} from "@eachbase/fragments";
@@ -69,8 +68,8 @@ export const StaffItemHeader = ({
                                 : activeTab === 5 ? <AddButton text='Available Hours' handleClick={handleOpenClose}/>
                                     : activeTab === 1 ? <AddButton text='Add Employment' handleClick={handleOpenClose}/>
                                         : activeTab === 7 ?
-                                            <AddButton text='Add Note' handleClick={handleOpenClose}/> : null
-                                                           handleClick={handleOpenClose}
+                                            <AddButton text='Add Note' handleClick={handleOpenClose}
+
                             />
                             : activeTab === 3 ?
                                 <AddButton text='Add Credential'

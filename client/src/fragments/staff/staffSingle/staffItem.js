@@ -270,10 +270,8 @@ export const StaffItem = () => {
             >
                 <div className={classes.staffSingleItem}>
 
-//                     <StaffItemHeader onModel='Staff' availabilityData={availabilityData} title={`${staffGeneral?.firstName} ${staffGeneral?.lastName}`}
-//                                      noteModalTypeInfo={noteModalTypeInfo} handleOpenClose={handleOpenCloseNote}
-// =======
-                    <StaffItemHeader title={`${staffGeneral?.firstName} ${staffGeneral?.lastName}`}
+
+                    <StaffItemHeader onModel='Staff' availabilityData={availabilityData} title={`${staffGeneral?.firstName} ${staffGeneral?.lastName}`}
                                      noteModalTypeInfo={noteModalTypeInfo}
                                      handleOpenClose={handleOpenCloseNote}
                                      openModal={openModal} globalCredentialInformation={globalCredentialInformation}
