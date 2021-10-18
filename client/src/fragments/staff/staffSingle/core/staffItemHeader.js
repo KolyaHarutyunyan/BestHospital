@@ -1,6 +1,13 @@
-import React from "react";
+import React, {useState} from "react";
 import {serviceSingleStyles} from "./styles";
-import {AddButton, AddModalButton, SimpleModal, AddNotes, AvailabilitySchedule} from "@eachbase/components";
+import {
+    AddButton,
+    AddModalButton,
+    SimpleModal,
+    AddNotes,
+    AvailabilitySchedule,
+    ValidationInput
+} from "@eachbase/components";
 import {Colors, Images} from "@eachbase/utils";
 import {CreateStaff, CredentialModal} from "@eachbase/fragments";
 import {useSelector} from "react-redux";
@@ -35,11 +42,19 @@ export const StaffItemHeader = ({
         })
     )
 
-
-    let changeSwitch = (e)=>{
+    let changeSwitch = (e) => {
         console.log(e.target.checked)
     }
 
+    const [searchDate, setSearchDate] = useState('')
+
+    const handleChange = e => {
+        setSearchDate(e.target.value)
+    }
+
+    const handleSubmit = () => {
+        alert('submit')
+    }
 
     return (
         <div>
@@ -70,19 +85,37 @@ export const StaffItemHeader = ({
                                         : activeTab === 7 ?
                                             <AddButton text='Add Note' handleClick={handleOpenClose}
 
-                            />
-                            : activeTab === 3 ?
-                                <AddButton text='Add Credential'
-                                           handleClick={() => openCloseCredModal('addCredential')}/>
-                                : activeTab === 1 ? <div style={{display: 'flex', alignItems: "center"}}>
-                                        <p style={{color:Colors.ThemeBlue, fontWeight: 'bold'}}>Clinician</p>
-                                       <div style={{margin: '0 24px 0 8px'}}>
-                                           <Switch onChange={changeSwitch} color={"primary"} />
-                                       </div>
-                                        <AddButton text='Add Employemnt' handleClick={handleOpenClose}/>
-                                    </div>
-                                    : activeTab === 7 ?
-                                        <AddButton text='Add Note' handleClick={handleOpenClose}/> : null
+                                            />
+                                            : activeTab === 3 ?
+                                                <AddButton text='Add Credential'
+                                                           handleClick={() => openCloseCredModal('addCredential')}/>
+                                                : activeTab === 1 ?
+                                                    <div style={{display: 'flex', alignItems: "center"}}>
+                                                        <p style={{
+                                                            color: Colors.ThemeBlue,
+                                                            fontWeight: 'bold'
+                                                        }}>Clinician</p>
+                                                        <div style={{margin: '0 24px 0 8px'}}>
+                                                            <Switch onChange={changeSwitch} color={"primary"}/>
+                                                        </div>
+                                                        <AddButton text='Add Employment' handleClick={handleOpenClose}/>
+                                                    </div>
+                                                    : activeTab === 7 ?
+                                                        <AddButton text='Add Note' handleClick={handleOpenClose}/> :
+                                                        activeTab === 8 ?
+                                                            <div className={classes.searchContainer}>
+                                                                <ValidationInput
+                                                                    errorFalse={true}
+                                                                    variant={"outlined"}
+                                                                    onChange={(e) => handleChange(e)}
+                                                                    value={searchDate}
+                                                                    type={"date"}
+                                                                    name='searchDate'
+                                                                    // typeError={error === 'birthday' && ErrorText.field}
+                                                                />
+                                                                <AddButton text='Search' handleClick={handleSubmit}/>
+                                                            </div>
+                                                            : null
                     }
                 </li>
             </ul>
@@ -93,20 +126,20 @@ export const StaffItemHeader = ({
                     <CreateStaff adminsList={adminsList && adminsList.staff} staffGeneral={adminInfoById}
                                  resetData={false} handleClose={handleOpenClose}/>
                     : activeTab === 2 ? <p>Timesheet</p>
-                    : activeTab === 2 ?
-                        <TimesheetModal handleClose={handleOpenClose}/>
-                        : activeTab === 3 ?
-                            <CredentialModal globalCredentialInformation={globalCredentialInformation}
-                                             globalCredentials={globalCredentials} credModalType={credModalType}
-                                             handleClose={() => openCloseCredModal()}/>
-                            : activeTab === 1 ? <EmploymentModal handleClose={handleOpenClose}/>
-                                : activeTab === 7 ?
-                                    <AddNotes model='Staff' noteModalTypeInfo={noteModalTypeInfo}
-                                              handleClose={handleOpenClose}/>
-                                    : activeTab === 5 ?
-                                        <AvailabilitySchedule onModel={onModel} availabilityData={availabilityData}
-                                                              handleClose={handleOpenClose}/>
-                                        : null}
+                        : activeTab === 2 ?
+                            <TimesheetModal handleClose={handleOpenClose}/>
+                            : activeTab === 3 ?
+                                <CredentialModal globalCredentialInformation={globalCredentialInformation}
+                                                 globalCredentials={globalCredentials} credModalType={credModalType}
+                                                 handleClose={() => openCloseCredModal()}/>
+                                : activeTab === 1 ? <EmploymentModal handleClose={handleOpenClose}/>
+                                    : activeTab === 7 ?
+                                        <AddNotes model='Staff' noteModalTypeInfo={noteModalTypeInfo}
+                                                  handleClose={handleOpenClose}/>
+                                        : activeTab === 5 ?
+                                            <AvailabilitySchedule onModel={onModel} availabilityData={availabilityData}
+                                                                  handleClose={handleOpenClose}/>
+                                            : null}
 
             />
         </div>

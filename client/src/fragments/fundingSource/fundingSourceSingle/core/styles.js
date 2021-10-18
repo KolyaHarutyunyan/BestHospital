@@ -38,6 +38,12 @@ export const fundingSourceSingleStyles = makeStyles(() => ({
         fontSize: 24,
         color: Colors.TextPrimary,
         fontWeight: "bold",
+
+        width : 400,
+        height : 33,
+         overflow : 'hidden',
+        textOverflow : 'ellipsis',
+        whiteSpace: 'nowrap',
     },
     fundingSourceSingleGeneralStyles: {
         display: 'flex',

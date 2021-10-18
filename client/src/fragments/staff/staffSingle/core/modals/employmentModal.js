@@ -87,7 +87,8 @@ export const EmploymentModal = ({handleClose, info}) => {
                 "staffId": params.id,
                 "supervisor": supervisorID,
                 "departmentId": depId,
-                "date": inputs.startDate,
+                "active": true,
+                "startDate": new Date(inputs.startDate).toISOString(),
                 "schedule": +inputs.employmentType,
                 "termination": {
                     // "reason": "string",
