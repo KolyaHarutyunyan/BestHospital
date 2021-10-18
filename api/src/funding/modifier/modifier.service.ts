@@ -26,15 +26,16 @@ export class ModifierService {
       const credentials = [];
       const fundingService = await this.fundingService.findService(dto.serviceId);
       const modifiers: any = await this.model.findOne({ serviceId: fundingService._id })
-      dto.modifiers.map(modifier => {
-        credentials.indexOf(modifier.credentialId) === -1 ? credentials.push(modifier.credentialId) : null
-      })
-      const credential = await this.credentialService.findAllByIds(credentials);
-      if (credentials.length !== credential.length) {
-        throw new HttpException(
-          'Credential was not found',
-          HttpStatus.NOT_FOUND)
-      }
+      // dto.modifiers.map(modifier => {
+      //   credentials.indexOf(modifier.credentialId) === -1 ? credentials.push(modifier.credentialId) : null
+      // })
+      // const credential = await this.credentialService.findAllByIds(credentials);
+      // if (credentials.length !== credential.length) {
+      //   throw new HttpException(
+      //     'Credential was not found',
+      //     HttpStatus.NOT_FOUND)
+      // }
+      
       if (modifiers) {
         dto.modifiers.map(modifier => {
           modifiers.modifiers.push(modifier)
@@ -78,15 +79,15 @@ export class ModifierService {
       const credentials = [];
       const modifier: any = await this.model.findOne({ serviceId: fundingServiceId });
       this.checkModify(modifier);
-      dto.modifiers.map(modifier => {
-        credentials.indexOf(modifier.credentialId) === -1 ? credentials.push(modifier.credentialId) : null
-      })
-      const credential = await this.credentialService.findAllByIds(credentials);
-      if (credentials.length !== credential.length) {
-        throw new HttpException(
-          'Credential was not found',
-          HttpStatus.NOT_FOUND)
-      }
+      // dto.modifiers.map(modifier => {
+      //   credentials.indexOf(modifier.credentialId) === -1 ? credentials.push(modifier.credentialId) : null
+      // })
+      // const credential = await this.credentialService.findAllByIds(credentials);
+      // if (credentials.length !== credential.length) {
+      //   throw new HttpException(
+      //     'Credential was not found',
+      //     HttpStatus.NOT_FOUND)
+      // }
       modifier.modifiers = dto.modifiers;
       await modifier.save()
       return modifier
