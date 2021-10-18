@@ -14,5 +14,5 @@ export class HistoryDTO {
     @ApiProperty()
     time: string;
     @ApiProperty()
-    date: string;
+    createdDate: string;
 }

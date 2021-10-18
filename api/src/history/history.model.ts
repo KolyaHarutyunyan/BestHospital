@@ -15,7 +15,7 @@ export const historySchema = new Schema({
         enum: ['Staff', 'Client', "Funder"]
     },
     user: { type: Types.ObjectId, ref: 'Staff' },
-    date: { type: Date, default: Date.now },
+    createdDate: { type: Date, default: Date.now },
     time: { type: String },
     title: { type: String }
 });

@@ -15,7 +15,7 @@ export class HistorySanitizer implements ISanitize {
       onModel: history.onModel,
       title: history.title,
       time: history.time,
-      date: history.date
+      createdDate: history.createdDate
     };
     return historyrDTO;
   }

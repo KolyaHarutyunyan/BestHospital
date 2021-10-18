@@ -6,6 +6,7 @@ import { HistoryModel } from './history.model';
 import { IHistory } from './interface';
 import { HistorySanitizer } from './interceptor';
 
+
 @Injectable()
 export class HistoryService {
   constructor(
@@ -22,7 +23,7 @@ export class HistoryService {
   async create(dto: CreateHistoryDTO): Promise<HistoryDTO> {
     try {
       const user = "610ba0a7b8944a30bcb15da4";
-         const onMod = dto.onModel;
+      const onMod = dto.onModel;
       const history = new this.model({
         resource: dto.resource,
         onModel: dto.onModel,
@@ -30,7 +31,7 @@ export class HistoryService {
         time: this.formatAMPM(new Date()),
         user,
       });
-     return await history.save();
+      return await history.save();
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'History already exists');
       throw e;
@@ -38,11 +39,27 @@ export class HistoryService {
   }
 
   /** returns all histories */
-  async findAll(onModel: string, resource: string, skip: number, limit: number): Promise<HistoryDTO[]> {
+  async findAll(onModel: string, resource: string, skip: number, limit: number, start: any, end: Date): Promise<HistoryDTO[]> {
     try {
+      let nullDate = false;
+      if (isNaN(end.getTime())) {
+        end = new Date()
+      }
+      if (isNaN(start.getTime())) {
+        start = new Date(new Date().getFullYear(), 0, 1);
+      }
+      if(isNaN(end.getTime()) && isNaN(start.getTime())){
+        start = new Date(new Date().getFullYear(), 0, 1);
+        end = new Date()
+      }
       if (isNaN(skip)) skip = 0;
       if (isNaN(limit)) limit = 10;
-      const histories = await this.model.find({ onModel, resource }).skip(skip).limit(limit).populate('user', 'firstName lastName');
+      const histories = await this.model.find({
+        onModel, resource, createdDate: {
+          $gte: start,
+          $lt: end
+        }
+      }).skip(skip).limit(limit).populate('user', 'firstName lastName');
       this.checkHistory(histories[0])
       return this.sanitizer.sanitizeMany(histories);
     } catch (e) {

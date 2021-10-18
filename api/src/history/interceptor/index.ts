@@ -1,1 +1,1 @@
-export { HistorySanitizer } from './sanitizer.interface';
+export { HistorySanitizer } from './sanitizer.interceptor';
