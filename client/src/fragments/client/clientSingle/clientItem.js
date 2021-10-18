@@ -61,7 +61,7 @@ export const ClientItem = () => {
 
 
     const data = useSelector(state => state.client.clientItemInfo)
-    const authItemData = useSelector(state => state.client.clientsAuthorizations[authItemIndex])
+    // const authItemData = useSelector(state => state.client.clientsAuthorizations[authItemIndex])
     const clientContactItem = useSelector(state => state.client.clientContacts[contactId])
     const clientContact = useSelector(state => state.client.clientContacts)
     const enrolments = useSelector(state => state.client.clientEnrollment)

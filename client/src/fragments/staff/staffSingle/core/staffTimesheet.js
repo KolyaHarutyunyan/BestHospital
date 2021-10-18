@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {Notes, SlicedText, TableBodyComponent} from "@eachbase/components";
 import {TableCell} from "@material-ui/core";
 import {Images} from "@eachbase/utils";
@@ -72,27 +72,20 @@ export const StaffTimesheet = () => {
 
     const classes = serviceSingleStyles()
 
+
+    const [active, setActive] = useState('active')
+
     const timesheetItem = (item, index) => {
         return (
             <TableBodyComponent key={index}>
                 <TableCell>
                     <SlicedText size={30} type={'name'} data={item.payCode}/>
                 </TableCell>
-                <TableCell>
-                    {item.type}
-                </TableCell>
-                <TableCell>
-                    {item.id}
-                </TableCell>
-                <TableCell>
-                    {item.startDate}
-                </TableCell>
-                <TableCell>
-                    {item.endDate}
-                </TableCell>
-                <TableCell>
-                    {item.totalAmount}
-                </TableCell>
+                <TableCell>{item.type}</TableCell>
+                <TableCell>{item.id}</TableCell>
+                <TableCell>{item.startDate}</TableCell>
+                <TableCell>{item.endDate}</TableCell>
+                <TableCell>{item.totalAmount}</TableCell>
             </TableBodyComponent>
         )
     }
@@ -100,18 +93,10 @@ export const StaffTimesheet = () => {
     const bcbaItem = (item, index) => {
         return (
             <TableBodyComponent key={index}>
-                <TableCell>
-                    <SlicedText size={30} type={'name'} data={item.rateType}/>
-                </TableCell>
-                <TableCell>
-                    {item.rate}
-                </TableCell>
-                <TableCell>
-                    {item.hours}
-                </TableCell>
-                <TableCell>
-                    {item.amount}
-                </TableCell>
+                <TableCell><SlicedText size={30} type={'name'} data={item.rateType}/></TableCell>
+                <TableCell>{item.rate}</TableCell>
+                <TableCell>{item.hours}</TableCell>
+                <TableCell>{item.amount}</TableCell>
             </TableBodyComponent>
         )
     }
@@ -119,9 +104,10 @@ export const StaffTimesheet = () => {
     return (
         <>
             <div className={classes.switcher}>
-                <p>Active</p>
-                <p>Processed</p>
+                <p className={ active === 'active' ? classes.switcherActive :  classes.switcherProcessed} onClick={()=> setActive('active') }>Active</p>
+                <p className={active === 'processed' ? classes.switcherActive :  classes.switcherProcessed} onClick={()=> setActive('processed') }>Processed</p>
             </div>
+
             <div className={classes.timesheetWrapper}>
                 <Notes
                     restHeight='560px'

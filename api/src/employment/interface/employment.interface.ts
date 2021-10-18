@@ -9,5 +9,7 @@ export interface IEmployment extends Document {
     termination: TerminationDTO;
     schedule: number;
     supervisor: string;
-    date: Date;
+    active: boolean;
+    startDate: Date;
+    endDate: any;
 }

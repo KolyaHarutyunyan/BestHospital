@@ -1,27 +1,18 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
+import {ValidationInput, SelectInput, CreateChancel, ModalHeader, Textarea} from "@eachbase/components";
 import {Checkbox} from "@material-ui/core";
 import {Colors, ErrorText} from "@eachbase/utils";
 import {adminActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 import {payrollActions} from "@eachbase/store/payroll";
 import {createClientStyle} from "@eachbase/fragments/client";
 import {staffModalsStyle} from "./styles";
-import moment from "moment";
 
-export const PaycodeModal = ({handleClose, info,employmentId}) => {
-    console.log(info,'iiinffoouza')
+export const TimesheetModal = ({handleClose, info,employmentId}) => {
+
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {
-        "employmentId": info.employmentId,
-        "payCodeTypeId": info.payCodeTypeId._id,
-         "rate": +info.rate,
-         "active": info.active,
-         "startDate": moment(info.startDate).format('YYYY-MM-DD'),
-         "endDate":  moment(info.startDate).format('YYYY-MM-DD')
-    }
-    : {});
-    const [checked, setChecked] = useState(info ? info.active : true);
+    const [inputs, setInputs] = useState(info ? {...info, modifiers: info.serviceId.name} : {});
+    const [checked, setChecked] = useState(true);
     const [payCode, setPayCode] = useState(null);
     const dispatch = useDispatch()
     const classes = createClientStyle()
@@ -47,12 +38,6 @@ export const PaycodeModal = ({handleClose, info,employmentId}) => {
             dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_AUTHORIZATION'))
         }
     }, [success])
-
-    useEffect(()=>{
-        if (info){
-            setPayCode(globalPayCodes.find(item => item.name === info.payCodeTypeId.name))
-        }
-    },[])
 
 
     const handleChange = e => {
@@ -81,7 +66,7 @@ export const PaycodeModal = ({handleClose, info,employmentId}) => {
             }
             dispatch(adminActions.createPayCode(data, employmentId))
         }
-         else {
+        else {
             setError(
                 !inputs.payCodeTypeId ? 'payCodeTypeId' :
                     !inputs.rate ? 'rate' :
@@ -96,23 +81,23 @@ export const PaycodeModal = ({handleClose, info,employmentId}) => {
         <div className={classes.createFoundingSource}>
             <ModalHeader
                 handleClose={handleClose}
-                title={info ? "Sick Time" : 'Add a New Paycode'}
-                text={!info && 'Please fulfill the below fields to add a paycode.'}
+                title={info ? "Add a New Timesheet" : 'Add a New Timesheet'}
+                text={!info && 'Please fulfill the below fields to add a timesheet.'}
             />
             <div className={classes.createFoundingSourceBody}>
                 <div className={classes.clientModalBlock}>
                     <div className={classes.clientModalBox}>
                         <SelectInput
                             name={"payCodeTypeId"}
-                            label={"Name"}
+                            label={"Paycode*"}
                             handleSelect={handleChange}
-                            value={info ? info?.payCodeTypeId?.name : inputs.payCodeTypeId}
+                            value={inputs.modifiers}
                             list={globalPayCodes}
                             typeError={error === 'payCodeTypeId' ? ErrorText.field : ''}
                         />
                         <div className={classes.displayCodeBlock}>
                             <div className={classes_v2.paycodeBox} >
-                                <p className={classes_v2.paycodeBoxTitle}>Code:</p>
+                                <p className={classes_v2.paycodeBoxTitle}>Rate:</p>
                                 <p className={classes_v2.paycodeBoxText}> {payCode?.code ? payCode.code : ' N/A'} </p>
                             </div>
                             <div className={classes_v2.paycodeBox} style={{marginBottom : 0}}>
@@ -120,17 +105,25 @@ export const PaycodeModal = ({handleClose, info,employmentId}) => {
                                 <p className={classes_v2.paycodeBoxText}>{payCode?.type ? payCode.type : 'N/A'}</p>
                             </div>
                         </div>
+                        <Textarea
+                            label={"Description"}
+                            name='rate'
+                            typeError={error === 'rate' && ErrorText.field}
+                            value={inputs.rate}
+                            variant={"outlined"}
+                            onChange={handleChange}
+                        />
                         <ValidationInput
                             variant={"outlined"}
                             onChange={handleChange}
                             value={inputs.rate}
                             type={"number"}
-                            label={"Rate*"}
+                            label={"Hours*"}
                             name='rate'
                             typeError={error === 'rate' && ErrorText.field}
                         />
                         <div className={classes_v2.paycodeBox}>
-                            <Checkbox defaultChecked={checked} onClick={onCheck} color={Colors.ThemeBlue} />
+                            <Checkbox defaultChecked={true} onClick={onCheck} color={Colors.ThemeBlue} />
                             <p className={classes_v2.activePaycode}>Active Paycode</p>
                         </div>
                         <div style={{display: 'flex'}}>

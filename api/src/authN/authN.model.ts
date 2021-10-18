@@ -1,5 +1,5 @@
 import { model, Schema, Types } from 'mongoose';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { IAuth } from './interface';
 import { RegistrationStatus, UserType } from './authN.constants';
 

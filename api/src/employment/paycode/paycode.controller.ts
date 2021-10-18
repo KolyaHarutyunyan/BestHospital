@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { PaycodeService } from './paycode.service';
-import { CreatePaycodeDTO, UpdatePaycodeDTO, PayCodeDTO } from './dto';
+import { CreatePaycodeDTO, UpdatePayCodeDTO, PayCodeDTO } from './dto';
 import { ParseObjectIdPipe, Public } from '../../util';
 import { ApiOkResponse, ApiProperty, ApiTags } from '@nestjs/swagger';
 
@@ -19,8 +19,8 @@ export class PaycodeController {
   @Get('employment/:employmentId')
   @Public()
   @ApiOkResponse({ type: [PayCodeDTO] })
-  async findAll(@Param('employmentId', ParseObjectIdPipe) employmentId: string) {
-    return await this.paycodeService.findAll(employmentId);
+  async findAllByEmployment(@Param('employmentId', ParseObjectIdPipe) employmentId: string) {
+    return await this.paycodeService.findAllByEmployment(employmentId);
   }
 
   @Get(':id')
@@ -30,12 +30,18 @@ export class PaycodeController {
     return await this.paycodeService.findOne(id);
   }
 
-  // @Patch(':id')
-  // @ApiOkResponse({ type: PayCodeDTO })
-  // @Public()
-  // update(@Param('id') id: string, @Body() updatePaycodeDto: UpdatePaycodeDTO) {
-  //   return this.paycodeService.update(id, updatePaycodeDto);
-  // }
+  @Get()
+  @Public()
+  @ApiOkResponse({ type: [PayCodeDTO] })
+  async findAll() {
+    return await this.paycodeService.findAll();
+  }
+  @Patch(':id')
+  @ApiOkResponse({ type: PayCodeDTO })
+  @Public()
+  update(@Param('id') id: string, @Body() updatePaycodeDto: UpdatePayCodeDTO) {
+    return this.paycodeService.update(id, updatePaycodeDto);
+  }
 
   // @Delete(':id')
   // @Public()

@@ -7,4 +7,4 @@ export { StaffAccess } from './staffAccess';
 export { StaffItemHeader } from './staffItemHeader';
 export { StaffAvailability } from './staffAvailability';
 export { StaffTimesheet } from './staffTimesheet';
-export { CredentialModal, EmploymentModal,PaycodeModal } from './modals';
+export { CredentialModal, EmploymentModal,PaycodeModal, TimesheetModal } from './modals';

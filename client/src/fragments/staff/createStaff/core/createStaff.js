@@ -85,7 +85,7 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
                 driverLicense: inputs?.driverLicense,
                 expireDate: inputs?.expirationDate ? new Date(inputs.expirationDate).toISOString() : '',
                 state: inputs?.state
-            } : {}
+            } : undefined
         }
 
         if ((inputs.firstName &&
@@ -154,6 +154,9 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
             dispatch(httpRequestsOnErrorsActions.removeError(httpOnError.length && httpOnError[0].type))
         }
     }, [success]);
+
+
+    console.log(staffGeneral,'staffGeneral');
 
     const firstStep = (
         <React.Fragment>
@@ -251,7 +254,7 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
             <ValidationInput
                 variant={"outlined"}
                 onChange={handleChange}
-                value={inputs.driverLicense}
+                value={staffGeneral?.license?.driverLicense ? staffGeneral?.license?.driverLicense : inputs.driverLicense}
                 type={"text"}
                 label={"Driver License*"}
                 name='driverLicense'
@@ -263,14 +266,14 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
                     name={"state"}
                     label={"Issuing State*"}
                     handleSelect={handleChange}
-                    value={inputs.state}
+                    value={staffGeneral?.license?.state ? staffGeneral?.license?.state : inputs.state}
                     list={issuingStateList}
                     typeError={error === 'state' ? ErrorText.field : ''}
                 />
                 <ValidationInput
                     variant={"outlined"}
                     onChange={handleChange}
-                    value={inputs.expirationDate}
+                    value={staffGeneral?.license?.expireDate ? moment(staffGeneral?.license?.state).format().substring(0, 10) : inputs.expirationDate}
                     type={"date"}
                     label={"Expiration Date*"}
                     name='expirationDate'

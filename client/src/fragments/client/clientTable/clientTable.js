@@ -4,7 +4,7 @@ import {Paper, Table, TableContainer} from "@material-ui/core";
 import {ClientTableBody, ClientTableHead} from "./core";
 import {useGlobalStyles} from "@eachbase/utils";
 import {Loader, NoItemText, PaginationItem} from "@eachbase/components";
-import {clientActions,} from "@eachbase/store";
+import {clientActions} from "@eachbase/store";
 
 
 export const ClientTable = ({setOpen, handleClose, setDeleteClient, handleGetPage, status}) => {

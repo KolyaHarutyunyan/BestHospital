@@ -4,10 +4,13 @@ import { UpdateDepartmentDTO, CreateDepartmentDTO, DepartmentDTO } from './dto'
 import { DepartmentModel } from './department.model';
 import { IDepartment } from './interface';
 import { Model } from 'mongoose';
+import { DepartmentSanitizer } from './interceptor/department.sanitizer';
 
 @Injectable()
 export class DepartmentService {
-  constructor() {
+  constructor(
+    private readonly sanitizer: DepartmentSanitizer
+  ) {
     this.model = DepartmentModel;
     this.mongooseUtil = new MongooseUtil();
   }
@@ -20,7 +23,7 @@ export class DepartmentService {
         name: dto.name
       });
       await department.save();
-      return department;
+      return this.sanitizer.sanitize(department)
     }
     catch (e) {
       throw e
@@ -31,7 +34,7 @@ export class DepartmentService {
     try {
       const departments = await this.model.find();
       this.checkDepartment(departments[0]);
-      return departments
+      return this.sanitizer.sanitizeMany(departments)
     }
     catch (e) {
       throw e
@@ -40,8 +43,8 @@ export class DepartmentService {
 
   async findOne(_id: string): Promise<DepartmentDTO> {
     let department = await this.model.findById({ _id })
-    this.checkDepartment(department)
-    return department;
+    this.checkDepartment(department);
+    return this.sanitizer.sanitize(department)
   }
 
   async update(_id: string, dto: UpdateDepartmentDTO): Promise<DepartmentDTO> {
@@ -50,7 +53,7 @@ export class DepartmentService {
       this.checkDepartment(department);
       department.name = dto.name;
       await department.save()
-      return department
+      return this.sanitizer.sanitize(department)
     }
     catch (e) {
       throw e

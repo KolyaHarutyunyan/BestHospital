@@ -7,7 +7,7 @@ const PayCodeSchema = new Schema({
     rate: { type: Number},
     active: {type: Boolean},
     startDate: { type: Date, default: Date.now },
-    endDate: {type: Date, default: null}
+    endDate: {type: Schema.Types.Mixed, default: "Precent"}
 });
 
 export const PayCodeModel = model<IPayCode>('PayCode', PayCodeSchema);

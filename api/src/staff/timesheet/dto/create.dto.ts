@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDateString, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsDateString, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString } from "class-validator";
 
 export class CreateTimesheetDTO {
     @ApiProperty()
@@ -17,6 +17,7 @@ export class CreateTimesheetDTO {
     @ApiProperty()
     @IsNotEmpty()
     @IsNumber()
+    @IsPositive()
     hours: number;
     @ApiProperty()
     @IsDateString()

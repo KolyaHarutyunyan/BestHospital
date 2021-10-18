@@ -269,8 +269,13 @@ export const StaffItem = () => {
                 body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
             >
                 <div className={classes.staffSingleItem}>
-                    <StaffItemHeader onModel='Staff' availabilityData={availabilityData} title={`${staffGeneral?.firstName} ${staffGeneral?.lastName}`}
-                                     noteModalTypeInfo={noteModalTypeInfo} handleOpenClose={handleOpenCloseNote}
+
+//                     <StaffItemHeader onModel='Staff' availabilityData={availabilityData} title={`${staffGeneral?.firstName} ${staffGeneral?.lastName}`}
+//                                      noteModalTypeInfo={noteModalTypeInfo} handleOpenClose={handleOpenCloseNote}
+// =======
+                    <StaffItemHeader title={`${staffGeneral?.firstName} ${staffGeneral?.lastName}`}
+                                     noteModalTypeInfo={noteModalTypeInfo}
+                                     handleOpenClose={handleOpenCloseNote}
                                      openModal={openModal} globalCredentialInformation={globalCredentialInformation}
                                      globalCredentials={globalCredentials} credModalType={credModalType}
                                      openCloseCredModal={openCloseCredModal} openCredModal={openCredModal}

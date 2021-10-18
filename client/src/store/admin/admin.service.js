@@ -23,15 +23,11 @@ export const authService = {
 
     deleteCredentialByIdService: (id) => axios.delete(`/scredential/${id}`),
 
-
-
     getEmploymentService: (id) => axios.get(`/employment/staff/${id}`),
 
     createEmploymentService: (body) => axios.post(`/employment` , body),
 
-
     editEmploymentService: (body,id) => axios.patch(`/employment/${id}` , body),
-
 
     getPayCodeService: (id) => axios.get(`/paycode/employment/${id}`),
 
@@ -41,6 +37,14 @@ export const authService = {
 
     createStaffServService: (id,serviceId) => axios.post(`/staff/${id}/service/${serviceId}`),
 
-
     deleteStaffServService: (id,serviceId) => axios.delete(`/staff/${id}/service/${serviceId}`),
+
+
+
+    // isClinicianService: (id) => axios(``),
+
+    getTimesheetService: (id) => axios.get(`/timesheet/staff/${id}`),
+
+    createTimesheetService: (id,serviceId) => axios.post(`/timesheet`),
+
 };

@@ -30,7 +30,6 @@ export const adminReducer = (state = initialState, action) => {
                 ...state,
                 adminsList: [...state.adminsList.staff ,action.payload ]
             }
-
         case GET_ADMINS_SUCCESS:
             return {
                 ...state,
@@ -41,13 +40,11 @@ export const adminReducer = (state = initialState, action) => {
                 employments: [],
                 payCodes:  []
             }
-
         case EDIT_ADMIN_BY_ID_SUCCESS:
             return {
                 ...state,
                 adminInfoById: action.payload,
             }
-
         case  GET_ADMIN_BY_ID_SUCCESS:
             return {
                 ...state,

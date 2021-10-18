@@ -2,9 +2,11 @@ import React from "react";
 import {serviceSingleStyles} from "./styles";
 import {Images} from "@eachbase/utils";
 import {AddButton, AddModalButton, SimpleModal, AddNotes, AvailabilitySchedule} from "@eachbase/components";
+import {Colors, Images} from "@eachbase/utils";
 import {CreateStaff, CredentialModal} from "@eachbase/fragments";
 import {useSelector} from "react-redux";
-import {EmploymentModal} from "./modals";
+import {EmploymentModal, TimesheetModal} from "./modals";
+import {Switch} from "@material-ui/core";
 
 const editButtonStyle = {
     height: 36,
@@ -34,6 +36,12 @@ export const StaffItemHeader = ({
         })
     )
 
+
+    let changeSwitch = (e)=>{
+        console.log(e.target.checked)
+    }
+
+
     return (
         <div>
             <ul className={classes.tabsWrapper}>
@@ -62,6 +70,20 @@ export const StaffItemHeader = ({
                                     : activeTab === 1 ? <AddButton text='Add Employment' handleClick={handleOpenClose}/>
                                         : activeTab === 7 ?
                                             <AddButton text='Add Note' handleClick={handleOpenClose}/> : null
+                                                           handleClick={handleOpenClose}
+                            />
+                            : activeTab === 3 ?
+                                <AddButton text='Add Credential'
+                                           handleClick={() => openCloseCredModal('addCredential')}/>
+                                : activeTab === 1 ? <div style={{display: 'flex', alignItems: "center"}}>
+                                        <p style={{color:Colors.ThemeBlue, fontWeight: 'bold'}}>Clinician</p>
+                                       <div style={{margin: '0 24px 0 8px'}}>
+                                           <Switch onChange={changeSwitch} color={"primary"} />
+                                       </div>
+                                        <AddButton text='Add Employemnt' handleClick={handleOpenClose}/>
+                                    </div>
+                                    : activeTab === 7 ?
+                                        <AddButton text='Add Note' handleClick={handleOpenClose}/> : null
                     }
                 </li>
             </ul>
@@ -72,6 +94,8 @@ export const StaffItemHeader = ({
                     <CreateStaff adminsList={adminsList && adminsList.staff} staffGeneral={adminInfoById}
                                  resetData={false} handleClose={handleOpenClose}/>
                     : activeTab === 2 ? <p>Timesheet</p>
+                    : activeTab === 2 ?
+                        <TimesheetModal handleClose={handleOpenClose}/>
                         : activeTab === 3 ?
                             <CredentialModal globalCredentialInformation={globalCredentialInformation}
                                              globalCredentials={globalCredentials} credModalType={credModalType}
@@ -84,6 +108,7 @@ export const StaffItemHeader = ({
                                         <AvailabilitySchedule onModel={onModel} availabilityData={availabilityData}
                                                               handleClose={handleOpenClose}/>
                                         : null}
+
             />
         </div>
     )

@@ -8,4 +8,5 @@ export interface ITimeSheet {
     startDate: Date;
     endDate: Date;
     createdDate: Date;
+    totalAmount: number;
 }

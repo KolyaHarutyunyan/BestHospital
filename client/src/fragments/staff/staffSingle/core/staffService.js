@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
+import {useParams} from "react-router-dom";
 import {AddButton, Card, DeleteElement, NoItemText, SimpleModal, SlicedText} from "@eachbase/components";
 import {Colors, ErrorText, Images,} from "@eachbase/utils";
 import {SelectInputPlaceholder} from "@eachbase/components";
 import {adminActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
-import {systemItemStyles} from "../../../system/core";
+import {systemItemStyles} from "@eachbase/fragments/system/core";
 import {serviceSingleStyles} from "./styles";
 import {useParams} from "react-router-dom";
+
 
 const credentialBtn = {
     maxWidth: '174px',
@@ -33,8 +35,6 @@ export const StaffService = ({staffGeneral, info}) => {
 
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_STAFF_SERVICE'
     const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_STAFF_SERVICE'
-
-
 
     useEffect(() => {
         if (success) {
@@ -65,7 +65,6 @@ export const StaffService = ({staffGeneral, info}) => {
     }
 
     const handleSubmit = () => {
-
         if (inputs.serviceType) {
             let serviceID = services && services.length >0 && services.find(item => item.name === inputs.serviceType).id
              dispatch(adminActions.createStaffService(params.id, serviceID));
@@ -156,7 +155,6 @@ export const StaffService = ({staffGeneral, info}) => {
                             )
                         }) : <NoItemText text='No Items Yet'/>
                     }
-
                 </div>
             </div>
         </div>
