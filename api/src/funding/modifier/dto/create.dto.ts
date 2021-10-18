@@ -7,7 +7,7 @@ import { ModifierStatus, TypeStatus } from '../../funding.constants';
 
 export class CreateModifierDto {
     @ApiProperty()
-    @IsNotEmpty()
+    @IsOptional()
     @IsMongoId()
     credentialId: string;
     @ApiProperty()
