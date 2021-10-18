@@ -1,5 +1,5 @@
 import {cardStyle} from "./style";
-import moment from 'moment'
+import moment from 'moment';
 
 export const HistoryCard = ({key, data}) => {
 
