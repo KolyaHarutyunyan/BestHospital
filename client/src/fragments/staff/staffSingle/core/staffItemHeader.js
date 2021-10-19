@@ -10,9 +10,11 @@ import {
 } from "@eachbase/components";
 import {Colors, Images} from "@eachbase/utils";
 import {CreateStaff, CredentialModal} from "@eachbase/fragments";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {EmploymentModal, TimesheetModal} from "./modals";
 import {Switch} from "@material-ui/core";
+import {fundingSourceActions} from "../../../../store";
+import {useParams} from "react-router-dom";
 
 const editButtonStyle = {
     height: 36,
@@ -36,6 +38,10 @@ export const StaffItemHeader = ({
 
     const classes = serviceSingleStyles()
 
+    const dispatch = useDispatch()
+
+    const params = useParams()
+
     const {adminInfoById, adminsList} = useSelector((state) => ({
             adminInfoById: state.admins.adminInfoById,
             adminsList: state.admins.adminsList,
@@ -53,7 +59,7 @@ export const StaffItemHeader = ({
     }
 
     const handleSubmit = () => {
-        alert('submit')
+        dispatch(fundingSourceActions.getFundingSourceHistoriesById('Staff', searchDate && new Date(searchDate).toISOString()))
     }
 
     return (

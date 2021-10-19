@@ -29,7 +29,19 @@ export const authService = {
 
     getFoundingSourceServiceModifierService: (id) => axios.get(`/modifier/${id}`),
 
-    getFundingSourceHistoriesByIdService: (id, onModal) => axios.get(`/history/${id}/${onModal}`,),
+    getFundingSourceHistoriesByIdService: (onModal,searchDate) => {
+        if(searchDate){
+            return (
+                axios.get(`/history/${onModal}?start=${searchDate}` )
+            )
+        }else {
+            return (
+                axios.get(`/history/${onModal}`)
+            )
+        }
+
+
+    },
 
     editActiveOrInactiveService: (id, path, status , body) => axios.patch(`/${path}/${id}/${status}`, body),
 
