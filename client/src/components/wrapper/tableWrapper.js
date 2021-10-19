@@ -17,7 +17,7 @@ export const TableWrapper = ({
 }) => {
   const classes = wrapperStyle();
 
-  const [inputs, setInputs] = useState( {});
+  const [inputs, setInputs] = useState( {checked : 'Active'});
   const [error, setError] = useState("");
 
   const handleChange = e => setInputs(
@@ -39,10 +39,10 @@ export const TableWrapper = ({
           {/*    second={secondButton}*/}
           {/*/>*/}
           <SelectInput
-              name={"supervisor"}
+              name={"checked"}
               // label={"Active"}
               handleSelect={handleChange}
-              // value={inputs.supervisor}
+              value={inputs.checked}
               list={[{name : 'Active' }, {name :'Inactive',},{name :'On Hold',}, {name :'Terminated',}]}
               // typeError={error === 'supervisor' ? ErrorText.field : ''}
               style={{width : 100, height : 36}}
