@@ -31,20 +31,13 @@ export class HistoryController {
     required: false,
     type: Date
   })
-  @ApiQuery({
-    name: "end",
-    description: "endDate",
-    required: false,
-    type: Date
-  })
   async findAll(
     @Query('skip') skip: number,
     @Query('limit') limit: number,
     @Query('start') start: Date,
-    @Query('end') end: Date,
     @Param('resourceId', ParseObjectIdPipe) resourceId: string,
     @Param('onModel') onModel: string
   ) {
-    return await this.historyService.findAll(onModel, resourceId, skip, limit, start, end);
+    return await this.historyService.findAll(onModel, resourceId, skip, limit, start);
   }
 }
