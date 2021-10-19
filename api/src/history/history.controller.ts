@@ -10,7 +10,7 @@ import { IsDateString, isDateString } from 'class-validator';
 export class HistoryController {
   constructor(private readonly historyService: HistoryService) { }
 
-  @Get(':resourceId/:onModel')
+  @Get(':onModel')
   @Public()
   @ApiOkResponse({ type: HistoryDTO })
   @ApiQuery({
