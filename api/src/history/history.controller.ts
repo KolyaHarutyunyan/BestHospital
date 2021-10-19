@@ -35,9 +35,8 @@ export class HistoryController {
     @Query('skip') skip: number,
     @Query('limit') limit: number,
     @Query('start') start: Date,
-    @Param('resourceId', ParseObjectIdPipe) resourceId: string,
     @Param('onModel') onModel: string
   ) {
-    return await this.historyService.findAll(onModel, resourceId, skip, limit, start);
+    return await this.historyService.findAll(onModel, skip, limit, start);
   }
 }
