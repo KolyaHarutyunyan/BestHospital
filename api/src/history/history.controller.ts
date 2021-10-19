@@ -29,13 +29,13 @@ export class HistoryController {
     name: "start",
     description: "startDate",
     required: false,
-    type: IsDateString
+    type: Date
   })
   @ApiQuery({
     name: "end",
     description: "endDate",
     required: false,
-    type: IsDateString
+    type: Date
   })
   async findAll(
     @Query('skip') skip: number,
