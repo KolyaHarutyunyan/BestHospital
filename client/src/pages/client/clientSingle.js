@@ -1,5 +1,5 @@
 import React from "react";
 import {ClientItem} from "@eachbase/fragments/client";
 
-export const ClientSingle = () => <ClientItem/>
+export const ClientSingle = () => <ClientItem />
 
