@@ -39,26 +39,27 @@ export class HistoryService {
   }
 
   /** returns all histories */
-  async findAll(onModel: string, resource: string, skip: number, limit: number, start: any, end: Date): Promise<HistoryDTO[]> {
+  async findAll(onModel: string, skip: number, limit: number, start: Date): Promise<HistoryDTO[]> {
     try {
-      let nullDate = false;
-      if (isNaN(end.getTime())) {
-        end = new Date()
-      }
+      let noDate = true;
+      let startDate, endDate;
+
       if (isNaN(start.getTime())) {
-        start = new Date(new Date().getFullYear(), 0, 1);
+        noDate = false;
       }
-      if(isNaN(end.getTime()) && isNaN(start.getTime())){
-        start = new Date(new Date().getFullYear(), 0, 1);
-        end = new Date()
+      else {
+        startDate = new Date(new Date(start).setHours(4, 0, 0));
+        endDate = new Date(new Date(start).setHours(27, 59, 59));
+      }
+      const query: any = {};
+
+      if (noDate) {
+        query.createdDate = { $gte: startDate, $lte: endDate }
       }
       if (isNaN(skip)) skip = 0;
       if (isNaN(limit)) limit = 10;
       const histories = await this.model.find({
-        onModel, resource, createdDate: {
-          $gte: start,
-          $lt: end
-        }
+        onModel, ...query
       }).skip(skip).limit(limit).populate('user', 'firstName lastName');
       this.checkHistory(histories[0])
       return this.sanitizer.sanitizeMany(histories);
