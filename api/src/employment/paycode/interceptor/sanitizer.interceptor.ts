@@ -10,6 +10,7 @@ export class PayCodeSanitizer implements ISanitize {
     sanitize(payCode: IPayCode): PayCodeDTO {
         const payCodeDTO: PayCodeDTO = {
             id: payCode.id,
+            name: payCode.name,
             employmentId: payCode.employmentId,
             payCodeTypeId: payCode.payCodeTypeId,
             rate: payCode.rate,

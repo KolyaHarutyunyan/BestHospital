@@ -1,7 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsBoolean, IsDateString, IsMongoId, IsNotEmpty, IsNumber, IsOptional } from "class-validator";
+import { IsBoolean, IsDateString, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class UpdatePayCodeDTO {
+    @ApiProperty()
+    @IsString()
+    @IsOptional()
+    name: string;
     @ApiProperty()
     @IsMongoId()
     @IsOptional()

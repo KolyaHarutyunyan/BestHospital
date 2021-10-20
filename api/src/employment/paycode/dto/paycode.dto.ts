@@ -3,26 +3,21 @@ import { IsBoolean, IsDateString, IsEmail, IsEnum, IsMongoId, IsNotEmpty, IsNumb
 
 export class PayCodeDTO {
     @ApiProperty()
-    @IsMongoId()
+    name: string;
+    @ApiProperty()
     id: string;
     @ApiProperty()
     @IsMongoId()
     @IsNotEmpty()
     employmentId: string;
     @ApiProperty()
-    @IsMongoId()
-    @IsNotEmpty()
     payCodeTypeId: string;
     @IsNumber()
-    @IsNotEmpty()
     rate: number;
     @IsBoolean()
-    @IsNotEmpty()
     active: boolean;
-    @IsDateString()
-    @IsNotEmpty()
+    @ApiProperty()
     startDate: Date;
-    @IsDateString()
-    @IsOptional()
+    @ApiProperty()
     endDate?: Date;
 }
