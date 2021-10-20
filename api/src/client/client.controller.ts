@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CreateTerminationDto } from 'src/termination/dto/create-termination.dto';
 import { ParseObjectIdPipe, Public } from '../util';
+import { ClientStatus } from './client.constants';
 import { ClientService } from './client.service';
 import {
   ClientDTO,
@@ -68,10 +69,12 @@ export class ClientController {
   /** Inactivate a client */
   @Patch(':id/inactivate')
   @Public()
+  @ApiQuery({ name: 'status', enum: ClientStatus })
   @ApiOkResponse({ type: ClientDTO })
   async inactivate(
     @Param('id', ParseObjectIdPipe) clientId: string,
     @Body() dto: CreateTerminationDto,
+    // @Query('status') status: ClientStatus = ClientStatus.INACTIVE)
   ): Promise<ClientDTO> {
     const staff = await this.clientService.setStatusInactive(
       clientId,

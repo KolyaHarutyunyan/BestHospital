@@ -2,7 +2,7 @@ export const serviceLog = {
     createFundingSource: `create a new Funding Source`,
     updateFundingSource: `update a Funding Source`,
     createClient: `create a new Client`,
-    updateClient: `create a Client`,
+    updateClient: `edit a Client`,
     createStaff: `create a new Staff`,
     updateStaff: `update a Staff`,
     createServiceTitle: `create a new service`,
