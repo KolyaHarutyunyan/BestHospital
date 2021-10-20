@@ -129,9 +129,9 @@ export class ClientService {
   }
 
   /** Set Status of a Funder Inactive*/
-  setStatusInactive = async (
+  setStatus = async (
     _id: string,
-    status: number,
+    status: any,
     dto: CreateTerminationDto
   ): Promise<ClientDTO> => {
     const client = await this.model.findById({ _id });
@@ -147,18 +147,18 @@ export class ClientService {
   };
 
   /** Set Status of a Funder Active */
-  setStatusActive = async (
-    id: string,
-    status: number,
-  ): Promise<ClientDTO> => {
-    const client = await this.model.findOneAndUpdate(
-      { _id: id },
-      { $set: { status: status, termination: null } },
-      { new: true },
-    );
-    this.checkClient(client);
-    return this.sanitizer.sanitize(client);
-  };
+  // setStatusActive = async (
+  //   id: string,
+  //   status: number,
+  // ): Promise<ClientDTO> => {
+  //   const client = await this.model.findOneAndUpdate(
+  //     { _id: id },
+  //     { $set: { status: status, termination: null } },
+  //     { new: true },
+  //   );
+  //   this.checkClient(client);
+  //   return this.sanitizer.sanitize(client);
+  // };
 
   /** Private methods */
   /** if the date is not valid, throws an exception */

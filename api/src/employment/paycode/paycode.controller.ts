@@ -22,7 +22,13 @@ export class PaycodeController {
   async findAllByEmployment(@Param('employmentId', ParseObjectIdPipe) employmentId: string) {
     return await this.paycodeService.findAllByEmployment(employmentId);
   }
-
+  @Get('staff/:staffId')
+  @Public()
+  @ApiOkResponse({ type: [PayCodeDTO] })
+  async findPayCodesByStaffId(@Param('staffId', ParseObjectIdPipe) staffId: string):Promise<PayCodeDTO[]> {
+    return await this.paycodeService.findPayCodesByStaffId(staffId);
+  }
+  
   @Get(':id')
   @Public()
   @ApiOkResponse({ type: PayCodeDTO })
@@ -36,6 +42,7 @@ export class PaycodeController {
   async findAll() {
     return await this.paycodeService.findAll();
   }
+
   @Patch(':id')
   @ApiOkResponse({ type: PayCodeDTO })
   @Public()
