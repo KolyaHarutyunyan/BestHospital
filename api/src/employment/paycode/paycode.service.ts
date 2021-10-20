@@ -29,6 +29,7 @@ export class PaycodeService {
     const paycode = new this.model({
       employmentId: employment.id,
       payCodeTypeId: payCodeType.id,
+      name: dto.name,
       rate: dto.rate,
       active: dto.active,
       startDate: dto.startDate
@@ -92,11 +93,15 @@ export class PaycodeService {
     try {
       let payCode = await this.model.findById(_id);
       this.checkPayCode(payCode);
+    
       if (dto.payCodeTypeId) {
         await this.PayCodeTypeService.findOne(dto.payCodeTypeId);
       }
       if (dto.employmentId) {
         await this.employmentService.findOne(dto.employmentId)
+      }
+      if(dto.name){
+        payCode.name = dto.name;
       }
       if (dto.rate) payCode.rate = dto.rate;
       if (!dto.active && !dto.endDate) {
