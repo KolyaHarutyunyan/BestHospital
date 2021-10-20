@@ -16,7 +16,7 @@ export const FundingSourceModifiersAdd = ({
     const [inputs, setInputs] = useState({});
     const [inputs2, setInputs2] = useState({});
     const [modifiers, setModifiers] = useState(modifiersServ ? [...modifiersServ] : []);
-    const [credentialID, setCredentialID] = useState(undefined)
+    const [credentialID, setCredentialID] = useState(null)
     const [btnStyle, setBtnStyle] = useState(false)
     const [indexItem, setIndexItem] = useState(null)
     const classes = foundingSourceModalStyle()
@@ -56,8 +56,8 @@ export const FundingSourceModifiersAdd = ({
             if (inputs.credentialId === item.name) {
                 setCredentialID(item._id)
             }
-            if (inputs.chargeRate && inputs.name && inputs.type) {
-                if (  inputs.chargeRate !== ' ' && inputs.name !== ' ') {
+            if (inputs.credentialId && inputs.chargeRate && inputs.name && inputs.type) {
+                if (inputs.credentialId !== '0' && inputs.chargeRate !== ' ' && inputs.name !== ' ') {
                     setBtnStyle(true)
                     setPostModifiers([...modifiers, {
                         "credentialId": credentialID,
@@ -82,7 +82,7 @@ export const FundingSourceModifiersAdd = ({
 
     const handleCreate = () => {
         setBtnStyle(false)
-        if ( inputs.chargeRate && inputs.name && inputs.type) {
+        if (inputs.credentialId && inputs.chargeRate && inputs.name && inputs.type) {
             if (inputs.credentialId !== '0' && inputs.chargeRate !== ' ' && inputs.name !== ' ') {
                 setGetLastMod(null)
                 setModifiers([...modifiers, {
@@ -103,7 +103,7 @@ export const FundingSourceModifiersAdd = ({
             setError(
                 !inputs.name ? 'name' :
                     !inputs.chargeRate ? 'chargeRate' :
-                        // !inputs.credentialId ? 'credentialId' :
+                        !inputs.credentialId ? 'credentialId' :
                             !inputs.type ? 'type' :
                                 'Input is not field'
             )

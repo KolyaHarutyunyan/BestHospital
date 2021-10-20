@@ -3,7 +3,26 @@ import {Colors} from "@eachbase/utils";
 
 
 export const fundingSourceSingleStyles = makeStyles(() => ({
-
+    inputTextField:{
+        alignItems: 'flex-end',
+        width:'100%',
+        '& .MuiOutlinedInput-notchedOutline':{
+            borderColor:Colors.BackgroundBlue,
+        },
+        '& .MuiOutlinedInput-root':{
+            height:'48px'
+        },
+        '& .MuiInputLabel-outlined':{
+            marginTop:'-3px',
+            color :Colors.TextPrimary
+        },
+        '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+            transform: 'translate(14px, -2px) scale(0.75)'
+        },
+        '&:hover .MuiOutlinedInput-notchedOutline':{
+            borderColor:Colors.BackgroundBlue,
+        },
+    },
     fundingSourceSingleHeaderStyles: {
         display: 'flex',
         justifyContent: 'space-between',
@@ -76,4 +95,7 @@ export const fundingSourceSingleStyles = makeStyles(() => ({
     },
 }));
 
-export const btnStyles = {height: 36, width: 74}
+export const editButtonStyle = {
+    height: 36,
+    paddingInline: 24,
+}

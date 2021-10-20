@@ -233,5 +233,29 @@ export const serviceSingleStyles = makeStyles(() => ({
         '& button': {
             marginLeft: 15
         }
-    }
+    },
+    headerRight :{
+        display:'flex',
+    },
+    inputTextField:{
+        alignItems: 'flex-end',
+        width:'100%',
+        '& .MuiOutlinedInput-notchedOutline':{
+            borderColor:Colors.BackgroundBlue,
+        },
+        '& .MuiOutlinedInput-root':{
+            height:'48px'
+        },
+        '& .MuiInputLabel-outlined':{
+            marginTop:'-3px',
+            color :Colors.TextPrimary
+        },
+        '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+            transform: 'translate(14px, -2px) scale(0.75)'
+        },
+        '&:hover .MuiOutlinedInput-notchedOutline':{
+            borderColor:Colors.BackgroundBlue,
+        },
+    },
+
 }));

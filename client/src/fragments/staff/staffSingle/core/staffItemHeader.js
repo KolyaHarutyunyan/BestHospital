@@ -6,13 +6,14 @@ import {
     SimpleModal,
     AddNotes,
     AvailabilitySchedule,
-    ValidationInput
+    ValidationInput, SelectInput
 } from "@eachbase/components";
 import {Colors, Images} from "@eachbase/utils";
 import {CreateStaff, CredentialModal} from "@eachbase/fragments";
 import {useSelector} from "react-redux";
 import {EmploymentModal, TimesheetModal} from "./modals";
 import {Switch} from "@material-ui/core";
+import {inputStyle} from "../../../client/clientSingle/core/styles";
 
 const editButtonStyle = {
     height: 36,
@@ -33,6 +34,7 @@ export const StaffItemHeader = ({
                                     openCredModal,
                                     activeTab,
                                 }) => {
+    const [inputs, setInputs] = useState({active: 'Active'});
 
     const classes = serviceSingleStyles()
 
@@ -56,6 +58,16 @@ export const StaffItemHeader = ({
         alert('submit')
     }
 
+    const list = [
+        {name: 'Active'},
+        {name: 'Inactive'},
+        {name: 'On Hold'},
+        {name: 'Terminated'},
+    ]
+    const handleChange2 = e => setInputs(
+        prevState => ({...prevState, [e.target.name]: e.target.value}),
+    );
+
     return (
         <div>
             <ul className={classes.tabsWrapper}>
@@ -70,24 +82,32 @@ export const StaffItemHeader = ({
                         </div>
                     </div>
                 </li>
-                <li>
+                <li  className={classes.headerRight}>
+                    <SelectInput
+                        styles={inputStyle}
+                        name={"active"}
+                        handleSelect={handleChange2}
+                        value={inputs.active}
+                        list={list}
+                        className={classes.inputTextField}
+                    />
                     {
                         activeTab === 0 ?
-                            <AddModalButton btnStyles={editButtonStyle} handleClick={handleOpenClose}
+                            <AddModalButton styles={{width: 450}} btnStyles={editButtonStyle} handleClick={handleOpenClose}
                                             text='edit'/>
-                            : activeTab === 2 ? <AddButton text='Add Timesheet'
-                                                           handleClick={() => handleOpenClose}/>
+                            : activeTab === 2 ? <AddButton styles={{width: 450}} text='Add Timesheet'
+                                                           handleClick={handleOpenClose}/>
                             : activeTab === 3 ?
-                                <AddButton text='Add Credential'
+                                <AddButton styles={{width: 450}} text='Add Credential'
                                            handleClick={() => openCloseCredModal('addCredential')}/>
-                                : activeTab === 5 ? <AddButton text='Available Hours' handleClick={handleOpenClose}/>
-                                    : activeTab === 1 ? <AddButton text='Add Employment' handleClick={handleOpenClose}/>
+                                : activeTab === 5 ? <AddButton styles={{width: 450}} text='Available Hours' handleClick={handleOpenClose}/>
+                                    : activeTab === 1 ? <AddButton styles={{width: 450}} text='Add Employment' handleClick={handleOpenClose}/>
                                         : activeTab === 7 ?
-                                            <AddButton text='Add Note' handleClick={handleOpenClose}
+                                            <AddButton styles={{width: 450}} text='Add Note' handleClick={handleOpenClose}
 
                                             />
                                             : activeTab === 3 ?
-                                                <AddButton text='Add Credential'
+                                                <AddButton styles={{width: 450}} text='Add Credential'
                                                            handleClick={() => openCloseCredModal('addCredential')}/>
                                                 : activeTab === 1 ?
                                                     <div style={{display: 'flex', alignItems: "center"}}>
@@ -98,7 +118,7 @@ export const StaffItemHeader = ({
                                                         <div style={{margin: '0 24px 0 8px'}}>
                                                             <Switch onChange={changeSwitch} color={"primary"}/>
                                                         </div>
-                                                        <AddButton text='Add Employment' handleClick={handleOpenClose}/>
+                                                        <AddButton styles={{width: 450}} text='Add Employment' handleClick={handleOpenClose}/>
                                                     </div>
                                                     : activeTab === 7 ?
                                                         <AddButton text='Add Note' handleClick={handleOpenClose}/> :
@@ -113,7 +133,7 @@ export const StaffItemHeader = ({
                                                                     name='searchDate'
                                                                     // typeError={error === 'birthday' && ErrorText.field}
                                                                 />
-                                                                <AddButton text='Search' handleClick={handleSubmit}/>
+                                                                <AddButton styles={{width: 450}} text='Search' handleClick={handleSubmit}/>
                                                             </div>
                                                             : null
                     }
@@ -125,7 +145,6 @@ export const StaffItemHeader = ({
                 content={activeTab === 0 ?
                     <CreateStaff adminsList={adminsList && adminsList.staff} staffGeneral={adminInfoById}
                                  resetData={false} handleClose={handleOpenClose}/>
-                    : activeTab === 2 ? <p>Timesheet</p>
                         : activeTab === 2 ?
                             <TimesheetModal handleClose={handleOpenClose}/>
                             : activeTab === 3 ?
