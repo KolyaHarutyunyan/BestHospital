@@ -3,7 +3,7 @@ import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { FundingService } from './funding.service';
 import { HistoryService } from '../history/history.service';
 
-import { CreateFundingDTO, FundingDTO, UpdateFundingDto, ServiceDTO, UpdateServiceDto, CreateServiceDTO } from './dto';
+import { CreateFundingDTO, FundingDTO, UpdateFundingDto, ServiceDTO, UpdateServiceDto, CreateServiceDTO, FundingQueryDTO } from './dto';
 import { Public, ParseObjectIdPipe } from '../util';
 import { CreateTerminationDto } from 'src/termination/dto/create-termination.dto';
 
@@ -146,32 +146,49 @@ export class FundingController {
     return await this.fundingService.remove(id);
   }
   /** Inactivate a funder */
-  @Patch(':id/inactivate')
+  @Patch(':id/setStatus')
   @Public()
   @ApiOkResponse({ type: FundingDTO })
-  async inactivate(
+  async setStatus(
     @Param('id', ParseObjectIdPipe) funderId: string,
     @Body() dto: CreateTerminationDto,
+    @Query() status: FundingQueryDTO
   ): Promise<FundingDTO> {
-    const funder = await this.fundingService.setStatusInactive(
+    const funder = await this.fundingService.setStatus(
       funderId,
-      0,
+      status.status,
       dto
     );
     return funder;
   }
-
+ /** Inactivate a client */
+//  @Patch(':id/setStatus')
+//  @Public()
+//  @ApiQuery({ name: 'status', enum: ClientStatus })
+//  @ApiOkResponse({ type: ClientDTO })
+//  async inactivate(
+//    @Param('id', ParseObjectIdPipe) clientId: string,
+//    @Body() dto: CreateTerminationDto,
+//    @Query() status: ClientQueryDTO
+//  ): Promise<ClientDTO> {
+//    const staff = await this.clientService.setStatus(
+//      clientId,
+//      status.status,
+//      dto
+//    );
+//    return staff;
+//  }
   /** Activated a funder */
-  @Patch(':id/activate')
-  @Public()
-  @ApiOkResponse({ type: FundingDTO })
-  async activate(
-    @Param('id', ParseObjectIdPipe) funderId: string,
-  ): Promise<FundingDTO> {
-    const funder = await this.fundingService.setStatusActive(
-      funderId,
-      1,
-    );
-    return funder;
-  }
+  // @Patch(':id/activate')
+  // @Public()
+  // @ApiOkResponse({ type: FundingDTO })
+  // async activate(
+  //   @Param('id', ParseObjectIdPipe) funderId: string,
+  // ): Promise<FundingDTO> {
+  //   const funder = await this.fundingService.setStatusActive(
+  //     funderId,
+  //     1,
+  //   );
+  //   return funder;
+  // }
 }

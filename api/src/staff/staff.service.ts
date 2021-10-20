@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model, Types } from 'mongoose';
-import { StaffDTO, CreateStaffDto, EditStaffDTO } from './dto';
+import { StaffDTO, CreateStaffDto, EditStaffDTO, StaffQueryDTO } from './dto';
 import { StaffSanitizer } from './interceptor';
 import { IStaff } from './interface';
 import { StaffModel } from './staff.model';
@@ -9,7 +9,7 @@ import { MongooseUtil } from '../util';
 import { AddressService } from '../address';
 import { CreateCredentialDto } from '../credential';
 import { HistoryService, serviceLog } from '../history';
-import { UserStatus } from './staff.constants';
+import { StaffStatus } from '../staff/staff.constants';
 import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
 import { CreateStaffDtoTest } from './dto/createTest.dto';
 import { ServiceService } from '../service'
@@ -178,28 +178,29 @@ export class StaffService {
   };
 
   /** returns all users */
-  getUsers = async (skip: number, limit: number, status: number): Promise<any> => {
-    if (status == 0) {
+  getUsers = async (skip: number, limit: number, status: string): Promise<any> => {
+    console.log(status)
+    if (status == "INACTIVE" || status == "HOLD" || status == "TERMINATE") {
       const [staff, count] = await Promise.all([
-        this.model.find({ status: 0 }).sort({ _id: -1 }).skip(skip).limit(limit),
-        this.model.countDocuments({ status: 0 }),
+        this.model.find({ $or: [{ status: "INACTIVE" }, { status: "HOLD" }, { status: "TERMINATE" }] }).sort({ _id: -1 }).skip(skip).limit(limit),
+        this.model.countDocuments({ $or: [{ status: "INACTIVE" }, { status: "HOLD" }, { status: "TERMINATE" }] }),
       ]);
       const sanFun = this.sanitizer.sanitizeMany(staff);
       return { staff: sanFun, count };
     }
 
     const [staff, count] = await Promise.all([
-      (await this.model.find({ status: 1 }).sort({ _id: 1 }).skip(skip).limit(limit)).reverse(),
-      this.model.countDocuments({ status: 1 }),
+      (await this.model.find({ status: "ACTIVE" }).sort({ _id: 1 }).skip(skip).limit(limit)).reverse(),
+      this.model.countDocuments({ status: "ACTIVE" }),
     ]);
     const sanFun = this.sanitizer.sanitizeMany(staff);
     return { staff: sanFun, count };
   };
 
   /** Set Status of a staff Inactive*/
-  setStatusInactive = async (
+  setStatus = async (
     _id: string,
-    status: number,
+    status: any,
     dto: CreateTerminationDto,
   ): Promise<StaffDTO> => {
     const staff = await this.model.findById({ _id });
@@ -214,15 +215,15 @@ export class StaffService {
   };
 
   /** Set Status of a staff Active */
-  setStatusActive = async (id: string, status: number): Promise<StaffDTO> => {
-    const staff = await this.model.findOneAndUpdate(
-      { _id: id },
-      { $set: { status: status, termination: null } },
-      { new: true },
-    );
-    this.checkStaff(staff);
-    return this.sanitizer.sanitize(staff);
-  };
+  // setStatusActive = async (id: string, status: number): Promise<StaffDTO> => {
+  //   const staff = await this.model.findOneAndUpdate(
+  //     { _id: id },
+  //     { $set: { status: status, termination: null } },
+  //     { new: true },
+  //   );
+  //   this.checkStaff(staff);
+  //   return this.sanitizer.sanitize(staff);
+  // };
   /** Set isClinical of a staff Active */
   isClinical = async (id: string, status: boolean): Promise<StaffDTO> => {
     const staff = await this.model.findOneAndUpdate(

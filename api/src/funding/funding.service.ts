@@ -261,9 +261,9 @@ export class FundingService {
   }
 
   /** Set Status of a Funder Inactive*/
-  setStatusInactive = async (
+  setStatus = async (
     _id: string,
-    status: number,
+    status: any,
     dto: CreateTerminationDto
   ): Promise<FundingDTO> => {
     const funder = await this.model.findById({ _id });
@@ -279,18 +279,18 @@ export class FundingService {
   };
 
   /** Set Status of a Funder Active */
-  setStatusActive = async (
-    id: string,
-    status: number,
-  ): Promise<FundingDTO> => {
-    const funder = await this.model.findOneAndUpdate(
-      { _id: id },
-      { $set: { status: status, termination: null } },
-      { new: true },
-    );
-    this.checkFunder(funder);
-    return this.sanitizer.sanitize(funder);
-  };
+  // setStatusActive = async (
+  //   id: string,
+  //   status: number,
+  // ): Promise<FundingDTO> => {
+  //   const funder = await this.model.findOneAndUpdate(
+  //     { _id: id },
+  //     { $set: { status: status, termination: null } },
+  //     { new: true },
+  //   );
+  //   this.checkFunder(funder);
+  //   return this.sanitizer.sanitize(funder);
+  // };
 
   /** Private methods */
   /** if the funder is not found, throws an exception */

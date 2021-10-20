@@ -4,6 +4,7 @@ import { EmploymentController } from './employment.controller';
 import { StaffModule } from '../staff';
 import { EmploymentSanitizer } from './interceptor/employment.interceptor';
 import { DepartmentModule } from '../department/department.module';
+import { PaycodeModule } from './paycode/paycode.module';
 
 @Module({
   imports: [StaffModule, DepartmentModule],

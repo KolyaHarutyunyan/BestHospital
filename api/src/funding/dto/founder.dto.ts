@@ -28,3 +28,9 @@ export class FundingDTO {
     @ApiProperty()
     termination: Object;
 }
+
+export class FundingQueryDTO {
+    @ApiProperty({ enum: FundingStatus })
+    @IsEnum(FundingStatus)
+    status: string;
+}

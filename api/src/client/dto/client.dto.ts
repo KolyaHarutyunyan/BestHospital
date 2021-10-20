@@ -30,3 +30,9 @@ export class ClientDTO {
     @ApiProperty()
     termination: Object;
 }
+
+export class ClientQueryDTO {
+    @ApiProperty({ enum: ClientStatus })
+    @IsEnum(ClientStatus)
+    status: string;
+}

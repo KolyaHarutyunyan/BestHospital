@@ -1,12 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { StaffService } from './staff.service';
-import { StaffDTO, CreateStaffDto, EditStaffDTO } from './dto';
+import { StaffDTO, CreateStaffDto, EditStaffDTO, StaffQueryDTO } from './dto';
 import { ACCESS_TOKEN } from '../authN';
 import { Public, ParseObjectIdPipe } from '../util';
-import { UserStatus } from './staff.constants';
+import { StaffStatus } from './staff.constants';
 import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
-import { CreateStaffDtoTest } from './dto/createTest.dto';
 
 @Controller('staff')
 @ApiTags('Staff Endpoints')
@@ -57,12 +56,13 @@ export class StaffController {
     required: false,
     type: Number,
   })
+  @ApiQuery({ name: 'status', enum: StaffStatus })
   async getUsers(
     @Query('skip') skip: number,
     @Query('limit') limit: number,
-    @Query('status') status: number,
+    @Query() status: StaffQueryDTO
   ): Promise<StaffDTO[]> {
-    return await this.staffService.getUsers(skip, limit, status);
+    return await this.staffService.getUsers(skip, limit, status.status);
   }
 
   /** Get the staff profile */
@@ -74,25 +74,27 @@ export class StaffController {
   }
 
   /** Inactivate a staff */
-  @Patch(':id/inactivate')
+  @Patch(':id/setStatus')
   @Public()
+  @ApiQuery({ name: 'status', enum: StaffStatus })
   @ApiOkResponse({ type: StaffDTO })
-  async inactivate(
+  async setStatus(
     @Param('id', ParseObjectIdPipe) staffId: string,
     @Body() dto: CreateTerminationDto,
+    @Query() status: StaffQueryDTO
   ): Promise<StaffDTO> {
-    const staff = await this.staffService.setStatusInactive(staffId, 0, dto);
+    const staff = await this.staffService.setStatus(staffId, status.status, dto);
     return staff;
   }
 
   /** Activated a staff */
-  @Patch(':id/activate')
-  @Public()
-  @ApiOkResponse({ type: StaffDTO })
-  async activate(@Param('id', ParseObjectIdPipe) staffId: string): Promise<StaffDTO> {
-    const staff = await this.staffService.setStatusActive(staffId, 1);
-    return staff;
-  }
+  // @Patch(':id/activate')
+  // @Public()
+  // @ApiOkResponse({ type: StaffDTO })
+  // async activate(@Param('id', ParseObjectIdPipe) staffId: string): Promise<StaffDTO> {
+  //   const staff = await this.staffService.setStatusActive(staffId, 1);
+  //   return staff;
+  // }
 
   /** IsClinical a staff */
   @Patch(':id/:isClinical')

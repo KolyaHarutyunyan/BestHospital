@@ -1,5 +1,5 @@
 export { CreateFundingDTO } from './create.dto';
-export { FundingDTO } from './founder.dto';
+export { FundingDTO, FundingQueryDTO } from './founder.dto';
 export { UpdateFundingDto } from './edit.dto';
 
 // services
