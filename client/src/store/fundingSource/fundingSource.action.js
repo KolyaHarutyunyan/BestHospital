@@ -118,10 +118,10 @@ export const getFoundingSourceServiceModifiersForClient = (id) => {
     }
 }
 
-export const getFundingSourceHistoriesById = (id, onModal) => {
+export const getFundingSourceHistoriesById = (onModal,searchDate) => {
     return {
         type: GET_FUNDING_SOURCE_HISTORIES_BY_ID,
-        payload: {id, onModal}
+        payload: {onModal,searchDate}
     }
 }
 

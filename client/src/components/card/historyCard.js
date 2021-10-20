@@ -3,7 +3,7 @@ import moment from 'moment';
 
 export const HistoryCard = ({key, data}) => {
 
-    let correctDate = moment(data.date).format('dddd, MMMM DD, YYYY')
+    let correctDate = moment(data.createdDate).format('dddd, MMMM DD, YYYY')
     const classes = cardStyle()
 
     return (

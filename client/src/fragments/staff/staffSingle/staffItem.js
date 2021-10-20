@@ -67,8 +67,7 @@ export const StaffItem = () => {
     const availabilityData = useSelector(state => state.availabilitySchedule.availabilitySchedule)
     const employments = useSelector(state => state.admins.employments)
     const staffServices = useSelector(state => state.admins.staffServices.service)
-
-
+    console.log(historiesData,'historyfdatatataa');
     const handleOpenClose = () => {
         setOpen(!open)
     }
@@ -138,7 +137,7 @@ export const StaffItem = () => {
         dispatch(adminActions.getAdminById(params.id))
         dispatch(systemActions.getCredentialGlobal())
         dispatch(noteActions.getGlobalNotes(params.id, 'Staff'))
-        dispatch(fundingSourceActions.getFundingSourceHistoriesById(params.id, 'Staff'))
+        dispatch(fundingSourceActions.getFundingSourceHistoriesById('Staff'))
         dispatch(availabilityScheduleActions.getAvailabilitySchedule(params.id))
         dispatch(adminActions.getEmployment(params.id))
         dispatch(adminActions.getStaffService(params.id))

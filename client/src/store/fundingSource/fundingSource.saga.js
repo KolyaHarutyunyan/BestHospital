@@ -261,15 +261,16 @@ function* getFundingSourceServicesModifierClient(action) {
 }
 
 function* getFundingSourceHistoriesById(action) {
-
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
     try {
-        const res = yield call(authService.getFundingSourceHistoriesByIdService, action.payload.id, action.payload.onModal);
-
+        const res = yield call(authService.getFundingSourceHistoriesByIdService, action.payload.onModal, action.payload.searchDate);
         yield put({
             type: GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS,
             payload: res.data,
         });
-    } catch (error) {}
+    } catch (error) {
+        yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
+    }
 }
 
 function* editActiveOrInactive(action) {
