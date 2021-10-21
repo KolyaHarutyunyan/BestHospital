@@ -10,7 +10,7 @@ import {
     CREATE_ADMIN_SUCCESS,
     GET_EMPLOYMENT_SUCCESS,
     GET_PAY_CODE_SUCCESS,
-    GET_STAFF_SERVICE_SUCCESS
+    GET_STAFF_SERVICE_SUCCESS, GET_ALL_PAYCODES_SUCCESS
 } from "./admin.types";
 
 const initialState = {
@@ -20,7 +20,8 @@ const initialState = {
     credential: [],
     employments : [],
     payCodes : [],
-    staffServices : []
+    staffServices : [],
+    allPaycodes : [],
 };
 
 export const adminReducer = (state = initialState, action) => {
@@ -92,6 +93,11 @@ export const adminReducer = (state = initialState, action) => {
             return {
                 ...state,
                 staffServices: action.payload
+            }
+            case GET_ALL_PAYCODES_SUCCESS :
+            return {
+                ...state,
+                allPaycodes: action.payload
             }
         default:
             return state;

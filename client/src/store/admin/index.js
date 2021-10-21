@@ -17,7 +17,7 @@ import {
     getStaffService,
     deleteStaffService,
     isClinician,
-    getTimesheet, createTimesheet
+    getTimesheet, createTimesheet, getAllPaycodes
 } from "./admin.action";
 
 export {adminReducer} from './admin.reducer';
@@ -43,7 +43,8 @@ export const adminActions = {
     deleteStaffService,
     isClinician,
     getTimesheet,
-    createTimesheet
+    createTimesheet,
+    getAllPaycodes
 }
 
 
