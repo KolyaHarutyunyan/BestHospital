@@ -35,17 +35,16 @@ export class ClientController {
     required: false,
     type: Number
   })
-  @ApiQuery({
-    name: "status",
-    description: "status",
-    required: false,
-    type: Number
-  })
+  // @ApiQuery({
+  //   name: "status",
+  //   description: "status",
+  //   required: false,
+  //   type: Number
+  // })
   findAll(
     @Query('skip') skip: number,
-    @Query('status') status: number,
-    @Query('limit') limit: number,) {
-    return this.clientService.findAll(skip, limit, status);
+    @Query('limit') limit: number) {
+    return this.clientService.findAll(skip, limit, 1);
   }
   /** Get Client By Id */
   @Get(':id')
@@ -76,6 +75,7 @@ export class ClientController {
     @Body() dto: CreateTerminationDto,
     @Query() status: ClientQueryDTO
   ): Promise<ClientDTO> {
+    console.log(status);
     const staff = await this.clientService.setStatus(
       clientId,
       status.status,

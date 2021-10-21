@@ -60,12 +60,11 @@ export class ClientService {
   /** returns all clients */
   async findAll(skip: number, limit: number, status: number): Promise<any> {
     try {
-      if (status == 0) {
+      if (status == 0 || status == 2 || status == 3) {
         let [clients, count] = await Promise.all([
-          this.model
-            .find({ status: 0 })
+          this.model.find({ $or: [{ status: 0 }, { status: 2 }, { status: 3 }] })
             .populate({ path: 'enrollment', select: 'name' }).sort({ '_id': 1 }).skip(skip).limit(limit),
-          this.model.countDocuments({ status: 0 })
+          this.model.countDocuments({ $or: [{ status: 0 }, { status: 2 }, { status: 3 }] })
         ]);
         this.checkClient(clients[0]);
         const sanClient = this.sanitizer.sanitizeMany(clients);
@@ -76,7 +75,7 @@ export class ClientService {
         this.model
           .find({ status: 1 })
           .populate({ path: 'enrollment', select: 'name' }).sort({ '_id': 1 }).skip(skip).limit(limit),
-        this.model.countDocuments({ status: 1 })
+        this.model.countDocuments({ status: 1})
       ]);
       const sanClient = this.sanitizer.sanitizeMany(clients);
       return { clients: sanClient, count }
@@ -108,7 +107,6 @@ export class ClientService {
       if (dto.birthday) {
         client.birthday = dto.birthday
       }
-      if (dto.status) client.status = dto.status;
       // if (dto.address)
       //   funder.address = await this.addressService.getAddress(dto.address);
       await client.save();
@@ -131,7 +129,7 @@ export class ClientService {
   /** Set Status of a Funder Inactive*/
   setStatus = async (
     _id: string,
-    status: any,
+    status: number,
     dto: CreateTerminationDto
   ): Promise<ClientDTO> => {
     const client = await this.model.findById({ _id });

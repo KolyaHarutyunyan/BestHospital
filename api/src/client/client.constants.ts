@@ -1,6 +1,6 @@
 export enum ClientStatus {
-    INACTIVE = "INACTIVE",
-    ACTIVE = "ACTIVE",
-    HOLD = "HOLD",
-    TERMINATE = "TERMINATE"
+    INACTIVE = 0,
+    ACTIVE = 1,
+    HOLD = 2,
+    TERMINATE = 3
 }

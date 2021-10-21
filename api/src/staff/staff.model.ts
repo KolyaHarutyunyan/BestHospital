@@ -28,7 +28,7 @@ const StaffSchema = new Schema({
   birthday: { type: Date },
   residency: { type: String },
   ssn: { type: Number },
-  status: { type: String, enum: StaffStatus, default: "ACTIVE" },
+  status: { type: Number, enum: StaffStatus, default: 1 },
   createdDate: { type: Date, default: Date.now },
   license: LicenseSchema,
   // availability: {type: Number, enum: UserAvailabilityStatus}

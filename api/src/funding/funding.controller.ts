@@ -62,17 +62,16 @@ export class FundingController {
     required: false,
     type: Number
   })
-  @ApiQuery({
-    name: "status",
-    description: "status",
-    required: false,
-    type: Number
-  })
+  // @ApiQuery({
+  //   name: "status",
+  //   description: "status",
+  //   required: false,
+  //   type: Number
+  // })
   async findAll(
     @Query('skip') skip: number,
-    @Query('limit') limit: number,
-    @Query('status') status: number): Promise<FundingDTO[]> {
-    return await this.fundingService.findAll(skip, limit, status);
+    @Query('limit') limit: number): Promise<FundingDTO[]> {
+    return await this.fundingService.findAll(skip, limit, 1);
   }
 
   /** Get all services */

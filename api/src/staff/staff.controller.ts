@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
-import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiOkResponse, ApiProperty, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { StaffService } from './staff.service';
 import { StaffDTO, CreateStaffDto, EditStaffDTO, StaffQueryDTO } from './dto';
 import { ACCESS_TOKEN } from '../authN';
@@ -50,19 +50,20 @@ export class StaffController {
     required: false,
     type: Number,
   })
-  @ApiQuery({
-    name: 'status',
-    description: 'status',
-    required: false,
-    type: Number,
-  })
-  @ApiQuery({ name: 'status', enum: StaffStatus })
+  // @ApiQuery({
+  //   name: 'status',
+  //   description: 'status',
+  //   required: false,
+  //   type: Number,
+  //   enum: StaffStatus
+  // })
+  // @ApiQuery({ name: 'status', enum: StaffStatus })
   async getUsers(
     @Query('skip') skip: number,
     @Query('limit') limit: number,
-    @Query() status: StaffQueryDTO
+    // @Query() status: StaffQueryDTO
   ): Promise<StaffDTO[]> {
-    return await this.staffService.getUsers(skip, limit, status.status);
+    return await this.staffService.getUsers(skip, limit, 1);
   }
 
   /** Get the staff profile */
@@ -83,6 +84,7 @@ export class StaffController {
     @Body() dto: CreateTerminationDto,
     @Query() status: StaffQueryDTO
   ): Promise<StaffDTO> {
+    console.log(status);
     const staff = await this.staffService.setStatus(staffId, status.status, dto);
     return staff;
   }

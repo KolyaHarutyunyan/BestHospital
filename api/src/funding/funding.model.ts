@@ -17,7 +17,7 @@ const FundingSchema = new Schema({
     contact: { type: String, required: true },
     website: { type: String, required: true },
     termination: TerminationSchema,
-    status: { type: String, enum: FundingStatus, default: "ACTIVE" },
+    status: { type: Number, enum: FundingStatus, default: 1 },
 
 });
 

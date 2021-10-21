@@ -23,7 +23,7 @@ export class FundingDTO {
     @ApiProperty({ type: AddressDTO })
     address: AddressDTO;
     @ApiProperty({ enum: FundingStatus })
-    @IsEnum(FundingStatus)
+    // @IsEnum(FundingStatus)
     status: number;
     @ApiProperty()
     termination: Object;

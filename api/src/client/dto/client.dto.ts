@@ -33,6 +33,6 @@ export class ClientDTO {
 
 export class ClientQueryDTO {
     @ApiProperty({ enum: ClientStatus })
-    @IsEnum(ClientStatus)
-    status: string;
+    // @IsEnum(ClientStatus)
+    status: number;
 }
