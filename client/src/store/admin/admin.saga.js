@@ -38,7 +38,6 @@ import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
 import {httpRequestsOnSuccessActions} from "../http_requests_on_success";
 
-
 function* createAdmin(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
@@ -177,7 +176,6 @@ function* deleteCredentialById(action) {
     }
 }
 
-
 function* getEmployment(action) {
     try {
         const res = yield call(authService.getEmploymentService, action.payload.id)
@@ -243,7 +241,6 @@ function* getPayCode(action) {
     }
 }
 
-
 function* createPayCode(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
@@ -259,7 +256,6 @@ function* createPayCode(action) {
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
 }
-
 
 function* getStaffService(action) {
     try {
@@ -312,8 +308,6 @@ function* delteStaffService(action) {
     }
 }
 
-
-
 function* isClinician(action) {
 
     try {
@@ -329,6 +323,7 @@ function* isClinician(action) {
 
     }
 }
+
 function* getTimesheet(action) {
     try {
         const res = yield call(authService.getTimesheetService, action.payload.id)
@@ -361,7 +356,6 @@ function* createTimesheet(action) {
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
 }
-
 
 function* getAllPaycodes(action) {
     try {

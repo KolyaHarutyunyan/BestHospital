@@ -13,6 +13,7 @@ export const authService = {
             return axios.get('/staff')
         }
     },
+
     getAdminByIdService: (id) => axios.get(`/staff/${id}`),
 
     createCredentialService: (body) => axios.post(`/scredential`, body),

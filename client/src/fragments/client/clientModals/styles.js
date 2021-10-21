@@ -113,8 +113,37 @@ export const createClientStyle = makeStyles(() => ({
         alignItems: 'center',
         justifyContent: 'space-between'
     },
-    authorizationFileSubTitle: {},
+    authorizationFileSubTitle: {
+        fontSize: 16,
+        color: Colors.TextSecondary,
+        fontWeight: 600,
+        padding: '20px 0',
+        textTransform: 'capitalize'
+    },
     fileTypeInput: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    iconText: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        '& p':{
+            fontSize: 16,
+            color: Colors.TextLightGray,
+            fontWeight: 600,
+            paddingTop: 10
+        }
+    },
+    centered: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 290
+    },
+    normal: {
 
     }
 }));

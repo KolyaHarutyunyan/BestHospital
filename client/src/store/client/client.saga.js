@@ -227,6 +227,7 @@ function* createClientEnrollment(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.createClientEnrollmentService, action);
+
         yield put({
             type: GET_CLIENT_ENROLLMENT,
             payload: {id: action.payload.id},
@@ -245,6 +246,7 @@ function* editClientEnrollment(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.editClientEnrollmentService, action);
+
         yield put({
             type: GET_CLIENT_ENROLLMENT,
             payload: {id: action.payload.clientId},
