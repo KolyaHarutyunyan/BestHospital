@@ -39,6 +39,7 @@ export class FileController {
 
   /** Edit a File profile */
   @Patch(':id')
+  @Public()
   // @ApiBody({ type: EditFactoringDTO })
   @ApiOkResponse({ type: FileDTO })
   async edit(
