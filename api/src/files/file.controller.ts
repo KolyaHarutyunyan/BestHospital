@@ -14,13 +14,13 @@ export class FileController {
   @Public()
   @UseInterceptors(FileInterceptor('file'))
   async uploadImage(@UploadedFile() file) {
-    console.log(file, 'fileeeeeeeeeeeeeee');
     const fileURLs = await this.imagesService.saveImage(file);
     // createRestaurantDTO.logoUrl = fileURLs ? fileURLs.imageUrl : null;
     return fileURLs;
   }
 
   @Post()
+  @Public()
   @ApiOkResponse({ type: FileDTO })
   async create(
     @Body() createDTO: CreateImageDTO): Promise<FileDTO> {
@@ -28,12 +28,12 @@ export class FileController {
     return image;
   }
 
-  @Get(':resource/:onModel')
+  @Get(':resource')
+  @Public()
   @ApiOkResponse({ type: [FileDTO] })
-  async get(@Param('resource', ParseObjectIdPipe) resource: string,
-    @Param('onModel') onModel: string
+  async get(@Param('resource', ParseObjectIdPipe) resource: string
   ): Promise<FileDTO[]> {
-    const file = await this.imagesService.get(resource, onModel);
+    const file = await this.imagesService.get(resource);
     return file;
   }
 

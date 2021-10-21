@@ -62,9 +62,9 @@ export class AuthorizationService {
       this.checkAuthorization(authorization)
       if (dto.startDate) authorization.startDate = dto.startDate;
       if (dto.endDate) authorization.endDate = dto.endDate;
-      if (dto.authId) authorization.authId = dto.authId
+      if (dto.authId) authorization.authId = dto.authId;
       if (dto.status) authorization.status = dto.status;
-      if (dto.location) authorization.location = dto.location
+      if (dto.location) authorization.location = dto.location;
       await authorization.save()
       return this.sanitizer.sanitize(authorization);
     } catch (e) {
@@ -72,11 +72,10 @@ export class AuthorizationService {
       throw e;
     }
   }
+  
   async findAll(clientId: string): Promise<AuthorizationDTO[]> {
     try {
-      console.log('bbb');
       const authorizations = await this.model.find({ clientId }).populate({ path: 'funderId', select: "name" });
-      console.log(authorizations);
       this.checkAuthorization(authorizations[0])
       return this.sanitizer.sanitizeMany(authorizations);
     }

@@ -20,9 +20,9 @@ export const FileStatus = {
     LOAD: "load"
 }
 
-export enum FileType {
-    PERSONAL = 'PERSONAL',
-    AVATAR = 'AVATAR',
-    DOCUMENT = 'DOCUMENT',
-    LOAD = 'LOAD'
-}
+// export enum FileType {
+//     PERSONAL = 'PERSONAL',
+//     AVATAR = 'AVATAR',
+//     DOCUMENT = 'DOCUMENT',
+//     LOAD = 'LOAD'
+// }

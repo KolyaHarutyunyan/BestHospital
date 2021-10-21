@@ -5,5 +5,4 @@ export interface IFile extends Document {
     resource: string;
     type: string;
     url: string;
-    onModel: string
 }

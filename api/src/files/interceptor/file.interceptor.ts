@@ -13,7 +13,6 @@ export class FileSanitizer implements ISanitize {
       type: file.type,
       url: file.url,
       resource: file.resource,
-      onModel: file.onModel,
     };
     return sanitizedOffice;
   }

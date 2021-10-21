@@ -42,21 +42,18 @@ export class FileService {
   }
 
   create = async (dto: CreateImageDTO): Promise<FileDTO> => {
-    const onMod = dto.onModel;
-    const resource = await this[onMod].getRaw(dto.resource);
     const file = new this.model({
       type: dto.type,
       url: dto.url,
       resource: dto.resource,
-      onModel: dto.onModel
     })
 
     await file.save()
     return this.sanitizer.sanitize(file)
   }
 
-  get = async (resource: string, onModel: string): Promise<FileDTO[]> => {
-    const files = await this.model.find({ resource, onModel });
+  get = async (resource: string): Promise<FileDTO[]> => {
+    const files = await this.model.find({ resource });
     this.checkFile(files[0])
     return this.sanitizer.sanitizeMany(files)
   }
