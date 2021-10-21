@@ -45,7 +45,6 @@ import {
     //removes files from the s3 bucket
     deleteImages = (fileUrls: string[]): Promise<unknown> => {
       const objects = [];
-      console.log(fileUrls);
       for (let i = 0; i < fileUrls.length; i++) {
         //extract the pathname from the url
         let pathname = url.parse(fileUrls[i]).pathname;

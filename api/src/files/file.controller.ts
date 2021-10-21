@@ -51,6 +51,7 @@ export class FileController {
 
   @Delete(':id')
   // @ApiOkResponse({type: FileDTO})
+  @Public()
   async delete(
     @Param('id', ParseObjectIdPipe) id: string): Promise<any> {
     const file = await this.imagesService.deleteImages(id);
