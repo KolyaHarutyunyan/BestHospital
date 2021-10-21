@@ -1,7 +1,9 @@
 
-export const FundingStatus = {
-  INACTIVE: 0,
-  ACTIVE: 1,
+export enum FundingStatus {
+  INACTIVE = "INACTIVE",
+  ACTIVE = "ACTIVE",
+  HOLD = "HOLD",
+  TERMINATE = "TERMINATE"
 }
 
 export const ModifierStatus = {
@@ -14,3 +16,4 @@ export const TypeStatus = {
   INDIRECT: 0,
   DIRECT: 1,
 }
+

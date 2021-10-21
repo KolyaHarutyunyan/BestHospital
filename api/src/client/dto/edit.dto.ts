@@ -39,9 +39,5 @@ export class UpdateClientDto {
     @IsOptional()
     @IsDateString()
     birthday: Date;
-    @ApiProperty({ enum: ClientStatus })
-    @IsOptional()
-    @IsNumber()
-    status: number;
 }
 

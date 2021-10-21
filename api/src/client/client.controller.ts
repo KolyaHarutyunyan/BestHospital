@@ -2,10 +2,11 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CreateTerminationDto } from 'src/termination/dto/create-termination.dto';
 import { ParseObjectIdPipe, Public } from '../util';
+import { ClientStatus } from './client.constants';
 import { ClientService } from './client.service';
 import {
   ClientDTO,
-  CreateClientDTO, UpdateClientDto
+  CreateClientDTO, UpdateClientDto, ClientQueryDTO
 } from './dto';
 
 @Controller('client')
@@ -34,17 +35,16 @@ export class ClientController {
     required: false,
     type: Number
   })
-  @ApiQuery({
-    name: "status",
-    description: "status",
-    required: false,
-    type: Number
-  })
+  // @ApiQuery({
+  //   name: "status",
+  //   description: "status",
+  //   required: false,
+  //   type: Number
+  // })
   findAll(
     @Query('skip') skip: number,
-    @Query('status') status: number,
-    @Query('limit') limit: number,) {
-    return this.clientService.findAll(skip, limit, status);
+    @Query('limit') limit: number) {
+    return this.clientService.findAll(skip, limit, 1);
   }
   /** Get Client By Id */
   @Get(':id')
@@ -66,33 +66,36 @@ export class ClientController {
   }
 
   /** Inactivate a client */
-  @Patch(':id/inactivate')
+  @Patch(':id/setStatus')
   @Public()
+  @ApiQuery({ name: 'status', enum: ClientStatus })
   @ApiOkResponse({ type: ClientDTO })
-  async inactivate(
+  async setStatus(
     @Param('id', ParseObjectIdPipe) clientId: string,
     @Body() dto: CreateTerminationDto,
+    @Query() status: ClientQueryDTO
   ): Promise<ClientDTO> {
-    const staff = await this.clientService.setStatusInactive(
+    console.log(status);
+    const staff = await this.clientService.setStatus(
       clientId,
-      0,
+      status.status,
       dto
     );
     return staff;
   }
 
   /** Activated a funder */
-  @Patch(':id/activate')
-  @Public()
-  @ApiOkResponse({ type: ClientDTO })
-  async activate(
-    @Param('id', ParseObjectIdPipe) clientId: string,
-  ): Promise<ClientDTO> {
-    const client = await this.clientService.setStatusActive(
-      clientId,
-      1,
-    );
-    return client;
-  }
+  // @Patch(':id/activate')
+  // @Public()
+  // @ApiOkResponse({ type: ClientDTO })
+  // async activate(
+  //   @Param('id', ParseObjectIdPipe) clientId: string,
+  // ): Promise<ClientDTO> {
+  //   const client = await this.clientService.setStatusActive(
+  //     clientId,
+  //     1,
+  //   );
+  //   return client;
+  // }
 
 }

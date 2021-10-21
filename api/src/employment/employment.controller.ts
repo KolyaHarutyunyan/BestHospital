@@ -20,6 +20,7 @@ export class EmploymentController {
   async findAll(@Param('staffId', ParseObjectIdPipe) staffId: string) {
     return await this.employmentService.findAll(staffId);
   }
+ 
   @Get(':id')
   @Public()
   @ApiOkResponse({ type: EmploymentDto })

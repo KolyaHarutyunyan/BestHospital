@@ -1,7 +1,7 @@
 import { model, Schema, Types } from 'mongoose';
 import { addressSchema } from '../address';
 // import { TerminationSchema } from '../termination';
-import { UserStatus } from './staff.constants';
+import { StaffStatus } from './staff.constants';
 import { IStaff } from './interface';
 
 export const TerminationSchema = {
@@ -28,7 +28,7 @@ const StaffSchema = new Schema({
   birthday: { type: Date },
   residency: { type: String },
   ssn: { type: Number },
-  status: { type: Number, enum: UserStatus, default: 1 },
+  status: { type: Number, enum: StaffStatus, default: 1 },
   createdDate: { type: Date, default: Date.now },
   license: LicenseSchema,
   // availability: {type: Number, enum: UserAvailabilityStatus}

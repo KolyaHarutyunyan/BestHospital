@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEnum, IsOptional } from 'class-validator';
 import { AddressDTO } from '../../address';
 import { LicenseDTO } from './license.dto';
+import { StaffStatus } from '../staff.constants';
 
 export class StaffDTO {
   @ApiProperty()
@@ -31,14 +33,20 @@ export class StaffDTO {
   residency: string;
   @ApiProperty()
   ssn: number;
-  @ApiProperty()
+  @ApiProperty({ enum: StaffStatus })
   status: number;
   @ApiProperty()
   termination: Object;
   @ApiProperty({ type: AddressDTO })
   address: AddressDTO;
-  @ApiProperty({type: LicenseDTO})
+  @ApiProperty({ type: LicenseDTO })
   license: LicenseDTO;
-  @ApiProperty({type: Boolean})
+  @ApiProperty({ type: Boolean })
   clinical: boolean;
+}
+
+export class StaffQueryDTO {
+  @ApiProperty({ enum: StaffStatus })
+  @IsEnum(StaffStatus)
+  status: number;
 }

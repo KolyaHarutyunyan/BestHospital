@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsDateString, IsEmail, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString, ValidateNested } from 'class-validator';
-import { UserStatus } from '../staff.constants';
 import { LicenseDTO } from './license.dto';
 
 export class EditStaffDTO {

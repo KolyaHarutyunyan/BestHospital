@@ -100,12 +100,32 @@ export class FundingService {
   //   }
   // }
 
+
+
+
+
+
+    // console.log(status)
+  // if (status == "INACTIVE" || status == "HOLD" || status == "TERMINATE") {
+  //   const [staff, count] = await Promise.all([
+  //     this.model.find({ $or: [{ status: "INACTIVE" }, { status: "HOLD" }, { status: "TERMINATE" }] }).sort({ _id: -1 }).skip(skip).limit(limit),
+  //     this.model.countDocuments({ $or: [{ status: "INACTIVE" }, { status: "HOLD" }, { status: "TERMINATE" }] }),
+  //   ]);
+  //   const sanFun = this.sanitizer.sanitizeMany(staff);
+  //   return { staff: sanFun, count };
+  // }
+
+  // const [staff, count] = await Promise.all([
+  //   (await this.model.find({ status: "ACTIVE" }).sort({ _id: 1 }).skip(skip).limit(limit)).reverse(),
+  //   this.model.countDocuments({ status: "ACTIVE" }),
+  // ]);
   /** returns all funders */
   async findAll(skip: number, limit: number, status: number): Promise<any> {
-    if (status == 0) {
+     if (status == 0 || status == 2 || status == 3) {
+
       let [funders, count] = await Promise.all([
-        this.model.find({ status: 0 }).sort({ '_id': -1 }).skip(skip).limit(limit),
-        this.model.countDocuments({ status: 0 })
+        this.model.find({ $or: [{ status: 2 }, { status: 3}, { status: 0 }] }).sort({ '_id': -1 }).skip(skip).limit(limit),
+        this.model.countDocuments({ $or: [{ status: 2 }, { status: 3 }, { status: 0 }] })
       ]);
       const sanFun = this.sanitizer.sanitizeMany(funders);
       return { funders: sanFun, count }
@@ -115,6 +135,7 @@ export class FundingService {
       (await this.model.find({ status: 1 }).sort({ '_id': 1 }).skip(skip).limit(limit)).reverse(),
       this.model.countDocuments({ status: 1 })
     ]);
+    console.log(funders);
     const sanFun = this.sanitizer.sanitizeMany(funders);
     return { funders: sanFun, count }
   }
@@ -261,9 +282,9 @@ export class FundingService {
   }
 
   /** Set Status of a Funder Inactive*/
-  setStatusInactive = async (
+  setStatus = async (
     _id: string,
-    status: number,
+    status: any,
     dto: CreateTerminationDto
   ): Promise<FundingDTO> => {
     const funder = await this.model.findById({ _id });
@@ -279,18 +300,18 @@ export class FundingService {
   };
 
   /** Set Status of a Funder Active */
-  setStatusActive = async (
-    id: string,
-    status: number,
-  ): Promise<FundingDTO> => {
-    const funder = await this.model.findOneAndUpdate(
-      { _id: id },
-      { $set: { status: status, termination: null } },
-      { new: true },
-    );
-    this.checkFunder(funder);
-    return this.sanitizer.sanitize(funder);
-  };
+  // setStatusActive = async (
+  //   id: string,
+  //   status: number,
+  // ): Promise<FundingDTO> => {
+  //   const funder = await this.model.findOneAndUpdate(
+  //     { _id: id },
+  //     { $set: { status: status, termination: null } },
+  //     { new: true },
+  //   );
+  //   this.checkFunder(funder);
+  //   return this.sanitizer.sanitize(funder);
+  // };
 
   /** Private methods */
   /** if the funder is not found, throws an exception */

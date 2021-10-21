@@ -16,7 +16,7 @@ import {useDispatch} from "react-redux";
 export const TabsHeader = ({activeTab, data, authActive}) => {
     const classes = serviceSingleStyles()
     const [open, setOpen] = useState()
-    const [inputs, setInputs] = useState({active: 'active'});
+    const [inputs, setInputs] = useState({active: 'Active'});
 
     const handleOpenClose = () => {
         setOpen(!open)

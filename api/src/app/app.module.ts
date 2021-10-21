@@ -20,11 +20,12 @@ import { PaycodetypeModule } from '../paycodetype/paycodetype.module';
 import { AvailabilityModule } from '../availability/availability.module';
 import { OvertimeModule } from '../overtime/overtime.module';
 import { TimesheetModule } from '../staff/timesheet/timesheet.module';
+import { FileModule } from '../files/file.module';
 
 @Module({
   imports: [AuthNModule, AuthZModule, AddressModule, StaffModule, FundingModule,
     EmploymentModule, ClientModule, DepartmentModule, CommentModule, HistoryModule,
-    JobModule, SCredentialModule, PaycodeModule, PaycodetypeModule, AvailabilityModule, OvertimeModule, TimesheetModule],
+    JobModule, SCredentialModule, PaycodeModule, PaycodetypeModule, AvailabilityModule, OvertimeModule, TimesheetModule, FileModule],
   controllers: [AppController],
   providers: [AppService, DatabaseConnection],
 })

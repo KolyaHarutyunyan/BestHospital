@@ -67,7 +67,18 @@ export class EmploymentService {
     this.checkEmployment(employments[0])
     return this.sanitizer.sanitizeMany(employments);
   }
-
+  async findAllEmploymentsByStaffId(staffId: string): Promise<String[]> {
+    const ids = [];
+    const employments = await this.model.find({ staffId });
+    this.checkEmployment(employments[0])
+    employments.map(employment => {
+      ids.push(employment._id)
+    })
+    return ids;
+    // this.checkEmployment(employments[0])
+    // return this.sanitizer.sanitizeMany(employments);
+  }
+  
   async findOne(_id: string): Promise<EmploymentDto> {
     let employment = await this.model.findById({ _id }).populate('departmentId', 'name').populate("supervisor", 'firstName');
     this.checkEmployment(employment)

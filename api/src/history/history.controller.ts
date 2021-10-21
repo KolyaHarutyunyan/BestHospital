@@ -10,7 +10,7 @@ import { IsDateString, isDateString } from 'class-validator';
 export class HistoryController {
   constructor(private readonly historyService: HistoryService) { }
 
-  @Get(':resourceId/:onModel')
+  @Get(':onModel')
   @Public()
   @ApiOkResponse({ type: HistoryDTO })
   @ApiQuery({
@@ -29,22 +29,14 @@ export class HistoryController {
     name: "start",
     description: "startDate",
     required: false,
-    type: IsDateString
-  })
-  @ApiQuery({
-    name: "end",
-    description: "endDate",
-    required: false,
-    type: IsDateString
+    type: Date
   })
   async findAll(
     @Query('skip') skip: number,
     @Query('limit') limit: number,
     @Query('start') start: Date,
-    @Query('end') end: Date,
-    @Param('resourceId', ParseObjectIdPipe) resourceId: string,
     @Param('onModel') onModel: string
   ) {
-    return await this.historyService.findAll(onModel, resourceId, skip, limit, start, end);
+    return await this.historyService.findAll(onModel, skip, limit, start);
   }
 }
