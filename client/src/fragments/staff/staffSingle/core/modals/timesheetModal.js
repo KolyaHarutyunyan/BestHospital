@@ -7,6 +7,7 @@ import {adminActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions}
 import {payrollActions} from "@eachbase/store/payroll";
 import {createClientStyle} from "@eachbase/fragments/client";
 import {staffModalsStyle} from "./styles";
+import {useParams} from "react-router-dom";
 
 export const TimesheetModal = ({handleClose, info,employmentId}) => {
 
@@ -18,10 +19,30 @@ export const TimesheetModal = ({handleClose, info,employmentId}) => {
     const classes = createClientStyle()
     const classes_v2 = staffModalsStyle()
     const globalPayCodes = useSelector(state => state.payroll.PayCodes)
+     const allPaycodes = useSelector(state => state.admins.allPaycodes)
+    const [newallPaycodes, setnewallPaycodes] = useState([]);
+
+    const params = useParams()
+    useEffect(() => {
+        dispatch(adminActions.getAllPaycodes(params.id))
+    }, []);
+
+
 
     useEffect(() => {
         dispatch(payrollActions.getPayCodeGlobal())
     }, []);
+
+    useEffect(()=>{
+        setnewallPaycodes(allPaycodes.map(item=>{
+            return {
+                id : item.id,
+                name : item.payCodeTypeId.name
+            }
+        }))
+    },[])
+
+
 
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
@@ -57,10 +78,15 @@ export const TimesheetModal = ({handleClose, info,employmentId}) => {
     const handleCreate = () => {
         if (inputs.rate && inputs.payCodeTypeId && inputs.startDate && checked ? "Present" : inputs.endDate ) {
             const data = {
-                "employmentId": employmentId,
-                "payCodeTypeId": payCode.id,
-                "rate": +inputs.rate,
-                "active": checked,
+                // "employmentId": employmentId,
+                // "payCodeTypeId": payCode.id,
+                // "rate": +inputs.rate,
+                // "active": checked,
+
+                "staffId": params.id,
+                "payCode": "string",
+                "description": "string",
+                "hours": 0,
                 "startDate": inputs.startDate,
                 "endDate":  inputs.endDate ? inputs.endDate : undefined
             }
@@ -92,7 +118,7 @@ export const TimesheetModal = ({handleClose, info,employmentId}) => {
                             label={"Paycode*"}
                             handleSelect={handleChange}
                             value={inputs.modifiers}
-                            list={globalPayCodes}
+                            list={newallPaycodes}
                             typeError={error === 'payCodeTypeId' ? ErrorText.field : ''}
                         />
                         <div className={classes.displayCodeBlock}>

@@ -23,8 +23,14 @@ import {
     EDIT_EMPLOYMENT,
     CREATE_STAFF_SERVICE,
     GET_STAFF_SERVICE_SUCCESS,
-    GET_STAFF_SERVICE, IS_CLINICIAN,
-    DELETE_STAFF_SERVICE, GET_TIMESHEET_SUCCESS, GET_TIMESHEET, CREATE_TIMESHEET,
+    GET_STAFF_SERVICE,
+    IS_CLINICIAN,
+    DELETE_STAFF_SERVICE,
+    GET_TIMESHEET_SUCCESS,
+    GET_TIMESHEET,
+    CREATE_TIMESHEET,
+    GET_ALL_PAYCODES,
+    GET_ALL_PAYCODES_SUCCESS,
 
 
 } from "./admin.types";
@@ -356,6 +362,23 @@ function* createTimesheet(action) {
     }
 }
 
+
+function* getAllPaycodes(action) {
+    try {
+        const res = yield call(authService.getAllPaycodesService, action.payload.id)
+        yield put({
+            type: GET_ALL_PAYCODES_SUCCESS,
+            payload:  res.data
+        });
+        console.log(res,'reeeeseeseses get paycodeeeeesesesesesesesesese')
+
+    } catch (err) {
+
+        console.log(err, ' errr employmeny')
+    }
+}
+
+
 export const watchAdmin = function* watchAdminSaga() {
     yield takeLatest(CREATE_ADMIN, createAdmin);
     yield takeLatest(GET_ADMINS, getAdmins);
@@ -376,4 +399,5 @@ export const watchAdmin = function* watchAdminSaga() {
     yield takeLatest(IS_CLINICIAN, isClinician)
     yield takeLatest(GET_TIMESHEET, getTimesheet)
     yield takeLatest(CREATE_TIMESHEET, createTimesheet)
+    yield takeLatest(GET_ALL_PAYCODES, getAllPaycodes)
 };
