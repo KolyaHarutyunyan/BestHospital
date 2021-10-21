@@ -8,6 +8,8 @@ import {payrollActions} from "@eachbase/store/payroll";
 import {createClientStyle} from "@eachbase/fragments/client";
 import {staffModalsStyle} from "./styles";
 import moment from "moment";
+import {getAllPaycodes} from "../../../../../store/admin/admin.action";
+import {useParams} from "react-router-dom";
 
 export const PaycodeModal = ({handleClose, info,employmentId}) => {
     console.log(info,'iiinffoouza')
@@ -77,9 +79,11 @@ export const PaycodeModal = ({handleClose, info,employmentId}) => {
                 "rate": +inputs.rate,
                 "active": checked,
                 "startDate": inputs.startDate,
-                "endDate":  inputs.endDate ? inputs.endDate : undefined
+                "endDate":  inputs.endDate ? inputs.endDate : undefined,
+                'name' : inputs.payCodeTypeId
             }
-            dispatch(adminActions.createPayCode(data, employmentId))
+
+            dispatch(adminActions.createTimesheet(                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    data, employmentId))
         }
          else {
             setError(

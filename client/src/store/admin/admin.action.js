@@ -11,7 +11,13 @@ import {
     CREATE_EMPLOYMENT,
     GET_PAY_CODE,
     CREATE_PAY_CODE,
-    EDIT_EMPLOYMENT, CREATE_STAFF_SERVICE, GET_STAFF_SERVICE, DELETE_STAFF_SERVICE, GET_TIMESHEET, CREATE_TIMESHEET
+    EDIT_EMPLOYMENT,
+    CREATE_STAFF_SERVICE,
+    GET_STAFF_SERVICE,
+    DELETE_STAFF_SERVICE,
+    GET_TIMESHEET,
+    CREATE_TIMESHEET,
+    GET_ALL_PAYCODES
 
 } from "./admin.types";
 
@@ -146,6 +152,14 @@ export const getTimesheet = (id) => {
 export const createTimesheet = (id) => {
     return {
         type: CREATE_TIMESHEET,
+        payload: {id}
+    }
+}
+
+
+export const getAllPaycodes = (id) => {
+    return {
+        type: GET_ALL_PAYCODES,
         payload: {id}
     }
 }
