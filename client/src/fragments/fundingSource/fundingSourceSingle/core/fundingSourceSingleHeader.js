@@ -1,17 +1,12 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {btnStyles, fundingSourceSingleStyles ,editButtonStyle } from "./styles";
+import {fundingSourceSingleStyles ,editButtonStyle } from "./styles";
 import {Images} from "@eachbase/utils";
 import {AddButton, AddModalButton, SimpleModal, AddNotes, ValidationInput, SelectInput} from "@eachbase/components";
 import {FundingSourceServiceAdd} from "./modals";
 import {CreateFundingSource} from "../../createFundingSource";
 import {fundingSourceActions, httpRequestsOnSuccessActions} from "@eachbase/store";
-import {FundingSourceServiceAdd} from "./modals";
-import {CreateFundingSource} from "../../createFundingSource";
-import {httpRequestsOnSuccessActions} from "@eachbase/store";
 import { inputStyle} from "../../../client/clientSingle/core/styles";
-
-
 
 export const FundingSourceSingleHeader = ({activeTab, title}) => {
     const [open, setOpen] = useState(false)
@@ -25,14 +20,12 @@ export const FundingSourceSingleHeader = ({activeTab, title}) => {
         httpOnLoad: state.httpOnLoad,
     }));
     const handleOpenClose = () => {
-
         setOpen(!open)
-
     }
 
     const [searchDate, setSearchDate] = useState('')
 
-    const handleChange = e => {
+    const handleChangeFile = e => {
         setSearchDate(e.target.value)
     }
 
@@ -82,14 +75,14 @@ export const FundingSourceSingleHeader = ({activeTab, title}) => {
 
             {
                 activeTab === 0 ?
-                    <AddModalButton handleClick={handleOpenClose} text='Edit' btnStyles={btnStyles}/> :
+                    <AddModalButton handleClick={handleOpenClose} text='Edit' /> :
                     activeTab === 3 ?
                         <>
                             <div className={classes.searchContainer}>
                                 <ValidationInput
                                     errorFalse={true}
                                     variant={"outlined"}
-                                    onChange={(e) => handleChange(e)}
+                                    onChange={(e) => handleChangeFile(e)}
                                     value={searchDate}
                                     type={"date"}
                                     name='searchDate'

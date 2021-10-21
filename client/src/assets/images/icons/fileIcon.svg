@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <g id="File_Outline" data-name="File Outline" transform="translate(-333 -306)">
+    <g id="Base" transform="translate(333 306)" fill="rgba(52,122,240,0.5)" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="64" height="64" stroke="none"/>
+      <rect x="0.5" y="0.5" width="63" height="63" fill="none"/>
+    </g>
+    <g id="File_Outline-2" data-name="File Outline" transform="translate(343.667 311.333)">
+      <path id="Path_3207" data-name="Path 3207" d="M99.833,11.07l-10.044-9.5A5.707,5.707,0,0,0,85.852,0H66.729A5.736,5.736,0,0,0,61,5.729V47.6a5.736,5.736,0,0,0,5.729,5.729H95.9a5.736,5.736,0,0,0,5.729-5.729V15.231A5.753,5.753,0,0,0,99.833,11.07ZM96.8,12.5H89.021a.521.521,0,0,1-.521-.521V4.65Zm-.9,37.708H66.729a2.607,2.607,0,0,1-2.6-2.6V5.729a2.607,2.607,0,0,1,2.6-2.6H85.375v8.854a3.65,3.65,0,0,0,3.646,3.646H98.5V47.6A2.607,2.607,0,0,1,95.9,50.208Z" transform="translate(-61 0)" fill="rgba(52,122,240,0.5)"/>
+      <path id="Path_3208" data-name="Path 3208" d="M152.479,200H129.563a1.563,1.563,0,1,0,0,3.125h22.917a1.563,1.563,0,0,0,0-3.125Z" transform="translate(-121.021 -179.167)" fill="rgba(52,122,240,0.5)"/>
+      <path id="Path_3209" data-name="Path 3209" d="M152.479,280H129.563a1.563,1.563,0,1,0,0,3.125h22.917a1.563,1.563,0,0,0,0-3.125Z" transform="translate(-121.021 -250.833)" fill="rgba(52,122,240,0.5)"/>
+      <path id="Path_3210" data-name="Path 3210" d="M137.138,360h-7.575a1.563,1.563,0,1,0,0,3.125h7.575a1.563,1.563,0,0,0,0-3.125Z" transform="translate(-121.021 -322.5)" fill="rgba(52,122,240,0.5)"/>
+    </g>
+  </g>
+</svg>
