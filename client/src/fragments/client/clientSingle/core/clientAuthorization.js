@@ -6,7 +6,7 @@ import {serviceSingleStyles} from './styles';
 import {Colors, Images} from "@eachbase/utils";
 import {TableCell} from "@material-ui/core";
 import {clientActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
-import {AddAuthorization} from "../../clientModals";
+import {AddAuthorization, AuthorizationFile} from "../../clientModals";
 import {AuthHeader} from "@eachbase/components/headers/auth/authHeader";
 import {AddAuthorizationService} from "../../clientModals/addAuthorizationService";
 
@@ -19,6 +19,9 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
     const [toggleModal, setToggleModal] = useState(false)
     const [toggleModal2, setToggleModal2] = useState(false)
     const [toggleModal3, setToggleModal3] = useState(false)
+
+    const [createEditFile,setCreateEditFile] = useState(false)
+
     const [authIndex, setAuthIndex] = useState(0)
     const [serviceIndex, setServiceIndex] = useState(null)
     const services = useSelector(state => state.client.clientsAuthorizationsServices)
@@ -32,7 +35,6 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
 
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION'
     const successDelServ = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION_SERV'
-
 
     useEffect(()=>{
         dispatch(clientActions.getClientsAuthorizationsServ(info[authIndex].id))
@@ -153,6 +155,11 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
                     />
                 }
             />
+            <SimpleModal
+                handleOpenClose={() => setCreateEditFile(!createEditFile)}
+                openDefault={createEditFile}
+                content={<AuthorizationFile />}
+            />
             <Card
                 width='234px'
                 cardInfo={info}
@@ -167,7 +174,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
             />
             <div className={classes.clearBoth}/>
             <div className={classes.notesWrap}>
-                <AuthHeader setDelEdit={setDelEdit} info={info[authIndex]}  setToggleModal={setToggleModal} toggleModal={toggleModal}/>
+                <AuthHeader createEditFile={createEditFile} setCreateEditFile={setCreateEditFile}  setDelEdit={setDelEdit} info={info[authIndex]}  setToggleModal={setToggleModal} toggleModal={toggleModal}/>
                 <div className={classes.authorizationServices}>
                     <p className={classes.authorizationServicesTitle}>Authorization Services</p>
                     <div className={classes.authorizationServicesRight}>

@@ -79,6 +79,7 @@ import infoIcon from '@eachbase/assets/images/icons/informationIcon.svg'
 import addHours from '@eachbase/assets/images/icons/addHours.svg'
 import authIconGen from '@eachbase/assets/images/icons/authIconGen.svg'
 import addIcon from '@eachbase/assets/images/icons/Add.svg';
+import fileIcon from '@eachbase/assets/images/icons/fileIcon.svg';
 
 export const Images = {
     doctors: doctors,
@@ -160,5 +161,5 @@ export const Images = {
     infoIcon: infoIcon,
     addIcon: addIcon,
     employment: employment,
-
+    fileIcon: fileIcon
 }

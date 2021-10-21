@@ -93,6 +93,14 @@ export const fundingSourceSingleStyles = makeStyles(() => ({
         marginTop: -32,
         width: '100%'
     },
+    searchContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        '& button': {
+            marginLeft: 15
+        }
+    }
 }));
 
 export const editButtonStyle = {

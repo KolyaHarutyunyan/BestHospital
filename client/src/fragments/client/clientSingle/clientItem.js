@@ -9,7 +9,7 @@ import {
     SimpleModal,
     NoItemText, Loader,
 } from "@eachbase/components";
-import {clientActions, httpRequestsOnSuccessActions} from "@eachbase/store";
+import {clientActions, fundingSourceActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 import {
     ClientGeneral,
     ClientContact,
@@ -50,7 +50,7 @@ export const ClientItem = () => {
         dispatch(clientActions.getClientsContacts(params.id))
         dispatch(clientActions.getClientsEnrollment(params.id))
         dispatch(clientActions.getClientsAuthorizations(params.id))
-        dispatch(clientActions.getClientHistories(params.id, 'Client'))
+        dispatch(fundingSourceActions.getFundingSourceHistoriesById('Client'))
         dispatch(noteActions.getGlobalNotes(params.id,'Client'))
         dispatch(availabilityScheduleActions.getAvailabilitySchedule(params.id))
     }, []);
@@ -66,11 +66,9 @@ export const ClientItem = () => {
     const clientContact = useSelector(state => state.client.clientContacts)
     const enrolments = useSelector(state => state.client.clientEnrollment)
     const clientsAuthorizations = useSelector(state => state.client.clientsAuthorizations)
-    const clientsHistories = useSelector(state => state.client.clientHistories)
+    const clientsHistories = useSelector(state => state.fundingSource.fundingSourceHistories)
     const clientsNotes = useSelector(state => state.note.notes)
     const availabilityData = useSelector(state => state.availabilitySchedule.availabilitySchedule)
-
-
 
     const handleOpenClose = () => {
         setOpen(!open)

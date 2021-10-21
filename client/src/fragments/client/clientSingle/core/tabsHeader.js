@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {editButtonStyle, serviceSingleStyles, inputStyle} from "./styles";
 import {Images} from "@eachbase/utils";
-import {AddButton, AddModalButton, SelectInput, SimpleModal, AddNotes} from "@eachbase/components";
+import {AddButton, AddModalButton, SelectInput, SimpleModal, AddNotes, ValidationInput} from "@eachbase/components";
 import {
     AddContact,
     AddEnrollment,
@@ -9,6 +9,8 @@ import {
     AddAuthorization,
     AddAuthorizationService
 } from "@eachbase/fragments/client";
+import {fundingSourceActions} from "../../../../store";
+import {useDispatch} from "react-redux";
 
 
 export const TabsHeader = ({activeTab, data, authActive}) => {
@@ -18,6 +20,18 @@ export const TabsHeader = ({activeTab, data, authActive}) => {
 
     const handleOpenClose = () => {
         setOpen(!open)
+    }
+
+    const dispatch = useDispatch()
+
+    const [searchDate, setSearchDate] = useState('')
+
+    const handleChangeDate = e => {
+        setSearchDate(e.target.value)
+    }
+
+    const handleSubmit = () => {
+        dispatch(fundingSourceActions.getFundingSourceHistoriesById('Client', searchDate && new Date(searchDate).toISOString()))
     }
 
     const list = [
@@ -56,6 +70,21 @@ export const TabsHeader = ({activeTab, data, authActive}) => {
                     />
                     }
                     {
+                        activeTab === 6 ? <>
+                                <div className={classes.searchContainer}>
+                                    <ValidationInput
+                                        errorFalse={true}
+                                        variant={"outlined"}
+                                        onChange={(e) => handleChangeDate(e)}
+                                        value={searchDate}
+                                        type={"date"}
+                                        name='searchDate'
+                                        // typeError={error === 'birthday' && ErrorText.field}
+                                    />
+                                    <AddButton text='Search' handleClick={handleSubmit}/>
+                                </div>
+                            </> :
+
                         activeTab === 0 ?
                             <AddModalButton btnStyles={editButtonStyle} handleClick={() => setOpen(true)}
                                             text='Edit'/> :
@@ -87,7 +116,9 @@ export const TabsHeader = ({activeTab, data, authActive}) => {
                                     activeTab === 4 ?
                                         null :
                                         activeTab === 5 ?
-                                            <AddNotes model='Client' handleClose={handleOpenClose}/> : null
+                                            <AddNotes model='Client' handleClose={handleOpenClose}/> :
+
+                                            null
                 }
             />
         </div>
