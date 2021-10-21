@@ -5,6 +5,14 @@ export const serviceSingleStyles = makeStyles(() => ({
         staffGeneralWrapper: {
             display: 'flex',
         },
+    searchContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        '& button': {
+            marginLeft: 15
+        }
+    },
         tabsWrapper: {
             display: 'flex',
             alignItems: 'center',

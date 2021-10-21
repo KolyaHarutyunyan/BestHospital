@@ -4,7 +4,7 @@ import React from "react";
 import moment from "moment";
 
 
-export const AuthHeader = ({info, setToggleModal, toggleModal, setDelEdit, empoloyment}) => {
+export const AuthHeader = ({setCreateEditFile,createEditFile, info, setToggleModal, toggleModal, setDelEdit, empoloyment}) => {
     const classes = authHeaderStyles()
 
     return (
@@ -18,6 +18,13 @@ export const AuthHeader = ({info, setToggleModal, toggleModal, setDelEdit, empol
                         <p className={classes.AuthHeaderTopLeftText}>{info?.startDate && `${info?.startDate} - ${info?.endDate}`}</p>}
                 </div>
                 <div className={classes.AuthHeaderTopRight} style={{display: 'flex', alignItems: 'center'}}>
+                    <p style={{cursor: 'pointer',marginRight: 10}}
+                       onClick={()=>{
+                           setCreateEditFile(!createEditFile)
+                       }}
+                    >
+                        create file
+                    </p>
                     <img src={Images.edit} alt="edit" className={classes.iconStyle} onClick={() => {
                         setDelEdit(true)
                         setToggleModal(!toggleModal)
@@ -27,7 +34,6 @@ export const AuthHeader = ({info, setToggleModal, toggleModal, setDelEdit, empol
                         <img src={Images.remove} alt="delete" className={classes.iconDeleteStyle} onClick={() => {
                             setDelEdit(false)
                             setToggleModal(!toggleModal)
-
                         }}/>}
                 </div>
             </div>

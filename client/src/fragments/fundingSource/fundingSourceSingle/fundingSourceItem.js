@@ -38,7 +38,7 @@ export const FundingSourceItem = ({}) => {
         dispatch(adminActions.getAdmins())
         dispatch(fundingSourceActions.getFundingSourceById(params.id))
         dispatch(fundingSourceActions.getFoundingSourceServiceById(params.id))
-        dispatch(fundingSourceActions.getFundingSourceHistoriesById(params.id, 'Funder'))
+        dispatch(fundingSourceActions.getFundingSourceHistoriesById('Funder'))
         dispatch(noteActions.getGlobalNotes(params.id, 'Funder'))
         dispatch(systemActions.getServices())
         dispatch(systemActions.getCredentialGlobal())
