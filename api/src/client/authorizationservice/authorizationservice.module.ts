@@ -12,6 +12,7 @@ import { ModifySanitizer } from '../../funding/modifier/interceptor/modifier.int
 @Module({
   imports: [FundingModule, ModifierModule, CredentialModule],
   controllers: [AuthorizationserviceController],
-  providers: [AuthorizationserviceService, AuthorizationServiceSanitizer, ModifierService, ModifySanitizer, CredentialService]
+  providers: [AuthorizationserviceService, AuthorizationServiceSanitizer, ModifierService, ModifySanitizer, CredentialService],
+  exports: [AuthorizationserviceService]
 })
 export class AuthorizationserviceModule { }

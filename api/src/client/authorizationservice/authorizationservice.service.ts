@@ -137,7 +137,7 @@ export class AuthorizationserviceService {
           HttpStatus.NOT_FOUND,
         );
       }
-   
+
       let authorizationService = new this.model({
         total: dto.total,
         // completed: dto.completed,
@@ -184,6 +184,10 @@ export class AuthorizationserviceService {
     } catch (e) {
       throw e;
     }
+  }
+
+  async findByClientId(_id: string): Promise<any> {
+    
   }
 
   async update(_id: string, dto: UpdateAuthorizationserviceDTO): Promise<AuthorizationServiceDTO> {
