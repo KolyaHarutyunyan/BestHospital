@@ -347,9 +347,11 @@ function* getTimesheet(action) {
 }
 
 function* createTimesheet(action) {
+    console.log(action.payload.body,'bodin')
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.createTimesheetService, action.payload.body)
+        console.log(res,'resi patasxany')
         yield put({
             type: GET_TIMESHEET,
             payload: {id : action.payload.id}
@@ -357,6 +359,7 @@ function* createTimesheet(action) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
+        console.log(err,'eeerererererfhdskjfvhdfkjghdfkjgdfiugjdfgh')
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }

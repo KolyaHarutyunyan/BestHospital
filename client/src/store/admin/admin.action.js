@@ -149,10 +149,10 @@ export const getTimesheet = (id) => {
     }
 }
 
-export const createTimesheet = (id) => {
+export const createTimesheet = (body,id) => {
     return {
         type: CREATE_TIMESHEET,
-        payload: {id}
+        payload: { body,id}
     }
 }
 
