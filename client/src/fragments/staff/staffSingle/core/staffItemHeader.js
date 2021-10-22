@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {serviceSingleStyles} from "./styles";
 import {
     AddButton,
@@ -6,14 +6,15 @@ import {
     SimpleModal,
     AddNotes,
     AvailabilitySchedule,
-    ValidationInput, SelectInput
+    ValidationInput,
+    SelectInput
 } from "@eachbase/components";
 import {Colors, Images} from "@eachbase/utils";
 import {CreateStaff, CredentialModal} from "@eachbase/fragments";
 import {useDispatch, useSelector} from "react-redux";
 import {EmploymentModal, TimesheetModal} from "./modals";
 import {Switch} from "@material-ui/core";
-import {fundingSourceActions} from "../../../../store";
+import {adminActions, fundingSourceActions} from "../../../../store";
 import {useParams} from "react-router-dom";
 import {inputStyle} from "../../../client/clientSingle/core/styles";
 
@@ -42,7 +43,15 @@ export const StaffItemHeader = ({
 
     const dispatch = useDispatch()
 
+    const allPaycodes = useSelector(state => state.admins.allPaycodes)
+
     const params = useParams()
+
+    useEffect(() => {
+        dispatch(adminActions.getAllPaycodes(params.id))
+    }, []);
+
+
 
     const {adminInfoById, adminsList} = useSelector((state) => ({
             adminInfoById: state.admins.adminInfoById,
@@ -152,7 +161,7 @@ export const StaffItemHeader = ({
                     <CreateStaff adminsList={adminsList && adminsList.staff} staffGeneral={adminInfoById}
                                  resetData={false} handleClose={handleOpenClose}/>
                         : activeTab === 2 ?
-                            <TimesheetModal handleClose={handleOpenClose}/>
+                            <TimesheetModal handleClose={handleOpenClose} allPaycodes={allPaycodes}  />
                             : activeTab === 3 ?
                                 <CredentialModal globalCredentialInformation={globalCredentialInformation}
                                                  globalCredentials={globalCredentials} credModalType={credModalType}

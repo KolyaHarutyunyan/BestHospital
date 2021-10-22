@@ -9,25 +9,22 @@ import {createClientStyle} from "@eachbase/fragments/client";
 import {staffModalsStyle} from "./styles";
 import {useParams} from "react-router-dom";
 
-export const TimesheetModal = ({handleClose, info,employmentId}) => {
+export const TimesheetModal = ({handleClose, info, allPaycodes}) => {
 
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {...info, modifiers: info.serviceId.name} : {});
     const [checked, setChecked] = useState(true);
     const [payCode, setPayCode] = useState(null);
+    const [newallPaycodes, setnewallPaycodes] = useState([]);
     const dispatch = useDispatch()
     const classes = createClientStyle()
     const classes_v2 = staffModalsStyle()
     const globalPayCodes = useSelector(state => state.payroll.PayCodes)
-     const allPaycodes = useSelector(state => state.admins.allPaycodes)
-    const [newallPaycodes, setnewallPaycodes] = useState([]);
-
-    const params = useParams()
-    useEffect(() => {
-        dispatch(adminActions.getAllPaycodes(params.id))
-    }, []);
 
 
+
+
+const params = useParams()
 
     useEffect(() => {
         dispatch(payrollActions.getPayCodeGlobal())
@@ -62,8 +59,12 @@ export const TimesheetModal = ({handleClose, info,employmentId}) => {
 
 
     const handleChange = e => {
-        if (e.target.name === 'payCodeTypeId') {
-            setPayCode(globalPayCodes.find(item => item.name === e.target.value))
+        console.log(allPaycodes,'aaaalsslslalaslas')
+        if (e.target.name === 'payCode') {
+            setPayCode(allPaycodes.find(item => item.payCodeTypeId.name === e.target.value))
+
+            // setPayCode(allPaycodes.find(item => item.name === e.target.value))
+
         }
         setInputs(
             prevState => ({...prevState, [e.target.name]: e.target.value}),
@@ -76,26 +77,21 @@ export const TimesheetModal = ({handleClose, info,employmentId}) => {
     }
 
     const handleCreate = () => {
-        if (inputs.rate && inputs.payCodeTypeId && inputs.startDate && checked ? "Present" : inputs.endDate ) {
+        if (inputs.description && inputs.hours && inputs.startDate && checked ? "Present" : inputs.endDate ) {
             const data = {
-                // "employmentId": employmentId,
-                // "payCodeTypeId": payCode.id,
-                // "rate": +inputs.rate,
-                // "active": checked,
-
                 "staffId": params.id,
-                "payCode": "string",
-                "description": "string",
-                "hours": 0,
+                "payCode":  payCode.id,
+                "description": inputs.description,
+                "hours": inputs.hours,
                 "startDate": inputs.startDate,
-                "endDate":  inputs.endDate ? inputs.endDate : undefined
+                "endDate": inputs.endDate ? inputs.endDate : undefined
             }
-            dispatch(adminActions.createPayCode(data, employmentId))
+            dispatch(adminActions.createTimesheet(data))
         }
         else {
             setError(
-                !inputs.payCodeTypeId ? 'payCodeTypeId' :
-                    !inputs.rate ? 'rate' :
+                !inputs.payCode ? 'payCode' :
+                    !inputs.hours ? 'hours' :
                         !inputs.startDate ? 'startDate' :
                             !inputs.endDate ? 'endDate' :
                                 'Input is not field'
@@ -114,12 +110,12 @@ export const TimesheetModal = ({handleClose, info,employmentId}) => {
                 <div className={classes.clientModalBlock}>
                     <div className={classes.clientModalBox}>
                         <SelectInput
-                            name={"payCodeTypeId"}
+                            name={"payCode"}
                             label={"Paycode*"}
                             handleSelect={handleChange}
-                            value={inputs.modifiers}
+                            value={inputs.payCode}
                             list={newallPaycodes}
-                            typeError={error === 'payCodeTypeId' ? ErrorText.field : ''}
+                            typeError={error === 'payCode' ? ErrorText.field : ''}
                         />
                         <div className={classes.displayCodeBlock}>
                             <div className={classes_v2.paycodeBox} >
@@ -133,20 +129,20 @@ export const TimesheetModal = ({handleClose, info,employmentId}) => {
                         </div>
                         <Textarea
                             label={"Description"}
-                            name='rate'
-                            typeError={error === 'rate' && ErrorText.field}
-                            value={inputs.rate}
+                            name='description'
+                            typeError={error === 'description' && ErrorText.field}
+                            value={inputs.description}
                             variant={"outlined"}
                             onChange={handleChange}
                         />
                         <ValidationInput
                             variant={"outlined"}
                             onChange={handleChange}
-                            value={inputs.rate}
+                            value={inputs.hours}
                             type={"number"}
                             label={"Hours*"}
-                            name='rate'
-                            typeError={error === 'rate' && ErrorText.field}
+                            name='hours'
+                            typeError={error === 'hours' && ErrorText.field}
                         />
                         <div className={classes_v2.paycodeBox}>
                             <Checkbox defaultChecked={true} onClick={onCheck} color={Colors.ThemeBlue} />

@@ -67,7 +67,6 @@ export const StaffItem = () => {
     const availabilityData = useSelector(state => state.availabilitySchedule.availabilitySchedule)
     const employments = useSelector(state => state.admins.employments)
     const staffServices = useSelector(state => state.admins.staffServices.service)
-    console.log(historiesData,'historyfdatatataa');
     const handleOpenClose = () => {
         setOpen(!open)
     }
