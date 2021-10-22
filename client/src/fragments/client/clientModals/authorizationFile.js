@@ -3,6 +3,8 @@ import {createClientStyle} from '../index';
 import {Images} from "@eachbase/utils";
 import {AddButton, AddModalButton, ValidationInput} from "@eachbase/components";
 import axios from 'axios';
+import {useDispatch} from "react-redux";
+import {clientActions} from "../../../store";
 
 const credentialBtn = {
     maxWidth: 192,
@@ -15,13 +17,14 @@ export const AuthorizationFile = ({handleFile}) => {
 
     const classes = createClientStyle()
 
+    const dispatch = useDispatch()
+
     const uploadedFiles = false
 
     const [fileName, setFileName] = useState('')
 
     const [file,setFile] = useState({})
-    console.log(file,'file file');
-    console.log(file.length,'length');
+
     const handleChange = (e) => {
         setFileName(e.target.value)
     }
@@ -37,7 +40,11 @@ export const AuthorizationFile = ({handleFile}) => {
 
     useEffect(()=>{
         if (file.name){
-            alert('aaaa')
+            let fD = new FormData();
+            console.log(file,'file file file useEffect');
+            let sent = fD.append('name',file)
+            console.log(sent, 'sent')
+            dispatch(clientActions.createClientsAuthorizationFile(sent))
         }
     },[file.name])
 

@@ -1,33 +1,32 @@
 import {
-    CREATE_AVAILABILITY_SCHEDULE,
     CREATE_CLIENT,
     CREATE_CLIENT_AUTHORIZATION,
     CREATE_CLIENT_AUTHORIZATION_SERV,
     CREATE_CLIENT_CONTACT,
     CREATE_CLIENT_ENROLLMENT,
-    CREATE_CLIENT_NOTE, DELETE_AVAILABILITY_SCHEDULE,
     DELETE_CLIENT,
     DELETE_CLIENT_AUTHORIZATION,
     DELETE_CLIENT_AUTHORIZATION_SERV,
     DELETE_CLIENT_CONTACT,
     DELETE_CLIENT_ENROLLMENT,
-    DELETE_CLIENT_NOTE, EDIT_AVAILABILITY_SCHEDULE,
     EDIT_CLIENT,
     EDIT_CLIENT_AUTHORIZATION,
     EDIT_CLIENT_AUTHORIZATION_SERV,
     EDIT_CLIENT_CONTACT,
     EDIT_CLIENT_ENROLLMENT,
-    EDIT_CLIENT_NOTE,
     GET_CLIENT_AUTHORIZATION,
     GET_CLIENT_AUTHORIZATION_SERV,
-    GET_AVAILABILITY_SCHEDULE,
     GET_CLIENT_BY_ID,
     GET_CLIENT_CONTACTS,
     GET_CLIENT_ENROLLMENT,
     GET_CLIENT_HISTORIES,
-    GET_CLIENT_NOTES,
     GET_CLIENTS,
     GET_CLIENT_AUTHORIZATION_MOD_CHECK,
+
+    DELETE_CLIENT_AUTHORIZATION_FILE,
+    EDIT_CLIENT_AUTHORIZATION_FILE,
+    CREATE_CLIENT_AUTHORIZATION_FILE,
+    GET_CLIENT_AUTHORIZATION_FILE,
 } from "./client.types";
 
 
@@ -157,6 +156,40 @@ export const getClientsAuthorizationsServ = (id) => {
         payload: {id}
     }
 }
+
+// authorization file
+
+export const createClientsAuthorizationFile = (body) => {
+    console.log(body,'body client action')
+    return {
+        type: CREATE_CLIENT_AUTHORIZATION_FILE,
+        payload: {body}
+    }
+}
+
+export const editClientAuthorizationFile = (body,  id, clientId) => {
+    return {
+        type: EDIT_CLIENT_AUTHORIZATION_FILE,
+        payload: {body, id, clientId}
+    }
+}
+
+export const deleteClientAuthorizationFile = ( id, clientId) => {
+    return {
+        type: DELETE_CLIENT_AUTHORIZATION_FILE,
+        payload: {id, clientId}
+    }
+}
+
+export const getClientsAuthorizationFile = (id) => {
+    return {
+        type: GET_CLIENT_AUTHORIZATION_FILE,
+        payload: {id}
+    }
+}
+
+// end
+
 
 export const getClientsAuthorizationsServModifiersCheck = (body,id,funderId) => {
     return {
