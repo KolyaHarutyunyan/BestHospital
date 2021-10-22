@@ -8,11 +8,19 @@ import {payrollActions} from "@eachbase/store/payroll";
 import {createClientStyle} from "@eachbase/fragments/client";
 import {staffModalsStyle} from "./styles";
 import {useParams} from "react-router-dom";
+import moment from "moment";
 
 export const TimesheetModal = ({handleClose, info, allPaycodes}) => {
+    console.log(allPaycodes,'aaalna')
+    console.log(info,'info')
 
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info, modifiers: info.serviceId.name} : {});
+    const [inputs, setInputs] = useState(info ? {...info,
+        startDate :  moment(info.startDate).format('YYYY-MM-DD') ,
+        endDate :  moment(info.endDate).format('YYYY-MM-DD'),
+        payCode : allPaycodes.find(item=> item?.payCodeTypeId.name === info.payCode.payCodeTypeId.name ).payCodeTypeId.name
+    }
+        : {});
     const [checked, setChecked] = useState(true);
     const [payCode, setPayCode] = useState(null);
     const [newallPaycodes, setnewallPaycodes] = useState([]);
@@ -21,8 +29,9 @@ export const TimesheetModal = ({handleClose, info, allPaycodes}) => {
     const classes_v2 = staffModalsStyle()
     const globalPayCodes = useSelector(state => state.payroll.PayCodes)
 
+    console.log(inputs,'inputs')
 
-
+    console.log( allPaycodes.find(item=> item?.payCodeTypeId.name === info.payCode.payCodeTypeId.name ).payCodeTypeId.name, 'find')
 
 const params = useParams()
 
@@ -59,7 +68,6 @@ const params = useParams()
 
 
     const handleChange = e => {
-        console.log(allPaycodes,'aaaalsslslalaslas')
         if (e.target.name === 'payCode') {
             setPayCode(allPaycodes.find(item => item.payCodeTypeId.name === e.target.value))
 
@@ -86,7 +94,11 @@ const params = useParams()
                 "startDate": inputs.startDate,
                 "endDate": inputs.endDate ? inputs.endDate : undefined
             }
-            dispatch(adminActions.createTimesheet(data))
+            if (info){
+                dispatch(adminActions.createTimesheet(data))
+            }else {
+                dispatch(adminActions.createTimesheet(data))
+            }
         }
         else {
             setError(
@@ -152,7 +164,7 @@ const params = useParams()
                             <ValidationInput
                                 variant={"outlined"}
                                 onChange={handleChange}
-                                value={inputs.startDate}
+                                value={ inputs.startDate }
                                 type={"date"}
                                 label={"Start Date*"}
                                 name='startDate'

@@ -48,5 +48,8 @@ export const authService = {
 
     createTimesheetService: (body) => axios.post(`/timesheet`, body),
 
+
+    // editTimesheetService: (body) => axios.post(`/timesheet`, body),
+
     getAllPaycodesService: (id) => axios.get(`/paycode/staff/${id}`),
 };

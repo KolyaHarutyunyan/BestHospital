@@ -71,6 +71,9 @@ export const GET_TIMESHEET_SUCCESS = 'GET_TIMESHEET_SUCCESS'
 /** create timesheet */
 export const CREATE_TIMESHEET = 'CREATE_TIMESHEET'
 
+/** edit timesheet */
+export const EDIT_TIMESHEET = 'EDIT_TIMESHEET'
+
 
 /** GET ALL PAYCODE  */
 export const GET_ALL_PAYCODES = 'GET_ALL_PAYCODES'
