@@ -11,6 +11,7 @@ import {
 } from "@eachbase/store";
 import {createClientStyle} from "@eachbase/fragments/client";
 import {Checkbox} from "@material-ui/core";
+import {getAllAdmins} from "../../../../../store/admin/admin.action";
 
 
 export const EmploymentModal = ({handleClose, info}) => {
@@ -26,9 +27,10 @@ export const EmploymentModal = ({handleClose, info}) => {
     const params = useParams()
     const dispatch = useDispatch()
     const departments = useSelector(state => state.system.departments)
-    const staffList = useSelector(state => state.admins.adminsList.staff)?.filter(item=>item.id !== params.id && item)
+    const staffList = useSelector(state => state.admins.adminsAllList.staff)?.filter(item=>item.id !== params.id && item)
     const classes = createClientStyle()
 
+    console.log(staffList,'lisst')
 
     let onCheck  = (e)=>{
         setChecked(e.target.checked)
@@ -36,6 +38,15 @@ export const EmploymentModal = ({handleClose, info}) => {
 
     useEffect(() => {
         dispatch(systemActions.getDepartments())
+    }, []);
+
+    useEffect(() => {
+        dispatch(systemActions.getDepartments())
+    }, []);
+
+
+    useEffect(() => {
+        dispatch(adminActions.getAllAdmins())
     }, []);
 
 

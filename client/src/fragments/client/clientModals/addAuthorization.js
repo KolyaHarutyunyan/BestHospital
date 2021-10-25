@@ -13,8 +13,9 @@ import {
 
 
 export const AddAuthorization = ({handleClose, info}) => {
+    console.log(info,'iiinfoooooo')
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info, funding: info.funderId?.name, status : String(info.status)} : {});
+    const [inputs, setInputs] = useState(info ? {...info, funding: info?.funderId?.name, status : String(info.status)} : {});
     const params = useParams()
     const dispatch = useDispatch()
     // const fSelect = useSelector(state => state?.fundingSource?.fSelect?.funders)
@@ -54,7 +55,7 @@ export const AddAuthorization = ({handleClose, info}) => {
     );
 
     const handleCreate = () => {
-        if (inputs.authId && inputs.funding && inputs.startDate && inputs.endDate && fullAddress && inputs.status ) {
+        if (inputs.authId && inputs.funding && inputs.startDate && inputs.endDate  && inputs.status && fullAddress ) {
             let funderId;
             enrolments.forEach(item => {
                 if (inputs.funding === item.name) {
@@ -79,7 +80,7 @@ export const AddAuthorization = ({handleClose, info}) => {
                     !inputs.funding ? 'funding' :
                         !inputs.startDate ? 'startDate' :
                             !inputs.endDate ? 'endDate' :
-                                // !inputs.location ? 'location' :
+                                 !inputs.location ? 'location' :
                                     !inputs.status ? 'status' :
                                         'Input is not field'
             )
@@ -145,14 +146,16 @@ export const AddAuthorization = ({handleClose, info}) => {
                             handleSelect={handleChange}
                             value={String(inputs.status)}
                             list={list}
-                            typeError={error === 'status' ? ErrorText.field : ''}
+                            typeError={error === 'status' && ErrorText.field}
                         />
                         <AddressInput
+                            name ={'location'}
                             auth={true}
                             oneInput={true}
                             flex={true}
                             handleSelectValue={setFullAddress}
                             info={info? info : ''}
+                            typeError={error === 'location' ? ErrorText.field : ''}
                         />
                     </div>
                 </div>
