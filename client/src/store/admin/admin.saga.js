@@ -30,7 +30,7 @@ import {
     GET_TIMESHEET,
     CREATE_TIMESHEET,
     GET_ALL_PAYCODES,
-    GET_ALL_PAYCODES_SUCCESS, EDIT_TIMESHEET,
+    GET_ALL_PAYCODES_SUCCESS, EDIT_TIMESHEET, GET_ALL_ADMINS_SUCCESS, GET_ALL_ADMINS,
 
 
 } from "./admin.types";
@@ -61,6 +61,7 @@ function* getAdmins(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.getAdminsService, action.payload);
+        console.log(res,'reeeesesesefesfdsf')
         yield put({
             type: GET_ADMINS_SUCCESS,
             payload: res.data,
@@ -73,6 +74,24 @@ function* getAdmins(action) {
         console.log(err)
     }
 }
+
+
+
+function* getAllAdmins(action) {
+    try {
+        const res = yield call(authService.getAdminsService, action.payload);
+        console.log(res,'reeeesesesefesfdsf')
+        yield put({
+            type: GET_ALL_ADMINS_SUCCESS,
+            payload: res.data,
+        });
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+
+
 
 function* getAdminById(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
@@ -385,7 +404,6 @@ function* getAllPaycodes(action) {
             type: GET_ALL_PAYCODES_SUCCESS,
             payload:  res.data
         });
-        console.log(res,'reeeeseeseses get paycodeeeeesesesesesesesesese')
 
     } catch (err) {
 
@@ -416,4 +434,5 @@ export const watchAdmin = function* watchAdminSaga() {
     yield takeLatest(CREATE_TIMESHEET, createTimesheet)
     yield takeLatest(EDIT_TIMESHEET, editTimesheet)
     yield takeLatest(GET_ALL_PAYCODES, getAllPaycodes)
+    yield takeLatest(GET_ALL_ADMINS, getAllAdmins)
 };

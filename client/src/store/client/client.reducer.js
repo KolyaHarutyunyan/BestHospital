@@ -63,7 +63,7 @@ export const clientReducer = (state = initialState, action) => {
         case  GET_CLIENT_AUTHORIZATION_SUCCESS:
             return {
                 ...state,
-                clientsAuthorizations: action.payload,
+                clientsAuthorizations: action.payload.reverse(),
             }
             case  GET_CLIENT_AUTHORIZATION_ERROR:
                 return {

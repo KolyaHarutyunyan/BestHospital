@@ -62,43 +62,42 @@ export const FundingSourceSingleHeader = ({activeTab, title}) => {
                 <p className={classes.title}>{title && title}</p>
             </div>
 
-            <SimpleModal
-                openDefault={open}
-                handleOpenClose={handleOpenClose}
-                content={activeTab === 0 ?
-                    <CreateFundingSource handleClose={handleOpenClose} info={prevData}/>
-                    : activeTab === 1 ?
-                        <FundingSourceServiceAdd handleClose={handleOpenClose}/> :
-                        activeTab === 2 ?
-                            <AddNotes model='Funder' handleClose={handleOpenClose}/> : null}/>
+            {/*<SimpleModal*/}
+            {/*    openDefault={open}*/}
+            {/*    handleOpenClose={handleOpenClose}*/}
+            {/*    content={activeTab === 0 ?*/}
+            {/*        <CreateFundingSource handleClose={handleOpenClose} info={prevData}/>*/}
+            {/*        : activeTab === 1 ?*/}
+            {/*            <FundingSourceServiceAdd handleClose={handleOpenClose}/> :*/}
+            {/*            activeTab === 2 ?*/}
+            {/*                <AddNotes model='Funder' handleClose={handleOpenClose}/> : null}/>*/}
+            {/*{*/}
+            {/*    */}
+            {/*    activeTab === 0 ?*/}
+            {/*        <AddModalButton handleClick={handleOpenClose} text='Edit' /> :*/}
+            {/*        activeTab === 3 ?*/}
+            {/*            <>*/}
+            {/*                <div className={classes.searchContainer}>*/}
+            {/*                    <ValidationInput*/}
+            {/*                        errorFalse={true}*/}
+            {/*                        variant={"outlined"}*/}
+            {/*                        onChange={(e) => handleChangeFile(e)}*/}
+            {/*                        value={searchDate}*/}
+            {/*                        type={"date"}*/}
+            {/*                        name='searchDate'*/}
+            {/*                        // typeError={error === 'birthday' && ErrorText.field}*/}
+            {/*                    />*/}
+            {/*                    <AddButton text='Search' handleClick={handleSubmit}/>*/}
+            {/*                </div>*/}
+            {/*            </>*/}
+            {/*            : activeTab >= 3 ?*/}
+            {/*            <div className={classes.clear}/> :*/}
 
 
-            {
-                activeTab === 0 ?
-                    <AddModalButton handleClick={handleOpenClose} text='Edit' /> :
-                    activeTab === 3 ?
-                        <>
-                            <div className={classes.searchContainer}>
-                                <ValidationInput
-                                    errorFalse={true}
-                                    variant={"outlined"}
-                                    onChange={(e) => handleChangeFile(e)}
-                                    value={searchDate}
-                                    type={"date"}
-                                    name='searchDate'
-                                    // typeError={error === 'birthday' && ErrorText.field}
-                                />
-                                <AddButton text='Search' handleClick={handleSubmit}/>
-                            </div>
-                        </>
-                        : activeTab >= 3 ?
-                        <div className={classes.clear}/> :
-
-
-                        <AddButton
-                            text={activeTab === 1 ? 'Add Service' : activeTab === 2 ? 'Add Note' : ''}
-                            handleClick={handleOpenClose}/>
-            }
+            {/*            <AddButton*/}
+            {/*                text={activeTab === 1 ? 'Add Service' : activeTab === 2 ? 'Add Note' : ''}*/}
+            {/*                handleClick={handleOpenClose}/>*/}
+            {/*}*/}
 
 
             <div style={{display : 'flex'}}>
@@ -121,7 +120,22 @@ export const FundingSourceSingleHeader = ({activeTab, title}) => {
                                 <AddNotes model='Funder' handleClose={handleOpenClose}/> : null}/>
 
                 {activeTab === 0 ?
-                    <AddModalButton styles={{width: 450}} handleClick={handleOpenClose} text='Edit'  btnStyles={editButtonStyle} />
+                    <AddModalButton styles={{width: 450}} handleClick={handleOpenClose} text='Edit'  btnStyles={editButtonStyle} /> :
+                            activeTab === 3 ?
+                            <>
+                                <div className={classes.searchContainer}>
+                                    <ValidationInput
+                                        errorFalse={true}
+                                        variant={"outlined"}
+                                        onChange={(e) => handleChangeFile(e)}
+                                        value={searchDate}
+                                        type={"date"}
+                                        name='searchDate'
+                                        // typeError={error === 'birthday' && ErrorText.field}
+                                    />
+                                    <AddButton text='Search' handleClick={handleSubmit}/>
+                                </div>
+                            </>
                     : activeTab >= 3 ?
                         <div className={classes.clear}/> :
                         <AddButton

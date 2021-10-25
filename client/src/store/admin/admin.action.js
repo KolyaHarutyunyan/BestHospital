@@ -17,7 +17,7 @@ import {
     DELETE_STAFF_SERVICE,
     GET_TIMESHEET,
     CREATE_TIMESHEET,
-    GET_ALL_PAYCODES, EDIT_TIMESHEET
+    GET_ALL_PAYCODES, EDIT_TIMESHEET, GET_ALL_ADMINS
 
 } from "./admin.types";
 
@@ -41,6 +41,14 @@ export const getAdmins = (data) => {
         payload: {data}
     }
 }
+
+export const getAllAdmins = (data) => {
+    return {
+        type: GET_ALL_ADMINS,
+        payload: {data}
+    }
+}
+
 
 export const getAdminById = (adminId) => {
     return {
