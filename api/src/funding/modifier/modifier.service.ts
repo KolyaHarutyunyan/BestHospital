@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model, model } from 'mongoose';
 import { MongooseUtil } from '../../util/mongoose.util';
-import { CreateModifierDto, CreateModifiersDTO, UpdateModifierDto, ModifyDTO, UpdateModifiersDto } from './dto';
+import { CreateModifiersDTO, ModifyDTO, UpdateModifiersDto } from './dto';
 import { ModifyModel } from './modifier.model';
 import { FundingService } from '../funding.service';
 import { CredentialService } from '../../credential/credential.service';
@@ -26,15 +26,6 @@ export class ModifierService {
       const credentials = [];
       const fundingService = await this.fundingService.findService(dto.serviceId);
       const modifiers: any = await this.model.findOne({ serviceId: fundingService._id })
-      // dto.modifiers.map(modifier => {
-      //   credentials.indexOf(modifier.credentialId) === -1 ? credentials.push(modifier.credentialId) : null
-      // })
-      // const credential = await this.credentialService.findAllByIds(credentials);
-      // if (credentials.length !== credential.length) {
-      //   throw new HttpException(
-      //     'Credential was not found',
-      //     HttpStatus.NOT_FOUND)
-      // }
       
       if (modifiers) {
         dto.modifiers.map(modifier => {
@@ -64,8 +55,6 @@ export class ModifierService {
 
   async findByServiceByIds(ids: string[], serviceId: string): Promise<ModifyDTO[]> {
     const modifiers = await this.model.findOne({serviceId, 'modifiers._id': { $in: ids } });
-    console.log(modifiers, 'modifiers');
-    // this.checkModify(modifiers?.modifiers[0]);
     return modifiers;
     // const modifiers = await this.model.findOne({ serviceId: fundingServiceId });
     // this.checkModify(modifiers?.modifiers[0]);
@@ -79,15 +68,6 @@ export class ModifierService {
       const credentials = [];
       const modifier: any = await this.model.findOne({ serviceId: fundingServiceId });
       this.checkModify(modifier);
-      // dto.modifiers.map(modifier => {
-      //   credentials.indexOf(modifier.credentialId) === -1 ? credentials.push(modifier.credentialId) : null
-      // })
-      // const credential = await this.credentialService.findAllByIds(credentials);
-      // if (credentials.length !== credential.length) {
-      //   throw new HttpException(
-      //     'Credential was not found',
-      //     HttpStatus.NOT_FOUND)
-      // }
       modifier.modifiers = dto.modifiers;
       await modifier.save()
       return modifier
