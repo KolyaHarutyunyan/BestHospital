@@ -22,6 +22,12 @@ import {
     getClientsById,
     getClientsContacts,
     getClientsEnrollment,
+    // authoriztion file
+    getClientsAuthorizationFile,
+    createClientsAuthorizationFile,
+    editClientAuthorizationFile,
+    deleteClientAuthorizationFile
+    //end
 } from "./client.action";
 
 export {clientReducer} from './client.reducer';
@@ -50,6 +56,15 @@ export const clientActions = {
     editClientsAuthorizationsServ,
     deleteClientsAuthorizationServ,
     getClientHistories,
-    getClientsAuthorizationsServModifiersCheck
+    getClientsAuthorizationsServModifiersCheck,
+
+    // authorization file file
+
+    getClientsAuthorizationFile,
+    createClientsAuthorizationFile,
+    editClientAuthorizationFile,
+    deleteClientAuthorizationFile
+
+    // end
 }
 

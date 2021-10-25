@@ -67,7 +67,8 @@ export const StaffItem = () => {
     const availabilityData = useSelector(state => state.availabilitySchedule.availabilitySchedule)
     const employments = useSelector(state => state.admins.employments)
     const staffServices = useSelector(state => state.admins.staffServices.service)
-    console.log(historiesData,'historyfdatatataa');
+    const staffTimesheet = useSelector(state => state.admins.timesheet)
+
     const handleOpenClose = () => {
         setOpen(!open)
     }
@@ -141,6 +142,7 @@ export const StaffItem = () => {
         dispatch(availabilityScheduleActions.getAvailabilitySchedule(params.id))
         dispatch(adminActions.getEmployment(params.id))
         dispatch(adminActions.getStaffService(params.id))
+        dispatch(adminActions.getTimesheet(params.id))
     }, [])
 
     const openNoteModal = (data) => {
@@ -203,7 +205,7 @@ export const StaffItem = () => {
                 <NoItemText text='No Employments Yet'/>)
         },
         {
-            tabComponent: (<StaffTimesheet>Timesheet</StaffTimesheet>)
+            tabComponent: (<StaffTimesheet info={staffTimesheet} />)
         },
         {
             tabComponent: (<StaffCredentials credentialData={credentialData} openModal={openCloseCredModal}/>)

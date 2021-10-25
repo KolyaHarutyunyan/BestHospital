@@ -17,7 +17,7 @@ import {
     DELETE_STAFF_SERVICE,
     GET_TIMESHEET,
     CREATE_TIMESHEET,
-    GET_ALL_PAYCODES
+    GET_ALL_PAYCODES, EDIT_TIMESHEET
 
 } from "./admin.types";
 
@@ -149,10 +149,17 @@ export const getTimesheet = (id) => {
     }
 }
 
-export const createTimesheet = (id) => {
+export const createTimesheet = (body,id) => {
     return {
         type: CREATE_TIMESHEET,
-        payload: {id}
+        payload: { body,id}
+    }
+}
+
+export const editTimesheet = (body,id) => {
+    return {
+        type: EDIT_TIMESHEET,
+        payload: { body,id}
     }
 }
 

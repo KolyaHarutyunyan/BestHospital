@@ -33,7 +33,13 @@ import {
     CREATE_CLIENT_CONTACT_SUCCESS,
     GET_CLIENT_AUTHORIZATION_SERV_ERROR,
     GET_CLIENT_AUTHORIZATION_ERROR,
-    GET_CLIENT_AUTHORIZATION_MOD_CHECK
+    GET_CLIENT_AUTHORIZATION_MOD_CHECK,
+    GET_CLIENT_AUTHORIZATION_FILE_SUCCESS,
+    CREATE_CLIENT_AUTHORIZATION_FILE_SUCCESS,
+    EDIT_CLIENT_AUTHORIZATION_FILE_SUCCESS,
+    DELETE_CLIENT_AUTHORIZATION_FILE_SUCCESS,
+    GET_CLIENT_AUTHORIZATION_FILE,
+    CREATE_CLIENT_AUTHORIZATION_FILE, EDIT_CLIENT_AUTHORIZATION_FILE, DELETE_CLIENT_AUTHORIZATION_FILE
 } from "./client.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
@@ -188,7 +194,6 @@ function* editClientContact(action) {
     }
 }
 
-
 function* deleteClientContact(action) {
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
@@ -206,7 +211,6 @@ function* deleteClientContact(action) {
         yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
     }
 }
-
 
 function* getClientEnrollment(action) {
     try {
@@ -227,6 +231,7 @@ function* createClientEnrollment(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.createClientEnrollmentService, action);
+
         yield put({
             type: GET_CLIENT_ENROLLMENT,
             payload: {id: action.payload.id},
@@ -245,6 +250,7 @@ function* editClientEnrollment(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.editClientEnrollmentService, action);
+
         yield put({
             type: GET_CLIENT_ENROLLMENT,
             payload: {id: action.payload.clientId},
@@ -310,7 +316,6 @@ function* createClientsAuthorizations(action) {
     }
 }
 
-
 function* editClientAuthorizations(action) {
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
@@ -347,6 +352,76 @@ function* deleteClientAuthorizations(action) {
     }
 }
 
+// authorization file
+
+function* getClientsAuthorizationFile(action) {
+    try {
+        const res = yield call(authService.getClientAuthorizationFileService, action.payload.id);
+        yield put({
+            type: GET_CLIENT_AUTHORIZATION_FILE_SUCCESS,
+            payload: res.data,
+        });
+    } catch (err) {
+        console.log(err,)
+    }
+}
+
+function* createClientsAuthorizationFile(action) {
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    console.log(action,'actiiion');
+    try {
+        const res = yield call(authService.createClientAuthorizationFileService, action);
+        yield put({
+            type: CREATE_CLIENT_AUTHORIZATION_FILE_SUCCESS,
+            payload: {id: action.payload.id},
+        });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+    } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+        console.log(err, 'error create auth')
+    }
+}
+
+function* editClientAuthorizationFile(action) {
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    try {
+        const res = yield call(authService.editClientAuthorizationFileService, action);
+        yield put({
+            type: EDIT_CLIENT_AUTHORIZATION_FILE_SUCCESS,
+            payload: {id: action.payload.clientId},
+        });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+    } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+        console.log(err, 'error create client')
+    }
+}
+
+function* deleteClientAuthorizationFile(action) {
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    try {
+        const res = yield call(authService.deleteClientAuthorizationFileService, action);
+        yield put({
+            type: DELETE_CLIENT_AUTHORIZATION_FILE_SUCCESS,
+            payload: {id: action.payload.clientId},
+        });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+    } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+        console.log(err, 'error del enroll')
+    }
+}
+
+// end
 
 function* getClientsAuthorizationsServ(action) {
     try {
@@ -379,7 +454,6 @@ function* createClientsAuthorizationsServ(action) {
         yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
     }
 }
-
 
 function*  getClientsAuthorizationsModCheck(action) {
     try {
@@ -460,6 +534,13 @@ export const watchClient = function* watchClientSaga() {
     yield takeLatest(CREATE_CLIENT_AUTHORIZATION_SERV, createClientsAuthorizationsServ)
     yield takeLatest(EDIT_CLIENT_AUTHORIZATION_SERV, editClientAuthorizationsServ)
     yield takeLatest(DELETE_CLIENT_AUTHORIZATION_SERV, deleteClientAuthorizationsServ)
+
+    yield takeLatest(GET_CLIENT_AUTHORIZATION_FILE, getClientsAuthorizationFile)
+    yield takeLatest(CREATE_CLIENT_AUTHORIZATION_FILE, createClientsAuthorizationFile)
+    yield takeLatest(EDIT_CLIENT_AUTHORIZATION_FILE, editClientAuthorizationFile)
+    yield takeLatest(DELETE_CLIENT_AUTHORIZATION_FILE, deleteClientAuthorizationFile)
+
+
     yield takeLatest(GET_CLIENT_HISTORIES, getClientHistories)
     yield takeLatest(GET_CLIENT_AUTHORIZATION_MOD_CHECK, getClientsAuthorizationsModCheck)
 

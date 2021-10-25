@@ -13,6 +13,7 @@ export const authService = {
             return axios.get('/staff')
         }
     },
+
     getAdminByIdService: (id) => axios.get(`/staff/${id}`),
 
     createCredentialService: (body) => axios.post(`/scredential`, body),
@@ -45,7 +46,10 @@ export const authService = {
 
     getTimesheetService: (id) => axios.get(`/timesheet/staff/${id}`),
 
-    createTimesheetService: (id,serviceId) => axios.post(`/timesheet`),
+    createTimesheetService: (body) => axios.post(`/timesheet`, body),
+
+
+    // editTimesheetService: (body) => axios.post(`/timesheet`, body),
 
     getAllPaycodesService: (id) => axios.get(`/paycode/staff/${id}`),
 };
