@@ -185,7 +185,12 @@ export class AuthorizationserviceService {
       throw e;
     }
   }
-
+  async getClient(authServiceId: string): Promise<AuthorizationServiceDTO> {
+    const authorizationService = await this.model.findById({ _id: authServiceId }).populate("authorizationId");
+    this.checkAuthorizationService(authorizationService);
+    // console.log(authorizationService, 'authorizationService');
+    return this.sanitizer.sanitize(authorizationService);
+  }
   async findByClientId(_id: string): Promise<any> {
     
   }

@@ -120,20 +120,19 @@ export class FundingService {
   //   this.model.countDocuments({ status: "ACTIVE" }),
   // ]);
   /** returns all funders */
-  async findAll(skip: number, limit: number, status: number): Promise<any> {
-     if (status == 0 || status == 2 || status == 3) {
-
+  async findAll(skip: number, limit: number, status: string): Promise<any> {
+    if (status == "INACTIVE" || status == "HOLD" || status == "TERMINATE") {
       let [funders, count] = await Promise.all([
-        this.model.find({ $or: [{ status: 2 }, { status: 3}, { status: 0 }] }).sort({ '_id': -1 }).skip(skip).limit(limit),
-        this.model.countDocuments({ $or: [{ status: 2 }, { status: 3 }, { status: 0 }] })
+        this.model.find({ $or: [{ status: "INACTIVE" }, { status: "HOLD"}, { status: "TERMINATE" }] }).sort({ '_id': -1 }).skip(skip).limit(limit),
+        this.model.countDocuments({ $or: [{ status: "INACTIVE" }, { status: "HOLD" }, { status: "TERMINATE" }] })
       ]);
       const sanFun = this.sanitizer.sanitizeMany(funders);
       return { funders: sanFun, count }
     }
 
     let [funders, count] = await Promise.all([
-      (await this.model.find({ status: 1 }).sort({ '_id': 1 }).skip(skip).limit(limit)).reverse(),
-      this.model.countDocuments({ status: 1 })
+      (await this.model.find({ status: "ACTIVE" }).sort({ '_id': 1 }).skip(skip).limit(limit)).reverse(),
+      this.model.countDocuments({ status: "ACTIVE" })
     ]);
     console.log(funders);
     const sanFun = this.sanitizer.sanitizeMany(funders);
@@ -284,7 +283,7 @@ export class FundingService {
   /** Set Status of a Funder Inactive*/
   setStatus = async (
     _id: string,
-    status: any,
+    status: string,
     dto: CreateTerminationDto
   ): Promise<FundingDTO> => {
     const funder = await this.model.findById({ _id });

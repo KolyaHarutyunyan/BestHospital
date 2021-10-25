@@ -12,6 +12,6 @@ export interface IFunder extends Document {
     contact: string
     website: string
     address: IAddress;
-    status: number;
+    status: string;
     termination: ITermination;
 }

@@ -178,19 +178,19 @@ export class StaffService {
   };
 
   /** returns all users */
-  getUsers = async (skip: number, limit: number, status: number): Promise<any> => {
-    if (status == 0 || status == 2 || status == 3) {
+  getUsers = async (skip: number, limit: number, status: string): Promise<any> => {
+    if (status == "INACTIVE" || status == "HOLD" || status == "TERMINATE") {
       const [staff, count] = await Promise.all([
-        this.model.find({ $or: [{ status: 0 }, { status: 2 }, { status: 3 }] }).sort({ _id: -1 }).skip(skip).limit(limit),
-        this.model.countDocuments({ $or: [{ status: 0 }, { status: 2 }, { status: 3 }] }),
+        this.model.find({ $or: [{ status: "INACTIVE" }, { status: "HOLD" }, { status: "TERMINATE" }] }).sort({ _id: -1 }).skip(skip).limit(limit),
+        this.model.countDocuments({ $or: [{ status: "INACTIVE" }, { status: "HOLD" }, { status: "TERMINATE" }] }),
       ]);
       const sanFun = this.sanitizer.sanitizeMany(staff);
       return { staff: sanFun, count };
     }
 
     const [staff, count] = await Promise.all([
-      (await this.model.find({ status: 1 }).sort({ _id: 1 }).skip(skip).limit(limit)).reverse(),
-      this.model.countDocuments({ status: 1 }),
+      (await this.model.find({ status: "ACTIVE" }).sort({ _id: 1 }).skip(skip).limit(limit)).reverse(),
+      this.model.countDocuments({ status: "ACTIVE" }),
     ]);
     const sanFun = this.sanitizer.sanitizeMany(staff);
     return { staff: sanFun, count };

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { ClientService } from '../client/client.service';
@@ -16,13 +16,23 @@ export class AppointmentService {
     private readonly payCodeService: PaycodeService) {
   }
   async create(dto: CreateAppointmentDto):Promise<any> {
-    // const client = await this.clientService.findById(dto.client);
-    // const authService = await this.authorizedService.
-    // const client = await this.clientService.findById(dto.client);
+    const client = await this.clientService.findById(dto.client);
+    const authService: any = await this.authorizedService.getClient(dto.authorizedService);
+    const staff = await this.staffService.findById(dto.staff);
+    const staffPayCode = await this.payCodeService.findPayCodesByStaffId(staff.id);
+    console.log(staffPayCode);
 
-    // const appointment = new this.model(
-
-    // )
+    // console.log(client, 'clientclient');
+    // console.log(authService, 'authServiceauthService');
+    if(client.id != authService.authorizationId.clientId){
+      throw new HttpException(
+        'Authorization Service is not Client authorization service',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    // const appointment = new this.model({
+    //   client: client.id
+    // })
 
   }
 

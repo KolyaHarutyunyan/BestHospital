@@ -34,7 +34,7 @@ export class StaffDTO {
   @ApiProperty()
   ssn: number;
   @ApiProperty({ enum: StaffStatus })
-  status: number;
+  status: string;
   @ApiProperty()
   termination: Object;
   @ApiProperty({ type: AddressDTO })
@@ -48,5 +48,5 @@ export class StaffDTO {
 export class StaffQueryDTO {
   @ApiProperty({ enum: StaffStatus })
   @IsEnum(StaffStatus)
-  status: number;
+  status: string;
 }

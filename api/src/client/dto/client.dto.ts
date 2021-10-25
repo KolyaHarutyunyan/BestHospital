@@ -26,13 +26,13 @@ export class ClientDTO {
     @ApiProperty()
     enrollment?: string;
     @ApiProperty({ enum: ClientStatus })
-    status: number;
+    status: string;
     @ApiProperty()
     termination: Object;
 }
 
 export class ClientQueryDTO {
     @ApiProperty({ enum: ClientStatus })
-    // @IsEnum(ClientStatus)
-    status: number;
+    @IsEnum(ClientStatus)
+    status: string;
 }
