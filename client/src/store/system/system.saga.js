@@ -66,7 +66,8 @@ function* getCredentialGlobal() {
 function* editCredentialById(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
-        yield call(systemService.editCredentialByIdGlobalService, action.payload.id, action.payload.body)
+        const res =  yield call(systemService.editCredentialByIdGlobalService, action.payload.id, action.payload.body);
+        console.log(res,'reeeees');
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         yield put({

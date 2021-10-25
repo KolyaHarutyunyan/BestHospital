@@ -146,6 +146,7 @@ function* createCredential(action) {
 }
 
 function* getCredential(action) {
+    console.log(action,'aaaction');
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.getCredentialService, action.payload.credentialId);
@@ -156,6 +157,14 @@ function* getCredential(action) {
         });
     } catch (err) {
         console.log(err)
+
+        if(err.data.message === "Staff Credential with this id was not found"){
+            yield put({
+                type: GET_CREDENTIAL_SUCCESS,
+                payload:'',
+            });
+        }
+
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }

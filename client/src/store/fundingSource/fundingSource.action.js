@@ -125,8 +125,6 @@ export const getFundingSourceHistoriesById = (onModal,searchDate) => {
     }
 }
 
-
-
 export const editFoundingSourceModifier = (id, body,fId) => {
 
     return {

@@ -82,7 +82,7 @@ export const FundingSourceSingleNotes = ({ data}) => {
 
     const openNoteModal = (data) =>{
         setNoteModalInfo({
-            right: '1px',
+            right: '87px',
             created: data?.created,
             subject: data?.subject,
             id: data?.id,
