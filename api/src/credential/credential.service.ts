@@ -75,7 +75,7 @@ export class CredentialService {
       let credential = await this.model.findById({ _id })
       this.checkCredential(credential)
       if (dto.name) credential.name = dto.name;
-      if (dto.type) credential.type = dto.type;
+      if (dto.type || dto.type === 0) credential.type = dto.type;
 
       await credential.save();
       return credential;
