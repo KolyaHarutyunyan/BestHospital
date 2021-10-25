@@ -4,7 +4,7 @@ import {Images} from "@eachbase/utils";
 import {SystemItemAddService} from "./modals";
 import {systemItemStyles} from "./styles";
 import {useDispatch, useSelector} from "react-redux";
-import {httpRequestsOnSuccessActions, systemActions} from "../../../store";
+import {httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
 
 export const SystemItemHeader = ({
                                      deletedName,
@@ -59,7 +59,6 @@ export const SystemItemHeader = ({
             handleDeletedOpenClose()
         }
     }, [success]);
-
 
     return (
         <div className={[`${classes.systemHeaderStyles} ${classes.spaceBottom}`]}>
