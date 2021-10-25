@@ -49,6 +49,22 @@ export const authService = {
 
     createClientAuthorizationServService: ({payload}) => axios.post(`/authorizationservice/authorization/${payload.id}/fundingService/${payload.funderId}`, payload.body),
 
+
+    // Authorization file
+
+    editClientAuthorizationFileService: ({payload}) =>  axios.patch(`/files/${payload.id}`, payload.body),
+
+    deleteClientAuthorizationFileService: ({payload}) =>  axios.delete(`/files/${payload.id}`),
+
+    getClientAuthorizationFileService: ({payload}) => axios.get(`/files/${payload.id}` ),
+
+    createClientAuthorizationFileService: ({payload}) => axios.post(`/files/upload`,payload.body),
+
+    createClientAuthorizationRestFileService: ({payload}) => axios.post(`/files`,payload.body),
+
+    // end
+
+
     getClientAuthorizationServCheckModService: ({payload}) => axios.post(`/authorizationservice/authorization/${payload.id}/fundingService/${payload.funderId}/checkModifiers`,payload.body),
 
     editClientAuthorizationServService: ({payload}) =>  axios.patch(`/authorizationservice/${payload.id}`, payload.body),

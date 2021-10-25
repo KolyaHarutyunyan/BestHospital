@@ -8,7 +8,11 @@ import {
     CREATE_CLIENT_CONTACT_SUCCESS,
     GET_CLIENT_AUTHORIZATION_SERV_SUCCESS,
     GET_CLIENT_AUTHORIZATION_SERV_ERROR,
-    GET_CLIENT_AUTHORIZATION_ERROR
+    GET_CLIENT_AUTHORIZATION_ERROR,
+    GET_CLIENT_AUTHORIZATION_FILE,
+    CREATE_CLIENT_AUTHORIZATION_FILE,
+    EDIT_CLIENT_AUTHORIZATION_FILE,
+    DELETE_CLIENT_AUTHORIZATION_FILE
 } from "./client.types";
 
 
@@ -83,6 +87,33 @@ export const clientReducer = (state = initialState, action) => {
                 ...state,
                 clientHistories: action.payload,
             }
+
+            // authorization file
+
+        case CREATE_CLIENT_AUTHORIZATION_FILE :
+            return {
+                ...state,
+                file: action.payload
+            }
+
+        case GET_CLIENT_AUTHORIZATION_FILE :
+            return {
+                ...state,
+                file: action.payload
+            }
+        case EDIT_CLIENT_AUTHORIZATION_FILE :
+            return {
+                ...state,
+                file: action.payload
+            }
+        case DELETE_CLIENT_AUTHORIZATION_FILE :
+            return {
+                ...state,
+                file: {}
+            }
+
+            // end
+
         default:
             return state;
     }
