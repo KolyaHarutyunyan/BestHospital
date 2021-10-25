@@ -56,8 +56,9 @@ export class HistoryService {
       if (noDate) {
         query.createdDate = { $gte: startDate, $lte: endDate }
       }
+
       if (isNaN(skip)) skip = 0;
-      if (isNaN(limit)) limit = 10;
+      // if (isNaN(limit)) limit = 100;
       const histories = await this.model.find({
         onModel, ...query
       }).skip(skip).limit(limit).populate('user', 'firstName lastName');
