@@ -3,7 +3,7 @@ import { IsDateString, IsNotEmpty, IsOptional, IsString } from "class-validator"
 
 export class CreateTerminationDto {
     @ApiProperty()
-    @IsNotEmpty()
+    @IsOptional()
     @IsDateString()
     date: Date
     @ApiProperty()

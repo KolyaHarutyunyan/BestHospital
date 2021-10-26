@@ -288,7 +288,9 @@ export class FundingService {
   ): Promise<FundingDTO> => {
     const funder = await this.model.findById({ _id });
     this.checkFunder(funder);
-
+    if(status != "ACTIVE" && !dto.date){
+      throw new HttpException('If status is not active, then date is required field', HttpStatus.BAD_REQUEST);
+    }
     funder.termination.date = dto.date;
     funder.status = status;
     if (dto.reason) {

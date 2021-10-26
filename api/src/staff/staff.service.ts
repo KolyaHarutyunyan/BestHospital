@@ -204,11 +204,15 @@ export class StaffService {
   ): Promise<StaffDTO> => {
     const staff = await this.model.findById({ _id });
     this.checkStaff(staff);
+    if(status != "ACTIVE" && !dto.date){
+      throw new HttpException('If status is not active, then date is required field', HttpStatus.BAD_REQUEST);
+    }
     staff.termination.date = dto.date;
-    staff.status = status;
     if (dto.reason) {
       staff.termination.reason = dto.reason;
     }
+    staff.status = status;
+  
     await staff.save();
     return this.sanitizer.sanitize(staff);
   };
