@@ -14,7 +14,7 @@ import {CreateStaff, CredentialModal} from "@eachbase/fragments";
 import {useDispatch, useSelector} from "react-redux";
 import {EmploymentModal, TimesheetModal} from "./modals";
 import {Switch} from "@material-ui/core";
-import {adminActions, fundingSourceActions} from "@eachbase/store";
+import {adminActions, fundingSourceActions, httpRequestsOnErrorsActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 import {inputStyle} from "../../../client/clientSingle/core/styles";
 
@@ -65,8 +65,6 @@ export const StaffItemHeader = ({
         dispatch(adminActions.getAllPaycodes(params.id))
     }, []);
 
-
-
     const {adminInfoById, adminsList} = useSelector((state) => ({
             adminInfoById: state.admins.adminInfoById,
             adminsList: state.admins.adminsList,
@@ -80,6 +78,7 @@ export const StaffItemHeader = ({
     const [searchDate, setSearchDate] = useState('')
 
     const handleChange = e => {
+        dispatch(httpRequestsOnErrorsActions.removeError('GET_FUNDING_SOURCE_HISTORIES_BY_ID'))
         setSearchDate(e.target.value)
     }
 

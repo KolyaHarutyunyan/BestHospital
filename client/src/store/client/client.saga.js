@@ -153,7 +153,7 @@ function* getClientContacts(action) {
         });
     } catch (err) {
         console.log(err, 'contact get errrr')
-        yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+        // yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
     }
 }
 
