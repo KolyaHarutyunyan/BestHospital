@@ -269,7 +269,15 @@ function* getFundingSourceHistoriesById(action) {
             payload: res.data,
         });
     } catch (error) {
-        yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
+
+        if(!action.payload.searchDate){
+            yield put({
+                type: GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS,
+                payload: [],
+            });
+        } else {
+            yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
+        }
     }
 }
 

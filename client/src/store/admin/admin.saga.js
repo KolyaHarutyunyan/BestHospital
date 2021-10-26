@@ -166,7 +166,6 @@ function* getCredential(action) {
         }
 
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
 }
 
