@@ -16,7 +16,7 @@ import {
     getFoundingSourceServiceModifiers,
     editActiveOrInactive,
     editFoundingSourceModifier,
-    getFoundingSourceServiceModifiersForClient
+    getFoundingSourceServiceModifiersForClient, changeState, setStatus
 } from "./fundingSource.action";
 
 export {fundingSourceReducer} from './fundingSource.reducer';
@@ -40,6 +40,8 @@ export const fundingSourceActions = {
     getActiveOrInactive,
     editActiveOrInactive,
     editFoundingSourceModifier,
-    getFoundingSourceServiceModifiersForClient
+    getFoundingSourceServiceModifiersForClient,
+    setStatus
+
 }
 

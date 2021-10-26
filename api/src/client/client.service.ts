@@ -134,7 +134,9 @@ export class ClientService {
   ): Promise<ClientDTO> => {
     const client = await this.model.findById({ _id });
     this.checkClient(client);
-
+    if(status != "ACTIVE" && !dto.date){
+      throw new HttpException('If status is not active, then date is required field', HttpStatus.BAD_REQUEST);
+    }
     client.termination.date = dto.date;
     client.status = status;
     if (dto.reason) {

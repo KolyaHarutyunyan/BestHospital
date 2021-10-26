@@ -7,7 +7,7 @@ import {ValidationInput, Textarea} from "../inputs";
 import {useDispatch, useSelector} from "react-redux";
 import {fundingSourceActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 
-export const InactiveModal = ({handleOpenClose, info}) => {
+export const InactiveModal = ({handleOpenClose, info, setGetStatus ,prevStatus , name}) => {
     const classes = modalsStyle()
     const globalText = useGlobalTextStyles()
     const params = useParams()
@@ -21,7 +21,7 @@ export const InactiveModal = ({handleOpenClose, info}) => {
         httpOnLoad: state.httpOnLoad,
     }));
 
-    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_ACTIVE_OR_INACTIVE'
+    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'SET_STATUS'
 
     const inactivateButtonStyle = {
         backgroundColor: activeOrInactive ==="activate" ? Colors.BackgroundBlue : Colors.ThemeRed,
@@ -33,13 +33,19 @@ export const InactiveModal = ({handleOpenClose, info}) => {
     );
 
 
+    const cancel = ()=>{
+        setGetStatus(prevStatus)
+        handleOpenClose()
+    }
+
+
     const handleCreate = () => {
         const data = {
             "date": inputs.date,
             "reason": inputs.reason,
         }
         if (inputs.date && inputs.reason ) {
-                dispatch(fundingSourceActions.editActiveOrInactive(params.id, info.path, activeOrInactive, data , info.type))
+                dispatch(fundingSourceActions.setStatus(params.id, info.path, info.status, data , info.type))
         } else {
             setError(
                 !inputs.date ? 'date' :
@@ -52,26 +58,25 @@ export const InactiveModal = ({handleOpenClose, info}) => {
     useEffect(()=>{
         if (success){
             handleOpenClose()
-            dispatch(httpRequestsOnSuccessActions.removeSuccess('EDIT_ACTIVE_OR_INACTIVE'))
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('SET_STATUS'))
         }
 
     },[success])
 
     return (
         <div className={classes.inactiveModalBody}>
-            <h1 className={`${globalText.modalTitle}`}>Inactivate Name Surname?</h1>
+            <h1 className={`${globalText.modalTitle}`}> {name} </h1>
             <div className={classes.positionedButton}>
-                <CloseButton handleCLic={handleOpenClose}/>
+                <CloseButton handleCLic={cancel}/>
             </div>
-            <p className={classes.inactiveModalInfo}>Name Surname will be notified about the inactivation reason after
-                inactivation.</p>
+            <p className={classes.inactiveModalInfo}>{`${name} will be notified about the  reason `}</p>
             <ValidationInput
                 variant={"outlined"}
 
                 onChange={handleChange}
                  value={inputs.date}
                 type={"date"}
-                label={"Inactivation Date*"}
+                label={"Date*"}
                 name='date'
                  typeError={error === 'date' && ErrorText.field}
             />
@@ -80,13 +85,14 @@ export const InactiveModal = ({handleOpenClose, info}) => {
                 maxRows={6}
                 variant={"outlined"}
                 onChange={handleChange}
-                label={"Write inactivation reason here..."}
+                label={"Write  reason here..."}
                 name='reason'
                  typeError={error === 'reason' && ErrorText.field}
             />
             <AddModalButton
                 btnStyles={inactivateButtonStyle}
-                text={activeOrInactive}
+                // text={activeOrInactive}
+                text={'Send'}
                 handleClick={handleCreate}
                 loader={ httpOnLoad.length > 0}
             />

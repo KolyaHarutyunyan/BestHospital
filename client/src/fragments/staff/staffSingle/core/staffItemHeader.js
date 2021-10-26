@@ -14,7 +14,7 @@ import {CreateStaff, CredentialModal} from "@eachbase/fragments";
 import {useDispatch, useSelector} from "react-redux";
 import {EmploymentModal, TimesheetModal} from "./modals";
 import {Switch} from "@material-ui/core";
-import {adminActions, fundingSourceActions, httpRequestsOnErrorsActions} from "../../../../store";
+import {adminActions, fundingSourceActions, httpRequestsOnErrorsActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 import {inputStyle} from "../../../client/clientSingle/core/styles";
 
@@ -36,6 +36,7 @@ export const StaffItemHeader = ({
                                     openCloseCredModal,
                                     openCredModal,
                                     activeTab,
+                                    status,handleOpen, setGetStatus ,setPrevStatus ,getStatus, type
                                 }) => {
     const [inputs, setInputs] = useState({active: 'Active'});
 
@@ -46,6 +47,19 @@ export const StaffItemHeader = ({
     const allPaycodes = useSelector(state => state.admins.allPaycodes)
 
     const params = useParams()
+
+
+    useEffect(()=>{
+        setInputs(getStatus)
+    },[getStatus])
+
+    useEffect(()=>{
+        setInputs(status)
+    },[])
+
+
+
+
 
     useEffect(() => {
         dispatch(adminActions.getAllPaycodes(params.id))
@@ -73,14 +87,23 @@ export const StaffItemHeader = ({
     }
 
     const list = [
-        {name: 'Active'},
-        {name: 'Inactive'},
-        {name: 'On Hold'},
-        {name: 'Terminated'},
+        {name: 'ACTIVE'},
+        {name: 'INACTIVE'},
+        {name: 'HOLD'},
+        {name: 'TERMINATE'},
     ]
-    const handleChange2 = e => setInputs(
-        prevState => ({...prevState, [e.target.name]: e.target.value}),
-    );
+
+    const handleChange2 = e => {
+        setPrevStatus(inputs)
+        setGetStatus(e.target.value)
+        if (e.target.value === 'INACTIVE' || e.target.value === 'HOLD' || e.target.value === 'TERMINATE'){
+            handleOpen()
+        }if (e.target.value === 'ACTIVE') {
+            dispatch(fundingSourceActions.setStatus(params.id,'funding', e.target.value, type ))
+        }
+
+        setInputs(e.target.value)
+    };
 
     return (
         <div>
@@ -101,7 +124,7 @@ export const StaffItemHeader = ({
                         styles={inputStyle}
                         name={"active"}
                         handleSelect={handleChange2}
-                        value={inputs.active}
+                        value={inputs}
                         list={list}
                         className={classes.inputTextField}
                     />
