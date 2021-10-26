@@ -4,7 +4,6 @@ import { ITimeSheet } from './interface';
 const TimesheetSchema = new Schema({
     staffId: { type: Types.ObjectId, ref: 'Staff' },
     payCode: { type: Types.ObjectId, ref: 'PayCode' },
-    //payTable: [{regular, }]
     description: { type: String },
     hours: { type: Number },
     startDate: { type: Date, default: Date.now },

@@ -28,14 +28,4 @@ export class TimesheetController {
   async findOne(@Param('id', ParseObjectIdPipe) id: string): Promise<TimeSheetDTO> {
     return await this.timesheetService.findOne(id);
   }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateTimesheetDto: UpdateTimesheetDto) {
-  //   return this.timesheetService.update(+id, updateTimesheetDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.timesheetService.remove(+id);
-  // }
 }

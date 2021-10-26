@@ -12,6 +12,7 @@ import { OvertimeService } from '../../overtime/overtime.service';
 var bigAmount = 0;
 var dailyAmount = 0;
 var weeklyAmount = 0;
+const ids = [];
 @Injectable()
 export class TimesheetService {
   constructor(
@@ -35,7 +36,7 @@ export class TimesheetService {
       const payCode: any = await this.payCodeService.findOne(dto.payCode);
       const overtime = await this.overtimeService.findAll();
       const total = await this.getTotalAmount(payCode, overtime, dto, bigAmount);
-     
+      // console.log(ids);
       let timesheet = new this.model({
         staffId: staff._id,
         payCode: payCode.id,
@@ -45,8 +46,10 @@ export class TimesheetService {
         endDate: dto.endDate ? dto.endDate : null,
         totalAmount: bigAmount
       });
-      timesheet = await (await timesheet.save()).populate({  path: 'payCode',
-      populate: { path: 'payCodeTypeId' }}).execPopulate();
+      timesheet = await (await timesheet.save()).populate({
+        path: 'payCode',
+        populate: { path: 'payCodeTypeId' }
+      }).execPopulate();
 
       return this.sanitizer.sanitize(timesheet);
     } catch (e) {
@@ -57,13 +60,19 @@ export class TimesheetService {
   }
 
   async getTotalAmount(payCode, overtime, dto, totalAmount) {
+    console.log( overtime, 'overtime', dto.hours, 'dto', totalAmount, 'totalAmount');
+    if (overtime.length == []) {
+      bigAmount += dto.hours * payCode.rate;
+      return
+    }
     var maxMultiplier;
     if (payCode.payCodeTypeId.overtime) {
       maxMultiplier = await this.getMaxMultiplier(overtime);
       if (maxMultiplier.type == 'DAILY') {
+        console.log('daily');
         const getDayTimesheet = await this.getDailyTimesheet(dto.startDate);
         // if not find any daily timesheet
-        if (getDayTimesheet.length == []) {
+        if (getDayTimesheet.length == [] && dto.hours < maxMultiplier.threshold) {
           bigAmount += dto.hours * payCode.rate;
           return
         }
@@ -81,6 +90,7 @@ export class TimesheetService {
             return bigAmount
           }
           //skip current maxMultiplier(overtime rule) and find another maxMultiplier
+          ids.push(maxMultiplier)
           await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
         }
         else {
@@ -92,58 +102,80 @@ export class TimesheetService {
             bigAmount += dto.hours * payCode.rate * maxMultiplier.multiplier;
             return
           }
-          const amount = (dto.hours - difference) * payCode.rate * maxMultiplier.multiplier;
+          const amount = difference * payCode.rate * maxMultiplier.multiplier;
           bigAmount = (bigAmount + amount);
           const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
           dto.hours = difference;
+          ids.push(maxMultiplier)
           await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
         }
       }
       else if (maxMultiplier.type == 'WEEKLY') {
+        console.log('weekly');
+
         const week = await this.getWeekly(dto.endDate);
-        if (week.length == []) {
-          bigAmount += dto.hours * payCode.rate;
-          return
+        console.log(week, 'weeeeeeeek');
+        if (week.length == [] && dto.hours < maxMultiplier.threshold) {
+          console.log(week, 'mtavvvvv');
+          const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
+          await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
+
+          // bigAmount += dto.hours * payCode.rate;
+          // return
         }
         week.map(timesheet => {
           weeklyAmount += timesheet.hours
         })
         weeklyAmount += dto.hours;
+        console.log(weeklyAmount, 'weeklyAmount', dto.hours)
         if (weeklyAmount < maxMultiplier.threshold) {
           const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
-          if (filteredDays.length == []) {
-            bigAmount = bigAmount + dto.hours * payCode.rate;
-            return bigAmount
-          }
+          // if (filteredDays.length == []) {
+          //   bigAmount = bigAmount + dto.hours * payCode.rate;
+          //   return bigAmount
+          // }
+          // ids.push(maxMultiplier)
           await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
         }
         else {
-          const difference = await dto.hours - maxMultiplier.threshold;
+          const difference = weeklyAmount - maxMultiplier.threshold;
           if (difference < 0 || difference == 0) {
-            maxMultiplier.threshold - dto.hours;
-            bigAmount += dto.hours * payCode.rate * maxMultiplier.multiplier;
-            return
+            const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
+            await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
+
+            // maxMultiplier.threshold - dto.hours;
+            // bigAmount += dto.hours * payCode.rate * maxMultiplier.multiplier;
+            // return
           }
-          const amount = (dto.hours - difference) * payCode.rate * maxMultiplier.multiplier;
+          const amount = difference * payCode.rate * maxMultiplier.multiplier;
           bigAmount = (bigAmount + amount);
           const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
-          dto.hours = difference;
+          dto.hours = dto.hours - difference;
+          ids.push(maxMultiplier)
           await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
         }
       }
       else if (maxMultiplier.type == 'CONSECUTIVE') {
+        console.log('consecutive');
+
         const consecutive = await this.getConsecutive(dto.hours, dto.endDate);
         if (consecutive) {
-          console.log('1');
-          bigAmount += payCode.rate * dto.hours;
-          return
+          const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
+          await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
+
+          // bigAmount += payCode.rate * dto.hours;
+          // return
         }
-        console.log('2');
+        // ids.push('aaaaaa')
+
         bigAmount += dto.hours * maxMultiplier.multiplier * payCode.rate;
+        ids.push(maxMultiplier)
         return
       }
     }
-    bigAmount += dto.hours * payCode.rate;
+    else {
+      bigAmount += dto.hours * payCode.rate;
+    }
   }
   async getMaxMultiplier(overtime) {
     const maxMultiplier = overtime.reduce(function (prev, current) {
@@ -194,6 +226,7 @@ export class TimesheetService {
   }
   async getConsecutive(day, endDate): Promise<any> {
     try {
+      console.log(day, endDate, 'aaaaa')
       let arr;
       var curr = new Date(endDate);
       var first = curr.getDate() - day + 1;
@@ -211,6 +244,7 @@ export class TimesheetService {
           arr.splice(j, 1)
         }
       }
+      console.log(arr.length, 'arr', day);
       return arr.length < day;
     }
     catch (e) {
@@ -245,13 +279,6 @@ export class TimesheetService {
       throw e
     }
   }
-  // update(id: number, updateTimesheetDto: UpdateTimesheetDto) {
-  //   return `This action updates a #${id} timesheet`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} timesheet`;
-  // }
 
   /** Private methods */
   /** if the timesheet is not valid, throws an exception */
