@@ -1,10 +1,11 @@
 import { model, Schema, Types } from 'mongoose';
 import { IAppointment } from './interface';
-import { EventStatus } from './appointment.constants';
+import { EventStatus, AppointmentType } from './appointment.constants';
 
 export const appointmentSchema = new Schema({
-    client: { type: Types.ObjectId, ref: 'Client' },
-    authorizedService: { type: Types.ObjectId, ref: 'ClientAuthorizationService' },
+    type: { type: String, enum: AppointmentType },
+    client: { type: Types.ObjectId, ref: 'Client', default: null },
+    authorizedService: { type: Types.ObjectId, ref: 'ClientAuthorizationService', default: null },
     staff: { type: Types.ObjectId, ref: 'Staff' },
     staffPayCode: { type: Types.ObjectId, ref: 'PayCode' },
     startDate: { type: Date },
@@ -12,6 +13,8 @@ export const appointmentSchema = new Schema({
     endTime: { type: Date, default: Date.now },
     require: { type: Boolean },
     status: { type: String, enum: EventStatus },
+    isRepeat: { type: Boolean, default: false },
+    miles: { type: String, default: null }
 });
 
-export const HistoryModel = model<IAppointment>('appointment', appointmentSchema);
+export const AppointmentModel = model<IAppointment>('appointment', appointmentSchema);
