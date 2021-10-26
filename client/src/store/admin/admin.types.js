@@ -10,6 +10,10 @@ export const EDIT_ADMIN_BY_ID = 'EDIT_ADMIN_BY_ID';
 export const GET_ADMINS = 'GET_ADMINS';
 export const GET_ADMINS_SUCCESS = 'GET_ADMINS_SUCCESS';
 
+/**Get Admins */
+export const GET_ALL_ADMINS = 'GET_ALL_ADMINS';
+export const GET_ALL_ADMINS_SUCCESS = 'GET_ALL_ADMINS_SUCCESS';
+
 /**Get Admin by id */
 export const GET_ADMIN_BY_ID = 'GET_ADMIN_BY_ID';
 export const GET_ADMIN_BY_ID_SUCCESS = 'GET_ADMIN_BY_ID_SUCCESS';

@@ -100,7 +100,7 @@ export const PaycodeModal = ({handleClose, info,employmentId}) => {
         <div className={classes.createFoundingSource}>
             <ModalHeader
                 handleClose={handleClose}
-                title={info ? "Sick Time" : 'Add a New Paycode'}
+                title={info ? "Edit Time" : 'Add a New Paycode'}
                 text={!info && 'Please fulfill the below fields to add a paycode.'}
             />
             <div className={classes.createFoundingSourceBody}>
