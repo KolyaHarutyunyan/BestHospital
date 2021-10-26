@@ -31,12 +31,12 @@ import {
     GET_FUNDING_SOURCE_SERVICE_MODIFIERS_ERR,
     EDIT_ACTIVE_OR_INACTIVE,
     EDIT_FUNDING_SOURCE_SERVICE_MODIFIER,
-    GET_FUNDING_SOURCE_SERVICE_MODIFIERS_CLIENT,
+    GET_FUNDING_SOURCE_SERVICE_MODIFIERS_CLIENT, SET_STATUS,
 } from "./fundingSource.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
 import {httpRequestsOnSuccessActions} from "../http_requests_on_success";
-import {logDOM} from "@testing-library/react";
+
 
 
 
@@ -290,6 +290,25 @@ function* editActiveOrInactive(action) {
     }
 }
 
+function* setStatus(action) {
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    try {
+        const res = yield call(authService.setStatusService, action.payload.id , action.payload.path, action.payload.status, action.payload.body , );
+        console.log(res,'res for status')
+        yield put({
+            type: action.payload.type,
+            payload: res.data,
+        });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+    } catch (error) {
+        console.log(error,'errr for status')
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
+    }
+}
+
 
 export const watchFundingSource = function* watchFundingSourceSaga() {
     yield takeLatest(CREATE_FUNDING_SOURCE, createFundingSource);
@@ -306,4 +325,5 @@ export const watchFundingSource = function* watchFundingSourceSaga() {
     yield takeLatest(EDIT_ACTIVE_OR_INACTIVE, editActiveOrInactive);
      yield takeLatest(EDIT_FUNDING_SOURCE_SERVICE_MODIFIER, editFundingSourceServicesModifier);
     yield takeLatest(GET_FUNDING_SOURCE_SERVICE_MODIFIERS_CLIENT, getFundingSourceServicesModifierClient);
+    yield takeLatest(SET_STATUS, setStatus);
 };
