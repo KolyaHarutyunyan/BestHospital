@@ -9,14 +9,30 @@ import {
     AddAuthorization,
     AddAuthorizationService
 } from "@eachbase/fragments/client";
-import {fundingSourceActions} from "../../../../store";
+import {fundingSourceActions} from "@eachbase/store";
 import {useDispatch} from "react-redux";
+import {useParams} from "react-router-dom";
 
 
-export const TabsHeader = ({activeTab, data, authActive}) => {
+
+export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setGetStatus ,setPrevStatus ,getStatus, type}) => {
+
     const classes = serviceSingleStyles()
     const [open, setOpen] = useState()
-    const [inputs, setInputs] = useState({active: 'Active'});
+    const [inputs, setInputs] = useState(status);
+    const params = useParams()
+
+
+    useEffect(()=>{
+        setInputs(getStatus)
+    },[getStatus])
+
+    useEffect(()=>{
+        setInputs(status)
+    },[])
+
+
+
 
     const handleOpenClose = () => {
         setOpen(!open)
@@ -35,14 +51,24 @@ export const TabsHeader = ({activeTab, data, authActive}) => {
     }
 
     const list = [
-        {name: 'Active'},
-        {name: 'Inactive'},
-        {name: 'On Hold'},
-        {name: 'Terminated'},
+        {name: 'ACTIVE'},
+        {name: 'INACTIVE'},
+        {name: 'HOLD'},
+        {name: 'TERMINATE'},
     ]
-    const handleChange = e => setInputs(
-        prevState => ({...prevState, [e.target.name]: e.target.value}),
-    );
+
+
+    const handleChange = e => {
+        setPrevStatus(inputs)
+        setGetStatus(e.target.value)
+        if (e.target.value === 'INACTIVE' || e.target.value === 'HOLD' || e.target.value === 'TERMINATE'){
+            handleOpen()
+        }if (e.target.value === 'ACTIVE') {
+            dispatch(fundingSourceActions.setStatus(params.id,'funding', e.target.value, type ))
+        }
+
+        setInputs(e.target.value)
+    };
 
     return (
         <div>
@@ -64,7 +90,7 @@ export const TabsHeader = ({activeTab, data, authActive}) => {
                         styles={inputStyle}
                         name={"active"}
                         handleSelect={handleChange}
-                        value={inputs.active}
+                        value={inputs}
                         list={list}
                         className={classes.inputTextField}
                     />
