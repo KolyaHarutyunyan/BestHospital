@@ -84,16 +84,30 @@ export class AppointmentService {
         );
       }
       else if (dto.repeatCount && !dto.repeatConsecutive) {
-        console.log('!dto.repeatCount && dto.repeatConsecutive');
+        console.log('dto.repeatCount && !dto.repeatConsecutive');
+
+        const day = 24 * 60 * 60 * 1000 * dto.repeatCount; // hours*minutes*seconds*milliseconds
+        const startDate: any = new Date(dto.startDate);
+        const endDateDate: any = new Date(dto.endDate);
+
+        const diffDays = Math.floor(Math.abs((startDate - endDateDate) / day));
         cron.schedule(`0 0 */${dto.repeatCount} * *`, () => {
-          console.log('running a task every minute');
+          console.log('running a task every interval day');
         });
+
+        return diffDays;
       }
       else if (!dto.repeatCount && dto.repeatConsecutive) {
-        console.log('dto.repeatCount && !dto.repeatConsecutive');
+        console.log('!dto.repeatCount && dto.repeatConsecutive');
+
+        const startDate: any = new Date(dto.startDate);
+        const endDateDate: any = new Date(dto.endDate);
+
+        const count = this.getBusinessDatesCount(startDate, endDateDate)
         cron.schedule('0 0 * * 1-5', () => {
           console.log('running a task every minute');
         });
+        return count;
       }
       //something
     }
@@ -132,7 +146,7 @@ export class AppointmentService {
       }
       else if (!dto.repeatDayMonth && dto.repeatMonth) {
         console.log('!dto.repeatDayMonth && dto.repeatMonth');
-     
+
       }
     }
   }
@@ -150,5 +164,16 @@ export class AppointmentService {
 
   remove(id: number) {
     return `This action removes a #${id} appointment`;
+  }
+  // calculate working days between two dates
+  getBusinessDatesCount(startDate, endDate) {
+    let count = 0;
+    const curDate = new Date(startDate.getTime());
+    while (curDate <= endDate) {
+      const dayOfWeek = curDate.getDay();
+      if (dayOfWeek !== 0 && dayOfWeek !== 6) count++;
+      curDate.setDate(curDate.getDate() + 1);
+    }
+    return count;
   }
 }
