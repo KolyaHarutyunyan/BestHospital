@@ -84,7 +84,6 @@ export const StaffService = ({staffGeneral, info}) => {
     }
 
     let deleteService = () => {
-        console.log(index,'iiiii')
         dispatch(adminActions.deleteStaffService(params.id, staffServices[index]?._id));
     }
 

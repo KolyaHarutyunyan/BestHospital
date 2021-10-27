@@ -9,7 +9,7 @@ import {
     SlicedText,
     NoItemText
 } from "@eachbase/components";
-import {Images} from "@eachbase/utils";
+import {FindLoad, FindSuccess, Images} from "@eachbase/utils";
 import {systemItemStyles} from './styles'
 import {httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
 
@@ -111,22 +111,19 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
         }
     }
 
-    const {httpOnLoad} = useSelector((state) => ({
-        httpOnLoad: state.httpOnLoad,
-    }));
-
-    const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_SERVICE_GLOBAL'
+    const loader = FindLoad('CREATE_SERVICE_GLOBAL')
+    const success = FindSuccess('CREATE_SERVICE_GLOBAL')
 
     useEffect(() => {
-        if (loader) {
-            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_SERVICE_GLOBAL'))
+        if (success) {
             setInputs({
                 name: '',
                 displayCode: '',
                 category: ''
             })
         }
-    }, [loader])
+    }, [success.length])
+
 
     return (
         <>
@@ -159,7 +156,7 @@ export const ServiceType = ({globalServices, removeItem, openModal}) => {
                     placeholder={'Category'}
                 />
                 <AddButton
-                    loader={loader}
+                    loader={!!loader.length}
                     type={'CREATE_SERVICE_GLOBAL'}
                     styles={credentialBtn}
                     disabled={!isDisabled}
