@@ -255,7 +255,7 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
                 handleSelectValue={setFullAddress}
                 Value={'Street Address*'}
                 flex='block'
-                info={staffGeneral && staffGeneral ? staffGeneral : ''}
+                info={staffGeneral}
                 styles={inputStyle}
             />
         </React.Fragment>
