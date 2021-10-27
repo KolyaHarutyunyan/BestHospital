@@ -11,18 +11,15 @@ import {adminActions, clientActions, httpRequestsOnErrorsActions, httpRequestsOn
 import {serviceSingleStyles} from "@eachbase/fragments/client/clientSingle/core";
 
 
-export const StaffEmployment = ({setAuthActive,  info}) => {
+export const StaffEmployment = ({ info}) => {
     const classes = serviceSingleStyles()
     const dispatch = useDispatch()
     const [delEdit, setDelEdit] = useState(null)
-    const [delEdit2, setDelEdit2] = useState(null)
     const [toggleModal, setToggleModal] = useState(false)
     const [toggleModal2, setToggleModal2] = useState(false)
     const [toggleModal3, setToggleModal3] = useState(false)
     const [authIndex, setAuthIndex] = useState(0)
     const [paycodeIndex, setPaycodeIndex] = useState(0)
-    const [serviceIndex, setServiceIndex] = useState(null)
-    const services = useSelector(state => state.client.clientsAuthorizationsServices)
     const payCodes = useSelector(state => state.admins.payCodes)
     const params = useParams()
 

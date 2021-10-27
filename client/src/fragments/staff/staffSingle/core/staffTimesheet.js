@@ -1,8 +1,11 @@
 import React, {useState} from "react";
-import {Notes, SlicedText, TableBodyComponent} from "@eachbase/components";
+import {Notes, SimpleModal, SlicedText, TableBodyComponent} from "@eachbase/components";
 import {TableCell} from "@material-ui/core";
 import {Images} from "@eachbase/utils";
 import {serviceSingleStyles} from './styles';
+import moment from "moment";
+import {TimesheetModal} from "./modals";
+import {useSelector} from "react-redux";
 
 const headerTitles = [
     {
@@ -50,42 +53,51 @@ const headerTitlesBcba = [
     }
 ];
 
-const data = [{
-    payCode: 'Name',
-    type: 'Hourly',
-    id: '12345',
-    startDate: '10/10/10',
-    endDate: '11/11/11',
-    totalAmount: '$160'
-}]
+// const data = [{
+//     payCode: 'Name',
+//     type: 'Hourly',
+//     id: '12345',
+//     startDate: '10/10/10',
+//     endDate: '11/11/11',
+//     totalAmount: '$160'
+// }]
+//
+// const dataBcba = [
+//     {
+//         rateType: 'Regular',
+//         rate: '$10',
+//         hours: '8 h',
+//         amount: '$80',
+//     },
+// ]
 
-const dataBcba = [
-    {
-        rateType: 'Regular',
-        rate: '$10',
-        hours: '8 h',
-        amount: '$80',
-    },
-]
+export const StaffTimesheet = ({info}) => {
 
-export const StaffTimesheet = () => {
+    const allPaycodes = useSelector(state => state.admins.allPaycodes)
+    const [openModal,setOpenModal] = useState(false)
+    console.log(info ,'dfgdfgdfgdfgdfgdfg')
 
     const classes = serviceSingleStyles()
-
-
     const [active, setActive] = useState('active')
+    const [index, setIndex] = useState(0)
+
+
+    const handleOpenClose = () => {
+        setOpenModal(!openModal)
+    }
+
 
     const timesheetItem = (item, index) => {
         return (
-            <TableBodyComponent key={index}>
+            <TableBodyComponent key={index} handleOpenInfo={()=>setIndex(index)}>
                 <TableCell>
-                    <SlicedText size={30} type={'name'} data={item.payCode}/>
+                    <SlicedText size={30} type={'name'} data={item?.payCode?.payCodeTypeId?.name}/>
                 </TableCell>
-                <TableCell>{item.type}</TableCell>
-                <TableCell>{item.id}</TableCell>
-                <TableCell>{item.startDate}</TableCell>
-                <TableCell>{item.endDate}</TableCell>
-                <TableCell>{item.totalAmount}</TableCell>
+                <TableCell>{item?.payCode?.payCodeTypeId?.type}</TableCell>
+                <TableCell> <p style={{width:50, overflow :'hidden',}}>{item?.id}</p> </TableCell>
+                <TableCell>{moment(item?.startDate).format('DD/MM/YYYY')}</TableCell>
+                <TableCell>{moment(item?.endDate).format('DD/MM/YYYY')}</TableCell>
+                <TableCell>{item?.totalAmount}</TableCell>
             </TableBodyComponent>
         )
     }
@@ -93,16 +105,24 @@ export const StaffTimesheet = () => {
     const bcbaItem = (item, index) => {
         return (
             <TableBodyComponent key={index}>
-                <TableCell><SlicedText size={30} type={'name'} data={item.rateType}/></TableCell>
-                <TableCell>{item.rate}</TableCell>
-                <TableCell>{item.hours}</TableCell>
-                <TableCell>{item.amount}</TableCell>
+                <TableCell><SlicedText size={30} type={'name'} data={item?.payCode?.payCodeTypeId?.type}/></TableCell>
+                <TableCell>{item?.payCode?.rate}</TableCell>
+                <TableCell>{item?.hours}</TableCell>
+                <TableCell>{item.totalAmount}</TableCell>
             </TableBodyComponent>
         )
     }
 
     return (
         <>
+            <SimpleModal
+                openDefault={openModal}
+                 handleOpenClose={handleOpenClose}
+                content={ <TimesheetModal
+                    info={info[index] }
+                     handleClose={handleOpenClose} allPaycodes={allPaycodes}
+                />}
+            />
             <div className={classes.switcher}>
                 <p className={ active === 'active' ? classes.switcherActive :  classes.switcherProcessed} onClick={()=> setActive('active') }>Active</p>
                 <p className={active === 'processed' ? classes.switcherActive :  classes.switcherProcessed} onClick={()=> setActive('processed') }>Processed</p>
@@ -111,7 +131,7 @@ export const StaffTimesheet = () => {
             <div className={classes.timesheetWrapper}>
                 <Notes
                     restHeight='560px'
-                    data={data}
+                    data={info}
                     items={timesheetItem}
                     headerTitles={headerTitles}
                     defaultStyle={true}
@@ -121,13 +141,13 @@ export const StaffTimesheet = () => {
                         <h1>BCBA (hourly)</h1>
                         <div className={classes.dateEdite}>
                             <p>04/21/2021 - 04/27/2017</p>
-                            <img src={Images.edit} alt="edit"/>
+                            <img src={Images.edit} alt="edit" onClick={handleOpenClose}/>
                         </div>
                     </div>
                     <p>Office Supply reimbursement</p>
                     <Notes
                         restHeight='560px'
-                        data={dataBcba}
+                        data={info}
                         items={bcbaItem}
                         headerTitles={headerTitlesBcba}
                         defaultStyle={true}

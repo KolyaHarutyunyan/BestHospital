@@ -20,7 +20,7 @@ import {
     GET_FUNDING_SOURCE_SERVICE_MODIFIERS,
     EDIT_ACTIVE_OR_INACTIVE,
     EDIT_FUNDING_SOURCE_SERVICE_MODIFIER,
-    GET_FUNDING_SOURCE_SERVICE_MODIFIERS_CLIENT,
+    GET_FUNDING_SOURCE_SERVICE_MODIFIERS_CLIENT, CHANGE_STATE, SET_STATUS,
 } from "./fundingSource.types";
 
 export const createFundingSource = (body) => {
@@ -125,8 +125,6 @@ export const getFundingSourceHistoriesById = (onModal,searchDate) => {
     }
 }
 
-
-
 export const editFoundingSourceModifier = (id, body,fId) => {
 
     return {
@@ -174,6 +172,14 @@ export const getActiveOrInactive = (type) => {
 export const editActiveOrInactive = (id, path, status, body, type) => {
     return {
         type: EDIT_ACTIVE_OR_INACTIVE,
+        payload: {id, path, status, body, type}
+    }
+}
+
+
+export const setStatus = (id, path, status, body, type) => {
+    return {
+        type: SET_STATUS,
         payload: {id, path, status, body, type}
     }
 }

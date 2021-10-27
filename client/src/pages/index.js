@@ -8,4 +8,5 @@ export {Customers} from "./customers";
 export {Management} from "./management";
 export {Single} from "./single";
 export {System} from './system';
+export {Schedule} from './schedule'
 

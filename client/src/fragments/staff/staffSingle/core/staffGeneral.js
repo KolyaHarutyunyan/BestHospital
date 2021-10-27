@@ -5,7 +5,7 @@ import { serviceSingleStyles } from './styles';
 export const StaffGeneral = ({staffGeneral}) =>{
 
     const classes = serviceSingleStyles()
-
+    console.log(staffGeneral,'staffGeneral');
     const generalInfo = [
         {title: 'First Name', value: staffGeneral?.firstName},
         {title: 'Middle Name', value: staffGeneral?.middleName},
@@ -16,11 +16,11 @@ export const StaffGeneral = ({staffGeneral}) =>{
         {title: 'Secondary Phone Number', value: staffGeneral?.secondaryPhone},
     ]
     const addressInfo = [
-        {title: 'Street Address', value: 'Street Address'},
-        {title: 'Country', value: 'Country'},
-        {title: 'City', value: 'City'},
-        {title: 'State', value: staffGeneral?.state},
-        {title: 'Zip Code', value: 'Zip Code'},
+        {title: 'Street Address', value: staffGeneral?.address?.street},
+        {title: 'Country', value: staffGeneral?.address?.country},
+        {title: 'City', value: staffGeneral?.address?.city},
+        {title: 'State', value: staffGeneral?.address?.state},
+        {title: 'Zip Code', value: staffGeneral?.address?.zip},
     ]
     const otherDetails = [
         {title: 'Driver License', value: staffGeneral?.license?.driverLicense},

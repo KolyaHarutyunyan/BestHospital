@@ -18,6 +18,8 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
     const [mInformation] = useState(modalInformation)
     const [inputs, setInputs] = useState(mInformation ? mInformation : {})
 
+    console.log(mInformation,'mInformation');
+
     const [error, setError] = useState('')
 
     const classes = modalsStyle()
@@ -48,6 +50,7 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
             name: inputs.credentialName,
             type: checkType(inputs.credentialType),
         }
+        console.log(credentialData,'losdfhdsjfsdhfsd vcred data');
         let serviceData = {
             name: inputs.name,
             displayCode: inputs.displayCode,

@@ -33,6 +33,7 @@ export const getCredentialGlobal = () => {
 }
 
 export const editCredentialByIdGlobal = (body, id) => {
+    console.log(body,'body system action');
     return {
         type: EDIT_CREDENTIAL_BY_ID_GLOBAL,
         payload: {body, id}

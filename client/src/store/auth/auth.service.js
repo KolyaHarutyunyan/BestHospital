@@ -13,14 +13,14 @@ export const authService = {
     getLink: (email) => axios.get(`/auth/forgotPassword/${email}` ),
 
     resetPass: ( passwords ) => {
-        let endpoint = `http://localhost:8200/api/authn/resetPassword`;
-        const res = axios.post(endpoint,
-
+        // let endpoint = `/authn/resetPassword`;
+        const res = axios.post(`/authn`,
           {
             "newPassword": passwords.newPassword,
             "confirmation": passwords.confirmation
         },
-        { headers: { 'reset-token': passwords.token } },
+            { headers: { 'registration-token': passwords.token } },
+        // { headers: { 'reset-token': passwords.token } },
         );
         return res;
     },

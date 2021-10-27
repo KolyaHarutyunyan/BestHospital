@@ -75,7 +75,7 @@ export class AvailabilityService {
   private checkSchedule(schedule: any) {
     if (!schedule) {
       throw new HttpException(
-        'Schedule with this id was not found',
+        'ScheduleFragment with this id was not found',
         HttpStatus.NOT_FOUND,
       );
     }

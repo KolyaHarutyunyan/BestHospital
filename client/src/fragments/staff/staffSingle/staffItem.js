@@ -49,6 +49,11 @@ export const StaffItem = () => {
     const [globalCredentialInformation, setGlobalCredentialInformation] = useState({})
     const [noteModalData, setNoteModalData] = useState({})
 
+
+    const [getStatus, setGetStatus] = useState('')
+    const [prevStatus, setPrevStatus] = useState('')
+
+
     const [noteModalInfo, setNoteModalInfo] = useState({
         right: '-1000px',
         created: '',
@@ -67,7 +72,10 @@ export const StaffItem = () => {
     const availabilityData = useSelector(state => state.availabilitySchedule.availabilitySchedule)
     const employments = useSelector(state => state.admins.employments)
     const staffServices = useSelector(state => state.admins.staffServices.service)
-    console.log(historiesData,'historyfdatatataa');
+    const staffTimesheet = useSelector(state => state.admins.timesheet)
+
+
+
     const handleOpenClose = () => {
         setOpen(!open)
     }
@@ -141,6 +149,7 @@ export const StaffItem = () => {
         dispatch(availabilityScheduleActions.getAvailabilitySchedule(params.id))
         dispatch(adminActions.getEmployment(params.id))
         dispatch(adminActions.getStaffService(params.id))
+        dispatch(adminActions.getTimesheet(params.id))
     }, [])
 
     const openNoteModal = (data) => {
@@ -203,7 +212,7 @@ export const StaffItem = () => {
                 <NoItemText text='No Employments Yet'/>)
         },
         {
-            tabComponent: (<StaffTimesheet>Timesheet</StaffTimesheet>)
+            tabComponent: (<StaffTimesheet info={staffTimesheet} />)
         },
         {
             tabComponent: (<StaffCredentials credentialData={credentialData} openModal={openCloseCredModal}/>)
@@ -258,26 +267,53 @@ export const StaffItem = () => {
     return (
         <>
             <TableWrapperGeneralInfo
-                status='inactive'
+                // status='inactive'
                 parent='Staff'
                 title={staffGeneral?.firstName}
                 parentLink='/staff'
                 buttonsTabAddButton={true}
-                activeInactiveText={'Inactive'}
+                // activeInactiveText={'Inactive'}
                 openCloseInfo={open}
                 handleOpenClose={handleOpenClose}
-                body={<InactiveModal handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
+                body={
+                    <InactiveModal
+                        name={staffGeneral?.firstName}
+                        setGetStatus={setGetStatus}
+                        prevStatus={prevStatus}
+                        info={{
+                            status: getStatus,
+                            path: 'staff',
+                            type: 'GET_ADMIN_BY_ID_SUCCESS'
+                        }}
+                        handleOpenClose={handleOpenClose}
+                        handleClose={handleOpenClose}
+                    />
+                }
             >
                 <div className={classes.staffSingleItem}>
 
 
-                    <StaffItemHeader onModel='Staff' availabilityData={availabilityData} title={`${staffGeneral?.firstName} ${staffGeneral?.lastName}`}
+                    <StaffItemHeader onModel='Staff'
+                                     availabilityData={availabilityData}
+                                     title={`${staffGeneral?.firstName}${staffGeneral?.lastName}`}
                                      noteModalTypeInfo={noteModalTypeInfo}
                                      handleOpenClose={handleOpenCloseNote}
-                                     openModal={openModal} globalCredentialInformation={globalCredentialInformation}
-                                     globalCredentials={globalCredentials} credModalType={credModalType}
-                                     openCloseCredModal={openCloseCredModal} openCredModal={openCredModal}
-                                     activeTab={activeTab}/>
+                                     openModal={openModal}
+                                     globalCredentialInformation={globalCredentialInformation}
+                                     globalCredentials={globalCredentials}
+                                     credModalType={credModalType}
+                                     openCloseCredModal={openCloseCredModal}
+                                     openCredModal={openCredModal}
+                                     activeTab={activeTab}
+
+
+                                     status={staffGeneral?.status}
+                                     type= 'GET_ADMIN_BY_ID_SUCCESS'
+                                     setGetStatus={setGetStatus}
+                                     getStatus={getStatus}
+                                     setPrevStatus={setPrevStatus}
+                                     handleOpen={handleOpenClose}
+                    />
                     <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
                 </div>
                 <SimpleModal

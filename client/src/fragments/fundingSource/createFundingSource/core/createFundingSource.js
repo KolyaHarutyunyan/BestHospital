@@ -46,7 +46,7 @@ export const CreateFundingSource = ({handleClose, info}) => {
             'contact': inputs.contact,
             'website': inputs.website,
             "address": fullAddress,
-            "status": 1
+            "status": 'ACTIVE'
         }
         if (inputs.name && inputs.email && inputs.phoneNumber && inputs.type && inputs.contact && inputs.website) {
             if (info) {

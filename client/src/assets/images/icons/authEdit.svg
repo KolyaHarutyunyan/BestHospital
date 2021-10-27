@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="File_Outline" data-name="File Outline" transform="translate(-333 -306)">
+    <g id="Base" transform="translate(333 306)" fill="#ffc051" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <g id="File_Outline-2" data-name="File Outline" transform="translate(278 310)">
+      <path id="Path_3207" data-name="Path 3207" d="M73.378,3.528,70.177.5A1.819,1.819,0,0,0,68.922,0h-6.1A1.828,1.828,0,0,0,61,1.826V15.174A1.828,1.828,0,0,0,62.826,17h9.3a1.828,1.828,0,0,0,1.826-1.826V4.855A1.834,1.834,0,0,0,73.378,3.528Zm-.967.456H69.932a.166.166,0,0,1-.166-.166V1.482ZM72.123,16h-9.3a.831.831,0,0,1-.83-.83V1.826a.831.831,0,0,1,.83-.83H68.77V3.818A1.163,1.163,0,0,0,69.932,4.98h3.021V15.174A.831.831,0,0,1,72.123,16Z" transform="translate(0)" fill="#347af0"/>
+      <path id="Path_3208" data-name="Path 3208" d="M135.8,200h-7.3a.5.5,0,0,0,0,1h7.3a.5.5,0,0,0,0-1Z" transform="translate(-64.775 -193.359)" fill="#347af0"/>
+      <path id="Path_3209" data-name="Path 3209" d="M135.8,280h-7.3a.5.5,0,0,0,0,1h7.3a.5.5,0,0,0,0-1Z" transform="translate(-64.775 -270.703)" fill="#347af0"/>
+      <path id="Path_3210" data-name="Path 3210" d="M130.913,360H128.5a.5.5,0,0,0,0,1h2.415a.5.5,0,0,0,0-1Z" transform="translate(-64.775 -348.047)" fill="#347af0"/>
+    </g>
+  </g>
+</svg>
