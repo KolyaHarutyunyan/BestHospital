@@ -8,7 +8,7 @@ import {HtmlTooltip, SelectInput, SimpleModal, Switcher} from "@eachbase/compone
 import {Link} from "react-router-dom";
 import {InfoModal} from "./modals";
 
-export const ListView = ({changeScreen, handleOpenClose}) => {
+export const ListView = ({changeScreen, handleOpenClose, openCloseRecur}) => {
     const classes = scheduleStyle()
     const [date, setDate] = useState(0)
     const [open, setOpen] = useState(false)
@@ -65,7 +65,7 @@ export const ListView = ({changeScreen, handleOpenClose}) => {
                                 title={<p>{'Recur Event'}</p>}
                                 placement="top-end"
                             >
-                                <button>
+                                <button onClick={openCloseRecur}>
                                     <img src={Images.recurrance} alt="icon"/>
                                 </button>
                             </HtmlTooltip>

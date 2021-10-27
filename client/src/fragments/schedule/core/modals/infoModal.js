@@ -7,7 +7,7 @@ import {Link} from "react-router-dom";
 import {scheduleStyle} from "../styles";
 
 
-export const InfoModal =({type, handleOpenClose})=>{
+export const InfoModal =({type, handleOpenClose, openCloseRecur})=>{
     const classes = scheduleStyle()
     const global = modalsStyle()
 
@@ -24,7 +24,7 @@ export const InfoModal =({type, handleOpenClose})=>{
                             title={<p>{'Recur Event'}</p>}
                             placement="top-end"
                         >
-                        <button>
+                        <button onClick={openCloseRecur}>
                             <img src={Images.recurrance} alt="icon"/>
                         </button>
                         </HtmlTooltip>
