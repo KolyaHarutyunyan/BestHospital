@@ -78,10 +78,8 @@ export const PayCodeType = ({handleOpenClose, editedData, maxWidth, marginRight,
         if (inputs.name && inputs.type && inputs.code) {
             if (editedData) {
                 dispatch(payrollActions.editPayCodeByIdGlobal(data, editedData?.id));
-
             } else {
                 dispatch(payrollActions.createPayCodeGlobal(data))
-
                 setApplyOvertime('No')
                 setAccruePTO('No')
             }
