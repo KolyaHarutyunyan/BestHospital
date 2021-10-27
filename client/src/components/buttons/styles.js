@@ -34,12 +34,12 @@ export const buttonsStyle = makeStyles(() => ({
       display: "none",
     },
     "& .MuiTab-root": {
-      minWidth:'103px',
-      maxWidth:'103px',
+      minWidth:'125px',
+      maxWidth:'125px',
       minHeight: '36px',
     },
     "& .MuiTab-textColorPrimary.Mui-selected": {
-      minWidth: "103px",
+      minWidth: "125px",
       minHeight: "32px",
       maxHeight: "32px",
       background: Backgrounds.blue,
@@ -52,7 +52,7 @@ export const buttonsStyle = makeStyles(() => ({
 
       '& :hover':{
         background: '#0000001A 0% 0% no-repeat padding-box',
-        minWidth: "103px",
+        minWidth: "125px",
         minHeight: "32px",
         maxHeight: "32px",
         borderRadius: "8px",
@@ -63,7 +63,7 @@ export const buttonsStyle = makeStyles(() => ({
       }
     },
     "& .MuiTab-textColorPrimary": {
-      minWidth: "103px",
+      minWidth: "125px",
       minHeight: "32px",
       maxHeight: "32px",
       borderRadius: "8px",
@@ -75,7 +75,7 @@ export const buttonsStyle = makeStyles(() => ({
 
       '& :hover':{
         background: '#E6ECF380 0% 0% no-repeat padding-box',
-        minWidth: "103px",
+        minWidth: "125px",
         minHeight: "32px",
         maxHeight: "32px",
         borderRadius: "8px",

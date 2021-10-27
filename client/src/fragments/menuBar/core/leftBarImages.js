@@ -27,7 +27,14 @@ export const LeftBarImages =({ item, linkInfo })=>{
                             ? linkInfo === item.path
                                 ? Images.roleManagementActive
                                 : Images.roleManagementPassive
-                                                    :
+
+                                : item.icon === "Schedule"
+                            ? linkInfo === item.path
+                                ? Images.eventsFill
+                                : Images.eventsFill
+
+
+                                :
                                                     ''
             }
             alt={"icons"}

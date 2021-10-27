@@ -80,6 +80,9 @@ import addHours from '@eachbase/assets/images/icons/addHours.svg'
 import authIconGen from '@eachbase/assets/images/icons/authIconGen.svg'
 import addIcon from '@eachbase/assets/images/icons/Add.svg';
 import fileIcon from '@eachbase/assets/images/icons/fileIcon.svg';
+import eventsFill from '../assets/images/icons/eventsFill.svg';
+import download from '../assets/images/icons/download.svg';
+import forward from '../assets/images/icons/forward.svg';
 
 export const Images = {
     doctors: doctors,
@@ -161,5 +164,9 @@ export const Images = {
     infoIcon: infoIcon,
     addIcon: addIcon,
     employment: employment,
-    fileIcon: fileIcon
+    fileIcon: fileIcon,
+    eventsFill:eventsFill,
+    download:download,
+    forward:forward,
 }
+

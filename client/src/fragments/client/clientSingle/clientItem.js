@@ -82,7 +82,7 @@ export const ClientItem = () => {
         {label: 'Contacts'},
         {label: 'Enrollments'},
         {label: 'Authorization'},
-        {label: 'Availability Schedule'},
+        {label: 'Availability ScheduleFragment'},
         {label: 'Notes'},
         {label: 'History'}
     ]

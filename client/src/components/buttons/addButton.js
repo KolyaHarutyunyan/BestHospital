@@ -4,7 +4,7 @@ import {Colors, Images} from "@eachbase/utils";
 import {MinLoader} from "../loader";
 import {useSelector} from "react-redux";
 
-export const AddButton = ({loader,disabled, styles, text, handleClick,type }) => {
+export const AddButton = ({loader,disabled, styles, text, handleClick,type, Icon }) => {
   const classes = buttonsStyle();
 
   const {httpOnLoad,}  = useSelector((state) => ({
@@ -22,7 +22,7 @@ export const AddButton = ({loader,disabled, styles, text, handleClick,type }) =>
         onClick={handleClick}
     >
       {
-        loader !== true && <img src={Images.addCircle} alt={'icon'}/>
+        Icon !== false &&  loader !== true && <img src={Images.addCircle} alt={'icon'}/>
       }
 
       { load === type ?

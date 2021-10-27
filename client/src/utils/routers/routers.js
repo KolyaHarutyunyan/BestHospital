@@ -25,4 +25,9 @@ export const superAdminRouters =
             "icon": "Client",
             "path": "/client"
         },
+        {
+            "name": "Schedule",
+            "icon": "Schedule",
+            "path": "/schedule"
+        },
     ]
