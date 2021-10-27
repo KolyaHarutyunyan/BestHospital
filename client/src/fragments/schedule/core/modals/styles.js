@@ -69,6 +69,7 @@ export const scheduleModalsStyle = makeStyles(() => ({
         },
     },
 
+
     serciveModall:{
         display:'flex',
         textAlign:'center',
@@ -87,8 +88,41 @@ export const scheduleModalsStyle = makeStyles(() => ({
             marginRight:'40px',
             '@media (max-width: 1280px)': {
                 marginRight:'32px',
-            }
-        }
+            },
+        },
+    },
+
+    infoModalHead:{
+        display:'flex',
+        justifyContent:'space-between',
+        alignItems:'center',
+        '& p':{
+            fontSize:'18px',
+            fontWeight:'bold',
+            color:Colors.TextSecondary,
+        },
+        '& button': {
+            border: 'none',
+            outline: 'none',
+            background: 'transparent',
+        },
+        '& button:first-of-type': {
+            marginRight: '16px',
+        },
+    },
+
+    modalDate:{
+        fontSize:'14px',
+        fontWeight:'600',
+        color:Colors.TextSecondary,
+        '& span':{
+            marginLeft:'16px',
+            marginTop:'8px',
+        },
+    },
+
+    infoModalBody:{
+        marginTop:'32px',
     }
 
 }))

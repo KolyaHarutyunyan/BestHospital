@@ -1,9 +1,8 @@
-import {Filters, ListView, scheduleStyle} from "./core";
+import {ListView, scheduleStyle} from "./core";
 import {Selectable} from "./core/calendar";
 import React, {useState} from "react";
 import {SimpleModal} from "@eachbase/components";
 import {CreateEvent} from "./core/modals/createEvent";
-
 
 export const ScheduleFragment = ({}) => {
     const classes = scheduleStyle()
@@ -15,18 +14,16 @@ export const ScheduleFragment = ({}) => {
         setType(ev)
     }
     const handleOpenClose = (date) =>{
-        console.log('asdad')
         if(date){
             setDate(date)
-            console.log(date,'dddddd')
         }
         setOpen(!open)
     }
+
     return (
         <div className={classes.wrapper}>
             {type === 'calendar' ?
                 <Selectable
-
                     handleOpenClose={handleOpenClose}
                     handleChangeScreenView={(e) => changeScreen(e)}
                 />
@@ -46,7 +43,6 @@ export const ScheduleFragment = ({}) => {
                   />
                 }
             />
-
         </div>
     )
 }

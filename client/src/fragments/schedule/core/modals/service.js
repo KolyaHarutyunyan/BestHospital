@@ -14,8 +14,6 @@ export const Service =({ handleOpenClose, info, date}) =>{
     const handleChange = e => setInputs(
         prevState => ({...prevState, [e.target.name]: e.target.value}),
         error === e.target.name && setError(''),
-        // e.target.name === 'firstName' && handleChangeFirstName(e.target.value),
-        // e.target.name === 'lastName' && handleChangeLastName(e.target.value),
     );
 
     const handleCreate = () => {
