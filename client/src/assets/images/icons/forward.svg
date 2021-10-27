@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="Forward" transform="translate(-1501 -352)">
+    <g id="Base" transform="translate(1501 352)" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <path id="Icon_ionic-ios-arrow-round-forward" data-name="Icon ionic-ios-arrow-round-forward" d="M19.354,11.482a.817.817,0,0,0-.006,1.15l3.8,3.808H8.682a.813.813,0,0,0,0,1.626H23.143l-3.8,3.808a.823.823,0,0,0,.006,1.15.809.809,0,0,0,1.144-.006l5.152-5.189h0a.913.913,0,0,0,.169-.256.776.776,0,0,0,.063-.313.815.815,0,0,0-.231-.569L20.492,11.5A.8.8,0,0,0,19.354,11.482Z" transform="translate(1496.125 346.748)" fill="#fff"/>
+  </g>
+</svg>
