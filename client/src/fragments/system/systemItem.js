@@ -20,7 +20,6 @@ export const SystemItem = () => {
     const [modalType, setModalType] = useState('')
     const [modalInformation, setModalInformation] = useState('')
     const [deletedName, setDeletedName] = useState()
-    console.log(modalInformation,'modalInformation');
     const classes = systemItemStyles()
 
     const globalCredentials = useSelector(state => state.system.credentials)

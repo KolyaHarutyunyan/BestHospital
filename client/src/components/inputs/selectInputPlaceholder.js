@@ -1,10 +1,12 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Select, FormControl, FormHelperText,} from "@material-ui/core";
 import {inputsStyle} from "./styles";
 import MenuItem from "@material-ui/core/MenuItem";
 import {InputMinLoader} from "./inputMiniLoader";
 import {makeStyles} from "@material-ui/core/styles";
 import {Colors} from "@eachbase/utils";
+import {httpRequestsOnSuccessActions} from "../../store";
+import {useDispatch, useSelector} from "react-redux";
 
 const usePlaceholderStyles = makeStyles(() => ({
     placeholder: {
@@ -30,16 +32,31 @@ export const SelectInputPlaceholder = ({
                                            type,
                                            language,
                                            styles,
-                                           placeholder
+                                           placeholder,
+    status
                                        }) => {
 
     const [current, setCurrent] = React.useState('');
+    const dispatch = useDispatch()
     const classes = inputsStyle();
 
     const handleChange = (event) => {
         handleSelect(event)
         setCurrent(event.target.value);
     };
+
+    const {httpOnSuccess} = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+    }));
+
+    const success = httpOnSuccess.length && httpOnSuccess.filter((i) => console.log(i.type === status))
+
+    useEffect(() => {
+        if (success) {
+            dispatch(httpRequestsOnSuccessActions.removeSuccess(status))
+            setCurrent('')
+        }
+    }, [success.length])
 
     return (
         <>

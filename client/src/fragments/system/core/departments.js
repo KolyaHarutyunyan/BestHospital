@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {AddButton, NoItemText, SlicedText, ValidationInput} from "@eachbase/components";
-import {Images} from "@eachbase/utils";
+import {FindLoad, FindSuccess, Images} from "@eachbase/utils";
 import {systemItemStyles} from "./styles";
 import {httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
 
@@ -50,20 +50,16 @@ export const Departments = ({globalDepartments, removeItem, openModal}) => {
 
     const isDisabled = inputs.name
 
-    const {httpOnLoad} = useSelector((state) => ({
-        httpOnLoad: state.httpOnLoad,
-    }));
-
-    const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_DEPARTMENT_GLOBAL'
+    const loader = FindLoad('CREATE_DEPARTMENT_GLOBAL')
+    const success = FindSuccess('CREATE_DEPARTMENT_GLOBAL')
 
     useEffect(() => {
-        if (loader) {
-            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_DEPARTMENT_GLOBAL'))
+        if (success) {
             setInputs({
                 name: '',
             })
         }
-    }, [loader])
+    }, [success.length])
 
     return (
         <>
@@ -79,7 +75,7 @@ export const Departments = ({globalDepartments, removeItem, openModal}) => {
                 />
                 <AddButton
                     type={'CREATE_DEPARTMENT_GLOBAL'}
-                    loader={loader}
+                    loader={!!loader.length}
                     disabled={!isDisabled}
                     styles={credentialBtn}
                     handleClick={handleSubmit} text='Add Department'/>
@@ -88,7 +84,6 @@ export const Departments = ({globalDepartments, removeItem, openModal}) => {
             <div className={classes.credentialTable}>
                 {
                     globalDepartments && globalDepartments.length ? globalDepartments.map((departmentItem, index) => {
-                        console.log(departmentItem,'modalInformation, modalInformation modalInformation');
                         return (
                             <div className={classes.item} key={index}>
                                 <p>
