@@ -52,6 +52,11 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .rbc-time-header-content{
+  //border-left: 1px solid #EBF2FD;
+  border:none
+
+}
+.rbc-time-content > * + * > *{
   border-left: 1px solid #EBF2FD;
 }
 .rbc-time-content{
@@ -66,6 +71,10 @@ input[type=number]::-webkit-outer-spin-button {
   letter-spacing: 0px;
   color: #4B5C68;
   border-left: 4px solid #347AF0!important;
+}
+
+.rbc-event.rbc-selected, .rbc-day-slot .rbc-selected.rbc-background-event{
+  background: #d2dff5 0% 0% no-repeat padding-box;
 }
 
 .rbc-timeslot-group{
@@ -85,6 +94,25 @@ input[type=number]::-webkit-outer-spin-button {
 
 .rbc-day-slot .rbc-event, .rbc-day-slot .rbc-background-event{
   border: none;
+}
+.rbc-day-bg + .rbc-day-bg{
+  border-left: 1px solid #EBF2FD;
+}
+.rbc-time-view .rbc-allday-cell{
+  height: 17px;
+  border-left: 1px solid #EBF2FD;
+}
+.rbc-today{
+  background: transparent;
+}
+
+.rbc-header + .rbc-today{
+   //background:  #347AF0;
+}
+
+.rbc-header + .rbc-header{
+  border: none;
+  height: 50px;
 }
 
 ::-webkit-scrollbar {

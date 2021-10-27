@@ -272,7 +272,15 @@ export const modalsStyle = makeStyles(() => ({
         lineHeight: '20px',
         textTransform: 'capitalize',
         paddingLeft: 6
-    }
+    },
+    infoModalWrapper :{
+        width: '645px',
+        padding: '32px',
+        borderRadius: '8px',
+        backgroundColor: 'white',
+        position: 'relative',
+    },
+
 
 }));
 

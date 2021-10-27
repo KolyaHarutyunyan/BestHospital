@@ -6,10 +6,11 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import {NavigateBefore, NavigateNext} from "@material-ui/icons";
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import {scheduleStyle} from "./styles";
-import {AddButton, ButtonsTab, SelectInput, ValidationInput} from "@eachbase/components";
+import {AddButton, ButtonsTab, SelectInput, SimpleModal, ValidationInput} from "@eachbase/components";
 import {InputBase, InputLabel, NativeSelect, styled} from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import {Filters} from "./filters";
+import {InfoModal} from "./modals";
 
 const DragAndDropCalendar = withDragAndDrop(Calendar)
 
@@ -53,8 +54,16 @@ export const Selectable =({handleChangeScreenView, handleOpenClose}) => {
     const [displayDragItemInCell, setDisplayDragItemInCell] = useState(true)
     const [draggedEvent, setDraggedEvent] = useState('')
     const [screen, setScreen] = useState('calendar')
-
     const [age, setAge] = React.useState(10);
+    const [open, setOpen] = useState(false)
+    const [info, setInfo] = useState('')
+
+    const handleOpenCloseModal =(date) =>{
+        console.log('asdasdasd')
+        setOpen(!open)
+        setInfo(date)
+    }
+    console.log(open,'openopenopenopenopen')
     const handleChange = (event) => {
         setAge(event.target.value);
     };
@@ -126,8 +135,6 @@ export const Selectable =({handleChangeScreenView, handleOpenClose}) => {
 
 
     const  handleSelect = ({ start, end }) => {
-
-        console.log(moment(start).format('YYYY-MM-DD'),'asdasdsad')
         const date = {
             startDate:moment(start).format('YYYY-MM-DD'),
             startTime:moment(start).format('hh:mm'),
@@ -333,8 +340,11 @@ export const Selectable =({handleChangeScreenView, handleOpenClose}) => {
                     // onShowMore={(events, date) => console.log(date)}
                     // timeslots={4}
 
-
-
+                    formats={{
+                        // timeGutterFormat: 'HH:mm',
+                        // dateFormat: `dd ${'asdasdas'}`,
+                        dayFormat: `dd`,
+                    }}
                     onEventDrop={moveEvent}
                     resizable
                     view={'week'}
@@ -342,12 +352,20 @@ export const Selectable =({handleChangeScreenView, handleOpenClose}) => {
                     localizer={localizer}
                     events={events}
                     defaultView={Views.WEEK}
-                    scrollToTime={new Date(1970, 1, 1, 6)}
-                    defaultDate={new Date(2015, 3, 12)}
-                    onSelectEvent={event => alert(event.title)}
+                    // scrollToTime={new Date(1970, 1, 1, 6)}
+                    defaultDate={new Date()}
+                    onSelectEvent={handleOpenCloseModal}
                     onSelectSlot={handleSelect}
                 />
             {/*}*/}
+
+                <SimpleModal
+                    handleOpenClose = {handleOpenCloseModal}
+                    openDefault={open}
+                    content={
+                        <InfoModal type={info}  handleOpenClose = {handleOpenCloseModal}/>
+                    }
+                />
             </>
         )
 }

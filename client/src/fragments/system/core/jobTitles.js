@@ -50,11 +50,6 @@ export const JobTitles = ({globalJobs, removeItem, openModal}) => {
 
     const isDisabled = inputs.name
 
-    const {httpOnLoad} = useSelector((state) => ({
-        httpOnLoad: state.httpOnLoad,
-    }));
-
-
     const loader = FindLoad('CREATE_JOB_GLOBAL')
     const success = FindSuccess('CREATE_JOB_GLOBAL')
 

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="Recurrance" transform="translate(14457 -21020)">
+    <rect id="Base" width="24" height="24" transform="translate(-14457 21020)" fill="#fff" opacity="0.003"/>
+    <g id="Layer_2" data-name="Layer 2" transform="translate(-14437 21023) rotate(90)">
+      <g id="Interface-Solid" transform="translate(-0.001 0)">
+        <path id="interface-solid-multimedia-refresh-button" d="M10.254,0A7.517,7.517,0,0,0,2.737,7.388v.026c0,.029,0,.057,0,.085,0,.008,0,.014,0,.021v2.494L1.2,8.385a.695.695,0,0,0-1.011.953l2.736,2.905.009.006.016.015s0,.006.006.009a.668.668,0,0,0,.1.065.673.673,0,0,0,.1.065l.005,0,.01,0a.671.671,0,0,0,.521,0l.01,0,0,0a.671.671,0,0,0,.092-.062.651.651,0,0,0,.109-.069s0-.006.006-.009l.015-.015.008-.006L6.663,9.336a.694.694,0,1,0-1.012-.951L4.125,10.012v-2.6a6.132,6.132,0,1,1,6.13,6.2.694.694,0,1,0,0,1.389,7.5,7.5,0,1,0,0-15Z" transform="translate(0.001 0)" fill="#347af0"/>
+      </g>
+    </g>
+  </g>
+</svg>

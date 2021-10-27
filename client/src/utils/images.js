@@ -84,6 +84,7 @@ import eventsFill from '../assets/images/icons/eventsFill.svg';
 import download from '../assets/images/icons/download.svg';
 import forward from '../assets/images/icons/forward.svg';
 import authEdit from '@eachbase/assets/images/icons/authEdit.svg';
+import recurrance from '@eachbase/assets/images/icons/recurrance.svg';
 
 export const Images = {
     doctors: doctors,
@@ -169,6 +170,7 @@ export const Images = {
     eventsFill:eventsFill,
     download:download,
     forward:forward,
-    authEdit : authEdit
+    authEdit : authEdit,
+    recurrance: recurrance,
 }
 
