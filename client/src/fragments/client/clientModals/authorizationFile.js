@@ -4,7 +4,8 @@ import {Images} from "@eachbase/utils";
 import {AddButton, AddModalButton, ValidationInput} from "@eachbase/components";
 
 import {useDispatch} from "react-redux";
-import {clientActions} from "@eachbase/store";
+import {clientActions, uploadActions} from "@eachbase/store";
+import {useParams} from "react-router-dom";
 
 const credentialBtn = {
     maxWidth: 192,
@@ -19,13 +20,11 @@ export const AuthorizationFile = ({handleFile}) => {
 
     const dispatch = useDispatch()
 
+    const params = useParams()
+
     const uploadedFiles = false
 
     const [fileName, setFileName] = useState('')
-
-    const [file,setFile] = useState({})
-
-    console.log(file,'file');
 
     const handleChange = (e) => {
         setFileName(e.target.value)
@@ -40,19 +39,12 @@ export const AuthorizationFile = ({handleFile}) => {
         alert('done')
     }
 
-    useEffect(()=>{
-        if (file.name){
-            let fD = new FormData();
-            console.log(file,'file file file useEffect');
-            let sent = fD.append('name',file)
-            console.log(sent, 'sent')
-            dispatch(clientActions.createClientsAuthorizationFile(sent))
-        }
-    },[file.name])
-
     const handleChangeFile = event => {
-        const fileUploaded = event.target.files[0];
-        setFile(fileUploaded)
+        const createInfo = {
+            "resource": params.id,
+            "type": fileName,
+        }
+        dispatch(uploadActions.createUpload(event.target.files[0], createInfo))
     };
 
     return (
