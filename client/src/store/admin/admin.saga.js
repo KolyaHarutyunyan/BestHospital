@@ -30,7 +30,7 @@ import {
     GET_TIMESHEET,
     CREATE_TIMESHEET,
     GET_ALL_PAYCODES,
-    GET_ALL_PAYCODES_SUCCESS, EDIT_TIMESHEET,
+    GET_ALL_PAYCODES_SUCCESS, EDIT_TIMESHEET, GET_ALL_ADMINS_SUCCESS, GET_ALL_ADMINS,
 
 
 } from "./admin.types";
@@ -61,6 +61,7 @@ function* getAdmins(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.getAdminsService, action.payload);
+        console.log(res,'reeeesesesefesfdsf')
         yield put({
             type: GET_ADMINS_SUCCESS,
             payload: res.data,
@@ -73,6 +74,24 @@ function* getAdmins(action) {
         console.log(err)
     }
 }
+
+
+
+function* getAllAdmins(action) {
+    try {
+        const res = yield call(authService.getAdminsService, action.payload);
+        console.log(res,'reeeesesesefesfdsf')
+        yield put({
+            type: GET_ALL_ADMINS_SUCCESS,
+            payload: res.data,
+        });
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+
+
 
 function* getAdminById(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
@@ -127,6 +146,7 @@ function* createCredential(action) {
 }
 
 function* getCredential(action) {
+    console.log(action,'aaaction');
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.getCredentialService, action.payload.credentialId);
@@ -137,8 +157,15 @@ function* getCredential(action) {
         });
     } catch (err) {
         console.log(err)
+
+        if(err.data.message === "Staff Credential with this id was not found"){
+            yield put({
+                type: GET_CREDENTIAL_SUCCESS,
+                payload:'',
+            });
+        }
+
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
 }
 
@@ -385,7 +412,6 @@ function* getAllPaycodes(action) {
             type: GET_ALL_PAYCODES_SUCCESS,
             payload:  res.data
         });
-        console.log(res,'reeeeseeseses get paycodeeeeesesesesesesesesese')
 
     } catch (err) {
 
@@ -416,4 +442,5 @@ export const watchAdmin = function* watchAdminSaga() {
     yield takeLatest(CREATE_TIMESHEET, createTimesheet)
     yield takeLatest(EDIT_TIMESHEET, editTimesheet)
     yield takeLatest(GET_ALL_PAYCODES, getAllPaycodes)
+    yield takeLatest(GET_ALL_ADMINS, getAllAdmins)
 };

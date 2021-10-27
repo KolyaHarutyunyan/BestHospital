@@ -1,5 +1,4 @@
 import { model, Schema, Types } from 'mongoose';
-// import { IModify } from './interface';
 import { ModifierStatus, TypeStatus } from '../funding.constants';
 
 export const modifier = {
@@ -13,5 +12,4 @@ const modifierSchema = new Schema({
     serviceId: { type: Types.ObjectId, ref: 'FundingService' },
     modifiers: [modifier]
 });
-
 export const ModifyModel = model<any>('Modifier', modifierSchema);

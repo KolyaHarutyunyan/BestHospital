@@ -88,6 +88,7 @@ export const Departments = ({globalDepartments, removeItem, openModal}) => {
             <div className={classes.credentialTable}>
                 {
                     globalDepartments && globalDepartments.length ? globalDepartments.map((departmentItem, index) => {
+                        console.log(departmentItem,'modalInformation, modalInformation modalInformation');
                         return (
                             <div className={classes.item} key={index}>
                                 <p>
@@ -99,12 +100,12 @@ export const Departments = ({globalDepartments, removeItem, openModal}) => {
                                     <img src={Images.edit}
                                          onClick={() => editDepartment('editDepartment', {
                                              departmentName: departmentItem.name,
-                                             departmentID: departmentItem._id
+                                             departmentID: departmentItem.id
                                          })
                                          } alt="edit"/>
                                     <img src={Images.remove} alt="delete"
                                          onClick={() => removeItem({
-                                             id: departmentItem._id,
+                                             id: departmentItem.id,
                                              name: departmentItem.name,
                                              type: 'editDepartment'
                                          })}/>

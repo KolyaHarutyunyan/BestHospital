@@ -50,20 +50,19 @@ export class StaffController {
     required: false,
     type: Number,
   })
-  // @ApiQuery({
-  //   name: 'status',
-  //   description: 'status',
-  //   required: false,
-  //   type: Number,
-  //   enum: StaffStatus
-  // })
+  @ApiQuery({
+    name: 'status',
+    description: 'status',
+    required: false,
+    type: StaffQueryDTO,
+  })
   // @ApiQuery({ name: 'status', enum: StaffStatus })
   async getUsers(
     @Query('skip') skip: number,
     @Query('limit') limit: number,
-    // @Query() status: StaffQueryDTO
+    @Query("status") status: string
   ): Promise<StaffDTO[]> {
-    return await this.staffService.getUsers(skip, limit, 1);
+    return await this.staffService.getUsers(skip, limit, status);
   }
 
   /** Get the staff profile */

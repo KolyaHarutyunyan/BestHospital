@@ -15,7 +15,6 @@ export class OvertimeService {
     this.mongooseUtil = new MongooseUtil();
   }
   private model: Model<IOverTime>;
-
   private mongooseUtil: MongooseUtil;
 
   async create(dto: CreateOvertimeDTO): Promise<OvertimeDTO> {
@@ -73,7 +72,7 @@ export class OvertimeService {
     }
   }
 
- async remove(_id: string): Promise<string> {
+  async remove(_id: string): Promise<string> {
     const overtime = await this.model.findByIdAndDelete({ _id });
     this.checkOvertime(overtime);
     return overtime._id;

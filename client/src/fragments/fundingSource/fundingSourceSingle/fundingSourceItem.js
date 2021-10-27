@@ -31,7 +31,10 @@ export const FundingSourceItem = ({}) => {
     const globalNotes = useSelector(state => state.note.notes)
     const globalServices = useSelector(state => state.system.services)
     const [activeTab, setActiveTab] = useState(0)
+    const [getStatus, setGetStatus] = useState('')
+    const [prevStatus, setPrevStatus] = useState('')
     const classes = fundingSourceItemStyle()
+
 
 
     useEffect(() => {
@@ -84,21 +87,35 @@ export const FundingSourceItem = ({}) => {
         <>
             <TableWrapperGeneralInfo
                 title={data?.name}
-                status={data?.status === 1 ? 'active' : 'inactive'}
-                activeInactiveText={data?.status !== 1 ? 'active' : 'inactive'}
+                // status={data?.status === 1 ? 'active' : 'inactive'}
+                // activeInactiveText={data?.status !== 1 ? 'active' : 'inactive'}
                 parent='Funding Source'
                 parentLink='/fundingSource'
                 buttonsTabAddButton={true}
                 openCloseInfo={open}
                 handleOpenClose={handleOpenClose}
-                body={<InactiveModal info={{
-                    status: data?.status,
+
+                body={<InactiveModal
+                    name ={data?.name}
+                    setGetStatus={setGetStatus}
+                    prevStatus={prevStatus}
+                    info={{
+                    status: getStatus,
                     path: 'funding',
                     type: 'GET_FUNDING_SOURCE_BY_ID_SUCCESS'
-                }} handleOpenClose={handleOpenClose} handleClose={handleOpenClose}/>}
+                }} handleOpenClose={handleOpenClose}
+                    handleClose={handleOpenClose}/>}
             >
                 <div className={classes.fundingSourceItemHeader}>
-                    <FundingSourceSingleHeader title={data?.name} activeTab={activeTab}/>
+                    <FundingSourceSingleHeader
+                        type= 'GET_FUNDING_SOURCE_BY_ID_SUCCESS'
+                        setGetStatus={setGetStatus}
+                        getStatus={getStatus}
+                        setPrevStatus={setPrevStatus}
+                        handleOpen={handleOpenClose}
+                        status={data?.status}
+                        title={data?.name}
+                        activeTab={activeTab}/>
                     <SimpleTabs
                         setActiveTab={setActiveTab}
                         tabsLabels={tabsLabels}

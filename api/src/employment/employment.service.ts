@@ -37,19 +37,30 @@ export class EmploymentService {
           HttpStatus.BAD_REQUEST,
         );
       }
-      if (dto.endDate && !dto.active) employment.endDate = dto.endDate;
-
+      if (dto.endDate && !dto.active) {
+        employment.active = false;
+        employment.endDate = dto.endDate;
+      }
       if (dto.supervisor == dto.staffId) {
         throw new HttpException(
           'staff@ inq@ ir manager@ chi karox linel chnayac hayastanum hnaravor e',
           HttpStatus.NOT_FOUND,
         );
       }
+      if (dto.active) {
+        let activeEmployment = await this.model.findOne({ active: true, staffId: staff.id });
+        if(activeEmployment){
+          activeEmployment.active = false;
+          await activeEmployment.save()
+        }
+        employment.active = true;
+      }
+
       const findStaff = await this.staffService.findById(dto.supervisor);
       employment.supervisor = dto.supervisor;
 
       if (dto.departmentId) {
-        let departmen = await this.departmentService.findOne(dto.departmentId)
+        let department = await this.departmentService.findOne(dto.departmentId)
         employment.departmentId = dto.departmentId;
       }
       employment = await employment.save();
@@ -78,7 +89,7 @@ export class EmploymentService {
     // this.checkEmployment(employments[0])
     // return this.sanitizer.sanitizeMany(employments);
   }
-  
+
   async findOne(_id: string): Promise<EmploymentDto> {
     let employment = await this.model.findById({ _id }).populate('departmentId', 'name').populate("supervisor", 'firstName');
     this.checkEmployment(employment)
@@ -86,11 +97,10 @@ export class EmploymentService {
   }
   async update(_id: string, dto: UpdateEmploymentDto): Promise<EmploymentDto> {
     let employment = await this.model.findById({ _id })
-    this.checkEmployment(employment)
+    this.checkEmployment(employment);
     if (dto.title) employment.title = dto.title;
 
     if (dto.supervisor == employment._id) {
-
       throw new HttpException(
         'staff@ inq@ ir manager@ chi karox linel chnayac hayastanum hnaravor e',
         HttpStatus.BAD_REQUEST,
@@ -108,7 +118,7 @@ export class EmploymentService {
       employment.supervisor = dto.supervisor;
     }
     if (dto.departmentId) {
-      let departmen = await this.departmentService.findOne(dto.departmentId)
+      let department = await this.departmentService.findOne(dto.departmentId)
       employment.departmentId = dto.departmentId;
     }
     if (dto.schedule) employment.schedule = dto.schedule;
@@ -119,9 +129,18 @@ export class EmploymentService {
       );
     }
     if (dto.active && !dto.endDate) {
+      let activeEmployment = await this.model.findOne({ active: true, staffId: employment.staffId });
+      if(activeEmployment){
+        activeEmployment.active = false;
+        await activeEmployment.save()
+      }
+      employment.active = true;
       employment.endDate = "Precent"
     }
-    if (dto.endDate && !dto.active) employment.endDate = dto.endDate;
+    if (dto.endDate && !dto.active) {
+      employment.active = false;
+      employment.endDate = dto.endDate
+    };
     if (dto.startDate) employment.startDate = dto.startDate;
 
     employment = await employment.save();

@@ -120,7 +120,7 @@ export const OvertimeSettings = ({handleOpenClose, editedData, maxWidth, marginR
                 value={inputs.threshold}
                 variant={"outlined"}
                 name={"threshold"}
-                type={"text"}
+                type={"number"}
                 label={inputs.type === 'CONSECUTIVE' ? 'Threshold in days*' : inputs.type === undefined ? 'Threshold' : 'Threshold in hours*'}
                 typeError={error === 'threshold' ? ErrorText.field : ''}
             />

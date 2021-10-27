@@ -58,13 +58,13 @@ export class ClientService {
   };
 
   /** returns all clients */
-  async findAll(skip: number, limit: number, status: number): Promise<any> {
+  async findAll(skip: number, limit: number, status: string): Promise<any> {
     try {
-      if (status == 0 || status == 2 || status == 3) {
+      if (status == "INACTIVE" || status == "HOLD" || status == "TERMINATE") {
         let [clients, count] = await Promise.all([
-          this.model.find({ $or: [{ status: 0 }, { status: 2 }, { status: 3 }] })
+          this.model.find({ $or: [{ status: "INACTIVE" }, { status: "HOLD" }, { status: "TERMINATE" }] })
             .populate({ path: 'enrollment', select: 'name' }).sort({ '_id': 1 }).skip(skip).limit(limit),
-          this.model.countDocuments({ $or: [{ status: 0 }, { status: 2 }, { status: 3 }] })
+          this.model.countDocuments({ $or: [{ status: "INACTIVE" }, { status: "HOLD" }, { status: "TERMINATE" }] })
         ]);
         this.checkClient(clients[0]);
         const sanClient = this.sanitizer.sanitizeMany(clients);
@@ -73,9 +73,9 @@ export class ClientService {
 
       let [clients, count] = await Promise.all([
         this.model
-          .find({ status: 1 })
+          .find({ status: "ACTIVE" })
           .populate({ path: 'enrollment', select: 'name' }).sort({ '_id': 1 }).skip(skip).limit(limit),
-        this.model.countDocuments({ status: 1})
+        this.model.countDocuments({ status: "ACTIVE" })
       ]);
       const sanClient = this.sanitizer.sanitizeMany(clients);
       return { clients: sanClient, count }
@@ -129,12 +129,14 @@ export class ClientService {
   /** Set Status of a Funder Inactive*/
   setStatus = async (
     _id: string,
-    status: number,
+    status: string,
     dto: CreateTerminationDto
   ): Promise<ClientDTO> => {
     const client = await this.model.findById({ _id });
     this.checkClient(client);
-
+    if(status != "ACTIVE" && !dto.date){
+      throw new HttpException('If status is not active, then date is required field', HttpStatus.BAD_REQUEST);
+    }
     client.termination.date = dto.date;
     client.status = status;
     if (dto.reason) {

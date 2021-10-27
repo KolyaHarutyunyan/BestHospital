@@ -9,7 +9,7 @@ const EmploymentSchema = new Schema({
     title: { type: String },
     schedule: { type: Number, enum: ScheduleStatus },
     termination: TerminationSchema,
-    active: { type: Boolean },
+    active: { type: Boolean, default: false },
     startDate: { type: Date, default: Date.now },
     endDate: { type: Schema.Types.Mixed, default: "Precent" }
 });

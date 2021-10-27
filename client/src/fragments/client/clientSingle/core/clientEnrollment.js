@@ -65,7 +65,7 @@ export const ClientEnrollment = ({data, info}) => {
         let terminationDate = moment(item?.terminationDate).format('DD/MM/YYYY')
 
         return (
-            <TableBodyComponent key={index}>
+            <TableBodyComponent key={index} >
                 <TableCell>
                     <Radio onChange={e => {
                         e.stopPropagation()
@@ -77,22 +77,23 @@ export const ClientEnrollment = ({data, info}) => {
                 <TableCell>  {startDate}  </TableCell>
                 <TableCell>  {terminationDate}  </TableCell>
                 <TableCell>
-                    <>
+                    <div style={{marginTop : 10}}>
                         <img src={Images.edit} alt="edit" className={classes.iconStyle}
                              onClick={e => {
                                  e.stopPropagation()
                                  setDelEdit(true)
                                  setToggleModal(!toggleModal)
+
                                  setIndex(index)
                              }}/>
-                        <img src={Images.remove} alt="delete" className={classes.iconDeleteStyle}
-                             onClick={e => {
-                                 e.stopPropagation()
-                                 setDelEdit(false)
-                                 setToggleModal(!toggleModal)
-                                 setIndex(index)
-                             }}/>
-                    </>
+                        {!item.primary &&  <img src={Images.remove} alt="delete" className={classes.iconDeleteStyle}
+                                                  onClick={e => {
+                                                      e.stopPropagation()
+                                                      setDelEdit(false)
+                                                      setToggleModal(!toggleModal)
+                                                      setIndex(index)
+                                                  }}/>}
+                    </div>
                 </TableCell>
             </TableBodyComponent>
         )
