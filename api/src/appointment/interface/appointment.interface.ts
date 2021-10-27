@@ -6,6 +6,7 @@ import { IPayCode } from '../../employment/paycode/interface';
 
 export interface IAppointment extends Document {
   id: string,
+  type: string,
   client: IClient,
   authorizedService: IAuthorizationService,
   staff: IStaff,
@@ -15,4 +16,6 @@ export interface IAppointment extends Document {
   endTime: Date,
   require: boolean,
   status: string,
+  miles: number,
+  isRepeat: boolean
 }
