@@ -2,7 +2,7 @@ import {cardStyle} from "./style";
 import moment from 'moment';
 
 export const HistoryCard = ({key, data}) => {
-    console.log(data,'datatatata');
+
     let correctDate = moment(data.createdDate).format('dddd, MMMM DD, YYYY')
     const classes = cardStyle()
 

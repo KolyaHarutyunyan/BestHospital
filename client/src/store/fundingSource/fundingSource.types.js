@@ -63,4 +63,8 @@ export const GET_ACTIVE_OR_INACTIVE = 'GET_ACTIVE_OR_INACTIVE'
 export const EDIT_ACTIVE_OR_INACTIVE = 'EDIT_ACTIVE_OR_INACTIVE'
 
 
+/** Edit State */
+export const SET_STATUS = 'SET_STATUS'
+
+
 
