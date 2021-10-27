@@ -5,7 +5,7 @@ import {Card, DeleteElement, Notes, SimpleModal, TableBodyComponent} from '@each
 import {serviceSingleStyles} from './styles';
 import {Colors, Images} from "@eachbase/utils";
 import {TableCell} from "@material-ui/core";
-import {clientActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
+import {clientActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, uploadActions} from "@eachbase/store";
 import {AddAuthorization, AuthorizationFile} from "../../clientModals";
 import {AuthHeader} from "@eachbase/components/headers/auth/authHeader";
 import {AddAuthorizationService} from "../../clientModals/addAuthorizationService";
@@ -36,6 +36,11 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION'
     const successDelServ = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION_SERV'
 
+
+    useEffect(()=>{
+        dispatch(uploadActions.getUpload(params.id))
+    },[])
+
     useEffect(()=>{
         dispatch(clientActions.getClientsAuthorizationsServ(info[authIndex].id))
     },[authIndex])
@@ -46,7 +51,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
             dispatch(httpRequestsOnSuccessActions.removeSuccess('DELETE_CLIENT_AUTHORIZATION'))
             dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_AUTHORIZATION'))
         }
-    }, [success,])
+    }, [success])
 
     useEffect(() => {
 
