@@ -27,7 +27,7 @@ export const AuthHeader = ({setCreateEditFile,createEditFile, info, setToggleMod
                            setCreateEditFile(!createEditFile)
                        }}
                     >
-                        {!empoloyment && <img src={Images.authEdit} style={{width: 24, height : 24, marginTop : 7, marginRight : 7}} />}
+                        {!empoloyment && <img alt='' src={Images.authEdit} style={{width: 24, height : 24, marginTop : 7, marginRight : 7}} />}
                     </p>
                     <img src={Images.edit} alt="edit" className={classes.iconStyle} onClick={() => {
                         setDelEdit(true)
