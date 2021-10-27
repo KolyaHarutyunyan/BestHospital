@@ -2,9 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {createClientStyle} from '../index';
 import {Images} from "@eachbase/utils";
 import {AddButton, AddModalButton, ValidationInput} from "@eachbase/components";
-import axios from 'axios';
+
 import {useDispatch} from "react-redux";
-import {clientActions} from "../../../store";
+import {clientActions} from "@eachbase/store";
 
 const credentialBtn = {
     maxWidth: 192,
@@ -24,6 +24,8 @@ export const AuthorizationFile = ({handleFile}) => {
     const [fileName, setFileName] = useState('')
 
     const [file,setFile] = useState({})
+
+    console.log(file,'file');
 
     const handleChange = (e) => {
         setFileName(e.target.value)
