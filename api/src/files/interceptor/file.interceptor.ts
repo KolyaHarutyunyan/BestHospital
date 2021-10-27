@@ -11,6 +11,7 @@ export class FileSanitizer implements ISanitize {
     const sanitizedOffice: FileDTO = {
       id: file.id,
       type: file.type,
+      mimetype: file.mimetype,
       url: file.url,
       resource: file.resource,
     };

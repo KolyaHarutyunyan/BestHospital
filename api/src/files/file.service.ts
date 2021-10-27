@@ -37,14 +37,16 @@ export class FileService {
   private model: Model<IFile>;
   private mongooseUtil: MongooseUtil;
 
-  saveImage = async (file): Promise<string> => {
-    return await this.storage.storeImage(file, 'Polo');
+  saveImage = async (file): Promise<Object> => {
+    const url = await this.storage.storeImage(file, 'Polo');
+    return { url: url, mimetype: file.mimetype }
   }
 
   create = async (dto: CreateImageDTO): Promise<FileDTO> => {
     const file = new this.model({
       type: dto.type,
       url: dto.url,
+      mimetype: dto.mimetype,
       resource: dto.resource,
     })
 
@@ -62,6 +64,7 @@ export class FileService {
     const file = await this.model.findById(_id);
     this.checkFile(file);
     if (dto.type) file.type = dto.type;
+    if (dto.mimetype) file.mimetype = dto.mimetype;
     if (dto.url) file.url = dto.url;
     await file.save()
     return this.sanitizer.sanitize(file)
