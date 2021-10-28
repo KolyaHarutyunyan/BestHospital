@@ -30,6 +30,7 @@ import {
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
 import {httpRequestsOnSuccessActions} from "../http_requests_on_success";
+import {LOG_IN} from "../auth";
 
 
 function* createFundingSource(action) {
@@ -39,7 +40,7 @@ function* createFundingSource(action) {
         const res = yield call(authService.createFundingSourceService, action.payload.body);
         yield put({
             type: GET_FUNDING_SOURCE,
-            payload: {status: 1, start: 0, end: 10},
+            payload: {status: 'ACTIVE', start: 0, end: 10},
         });
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
@@ -117,6 +118,7 @@ function* getFundingSourceServicesById(action) {
 
 
 function* createFundingSourceServicesById(action) {
+    console.log(action,'actions py')
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
@@ -128,16 +130,18 @@ function* createFundingSourceServicesById(action) {
             type: CREATE_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
             payload: res.data,
         });
-
+       console.log(res,'ressss')
         const body = {
             modifiers: action.payload.modifier,
             serviceId: res.data._id,
         }
-        yield put({
-            type: CREATE_FUNDING_SOURCE_SERVICE_MODIFIER,
-            payload: {body}
-        })
-
+        if(action.payload.modifier.length) {
+            yield put({
+                type: CREATE_FUNDING_SOURCE_SERVICE_MODIFIER,
+                payload: {body}
+            })
+        }
+        console.log(body,'booody')
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
 
     } catch (error) {
@@ -176,7 +180,7 @@ function* editFundingSourceServices(action) {
 
 function* createFundingSourceServicesModifier({payload}) {
     try {
-
+        console.log(payload,'payloadpayloadpayloadpayload')
         const res = yield call(authService.createFoundingSourceServiceModifierService, payload.body);
     } catch (error) {
         console.log(error, 'res mod')

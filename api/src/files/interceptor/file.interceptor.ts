@@ -12,6 +12,7 @@ export class FileSanitizer implements ISanitize {
       id: file.id,
       type: file.type,
       mimetype: file.mimetype,
+      size: file.size,
       url: file.url,
       resource: file.resource,
     };

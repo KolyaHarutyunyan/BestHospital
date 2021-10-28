@@ -20,6 +20,10 @@ export const AddAuthorization = ({handleClose, info}) => {
     const dispatch = useDispatch()
     // const fSelect = useSelector(state => state?.fundingSource?.fSelect?.funders)
     let enrolments = useSelector(state => state?.client?.clientEnrollment).map(item=> item.funderId )
+
+    console.log(enrolments,'dfgdfgdfgdfgdfg')
+
+
     const classes = createClientStyle()
     const [fullAddress, setFullAddress] = useState(info?.location ? info?.location : null )
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({

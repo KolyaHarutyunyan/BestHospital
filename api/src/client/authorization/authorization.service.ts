@@ -40,7 +40,7 @@ export class AuthorizationService {
       let authorization = new this.model({
         authId: dto.authId,
         clientId: client._id,
-        funderId: enrollmentFunder.id,
+        funderId: funderId,
         startDate: dto.startDate,
         endDate: dto.endDate,
         status: dto.status,

@@ -12,4 +12,6 @@ export class FileDTO {
     url: string;
     @ApiProperty()
     mimetype: string;
+    @ApiProperty()
+    size: number;
 }

@@ -84,16 +84,30 @@ export class AppointmentService {
         );
       }
       else if (dto.repeatCount && !dto.repeatConsecutive) {
-        console.log('!dto.repeatCount && dto.repeatConsecutive');
+        console.log('dto.repeatCount && !dto.repeatConsecutive');
+
+        const day = 24 * 60 * 60 * 1000 * dto.repeatCount; // hours*minutes*seconds*milliseconds
+        const startDate: any = new Date(dto.startDate);
+        const endDateDate: any = new Date(dto.endDate);
+
+        const diffDays = Math.floor(Math.abs((startDate - endDateDate) / day));
         cron.schedule(`0 0 */${dto.repeatCount} * *`, () => {
-          console.log('running a task every minute');
+          console.log('running a task every interval day');
         });
+
+        return diffDays;
       }
       else if (!dto.repeatCount && dto.repeatConsecutive) {
-        console.log('dto.repeatCount && !dto.repeatConsecutive');
+        console.log('!dto.repeatCount && dto.repeatConsecutive');
+
+        const startDate: any = new Date(dto.startDate);
+        const endDateDate: any = new Date(dto.endDate);
+
+        const count = this.getBusinessDatesCount(startDate, endDateDate)
         cron.schedule('0 0 * * 1-5', () => {
           console.log('running a task every minute');
         });
+        return count;
       }
       //something
     }
@@ -109,10 +123,34 @@ export class AppointmentService {
       }
       else if (!dto.repeatCountWeek && dto.repeatCheckWeek) {
         console.log('!dto.repeatCountWeek && dto.repeatCheckWeek');
+        const count = [];
         const week = dto.repeatCheckWeek.toString();
-        cron.schedule(`0 0 * * ${week}`, () => {
+
+        const startDate: any = new Date(dto.startDate);
+        const endDateDate: any = new Date(dto.endDate);
+
+        var dayCount = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 }; //0 is sunday and 6 is saturday
+        for (var d = startDate; d <= endDateDate; d.setDate(d.getDate() + 1)) {
+          dayCount[d.getDay()]++;
+        }
+
+        dto.repeatCheckWeek.map(days => {
+          const day = Number(days);
+          const obj = {};
+          obj[day] = dayCount[days]
+          count.push(obj);
+        })
+        cron.schedule(`0 0 * * */${week}`, () => {
           console.log('running a task every checked day');
         });
+        return count
+      }
+      else if (dto.repeatCountWeek && dto.repeatCheckWeek) {
+        console.log('dto.repeatCountWeek && dto.repeatCheckWeek');
+        // const week = dto.repeatCheckWeek.toString();
+        // cron.schedule(`0 0 * * ${week}`, () => {
+        //   console.log('running a task every checked day');
+        // });
       }
     }
     else {
@@ -126,13 +164,36 @@ export class AppointmentService {
       }
       else if (dto.repeatDayMonth && !dto.repeatMonth) {
         console.log('dto.repeatDayMonth && !dto.repeatMonth')
-        cron.schedule(`0 0 ${dto.repeatDayMonth} * *`, () => {
+        const startDate: any = new Date(dto.startDate);
+        const endDateDate: any = new Date(dto.endDate);
+        let months;
+        months = (endDateDate.getFullYear() - startDate.getFullYear()) * 12;
+        months -= startDate.getMonth();
+        months += endDateDate.getMonth();
+        cron.schedule(`0 0 */${dto.repeatDayMonth} * *`, () => {
           console.log('running a task every month by checked day');
         });
+        return { occurrency: Math.floor(months / dto.repeatDayMonth) }
+
       }
       else if (!dto.repeatDayMonth && dto.repeatMonth) {
         console.log('!dto.repeatDayMonth && dto.repeatMonth');
-     
+        const startDate: any = new Date(dto.startDate);
+        const endDateDate: any = new Date(dto.endDate);
+        let months;
+        months = (endDateDate.getFullYear() - startDate.getFullYear()) * 12;
+        months -= startDate.getMonth();
+        months += endDateDate.getMonth();
+        cron.schedule(`0 0 * */${dto.repeatMonth} *`, () => {
+          console.log('running a task every checked month');
+        });
+        return { occurrency: Math.floor(months / dto.repeatMonth) }
+      }
+      else if (dto.repeatDayMonth && dto.repeatMonth) {
+        console.log('dto.repeatDayMonth && dto.repeatMonth');
+        cron.schedule(`0 0 */${dto.repeatDayMonth} */${dto.repeatMonth} *`, () => {
+          console.log('running a task every month by checked day');
+        });
       }
     }
   }
@@ -150,5 +211,16 @@ export class AppointmentService {
 
   remove(id: number) {
     return `This action removes a #${id} appointment`;
+  }
+  // calculate working days between two dates
+  getBusinessDatesCount(startDate, endDate) {
+    let count = 0;
+    const curDate = new Date(startDate.getTime());
+    while (curDate <= endDate) {
+      const dayOfWeek = curDate.getDay();
+      if (dayOfWeek !== 0 && dayOfWeek !== 6) count++;
+      curDate.setDate(curDate.getDate() + 1);
+    }
+    return count;
   }
 }

@@ -23,9 +23,6 @@ export const AddEnrollment = ({handleClose, info}) => {
     const params = useParams()
     const dispatch = useDispatch()
 
-    useEffect(() => {
-        dispatch(fundingSourceActions.getFundingSource())
-    }, []);
     let fSelect = useSelector(state => state.fundingSource.fSelect.funders)
 
 
