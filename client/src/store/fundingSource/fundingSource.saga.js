@@ -30,6 +30,7 @@ import {
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
 import {httpRequestsOnSuccessActions} from "../http_requests_on_success";
+import {LOG_IN} from "../auth";
 
 
 function* createFundingSource(action) {
@@ -129,15 +130,17 @@ function* createFundingSourceServicesById(action) {
             type: CREATE_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
             payload: res.data,
         });
-
+       console.log(res,'ressss')
         const body = {
             modifiers: action.payload.modifier,
             serviceId: res.data._id,
         }
-        yield put({
-            type: CREATE_FUNDING_SOURCE_SERVICE_MODIFIER,
-            payload: {body}
-        })
+        if(action.payload.modifier.length) {
+            yield put({
+                type: CREATE_FUNDING_SOURCE_SERVICE_MODIFIER,
+                payload: {body}
+            })
+        }
         console.log(body,'booody')
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
 
@@ -177,7 +180,7 @@ function* editFundingSourceServices(action) {
 
 function* createFundingSourceServicesModifier({payload}) {
     try {
-
+        console.log(payload,'payloadpayloadpayloadpayload')
         const res = yield call(authService.createFoundingSourceServiceModifierService, payload.body);
     } catch (error) {
         console.log(error, 'res mod')
