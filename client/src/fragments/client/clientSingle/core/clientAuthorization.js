@@ -11,7 +11,7 @@ import {AuthHeader} from "@eachbase/components/headers/auth/authHeader";
 import {AddAuthorizationService} from "../../clientModals/addAuthorizationService";
 
 
-export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) => {
+export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) => {
     const classes = serviceSingleStyles()
     const dispatch = useDispatch()
     const [delEdit, setDelEdit] = useState(null)
@@ -20,7 +20,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
     const [toggleModal2, setToggleModal2] = useState(false)
     const [toggleModal3, setToggleModal3] = useState(false)
 
-    const [createEditFile,setCreateEditFile] = useState(false)
+    const [createEditFile, setCreateEditFile] = useState(false)
 
     const [authIndex, setAuthIndex] = useState(0)
     const [serviceIndex, setServiceIndex] = useState(null)
@@ -37,13 +37,13 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
     const successDelServ = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION_SERV'
 
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(uploadActions.getUpload(params.id))
-    },[])
+    }, [])
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(clientActions.getClientsAuthorizationsServ(info[authIndex].id))
-    },[authIndex])
+    }, [authIndex])
 
     useEffect(() => {
         if (success) {
@@ -56,7 +56,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
     useEffect(() => {
 
         if (successDelServ) {
-             setToggleModal3(!toggleModal3)
+            setToggleModal3(!toggleModal3)
             dispatch(httpRequestsOnSuccessActions.removeSuccess('DELETE_CLIENT_AUTHORIZATION_SERV'))
             dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_AUTHORIZATION_SERV'))
         }
@@ -89,7 +89,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
     }
 
     let deleteAuthorizationServ = () => {
-        dispatch(clientActions.deleteClientsAuthorizationServ(services[serviceIndex].id, info[authIndex].id ))
+        dispatch(clientActions.deleteClientsAuthorizationServ(services[serviceIndex].id, info[authIndex].id))
     }
 
     let clientAuthorizationServiceItem = (item, index) => {
@@ -99,14 +99,14 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
                 setAuthActive(true)
             }}>
                 <TableCell><p className={classes.tableName}>{item?.serviceId?.name}</p></TableCell>
-                <TableCell>  {item?.modifiers && item?.modifiers.length>0 && item?.modifiers[0]}  </TableCell>
+                <TableCell>  {item?.modifiers && item?.modifiers.length > 0 && item?.modifiers[0]}  </TableCell>
                 <TableCell>  {item?.total}  </TableCell>
                 <TableCell>
                     <>
                         <img src={Images.edit} alt="edit" className={classes.iconStyle}
                              onClick={(e) => {
                                  e.stopPropagation()
-                                  setDelEdit2(true)
+                                 setDelEdit2(true)
                                  setServiceIndex(index)
                                  setToggleModal3(!toggleModal3)
 
@@ -116,7 +116,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
                                  e.stopPropagation()
                                  setDelEdit2(false)
                                  setServiceIndex(index)
-                                  setToggleModal3(!toggleModal3)
+                                 setToggleModal3(!toggleModal3)
                              }}/>
                     </>
                 </TableCell>
@@ -134,7 +134,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
                                       handleClose={() => setToggleModal(!toggleModal)}/>
                     : <DeleteElement
                         loader={httpOnLoad.length > 0}
-                         info={`Delete ${info[authIndex].authId}`}
+                        info={`Delete ${info[authIndex].authId}`}
                         handleClose={() => setToggleModal(!toggleModal)}
                         handleDel={deleteAuthorization}
                     />
@@ -144,17 +144,21 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
                 handleOpenClose={() => setToggleModal2(!toggleModal2)}
                 openDefault={toggleModal2}
                 content={
-                <AddAuthorizationService   authId={info[authIndex]?.id} handleClose={() => setToggleModal2(!toggleModal2)}  fundingId={info[authIndex].funderId?._id} />
+                    <AddAuthorizationService authId={info[authIndex]?.id}
+                                             handleClose={() => setToggleModal2(!toggleModal2)}
+                                             fundingId={info[authIndex].funderId?._id}/>
                 }
             />
             <SimpleModal
                 handleOpenClose={() => setToggleModal3(!toggleModal3)}
                 openDefault={toggleModal3}
-                content={ delEdit2 ?
-                    <AddAuthorizationService  info={services  && services[serviceIndex]} authId={info[authIndex].id} handleClose={() => setToggleModal3(!toggleModal3)} fundingId={info[authIndex].funderId?._id} />
+                content={delEdit2 ?
+                    <AddAuthorizationService info={services && services[serviceIndex]} authId={info[authIndex].id}
+                                             handleClose={() => setToggleModal3(!toggleModal3)}
+                                             fundingId={info[authIndex].funderId?._id}/>
                     : <DeleteElement
                         loader={httpOnLoad.length > 0}
-                         info={`Delete ${services && services[serviceIndex]?.serviceId?.name}`}
+                        info={`Delete ${services && services[serviceIndex]?.serviceId?.name}`}
                         handleClose={() => setToggleModal3(!toggleModal3)}
                         handleDel={deleteAuthorizationServ}
                     />
@@ -163,7 +167,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
             <SimpleModal
                 handleOpenClose={() => setCreateEditFile(!createEditFile)}
                 openDefault={createEditFile}
-                content={<AuthorizationFile />}
+                content={<AuthorizationFile/>}
             />
             <Card
                 width='234px'
@@ -179,13 +183,16 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
             />
             <div className={classes.clearBoth}/>
             <div className={classes.notesWrap}>
-                <AuthHeader createEditFile={createEditFile} setCreateEditFile={setCreateEditFile}  setDelEdit={setDelEdit} info={info[authIndex]}  setToggleModal={setToggleModal} toggleModal={toggleModal}/>
+                <AuthHeader createEditFile={createEditFile} setCreateEditFile={setCreateEditFile}
+                            setDelEdit={setDelEdit} info={info[authIndex]} setToggleModal={setToggleModal}
+                            toggleModal={toggleModal}/>
                 <div className={classes.authorizationServices}>
                     <p className={classes.authorizationServicesTitle}>Authorization Services</p>
                     <div className={classes.authorizationServicesRight}>
                         <img src={Images.addHours} alt="" className={classes.iconStyle}
                              onClick={() => setToggleModal2(!toggleModal2)}/>
-                        <p onClick={() => setToggleModal2(!toggleModal2)} className={classes.authorizationServicesText}>Add Authorization Service</p>
+                        <p onClick={() => setToggleModal2(!toggleModal2)}
+                           className={classes.authorizationServicesText}>Add Authorization Service</p>
                     </div>
                 </div>
                 <Notes

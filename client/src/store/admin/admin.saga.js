@@ -253,13 +253,16 @@ function* editEmployment(action) {
 }
 
 function* getPayCode(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.getPayCodeService, action.payload.id)
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put({
             type: GET_PAY_CODE_SUCCESS,
             payload: res.data
         });
     } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put({
             type: GET_PAY_CODE_SUCCESS,
             payload: []
@@ -270,6 +273,7 @@ function* getPayCode(action) {
 
 function* createPayCode(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    yield put(httpRequestsOnErrorsActions.appendError(action.type));
     try {
         const res = yield call(authService.createPayCodeService, action.payload.body)
         yield put({

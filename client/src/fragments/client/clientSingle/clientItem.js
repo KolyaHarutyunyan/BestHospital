@@ -54,6 +54,7 @@ export const ClientItem = () => {
         dispatch(fundingSourceActions.getFundingSourceHistoriesById('Client'))
         dispatch(noteActions.getGlobalNotes(params.id, 'Client'))
         dispatch(availabilityScheduleActions.getAvailabilitySchedule(params.id))
+        dispatch(fundingSourceActions.getFundingSource())
     }, []);
 
     useEffect(() => {

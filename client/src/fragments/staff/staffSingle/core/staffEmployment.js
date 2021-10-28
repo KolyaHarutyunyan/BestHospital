@@ -3,10 +3,10 @@ import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
 import {TableCell} from "@material-ui/core";
-import {Card, DeleteElement, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
+import {Card, DeleteElement, Loader, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
 import {EmploymentModal, PaycodeModal} from "./modals";
 import {AuthHeader} from "@eachbase/components/headers/auth/authHeader";
-import {Colors, Images} from "@eachbase/utils";
+import {Colors, FindLoad, Images} from "@eachbase/utils";
 import {adminActions, clientActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 import {serviceSingleStyles} from "@eachbase/fragments/client/clientSingle/core";
 
@@ -87,9 +87,14 @@ export const StaffEmployment = ({ info}) => {
         dispatch(clientActions.deleteClientsAuthorization(info[authIndex].id, params.id))
         // setAuthIndex(0)
     }
+    const loader = FindLoad('GET_PAY_CODE')
 
     let payCodeItem = (item, index) => {
         return (
+            <>
+                {loader.length ?
+                    <Loader/>
+                      :
             <TableBodyComponent key={index} handleOpenInfo={() => {
                 setPaycodeIndex(index)
                 setToggleModal3(!toggleModal3)
@@ -102,7 +107,9 @@ export const StaffEmployment = ({ info}) => {
                 <TableCell>{moment(item.startDate).format('DD MM YYYY')} </TableCell>
                 <TableCell>{moment(item.endDate).format('DD MM YYYY')} </TableCell>
                 <TableCell>{Number(item.active)} </TableCell>
-            </TableBodyComponent>
+            </TableBodyComponent>}
+
+                </>
         )
     }
 

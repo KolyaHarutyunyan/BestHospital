@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {clientsStyle} from './styles'
 import {clientActions} from "@eachbase/store/client";
 import {httpRequestsOnSuccessActions} from "@eachbase/store";
+import {FindLoad} from "../../utils";
 
 
 export const Client = ({}) => {
@@ -57,9 +58,10 @@ export const Client = ({}) => {
     useEffect(() => {
         if (success) {
             handleOpenClose()
-            dispatch(httpRequestsOnSuccessActions.removeSuccess('DELETE_CLIENT'))
         }
     }, [success])
+
+    const loader = FindLoad('DELETE_CLIENT')
 
     return (
         <>
@@ -78,11 +80,13 @@ export const Client = ({}) => {
                         openCloseInfo={open}
                         body={deleteClient ?
                             <DeleteElement
+                                loader={!!loader.length}
                                 handleDel={removeClient}
                                 className={classes}
                                 text={'Delete Client'}
                                 info={deleteClient.firstName}
-                                handleClose={handleOpenClose}/>
+                                handleClose={handleOpenClose}
+                            />
                             : <CreateClient title={'Add Client'} handleClose={handleOpenClose}/>}
                     >
                         <ClientTable status={status}

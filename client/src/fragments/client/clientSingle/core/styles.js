@@ -5,14 +5,14 @@ export const serviceSingleStyles = makeStyles(() => ({
         staffGeneralWrapper: {
             display: 'flex',
         },
-    searchContainer: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        '& button': {
-            marginLeft: 15
-        }
-    },
+        searchContainer: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            '& button': {
+                marginLeft: 15
+            }
+        },
         tabsWrapper: {
             display: 'flex',
             alignItems: 'center',
@@ -102,6 +102,10 @@ export const serviceSingleStyles = makeStyles(() => ({
             width: 60,
             overflow: 'hidden'
         },
+        loadStyle: {
+            display: 'flex',
+            alignItems: 'center',
+        },
         iconStyle: {
             cursor: "pointer"
         },
@@ -116,71 +120,71 @@ export const serviceSingleStyles = makeStyles(() => ({
         clientHistory: {
             marginTop: 50,
         },
-    headerRight :{
-        display:'flex',
-    },
-    inputTextField:{
-           alignItems: 'flex-end',
-        width:'100%',
-        '& .MuiOutlinedInput-notchedOutline':{
-            borderColor:Colors.BackgroundBlue,
+        headerRight: {
+            display: 'flex',
         },
-        '& .MuiOutlinedInput-root':{
-            height:'48px'
+        inputTextField: {
+            alignItems: 'flex-end',
+            width: '100%',
+            '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: Colors.BackgroundBlue,
+            },
+            '& .MuiOutlinedInput-root': {
+                height: '48px'
+            },
+            '& .MuiInputLabel-outlined': {
+                marginTop: '-3px',
+                color: Colors.TextPrimary
+            },
+            '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+                transform: 'translate(14px, -2px) scale(0.75)'
+            },
+            '&:hover .MuiOutlinedInput-notchedOutline': {
+                borderColor: Colors.BackgroundBlue,
+            },
         },
-        '& .MuiInputLabel-outlined':{
-            marginTop:'-3px',
-            color :Colors.TextPrimary
-        },
-        '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
-            transform: 'translate(14px, -2px) scale(0.75)'
-        },
-        '&:hover .MuiOutlinedInput-notchedOutline':{
-            borderColor:Colors.BackgroundBlue,
-        },
-    },
-    radio: {
-        color: '#D263E4',
-        '&:hover': {
-            backgroundColor: 'white'
-        },
-        '&$checked': {
+        radio: {
             color: '#D263E4',
             '&:hover': {
                 backgroundColor: 'white'
             },
+            '&$checked': {
+                color: '#D263E4',
+                '&:hover': {
+                    backgroundColor: 'white'
+                },
+            }
+        },
+        radioInputLabel: {
+            fontSize: 16,
+            color: Colors.TextSecondary,
+        },
+        checked: {
+            color: 'green'
+        },
+        authorizationServices: {
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'space-between',
+            alignItems: "center",
+            padding: '24px 24px 0 '
+        },
+        authorizationServicesRight: {
+            display: 'flex',
+            alignItems: "center"
+        },
+        authorizationServicesTitle: {
+            fontSize: 18,
+            color: Colors.TextPrimary,
+            fontWeight: "bold"
+        },
+        authorizationServicesText: {
+            fontSize: 14,
+            color: Colors.ThemeBlue,
+            fontWeight: "bold",
+            marginLeft: 8,
+            cursor: 'pointer'
         }
-    },
-    radioInputLabel: {
-        fontSize: 16,
-        color: Colors.TextSecondary,
-    },
-    checked: {
-        color :'green'
-    },
-    authorizationServices : {
-            display : 'flex',
-            width : '100%',
-            justifyContent : 'space-between',
-        alignItems : "center",
-         padding : '24px 24px 0 '
-    },
-    authorizationServicesRight: {
-            display :'flex',
-          alignItems : "center"
-    },
-    authorizationServicesTitle : {
-            fontSize : 18,
-        color : Colors.TextPrimary,
-        fontWeight : "bold"
-    },
-    authorizationServicesText : {
-        fontSize : 14,
-        color : Colors.ThemeBlue,
-        fontWeight : "bold",
-        marginLeft : 8,
-        cursor : 'pointer'
-    }
     }))
 ;
 
@@ -188,7 +192,7 @@ export const editButtonStyle = {
     height: 36,
     paddingInline: 24,
 }
-export const inputStyle={
+export const inputStyle = {
     marginRight: 16,
     height: 36,
     width: 164
