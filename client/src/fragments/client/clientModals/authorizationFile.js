@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {createClientStyle} from '../index';
 import {Images} from "@eachbase/utils";
 import {AddButton, AddModalButton, ValidationInput} from "@eachbase/components";
 
 import {useDispatch} from "react-redux";
-import {clientActions, uploadActions} from "@eachbase/store";
+import {uploadActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 
 const credentialBtn = {
@@ -12,6 +12,11 @@ const credentialBtn = {
     width: '100%',
     marginLeft: 16,
     height: 48
+}
+
+const changeChangeFile = {
+    width: '100%',
+    height: 150
 }
 
 export const AuthorizationFile = ({uploadedFiles}) => {
@@ -30,7 +35,7 @@ export const AuthorizationFile = ({uploadedFiles}) => {
 
     const hiddenFileInput = React.useRef(null);
 
-    const handleClick = event => {
+    const handleClick = () => {
         hiddenFileInput.current.click();
     };
     const handleSubmit = () => {
@@ -47,13 +52,13 @@ export const AuthorizationFile = ({uploadedFiles}) => {
 
     const checkFileType = (uploadedFileType)=>{
         if(uploadedFileType === "application/pdf"){
-           return <p>pdf</p>
+           return <img src={Images.pdfIcon} alt="pdf"/>
         }else if (uploadedFileType === "image/jpeg"){
-          return <p>jpeg</p>
+          return <img src={Images.jpegIcon} alt="jpeg"/>
         }else if (uploadedFileType === "image/png"){
-            return <p>png</p>
+            return <img src={Images.pngIcon} alt="png"/>
         }else if (uploadedFileType === "text/csv"){
-            return <p>csv</p>
+            return <img src={Images.csvIcon} alt="csv"/>
         } else {
             alert('error')
         }
@@ -102,7 +107,26 @@ export const AuthorizationFile = ({uploadedFiles}) => {
                         uploadedFiles && uploadedFiles.map((item, index)=>{
                             console.log(item,'item');
                             return (
-                                <p>{checkFileType(item.mimetype)}</p>
+                                <div key={index} className={classes.fileRow}>
+                                    <div className={classes.imageContainer}>
+                                        {checkFileType(item.mimetype)}
+                                        <p className={classes.fileSize}>{item.size}</p>
+                                    </div>
+                                    <div>
+                                        <p>{item.type}</p>
+                                        <ValidationInput
+                                            onChange={()=>{console.log('aaaa')}}
+                                            style={{changeChangeFile}}
+                                            value={item.type}
+                                            variant={"outlined"}
+                                            name={"type"}
+                                            type={"text"}
+                                            placeholder={'File Type*'}
+                                            errorFalse={true}
+                                        />
+                                    </div>
+                                    <img src={Images.download} className={classes.downloadIcon} alt="download"/>
+                                </div>
                             )
                         })
                         :

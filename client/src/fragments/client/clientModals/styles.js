@@ -1,4 +1,4 @@
-import {Colors} from "@eachbase/utils";
+import {Colors, Shadow} from "@eachbase/utils";
 import {makeStyles} from "@material-ui/core/styles";
 
 
@@ -144,6 +144,34 @@ export const createClientStyle = makeStyles(() => ({
         height: 290
     },
     normal: {
-
+        maxHeight: 290,
+        overflowY: 'scroll',
+        msOverflowStyle: 'none',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none'
+        },
+    },
+    fileRow: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    imageContainer: {
+        width: 60,
+        height: 73,
+        borderRadius: 4,
+        boxShadow: Shadow.changeShadow,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    fileSize: {
+        fontSize: 10,
+        color: Colors.TextLightGray
+    },
+    downloadIcon: {
+        width: 32,
+        height: 32,
+        cursor: 'pointer'
     }
 }));

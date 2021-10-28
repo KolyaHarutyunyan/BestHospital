@@ -20,7 +20,8 @@ function* createUpload({payload,type}) {
       "resource": payload.createInfo.resource,
       "type": payload.createInfo.type,
       "url": res.data.url,
-      "mimetype":res.data.mimetype
+      "mimetype":res.data.mimetype,
+      "size": res.data.size
     }
     if(res.data) {
       const created = yield call(authService.createUploadService, info);
@@ -70,7 +71,7 @@ function* delUploads({payload, type }) {
   yield put(httpRequestsOnSuccessActions.removeSuccess(type));
   yield put(httpRequestsOnErrorsActions.removeError(type));
   try {
-    const res = yield call( authService.deleteUploadsService, payload.id, );
+    yield call( authService.deleteUploadsService, payload.id, );
     yield put(httpRequestsOnSuccessActions.appendSuccess(type));
     yield put({
       type: GET_UPLOADS,
