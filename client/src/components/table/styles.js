@@ -30,6 +30,7 @@ export const tableStyle = makeStyles(() => ({
   tableRow: {
     boxShadow: '0px 0px 12px #0052E01A',
     borderRadius:'8px',
+    cursor:'pointer',
     "&:hover": {
       background: "#EAF2FF 0% 0% no-repeat padding-box",
     },

@@ -67,7 +67,7 @@ export const CreateClient = ({handleClose, info}) => {
                     'familyLanguage': inputs.familyLanguage,
                     'gender': inputs.gender,
                     "birthday": inputs.birthday,
-                    "status": 1
+                    "status": 'ACTIVE'
                 }
                 if (!info) {
                     dispatch(clientActions.createClient(data))

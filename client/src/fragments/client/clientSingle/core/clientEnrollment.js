@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import moment from "moment";
-import {Card, DeleteElement, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
+import {Card, DeleteElement, MinLoader, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
 import {serviceSingleStyles} from './styles';
-import {Colors, Images} from "@eachbase/utils";
+import {Colors, FindLoad, Images} from "@eachbase/utils";
 import {Radio, TableCell} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
 import {AddEnrollment} from "../../clientModals";
@@ -12,7 +12,7 @@ import {clientActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions
 export const ClientEnrollment = ({data, info}) => {
     const classes = serviceSingleStyles()
     const [toggleModal, setToggleModal] = useState(false)
-    const [index, setIndex] = useState(null)
+    const [indexItem, setIndex] = useState(null)
     const [delEdit, setDelEdit] = useState(null)
     const dispatch = useDispatch()
     const params = useParams()
@@ -40,12 +40,13 @@ export const ClientEnrollment = ({data, info}) => {
     ];
 
     let deleteEnrollment = () => {
-        dispatch(clientActions.deleteClientEnrollment(info[index].id, params.id))
+        dispatch(clientActions.deleteClientEnrollment(info[indexItem].id, params.id))
         dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_ENROLMENT'))
     }
 
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_ENROLLMENT'
 
+    const loader = FindLoad('EDIT_CLIENT_ENROLLMENT')
     useEffect(() => {
         if (success) {
             setToggleModal(!toggleModal)
@@ -57,8 +58,10 @@ export const ClientEnrollment = ({data, info}) => {
     }, [success])
 
     let editPrimary = i => {
+        setIndex(i)
         dispatch(clientActions.editClientEnrollment({primary: true}, params.id, info[i].funderId._id, info[i].id))
     }
+
 
     let enrollmentsItem = (item, index) => {
         let startDate = moment(item?.startDate).format('DD/MM/YYYY')
@@ -67,10 +70,17 @@ export const ClientEnrollment = ({data, info}) => {
         return (
             <TableBodyComponent key={index} >
                 <TableCell>
-                    <Radio onChange={e => {
-                        e.stopPropagation()
-                        editPrimary(index)
-                    }} checked={item.primary} classes={{root: classes.radio, checked: classes.checked}}/>
+                    {loader.length ?
+                        indexItem === index &&
+                        <div className={classes.loadStyle}>
+                          <MinLoader margin={'0'} color={Colors.BackgroundBlue}/>
+                        </div>
+                        :
+                        <Radio onChange={e => {
+                            e.stopPropagation()
+                            editPrimary(index)
+                        }} checked={item.primary} classes={{root: classes.radio, checked: classes.checked}}/>
+                    }
                 </TableCell>
                 <TableCell>  {item.funderId?.name}  </TableCell>
                 <TableCell><p className={classes.tableID}>{item?.clientId}</p></TableCell>
@@ -104,7 +114,7 @@ export const ClientEnrollment = ({data, info}) => {
             <SimpleModal
                 handleOpenClose={() => setToggleModal(!toggleModal)}
                 openDefault={toggleModal}
-                content={delEdit ? <AddEnrollment info={info[index]} handleClose={() => setToggleModal(!toggleModal)}/>
+                content={delEdit ? <AddEnrollment info={info[indexItem]} handleClose={() => setToggleModal(!toggleModal)}/>
                     : <DeleteElement
                         loader={httpOnLoad.length > 0}
                         info={'Delete Enrollment'}
