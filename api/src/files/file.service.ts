@@ -39,7 +39,7 @@ export class FileService {
 
   saveImage = async (file): Promise<Object> => {
     const url = await this.storage.storeImage(file, 'Polo');
-    return { url: url, mimetype: file.mimetype, size: file.size }
+    return { url: url, mimetype: file.mimetype, size: file.size, name: file.originalname }
   }
 
   create = async (dto: CreateImageDTO): Promise<FileDTO> => {
@@ -48,6 +48,7 @@ export class FileService {
       url: dto.url,
       mimetype: dto.mimetype,
       size: dto.size,
+      name: dto.name,
       resource: dto.resource,
     })
 
@@ -66,6 +67,8 @@ export class FileService {
     this.checkFile(file);
     if (dto.type) file.type = dto.type;
     if (dto.mimetype) file.mimetype = dto.mimetype;
+    if (dto.size) file.size = dto.size;
+    if (dto.name) file.name = dto.name;
     if (dto.url) file.url = dto.url;
     await file.save()
     return this.sanitizer.sanitize(file)

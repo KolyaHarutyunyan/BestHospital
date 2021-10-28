@@ -14,4 +14,6 @@ export class FileDTO {
     mimetype: string;
     @ApiProperty()
     size: number;
+    @ApiProperty()
+    name: string;
 }

@@ -17,6 +17,10 @@ export class CreateImageDTO {
     mimetype: string;
     @ApiProperty()
     @IsNotEmpty()
+    @IsString()
+    name: string;
+    @ApiProperty()
+    @IsNotEmpty()
     @IsNumber()
     size: number;
     @ApiProperty()

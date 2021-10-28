@@ -7,4 +7,5 @@ export interface IFile extends Document {
     mimetype: string;
     size: number;
     url: string;
+    name: string;
 }

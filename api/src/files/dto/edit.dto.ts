@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl } from 'class-validator';
 
 export class EditImageDTO {
     @ApiProperty()
@@ -13,4 +13,12 @@ export class EditImageDTO {
     @IsString()
     @IsNotEmpty()
     mimetype: string;
+    @ApiProperty()
+    @IsNumber()
+    @IsOptional()
+    size: number;
+    @ApiProperty()
+    @IsString()
+    @IsOptional()
+    name: string;
 }
