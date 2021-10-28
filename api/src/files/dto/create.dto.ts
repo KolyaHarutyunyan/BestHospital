@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsMongoId, IsNotEmpty, IsUrl, Max } from 'class-validator';
+import { IsEnum, IsMongoId, IsNotEmpty, IsString, IsUrl, Max } from 'class-validator';
 import { FileStatus } from '../constants';
 
 export class CreateImageDTO {
@@ -9,7 +9,12 @@ export class CreateImageDTO {
     resource: string;
     @ApiProperty()
     @IsNotEmpty()
+    @IsString()
     type: string;
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    mimetype: string;
     @ApiProperty()
     @IsUrl()
     @IsNotEmpty()

@@ -3,12 +3,14 @@ import { StaffDTO } from "../../staff/dto";
 import { ClientDTO } from "../../client/dto";
 import { PayCodeDTO } from "../../employment/paycode/dto";
 
-import { EventStatus } from "../appointment.constants";
+import { AppointmentType, EventStatus } from "../appointment.constants";
 import { AuthorizationServiceDTO } from "../../client/authorizationservice/dto";
 
 export class AppointmentDto {
     @ApiProperty()
     id: string;
+    @ApiProperty({ enum: AppointmentType })
+    type: string;
     @ApiProperty()
     client: ClientDTO;
     @ApiProperty()
@@ -23,6 +25,10 @@ export class AppointmentDto {
     startTime: Date;
     @ApiProperty()
     endTime: Date;
+    @ApiProperty({ type: Boolean })
+    require: boolean;
     @ApiProperty({ enum: EventStatus })
     status: string;
+    @ApiProperty({ required: false })
+    miles?: number;
 }

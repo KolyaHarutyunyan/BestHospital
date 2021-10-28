@@ -1,17 +1,21 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDateString, IsEnum, IsMongoId, IsNotEmpty, IsOptional, IsString } from "class-validator";
-import { EventStatus } from "../appointment.constants";
+import { IsBoolean, IsDateString, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { AppointmentType, EventStatus } from "../appointment.constants";
 
 export class CreateAppointmentDto {
     @ApiProperty()
+    @IsNotEmpty()
+    @IsEnum(AppointmentType)
+    type: string;
+    @ApiProperty()
     @IsMongoId()
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     client: string;
     @ApiProperty()
     @IsMongoId()
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     authorizedService: string;
     @ApiProperty()
     @IsMongoId()
@@ -35,7 +39,15 @@ export class CreateAppointmentDto {
     @IsDateString()
     @IsOptional()
     endTime: Date;
-    @ApiProperty({enum: EventStatus})
+    @ApiProperty({ enum: EventStatus })
     @IsEnum(EventStatus)
     status: string;
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsBoolean()
+    require: boolean;
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsNumber()
+    miles?: number;
 }

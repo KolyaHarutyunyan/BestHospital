@@ -1,21 +1,26 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/util';
 import { AppointmentService } from './appointment.service';
-import { CreateAppointmentDto } from './dto/create-appointment.dto';
-import { UpdateAppointmentDto } from './dto/update-appointment.dto';
+import { CreateAppointmentDto, UpdateAppointmentDto, AppointmentDto, CreateRepeatDto } from './dto';
 
 @Controller('appointment')
 @ApiTags('Appointment Endpoints')
 export class AppointmentController {
-  constructor(private readonly appointmentService: AppointmentService) {}
+  constructor(private readonly appointmentService: AppointmentService) { }
 
   @Post()
   @Public()
+  @ApiOkResponse({ type: AppointmentDto })
   create(@Body() createAppointmentDto: CreateAppointmentDto) {
     return this.appointmentService.create(createAppointmentDto);
   }
-
+  @Post('repeat')
+  @Public()
+  // @ApiOkResponse({ type: AppointmentDto })
+  repeat(@Body() createRepeatDto: CreateRepeatDto) {
+    return this.appointmentService.repeat(createRepeatDto);
+  }
   @Get()
   findAll() {
     return this.appointmentService.findAll();

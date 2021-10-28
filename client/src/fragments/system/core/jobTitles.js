@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {AddButton, NoItemText, SlicedText, ValidationInput} from "@eachbase/components";
 import {useDispatch, useSelector} from "react-redux";
-import {Images} from "@eachbase/utils";
+import {FindLoad, FindSuccess, Images} from "@eachbase/utils";
 import {systemItemStyles} from "./styles";
 import {httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
 
@@ -50,20 +50,17 @@ export const JobTitles = ({globalJobs, removeItem, openModal}) => {
 
     const isDisabled = inputs.name
 
-    const {httpOnLoad} = useSelector((state) => ({
-        httpOnLoad: state.httpOnLoad,
-    }));
-
-    const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_JOB_GLOBAL'
+    const loader = FindLoad('CREATE_JOB_GLOBAL')
+    const success = FindSuccess('CREATE_JOB_GLOBAL')
 
     useEffect(() => {
-        if (loader) {
-            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_JOB_GLOBAL'))
+        if (success) {
             setInputs({
                 name: '',
             })
         }
-    }, [loader])
+    }, [success.length])
+
 
     return (
         <>
@@ -81,7 +78,7 @@ export const JobTitles = ({globalJobs, removeItem, openModal}) => {
                     type={'CREATE_JOB_GLOBAL'}
                     disabled={!isDisabled}
                     styles={credentialBtn}
-                    loader={loader}
+                    loader={!!loader.length}
                     handleClick={handleSubmit} text='Add Job Title'/>
             </div>
             <p className={classes.title}>Job Titles</p>

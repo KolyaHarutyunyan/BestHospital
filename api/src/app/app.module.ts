@@ -22,11 +22,14 @@ import { OvertimeModule } from '../overtime/overtime.module';
 import { TimesheetModule } from '../staff/timesheet/timesheet.module';
 import { FileModule } from '../files/file.module';
 import { AppointmentModule } from '../appointment/appointment.module';
+import { PlaceModule } from '../place/place.module';
+import { MileageModule } from '../mileage/mileage.module';
 
 @Module({
   imports: [AuthNModule, AuthZModule, AddressModule, StaffModule, FundingModule,
     EmploymentModule, ClientModule, DepartmentModule, CommentModule, HistoryModule,
-    JobModule, SCredentialModule, PaycodeModule, PaycodetypeModule, AvailabilityModule, OvertimeModule, TimesheetModule, FileModule, AppointmentModule],
+    JobModule, SCredentialModule, PaycodeModule, PaycodetypeModule, AvailabilityModule,
+    OvertimeModule, TimesheetModule, FileModule, AppointmentModule, PlaceModule, MileageModule],
   controllers: [AppController],
   providers: [AppService, DatabaseConnection],
 })

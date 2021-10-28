@@ -10,4 +10,6 @@ export class FileDTO {
     type: string;
     @ApiProperty()
     url: string;
+    @ApiProperty()
+    mimetype: string;
 }

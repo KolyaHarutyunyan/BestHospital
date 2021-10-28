@@ -1,8 +1,8 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {PayrollSetupStyles} from '../styles';
 import {DeleteElement, Notes, SimpleModal, SlicedText, TableBodyComponent} from "@eachbase/components";
 import {TableCell} from "@material-ui/core";
-import {Images} from "@eachbase/utils";
+import {FindLoad, FindSuccess, Images} from "@eachbase/utils";
 import {OvertimeSettings} from "./overtimeSettings";
 import {useDispatch} from "react-redux";
 import {payrollActions} from "@eachbase/store/payroll";
@@ -53,7 +53,7 @@ export const OvertimeTable = ({globalOvertimeSettings}) => {
 
     const handleDeleteItem = () => {
         dispatch(payrollActions.deleteOvertimeSettingsByIdGlobal(deletedInfo.id));
-        setOpen(false)
+
     }
 
     const notesItem = (item, index) => {
@@ -89,6 +89,15 @@ export const OvertimeTable = ({globalOvertimeSettings}) => {
         )
     }
 
+    const loader = FindLoad('DELETE_OVERTIME_SETTINGS_BY_ID_GLOBAL')
+    const success = FindSuccess('DELETE_OVERTIME_SETTINGS_BY_ID_GLOBAL')
+
+    useEffect(() => {
+        if (success) {
+            setOpen(false)
+        }
+    }, [success.length])
+
     return (
         <>
             <Notes restHeight='360px' defaultStyle={true} data={globalOvertimeSettings} pagination={false}
@@ -104,6 +113,7 @@ export const OvertimeTable = ({globalOvertimeSettings}) => {
                 openDefault={open}
                 handleOpenClose={handleOpenCloseDelete}
                 content={<DeleteElement
+                    loader={!!loader.length}
                     info={deletedInfo.name}
                     text='some information'
                     handleDel={handleDeleteItem}

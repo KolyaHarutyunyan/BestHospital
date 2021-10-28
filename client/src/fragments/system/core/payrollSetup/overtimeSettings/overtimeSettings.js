@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     AddModalButton,
     SelectInputPlaceholder,
@@ -6,7 +6,7 @@ import {
     ValidationInput, CreateChancel,
 } from "@eachbase/components";
 import {PayrollSetupStyles} from '../styles';
-import {ErrorText} from "@eachbase/utils";
+import {ErrorText, FindLoad, FindSuccess} from "@eachbase/utils";
 import {useDispatch} from "react-redux";
 import {payrollActions} from "@eachbase/store/payroll";
 
@@ -48,16 +48,8 @@ export const OvertimeSettings = ({handleOpenClose, editedData, maxWidth, marginR
         if (inputs.name && inputs.type && inputs.threshold && inputs.multiplier) {
             if (editedData) {
                 dispatch(payrollActions.editOvertimeSettingsByIdGlobal(data, editedData?.id));
-                handleOpenClose()
             } else {
                 dispatch(payrollActions.createOvertimeSettingsGlobal(data))
-                setInputs({
-                    name: '',
-                    type: '',
-                    threshold: '',
-                    multiplier: ''
-                })
-
             }
 
         } else {
@@ -70,6 +62,29 @@ export const OvertimeSettings = ({handleOpenClose, editedData, maxWidth, marginR
             )
         }
     }
+
+    const loader = FindLoad('CREATE_OVERTIME_SETTINGS_GLOBAL')
+    const loaderEdit = FindLoad('EDIT_OVERTIME_SETTINGS_BY_ID_GLOBAL')
+    const success = FindSuccess('CREATE_OVERTIME_SETTINGS_GLOBAL')
+    const edit = FindSuccess('EDIT_OVERTIME_SETTINGS_BY_ID_GLOBAL')
+
+
+    useEffect(() => {
+        if (success) {
+            setInputs({
+                name: '',
+                type: '',
+                threshold: '',
+                multiplier: ''
+            })
+        }
+    }, [success.length])
+
+    useEffect(() => {
+        if (edit) {
+            handleOpenClose && handleOpenClose()
+        }
+    }, [edit.length])
 
     return (
         <div className={classes.payCodeType} style={{
@@ -135,6 +150,7 @@ export const OvertimeSettings = ({handleOpenClose, editedData, maxWidth, marginR
             />
             {
                 editedData ? <CreateChancel
+                        loader={!!loaderEdit.length}
                         buttonWidth='192px'
                         create='Save'
                         chancel="Cancel"
@@ -142,6 +158,7 @@ export const OvertimeSettings = ({handleOpenClose, editedData, maxWidth, marginR
                         onCreate={handleSubmit}
                     /> :
                     <AddModalButton
+                        loader={!!loader.length}
                         handleClick={handleSubmit} text={'Add Overtime Setting'}
                         styles={overtimeBtn}
                     />

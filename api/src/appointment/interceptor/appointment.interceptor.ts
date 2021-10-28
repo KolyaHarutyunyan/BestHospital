@@ -10,24 +10,27 @@ import { ClientSanitizer } from '../../client/interceptor';
 @Injectable()
 export class AppointmentSanitizer implements ISanitize {
     constructor(
-        private readonly clientSanitizer: ClientSanitizer,
-        private readonly authorizeSanitizer: AuthorizationServiceSanitizer,
-        private readonly staffSanitizer: StaffSanitizer,
-        private readonly payCodeSanitizer: PayCodeSanitizer
+        // private readonly clientSanitizer: ClientSanitizer,
+        // private readonly authorizeSanitizer: AuthorizationServiceSanitizer,
+        // private readonly staffSanitizer: StaffSanitizer,
+        // private readonly payCodeSanitizer: PayCodeSanitizer
 
     ) { }
 
     sanitize(appointment: IAppointment): AppointmentDto {
         const appointmentDTO: AppointmentDto = {
             id: appointment.id,
-            client: this.clientSanitizer.sanitize(appointment.client),
-            authorizedService: this.authorizeSanitizer.sanitize(appointment.authorizedService),
-            staff: this.staffSanitizer.sanitize(appointment.staff),
-            staffPayCode: this.payCodeSanitizer.sanitize(appointment.staffPayCode),
+            type: appointment.type,
+            client: appointment.client,
+            authorizedService: appointment.authorizedService,
+            staff: appointment.staff,
+            staffPayCode: appointment.staffPayCode,
             status: appointment.status,
+            require: appointment.require,
             startTime: appointment.startTime,
             endTime: appointment.endTime,
-            startDate: appointment.startDate
+            startDate: appointment.startDate,
+            miles: appointment.miles
         };
         return appointmentDTO;
     }

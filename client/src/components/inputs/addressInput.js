@@ -6,7 +6,7 @@ import { CountryList, useGlobalStyles } from "@eachbase/utils";
 import { SelectInput, ValidationInput } from "@eachbase/components";
 import { State } from 'country-state-city';
 
-export const AddressInput = ({handleSelectValue, info, disabled, flex, oneInput, errorBoolean, auth }) => {
+export const AddressInput = ({handleSelectValue, info, disabled, flex, oneInput, errorBoolean, auth, all, type, handleGetAll }) => {
     const classes = inputsStyle();
     const globalInputs = useGlobalStyles();
     const [address, setAddress] = useState("");
@@ -14,14 +14,13 @@ export const AddressInput = ({handleSelectValue, info, disabled, flex, oneInput,
     const [fullAddress, setFullAddress] = useState('')
     const [loading, setLoading] = useState(false)
     const [code, setCode] = useState('')
-    const [inputs, setInputs] = useState(info ? {...info.address} : {});
-    const Country = inputs.country ? inputs.country : fullAddress.country ? fullAddress.country : ''
-    const City = inputs.city ? inputs.city : fullAddress.city ? fullAddress.city : ''
-    const States = inputs.state ? inputs.state : fullAddress.state ? fullAddress.state : ''
-    const Zip = inputs.zip ? inputs.zip : fullAddress.zip ? fullAddress.zip : ''
-    const Street = fullAddress ? fullAddress.street : address ? address : ''
-
-    const fullAddressCompleted = `${Street}${City}${States}${Zip}${Country}`
+    const [inputs, setInputs] = useState(info ?    type ==='another' ? {...info} :  {...info.address} : {});
+    const Country = inputs.country ? inputs.country : fullAddress.country ? fullAddress.country : all? all.country :''
+    const City = inputs.city ? inputs.city : fullAddress.city ? fullAddress.city :  all?  all.city : ''
+    const States = inputs.state ? inputs.state : fullAddress.state ? fullAddress.state :  all?  all.state : ''
+    const Zip = inputs.zip ? inputs.zip : fullAddress.zip ? fullAddress.zip :  all?  all.zip : ''
+    const Street = fullAddress ? fullAddress.street : address ? address :  all?  all.street : ''
+    const fullAddressCompleted = `${Street} ${City} ${States} ${Zip} ${Country}`
 
     const handleChangeAddress = (value, name) => {
         handleSelectValue(fullAddressCompleted)
@@ -31,14 +30,16 @@ export const AddressInput = ({handleSelectValue, info, disabled, flex, oneInput,
         }
     };
 
-    const handleSelect = async (value) => {
+    const handleSelect = async (value, ev) => {
         setAddress(value);
         setLoading(true)
         await axios.post(`/address`, {address: value})
             .then(function (response) {
                 handleSelectValue(response.data.formattedAddress);
+                setInputs({...response.data})
                 setFullAddress(response.data);
                 setLoading(false)
+                handleGetAll && handleGetAll(response.data)
             })
             .catch(function (error) {
                 console.log(error);
@@ -49,7 +50,7 @@ export const AddressInput = ({handleSelectValue, info, disabled, flex, oneInput,
         prevState => ({...prevState, [e.target.name]: e.target.value}),
         error === e.target.name && setError(''),
         handleSelectValue(fullAddressCompleted),
-    );
+    )
 
     let authPlaceHolder = info? info.location : 'Service Location'
     const stateList = code ? State.getStatesOfCountry(code) : State.getStatesOfCountry('US')
@@ -114,7 +115,7 @@ export const AddressInput = ({handleSelectValue, info, disabled, flex, oneInput,
         handleChangeCountryCode={setCode}
         loader={loading}
 
-        value={info ? info.address.country : Country}
+        value={Country}
         list={CountryList}
         disabled={disabled}
       />
@@ -129,7 +130,7 @@ export const AddressInput = ({handleSelectValue, info, disabled, flex, oneInput,
                 handleChangeAddress(e, 'other')
             }}
             onChange={handleChange}
-            value={info ? info.address.city : City}
+            value={City}
             loader={loading}
             disabled={disabled}
         />

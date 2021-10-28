@@ -8,7 +8,8 @@ import {
     Client,
     ClientSingle,
     System,
-    Single
+    Single,
+    Schedule
 } from "@eachbase/pages";
 import React from "react";
 
@@ -32,6 +33,7 @@ export const Router = ({}) => {
       <Route path="/management" component={Management} />
       <Route path="/system" component={System} />
 
+      <Route path='/schedule'  exact component={Schedule}/>
       <Redirect to={"/"} />
     </Switch>
   );
