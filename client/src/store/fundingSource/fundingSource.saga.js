@@ -39,7 +39,7 @@ function* createFundingSource(action) {
         const res = yield call(authService.createFundingSourceService, action.payload.body);
         yield put({
             type: GET_FUNDING_SOURCE,
-            payload: {status: 1, start: 0, end: 10},
+            payload: {status: 'ACTIVE', start: 0, end: 10},
         });
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
@@ -117,6 +117,7 @@ function* getFundingSourceServicesById(action) {
 
 
 function* createFundingSourceServicesById(action) {
+    console.log(action,'actions py')
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
@@ -137,7 +138,7 @@ function* createFundingSourceServicesById(action) {
             type: CREATE_FUNDING_SOURCE_SERVICE_MODIFIER,
             payload: {body}
         })
-
+        console.log(body,'booody')
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
 
     } catch (error) {
