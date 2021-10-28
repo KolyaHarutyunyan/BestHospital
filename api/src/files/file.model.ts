@@ -5,6 +5,7 @@ const fileSchema = new Schema({
     resource: { type: Types.ObjectId },
     type: { type: String },
     mimetype: { type: String },
+    size: { type: Number },
     url: { type: String }
 });
 

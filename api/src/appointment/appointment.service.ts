@@ -165,11 +165,13 @@ export class AppointmentService {
       else if (dto.repeatDayMonth && !dto.repeatMonth) {
         console.log('dto.repeatDayMonth && !dto.repeatMonth')
         const startDate: any = new Date(dto.startDate);
-        const endDateDate: any = new Date(dto.endDate);
+        const endDate: any = new Date(dto.endDate);
         let months;
-        months = (endDateDate.getFullYear() - startDate.getFullYear()) * 12;
+        months = (endDate.getFullYear() - startDate.getFullYear()) * 12;
         months -= startDate.getMonth();
-        months += endDateDate.getMonth();
+        months += endDate.getMonth();
+
+        console.log(endDate.getMonth() + 1, 'aaaa', months, 'month');
         cron.schedule(`0 0 */${dto.repeatDayMonth} * *`, () => {
           console.log('running a task every month by checked day');
         });
@@ -179,11 +181,11 @@ export class AppointmentService {
       else if (!dto.repeatDayMonth && dto.repeatMonth) {
         console.log('!dto.repeatDayMonth && dto.repeatMonth');
         const startDate: any = new Date(dto.startDate);
-        const endDateDate: any = new Date(dto.endDate);
+        const endDate: any = new Date(dto.endDate);
         let months;
-        months = (endDateDate.getFullYear() - startDate.getFullYear()) * 12;
+        months = (endDate.getFullYear() - startDate.getFullYear()) * 12;
         months -= startDate.getMonth();
-        months += endDateDate.getMonth();
+        months += endDate.getMonth();
         cron.schedule(`0 0 * */${dto.repeatMonth} *`, () => {
           console.log('running a task every checked month');
         });
