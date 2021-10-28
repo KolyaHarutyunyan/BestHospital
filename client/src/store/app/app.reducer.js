@@ -14,6 +14,7 @@ import {httpRequestsOnLoadReducer} from "../http_requests_on_load";
 import {httpRequestsOnSuccessReducer} from "../http_requests_on_success";
 import {httpRequestsOnErrorsReducer} from "../http_requests_on_errors";
 import {availabilityScheduleReducer} from "../availabilitySchedule";
+import {uploadReducer} from '../upload';
 
 const initialState = {
     isLoading: false,
@@ -41,6 +42,7 @@ export const appReducer = combineReducers({
     note: noteReducer,
     payroll: payrollReducer,
     availabilitySchedule: availabilityScheduleReducer,
+    upload: uploadReducer,
 
     httpOnLoad: httpRequestsOnLoadReducer,
     httpOnSuccess: httpRequestsOnSuccessReducer,

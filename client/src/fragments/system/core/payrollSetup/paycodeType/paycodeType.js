@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     AddModalButton,
     RadioButton,
@@ -7,7 +7,7 @@ import {
     ValidationInput, CreateChancel,
 } from "@eachbase/components";
 import {PayrollSetupStyles} from '../styles';
-import {ErrorText} from "@eachbase/utils";
+import {ErrorText, FindLoad, FindSuccess} from "@eachbase/utils";
 import {useDispatch} from "react-redux";
 import {payrollActions} from "@eachbase/store/payroll";
 
@@ -78,14 +78,8 @@ export const PayCodeType = ({handleOpenClose, editedData, maxWidth, marginRight,
         if (inputs.name && inputs.type && inputs.code) {
             if (editedData) {
                 dispatch(payrollActions.editPayCodeByIdGlobal(data, editedData?.id));
-                handleOpenClose()
             } else {
                 dispatch(payrollActions.createPayCodeGlobal(data))
-                setInputs({
-                    name: '',
-                    code: '',
-                    type: '',
-                })
                 setApplyOvertime('No')
                 setAccruePTO('No')
             }
@@ -107,6 +101,27 @@ export const PayCodeType = ({handleOpenClose, editedData, maxWidth, marginRight,
     const changePTO = (event) => {
         setAccruePTO(event.target.value);
     };
+
+    const loader = FindLoad('CREATE_PAYCODE_GLOBAL')
+    const loaderEdit = FindLoad('EDIT_PAYCODE_BY_ID_GLOBAL')
+    const success = FindSuccess('CREATE_PAYCODE_GLOBAL')
+    const edit = FindSuccess('EDIT_PAYCODE_BY_ID_GLOBAL')
+
+    useEffect(() => {
+        if (success) {
+            setInputs({
+                name: '',
+                code: '',
+                type: '',
+            })
+        }
+    }, [success.length])
+
+    useEffect(() => {
+        if (edit) {
+            handleOpenClose && handleOpenClose()
+        }
+    }, [edit.length])
 
     return (
         <div className={classes.payCodeType} style={{
@@ -176,6 +191,7 @@ export const PayCodeType = ({handleOpenClose, editedData, maxWidth, marginRight,
             </div>
             {
                 editedData ? <CreateChancel
+                        loader={!!loaderEdit.length}
                         buttonWidth='192px'
                         create='Save'
                         chancel="Cancel"
@@ -183,6 +199,7 @@ export const PayCodeType = ({handleOpenClose, editedData, maxWidth, marginRight,
                         onCreate={handleSubmit}
                     /> :
                     <AddModalButton
+                        loader={!!loader.length}
                         handleClick={handleSubmit} text={'Add Paycode Type'}
                         styles={payCodeBtn}
                     />

@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from "react";
 import {modalsStyle} from "@eachbase/components/modal/styles";
-import {ErrorText, useGlobalTextStyles} from "@eachbase/utils";
+import {ErrorText, FindLoad, FindSuccess, useGlobalTextStyles} from "@eachbase/utils";
 import {AddModalButton, CloseButton, CreateChancel} from "@eachbase/components/buttons";
-import {SelectInput, RadioButton, ValidationInput, SelectInputPlaceholder, Toast} from "@eachbase/components";
-import {useDispatch, useSelector} from "react-redux";
-import {adminActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
+import {SelectInput, RadioButton, ValidationInput, SelectInputPlaceholder} from "@eachbase/components";
+import {useDispatch} from "react-redux";
+import {adminActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 import moment from "moment";
 
@@ -79,7 +79,6 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
             case 'addCredential':
                 if(inputs.type){
                     dispatch(adminActions.createCredential(data))
-                    handleClose()
                 }else {
                     setError(
                         !inputs.type ? 'type' : 'Input is not filled'
@@ -88,16 +87,20 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
                 break;
             case 'editCredential':
                 dispatch(adminActions.editCredentialById(editData, globalCredentialInformation?.id, params.id))
-                handleClose()
                 break;
             case 'credentialPreview':
                 setMType('editCredential')
                 break;
             default:
-                handleClose()
+
         }
 
     }
+
+    const loader = FindLoad('CREATE_CREDENTIAL')
+    const loaderEdit = FindLoad('EDIT_CREDENTIAL_BY_ID')
+    const success = FindSuccess('CREATE_CREDENTIAL')
+    const edit = FindSuccess('EDIT_CREDENTIAL_BY_ID')
 
     const handleChange = e => {
         setInputs(
@@ -109,6 +112,18 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
             ));
         error === e.target.name && setError('')
     }
+
+    useEffect(() => {
+        if (success) {
+            handleClose()
+        }
+    }, [success.length])
+
+    useEffect(() => {
+        if (edit) {
+            handleClose() && handleClose()
+        }
+    }, [edit.length])
 
     return (
         <div className={classes.inactiveModalBody}>
@@ -164,8 +179,13 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
             </div>
             {
                 mType === 'credentialPreview' ?
-                    <AddModalButton text='Edit' handleClick={handleSubmit}/> :
+                    <AddModalButton
+                        loader={!!loader.length}
+                        text='Edit'
+                        handleClick={handleSubmit}
+                    /> :
                     <CreateChancel
+                        loader={!!loaderEdit.length || !!loader.length}
                         buttonWidth='192px'
                         create={mType === 'addCredential' ? 'Add' : 'Save'}
                         chancel="Cancel"

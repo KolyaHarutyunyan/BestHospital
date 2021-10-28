@@ -15,7 +15,7 @@ import {
     StaffItemHeader,
     StaffAvailability, StaffTimesheet
 } from "./core";
-import {Images} from "@eachbase/utils";
+import {FindLoad, FindSuccess, Images} from "@eachbase/utils";
 import {
     SimpleTabs,
     Notes,
@@ -31,7 +31,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {staffStyle} from "@eachbase/pages/staff/styles";
 import {noteActions} from "@eachbase/store/notes";
 import moment from "moment";
-import {httpRequestsOnLoadActions} from "@eachbase/store/http_requests_on_load";
 import {availabilityScheduleActions} from "@eachbase/store/availabilitySchedule";
 import {StaffService} from "./core/staffService";
 
@@ -252,27 +251,25 @@ export const StaffItem = () => {
 
     const handleDeleteNote = () => {
         dispatch(noteActions.deleteGlobalNote(noteModalData.id, params.id, 'Staff'))
-        closeNoteModal()
     }
 
-    const loader = httpOnLoad.length && httpOnLoad[0] === 'DELETE_GLOBAL_NOTE'
+    const loader = FindLoad('DELETE_GLOBAL_NOTE');
+    const success = FindSuccess('DELETE_GLOBAL_NOTE');
 
-    useEffect(() => {
-        if (loader) {
-            dispatch(httpRequestsOnLoadActions.removeLoading(httpOnLoad.length && httpOnLoad[0].type))
+    useEffect(()=>{
+        if(success){
             setOpenDelModal(false)
+            closeNoteModal()
         }
-    }, [loader]);
+    },[success.length])
 
     return (
         <>
             <TableWrapperGeneralInfo
-                // status='inactive'
                 parent='Staff'
                 title={staffGeneral?.firstName}
                 parentLink='/staff'
                 buttonsTabAddButton={true}
-                // activeInactiveText={'Inactive'}
                 openCloseInfo={open}
                 handleOpenClose={handleOpenClose}
                 body={
@@ -305,8 +302,6 @@ export const StaffItem = () => {
                                      openCloseCredModal={openCloseCredModal}
                                      openCredModal={openCredModal}
                                      activeTab={activeTab}
-
-
                                      status={staffGeneral?.status}
                                      type= 'GET_ADMIN_BY_ID_SUCCESS'
                                      setGetStatus={setGetStatus}
@@ -319,7 +314,7 @@ export const StaffItem = () => {
                 <SimpleModal
                     openDefault={openDelModal}
                     handleOpenClose={handleOpenCloseDel}
-                    content={<DeleteElement loader={loader} text='some information' info={noteModalData?.deletedName}
+                    content={<DeleteElement loader={!!loader.length} text='some information' info={noteModalData?.deletedName}
                                             handleDel={handleDeleteNote} handleClose={handleOpenCloseDel}/>}
                 />
             </TableWrapperGeneralInfo>

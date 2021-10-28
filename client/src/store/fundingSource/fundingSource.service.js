@@ -43,7 +43,7 @@ export const authService = {
 
     },
 
-    editActiveOrInactiveService: (id, path, status , body) => axios.patch(`/${path}/${id}/${status}`, body),
+    // editActiveOrInactiveService: (id, path, status , body) => axios.patch(`/${path}/${id}/${status}`, body),
 
     setStatusService: (id, path, status , body) => axios.patch(`/${path}/${id}/setStatus?status=${status}`, body),
 

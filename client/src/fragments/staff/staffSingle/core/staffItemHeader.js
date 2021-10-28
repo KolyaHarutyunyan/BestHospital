@@ -36,7 +36,11 @@ export const StaffItemHeader = ({
                                     openCloseCredModal,
                                     openCredModal,
                                     activeTab,
-                                    status,handleOpen, setGetStatus ,setPrevStatus ,getStatus, type
+                                    status,handleOpen,
+                                    setGetStatus
+                                    ,setPrevStatus,
+                                    getStatus,
+                                    type
                                 }) => {
     const [inputs, setInputs] = useState({active: 'Active'});
 
@@ -56,9 +60,6 @@ export const StaffItemHeader = ({
     useEffect(()=>{
         setInputs(status)
     },[])
-
-
-
 
 
     useEffect(() => {
@@ -168,7 +169,6 @@ export const StaffItemHeader = ({
                                                                     value={searchDate}
                                                                     type={"date"}
                                                                     name='searchDate'
-                                                                    // typeError={error === 'birthday' && ErrorText.field}
                                                                 />
                                                                 <AddButton styles={{width: 450}} text='Search' handleClick={handleSubmit}/>
                                                             </div>
@@ -185,7 +185,8 @@ export const StaffItemHeader = ({
                         : activeTab === 2 ?
                             <TimesheetModal handleClose={handleOpenClose} allPaycodes={allPaycodes}  />
                             : activeTab === 3 ?
-                                <CredentialModal globalCredentialInformation={globalCredentialInformation}
+                                <CredentialModal
+                                    globalCredentialInformation={globalCredentialInformation}
                                                  globalCredentials={globalCredentials} credModalType={credModalType}
                                                  handleClose={() => openCloseCredModal()}/>
                                 : activeTab === 1 ? <EmploymentModal handleClose={handleOpenClose}/>

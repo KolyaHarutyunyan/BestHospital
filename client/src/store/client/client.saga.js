@@ -71,7 +71,7 @@ function* createClient(action) {
         const res = yield call(authService.createClientService, action);
         yield put({
             type: GET_CLIENTS,
-            payload: {status: 1, start: 0, end: 10},
+            payload: {status: 'ACTIVE', start: 0, end: 10},
         });
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));

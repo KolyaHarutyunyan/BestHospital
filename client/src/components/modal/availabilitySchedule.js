@@ -1,8 +1,8 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {CloseButton, CreateChancel} from "../buttons";
 import {modalsStyle} from './styles'
 import {ValidationInput} from "../inputs";
-import {Images} from "@eachbase/utils";
+import {FindLoad, FindSuccess, Images} from "@eachbase/utils";
 import moment from "moment";
 import {Checkbox} from "@material-ui/core";
 import {useDispatch} from "react-redux";
@@ -77,8 +77,16 @@ export const AvailabilitySchedule = ({availabilityData, onModel, handleClose}) =
 
     const handleSubmit = () => {
         dispatch(availabilityScheduleActions.createAvailabilitySchedule(times, params.id, onModel));
-        handleClose();
     }
+
+    const loader = FindLoad('CREATE_AVAILABILITY_SCHEDULE_GLOBAL')
+    const success = FindSuccess('CREATE_AVAILABILITY_SCHEDULE_GLOBAL')
+
+    useEffect(()=>{
+        if(success){
+            handleClose();
+        }
+    },[success])
 
     return (
 
@@ -163,6 +171,7 @@ export const AvailabilitySchedule = ({availabilityData, onModel, handleClose}) =
             </div>
             <div style={{padding: '20px 10px 0 10px'}}>
                 <CreateChancel
+                    loader={!!loader.length}
                     create={'Save'}
                     chancel={"Cancel"}
                     onCreate={handleSubmit}

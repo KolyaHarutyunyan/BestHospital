@@ -28,7 +28,7 @@ export const ClientTable = ({setOpen, handleClose, setDeleteClient, handleGetPag
 
     return (
         <div className={globalStyle.tableWrapper}>
-            {clientList && clientList.count > 0 ?  <TableContainer component={Paper} style={{height: 'calc(100vh - 250px)'}}>
+            {clientList ?  <TableContainer component={Paper} style={{height: `calc(100vh - ${clientList?.clients?.length? '250px' : '150px'} )`}}>
                 <Table
                     stickyHeader
                     className={globalStyle.table}
@@ -52,13 +52,13 @@ export const ClientTable = ({setOpen, handleClose, setDeleteClient, handleGetPag
 
 
             </TableContainer> : <NoItemText text={'No Clients Yet'}/> }
-            {clientList?.clients &&     <PaginationItem
+            {clientList?.clients?.length ?     <PaginationItem
                 listLength={clientList?.clients?.length}
                 page={page}
                 handleReturn={(number) => changePage(number)}
                 count={clientList?.count}
                 entries={clientList?.clients?.length}
-            />}
+            /> : <NoItemText text={'No Clients Yet'}/> }
         </div>
     );
 }

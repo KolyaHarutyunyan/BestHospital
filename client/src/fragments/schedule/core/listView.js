@@ -1,18 +1,27 @@
-import React from "react";
+import React, {useState} from "react";
 import {Card} from "./card";
 import {Filters} from "./filters";
 import {scheduleStyle} from "./styles";
 import {Images} from "@eachbase/utils";
 import {Items} from "./items";
-import {SelectInput, Switcher} from "@eachbase/components";
+import {HtmlTooltip, SelectInput, SimpleModal, Switcher} from "@eachbase/components";
 import {Link} from "react-router-dom";
-import moment from "moment";
+import {InfoModal} from "./modals";
 
-export const ListView = ({changeScreen, handleOpenClose}) => {
+export const ListView = ({changeScreen, handleOpenClose, openCloseRecur}) => {
     const classes = scheduleStyle()
+    const [date, setDate] = useState(0)
+    const [open, setOpen] = useState(false)
+    const [type, setType] = useState('')
+
+    const handleOpenCloseModal =(modalType) =>{
+        setType(modalType)
+        setOpen(!open)
+    }
+
     let currentDate = new Date();
     let firstday = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay())).toUTCString();
-    let lastday = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 7)).toUTCString();
+    let lastday = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay())).toUTCString();
     let convertedDate = `${currentDate.toLocaleString('default', { month: 'long' })} ${new Date(firstday).getDate()} - ${new Date(lastday).getDate()}`
 
     return (
@@ -20,8 +29,8 @@ export const ListView = ({changeScreen, handleOpenClose}) => {
             <Filters
                 handleOpenClose={handleOpenClose}
                 label={convertedDate}
-                goToNext={() => console.log('a')}
-                goToBack={() => console.log('aaa')}
+                goToNext={() => setDate(date +7)}
+                goToBack={() => setDate(date -7)}
                 handleChangeScreenView={(e) => changeScreen(e)}
             />
 
@@ -29,14 +38,14 @@ export const ListView = ({changeScreen, handleOpenClose}) => {
                 <div className={classes.wrapp}>
                     <div className={classes.cardWrapper}>
                         <p className={classes.cardTitle}>Monday, Sep 13 2021</p>
-                        <Card borderType={'Rendered'}/>
-                        <Card borderType={'Cancelled'}/>
+                        <Card openModal={() => handleOpenCloseModal('Rendered')} borderType={'Rendered'}/>
+                        <Card openModal={() => handleOpenCloseModal('Cancelled')} borderType={'Cancelled'}/>
                     </div>
 
                     <div className={classes.cardWrapper}>
                         <p className={classes.cardTitle}>Monday, Sep 13 2021</p>
-                        <Card borderType={'Pending'}/>
-                        <Card borderType={'Completed'}/>
+                        <Card openModal={() => handleOpenCloseModal('Pending')} borderType={'Pending'}/>
+                        <Card openModal={() => handleOpenCloseModal('Completed')} borderType={'Completed'}/>
                         <Card borderType={'Not Rend...'}/>
                     </div>
 
@@ -52,12 +61,22 @@ export const ListView = ({changeScreen, handleOpenClose}) => {
                     <div className={classes.titleWrapper}>
                         <p>Service Appointment</p>
                         <div>
-                            <button>
-                                <img src={Images.remove} alt="icon"/>
-                            </button>
-                            <button>
-                                <img src={Images.edit} alt="icon"/>
-                            </button>
+                            <HtmlTooltip
+                                title={<p>{'Recur Event'}</p>}
+                                placement="top-end"
+                            >
+                                <button onClick={openCloseRecur}>
+                                    <img src={Images.recurrance} alt="icon"/>
+                                </button>
+                            </HtmlTooltip>
+                            <HtmlTooltip
+                                title={<p>{'Edit'}</p>}
+                                placement="top-end"
+                            >
+                                <button>
+                                    <img src={Images.edit} alt="icon"/>
+                                </button>
+                            </HtmlTooltip>
                         </div>
                     </div>
                     <p className={classes.infoDate}>Sep 13, 2021 <span>09:00 AM - 11:00 AM</span></p>
@@ -98,6 +117,14 @@ export const ListView = ({changeScreen, handleOpenClose}) => {
                     </div>
                 </div>
             </div>
+
+            <SimpleModal
+                handleOpenClose = {handleOpenCloseModal}
+                openDefault={open}
+                content={
+                    <InfoModal type={type}  handleOpenClose = {handleOpenCloseModal}/>
+                }
+            />
         </div>
     )
 }
