@@ -3,6 +3,7 @@ import {availabilityStyles} from "@eachbase/components/availability/styles";
 
 
 export const AvailableHourseBox = ({day, info}) => {
+    console.log(info,'info')
     const classes = availabilityStyles()
     return (
         <div className={classes.availableHoursBox}>
@@ -14,7 +15,8 @@ export const AvailableHourseBox = ({day, info}) => {
                     return (
                         <>
                             {
-                             item && item.available && <p className={classes.availableHoursBoxBodyInfo}>{`${item.from} - ${item.to}`} </p>
+                             item && item.available ? <p key={index} className={classes.availableHoursBoxBodyInfo}>{`${item.from} - ${item.to}`} </p> :
+                                 <p className={classes.availableHoursBoxBodyInfo}>Not Available</p>
                             }
                         </>
                     )

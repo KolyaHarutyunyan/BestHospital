@@ -10,12 +10,10 @@ import {
     SimpleModal,
     AddNotes, DeleteElement
 } from "@eachbase/components";
-import {Images, useGlobalStyles} from "@eachbase/utils";
+import {FindLoad, FindSuccess, Images, useGlobalStyles} from "@eachbase/utils";
 import moment from "moment";
 import {noteActions} from "@eachbase/store/notes";
 import {useParams} from "react-router-dom";
-import {httpRequestsOnSuccessActions} from "@eachbase/store";
-import {httpRequestsOnLoadActions} from "@eachbase/store/http_requests_on_load";
 
 export const Notes = ({
                           restHeight,
@@ -72,31 +70,42 @@ export const Notes = ({
 
     const handleDelete = () => {
         dispatch(noteActions.deleteGlobalNote(deletedData.id, params.id, model))
-        closeModal()
     }
 
-    const {httpOnLoad, httpOnSuccess} = useSelector((state) => ({
-        httpOnSuccess: state.httpOnSuccess,
-        httpOnLoad: state.httpOnLoad,
-    }));
+    // const {httpOnLoad, httpOnSuccess} = useSelector((state) => ({
+    //     httpOnSuccess: state.httpOnSuccess,
+    //     httpOnLoad: state.httpOnLoad,
+    // }));
 
-    const success =
-        httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_GLOBAL_NOTE' ? true :
-            httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_GLOBAL_NOTE' ? true :
-                httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_GLOBAL_NOTE'
+    // const success =
+    //     httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_GLOBAL_NOTE' ? true :
+    //         httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_GLOBAL_NOTE' ? true :
+    //             httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_GLOBAL_NOTE'
 
-    const loader = httpOnLoad.length &&
-    httpOnLoad[0] === 'CREATE_GLOBAL_NOTE' ? true :
-        httpOnLoad[0] === 'EDIT_GLOBAL_NOTE' ? true :
-            httpOnLoad[0] === 'DELETE_GLOBAL_NOTE'
+    // const loader = httpOnLoad.length &&
+    // httpOnLoad[0] === 'CREATE_GLOBAL_NOTE' ? true :
+    //     httpOnLoad[0] === 'EDIT_GLOBAL_NOTE' ? true :
+    //         httpOnLoad[0] === 'DELETE_GLOBAL_NOTE'
 
-    useEffect(() => {
-        if (success) {
-            dispatch(httpRequestsOnSuccessActions.removeSuccess(httpOnSuccess.length && httpOnSuccess[0].type))
-            dispatch(httpRequestsOnLoadActions.removeLoading(httpOnLoad.length && httpOnLoad[0].type))
+    // useEffect(() => {
+    //     if (success) {
+    //         dispatch(httpRequestsOnSuccessActions.removeSuccess(httpOnSuccess.length && httpOnSuccess[0].type))
+    //         dispatch(httpRequestsOnLoadActions.removeLoading(httpOnLoad.length && httpOnLoad[0].type))
+    //         setOpenDelModal(false)
+    //         closeModal()
+    //     }
+    // }, [success]);
+
+
+    const loader = FindLoad('DELETE_GLOBAL_NOTE');
+    const success = FindSuccess('DELETE_GLOBAL_NOTE');
+
+    useEffect(()=>{
+        if(success){
             setOpenDelModal(false)
+            closeModal()
         }
-    }, [success]);
+    },[success])
 
     return (
         <div className={globalStyle.tableWrapper}>
@@ -179,7 +188,7 @@ export const Notes = ({
                         handleOpenClose={handleOpenCloseDel}
                         content={
                             <DeleteElement
-                                loader={loader}
+                                loader={!!loader.length}
                                 text='some information'
                                 info={deletedData?.deletedName}
                                 handleDel={handleDelete}

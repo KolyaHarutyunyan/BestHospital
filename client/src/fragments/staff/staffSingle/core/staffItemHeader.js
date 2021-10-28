@@ -185,7 +185,8 @@ export const StaffItemHeader = ({
                         : activeTab === 2 ?
                             <TimesheetModal handleClose={handleOpenClose} allPaycodes={allPaycodes}  />
                             : activeTab === 3 ?
-                                <CredentialModal globalCredentialInformation={globalCredentialInformation}
+                                <CredentialModal
+                                    globalCredentialInformation={globalCredentialInformation}
                                                  globalCredentials={globalCredentials} credModalType={credModalType}
                                                  handleClose={() => openCloseCredModal()}/>
                                 : activeTab === 1 ? <EmploymentModal handleClose={handleOpenClose}/>

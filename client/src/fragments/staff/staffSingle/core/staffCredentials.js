@@ -1,7 +1,7 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {TableCell} from "@material-ui/core";
 import {DeleteElement, NoItemText, Notes, SimpleModal, TableBodyComponent} from "@eachbase/components";
-import {Images} from "@eachbase/utils";
+import {FindLoad, FindSuccess, Images} from "@eachbase/utils";
 import moment from 'moment';
 import {useDispatch} from "react-redux";
 import {adminActions} from "@eachbase/store";
@@ -23,7 +23,6 @@ export const StaffCredentials = ({credentialData, openModal}) => {
 
     const removeCredential = () => {
         dispatch(adminActions.deleteCredentialById(deletedId, params.id))
-        handleClose()
     }
 
     const convertType = (index) => {
@@ -35,6 +34,16 @@ export const StaffCredentials = ({credentialData, openModal}) => {
             return 'licence'
         }
     }
+
+    const loader = FindLoad('DELETE_CREDENTIAL_BY_ID')
+    const success = FindSuccess('DELETE_CREDENTIAL_BY_ID')
+
+    useEffect(()=>{
+        if (success){
+            handleClose()
+        }
+    },[success])
+
 
     const notesItem = (item, index) => {
         return (
@@ -112,7 +121,7 @@ export const StaffCredentials = ({credentialData, openModal}) => {
             <SimpleModal
                 openDefault={open}
                 handleOpenClose={handleClose}
-                content={<DeleteElement text='Delete Credential' info='info' handleClose={handleClose}
+                content={<DeleteElement loader={!!loader.length} text='Delete Credential' info='info' handleClose={handleClose}
                                         handleDel={removeCredential}/>}
             />
         </div>

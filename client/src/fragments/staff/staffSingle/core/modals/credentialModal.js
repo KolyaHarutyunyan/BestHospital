@@ -2,9 +2,9 @@ import React, {useState, useEffect} from "react";
 import {modalsStyle} from "@eachbase/components/modal/styles";
 import {ErrorText, FindLoad, FindSuccess, useGlobalTextStyles} from "@eachbase/utils";
 import {AddModalButton, CloseButton, CreateChancel} from "@eachbase/components/buttons";
-import {SelectInput, RadioButton, ValidationInput, SelectInputPlaceholder, Toast} from "@eachbase/components";
-import {useDispatch, useSelector} from "react-redux";
-import {adminActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
+import {SelectInput, RadioButton, ValidationInput, SelectInputPlaceholder} from "@eachbase/components";
+import {useDispatch} from "react-redux";
+import {adminActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 import moment from "moment";
 
@@ -179,9 +179,13 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
             </div>
             {
                 mType === 'credentialPreview' ?
-                    <AddModalButton  loader={!!loader.length} text='Edit' handleClick={handleSubmit}/> :
+                    <AddModalButton
+                        loader={!!loader.length}
+                        text='Edit'
+                        handleClick={handleSubmit}
+                    /> :
                     <CreateChancel
-                        loader={!!loaderEdit.length}
+                        loader={!!loaderEdit.length || !!loader.length}
                         buttonWidth='192px'
                         create={mType === 'addCredential' ? 'Add' : 'Save'}
                         chancel="Cancel"

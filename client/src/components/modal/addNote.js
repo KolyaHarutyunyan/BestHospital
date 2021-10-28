@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {AddModalButton, CloseButton, ValidationInput, Textarea} from "@eachbase/components";
-import {ErrorText, useGlobalTextStyles} from "@eachbase/utils";
+import {ErrorText, FindLoad, FindSuccess, useGlobalTextStyles} from "@eachbase/utils";
 import {modalsStyle} from "@eachbase/components/modal/styles";
 import {useParams} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {noteActions} from "@eachbase/store/notes";
-import {httpRequestsOnLoadActions} from "@eachbase/store/http_requests_on_load";
 
 export const AddNotes = ({closeModal, model, noteModalTypeInfo, handleClose}) => {
     const dispatch = useDispatch()
@@ -50,7 +49,6 @@ export const AddNotes = ({closeModal, model, noteModalTypeInfo, handleClose}) =>
         }
         if (inputs.subject && inputs.text) {
             dispatch(noteActions.editGlobalNote(params.id, noteModalTypeInfo.id, data, model))
-            closeModal()
         } else {
             setError(
                 !inputs.subject ? 'subject' :
@@ -60,20 +58,26 @@ export const AddNotes = ({closeModal, model, noteModalTypeInfo, handleClose}) =>
         }
     }
 
-    const {httpOnLoad} = useSelector((state) => ({
-        httpOnLoad: state.httpOnLoad,
-    }));
+    const loader = FindLoad('CREATE_GLOBAL_NOTE'  );
+    const success = FindSuccess('CREATE_GLOBAL_NOTE' );
 
-    const loader =
-        httpOnLoad.length && httpOnLoad[0] === 'CREATE_GLOBAL_NOTE' ? true :
-            httpOnLoad.length && httpOnLoad[0] === 'EDIT_GLOBAL_NOTE'
+    const editLoad = FindLoad(  'EDIT_GLOBAL_NOTE' );
+    const editSuccess = FindSuccess( 'EDIT_GLOBAL_NOTE' );
 
-    useEffect(() => {
-        if (loader) {
-            dispatch(httpRequestsOnLoadActions.removeLoading('CREATE_GLOBAL_NOTE' || 'EDIT_GLOBAL_NOTE'))
+
+    useEffect(()=>{
+        if(success){
             handleClose()
+
         }
-    }, [loader]);
+    },[success.length])
+
+    useEffect(()=>{
+        if(editSuccess){
+            closeModal &&  closeModal()
+        }
+    },[editSuccess.length])
+
 
     return (
         <div className={classes.inactiveModalBody}>
@@ -102,8 +106,9 @@ export const AddNotes = ({closeModal, model, noteModalTypeInfo, handleClose}) =>
             />
 
             {
-                noteModalTypeInfo?.modalType === 'editNote' ? <AddModalButton loader={loader} handleClick={handleEdit} text='Edit'/> :
-                    <AddModalButton loader={loader} handleClick={handleSubmit} text='Add'/>
+                noteModalTypeInfo?.modalType === 'editNote' ?
+                    <AddModalButton loader={!!editLoad.length} handleClick={handleEdit} text='Edit'/> :
+                    <AddModalButton loader={!!loader.length} handleClick={handleSubmit} text='Add'/>
             }
         </div>
     );

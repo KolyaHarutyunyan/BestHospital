@@ -24,7 +24,6 @@ import {
     CREATE_STAFF_SERVICE,
     GET_STAFF_SERVICE_SUCCESS,
     GET_STAFF_SERVICE,
-    IS_CLINICIAN,
     DELETE_STAFF_SERVICE,
     GET_TIMESHEET_SUCCESS,
     GET_TIMESHEET,
@@ -61,7 +60,6 @@ function* getAdmins(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.getAdminsService, action.payload);
-        console.log(res,'reeeesesesefesfdsf')
         yield put({
             type: GET_ADMINS_SUCCESS,
             payload: res.data,
@@ -71,7 +69,6 @@ function* getAdmins(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.removeError(action.type));
-        console.log(err)
     }
 }
 
@@ -80,13 +77,11 @@ function* getAdmins(action) {
 function* getAllAdmins(action) {
     try {
         const res = yield call(authService.getAdminsService, action.payload);
-        console.log(res,'reeeesesesefesfdsf')
         yield put({
             type: GET_ALL_ADMINS_SUCCESS,
             payload: res.data,
         });
     } catch (err) {
-        console.log(err)
     }
 }
 
@@ -103,7 +98,6 @@ function* getAdminById(action) {
         });
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
     } catch (err) {
-        console.log(err)
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
     }
 }
@@ -112,24 +106,24 @@ function* editAdminById(action) {
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
-        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         const res = yield call(authService.editAdminByIdService, action.payload.id, action.payload.body);
         yield put({
             type: EDIT_ADMIN_BY_ID_SUCCESS,
             payload: res.data,
         });
-
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.removeError(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
-        console.log(err)
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
     }
 }
 
 function* createCredential(action) {
+    console.log(action.type,'action.type')
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
     try {
         const res = yield call(authService.createCredentialService, action.payload.body);
         yield put({
@@ -139,14 +133,12 @@ function* createCredential(action) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
-        console.log(err)
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
 }
 
 function* getCredential(action) {
-    console.log(action,'aaaction');
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.getCredentialService, action.payload.credentialId);
@@ -156,8 +148,6 @@ function* getCredential(action) {
             payload: res.data,
         });
     } catch (err) {
-        console.log(err)
-
         if(err.data.message === "Staff Credential with this id was not found"){
             yield put({
                 type: GET_CREDENTIAL_SUCCESS,
@@ -180,7 +170,6 @@ function* editCredentialById(action) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
-        console.log(err)
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
@@ -197,7 +186,6 @@ function* deleteCredentialById(action) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
-        console.log(err)
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
@@ -212,14 +200,13 @@ function* getEmployment(action) {
         });
 
     } catch (err) {
-        console.log(err,)
     }
 }
 
 function* createEmployment(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
-        const res = yield call(authService.createEmploymentService, action.payload.body)
+        yield call(authService.createEmploymentService, action.payload.body)
         yield put({
             type: GET_EMPLOYMENT,
             payload: {id : action.payload.id}
@@ -229,7 +216,6 @@ function* createEmployment(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        console.log(err)
 
     }
 }
@@ -237,7 +223,7 @@ function* createEmployment(action) {
 function* editEmployment(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
-        const res = yield call(authService.editEmploymentService, action.payload.body, action.payload.id)
+        yield call(authService.editEmploymentService, action.payload.body, action.payload.id)
         yield put({
             type: GET_EMPLOYMENT,
             payload: {id : action.payload.staffId}
@@ -247,7 +233,6 @@ function* editEmployment(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        console.log(err)
 
     }
 }
@@ -271,7 +256,7 @@ function* getPayCode(action) {
 function* createPayCode(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
-        const res = yield call(authService.createPayCodeService, action.payload.body)
+        yield call(authService.createPayCodeService, action.payload.body)
         yield put({
             type: GET_PAY_CODE,
             payload: {id : action.payload.id}
@@ -302,7 +287,7 @@ function* getStaffService(action) {
 function* createStaffService(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
-        const res = yield call(authService.createStaffServService, action.payload.id, action.payload.serviceId)
+        yield call(authService.createStaffServService, action.payload.id, action.payload.serviceId)
         yield put({
             type: GET_STAFF_SERVICE,
             payload: {id : action.payload.id}
@@ -312,7 +297,6 @@ function* createStaffService(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        console.log(err)
 
     }
 }
@@ -320,7 +304,7 @@ function* createStaffService(action) {
 function* delteStaffService(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
-        const res = yield call(authService.deleteStaffServService, action.payload.id, action.payload.serviceId)
+        yield call(authService.deleteStaffServService, action.payload.id, action.payload.serviceId)
         yield put({
             type: GET_STAFF_SERVICE,
             payload: {id : action.payload.id}
@@ -330,8 +314,6 @@ function* delteStaffService(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        console.log(err)
-
     }
 }
 
@@ -363,14 +345,13 @@ function* getTimesheet(action) {
             type: GET_TIMESHEET_SUCCESS,
             payload: []
         });
-        console.log(err, ' errr employmeny')
     }
 }
 
 function* createTimesheet(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
-        const res = yield call(authService.createTimesheetService, action.payload.body)
+        yield call(authService.createTimesheetService, action.payload.body)
         yield put({
             type: GET_TIMESHEET,
             payload: {id : action.payload.id}
@@ -378,7 +359,6 @@ function* createTimesheet(action) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
-        console.log(err,'eeerererererfhdskjfvhdfkjghdfkjgdfiugjdfgh')
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
@@ -387,7 +367,7 @@ function* createTimesheet(action) {
 function* editTimesheet(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
-        const res = yield call(authService.createTimesheetService, action.payload.body)
+        yield call(authService.createTimesheetService, action.payload.body)
         yield put({
             type: GET_TIMESHEET,
             payload: {id : action.payload.id}
@@ -395,7 +375,6 @@ function* editTimesheet(action) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
-        console.log(err,'eeerererererfhdskjfvhdfkjghdfkjgdfiugjdfgh')
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
@@ -412,8 +391,7 @@ function* getAllPaycodes(action) {
         });
 
     } catch (err) {
-
-        console.log(err, ' errr employmeny')
+        
     }
 }
 
