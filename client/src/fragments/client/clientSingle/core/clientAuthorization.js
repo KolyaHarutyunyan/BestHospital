@@ -25,8 +25,8 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
     const [authIndex, setAuthIndex] = useState(0)
     const [serviceIndex, setServiceIndex] = useState(null)
     const services = useSelector(state => state.client.clientsAuthorizationsServices)
+    const uploadedFiles = useSelector(state => state.upload.uploadedInfo)
     const params = useParams()
-
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnError: state.httpOnError,
@@ -163,7 +163,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex, }) =
             <SimpleModal
                 handleOpenClose={() => setCreateEditFile(!createEditFile)}
                 openDefault={createEditFile}
-                content={<AuthorizationFile />}
+                content={<AuthorizationFile uploadedFiles={uploadedFiles} />}
             />
             <Card
                 width='234px'

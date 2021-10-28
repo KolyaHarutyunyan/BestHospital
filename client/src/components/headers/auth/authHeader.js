@@ -5,9 +5,6 @@ import moment from "moment";
 
 
 export const AuthHeader = ({setCreateEditFile,createEditFile, info, setToggleModal, toggleModal, setDelEdit, empoloyment}) => {
-
-    console.log(info,'iinfooo')
-
     const classes = authHeaderStyles()
 
     return (

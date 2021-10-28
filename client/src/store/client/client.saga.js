@@ -122,7 +122,6 @@ function* editClient(action) {
 }
 
 function* getClientById(action) {
-    console.log(action,'sagaaaaaaic')
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
@@ -152,7 +151,7 @@ function* getClientContacts(action) {
             payload: res.data,
         });
     } catch (err) {
-        console.log(err, 'contact get errrr')
+        console.log(err)
         // yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
     }
 }
@@ -169,7 +168,7 @@ function* createClientContact(action) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
-        console.log(err, 'error add client')
+        console.log(err)
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
     }
@@ -188,7 +187,7 @@ function* editClientContact(action) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
-        console.log(err, 'error edit client')
+        console.log(err)
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
     }
@@ -206,7 +205,7 @@ function* deleteClientContact(action) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
-        console.log(err, 'error del client')
+        console.log(err)
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
     }
@@ -241,7 +240,7 @@ function* createClientEnrollment(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
-        console.log(err, 'error create client')
+        console.log(err)
     }
 }
 
@@ -258,7 +257,7 @@ function* editClientEnrollment(action) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
-        console.log(err, 'error create client')
+        console.log(err)
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
     }
@@ -294,7 +293,7 @@ function* getClientsAuthorizations(action) {
         yield put({
             type: GET_CLIENT_AUTHORIZATION_ERROR,
         });
-        console.log(err, 'err authhhhhhhh get ')
+        console.log(err)
     }
 }
 
@@ -312,7 +311,7 @@ function* createClientsAuthorizations(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
-        console.log(err, 'error create auth')
+        console.log(err)
     }
 }
 
@@ -330,7 +329,7 @@ function* editClientAuthorizations(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
-        console.log(err, 'error create client')
+        console.log(err)
     }
 }
 
@@ -348,7 +347,7 @@ function* deleteClientAuthorizations(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
-        console.log(err, 'error del enroll')
+        console.log(err)
     }
 }
 
@@ -362,14 +361,13 @@ function* getClientsAuthorizationFile(action) {
             payload: res.data,
         });
     } catch (err) {
-        console.log(err,)
+        console.log(err)
     }
 }
 
 function* createClientsAuthorizationFile(action) {
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
-    console.log(action,'actiiion');
     try {
         const res = yield call(authService.createClientAuthorizationFileService, action);
         yield put({
@@ -381,7 +379,7 @@ function* createClientsAuthorizationFile(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
-        console.log(err, 'error create auth')
+        console.log(err)
     }
 }
 
@@ -399,7 +397,7 @@ function* editClientAuthorizationFile(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
-        console.log(err, 'error create client')
+        console.log(err)
     }
 }
 
@@ -417,7 +415,7 @@ function* deleteClientAuthorizationFile(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
-        console.log(err, 'error del enroll')
+        console.log(err)
     }
 }
 
@@ -449,7 +447,7 @@ function* createClientsAuthorizationsServ(action) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
-        console.log(err, 'error create auth')
+        console.log(err)
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
     }
@@ -458,9 +456,9 @@ function* createClientsAuthorizationsServ(action) {
 function*  getClientsAuthorizationsModCheck(action) {
     try {
         const res = yield call(authService.getClientAuthorizationServCheckModService, action);
-        console.log(res,'get chechhhhhfhfghfghfghfghfghfghfghfghfghfghfghfghfghfgh')
+        console.log(res)
     } catch (err) {
-        console.log(err, 'error create auth')
+        console.log(err)
     }
 }
 
@@ -476,7 +474,7 @@ function* editClientAuthorizationsServ(action) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
-        console.log(err, 'error create client')
+        console.log(err)
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
     }
