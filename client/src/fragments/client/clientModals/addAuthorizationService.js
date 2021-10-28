@@ -90,8 +90,12 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
                 "modifiers": modifiersPost,
             }
 
-            // dispatch(clientActions.getClientsAuthorizationsServModifiersCheck(data, authId, funderId,))
-            dispatch(clientActions.createClientsAuthorizationsServ(data, authId, funderId,))
+            dispatch(clientActions.getClientsAuthorizationsServModifiersCheck(data, authId, funderId,))
+
+
+
+
+            // dispatch(clientActions.createClientsAuthorizationsServ(data, authId, funderId,))
         } else if (inputs.total && info) {
             dispatch(clientActions.editClientsAuthorizationsServ({
                 "total": +inputs.total,

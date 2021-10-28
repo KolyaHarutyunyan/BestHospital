@@ -9,7 +9,6 @@ import {
     Loader,
     NoItemText,
 } from "@eachbase/components";
-import {adminActions, fundingSourceActions, httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
 import {
     FundingSourceSingleGeneral,
     FundingSourceSingleHeader,
@@ -18,13 +17,10 @@ import {
     FundingSourceSingleHistories
 } from "./core";
 import {fundingSourceItemStyle} from "./styles";
-import {noteActions} from "@eachbase/store/notes";
 
 
 export const FundingSourceItem = ({}) => {
-    const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
-    const params = useParams()
     const data = useSelector(state => state.fundingSource.fundingSourceItem)
     const servicesData = useSelector(state => state.fundingSource.fundingSourceServices)
     const historiesData = useSelector(state => state.fundingSource.fundingSourceHistories)
@@ -36,17 +32,6 @@ export const FundingSourceItem = ({}) => {
     const classes = fundingSourceItemStyle()
 
 
-
-    useEffect(() => {
-        dispatch(adminActions.getAdmins())
-        dispatch(fundingSourceActions.getFundingSourceById(params.id))
-        dispatch(fundingSourceActions.getFoundingSourceServiceById(params.id))
-        dispatch(fundingSourceActions.getFundingSourceHistoriesById('Funder'))
-        dispatch(noteActions.getGlobalNotes(params.id, 'Funder'))
-        dispatch(systemActions.getServices())
-        dispatch(systemActions.getCredentialGlobal())
-        dispatch(httpRequestsOnSuccessActions.removeSuccess())
-    }, []);
 
     const handleOpenClose = () => {
         setOpen(!open)
@@ -60,7 +45,7 @@ export const FundingSourceItem = ({}) => {
     ]
 
 
-    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
+    const {httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,

@@ -127,7 +127,7 @@ export const FundingSourceModifiersAdd = ({
                     value={item.name}
                     variant={"outlined"}
                     type={"text"}
-                    label={"Modifier Name"}
+                    label={"Modifier Name*"}
                     name={'name'}
                     styles={{width: 198}}
                 />
@@ -175,7 +175,7 @@ export const FundingSourceModifiersAdd = ({
                     value={inputs.name}
                     variant={"outlined"}
                     type={"text"}
-                    label={"Modifier Name"}
+                    label={"Modifier Name*"}
                     name={'name'}
                     typeError={error === 'name' && ErrorText.field}
                     styles={{width: 198}}

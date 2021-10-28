@@ -14,24 +14,12 @@ export const FundingSourceSingleHeader = ({activeTab, title, status,handleOpen, 
     const dispatch = useDispatch()
     const prevData = useSelector(state => state.fundingSource.fundingSourceItem)
     const classes = fundingSourceSingleStyles()
-    const [inputs, setInputs] = useState(status);
+    const [inputs, setInputs] = useState( '');
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,
     }));
-
-
-    useEffect(()=>{
-        setInputs(getStatus)
-    },[getStatus])
-
-    useEffect(()=>{
-        setInputs(status)
-    },[])
-
-
-
 
     const params = useParams()
 
@@ -52,10 +40,10 @@ export const FundingSourceSingleHeader = ({activeTab, title, status,handleOpen, 
     const successServ = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_FUNDING_SOURCE_SERVICE_BY_ID'
 
     const list = [
-        {name: 'ACTIVE'},
-        {name: 'INACTIVE'},
-        {name: 'HOLD'},
-        {name: 'TERMINATE'},
+        {name: 'ACTIVE', id:'ACTIVE'},
+        {name: 'INACTIVE', id:'INACTIVE'},
+        {name: 'HOLD', id:'HOLD'},
+        {name: 'TERMINATE', id:'TERMINATE'},
     ]
 
     useEffect(() => {
@@ -72,7 +60,7 @@ export const FundingSourceSingleHeader = ({activeTab, title, status,handleOpen, 
        if (e.target.value === 'INACTIVE' || e.target.value === 'HOLD' || e.target.value === 'TERMINATE'){
            handleOpen()
        }if (e.target.value === 'ACTIVE') {
-           dispatch(fundingSourceActions.setStatus(params.id,'funding', e.target.value, type ))
+           dispatch(fundingSourceActions.setStatus(params.id,'funding', e.target.value,'', type ))
        }
 
         setInputs(e.target.value)
@@ -90,7 +78,7 @@ export const FundingSourceSingleHeader = ({activeTab, title, status,handleOpen, 
                     styles={inputStyle}
                     name={"active"}
                     handleSelect={handleChange}
-                    value={inputs}
+                    value={inputs ? inputs : status}
                     list={list}
                     className={classes.inputTextField}
                 />
