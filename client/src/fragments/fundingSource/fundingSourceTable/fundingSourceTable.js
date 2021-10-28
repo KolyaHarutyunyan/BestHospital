@@ -29,8 +29,8 @@ export const FundingSourceTable = ({status, handleGetPage}) => {
         return (
             <div className={globalStyle.tableWrapper}>
                 <Paper className={globalStyle.tableBack}>
-                {fundingSourceList?.funders?.length ?
-                    <TableContainer style={{height: 'calc(100vh - 250px)'}} className={globalStyle.tableContainer} component={Paper}>
+                {fundingSourceList?.funders?
+                    <TableContainer style={{height: `calc(100vh - ${fundingSourceList?.funders?.length ? '250px' : '150px'} )`}} className={globalStyle.tableContainer} component={Paper}>
                         <Table
                             stickyHeader
                             className={globalStyle.table}
@@ -49,13 +49,14 @@ export const FundingSourceTable = ({status, handleGetPage}) => {
                         </Table>
                     </TableContainer> : <NoItemText text={'No Funding source yet'}/>
                 }
-                    {fundingSourceList?.funders &&       <PaginationItem
+                    {fundingSourceList?.funders?.length ?
+                        <PaginationItem
                         listLength={fundingSourceList?.funders?.length}
                         page={page}
                         handleReturn={(number) => changePage(number)}
                         count={fundingSourceList?.count}
                         entries={fundingSourceList?.funders?.length}
-                    />}
+                    /> : <NoItemText text={'No Funding source yet'}/>}
                 </Paper>
             </div>
         );
