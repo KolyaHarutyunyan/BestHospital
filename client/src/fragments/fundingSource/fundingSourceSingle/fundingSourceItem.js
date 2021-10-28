@@ -87,8 +87,6 @@ export const FundingSourceItem = ({}) => {
         <>
             <TableWrapperGeneralInfo
                 title={data?.name}
-                // status={data?.status === 1 ? 'active' : 'inactive'}
-                // activeInactiveText={data?.status !== 1 ? 'active' : 'inactive'}
                 parent='Funding Source'
                 parentLink='/fundingSource'
                 buttonsTabAddButton={true}

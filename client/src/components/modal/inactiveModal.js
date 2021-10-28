@@ -7,15 +7,15 @@ import {ValidationInput, Textarea} from "../inputs";
 import {useDispatch, useSelector} from "react-redux";
 import {fundingSourceActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 
-export const InactiveModal = ({handleOpenClose, info, setGetStatus ,prevStatus , name}) => {
+export const InactiveModal = ({handleOpenClose, info, setGetStatus, prevStatus, name}) => {
     const classes = modalsStyle()
     const globalText = useGlobalTextStyles()
     const params = useParams()
-    const [activeOrInactive, setActiveOrInactive ] = useState(info?.status ===1 ? 'inactivate'  : 'activate')
+    const [activeOrInactive, setActiveOrInactive] = useState(info?.status === 1 ? 'inactivate' : 'activate')
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState({});
     const dispatch = useDispatch()
-    const { httpOnSuccess, httpOnError,httpOnLoad } = useSelector((state) => ({
+    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,
@@ -24,7 +24,7 @@ export const InactiveModal = ({handleOpenClose, info, setGetStatus ,prevStatus ,
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'SET_STATUS'
 
     const inactivateButtonStyle = {
-        backgroundColor: activeOrInactive ==="activate" ? Colors.BackgroundBlue : Colors.ThemeRed,
+        backgroundColor: activeOrInactive === "activate" ? Colors.BackgroundBlue : Colors.ThemeRed,
     }
 
     const handleChange = e => setInputs(
@@ -33,7 +33,7 @@ export const InactiveModal = ({handleOpenClose, info, setGetStatus ,prevStatus ,
     );
 
 
-    const cancel = ()=>{
+    const cancel = () => {
         setGetStatus(prevStatus)
         handleOpenClose()
     }
@@ -44,24 +44,24 @@ export const InactiveModal = ({handleOpenClose, info, setGetStatus ,prevStatus ,
             "date": inputs.date,
             "reason": inputs.reason,
         }
-        if (inputs.date && inputs.reason ) {
-                dispatch(fundingSourceActions.setStatus(params.id, info.path, info.status, data , info.type))
+        if (inputs.date && inputs.reason) {
+            dispatch(fundingSourceActions.setStatus(params.id, info.path, info.status, data, info.type))
         } else {
             setError(
                 !inputs.date ? 'date' :
                     !inputs.reason ? 'reason' :
-                                        'Input is not field'
+                        'Input is not field'
             )
         }
     }
 
-    useEffect(()=>{
-        if (success){
+    useEffect(() => {
+        if (success) {
             handleOpenClose()
             dispatch(httpRequestsOnSuccessActions.removeSuccess('SET_STATUS'))
         }
 
-    },[success])
+    }, [success])
 
     return (
         <div className={classes.inactiveModalBody}>
@@ -72,13 +72,12 @@ export const InactiveModal = ({handleOpenClose, info, setGetStatus ,prevStatus ,
             <p className={classes.inactiveModalInfo}>{`${name} will be notified about the  reason `}</p>
             <ValidationInput
                 variant={"outlined"}
-
                 onChange={handleChange}
-                 value={inputs.date}
+                value={inputs.date}
                 type={"date"}
                 label={"Date*"}
                 name='date'
-                 typeError={error === 'date' && ErrorText.field}
+                typeError={error === 'date' && ErrorText.field}
             />
             <Textarea
                 value={inputs.reason}
@@ -87,14 +86,13 @@ export const InactiveModal = ({handleOpenClose, info, setGetStatus ,prevStatus ,
                 onChange={handleChange}
                 label={"Write  reason here..."}
                 name='reason'
-                 typeError={error === 'reason' && ErrorText.field}
+                typeError={error === 'reason' && ErrorText.field}
             />
             <AddModalButton
                 btnStyles={inactivateButtonStyle}
-                // text={activeOrInactive}
                 text={'Send'}
                 handleClick={handleCreate}
-                loader={ httpOnLoad.length > 0}
+                loader={httpOnLoad.length > 0}
             />
         </div>
     );

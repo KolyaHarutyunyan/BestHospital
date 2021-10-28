@@ -335,21 +335,21 @@ function* delteStaffService(action) {
     }
 }
 
-function* isClinician(action) {
-
-    try {
-        // const res = yield call(authService.isClinicianService, action.payload.id,)
-        console.log('deeeel service')
-        //
-        // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        // yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-    } catch (err) {
-        // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        // yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        // console.log(err, ' errr del paycode')
-
-    }
-}
+// function* isClinician(action) {
+//
+//     try {
+//         // const res = yield call(authService.isClinicianService, action.payload.id,)
+//         console.log('deeeel service')
+//         //
+//         // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+//         // yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+//     } catch (err) {
+//         // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+//         // yield put(httpRequestsOnErrorsActions.appendError(action.type));
+//         // console.log(err, ' errr del paycode')
+//
+//     }
+// }
 
 function* getTimesheet(action) {
     try {
@@ -368,11 +368,9 @@ function* getTimesheet(action) {
 }
 
 function* createTimesheet(action) {
-    console.log(action.payload.body,'bodin')
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.createTimesheetService, action.payload.body)
-        console.log(res,'resi patasxany')
         yield put({
             type: GET_TIMESHEET,
             payload: {id : action.payload.id}
@@ -387,11 +385,9 @@ function* createTimesheet(action) {
 }
 
 function* editTimesheet(action) {
-    console.log(action.payload.body,'bodin')
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.createTimesheetService, action.payload.body)
-        console.log(res,'resi patasxany')
         yield put({
             type: GET_TIMESHEET,
             payload: {id : action.payload.id}
@@ -404,6 +400,8 @@ function* editTimesheet(action) {
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
 }
+
+
 
 function* getAllPaycodes(action) {
     try {
@@ -437,7 +435,7 @@ export const watchAdmin = function* watchAdminSaga() {
     yield takeLatest(GET_STAFF_SERVICE, getStaffService)
     yield takeLatest(CREATE_STAFF_SERVICE, createStaffService)
     yield takeLatest(DELETE_STAFF_SERVICE, delteStaffService)
-    yield takeLatest(IS_CLINICIAN, isClinician)
+    // yield takeLatest(IS_CLINICIAN, isClinician)
     yield takeLatest(GET_TIMESHEET, getTimesheet)
     yield takeLatest(CREATE_TIMESHEET, createTimesheet)
     yield takeLatest(EDIT_TIMESHEET, editTimesheet)

@@ -267,12 +267,10 @@ export const StaffItem = () => {
     return (
         <>
             <TableWrapperGeneralInfo
-                // status='inactive'
                 parent='Staff'
                 title={staffGeneral?.firstName}
                 parentLink='/staff'
                 buttonsTabAddButton={true}
-                // activeInactiveText={'Inactive'}
                 openCloseInfo={open}
                 handleOpenClose={handleOpenClose}
                 body={
@@ -305,8 +303,6 @@ export const StaffItem = () => {
                                      openCloseCredModal={openCloseCredModal}
                                      openCredModal={openCredModal}
                                      activeTab={activeTab}
-
-
                                      status={staffGeneral?.status}
                                      type= 'GET_ADMIN_BY_ID_SUCCESS'
                                      setGetStatus={setGetStatus}

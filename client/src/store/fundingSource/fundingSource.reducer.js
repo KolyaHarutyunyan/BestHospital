@@ -6,8 +6,6 @@ import {
     GET_FUNDING_SOURCE_SERV_SUCCESS,
     GET_FUNDING_SOURCE_SERV_BY_ID_SUCCESS,
     GET_ACTIVE_OR_INACTIVE,
-    GET_FUNDING_SOURCE_NOTES_SUCCESS,
-    CREATE_FUNDING_SOURCE_NOTES_SUCCESS,
     CREATE_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
     GET_FUNDING_SOURCE_SERVICE_MODIFIERS_SUCCESS, GET_FUNDING_SOURCE_SERVICE_MODIFIERS_ERR
 } from "./fundingSource.types";
@@ -76,19 +74,6 @@ export const fundingSourceReducer = (state = initialState, action) => {
                 ...state,
                 servicesItem: action.payload
             }
-
-        // case  GET_FUNDING_SOURCE_NOTES_SUCCESS :
-        //     return {
-        //         ...state,
-        //         fundingSourceNotes: action.payload.reverse()
-        //     }
-        //
-        // case  CREATE_FUNDING_SOURCE_NOTES_SUCCESS:
-        //     return {
-        //         ...state,
-        //         fundingSourceNotes: [action.payload,...state.fundingSourceNotes, ]
-        //     }
-
         case GET_ACTIVE_OR_INACTIVE:
             return {
                 ...state,

@@ -19,12 +19,6 @@ import {
     CREATE_FUNDING_SOURCE_SERVICE_MODIFIER,
     EDIT_FUNDING_SOURCE,
     EDIT_FUNDING_SOURCE_SERVICE,
-    GET_FUNDING_SOURCE_NOTES_SUCCESS,
-    GET_FUNDING_SOURCE_NOTES,
-    CREATE_FUNDING_SOURCE_NOTE,
-    EDIT_FUNDING_SOURCE_NOTE,
-    DELETE_FUNDING_SOURCE_NOTE,
-    CREATE_FUNDING_SOURCE_NOTES_SUCCESS,
     CREATE_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
     GET_FUNDING_SOURCE_SERVICE_MODIFIERS,
     GET_FUNDING_SOURCE_SERVICE_MODIFIERS_SUCCESS,
@@ -114,7 +108,6 @@ function* getFundingSourceById(action) {
 function* getFundingSourceServicesById(action) {
     try {
         const res = yield call(authService.getFoundingSourceServiceByIdService, action.payload);
-        console.log(res,'resssssesesesese')
         yield put({
             type: GET_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
             payload: res.data,
@@ -281,22 +274,22 @@ function* getFundingSourceHistoriesById(action) {
     }
 }
 
-function* editActiveOrInactive(action) {
-    yield put(httpRequestsOnErrorsActions.removeError(action.type));
-    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
-    try {
-        const res = yield call(authService.editActiveOrInactiveService, action.payload.id , action.payload.path, action.payload.status, action.payload.body , );
-        yield put({
-            type: action.payload.type,
-            payload: res.data,
-        });
-        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-    } catch (error) {
-        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
-    }
-}
+// function* editActiveOrInactive(action) {
+//     yield put(httpRequestsOnErrorsActions.removeError(action.type));
+//     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+//     try {
+//         const res = yield call(authService.editActiveOrInactiveService, action.payload.id , action.payload.path, action.payload.status, action.payload.body , );
+//         yield put({
+//             type: action.payload.type,
+//             payload: res.data,
+//         });
+//         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+//         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+//     } catch (error) {
+//         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+//         yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
+//     }
+// }
 
 function* setStatus(action) {
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
