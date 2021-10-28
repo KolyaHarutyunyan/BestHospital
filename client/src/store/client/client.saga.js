@@ -255,8 +255,9 @@ function* editClientEnrollment(action) {
             type: GET_CLIENT_ENROLLMENT,
             payload: {id: action.payload.clientId},
         });
-        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
     } catch (err) {
         console.log(err, 'error create client')
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));

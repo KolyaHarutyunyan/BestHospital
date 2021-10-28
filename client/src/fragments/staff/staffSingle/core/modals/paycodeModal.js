@@ -82,8 +82,7 @@ export const PaycodeModal = ({handleClose, info,employmentId}) => {
                 "endDate":  inputs.endDate ? inputs.endDate : undefined,
                 'name' : inputs.payCodeTypeId
             }
-
-            dispatch(adminActions.createTimesheet(                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    data, employmentId))
+            dispatch(adminActions.createPayCode(data, employmentId))
         }
          else {
             setError(

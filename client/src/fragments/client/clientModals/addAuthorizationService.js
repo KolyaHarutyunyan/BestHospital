@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {ValidationInput, SelectInput, CreateChancel, ModalHeader} from "@eachbase/components";
+import {ValidationInput, SelectInput, CreateChancel, ModalHeader, ErrMessage} from "@eachbase/components";
 import {createClientStyle,} from "./styles";
 import {ErrorText} from "@eachbase/utils";
 import {
@@ -91,23 +91,27 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
             }
 
             // dispatch(clientActions.getClientsAuthorizationsServModifiersCheck(data, authId, funderId,))
-             dispatch(clientActions.createClientsAuthorizationsServ(data, authId, funderId,))
+            dispatch(clientActions.createClientsAuthorizationsServ(data, authId, funderId,))
         } else if (inputs.total && info) {
             dispatch(clientActions.editClientsAuthorizationsServ({
                 "total": +inputs.total,
                 "fundingServiceId": funderId,
                 "authorizationId": authId,
             }, info.id, authId))
+
         } else {
             setError(
-                !inputs.total ? 'total' :
-                    !inputs.modifiers ? 'modifiers' :
-                        'Input is not field'
+                !inputs.modifiers ? 'modifiers' :
+                    !modifiersPost.length ? 'modifiersPost' :
+                        !inputs.total ? 'total' :
+                            'Input is not field'
             )
         }
     }
 
+
     function onModifier(index) {
+        error === 'modifiersPost' && setError('')
         let arr = new Set([...modCheck])
         if (arr.has(index)) {
             arr.delete(index)
@@ -166,6 +170,7 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
                                     }) : <p>N/A</p>}
                             </div>
                         </div>
+                        {/*{error === 'modifiersPost' &&  <ErrMessage text={ErrorText.field}/>}*/}
                         <p className={classes.inputInfo}>Availability</p>
                         <ValidationInput
                             variant={"outlined"}

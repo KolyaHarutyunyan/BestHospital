@@ -195,7 +195,7 @@ export const EmploymentModal = ({handleClose, info}) => {
 
                             <ValidationInput
                                 variant={"outlined"}
-                                disabled={checked ?  true : false}
+                                disabled={checked}
                                 onChange={handleChange}
                                 value={checked ? 'Present' : inputs.endDate}
                                 type={checked ? 'text' :"date"}
