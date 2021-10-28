@@ -5,5 +5,6 @@ export interface IFile extends Document {
     resource: string;
     type: string;
     mimetype: string;
+    size: number;
     url: string;
 }

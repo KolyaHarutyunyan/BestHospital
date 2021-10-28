@@ -39,7 +39,7 @@ export class FileService {
 
   saveImage = async (file): Promise<Object> => {
     const url = await this.storage.storeImage(file, 'Polo');
-    return { url: url, mimetype: file.mimetype }
+    return { url: url, mimetype: file.mimetype, size: file.size }
   }
 
   create = async (dto: CreateImageDTO): Promise<FileDTO> => {
@@ -47,6 +47,7 @@ export class FileService {
       type: dto.type,
       url: dto.url,
       mimetype: dto.mimetype,
+      size: dto.size,
       resource: dto.resource,
     })
 
