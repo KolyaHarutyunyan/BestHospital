@@ -13,16 +13,17 @@ function* createUpload({payload,type}) {
   yield put(httpRequestsOnErrorsActions.removeError(type));
   yield put(httpRequestsOnLoadActions.appendLoading(type));
   yield put(httpRequestsOnSuccessActions.removeSuccess(type));
+
   try {
     const res = yield call( authService.assignUploadService, payload.body );
     const info ={
       "resource": payload.createInfo.resource,
       "type": payload.createInfo.type,
-      "url": res.data,
+      "url": res.data.url,
+      "mimetype":res.data.mimetype
     }
     if(res.data) {
       const created = yield call(authService.createUploadService, info);
-
       yield put({
         type: GET_UPLOADS,
         payload: { resource: payload.createInfo.resource, onModel: payload.createInfo.onModel,}
@@ -33,7 +34,7 @@ function* createUpload({payload,type}) {
     yield put(httpRequestsOnErrorsActions.removeError(type));
   } catch (err) {
     yield put(httpRequestsOnLoadActions.removeLoading(type));
-    yield put(httpRequestsOnErrorsActions.appendError(type,err.data.message));
+    yield put(httpRequestsOnErrorsActions.appendError(type));
   }
 }
 
@@ -47,6 +48,7 @@ function* getUploads({payload, type }) {
   yield put(httpRequestsOnLoadActions.removeLoading(type));
   try {
     const res = yield call( authService.getUploadsService, payload.resource  );
+    console.log(res,'res upload res');
     yield put({
       type: GET_UPLOADS_SUCCESS,
       payload: res.data,
@@ -55,6 +57,7 @@ function* getUploads({payload, type }) {
     yield put({
       type: GET_UPLOADS_ERROR,
     });
+    console.log(err,'error error uploads');
   }
 }
 

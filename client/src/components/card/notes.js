@@ -103,7 +103,7 @@ export const Notes = ({
     useEffect(()=>{
         if(success){
             setOpenDelModal(false)
-            closeModal()
+            closeModal && closeModal()
         }
     },[success])
 

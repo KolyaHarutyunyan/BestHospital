@@ -14,15 +14,13 @@ const credentialBtn = {
     height: 48
 }
 
-export const AuthorizationFile = ({handleFile}) => {
+export const AuthorizationFile = ({uploadedFiles}) => {
 
     const classes = createClientStyle()
 
     const dispatch = useDispatch()
 
     const params = useParams()
-
-    const uploadedFiles = false
 
     const [fileName, setFileName] = useState('')
 
@@ -36,7 +34,7 @@ export const AuthorizationFile = ({handleFile}) => {
         hiddenFileInput.current.click();
     };
     const handleSubmit = () => {
-        alert('done')
+
     }
 
     const handleChangeFile = event => {
@@ -46,6 +44,20 @@ export const AuthorizationFile = ({handleFile}) => {
         }
         dispatch(uploadActions.createUpload(event.target.files[0], createInfo))
     };
+
+    const checkFileType = (uploadedFileType)=>{
+        if(uploadedFileType === "application/pdf"){
+           return <p>pdf</p>
+        }else if (uploadedFileType === "image/jpeg"){
+          return <p>jpeg</p>
+        }else if (uploadedFileType === "image/png"){
+            return <p>png</p>
+        }else if (uploadedFileType === "text/csv"){
+            return <p>csv</p>
+        } else {
+            alert('error')
+        }
+    }
 
     return (
         <div className={classes.authorizationFileWrapper}>
@@ -86,7 +98,14 @@ export const AuthorizationFile = ({handleFile}) => {
             <p className={classes.authorizationFileSubTitle}>uploaded files</p>
             <div className={!uploadedFiles ? classes.centered : classes.normal}>
                 {
-                    uploadedFiles ? <p>coming soon</p> :
+                    uploadedFiles ?
+                        uploadedFiles && uploadedFiles.map((item, index)=>{
+                            console.log(item,'item');
+                            return (
+                                <p>{checkFileType(item.mimetype)}</p>
+                            )
+                        })
+                        :
                         <div className={classes.iconText}>
                             <img src={Images.fileIcon} alt=""/>
                             <p>No File yet</p>
