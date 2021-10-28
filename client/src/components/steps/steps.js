@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-import {Images} from '@eachbase/utils';
+import {FindLoad, Images} from '@eachbase/utils';
 import {stepStyles, useStyles, useColorlibStepIconStyles, ColorlibConnector} from "./styles";
 import {CreateChancel} from "@eachbase/components";
 
@@ -24,6 +24,9 @@ export const Steps = ({ disableSecond,disabledOne, handleClick, stepTitles, hand
     const handleBack = (step) => {
         setActiveStep(step - 1);
     };
+
+    const loader = FindLoad('CREATE_ADMIN')
+    const editLoader = FindLoad('EDIT_ADMIN_BY_ID')
 
     function ColorlibStepIcon(props) {
         const classes = useColorlibStepIconStyles();
@@ -71,6 +74,7 @@ export const Steps = ({ disableSecond,disabledOne, handleClick, stepTitles, hand
                         <React.Fragment>{thirdStep}</React.Fragment>}
                 <div className={stepsStyles.buttonsContainer}>
                     <CreateChancel
+                        loader={!!loader.length || !!editLoader.length}
                         buttonWidth='224px'
                         create={activeStep === stepTitles.length - 1 ? 'Add' : 'Next'}
                         chancel={"Cancel"}

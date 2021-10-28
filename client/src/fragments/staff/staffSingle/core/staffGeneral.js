@@ -5,7 +5,7 @@ import { serviceSingleStyles } from './styles';
 export const StaffGeneral = ({staffGeneral}) =>{
 
     const classes = serviceSingleStyles()
-    console.log(staffGeneral,'staffGeneral');
+
     const generalInfo = [
         {title: 'First Name', value: staffGeneral?.firstName},
         {title: 'Middle Name', value: staffGeneral?.middleName},

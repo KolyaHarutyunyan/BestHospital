@@ -33,7 +33,7 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
 
     const [license, setLicense] = useState(staffGeneral ? staffGeneral.license : {})
 
-    const disabledOne = inputs.firstName && error !== 'Not valid email' && inputs.lastName && inputs.email && inputs.phone
+    const disabledOne = inputs.firstName && error !== 'Not valid email' && errorSec !== 'Not valid email' && inputs.lastName && inputs.email && inputs.phone
 
     const disableSecond = !fullAddress.length
 
@@ -158,6 +158,7 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
         httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_ADMIN' ? true :
             httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_ADMIN_BY_ID'
 
+    console.log( httpOnSuccess.length && httpOnSuccess[0].type,' httpOnSuccess.length && httpOnSuccess[0].type')
     const errorText =
         httpOnError.length && httpOnError[0].type === 'CREATE_ADMIN' ? true :
             httpOnError.length && httpOnError[0].type === 'EDIT_ADMIN_BY_ID'
@@ -269,7 +270,7 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
                 onChange={handleChangeLicense}
                 value={license ? license.driverLicense : ''}
                 type={"text"}
-                label={"Driver License*"}
+                label={"Driver License"}
                 name='driverLicense'
                 typeError={error === 'driverLicense' && ErrorText.field}
             />
@@ -277,7 +278,7 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
                 <SelectInput
                     style={classes.selectMargin}
                     name={"state"}
-                    label={"Issuing State*"}
+                    label={"Issuing State"}
                     handleSelect={handleChangeLicense}
                     value={license ? license.state : ''}
                     list={issuingStateList}
@@ -288,7 +289,7 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
                     onChange={handleChangeLicense}
                     value={license?.expireDate && moment(license?.expireDate).format().substring(0, 10)}
                     type={"date"}
-                    label={"Expiration Date*"}
+                    label={"Expiration Date"}
                     name='expireDate'
                     typeError={error === 'expireDate' && ErrorText.field}
                 />
