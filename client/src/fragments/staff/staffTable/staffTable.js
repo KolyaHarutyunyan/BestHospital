@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Paper, Table, TableBody, TableContainer} from "@material-ui/core";
 import {useGlobalStyles} from "@eachbase/utils";
-import {Loader, PaginationItem} from "@eachbase/components";
+import {Loader, NoItemText, PaginationItem} from "@eachbase/components";
 import {StaffTableBody, StaffTableHead} from "./core";
 import {useDispatch, useSelector} from "react-redux";
 import {adminActions} from "@eachbase/store";
@@ -21,12 +21,13 @@ export const StaffTable = ({status, handleGetPage}) => {
         dispatch(adminActions.getAdmins({status: status, start: start, end: 10}))
         handleGetPage(start)
     };
+
     return (
         <div className={globalStyle.tableWrapper}>
             <Paper className={globalStyle.tableBack}>
                 {
                     httpOnLoad.length ? <Loader/> :
-                        <TableContainer style={{height: 'calc(100vh - 250px)'}} component={Paper}>
+                        <TableContainer style={adminsList?.staff?.length ? {height: 'calc(100vh - 260px)'} : {height: 'calc(100vh - 185px)'}  } component={Paper}>
                             <Table
                                 stickyHeader
                                 className={globalStyle.table}
@@ -48,7 +49,7 @@ export const StaffTable = ({status, handleGetPage}) => {
                         </TableContainer>
                 }
                 {
-                    !httpOnLoad.length &&
+                    adminsList?.staff?.length ?
                     <PaginationItem
                         listLength={adminsList?.staff?.length}
                         page={page}
@@ -56,7 +57,7 @@ export const StaffTable = ({status, handleGetPage}) => {
                         handleReturn={(number) => changePage(number)}
                         count={adminsList?.count}
                         entries={adminsList?.staff?.length}
-                    />
+                    /> : <NoItemText text='No Items Yet'/>
                 }
 
             </Paper>

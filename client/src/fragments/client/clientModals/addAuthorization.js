@@ -13,7 +13,7 @@ import {
 
 
 export const AddAuthorization = ({handleClose, info}) => {
-    console.log(info,'iiinfoooooo')
+
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {...info, funding: info?.funderId?.name, status : String(info.status)} : {});
     const params = useParams()

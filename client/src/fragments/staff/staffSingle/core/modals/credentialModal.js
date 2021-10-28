@@ -77,11 +77,15 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
 
         switch (mType) {
             case 'addCredential':
-                if(inputs.type){
+                if (inputs.type && checkboxValue === 'nonExpiring') {
                     dispatch(adminActions.createCredential(data))
-                }else {
+                } else if (checkboxValue === 'expiring' && inputs.expirationDate) {
+                    dispatch(adminActions.createCredential(data))
+                } else {
                     setError(
-                        !inputs.type ? 'type' : 'Input is not filled'
+                        !inputs.type ? 'type' :
+                            !inputs.expirationDate ? 'expirationDate' :
+                            'Input is not filled'
                     )
                 }
                 break;
@@ -96,6 +100,10 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
         }
 
     }
+
+// else {
+//
+//     }
 
     const loader = FindLoad('CREATE_CREDENTIAL')
     const loaderEdit = FindLoad('EDIT_CREDENTIAL_BY_ID')
@@ -125,6 +133,14 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
         }
     }, [edit.length])
 
+    useEffect(() => {
+        if (globalCredentialInformation?.expirationDate) {
+            setCheckboxValue('expiring')
+        } else {
+            setCheckboxValue('nonExpiring')
+        }
+    }, [globalCredentialInformation])
+
     return (
         <div className={classes.inactiveModalBody}>
             <h1 className={`${globalText.modalTitle}`}>{title(mType)}</h1>
@@ -141,14 +157,14 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
                     value={inputs.type}
                     disabled={true}
                 /> : mType === 'editCredential' ? <SelectInput
-                    style={classes.credentialInputStyle}
-                    name={"type"}
-                    placeholder={"Select Credential*"}
-                    list={globalCredentials}
-                    value={inputs.type}
-                    handleSelect={handleChange}
-                    typeError={error === 'type' && ErrorText.field}
-                /> :
+                        style={classes.credentialInputStyle}
+                        name={"type"}
+                        placeholder={"Select Credential*"}
+                        list={globalCredentials}
+                        value={inputs.type}
+                        handleSelect={handleChange}
+                        typeError={error === 'type' && ErrorText.field}
+                    /> :
                     <SelectInputPlaceholder
                         style={classes.credentialInputStyle}
                         name={"type"}
@@ -173,7 +189,7 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
                         type={"date"}
                         name='expirationDate'
                         onChange={handleChange}
-                        typeError={error === 'birthday' && ErrorText.field}
+                        typeError={error === 'expirationDate' && ErrorText.field}
                     />
                 }
             </div>

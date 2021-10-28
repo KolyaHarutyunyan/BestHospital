@@ -85,6 +85,10 @@ import download from '../assets/images/icons/download.svg';
 import forward from '../assets/images/icons/forward.svg';
 import authEdit from '@eachbase/assets/images/icons/authEdit.svg';
 import recurrance from '@eachbase/assets/images/icons/recurrance.svg';
+import pngIcon from '@eachbase/assets/images/icons/pngIcon.svg';
+import jpegIcon from '@eachbase/assets/images/icons/jpegIcon.svg';
+import pdfIcon from '@eachbase/assets/images/icons/pdfIcon.svg';
+import csvIcon from '@eachbase/assets/images/icons/csvIcon.svg';
 
 export const Images = {
     doctors: doctors,
