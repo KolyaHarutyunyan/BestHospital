@@ -4,11 +4,7 @@ import React from "react";
 import moment from "moment";
 
 
-export const AuthHeader = ({setCreateEditFile,createEditFile, info, setToggleModal, toggleModal, setDelEdit, empoloyment}) => {
-
-
-
-
+export const AuthHeader = ({getId, setCreateEditFile,createEditFile, info, setToggleModal, toggleModal, setDelEdit, empoloyment}) => {
     const classes = authHeaderStyles()
 
     return (
@@ -26,16 +22,17 @@ export const AuthHeader = ({setCreateEditFile,createEditFile, info, setToggleMod
                     <p style={{cursor: 'pointer',marginRight: 10}}
                        onClick={()=>{
                            setCreateEditFile(!createEditFile)
+                           getId(info.id)
                        }}
                     >
-                        {!empoloyment && <img alt='' src={Images.authEdit} style={{width: 24, height : 24, marginTop : 7, marginRight : 7}} />}
+                        {!empoloyment && <img alt='file' src={Images.authEdit} style={{width: 24, height : 24, marginTop : 7, marginRight : 7}} />}
                     </p>
                     <img src={Images.edit} alt="edit" className={classes.iconStyle} onClick={() => {
                         setDelEdit(true)
                         setToggleModal(!toggleModal)
                     }}/>
                     {empoloyment ?
-                        <p style={{color: Colors.ThemeBlue, fontSize: 14, fontWeight: 'bold', marginLeft: 8, cursor : 'pointer'}}onClick={() => {
+                        <p style={{color: Colors.ThemeBlue, fontSize: 14, fontWeight: 'bold', marginLeft: 8, cursor : 'pointer'}} onClick={() => {
                             setDelEdit(true)
                             setToggleModal(!toggleModal)
                         }}>Edit</p> :

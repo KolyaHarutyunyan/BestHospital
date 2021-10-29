@@ -24,6 +24,11 @@ const editButtonStyle = {
     paddingInline: 24
 }
 
+const filterBtn = {
+    width: 93,
+    height: 36
+}
+
 export const StaffItemHeader = ({
                                     onModel,
                                     availabilityData,
@@ -79,7 +84,7 @@ export const StaffItemHeader = ({
     }
 
     const [searchDate, setSearchDate] = useState('')
-
+    const disabled = !searchDate.length
     const handleChange = e => {
         dispatch(httpRequestsOnErrorsActions.removeError('GET_FUNDING_SOURCE_HISTORIES_BY_ID'))
         setSearchDate(e.target.value)
@@ -124,6 +129,7 @@ export const StaffItemHeader = ({
                 </li>
                 <li  className={classes.headerRight}>
                     <SelectInput
+                        errorFalse={true}
                         styles={inputStyle}
                         name={"active"}
                         handleSelect={handleChange2}
@@ -179,6 +185,7 @@ export const StaffItemHeader = ({
                                                         activeTab === 8 ?
                                                             <div className={classes.searchContainer}>
                                                                 <ValidationInput
+                                                                    className={classes.dateInput}
                                                                     errorFalse={true}
                                                                     variant={"outlined"}
                                                                     onChange={(e) => handleChange(e)}
@@ -186,7 +193,11 @@ export const StaffItemHeader = ({
                                                                     type={"date"}
                                                                     name='searchDate'
                                                                 />
-                                                                <AddButton styles={{width: 450}} text='Search' handleClick={handleSubmit}/>
+                                                                <AddModalButton
+                                                                    disabled={disabled}
+                                                                    handleClick={handleSubmit} text='Search'
+                                                                    btnStyles={filterBtn}
+                                                                />
                                                             </div>
                                                             : null
                     }

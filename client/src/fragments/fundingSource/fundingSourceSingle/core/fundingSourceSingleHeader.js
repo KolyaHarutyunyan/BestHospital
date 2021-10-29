@@ -9,6 +9,11 @@ import {fundingSourceActions, httpRequestsOnSuccessActions} from "@eachbase/stor
 import {inputStyle} from "../../../client/clientSingle/core/styles";
 import {useParams} from "react-router-dom";
 
+const filterBtn = {
+    width: 93,
+    height: 36
+}
+
 export const FundingSourceSingleHeader = ({activeTab, title, status,handleOpen, setGetStatus ,setPrevStatus ,getStatus, type}) => {
     const [open, setOpen] = useState(false)
     const dispatch = useDispatch()
@@ -32,6 +37,8 @@ export const FundingSourceSingleHeader = ({activeTab, title, status,handleOpen, 
     },[getStatus])
 
     const [searchDate, setSearchDate] = useState('')
+
+    const disabled = !searchDate.length
 
     const handleChangeFile = e => {
         setSearchDate(e.target.value)
@@ -79,6 +86,7 @@ export const FundingSourceSingleHeader = ({activeTab, title, status,handleOpen, 
             </div>
             <div style={{display: 'flex'}}>
                 <SelectInput
+                    errorFalse={true}
                     styles={inputStyle}
                     name={"active"}
                     handleSelect={handleChange}
@@ -103,6 +111,7 @@ export const FundingSourceSingleHeader = ({activeTab, title, status,handleOpen, 
                         <>
                             <div className={classes.searchContainer}>
                                 <ValidationInput
+                                    className={classes.dateInput}
                                     errorFalse={true}
                                     variant={"outlined"}
                                     onChange={(e) => handleChangeFile(e)}
@@ -110,7 +119,11 @@ export const FundingSourceSingleHeader = ({activeTab, title, status,handleOpen, 
                                     type={"date"}
                                     name='searchDate'
                                 />
-                                <AddButton text='Search' handleClick={handleSubmit}/>
+                                <AddModalButton
+                                    disabled={disabled}
+                                    handleClick={handleSubmit} text='Search'
+                                    btnStyles={filterBtn}
+                                />
                             </div>
                         </>
                         : activeTab >= 3 ?

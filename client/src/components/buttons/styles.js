@@ -124,6 +124,10 @@ export const buttonsStyle = makeStyles(() => ({
     "&:hover": {
       background: Backgrounds.darkBlue,
     },
+    "&:disabled":{
+      color: 'white',
+      backgroundColor: '#347AF080'
+    }
   },
 
   deleteButtonStyle: {

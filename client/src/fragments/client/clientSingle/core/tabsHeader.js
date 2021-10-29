@@ -13,7 +13,10 @@ import {fundingSourceActions} from "@eachbase/store";
 import {useDispatch} from "react-redux";
 import {useParams} from "react-router-dom";
 
-
+const filterBtn = {
+    width: 93,
+    height: 36
+}
 
 export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setGetStatus ,setPrevStatus ,getStatus, type}) => {
 
@@ -30,9 +33,6 @@ export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setG
     useEffect(()=>{
         setInputs(status)
     },[])
-
-
-
 
     const handleOpenClose = () => {
         setOpen(!open)
@@ -99,6 +99,7 @@ export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setG
                         activeTab === 6 ? <>
                                 <div className={classes.searchContainer}>
                                     <ValidationInput
+                                        className={classes.dateInput}
                                         errorFalse={true}
                                         variant={"outlined"}
                                         onChange={(e) => handleChangeDate(e)}
@@ -107,7 +108,10 @@ export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setG
                                         name='searchDate'
                                         // typeError={error === 'birthday' && ErrorText.field}
                                     />
-                                    <AddButton text='Search' handleClick={handleSubmit}/>
+                                    <AddModalButton
+                                        handleClick={handleSubmit} text='Search'
+                                        btnStyles={filterBtn}
+                                    />
                                 </div>
                             </> :
 

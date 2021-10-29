@@ -7,8 +7,8 @@ export class UpdateEnrollmentDTO {
     @IsDateString()
     startDate: Date;
     @ApiProperty()
-    @IsOptional()
     @IsDateString()
+    @IsOptional()
     terminationDate: Date;
     @ApiProperty()
     @IsNotEmpty()
