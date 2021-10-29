@@ -60,6 +60,9 @@ export const ToastSuccess = (success) => {
 
             success === 'CREATE_ROLE' ? 'Role Was Created' :
             success === 'DELETE_ROLE' ? 'Role Was Deleted' :
+            success === 'CREATE_MILEAGE' ? 'Successfully created Mileage' :
+            success === 'EDIT_MILEAGE' ? 'Successfully edited Mileage' :
+            success === 'DELETE_MILEAGE' ? 'Successfully deleted Mileage' :
 
             false
         )

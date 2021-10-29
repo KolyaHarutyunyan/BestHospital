@@ -15,6 +15,7 @@ import {httpRequestsOnSuccessReducer} from "../http_requests_on_success";
 import {httpRequestsOnErrorsReducer} from "../http_requests_on_errors";
 import {availabilityScheduleReducer} from "../availabilitySchedule";
 import {uploadReducer} from '../upload';
+import {mileageReducer} from "../mileage";
 
 const initialState = {
     isLoading: false,
@@ -43,6 +44,7 @@ export const appReducer = combineReducers({
     payroll: payrollReducer,
     availabilitySchedule: availabilityScheduleReducer,
     upload: uploadReducer,
+    mileage: mileageReducer,
 
     httpOnLoad: httpRequestsOnLoadReducer,
     httpOnSuccess: httpRequestsOnSuccessReducer,

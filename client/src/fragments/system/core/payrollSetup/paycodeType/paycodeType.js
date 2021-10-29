@@ -146,12 +146,14 @@ export const PayCodeType = ({handleOpenClose, editedData, maxWidth, marginRight,
                 name={"name"}
                 type={"text"}
                 placeholder={'Name*'}
+                label={'Name*'}
                 typeError={error === 'name' ? ErrorText.field : ''}
             />
             <ValidationInput
                 onChange={handleChange}
                 value={inputs.code}
                 variant={"outlined"}
+                label={'Code*'}
                 name={"code"}
                 type={"text"}
                 placeholder={'Code*'}
@@ -160,6 +162,7 @@ export const PayCodeType = ({handleOpenClose, editedData, maxWidth, marginRight,
             {
                 (editedData) ?
                     <SelectInput
+                        label={"Type*"}
                         placeholder='Type'
                         name={"type"}
                         handleSelect={handleChange}
@@ -169,7 +172,8 @@ export const PayCodeType = ({handleOpenClose, editedData, maxWidth, marginRight,
                     />
                     :
                     <SelectInputPlaceholder
-                        placeholder='Type'
+                        label={"Type*"}
+                        placeholder='Type*'F
                         name={"type"}
                         handleSelect={handleChange}
                         value={inputs.type}

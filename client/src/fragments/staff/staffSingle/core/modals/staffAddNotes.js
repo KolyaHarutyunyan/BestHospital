@@ -50,7 +50,7 @@ export const StaffAddNotes = ({noteModalTypeInfo, handleClose }) => {
 
     return (
         <div className={classes.inactiveModalBody}>
-            <h1 className={`${globalText.modalTitle}`}>{noteModalTypeInfo?.modalType === 'editNote' ? 'Edit Note' : 'Add a New Note'}</h1>
+            <h1 className={`${globalText.modalTitle}`}>{noteModalTypeInfo?.modalType === 'editNote' ? 'Edit Note' : 'asdasdAdd a New Note'}</h1>
             <div className={classes.positionedButton}>
                 <CloseButton handleCLic={handleClose}/>
             </div>

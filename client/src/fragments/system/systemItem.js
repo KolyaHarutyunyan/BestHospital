@@ -10,7 +10,7 @@ import {
     PayrollSetup
 } from './core';
 import {useDispatch, useSelector} from "react-redux";
-import {systemActions} from "@eachbase/store";
+import {mileagesActions, systemActions} from "@eachbase/store";
 import {payrollActions} from "@eachbase/store/payroll";
 
 export const SystemItem = () => {
@@ -75,6 +75,7 @@ export const SystemItem = () => {
         dispatch(systemActions.getJobs())
         dispatch(payrollActions.getPayCodeGlobal())
         dispatch(payrollActions.getOvertimeSettingsGlobal())
+        dispatch(mileagesActions.getMileages())
     }, [])
 
     const tabsContent = [

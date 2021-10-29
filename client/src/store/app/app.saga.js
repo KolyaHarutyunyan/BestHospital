@@ -12,6 +12,7 @@ import {watchNotes} from "../notes";
 import {watchPayroll} from "../payroll";
 import {watchAvailabilitySchedule} from "../availabilitySchedule";
 import {watchUpload} from '../upload';
+import {watchMileage} from "../mileage";
 
 
 /** Combined Sagas */
@@ -29,4 +30,5 @@ export const appSaga = function* startForman() {
     yield fork (watchPayroll)
     yield fork (watchAvailabilitySchedule)
     yield fork (watchUpload)
+    yield fork (watchMileage)
 };

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {TableWrapper} from "@eachbase/components";
 import {CreateStaff, StaffTable,} from "@eachbase/fragments";
-import {adminActions, systemActions} from "@eachbase/store";
+import {adminActions, fundingSourceActions, systemActions} from "@eachbase/store";
 import {useDispatch, useSelector} from "react-redux";
 
 export const Staff = () => {
@@ -24,19 +24,15 @@ export const Staff = () => {
         setOpen(!open)
     }
 
-    const getStaffMemberWithStatus = (status) => {
+    const handleActiveOrInactive = (status) => {
         setStatus(status)
-        if(status === 0){
-            dispatch(adminActions.getAdmins({status: 0, start: 0,end: 20}))
-        }else {
-            dispatch(adminActions.getAdmins({status: 1, start: 0, end: 20}));
-        }
+        dispatch(adminActions.getAdmins({status: status, start: 0, end: 10}))
     }
+
     return (
         <>
             <TableWrapper
-                getActive={() => getStaffMemberWithStatus(1)}
-                getInactive={() => getStaffMemberWithStatus(0)}
+                handleType={handleActiveOrInactive}
                 firstButton={"Active"}
                 secondButton={"Inactive"}
                 buttonsTab={true}
