@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {Card, DeleteElement, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
+import {Card, DeleteElement, NoItemText, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
 import {serviceSingleStyles} from './styles';
 import {Colors, Images} from "@eachbase/utils";
 import {TableCell} from "@material-ui/core";
@@ -25,7 +25,9 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) =>
     const [authIndex, setAuthIndex] = useState(0)
     const [serviceIndex, setServiceIndex] = useState(null)
     const services = useSelector(state => state.client.clientsAuthorizationsServices)
-    const uploadedFiles = useSelector(state => state.upload.uploadedInfo)
+
+    const [authenticationsId, setAuthentications] = useState('')
+
     const params = useParams()
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
@@ -37,9 +39,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) =>
     const successDelServ = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION_SERV'
 
 
-    useEffect(() => {
-        dispatch(uploadActions.getUpload(params.id))
-    }, [])
+
 
     useEffect(() => {
         dispatch(clientActions.getClientsAuthorizationsServ(info[authIndex].id))
@@ -82,7 +82,6 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) =>
         },
     ];
 
-
     let deleteAuthorization = () => {
         dispatch(clientActions.deleteClientsAuthorization(info[authIndex].id, params.id))
         setAuthIndex(0)
@@ -122,6 +121,10 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) =>
                 </TableCell>
             </TableBodyComponent>
         )
+    }
+
+    const getId = (id)=> {
+        setAuthentications(id)
     }
 
     return (
@@ -167,7 +170,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) =>
             <SimpleModal
                 handleOpenClose={() => setCreateEditFile(!createEditFile)}
                 openDefault={createEditFile}
-                content={<AuthorizationFile uploadedFiles={uploadedFiles} />}
+                content={<AuthorizationFile authenticationsId={authenticationsId}/>}
             />
             <Card
                 width='234px'
@@ -183,7 +186,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) =>
             />
             <div className={classes.clearBoth}/>
             <div className={classes.notesWrap}>
-                <AuthHeader createEditFile={createEditFile} setCreateEditFile={setCreateEditFile}
+                <AuthHeader getId={getId} createEditFile={createEditFile} setCreateEditFile={setCreateEditFile}
                             setDelEdit={setDelEdit} info={info[authIndex]} setToggleModal={setToggleModal}
                             toggleModal={toggleModal}/>
                 <div className={classes.authorizationServices}>
@@ -195,12 +198,12 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) =>
                            className={classes.authorizationServicesText}>Add Authorization Service</p>
                     </div>
                 </div>
-                <Notes
+                {services && services?.length ? <Notes
                     restHeight='560px'
                     data={services}
                     items={clientAuthorizationServiceItem}
                     headerTitles={headerTitles}
-                    defaultStyle={true}/>
+                    defaultStyle={true}/> : <NoItemText text={'No Authorization Services Yet'} /> }
             </div>
         </div>
     )

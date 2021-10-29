@@ -29,10 +29,10 @@ export const getUpload = (resource) => {
 
 /** D Upload */
 
-export const delUpload = (id, officeId) => {
+export const delUpload = (id,authenticationsId) => {
     return {
         type: DELETE_UPLOADS,
-        payload: { id, officeId  }
+        payload: { id,authenticationsId}
     }
 }
 

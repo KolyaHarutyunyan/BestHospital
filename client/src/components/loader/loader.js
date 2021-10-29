@@ -2,9 +2,9 @@ import React from "react";
 import {CircularProgress} from "@material-ui/core";
 import {Colors} from "@eachbase/utils";
 
-export const Loader = ({style}) => {
+export const Loader = ({style,height}) => {
     return (
-        <div style={{display: "flex", alignItems: "center", height: "60vh", width: '100%', justifyContent: 'center'}}>
+        <div style={{display: "flex", alignItems: "center", height: height ? height : "60vh", width: '100%', justifyContent: 'center'}}>
             <CircularProgress
                 style={{
                     width: "100px",
