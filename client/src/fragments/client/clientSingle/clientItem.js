@@ -84,7 +84,7 @@ export const ClientItem = () => {
         {label: 'Contacts'},
         {label: 'Enrollments'},
         {label: 'Authorization'},
-        {label: 'Availability ScheduleFragment'},
+        {label: 'Availability'},
         {label: 'Notes'},
         {label: 'History'}
     ]
@@ -125,12 +125,9 @@ export const ClientItem = () => {
     ];
 
 
-
     return (
         <>
             <TableWrapperGeneralInfo
-                // status= {data?.status ===1 ? 'active' : 'inactive'}
-                // activeInactiveText={data?.status !==1 ? 'active' : 'inactive'}
                 parent='Clients'
                 title={data ? `${data?.firstName} ${data?.lastName}` : ''}
                 parentLink='/client'
@@ -139,37 +136,37 @@ export const ClientItem = () => {
                 handleOpenClose={handleOpenClose}
                 body={
                     <InactiveModal
-                    name={data?.firstName}
-                    setGetStatus={setGetStatus}
-                    prevStatus={prevStatus}
-                    info={{
-                        status: getStatus,
-                        path: 'client',
-                        type: 'GET_CLIENT_BY_ID_SUCCESS'
-                    }} handleOpenClose={handleOpenClose}
-                    handleClose={handleOpenClose}
+                        name={data?.firstName}
+                        setGetStatus={setGetStatus}
+                        prevStatus={prevStatus}
+                        info={{
+                            status: getStatus,
+                            path: 'client',
+                            type: 'GET_CLIENT_BY_ID_SUCCESS'
+                        }} handleOpenClose={handleOpenClose}
+                        handleClose={handleOpenClose}
                     />}
             >
-                <SimpleModal openDefault={openModal}
-                             handleOpenClose={handleOpenCloseModal}
-                             content={<AddContact info={clientContactItem} handleClose={handleOpenCloseModal}/>}/>
+                <SimpleModal
+                    openDefault={openModal}
+                    handleOpenClose={handleOpenCloseModal}
+                    content={<AddContact info={clientContactItem} handleClose={handleOpenCloseModal}/>}
+                />
                 <div className={classes.headerWraperStyle}>
-
                     <TabsHeader
                         authActive={authActive}
                         data={data}
                         activeTab={activeTab}
-
                         status={data?.status}
-                        type= 'GET_CLIENT_BY_ID_SUCCESS'
+                        type='GET_CLIENT_BY_ID_SUCCESS'
                         setGetStatus={setGetStatus}
                         getStatus={getStatus}
                         setPrevStatus={setPrevStatus}
                         handleOpen={handleOpenClose}
                     />
-
-
-                    <SimpleTabs setAuthActive={setAuthActive} setActiveTab={setActiveTab} tabsLabels={tabsLabels}
+                    <SimpleTabs setAuthActive={setAuthActive}
+                                setActiveTab={setActiveTab}
+                                tabsLabels={tabsLabels}
                                 tabsContent={tabsContent}/>
                 </div>
             </TableWrapperGeneralInfo>

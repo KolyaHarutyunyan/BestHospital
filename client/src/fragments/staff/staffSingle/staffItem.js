@@ -147,7 +147,9 @@ export const StaffItem = () => {
         dispatch(adminActions.getEmployment(params.id))
         dispatch(adminActions.getStaffService(params.id))
         dispatch(adminActions.getTimesheet(params.id))
+        dispatch(systemActions.getServices())
     }, [])
+
 
     const openNoteModal = (data) => {
         setNoteModalInfo({

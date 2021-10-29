@@ -34,6 +34,8 @@ export const authService = {
 
     createPayCodeService: (body) => axios.post(`/paycode`, body),
 
+    editPayCodeService: (body, id) => axios.patch(`/paycode/${id}`, body),
+
     getStaffServService: (id) => axios.get(`/staff/${id}/service`),
 
     createStaffServService: (id,serviceId) => axios.post(`/staff/${id}/service/${serviceId}`),
@@ -42,7 +44,7 @@ export const authService = {
 
 
 
-    // isClinicianService: (id) => axios(``),
+     isClinicianService: (id,isClinical) => axios.patch(`staff/${id}/${isClinical}`),
 
     getTimesheetService: (id) => axios.get(`/timesheet/staff/${id}`),
 

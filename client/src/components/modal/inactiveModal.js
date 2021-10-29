@@ -7,7 +7,7 @@ import {ValidationInput, Textarea} from "../inputs";
 import {useDispatch, useSelector} from "react-redux";
 import {fundingSourceActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 
-export const InactiveModal = ({handleOpenClose, info, setGetStatus, prevStatus, name}) => {
+export const InactiveModal = ({handleOpenClose, info, setGetStatus, prevStatus, name, status}) => {
     const classes = modalsStyle()
     const globalText = useGlobalTextStyles()
     const params = useParams()
@@ -34,7 +34,7 @@ export const InactiveModal = ({handleOpenClose, info, setGetStatus, prevStatus, 
 
 
     const cancel = () => {
-        setGetStatus(prevStatus)
+        setGetStatus(status)
         handleOpenClose()
     }
 

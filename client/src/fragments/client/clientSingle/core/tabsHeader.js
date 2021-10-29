@@ -90,7 +90,7 @@ export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setG
                         styles={inputStyle}
                         name={"active"}
                         handleSelect={handleChange}
-                        value={inputs}
+                        value={inputs ? inputs : status}
                         list={list}
                         className={classes.inputTextField}
                     />

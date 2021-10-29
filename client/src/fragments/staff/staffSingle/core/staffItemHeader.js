@@ -17,6 +17,7 @@ import {Switch} from "@material-ui/core";
 import {adminActions, fundingSourceActions, httpRequestsOnErrorsActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 import {inputStyle} from "../../../client/clientSingle/core/styles";
+import {isClinician} from "../../../../store/admin/admin.action";
 
 const editButtonStyle = {
     height: 36,
@@ -78,7 +79,8 @@ export const StaffItemHeader = ({
     )
 
     let changeSwitch = (e) => {
-        console.log(e.target.checked)
+        dispatch(adminActions.isClinician(params.id,e.target.checked))
+
     }
 
     const [searchDate, setSearchDate] = useState('')
@@ -131,7 +133,7 @@ export const StaffItemHeader = ({
                         styles={inputStyle}
                         name={"active"}
                         handleSelect={handleChange2}
-                        value={inputs}
+                        value={inputs ? inputs : status}
                         list={list}
                         className={classes.inputTextField}
                     />
@@ -145,7 +147,21 @@ export const StaffItemHeader = ({
                                 <AddButton styles={{width: 450}} text='Add Credential'
                                            handleClick={() => openCloseCredModal('addCredential')}/>
                                 : activeTab === 5 ? <AddButton styles={{width: 450}} text='Available Hours' handleClick={handleOpenClose}/>
-                                    : activeTab === 1 ? <AddButton styles={{width: 450}} text='Add Employment' handleClick={handleOpenClose}/>
+                                    : activeTab === 1 ?
+                                        <>
+                                        <div style={{display: 'flex', alignItems: "center"}}>
+                                            <p style={{
+                                                color: Colors.ThemeBlue,
+                                                fontWeight: 'bold'
+                                            }}>Clinician</p>
+                                            <div style={{margin: '0 24px 0 8px'}}>
+                                                <Switch onChange={changeSwitch} color={"primary"}/>
+                                            </div>
+                                            </div>
+                                            <AddButton styles={{width: 450}} text='Add Employment' handleClick={handleOpenClose}/>
+                                        </>
+
+
                                         : activeTab === 7 ?
                                             <AddButton styles={{width: 450}} text='Add Note' handleClick={handleOpenClose}
 

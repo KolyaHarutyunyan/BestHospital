@@ -56,7 +56,7 @@ export const AddEnrollment = ({handleClose, info}) => {
     );
 
     const handleCreate = () => {
-        if (inputs.funding && inputs.startDate && inputs.terminationDate) {
+        if (inputs.funding && inputs.startDate ) {
             let funderId;
             fSelect.forEach(item => {
                 if (inputs.funding === item.name) {
@@ -116,7 +116,7 @@ export const AddEnrollment = ({handleClose, info}) => {
                             onChange={handleChange}
                             value={inputs.terminationDate}
                             type={"date"}
-                            label={"Terminated Date*"}
+                            label={"Terminated Date"}
                             name='terminationDate'
                             typeError={error === 'terminationDate' && ErrorText.field}
                         />

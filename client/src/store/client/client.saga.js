@@ -457,7 +457,7 @@ function* createClientsAuthorizationsServ(action) {
 function*  getClientsAuthorizationsModCheck(action) {
     try {
         const res = yield call(authService.getClientAuthorizationServCheckModService, action);
-        console.log(res)
+
     } catch (err) {
         console.log(err)
     }

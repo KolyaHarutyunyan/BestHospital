@@ -122,5 +122,8 @@ export const systemItemStyles = makeStyles(() => ({
         cursor: 'pointer',
         margin: 2,
     },
-
+    noTypeYet : {
+        fontSize : 14,
+        color :Colors.TextDarkGrey
+    }
 }));

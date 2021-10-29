@@ -151,6 +151,20 @@ export const AuthorizationFile = ({authenticationsId}) => {
             </div>
             <p className={classes.authorizationFileSubTitle}>uploaded files</p>
 
+
+
+// 
+            <div className={!uploadedFiles ? classes.centered : classes.normal}>
+                {
+                    uploadedFiles ?
+                        uploadedFiles && uploadedFiles.map((item, index)=>{
+
+                            return (
+                                <div key={index} className={classes.fileRow}>
+
+
+// 
+
             {
                 getLoader.length ? <Loader height={'29.8vh'} />
                     :
@@ -158,6 +172,10 @@ export const AuthorizationFile = ({authenticationsId}) => {
                         {
                             createLoader.length ?
                                 <div className={classes.fileRow}>
+
+
+
+// 
                                     <div className={classes.imageContainer}>
                                         <div>
                                             <CircularProgressWithLabel value={progress}/>
