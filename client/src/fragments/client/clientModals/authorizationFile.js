@@ -45,6 +45,7 @@ export const AuthorizationFile = ({authenticationsId}) => {
     }, [])
 
     const handleChangeFile = event => {
+        console.log('qwdqwdqwd')
         const createInfo = {
             "resource": authenticationsId,
             "type": fileName,
@@ -153,29 +154,17 @@ export const AuthorizationFile = ({authenticationsId}) => {
 
 
 
-// 
             <div className={!uploadedFiles ? classes.centered : classes.normal}>
-                {
-                    uploadedFiles ?
-                        uploadedFiles && uploadedFiles.map((item, index)=>{
-
-                            return (
-                                <div key={index} className={classes.fileRow}>
 
 
-// 
-
-            {
-                getLoader.length ? <Loader height={'29.8vh'} />
+            {getLoader.length ?
+                  <Loader height={'29.8vh'} />
                     :
                     <div className={!uploadedFiles.length ? classes.centered : classes.normal}>
                         {
                             createLoader.length ?
                                 <div className={classes.fileRow}>
 
-
-
-// 
                                     <div className={classes.imageContainer}>
                                         <div>
                                             <CircularProgressWithLabel value={progress}/>
@@ -237,7 +226,9 @@ export const AuthorizationFile = ({authenticationsId}) => {
                         }
                     </div>
             }
+
             <AddModalButton handleClick={handleSubmit} text='Done'/>
+         </div>
         </div>
     )
 }
