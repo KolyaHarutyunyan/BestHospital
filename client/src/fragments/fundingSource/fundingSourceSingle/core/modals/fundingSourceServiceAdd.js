@@ -78,7 +78,6 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
                 "max": +inputs.max
             }
             let arr = postModifiers
-            console.log(arr,'aaararararararararararar')
              if (!info){
                 dispatch(fundingSourceActions.createFoundingSourceServiceById(params.id, data, arr))
             }else {

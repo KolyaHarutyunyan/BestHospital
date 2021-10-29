@@ -295,8 +295,12 @@ function* setStatus(action) {
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
-        const res = yield call(authService.setStatusService, action.payload.id, action.payload.path, action.payload.status, action.payload.body,);
-        console.log(res, 'res for status')
+        const body  = action.payload.body ? action.payload.body : ''
+
+        const res = yield call(authService.setStatusService, action.payload.id, action.payload.path, action.payload.status, body,);
+
+        console.log(res,'resresresres')
+        console.log(action.payload.type,'action.payload.type')
         yield put({
             type: action.payload.type,
             payload: res.data,
@@ -304,7 +308,6 @@ function* setStatus(action) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (error) {
-        console.log(error, 'errr for status')
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
     }
