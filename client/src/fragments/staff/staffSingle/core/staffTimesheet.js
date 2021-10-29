@@ -75,7 +75,7 @@ export const StaffTimesheet = ({info}) => {
 
     const allPaycodes = useSelector(state => state.admins.allPaycodes)
     const [openModal,setOpenModal] = useState(false)
-    console.log(info ,'dfgdfgdfgdfgdfgdfg')
+
 
     const classes = serviceSingleStyles()
     const [active, setActive] = useState('active')

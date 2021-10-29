@@ -3,7 +3,7 @@ import {inputsStyle} from "./styles";
 import {InputMinLoader} from "./inputMiniLoader";
 import React from "react";
 
-export const SelectInput = ({
+export const SelectInput = ({errorFalse,
                                 className,
                                 loader,
                                 name,
@@ -35,6 +35,7 @@ export const SelectInput = ({
             handleChangeCountryCode(event.target.options[selectedIndex].getAttribute('data-key'))
         }
     };
+
     return (
         <>
             <div style={{marginBottom:0}} className={style ? style : classes.SignInInput}>
@@ -78,7 +79,9 @@ export const SelectInput = ({
                             ))
                         }
                     </Select>
-                    <FormHelperText className={classes.errorText}>{typeError && typeError}</FormHelperText>
+                    {
+                        errorFalse ? null : <FormHelperText className={classes.errorText}>{typeError && typeError}</FormHelperText>
+                    }
                 </FormControl>
             </div>
         </>

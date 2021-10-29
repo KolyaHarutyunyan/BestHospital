@@ -11,8 +11,6 @@ import {useParams} from "react-router-dom";
 import moment from "moment";
 
 export const TimesheetModal = ({handleClose, info, allPaycodes}) => {
-    console.log(allPaycodes,'aaalna')
-    console.log(info,'info')
 
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {...info,
@@ -29,9 +27,9 @@ export const TimesheetModal = ({handleClose, info, allPaycodes}) => {
     const classes_v2 = staffModalsStyle()
     const globalPayCodes = useSelector(state => state.payroll.PayCodes)
 
-    console.log(inputs,'inputs')
 
-    console.log( allPaycodes.find(item=> item?.payCodeTypeId.name === info.payCode.payCodeTypeId.name ).payCodeTypeId.name, 'find')
+
+
 
 const params = useParams()
 

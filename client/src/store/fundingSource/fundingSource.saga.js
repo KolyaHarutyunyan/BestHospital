@@ -118,7 +118,7 @@ function* getFundingSourceServicesById(action) {
 
 
 function* createFundingSourceServicesById(action) {
-    console.log(action,'actions py')
+
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
@@ -130,7 +130,7 @@ function* createFundingSourceServicesById(action) {
             type: CREATE_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
             payload: res.data,
         });
-       console.log(res,'ressss')
+
         const body = {
             modifiers: action.payload.modifier,
             serviceId: res.data._id,
@@ -141,7 +141,7 @@ function* createFundingSourceServicesById(action) {
                 payload: {body}
             })
         }
-        console.log(body,'booody')
+
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
 
     } catch (error) {
@@ -180,7 +180,7 @@ function* editFundingSourceServices(action) {
 
 function* createFundingSourceServicesModifier({payload}) {
     try {
-        console.log(payload,'payloadpayloadpayloadpayload')
+
         const res = yield call(authService.createFoundingSourceServiceModifierService, payload.body);
     } catch (error) {
         console.log(error, 'res mod')

@@ -17,7 +17,7 @@ export const Service =({ handleOpenClose, info, date}) =>{
     );
 
     const handleCreate = () => {
-        console.log(inputs, 'iiiiii')
+
     }
 
     return(

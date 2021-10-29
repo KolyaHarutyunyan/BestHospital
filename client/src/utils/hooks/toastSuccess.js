@@ -53,6 +53,7 @@ export const ToastSuccess = (success) => {
             success === 'CREATE_EMPLOYMENT' ? 'Successfully created employment' :
             success === 'EDIT_EMPLOYMENT' ? 'Successfully edited employment' :
             success === 'CREATE_PAY_CODE' ? 'Successfully created pay code' :
+            success === 'EDIT_PAY_CODE' ? 'Successfully edited pay code' :
             success === 'DELETE_STAFF_SERVICE' ? 'Successfully deleted service' :
             success === 'CREATE_STAFF_SERVICE' ? 'Successfully created service' :
 

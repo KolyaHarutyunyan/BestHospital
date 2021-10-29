@@ -21,7 +21,7 @@ export const AddAuthorization = ({handleClose, info}) => {
     // const fSelect = useSelector(state => state?.fundingSource?.fSelect?.funders)
     let enrolments = useSelector(state => state?.client?.clientEnrollment).map(item=> item.funderId )
 
-    console.log(enrolments,'dfgdfgdfgdfgdfg')
+
 
 
     const classes = createClientStyle()
@@ -139,7 +139,7 @@ export const AddAuthorization = ({handleClose, info}) => {
                                 onChange={handleChange}
                                 value={inputs.endDate}
                                 type={"date"}
-                                label={"Terminated Date*"}
+                                label={"End Date*"}
                                 name='endDate'
                                 typeError={error === 'endDate' && ErrorText.field}
                             />

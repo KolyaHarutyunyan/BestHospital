@@ -51,8 +51,8 @@ export const AddRoleModal = ({handleClose, permissionsList}) => {
     const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_ROLE'
     const errorText = httpOnError.length && httpOnError[0].error
 
-    console.log(loader,'loader')
-    console.log(httpOnLoad,'httpOnLoad')
+
+
     useEffect(() => {
         if (success) {
             dispatch(httpRequestsOnSuccessActions.removeSuccess(httpOnSuccess[0].type ))
