@@ -176,5 +176,8 @@ export const Images = {
     forward:forward,
     authEdit : authEdit,
     recurrance: recurrance,
+    pngIcon: pngIcon,
+    jpegIcon: jpegIcon,
+    pdfIcon: pdfIcon,
+    csvIcon: csvIcon
 }
-
