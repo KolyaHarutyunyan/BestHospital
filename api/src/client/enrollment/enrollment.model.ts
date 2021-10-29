@@ -6,7 +6,7 @@ const ClientEnrollmentSchema = new Schema({
     funderId: {type: Types.ObjectId, ref: "Funder"},
     primary: { type: Boolean },
     startDate: { type: Date },
-    terminationDate: { type: Date },
+    terminationDate: { type: Date, default: Date.now() },
     createdDate: { type: Date, default: Date.now() },
     updatedDate: { type: Date, default: null },
 });
