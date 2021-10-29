@@ -1,5 +1,6 @@
-import {HistoryCard} from '@eachbase/components';
+import {HistoryCard, NoItemText} from '@eachbase/components';
 import {useSelector} from "react-redux";
+import React from "react";
 
 export const StaffHistory = ({data}) => {
 
@@ -13,7 +14,7 @@ export const StaffHistory = ({data}) => {
     return(
         <div style={{marginTop: 50}}>
             {
-                errorMessage ? <p>sdfdslf</p> : data && data.map((item,index)=>{
+                errorMessage ?<NoItemText text='There is no history in this date'/>  : data && data.map((item,index)=>{
                     return(
                         <HistoryCard key={index} data={item} />
                     )

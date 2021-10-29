@@ -130,7 +130,7 @@ export const createClientStyle = makeStyles(() => ({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        '& p':{
+        '& p': {
             fontSize: 16,
             color: Colors.TextLightGray,
             fontWeight: 600,
@@ -144,17 +144,20 @@ export const createClientStyle = makeStyles(() => ({
         height: 290
     },
     normal: {
-        maxHeight: 290,
+        height: 290,
         overflowY: 'scroll',
         msOverflowStyle: 'none',
         scrollbarWidth: 'none',
+        paddingBottom: 16,
         '&::-webkit-scrollbar': {
             display: 'none'
         },
     },
     fileRow: {
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-end',
+        padding: '16px 2px',
+        borderBottom: `1px solid ${Colors.BackgroundBlue}`,
     },
     imageContainer: {
         width: 60,
@@ -163,15 +166,70 @@ export const createClientStyle = makeStyles(() => ({
         boxShadow: Shadow.changeShadow,
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginRight: 24,
+        flex: '0 0 60px',
+        position: 'relative'
     },
     fileSize: {
         fontSize: 10,
-        color: Colors.TextLightGray
+        color: Colors.TextLightGray,
+        textAlign: 'center'
     },
     downloadIcon: {
         width: 32,
         height: 32,
+        cursor: 'pointer',
+        flex: '0 0 32px',
+        marginLeft: 16
+    },
+    fileName: {
+        fontSize: 12,
+        color: Colors.TextSecondary,
+        paddingBottom: 12,
+        lineHeight: 1,
+        fontWeight: 600
+    },
+    fileInput: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        width: '100%'
+    },
+    fileNameInput: {
+        width: '100%',
+        '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: Colors.BackgroundBlue,
+        },
+        '& .MuiOutlinedInput-root': {
+            height: 40,
+            color: Colors.TextPrimary
+        },
+        '& .MuiInputLabel-outlined': {
+            marginTop: '-3px',
+            color: Colors.TextPrimary
+        },
+        '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+            transform: 'translate(14px, -2px) scale(0.75)'
+        },
+        '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: Colors.BackgroundBlue,
+        },
+        '& .MuiInputBase-input::placeholder': {
+            fontSize: 14,
+            color: Colors.TextLightGray
+        }
+    },
+    percentage: {
+        marginTop: -30,
+        fontSize: 10,
+        color: Colors.BackgroundBlue,
+        textAlign: 'center'
+    },
+    removeIcon: {
+        position: 'absolute',
+        top: -5,
+        right: -5,
         cursor: 'pointer'
     }
 }));

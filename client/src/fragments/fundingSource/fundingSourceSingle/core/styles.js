@@ -100,6 +100,30 @@ export const fundingSourceSingleStyles = makeStyles(() => ({
         '& button': {
             marginLeft: 15
         }
+    },
+    dateInput: {
+        width: '100%',
+        '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: Colors.BackgroundBlue,
+        },
+        '& .MuiOutlinedInput-root': {
+            height: 38,
+            color: Colors.TextPrimary
+        },
+        '& .MuiInputLabel-outlined': {
+            marginTop: '-3px',
+            color: Colors.TextPrimary
+        },
+        '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+            transform: 'translate(14px, -2px) scale(0.75)'
+        },
+        '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: Colors.BackgroundBlue,
+        },
+        '& .MuiInputBase-input::placeholder': {
+            fontSize: 14,
+            color: Colors.TextLightGray
+        }
     }
 }));
 
