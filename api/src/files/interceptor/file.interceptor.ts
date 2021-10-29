@@ -14,7 +14,7 @@ export class FileSanitizer implements ISanitize {
       mimetype: file.mimetype,
       size: file.size,
       url: file.url,
-      name: file.modelName,
+      name: file.name,
       resource: file.resource,
     };
     return sanitizedOffice;
