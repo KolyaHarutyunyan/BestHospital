@@ -35,7 +35,6 @@ export const SelectInput = ({
             handleChangeCountryCode(event.target.options[selectedIndex].getAttribute('data-key'))
         }
     };
-    console.log(value,'value')
     return (
         <>
             <div style={{marginBottom:0}} className={style ? style : classes.SignInInput}>

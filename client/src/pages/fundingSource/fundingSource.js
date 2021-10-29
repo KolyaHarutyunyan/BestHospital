@@ -3,6 +3,7 @@ import {TableWrapper} from "@eachbase/components";
 import {FundingSourceTable, CreateFundingSource,} from "@eachbase/fragments";
 import {fundingSourceActions} from "@eachbase/store";
 import {useDispatch} from "react-redux";
+import {ActiveInactiveStatus} from "../../utils";
 
 
 export const FundingSource = () => {
@@ -20,18 +21,13 @@ export const FundingSource = () => {
     }
 
     const handleActiveOrInactive = (status) => {
-        setStatus(status)
-        if (status === 0) {
-            dispatch(fundingSourceActions.getFundingSource({status: 0, start: 0, end: 10}))
-        } else {
-            dispatch(fundingSourceActions.getFundingSource({status: 1, start: 0, end: 10}))
-        }
+            setStatus(status)
+            dispatch(fundingSourceActions.getFundingSource({status: status, start: 0, end: 10}))
     }
 
     return (
         <TableWrapper
-            getActive={() => handleActiveOrInactive(1)}
-            getInactive={() => handleActiveOrInactive(0)}
+            handleType={handleActiveOrInactive}
             firstButton={"Active"}
             secondButton={"Inactive"}
             addButton={"Add Funding Source"}

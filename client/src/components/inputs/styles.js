@@ -153,7 +153,7 @@ export const inputsStyle = makeStyles(() => ({
     resize: 'none',
     height:'128px!important',
     borderColor:Colors.BackgroundBlue,
-    padding: '2px 0 10px 10px',
+    padding: '13px 0 10px 16px',
     borderRadius: '4px',
     overflow: 'unset!important',
     msOverflowStyle: 'none',

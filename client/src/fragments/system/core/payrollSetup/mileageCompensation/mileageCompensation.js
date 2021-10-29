@@ -1,11 +1,13 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     AddModalButton,
     ValidationInput, CreateChancel,
 } from "@eachbase/components";
 import {PayrollSetupStyles} from '../styles';
-import {ErrorText} from "@eachbase/utils";
+import {ErrorText, FindLoad, FindSuccess} from "@eachbase/utils";
 import {useDispatch} from "react-redux";
+import {mileagesActions} from "@eachbase/store";
+import moment from "moment";
 
 const overtimeBtn = {
     width: '100%',
@@ -13,10 +15,8 @@ const overtimeBtn = {
 }
 
 export const MileageCompensation = ({marginTop,marginRight,maxWidth, editedData,handleOpenClose}) => {
-
     const classes = PayrollSetupStyles()
     const dispatch = useDispatch()
-
     const [inputs, setInputs] = useState(editedData ? editedData :{});
     const [error, setError] = useState('');
 
@@ -33,19 +33,14 @@ export const MileageCompensation = ({marginTop,marginRight,maxWidth, editedData,
 
     const handleSubmit = () => {
         let data = {
-            name: inputs.name,
-            startDate: inputs.startDate
+            compensation: parseInt(inputs.compensation),
+            startDate: new Date(inputs.startDate).toISOString()
         }
-        if (inputs.name && inputs.startDate) {
+        if (inputs.compensation && inputs.startDate) {
             if (editedData) {
-                alert('edited')
-                handleOpenClose()
+                dispatch(mileagesActions.editMileage(inputs._id, data))
             } else {
-                alert('added')
-                setInputs({
-                    name: '',
-                    startDate: ''
-                })
+                dispatch(mileagesActions.createMileage(data))
             }
         } else {
             setError(
@@ -55,6 +50,27 @@ export const MileageCompensation = ({marginTop,marginRight,maxWidth, editedData,
             )
         }
     }
+
+    const success = FindSuccess('CREATE_MILEAGE')
+    const editSuccess = FindSuccess('EDIT_MILEAGE')
+    const load = FindLoad('CREATE_MILEAGE')
+    const editLoad = FindLoad('EDIT_MILEAGE')
+
+    useEffect(()=>{
+        if(success){
+            setInputs({
+                compensation: '',
+                startDate:''
+            })
+        }
+    },[success.length])
+
+    useEffect(()=>{
+        if(editSuccess){
+            handleOpenClose && handleOpenClose()
+        }
+    },[editSuccess.length])
+
     return (
         <div className={classes.payCodeType} style={{
             maxWidth: maxWidth,
@@ -72,16 +88,17 @@ export const MileageCompensation = ({marginTop,marginRight,maxWidth, editedData,
 
             <ValidationInput
                 onChange={handleChange}
-                value={inputs.name}
+                value={inputs.compensation}
+                label={'Mileage Compensation*'}
                 variant={"outlined"}
-                name={"name"}
-                type={"text"}
-                placeholder={'Name*'}
-                typeError={error === 'name' ? ErrorText.field : ''}
+                name={"compensation"}
+                type={"number"}
+                placeholder={'Mileage Compensation*'}
+                typeError={error === 'compensation' ? ErrorText.field : ''}
             />
             <ValidationInput
                 onChange={handleChange}
-                value={inputs.startDate}
+                value={editedData ?  moment(inputs.startDate).format().substring(0, 10) : inputs.startDate}
                 variant={"outlined"}
                 name={"startDate"}
                 type={"date"}
@@ -89,7 +106,9 @@ export const MileageCompensation = ({marginTop,marginRight,maxWidth, editedData,
                 typeError={error === 'startDate' ? ErrorText.field : ''}
             />
             {
-                editedData ? <CreateChancel
+                editedData ?
+                    <CreateChancel
+                        loader={!!editLoad.length}
                         buttonWidth='192px'
                         create='Save'
                         chancel="Cancel"
@@ -97,6 +116,7 @@ export const MileageCompensation = ({marginTop,marginRight,maxWidth, editedData,
                         onCreate={handleSubmit}
                     /> :
                     <AddModalButton
+                        loader={!!load.length}
                         handleClick={handleSubmit} text={'Add Mileage Compensation'}
                         styles={overtimeBtn}
                     />
