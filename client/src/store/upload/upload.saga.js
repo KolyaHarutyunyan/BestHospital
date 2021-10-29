@@ -49,7 +49,7 @@ function* getUploads({payload, type }) {
   yield put(httpRequestsOnLoadActions.removeLoading(type));
   try {
     const res = yield call( authService.getUploadsService, payload.resource  );
-    console.log(res,'res upload res');
+
     yield put({
       type: GET_UPLOADS_SUCCESS,
       payload: res.data,

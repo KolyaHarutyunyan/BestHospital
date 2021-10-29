@@ -3,7 +3,7 @@ import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
 import {TableCell} from "@material-ui/core";
-import {Card, DeleteElement, Loader, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
+import {Card, DeleteElement, Loader, NoItemText, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
 import {EmploymentModal, PaycodeModal} from "./modals";
 import {AuthHeader} from "@eachbase/components/headers/auth/authHeader";
 import {Colors, FindLoad, Images} from "@eachbase/utils";
@@ -104,8 +104,8 @@ export const StaffEmployment = ({ info}) => {
                 <TableCell>  {item.payCodeTypeId.code} </TableCell>
                 <TableCell> {item.payCodeTypeId.type} </TableCell>
                 <TableCell>{item.rate} </TableCell>
-                <TableCell>{moment(item.startDate).format('DD MM YYYY')} </TableCell>
-                <TableCell>{moment(item.endDate).format('DD MM YYYY')} </TableCell>
+                <TableCell>{moment(item.startDate).format('DD/MM/YYYY')} </TableCell>
+                <TableCell>{moment(item.endDate).format('DD/MM/YYYY')} </TableCell>
                 <TableCell>{Number(item.active)} </TableCell>
             </TableBodyComponent>}
 
@@ -175,12 +175,12 @@ export const StaffEmployment = ({ info}) => {
                            className={classes.authorizationServicesText}>Add Paycode</p>
                     </div>
                 </div>
-                <Notes
+                {payCodes && payCodes?.length ? <Notes
                     restHeight='560px'
                     data={payCodes}
                     items={payCodeItem}
                     headerTitles={headerTitles}
-                    defaultStyle={true}/>
+                    defaultStyle={true}/> : <NoItemText text={'No Paycodes Yet'} />}
             </div>
         </div>
     )

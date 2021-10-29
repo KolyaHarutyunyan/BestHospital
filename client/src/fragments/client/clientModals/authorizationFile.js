@@ -105,7 +105,7 @@ export const AuthorizationFile = ({uploadedFiles}) => {
                 {
                     uploadedFiles ?
                         uploadedFiles && uploadedFiles.map((item, index)=>{
-                            console.log(item,'item');
+
                             return (
                                 <div key={index} className={classes.fileRow}>
                                     <div className={classes.imageContainer}>

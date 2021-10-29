@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
-import {AddButton, Card, DeleteElement, NoItemText, SimpleModal, SlicedText} from "@eachbase/components";
+import {AddButton, Card, DeleteElement, NoItemText, SelectInput, SimpleModal, SlicedText} from "@eachbase/components";
 import {Colors, ErrorText, Images,} from "@eachbase/utils";
 import {SelectInputPlaceholder} from "@eachbase/components";
 import {adminActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
@@ -30,12 +30,6 @@ export const StaffService = ({staffGeneral, info}) => {
     const params = useParams()
     const staffServices = useSelector(state => state.admins.staffServices.service)
 
-    useEffect(() => {
-        dispatch(systemActions.getServices())
-    }, [])
-
-
-
 
 
 
@@ -49,16 +43,9 @@ export const StaffService = ({staffGeneral, info}) => {
     const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_STAFF_SERVICE'
 
     useEffect(() => {
-        setFilteredList([...services.filter(array_el=>staffServices.filter(anotherOne_el=> anotherOne_el._id === array_el.id).length === 0)])
+        setFilteredList([...services.filter(array_el => staffServices.filter(anotherOne_el => anotherOne_el._id === array_el.id).length === 0)])
 
-    }, [services,success ,successCreate])
-
-
-    // useEffect(() => {
-    //     dispatch(adminActions.getStaffService(params.id))
-    // }, [ success ,successCreate])
-
-
+    }, [services, success, successCreate])
 
 
     useEffect(() => {
@@ -91,7 +78,7 @@ export const StaffService = ({staffGeneral, info}) => {
         if (inputs.serviceType) {
             let serviceID = services && services.length > 0 && services.find(item => item.name === inputs.serviceType).id
             dispatch(adminActions.createStaffService(params.id, serviceID));
-             dispatch(adminActions.getStaffService(params.id))
+            dispatch(adminActions.getStaffService(params.id))
             setIndex(0)
         } else {
             setError(
@@ -141,7 +128,7 @@ export const StaffService = ({staffGeneral, info}) => {
             }}>
                 <p className={classes.title} style={{marginBottom: 24}}>Services</p>
                 <div style={{display: 'flex', width: "100%"}}>
-                    <SelectInputPlaceholder
+                    {filteredList && filteredList.length ? <SelectInputPlaceholder
                         placeholder='Service Type'
                         style={classes.credentialInputStyle2}
                         name={"serviceType"}
@@ -149,14 +136,20 @@ export const StaffService = ({staffGeneral, info}) => {
                         value={inputs.serviceType}
                         list={filteredList}
                         typeError={error === 'serviceType' ? ErrorText.field : ''}
-                    />
+                    /> : <SelectInput
+                        disabled={true}
+                        style={classes.credentialInputStyle2}
+                        list={filteredList}
+                    />}
                     <AddButton
                         loader={httpOnLoad.length > 0}
                         styles={credentialBtn}
                         handleClick={handleSubmit}
                         text='Add Service Type'
                     />
+
                 </div>
+                {services && services.length ? <></> : <p className={classes.noTypeYet}>No services found</p>}
                 <div className={classes.credentialTable} style={{width: '100%'}}>
                     {
                         info && info.length ? info.map((item, index) => {
@@ -166,7 +159,6 @@ export const StaffService = ({staffGeneral, info}) => {
                                     <span>
                                         <SlicedText type={'responsive'} size={25} data={item.name}/>
                                     </span>
-                                        {/*{` - ${convertType(credentialItem.type)}`}*/}
                                     </p>
                                     <div className={classes.icons}>
                                         <img src={Images.remove} alt="delete"

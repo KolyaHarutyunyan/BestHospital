@@ -79,7 +79,7 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
         error === e.target.name && setError('')
     }
 
-    console.log(license, 'license');
+
 
     const handleCreate = () => {
         const data = {

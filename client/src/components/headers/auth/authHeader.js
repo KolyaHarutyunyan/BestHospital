@@ -5,6 +5,10 @@ import moment from "moment";
 
 
 export const AuthHeader = ({setCreateEditFile,createEditFile, info, setToggleModal, toggleModal, setDelEdit, empoloyment}) => {
+
+
+
+
     const classes = authHeaderStyles()
 
     return (
@@ -15,7 +19,7 @@ export const AuthHeader = ({setCreateEditFile,createEditFile, info, setToggleMod
                     <p className={classes.AuthHeaderTopLeftTitle}>{empoloyment ? info?.title : `# ${info?.authId}`}</p>
                     {empoloyment ?
 
-                        <p className={classes.AuthHeaderTopLeftText}>{info?.startDate && `${moment(info?.startDate).format('DD MM YYYY')} - ${info?.endDate !=='Precent'  ? moment(info?.endDate).format('DD MM YYYY') : 'Present'}`}</p>:
+                        <p className={classes.AuthHeaderTopLeftText}>{info?.startDate && `${moment(info?.startDate).format('DD/MM/YYYY')} - ${info?.endDate !=='Precent'  ? moment(info?.endDate).format('DD/MM/YYYY') : 'Present'}`}</p>:
                         <p className={classes.AuthHeaderTopLeftText}>{info?.startDate && `${info?.startDate} - ${info?.endDate}`}</p>}
                 </div>
                 <div className={classes.AuthHeaderTopRight} style={{display: 'flex', alignItems: 'center'}}>

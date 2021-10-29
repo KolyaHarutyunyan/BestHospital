@@ -30,7 +30,7 @@ export const EmploymentModal = ({handleClose, info}) => {
     const staffList = useSelector(state => state.admins.adminsAllList.staff)?.filter(item=>item.id !== params.id && item)
     const classes = createClientStyle()
 
-    console.log(staffList,'lisst')
+
 
     let onCheck  = (e)=>{
         setChecked(e.target.checked)
@@ -72,11 +72,11 @@ export const EmploymentModal = ({handleClose, info}) => {
         }
     }, [success, successCreate])
 
-
     const handleChange = e => setInputs(
         prevState => ({...prevState, [e.target.name]: e.target.value === 0? '0' : e.target.value}),
         error === e.target.name && setError(''),
     );
+
 
     const handleCreate = () => {
         if (inputs.title && inputs.departmentId && inputs.supervisor  && checked ? "Present" : inputs.endDate && inputs.startDate) {
@@ -84,7 +84,7 @@ export const EmploymentModal = ({handleClose, info}) => {
             let supervisorID;
             departments.forEach(item => {
                 if (inputs.departmentId === item.name) {
-                    depId = item._id
+                    depId = item.id
                 }
             })
             staffList &&     staffList.forEach(item => {
@@ -92,6 +92,7 @@ export const EmploymentModal = ({handleClose, info}) => {
                     supervisorID = item.id
                 }
             })
+
 
             const data = {
                 'title': inputs.title,
@@ -106,6 +107,7 @@ export const EmploymentModal = ({handleClose, info}) => {
                     "date": inputs.endDate ? inputs.endDate : undefined
                 }
             }
+
         if (info) {
              dispatch(adminActions.editEmployment(data, info.id, params.id))
         } else {

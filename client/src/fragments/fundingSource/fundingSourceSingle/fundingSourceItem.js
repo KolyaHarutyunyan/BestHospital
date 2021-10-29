@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {useParams} from "react-router-dom";
+import React, {useState} from "react";
+import {useSelector} from "react-redux";
 import {
     SimpleTabs,
     Notes,
@@ -32,8 +31,9 @@ export const FundingSourceItem = ({}) => {
     const classes = fundingSourceItemStyle()
 
 
-
     const handleOpenClose = () => {
+        alert('gj')
+        setGetStatus(data?.status)
         setOpen(!open)
     }
 
@@ -79,19 +79,23 @@ export const FundingSourceItem = ({}) => {
                 handleOpenClose={handleOpenClose}
 
                 body={<InactiveModal
-                    name ={data?.name}
+                    status={data?.status}
+                    name={data?.name}
                     setGetStatus={setGetStatus}
                     prevStatus={prevStatus}
                     info={{
-                    status: getStatus,
-                    path: 'funding',
-                    type: 'GET_FUNDING_SOURCE_BY_ID_SUCCESS'
-                }} handleOpenClose={handleOpenClose}
-                    handleClose={handleOpenClose}/>}
+                        status: getStatus,
+                        path: 'funding',
+                        type: 'GET_FUNDING_SOURCE_BY_ID_SUCCESS'
+                    }}
+                    handleOpenClose={handleOpenClose}
+
+                />
+                }
             >
                 <div className={classes.fundingSourceItemHeader}>
                     <FundingSourceSingleHeader
-                        type= 'GET_FUNDING_SOURCE_BY_ID_SUCCESS'
+                        type='GET_FUNDING_SOURCE_BY_ID_SUCCESS'
                         setGetStatus={setGetStatus}
                         getStatus={getStatus}
                         setPrevStatus={setPrevStatus}

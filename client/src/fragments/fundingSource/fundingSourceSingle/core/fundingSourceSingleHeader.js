@@ -27,6 +27,10 @@ export const FundingSourceSingleHeader = ({activeTab, title, status,handleOpen, 
         setOpen(!open)
     }
 
+    useEffect(()=>{
+        setInputs(getStatus)
+    },[getStatus])
+
     const [searchDate, setSearchDate] = useState('')
 
     const handleChangeFile = e => {

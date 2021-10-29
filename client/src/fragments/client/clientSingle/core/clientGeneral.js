@@ -7,9 +7,9 @@ import { Colors, Images } from "@eachbase/utils";
 export const ClientGeneral = ({data}) =>{
     let today = new Date();
 
-    const [otherDetails, setOtherDetails] = useState([
+    const [otherDetails, _] = useState([
         {title: 'Gender', value: data?.gender},
-        {title: 'Date of Birth', value: data?.birthday && moment(data?.birthday).format('DD MM YYYY') },
+        {title: 'Date of Birth', value: data?.birthday && moment(data?.birthday).format('DD/MM/YYYY') },
         {title: 'Age', value  : data?.birthday ? today.getFullYear() - new Date(data.birthday).getFullYear() : ''} ,
         {title: 'Ethnicity', value: data?.ethnicity},
         {title: 'Language', value: data?.language},
