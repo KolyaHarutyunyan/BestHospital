@@ -51,7 +51,7 @@ export const StaffCredentials = ({credentialData, openModal}) => {
                 <TableCell>{item?.credentialId?.name}</TableCell>
                 <TableCell>{convertType(item?.credentialId?.type)}</TableCell>
                 <TableCell>{item?.receiveData && moment(item.receiveData).format('L')}</TableCell>
-                <TableCell>{item.expirationDate && moment(item.expirationDate).format('L')}</TableCell>
+                <TableCell>{item.expirationDate ? moment(item.expirationDate).format('L') : 'Non-Expiring'}</TableCell>
                 <TableCell>{
                     <>
                         <img

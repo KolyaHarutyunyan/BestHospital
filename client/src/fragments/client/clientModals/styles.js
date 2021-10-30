@@ -231,5 +231,15 @@ export const createClientStyle = makeStyles(() => ({
         top: -5,
         right: -5,
         cursor: 'pointer'
-    }
+    },
+    curently:{
+        color : Colors.TextPrimary,
+        fontSize : 16,
+        marginLeft : 10,
+    },
+    curentlyCheckbox:{
+        display: 'flex',
+        alignItems : "center",
+        marginBottom: 16,
+    },
 }));

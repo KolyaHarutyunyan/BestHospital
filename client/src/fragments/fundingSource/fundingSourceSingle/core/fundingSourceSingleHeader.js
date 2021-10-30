@@ -14,16 +14,14 @@ const filterBtn = {
     height: 36
 }
 
-export const FundingSourceSingleHeader = ({activeTab, title, status,handleOpen, setGetStatus ,setPrevStatus ,getStatus, type}) => {
+export const FundingSourceSingleHeader = ({activeTab, title, status, handleOpen, setGetStatus ,setPrevStatus ,getStatus, type,  handleGetStatus}) => {
     const [open, setOpen] = useState(false)
     const dispatch = useDispatch()
     const prevData = useSelector(state => state.fundingSource.fundingSourceItem)
     const classes = fundingSourceSingleStyles()
     const [inputs, setInputs] = useState( '');
-    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
+    const {httpOnSuccess,} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
-        httpOnError: state.httpOnError,
-        httpOnLoad: state.httpOnLoad,
     }));
 
     const params = useParams()
@@ -68,13 +66,15 @@ export const FundingSourceSingleHeader = ({activeTab, title, status,handleOpen, 
     const handleChange = e => {
         setPrevStatus(inputs)
         setGetStatus(e.target.value)
-       if (e.target.value === 'INACTIVE' || e.target.value === 'HOLD' || e.target.value === 'TERMINATE'){
-           handleOpen()
-       }if (e.target.value === 'ACTIVE') {
-           dispatch(fundingSourceActions.setStatus(params.id,'funding', e.target.value,'', type ))
-       }
+       // if (e.target.value === 'INACTIVE' || e.target.value === 'HOLD' || e.target.value === 'TERMINATE'){
+        e.target.value !== 'ACTIVE' && handleOpen()
+       // }if (e.target.value === 'ACTIVE') {
+        e.target.value === 'ACTIVE' && dispatch(fundingSourceActions.setStatus(params.id,'funding', e.target.value,'', type ))
+       // }
 
         setInputs(e.target.value)
+
+        handleGetStatus && handleGetStatus(e.target.value)
     };
 
 

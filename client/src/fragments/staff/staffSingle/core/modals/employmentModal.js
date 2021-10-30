@@ -11,29 +11,27 @@ import {
 } from "@eachbase/store";
 import {createClientStyle} from "@eachbase/fragments/client";
 import {Checkbox} from "@material-ui/core";
-import {getAllAdmins} from "../../../../../store/admin/admin.action";
-
 
 export const EmploymentModal = ({handleClose, info}) => {
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info,
-        supervisor : info.supervisor.firstName,
-        departmentId : info?.departmentId?.name,
-        startDate : moment(info?.date).format('YYYY-MM-DD'),
-        endDate : moment(info?.termination?.date).format('YYYY-MM-DD'),
-        employmentType : info?.schedule
+    const [inputs, setInputs] = useState(info ? {
+        ...info,
+        supervisor: info.supervisor.firstName,
+        departmentId: info?.departmentId?.name,
+        startDate: moment(info?.date).format('YYYY-MM-DD'),
+        endDate: moment(info?.termination?.date).format('YYYY-MM-DD'),
+        employmentType: info?.schedule
     } : {});
     const [checked, setChecked] = useState(true);
     const params = useParams()
     const dispatch = useDispatch()
     const departments = useSelector(state => state.system.departments)
-    const staffList = useSelector(state => state.admins.adminsAllList.staff)?.filter(item=>item.id !== params.id && item)
+    const staffList = useSelector(state => state.admins.adminsAllList.staff)?.filter(item => item.id !== params.id && item)
     const classes = createClientStyle()
 
-
-
-    let onCheck  = (e)=>{
+    let onCheck = (e) => {
         setChecked(e.target.checked)
+        error=== 'endDate' && setError('')
     }
 
     useEffect(() => {
@@ -50,9 +48,8 @@ export const EmploymentModal = ({handleClose, info}) => {
     }, []);
 
 
-    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
+    const {httpOnSuccess, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
-        httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,
     }));
 
@@ -73,13 +70,13 @@ export const EmploymentModal = ({handleClose, info}) => {
     }, [success, successCreate])
 
     const handleChange = e => setInputs(
-        prevState => ({...prevState, [e.target.name]: e.target.value === 0? '0' : e.target.value}),
+        prevState => ({...prevState, [e.target.name]: e.target.value === 0 ? '0' : e.target.value}),
         error === e.target.name && setError(''),
     );
 
 
     const handleCreate = () => {
-        if (inputs.title && inputs.departmentId && inputs.supervisor  && checked ? "Present" : inputs.endDate && inputs.startDate) {
+        if (inputs.title && inputs.departmentId && inputs.supervisor && inputs.employmentType && inputs.startDate && checked ? "Present" : inputs.endDate) {
             let depId;
             let supervisorID;
             departments.forEach(item => {
@@ -87,7 +84,7 @@ export const EmploymentModal = ({handleClose, info}) => {
                     depId = item.id
                 }
             })
-            staffList &&     staffList.forEach(item => {
+            staffList && staffList.forEach(item => {
                 if (inputs.supervisor === item.firstName) {
                     supervisorID = item.id
                 }
@@ -100,31 +97,30 @@ export const EmploymentModal = ({handleClose, info}) => {
                 "supervisor": supervisorID,
                 "departmentId": depId,
                 "active": true,
-                "startDate": new Date(inputs.startDate).toISOString(),
+                "startDate": inputs.startDate ? new Date(inputs.startDate).toISOString() : '',
                 "schedule": +inputs.employmentType,
                 "termination": {
-                    // "reason": "string",
                     "date": inputs.endDate ? inputs.endDate : undefined
                 }
             }
 
-        if (info) {
-             dispatch(adminActions.editEmployment(data, info.id, params.id))
+            if (info) {
+                dispatch(adminActions.editEmployment(data, info.id, params.id))
+            } else {
+                dispatch(adminActions.createEmployment(data, params.id))
+            }
         } else {
-            dispatch(adminActions.createEmployment(data, params.id))
-        }
-    }
-
-    else {   setError(
+            setError(
                 !inputs.title ? 'title' :
                     !inputs.supervisor ? 'supervisor' :
                         !inputs.departmentId ? 'departmentId' :
+                            !inputs.employmentType ? 'employmentType' :
                                 !inputs.startDate ? 'startDate' :
                                     !inputs.endDate ? 'endDate' :
-                                            'Input is not field'
+                                        'Input is not field'
             )
         }
-        }
+    }
 
     return (
         <div className={classes.createFoundingSource}>
@@ -165,14 +161,15 @@ export const EmploymentModal = ({handleClose, info}) => {
                             name='employmentType'
                             label={"Employment Type*"}
                             handleSelect={handleChange}
-                           value={ String(inputs.employmentType) }
-                            list={ [{name: 0,} ,{name : 1}]}
+                            value={String(inputs.employmentType)}
+                            list={[{name: 0,}, {name: 1}]}
                             typeError={error === 'employmentType' && ErrorText.field}
                         />
 
-                        <div style={{display: 'flex', alignItems : "center", marginBottom: 16}}>
-                            <Checkbox defaultChecked={true} onClick={onCheck} color={Colors.ThemeBlue} />
-                            <p style={{color : Colors.TextPrimary, fontSize : 16, marginLeft : 10}}>Currently works in this role</p>
+                        <div className={classes.curentlyCheckbox}>
+                            <Checkbox style={{color: Colors.BackgroundBlue}} defaultChecked={true} onClick={onCheck}
+                                      color={Colors.ThemeBlue}/>
+                            <p className={classes.curently}>Currently works in this role</p>
                         </div>
                         <div style={{display: 'flex'}}>
                             <ValidationInput
@@ -185,28 +182,16 @@ export const EmploymentModal = ({handleClose, info}) => {
                                 typeError={error === 'startDate' && ErrorText.field}
                             />
                             <div style={{width: 16}}/>
-                            {/*<ValidationInput*/}
-                            {/*    variant={"outlined"}*/}
-                            {/*    onChange={handleChange}*/}
-                            {/*    value={inputs.endDate}*/}
-                            {/*    type={"date"}*/}
-                            {/*    label={"Terminated Date*"}*/}
-                            {/*    name='endDate'*/}
-                            {/*    typeError={error === 'endDate' && ErrorText.field}*/}
-                            {/*/>*/}
-
                             <ValidationInput
                                 variant={"outlined"}
                                 disabled={checked}
                                 onChange={handleChange}
                                 value={checked ? 'Present' : inputs.endDate}
-                                type={checked ? 'text' :"date"}
+                                type={checked ? 'text' : "date"}
                                 label={"End Date*"}
                                 name='endDate'
                                 typeError={error === 'endDate' && ErrorText.field}
                             />
-
-
                         </div>
                     </div>
                 </div>

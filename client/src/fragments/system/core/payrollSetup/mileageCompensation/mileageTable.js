@@ -37,7 +37,7 @@ export const MileageTable = ({data}) => {
     const [open, setOpen] = useState(false)
 
     const handleOpenClose = (data) => {
-        data && data.item && setEditedData(data)
+        data && data.item && setEditedData(data.item)
         setEditModalOpenClose(!editModalOpenClose)
     }
 

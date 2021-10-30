@@ -64,7 +64,7 @@ export const AuthorizationFile = ({authenticationsId}) => {
         } else if (uploadedFileType === "text/csv") {
             return <img src={Images.csvIcon} alt="csv"/>
         } else {
-            alert('error')
+
         }
     }
 

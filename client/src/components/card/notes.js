@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {Paper, Table, TableCell, TableContainer} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {
@@ -15,18 +15,7 @@ import moment from "moment";
 import {noteActions} from "@eachbase/store/notes";
 import {useParams} from "react-router-dom";
 
-export const Notes = ({
-                          restHeight,
-                          closeModal,
-                          noteModalInfo,
-                          showModal,
-                          data,
-                          headerTitles,
-                          defaultStyle,
-                          items,
-                          noItemsYet,
-                          model,
-                      }) => {
+export const Notes = ({restHeight, closeModal, noteModalInfo, showModal, data, headerTitles, defaultStyle, items, noItemsYet, model,}) => {
 
     const officesStyle = makeStyles(({}) => ({
         thWidth: {
@@ -42,19 +31,7 @@ export const Notes = ({
     const dispatch = useDispatch()
     const params = useParams()
     const classes = officesStyle()
-
     const globalStyle = useGlobalStyles();
-
-    const [page, setPage] = useState(1);
-    const {officesList} = useSelector((state) => ({
-        officesList: state.offices.officesList,
-        httpOnLoad: state.httpOnLoad,
-    }));
-
-    const changePage = (number) => {
-        setPage(number);
-    };
-
     const [open, setOpen] = useState(false);
     const [openDelModal, setOpenDelModal] = useState(false)
     const [noteModalInfoEdit, setNoteModalInfoEdit] = useState({})
@@ -72,29 +49,6 @@ export const Notes = ({
         dispatch(noteActions.deleteGlobalNote(deletedData.id, params.id, model))
     }
 
-    // const {httpOnLoad, httpOnSuccess} = useSelector((state) => ({
-    //     httpOnSuccess: state.httpOnSuccess,
-    //     httpOnLoad: state.httpOnLoad,
-    // }));
-
-    // const success =
-    //     httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_GLOBAL_NOTE' ? true :
-    //         httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_GLOBAL_NOTE' ? true :
-    //             httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_GLOBAL_NOTE'
-
-    // const loader = httpOnLoad.length &&
-    // httpOnLoad[0] === 'CREATE_GLOBAL_NOTE' ? true :
-    //     httpOnLoad[0] === 'EDIT_GLOBAL_NOTE' ? true :
-    //         httpOnLoad[0] === 'DELETE_GLOBAL_NOTE'
-
-    // useEffect(() => {
-    //     if (success) {
-    //         dispatch(httpRequestsOnSuccessActions.removeSuccess(httpOnSuccess.length && httpOnSuccess[0].type))
-    //         dispatch(httpRequestsOnLoadActions.removeLoading(httpOnLoad.length && httpOnLoad[0].type))
-    //         setOpenDelModal(false)
-    //         closeModal()
-    //     }
-    // }, [success]);
 
 
     const loader = FindLoad('DELETE_GLOBAL_NOTE');
@@ -148,7 +102,7 @@ export const Notes = ({
                 showModal &&
                 <>
                     <div className={globalStyle.previewModal} style={{right: noteModalInfo.right}}>
-                        <h1>{noteModalInfo.subject}</h1>
+                        <p>{noteModalInfo.subject}</p>
                         <span>By John Smith</span>
                         <div className={globalStyle.dateContainer}>
                             <p>{moment(noteModalInfo?.created).format('DD/MM/YYYY')}</p>

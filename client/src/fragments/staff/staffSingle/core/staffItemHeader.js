@@ -29,24 +29,11 @@ const filterBtn = {
     height: 36
 }
 
-export const StaffItemHeader = ({
-                                    onModel,
-                                    availabilityData,
-                                    title,
-                                    noteModalTypeInfo,
-                                    openModal,
-                                    handleOpenClose,
-                                    globalCredentialInformation,
-                                    globalCredentials,
-                                    credModalType,
-                                    openCloseCredModal,
-                                    openCredModal,
-                                    activeTab,
-                                    status,handleOpen,
-                                    setGetStatus
-                                    ,setPrevStatus,
-                                    getStatus,
-                                    type
+export const StaffItemHeader = ({onModel, availabilityData, title, noteModalTypeInfo,
+                                    openModal, handleOpenClose, globalCredentialInformation,
+                                    globalCredentials, credModalType, openCloseCredModal,
+                                    openCredModal, activeTab, status,handleOpen, setGetStatus,
+                                    setPrevStatus, getStatus, type
                                 }) => {
     const [inputs, setInputs] = useState({active: 'Active'});
 
@@ -116,15 +103,15 @@ export const StaffItemHeader = ({
     return (
         <div>
             <ul className={classes.tabsWrapper}>
-                <li>
+                <li style={{display:'flex', alignItems:'center'}}>
                     <img src={Images.userProfile} alt="avatar" className={classes.avatar}/>
                     <div className={classes.nameContent}>
                         <h1 className={classes.name}>{title}</h1>
-                        <div className={classes.tagContent}>
-                            <p>Tag Name</p>
-                            <p>Tag Name</p>
-                            <p>Tag Name</p>
-                        </div>
+                        {/*<div className={classes.tagContent}>*/}
+                        {/*    <p>Tag Name</p>*/}
+                        {/*    <p>Tag Name</p>*/}
+                        {/*    <p>Tag Name</p>*/}
+                        {/*</div>*/}
                     </div>
                 </li>
                 <li  className={classes.headerRight}>

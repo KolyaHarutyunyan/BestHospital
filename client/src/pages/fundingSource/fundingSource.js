@@ -36,7 +36,9 @@ export const FundingSource = () => {
             addButtonText={'Add Funding Source'}
             handleOpenClose={handleOpenClose}
             openCloseInfo={open}
-            body={<CreateFundingSource handleClose={handleOpenClose}/>}
+            body={
+                <CreateFundingSource handleClose={handleOpenClose}/>
+            }
         >
             <FundingSourceTable handleGetPage={setPage} status={status}/>
         </TableWrapper>

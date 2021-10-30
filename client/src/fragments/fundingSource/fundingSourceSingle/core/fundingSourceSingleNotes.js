@@ -2,30 +2,23 @@ import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import moment from "moment";
 import {DeleteElement, Notes, SimpleModal, TableBodyComponent} from "@eachbase/components";
-import {Images} from "@eachbase/utils";
+import {FindLoad, FindSuccess, Images} from "@eachbase/utils";
 import {TableCell} from "@material-ui/core";
-import {httpRequestsOnSuccessActions} from "@eachbase/store";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {noteActions} from "@eachbase/store/notes";
 
-
-export const FundingSourceSingleNotes = ({ data}) => {
+export const FundingSourceSingleNotes = ({data}) => {
     const params = useParams()
-    const [toggleModal, setToggleModal] = useState(false)
     const dispatch = useDispatch()
+    const [noteModalData, setNoteModalData] = useState({})
+    const [openDelModal, setOpenDelModal] = useState(false)
+    const deleteSuccess = FindSuccess('DELETE_GLOBAL_NOTE')
+    const loader = FindLoad('DELETE_GLOBAL_NOTE')
     const [noteModalInfo, setNoteModalInfo] = useState({
         right: '-1000px',
         created: '',
         subject: '',
     })
-    const [noteModalData, setNoteModalData] = useState({})
-    const [openDelModal,setOpenDelModal] = useState(false)
-    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
-        httpOnSuccess: state.httpOnSuccess,
-        httpOnError: state.httpOnError,
-        httpOnLoad: state.httpOnLoad,
-    }));
-    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_FUNDING_SOURCE_NOTE'
 
     const headerTitles = [
         {
@@ -46,18 +39,10 @@ export const FundingSourceSingleNotes = ({ data}) => {
         },
     ];
 
-    useEffect(() => {
-        if (success) {
-            setToggleModal(!toggleModal)
-            dispatch(httpRequestsOnSuccessActions.removeSuccess('DELETE_FUNDING_SOURCE_NOTE'))
-        }
-
-    }, [success])
-
     let notesItem = (item, index) => {
         return (
-            <TableBodyComponent key={index} handleOpenInfo={()=> openNoteModal({
-                created:item?.created,
+            <TableBodyComponent key={index} handleOpenInfo={() => openNoteModal({
+                created: item?.created,
                 subject: item?.subject,
                 id: item?.id,
                 text: item?.text
@@ -68,19 +53,19 @@ export const FundingSourceSingleNotes = ({ data}) => {
                 <TableCell>
                     <img src={Images.remove} alt="delete" style={{cursor: 'pointer'}} onClick={(e) => {
                         e.stopPropagation();
-                        handleOpenCloseDel({id: item.id,deletedName: item.subject,text: item.text})
-                    }} />
+                        handleOpenCloseDel({id: item.id, deletedName: item.subject, text: item.text})
+                    }}/>
                 </TableCell>
             </TableBodyComponent>
         )
     }
 
-    const handleOpenCloseDel = (data)=>{
+    const handleOpenCloseDel = (data) => {
         setNoteModalData(data)
         setOpenDelModal(!openDelModal)
     }
 
-    const openNoteModal = (data) =>{
+    const openNoteModal = (data) => {
         setNoteModalInfo({
             right: '87px',
             created: data?.created,
@@ -90,7 +75,7 @@ export const FundingSourceSingleNotes = ({ data}) => {
         })
     }
 
-    const closeNoteModal = () =>{
+    const closeNoteModal = () => {
         setNoteModalInfo({
             right: '-1000px',
             created: '',
@@ -98,27 +83,42 @@ export const FundingSourceSingleNotes = ({ data}) => {
             id: ''
         })
     }
-    const handleDeleteNote = () =>{
+
+    const handleDeleteNote = () => {
         dispatch(noteActions.deleteGlobalNote(noteModalData.id, params.id, 'Funder'))
-        setOpenDelModal(false)
-        closeNoteModal()
     }
+
+    useEffect(() => {
+        if (deleteSuccess) {
+            setOpenDelModal(false)
+            closeNoteModal()
+        }
+    }, [deleteSuccess.length])
+
     return (
         <>
             <Notes
-                    restHeight='360px'
-                    model={'Funder'}
-                    closeModal={closeNoteModal}
-                    noteModalInfo={noteModalInfo}
-                    showModal={true}
-                    pagination={true}
-                    data={data}
-                    items={notesItem}
-                    headerTitles={headerTitles}/>
+                restHeight='360px'
+                model={'Funder'}
+                closeModal={closeNoteModal}
+                noteModalInfo={noteModalInfo}
+                showModal={true}
+                pagination={true}
+                data={data}
+                items={notesItem}
+                headerTitles={headerTitles}/>
             <SimpleModal
                 openDefault={openDelModal}
                 handleOpenClose={handleOpenCloseDel}
-                content={<DeleteElement text='delete Note' info={noteModalData?.deletedName} handleDel={handleDeleteNote} handleClose={handleOpenCloseDel}/>}
+                content={
+                    <DeleteElement
+                        loader={!!loader.length}
+                        text='delete Note'
+                        info={noteModalData?.deletedName}
+                        handleDel={handleDeleteNote}
+                        handleClose={handleOpenCloseDel}
+                    />
+                }
             />
         </>
 
