@@ -73,15 +73,15 @@ export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setG
     return (
         <div>
             <ul className={classes.tabsWrapper}>
-                <li>
+                <li style={{display:'flex',alignItems:'center'}}>
                     <img src={Images.userProfile} alt="avatar" className={classes.avatar}/>
                     <div className={classes.nameContent}>
                         <h1 className={classes.name}>{data ? `${data?.firstName} ${data?.lastName}` : ''}</h1>
-                        <div className={classes.tagContent}>
-                            <p>Tag Name</p>
-                            <p>Tag Name</p>
-                            <p>Tag Name</p>
-                        </div>
+                        {/*<div className={classes.tagContent}>*/}
+                            {/*<p>Tag Name</p>*/}
+                            {/*<p>Tag Name</p>*/}
+                            {/*<p>Tag Name</p>*/}
+                        {/*</div>*/}
                     </div>
                 </li>
                 <li className={classes.headerRight}>

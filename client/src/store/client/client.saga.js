@@ -500,13 +500,18 @@ function* deleteClientAuthorizationsServ(action) {
 }
 
 function* getClientHistories(action) {
+    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.getClientHistoriesService, action.payload.id, action.payload.onModal);
         yield put({
             type: GET_CLIENT_HISTORIES_SUCCESS,
             payload: res.data,
         });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
     } catch (error) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
 }
 

@@ -255,12 +255,14 @@ function* getFundingSourceServicesModifierClient(action) {
 
 function* getFundingSourceHistoriesById(action) {
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.getFundingSourceHistoriesByIdService, action.payload.onModal, action.payload.searchDate);
         yield put({
             type: GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS,
             payload: res.data,
         });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
     } catch (error) {
 
         if (!action.payload.searchDate) {
@@ -269,6 +271,7 @@ function* getFundingSourceHistoriesById(action) {
                 payload: [],
             });
         } else {
+            yield put(httpRequestsOnLoadActions.removeLoading(action.type));
             yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
         }
     }

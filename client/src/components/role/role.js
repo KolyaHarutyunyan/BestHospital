@@ -15,7 +15,7 @@ export const Role = () => {
     }
 
     const getRoleItemId = (id) =>{
-        alert(`index: ${id}`);
+        // alert(`index: ${id}`);
     }
 
     return (

@@ -17,7 +17,6 @@ import {
 } from "./core";
 import {fundingSourceItemStyle} from "./styles";
 
-
 export const FundingSourceItem = ({}) => {
     const [open, setOpen] = useState(false)
     const data = useSelector(state => state.fundingSource.fundingSourceItem)
@@ -28,11 +27,13 @@ export const FundingSourceItem = ({}) => {
     const [activeTab, setActiveTab] = useState(0)
     const [getStatus, setGetStatus] = useState('')
     const [prevStatus, setPrevStatus] = useState('')
+
+
+    const [statusType, setStatusType] = useState('')
+
     const classes = fundingSourceItemStyle()
 
-
     const handleOpenClose = () => {
-        alert('gj')
         setGetStatus(data?.status)
         setOpen(!open)
     }
@@ -44,7 +45,6 @@ export const FundingSourceItem = ({}) => {
         {label: 'History'}
     ]
 
-
     const {httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnError: state.httpOnError,
@@ -53,15 +53,18 @@ export const FundingSourceItem = ({}) => {
 
     const tabsContent = [
         {tabComponent: httpOnLoad.length > 0 ? <Loader/> : <FundingSourceSingleGeneral data={data}/>},
+
         {
             tabComponent: servicesData.length ?
                 <FundingSourceSingleServices data={servicesData} globalServices={globalServices}/> :
                 <NoItemText text='No Services Yet'/>
         },
+
         {
             tabComponent: globalNotes.length ? <FundingSourceSingleNotes data={globalNotes}/> :
                 <NoItemText text='No Notes Yet'/>
         },
+
         {
             tabComponent: historiesData.length ? <FundingSourceSingleHistories data={historiesData}/> :
                 <NoItemText text='No Histories Yet'/>
@@ -78,23 +81,26 @@ export const FundingSourceItem = ({}) => {
                 openCloseInfo={open}
                 handleOpenClose={handleOpenClose}
 
-                body={<InactiveModal
-                    status={data?.status}
-                    name={data?.name}
-                    setGetStatus={setGetStatus}
-                    prevStatus={prevStatus}
-                    info={{
-                        status: getStatus,
-                        path: 'funding',
-                        type: 'GET_FUNDING_SOURCE_BY_ID_SUCCESS'
-                    }}
-                    handleOpenClose={handleOpenClose}
+                body={
+                    <InactiveModal
+                        statusType={statusType}
+                        // status={data?.status}
+                        name={data?.name}
+                        // setGetStatus={setGetStatus}
+                        // prevStatus={prevStatus}
+                        info={{
+                            status: getStatus,
+                            path: 'funding',
+                            type: 'GET_FUNDING_SOURCE_BY_ID_SUCCESS'
+                        }}
+                        handleOpenClose={handleOpenClose}
 
-                />
+                    />
                 }
             >
                 <div className={classes.fundingSourceItemHeader}>
                     <FundingSourceSingleHeader
+                        handleGetStatus={setStatusType}
                         type='GET_FUNDING_SOURCE_BY_ID_SUCCESS'
                         setGetStatus={setGetStatus}
                         getStatus={getStatus}

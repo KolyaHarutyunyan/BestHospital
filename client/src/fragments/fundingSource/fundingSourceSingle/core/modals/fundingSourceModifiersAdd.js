@@ -5,13 +5,8 @@ import {ErrorText, Images} from "@eachbase/utils";
 
 
 
-export const FundingSourceModifiersAdd = ({
-                                              setPostModifiers,
-                                              globalCredentials,
-                                              modifiersServ,
-                                              addNewMod,
-                                              setGetLastMod
-                                          }) => {
+export const FundingSourceModifiersAdd = ({setPostModifiers, globalCredentials, modifiersServ, addNewMod, setGetLastMod}) => {
+
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState({});
     const [inputs2, setInputs2] = useState({});

@@ -33,9 +33,8 @@ export const PaycodeModal = ({handleClose, info,employmentId}) => {
         dispatch(payrollActions.getPayCodeGlobal())
     }, []);
 
-    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
+    const {httpOnSuccess, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
-        httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,
     }));
 
@@ -77,6 +76,7 @@ export const PaycodeModal = ({handleClose, info,employmentId}) => {
 
     let onCheck  = (e)=>{
         setChecked(e.target.checked)
+       
     }
 
     const handleCreate = () => {
@@ -145,7 +145,7 @@ export const PaycodeModal = ({handleClose, info,employmentId}) => {
                             typeError={error === 'rate' && ErrorText.field}
                         />
                         <div className={classes_v2.paycodeBox}>
-                            <Checkbox defaultChecked={checked} onClick={onCheck} color={Colors.ThemeBlue} />
+                            <Checkbox  style={{color:Colors.BackgroundBlue}} defaultChecked={checked} onClick={onCheck} color={Colors.ThemeBlue} />
                             <p className={classes_v2.activePaycode}>Active Paycode</p>
                         </div>
                         <div style={{display: 'flex'}}>

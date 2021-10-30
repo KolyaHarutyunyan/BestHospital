@@ -168,6 +168,26 @@ export const inputsStyle = makeStyles(() => ({
       color: Colors.TextLightGray
     },
   },
+  errorTextareaTextField:{
+    width:'100%',
+    resize: 'none',
+    height:'128px!important',
+    borderColor:Colors.ThemeRed,
+    padding: '13px 0 10px 16px',
+    borderRadius: '4px',
+    overflow: 'unset!important',
+    msOverflowStyle: 'none',
+    scrollbarWidth: 'none',
+    '&::-webkit-scrollbar': {
+      display: 'none'
+    },
+
+    '&::placeholder' : {
+      fontSize: '14px',
+      lineHeight: '19px',
+      color: Colors.TextLightGray
+    },
+  },
   inputTextFieldAutoHeight:{
     '& .MuiOutlinedInput-root':{
       // minHeight:'48px',

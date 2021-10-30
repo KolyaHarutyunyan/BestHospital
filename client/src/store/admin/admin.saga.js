@@ -343,14 +343,12 @@ function* isClinician(action) {
 
     try {
          const res = yield call(authService.isClinicianService, action.payload.id, action.payload.isClinical )
-        console.log(res,'res service')
 
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        console.log(err, ' errr del paycode')
 
     }
 }

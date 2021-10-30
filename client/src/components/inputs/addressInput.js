@@ -3,7 +3,7 @@ import PlacesAutocomplete from "react-places-autocomplete";
 import { inputsStyle } from "./styles";
 import axios from "axios";
 import { CountryList, useGlobalStyles } from "@eachbase/utils";
-import { SelectInput, ValidationInput } from "@eachbase/components";
+import {ErrMessage, SelectInput, ValidationInput} from "@eachbase/components";
 import { State } from 'country-state-city';
 
 export const AddressInput = ({handleSelectValue, info, disabled, flex, oneInput, errorBoolean, auth, all, type, handleGetAll }) => {
@@ -71,7 +71,8 @@ export const AddressInput = ({handleSelectValue, info, disabled, flex, oneInput,
                             },
                         })}
                     />
-                    <p className={classes.errorText}>{errorBoolean ? errorBoolean : ''}</p>
+                    <ErrMessage text={errorBoolean ? errorBoolean : ''}/>
+                    {/*<p className={classes.errorText}>{errorBoolean ? errorBoolean : ''}</p>*/}
                     <div>
                         {loading && <div>Loading...</div>}
 
