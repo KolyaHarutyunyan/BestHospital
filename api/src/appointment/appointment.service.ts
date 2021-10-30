@@ -119,7 +119,14 @@ export class AppointmentService {
         );
       }
       else if (dto.repeatCountWeek && !dto.repeatCheckWeek) {
-        console.log('dto.repeatCountWeek && !dto.repeatCheckWeek')
+        console.log('dto.repeatCountWeek && !dto.repeatCheckWeek');
+        const diff = this.weeks_between(new Date(dto.startDate), new Date(dto.endDate));
+        //////////////////////////////////////////////////////////////////
+        cron.schedule(``, () => {
+          console.log(`running a task every ${dto.repeatCountWeek}`);
+        });
+        //////////////////////////////////////////////////////////////////
+        return { occurrency: diff }
       }
       else if (!dto.repeatCountWeek && dto.repeatCheckWeek) {
         console.log('!dto.repeatCountWeek && dto.repeatCheckWeek');
@@ -164,7 +171,7 @@ export class AppointmentService {
       }
       else if (dto.repeatDayMonth && !dto.repeatMonth) {
         console.log('dto.repeatDayMonth && !dto.repeatMonth')
-     
+
         let start = new Date(dto.startDate);
         let end = new Date(dto.endDate);
         let count = 0;
@@ -235,5 +242,16 @@ export class AppointmentService {
       curDate.setDate(curDate.getDate() + 1);
     }
     return count;
+  }
+  weeks_between(start: Date, end: Date) {
+    // The number of milliseconds in one week
+    var ONE_WEEK = 1000 * 60 * 60 * 24 * 7;
+    // Convert both dates to milliseconds
+    var start_ms = start.getTime();
+    var end_ms = end.getTime();
+    // Calculate the difference in milliseconds
+    var difference_ms = Math.abs(start_ms - end_ms);
+    // Convert back to weeks and return hole weeks
+    return Math.floor(difference_ms / ONE_WEEK);
   }
 }
