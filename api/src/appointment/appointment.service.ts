@@ -1,15 +1,15 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { ClientService } from '../client/client.service';
-import { AuthorizationserviceService } from '../client/authorizationservice/authorizationservice.service';
-import { StaffService } from '../staff/staff.service';
-import { PaycodeService } from '../employment/paycode/paycode.service';
-import { MongooseUtil } from '../util/mongoose.util';
 import { Model } from 'mongoose';
-import { AppointmentModel, appointmentSchema } from './appointment.model';
-import { IAppointment } from './interface';
-import { AppointmentSanitizer } from './interceptor/appointment.interceptor';
-import { CreateAppointmentDto, UpdateAppointmentDto, AppointmentDto, CreateRepeatDto } from './dto';
 import * as cron from 'node-cron';
+import { AuthorizationserviceService } from '../client/authorizationservice/authorizationservice.service';
+import { ClientService } from '../client/client.service';
+import { PaycodeService } from '../employment/paycode/paycode.service';
+import { StaffService } from '../staff/staff.service';
+import { MongooseUtil } from '../util/mongoose.util';
+import { AppointmentModel } from './appointment.model';
+import { AppointmentDto, CreateAppointmentDto, CreateRepeatDto, UpdateAppointmentDto } from './dto';
+import { AppointmentSanitizer } from './interceptor/appointment.interceptor';
+import { IAppointment } from './interface';
 
 @Injectable()
 export class AppointmentService {
@@ -164,18 +164,29 @@ export class AppointmentService {
       }
       else if (dto.repeatDayMonth && !dto.repeatMonth) {
         console.log('dto.repeatDayMonth && !dto.repeatMonth')
-        // const startDate: any = new Date(dto.startDate);
-        // const endDate: any = new Date(dto.endDate);
-        // let months;
-        // months = (endDate.getFullYear() - startDate.getFullYear()) * 12;
-        // months -= startDate.getMonth();
-        // months += endDate.getMonth();
+     
+        let start = new Date(dto.startDate);
+        let end = new Date(dto.endDate);
+        let count = 0;
+        let loop = new Date(start);
+        while (loop <= end) {
+          if (loop.getDate() < dto.repeatDayMonth || start.getMonth() < loop.getMonth()) {
+            ++count;
+          }
+          let newDate = loop.setMonth(loop.getMonth() + 1);
+          loop = new Date(newDate);
+          if (loop.getMonth() == end.getMonth()) {
+            if (end.getDate() < dto.repeatDayMonth) {
+              return { occurrency: count }
+            }
+            return { occurrency: ++count }
+          }
+        }
 
-        // console.log(endDate.getMonth() + 1, 'aaaa', months, 'month');
-        // cron.schedule(`0 0 */${dto.repeatDayMonth} * *`, () => {
-        //   console.log('running a task every month by checked day');
-        // });
-        // return { occurrency: Math.floor(months / dto.repeatDayMonth) }
+        cron.schedule(`0 0 */${dto.repeatDayMonth} * *`, () => {
+          console.log('running a task every month by checked day');
+        });
+        return { occurrency: count }
 
       }
       else if (!dto.repeatDayMonth && dto.repeatMonth) {
