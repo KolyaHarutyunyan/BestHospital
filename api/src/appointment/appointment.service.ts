@@ -76,6 +76,19 @@ export class AppointmentService {
   }
 
   async repeat(dto: CreateRepeatDto): Promise<any> {
+    let now = new Date();
+    if (dto.startDate > dto.endDate) {
+      throw new HttpException(
+        `startDate can not be higher than endDate`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (new Date(dto.startDate) < now) {
+      dto.startDate = now;
+    }
+    if (new Date(dto.endDate) < now) {
+      dto.endDate = now;
+    }
     if (dto.mode == 'DAILY') {
       if (!dto.repeatCount && !dto.repeatConsecutive) {
         throw new HttpException(
@@ -105,7 +118,7 @@ export class AppointmentService {
 
         const count = this.getBusinessDatesCount(startDate, endDateDate)
         cron.schedule('0 0 * * 1-5', () => {
-          console.log('running a task every minute');
+          console.log('running a task every weekdays');
         });
         return count;
       }
@@ -150,7 +163,7 @@ export class AppointmentService {
         cron.schedule(`0 0 * * */${week}`, () => {
           console.log('running a task every checked day');
         });
-        return count
+        return count;
       }
       else if (dto.repeatCountWeek && dto.repeatCheckWeek) {
         console.log('dto.repeatCountWeek && dto.repeatCheckWeek');
@@ -171,15 +184,15 @@ export class AppointmentService {
       }
       else if (dto.repeatDayMonth && !dto.repeatMonth) {
         console.log('dto.repeatDayMonth && !dto.repeatMonth')
-
         let start = new Date(dto.startDate);
         let end = new Date(dto.endDate);
         let count = 0;
         let loop = new Date(start);
         while (loop <= end) {
-          if (loop.getDate() < dto.repeatDayMonth || start.getMonth() < loop.getMonth()) {
+          if (loop.getDate() < dto.repeatDayMonth || start.getMonth() <= loop.getMonth()) {
             ++count;
           }
+
           let newDate = loop.setMonth(loop.getMonth() + 1);
           loop = new Date(newDate);
           if (loop.getMonth() == end.getMonth()) {
@@ -189,10 +202,11 @@ export class AppointmentService {
             return { occurrency: ++count }
           }
         }
-
         cron.schedule(`0 0 */${dto.repeatDayMonth} * *`, () => {
           console.log('running a task every month by checked day');
         });
+        
+        // this.everyMinute()
         return { occurrency: count }
 
       }
@@ -253,5 +267,17 @@ export class AppointmentService {
     var difference_ms = Math.abs(start_ms - end_ms);
     // Convert back to weeks and return hole weeks
     return Math.floor(difference_ms / ONE_WEEK);
+  }
+  // cron operation
+  everyMinute() {
+    let task = cron.schedule('* * * * *', () =>  {
+      console.log('stopped task');
+    }, {
+      scheduled: false
+    });
+    task.start()
+    if(new Date() == new Date('Sun Oct 31 2021 13:13:33 GMT+0400')){
+      task.stop()
+    }
   }
 }
