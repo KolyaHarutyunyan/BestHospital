@@ -57,7 +57,6 @@ export const ToastSuccess = (success) => {
             success === 'DELETE_STAFF_SERVICE' ? 'Successfully deleted service' :
             success === 'CREATE_STAFF_SERVICE' ? 'Successfully created service' :
 
-
             success === 'CREATE_ROLE' ? 'Role Was Created' :
             success === 'DELETE_ROLE' ? 'Role Was Deleted' :
             success === 'CREATE_MILEAGE' ? 'Successfully created Mileage' :
@@ -69,6 +68,8 @@ export const ToastSuccess = (success) => {
             success === 'CREATE_PLACE_GLOBAL' ? 'Successfully created Place' :
             success === 'EDIT_PLACE_BY_ID_GLOBAL' ? 'Successfully edited Place' :
             success === 'DELETE_PLACE_BY_ID_GLOBAL' ? 'Successfully deleted Place' :
+            success === 'CREATE_UPLOAD' ? 'Successfully uploaded File' :
+            success === 'DELETE_UPLOADS' ? 'Successfully deleted File' :
 
             false
         )

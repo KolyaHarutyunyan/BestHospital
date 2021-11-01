@@ -29,7 +29,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) =>
     const [authenticationsId, setAuthentications] = useState('')
 
     const params = useParams()
-    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
+    const {httpOnSuccess, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,
@@ -39,6 +39,9 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) =>
     const successDelServ = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION_SERV'
 
 
+    const handleClose = () =>{
+        setCreateEditFile(!createEditFile)
+    }
 
 
     useEffect(() => {
@@ -127,6 +130,8 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) =>
         setAuthentications(id)
     }
 
+    const uploadedFiles = useSelector(state => state.upload.uploadedInfo)
+
     return (
         <div className={classes.staffGeneralWrapper}>
             <SimpleModal
@@ -170,7 +175,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) =>
             <SimpleModal
                 handleOpenClose={() => setCreateEditFile(!createEditFile)}
                 openDefault={createEditFile}
-                content={<AuthorizationFile authenticationsId={authenticationsId}/>}
+                content={<AuthorizationFile handleClose={handleClose} authenticationsId={authenticationsId} uploadedFiles={uploadedFiles}/>}
             />
             <Card
                 width='234px'

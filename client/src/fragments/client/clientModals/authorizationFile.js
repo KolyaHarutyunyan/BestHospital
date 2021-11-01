@@ -17,32 +17,50 @@ const credentialBtn = {
     height: 48
 }
 
-export const AuthorizationFile = ({authenticationsId}) => {
+export const AuthorizationFile = ({authenticationsId, handleClose, uploadedFiles}) => {
 
     const classes = createClientStyle()
 
     const dispatch = useDispatch()
-    const uploadedFiles = useSelector(state => state.upload.uploadedInfo)
+    // const uploadedFiles = useSelector(state => state.upload.uploadedInfo)
     const [fileName, setFileName] = useState('')
+    const [fileBack, setFileBack] = useState(uploadedFiles ? [...uploadedFiles] : [])
 
     const [selectedFile, setSelectedFile] = useState()
 
+
+    const [another, setAnother] = useState('')
+    const [anotherId, setAnotherId] = useState('')
+    const [info, setInfo] = useState('')
+
     const handleChange = (e) => {
+
         setFileName(e.target.value)
     }
 
     const hiddenFileInput = React.useRef(null);
 
     const handleClick = () => {
-        hiddenFileInput.current.click();
+        // hiddenFileInput.current.click();
     };
-    const handleSubmit = () => {
 
+    const handleSubmit = () => {
+        handleClose && handleClose()
     }
+
+    const success = FindSuccess('CREATE_UPLOAD')
+
+    useEffect(() => {
+        if (success) {
+            setFileName('')
+            setSelectedFile('')
+        }
+    }, [success.length])
 
     useEffect(() => {
         dispatch(uploadActions.getUpload(authenticationsId))
     }, [])
+
 
     const handleChangeFile = event => {
         const createInfo = {
@@ -68,8 +86,6 @@ export const AuthorizationFile = ({authenticationsId}) => {
     }
 
     const createLoader = FindLoad('CREATE_UPLOAD')
-    const createSuccess = FindSuccess('CREATE_UPLOAD')
-
     const getLoader = FindLoad('GET_UPLOADS')
 
     const [progress, setProgress] = React.useState(10);
@@ -99,19 +115,49 @@ export const AuthorizationFile = ({authenticationsId}) => {
     }
 
     React.useEffect(() => {
-       if (createLoader){
-           const timer = setInterval(() => {
-               setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
-           }, 800);
-           return () => {
-               clearInterval(timer);
-           };
-       }
+        if (createLoader) {
+            const timer = setInterval(() => {
+                setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
+            }, 800);
+            return () => {
+                clearInterval(timer);
+            };
+        }
     }, [createLoader.length]);
 
-    const deleteItem = (id) =>{
-        dispatch(uploadActions.delUpload(id,authenticationsId))
+    const deleteItem = (id) => {
+        dispatch(uploadActions.delUpload(id, authenticationsId))
     }
+
+    const handleChangeFileName =(e, id, item) =>{
+        setAnother(e.target.value)
+        setAnotherId(id)
+        setInfo(item)
+    }
+    const params = useParams()
+
+    const changeFile = FindSuccess('EDIT_UPLOAD')
+    useEffect(() =>{
+        if(changeFile){
+            setAnotherId('')
+            setAnother('')
+            setInfo('')
+        }
+    },[changeFile.length])
+
+    const handleChangeType =() =>{
+        if(another) {
+            const date = {
+                "type": another,
+                "url": info.url,
+                "mimetype": info.mimetype,
+                "size": info.size,
+                "name": info.name
+            }
+            dispatch(uploadActions.editUpload(date, anotherId, authenticationsId))
+        }
+    }
+
 
     return (
         <div className={classes.authorizationFileWrapper}>
@@ -136,28 +182,41 @@ export const AuthorizationFile = ({authenticationsId}) => {
                     placeholder={'File Type*'}
                     errorFalse={true}
                 />
-                <input
-                    hidden
-                    type="file"
-                    ref={hiddenFileInput}
-                    onChange={handleChangeFile}
-                />
-                <AddButton
-                    styles={credentialBtn}
-                    disabled={!fileName}
-                    text='Upload a file'
-                    handleClick={handleClick}
-                />
+
+                <div>
+                <input disabled={!fileName} onChange={handleChangeFile} type="file" id="BtnBrowseHidden" name="files" style={{display: 'none'}}/>
+
+                <label  htmlFor="BtnBrowseHidden" id="LblBrowse">
+                    <div
+                        style={fileName ? {} : {background: 'rgba(52,122,240,.5)'}}
+                       className={classes.uploadButton}>
+                        <img src={Images.addCircle} alt={'icon'}/>
+                        <span>Upload a file</span>
+                    </div>
+                </label>
+              </div>
+
+                {/*<input*/}
+                {/*    hidden*/}
+                {/*    type="file"*/}
+                {/*    ref={hiddenFileInput}*/}
+                {/*    onChange={handleChangeFile}*/}
+                {/*/>*/}
+                {/*<AddButton*/}
+                {/*    styles={credentialBtn}*/}
+                {/*    disabled={!fileName}*/}
+                {/*    text='Upload a file'*/}
+                {/*    handleClick={handleClick}*/}
+                {/*/>*/}
             </div>
             <p className={classes.authorizationFileSubTitle}>uploaded files</p>
-
 
 
             <div className={!uploadedFiles ? classes.centered : classes.normal}>
 
 
-            {getLoader.length ?
-                  <Loader height={'29.8vh'} />
+                {getLoader.length ?
+                    <Loader height={'29.8vh'}/>
                     :
                     <div className={!uploadedFiles.length ? classes.centered : classes.normal}>
                         {
@@ -195,17 +254,17 @@ export const AuthorizationFile = ({authenticationsId}) => {
                                                 <div>
                                                     {checkFileType(item.mimetype)}
                                                     <p className={classes.fileSize}>{item.size}</p>
-                                                    <img onClick={()=> deleteItem(item.id)} src={Images.removeIcon} alt="removeIcon" className={classes.removeIcon}/>
+                                                    <img onClick={() => deleteItem(item.id)} src={Images.removeIcon}
+                                                         alt="removeIcon" className={classes.removeIcon}/>
                                                 </div>
                                             </div>
                                             <div className={classes.fileInput}>
                                                 <p className={classes.fileName}>{item.name}</p>
                                                 <ValidationInput
-                                                    onChange={(e) => {
-                                                      console.log(e)
-                                                    }}
+                                                    handleBlur={() => handleChangeType()}
+                                                    onChange={(e) => {handleChangeFileName(e, item.id, item)}}
                                                     className={classes.fileNameInput}
-                                                    value={item.type}
+                                                    value={another ? anotherId === item.id ? another : item.type : item.type}
                                                     variant={"outlined"}
                                                     name={"type"}
                                                     type={"text"}
@@ -213,7 +272,9 @@ export const AuthorizationFile = ({authenticationsId}) => {
                                                     errorFalse={true}
                                                 />
                                             </div>
+                                            <a href={item.url} target={'_blank'} download>
                                             <img src={Images.download} className={classes.downloadIcon} alt="download"/>
+                                            </a>
                                         </div>
                                     )
                                 })
@@ -224,10 +285,11 @@ export const AuthorizationFile = ({authenticationsId}) => {
                                 </div>
                         }
                     </div>
-            }
+                }
 
+
+            </div>
             <AddModalButton handleClick={handleSubmit} text='Done'/>
-         </div>
         </div>
     )
 }

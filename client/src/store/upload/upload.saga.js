@@ -1,7 +1,7 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import { authService } from "./upload.service";
 import {
-  CREATE_UPLOAD, DELETE_UPLOADS, GET_UPLOADS, GET_UPLOADS_ERROR, GET_UPLOADS_SUCCESS,
+  CREATE_UPLOAD, DELETE_UPLOADS, EDIT_UPLOAD, GET_UPLOADS, GET_UPLOADS_ERROR, GET_UPLOADS_SUCCESS,
 } from "./upload.types";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
@@ -31,6 +31,32 @@ function* createUpload({payload,type}) {
         payload: { resource: payload.createInfo.resource}
       });
     }
+    yield put(httpRequestsOnLoadActions.removeLoading(type));
+    yield put(httpRequestsOnSuccessActions.appendSuccess(type));
+  } catch (err) {
+    yield put(httpRequestsOnLoadActions.removeLoading(type));
+    yield put(httpRequestsOnErrorsActions.appendError(type));
+  }
+}
+
+/** End */
+
+
+/** Create, Upload */
+
+function* editUpload({payload,type}) {
+  yield put(httpRequestsOnErrorsActions.removeError(type));
+  yield put(httpRequestsOnLoadActions.appendLoading(type));
+  try {
+    yield put(httpRequestsOnLoadActions.appendLoading(type));
+    const res = yield call( authService.editUploadService, payload.body, payload.id );
+
+
+      yield put({
+        type: GET_UPLOADS,
+        payload: { resource: payload.resource}
+      });
+
     yield put(httpRequestsOnLoadActions.removeLoading(type));
     yield put(httpRequestsOnSuccessActions.appendSuccess(type));
   } catch (err) {
@@ -90,6 +116,10 @@ export const watchUpload = function* watchUploadSaga() {
 
   /** Create, Upload */
   yield takeLatest( CREATE_UPLOAD, createUpload );
+  /** End */
+
+  /** Create, Upload */
+  yield takeLatest( EDIT_UPLOAD, editUpload );
   /** End */
 
   /** Get Mcs */
