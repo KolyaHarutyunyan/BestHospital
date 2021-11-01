@@ -15,11 +15,11 @@ export class AppointmentController {
   create(@Body() createAppointmentDto: CreateAppointmentDto) {
     return this.appointmentService.create(createAppointmentDto);
   }
-  @Post('repeat')
+  @Post('repeat/:id')
   @Public()
   // @ApiOkResponse({ type: AppointmentDto })
-  repeat(@Body() createRepeatDto: CreateRepeatDto) {
-    return this.appointmentService.repeat(createRepeatDto);
+  repeat(@Body() createRepeatDto: CreateRepeatDto, @Param('id') id: string) {
+    return this.appointmentService.repeat(createRepeatDto, id);
   }
   @Get()
   findAll() {
