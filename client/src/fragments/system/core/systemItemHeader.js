@@ -29,6 +29,8 @@ export const SystemItemHeader = ({
             dispatch(systemActions.deleteDepartmentByIdGlobal(deletedId))
         } else if (modalType === 'editJobTitles') {
             dispatch(systemActions.deleteJobByIdGlobal(deletedId))
+        } else if (modalType === 'editPlaceTitles') {
+            dispatch(systemActions.deletePlaceByIdGlobal(deletedId))
         }
     }
 
@@ -43,7 +45,8 @@ export const SystemItemHeader = ({
         httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_SERVICE_BY_ID_GLOBAL' ? true :
             httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CREDENTIAL_BY_ID_GLOBAL' ? true :
                 httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_DEPARTMENT_BY_ID_GLOBAL' ? true :
-                    httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_JOB_BY_ID_GLOBAL'
+                    httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_JOB_BY_ID_GLOBAL' ? true :
+                        httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_PLACE_BY_ID_GLOBAL'
 
 
     const loader = httpOnLoad.length &&
@@ -51,7 +54,8 @@ export const SystemItemHeader = ({
         httpOnLoad[0] === 'EDIT_CREDENTIAL_BY_ID_GLOBAL' ? true :
             httpOnLoad[0] === 'DELETE_CREDENTIAL_BY_ID_GLOBAL' ? true :
                 httpOnLoad[0] === 'DELETE_DEPARTMENT_BY_ID_GLOBAL' ? true :
-                    httpOnLoad[0] === 'DELETE_JOB_BY_ID_GLOBAL'
+                    httpOnLoad[0] === 'DELETE_JOB_BY_ID_GLOBAL' ? true :
+                        httpOnLoad[0] === 'DELETE_PLACE_BY_ID_GLOBAL'
 
     useEffect(() => {
         if (success) {

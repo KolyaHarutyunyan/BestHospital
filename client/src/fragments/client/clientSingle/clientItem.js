@@ -46,17 +46,6 @@ export const ClientItem = () => {
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'GET_CLIENT_BY_ID'
 
     useEffect(() => {
-        dispatch(clientActions.getClientsById(params.id))
-        dispatch(clientActions.getClientsContacts(params.id))
-        dispatch(clientActions.getClientsEnrollment(params.id))
-        dispatch(clientActions.getClientsAuthorizations(params.id))
-        dispatch(fundingSourceActions.getFundingSourceHistoriesById('Client'))
-        dispatch(noteActions.getGlobalNotes(params.id, 'Client'))
-        dispatch(availabilityScheduleActions.getAvailabilitySchedule(params.id))
-        dispatch(fundingSourceActions.getFundingSource())
-    }, []);
-
-    useEffect(() => {
         dispatch(httpRequestsOnSuccessActions.removeSuccess("GET_CLIENT_BY_ID"))
     }, [success]);
 

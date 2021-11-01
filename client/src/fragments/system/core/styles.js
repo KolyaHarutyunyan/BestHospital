@@ -29,6 +29,14 @@ export const systemItemStyles = makeStyles(() => ({
             }
         }
     },
+    text:{
+        display:'flex',
+        alignItems:'center',
+        '& p':{
+            fontWeight:'600',
+            color:Colors.TextPrimary,
+        }
+    },
     title: {
         fontSize: 18,
         color: Colors.TextSecondary,
@@ -73,6 +81,16 @@ export const systemItemStyles = makeStyles(() => ({
     },
     credentialInputStyle: {
         width: '100%',
+        marginRight: 16,
+        '& .MuiOutlinedInput-root': {
+            height: '36px!important',
+            color: Colors.TextPrimary,
+            fontSize: 14
+        },
+    },
+    codInputStyle: {
+        width: '300px',
+
         marginRight: 16,
         '& .MuiOutlinedInput-root': {
             height: '36px!important',

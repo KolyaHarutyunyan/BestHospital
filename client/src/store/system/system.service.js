@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const systemService = {
-
+    /** Credential */
     createCredentialGlobalService: (body) => axios.post(`/credential`, body),
 
     getCredentialGlobalService: () => axios.get(`/credential`),
@@ -9,7 +9,9 @@ export const systemService = {
     editCredentialByIdGlobalService: (id, body) => axios.patch(`/credential/${id}`, body),
 
     deleteCredentialByIdService: (id) => axios.delete(`/credential/${id}`),
+    /** End */
 
+    /** Service */
     createServiceGlobalService: (body) => axios.post(`/service`, body),
 
     getServicesService: () => axios.get(`/service`),
@@ -17,7 +19,9 @@ export const systemService = {
     editServiceByIdGlobalService: (id, body) => axios.patch(`/service/${id}`, body),
 
     deleteServiceByIdService: (id) => axios.delete(`/service/${id}`),
+    /** End */
 
+    /** Department */
     createDepartmentGlobalService: (body) => axios.post(`/department`, body),
 
     getDepartmentsService: () => axios.get(`/department`),
@@ -25,7 +29,9 @@ export const systemService = {
     editDepartmentByIdGlobalService: (id, body) => axios.patch(`/department/${id}`, body),
 
     deleteDepartmentByIdService: (id) => axios.delete(`/department/${id}`),
+    /** End */
 
+    /** Job */
     createJobGlobalService: (body) => axios.post(`/job`, body),
 
     getJobsService: () => axios.get(`/job`),
@@ -33,5 +39,16 @@ export const systemService = {
     editJobByIdGlobalService: (id, body) => axios.patch(`/job/${id}`, body),
 
     deleteJobByIdService: (id) => axios.delete(`/job/${id}`),
+    /** End */
+
+    /** Departments */
+    createPlaceGlobalService: (body) => axios.post(`/place`, body),
+
+    getPlacesService: () => axios.get(`/place`),
+
+    editPlaceByIdGlobalService: (id, body) => axios.patch(`/place/${id}`, body),
+
+    deletePlaceByIdService: (id) => axios.delete(`/place/${id}`),
+    /** End */
 
 };
