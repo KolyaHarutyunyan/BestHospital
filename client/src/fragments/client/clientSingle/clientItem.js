@@ -24,6 +24,7 @@ import {AddContact} from "../clientModals";
 import {clientItemStyles} from "./styles";
 import {noteActions} from "@eachbase/store/notes";
 import {availabilityScheduleActions} from "@eachbase/store/availabilitySchedule";
+import {FindLoad} from "../../../utils";
 
 
 export const ClientItem = () => {
@@ -39,10 +40,8 @@ export const ClientItem = () => {
     const params = useParams()
     const classes = clientItemStyles()
 
-    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
+    const {httpOnSuccess} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
-        httpOnError: state.httpOnError,
-        httpOnLoad: state.httpOnLoad,
     }));
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'GET_CLIENT_BY_ID'
 
@@ -89,9 +88,11 @@ export const ClientItem = () => {
         {label: 'History'}
     ]
 
+
+    const load = FindLoad('GET_CLIENT_BY_ID')
     const tabsContent = [
         {
-            tabComponent: (httpOnLoad.length > 0 ? <Loader/> : <ClientGeneral data={data}/>)
+            tabComponent: (load.length ? <Loader/> : <ClientGeneral data={data}/>)
         },
         {
             tabComponent: (clientContact.length ?

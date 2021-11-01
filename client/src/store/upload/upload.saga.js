@@ -60,7 +60,6 @@ function* getUploads({payload, type }) {
     });
     yield put(httpRequestsOnLoadActions.removeLoading(type));
     yield put(httpRequestsOnErrorsActions.appendError(type));
-    console.log(err,'error error uploads');
   }
 }
 
@@ -69,7 +68,6 @@ function* getUploads({payload, type }) {
 /** Get Uploads */
 
 function* delUploads({payload, type }) {
-  console.log(payload,'payload');
   yield put(httpRequestsOnErrorsActions.removeError(type));
   yield put(httpRequestsOnLoadActions.appendLoading(type));
   try {

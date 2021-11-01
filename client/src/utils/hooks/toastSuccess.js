@@ -64,6 +64,7 @@ export const ToastSuccess = (success) => {
             success === 'EDIT_MILEAGE' ? 'Successfully edited Mileage' :
             success === 'DELETE_MILEAGE' ? 'Successfully deleted Mileage' :
             success === 'IS_CLINICIAN' ? 'Successfully changed Clinician' :
+            success === 'SET_STATUS' ? 'Successfully changed Status' :
 
             false
         )

@@ -67,7 +67,7 @@ function* editCredentialById(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res =  yield call(systemService.editCredentialByIdGlobalService, action.payload.id, action.payload.body);
-        console.log(res,'reeeees');
+
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         yield put({
@@ -115,17 +115,17 @@ function* createServiceGlobal(action) {
     }
 }
 
-function* getServices() {
-
+function* getServices(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(systemService.getServicesService);
         yield put({
             type: GET_SERVICES_SUCCESS,
             payload: res.data.reverse(),
         });
-
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
     } catch (err) {
-        console.log(err)
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put({
             type: GET_SERVICES_SUCCESS,
             payload: '',

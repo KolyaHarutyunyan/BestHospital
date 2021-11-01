@@ -34,7 +34,7 @@ import moment from "moment";
 import {availabilityScheduleActions} from "@eachbase/store/availabilitySchedule";
 import {StaffService} from "./core/staffService";
 
-export const StaffItem = () => {
+export const StaffItem = ({ gen }) => {
 
     const dispatch = useDispatch()
     const params = useParams()
@@ -72,6 +72,7 @@ export const StaffItem = () => {
     const employments = useSelector(state => state.admins.employments)
     const staffServices = useSelector(state => state.admins.staffServices.service)
     const staffTimesheet = useSelector(state => state.admins.timesheet)
+
 
     const handleOpenClose = () => {
         setOpen(!open)
@@ -137,18 +138,7 @@ export const StaffItem = () => {
         setGlobalCredentialInformation(globalCredentialInfo)
     }
 
-    useEffect(() => {
-        dispatch(adminActions.getCredential(params.id))
-        dispatch(adminActions.getAdminById(params.id))
-        dispatch(systemActions.getCredentialGlobal())
-        dispatch(noteActions.getGlobalNotes(params.id, 'Staff'))
-        dispatch(fundingSourceActions.getFundingSourceHistoriesById('Staff'))
-        dispatch(availabilityScheduleActions.getAvailabilitySchedule(params.id))
-        dispatch(adminActions.getEmployment(params.id))
-        dispatch(adminActions.getStaffService(params.id))
-        dispatch(adminActions.getTimesheet(params.id))
-        dispatch(systemActions.getServices())
-    }, [])
+
 
 
     const openNoteModal = (data) => {
@@ -202,9 +192,11 @@ export const StaffItem = () => {
         })
     }
 
+    const loaderItems = FindLoad('GET_ADMIN_BY_ID')
+
     const tabsContent = [
         {
-            tabComponent: (httpOnLoad.length ? <Loader/> : <StaffGeneral staffGeneral={staffGeneral}/>)
+            tabComponent: (loaderItems.length ? <Loader/> : <StaffGeneral staffGeneral={staffGeneral}/>)
         },
         {
             tabComponent: (employments.length > 0 ? <StaffEmployment info={employments}/> :
@@ -301,6 +293,7 @@ export const StaffItem = () => {
                                      credModalType={credModalType}
                                      openCloseCredModal={openCloseCredModal}
                                      openCredModal={openCredModal}
+                                     info={gen}
                                      activeTab={activeTab}
                                      status={staffGeneral?.status}
                                      type= 'GET_ADMIN_BY_ID_SUCCESS'

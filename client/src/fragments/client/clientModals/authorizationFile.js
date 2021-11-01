@@ -45,7 +45,6 @@ export const AuthorizationFile = ({authenticationsId}) => {
     }, [])
 
     const handleChangeFile = event => {
-        console.log('qwdqwdqwd')
         const createInfo = {
             "resource": authenticationsId,
             "type": fileName,
