@@ -42,7 +42,7 @@ export const AddressInput = ({handleSelectValue, info, disabled, flex, oneInput,
                 handleGetAll && handleGetAll(response.data)
             })
             .catch(function (error) {
-                console.log(error);
+
             });
     };
 

@@ -224,6 +224,17 @@ export const serviceSingleStyles = makeStyles(() => ({
 
     },
 
+    clinicalWrapper:{
+        display: 'flex',
+        alignItems: "center",
+        '& p':{
+            color: Colors.ThemeBlue,
+            fontWeight: 'bold'
+        },
+        '& div':{
+            margin: '0 24px 0 8px'
+        },
+    },
 //  History
 
     searchContainer: {

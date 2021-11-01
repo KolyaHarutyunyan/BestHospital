@@ -39,7 +39,7 @@ export const StaffService = ({staffGeneral, info}) => {
         httpOnLoad: state.httpOnLoad,
     }));
 
-    console.log(httpOnLoad,'httpOnLoad')
+
 
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_STAFF_SERVICE'
     const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_STAFF_SERVICE'

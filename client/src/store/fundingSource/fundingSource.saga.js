@@ -65,7 +65,6 @@ function* editFundingSource(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
-        console.log(err)
     }
 }
 
@@ -100,7 +99,6 @@ function* getFundingSourceById(action) {
         });
     } catch (error) {
 
-        console.log(error)
     }
 }
 
@@ -112,7 +110,6 @@ function* getFundingSourceServicesById(action) {
             payload: res.data,
         });
     } catch (error) {
-        console.log(error, 'erererererererererer')
     }
 }
 
@@ -145,7 +142,6 @@ function* createFundingSourceServicesById(action) {
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
 
     } catch (error) {
-        console.log(error, 'err create services')
         yield put(httpRequestsOnErrorsActions.removeError(action.type));
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
@@ -183,7 +179,7 @@ function* createFundingSourceServicesModifier({payload}) {
 
         const res = yield call(authService.createFoundingSourceServiceModifierService, payload.body);
     } catch (error) {
-        console.log(error, 'res mod')
+
     }
 }
 
@@ -197,7 +193,7 @@ function* editFundingSourceServicesModifier({payload}) {
             payload: payload.id,
         })
     } catch (error) {
-        console.log(error, 'res mod')
+
     }
 }
 
@@ -221,7 +217,6 @@ function* getFundingSourceServicesModifier(action) {
             type: GET_FUNDING_SOURCE_SERVICE_MODIFIERS_ERR,
             payload: error,
         });
-        console.log(error.data.message, 'get modifier')
         yield put({
             type: GET_FUNDING_SOURCE_SERVICE_MODIFIERS_SUCCESS,
             payload: [],
@@ -249,7 +244,6 @@ function* getFundingSourceServicesModifierClient(action) {
             type: GET_FUNDING_SOURCE_SERVICE_MODIFIERS_ERR,
             payload: error,
         });
-        console.log(error.data.message, 'get modifier')
     }
 }
 
@@ -302,8 +296,6 @@ function* setStatus(action) {
 
         const res = yield call(authService.setStatusService, action.payload.id, action.payload.path, action.payload.status, body,);
 
-        console.log(res,'resresresres')
-        console.log(action.payload.type,'action.payload.type')
         yield put({
             type: action.payload.type,
             payload: res.data,

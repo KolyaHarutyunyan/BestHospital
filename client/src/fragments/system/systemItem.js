@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {SimpleTabs} from "@eachbase/components";
+import {Loader, SimpleTabs} from "@eachbase/components";
 import {
     ServiceType,
     systemItemStyles,
@@ -12,6 +12,7 @@ import {
 import {useDispatch, useSelector} from "react-redux";
 import {mileagesActions, systemActions} from "@eachbase/store";
 import {payrollActions} from "@eachbase/store/payroll";
+import {FindLoad} from "../../utils";
 
 export const SystemItem = () => {
 
@@ -78,9 +79,16 @@ export const SystemItem = () => {
         dispatch(mileagesActions.getMileages())
     }, [])
 
+    const {httpOnLoad} = useSelector((state) => ({
+        httpOnLoad: state.httpOnLoad,
+    }));
+
+
+    const loader = FindLoad('GET_SERVICES')
     const tabsContent = [
         {
-            tabComponent: (<ServiceType globalServices={globalServices} removeItem={handleRemoveItem}
+            tabComponent: (loader.length ? <Loader/> :
+                <ServiceType globalServices={globalServices} removeItem={handleRemoveItem}
                                         openModal={handleOpenClose}/>)
         },
         {

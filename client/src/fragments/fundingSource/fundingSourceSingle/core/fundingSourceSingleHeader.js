@@ -2,7 +2,14 @@ import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {fundingSourceSingleStyles, editButtonStyle} from "./styles";
 import {Images} from "@eachbase/utils";
-import {AddButton, AddModalButton, SimpleModal, AddNotes, ValidationInput, SelectInput} from "@eachbase/components";
+import {
+    AddButton,
+    AddModalButton,
+    SimpleModal,
+    AddNotes,
+    ValidationInput,
+    SelectStatusInput
+} from "@eachbase/components";
 import {FundingSourceServiceAdd} from "./modals";
 import {CreateFundingSource} from "../../createFundingSource";
 import {fundingSourceActions, httpRequestsOnSuccessActions} from "@eachbase/store";
@@ -71,9 +78,7 @@ export const FundingSourceSingleHeader = ({activeTab, title, status, handleOpen,
        // }if (e.target.value === 'ACTIVE') {
         e.target.value === 'ACTIVE' && dispatch(fundingSourceActions.setStatus(params.id,'funding', e.target.value,'', type ))
        // }
-
         setInputs(e.target.value)
-
         handleGetStatus && handleGetStatus(e.target.value)
     };
 
@@ -85,7 +90,7 @@ export const FundingSourceSingleHeader = ({activeTab, title, status, handleOpen,
                 <p className={classes.title}>{title && title}</p>
             </div>
             <div style={{display: 'flex'}}>
-                <SelectInput
+                <SelectStatusInput
                     errorFalse={true}
                     styles={inputStyle}
                     name={"active"}

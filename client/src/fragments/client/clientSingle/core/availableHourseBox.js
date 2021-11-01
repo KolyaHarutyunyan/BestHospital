@@ -3,7 +3,6 @@ import {availabilityStyles} from "@eachbase/components/availability/styles";
 
 
 export const AvailableHourseBox = ({day, info}) => {
-    console.log(info,'info')
     const classes = availabilityStyles()
     return (
         <div className={classes.availableHoursBox}>

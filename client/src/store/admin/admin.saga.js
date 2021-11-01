@@ -122,7 +122,7 @@ function* editAdminById(action) {
 }
 
 function* createCredential(action) {
-    console.log(action.type,'action.type')
+
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
     try {

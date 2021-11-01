@@ -39,7 +39,6 @@ function* createAvailabilitySchedule(action) {
         });
 
     } catch (error) {
-       console.log(error)
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
