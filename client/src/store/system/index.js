@@ -32,24 +32,28 @@ export const systemActions = {
     editCredentialByIdGlobal,
     deleteCredentialByIdGlobal,
     /** End */
+
     /** Service */
     createServiceGlobal,
     getServices,
     editServiceByIdGlobal,
     deleteServiceByIdGlobal,
     /** End */
+
     /** Department */
     createDepartmentGlobal,
     getDepartments,
     editDepartmentByIdGlobal,
     deleteDepartmentByIdGlobal,
     /** End */
+
     /** Job */
     createJobGlobal,
     getJobs,
     editJobByIdGlobal,
     deleteJobByIdGlobal,
     /** End */
+
     /** Place */
     createPlaceGlobal,
     getPlaces,

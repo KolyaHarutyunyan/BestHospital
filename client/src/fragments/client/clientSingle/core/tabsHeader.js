@@ -18,7 +18,7 @@ const filterBtn = {
     height: 36
 }
 
-export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setGetStatus ,setPrevStatus ,getStatus, type}) => {
+export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setGetStatus ,setPrevStatus ,getStatus, type, handleOpenHour}) => {
 
     const classes = serviceSingleStyles()
     const [open, setOpen] = useState()
@@ -70,6 +70,7 @@ export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setG
         setInputs(e.target.value)
     };
 
+    console.log(activeTab,'activeTabactiveTabactiveTabactiveTab')
     return (
         <div>
             <ul className={classes.tabsWrapper}>
@@ -118,6 +119,10 @@ export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setG
                         activeTab === 0 ?
                             <AddModalButton btnStyles={editButtonStyle} handleClick={() => setOpen(true)}
                                             text='Edit'/> :
+                            activeTab === 4 ?
+                                <AddButton styles={{width: 450}} text='Available Hours'
+                                           handleClick={handleOpenHour}/>
+                                :
                             activeTab !== 6 && activeTab !== 4 ?
                                 <AddButton text={
                                     authActive ? 'Add Authorization Service' :

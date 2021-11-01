@@ -128,18 +128,11 @@ export const StaffItem = ({ gen }) => {
         },
     ];
 
-    const {httpOnLoad} = useSelector((state) => ({
-        httpOnLoad: state.httpOnLoad,
-    }));
-
     const openCloseCredModal = (modalType, globalCredentialInfo) => {
         setOpenCredModal(!openCredModal)
         setCredModalType(modalType)
         setGlobalCredentialInformation(globalCredentialInfo)
     }
-
-
-
 
     const openNoteModal = (data) => {
         setNoteModalInfo({
@@ -199,8 +192,7 @@ export const StaffItem = ({ gen }) => {
             tabComponent: (loaderItems.length ? <Loader/> : <StaffGeneral staffGeneral={staffGeneral}/>)
         },
         {
-            tabComponent: (employments.length > 0 ? <StaffEmployment info={employments}/> :
-                <NoItemText text='No Employments Yet'/>)
+            tabComponent: (employments.length > 0 ? <StaffEmployment info={employments}/> : <NoItemText text='No Employments Yet'/>)
         },
         {
             tabComponent: (<StaffTimesheet info={staffTimesheet} />)

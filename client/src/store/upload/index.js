@@ -1,4 +1,4 @@
-import {createUpload, delUpload, getUpload,} from "./upload.action";
+import {createUpload, delUpload, editUpload, getUpload,} from "./upload.action";
 
 export {uploadReducer} from './upload.reducer';
 export {watchUpload} from './upload.saga';
@@ -6,6 +6,10 @@ export {watchUpload} from './upload.saga';
 export const uploadActions = {
     /** Create, Upload */
     createUpload,
+    /** End */
+
+    /** Edit, Upload */
+    editUpload,
     /** End */
 
     /** Get Uploads */

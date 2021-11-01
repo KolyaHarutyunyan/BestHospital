@@ -1,4 +1,4 @@
-import {Colors, Shadow} from "@eachbase/utils";
+import {Backgrounds, Colors, Shadow} from "@eachbase/utils";
 import {makeStyles} from "@material-ui/core/styles";
 
 
@@ -141,6 +141,7 @@ export const createClientStyle = makeStyles(() => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        flexDirection:'column',
         height: 290
     },
     normal: {
@@ -241,5 +242,34 @@ export const createClientStyle = makeStyles(() => ({
         display: 'flex',
         alignItems : "center",
         marginBottom: 16,
+    },
+
+    uploadButton: {
+        cursor:'pointer',
+        background: Colors.BackgroundBlue,
+        boxShadow: Shadow.blueButton,
+        borderRadius: "8px",
+        width: "100%",
+        minWidth:'150px',
+        padding: "0 24px",
+        marginLeft:'24px',
+        height: "48px",
+        display:'flex',
+        justifyContent:'center',
+        alignItems:'center',
+        fontSize: "14px",
+        lineHeight: "19px",
+        color: Colors.TextWhite,
+        textTransform: "capitalize",
+        "&:hover": {
+            background: Backgrounds.blueHover,
+        },
+        "& img":{
+            marginRight:'8px',
+        },
+        "& span": {
+            fontSize: "14px",
+            color: 'white'
+        },
     },
 }));

@@ -9,7 +9,7 @@ import {
     SimpleModal,
     NoItemText, Loader,
 } from "@eachbase/components";
-import {clientActions, fundingSourceActions, httpRequestsOnSuccessActions} from "@eachbase/store";
+import {httpRequestsOnSuccessActions} from "@eachbase/store";
 import {
     ClientGeneral,
     ClientContact,
@@ -22,9 +22,7 @@ import {
 } from "./core";
 import {AddContact} from "../clientModals";
 import {clientItemStyles} from "./styles";
-import {noteActions} from "@eachbase/store/notes";
-import {availabilityScheduleActions} from "@eachbase/store/availabilitySchedule";
-import {FindLoad} from "../../../utils";
+import {FindLoad} from "@eachbase/utils";
 
 
 export const ClientItem = () => {
@@ -37,7 +35,6 @@ export const ClientItem = () => {
     const [authActive, setAuthActive] = useState(false)
     const [getStatus, setGetStatus] = useState('')
     const [prevStatus, setPrevStatus] = useState('')
-    const params = useParams()
     const classes = clientItemStyles()
 
     const {httpOnSuccess} = useSelector((state) => ({
@@ -63,8 +60,13 @@ export const ClientItem = () => {
     const handleOpenClose = () => {
         setOpen(!open)
     }
+
     const handleOpenCloseModal = () => {
         setOpenModal(!openModal)
+    }
+
+    const handleOpenHour = () =>{
+
     }
 
     const tabsLabels = [
@@ -102,7 +104,8 @@ export const ClientItem = () => {
                                      data={data}/> : <NoItemText text={'No AuthorizationItem Yet'}/>)
         },
         {
-            tabComponent: (<ClientAvailabilitySchedule data={data} availabilityData={availabilityData}/>)
+            tabComponent: (
+                <ClientAvailabilitySchedule data={data} availabilityData={availabilityData}/>)
         },
         {
             tabComponent: (clientsNotes.length ? <ClientNotes data={clientsNotes}/> :
@@ -144,6 +147,9 @@ export const ClientItem = () => {
                 />
                 <div className={classes.headerWraperStyle}>
                     <TabsHeader
+                        handleOpenHour={handleOpenHour}
+
+
                         authActive={authActive}
                         data={data}
                         activeTab={activeTab}
