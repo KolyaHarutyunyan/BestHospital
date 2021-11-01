@@ -70,5 +70,18 @@ export const EDIT_JOB_BY_ID_GLOBAL_SUCCESS = 'EDIT_JOB_BY_ID_GLOBAL_SUCCESS'
 export const DELETE_JOB_BY_ID_GLOBAL = 'DELETE_JOB_BY_ID_GLOBAL'
 export const DELETE_JOB_BY_ID_GLOBAL_SUCCESS = 'DELETE_JOB_BY_ID_GLOBAL_SUCCESS'
 
+// PLACE
 
+/**Create Global Job */
+export const CREATE_PLACE_GLOBAL = 'CREATE_PLACE_GLOBAL'
+
+/**Get Global Jobs */
+export const GET_PLACES = 'GET_PLACES'
+export const GET_PLACES_SUCCESS = 'GET_PLACES_SUCCESS'
+
+/**Edit Global Job by id */
+export const EDIT_PLACE_BY_ID_GLOBAL = 'EDIT_PLACE_BY_ID_GLOBAL'
+
+/**Delete Global Job by id */
+export const DELETE_PLACE_BY_ID_GLOBAL = 'DELETE_PLACE_BY_ID_GLOBAL'
 
