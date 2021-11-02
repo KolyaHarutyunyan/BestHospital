@@ -8,6 +8,7 @@ export enum EventStatus {
 }
 
 export enum AppointmentType {
+    ALL = "ALL",
     DRIVE = "DRIVE",
     PAID = "PAID",
     BREAK = "BREAK",

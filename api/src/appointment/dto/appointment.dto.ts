@@ -5,6 +5,7 @@ import { PayCodeDTO } from "../../employment/paycode/dto";
 
 import { AppointmentType, EventStatus } from "../appointment.constants";
 import { AuthorizationServiceDTO } from "../../client/authorizationservice/dto";
+import { IsEnum } from "class-validator";
 
 export class AppointmentDto {
     @ApiProperty()
@@ -31,4 +32,13 @@ export class AppointmentDto {
     status: string;
     @ApiProperty({ required: false })
     miles?: number;
+}
+
+export class AppointmentQueryDTO {
+    @ApiProperty({ enum: EventStatus })
+    @IsEnum(EventStatus)
+    status: string;
+    @ApiProperty({ enum: AppointmentType })
+    @IsEnum(AppointmentType)
+    type: string;
 }

@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { Public } from 'src/util';
+import { ParseObjectIdPipe, Public } from 'src/util';
+import { EventStatus } from './appointment.constants';
 import { AppointmentService } from './appointment.service';
 import { CreateAppointmentDto, UpdateAppointmentDto, AppointmentDto, CreateRepeatDto } from './dto';
+import { AppointmentQueryDTO } from './dto/appointment.dto';
 
 @Controller('appointment')
 @ApiTags('Appointment Endpoints')
@@ -22,13 +24,17 @@ export class AppointmentController {
     return this.appointmentService.repeat(createRepeatDto, id);
   }
   @Get()
-  findAll() {
-    return this.appointmentService.findAll();
+  @Public()
+  findAll(@Query() filter: AppointmentQueryDTO) {
+    console.log(filter, 'filter');
+    return this.appointmentService.findAll(filter, 'client', 'staff');
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.appointmentService.findOne(+id);
+  @Public()
+  @ApiOkResponse({ type: AppointmentDto })
+  findOne(@Param('id', ParseObjectIdPipe) id: string) {
+    return this.appointmentService.findOne(id);
   }
 
   @Patch(':id')

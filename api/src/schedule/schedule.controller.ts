@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ScheduleService } from './schedule.service';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
+import { Public } from '../util';
 
 @Controller('schedule')
 export class ScheduleController {
@@ -13,6 +14,7 @@ export class ScheduleController {
   }
 
   @Get()
+  @Public()
   findAll() {
     return this.scheduleService.findAll();
   }
