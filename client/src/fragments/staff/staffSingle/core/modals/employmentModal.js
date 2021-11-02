@@ -36,17 +36,8 @@ export const EmploymentModal = ({handleClose, info}) => {
 
     useEffect(() => {
         dispatch(systemActions.getDepartments())
-    }, []);
-
-    useEffect(() => {
-        dispatch(systemActions.getDepartments())
-    }, []);
-
-
-    useEffect(() => {
         dispatch(adminActions.getAllAdmins())
     }, []);
-
 
     const {httpOnSuccess, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,

@@ -72,7 +72,7 @@ export const StaffItem = ({ gen }) => {
     const employments = useSelector(state => state.admins.employments)
     const staffServices = useSelector(state => state.admins.staffServices.service)
     const staffTimesheet = useSelector(state => state.admins.timesheet)
-
+    const services = useSelector(state => state.system.services)
 
     const handleOpenClose = () => {
         setOpen(!open)
@@ -187,6 +187,8 @@ export const StaffItem = ({ gen }) => {
 
     const loaderItems = FindLoad('GET_ADMIN_BY_ID')
 
+
+
     const tabsContent = [
         {
             tabComponent: (loaderItems.length ? <Loader/> : <StaffGeneral staffGeneral={staffGeneral}/>)
@@ -207,7 +209,7 @@ export const StaffItem = ({ gen }) => {
             tabComponent: (<StaffAvailability availabilityData={availabilityData} staffGeneral={staffGeneral}/>)
         },
         {
-            tabComponent: (<StaffService info={staffServices} staffGeneral={staffGeneral}/>)
+            tabComponent: (<StaffService services={services} info={staffServices} staffGeneral={staffGeneral}/>)
         },
         {
             tabComponent: (globalNotes.length ? <Notes

@@ -1,8 +1,7 @@
 import React, {useEffect} from "react";
 import {FundingSourceItem} from "@eachbase/fragments/fundingSource";
-import {useDispatch, useSelector} from "react-redux";
-import {adminActions, fundingSourceActions, httpRequestsOnSuccessActions, systemActions} from "../../store";
-import {noteActions} from "../../store/notes";
+import {useDispatch} from "react-redux";
+import {adminActions, fundingSourceActions, httpRequestsOnSuccessActions, systemActions, noteActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
 
 

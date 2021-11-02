@@ -16,7 +16,6 @@ export const ValidationInput = ({
 
     const chechValid = (e) => {
         handleBlur && handleBlur()
-        console.log('wwwwww')
         let Value = e.target.value;
         if (Value.length >= 1) {
             if (validator) {

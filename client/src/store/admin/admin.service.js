@@ -46,9 +46,15 @@ export const authService = {
 
      isClinicianService: (id,isClinical) => axios.patch(`/staff/${id}/${isClinical}`),
 
+
+
     getTimesheetService: (id) => axios.get(`/timesheet/staff/${id}`),
 
+    getTimesheetById: (id) => axios.get(`/timesheet/${id}`),
+
     createTimesheetService: (body) => axios.post(`/timesheet`, body),
+
+    editTimesheetService: (body) => axios.patch(`/timesheet`, body),
 
 
     // editTimesheetService: (body) => axios.post(`/timesheet`, body),
