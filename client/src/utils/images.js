@@ -90,6 +90,7 @@ import pngIcon from '@eachbase/assets/images/icons/pngIcon.svg';
 import jpegIcon from '@eachbase/assets/images/icons/jpegIcon.svg';
 import pdfIcon from '@eachbase/assets/images/icons/pdfIcon.svg';
 import csvIcon from '@eachbase/assets/images/icons/csvIcon.svg';
+import eventsPassive from '@eachbase/assets/images/icons/eventsPassive.svg'
 
 export const Images = {
     doctors: doctors,
@@ -181,5 +182,6 @@ export const Images = {
     jpegIcon: jpegIcon,
     pdfIcon: pdfIcon,
     csvIcon: csvIcon,
-    removeIcon: removeIcon
+    removeIcon: removeIcon,
+    eventsPassive:eventsPassive
 }

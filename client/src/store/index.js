@@ -13,6 +13,8 @@ export {systemActions} from './system'
 export {uploadActions} from './upload'
 export {mileagesActions} from './mileage'
 export {payrollActions} from './payroll'
+export {noteActions} from './notes'
+export {availabilityScheduleActions} from './availabilitySchedule'
 
 export {httpRequestsOnSuccessActions} from './http_requests_on_success'
 export {httpRequestsOnErrorsActions} from './http_requests_on_errors'

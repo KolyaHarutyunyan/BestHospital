@@ -1,9 +1,7 @@
 import React, {useEffect} from "react";
 import {StaffItem} from "@eachbase/fragments";
 import {useDispatch, useSelector} from "react-redux";
-import {adminActions, fundingSourceActions, systemActions} from "../../store";
-import {noteActions} from "../../store/notes";
-import {availabilityScheduleActions} from "../../store/availabilitySchedule";
+import {adminActions, fundingSourceActions, systemActions, noteActions, availabilityScheduleActions} from "../../store";
 import {useParams} from "react-router-dom";
 
 export const SingleStaff = () => {

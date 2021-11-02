@@ -10,7 +10,11 @@ import {
     CREATE_ADMIN_SUCCESS,
     GET_EMPLOYMENT_SUCCESS,
     GET_PAY_CODE_SUCCESS,
-    GET_STAFF_SERVICE_SUCCESS, GET_ALL_PAYCODES_SUCCESS, GET_TIMESHEET_SUCCESS, GET_ALL_ADMINS_SUCCESS
+    GET_STAFF_SERVICE_SUCCESS,
+    GET_ALL_PAYCODES_SUCCESS,
+    GET_TIMESHEET_SUCCESS,
+    GET_ALL_ADMINS_SUCCESS,
+    GET_TIMESHEET_BY_ID_SUCCESS
 } from "./admin.types";
 
 const initialState = {
@@ -24,6 +28,7 @@ const initialState = {
     staffServices : [],
     allPaycodes : [],
     timesheet : [],
+    timesheetById:[]
 };
 
 export const adminReducer = (state = initialState, action) => {
@@ -112,6 +117,12 @@ export const adminReducer = (state = initialState, action) => {
             return {
                 ...state,
                 timesheet: action.payload
+            }
+
+            case GET_TIMESHEET_BY_ID_SUCCESS :
+            return {
+                ...state,
+                timesheetById: action.payload
             }
         default:
             return state;

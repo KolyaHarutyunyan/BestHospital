@@ -1,39 +1,21 @@
 import React from "react";
-
-import {useDispatch} from "react-redux";
 import {Link} from "react-router-dom";
 import clsx from "clsx";
 import {navBarStyles} from "./style";
-import {
-    Divider,
-    Drawer,
-    IconButton,
-    List,
-    ListItem,
-    ListItemText,
-} from "@material-ui/core";
+import {Drawer, IconButton, List, ListItem, ListItemText,} from "@material-ui/core";
 import {ChevronLeft, ChevronRight} from "@material-ui/icons";
-import {GlobalLogo, Title} from "@eachbase/components";
-import {Colors, Images, superAdminRouters} from "@eachbase/utils";
+import {GlobalLogo} from "@eachbase/components";
+import {Colors, superAdminRouters} from "@eachbase/utils";
 import {LeftBarImages} from "./leftBarImages";
 
-export const LeftBar = ({
-                            handleDrawerClose,
-                            open,
-                            theme,
-                            setLinksStyle,
-                            linkInfo,
-                        }) => {
+export const LeftBar = ({handleDrawerClose, open, setLinksStyle, linkInfo,}) => {
     const classes = navBarStyles();
-    const dispatch = useDispatch();
 
     return (
         <div>
             <div
                 className={classes.transition}
-                style={
-                    open === false ? {marginLeft: "47px"} : {marginLeft: "203px"}
-                }
+                style={open === false ? {marginLeft: "47px"} : {marginLeft: "203px"}}
             >
                 <IconButton
                     style={{background: Colors.BackgroundBlue, border:`2px solid ${Colors.TextWhite}`}}
@@ -58,36 +40,31 @@ export const LeftBar = ({
                 }}
             >
                 <GlobalLogo/>
-
-
                 <List onClick={setLinksStyle} className={classes.menuItems}>
                     {superAdminRouters.map((item, i) => (
                         <Link
-                            // onClick={ () => dispatch (authActions.saveWindowLink (item.path)) }
                             key={i}
                             to={item.path}
                         >
-                            <div className={ linkInfo === item.path ? classes.linkWrapperActive : ''  }>
+                            <div className={
+                                linkInfo === item.path ? classes.linkWrapperActive :
+                                    linkInfo.slice(0, 4) === item.path.slice(0, 4) ?   classes.linkWrapperActive :
+                                    ''  }>
                             <ListItem
                                 className={
-                                    linkInfo === item.path ?
-                                        open === false ? classes.activeListItemFalse :
-                                            classes.activeListItem : classes.listItem
+                                    linkInfo === item.path ? open === false ? classes.activeListItemFalse : classes.activeListItem :
+                                            linkInfo.slice(0, 4) === item.path.slice(0, 4) ? open === false ? classes.activeListItemFalse : classes.activeListItem :
+                                        classes.listItem
                                 }
                                 button
                             >
-                                {
-                                    <LeftBarImages
-                                        item={item}
-                                        linkInfo={linkInfo}
-                                    />
-                                }
+                                {<LeftBarImages item={item} linkInfo={linkInfo}/>}
                                 {open && (
                                     <ListItemText
                                         className={
-                                            linkInfo === item.path
-                                                ? classes.menuActiveItemsStyle
-                                                : classes.menuItemsStyle
+                                            linkInfo === item.path ? classes.menuActiveItemsStyle :
+                                                linkInfo.slice(0, 4) === item.path.slice(0, 4) ? classes.menuActiveItemsStyle :
+                                                classes.menuItemsStyle
                                         }
                                         primary={
                                             item.name.length > 13

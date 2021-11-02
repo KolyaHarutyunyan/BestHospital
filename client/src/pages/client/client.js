@@ -60,7 +60,8 @@ export const Client = ({}) => {
                         info={deleteClient.firstName}
                         handleClose={handleOpenClose}
                     />
-                    : <CreateClient
+                    :
+                    <CreateClient
                         title={'Add Client'}
                         handleClose={handleOpenClose}
                     />

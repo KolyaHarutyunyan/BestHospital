@@ -65,7 +65,7 @@ export const ToastSuccess = (success) => {
             success === 'IS_CLINICIAN' ? 'Successfully changed Clinician' :
             success === 'SET_STATUS' ? 'Successfully changed Status' :
             success === 'CREATE_PLACE_GLOBAL' ? 'Successfully created Place' :
-            success === 'CREATE_PLACE_GLOBAL' ? 'Successfully created Place' :
+            success === 'CREATE_TIMESHEET' ? 'Successfully created Timesheet' :
             success === 'EDIT_PLACE_BY_ID_GLOBAL' ? 'Successfully edited Place' :
             success === 'DELETE_PLACE_BY_ID_GLOBAL' ? 'Successfully deleted Place' :
             success === 'CREATE_UPLOAD' ? 'Successfully uploaded File' :

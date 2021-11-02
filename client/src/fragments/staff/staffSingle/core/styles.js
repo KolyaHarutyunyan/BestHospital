@@ -133,6 +133,7 @@ export const serviceSingleStyles = makeStyles(() => ({
         alignItems: 'flex-start'
     },
     bcbaWrapper: {
+        marginTop:30,
         padding: 16,
         boxShadow: Shadow.noteModalShadow,
         borderRadius: 8,

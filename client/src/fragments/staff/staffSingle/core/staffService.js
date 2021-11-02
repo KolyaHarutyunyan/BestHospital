@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {useParams} from "react-router-dom";
-import {AddButton, Card, DeleteElement, NoItemText, SelectInput, SimpleModal, SlicedText} from "@eachbase/components";
-import {Colors, ErrorText, Images,} from "@eachbase/utils";
+import {AddButton, Card, DeleteElement, NoItemText, SimpleModal, SlicedText} from "@eachbase/components";
+import {Colors, ErrorText, FindError, FindLoad, FindSuccess, Images,} from "@eachbase/utils";
 import {SelectInputPlaceholder} from "@eachbase/components";
-import {adminActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, systemActions} from "@eachbase/store";
+import {adminActions, httpRequestsOnErrorsActions} from "@eachbase/store";
 import {systemItemStyles} from "@eachbase/fragments/system/core";
 import {serviceSingleStyles} from "./styles";
-
 
 const credentialBtn = {
     maxWidth: '174px',
@@ -15,9 +14,8 @@ const credentialBtn = {
     flex: '0 0 174px',
     padding: 0
 }
-export const StaffService = ({staffGeneral, info}) => {
-
-
+export const StaffService = ({staffGeneral, info, services}) => {
+    const params = useParams()
     const dispatch = useDispatch()
     const classes = systemItemStyles()
     const classes2 = serviceSingleStyles()
@@ -25,46 +23,19 @@ export const StaffService = ({staffGeneral, info}) => {
     const [error, setError] = useState('');
     const [index, setIndex] = useState(0);
     const [toggleModal, setToggleModal] = useState(false);
-    const [filteredList, setFilteredList] = useState([]);
-    const services = useSelector(state => state.system.services)
-    const params = useParams()
-    const staffServices = useSelector(state => state.admins.staffServices.service)
-
-
-
-
-    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
-        httpOnSuccess: state.httpOnSuccess,
-        httpOnError: state.httpOnError,
-        httpOnLoad: state.httpOnLoad,
-    }));
-
-
-
-    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_STAFF_SERVICE'
-    const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_STAFF_SERVICE'
-
-    useEffect(() => {
-        setFilteredList([...services.filter(array_el => staffServices.filter(anotherOne_el => anotherOne_el._id === array_el.id).length === 0)])
-
-    }, [services, success, successCreate])
-
+    const success = FindSuccess('DELETE_STAFF_SERVICE')
+    const fail = FindError('CREATE_STAFF_SERVICE')
+    const loadDel = FindLoad('DELETE_STAFF_SERVICE')
+    const loadCreate = FindLoad('CREATE_STAFF_SERVICE')
 
     useEffect(() => {
         if (success) {
-            setToggleModal(!toggleModal)
-            dispatch(httpRequestsOnSuccessActions.removeSuccess('DELETE_STAFF_SERVICE'))
-            dispatch(httpRequestsOnErrorsActions.removeError('GET_STAFF_SERVICE'))
+            setToggleModal(false)
         }
-        if (successCreate) {
-            setToggleModal(!toggleModal)
-            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_STAFF_SERVICE'))
-            dispatch(httpRequestsOnErrorsActions.removeError('GET_STAFF_SERVICE'))
-        }
-    }, [success, successCreate])
-
+    }, [success.length])
 
     const handleChange = e => {
+        fail.length && dispatch(httpRequestsOnErrorsActions.removeError('CREATE_STAFF_SERVICE'))
         setInputs(
             prevState => (
                 {...prevState, [e.target.name]: e.target.value}
@@ -73,14 +44,13 @@ export const StaffService = ({staffGeneral, info}) => {
     }
 
     let deleteService = () => {
-        dispatch(adminActions.deleteStaffService(params.id, staffServices[index]?._id));
+        dispatch(adminActions.deleteStaffService(params.id, info[index]?._id));
     }
 
     const handleSubmit = () => {
         if (inputs.serviceType) {
             let serviceID = services && services.length > 0 && services.find(item => item.name === inputs.serviceType).id
             dispatch(adminActions.createStaffService(params.id, serviceID));
-            dispatch(adminActions.getStaffService(params.id))
             setIndex(0)
         } else {
             setError(
@@ -89,6 +59,7 @@ export const StaffService = ({staffGeneral, info}) => {
             )
         }
     }
+
     const generalInfo = [
         {title: 'First Name', value: staffGeneral?.firstName},
         {title: 'Middle Name', value: staffGeneral?.middleName},
@@ -98,6 +69,13 @@ export const StaffService = ({staffGeneral, info}) => {
         {title: 'Primary Phone Number', value: staffGeneral?.phone},
         {title: 'Secondary Phone Number', value: staffGeneral?.secondaryPhone},
     ]
+
+    const filteredList = services.filter(function (array_el) {
+        return info && info.filter(function (anotherOne_el) {
+            return anotherOne_el._id === array_el.id;
+        }).length === 0
+    });
+
     return (
         <div className={classes2.staffGeneralWrapper}>
             <SimpleModal
@@ -105,7 +83,7 @@ export const StaffService = ({staffGeneral, info}) => {
                 openDefault={toggleModal}
                 content={
                     <DeleteElement
-                        loader={httpOnLoad.length > 0}
+                        loader={!!loadDel.length}
                         info={`${info && info[index]?.name}`}
                         text={`delete Service`}
                         handleClose={() => setToggleModal(!toggleModal)}
@@ -130,34 +108,29 @@ export const StaffService = ({staffGeneral, info}) => {
             }}>
                 <p className={classes.title} style={{marginBottom: 24}}>Services</p>
                 <div style={{display: 'flex', width: "100%"}}>
-                    {filteredList && filteredList.length ? <SelectInputPlaceholder
+                    <SelectInputPlaceholder
                         placeholder='Service Type'
                         style={classes.credentialInputStyle2}
                         name={"serviceType"}
                         handleSelect={handleChange}
                         value={inputs.serviceType}
                         list={filteredList}
-                        typeError={error === 'serviceType' ? ErrorText.field : ''}
-                    /> : <SelectInput
-                        disabled={true}
-                        style={classes.credentialInputStyle2}
-                        list={filteredList}
-                    />}
+                        typeError={error === 'serviceType' ? ErrorText.field : fail && fail.length && fail[0].error === 'Service already exist' ? 'Service already exist' : ''}
+                    />
                     <AddButton
                         type={'CREATE_STAFF_SERVICE'}
-                        loader={httpOnLoad.length > 0}
+                        loader={!!loadCreate.length}
                         styles={credentialBtn}
                         handleClick={handleSubmit}
                         text='Add Service Type'
                     />
-
                 </div>
                 {services && services.length ? <></> : <p className={classes.noTypeYet}>No services found</p>}
-                <div className={classes.credentialTable} style={{width: '100%'}}>
+                <div className={classes.credentialTable}>
                     {
                         info && info.length ? info.map((item, index) => {
                             return (
-                                <div className={classes.item} key={index} style={{flex: '0 0 100%'}}>
+                                <div className={classes.item} key={index}>
                                     <p style={{display: 'flex', alignItems: 'center'}}>
                                     <span>
                                         <SlicedText type={'responsive'} size={25} data={item.name}/>

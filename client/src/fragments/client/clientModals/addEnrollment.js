@@ -4,21 +4,25 @@ import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
 import {ValidationInput, SelectInput, CreateChancel, ModalHeader,} from "@eachbase/components";
 import {createClientStyle,} from "./styles";
-import {ErrorText} from "@eachbase/utils";
+import {Colors, ErrorText} from "@eachbase/utils";
 import {
     clientActions,
     fundingSourceActions,
     httpRequestsOnErrorsActions,
     httpRequestsOnSuccessActions
 } from '@eachbase/store';
+import {Checkbox} from "@material-ui/core";
 
 
 export const AddEnrollment = ({handleClose, info}) => {
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info,
-        funding: info.funderId.name ,
-        startDate : info?.startDate && moment(info?.startDate).format('YYYY-MM-DD'),
-        terminationDate : info?.terminationDate && moment(info?.terminationDate).format('YYYY-MM-DD') } : {});
+    const [inputs, setInputs] = useState(info ? {
+        ...info,
+        funding: info.funderId.name,
+        startDate: info?.startDate && moment(info?.startDate).format('YYYY-MM-DD'),
+        terminationDate: info?.terminationDate && moment(info?.terminationDate).format('YYYY-MM-DD')
+    } : {});
+    const [checked, setChecked] = useState(info ? !info.terminationDate : true);
     const classes = createClientStyle()
     const params = useParams()
     const dispatch = useDispatch()
@@ -56,7 +60,7 @@ export const AddEnrollment = ({handleClose, info}) => {
     );
 
     const handleCreate = () => {
-        if (inputs.funding && inputs.startDate ) {
+        if (inputs.funding && inputs.startDate && checked ? "Present" : inputs.terminationDate) {
             let funderId;
             fSelect.forEach(item => {
                 if (inputs.funding === item.name) {
@@ -64,9 +68,9 @@ export const AddEnrollment = ({handleClose, info}) => {
                 }
             })
             const data = {
-                "primary": true,
+                "primary": info ? info.primary : true,
                 "startDate": inputs.startDate,
-                "terminationDate": inputs.terminationDate
+                "terminationDate": checked ? null : inputs.terminationDate ? inputs.terminationDate : null
             }
             if (info) {
                 dispatch(clientActions.editClientEnrollment(data, params.id, funderId, info.id))
@@ -81,6 +85,11 @@ export const AddEnrollment = ({handleClose, info}) => {
                             'Input is not field'
             )
         }
+    }
+
+    let onCheck = (e) => {
+        setChecked(e.target.checked)
+        error === 'terminationDate' && setError('')
     }
 
     return (
@@ -111,15 +120,39 @@ export const AddEnrollment = ({handleClose, info}) => {
                             name='startDate'
                             typeError={error === 'startDate' && ErrorText.field}
                         />
+
+                        <div className={classes.curentlyCheckbox}>
+                            <Checkbox
+                                style={{color: Colors.BackgroundBlue}}
+                                defaultChecked={checked}
+                                onClick={onCheck}
+                                color={Colors.ThemeBlue}
+                            />
+                            <p className={classes.curently}>Currently works in this role</p>
+                        </div>
+
                         <ValidationInput
                             variant={"outlined"}
+                            disabled={checked}
                             onChange={handleChange}
-                            value={inputs.terminationDate}
-                            type={"date"}
+                            value={checked ? 'Present' : inputs.terminationDate}
+                            type={checked ? 'text' : "date"}
                             label={"Terminated Date"}
                             name='terminationDate'
                             typeError={error === 'terminationDate' && ErrorText.field}
                         />
+
+                        {/*<ValidationInput*/}
+                        {/*    variant={"outlined"}*/}
+                        {/*    onChange={handleChange}*/}
+                        {/*    value={inputs.terminationDate}*/}
+                        {/*    type={"date"}*/}
+                        {/*    label={"Terminated Date"}*/}
+                        {/*    name='terminationDate'*/}
+                        {/*    typeError={error === 'terminationDate' && ErrorText.field}*/}
+                        {/*/>*/}
+
+
                     </div>
                 </div>
                 <div className={classes.clientModalBlock}>

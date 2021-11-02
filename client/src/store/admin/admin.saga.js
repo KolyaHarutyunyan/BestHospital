@@ -29,7 +29,13 @@ import {
     GET_TIMESHEET,
     CREATE_TIMESHEET,
     GET_ALL_PAYCODES,
-    GET_ALL_PAYCODES_SUCCESS, EDIT_TIMESHEET, GET_ALL_ADMINS_SUCCESS, GET_ALL_ADMINS, EDIT_PAY_CODE, IS_CLINICIAN,
+    GET_ALL_PAYCODES_SUCCESS,
+    EDIT_TIMESHEET,
+    GET_ALL_ADMINS_SUCCESS,
+    GET_ALL_ADMINS,
+    EDIT_PAY_CODE,
+    IS_CLINICIAN,
+    GET_TIMESHEET_BY_ID, GET_TIMESHEET_BY_ID_SUCCESS,
 
 
 } from "./admin.types";
@@ -318,7 +324,7 @@ function* createStaffService(action) {
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        yield put(httpRequestsOnErrorsActions.appendError(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
 
     }
 }
@@ -368,13 +374,30 @@ function* getTimesheet(action) {
     }
 }
 
+function* getTimesheetById(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    yield put(httpRequestsOnErrorsActions.appendError(action.type));
+    try {
+        const res = yield call(authService.getTimesheetById, action.payload.id)
+        yield put({
+            type: GET_TIMESHEET_BY_ID_SUCCESS,
+            payload: res.data
+        });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
+    } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
+    }
+}
+
 function* createTimesheet(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         yield call(authService.createTimesheetService, action.payload.body)
         yield put({
             type: GET_TIMESHEET,
-            payload: {id : action.payload.id}
+            payload: {id : action.payload.body.staffId}
         });
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
@@ -387,7 +410,7 @@ function* createTimesheet(action) {
 function* editTimesheet(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
-        yield call(authService.createTimesheetService, action.payload.body)
+        yield call(authService.editTimesheetService, action.payload.body)
         yield put({
             type: GET_TIMESHEET,
             payload: {id : action.payload.id}
@@ -436,6 +459,7 @@ export const watchAdmin = function* watchAdminSaga() {
     yield takeLatest(DELETE_STAFF_SERVICE, delteStaffService)
      yield takeLatest(IS_CLINICIAN, isClinician)
     yield takeLatest(GET_TIMESHEET, getTimesheet)
+    yield takeLatest(GET_TIMESHEET_BY_ID, getTimesheetById)
     yield takeLatest(CREATE_TIMESHEET, createTimesheet)
     yield takeLatest(EDIT_TIMESHEET, editTimesheet)
     yield takeLatest(GET_ALL_PAYCODES, getAllPaycodes)

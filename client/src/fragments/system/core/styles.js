@@ -8,11 +8,13 @@ export const systemItemStyles = makeStyles(() => ({
         justifyContent: 'space-between',
         flexWrap: 'wrap',
         marginTop: 16,
-        position: 'relative'
+        position: 'relative',
+        width:'100%',
     },
     item: {
+        flex: '0 0 100%',
         width: '49%',
-        flex: '0 0 49%',
+        // flex: '0 0 49%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',

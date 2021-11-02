@@ -6,7 +6,6 @@ import {useGlobalStyles} from "@eachbase/utils";
 import {Loader, NoItemText, PaginationItem} from "@eachbase/components";
 import {fundingSourceActions} from "@eachbase/store";
 
-
 export const FundingSourceTable = ({status, handleGetPage}) => {
         const globalStyle = useGlobalStyles();
         const [page, setPage] = useState(1);
@@ -15,7 +14,6 @@ export const FundingSourceTable = ({status, handleGetPage}) => {
             fundingSourceList: state.fundingSource.fundingSourceList,
             httpOnLoad: state.httpOnLoad,
         }));
-
 
         const changePage = (number) => {
             let start = number > 1 ? (number - 1) + '0' : 0
@@ -49,7 +47,6 @@ export const FundingSourceTable = ({status, handleGetPage}) => {
                             </Table>
                         </TableContainer> : <NoItemText text={'No Funding source yet'}/>
                     }
-
                     {fundingSourceList?.funders?.length ?
                         <PaginationItem
                             listLength={fundingSourceList?.funders?.length}
@@ -61,6 +58,7 @@ export const FundingSourceTable = ({status, handleGetPage}) => {
                         :
                         <NoItemText text={'No Funding source yet'}/>
                     }
+
                 </Paper>
             </div>
         );

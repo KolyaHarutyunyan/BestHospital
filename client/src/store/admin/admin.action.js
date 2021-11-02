@@ -17,7 +17,7 @@ import {
     DELETE_STAFF_SERVICE,
     GET_TIMESHEET,
     CREATE_TIMESHEET,
-    GET_ALL_PAYCODES, EDIT_TIMESHEET, GET_ALL_ADMINS, EDIT_PAY_CODE, IS_CLINICIAN
+    GET_ALL_PAYCODES, EDIT_TIMESHEET, GET_ALL_ADMINS, EDIT_PAY_CODE, IS_CLINICIAN, GET_TIMESHEET_BY_ID
 
 } from "./admin.types";
 
@@ -163,6 +163,12 @@ export const isClinician = (id,isClinical) => {
 export const getTimesheet = (id) => {
     return {
         type: GET_TIMESHEET,
+        payload: {id}
+    }
+}
+export const getTimesheetById = (id) => {
+    return {
+        type: GET_TIMESHEET_BY_ID,
         payload: {id}
     }
 }

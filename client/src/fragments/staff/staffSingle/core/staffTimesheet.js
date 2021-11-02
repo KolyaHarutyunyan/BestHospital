@@ -5,7 +5,8 @@ import {Images} from "@eachbase/utils";
 import {serviceSingleStyles} from './styles';
 import moment from "moment";
 import {TimesheetModal} from "./modals";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {adminActions} from "../../../../store";
 
 const headerTitles = [
     {
@@ -72,7 +73,7 @@ const headerTitlesBcba = [
 // ]
 
 export const StaffTimesheet = ({info}) => {
-
+    const dispatch = useDispatch()
     const allPaycodes = useSelector(state => state.admins.allPaycodes)
     const [openModal,setOpenModal] = useState(false)
 
@@ -85,19 +86,33 @@ export const StaffTimesheet = ({info}) => {
     const handleOpenClose = () => {
         setOpenModal(!openModal)
     }
+    const handleOpen = (item) =>{
+        dispatch(adminActions.getTimesheetById(item.id))
+    }
+
+
+
+    const { timesheetById} = useSelector((state) => ({
+        timesheetById: state.admins.timesheetById
+    }));
 
 
     const timesheetItem = (item, index) => {
         return (
-            <TableBodyComponent key={index} handleOpenInfo={()=>setIndex(index)}>
+            <TableBodyComponent key={index}
+                                handleOpenInfo={()=>handleOpen(item)}
+                                // handleOpenInfo={()=>setIndex(index)}
+            >
                 <TableCell>
                     <SlicedText size={30} type={'name'} data={item?.payCode?.payCodeTypeId?.name}/>
                 </TableCell>
                 <TableCell>{item?.payCode?.payCodeTypeId?.type}</TableCell>
                 <TableCell> <p style={{width:50, overflow :'hidden',}}>{item?.id}</p> </TableCell>
                 <TableCell>{moment(item?.startDate).format('DD/MM/YYYY')}</TableCell>
-                <TableCell>{moment(item?.endDate).format('DD/MM/YYYY')}</TableCell>
-                <TableCell>{item?.totalAmount}</TableCell>
+                <TableCell>{info ? item.endDate === null ? 'Present' :
+                    moment(item?.endDate).format('DD/MM/YYYY')
+                    : moment(item?.endDate).format('DD/MM/YYYY')}</TableCell>
+                <TableCell>{`$${item?.totalAmount}`}</TableCell>
             </TableBodyComponent>
         )
     }
