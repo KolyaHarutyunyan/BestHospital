@@ -1,6 +1,7 @@
 import { model, Schema, Types } from 'mongoose';
 import { IAppointment } from './interface';
 import { EventStatus, AppointmentType } from './appointment.constants';
+import { addressSchema } from '../address';
 
 export const appointmentSchema = new Schema({
     type: { type: String, enum: AppointmentType },
@@ -14,7 +15,8 @@ export const appointmentSchema = new Schema({
     require: { type: Boolean },
     status: { type: String, enum: EventStatus },
     isRepeat: { type: Boolean, default: false },
-    miles: { type: String, default: null }
+    miles: { type: String, default: null },
+    address: addressSchema
 });
 
 export const AppointmentModel = model<IAppointment>('appointment', appointmentSchema);

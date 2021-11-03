@@ -1,11 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { StaffDTO } from "../../staff/dto";
-import { ClientDTO } from "../../client/dto";
-import { PayCodeDTO } from "../../employment/paycode/dto";
-
 import { AppointmentType, EventStatus } from "../appointment.constants";
-import { AuthorizationServiceDTO } from "../../client/authorizationservice/dto";
-import { IsEnum } from "class-validator";
+import { IsEnum, IsMongoId, IsOptional } from "class-validator";
+import { AddressDTO } from '../../address';
 
 export class AppointmentDto {
     @ApiProperty()
@@ -13,13 +9,13 @@ export class AppointmentDto {
     @ApiProperty({ enum: AppointmentType })
     type: string;
     @ApiProperty()
-    client: ClientDTO;
+    client: string;
     @ApiProperty()
-    authorizedService: AuthorizationServiceDTO;
+    authorizedService: string;
     @ApiProperty()
-    staff: StaffDTO;
+    staff: string;
     @ApiProperty()
-    staffPayCode: PayCodeDTO;
+    staffPayCode: string;
     @ApiProperty()
     startDate: Date;
     @ApiProperty()
@@ -32,13 +28,25 @@ export class AppointmentDto {
     status: string;
     @ApiProperty({ required: false })
     miles?: number;
+    @ApiProperty({ type: AddressDTO })
+    address: AddressDTO;
 }
 
 export class AppointmentQueryDTO {
-    @ApiProperty({ enum: EventStatus })
+    @ApiProperty({ enum: EventStatus, required: false })
     @IsEnum(EventStatus)
+    @IsOptional()
     status: string;
-    @ApiProperty({ enum: AppointmentType })
+    @ApiProperty({ enum: AppointmentType, required: false })
     @IsEnum(AppointmentType)
+    @IsOptional()
     type: string;
+    @ApiProperty({ required: false })
+    @IsMongoId()
+    @IsOptional()
+    client: string;
+    @ApiProperty({ required: false })
+    @IsMongoId()
+    @IsOptional()
+    staff: string;
 }

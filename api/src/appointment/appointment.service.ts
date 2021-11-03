@@ -6,6 +6,7 @@ import { ClientService } from '../client/client.service';
 import { PaycodeService } from '../employment/paycode/paycode.service';
 import { StaffService } from '../staff/staff.service';
 import { MongooseUtil } from '../util/mongoose.util';
+import { EventStatus } from './appointment.constants';
 import { AppointmentModel } from './appointment.model';
 import { AppointmentDto, CreateAppointmentDto, CreateRepeatDto, UpdateAppointmentDto } from './dto';
 import { AppointmentQueryDTO } from './dto/appointment.dto';
@@ -46,9 +47,9 @@ export class AppointmentService {
         );
       }
     }
-    if (staff.id != staffPayCode.employmentId.staffId) {
+    if (staff.id != staffPayCode.employmentId.staffId && staffPayCode.employmentId.active != true) {
       throw new HttpException(
-        'PayCode is not staff pay code',
+        'PayCode is not staff pay code or employment is not active',
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -61,7 +62,8 @@ export class AppointmentService {
       startTime: dto.startTime,
       endTime: dto.endTime,
       status: dto.status,
-      require: dto.require
+      require: dto.require,
+      type: dto.type,
     });
     if (dto.type == "DRIVE") {
       if (!dto.miles) {
@@ -141,7 +143,6 @@ export class AppointmentService {
         );
       }
       else if (dto.repeatCountWeek && dto.repeatCheckWeek) {
-        console.log('a?');
         const weeks = [];
         let totalCount = 0;
         const week = dto.repeatCheckWeek.toString();
@@ -152,12 +153,9 @@ export class AppointmentService {
         let dates = [], x;
         var dayCount = { 0: { sum: 0, date: [] }, 1: { sum: 0, date: [] }, 2: { sum: 0, date: [] }, 3: { sum: 0, date: [] }, 4: { sum: 0, date: [] }, 5: { sum: 0, date: [] }, 6: { sum: 0, date: [] } }; //0 is sunday and 6 is saturday
         for (var d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
-          console.log(d, 'd', d.getDay());
           dayCount[d.getDay()].sum++;
           x = new Date(d.getTime());
-          // dayCount[d.getDay()].date = [];
           dayCount[d.getDay()].date.push(x);
-
           if (d.getDay() == 5) current = true;
           if (d.getDay() == 0 && current) {
             d.setDate(d.getDate() + (7 * dto.repeatCountWeek));
@@ -171,13 +169,16 @@ export class AppointmentService {
           weeks.push(obj[day].date);
           totalCount += dayCount[days].sum
         })
-        weeks.map(date =>{
-          // extract array nd then clloneDoc
-        })
-        for (let i = 0; i < totalCount; i++) {
-          // this.cloneDoc(appointment, dayCount[])
+
+        for (let prop of weeks) {
+          prop.map(date => {
+            dates.push(date)
+          })
         }
-        return { totalCount, weeks };
+        for (let i = 0; i < totalCount; i++) {
+          this.cloneDoc(appointment, dates[i])
+        }
+        return { occurency: totalCount };
       }
     }
     else {
@@ -194,26 +195,59 @@ export class AppointmentService {
         let start = new Date(dto.startDate);
         let end = new Date(dto.endDate);
         let count = 0;
+        let dates = [], x;
         for (let d = start; d <= end; d.setMonth(d.getMonth() + 1)) {
           if (d.getMonth() == end.getMonth() && end.getDate() < dto.repeatDayMonth) {
             break
           }
+          x = new Date(d.getTime());
           count++;
+          dates.push(x);
           d.setMonth(d.getMonth() + dto.repeatMonth);
-          continue
         }
-        
+
         for (let i = 0; i < count; i++) {
-          this.cloneDoc(appointment)
+          this.cloneDoc(appointment, dates[i])
         }
         return { occurrency: count }
       }
     }
   }
 
-  async findAll(filter: AppointmentQueryDTO, client: string, staff: string): Promise<any> {
-    const appointment = await this.model.find({ status: filter.status, type: filter.type });
-    return
+  async findAll(filter: AppointmentQueryDTO): Promise<AppointmentDto[]> {
+    let query: any = {}
+    if (filter.client) query.client = filter.client;
+    if (filter.staff) query.staff = filter.staff;
+    if (filter.status) query.status = filter.status;
+    if (filter.type) query.type = filter.type;
+    const appointments = await this.model.find({ ...query }).populate({
+      path: 'client',
+      select: 'firstName lastName'
+    }).populate({
+      path: 'staff',
+      select: 'firstName lastName'
+    });
+    this.checkAppointment(appointments[0])
+
+    return this.sanitizer.sanitizeMany(appointments);
+  }
+
+  async findClients(client: string): Promise<AppointmentDto[]> {
+    const appointments = await this.model.find({ client }).populate({
+      path: 'client',
+      select: 'firstName lastName'
+    });
+    this.checkAppointment(appointments[0])
+    return this.sanitizer.sanitizeMany(appointments);
+  }
+
+  async findStaff(staff: string): Promise<AppointmentDto[]> {
+    const appointments = await this.model.find({ staff }).populate({
+      path: 'staff',
+      select: 'firstName lastName'
+    });
+    this.checkAppointment(appointments[0])
+    return this.sanitizer.sanitizeMany(appointments);
   }
 
   async findOne(_id: string): Promise<AppointmentDto> {
@@ -253,7 +287,7 @@ export class AppointmentService {
       startDate: date,
       startTime: appointment.startTime,
       endTime: appointment.endTime,
-      status: appointment.status,
+      status: EventStatus.NOTRENDERED,
       require: appointment.require
     });
     return await cloneDoc.save();

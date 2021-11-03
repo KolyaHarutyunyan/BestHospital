@@ -26,8 +26,21 @@ export class AppointmentController {
   @Get()
   @Public()
   findAll(@Query() filter: AppointmentQueryDTO) {
-    console.log(filter, 'filter');
-    return this.appointmentService.findAll(filter, 'client', 'staff');
+    return this.appointmentService.findAll(filter);
+  }
+
+  @Get(':clientId')
+  @Public()
+  @ApiOkResponse({ type: AppointmentDto })
+  findClients(@Param('clientId', ParseObjectIdPipe) clientId: string,) {
+    return this.appointmentService.findClients(clientId);
+  }
+
+  @Get(':staffId')
+  @Public()
+  @ApiOkResponse({ type: AppointmentDto })
+  findStaff(@Param('staffId', ParseObjectIdPipe) staffId: string,) {
+    return this.appointmentService.findStaff(staffId);
   }
 
   @Get(':id')

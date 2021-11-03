@@ -30,7 +30,8 @@ export class AppointmentSanitizer implements ISanitize {
             startTime: appointment.startTime,
             endTime: appointment.endTime,
             startDate: appointment.startDate,
-            miles: appointment.miles
+            miles: appointment.miles,
+            address: appointment.address
         };
         return appointmentDTO;
     }
