@@ -15,7 +15,7 @@ export class CreateModifierDto {
     chargeRate: number;
     @ApiProperty()
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     name: string;
     @ApiProperty({ enum: TypeStatus })
     @IsEnum(TypeStatus)
