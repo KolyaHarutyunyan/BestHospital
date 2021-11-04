@@ -18,12 +18,18 @@ export class PlaceService {
   private mongooseUtil: MongooseUtil;
 
   async create(dto: CreatePlaceDto): Promise<PlaceDTO> {
-    const place = new this.model({
-      name: dto.name,
-      code: dto.code
-    })
-    await place.save()
-    return this.sanitizer.sanitize(place)
+    try {
+      const place = new this.model({
+        name: dto.name,
+        code: dto.code
+      })
+      await place.save()
+      return this.sanitizer.sanitize(place)
+    }
+    catch (e) {
+      this.mongooseUtil.checkDuplicateKey(e, 'Place already exists');
+      throw e;
+    }
   }
 
   async findAll(): Promise<PlaceDTO[]> {
