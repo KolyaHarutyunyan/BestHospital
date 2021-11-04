@@ -29,6 +29,16 @@ export class AppointmentService {
   private mongooseUtil: MongooseUtil;
 
   async create(dto: CreateAppointmentDto): Promise<AppointmentDto> {
+    const overlapAppointmentStaff = await this.model.find({ staff: dto.staff, "startDate": { "$lt": new Date(dto.endTime) }, "endTime": { "$gt": new Date(dto.startDate) } });
+    const overlapAppointmentClient = await this.model.find({ client: dto.client, "startDate": { "$lt": new Date(dto.endTime) }, "endTime": { "$gt": new Date(dto.startDate) } });
+
+    if (overlapAppointmentStaff[0] || overlapAppointmentClient[0]) {
+      throw new HttpException(
+        `appointment overlapping`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     const staff = await this.staffService.findById(dto.staff);
     const staffPayCode: any = await this.payCodeService.findOne(dto.staffPayCode);
     if (dto.type == "SERVICE") {

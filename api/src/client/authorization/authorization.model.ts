@@ -13,7 +13,7 @@ const AuthorizationSchema = new Schema({
     status: { type: Number, enum: [AuthorizationStatus] },
     createdDate: { type: Date, default: Date.now() },
     updatedDate: { type: Date, default: null },
-    location: { type: String },
+    location: { type: String }, // adrressSchema
 });
 
 AuthorizationSchema.pre('remove', async function (next) {

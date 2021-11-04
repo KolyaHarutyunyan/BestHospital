@@ -40,6 +40,7 @@ export class MileageService {
     this.checkMileage(mileage);
     if (dto.compensation) mileage.compensation = dto.compensation;
     if (dto.startDate) mileage.startDate = dto.startDate;
+    await mileage.save()
     return this.sanitizer.sanitize(mileage);
   }
 
