@@ -23,7 +23,8 @@ export class JobService {
       return job;
     }
     catch (e) {
-      throw e
+      this.mongooseUtil.checkDuplicateKey(e, 'Job already exists');
+      throw e;
     }
   }
 

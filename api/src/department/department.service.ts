@@ -26,7 +26,8 @@ export class DepartmentService {
       return this.sanitizer.sanitize(department)
     }
     catch (e) {
-      throw e
+      this.mongooseUtil.checkDuplicateKey(e, 'Department already exists');
+      throw e;
     }
   }
 
