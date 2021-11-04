@@ -76,7 +76,6 @@ export class ClientController {
     @Body() dto: CreateTerminationDto,
     @Query() status: ClientQueryDTO
   ): Promise<ClientDTO> {
-    console.log(status)
     const staff = await this.clientService.setStatus(
       clientId,
       status.status,
@@ -84,19 +83,4 @@ export class ClientController {
     );
     return staff;
   }
-
-  /** Activated a funder */
-  // @Patch(':id/activate')
-  // @Public()
-  // @ApiOkResponse({ type: ClientDTO })
-  // async activate(
-  //   @Param('id', ParseObjectIdPipe) clientId: string,
-  // ): Promise<ClientDTO> {
-  //   const client = await this.clientService.setStatusActive(
-  //     clientId,
-  //     1,
-  //   );
-  //   return client;
-  // }
-
 }

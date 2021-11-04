@@ -50,6 +50,13 @@ export class AppointmentService {
       }
       const client = await this.clientService.findById(dto.client);
       const authService: any = await this.authorizedService.getClient(dto.authorizedService);
+      const compareService = await this.authorizedService.checkByServiceId(authService.serviceId);
+      if (staff.service.indexOf(compareService.serviceId) == -1) {
+        throw new HttpException(
+          'Staff service have not current service',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
       if (client.id != authService.authorizationId.clientId) {
         throw new HttpException(
           'Authorization Service is not Client authorization service',
@@ -71,6 +78,7 @@ export class AppointmentService {
       startDate: dto.startDate,
       startTime: dto.startTime,
       endTime: dto.endTime,
+      eventStatus: dto.eventStatus,
       status: dto.status,
       require: dto.require,
       type: dto.type,
@@ -88,7 +96,7 @@ export class AppointmentService {
     return this.sanitizer.sanitize(appointment)
   }
 
-  async repeat(dto: CreateRepeatDto, _id: string): Promise<any> {
+  async repeat(dto: CreateRepeatDto, _id: string): Promise<Object>{
     const appointment = await this.model.findById(_id);
     this.checkAppointment(appointment)
     let now = new Date();
@@ -117,7 +125,6 @@ export class AppointmentService {
         const day = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
         const startDate: any = new Date(dto.startDate);
         const endDate: any = new Date(new Date(dto.endDate).setHours(23, 59, 59));
-        console.log(endDate, 'endDate');
         const diffDays = Math.floor(Math.abs((startDate - endDate) / day));
         let count = 0;
         let dates = [], x;
@@ -224,11 +231,20 @@ export class AppointmentService {
     }
   }
 
+  async setStatus(_id: string, eventStatus: string): Promise<AppointmentDto> {
+    const appointment = await this.model.findById(_id);
+    this.checkAppointment(appointment);
+    console.log(eventStatus, 'eventStatuseventStatuseventStatuseventStatus');
+    appointment.eventStatus = eventStatus;
+    await appointment.save();
+    return this.sanitizer.sanitize(appointment)
+  }
+  
   async findAll(filter: AppointmentQueryDTO): Promise<AppointmentDto[]> {
     let query: any = {}
     if (filter.client) query.client = filter.client;
     if (filter.staff) query.staff = filter.staff;
-    if (filter.status) query.status = filter.status;
+    if (filter.eventStatus) query.eventStatus = filter.eventStatus;
     if (filter.type) query.type = filter.type;
     const appointments = await this.model.find({ ...query }).populate({
       path: 'client',
@@ -286,7 +302,7 @@ export class AppointmentService {
     }
   }
 
-  async cloneDoc(appointment: IAppointment, date: any = "2021-10-01T11:56:15.938Z") {
+  async cloneDoc(appointment: IAppointment, date) {
     const cloneDoc = new this.model({
       client: appointment.client,
       authorizedService: appointment.authorizedService,
@@ -297,7 +313,8 @@ export class AppointmentService {
       startDate: date,
       startTime: appointment.startTime,
       endTime: appointment.endTime,
-      status: EventStatus.NOTRENDERED,
+      eventStatus: EventStatus.NOTRENDERED,
+      status: appointment.status,
       require: appointment.require
     });
     return await cloneDoc.save();
