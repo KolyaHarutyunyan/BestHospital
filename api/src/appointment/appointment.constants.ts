@@ -1,3 +1,8 @@
+export enum AppointmentStatus {
+    ACTIVE = "ACTIVE",
+    INACTIVE = "INACTIVE"
+}
+
 export enum EventStatus {
     RENDERED = "RENDERED",
     COMPLETED = "COMPLETED",

@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsBoolean, IsDateString, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
-import { AppointmentType, EventStatus } from "../appointment.constants";
+import { AppointmentStatus, AppointmentType, EventStatus } from "../appointment.constants";
 
 export class CreateAppointmentDto {
     @ApiProperty()
@@ -41,6 +41,9 @@ export class CreateAppointmentDto {
     endTime: Date;
     @ApiProperty({ enum: EventStatus })
     @IsEnum(EventStatus)
+    eventStatus: string;
+    @ApiProperty({ enum: AppointmentStatus })
+    @IsEnum(AppointmentStatus)
     status: string;
     @ApiProperty()
     @IsNotEmpty()

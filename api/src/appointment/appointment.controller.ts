@@ -1,10 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ParseObjectIdPipe, Public } from 'src/util';
-import { EventStatus } from './appointment.constants';
+import { AppointmentStatus, EventStatus } from './appointment.constants';
 import { AppointmentService } from './appointment.service';
 import { CreateAppointmentDto, UpdateAppointmentDto, AppointmentDto, CreateRepeatDto } from './dto';
-import { AppointmentQueryDTO } from './dto/appointment.dto';
+import { AppointmentQueryDTO, AppointmentQuerySetEventStatusDTO } from './dto/appointment.dto';
 
 @Controller('appointment')
 @ApiTags('Appointment Endpoints')
@@ -22,6 +22,22 @@ export class AppointmentController {
   // @ApiOkResponse({ type: AppointmentDto })
   repeat(@Body() createRepeatDto: CreateRepeatDto, @Param('id') id: string) {
     return this.appointmentService.repeat(createRepeatDto, id);
+  }
+  /** set eventStatus */
+  @Patch(':id/setEventStatus')
+  @Public()
+  @ApiQuery({ name: 'eventStatus', enum: EventStatus })
+  @ApiOkResponse({ type: AppointmentDto })
+  async setStatus(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Query() eventStatus: AppointmentQuerySetEventStatusDTO
+  ): Promise<AppointmentDto> {
+    console.log(eventStatus);
+    const staff = await this.appointmentService.setStatus(
+      id,
+      eventStatus.eventStatus
+    );
+    return staff;
   }
   @Get()
   @Public()

@@ -255,7 +255,16 @@ export class AuthorizationserviceService {
       throw e
     }
   }
-
+  async checkByServiceId(serviceId: string) {
+    try {
+      const authorizationService = await this.model.findOne({ serviceId });
+      this.checkAuthorizationService(authorizationService);
+      return authorizationService;
+    }
+    catch (e) {
+      throw e
+    }
+  }
   /** if the contact is not found, throws an exception */
   private checkAuthorization(authorization: IAuthorization) {
     if (!authorization) {

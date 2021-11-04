@@ -2,7 +2,7 @@ import { Document } from 'mongoose';
 import { IAddress } from '../../address';
 
 export interface IAppointment extends Document {
-  id: string,
+  _id: string,
   type: string,
   client: string,
   authorizedService: string,
@@ -12,6 +12,7 @@ export interface IAppointment extends Document {
   startTime: Date,
   endTime: Date,
   require: boolean,
+  eventStatus: string,
   status: string,
   miles: number,
   isRepeat: boolean,

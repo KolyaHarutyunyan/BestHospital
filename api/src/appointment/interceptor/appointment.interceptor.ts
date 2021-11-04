@@ -19,12 +19,13 @@ export class AppointmentSanitizer implements ISanitize {
 
     sanitize(appointment: IAppointment): AppointmentDto {
         const appointmentDTO: AppointmentDto = {
-            id: appointment.id,
+            _id: appointment.id,
             type: appointment.type,
             client: appointment.client,
             authorizedService: appointment.authorizedService,
             staff: appointment.staff,
             staffPayCode: appointment.staffPayCode,
+            eventStatus: appointment.eventStatus,
             status: appointment.status,
             require: appointment.require,
             startTime: appointment.startTime,
