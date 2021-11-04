@@ -8,17 +8,16 @@ import {payrollActions} from "@eachbase/store/payroll";
 import {createClientStyle} from "@eachbase/fragments/client";
 import {staffModalsStyle} from "./styles";
 import moment from "moment";
-import {getAllPaycodes} from "../../../../../store/admin/admin.action";
-import {useParams} from "react-router-dom";
+
+
 
 export const PaycodeModal = ({handleClose, info,employmentId}) => {
-    console.log(info,'iiinffoouza')
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {
         "employmentId": info.employmentId,
-        "payCodeTypeId": info.payCodeTypeId._id,
-         "rate": +info.rate,
-         "active": info.active,
+        "payCodeTypeId": info?.payCodeTypeId?._id,
+         "rate": +info?.rate,
+         "active": info?.active,
          "startDate": moment(info.startDate).format('YYYY-MM-DD'),
          "endDate":  moment(info.startDate).format('YYYY-MM-DD')
     }
@@ -34,13 +33,13 @@ export const PaycodeModal = ({handleClose, info,employmentId}) => {
         dispatch(payrollActions.getPayCodeGlobal())
     }, []);
 
-    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
+    const {httpOnSuccess, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
-        httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,
     }));
 
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_PAY_CODE'
+    const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_PAY_CODE'
 
     useEffect(() => {
         if (success) {
@@ -49,6 +48,14 @@ export const PaycodeModal = ({handleClose, info,employmentId}) => {
             dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_AUTHORIZATION'))
         }
     }, [success])
+
+    useEffect(() => {
+        if (successEdit) {
+            handleClose()
+            dispatch(httpRequestsOnSuccessActions.removeSuccess('EDIT_PAY_CODE'))
+            dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_AUTHORIZATION'))
+        }
+    }, [successEdit])
 
     useEffect(()=>{
         if (info){
@@ -69,20 +76,25 @@ export const PaycodeModal = ({handleClose, info,employmentId}) => {
 
     let onCheck  = (e)=>{
         setChecked(e.target.checked)
+       
     }
 
     const handleCreate = () => {
         if (inputs.rate && inputs.payCodeTypeId && inputs.startDate && checked ? "Present" : inputs.endDate ) {
             const data = {
                 "employmentId": employmentId,
-                "payCodeTypeId": payCode.id,
+                "payCodeTypeId": payCode?.id,
                 "rate": +inputs.rate,
                 "active": checked,
                 "startDate": inputs.startDate,
                 "endDate":  inputs.endDate ? inputs.endDate : undefined,
                 'name' : inputs.payCodeTypeId
             }
-            dispatch(adminActions.createPayCode(data, employmentId))
+            if (!info){
+                dispatch(adminActions.createPayCode(data, employmentId))
+            }else {
+                dispatch(adminActions.editPayCode(data, employmentId, info.id))
+            }
         }
          else {
             setError(
@@ -133,7 +145,7 @@ export const PaycodeModal = ({handleClose, info,employmentId}) => {
                             typeError={error === 'rate' && ErrorText.field}
                         />
                         <div className={classes_v2.paycodeBox}>
-                            <Checkbox defaultChecked={checked} onClick={onCheck} color={Colors.ThemeBlue} />
+                            <Checkbox  style={{color:Colors.BackgroundBlue}} defaultChecked={checked} onClick={onCheck} color={Colors.ThemeBlue} />
                             <p className={classes_v2.activePaycode}>Active Paycode</p>
                         </div>
                         <div style={{display: 'flex'}}>

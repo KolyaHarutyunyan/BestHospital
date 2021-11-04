@@ -13,9 +13,12 @@ import {fundingSourceActions} from "@eachbase/store";
 import {useDispatch} from "react-redux";
 import {useParams} from "react-router-dom";
 
+const filterBtn = {
+    width: 93,
+    height: 36
+}
 
-
-export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setGetStatus ,setPrevStatus ,getStatus, type}) => {
+export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setGetStatus ,setPrevStatus ,getStatus, type, handleOpenHour}) => {
 
     const classes = serviceSingleStyles()
     const [open, setOpen] = useState()
@@ -30,9 +33,6 @@ export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setG
     useEffect(()=>{
         setInputs(status)
     },[])
-
-
-
 
     const handleOpenClose = () => {
         setOpen(!open)
@@ -73,15 +73,15 @@ export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setG
     return (
         <div>
             <ul className={classes.tabsWrapper}>
-                <li>
+                <li style={{display:'flex',alignItems:'center'}}>
                     <img src={Images.userProfile} alt="avatar" className={classes.avatar}/>
                     <div className={classes.nameContent}>
                         <h1 className={classes.name}>{data ? `${data?.firstName} ${data?.lastName}` : ''}</h1>
-                        <div className={classes.tagContent}>
-                            <p>Tag Name</p>
-                            <p>Tag Name</p>
-                            <p>Tag Name</p>
-                        </div>
+                        {/*<div className={classes.tagContent}>*/}
+                            {/*<p>Tag Name</p>*/}
+                            {/*<p>Tag Name</p>*/}
+                            {/*<p>Tag Name</p>*/}
+                        {/*</div>*/}
                     </div>
                 </li>
                 <li className={classes.headerRight}>
@@ -90,7 +90,7 @@ export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setG
                         styles={inputStyle}
                         name={"active"}
                         handleSelect={handleChange}
-                        value={inputs}
+                        value={inputs ? inputs : status}
                         list={list}
                         className={classes.inputTextField}
                     />
@@ -99,6 +99,7 @@ export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setG
                         activeTab === 6 ? <>
                                 <div className={classes.searchContainer}>
                                     <ValidationInput
+                                        className={classes.dateInput}
                                         errorFalse={true}
                                         variant={"outlined"}
                                         onChange={(e) => handleChangeDate(e)}
@@ -107,13 +108,20 @@ export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setG
                                         name='searchDate'
                                         // typeError={error === 'birthday' && ErrorText.field}
                                     />
-                                    <AddButton text='Search' handleClick={handleSubmit}/>
+                                    <AddModalButton
+                                        handleClick={handleSubmit} text='Search'
+                                        btnStyles={filterBtn}
+                                    />
                                 </div>
                             </> :
 
                         activeTab === 0 ?
                             <AddModalButton btnStyles={editButtonStyle} handleClick={() => setOpen(true)}
                                             text='Edit'/> :
+                            activeTab === 4 ?
+                                <AddButton styles={{width: 450}} text='Available Hours'
+                                           handleClick={handleOpenHour}/>
+                                :
                             activeTab !== 6 && activeTab !== 4 ?
                                 <AddButton text={
                                     authActive ? 'Add Authorization Service' :

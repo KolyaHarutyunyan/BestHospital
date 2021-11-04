@@ -17,7 +17,7 @@ import {
     DELETE_STAFF_SERVICE,
     GET_TIMESHEET,
     CREATE_TIMESHEET,
-    GET_ALL_PAYCODES, EDIT_TIMESHEET, GET_ALL_ADMINS
+    GET_ALL_PAYCODES, EDIT_TIMESHEET, GET_ALL_ADMINS, EDIT_PAY_CODE, IS_CLINICIAN, GET_TIMESHEET_BY_ID
 
 } from "./admin.types";
 
@@ -121,6 +121,14 @@ export const createPayCode = (body,id) => {
     }
 }
 
+export const editPayCode = (body,id,payCodeId) => {
+    return {
+        type: EDIT_PAY_CODE,
+        payload: {body,id, payCodeId}
+    }
+}
+
+
 export const getStaffService = (id) => {
     return {
         type: GET_STAFF_SERVICE,
@@ -145,15 +153,22 @@ export const deleteStaffService = (id,serviceId) => {
 
 
 
-// export const isClinician = (id) => {
-//     return {
-//         type: IS_CLINICIAN,
-//     }
-// }
+export const isClinician = (id,isClinical) => {
+    return {
+        type: IS_CLINICIAN,
+        payload: {id, isClinical}
+    }
+}
 
 export const getTimesheet = (id) => {
     return {
         type: GET_TIMESHEET,
+        payload: {id}
+    }
+}
+export const getTimesheetById = (id) => {
+    return {
+        type: GET_TIMESHEET_BY_ID,
         payload: {id}
     }
 }

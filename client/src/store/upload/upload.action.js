@@ -1,5 +1,5 @@
 import {
-    CREATE_UPLOAD, DELETE_UPLOADS, GET_UPLOADS
+    CREATE_UPLOAD, DELETE_UPLOADS, EDIT_UPLOAD, GET_UPLOADS
 
 } from "./upload.types";
 
@@ -11,6 +11,17 @@ export const createUpload = (body , createInfo) => {
     return {
         type: CREATE_UPLOAD,
         payload: { body, createInfo }
+    }
+}
+
+/** End */
+
+/** Create Upload */
+
+export const editUpload = (body , id, resource) => {
+    return {
+        type: EDIT_UPLOAD,
+        payload: { body, id, resource }
     }
 }
 
@@ -29,10 +40,10 @@ export const getUpload = (resource) => {
 
 /** D Upload */
 
-export const delUpload = (id, officeId) => {
+export const delUpload = (id,authenticationsId) => {
     return {
         type: DELETE_UPLOADS,
-        payload: { id, officeId  }
+        payload: { id,authenticationsId}
     }
 }
 

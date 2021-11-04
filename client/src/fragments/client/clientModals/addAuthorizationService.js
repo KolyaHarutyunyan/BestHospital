@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {ValidationInput, SelectInput, CreateChancel, ModalHeader, ErrMessage} from "@eachbase/components";
 import {createClientStyle,} from "./styles";
-import {ErrorText} from "@eachbase/utils";
+import {Colors, ErrorText} from "@eachbase/utils";
 import {
     clientActions,
     fundingSourceActions,
@@ -89,13 +89,7 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
                 "total": +inputs.total,
                 "modifiers": modifiersPost,
             }
-
-            dispatch(clientActions.getClientsAuthorizationsServModifiersCheck(data, authId, funderId,))
-
-
-
-
-            // dispatch(clientActions.createClientsAuthorizationsServ(data, authId, funderId,))
+            dispatch(clientActions.createClientsAuthorizationsServ(data, authId, funderId,))
         } else if (inputs.total && info) {
             dispatch(clientActions.editClientsAuthorizationsServ({
                 "total": +inputs.total,
@@ -148,7 +142,7 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
                             list={fSelect}
                             typeError={error === 'modifiers' ? ErrorText.field : ''}
                         />
-                        <div className={classes.displayCodeBlock2}>
+                        <div style={error === 'modifiersPost' ? {border:`1px solid ${Colors.ThemeRed}`} :{}} className={classes.displayCodeBlock2}>
                             <p className={classes.displayCodeBlockText}>Available Modfiers </p>
                             <div className={classes.availableModfiers}>
                                 {info ? info?.modifiers && info?.modifiers?.length > 0 && info.modifiers.map((item, index) => {
@@ -174,7 +168,7 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
                                     }) : <p>N/A</p>}
                             </div>
                         </div>
-                        {/*{error === 'modifiersPost' &&  <ErrMessage text={ErrorText.field}/>}*/}
+                        {error === 'modifiersPost' &&  <ErrMessage text={'Please select some modifier'}/>}
                         <p className={classes.inputInfo}>Availability</p>
                         <ValidationInput
                             variant={"outlined"}

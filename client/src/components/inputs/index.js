@@ -9,3 +9,5 @@ export { SelectInput } from './selectInput';
 export { Textarea } from './textarea';
 export { RadioButton } from './radio';
 export { SelectInputPlaceholder } from './selectInputPlaceholder'
+export { AntSwitch } from './styles'
+export { SelectStatusInput } from './selectStatusInput'

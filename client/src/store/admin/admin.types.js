@@ -52,6 +52,9 @@ export const GET_PAY_CODE_SUCCESS = 'GET_PAY_CODE_SUCCESS'
 /**create Pay Code */
 export const CREATE_PAY_CODE = 'CREATE_PAY_CODE'
 
+/**edit Pay Code */
+export const EDIT_PAY_CODE = 'EDIT_PAY_CODE'
+
 
 /** create staff service */
 export const CREATE_STAFF_SERVICE = 'CREATE_STAFF_SERVICE'
@@ -70,6 +73,8 @@ export const IS_CLINICIAN = 'IS_CLINICIAN'
 
 /** get timesheet  */
 export const GET_TIMESHEET = 'GET_TIMESHEET'
+export const GET_TIMESHEET_BY_ID = 'GET_TIMESHEET_BY_ID'
+export const GET_TIMESHEET_BY_ID_SUCCESS = 'GET_TIMESHEET_BY_ID_SUCCESS'
 export const GET_TIMESHEET_SUCCESS = 'GET_TIMESHEET_SUCCESS'
 
 /** create timesheet */
@@ -82,3 +87,6 @@ export const EDIT_TIMESHEET = 'EDIT_TIMESHEET'
 /** GET ALL PAYCODE  */
 export const GET_ALL_PAYCODES = 'GET_ALL_PAYCODES'
 export const GET_ALL_PAYCODES_SUCCESS = 'GET_ALL_PAYCODES_SUCCESS'
+
+
+

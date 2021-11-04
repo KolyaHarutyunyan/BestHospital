@@ -1,9 +1,12 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {PayrollSetupStyles} from '../styles';
 import {DeleteElement, Notes, SimpleModal, SlicedText, TableBodyComponent} from "@eachbase/components";
 import {TableCell} from "@material-ui/core";
-import {Images} from "@eachbase/utils";
-import { MileageCompensation } from "./mileageCompensation";
+import {FindLoad, FindSuccess, Images} from "@eachbase/utils";
+import {MileageCompensation} from "./mileageCompensation";
+import moment from "moment";
+import {useDispatch} from "react-redux";
+import {mileagesActions} from "@eachbase/store";
 
 const headerTitles = [
     {
@@ -24,17 +27,17 @@ const headerTitles = [
     },
 ];
 
-export const MileageTable = () => {
+export const MileageTable = ({data}) => {
     const classes = PayrollSetupStyles()
 
     const [editModalOpenClose, setEditModalOpenClose] = useState(false)
     const [editedData, setEditedData] = useState({})
     const [deletedInfo, setDeletedInfo] = useState({})
-
+    const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
 
     const handleOpenClose = (data) => {
-        setEditedData(data)
+        data && data.item && setEditedData(data.item)
         setEditModalOpenClose(!editModalOpenClose)
     }
 
@@ -44,28 +47,37 @@ export const MileageTable = () => {
     }
 
     const handleDeleteItem = () => {
-        setOpen(false)
+        dispatch(mileagesActions.deleteMileage(deletedInfo._id))
     }
+
+    const success = FindSuccess('DELETE_MILEAGE')
+    const loader = FindLoad('DELETE_MILEAGE')
+
+    useEffect(() => {
+        if (success) {
+            setOpen(false)
+        }
+    }, [success.length])
 
     const notesItem = (item, index) => {
         return (
             <TableBodyComponent key={index}>
                 <TableCell>
-                    <SlicedText size={30} type={'name'} data={item.name}/>
+                    <SlicedText size={30} type={'name'} data={item.compensation}/>
                 </TableCell>
                 <TableCell>
-                    {item.startDate}
+                    {moment(item.startDate).format('YYYY-MM-DD')}
                 </TableCell>
                 <TableCell>
-                    {item.endDate}
+                    {moment(item.endDate).format('YYYY-MM-DD')}
                 </TableCell>
                 <TableCell>{item.action ? item.action :
                     <div className={classes.icons}>
                         <img src={Images.edit} onClick={() => handleOpenClose({
-                            name: item.name,
+                            item
                         })} alt="edit"/>
                         <img src={Images.remove} alt="delete"
-                             onClick={() => handleOpenCloseDelete({id: item.id, name: item.name})}/>
+                             onClick={() => handleOpenCloseDelete(item)}/>
                     </div>
                 }
                 </TableCell>
@@ -73,28 +85,30 @@ export const MileageTable = () => {
         )
     }
 
-    const data = [{
-        name: 'Name',
-        startDate: '10/10/10',
-        endDate: '11/11/11'
-    }]
-
     return (
         <>
             <Notes restHeight='360px' defaultStyle={true} data={data} pagination={false}
                    items={notesItem}
-                   headerTitles={headerTitles}/>
+                   headerTitles={headerTitles}
+            />
             <SimpleModal
                 openDefault={editModalOpenClose}
                 handleOpenClose={handleOpenClose}
-                content={<MileageCompensation handleOpenClose={editedData && handleOpenClose} maxWidth='480px'
-                                           editedData={editedData} handleClose={handleOpenClose}/>}
+                content={
+                    <MileageCompensation
+                        handleOpenClose={editedData && handleOpenClose}
+                        maxWidth='480px'
+                        editedData={editedData}
+                        handleClose={handleOpenClose}
+                    />
+                }
             />
             <SimpleModal
                 openDefault={open}
                 handleOpenClose={handleOpenCloseDelete}
                 content={<DeleteElement
-                    info={deletedInfo.name}
+                    loader={!!loader.length}
+                    info={deletedInfo.compensation}
                     text='some information'
                     handleDel={handleDeleteItem}
                     handleClose={handleOpenCloseDelete}

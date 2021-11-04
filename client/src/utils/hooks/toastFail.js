@@ -32,6 +32,10 @@ export const ToastFail = (fail) => {
                     fail === 'CREATE_OVERTIME_SETTINGS_GLOBAL' ? 'Something went wrong' :
                         fail === 'EDIT_OVERTIME_SETTINGS_BY_ID_GLOBAL' ? 'Something went wrong' :
                             fail === 'DELETE_OVERTIME_SETTINGS_BY_ID_GLOBAL' ? 'Something went wrong' :
+                                fail === 'CREATE_MILEAGE' ? 'Something went wrong' :
+                                fail === 'EDIT_MILEAGE' ? 'Something went wrong' :
+                                fail === 'CREATE_UPLOAD' ? 'Something went wrong' :
+                                fail === 'CREATE_STAFF_SERVICE' ? 'Something went wrong' :
                                 false
 
         )

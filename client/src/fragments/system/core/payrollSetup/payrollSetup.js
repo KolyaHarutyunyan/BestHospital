@@ -3,9 +3,14 @@ import {PayrollSetupStyles} from './styles';
 import {PayCodeType, PayCodeTable} from "./paycodeType/";
 import {OvertimeTable, OvertimeSettings} from "./overtimeSettings";
 import {MileageCompensation, MileageTable} from "./mileageCompensation";
+import {useSelector} from "react-redux";
 
 export const PayrollSetup = ({globalOvertimeSettings, globalPayCodes}) => {
     const classes = PayrollSetupStyles()
+
+    const { mileages } = useSelector((state) => ({
+        mileages: state.mileage.mileages
+    }));
 
     const [activeStep, setActiveStep] = useState(0);
 
@@ -28,7 +33,7 @@ export const PayrollSetup = ({globalOvertimeSettings, globalPayCodes}) => {
             return (
                 <div className={classes.wrapper}>
                     <MileageCompensation marginTop='30px' marginRight='16px' maxWidth='508px'/>
-                    <MileageTable/>
+                    <MileageTable data={mileages}/>
                 </div>
             )
         }

@@ -9,7 +9,7 @@ import {
     SimpleModal,
     NoItemText, Loader,
 } from "@eachbase/components";
-import {clientActions, fundingSourceActions, httpRequestsOnSuccessActions} from "@eachbase/store";
+import {httpRequestsOnSuccessActions} from "@eachbase/store";
 import {
     ClientGeneral,
     ClientContact,
@@ -22,8 +22,7 @@ import {
 } from "./core";
 import {AddContact} from "../clientModals";
 import {clientItemStyles} from "./styles";
-import {noteActions} from "@eachbase/store/notes";
-import {availabilityScheduleActions} from "@eachbase/store/availabilitySchedule";
+import {FindLoad} from "@eachbase/utils";
 
 
 export const ClientItem = () => {
@@ -36,26 +35,12 @@ export const ClientItem = () => {
     const [authActive, setAuthActive] = useState(false)
     const [getStatus, setGetStatus] = useState('')
     const [prevStatus, setPrevStatus] = useState('')
-    const params = useParams()
     const classes = clientItemStyles()
 
-    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
+    const {httpOnSuccess} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
-        httpOnError: state.httpOnError,
-        httpOnLoad: state.httpOnLoad,
     }));
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'GET_CLIENT_BY_ID'
-
-    useEffect(() => {
-        dispatch(clientActions.getClientsById(params.id))
-        dispatch(clientActions.getClientsContacts(params.id))
-        dispatch(clientActions.getClientsEnrollment(params.id))
-        dispatch(clientActions.getClientsAuthorizations(params.id))
-        dispatch(fundingSourceActions.getFundingSourceHistoriesById('Client'))
-        dispatch(noteActions.getGlobalNotes(params.id, 'Client'))
-        dispatch(availabilityScheduleActions.getAvailabilitySchedule(params.id))
-        dispatch(fundingSourceActions.getFundingSource())
-    }, []);
 
     useEffect(() => {
         dispatch(httpRequestsOnSuccessActions.removeSuccess("GET_CLIENT_BY_ID"))
@@ -75,8 +60,13 @@ export const ClientItem = () => {
     const handleOpenClose = () => {
         setOpen(!open)
     }
+
     const handleOpenCloseModal = () => {
         setOpenModal(!openModal)
+    }
+
+    const handleOpenHour = () =>{
+
     }
 
     const tabsLabels = [
@@ -84,14 +74,16 @@ export const ClientItem = () => {
         {label: 'Contacts'},
         {label: 'Enrollments'},
         {label: 'Authorization'},
-        {label: 'Availability ScheduleFragment'},
+        {label: 'Availability'},
         {label: 'Notes'},
         {label: 'History'}
     ]
 
+
+    const load = FindLoad('GET_CLIENT_BY_ID')
     const tabsContent = [
         {
-            tabComponent: (httpOnLoad.length > 0 ? <Loader/> : <ClientGeneral data={data}/>)
+            tabComponent: (load.length ? <Loader/> : <ClientGeneral data={data}/>)
         },
         {
             tabComponent: (clientContact.length ?
@@ -112,7 +104,8 @@ export const ClientItem = () => {
                                      data={data}/> : <NoItemText text={'No AuthorizationItem Yet'}/>)
         },
         {
-            tabComponent: (<ClientAvailabilitySchedule data={data} availabilityData={availabilityData}/>)
+            tabComponent: (
+                <ClientAvailabilitySchedule data={data} availabilityData={availabilityData}/>)
         },
         {
             tabComponent: (clientsNotes.length ? <ClientNotes data={clientsNotes}/> :
@@ -125,12 +118,9 @@ export const ClientItem = () => {
     ];
 
 
-
     return (
         <>
             <TableWrapperGeneralInfo
-                // status= {data?.status ===1 ? 'active' : 'inactive'}
-                // activeInactiveText={data?.status !==1 ? 'active' : 'inactive'}
                 parent='Clients'
                 title={data ? `${data?.firstName} ${data?.lastName}` : ''}
                 parentLink='/client'
@@ -139,37 +129,40 @@ export const ClientItem = () => {
                 handleOpenClose={handleOpenClose}
                 body={
                     <InactiveModal
-                    name={data?.firstName}
-                    setGetStatus={setGetStatus}
-                    prevStatus={prevStatus}
-                    info={{
-                        status: getStatus,
-                        path: 'client',
-                        type: 'GET_CLIENT_BY_ID_SUCCESS'
-                    }} handleOpenClose={handleOpenClose}
-                    handleClose={handleOpenClose}
+                        name={data?.firstName}
+                        setGetStatus={setGetStatus}
+                        prevStatus={prevStatus}
+                        info={{
+                            status: getStatus,
+                            path: 'client',
+                            type: 'GET_CLIENT_BY_ID_SUCCESS'
+                        }} handleOpenClose={handleOpenClose}
+                        handleClose={handleOpenClose}
                     />}
             >
-                <SimpleModal openDefault={openModal}
-                             handleOpenClose={handleOpenCloseModal}
-                             content={<AddContact info={clientContactItem} handleClose={handleOpenCloseModal}/>}/>
+                <SimpleModal
+                    openDefault={openModal}
+                    handleOpenClose={handleOpenCloseModal}
+                    content={<AddContact info={clientContactItem} handleClose={handleOpenCloseModal}/>}
+                />
                 <div className={classes.headerWraperStyle}>
-
                     <TabsHeader
+                        handleOpenHour={handleOpenHour}
+
+
                         authActive={authActive}
                         data={data}
                         activeTab={activeTab}
-
                         status={data?.status}
-                        type= 'GET_CLIENT_BY_ID_SUCCESS'
+                        type='GET_CLIENT_BY_ID_SUCCESS'
                         setGetStatus={setGetStatus}
                         getStatus={getStatus}
                         setPrevStatus={setPrevStatus}
                         handleOpen={handleOpenClose}
                     />
-
-
-                    <SimpleTabs setAuthActive={setAuthActive} setActiveTab={setActiveTab} tabsLabels={tabsLabels}
+                    <SimpleTabs setAuthActive={setAuthActive}
+                                setActiveTab={setActiveTab}
+                                tabsLabels={tabsLabels}
                                 tabsContent={tabsContent}/>
                 </div>
             </TableWrapperGeneralInfo>

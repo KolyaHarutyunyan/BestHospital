@@ -22,13 +22,18 @@ import {
     CREATE_JOB_GLOBAL,
     GET_JOBS,
     EDIT_JOB_BY_ID_GLOBAL,
-    DELETE_JOB_BY_ID_GLOBAL, GET_JOBS_SUCCESS,
+    DELETE_JOB_BY_ID_GLOBAL,
+    GET_JOBS_SUCCESS,
+    CREATE_PLACE_GLOBAL,
+    GET_PLACES,
+    EDIT_PLACE_BY_ID_GLOBAL,
+    DELETE_PLACE_BY_ID_GLOBAL, GET_PLACES_SUCCESS,
 } from "./system.type";
 import {httpRequestsOnLoadActions} from "../http_requests_on_load";
 import {httpRequestsOnSuccessActions} from "../http_requests_on_success";
 import {httpRequestsOnErrorsActions} from "../http_requests_on_errors";
 
-//CREDENTIALS
+/** Credentials */
 
 function* createCredentialGlobal(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
@@ -66,8 +71,8 @@ function* getCredentialGlobal() {
 function* editCredentialById(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
-        const res =  yield call(systemService.editCredentialByIdGlobalService, action.payload.id, action.payload.body);
-        console.log(res,'reeeees');
+        const res = yield call(systemService.editCredentialByIdGlobalService, action.payload.id, action.payload.body);
+
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         yield put({
@@ -97,7 +102,9 @@ function* deleteCredentialByIdGlobal(action) {
     }
 }
 
-// SERVICES
+/** End */
+
+/** Service */
 
 function* createServiceGlobal(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
@@ -115,17 +122,17 @@ function* createServiceGlobal(action) {
     }
 }
 
-function* getServices() {
-
+function* getServices(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(systemService.getServicesService);
         yield put({
             type: GET_SERVICES_SUCCESS,
             payload: res.data.reverse(),
         });
-
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
     } catch (err) {
-        console.log(err)
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put({
             type: GET_SERVICES_SUCCESS,
             payload: '',
@@ -169,7 +176,9 @@ function* deleteServiceByIdGlobal(action) {
     }
 }
 
-// DEPARTMENTS
+/** End */
+
+/** Departments */
 
 function* createDepartmentGlobal(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
@@ -238,7 +247,9 @@ function* deleteDepartmentByIdGlobal(action) {
     }
 }
 
-// JOBS
+/** End */
+
+/** Job */
 
 function* createJobGlobal(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
@@ -307,24 +318,106 @@ function* deleteJobByIdGlobal(action) {
     }
 }
 
+/** End */
+
+/** Places */
+
+function* createPlaceGlobal(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    try {
+        yield call(systemService.createPlaceGlobalService, action.payload.body);
+        yield put({
+            type: GET_PLACES,
+        });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+    } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
+    }
+}
+
+function* getPlaces() {
+    try {
+        const res = yield call(systemService.getPlacesService);
+        yield put({
+            type: GET_PLACES_SUCCESS,
+            payload: res.data.reverse(),
+        });
+
+    } catch (err) {
+        yield put({
+            type: GET_PLACES_SUCCESS,
+            payload: '',
+        });
+    }
+}
+
+function* editPlaceByIdGlobal(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    try {
+        yield call(systemService.editPlaceByIdGlobalService, action.payload.id, action.payload.body)
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+        yield put({
+            type: GET_PLACES,
+        });
+
+    } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
+    }
+}
+
+function* deletePlaceByIdGlobal(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    try {
+        yield call(systemService.deletePlaceByIdService, action.payload.id)
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+        yield put({
+            type: GET_PLACES,
+        });
+
+    } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type));
+    }
+}
+
+/** End */
+//
+
+
 export const watchSystem = function* watchSystemSaga() {
+    /** Credential */
     yield takeLatest(CREATE_CREDENTIAL_GLOBAL, createCredentialGlobal)
     yield takeLatest(GET_CREDENTIAL_GLOBAL, getCredentialGlobal)
     yield takeLatest(EDIT_CREDENTIAL_BY_ID_GLOBAL, editCredentialById)
     yield takeLatest(DELETE_CREDENTIAL_BY_ID_GLOBAL, deleteCredentialByIdGlobal)
-
+    /** End */
+    /** Service */
     yield takeLatest(CREATE_SERVICE_GLOBAL, createServiceGlobal)
     yield takeLatest(GET_SERVICES, getServices)
     yield takeLatest(EDIT_SERVICE_BY_ID_GLOBAL, editServiceByIdGlobal)
     yield takeLatest(DELETE_SERVICE_BY_ID_GLOBAL, deleteServiceByIdGlobal)
-
+    /** End */
+    /** Department */
     yield takeLatest(CREATE_DEPARTMENT_GLOBAL, createDepartmentGlobal)
     yield takeLatest(GET_DEPARTMENTS, getDepartments)
     yield takeLatest(EDIT_DEPARTMENT_BY_ID_GLOBAL, editDepartmentByIdGlobal)
     yield takeLatest(DELETE_DEPARTMENT_BY_ID_GLOBAL, deleteDepartmentByIdGlobal)
-
+    /** End */
+    /** Job */
     yield takeLatest(CREATE_JOB_GLOBAL, createJobGlobal)
     yield takeLatest(GET_JOBS, getJobs)
     yield takeLatest(EDIT_JOB_BY_ID_GLOBAL, editJobByIdGlobal)
     yield takeLatest(DELETE_JOB_BY_ID_GLOBAL, deleteJobByIdGlobal)
+    /** End */
+    /** Places */
+    yield takeLatest(CREATE_PLACE_GLOBAL, createPlaceGlobal)
+    yield takeLatest(GET_PLACES, getPlaces)
+    yield takeLatest(EDIT_PLACE_BY_ID_GLOBAL, editPlaceByIdGlobal)
+    yield takeLatest(DELETE_PLACE_BY_ID_GLOBAL, deletePlaceByIdGlobal)
+    /** End */
 };

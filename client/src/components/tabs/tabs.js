@@ -1,15 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+import {AppBar,Tabs,Tab,Typography,Box } from '@material-ui/core';
 import {tabsStyles} from "./styles";
 
 function TabPanel(props) {
-    const { children, value, index, ...other } = props;
-
+    const {children, value, index, ...other} = props;
     return (
         <div
             role="tabpanel"
@@ -62,23 +57,25 @@ export const SimpleTabs = ({tabsLabels, tabsContent, setActiveTab, setAuthActive
                     variant="scrollable"
                 >
                     {
-                        tabsLabels && tabsLabels.map((tabLabel, index)=>{
+                        tabsLabels && tabsLabels.map((tabLabel, index) => {
                             return (
-                                <Tab onClick={()=> {
+                                <Tab key={index} onClick={() => {
                                     setAuthActive && setAuthActive(false)
                                     setActiveTab(index)
-                                }}  className={tabStyle.tabLabel} label={tabLabel.label} {...a11yProps(index)} />
+                                }} className={tabStyle.tabLabel} label={tabLabel.label} {...a11yProps(index)} />
                             )
                         })
                     }
                 </Tabs>
             </AppBar>
             {
-                tabsContent && tabsContent.map((tabContent, index)=>{
+                tabsContent && tabsContent.map((tabContent, index) => {
                     return (
-                        <TabPanel value={value} index={index}>
-                            {tabContent.tabComponent}
-                        </TabPanel>
+                        <div key={index}>
+                            <TabPanel value={value} index={index}>
+                                {tabContent.tabComponent}
+                            </TabPanel>
+                        </div>
                     )
                 })
             }

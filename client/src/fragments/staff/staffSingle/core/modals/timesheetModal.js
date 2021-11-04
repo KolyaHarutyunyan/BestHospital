@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {ValidationInput, SelectInput, CreateChancel, ModalHeader, Textarea} from "@eachbase/components";
 import {Checkbox} from "@material-ui/core";
-import {Colors, ErrorText} from "@eachbase/utils";
+import {Colors, ErrorText, FindSuccess} from "@eachbase/utils";
 import {adminActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 import {payrollActions} from "@eachbase/store/payroll";
 import {createClientStyle} from "@eachbase/fragments/client";
@@ -11,8 +11,6 @@ import {useParams} from "react-router-dom";
 import moment from "moment";
 
 export const TimesheetModal = ({handleClose, info, allPaycodes}) => {
-    console.log(allPaycodes,'aaalna')
-    console.log(info,'info')
 
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {...info,
@@ -29,9 +27,9 @@ export const TimesheetModal = ({handleClose, info, allPaycodes}) => {
     const classes_v2 = staffModalsStyle()
     const globalPayCodes = useSelector(state => state.payroll.PayCodes)
 
-    console.log(inputs,'inputs')
 
-    console.log( allPaycodes.find(item=> item?.payCodeTypeId.name === info.payCode.payCodeTypeId.name ).payCodeTypeId.name, 'find')
+
+
 
 const params = useParams()
 
@@ -56,15 +54,15 @@ const params = useParams()
         httpOnLoad: state.httpOnLoad,
     }));
 
-    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_PAY_CODE'
+
+
+    const success = FindSuccess('CREATE_TIMESHEET')
 
     useEffect(() => {
         if (success) {
             handleClose()
-            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_PAY_CODE'))
-            dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_AUTHORIZATION'))
         }
-    }, [success])
+    }, [success.length])
 
 
     const handleChange = e => {
@@ -90,7 +88,7 @@ const params = useParams()
                 "staffId": params.id,
                 "payCode":  payCode.id,
                 "description": inputs.description,
-                "hours": inputs.hours,
+                "hours": parseInt(inputs.hours),
                 "startDate": inputs.startDate,
                 "endDate": inputs.endDate ? inputs.endDate : undefined
             }
@@ -173,7 +171,7 @@ const params = useParams()
                             <div style={{width: 16}}/>
                             <ValidationInput
                                 variant={"outlined"}
-                                disabled={checked ?  true : false}
+                                disabled={checked}
                                 onChange={handleChange}
                                 value={checked ? 'Present' : inputs.endDate}
                                 type={checked ? 'text' :"date"}

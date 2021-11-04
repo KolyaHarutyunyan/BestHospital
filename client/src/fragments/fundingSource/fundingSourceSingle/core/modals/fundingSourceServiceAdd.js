@@ -7,7 +7,6 @@ import {ErrorText} from "@eachbase/utils";
 import {fundingSourceActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 import {FundingSourceModifiersAdd} from "./fundingSourceModifiersAdd";
 
-
 export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
     const systemServices = useSelector(state => state.system.services)
     const globalCredentials = useSelector(state => state.system.credentials)
@@ -25,9 +24,8 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
         setModifiersEdit([...modifiersEdit, newMod])
     }
 
-    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
+    const {httpOnSuccess, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
-        httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,
     }));
 
@@ -62,9 +60,6 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
         })
 
     }, [inputs])
-
-
-
 
     const handleCreate = () => {
         if (inputs.name && inputs.cptCode && inputs.size && inputs.min && inputs.max) {
@@ -168,7 +163,6 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
                 </div>
 
                 <FundingSourceModifiersAdd
-
                     info={info}
                     addNewMod={addNewMod}
                     modifiersServ={modifiersID}

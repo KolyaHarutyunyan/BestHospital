@@ -1,8 +1,9 @@
 import React from "react";
-import {CustomBreadcrumbs, AddModalButton} from "@eachbase/components";
+import {CustomBreadcrumbs, AddModalButton, SelectStatusInput} from "@eachbase/components";
 import {wrapperStyle} from "./styles";
 import {SimpleModal} from "../modal";
 import {Colors} from "@eachbase/utils";
+import {inputStyle} from "../../fragments/client/clientSingle/core/styles";
 
 export const TableWrapperGeneralInfo =
     ({
@@ -13,22 +14,28 @@ export const TableWrapperGeneralInfo =
          title,
          parent,
          parentLink,
-         activeInactiveText
+
+         inputs,
+         list,
+         handleChange,
      }) => {
         const classes = wrapperStyle();
-
-        const inactivateButtonStyle = {
-            height: 36,
-            backgroundColor: activeInactiveText ==="active" ? Colors.BackgroundBlue : Colors.ThemeRed,
-            padding: '0 24px'
-        }
 
         return (
             <React.Fragment>
                 <div className={classes.inactiveActiveHeader}>
                     <CustomBreadcrumbs className={classes.breadcrumb} parent={parent} child={title}
                                        parentLink={parentLink}/>
-                    {/*<AddModalButton btnStyles={inactivateButtonStyle} text={activeInactiveText} handleClick={handleOpenClose}/>*/}
+
+                    {/*<SelectStatusInput*/}
+                    {/*    errorFalse={true}*/}
+                    {/*    styles={inputStyle}*/}
+                    {/*    name={"active"}*/}
+                    {/*    handleSelect={handleChange}*/}
+                    {/*    value={inputs ? inputs : status}*/}
+                    {/*    list={list}*/}
+                    {/*    className={classes.inputTextField}*/}
+                    {/*/>*/}
                 </div>
                 <div className={classes.addButton}>
                     <SimpleModal

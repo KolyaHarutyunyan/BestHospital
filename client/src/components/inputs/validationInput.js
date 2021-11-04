@@ -9,12 +9,13 @@ export const ValidationInput = ({
                                     multiline, style, className, autoComplete, placeholder,
                                     typeError, Length, disabled,
                                     value, type, onChange, name,
-                                    label, validator, sendBoolean, variant, loader, styles,
+                                    label, validator, sendBoolean, variant, loader, styles,handleBlur
                                 }) => {
     const classes = inputsStyle();
     const [validEmail, setValidEmail] = useState(false);
 
     const chechValid = (e) => {
+        handleBlur && handleBlur()
         let Value = e.target.value;
         if (Value.length >= 1) {
             if (validator) {

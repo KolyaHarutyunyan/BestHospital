@@ -133,6 +133,7 @@ export const serviceSingleStyles = makeStyles(() => ({
         alignItems: 'flex-start'
     },
     bcbaWrapper: {
+        marginTop:30,
         padding: 16,
         boxShadow: Shadow.noteModalShadow,
         borderRadius: 8,
@@ -224,6 +225,17 @@ export const serviceSingleStyles = makeStyles(() => ({
 
     },
 
+    clinicalWrapper:{
+        display: 'flex',
+        alignItems: "center",
+        '& p':{
+            color: Colors.ThemeBlue,
+            fontWeight: 'bold'
+        },
+        '& div':{
+            margin: '0 24px 0 8px'
+        },
+    },
 //  History
 
     searchContainer: {
@@ -232,6 +244,31 @@ export const serviceSingleStyles = makeStyles(() => ({
         justifyContent: 'center',
         '& button': {
             marginLeft: 15
+        }
+    },
+    dateInput: {
+        width: '100%',
+        '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: Colors.BackgroundBlue,
+        },
+        '& .MuiOutlinedInput-root': {
+            height: 38,
+            width: 200,
+            color: Colors.TextPrimary
+        },
+        '& .MuiInputLabel-outlined': {
+            marginTop: '-3px',
+            color: Colors.TextPrimary
+        },
+        '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+            transform: 'translate(14px, -2px) scale(0.75)'
+        },
+        '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: Colors.BackgroundBlue,
+        },
+        '& .MuiInputBase-input::placeholder': {
+            fontSize: 14,
+            color: Colors.TextLightGray
         }
     },
     headerRight :{

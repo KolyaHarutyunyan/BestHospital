@@ -1,5 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 import {Colors, Shadow} from "@eachbase/utils";
+import {Switch, withStyles} from "@material-ui/core";
 
 export const inputsStyle = makeStyles(() => ({
   select: {
@@ -153,7 +154,27 @@ export const inputsStyle = makeStyles(() => ({
     resize: 'none',
     height:'128px!important',
     borderColor:Colors.BackgroundBlue,
-    padding: '2px 0 10px 10px',
+    padding: '13px 0 10px 16px',
+    borderRadius: '4px',
+    overflow: 'unset!important',
+    msOverflowStyle: 'none',
+    scrollbarWidth: 'none',
+    '&::-webkit-scrollbar': {
+      display: 'none'
+    },
+
+    '&::placeholder' : {
+      fontSize: '14px',
+      lineHeight: '19px',
+      color: Colors.TextLightGray
+    },
+  },
+  errorTextareaTextField:{
+    width:'100%',
+    resize: 'none',
+    height:'128px!important',
+    borderColor:Colors.ThemeRed,
+    padding: '13px 0 10px 16px',
     borderRadius: '4px',
     overflow: 'unset!important',
     msOverflowStyle: 'none',
@@ -229,6 +250,50 @@ export const inputsStyle = makeStyles(() => ({
     width:'292px',
   },
 
+  statusImg:{
+    width: '12px',
+    height: '12px',
+    borderRadius:'24px',
+    background:'red'
+  }
+
 }));
 
 
+export const AntSwitch = withStyles((theme) => ({
+  root: {
+    width: 32,
+    height: 16,
+    padding: 0,
+    display: 'flex',
+    marginTop: 0,
+    marginLeft: '8px',
+  },
+  switchBase: {
+    paddingTop: '2.2px',
+    padding: 3,
+    color: theme.palette.common.white,
+    '&$checked': {
+      transform: 'translateX(14px)',
+      color: theme.palette.common.white,
+      '& + $track': {
+        opacity: 1,
+        backgroundColor: Colors.ThemeBlue,
+        borderColor: theme.palette.primary.main,
+      },
+    },
+  },
+  thumb: {
+    width: 12,
+    height: 12,
+    marginTop: 0,
+    boxShadow: 'none',
+  },
+  track: {
+    border: 'none',
+    borderRadius: 24 / 2,
+    opacity: 1,
+    backgroundColor: theme.palette.grey[400],
+  },
+  checked: {},
+}))(Switch);

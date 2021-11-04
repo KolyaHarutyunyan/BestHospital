@@ -105,7 +105,7 @@ export const FundingSourceSingleServices = ({data,}) => {
     }, [])
 
     let deleteService = () => {
-        alert('wait Edgar')
+        // alert('wait Edgar')
         dispatch(fundingSourceActions.deleteFoundingSourceServiceById(data[serviceIndex]._id))
     }
 

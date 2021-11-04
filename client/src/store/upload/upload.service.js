@@ -17,6 +17,10 @@ export const authService = {
     /** End */
 
     /** Delete Uploads */
-    deleteUploadsService: (id) => axios.delete(`/files/${id}`)
+    deleteUploadsService: (id) => axios.delete(`/files/${id}`),
+    /** End */
+
+    /** Edit Uploads */
+    editUploadService: (body, id) => axios.patch(`/files/${id}`, body)
     /** End */
 };

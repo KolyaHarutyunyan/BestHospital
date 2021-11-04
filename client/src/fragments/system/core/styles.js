@@ -8,11 +8,13 @@ export const systemItemStyles = makeStyles(() => ({
         justifyContent: 'space-between',
         flexWrap: 'wrap',
         marginTop: 16,
-        position: 'relative'
+        position: 'relative',
+        width:'100%',
     },
     item: {
+        flex: '0 0 100%',
         width: '49%',
-        flex: '0 0 49%',
+        // flex: '0 0 49%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -27,6 +29,14 @@ export const systemItemStyles = makeStyles(() => ({
             '& span': {
                 fontWeight: 600,
             }
+        }
+    },
+    text:{
+        display:'flex',
+        alignItems:'center',
+        '& p':{
+            fontWeight:'600',
+            color:Colors.TextPrimary,
         }
     },
     title: {
@@ -80,6 +90,16 @@ export const systemItemStyles = makeStyles(() => ({
             fontSize: 14
         },
     },
+    codInputStyle: {
+        width: '300px',
+
+        marginRight: 16,
+        '& .MuiOutlinedInput-root': {
+            height: '36px!important',
+            color: Colors.TextPrimary,
+            fontSize: 14
+        },
+    },
     credentialInputStyle2: {
         width: 300,
         marginRight: 16,
@@ -122,5 +142,8 @@ export const systemItemStyles = makeStyles(() => ({
         cursor: 'pointer',
         margin: 2,
     },
-
+    noTypeYet : {
+        fontSize : 14,
+        color :Colors.TextDarkGrey
+    }
 }));

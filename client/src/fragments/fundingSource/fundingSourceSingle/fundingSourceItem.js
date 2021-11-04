@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {useParams} from "react-router-dom";
+import React, {useState} from "react";
+import {useSelector} from "react-redux";
 import {
     SimpleTabs,
     Notes,
@@ -17,25 +16,20 @@ import {
     FundingSourceSingleHistories
 } from "./core";
 import {fundingSourceItemStyle} from "./styles";
-
+import {FindLoad} from "@eachbase/utils";
 
 export const FundingSourceItem = ({}) => {
-    const [open, setOpen] = useState(false)
+    const classes = fundingSourceItemStyle()
     const data = useSelector(state => state.fundingSource.fundingSourceItem)
     const servicesData = useSelector(state => state.fundingSource.fundingSourceServices)
     const historiesData = useSelector(state => state.fundingSource.fundingSourceHistories)
     const globalNotes = useSelector(state => state.note.notes)
     const globalServices = useSelector(state => state.system.services)
+    const [open, setOpen] = useState(false)
     const [activeTab, setActiveTab] = useState(0)
     const [getStatus, setGetStatus] = useState('')
     const [prevStatus, setPrevStatus] = useState('')
-    const classes = fundingSourceItemStyle()
-
-
-
-    const handleOpenClose = () => {
-        setOpen(!open)
-    }
+    const [statusType, setStatusType] = useState('')
 
     const tabsLabels = [
         {label: 'General Information'},
@@ -44,29 +38,45 @@ export const FundingSourceItem = ({}) => {
         {label: 'History'}
     ]
 
+    const loader = FindLoad('GET_FUNDING_SOURCE_HISTORIES_BY_ID')
 
-    const {httpOnLoad} = useSelector((state) => ({
-        httpOnSuccess: state.httpOnSuccess,
-        httpOnError: state.httpOnError,
-        httpOnLoad: state.httpOnLoad,
-    }));
+    const handleOpenClose = () => {
+        setGetStatus(data?.status)
+        setOpen(!open)
+    }
 
     const tabsContent = [
-        {tabComponent: httpOnLoad.length > 0 ? <Loader/> : <FundingSourceSingleGeneral data={data}/>},
+        {
+            tabComponent: loader.length ?
+                <Loader/>
+                :
+                <FundingSourceSingleGeneral data={data}/>
+        },
         {
             tabComponent: servicesData.length ?
-                <FundingSourceSingleServices data={servicesData} globalServices={globalServices}/> :
+                <FundingSourceSingleServices data={servicesData} globalServices={globalServices}/>
+                :
                 <NoItemText text='No Services Yet'/>
         },
         {
-            tabComponent: globalNotes.length ? <FundingSourceSingleNotes data={globalNotes}/> :
+            tabComponent: globalNotes.length ? <FundingSourceSingleNotes data={globalNotes}/>
+                :
                 <NoItemText text='No Notes Yet'/>
         },
         {
-            tabComponent: historiesData.length ? <FundingSourceSingleHistories data={historiesData}/> :
+            tabComponent: historiesData.length ? <FundingSourceSingleHistories data={historiesData}/>
+                :
                 <NoItemText text='No Histories Yet'/>
         },
     ];
+    const list = [
+        {name: 'ACTIVE', id:'ACTIVE'},
+        {name: 'INACTIVE', id:'INACTIVE'},
+        {name: 'HOLD', id:'HOLD'},
+        {name: 'TERMINATE', id:'TERMINATE'},
+    ]
+
+
 
     return (
         <>
@@ -76,22 +86,28 @@ export const FundingSourceItem = ({}) => {
                 parentLink='/fundingSource'
                 buttonsTabAddButton={true}
                 openCloseInfo={open}
+                list={list}
                 handleOpenClose={handleOpenClose}
-
-                body={<InactiveModal
-                    name ={data?.name}
-                    setGetStatus={setGetStatus}
-                    prevStatus={prevStatus}
-                    info={{
-                    status: getStatus,
-                    path: 'funding',
-                    type: 'GET_FUNDING_SOURCE_BY_ID_SUCCESS'
-                }} handleOpenClose={handleOpenClose}
-                    handleClose={handleOpenClose}/>}
+                body={
+                    <InactiveModal
+                        statusType={statusType}
+                        status={data?.status}
+                        name={data?.name}
+                        setGetStatus={setGetStatus}
+                        prevStatus={prevStatus}
+                        info={{
+                            status: getStatus,
+                            path: 'funding',
+                            type: 'GET_FUNDING_SOURCE_BY_ID_SUCCESS'
+                        }}
+                        handleOpenClose={handleOpenClose}
+                    />
+                }
             >
                 <div className={classes.fundingSourceItemHeader}>
                     <FundingSourceSingleHeader
-                        type= 'GET_FUNDING_SOURCE_BY_ID_SUCCESS'
+                        handleGetStatus={setStatusType}
+                        type='GET_FUNDING_SOURCE_BY_ID_SUCCESS'
                         setGetStatus={setGetStatus}
                         getStatus={getStatus}
                         setPrevStatus={setPrevStatus}
@@ -102,7 +118,8 @@ export const FundingSourceItem = ({}) => {
                     <SimpleTabs
                         setActiveTab={setActiveTab}
                         tabsLabels={tabsLabels}
-                        tabsContent={tabsContent}/>
+                        tabsContent={tabsContent}
+                    />
                 </div>
             </TableWrapperGeneralInfo>
         </>

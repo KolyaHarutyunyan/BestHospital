@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {SimpleTabs} from "@eachbase/components";
+import {Loader, SimpleTabs} from "@eachbase/components";
 import {
     ServiceType,
     systemItemStyles,
@@ -10,8 +10,10 @@ import {
     PayrollSetup
 } from './core';
 import {useDispatch, useSelector} from "react-redux";
-import {systemActions} from "@eachbase/store";
+import {mileagesActions, systemActions} from "@eachbase/store";
 import {payrollActions} from "@eachbase/store/payroll";
+import {FindLoad} from "../../utils";
+import {PlaceOfService} from "./core/placeOfService";
 
 export const SystemItem = () => {
 
@@ -28,6 +30,11 @@ export const SystemItem = () => {
     const globalJobs = useSelector(state => state.system.jobs)
     const globalPayCodes = useSelector(state => state.payroll.PayCodes)
     const globalOvertimeSettings = useSelector(state => state.payroll.overtimeSettings)
+
+
+
+    const globalPlaces = useSelector(state => state.system.places)
+
 
     const dispatch = useDispatch()
     const [deleteModalOpened, setDeleteModalOpened] = useState(false)
@@ -48,7 +55,10 @@ export const SystemItem = () => {
         },
         {
             label: 'Payroll Setup'
-        }
+        },
+        {
+            label: 'Place of Service'
+        },
     ]
 
     const handleOpenClose = (modalType, modalInformation) => {
@@ -68,18 +78,18 @@ export const SystemItem = () => {
         setModalType(data.type);
     }
 
-    useEffect(() => {
-        dispatch(systemActions.getCredentialGlobal())
-        dispatch(systemActions.getServices())
-        dispatch(systemActions.getDepartments())
-        dispatch(systemActions.getJobs())
-        dispatch(payrollActions.getPayCodeGlobal())
-        dispatch(payrollActions.getOvertimeSettingsGlobal())
-    }, [])
 
+
+    const {httpOnLoad} = useSelector((state) => ({
+        httpOnLoad: state.httpOnLoad,
+    }));
+
+
+    const loader = FindLoad('GET_SERVICES')
     const tabsContent = [
         {
-            tabComponent: (<ServiceType globalServices={globalServices} removeItem={handleRemoveItem}
+            tabComponent: (loader.length ? <Loader/> :
+                <ServiceType globalServices={globalServices} removeItem={handleRemoveItem}
                                         openModal={handleOpenClose}/>)
         },
         {
@@ -97,6 +107,10 @@ export const SystemItem = () => {
         {
             tabComponent: (
                 <PayrollSetup globalPayCodes={globalPayCodes} globalOvertimeSettings={globalOvertimeSettings}/>)
+        } ,
+        {
+            tabComponent: (
+                <PlaceOfService  globalJobs={globalPlaces} removeItem={handleRemoveItem} openModal={handleOpenClose} />)
         }
     ];
 

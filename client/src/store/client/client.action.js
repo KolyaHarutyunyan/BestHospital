@@ -160,7 +160,6 @@ export const getClientsAuthorizationsServ = (id) => {
 // authorization file
 
 export const createClientsAuthorizationFile = (body,createInfo) => {
-    console.log(body,createInfo,'body client action')
     return {
         type: CREATE_CLIENT_AUTHORIZATION_FILE,
         payload: {body,createInfo}

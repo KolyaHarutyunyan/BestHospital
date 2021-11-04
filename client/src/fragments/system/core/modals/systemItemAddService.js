@@ -18,8 +18,6 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
     const [mInformation] = useState(modalInformation)
     const [inputs, setInputs] = useState(mInformation ? mInformation : {})
 
-    console.log(mInformation,'mInformation');
-
     const [error, setError] = useState('')
 
     const classes = modalsStyle()
@@ -32,9 +30,12 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
             return 'Edit Credential'
         } else if (mType === 'editJobTitles') {
             return 'Edit Job Title'
+        } else if (mType === 'editPlaceTitles') {
+            return 'Edit Place Of Service'
         }
         return 'Edit Department'
     }
+
     const checkType = (type) => {
         if (type === 'Degree') {
             return 0
@@ -50,7 +51,7 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
             name: inputs.credentialName,
             type: checkType(inputs.credentialType),
         }
-        console.log(credentialData,'losdfhdsjfsdhfsd vcred data');
+
         let serviceData = {
             name: inputs.name,
             displayCode: inputs.displayCode,
@@ -61,6 +62,10 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
         }
         let jobData = {
             name: inputs.jobTitle,
+        }
+        let placeData = {
+            name: inputs.name,
+            code: inputs.code,
         }
         switch (mType) {
             case 'editService':
@@ -82,7 +87,7 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
                     setError(
                         !inputs.credentialType ? 'credentialType' :
                             !inputs.credentialName ? 'credentialName' :
-                                    'Input is not filled'
+                                'Input is not filled'
                     )
                 }
                 break;
@@ -92,6 +97,18 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
                 } else {
                     setError(
                         !inputs.jobTitle ? 'jobTitle' :
+                            'Input is not filled'
+                    )
+                }
+                break;
+
+            case 'editPlaceTitles':
+                if (inputs.name && inputs.code) {
+                    dispatch(systemActions.editPlaceByIdGlobal(placeData, mInformation.jobId))
+                } else {
+                    setError(
+                        !inputs.name ? 'name' :
+                            !inputs.code ? 'code' :
                                 'Input is not filled'
                     )
                 }
@@ -99,7 +116,7 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
             default:
                 if (inputs.departmentName) {
                     dispatch(systemActions.editDepartmentByIdGlobal(departmentData, mInformation.departmentID))
-                }else {
+                } else {
                     setError(
                         !inputs.departmentName ? 'departmentName' :
                             'Input is not filled'
@@ -109,29 +126,28 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
     }
 
     const handleChange = e => {
-        setInputs(
-            prevState => (
-                {
-                    ...prevState,
-                    [e.target.name]: e.target.value
-                }
-            ));
+        setInputs(prevState => ({...prevState, [e.target.name]: e.target.value}));
         error === e.target.name && setError('')
     }
 
-
-    const {httpOnLoad, httpOnSuccess,httpOnError} = useSelector((state) => ({
+    const {httpOnLoad, httpOnSuccess} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
         httpOnLoad: state.httpOnLoad,
-        httpOnError: state.httpOnError
     }));
 
     const success =
         httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CREDENTIAL_BY_ID_GLOBAL' ? true :
             httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_JOB_BY_ID_GLOBAL' ? true :
                 httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_DEPARTMENT_BY_ID_GLOBAL' ? true :
-                    httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_SERVICE_BY_ID_GLOBAL'
+                    httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_SERVICE_BY_ID_GLOBAL' ? true :
+                    httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_PLACE_BY_ID_GLOBAL'
 
+    const loader =
+        httpOnLoad.length && httpOnLoad[0] === 'EDIT_CREDENTIAL_BY_ID_GLOBAL' ? true :
+            httpOnLoad.length && httpOnLoad[0] === 'EDIT_JOB_BY_ID_GLOBAL' ? true :
+                httpOnLoad.length && httpOnLoad[0] === 'EDIT_SERVICE_BY_ID_GLOBAL' ? true :
+                    httpOnLoad.length && httpOnLoad[0] === 'EDIT_DEPARTMENT_BY_ID_GLOBAL' ? true :
+                        httpOnLoad.length && httpOnLoad[0] === 'EDIT_PLACE_BY_ID_GLOBAL'
 
     useEffect(() => {
         if (success) {
@@ -140,11 +156,8 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
         }
     }, [success]);
 
-    const loader =
-          httpOnLoad.length && httpOnLoad[0] === 'EDIT_CREDENTIAL_BY_ID_GLOBAL' ? true :
-            httpOnLoad.length && httpOnLoad[0] === 'EDIT_JOB_BY_ID_GLOBAL' ? true :
-              httpOnLoad.length && httpOnLoad[0] === 'EDIT_SERVICE_BY_ID_GLOBAL' ? true :
-                httpOnLoad.length && httpOnLoad[0] === 'EDIT_DEPARTMENT_BY_ID_GLOBAL'
+
+
 
     return (
         <div className={classes.inactiveModalBody}>
@@ -152,7 +165,28 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
             <div className={classes.positionedButton}>
                 <CloseButton handleCLic={handleClose}/>
             </div>
-            {
+            {mType === 'editPlaceTitles' ?
+                <>
+                    <ValidationInput
+                        variant={"outlined"}
+                        onChange={handleChange}
+                        type={"text"}
+                        label={"Name*"}
+                        name='name'
+                        value={inputs.name}
+                        typeError={error === 'name' && ErrorText.field}
+                    />
+                    <ValidationInput
+                        variant={"outlined"}
+                        onChange={handleChange}
+                        type={"number"}
+                        label={"Code*"}
+                        name='code'
+                        value={inputs.code}
+                        typeError={error === 'code' && ErrorText.field}
+                    />
+                </>
+                :
                 mType === 'editService' ?
                     <>
                         <ValidationInput
@@ -183,43 +217,43 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
                             typeError={error === 'category' && ErrorText.field}
                         />
                     </> : mType === 'editCredential' ?
-                        <>
-                            <ValidationInput
-                                variant={"outlined"}
-                                onChange={handleChange}
-                                type={"text"}
-                                label={"Credential Name*"}
-                                name='credentialName'
-                                value={inputs.credentialName}
-                                typeError={error === 'credentialName' && ErrorText.field}
-                            />
-                            <SelectInput
-                                style={classes.credentialInputStyle}
-                                name={"credentialType"}
-                                placeholder={"Type*"}
-                                list={credentialsList}
-                                handleSelect={handleChange}
-                                value={inputs.credentialType}
-                                typeError={error === 'credentialType' && ErrorText.field}
-                            />
-                        </> : mType === 'editDepartment' ?
-                            <ValidationInput
-                                variant={"outlined"}
-                                onChange={handleChange}
-                                type={"text"}
-                                name='departmentName'
-                                value={inputs.departmentName}
-                                typeError={error === 'departmentName' && ErrorText.field}
-                            /> :
-                            <ValidationInput
-                                variant={"outlined"}
-                                onChange={handleChange}
-                                type={"text"}
-                                label={"Job Title*"}
-                                name='jobTitle'
-                                value={inputs.jobTitle}
-                                typeError={error === 'jobTitle' && ErrorText.field}
-                            />
+                    <>
+                        <ValidationInput
+                            variant={"outlined"}
+                            onChange={handleChange}
+                            type={"text"}
+                            label={"Credential Name*"}
+                            name='credentialName'
+                            value={inputs.credentialName}
+                            typeError={error === 'credentialName' && ErrorText.field}
+                        />
+                        <SelectInput
+                            style={classes.credentialInputStyle}
+                            name={"credentialType"}
+                            placeholder={"Type*"}
+                            list={credentialsList}
+                            handleSelect={handleChange}
+                            value={inputs.credentialType}
+                            typeError={error === 'credentialType' && ErrorText.field}
+                        />
+                    </> : mType === 'editDepartment' ?
+                        <ValidationInput
+                            variant={"outlined"}
+                            onChange={handleChange}
+                            type={"text"}
+                            name='departmentName'
+                            value={inputs.departmentName}
+                            typeError={error === 'departmentName' && ErrorText.field}
+                        /> :
+                        <ValidationInput
+                            variant={"outlined"}
+                            onChange={handleChange}
+                            type={"text"}
+                            label={"Job Title*"}
+                            name='jobTitle'
+                            value={inputs.jobTitle}
+                            typeError={error === 'jobTitle' && ErrorText.field}
+                        />
 
             }
             <>

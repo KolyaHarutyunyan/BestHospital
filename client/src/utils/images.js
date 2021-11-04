@@ -11,6 +11,7 @@ import roleManagementActive from '@eachbase/images/icons/roleManagementActive.sv
 import roleManagementPassive from '@eachbase/images/icons/roleManagementPassive.svg'
 import addYellowIcon from '@eachbase/images/icons/addYellowIcon.svg'
 import employment from '@eachbase/images/icons/employment.svg'
+import removeIcon from '@eachbase/images/icons/removeIcon.svg'
 
 
 import offices from '@eachbase/images/offices.svg'
@@ -89,6 +90,7 @@ import pngIcon from '@eachbase/assets/images/icons/pngIcon.svg';
 import jpegIcon from '@eachbase/assets/images/icons/jpegIcon.svg';
 import pdfIcon from '@eachbase/assets/images/icons/pdfIcon.svg';
 import csvIcon from '@eachbase/assets/images/icons/csvIcon.svg';
+import eventsPassive from '@eachbase/assets/images/icons/eventsPassive.svg'
 
 export const Images = {
     doctors: doctors,
@@ -179,5 +181,7 @@ export const Images = {
     pngIcon: pngIcon,
     jpegIcon: jpegIcon,
     pdfIcon: pdfIcon,
-    csvIcon: csvIcon
+    csvIcon: csvIcon,
+    removeIcon: removeIcon,
+    eventsPassive:eventsPassive
 }

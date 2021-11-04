@@ -3,7 +3,7 @@ import { ButtonsTab } from "../buttons";
 import { wrapperStyle } from "./styles";
 import { SimpleModal } from "../modal";
 import {SelectInput} from "../inputs";
-import {ErrorText} from "../../utils";
+import {ActiveInactiveStatus, ErrorText} from "../../utils";
 import moment from "moment";
 
 export const TableWrapper = ({
@@ -13,7 +13,7 @@ export const TableWrapper = ({
   firstButton,
   secondButton,
   addButtonText, body,
-  openCloseInfo, handleOpenClose,getActive,getInactive
+  openCloseInfo, handleOpenClose,getActive,getInactive,handleType
 }) => {
   const classes = wrapperStyle();
 
@@ -21,12 +21,11 @@ export const TableWrapper = ({
   const [error, setError] = useState("");
 
   const handleChange = e => setInputs(
-      prevState => ({...prevState, [e.target.name]: e.target.value === 0? '0' : e.target.value}),
+      prevState => ({...prevState, [e.target.name]:  e.target.value}),
       error === e.target.name && setError(''),
+      handleType && handleType(ActiveInactiveStatus(e.target.value))
+
   );
-
-
-
 
   return (
     <div>

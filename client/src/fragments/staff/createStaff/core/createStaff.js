@@ -79,7 +79,7 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
         error === e.target.name && setError('')
     }
 
-    console.log(license, 'license');
+
 
     const handleCreate = () => {
         const data = {
@@ -158,8 +158,7 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
         httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_ADMIN' ? true :
             httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_ADMIN_BY_ID'
 
-    console.log( httpOnSuccess.length && httpOnSuccess[0].type,' httpOnSuccess.length && httpOnSuccess[0].type')
-    const errorText =
+     const errorText =
         httpOnError.length && httpOnError[0].type === 'CREATE_ADMIN' ? true :
             httpOnError.length && httpOnError[0].type === 'EDIT_ADMIN_BY_ID'
 

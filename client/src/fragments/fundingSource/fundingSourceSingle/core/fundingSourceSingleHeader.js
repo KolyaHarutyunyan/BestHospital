@@ -2,23 +2,33 @@ import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {fundingSourceSingleStyles, editButtonStyle} from "./styles";
 import {Images} from "@eachbase/utils";
-import {AddButton, AddModalButton, SimpleModal, AddNotes, ValidationInput, SelectInput} from "@eachbase/components";
+import {
+    AddButton,
+    AddModalButton,
+    SimpleModal,
+    AddNotes,
+    ValidationInput,
+    SelectStatusInput
+} from "@eachbase/components";
 import {FundingSourceServiceAdd} from "./modals";
 import {CreateFundingSource} from "../../createFundingSource";
 import {fundingSourceActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 import {inputStyle} from "../../../client/clientSingle/core/styles";
 import {useParams} from "react-router-dom";
 
-export const FundingSourceSingleHeader = ({activeTab, title, status,handleOpen, setGetStatus ,setPrevStatus ,getStatus, type}) => {
+const filterBtn = {
+    width: 93,
+    height: 36
+}
+
+export const FundingSourceSingleHeader = ({activeTab, title, status, handleOpen, setGetStatus ,setPrevStatus ,getStatus, type,  handleGetStatus}) => {
     const [open, setOpen] = useState(false)
     const dispatch = useDispatch()
     const prevData = useSelector(state => state.fundingSource.fundingSourceItem)
     const classes = fundingSourceSingleStyles()
     const [inputs, setInputs] = useState( '');
-    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
+    const {httpOnSuccess,} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
-        httpOnError: state.httpOnError,
-        httpOnLoad: state.httpOnLoad,
     }));
 
     const params = useParams()
@@ -27,7 +37,13 @@ export const FundingSourceSingleHeader = ({activeTab, title, status,handleOpen, 
         setOpen(!open)
     }
 
+    useEffect(()=>{
+        setInputs(getStatus)
+    },[getStatus])
+
     const [searchDate, setSearchDate] = useState('')
+
+    const disabled = !searchDate.length
 
     const handleChangeFile = e => {
         setSearchDate(e.target.value)
@@ -57,13 +73,13 @@ export const FundingSourceSingleHeader = ({activeTab, title, status,handleOpen, 
     const handleChange = e => {
         setPrevStatus(inputs)
         setGetStatus(e.target.value)
-       if (e.target.value === 'INACTIVE' || e.target.value === 'HOLD' || e.target.value === 'TERMINATE'){
-           handleOpen()
-       }if (e.target.value === 'ACTIVE') {
-           dispatch(fundingSourceActions.setStatus(params.id,'funding', e.target.value,'', type ))
-       }
-
+       // if (e.target.value === 'INACTIVE' || e.target.value === 'HOLD' || e.target.value === 'TERMINATE'){
+        e.target.value !== 'ACTIVE' && handleOpen()
+       // }if (e.target.value === 'ACTIVE') {
+        e.target.value === 'ACTIVE' && dispatch(fundingSourceActions.setStatus(params.id,'funding', e.target.value,'', type ))
+       // }
         setInputs(e.target.value)
+        handleGetStatus && handleGetStatus(e.target.value)
     };
 
 
@@ -74,7 +90,8 @@ export const FundingSourceSingleHeader = ({activeTab, title, status,handleOpen, 
                 <p className={classes.title}>{title && title}</p>
             </div>
             <div style={{display: 'flex'}}>
-                <SelectInput
+                <SelectStatusInput
+                    errorFalse={true}
                     styles={inputStyle}
                     name={"active"}
                     handleSelect={handleChange}
@@ -99,6 +116,7 @@ export const FundingSourceSingleHeader = ({activeTab, title, status,handleOpen, 
                         <>
                             <div className={classes.searchContainer}>
                                 <ValidationInput
+                                    className={classes.dateInput}
                                     errorFalse={true}
                                     variant={"outlined"}
                                     onChange={(e) => handleChangeFile(e)}
@@ -106,7 +124,11 @@ export const FundingSourceSingleHeader = ({activeTab, title, status,handleOpen, 
                                     type={"date"}
                                     name='searchDate'
                                 />
-                                <AddButton text='Search' handleClick={handleSubmit}/>
+                                <AddModalButton
+                                    disabled={disabled}
+                                    handleClick={handleSubmit} text='Search'
+                                    btnStyles={filterBtn}
+                                />
                             </div>
                         </>
                         : activeTab >= 3 ?

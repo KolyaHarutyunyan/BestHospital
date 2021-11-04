@@ -6,7 +6,7 @@ export {
   CopyRight,
 } from "./login";
 export { MenuBar } from "./menuBar";
-export { FundingSourceTable, CreateFundingSource, OfficesInfo } from "./fundingSource";
+export { FundingSourceTable, CreateFundingSource } from "./fundingSource";
 export { StaffTable, CreateStaff, StaffItem, CredentialModal} from "./staff";
 export { ClientTable,CreateClient} from "./client";
 export { HumanResourcesTable, CreateAdminTable, AdminInfo } from "./humanResources";

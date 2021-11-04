@@ -34,7 +34,7 @@ import moment from "moment";
 import {availabilityScheduleActions} from "@eachbase/store/availabilitySchedule";
 import {StaffService} from "./core/staffService";
 
-export const StaffItem = () => {
+export const StaffItem = ({ gen }) => {
 
     const dispatch = useDispatch()
     const params = useParams()
@@ -72,6 +72,7 @@ export const StaffItem = () => {
     const employments = useSelector(state => state.admins.employments)
     const staffServices = useSelector(state => state.admins.staffServices.service)
     const staffTimesheet = useSelector(state => state.admins.timesheet)
+    const services = useSelector(state => state.system.services)
 
     const handleOpenClose = () => {
         setOpen(!open)
@@ -127,27 +128,11 @@ export const StaffItem = () => {
         },
     ];
 
-    const {httpOnLoad} = useSelector((state) => ({
-        httpOnLoad: state.httpOnLoad,
-    }));
-
     const openCloseCredModal = (modalType, globalCredentialInfo) => {
         setOpenCredModal(!openCredModal)
         setCredModalType(modalType)
         setGlobalCredentialInformation(globalCredentialInfo)
     }
-
-    useEffect(() => {
-        dispatch(adminActions.getCredential(params.id))
-        dispatch(adminActions.getAdminById(params.id))
-        dispatch(systemActions.getCredentialGlobal())
-        dispatch(noteActions.getGlobalNotes(params.id, 'Staff'))
-        dispatch(fundingSourceActions.getFundingSourceHistoriesById('Staff'))
-        dispatch(availabilityScheduleActions.getAvailabilitySchedule(params.id))
-        dispatch(adminActions.getEmployment(params.id))
-        dispatch(adminActions.getStaffService(params.id))
-        dispatch(adminActions.getTimesheet(params.id))
-    }, [])
 
     const openNoteModal = (data) => {
         setNoteModalInfo({
@@ -200,13 +185,16 @@ export const StaffItem = () => {
         })
     }
 
+    const loaderItems = FindLoad('GET_ADMIN_BY_ID')
+
+
+
     const tabsContent = [
         {
-            tabComponent: (httpOnLoad.length ? <Loader/> : <StaffGeneral staffGeneral={staffGeneral}/>)
+            tabComponent: (loaderItems.length ? <Loader/> : <StaffGeneral staffGeneral={staffGeneral}/>)
         },
         {
-            tabComponent: (employments.length > 0 ? <StaffEmployment info={employments}/> :
-                <NoItemText text='No Employments Yet'/>)
+            tabComponent: (employments.length > 0 ? <StaffEmployment info={employments}/> : <NoItemText text='No Employments Yet'/>)
         },
         {
             tabComponent: (<StaffTimesheet info={staffTimesheet} />)
@@ -221,7 +209,7 @@ export const StaffItem = () => {
             tabComponent: (<StaffAvailability availabilityData={availabilityData} staffGeneral={staffGeneral}/>)
         },
         {
-            tabComponent: (<StaffService info={staffServices} staffGeneral={staffGeneral}/>)
+            tabComponent: (<StaffService services={services} info={staffServices} staffGeneral={staffGeneral}/>)
         },
         {
             tabComponent: (globalNotes.length ? <Notes
@@ -299,6 +287,7 @@ export const StaffItem = () => {
                                      credModalType={credModalType}
                                      openCloseCredModal={openCloseCredModal}
                                      openCredModal={openCredModal}
+                                     info={gen}
                                      activeTab={activeTab}
                                      status={staffGeneral?.status}
                                      type= 'GET_ADMIN_BY_ID_SUCCESS'

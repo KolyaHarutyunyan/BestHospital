@@ -19,7 +19,7 @@ function* createAgent(action) {
 
    
   } catch (err) {
-    console.log(err)
+
   }
 }
 
@@ -32,7 +32,7 @@ function* getAgents(action) {
     });
 
   } catch (err) {
-    console.log(err)
+
   }
 }
 
@@ -45,7 +45,7 @@ function* getAgentById(action) {
     });
 
   } catch (err) {
-    console.log(err)
+
   }
 }
 

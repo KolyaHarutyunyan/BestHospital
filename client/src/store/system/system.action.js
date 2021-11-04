@@ -14,10 +14,10 @@ import {
     CREATE_JOB_GLOBAL,
     GET_JOBS,
     EDIT_JOB_BY_ID_GLOBAL,
-    DELETE_JOB_BY_ID_GLOBAL,
+    DELETE_JOB_BY_ID_GLOBAL, CREATE_PLACE_GLOBAL, GET_PLACES, EDIT_PLACE_BY_ID_GLOBAL, DELETE_PLACE_BY_ID_GLOBAL,
 } from "./system.type";
 
-// credential
+/** Credential */
 
 export const createCredentialGlobal = (body) => {
     return {
@@ -33,7 +33,7 @@ export const getCredentialGlobal = () => {
 }
 
 export const editCredentialByIdGlobal = (body, id) => {
-    console.log(body,'body system action');
+
     return {
         type: EDIT_CREDENTIAL_BY_ID_GLOBAL,
         payload: {body, id}
@@ -47,9 +47,9 @@ export const deleteCredentialByIdGlobal = (id) => {
     }
 }
 
-// credential
+/** End */
 
-// service
+/** Service */
 
 export const createServiceGlobal = (body) => {
     return {
@@ -78,10 +78,9 @@ export const deleteServiceByIdGlobal = (id) => {
     }
 }
 
-// service
+/** End */
 
-
-// departments
+/** Departments */
 
 export const createDepartmentGlobal = (body) => {
     return {
@@ -110,9 +109,9 @@ export const deleteDepartmentByIdGlobal = (id) => {
     }
 }
 
-// departments
+/** End */
 
-// jobs
+/** Job */
 
 export const createJobGlobal = (body) => {
     return {
@@ -140,5 +139,35 @@ export const deleteJobByIdGlobal = (id) => {
         payload: {id}
     }
 }
+/** End */
 
-// jobs
+/** Place */
+
+export const createPlaceGlobal = (body) => {
+    return {
+        type: CREATE_PLACE_GLOBAL,
+        payload: {body}
+    }
+}
+
+export const getPlaces = () => {
+    return {
+        type: GET_PLACES,
+    }
+}
+
+export const editPlaceByIdGlobal = (body, id) => {
+    return {
+        type: EDIT_PLACE_BY_ID_GLOBAL,
+        payload: {body, id}
+    }
+}
+
+export const deletePlaceByIdGlobal = (id) => {
+    return {
+        type: DELETE_PLACE_BY_ID_GLOBAL,
+        payload: {id}
+    }
+}
+
+/** End */

@@ -7,7 +7,7 @@ import {ValidationInput, Textarea} from "../inputs";
 import {useDispatch, useSelector} from "react-redux";
 import {fundingSourceActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 
-export const InactiveModal = ({handleOpenClose, info, setGetStatus, prevStatus, name}) => {
+export const InactiveModal = ({handleOpenClose, info, setGetStatus, prevStatus, name, status, statusType}) => {
     const classes = modalsStyle()
     const globalText = useGlobalTextStyles()
     const params = useParams()
@@ -15,9 +15,8 @@ export const InactiveModal = ({handleOpenClose, info, setGetStatus, prevStatus, 
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState({});
     const dispatch = useDispatch()
-    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
+    const {httpOnSuccess, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
-        httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,
     }));
 
@@ -32,9 +31,7 @@ export const InactiveModal = ({handleOpenClose, info, setGetStatus, prevStatus, 
         error === e.target.name && setError(''),
     );
 
-
     const cancel = () => {
-        setGetStatus(prevStatus)
         handleOpenClose()
     }
 
@@ -45,7 +42,7 @@ export const InactiveModal = ({handleOpenClose, info, setGetStatus, prevStatus, 
             "reason": inputs.reason,
         }
         if (inputs.date && inputs.reason) {
-            dispatch(fundingSourceActions.setStatus(params.id, info.path, info.status, data, info.type))
+            dispatch(fundingSourceActions.setStatus(params.id, info.path, statusType, data, info.type))
         } else {
             setError(
                 !inputs.date ? 'date' :

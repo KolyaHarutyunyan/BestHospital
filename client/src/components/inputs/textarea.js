@@ -34,7 +34,7 @@ export const Textarea = (
                 <TextareaAutosize
                     maxRows={maxRows}
                     style={{...styles}}
-                    className={className ? className : classes.TextareaTextField}
+                    className={typeError ? classes.errorTextareaTextField : className ? className : classes.TextareaTextField}
                     variant={variant}
                     placeholder={label}
                     name={name}

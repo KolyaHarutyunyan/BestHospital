@@ -53,12 +53,23 @@ export const ToastSuccess = (success) => {
             success === 'CREATE_EMPLOYMENT' ? 'Successfully created employment' :
             success === 'EDIT_EMPLOYMENT' ? 'Successfully edited employment' :
             success === 'CREATE_PAY_CODE' ? 'Successfully created pay code' :
+            success === 'EDIT_PAY_CODE' ? 'Successfully edited pay code' :
             success === 'DELETE_STAFF_SERVICE' ? 'Successfully deleted service' :
             success === 'CREATE_STAFF_SERVICE' ? 'Successfully created service' :
 
-
             success === 'CREATE_ROLE' ? 'Role Was Created' :
             success === 'DELETE_ROLE' ? 'Role Was Deleted' :
+            success === 'CREATE_MILEAGE' ? 'Successfully created Mileage' :
+            success === 'EDIT_MILEAGE' ? 'Successfully edited Mileage' :
+            success === 'DELETE_MILEAGE' ? 'Successfully deleted Mileage' :
+            success === 'IS_CLINICIAN' ? 'Successfully changed Clinician' :
+            success === 'SET_STATUS' ? 'Successfully changed Status' :
+            success === 'CREATE_PLACE_GLOBAL' ? 'Successfully created Place' :
+            success === 'CREATE_TIMESHEET' ? 'Successfully created Timesheet' :
+            success === 'EDIT_PLACE_BY_ID_GLOBAL' ? 'Successfully edited Place' :
+            success === 'DELETE_PLACE_BY_ID_GLOBAL' ? 'Successfully deleted Place' :
+            success === 'CREATE_UPLOAD' ? 'Successfully uploaded File' :
+            success === 'DELETE_UPLOADS' ? 'Successfully deleted File' :
 
             false
         )

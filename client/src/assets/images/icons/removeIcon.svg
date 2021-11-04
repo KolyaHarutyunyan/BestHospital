@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <g id="Remove" transform="translate(-913 -267)">
+    <g id="Remove-2" data-name="Remove" transform="translate(913 267)">
+      <rect id="Base" width="16" height="16" rx="8" fill="#fe7070"/>
+      <path id="Close" d="M8.335,3.891H5V.553a.553.553,0,0,0-1.107,0V3.891H.553A.553.553,0,0,0,.553,5H3.891V8.335A.553.553,0,1,0,5,8.335V5H8.335a.553.553,0,1,0,0-1.107Z" transform="translate(8.064 1.777) rotate(45)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

@@ -65,7 +65,6 @@ function* editFundingSource(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
-        console.log(err)
     }
 }
 
@@ -100,7 +99,6 @@ function* getFundingSourceById(action) {
         });
     } catch (error) {
 
-        console.log(error)
     }
 }
 
@@ -112,13 +110,12 @@ function* getFundingSourceServicesById(action) {
             payload: res.data,
         });
     } catch (error) {
-        console.log(error, 'erererererererererer')
     }
 }
 
 
 function* createFundingSourceServicesById(action) {
-    console.log(action,'actions py')
+
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
@@ -130,7 +127,7 @@ function* createFundingSourceServicesById(action) {
             type: CREATE_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
             payload: res.data,
         });
-       console.log(res,'ressss')
+
         const body = {
             modifiers: action.payload.modifier,
             serviceId: res.data._id,
@@ -141,11 +138,10 @@ function* createFundingSourceServicesById(action) {
                 payload: {body}
             })
         }
-        console.log(body,'booody')
+
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
 
     } catch (error) {
-        console.log(error, 'err create services')
         yield put(httpRequestsOnErrorsActions.removeError(action.type));
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
@@ -180,10 +176,10 @@ function* editFundingSourceServices(action) {
 
 function* createFundingSourceServicesModifier({payload}) {
     try {
-        console.log(payload,'payloadpayloadpayloadpayload')
+
         const res = yield call(authService.createFoundingSourceServiceModifierService, payload.body);
     } catch (error) {
-        console.log(error, 'res mod')
+
     }
 }
 
@@ -197,7 +193,7 @@ function* editFundingSourceServicesModifier({payload}) {
             payload: payload.id,
         })
     } catch (error) {
-        console.log(error, 'res mod')
+
     }
 }
 
@@ -221,7 +217,6 @@ function* getFundingSourceServicesModifier(action) {
             type: GET_FUNDING_SOURCE_SERVICE_MODIFIERS_ERR,
             payload: error,
         });
-        console.log(error.data.message, 'get modifier')
         yield put({
             type: GET_FUNDING_SOURCE_SERVICE_MODIFIERS_SUCCESS,
             payload: [],
@@ -249,18 +244,19 @@ function* getFundingSourceServicesModifierClient(action) {
             type: GET_FUNDING_SOURCE_SERVICE_MODIFIERS_ERR,
             payload: error,
         });
-        console.log(error.data.message, 'get modifier')
     }
 }
 
 function* getFundingSourceHistoriesById(action) {
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.getFundingSourceHistoriesByIdService, action.payload.onModal, action.payload.searchDate);
         yield put({
             type: GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS,
             payload: res.data,
         });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
     } catch (error) {
 
         if (!action.payload.searchDate) {
@@ -269,6 +265,7 @@ function* getFundingSourceHistoriesById(action) {
                 payload: [],
             });
         } else {
+            yield put(httpRequestsOnLoadActions.removeLoading(action.type));
             yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
         }
     }
@@ -299,8 +296,6 @@ function* setStatus(action) {
 
         const res = yield call(authService.setStatusService, action.payload.id, action.payload.path, action.payload.status, body,);
 
-        console.log(res,'resresresres')
-        console.log(action.payload.type,'action.payload.type')
         yield put({
             type: action.payload.type,
             payload: res.data,

@@ -1,4 +1,4 @@
-import {Colors, Shadow} from "@eachbase/utils";
+import {Backgrounds, Colors, Shadow} from "@eachbase/utils";
 import {makeStyles} from "@material-ui/core/styles";
 
 
@@ -130,7 +130,7 @@ export const createClientStyle = makeStyles(() => ({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        '& p':{
+        '& p': {
             fontSize: 16,
             color: Colors.TextLightGray,
             fontWeight: 600,
@@ -141,20 +141,24 @@ export const createClientStyle = makeStyles(() => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        flexDirection:'column',
         height: 290
     },
     normal: {
-        maxHeight: 290,
+        height: 290,
         overflowY: 'scroll',
         msOverflowStyle: 'none',
         scrollbarWidth: 'none',
+        paddingBottom: 16,
         '&::-webkit-scrollbar': {
             display: 'none'
         },
     },
     fileRow: {
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-end',
+        padding: '16px 2px',
+        borderBottom: `1px solid ${Colors.BackgroundBlue}`,
     },
     imageContainer: {
         width: 60,
@@ -163,15 +167,109 @@ export const createClientStyle = makeStyles(() => ({
         boxShadow: Shadow.changeShadow,
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginRight: 24,
+        flex: '0 0 60px',
+        position: 'relative'
     },
     fileSize: {
         fontSize: 10,
-        color: Colors.TextLightGray
+        color: Colors.TextLightGray,
+        textAlign: 'center'
     },
     downloadIcon: {
         width: 32,
         height: 32,
+        cursor: 'pointer',
+        flex: '0 0 32px',
+        marginLeft: 16
+    },
+    fileName: {
+        fontSize: 12,
+        color: Colors.TextSecondary,
+        paddingBottom: 12,
+        lineHeight: 1,
+        fontWeight: 600
+    },
+    fileInput: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        width: '100%'
+    },
+    fileNameInput: {
+        width: '100%',
+        '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: Colors.BackgroundBlue,
+        },
+        '& .MuiOutlinedInput-root': {
+            height: 40,
+            color: Colors.TextPrimary
+        },
+        '& .MuiInputLabel-outlined': {
+            marginTop: '-3px',
+            color: Colors.TextPrimary
+        },
+        '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+            transform: 'translate(14px, -2px) scale(0.75)'
+        },
+        '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: Colors.BackgroundBlue,
+        },
+        '& .MuiInputBase-input::placeholder': {
+            fontSize: 14,
+            color: Colors.TextLightGray
+        }
+    },
+    percentage: {
+        marginTop: -30,
+        fontSize: 10,
+        color: Colors.BackgroundBlue,
+        textAlign: 'center'
+    },
+    removeIcon: {
+        position: 'absolute',
+        top: -5,
+        right: -5,
         cursor: 'pointer'
-    }
+    },
+    curently:{
+        color : Colors.TextPrimary,
+        fontSize : 16,
+        marginLeft : 10,
+    },
+    curentlyCheckbox:{
+        display: 'flex',
+        alignItems : "center",
+        marginBottom: 16,
+    },
+
+    uploadButton: {
+        cursor:'pointer',
+        background: Colors.BackgroundBlue,
+        boxShadow: Shadow.blueButton,
+        borderRadius: "8px",
+        width: "100%",
+        minWidth:'150px',
+        padding: "0 24px",
+        marginLeft:'24px',
+        height: "48px",
+        display:'flex',
+        justifyContent:'center',
+        alignItems:'center',
+        fontSize: "14px",
+        lineHeight: "19px",
+        color: Colors.TextWhite,
+        textTransform: "capitalize",
+        "&:hover": {
+            background: Backgrounds.blueHover,
+        },
+        "& img":{
+            marginRight:'8px',
+        },
+        "& span": {
+            fontSize: "14px",
+            color: 'white'
+        },
+    },
 }));

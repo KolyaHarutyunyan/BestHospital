@@ -20,7 +20,7 @@ export const Break = ({ handleOpenClose, type, date }) => {
 
     const info = ''
     const handleCreate = () => {
-        console.log(inputs, 'iiiiii')
+
     }
 
     const title =

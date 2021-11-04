@@ -212,7 +212,7 @@ export const Selectable =({handleChangeScreenView, handleOpenClose, openCloseRec
                     formats={{
                         // timeGutterFormat: 'HH:mm',
                         // dateFormat: `dd ${'asdasdas'}`,
-                        dayFormat: `dd`,
+                        // dayFormat: `dd`,
                     }}
                     onEventDrop={moveEvent}
                     resizable
