@@ -27,4 +27,5 @@ export class CreateTimesheetDTO {
     @IsDateString()
     @IsOptional()
     endDate: Date;
+    totalAmount?: number
 }
