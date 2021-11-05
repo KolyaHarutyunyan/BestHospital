@@ -63,6 +63,12 @@ export class AppointmentService {
           HttpStatus.BAD_REQUEST,
         );
       }
+      if(dto.require && !dto.files.length){
+        throw new HttpException(
+          'Files should not be empty',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
     }
     if (staff.id != staffPayCode.employmentId.staffId && staffPayCode.employmentId.active != true) {
       throw new HttpException(
@@ -96,7 +102,7 @@ export class AppointmentService {
     return this.sanitizer.sanitize(appointment)
   }
 
-  async repeat(dto: CreateRepeatDto, _id: string): Promise<Object>{
+  async repeat(dto: CreateRepeatDto, _id: string): Promise<Object> {
     const appointment = await this.model.findById(_id);
     this.checkAppointment(appointment)
     let now = new Date();
@@ -231,19 +237,28 @@ export class AppointmentService {
     }
   }
 
-  async setStatus(_id: string, eventStatus: string): Promise<AppointmentDto> {
+  async setStatus(_id: string, status: any): Promise<AppointmentDto> {
     const appointment = await this.model.findById(_id);
     this.checkAppointment(appointment);
-    console.log(eventStatus, 'eventStatuseventStatuseventStatuseventStatus');
-    appointment.eventStatus = eventStatus;
+    if (status.status) appointment.status = status.status;
+    if (status.eventStatus) {
+      if (status.eventStatus == 'COMPLETED' && appointment.status !== 'ACTIVE') {
+        throw new HttpException(
+          `EventStatus can't be completed`,
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      appointment.eventStatus = status.eventStatus;
+    };
     await appointment.save();
     return this.sanitizer.sanitize(appointment)
   }
-  
+
   async findAll(filter: AppointmentQueryDTO): Promise<AppointmentDto[]> {
     let query: any = {}
     if (filter.client) query.client = filter.client;
     if (filter.staff) query.staff = filter.staff;
+    if (filter.status) query.status = filter.status;
     if (filter.eventStatus) query.eventStatus = filter.eventStatus;
     if (filter.type) query.type = filter.type;
     const appointments = await this.model.find({ ...query }).populate({

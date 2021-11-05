@@ -23,19 +23,17 @@ export class AppointmentController {
   repeat(@Body() createRepeatDto: CreateRepeatDto, @Param('id') id: string) {
     return this.appointmentService.repeat(createRepeatDto, id);
   }
-  /** set eventStatus */
-  @Patch(':id/setEventStatus')
+  /** set status */
+  @Patch(':id/setStatus')
   @Public()
-  @ApiQuery({ name: 'eventStatus', enum: EventStatus })
   @ApiOkResponse({ type: AppointmentDto })
   async setStatus(
     @Param('id', ParseObjectIdPipe) id: string,
-    @Query() eventStatus: AppointmentQuerySetEventStatusDTO
+    @Query() status: AppointmentQuerySetEventStatusDTO
   ): Promise<AppointmentDto> {
-    console.log(eventStatus);
     const staff = await this.appointmentService.setStatus(
       id,
-      eventStatus.eventStatus
+      status
     );
     return staff;
   }

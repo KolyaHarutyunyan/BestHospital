@@ -53,4 +53,8 @@ export class CreateAppointmentDto {
     @IsOptional()
     @IsNumber()
     miles?: number;
+    @ApiProperty({ required: false })
+    @IsOptional()
+    @IsString({ each: true })
+    files: String[];
 }

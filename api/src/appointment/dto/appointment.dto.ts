@@ -32,6 +32,8 @@ export class AppointmentDto {
     miles?: number;
     @ApiProperty({ type: AddressDTO })
     address: AddressDTO;
+    @ApiProperty({required: false})
+    files: String[];
 }
 
 export class AppointmentQueryDTO {
@@ -59,7 +61,12 @@ export class AppointmentQueryDTO {
 
 
 export class AppointmentQuerySetEventStatusDTO {
-    @ApiProperty({ enum: EventStatus })
+    @ApiProperty({ enum: EventStatus, required: false })
     @IsEnum(EventStatus)
+    @IsOptional()
     eventStatus: string;
+    @ApiProperty({ enum: AppointmentStatus, required: false })
+    @IsEnum(AppointmentStatus)
+    @IsOptional()
+    status: string;
 }

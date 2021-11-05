@@ -16,5 +16,6 @@ export interface IAppointment extends Document {
   status: string,
   miles: number,
   isRepeat: boolean,
-  address: IAddress;
+  address: IAddress,
+  files: String[]
 }
