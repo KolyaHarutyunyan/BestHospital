@@ -13,7 +13,7 @@ var bigAmount = 0;
 var dailyAmount = 0;
 var weeklyAmount = 0;
 var orderRate = 0;
-const ids = [];
+let ids = [];
 @Injectable()
 export class TimesheetService {
   constructor(
@@ -32,12 +32,14 @@ export class TimesheetService {
       bigAmount = 0;
       dailyAmount = 0;
       weeklyAmount = 0;
+      ids = [];
       const bigOvertime = [];
       const staff = await this.staffService.findById(dto.staffId);
       const payCode: any = await this.payCodeService.findOne(dto.payCode);
       const overtime = await this.overtimeService.findAll();
       let hours = dto.hours;
       const total = await this.getTotalAmount(payCode, overtime, dto, bigAmount);
+      console.log(total, 'totalll', bigAmount)
       let timesheet = new this.model({
         staffId: staff._id,
         payCode: payCode.id,
@@ -61,15 +63,22 @@ export class TimesheetService {
 
   async getTotalAmount(payCode, overtime, dto, bigAmount, amount = 0) {
     dailyAmount = 0;
+    console.log(overtime, 'overtimeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
     if (!overtime.length) {
-      bigAmount += amount * payCode.rate;
-      orderRate += amount * payCode.rate;
+      console.log(overtime, 'overtimeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+
+      bigAmount += dto.hours * payCode.rate;
+      orderRate += dto.hours * payCode.rate;
+      console.log(amount)
+      console.log(bigAmount, 'bigAmountbigAmountbigAmountbigAmountbigAmountbigAmountbigAmountbigAmountbigAmountbigAmount');
+
       dto.totalAmount = bigAmount;
       return dto
     }
     var maxMultiplier;
     if (payCode.payCodeTypeId.overtime) {
       maxMultiplier = await this.getMaxMultiplier(overtime);
+      console.log(maxMultiplier, 'maxxxxxxxxxxxxxxxxxxxxxxx');
       if (maxMultiplier.type == 'DAILY') {
         console.log('daily');
         const getDayTimesheet = await this.getDailyTimesheet(dto.startDate);
@@ -90,41 +99,54 @@ export class TimesheetService {
         getDayTimesheet.map(timesheet => {
           dailyAmount += timesheet.hours
         })
+        console.log(getDayTimesheet, 'getDailyTimesheet');
         dailyAmount += dto.hours;
+        console.log(dailyAmount, 'dailyAmount');
         // if dailyAmount less then maxMultiplier(overtime rule) then delete current maxMultiplier and skip that
         if (dailyAmount <= maxMultiplier.threshold) {
+          console.log(dailyAmount, 'DailyAmount IF BLOCK', maxMultiplier.threshold);
           const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
           // if can't find any maxMultiplier(overtime rule) then count by ordinary rate
           if (filteredDays.length == []) {
-            bigAmount = bigAmount + dailyAmount * payCode.rate;
-            orderRate += dailyAmount * payCode.rate
+            bigAmount = bigAmount + dto.hours * payCode.rate;
+            orderRate += dto.hours * payCode.rate
             dto.totalAmount = bigAmount;
             return dto
           }
           //skip current maxMultiplier(overtime rule) and find another maxMultiplier
-          ids.push(maxMultiplier)
+          // ids.push(maxMultiplier)
           return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
         }
         else {
           console.log('else')
           // count difference and get amount with rate
-          const difference = dailyAmount - maxMultiplier.threshold;
+          const difference = dto.hours >= maxMultiplier.threshold ? dto.hours - maxMultiplier.threshold : dto.hours;
+          // const difference = (dto.hours >= maxMultiplier.threshold) ? dto.hours - maxMultiplier.threshold : dailyAmount - maxMultiplier.threshold;
           console.log(difference, 'difference')
 
           // if difference less than 0 count rate and return, if not then call function again for calculating remaining hours
           if (difference < 0 || difference == 0) {
             maxMultiplier.threshold - dto.hours;
-            bigAmount += dailyAmount * payCode.rate * maxMultiplier.multiplier;
-            orderRate += dailyAmount * payCode.rate
+            bigAmount += dto.hours * payCode.rate;
+            orderRate += dto.hours * payCode.rate
             dto.totalAmount = bigAmount;
             return dto
           }
           const amount = difference * payCode.rate * maxMultiplier.multiplier;
           bigAmount = (bigAmount + amount);
+          console.log(bigAmount, 'bigAmount');
           const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
           dailyAmount -= difference;
           dto.hours -= difference;
+          console.log(dailyAmount, 'dailyAmountdailyAmount');
+          console.log(dto.hours, ' dto.hours dto.hours');
+
           ids.push(maxMultiplier)
+          if(dto.hours == 0) {
+            dto.totalAmount = bigAmount;
+            return dto;
+          }
+
           return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount, dailyAmount)
         }
       }
@@ -133,7 +155,7 @@ export class TimesheetService {
 
         const week = await this.getWeekly(dto.endDate);
         console.log(week, 'weeeeeeeek');
-        if (week.length == [] && dto.hours < maxMultiplier.threshold) {
+        if (week.length == [] && dto.hours <= maxMultiplier.threshold) {
           console.log(week, 'mtavvvvv');
           const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
           return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
@@ -166,9 +188,13 @@ export class TimesheetService {
             // return
           }
           const amount = difference * payCode.rate * maxMultiplier.multiplier;
+          console.log(amount, 'amount');
           bigAmount = (bigAmount + amount);
+          console.log(bigAmount, 'bigAmount');
           const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
           dto.hours = dto.hours - difference;
+          weeklyAmount -= difference;
+          console.log(dto.hours, 'dto.hours', weeklyAmount);
           ids.push(maxMultiplier)
           return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
         }
