@@ -40,20 +40,21 @@ export class TimesheetService {
       let hours = dto.hours;
       const total = await this.getTotalAmount(payCode, overtime, dto, bigAmount);
       console.log(total, 'totalll', bigAmount)
-      let timesheet = new this.model({
-        staffId: staff._id,
-        payCode: payCode.id,
-        description: dto.description,
-        hours,
-        startDate: dto.startDate,
-        endDate: dto.endDate ? dto.endDate : null,
-        totalAmount: dto.totalAmount
-      });
-      timesheet = await (await timesheet.save()).populate({
-        path: 'payCode',
-        populate: { path: 'payCodeTypeId' }
-      }).execPopulate();
-      return { timesheet, ids, orderRate }
+      // let timesheet = new this.model({
+      //   staffId: staff._id,
+      //   payCode: payCode.id,
+      //   description: dto.description,
+      //   hours,
+      //   startDate: dto.startDate,
+      //   endDate: dto.endDate ? dto.endDate : null,
+      //   totalAmount: dto.totalAmount
+      // });
+      // timesheet = await (await timesheet.save()).populate({
+      //   path: 'payCode',
+      //   populate: { path: 'payCodeTypeId' }
+      // }).execPopulate();
+      // return { timesheet, ids, orderRate }
+      return {ids, orderRate, total: dto.totalAmount}
     } catch (e) {
       console.log(e);
       this.mongooseUtil.checkDuplicateKey(e, 'TimeSheet already exists');
@@ -63,7 +64,7 @@ export class TimesheetService {
 
   async getTotalAmount(payCode, overtime, dto, bigAmount, amount = 0) {
     dailyAmount = 0;
-    console.log(overtime, 'overtimeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+    weeklyAmount = 0;
     if (!overtime.length) {
       console.log(overtime, 'overtimeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
 
@@ -126,11 +127,16 @@ export class TimesheetService {
 
           // if difference less than 0 count rate and return, if not then call function again for calculating remaining hours
           if (difference < 0 || difference == 0) {
-            maxMultiplier.threshold - dto.hours;
-            bigAmount += dto.hours * payCode.rate;
-            orderRate += dto.hours * payCode.rate
-            dto.totalAmount = bigAmount;
-            return dto
+            const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
+            if(filteredDays.length == []){
+              maxMultiplier.threshold - dto.hours;
+              bigAmount += dto.hours * payCode.rate;
+              orderRate += dto.hours * payCode.rate
+              dto.totalAmount = bigAmount;
+              return dto
+            }
+            return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
+
           }
           const amount = difference * payCode.rate * maxMultiplier.multiplier;
           bigAmount = (bigAmount + amount);
@@ -168,19 +174,34 @@ export class TimesheetService {
         })
         weeklyAmount += dto.hours;
         console.log(weeklyAmount, 'weeklyAmount', dto.hours)
-        if (weeklyAmount < maxMultiplier.threshold) {
+        if (weeklyAmount <= maxMultiplier.threshold) {
+          console.log('IF BLOCK WEEKLY')
           const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
-          // if (filteredDays.length == []) {
-          //   bigAmount = bigAmount + dto.hours * payCode.rate;
-          //   return bigAmount
-          // }
-          // ids.push(maxMultiplier)
+           // if can't find any maxMultiplier(overtime rule) then count by ordinary rate
+           if (filteredDays.length == []) {
+            bigAmount = bigAmount + dto.hours * payCode.rate;
+            orderRate += dto.hours * payCode.rate
+            dto.totalAmount = bigAmount;
+            return dto
+          }
           return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
         }
         else {
-          const difference = weeklyAmount - maxMultiplier.threshold;
+          console.log('ELSE WEEKLY')
+          const difference = dto.hours >= maxMultiplier.threshold ? dto.hours - maxMultiplier.threshold : weeklyAmount - maxMultiplier.threshold;
+
+          console.log(difference, 'differenceWeekly');
           if (difference < 0 || difference == 0) {
+            console.log(difference, 'diference < 0');
+        
             const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
+            if(filteredDays.length == []){
+              maxMultiplier.threshold - dto.hours;
+              bigAmount += dto.hours * payCode.rate;
+              orderRate += dto.hours * payCode.rate
+              dto.totalAmount = bigAmount;
+              return dto
+            }
             return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
 
             // maxMultiplier.threshold - dto.hours;
@@ -188,14 +209,18 @@ export class TimesheetService {
             // return
           }
           const amount = difference * payCode.rate * maxMultiplier.multiplier;
-          console.log(amount, 'amount');
+          console.log(amount, 'amountWeekly');
           bigAmount = (bigAmount + amount);
-          console.log(bigAmount, 'bigAmount');
+          console.log(bigAmount, 'bigAmountWeekly');
           const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
           dto.hours = dto.hours - difference;
           weeklyAmount -= difference;
-          console.log(dto.hours, 'dto.hours', weeklyAmount);
+          console.log(dto.hours, 'dto.hoursWeekly', weeklyAmount);
           ids.push(maxMultiplier)
+          if(dto.hours == 0) {
+            dto.totalAmount = bigAmount;
+            return dto;
+          }
           return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
         }
       }
@@ -257,11 +282,13 @@ export class TimesheetService {
     try {
       var curr = new Date(endDate); // get current date
       var first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week
-      var last = first + 5; // last day is the first day + 6
+      var last = first - 7; // last day is the first day + 6
       var firstday = new Date(curr.setDate(first));
       var lastday = new Date(curr.setDate(last));
+      console.log(firstday, 'firstdayyyyyyyy');
+      console.log(lastday, 'lastdayyyyyyyyy')
       const timesheets = await this.model.find({
-        createdDate: { $gte: firstday, $lte: lastday }
+        createdDate: { $gte: lastday, $lte: firstday }
       });
       return timesheets;
     }
