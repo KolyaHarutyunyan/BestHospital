@@ -40,21 +40,20 @@ export class TimesheetService {
       let hours = dto.hours;
       const total = await this.getTotalAmount(payCode, overtime, dto, bigAmount);
       console.log(total, 'totalll', bigAmount)
-      // let timesheet = new this.model({
-      //   staffId: staff._id,
-      //   payCode: payCode.id,
-      //   description: dto.description,
-      //   hours,
-      //   startDate: dto.startDate,
-      //   endDate: dto.endDate ? dto.endDate : null,
-      //   totalAmount: dto.totalAmount
-      // });
-      // timesheet = await (await timesheet.save()).populate({
-      //   path: 'payCode',
-      //   populate: { path: 'payCodeTypeId' }
-      // }).execPopulate();
-      // return { timesheet, ids, orderRate }
-      return {ids, orderRate, total: dto.totalAmount}
+      let timesheet = new this.model({
+        staffId: staff._id,
+        payCode: payCode.id,
+        description: dto.description,
+        hours,
+        startDate: dto.startDate,
+        endDate: dto.endDate ? dto.endDate : null,
+        totalAmount: dto.totalAmount
+      });
+      timesheet = await (await timesheet.save()).populate({
+        path: 'payCode',
+        populate: { path: 'payCodeTypeId' }
+      }).execPopulate();
+      return { timesheet, ids, orderRate }
     } catch (e) {
       console.log(e);
       this.mongooseUtil.checkDuplicateKey(e, 'TimeSheet already exists');
@@ -128,7 +127,7 @@ export class TimesheetService {
           // if difference less than 0 count rate and return, if not then call function again for calculating remaining hours
           if (difference < 0 || difference == 0) {
             const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
-            if(filteredDays.length == []){
+            if (filteredDays.length == []) {
               maxMultiplier.threshold - dto.hours;
               bigAmount += dto.hours * payCode.rate;
               orderRate += dto.hours * payCode.rate
@@ -148,7 +147,7 @@ export class TimesheetService {
           console.log(dto.hours, ' dto.hours dto.hours');
 
           ids.push(maxMultiplier)
-          if(dto.hours == 0) {
+          if (dto.hours == 0) {
             dto.totalAmount = bigAmount;
             return dto;
           }
@@ -177,8 +176,8 @@ export class TimesheetService {
         if (weeklyAmount <= maxMultiplier.threshold) {
           console.log('IF BLOCK WEEKLY')
           const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
-           // if can't find any maxMultiplier(overtime rule) then count by ordinary rate
-           if (filteredDays.length == []) {
+          // if can't find any maxMultiplier(overtime rule) then count by ordinary rate
+          if (filteredDays.length == []) {
             bigAmount = bigAmount + dto.hours * payCode.rate;
             orderRate += dto.hours * payCode.rate
             dto.totalAmount = bigAmount;
@@ -188,14 +187,14 @@ export class TimesheetService {
         }
         else {
           console.log('ELSE WEEKLY')
-          const difference = dto.hours >= maxMultiplier.threshold ? dto.hours - maxMultiplier.threshold : weeklyAmount - maxMultiplier.threshold;
+          const difference = dto.hours >= maxMultiplier.threshold ? dto.hours - maxMultiplier.threshold : dto.hours;
 
           console.log(difference, 'differenceWeekly');
           if (difference < 0 || difference == 0) {
             console.log(difference, 'diference < 0');
-        
+
             const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
-            if(filteredDays.length == []){
+            if (filteredDays.length == []) {
               maxMultiplier.threshold - dto.hours;
               bigAmount += dto.hours * payCode.rate;
               orderRate += dto.hours * payCode.rate
@@ -217,7 +216,7 @@ export class TimesheetService {
           weeklyAmount -= difference;
           console.log(dto.hours, 'dto.hoursWeekly', weeklyAmount);
           ids.push(maxMultiplier)
-          if(dto.hours == 0) {
+          if (dto.hours == 0) {
             dto.totalAmount = bigAmount;
             return dto;
           }
@@ -228,9 +227,11 @@ export class TimesheetService {
         console.log('consecutive');
 
         const consecutive = await this.getConsecutive(dto.hours, dto.endDate);
+        console.log(consecutive, 'consecutiveee');
         if (consecutive) {
+          console.log(consecutive, 'if BLOCK CONSECUTIVE');
           const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
-          await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
+          return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
 
           // bigAmount += payCode.rate * dto.hours;
           // return
@@ -238,9 +239,11 @@ export class TimesheetService {
         // ids.push('aaaaaa')
 
         bigAmount += dto.hours * maxMultiplier.multiplier * payCode.rate;
+        
         ids.push(maxMultiplier);
-        console.log('verj')
-        return
+        dto.totalAmount = bigAmount;
+        console.log('verj');
+        return dto;
       }
     }
     else {
@@ -298,16 +301,21 @@ export class TimesheetService {
   }
   async getConsecutive(day, endDate): Promise<any> {
     try {
+      console.log(day, 'dayyyyyy')
       let arr;
       var curr = new Date(endDate);
-      var first = curr.getDate() - day + 1;
+      var first = curr.getDate() - day;
       var last = curr.getDate() + 1;
       const lastday = new Date(curr.setDate(last))
       var firstday = new Date(curr.setDate(first));
+      console.log(lastday, 'lastday CONSECUTIVE');
+      console.log(firstday, 'firstday CONSECUTIVE');
+
       const timesheets = await this.model.find({
         createdDate: { $gte: firstday, $lte: lastday }
       }).sort({ createdDate: - 1 }).select('createdDate');
       arr = timesheets;
+      console.log(arr, 'arrr Timesheets');
       for (let j = 0; j < arr.length - 1; j++) {
         let date = new Date(arr[j].createdDate);
         let nextDate = new Date(arr[j + 1].createdDate);
@@ -315,6 +323,7 @@ export class TimesheetService {
           arr.splice(j, 1)
         }
       }
+      console.log('last Arr', arr, 'day', day)
       return arr.length < day;
     }
     catch (e) {
