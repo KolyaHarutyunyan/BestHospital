@@ -3,6 +3,7 @@ import { BASE_URL } from '../data';
 
 export class EmploymentModule {
   static async createEmployment(employment) {
+    console.log(employment, 'employmennnnnnnnnnnnnnnnnnnnnnnnnnnt')
     const res = await axios.post(BASE_URL + 'employment', employment);
     return res.data;
   }

@@ -3,6 +3,7 @@ import { BASE_URL } from '../data';
 
 export class FundingModule {
   static async createFunding(funding) {
+    console.log(funding, 'fundinggggggggggggggggggggg')
     const res = await axios.post(BASE_URL + 'funding', funding);
     return res.data;
   }

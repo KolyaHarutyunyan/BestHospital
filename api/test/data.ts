@@ -1,67 +1,160 @@
 export const BASE_URL = 'http://localhost:8200/api/';
 export const data = {
+  enrollment: [
+    {
+      clientId: null,
+      funderId: null,
+      primary: true,
+      startDate: "2021-11-07T15:28:04.892Z",
+      terminationDate: "2021-11-07T15:28:04.892Z"
+    },
+    {
+      clientId: null,
+      funderId: null,
+      primary: false,
+      startDate: "2021-11-07T15:28:04.892Z",
+      terminationDate: "2021-11-07T15:28:04.892Z"
+    },
+  ],
+  client: [
+    {
+      firstName: "Jon",
+      middleName: "Doe",
+      lastName: "rondodo",
+      code: "456",
+      ethnicity: "string",
+      language: "string",
+      familyLanguage: "string",
+      gender: "female",
+      birthday: "2021-11-07T13:02:05.350Z",
+      status: "INACTIVE"
+    },
+    {
+      firstName: "Jon",
+      middleName: "Doe",
+      lastName: "rondodo",
+      code: "456",
+      ethnicity: "string",
+      language: "string",
+      familyLanguage: "string",
+      gender: "female",
+      birthday: "2021-11-07T13:02:05.350Z",
+      status: "INACTIVE"
+    }
+  ],
+  auth: [
+    {
+      clientId: null,
+      funderId: null,
+      authId: '54645',
+      startDate: "2021-11-07T14:04:10.303Z",
+      endDate: "2021-11-07T14:04:10.303Z",
+      location: "string",
+      status: 1,
+    },
+    {
+      clientId: null,
+      funderId: null,
+      authId: null,
+      startDate: "2021-11-07T14:04:10.303Z",
+      endDate: "2021-11-07T14:04:10.303Z",
+      location: "string",
+      status: 0,
+    }
+  ],
+  authService: [
+    {
+      authorizationId: null,
+      fundingServiceId: null,
+      total: 10,
+      modifiers: []
+    },
+    {
+      authorizationId: null,
+      fundingServiceId: null,
+      total: 10,
+      modifiers: []
+    }
+  ],
+  appointment: [
+    {
+      type: "SERVICE",
+      client: null,
+      authorizedService: null,
+      staff: null,
+      staffPayCode: null,
+      startDate: '2021-11-07T12:19:20.703Z',
+      startTime: '2021-11-07T12:19:20.703Z',
+      endTime: '2021-11-07T12:19:20.703Z',
+      eventStatus: "RENDERED",
+      status: "ACTIVE",
+      require: false,
+      miles: 0,
+      files: [
+        "string"
+      ]
+    },
+    {
+      type: "dv",
+      client: null,
+      authorizedService: null,
+      staff: null,
+      staffPayCode: null,
+      startDate: '2021-11-07T12:19:20.703Z',
+      startTime: '2021-11-07T12:19:20.703Z',
+      endTime: '2021-11-07T12:19:20.703Z',
+      eventStatus: "RENDERED",
+      status: "ACTIVE",
+      require: false,
+      miles: 0,
+      files: [
+        "string"
+      ]
+    }
+  ],
   funding: [
     {
-      name: 's',
-      type: 's',
-      contact: 's',
-      email: 'abhsashCdddDFG@gmail.com',
-      website: 'd',
-      phoneNumber: '+37477379237',
-      address: {
-        lat: 0,
-        lng: 0,
-        street: 'string',
-        city: 'string',
-        state: 'string',
-        zip: 'string',
-        country: 'string',
-        formattedAddress: 'string',
-      },
-      status: 0,
+      name: "string",
+      type: "string",
+      contact: "string",
+      email: "a@gmail.com",
+      website: "string",
+      phoneNumber: "+37477379237",
+      address: "hi",
+      status: "INACTIVE"
     },
     {
-      id: null,
-      name: 'aaaaaaaaaaassssssssssssddddddddddddffffffffffffff',
-      type: 's',
-      contact: 's',
-      email: 'abhhsdsacdsxCdddDFG@gmail.com',
-      website: 'd',
-      phoneNumber: '+37477379237',
-      address: {
-        lat: 0,
-        lng: 0,
-        street: 'string',
-        city: 'string',
-        state: 'string',
-        zip: 'string',
-        country: 'string',
-        formattedAddress: 'string',
-      },
-      status: 0,
-    },
+      name: "string",
+      type: "string",
+      contact: "string",
+      email: "a@gmail.com",
+      website: "string",
+      phoneNumber: "+37477379237",
+      address: "hi",
+      status: 0
+    }
   ],
   fundingService: [
     {
+      name: "string",
       funderId: null,
-      id: '612e2b4543fc954ad068f356',
-      name: 'string',
-      globServiceId: null,
+      serviceId: null,
       rate: 0,
-      cptCode: 0,
+      cptCode: "string",
       size: 0,
       min: 0,
-      max: 0,
+      max: 0
     },
     {
-      name: 'string',
-      globServiceId: null,
+      name: "string",
+      serviceId: null,
+      funderId: null,
       rate: 0,
-      cptCode: 0,
+      cptCode: "string",
       size: 0,
       min: 0,
-      max: 0,
-    },
+      max: 0
+    }
   ],
   globalService: [
     {
@@ -83,13 +176,7 @@ export const data = {
           chargeRate: 0,
           name: 'string',
           type: 0,
-        },
-        {
-          credentialId: null,
-          chargeRate: 10,
-          name: 'eeeh',
-          type: 0,
-        },
+        }
       ],
       serviceId: null,
     },
@@ -226,26 +313,23 @@ export const data = {
   ],
   payCode: [
     {
+      name: "testPaycode",
       employmentId: null,
       payCodeTypeId: null,
-      rate: 50,
+      rate: 0,
       active: true,
-      startDate: "2021-10-15T09:39:09.822Z"
+      startDate: "2021-11-07T13:49:26.962Z",
+      endDate: "2021-11-07T13:49:26.962Z"
     },
     {
-      employmentId: 'fdfdf',
-      payCodeTypeId: null,
-      rate: 50,
-      active: true,
-      startDate: "2021-10-15T09:39:09.822Z"
-    },
-    {
+      name: "testPaycode",
       employmentId: null,
-      payCodeTypeId: 'dsdsdsd',
-      rate: 50,
+      payCodeTypeId: null,
+      rate: 0,
       active: true,
-      startDate: "2021-10-15T09:39:09.822Z"
-    },
+      startDate: "2021-11-07T13:49:26.962Z",
+      endDate: "2021-11-07T13:49:26.962Z"
+    }
   ],
   payCodeType: [
     {
@@ -321,7 +405,7 @@ export const data = {
       }
     }
   ],
- 
+
   permissions: [
     {
       title: 'ALL_ACCESS',

@@ -141,7 +141,7 @@ export class EnrollmentService {
   private checkClient(client: IClient) {
     if (!client) {
       throw new HttpException(
-        'Profile with this id was not found',
+        'Client with this id was not found',
         HttpStatus.NOT_FOUND,
       );
     }
@@ -150,7 +150,7 @@ export class EnrollmentService {
   private checkEnrollment(enrollment: IEnrollment) {
     if (!enrollment) {
       throw new HttpException(
-        'Profile with this id was not found',
+        'Enrollment with this id was not found',
         HttpStatus.NOT_FOUND,
       );
     }

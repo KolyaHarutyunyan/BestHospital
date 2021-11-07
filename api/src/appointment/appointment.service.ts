@@ -31,7 +31,6 @@ export class AppointmentService {
   async create(dto: CreateAppointmentDto): Promise<AppointmentDto> {
     const overlapAppointmentStaff = await this.model.find({ staff: dto.staff, "startDate": { "$lt": new Date(dto.endTime) }, "endTime": { "$gt": new Date(dto.startDate) } });
     const overlapAppointmentClient = await this.model.find({ client: dto.client, "startDate": { "$lt": new Date(dto.endTime) }, "endTime": { "$gt": new Date(dto.startDate) } });
-
     if (overlapAppointmentStaff[0] || overlapAppointmentClient[0]) {
       throw new HttpException(
         `appointment overlapping`,
@@ -63,7 +62,7 @@ export class AppointmentService {
           HttpStatus.BAD_REQUEST,
         );
       }
-      if(dto.require && !dto.files.length){
+      if(dto.require && !dto.files){
         throw new HttpException(
           'Files should not be empty',
           HttpStatus.BAD_REQUEST,

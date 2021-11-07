@@ -27,7 +27,7 @@ export class CreateFundingDTO {
     @IsNotEmpty()
     @IsPhoneNumber('US')
     phoneNumber: string;
-    @ApiProperty({ type: AddressDTO })
+    @ApiProperty()
     address: string;
     @ApiProperty({ enum: FundingStatus })
     @IsEnum(FundingStatus)

@@ -3,6 +3,7 @@ import { BASE_URL } from '../data';
 
 export class PayCodeModule {
     static async createPayCode(payCode) {
+        console.log(payCode, 'payCodepayCodepayCode')
         const res = await axios.post(BASE_URL + 'paycode', payCode);
         return res.data;
     }
