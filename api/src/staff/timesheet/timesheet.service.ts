@@ -38,7 +38,11 @@ export class TimesheetService {
       const payCode: any = await this.payCodeService.findOne(dto.payCode);
       const overtime = await this.overtimeService.findAll();
       let hours = dto.hours;
-      const total = await this.getTotalAmount(payCode, overtime, dto, bigAmount);
+      const getDayTimesheet = await this.getDailyTimesheet(dto.startDate);
+      const week = await this.getWeekly(dto.endDate);
+      const consecutive = await this.getConsecutive(dto.hours, dto.endDate);
+      const total = await this.getTotalAmount(payCode, overtime, dto, bigAmount, getDayTimesheet, week, consecutive);
+
       console.log(total, 'totalll', bigAmount)
       // let timesheet = new this.model({
       //   staffId: staff._id,
@@ -61,7 +65,7 @@ export class TimesheetService {
     }
   }
 
-  async getTotalAmount(payCode, overtime, dto, bigAmount, amount = 0) {
+  async getTotalAmount(payCode, overtime, dto, bigAmount, getDayTimesheet = null, week = null, consecutive = null) {
     dailyAmount = 0;
     weeklyAmount = 0;
     if (!overtime.length) {
@@ -69,7 +73,6 @@ export class TimesheetService {
 
       bigAmount += dto.hours * payCode.rate;
       orderRate += dto.hours * payCode.rate;
-      console.log(amount)
       console.log(bigAmount, 'bigAmountbigAmountbigAmountbigAmountbigAmountbigAmountbigAmountbigAmountbigAmountbigAmount');
 
       dto.totalAmount = bigAmount;
@@ -80,184 +83,13 @@ export class TimesheetService {
       maxMultiplier = await this.getMaxMultiplier(overtime);
       console.log(maxMultiplier, 'maxxxxxxxxxxxxxxxxxxxxxxx');
       if (maxMultiplier.type == 'DAILY') {
-        console.log('daily');
-        const getDayTimesheet = await this.getDailyTimesheet(dto.startDate);
-
-        // if not find any daily timesheet
-        if (getDayTimesheet.length == [] && dto.hours <= maxMultiplier.threshold) {
-          const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
-          // if can't find any maxMultiplier(overtime rule) then count by ordinary rate
-          if (filteredDays.length == []) {
-            bigAmount += dto.hours * payCode.rate;
-            orderRate += dto.hours * payCode.rate;
-            dto.totalAmount = bigAmount;
-            return dto
-          }
-          return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
-        }
-        // if find daily timesheets then count of hours ? :)
-        getDayTimesheet.map(timesheet => {
-          dailyAmount += timesheet.hours
-        })
-        console.log(getDayTimesheet, 'getDailyTimesheet');
-        dailyAmount += dto.hours;
-        console.log(dailyAmount, 'dailyAmount');
-        // if dailyAmount less then maxMultiplier(overtime rule) then delete current maxMultiplier and skip that
-        if (dailyAmount <= maxMultiplier.threshold) {
-          console.log(dailyAmount, 'DailyAmount IF BLOCK', maxMultiplier.threshold);
-          const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
-          // if can't find any maxMultiplier(overtime rule) then count by ordinary rate
-          if (filteredDays.length == []) {
-            bigAmount = bigAmount + dto.hours * payCode.rate;
-            orderRate += dto.hours * payCode.rate
-            dto.totalAmount = bigAmount;
-            return dto
-          }
-          //skip current maxMultiplier(overtime rule) and find another maxMultiplier
-          // ids.push(maxMultiplier)
-          return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
-        }
-        else {
-          console.log('else')
-          let difference;
-          // count difference and get amount with rate
-          if(dto.hours >= maxMultiplier.threshold){
-            difference = dto.hours - maxMultiplier.threshold;
-          } 
-          else{            
-              const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
-              if (filteredDays.length == []) {
-                maxMultiplier.threshold - dto.hours;
-                bigAmount += dto.hours * payCode.rate;
-                orderRate += dto.hours * payCode.rate
-                dto.totalAmount = bigAmount;
-                return dto
-              }
-              return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
-          }
-          // const difference = (dto.hours >= maxMultiplier.threshold) ? dto.hours - maxMultiplier.threshold : dailyAmount - maxMultiplier.threshold;
-          console.log(difference, 'difference')
-
-          // if difference less than 0 count rate and return, if not then call function again for calculating remaining hours
-          if (difference < 0 || difference == 0) {
-            const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
-            if (filteredDays.length == []) {
-              maxMultiplier.threshold - dto.hours;
-              bigAmount += dto.hours * payCode.rate;
-              orderRate += dto.hours * payCode.rate
-              dto.totalAmount = bigAmount;
-              return dto
-            }
-            return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
-
-          }
-          const amount = difference * payCode.rate * maxMultiplier.multiplier;
-          bigAmount = (bigAmount + amount);
-          console.log(bigAmount, 'bigAmount');
-          const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
-          dailyAmount -= difference;
-          dto.hours -= difference;
-          console.log(dailyAmount, 'dailyAmountdailyAmount');
-          console.log(dto.hours, ' dto.hours dto.hours');
-
-          ids.push(maxMultiplier)
-          if (dto.hours == 0) {
-            dto.totalAmount = bigAmount;
-            return dto;
-          }
-
-          return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount, dailyAmount)
-        }
+        await this.dailyTimesheet(payCode, overtime, dto, bigAmount, maxMultiplier, getDayTimesheet, week);
       }
       else if (maxMultiplier.type == 'WEEKLY') {
-        console.log('weekly');
-
-        const week = await this.getWeekly(dto.endDate);
-        console.log(week, 'weeeeeeeek');
-        if (week.length == [] && dto.hours <= maxMultiplier.threshold) {
-          console.log(week, 'mtavvvvv');
-          const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
-          return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
-
-          // bigAmount += dto.hours * payCode.rate;
-          // return
-        }
-        week.map(timesheet => {
-          weeklyAmount += timesheet.hours
-        })
-        weeklyAmount += dto.hours;
-        console.log(weeklyAmount, 'weeklyAmount', dto.hours)
-        if (weeklyAmount <= maxMultiplier.threshold) {
-          console.log('IF BLOCK WEEKLY')
-          const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
-          // if can't find any maxMultiplier(overtime rule) then count by ordinary rate
-          if (filteredDays.length == []) {
-            bigAmount = bigAmount + dto.hours * payCode.rate;
-            orderRate += dto.hours * payCode.rate
-            dto.totalAmount = bigAmount;
-            return dto
-          }
-          return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
-        }
-        else {
-          console.log('ELSE WEEKLY')
-          const difference = dto.hours >= maxMultiplier.threshold ? dto.hours - maxMultiplier.threshold : dto.hours;
-
-          console.log(difference, 'differenceWeekly');
-          if (difference < 0 || difference == 0) {
-            console.log(difference, 'diference < 0');
-
-            const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
-            if (filteredDays.length == []) {
-              maxMultiplier.threshold - dto.hours;
-              bigAmount += dto.hours * payCode.rate;
-              orderRate += dto.hours * payCode.rate
-              dto.totalAmount = bigAmount;
-              return dto
-            }
-            return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
-
-            // maxMultiplier.threshold - dto.hours;
-            // bigAmount += dto.hours * payCode.rate * maxMultiplier.multiplier;
-            // return
-          }
-          const amount = difference * payCode.rate * maxMultiplier.multiplier;
-          console.log(amount, 'amountWeekly');
-          bigAmount = (bigAmount + amount);
-          console.log(bigAmount, 'bigAmountWeekly');
-          const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
-          dto.hours = dto.hours - difference;
-          weeklyAmount -= difference;
-          console.log(dto.hours, 'dto.hoursWeekly', weeklyAmount);
-          ids.push(maxMultiplier)
-          if (dto.hours == 0) {
-            dto.totalAmount = bigAmount;
-            return dto;
-          }
-          return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
-        }
+        await this.weeklyTimesheet(payCode, overtime, dto, bigAmount, maxMultiplier, getDayTimesheet, week);
       }
       else if (maxMultiplier.type == 'CONSECUTIVE') {
-        console.log('consecutive');
-
-        const consecutive = await this.getConsecutive(dto.hours, dto.endDate);
-        console.log(consecutive, 'consecutiveee');
-        if (consecutive) {
-          console.log(consecutive, 'if BLOCK CONSECUTIVE');
-          const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
-          return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
-
-          // bigAmount += payCode.rate * dto.hours;
-          // return
-        }
-        // ids.push('aaaaaa')
-
-        bigAmount += dto.hours * maxMultiplier.multiplier * payCode.rate;
-        
-        ids.push(maxMultiplier);
-        dto.totalAmount = bigAmount;
-        console.log('verj');
-        return dto;
+        await this.consecutive(payCode, overtime, dto, bigAmount, maxMultiplier, getDayTimesheet, week, consecutive)
       }
     }
     else {
@@ -373,6 +205,196 @@ export class TimesheetService {
     }
   }
 
+  async dailyTimesheet(payCode, overtime, dto, bigAmount, maxMultiplier, getDayTimesheet, week): Promise<any> {
+    console.log('daily');
+
+    // if not find any daily timesheet
+    if (getDayTimesheet.length == [] && dto.hours <= maxMultiplier.threshold) {
+      const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
+      // if can't find any maxMultiplier(overtime rule) then count by ordinary rate
+      if (filteredDays.length == []) {
+        bigAmount += dto.hours * payCode.rate;
+        orderRate += dto.hours * payCode.rate;
+        dto.totalAmount = bigAmount;
+        return dto
+      }
+      return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount, getDayTimesheet, week)
+    }
+    // if find daily timesheets then count of hours ? :)
+    getDayTimesheet.map(timesheet => {
+      dailyAmount += timesheet.hours
+    })
+    console.log(getDayTimesheet, 'getDailyTimesheet');
+    dailyAmount += dto.hours;
+    console.log(dailyAmount, 'dailyAmount');
+    // if dailyAmount less then maxMultiplier(overtime rule) then delete current maxMultiplier and skip that
+    if (dailyAmount <= maxMultiplier.threshold) {
+      console.log(dailyAmount, 'DailyAmount IF BLOCK', maxMultiplier.threshold);
+      const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
+      // if can't find any maxMultiplier(overtime rule) then count by ordinary rate
+      if (filteredDays.length == []) {
+        bigAmount = bigAmount + dto.hours * payCode.rate;
+        orderRate += dto.hours * payCode.rate
+        dto.totalAmount = bigAmount;
+        return dto
+      }
+      //skip current maxMultiplier(overtime rule) and find another maxMultiplier
+      // ids.push(maxMultiplier)
+      return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount, getDayTimesheet, week)
+    }
+    else {
+      console.log('else')
+      let difference;
+      // count difference and get amount with rate
+      if (dailyAmount >= maxMultiplier.threshold) {
+        difference = dailyAmount - maxMultiplier.threshold;
+      }
+      else {
+        const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
+        if (filteredDays.length == []) {
+          maxMultiplier.threshold - dto.hours;
+          bigAmount += dto.hours * payCode.rate;
+          orderRate += dto.hours * payCode.rate
+          dto.totalAmount = bigAmount;
+          return dto
+        }
+        return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount, getDayTimesheet, week)
+      }
+      // const difference = (dto.hours >= maxMultiplier.threshold) ? dto.hours - maxMultiplier.threshold : dailyAmount - maxMultiplier.threshold;
+      console.log(difference, 'difference')
+
+      // if difference less than 0 count rate and return, if not then call function again for calculating remaining hours
+      if (difference < 0 || difference == 0) {
+        const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
+        if (filteredDays.length == []) {
+          maxMultiplier.threshold - dto.hours;
+          bigAmount += dto.hours * payCode.rate;
+          orderRate += dto.hours * payCode.rate
+          dto.totalAmount = bigAmount;
+          return dto
+        }
+        return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount, getDayTimesheet, week)
+
+      }
+      const amount = difference * payCode.rate * maxMultiplier.multiplier;
+      bigAmount = (bigAmount + amount);
+      console.log(bigAmount, 'bigAmount');
+      const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
+      dailyAmount -= difference;
+      dto.hours -= difference;
+      console.log(dailyAmount, 'dailyAmountdailyAmount');
+      console.log(dto.hours, ' dto.hours dto.hours');
+      maxMultiplier.hours = difference;
+      ids.push(maxMultiplier)
+      if (dto.hours == 0) {
+        dto.totalAmount = bigAmount;
+        return dto;
+      }
+
+      return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount, getDayTimesheet, week)
+    }
+  }
+
+  async weeklyTimesheet(payCode, overtime, dto, bigAmount, maxMultiplier, getDayTimesheet, week): Promise<any> {
+    console.log('weekly');
+
+    if (week.length == [] && dto.hours <= maxMultiplier.threshold) {
+      console.log(week, 'mtavvvvv');
+      const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
+      return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount, getDayTimesheet, week)
+
+      // bigAmount += dto.hours * payCode.rate;
+      // return
+    }
+    week.map(timesheet => {
+      weeklyAmount += timesheet.hours
+    })
+    weeklyAmount += dto.hours;
+    console.log(weeklyAmount, 'weeklyAmount', dto.hours)
+    if (weeklyAmount <= maxMultiplier.threshold) {
+      console.log('IF BLOCK WEEKLY')
+      const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
+      // if can't find any maxMultiplier(overtime rule) then count by ordinary rate
+      if (filteredDays.length == []) {
+        bigAmount = bigAmount + dto.hours * payCode.rate;
+        orderRate += dto.hours * payCode.rate
+        dto.totalAmount = bigAmount;
+        return dto
+      }
+      return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount, getDayTimesheet, week)
+    }
+    else {
+      console.log('ELSE WEEKLY')
+      let difference;
+      if (weeklyAmount >= maxMultiplier.threshold) {
+        difference = weeklyAmount - maxMultiplier.threshold
+      } else {
+        const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
+        if (filteredDays.length == []) {
+          maxMultiplier.threshold - dto.hours;
+          bigAmount += dto.hours * payCode.rate;
+          orderRate += dto.hours * payCode.rate
+          dto.totalAmount = bigAmount;
+          return dto
+        }
+        return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount, getDayTimesheet, week)
+      }
+
+      console.log(difference, 'differenceWeekly');
+      if (difference < 0 || difference == 0) {
+        console.log(difference, 'diference < 0');
+
+        const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
+        if (filteredDays.length == []) {
+          maxMultiplier.threshold - dto.hours;
+          bigAmount += dto.hours * payCode.rate;
+          orderRate += dto.hours * payCode.rate
+          dto.totalAmount = bigAmount;
+          return dto
+        }
+        return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount, getDayTimesheet, week)
+
+        // maxMultiplier.threshold - dto.hours;
+        // bigAmount += dto.hours * payCode.rate * maxMultiplier.multiplier;
+        // return
+      }
+      const amount = difference * payCode.rate * maxMultiplier.multiplier;
+      console.log(amount, 'amountWeekly');
+      bigAmount = (bigAmount + amount);
+      console.log(bigAmount, 'bigAmountWeekly');
+      const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
+      dto.hours = dto.hours - difference;
+      weeklyAmount -= difference;
+      console.log(dto.hours, 'dto.hoursWeekly', weeklyAmount);
+      ids.push(maxMultiplier)
+      if (dto.hours == 0) {
+        dto.totalAmount = bigAmount;
+        return dto;
+      }
+      return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount, getDayTimesheet, week)
+    }
+  }
+  async consecutive(payCode, overtime, dto, bigAmount, maxMultiplier, getDayTimesheet, week, consecutive): Promise<any> {
+    console.log('consecutive');
+
+    console.log(consecutive, 'consecutiveee');
+    if (consecutive) {
+      console.log(consecutive, 'if BLOCK CONSECUTIVE');
+      const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
+      return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount, getDayTimesheet, week, consecutive)
+
+      // bigAmount += payCode.rate * dto.hours;
+      // return
+    }
+    // ids.push('aaaaaa')
+
+    bigAmount += dto.hours * maxMultiplier.multiplier * payCode.rate;
+
+    ids.push(maxMultiplier);
+    dto.totalAmount = bigAmount;
+    console.log('verj');
+    return dto;
+  }
   /** Private methods */
   /** if the timesheet is not valid, throws an exception */
   private checkTimeSheet(timesheet: ITimeSheet) {
