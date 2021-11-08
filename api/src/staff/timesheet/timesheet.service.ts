@@ -247,7 +247,8 @@ export class TimesheetService {
       let difference;
       // count difference and get amount with rate
       if (dailyAmount >= maxMultiplier.threshold) {
-        difference = dailyAmount - maxMultiplier.threshold;
+        difference = dto.hours >= maxMultiplier.threshold ? dto.hours - (dto.hours - maxMultiplier.threshold) : dto.hours;
+        dto.hours = difference;
       }
       else {
         const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
