@@ -40,20 +40,20 @@ export class TimesheetService {
       let hours = dto.hours;
       const total = await this.getTotalAmount(payCode, overtime, dto, bigAmount);
       console.log(total, 'totalll', bigAmount)
-      let timesheet = new this.model({
-        staffId: staff._id,
-        payCode: payCode.id,
-        description: dto.description,
-        hours,
-        startDate: dto.startDate,
-        endDate: dto.endDate ? dto.endDate : null,
-        totalAmount: dto.totalAmount
-      });
-      timesheet = await (await timesheet.save()).populate({
-        path: 'payCode',
-        populate: { path: 'payCodeTypeId' }
-      }).execPopulate();
-      return { timesheet, ids, orderRate }
+      // let timesheet = new this.model({
+      //   staffId: staff._id,
+      //   payCode: payCode.id,
+      //   description: dto.description,
+      //   hours,
+      //   startDate: dto.startDate,
+      //   endDate: dto.endDate ? dto.endDate : null,
+      //   totalAmount: dto.totalAmount
+      // });
+      // timesheet = await (await timesheet.save()).populate({
+      //   path: 'payCode',
+      //   populate: { path: 'payCodeTypeId' }
+      // }).execPopulate();
+      return { total: dto.totalAmount, ids, orderRate }
     } catch (e) {
       console.log(e);
       this.mongooseUtil.checkDuplicateKey(e, 'TimeSheet already exists');
@@ -119,8 +119,22 @@ export class TimesheetService {
         }
         else {
           console.log('else')
+          let difference;
           // count difference and get amount with rate
-          const difference = dto.hours >= maxMultiplier.threshold ? dto.hours - maxMultiplier.threshold : dto.hours;
+          if(dto.hours >= maxMultiplier.threshold){
+            difference = dto.hours - maxMultiplier.threshold;
+          } 
+          else{            
+              const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
+              if (filteredDays.length == []) {
+                maxMultiplier.threshold - dto.hours;
+                bigAmount += dto.hours * payCode.rate;
+                orderRate += dto.hours * payCode.rate
+                dto.totalAmount = bigAmount;
+                return dto
+              }
+              return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
+          }
           // const difference = (dto.hours >= maxMultiplier.threshold) ? dto.hours - maxMultiplier.threshold : dailyAmount - maxMultiplier.threshold;
           console.log(difference, 'difference')
 
