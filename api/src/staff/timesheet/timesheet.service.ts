@@ -327,7 +327,8 @@ export class TimesheetService {
       console.log('ELSE WEEKLY')
       let difference;
       if (weeklyAmount >= maxMultiplier.threshold) {
-        difference = weeklyAmount - maxMultiplier.threshold
+        difference = dto.hours >= maxMultiplier.threshold ? dto.hours - (dto.hours - maxMultiplier.threshold) : dto.hours;
+        dto.hours = difference;
       } else {
         const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
         if (filteredDays.length == []) {
