@@ -408,3 +408,32 @@ export class TimesheetService {
     }
   }
 }
+
+
+
+
+// const diff = maxMultiplier.threshold - dailyAmount;
+// if (diff > 0) {
+//   console.log(diff, 'diff > 0');
+//   const dailyHours = dto.hours - diff;
+//   if (dailyHours === 0 || dailyHours < 0) {
+//     console.log(dailyHours, 'dailyHours === 0 || dailyHours < 0');
+
+//     const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
+//     return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount);
+//   }
+//   bigAmount += dailyHours * payCode.rate * maxMultiplier.multiplier;
+//   console.log(bigAmount, dailyHours, payCode.rate, maxMultiplier.multiplier, 'aaaave')
+//   if (dto.hours - dailyHours > 0) {
+//     console.log(dailyHours, 'dto.hours - dailyHours > 0');
+
+//     dto.hours -= dailyHours;
+//     const filteredDays = overtime.filter(day => day.id !== maxMultiplier.id);
+//     return await this.getTotalAmount(payCode, filteredDays, dto, bigAmount)
+//   }
+// }
+// if (diff === 0 || diff < 0) {
+//   console.log('stex em');
+//   bigAmount += dto.hours * payCode.rate * maxMultiplier.multiplier;
+//   return dto
+// }
