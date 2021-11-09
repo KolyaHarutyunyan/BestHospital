@@ -130,9 +130,8 @@ export class TimesheetService {
   private getMaxMultiplierOT(overtime: OvertimeDTO[]): OvertimeDTO {
     const maxMultiplier = overtime.reduce(function (prev, curr) {
       if (
-        prev.multiplier > curr.multiplier &&
-        prev.multiplier == curr.multiplier &&
-        prev.threshold > curr.threshold
+        prev.multiplier > curr.multiplier ||
+        (prev.multiplier == curr.multiplier && prev.threshold > curr.threshold)
       ) {
         return prev;
       } else {
@@ -237,7 +236,7 @@ export class TimesheetService {
       return { remainder: hours, used: 0 }; //did not use the hours
     }
   }
-  
+
   /** if the timesheet is not valid, throws an exception */
   private checkTimeSheet(timesheet: ITimeSheet) {
     if (!timesheet) {
