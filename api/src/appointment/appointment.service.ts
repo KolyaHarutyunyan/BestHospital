@@ -1,14 +1,15 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
-import * as cron from 'node-cron';
 import { AuthorizationserviceService } from '../client/authorizationservice/authorizationservice.service';
 import { ClientService } from '../client/client.service';
 import { PaycodeService } from '../employment/paycode/paycode.service';
 import { StaffService } from '../staff/staff.service';
-import { MongooseUtil } from '../util/mongoose.util';
 import { EventStatus } from './appointment.constants';
 import { AppointmentModel } from './appointment.model';
-import { AppointmentDto, CreateAppointmentDto, CreateRepeatDto, UpdateAppointmentDto } from './dto';
+import {
+  AppointmentDto, CreateAppointmentDto,
+  CreateRepeatDto, UpdateAppointmentDto
+} from './dto';
 import { AppointmentQueryDTO } from './dto/appointment.dto';
 import { AppointmentSanitizer } from './interceptor/appointment.interceptor';
 import { IAppointment } from './interface';
@@ -23,23 +24,28 @@ export class AppointmentService {
     private readonly sanitizer: AppointmentSanitizer
   ) {
     this.model = AppointmentModel;
-    this.mongooseUtil = new MongooseUtil();
   }
   private model: Model<IAppointment>;
-  private mongooseUtil: MongooseUtil;
 
+  // create Appointment
   async create(dto: CreateAppointmentDto): Promise<AppointmentDto> {
-    const overlapAppointmentStaff = await this.model.find({ staff: dto.staff, "startDate": { "$lt": new Date(dto.endTime) }, "endTime": { "$gt": new Date(dto.startDate) } });
-    const overlapAppointmentClient = await this.model.find({ client: dto.client, "startDate": { "$lt": new Date(dto.endTime) }, "endTime": { "$gt": new Date(dto.startDate) } });
-    if (overlapAppointmentStaff[0] || overlapAppointmentClient[0]) {
+    const [overlappingSatff, overlappingClient] = await Promise.all([
+      this.model.find({ staff: dto.staff, "startTime": { "$lt": new Date(dto.endTime) }, "endTime": { "$gt": new Date(dto.startDate) } }),
+      this.model.find({ client: dto.client, "startTime": { "$lt": new Date(dto.endTime) }, "endTime": { "$gt": new Date(dto.startDate) } })
+    ]);
+
+    if (overlappingSatff[0] || overlappingClient[0]) {
       throw new HttpException(
         `appointment overlapping`,
         HttpStatus.BAD_REQUEST,
       );
     }
+    const [staff, client, staffPayCode]: any = await Promise.all([
+      this.staffService.findById(dto.staff),
+      this.clientService.findById(dto.client),
+      this.payCodeService.findOne(dto.staffPayCode)
+    ]);
 
-    const staff = await this.staffService.findById(dto.staff);
-    const staffPayCode: any = await this.payCodeService.findOne(dto.staffPayCode);
     if (dto.type == "SERVICE") {
       if (!dto.client || !dto.authorizedService) {
         throw new HttpException(
@@ -47,7 +53,7 @@ export class AppointmentService {
           HttpStatus.BAD_REQUEST,
         );
       }
-      const client = await this.clientService.findById(dto.client);
+
       const authService: any = await this.authorizedService.getClient(dto.authorizedService);
       const compareService = await this.authorizedService.checkByServiceId(authService.serviceId);
       if (staff.service.indexOf(compareService.serviceId) == -1) {
@@ -62,7 +68,7 @@ export class AppointmentService {
           HttpStatus.BAD_REQUEST,
         );
       }
-      if(dto.require && !dto.files){
+      if (dto.require && !dto.files) {
         throw new HttpException(
           'Files should not be empty',
           HttpStatus.BAD_REQUEST,
@@ -101,6 +107,7 @@ export class AppointmentService {
     return this.sanitizer.sanitize(appointment)
   }
 
+  // repeat an appointments
   async repeat(dto: CreateRepeatDto, _id: string): Promise<Object> {
     const appointment = await this.model.findById(_id);
     this.checkAppointment(appointment)
@@ -125,34 +132,10 @@ export class AppointmentService {
         );
       }
       else if (dto.repeatCount && !dto.repeatConsecutive) {
-        console.log('dto.repeatCount && !dto.repeatConsecutive');
-
-        const day = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-        const startDate: any = new Date(dto.startDate);
-        const endDate: any = new Date(new Date(dto.endDate).setHours(23, 59, 59));
-        const diffDays = Math.floor(Math.abs((startDate - endDate) / day));
-        let count = 0;
-        let dates = [], x;
-        for (let d = startDate; d <= endDate; d.setDate(d.getDate() + dto.repeatCount + 1)) {
-          count++;
-          x = new Date(d.getTime());
-          dates.push(x)
-        }
-        for (let i = 0; i < count; i++) {
-          this.cloneDoc(appointment, dates[i]);
-        }
-        return { occurency: count };
+        return await this.repeatDaily(dto, appointment)
       }
       else if (!dto.repeatCount && dto.repeatConsecutive) {
-        const appointment = await this.model.findById(_id);
-        const startDate: any = new Date(dto.startDate);
-        const endDateDate: any = new Date(dto.endDate);
-        const days = this.getBusinessDatesCount(startDate, endDateDate);
-        for (let i = 0; i < days.count; i++) {
-          let iterationDate = new Date(startDate).setDate(new Date(startDate).getDate() + 1);
-          this.cloneDoc(appointment, days.dates[i]);
-        }
-        return { occurency: days.count };
+        return await this.repeatConsecutiveDays(dto, appointment);
       }
     }
     else if (dto.mode == 'WEEKLY') {
@@ -165,77 +148,128 @@ export class AppointmentService {
         );
       }
       else if (dto.repeatCountWeek && dto.repeatCheckWeek) {
-        const weeks = [];
-        let totalCount = 0;
-        const week = dto.repeatCheckWeek.toString();
-
-        const startDate: any = new Date(dto.startDate);
-        const endDate: any = new Date(dto.endDate);
-        let current = true;
-        let dates = [], x;
-        var dayCount = { 0: { sum: 0, date: [] }, 1: { sum: 0, date: [] }, 2: { sum: 0, date: [] }, 3: { sum: 0, date: [] }, 4: { sum: 0, date: [] }, 5: { sum: 0, date: [] }, 6: { sum: 0, date: [] } }; //0 is sunday and 6 is saturday
-        for (var d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
-          dayCount[d.getDay()].sum++;
-          x = new Date(d.getTime());
-          dayCount[d.getDay()].date.push(x);
-          if (d.getDay() == 5) current = true;
-          if (d.getDay() == 0 && current) {
-            d.setDate(d.getDate() + (7 * dto.repeatCountWeek));
-            current = false;
-          }
-        }
-        dto.repeatCheckWeek.map(days => {
-          const day = Number(days);
-          const obj = {};
-          obj[day] = dayCount[days]
-          weeks.push(obj[day].date);
-          totalCount += dayCount[days].sum
-        })
-
-        for (let prop of weeks) {
-          prop.map(date => {
-            dates.push(date)
-          })
-        }
-        for (let i = 0; i < totalCount; i++) {
-          this.cloneDoc(appointment, dates[i])
-        }
-        return { occurency: totalCount };
+        return await this.repeatWeekly(dto, appointment);
       }
     }
     else {
       if (!dto.repeatDayMonth && !dto.repeatMonth
         || !dto.repeatDayMonth && dto.repeatMonth
         || dto.repeatDayMonth && !dto.repeatMonth) {
-        console.log('!dto.repeatDayMonth && !dto.repeatMonth');
         throw new HttpException(
           `repeatDayMonth or(and) repeatMonth can not not be empty`,
           HttpStatus.BAD_REQUEST,
         );
       }
       else if (dto.repeatDayMonth && dto.repeatMonth) {
-        let start = new Date(dto.startDate);
-        let end = new Date(dto.endDate);
-        let count = 0;
-        let dates = [], x;
-        for (let d = start; d <= end; d.setMonth(d.getMonth() + 1)) {
-          if (d.getMonth() == end.getMonth() && end.getDate() < dto.repeatDayMonth) {
-            break
-          }
-          x = new Date(d.getTime());
-          count++;
-          dates.push(x);
-          d.setMonth(d.getMonth() + dto.repeatMonth);
-        }
-
-        for (let i = 0; i < count; i++) {
-          this.cloneDoc(appointment, dates[i])
-        }
-        return { occurrency: count }
+        return await this.repeatMonthly(dto, appointment);
       }
     }
   }
 
+  // repeat with interval days
+  async repeatDaily(dto: CreateRepeatDto, appointment: IAppointment): Promise<Object> {
+    console.log('dto.repeatCount && !dto.repeatConsecutive');
+    const appointments = [];
+    const day = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const startDate: any = new Date(dto.startDate);
+    const endDate: any = new Date(new Date(dto.endDate).setHours(23, 59, 59));
+    const diffDays = Math.floor(Math.abs((startDate - endDate) / day));
+    let count = 0;
+    let dates = [], x;
+    for (let d = startDate; d <= endDate; d.setDate(d.getDate() + dto.repeatCount + 1)) {
+      count++;
+      x = new Date(d.getTime());
+      dates.push(x)
+    }
+    for (let i = 0; i < count; i++) {
+      this.cloneDoc(appointment, dates[i], appointments);
+    }
+    await this.saveDb(appointments);
+    return { occurency: count };
+  }
+
+  // repeat every day
+  async repeatConsecutiveDays(dto: CreateRepeatDto, appointment: IAppointment): Promise<Object> {
+    const appointments = [];
+    const startDate: any = new Date(dto.startDate);
+    const endDateDate: any = new Date(dto.endDate);
+    const days = this.getBusinessDatesCount(startDate, endDateDate);
+    for (let i = 0; i < days.count; i++) {
+      this.cloneDoc(appointment, days.dates[i], appointments);
+    }
+    await this.saveDb(appointments);
+    return { occurency: days.count };
+  }
+
+  // repeat every week
+  async repeatWeekly(dto: CreateRepeatDto, appointment: IAppointment): Promise<Object> {
+    const appointments = [];
+    const weeks = [];
+    let totalCount = 0;
+    const startDate: any = new Date(dto.startDate);
+    const endDate: any = new Date(dto.endDate);
+    let current = true;
+    let dates = [], x;
+    var dayCount = {
+      0: { sum: 0, date: [] }, 1: { sum: 0, date: [] }, 2: { sum: 0, date: [] },
+      3: { sum: 0, date: [] }, 4: { sum: 0, date: [] }, 5: { sum: 0, date: [] },
+      6: { sum: 0, date: [] }
+    }; //0 is sunday and 6 is saturday
+    for (var d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
+      dayCount[d.getDay()].sum++;
+      x = new Date(d.getTime());
+      dayCount[d.getDay()].date.push(x);
+      if (d.getDay() == 5) current = true;
+      if (d.getDay() == 0 && current) {
+        d.setDate(d.getDate() + (7 * dto.repeatCountWeek));
+        current = false;
+      }
+    }
+    dto.repeatCheckWeek.map(days => {
+      const day = Number(days);
+      const obj = {};
+      obj[day] = dayCount[days]
+      weeks.push(obj[day].date);
+      totalCount += dayCount[days].sum
+    })
+
+    for (let prop of weeks) {
+      prop.map(date => {
+        dates.push(date)
+      })
+    }
+    for (let i = 0; i < totalCount; i++) {
+      this.cloneDoc(appointment, dates[i], appointments)
+    }
+    await this.saveDb(appointments)
+    return { occurency: totalCount };
+  }
+
+  // repeat every month
+  async repeatMonthly(dto: CreateRepeatDto, appointment: IAppointment): Promise<Object> {
+    const appointments = [];
+    let start = new Date(dto.startDate);
+    let end = new Date(dto.endDate);
+    let count = 0;
+    let dates = [], x;
+    for (let d = start; d <= end; d.setMonth(d.getMonth() + 1)) {
+      if (d.getMonth() == end.getMonth() && end.getDate() < dto.repeatDayMonth) {
+        break
+      }
+      x = new Date(d.getTime());
+      count++;
+      dates.push(x);
+      d.setMonth(d.getMonth() + dto.repeatMonth);
+    }
+
+    for (let i = 0; i < count; i++) {
+      this.cloneDoc(appointment, dates[i], appointments)
+    }
+    await this.saveDb(appointments)
+    return { occurrency: count }
+  }
+
+  //set Status(EventStatus)
   async setStatus(_id: string, status: any): Promise<AppointmentDto> {
     const appointment = await this.model.findById(_id);
     this.checkAppointment(appointment);
@@ -253,6 +287,7 @@ export class AppointmentService {
     return this.sanitizer.sanitize(appointment)
   }
 
+  // find all appointments
   async findAll(filter: AppointmentQueryDTO): Promise<AppointmentDto[]> {
     let query: any = {}
     if (filter.client) query.client = filter.client;
@@ -272,6 +307,7 @@ export class AppointmentService {
     return this.sanitizer.sanitizeMany(appointments);
   }
 
+  //filter appointments by client
   async findClients(client: string): Promise<AppointmentDto[]> {
     const appointments = await this.model.find({ client }).populate({
       path: 'client',
@@ -281,6 +317,7 @@ export class AppointmentService {
     return this.sanitizer.sanitizeMany(appointments);
   }
 
+  //filter appointments by staff
   async findStaff(staff: string): Promise<AppointmentDto[]> {
     const appointments = await this.model.find({ staff }).populate({
       path: 'staff',
@@ -290,6 +327,7 @@ export class AppointmentService {
     return this.sanitizer.sanitizeMany(appointments);
   }
 
+  // find appointment
   async findOne(_id: string): Promise<AppointmentDto> {
     const appointment = await this.model.findById(_id).populate('client').
       populate('authorizedService').populate('staff').populate('staffPayCode');
@@ -297,11 +335,13 @@ export class AppointmentService {
     return this.sanitizer.sanitize(appointment);
   }
 
-  update(id: number, updateAppointmentDto: UpdateAppointmentDto) {
+  // update appointment
+  async update(id: number, updateAppointmentDto: UpdateAppointmentDto) {
     return `This action updates a #${id} appointment`;
   }
 
-  remove(id: number) {
+  // remove appointment
+  async remove(id: number) {
     return `This action removes a #${id} appointment`;
   }
 
@@ -316,10 +356,12 @@ export class AppointmentService {
     }
   }
 
-  async cloneDoc(appointment: IAppointment, date) {
+  // clone appointment
+  async cloneDoc(appointment: IAppointment, date, appointments: Array<Object>) {
     const cloneDoc = new this.model({
       client: appointment.client,
       authorizedService: appointment.authorizedService,
+      type: appointment.type,
       isRepeat: true,
       miles: appointment.miles,
       staff: appointment.staff,
@@ -331,8 +373,14 @@ export class AppointmentService {
       status: appointment.status,
       require: appointment.require
     });
-    return await cloneDoc.save();
+    appointments.push(cloneDoc);
   }
+
+  // save the appointments
+  async saveDb(appointments: Array<Object>) {
+    return await this.model.insertMany(appointments);
+  }
+
   // calculate working days between two dates
   getBusinessDatesCount(startDate, endDate) {
     let count = 0;
