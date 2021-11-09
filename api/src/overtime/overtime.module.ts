@@ -5,9 +5,8 @@ import { OvertimeSanitizer } from './interceptor';
 import { AddressModule } from '../address';
 
 @Module({
-  imports: [AddressModule],
   controllers: [OvertimeController],
   providers: [OvertimeService, OvertimeSanitizer],
-  exports: [OvertimeService]
+  exports: [OvertimeService],
 })
-export class OvertimeModule { }
+export class OvertimeModule {}

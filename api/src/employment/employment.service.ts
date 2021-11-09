@@ -2,8 +2,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { MongooseUtil } from '../util';
 import { Model, Types } from 'mongoose';
 import { EmploymentModel } from './employment.model';
-import { IEmployment } from "./interface";
-import { StaffService } from "../staff/staff.service";
+import { IEmployment } from './interface';
+import { StaffService } from '../staff/staff.service';
 import { DepartmentService } from '../department/department.service';
 import { EmploymentDto, CreateEmploymentDto, UpdateEmploymentDto } from './dto';
 import { EmploymentSanitizer } from './interceptor/employment.interceptor';
@@ -13,7 +13,7 @@ export class EmploymentService {
   constructor(
     private readonly staffService: StaffService,
     private readonly departmentService: DepartmentService,
-    private readonly sanitizer: EmploymentSanitizer
+    private readonly sanitizer: EmploymentSanitizer,
   ) {
     this.model = EmploymentModel;
     this.mongooseUtil = new MongooseUtil();
@@ -29,13 +29,10 @@ export class EmploymentService {
         schedule: dto.schedule,
         termination: dto.termination,
         startDate: dto.startDate,
-        title: dto.title
+        title: dto.title,
       });
       if (!dto.active && !dto.endDate) {
-        throw new HttpException(
-          'endDate required field',
-          HttpStatus.BAD_REQUEST,
-        );
+        throw new HttpException('endDate required field', HttpStatus.BAD_REQUEST);
       }
       if (dto.endDate && !dto.active) {
         employment.active = false;
@@ -49,9 +46,9 @@ export class EmploymentService {
       }
       if (dto.active) {
         let activeEmployment = await this.model.findOne({ active: true, staffId: staff.id });
-        if(activeEmployment){
+        if (activeEmployment) {
           activeEmployment.active = false;
-          await activeEmployment.save()
+          await activeEmployment.save();
         }
         employment.active = true;
       }
@@ -60,11 +57,14 @@ export class EmploymentService {
       employment.supervisor = dto.supervisor;
 
       if (dto.departmentId) {
-        let department = await this.departmentService.findOne(dto.departmentId)
+        let department = await this.departmentService.findOne(dto.departmentId);
         employment.departmentId = dto.departmentId;
       }
       employment = await employment.save();
-      await employment.populate('departmentId', 'name').populate("supervisor", 'firstName').execPopulate();
+      await employment
+        .populate('departmentId', 'name')
+        .populate('supervisor', 'firstName')
+        .execPopulate();
       return this.sanitizer.sanitize(employment);
     } catch (e) {
       console.log(e);
@@ -74,29 +74,35 @@ export class EmploymentService {
   }
 
   async findAll(staffId: string): Promise<EmploymentDto[]> {
-    const employments = await this.model.find({ staffId }).populate('departmentId', 'name').populate("supervisor", 'firstName');
-    this.checkEmployment(employments[0])
+    const employments = await this.model
+      .find({ staffId })
+      .populate('departmentId', 'name')
+      .populate('supervisor', 'firstName');
+    this.checkEmployment(employments[0]);
     return this.sanitizer.sanitizeMany(employments);
   }
   async findAllEmploymentsByStaffId(staffId: string): Promise<String[]> {
     const ids = [];
     const employments = await this.model.find({ staffId });
-    this.checkEmployment(employments[0])
-    employments.map(employment => {
-      ids.push(employment._id)
-    })
+    this.checkEmployment(employments[0]);
+    employments.map((employment) => {
+      ids.push(employment._id);
+    });
     return ids;
     // this.checkEmployment(employments[0])
     // return this.sanitizer.sanitizeMany(employments);
   }
 
   async findOne(_id: string): Promise<EmploymentDto> {
-    let employment = await this.model.findById({ _id }).populate('departmentId', 'name').populate("supervisor", 'firstName');
-    this.checkEmployment(employment)
+    let employment = await this.model
+      .findById({ _id })
+      .populate('departmentId', 'name')
+      .populate('supervisor', 'firstName');
+    this.checkEmployment(employment);
     return this.sanitizer.sanitize(employment);
   }
   async update(_id: string, dto: UpdateEmploymentDto): Promise<EmploymentDto> {
-    let employment = await this.model.findById({ _id })
+    let employment = await this.model.findById({ _id });
     this.checkEmployment(employment);
     if (dto.title) employment.title = dto.title;
 
@@ -110,41 +116,41 @@ export class EmploymentService {
       const staff = await this.staffService.findById(dto.supervisor);
 
       if (!staff) {
-        throw new HttpException(
-          'supervisor is not found',
-          HttpStatus.NOT_FOUND,
-        );
+        throw new HttpException('supervisor is not found', HttpStatus.NOT_FOUND);
       }
       employment.supervisor = dto.supervisor;
     }
     if (dto.departmentId) {
-      let department = await this.departmentService.findOne(dto.departmentId)
+      let department = await this.departmentService.findOne(dto.departmentId);
       employment.departmentId = dto.departmentId;
     }
     if (dto.schedule) employment.schedule = dto.schedule;
     if (!dto.active && !dto.endDate) {
-      throw new HttpException(
-        'endDate required field',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('endDate required field', HttpStatus.BAD_REQUEST);
     }
     if (dto.active && !dto.endDate) {
-      let activeEmployment = await this.model.findOne({ active: true, staffId: employment.staffId });
-      if(activeEmployment){
+      let activeEmployment = await this.model.findOne({
+        active: true,
+        staffId: employment.staffId,
+      });
+      if (activeEmployment) {
         activeEmployment.active = false;
-        await activeEmployment.save()
+        await activeEmployment.save();
       }
       employment.active = true;
-      employment.endDate = "Precent"
+      employment.endDate = 'Precent';
     }
     if (dto.endDate && !dto.active) {
       employment.active = false;
-      employment.endDate = dto.endDate
-    };
+      employment.endDate = dto.endDate;
+    }
     if (dto.startDate) employment.startDate = dto.startDate;
 
     employment = await employment.save();
-    await employment.populate('departmentId', 'name').populate("supervisor", 'firstName').execPopulate();
+    await employment
+      .populate('departmentId', 'name')
+      .populate('supervisor', 'firstName')
+      .execPopulate();
     return this.sanitizer.sanitize(employment);
   }
   remove(id: number) {
@@ -154,20 +160,14 @@ export class EmploymentService {
   /** if the employment is not valid, throws an exception */
   private checkEmployment(employment: IEmployment) {
     if (!employment) {
-      throw new HttpException(
-        'Employment with this id was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Employment with this id was not found', HttpStatus.NOT_FOUND);
     }
   }
 
   /** if the date is not valid, throws an exception */
   private checkTime(date: Date) {
     if (isNaN(date.getTime())) {
-      throw new HttpException(
-        'Date with this format was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Date with this format was not found', HttpStatus.NOT_FOUND);
     }
   }
 }

@@ -8,9 +8,7 @@ import { OvertimeSanitizer } from './interceptor';
 
 @Injectable()
 export class OvertimeService {
-  constructor(
-    private readonly sanitizer: OvertimeSanitizer,
-  ) {
+  constructor(private readonly sanitizer: OvertimeSanitizer) {
     this.model = OverTimeModel;
     this.mongooseUtil = new MongooseUtil();
   }
@@ -23,10 +21,10 @@ export class OvertimeService {
         name: dto.name,
         type: dto.type,
         multiplier: dto.multiplier,
-        threshold: dto.threshold
-      })
-      await overtime.save()
-      return this.sanitizer.sanitize(overtime)
+        threshold: dto.threshold,
+      });
+      await overtime.save();
+      return this.sanitizer.sanitize(overtime);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Overtime already exists');
       throw e;
@@ -35,23 +33,21 @@ export class OvertimeService {
 
   async findAll(): Promise<OvertimeDTO[]> {
     try {
-      const overtime = await this.model.find();
-      this.checkOvertime(overtime[0])
-      return this.sanitizer.sanitizeMany(overtime)
-    }
-    catch (e) {
-      throw e
+      const overtimes = await this.model.find();
+      this.checkOvertime(overtimes[0]);
+      return this.sanitizer.sanitizeMany(overtimes);
+    } catch (e) {
+      throw e;
     }
   }
 
   async findOne(_id: string): Promise<OvertimeDTO> {
     try {
       const overtime = await this.model.findById(_id);
-      this.checkOvertime(overtime)
-      return this.sanitizer.sanitize(overtime)
-    }
-    catch (e) {
-      throw e
+      this.checkOvertime(overtime);
+      return this.sanitizer.sanitize(overtime);
+    } catch (e) {
+      throw e;
     }
   }
 
@@ -82,10 +78,7 @@ export class OvertimeService {
   /** if the Overtime is not found, throws an exception */
   private checkOvertime(overtime: IOverTime) {
     if (!overtime) {
-      throw new HttpException(
-        'Overtime with this id was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Overtime with this id was not found', HttpStatus.NOT_FOUND);
     }
   }
 }

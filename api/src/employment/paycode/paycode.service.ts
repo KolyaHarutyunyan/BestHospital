@@ -14,7 +14,6 @@ export class PaycodeService {
     private readonly employmentService: EmploymentService,
     private readonly PayCodeTypeService: PaycodetypeService,
     private readonly sanitizer: PayCodeSanitizer,
-
   ) {
     this.model = PayCodeModel;
     this.mongooseUtil = new MongooseUtil();
@@ -32,38 +31,35 @@ export class PaycodeService {
       name: dto.name,
       rate: dto.rate,
       active: dto.active,
-      startDate: dto.startDate
-    })
+      startDate: dto.startDate,
+    });
     if (!dto.active && !dto.endDate) {
-      throw new HttpException(
-        'endDate required field',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('endDate required field', HttpStatus.BAD_REQUEST);
     }
-    if (dto.endDate && !dto.active) paycode.endDate = dto.endDate
-    await paycode.save()
-    return this.sanitizer.sanitize(paycode)
+    if (dto.endDate && !dto.active) paycode.endDate = dto.endDate;
+    await paycode.save();
+    return this.sanitizer.sanitize(paycode);
   }
 
   async findAllByEmployment(employmentId: string): Promise<PayCodeDTO[]> {
     try {
       const payCode = await this.model.find({ employmentId }).populate('payCodeTypeId');
       this.checkPayCode(payCode[0]);
-      return this.sanitizer.sanitizeMany(payCode)
-    }
-    catch (e) {
-      throw e
+      return this.sanitizer.sanitizeMany(payCode);
+    } catch (e) {
+      throw e;
     }
   }
   async findPayCodesByStaffId(staffId: string): Promise<PayCodeDTO[]> {
     try {
       const employments = await this.employmentService.findAllEmploymentsByStaffId(staffId);
-      const payCode = await this.model.find({ "employmentId": { $in: employments } }).populate('payCodeTypeId')
+      const payCode = await this.model
+        .find({ employmentId: { $in: employments } })
+        .populate('payCodeTypeId');
       this.checkPayCode(payCode[0]);
-      return this.sanitizer.sanitizeMany(payCode)
-    }
-    catch (e) {
-      throw e
+      return this.sanitizer.sanitizeMany(payCode);
+    } catch (e) {
+      throw e;
     }
   }
 
@@ -71,21 +67,22 @@ export class PaycodeService {
     try {
       const payCode = await this.model.find({}).populate('payCodeTypeId');
       this.checkPayCode(payCode[0]);
-      return this.sanitizer.sanitizeMany(payCode)
-    }
-    catch (e) {
-      throw e
+      return this.sanitizer.sanitizeMany(payCode);
+    } catch (e) {
+      throw e;
     }
   }
   async findOne(_id: string): Promise<PayCodeDTO> {
     try {
-      let payCode = await this.model.findById({ _id }).populate('payCodeTypeId').populate('employmentId')
-      this.checkPayCode(payCode)
-      return this.sanitizer.sanitize(payCode)
+      const payCode = await this.model
+        .findById({ _id })
+        .populate('payCodeTypeId')
+        .populate('employmentId');
+      this.checkPayCode(payCode);
+      return this.sanitizer.sanitize(payCode);
       // poopulate payCodeType
-    }
-    catch (e) {
-      throw e
+    } catch (e) {
+      throw e;
     }
   }
 
@@ -93,33 +90,29 @@ export class PaycodeService {
     try {
       let payCode = await this.model.findById(_id);
       this.checkPayCode(payCode);
-    
+
       if (dto.payCodeTypeId) {
         await this.PayCodeTypeService.findOne(dto.payCodeTypeId);
       }
       if (dto.employmentId) {
-        await this.employmentService.findOne(dto.employmentId)
+        await this.employmentService.findOne(dto.employmentId);
       }
-      if(dto.name){
+      if (dto.name) {
         payCode.name = dto.name;
       }
       if (dto.rate) payCode.rate = dto.rate;
       if (!dto.active && !dto.endDate) {
-        throw new HttpException(
-          'endDate required field',
-          HttpStatus.BAD_REQUEST,
-        );
+        throw new HttpException('endDate required field', HttpStatus.BAD_REQUEST);
       }
       if (dto.active && !dto.endDate) {
-        payCode.endDate = "Precent"
+        payCode.endDate = 'Precent';
       }
       if (dto.endDate && !dto.active) payCode.endDate = dto.endDate;
       if (dto.startDate) payCode.startDate = dto.startDate;
       payCode = await (await payCode.save()).populate('payCodeTypeId').execPopulate();
       return this.sanitizer.sanitize(payCode);
-    }
-    catch (e) {
-      throw e
+    } catch (e) {
+      throw e;
     }
   }
 
@@ -131,10 +124,7 @@ export class PaycodeService {
   /** if the employment is not valid, throws an exception */
   private checkPayCode(payCode: IPayCode) {
     if (!payCode) {
-      throw new HttpException(
-        'PayCode with this id was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('PayCode with this id was not found', HttpStatus.NOT_FOUND);
     }
   }
 }
