@@ -32,15 +32,11 @@ export class TimesheetService {
     try {
       const staff = await this.staffService.findById(dto.staffId);
       const payCode: PayCodeDTO = await this.payCodeService.findOne(dto.payCode);
-      let payTable: IPayTable = {
-        totalAmount: 0,
-        totalHours: 0,
-        overtimes: [],
-      };
+      let payTable: IPayTable;
       if (payCode.payCodeTypeId.overtime) {
         payTable = await this.calculateOTs(dto, payCode.rate);
       }
-      const regularHours = dto.hours - payTable.totalHours;
+      const regularHours = payTable ? dto.hours - payTable.totalHours : dto.hours;
       const regularPay = regularHours * payCode.rate;
       let timesheet = new this.model({
         staffId: staff._id,
@@ -49,23 +45,46 @@ export class TimesheetService {
         totalHours: dto.hours,
         startDate: dto.startDate,
         endDate: dto.endDate ? dto.endDate : null,
-        totalAmount: regularPay + payTable.totalAmount,
+        totalAmount: payTable ? regularPay + payTable.totalAmount : regularPay,
         regularHours: regularHours,
         regularPay: regularPay,
-        overtimes: payTable.overtimes,
+        overtimes: payTable ? payTable.overtimes : [],
       });
-      timesheet = await (
-        await timesheet.save()
-      )
-        .populate({
-          path: 'payCode',
-          populate: { path: 'payCodeTypeId' },
-        })
+      timesheet = await (await timesheet.save())
+        .populate({ path: 'payCode', populate: { path: 'payCodeTypeId' } })
         .execPopulate();
       return this.sanitizer.sanitize(timesheet);
     } catch (e) {
       console.log(e);
       this.mongooseUtil.checkDuplicateKey(e, 'TimeSheet already exists');
+      throw e;
+    }
+  }
+
+  /** Gets a timesheet */
+  async findOne(_id: string): Promise<TimeSheetDTO> {
+    try {
+      const timesheet: any = await this.model.findById(_id).populate({
+        path: 'payCode',
+        populate: { path: 'payCodeTypeId' },
+      });
+      this.checkTimeSheet(timesheet);
+      return this.sanitizer.sanitize(timesheet);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  /** Gets all timesheets that have @param staffId matching */
+  async findAll(staffId: string): Promise<TimeSheetDTO[]> {
+    try {
+      const timesheet: any = await this.model.find({ staffId }).populate({
+        path: 'payCode',
+        populate: { path: 'payCodeTypeId' },
+      });
+      this.checkTimeSheet(timesheet);
+      return this.sanitizer.sanitizeMany(timesheet);
+    } catch (e) {
       throw e;
     }
   }
@@ -107,7 +126,6 @@ export class TimesheetService {
   }
 
   /** Private Methods */
-
   /** finds the overtime rule with the largest multiplier */
   private getMaxMultiplierOT(overtime: OvertimeDTO[]): OvertimeDTO {
     const maxMultiplier = overtime.reduce(function (prev, curr) {
@@ -138,7 +156,7 @@ export class TimesheetService {
     }
     return totalHours;
   }
-
+  /** Calculates and @returns the total number of hours in all timesheets for a week that contains the date*/
   private async getWeeklyHours(endDate): Promise<number> {
     const curr = new Date(endDate); // get current date
     const first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week
@@ -157,6 +175,7 @@ export class TimesheetService {
     return totalHours;
   }
 
+  /** Returns an arrya of dates that have at least one timesheet from @param startDate to @param endDate */
   private async getConsecutive(day, endDate): Promise<any> {
     console.log(day, 'dayyyyyy');
     let arr;
@@ -184,32 +203,6 @@ export class TimesheetService {
     }
     console.log('last Arr', arr, 'day', day);
     return arr.length < day;
-  }
-
-  async findOne(_id: string): Promise<TimeSheetDTO> {
-    try {
-      const timesheet: any = await this.model.findById(_id).populate({
-        path: 'payCode',
-        populate: { path: 'payCodeTypeId' },
-      });
-      this.checkTimeSheet(timesheet);
-      return this.sanitizer.sanitize(timesheet);
-    } catch (e) {
-      throw e;
-    }
-  }
-
-  async findAll(staffId: string): Promise<TimeSheetDTO[]> {
-    try {
-      const timesheet: any = await this.model.find({ staffId }).populate({
-        path: 'payCode',
-        populate: { path: 'payCodeTypeId' },
-      });
-      this.checkTimeSheet(timesheet);
-      return this.sanitizer.sanitizeMany(timesheet);
-    } catch (e) {
-      throw e;
-    }
   }
 
   /** Calculates the number of hours to be used and what remains given the ot rules threshold, previous hours and current timesheet hours */
@@ -244,8 +237,7 @@ export class TimesheetService {
       return { remainder: hours, used: 0 }; //did not use the hours
     }
   }
-
-  /** Private methods */
+  
   /** if the timesheet is not valid, throws an exception */
   private checkTimeSheet(timesheet: ITimeSheet) {
     if (!timesheet) {
