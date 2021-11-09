@@ -38,7 +38,7 @@ export class CreateAppointmentDto {
     startTime: Date;
     @ApiProperty()
     @IsDateString()
-    @IsOptional()
+    @IsNotEmpty()
     endTime: Date;
     @ApiProperty({ enum: EventStatus })
     @IsEnum(EventStatus)

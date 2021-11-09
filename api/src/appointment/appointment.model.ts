@@ -11,7 +11,7 @@ export const appointmentSchema = new Schema({
     staffPayCode: { type: Types.ObjectId, ref: 'PayCode' },
     startDate: { type: Date },
     startTime: { type: Date },
-    endTime: { type: Date, default: Date.now },
+    endTime: { type: Date },
     require: { type: Boolean },
     eventStatus: { type: String, enum: EventStatus },
     status: { type: String, enum: AppointmentStatus },
