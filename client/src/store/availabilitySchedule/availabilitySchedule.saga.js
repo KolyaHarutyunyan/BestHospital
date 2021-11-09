@@ -12,18 +12,20 @@ import {httpRequestsOnSuccessActions} from "../http_requests_on_success";
 
 
 function* getAvailabilitySchedule(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(availabilityScheduleService.getAvailabilityScheduleService, action.payload.id || action.payload,);
         yield put({
             type: GET_AVAILABILITY_SCHEDULE_GLOBAL_SUCCESS,
             payload: res.data,
         });
-
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
     } catch (error) {
         yield put({
             type: GET_AVAILABILITY_SCHEDULE_GLOBAL_SUCCESS,
             payload: [],
         });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
     }
 }
 
