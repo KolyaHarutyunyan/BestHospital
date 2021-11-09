@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {useParams} from "react-router-dom";
 import {
     SimpleTabs,
     Notes,
@@ -23,7 +22,6 @@ import {
 import {AddContact} from "../clientModals";
 import {clientItemStyles} from "./styles";
 import {FindLoad} from "@eachbase/utils";
-
 
 export const ClientItem = () => {
     const dispatch = useDispatch()
@@ -78,7 +76,6 @@ export const ClientItem = () => {
         {label: 'Notes'},
         {label: 'History'}
     ]
-
 
     const load = FindLoad('GET_CLIENT_BY_ID')
     const tabsContent = [
@@ -147,9 +144,8 @@ export const ClientItem = () => {
                 />
                 <div className={classes.headerWraperStyle}>
                     <TabsHeader
+                        availabilityData={availabilityData}
                         handleOpenHour={handleOpenHour}
-
-
                         authActive={authActive}
                         data={data}
                         activeTab={activeTab}

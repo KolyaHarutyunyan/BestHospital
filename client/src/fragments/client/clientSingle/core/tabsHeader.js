@@ -1,7 +1,15 @@
 import React, {useEffect, useState} from "react";
 import {editButtonStyle, serviceSingleStyles, inputStyle} from "./styles";
 import {Images} from "@eachbase/utils";
-import {AddButton, AddModalButton, SelectInput, SimpleModal, AddNotes, ValidationInput} from "@eachbase/components";
+import {
+    AddButton,
+    AddModalButton,
+    SelectInput,
+    SimpleModal,
+    AddNotes,
+    ValidationInput,
+    AvailabilitySchedule
+} from "@eachbase/components";
 import {
     AddContact,
     AddEnrollment,
@@ -10,7 +18,7 @@ import {
     AddAuthorizationService
 } from "@eachbase/fragments/client";
 import {fundingSourceActions} from "@eachbase/store";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
 
 const filterBtn = {
@@ -18,7 +26,7 @@ const filterBtn = {
     height: 36
 }
 
-export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setGetStatus ,setPrevStatus ,getStatus, type, handleOpenHour}) => {
+export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setGetStatus ,setPrevStatus ,getStatus, type, handleOpenHour, availabilityData}) => {
 
     const classes = serviceSingleStyles()
     const [open, setOpen] = useState()
@@ -70,6 +78,9 @@ export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setG
         setInputs(e.target.value)
     };
 
+
+    console.log(activeTab,'AddAuthorization')
+
     return (
         <div>
             <ul className={classes.tabsWrapper}>
@@ -120,7 +131,7 @@ export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setG
                                             text='Edit'/> :
                             activeTab === 4 ?
                                 <AddButton styles={{width: 450}} text='Available Hours'
-                                           handleClick={handleOpenHour}/>
+                                           handleClick={handleOpenClose}/>
                                 :
                             activeTab !== 6 && activeTab !== 4 ?
                                 <AddButton text={
@@ -148,7 +159,8 @@ export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setG
                                 activeTab === 3 ?
                                     <AddAuthorization handleClose={handleOpenClose}/> :
                                     activeTab === 4 ?
-                                        null :
+                                        <AvailabilitySchedule onModel={'Client'} availabilityData={availabilityData}
+                                                              handleClose={handleOpenClose}/> :
                                         activeTab === 5 ?
                                             <AddNotes model='Client' handleClose={handleOpenClose}/> :
 

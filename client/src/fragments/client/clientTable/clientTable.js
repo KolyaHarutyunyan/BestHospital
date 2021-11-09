@@ -2,22 +2,20 @@ import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Paper, Table, TableContainer} from "@material-ui/core";
 import {ClientTableBody, ClientTableHead} from "./core";
-import {useGlobalStyles} from "@eachbase/utils";
+import {FindLoad, useGlobalStyles} from "@eachbase/utils";
 import {Loader, NoItemText, PaginationItem} from "@eachbase/components";
 import {clientActions} from "@eachbase/store";
-
 
 export const ClientTable = ({setOpen, handleClose, setDeleteClient, handleGetPage, status}) => {
     const globalStyle = useGlobalStyles();
     const [page, setPage] = useState(1);
     const dispatch = useDispatch()
 
-    const {clientList, httpOnLoad, httpOnSuccess, httpOnError} = useSelector((state) => ({
+    const {clientList} = useSelector((state) => ({
         clientList: state.client.clientList,
-        httpOnLoad: state.httpOnLoad,
-        httpOnSuccess: state.httpOnSuccess,
-        httpOnError: state.httpOnError,
     }));
+
+    const loader = FindLoad('GET_CLIENTS')
 
     const changePage = number => {
         let start = number > 1 ? (number - 1) + '0' : 0
@@ -37,7 +35,7 @@ export const ClientTable = ({setOpen, handleClose, setDeleteClient, handleGetPag
                     aria-label="a dense table"
                 >
                     <ClientTableHead/>
-                    {httpOnLoad.length ?
+                    {loader.length ?
                         <Loader/>
                         :
                         clientList?.clients?.map((item, i) => (
@@ -50,8 +48,6 @@ export const ClientTable = ({setOpen, handleClose, setDeleteClient, handleGetPag
                             />
                         ))}
                 </Table>
-
-
             </TableContainer> : <NoItemText text={'No Clients Yet'}/>}
             {clientList?.clients?.length ?
                 <PaginationItem
