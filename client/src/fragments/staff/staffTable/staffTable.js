@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {Paper, Table, TableBody, TableContainer} from "@material-ui/core";
-import {useGlobalStyles} from "@eachbase/utils";
+import {FindLoad, useGlobalStyles} from "@eachbase/utils";
 import {Loader, NoItemText, PaginationItem} from "@eachbase/components";
 import {StaffTableBody, StaffTableHead} from "./core";
 import {useDispatch, useSelector} from "react-redux";
@@ -10,10 +10,12 @@ export const StaffTable = ({status, handleGetPage}) => {
     const dispatch = useDispatch()
     const globalStyle = useGlobalStyles();
     const [page, setPage] = useState(1);
-    const {adminsList, httpOnLoad} = useSelector((state) => ({
+
+    const {adminsList} = useSelector((state) => ({
         adminsList: state.admins.adminsList,
-        httpOnLoad: state.httpOnLoad
     }));
+
+    const loader = FindLoad('GET_ADMINS')
 
     const changePage = (number) => {
         let start = number > 1 ? (number - 1) + '0' : 0;
@@ -26,7 +28,7 @@ export const StaffTable = ({status, handleGetPage}) => {
         <div className={globalStyle.tableWrapper}>
             <Paper className={globalStyle.tableBack}>
                 {
-                    httpOnLoad.length ? <Loader/> :
+                    loader.length ? <Loader/> :
                         <TableContainer style={adminsList?.staff?.length ? {height: 'calc(100vh - 260px)'} : {height: 'calc(100vh - 185px)'}  } component={Paper}>
                             <Table
                                 stickyHeader

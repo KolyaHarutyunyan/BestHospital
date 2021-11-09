@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {Paper, Table, TableContainer} from "@material-ui/core";
 import {FundingSourceTableBody, FundingSourceTableHead} from "./core";
-import {useGlobalStyles} from "@eachbase/utils";
+import {FindLoad, useGlobalStyles} from "@eachbase/utils";
 import {Loader, NoItemText, PaginationItem} from "@eachbase/components";
 import {fundingSourceActions} from "@eachbase/store";
 
@@ -10,10 +10,12 @@ export const FundingSourceTable = ({status, handleGetPage}) => {
         const globalStyle = useGlobalStyles();
         const [page, setPage] = useState(1);
         const dispatch = useDispatch()
-        const {fundingSourceList, httpOnLoad} = useSelector((state) => ({
+
+        const {fundingSourceList} = useSelector((state) => ({
             fundingSourceList: state.fundingSource.fundingSourceList,
-            httpOnLoad: state.httpOnLoad,
         }));
+
+        const loader = FindLoad('GET_FUNDING_SOURCE')
 
         const changePage = (number) => {
             let start = number > 1 ? (number - 1) + '0' : 0
@@ -36,7 +38,7 @@ export const FundingSourceTable = ({status, handleGetPage}) => {
                                 aria-label="a dense table"
                             >
                                 <FundingSourceTableHead/>
-                                {httpOnLoad.length ? <Loader/>
+                                {loader.length ? <Loader/>
                                     :
                                     fundingSourceList?.funders && fundingSourceList.funders.map((item, i) => (
                                         <FundingSourceTableBody
@@ -58,7 +60,6 @@ export const FundingSourceTable = ({status, handleGetPage}) => {
                         :
                         <NoItemText text={'No Funding source yet'}/>
                     }
-
                 </Paper>
             </div>
         );

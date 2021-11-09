@@ -214,9 +214,8 @@ export const StaffItemHeader = ({
                                     : activeTab === 5 ?
                                         <AvailabilitySchedule onModel={onModel} availabilityData={availabilityData}
                                                               handleClose={handleOpenClose}/>
-                                        : null}
-
-            />
+                                        :
+                                        null}/>
         </div>
     )
 }

@@ -1,17 +1,12 @@
 import React, {useState} from "react";
-import {AddModalButton, AvailabilitySchedule, SimpleModal} from '@eachbase/components';
-import {editButtonStyle} from '../../fragments/client/clientSingle/core/styles';
-import { availabilityStyles } from './styles'
+import {availabilityStyles} from './styles'
 import {AvailableHourseBox} from "../../fragments/client/clientSingle/core/availableHourseBox";
+import {FindLoad} from "@eachbase/utils";
+import {Loader} from "../loader";
 
 export const AvailableHours = ({onModel, availabilityData, marginLeft}) => {
-    const [open, setOpen] = useState(false)
-
     const classes = availabilityStyles()
-
-    const handleOpenClose = () => {
-        setOpen(!open)
-    }
+    const load = FindLoad('GET_AVAILABILITY_SCHEDULE_GLOBAL')
 
     const shortDayNames = (name) => {
         switch (name) {
@@ -33,21 +28,19 @@ export const AvailableHours = ({onModel, availabilityData, marginLeft}) => {
     }
 
     return (
-        <div className={classes.availableHours} style={{marginLeft: marginLeft ? marginLeft : '0',minHeight: 503}}>
-            {/*<SimpleModal openDefault={open} handleOpenClose={handleOpenClose} content={ <AvailabilitySchedule onModel={onModel} availabilityData={availabilityData} handleClose={handleOpenClose} /> } />*/}
-            {/*<div className={classes.availableHoursHeader}>*/}
-            {/*    <p className={classes.availableHoursTitle}>Available Hours</p>*/}
-            {/*    <AddModalButton text='Edit' handleClick={handleOpenClose} btnStyles={editButtonStyle}/>*/}
-            {/*</div>*/}
+        <div className={classes.availableHours} style={{marginLeft: marginLeft ? marginLeft : '0', minHeight: 503}}>
             <div className={classes.availableHoursBlock}>
-                {
-                    availabilityData &&  Object.keys(availabilityData).map((item, index)=>{
-                        return (
-                            <AvailableHourseBox day={shortDayNames(item)} info={availabilityData && availabilityData[item]} />
-                        )
-                    })
+                {load.length ?
+                    <Loader/>
+                    :
+                    Array.isArray(availabilityData) === false ? Object.keys(availabilityData).map((item, index) => {
+                            return (
+                                <AvailableHourseBox day={shortDayNames(item)}
+                                                    info={availabilityData && availabilityData[item]}/>
+                            )
+                        }) :
+                        <p className={classes.noItems}>No Hours Yet</p>
                 }
-
             </div>
         </div>
 

@@ -1,8 +1,7 @@
 import React, {useEffect} from "react";
 import {ClientItem} from "@eachbase/fragments/client";
-import {clientActions, fundingSourceActions} from "../../store";
-import {noteActions} from "../../store/notes";
-import {availabilityScheduleActions} from "../../store/availabilitySchedule";
+import {clientActions, fundingSourceActions, noteActions, availabilityScheduleActions} from "@eachbase/store";
+
 import {useDispatch} from "react-redux";
 import {useParams} from "react-router-dom";
 

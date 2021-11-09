@@ -12,6 +12,7 @@ export const ClientAvailabilitySchedule = ({availabilityData, data}) => {
         {title: 'Last Name', value: data?.lastName},
         {title: 'Code', value: data?.code},
     ]
+
     return (
         <div className={classes.staffGeneralWrapper}>
             <Card

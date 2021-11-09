@@ -28,6 +28,12 @@ export const availabilityStyles = makeStyles(() => ({
         },
         paddingLeft: 10
     },
+    noItems:{
+        margin: '200px auto',
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: Colors.TextLightGray,
+    },
     availableHoursTitle: {
         color: Colors.TextSecondary,
         fontSize: 18,
