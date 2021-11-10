@@ -3,6 +3,7 @@ import { Model } from 'mongoose';
 import { PayCodeDTO } from 'src/employment/paycode/dto';
 import { OvertimeDTO } from 'src/overtime/dto';
 import { OvertimeStatus } from 'src/overtime/overtime.constants';
+import { OverTimeModel } from 'src/overtime/overtime.model';
 import { PaycodeService } from '../../employment/paycode/paycode.service';
 import { OvertimeService } from '../../overtime/overtime.service';
 import { MongooseUtil } from '../../util';
@@ -89,14 +90,16 @@ export class TimesheetService {
     }
   }
 
+  /** Private Methods */
   /** Calculates all the overtimes and returns it in a paytable ONLY for overtime */
   private async calculateOTs(dto: CreateTimesheetDTO, rate: number): Promise<IPayTable> {
     const paytable: IPayTable = { totalAmount: 0, totalHours: 0, overtimes: [] };
     let overtimeRules = await this.overtimeService.findAll();
+    const consecutiveMaxDays = this.getMaxDays(overtimeRules);
     const [dailyHours, weeklyHours, consecutiveDays] = await Promise.all([
       this.getDailyHours(dto.startDate),
       this.getWeeklyHours(dto.endDate),
-      this.getConsecutive(dto.hours, dto.endDate),
+      this.getConsecutive(dto.startDate, consecutiveMaxDays),
     ]);
     let maxMultiplierOT: OvertimeDTO;
     let hours = dto.hours;
@@ -109,7 +112,8 @@ export class TimesheetService {
         case OvertimeStatus.WEEKLY:
           calculatedOT = this.calculateByHours(maxMultiplierOT, hours, weeklyHours);
         case OvertimeStatus.CONSECUTIVE:
-          calculatedOT = this.calculateByDays(maxMultiplierOT, hours, consecutiveDays);
+          const startDate = new Date(dto.startDate);
+          calculatedOT = this.calculateByDays(maxMultiplierOT, hours, startDate, consecutiveDays);
       }
       hours = calculatedOT.remainder;
       const otAmount = calculatedOT.used * (maxMultiplierOT.multiplier * rate);
@@ -125,7 +129,6 @@ export class TimesheetService {
     return paytable;
   }
 
-  /** Private Methods */
   /** finds the overtime rule with the largest multiplier */
   private getMaxMultiplierOT(overtime: OvertimeDTO[]): OvertimeDTO {
     const maxMultiplier = overtime.reduce(function (prev, curr) {
@@ -175,33 +178,44 @@ export class TimesheetService {
   }
 
   /** Returns an arrya of dates that have at least one timesheet from @param startDate to @param endDate */
-  private async getConsecutive(day, endDate): Promise<any> {
-    console.log(day, 'dayyyyyy');
-    let arr;
-    const curr = new Date(endDate);
-    const first = curr.getDate() - day;
-    const last = curr.getDate() + 1;
-    const lastday = new Date(curr.setDate(last));
-    const firstday = new Date(curr.setDate(first));
-    console.log(lastday, 'lastday CONSECUTIVE');
-    console.log(firstday, 'firstday CONSECUTIVE');
+  private async getConsecutive(date, daysToGoBack): Promise<Date[]> {
+    // console.log(day, 'dayyyyyy');
+    const timeSheetDate = new Date(date);
+    const first = timeSheetDate.getDate() - daysToGoBack;
+    const last = timeSheetDate.getDate() + 1;
+    const lastday = new Date(timeSheetDate.setDate(last));
+    const firstday = new Date(timeSheetDate.setDate(first));
+    // console.log(lastday, 'lastday CONSECUTIVE');
+    // console.log(firstday, 'firstday CONSECUTIVE');
     const timesheets = await this.model
       .find({
         createdDate: { $gte: firstday, $lte: lastday },
       })
       .sort({ createdDate: -1 })
       .select('createdDate');
-    arr = timesheets;
-    console.log(arr, 'arrr Timesheets');
-    for (let j = 0; j < arr.length - 1; j++) {
-      let date = new Date(arr[j].createdDate);
-      let nextDate = new Date(arr[j + 1].createdDate);
-      if (date.getDay() == nextDate.getDay()) {
-        arr.splice(j, 1);
+    // console.log(arr, 'arrr Timesheets');
+    const uniqueDates = [];
+    if (!timesheets) return uniqueDates;
+    uniqueDates.push(new Date(timesheets[0].createdDate));
+    for (let j = 1; j < timesheets.length; j++) {
+      let prevDate = new Date(timesheets[j - 1].createdDate);
+      let currDate = new Date(timesheets[j].createdDate);
+      if (prevDate.getDay() != currDate.getDay()) {
+        uniqueDates.push(new Date(timesheets[j].createdDate));
       }
     }
-    console.log('last Arr', arr, 'day', day);
-    return arr.length < day;
+    // console.log('last Arr', arr, 'day', day);
+    return uniqueDates;
+  }
+  /** Get the maximum conseq days */
+  private getMaxDays(overtimes: OvertimeDTO[]): number {
+    let max = 0;
+    for (let i = 0; i < overtimes.length; i++) {
+      if (overtimes[i].type === OvertimeStatus.CONSECUTIVE) {
+        if (overtimes[i].threshold > max) max = overtimes[i].threshold;
+      }
+    }
+    return max;
   }
 
   /** Calculates the number of hours to be used and what remains given the ot rules threshold, previous hours and current timesheet hours */
@@ -227,9 +241,22 @@ export class TimesheetService {
   }
 
   /** Determines if the current consecutive overtime rule should be used. The function either uses all hours or none, since the mode is consecutive */
-  private calculateByDays(ot: OvertimeDTO, hours: number, dates: string[]): ICalculatedOT {
-    let matchesRule = false;
-    //TODO: Write the matching logic
+  private calculateByDays(
+    ot: OvertimeDTO,
+    hours: number,
+    startDate: Date,
+    dates: Date[],
+  ): ICalculatedOT {
+    let matchesRule = true;
+    let currDate, index;
+    for (let i = 1; i < ot.threshold; i++) {
+      currDate = startDate.setDate(startDate.getDate() - i);
+      index = dates.findIndex((date) => date.getDate() === currDate.getDate());
+      if (index < 0) {
+        matchesRule = false;
+        break;
+      }
+    }
     if (matchesRule) {
       return { remainder: 0, used: hours }; // rule matched: use all hours for this overtime
     } else {
@@ -244,3 +271,11 @@ export class TimesheetService {
     }
   }
 }
+
+/**
+ * { maxMult: 5, thresh: 3, type: CONSECUTIVE}
+ * { maxMult: 2, thresh: 4, type: CONSECUTIVE}
+ * { maxMult: 4, thresh: 6, type: CONSECUTIVE}
+ *
+ *  [01/01/2020, 02/01/2020, 03/01/2021, 05/01/2020]
+ */
