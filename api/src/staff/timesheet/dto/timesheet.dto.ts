@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { IPaytableItem } from "../interface/paytable.interface";
 
 export class TimeSheetDTO {
     @ApiProperty()
@@ -12,7 +13,7 @@ export class TimeSheetDTO {
     @ApiProperty()
     hours: number;
     @ApiProperty()
-    amount:number;
+    amount: number;
     @ApiProperty()
     startDate: Date
     @ApiProperty()
@@ -20,5 +21,11 @@ export class TimeSheetDTO {
     @ApiProperty()
     createdDate: Date;
     @ApiProperty()
-    totalAmount: number
+    totalAmount: number;
+    @ApiProperty()
+    overtimes: IPaytableItem[];
+    @ApiProperty()
+    regularHours: number
+    @ApiProperty()
+    regularPay: number
 }

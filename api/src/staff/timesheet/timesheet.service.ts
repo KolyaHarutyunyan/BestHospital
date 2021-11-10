@@ -3,7 +3,7 @@ import { Model } from 'mongoose';
 import { PayCodeDTO } from 'src/employment/paycode/dto';
 import { OvertimeDTO } from 'src/overtime/dto';
 import { OvertimeStatus } from 'src/overtime/overtime.constants';
-import { OverTimeModel } from 'src/overtime/overtime.model';
+import { PayCodeTypeDTO } from 'src/paycodetype/dto';
 import { PaycodeService } from '../../employment/paycode/paycode.service';
 import { OvertimeService } from '../../overtime/overtime.service';
 import { MongooseUtil } from '../../util';
@@ -34,7 +34,8 @@ export class TimesheetService {
       const staff = await this.staffService.findById(dto.staffId);
       const payCode: PayCodeDTO = await this.payCodeService.findOne(dto.payCode);
       let payTable: IPayTable;
-      if (payCode.payCodeTypeId.overtime) {
+      const payCodeType = payCode.payCodeTypeId as PayCodeTypeDTO;
+      if (payCodeType.overtime) {
         payTable = await this.calculateOTs(dto, payCode.rate);
       }
       const regularHours = payTable ? dto.hours - payTable.totalHours : dto.hours;
@@ -98,7 +99,7 @@ export class TimesheetService {
     const consecutiveMaxDays = this.getMaxDays(overtimeRules);
     const [dailyHours, weeklyHours, consecutiveDays] = await Promise.all([
       this.getDailyHours(dto.startDate),
-      this.getWeeklyHours(dto.endDate),
+      this.getWeeklyHours(dto.startDate),
       this.getConsecutive(dto.startDate, consecutiveMaxDays),
     ]);
     let maxMultiplierOT: OvertimeDTO;
@@ -109,13 +110,23 @@ export class TimesheetService {
       switch (maxMultiplierOT.type) {
         case OvertimeStatus.DAILY:
           calculatedOT = this.calculateByHours(maxMultiplierOT, hours, dailyHours);
+          console.log(calculatedOT, 'calculatedOT Day')
+          break
         case OvertimeStatus.WEEKLY:
           calculatedOT = this.calculateByHours(maxMultiplierOT, hours, weeklyHours);
+          console.log(calculatedOT, 'calculatedOT Week')
+          break
         case OvertimeStatus.CONSECUTIVE:
           const startDate = new Date(dto.startDate);
           calculatedOT = this.calculateByDays(maxMultiplierOT, hours, startDate, consecutiveDays);
+          console.log(calculatedOT, 'calculatedOT Consecutive')
+          break
       }
       hours = calculatedOT.remainder;
+      if (calculatedOT.used === 0) {
+        overtimeRules = overtimeRules.filter((rule) => rule.id !== maxMultiplierOT.id);
+        continue
+      }
       const otAmount = calculatedOT.used * (maxMultiplierOT.multiplier * rate);
       paytable.totalAmount += otAmount;
       paytable.totalHours += calculatedOT.used;
@@ -126,6 +137,7 @@ export class TimesheetService {
       });
       overtimeRules = overtimeRules.filter((rule) => rule.id !== maxMultiplierOT.id);
     }
+    
     return paytable;
   }
 
@@ -147,12 +159,12 @@ export class TimesheetService {
   /** Calculates and @returns the total number of hours in all timesheets for a given date */
   private async getDailyHours(date): Promise<number> {
     const timesheets = await this.model.find({
-      createdDate: {
+      startDate: {
         $gte: new Date(new Date(date).setHours(0, 0, 0)),
         $lt: new Date(new Date(date).setHours(23, 59, 59)),
       },
     });
-    let totalHours;
+    let totalHours = 0;
     for (let i = 0; i < timesheets.length; i++) {
       totalHours += timesheets[i].hours;
     }
@@ -165,12 +177,10 @@ export class TimesheetService {
     const last = first - 7; // last day is the first day + 6
     const firstday = new Date(curr.setDate(first));
     const lastday = new Date(curr.setDate(last));
-    console.log(firstday, 'firstdayyyyyyyy');
-    console.log(lastday, 'lastdayyyyyyyyy');
     const timesheets = await this.model.find({
-      createdDate: { $gte: lastday, $lte: firstday },
+      startDate: { $gte: lastday, $lte: firstday },
     });
-    let totalHours;
+    let totalHours = 0;
     for (let i = 0; i < timesheets.length; i++) {
       totalHours += timesheets[i].hours;
     }
@@ -179,32 +189,28 @@ export class TimesheetService {
 
   /** Returns an arrya of dates that have at least one timesheet from @param startDate to @param endDate */
   private async getConsecutive(date, daysToGoBack): Promise<Date[]> {
-    // console.log(day, 'dayyyyyy');
     const timeSheetDate = new Date(date);
     const first = timeSheetDate.getDate() - daysToGoBack;
-    const last = timeSheetDate.getDate() + 1;
+    const last = timeSheetDate.getDate();
     const lastday = new Date(timeSheetDate.setDate(last));
     const firstday = new Date(timeSheetDate.setDate(first));
-    // console.log(lastday, 'lastday CONSECUTIVE');
-    // console.log(firstday, 'firstday CONSECUTIVE');
     const timesheets = await this.model
       .find({
-        createdDate: { $gte: firstday, $lte: lastday },
+        startDate: { $gte: firstday, $lte: lastday },
       })
-      .sort({ createdDate: -1 })
-      .select('createdDate');
+      .sort({ startDate: -1 })
+      .select('startDate');
     // console.log(arr, 'arrr Timesheets');
     const uniqueDates = [];
     if (!timesheets) return uniqueDates;
-    uniqueDates.push(new Date(timesheets[0].createdDate));
+    uniqueDates.push(new Date(timesheets[0].startDate));
     for (let j = 1; j < timesheets.length; j++) {
-      let prevDate = new Date(timesheets[j - 1].createdDate);
-      let currDate = new Date(timesheets[j].createdDate);
+      let prevDate = new Date(timesheets[j - 1].startDate);
+      let currDate = new Date(timesheets[j].startDate);
       if (prevDate.getDay() != currDate.getDay()) {
-        uniqueDates.push(new Date(timesheets[j].createdDate));
+        uniqueDates.push(new Date(timesheets[j].startDate));
       }
     }
-    // console.log('last Arr', arr, 'day', day);
     return uniqueDates;
   }
   /** Get the maximum conseq days */
@@ -248,10 +254,11 @@ export class TimesheetService {
     dates: Date[],
   ): ICalculatedOT {
     let matchesRule = true;
-    let currDate, index;
-    for (let i = 1; i < ot.threshold; i++) {
-      currDate = startDate.setDate(startDate.getDate() - i);
+    let currDate = new Date(startDate), index;
+    for (let i = 1; i <= ot.threshold; i++) {
+      currDate = new Date(currDate.setDate(startDate.getDate() - i));
       index = dates.findIndex((date) => date.getDate() === currDate.getDate());
+      console.log(index)
       if (index < 0) {
         matchesRule = false;
         break;

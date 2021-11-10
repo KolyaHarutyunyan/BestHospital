@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsMongoId, IsNumber } from 'class-validator';
-import { PayCodeTypeDTO } from '../../paycodetype/dto';
+import { PayCodeTypeDTO } from '../../../paycodetype/dto';
 
 export class PayCodeDTO {
   @ApiProperty()
