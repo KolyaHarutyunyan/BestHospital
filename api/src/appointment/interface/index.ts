@@ -1,1 +1,1 @@
-export { IAppointment } from './appointment.interface';
+export { IAppointment, IFilterQuery } from './appointment.interface';

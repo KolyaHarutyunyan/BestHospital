@@ -19,3 +19,10 @@ export interface IAppointment extends Document {
   address: IAddress,
   files: String[]
 }
+export interface IFilterQuery extends Document {
+  client: string;
+  staff: string;
+  status: string;
+  eventStatus: string;
+  type: string
+}
