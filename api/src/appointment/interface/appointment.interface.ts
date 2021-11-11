@@ -17,7 +17,7 @@ export interface IAppointment extends Document {
   miles: number,
   isRepeat: boolean,
   address: IAddress,
-  files: String[]
+  signature: string
 }
 export interface IFilterQuery extends Document {
   client: string;

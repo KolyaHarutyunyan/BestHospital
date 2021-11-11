@@ -32,8 +32,8 @@ export class AppointmentDto {
     miles?: number;
     @ApiProperty({ type: AddressDTO })
     address: AddressDTO;
-    @ApiProperty({required: false})
-    files: String[];
+    @ApiProperty({ required: false })
+    signature: string;
 }
 
 export class AppointmentQueryDTO {

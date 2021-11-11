@@ -65,8 +65,10 @@ export class AppointmentController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAppointmentDto: UpdateAppointmentDto) {
-    return this.appointmentService.update(+id, updateAppointmentDto);
+  @Public()
+  @ApiOkResponse({ type: AppointmentDto })
+  update(@Param('id', ParseObjectIdPipe) id: string, @Body() updateAppointmentDto: UpdateAppointmentDto) {
+    return this.appointmentService.update(id, updateAppointmentDto);
   }
 
   @Delete(':id')

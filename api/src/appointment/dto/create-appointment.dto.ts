@@ -1,6 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Type } from "class-transformer";
-import { IsArray, IsBoolean, IsDateString, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl, ValidateNested } from "class-validator";
+import { IsBoolean, IsDateString, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 import { AppointmentStatus, AppointmentType, EventStatus } from "../appointment.constants";
 
 export class CreateAppointmentDto {
@@ -55,7 +54,5 @@ export class CreateAppointmentDto {
     @IsNumber()
     miles?: number;
     @ApiProperty({ required: false })
-    @IsArray()
-    @Type(() => String)
-    files: String[];
+    signature: string;
 }

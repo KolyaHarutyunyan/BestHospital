@@ -107,8 +107,7 @@ export class ClientService {
       if (dto.birthday) {
         client.birthday = dto.birthday
       }
-      // if (dto.address)
-      //   funder.address = await this.addressService.getAddress(dto.address);
+      
       await client.save();
       await this.historyService.create({ resource: client._id, onModel: "Client", title: serviceLog.updateClient })
       return this.sanitizer.sanitize(client);

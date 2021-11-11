@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
+import { Model, Query } from 'mongoose';
 import { AuthorizationserviceService } from '../client/authorizationservice/authorizationservice.service';
 import { ClientService } from '../client/client.service';
 import { PaycodeService } from '../employment/paycode/paycode.service';
@@ -13,6 +13,7 @@ import {
 import { AppointmentQueryDTO } from './dto/appointment.dto';
 import { AppointmentSanitizer } from './interceptor/appointment.interceptor';
 import { IAppointment } from './interface';
+import { AppointmentType } from './appointment.constants';
 
 @Injectable()
 export class AppointmentService {
@@ -29,81 +30,33 @@ export class AppointmentService {
 
   // create Appointment
   async create(dto: CreateAppointmentDto): Promise<AppointmentDto> {
-    const [overlappingSatff, overlappingClient] = await Promise.all([
-      this.model.find({ staff: dto.staff, "startTime": { "$lt": new Date(dto.endTime) }, "endTime": { "$gt": new Date(dto.startDate) } }),
-      this.model.find({ client: dto.client, "startTime": { "$lt": new Date(dto.endTime) }, "endTime": { "$gt": new Date(dto.startDate) } })
-    ]);
-
-    if (overlappingSatff[0] || overlappingClient[0]) {
-      throw new HttpException(
-        `appointment overlapping`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-    const [staff, client, staffPayCode]: any = await Promise.all([
+    let appointment;
+    const [staff, staffPayCode]: any = await Promise.all([
       this.staffService.findById(dto.staff),
-      this.clientService.findById(dto.client),
       this.payCodeService.findOne(dto.staffPayCode)
     ]);
-
-    if (dto.type == "SERVICE") {
-      if (!dto.client || !dto.authorizedService) {
-        throw new HttpException(
-          `Client or Client Authorization can not not be empty`,
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-
-      const authService: any = await this.authorizedService.getClient(dto.authorizedService);
-      const compareService = await this.authorizedService.checkByServiceId(authService.serviceId);
-      if (staff.service.indexOf(compareService.serviceId) == -1) {
-        throw new HttpException(
-          'Staff service have not current service',
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-      if (client.id != authService.authorizationId.clientId) {
-        throw new HttpException(
-          'Authorization Service is not Client authorization service',
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-      if (dto.require && !dto.files) {
-        throw new HttpException(
-          'Files should not be empty',
-          HttpStatus.BAD_REQUEST,
-        );
-      }
+    switch (dto.type) {
+      case AppointmentType.SERVICE:
+        appointment = await this.appointmentService(dto, staff)
+        break
+      case AppointmentType.DRIVE:
+        appointment = await this.appointmentDrive(dto)
+        break
+      case AppointmentType.PAID:
+        appointment = await this.appointmentPaid(dto)
+        break
+      case AppointmentType.BREAK:
+        appointment = await this.appointmentBreak(dto)
+        break
     }
+
     if (staff.id != staffPayCode.employmentId.staffId && staffPayCode.employmentId.active != true) {
       throw new HttpException(
         'PayCode is not staff pay code or employment is not active',
         HttpStatus.BAD_REQUEST,
       );
     }
-    let appointment = new this.model({
-      client: dto.client,
-      authorizedService: dto.authorizedService,
-      staff: dto.staff,
-      staffPayCode: dto.staffPayCode,
-      startDate: dto.startDate,
-      startTime: dto.startTime,
-      endTime: dto.endTime,
-      eventStatus: dto.eventStatus,
-      status: dto.status,
-      require: dto.require,
-      type: dto.type,
-    });
-    if (dto.type == "DRIVE") {
-      if (!dto.miles) {
-        throw new HttpException(
-          `Miles can not not be empty`,
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-      appointment.miles = dto.miles;
-    }
-    appointment = await appointment.save();
+    await appointment.save();
     return this.sanitizer.sanitize(appointment)
   }
 
@@ -164,6 +117,118 @@ export class AppointmentService {
         return await this.repeatMonthly(dto, appointment);
       }
     }
+  }
+
+  // create the service appointment
+  async appointmentService(dto, staff): Promise<AppointmentDto> {
+    const [overlappingStaff, overlappingClient] = await Promise.all([
+      this.model.find({ staff: dto.staff, startTime: { $lt: new Date(dto.endTime) }, endTime: { $gt: new Date(dto.startDate) } }),
+      this.model.find({ client: dto.client, startTime: { $lt: new Date(dto.endTime) }, endTime: { $gt: new Date(dto.startDate) } })
+    ]);
+    if (overlappingStaff[0] || overlappingClient[0]) {
+      throw new HttpException(
+        `appointment overlapping`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (!dto.client || !dto.authorizedService) {
+      throw new HttpException(
+        `Client or Client Authorization can not not be empty`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const [client, authService]: any = await Promise.all([
+      this.clientService.findById(dto.client),
+      this.authorizedService.findById(dto.authorizedService),
+    ]);
+    const compareService = await this.authorizedService.getByServiceId(authService.serviceId);
+    if (staff.service.indexOf(compareService.serviceId) == -1) {
+      throw new HttpException(
+        'Staff service have not current service',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (client.id != authService.authorizationId.clientId) {
+      throw new HttpException(
+        'Authorization Service is not Client authorization service',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    // if (dto.require && !dto.files) {
+    //   throw new HttpException(
+    //     'Files should not be empty',
+    //     HttpStatus.BAD_REQUEST,
+    //   );
+    // }
+    let appointment = new this.model({
+      client: dto.client,
+      authorizedService: dto.authorizedService,
+      staff: dto.staff,
+      staffPayCode: dto.staffPayCode,
+      startDate: dto.startDate,
+      startTime: dto.startTime,
+      endTime: dto.endTime,
+      eventStatus: dto.eventStatus,
+      status: dto.status,
+      require: dto.require,
+      signature: dto.signature,
+      type: dto.type,
+    });
+    return appointment;
+  }
+
+  // create the drive appointment
+  async appointmentDrive(dto): Promise<AppointmentDto> {
+    if (!dto.miles) {
+      throw new HttpException(
+        `Miles can not not be empty`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    let appointment = new this.model({
+      staff: dto.staff,
+      staffPayCode: dto.staffPayCode,
+      startDate: dto.startDate,
+      startTime: dto.startTime,
+      endTime: dto.endTime,
+      eventStatus: dto.eventStatus,
+      status: dto.status,
+      require: dto.require,
+      type: dto.type,
+    });
+    return appointment;
+  }
+
+  // create the paid appointment
+  async appointmentPaid(dto): Promise<AppointmentDto> {
+    let appointment = new this.model({
+      staff: dto.staff,
+      staffPayCode: dto.staffPayCode,
+      startDate: dto.startDate,
+      startTime: dto.startTime,
+      endTime: dto.endTime,
+      eventStatus: dto.eventStatus,
+      status: dto.status,
+      require: dto.require,
+      type: dto.type,
+    });
+    return appointment;
+  }
+
+  // create the break appointment
+  async appointmentBreak(dto): Promise<AppointmentDto> {
+    let appointment = new this.model({
+      staff: dto.staff,
+      staffPayCode: dto.staffPayCode,
+      startDate: dto.startDate,
+      startTime: dto.startTime,
+      endTime: dto.endTime,
+      eventStatus: dto.eventStatus,
+      status: dto.status,
+      require: dto.require,
+      type: dto.type,
+    });
+    return appointment;
   }
 
   // repeat with interval days
@@ -281,6 +346,12 @@ export class AppointmentService {
           HttpStatus.BAD_REQUEST,
         );
       }
+      if (status.eventStatus == 'RENDERED' || !appointment.signature) {
+        throw new HttpException(
+          `EventStatus can't be completed without signature`,
+          HttpStatus.BAD_REQUEST,
+        );
+      }
       appointment.eventStatus = status.eventStatus;
     };
     await appointment.save();
@@ -302,7 +373,7 @@ export class AppointmentService {
       path: 'staff',
       select: 'firstName lastName'
     });
-    this.checkAppointment(appointments[0])
+    this.checkAppointment(appointments[0]);
 
     return this.sanitizer.sanitizeMany(appointments);
   }
@@ -336,9 +407,56 @@ export class AppointmentService {
   }
 
   // update appointment
-  async update(id: number, updateAppointmentDto: UpdateAppointmentDto) {
-    return `This action updates a #${id} appointment`;
+  async update(_id: string, dto: UpdateAppointmentDto): Promise<any> {
+    const appointment = await this.model.findById(_id);
+    let compareService;
+    this.checkAppointment(appointment);
+    if (dto.type) {
+      if (dto.type == 'SERVICE' && !dto.client || !dto.authorizedService) {
+        throw new HttpException(
+          'Client and(or) Authorization service is not found',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      else if(dto.type == 'SERVICE' && dto.client || dto.authorizedService){
+        const [client, authService]: any = await Promise.all([
+          this.clientService.findById(dto.client ? dto.client : appointment.client),
+          this.authorizedService.findById(dto.authorizedService ? dto.client : dto.authorizedService),
+        ]);
+         compareService = await this.authorizedService.getByServiceId(authService.serviceId);
+    
+      }
+      appointment.type = dto.type;
+    }
+    if (dto.staff){
+      const staff = await this.staffService.findById(dto.staff);
+      if (staff.service.indexOf(compareService.serviceId) == -1) {
+        throw new HttpException(
+          'Staff service have not current service',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      appointment.staff = dto.staff;
+    }
+    if (dto.staffPayCode) appointment.staffPayCode = dto.staffPayCode;
+    if (dto.startDate) appointment.startDate = dto.startDate;
+    if (dto.startTime) appointment.startTime = dto.startTime;
+    if (dto.require) appointment.require = dto.require;
+    if (dto.signature) appointment.signature = dto.signature;
+    const [staff, staffPayCode]: any = await Promise.all([
+      this.staffService.findById(dto.staff ? dto.staff : appointment.staff),
+      this.payCodeService.findOne(dto.staffPayCode ? dto.staffPayCode : appointment.staffPayCode)
+    ]);
+    if (staff.id != staffPayCode.employmentId.staffId && staffPayCode.employmentId.active != true) {
+      throw new HttpException(
+        'PayCode is not staff pay code or employment is not active',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    await appointment.save();
+    return this.sanitizer.sanitize(appointment);
   }
+
 
   // remove appointment
   async remove(id: number) {

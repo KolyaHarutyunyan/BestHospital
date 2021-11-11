@@ -185,7 +185,7 @@ export class AuthorizationserviceService {
       throw e;
     }
   }
-  async getClient(authServiceId: string): Promise<AuthorizationServiceDTO> {
+  async findById(authServiceId: string): Promise<AuthorizationServiceDTO> {
     const authorizationService = await this.model.findById({ _id: authServiceId }).populate("authorizationId");
     this.checkAuthorizationService(authorizationService);
     // console.log(authorizationService, 'authorizationService');
@@ -255,9 +255,9 @@ export class AuthorizationserviceService {
       throw e
     }
   }
-  async checkByServiceId(serviceId: string) {
+  async getByServiceId(serviceId: string) {
     try {
-      const authorizationService = await this.model.findOne({ serviceId });
+      const authorizationService = await this.model.findOne({ serviceId }).populate("authorizationId");
       this.checkAuthorizationService(authorizationService);
       return authorizationService;
     }

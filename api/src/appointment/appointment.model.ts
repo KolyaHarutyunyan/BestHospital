@@ -18,7 +18,7 @@ export const appointmentSchema = new Schema({
     isRepeat: { type: Boolean, default: false },
     miles: { type: String, default: null },
     address: addressSchema,
-    files: [ String ]
+    signature: { type: String }
 });
 
 export const AppointmentModel = model<IAppointment>('appointment', appointmentSchema);

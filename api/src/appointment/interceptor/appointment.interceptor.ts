@@ -33,7 +33,7 @@ export class AppointmentSanitizer implements ISanitize {
             startDate: appointment.startDate,
             miles: appointment.miles,
             address: appointment.address,
-            files: appointment.files
+            signature: appointment.signature
         };
         return appointmentDTO;
     }
