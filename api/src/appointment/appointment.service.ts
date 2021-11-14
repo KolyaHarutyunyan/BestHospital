@@ -418,45 +418,53 @@ export class AppointmentService {
           HttpStatus.NOT_FOUND,
         );
       }
-      else if(dto.type == 'SERVICE' && dto.client || dto.authorizedService){
+      else if (dto.type == 'SERVICE' && dto.client || dto.authorizedService) {
         const [client, authService]: any = await Promise.all([
           this.clientService.findById(dto.client ? dto.client : appointment.client),
-          this.authorizedService.findById(dto.authorizedService ? dto.client : dto.authorizedService),
+          this.authorizedService.findById(dto.authorizedService ? dto.authorizedService : appointment.authorizedService),
         ]);
-         compareService = await this.authorizedService.getByServiceId(authService.serviceId);
-    
+        compareService = await this.authorizedService.getByServiceId(authService.serviceId);
       }
       appointment.type = dto.type;
     }
-    if (dto.staff){
-      const staff = await this.staffService.findById(dto.staff);
+    if (dto.staff) {
+      const [staff, authService]: any = await Promise.all([
+        this.staffService.findById(dto.staff),
+        this.authorizedService.findById(appointment.authorizedService),
+      ]);
+      compareService = await this.authorizedService.getByServiceId(authService.serviceId);
       if (staff.service.indexOf(compareService.serviceId) == -1) {
         throw new HttpException(
           'Staff service have not current service',
           HttpStatus.BAD_REQUEST,
         );
       }
+      const payCode: any = await this.payCodeService.findOne(dto.staffPayCode ? dto.staffPayCode : appointment.staffPayCode);
+      if (payCode.employmentId.active != true) {
+        throw new HttpException(
+          'employment is not active',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
       appointment.staff = dto.staff;
     }
-    if (dto.staffPayCode) appointment.staffPayCode = dto.staffPayCode;
+    if (dto.staffPayCode) {
+      const payCode: any = await this.payCodeService.findPayCodesByStaffId(dto.staff ? dto.staff : appointment.staff);
+      if (payCode.employmentId.active != true) {
+        throw new HttpException(
+          'employment is not active',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      appointment.staffPayCode = dto.staffPayCode
+    };
     if (dto.startDate) appointment.startDate = dto.startDate;
     if (dto.startTime) appointment.startTime = dto.startTime;
     if (dto.require) appointment.require = dto.require;
     if (dto.signature) appointment.signature = dto.signature;
-    const [staff, staffPayCode]: any = await Promise.all([
-      this.staffService.findById(dto.staff ? dto.staff : appointment.staff),
-      this.payCodeService.findOne(dto.staffPayCode ? dto.staffPayCode : appointment.staffPayCode)
-    ]);
-    if (staff.id != staffPayCode.employmentId.staffId && staffPayCode.employmentId.active != true) {
-      throw new HttpException(
-        'PayCode is not staff pay code or employment is not active',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
     await appointment.save();
     return this.sanitizer.sanitize(appointment);
   }
-
 
   // remove appointment
   async remove(id: number) {
