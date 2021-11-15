@@ -4,8 +4,6 @@ import { IClient } from '../../client/interface';
 import { IAuthorization } from './interface';
 import { MongooseUtil } from '../../util';
 import { Model } from 'mongoose';
-import { FundingService } from '../../funding';
-import { AddressService } from '../../address';
 import { AuthorizationSanitizer } from './interceptor/authorization.sanitizer';
 import { ClientAuthorizationModel } from './authorization.model';
 import { ClientModel } from '../client.model';
@@ -14,11 +12,8 @@ import { EnrollmentService } from '../enrollment';
 @Injectable()
 export class AuthorizationService {
   constructor(
-    private readonly fundingService: FundingService,
-    private readonly addressService: AddressService,
     private readonly enrollmentService: EnrollmentService,
     private readonly sanitizer: AuthorizationSanitizer,
-
   ) {
     this.model = ClientAuthorizationModel;
     this.clientModel = ClientModel;
@@ -34,9 +29,7 @@ export class AuthorizationService {
     try {
       const client = await this.clientModel.findById({ _id: clientId });
       this.checkClient(client);
-
       const enrollmentFunder = await this.enrollmentService.findByFunder(funderId);
-      
       let authorization = new this.model({
         authId: dto.authId,
         clientId: client._id,
@@ -46,7 +39,6 @@ export class AuthorizationService {
         status: dto.status,
         location: dto.location
       });
-
       await authorization.save();
       return this.sanitizer.sanitize(authorization);
     } catch (e) {
@@ -55,6 +47,7 @@ export class AuthorizationService {
       throw e;
     }
   }
+
   // update the authorization
   async update(_id: string, dto: UpdateAuthorizationDTO): Promise<AuthorizationDTO> {
     try {
@@ -72,7 +65,8 @@ export class AuthorizationService {
       throw e;
     }
   }
-  
+
+  // find authorizations
   async findAll(clientId: string): Promise<AuthorizationDTO[]> {
     try {
       const authorizations = await this.model.find({ clientId }).populate({ path: 'funderId', select: "name" });
@@ -84,13 +78,15 @@ export class AuthorizationService {
     }
   }
 
+  //remove authorization
   async remove(_id: string): Promise<string> {
     const authorization = await this.model.findById({ _id });
     this.checkAuthorization(authorization);
     authorization.remove();
     return authorization._id;
   }
-
+  
+  /** Private methods */
   /** if the client is not found, throws an exception */
   private checkClient(client: IClient) {
     if (!client) {
@@ -109,5 +105,4 @@ export class AuthorizationService {
       );
     }
   }
-
 }

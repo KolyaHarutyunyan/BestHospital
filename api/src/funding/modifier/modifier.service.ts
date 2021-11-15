@@ -4,7 +4,6 @@ import { MongooseUtil } from '../../util/mongoose.util';
 import { CreateModifiersDTO, ModifyDTO, UpdateModifiersDto } from './dto';
 import { ModifyModel } from './modifier.model';
 import { FundingService } from '../funding.service';
-import { CredentialService } from '../../credential/credential.service';
 import { IModify } from './interface/modify.interface';
 import { ModifySanitizer } from './interceptor/modifier.interceptor';
 
@@ -12,7 +11,6 @@ import { ModifySanitizer } from './interceptor/modifier.interceptor';
 export class ModifierService {
   constructor(
     private readonly fundingService: FundingService,
-    private readonly credentialService: CredentialService,
     private readonly sanitizer: ModifySanitizer,
   ) {
     this.model = ModifyModel;

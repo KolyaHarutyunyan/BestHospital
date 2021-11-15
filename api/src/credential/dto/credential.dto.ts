@@ -4,7 +4,7 @@ import {CredentialsStatus} from '../credential.constants';
 
 export class CredentialDTO {
   @ApiProperty()
-  id: string;
+  _id: string;
   @ApiProperty()
   name: string;
   @ApiProperty({ enum: CredentialsStatus })

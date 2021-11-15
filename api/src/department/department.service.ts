@@ -17,6 +17,7 @@ export class DepartmentService {
   private model: Model<IDepartment>;
   private mongooseUtil: MongooseUtil;
 
+  // create the department
   async create(dto: CreateDepartmentDTO): Promise<DepartmentDTO> {
     try {
       let department = new this.model({
@@ -31,6 +32,7 @@ export class DepartmentService {
     }
   }
 
+  // find all departments
   async findAll(): Promise<DepartmentDTO[]> {
     try {
       const departments = await this.model.find();
@@ -42,12 +44,14 @@ export class DepartmentService {
     }
   }
 
+  // find the department
   async findOne(_id: string): Promise<DepartmentDTO> {
     let department = await this.model.findById({ _id })
     this.checkDepartment(department);
     return this.sanitizer.sanitize(department)
   }
 
+  // update the department
   async update(_id: string, dto: UpdateDepartmentDTO): Promise<DepartmentDTO> {
     try {
       const department = await this.model.findById({ _id });
@@ -61,6 +65,7 @@ export class DepartmentService {
     }
   }
 
+  // remove the department
   async remove(_id: string): Promise<string> {
     try {
       const department = await this.model.findByIdAndDelete({ _id });
@@ -71,6 +76,7 @@ export class DepartmentService {
       throw e
     }
   }
+
   /** Private methods */
   /** if the department is not valid, throws an exception */
   private checkDepartment(department: IDepartment) {

@@ -18,6 +18,7 @@ export class AuthorizationserviceController {
     @Body() createAuthorizationserviceDto: CreateAuthorizationServiceDTO) {
     return this.authorizationserviceService.create(authorizationId, fundingServiceId, createAuthorizationserviceDto);
   }
+  
   @Post('authorization/:authorizationId/fundingService/:fundingServiceId/checkModifiers')
   @Public()
   @ApiOkResponse({type: AuthorizationServiceDTO})
@@ -27,26 +28,13 @@ export class AuthorizationserviceController {
     @Body() createAuthorizationserviceDto: AuthorizationModifiersDTO) {
     return this.authorizationserviceService.checkModifiers(authorizationId, fundingServiceId, createAuthorizationserviceDto);
   }
-  /** Create a new authorization service */
-  // @Post(':id/fundingService/:fundingServiceId/authorization/service')
-  // @Public()
-  // createAuthorizationService(
-  //   @Param('id', ParseObjectIdPipe) id: string,
-  //   @Param('fundingServiceId', ParseObjectIdPipe) fundingServiceId: string,
-  //   @Body() createAuthorizationServiceDTO: CreateAuthorizationServiceDTO) {
-  //   return this.clientService.createAuthorizationService(id, fundingServiceId, createAuthorizationServiceDTO);
-  // }
+
   @Get('authorization/:authorizationId')
   @ApiOkResponse({type: AuthorizationServiceDTO})
   @Public()
   findAll(@Param('authorizationId', ParseObjectIdPipe) authorizationId: string) {
     return this.authorizationserviceService.findAll(authorizationId);
   }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.authorizationserviceService.findOne(+id);
-  // }
 
   @Patch(':id')
   @Public()

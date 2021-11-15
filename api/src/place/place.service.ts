@@ -17,6 +17,7 @@ export class PlaceService {
   private model: Model<IPlace>;
   private mongooseUtil: MongooseUtil;
 
+  // create the place
   async create(dto: CreatePlaceDto): Promise<PlaceDTO> {
     try {
       const place = new this.model({
@@ -32,12 +33,14 @@ export class PlaceService {
     }
   }
 
+  // find all places
   async findAll(): Promise<PlaceDTO[]> {
     const places = await this.model.find();
     this.checkPlace(places[0]);
     return this.sanitizer.sanitizeMany(places);
   }
 
+  // find place by id
   async findOne(_id: string): Promise<PlaceDTO> {
     const place = await this.model.findById(_id);
     this.checkPlace(place)
@@ -45,6 +48,7 @@ export class PlaceService {
 
   }
 
+  // update the place
   async update(_id: string, dto: UpdatePlaceDto): Promise<PlaceDTO> {
     const place = await this.model.findById(_id);
     this.checkPlace(place);
@@ -54,6 +58,7 @@ export class PlaceService {
     return this.sanitizer.sanitize(place);
   }
 
+  // remove the place
   async remove(_id: string): Promise<String> {
     const place = await this.model.findByIdAndDelete(_id);
     this.checkPlace(place);

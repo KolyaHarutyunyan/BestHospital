@@ -23,16 +23,14 @@ export class EnrollmentService {
 
   private model: Model<IEnrollment>;
   private clientModel: Model<IClient>;
-
-
   private mongooseUtil: MongooseUtil;
 
+  // create enrollment
   async create(dto: CreateEnrollmentDTO, clientId: string, funderId: string): Promise<EnrollmentDTO> {
     try {
       const client = await this.clientModel.findById({ _id: clientId });
       this.checkClient(client);
       const funder = await this.fundingService.findById(funderId);
-
       if (dto.primary) {
         const findEnrollment = await this.model.findOne({ clientId, primary: true });
         if (findEnrollment !== null) {
@@ -48,13 +46,11 @@ export class EnrollmentService {
         terminationDate: dto.terminationDate
       });
       await enrollment.save();
-
       if (enrollment.primary) {
         client.enrollment = funderId;
         await client.save();
       }
       return this.sanitizer.sanitize(enrollment);
-
     } catch (e) {
       console.log(e);
       this.mongooseUtil.checkDuplicateKey(e, 'Enrollment already exists');
@@ -62,6 +58,7 @@ export class EnrollmentService {
     }
   }
 
+  // find all enrollments
   async findAll(clientId: string): Promise<EnrollmentDTO[]> {
     try {
       const enrollments = await this.model.find({ clientId }).populate({ path: 'funderId', select: 'name' });
@@ -71,7 +68,7 @@ export class EnrollmentService {
       throw e;
     }
   }
-
+  // find enrollment by funder
   async findByFunder(funderId: string): Promise<EnrollmentDTO> {
     try {
       const enrollment = await this.model.findOne({ funderId });
@@ -81,7 +78,7 @@ export class EnrollmentService {
       throw e;
     }
   }
-
+  // update the enrollment
   async update(_id: string, clientId: string, funderId: string, dto: UpdateEnrollmentDTO): Promise<EnrollmentDTO> {
     try {
       const enrollment = await this.model.findById({ _id, clientId });
@@ -113,7 +110,7 @@ export class EnrollmentService {
       throw e;
     }
   }
-
+  //remove the enrollment
   async remove(_id: string): Promise<string> {
     const enrollment = await this.model.findById({ _id });
     this.checkEnrollment(enrollment);
@@ -126,16 +123,7 @@ export class EnrollmentService {
     await enrollment.remove()
     return enrollment._id;
   }
-  /** Private methods */
-  /** if the date is not valid, throws an exception */
-  private checkTime(date: Date) {
-    if (isNaN(date.getTime())) {
-      throw new HttpException(
-        'Date with this format was not found',
-        HttpStatus.NOT_FOUND,
-      );
-    }
-  }
+
   /** Private methods */
   /** if the client is not found, throws an exception */
   private checkClient(client: IClient) {
@@ -146,6 +134,7 @@ export class EnrollmentService {
       );
     }
   }
+  
   /** if the enrollment is not found, throws an exception */
   private checkEnrollment(enrollment: IEnrollment) {
     if (!enrollment) {
@@ -155,13 +144,4 @@ export class EnrollmentService {
       );
     }
   }
-  /** if the contact is not found, throws an exception */
-  // private checkContact(contact: IContact) {
-  //   if (!contact) {
-  //     throw new HttpException(
-  //       'Profile with this id was not found',
-  //       HttpStatus.NOT_FOUND,
-  //     );
-  //   }
-  // }
 }

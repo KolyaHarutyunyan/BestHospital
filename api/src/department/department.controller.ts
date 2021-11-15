@@ -18,6 +18,7 @@ export class DepartmentController {
 
   @Get()
   @Public()
+  @ApiOkResponse({type: [DepartmentDTO]})
   findAll() {
     return this.departmentService.findAll();
   }
@@ -31,13 +32,15 @@ export class DepartmentController {
 
   @Patch(':id')
   @Public()
-  update(@Param('id') id: string, @Body() updateDepartmentDto: UpdateDepartmentDTO) {
+  @ApiOkResponse({type: DepartmentDTO})
+  update(@Param('id', ParseObjectIdPipe) id: string, @Body() updateDepartmentDto: UpdateDepartmentDTO) {
     return this.departmentService.update(id, updateDepartmentDto);
   }
 
   @Delete(':id')
   @Public()
-  remove(@Param('id') id: string) {
+  @ApiOkResponse({type: String})
+  remove(@Param('id', ParseObjectIdPipe) id: string) {
     return this.departmentService.remove(id);
   }
 }

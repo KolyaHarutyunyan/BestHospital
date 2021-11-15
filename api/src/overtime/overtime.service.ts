@@ -15,6 +15,7 @@ export class OvertimeService {
   private model: Model<IOverTime>;
   private mongooseUtil: MongooseUtil;
 
+  // create the overtime
   async create(dto: CreateOvertimeDTO): Promise<OvertimeDTO> {
     try {
       const overtime = new this.model({
@@ -31,6 +32,7 @@ export class OvertimeService {
     }
   }
 
+  // find all overtimes
   async findAll(): Promise<OvertimeDTO[]> {
     try {
       const overtimes = await this.model.find();
@@ -41,6 +43,7 @@ export class OvertimeService {
     }
   }
 
+  // find overtime by id
   async findOne(_id: string): Promise<OvertimeDTO> {
     try {
       const overtime = await this.model.findById(_id);
@@ -51,6 +54,7 @@ export class OvertimeService {
     }
   }
 
+  // update overtime by id
   async update(_id: string, dto: UpdateOvertimeDTO): Promise<OvertimeDTO> {
     try {
       const overtime = await this.model.findById(_id);
@@ -68,6 +72,7 @@ export class OvertimeService {
     }
   }
 
+  // remove the overtime
   async remove(_id: string): Promise<string> {
     const overtime = await this.model.findByIdAndDelete({ _id });
     this.checkOvertime(overtime);

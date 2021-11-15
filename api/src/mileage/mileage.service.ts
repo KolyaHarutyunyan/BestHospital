@@ -14,6 +14,7 @@ export class MileageService {
   }
   private model: Model<IMileage>;
 
+  // create the mileage
   async create(dto: CreateMileageDto): Promise<MileageDTO> {
     const mileage = new this.model({
       compensation: dto.compensation,
@@ -23,18 +24,21 @@ export class MileageService {
     return this.sanitizer.sanitize(mileage);
   }
 
+  // find all mileage
   async findAll(): Promise<MileageDTO[]> {
     const mileages = await this.model.find();
     this.checkMileage(mileages[0]);
     return this.sanitizer.sanitizeMany(mileages);
   }
 
+  // find mileage by id
   async findOne(_id: string): Promise<MileageDTO> {
     const mileage = await this.model.findById(_id);
     this.checkMileage(mileage);
     return this.sanitizer.sanitize(mileage);
   }
 
+  // update the mileage
   async update(_id: string, dto: UpdateMileageDto): Promise<MileageDTO> {
     const mileage = await this.model.findById(_id);
     this.checkMileage(mileage);
@@ -44,6 +48,7 @@ export class MileageService {
     return this.sanitizer.sanitize(mileage);
   }
 
+  // remove the mileage
   async remove(_id: string): Promise<String> {
     const mileage = await this.model.findByIdAndDelete(_id);
     this.checkMileage(mileage);

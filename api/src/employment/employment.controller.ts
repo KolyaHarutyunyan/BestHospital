@@ -14,6 +14,7 @@ export class EmploymentController {
   async create(@Body() createEmploymentDto: CreateEmploymentDto) {
     return await this.employmentService.create(createEmploymentDto);
   }
+
   @Get('staff/:staffId')
   @Public()
   @ApiOkResponse({ type: [EmploymentDto] })
@@ -27,6 +28,7 @@ export class EmploymentController {
   async findOne(@Param('id', ParseObjectIdPipe) id: string) {
     return this.employmentService.findOne(id);
   }
+  
   @Patch(':id')
   @Public()
   @ApiOkResponse({ type: EmploymentDto })

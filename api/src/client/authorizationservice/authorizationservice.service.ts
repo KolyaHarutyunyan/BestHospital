@@ -1,4 +1,4 @@
-import { Body, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { MongooseUtil } from '../../util';
 import { AuthorizationServiceSanitizer } from './interceptor/authorizationService.interceptor';
 import { AuthorizationServiceDTO, CreateAuthorizationServiceDTO, UpdateAuthorizationserviceDTO, AuthorizationModifiersDTO } from './dto';
@@ -26,6 +26,7 @@ export class AuthorizationserviceService {
   private authorizationModel: Model<IAuthorization>;
   private mongooseUtil: MongooseUtil;
 
+  // check if modifiers are received
   async checkModifiers(authorizationId: string, fundingServiceId: string, dto: AuthorizationModifiersDTO): Promise<any> {
     try {
       let modifiers = [];
@@ -70,7 +71,7 @@ export class AuthorizationserviceService {
     }
   }
 
-
+  // create authorization service
   async create(authorizationId: string, fundingServiceId: string, dto: CreateAuthorizationServiceDTO): Promise<AuthorizationServiceDTO> {
     try {
       let modifiers = [];
@@ -155,6 +156,7 @@ export class AuthorizationserviceService {
     }
   }
 
+  // find all authorization services
   async findAll(authorizationId: string): Promise<AuthorizationServiceDTO[]> {
     try {
       // let modifiers = []
@@ -185,16 +187,15 @@ export class AuthorizationserviceService {
       throw e;
     }
   }
+
+  // find authorization service by id
   async findById(authServiceId: string): Promise<AuthorizationServiceDTO> {
     const authorizationService = await this.model.findById({ _id: authServiceId }).populate("authorizationId");
     this.checkAuthorizationService(authorizationService);
-    // console.log(authorizationService, 'authorizationService');
     return this.sanitizer.sanitize(authorizationService);
   }
-  async findByClientId(_id: string): Promise<any> {
-    
-  }
 
+  // update authorization service
   async update(_id: string, dto: UpdateAuthorizationserviceDTO): Promise<AuthorizationServiceDTO> {
     try {
       const modifiers = [];
@@ -245,7 +246,8 @@ export class AuthorizationserviceService {
     }
   }
 
-  async remove(_id: string) {
+  // remove the authorization service
+  async remove(_id: string): Promise<String> {
     try {
       const authorizationService = await this.model.findByIdAndDelete({ _id });
       this.checkAuthorizationService(authorizationService);
@@ -255,6 +257,8 @@ export class AuthorizationserviceService {
       throw e
     }
   }
+
+  // get by funding service id
   async getByServiceId(serviceId: string) {
     try {
       const authorizationService = await this.model.findOne({ serviceId }).populate("authorizationId");
@@ -265,6 +269,8 @@ export class AuthorizationserviceService {
       throw e
     }
   }
+
+  /** Private methods */
   /** if the contact is not found, throws an exception */
   private checkAuthorization(authorization: IAuthorization) {
     if (!authorization) {
@@ -274,6 +280,7 @@ export class AuthorizationserviceService {
       );
     }
   }
+
   private checkAuthorizationService(authorizationService: IAuthorizationService) {
     if (!authorizationService) {
       throw new HttpException(

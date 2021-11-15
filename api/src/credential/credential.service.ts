@@ -8,7 +8,6 @@ import { MongooseUtil } from '../util';
 @Injectable()
 export class CredentialService {
   constructor(
-    // private readonly sanitizer: FundingSanitizer,
   ) {
     this.model = CredentialModel;
     this.mongooseUtil = new MongooseUtil();
@@ -23,7 +22,6 @@ export class CredentialService {
         name: dto.name,
         type: dto.type
       })
-
       await credential.save();
       return credential;
       // return this.sanitizer.sanitize(credential);
@@ -70,13 +68,13 @@ export class CredentialService {
     }
   }
 
+  // update the credential
   async update(_id: string, dto: UpdateCredentialDTO): Promise<CredentialDTO> {
     try {
       let credential = await this.model.findById({ _id })
       this.checkCredential(credential)
       if (dto.name) credential.name = dto.name;
       if (dto.type || dto.type === 0) credential.type = dto.type;
-
       await credential.save();
       return credential;
     }

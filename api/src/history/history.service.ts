@@ -10,7 +10,6 @@ import { HistorySanitizer } from './interceptor';
 @Injectable()
 export class HistoryService {
   constructor(
-
     private readonly sanitizer: HistorySanitizer
   ) {
     this.model = HistoryModel;

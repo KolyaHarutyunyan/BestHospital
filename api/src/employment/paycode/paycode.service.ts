@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { MongooseUtil } from '../../util';
 import { CreatePaycodeDTO, UpdatePayCodeDTO, PayCodeDTO } from './dto';
 import { IPayCode } from './interface';
 import { PayCodeModel } from './paycode.model';
@@ -16,15 +15,13 @@ export class PaycodeService {
     private readonly sanitizer: PayCodeSanitizer,
   ) {
     this.model = PayCodeModel;
-    this.mongooseUtil = new MongooseUtil();
   }
   private model: Model<IPayCode>;
-  private mongooseUtil: MongooseUtil;
 
+  // create the paycode
   async create(dto: CreatePaycodeDTO): Promise<PayCodeDTO> {
     const employment = await this.employmentService.findOne(dto.employmentId);
     const payCodeType = await this.PayCodeTypeService.findOne(dto.payCodeTypeId);
-
     const paycode = new this.model({
       employmentId: employment.id,
       payCodeTypeId: payCodeType.id,
@@ -41,6 +38,7 @@ export class PaycodeService {
     return this.sanitizer.sanitize(paycode);
   }
 
+  // find all payCodes by employment id
   async findAllByEmployment(employmentId: string): Promise<PayCodeDTO[]> {
     try {
       const payCode = await this.model.find({ employmentId }).populate('payCodeTypeId');
@@ -50,6 +48,8 @@ export class PaycodeService {
       throw e;
     }
   }
+
+  // find all payCode by staff id
   async findPayCodesByStaffId(staffId: string): Promise<PayCodeDTO[]> {
     try {
       const employments = await this.employmentService.findAllEmploymentsByStaffId(staffId);
@@ -63,6 +63,7 @@ export class PaycodeService {
     }
   }
 
+  // find all payCode
   async findAll(): Promise<PayCodeDTO[]> {
     try {
       const payCode = await this.model.find({}).populate('payCodeTypeId');
@@ -72,6 +73,8 @@ export class PaycodeService {
       throw e;
     }
   }
+
+  // find employment by id
   async findOne(_id: string): Promise<PayCodeDTO> {
     try {
       const payCode = await this.model
@@ -86,6 +89,7 @@ export class PaycodeService {
     }
   }
 
+  // update the payCode
   async update(_id: string, dto: UpdatePayCodeDTO): Promise<PayCodeDTO> {
     try {
       let payCode = await this.model.findById(_id);

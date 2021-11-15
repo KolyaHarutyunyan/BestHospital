@@ -374,7 +374,6 @@ export class AppointmentService {
       select: 'firstName lastName'
     });
     this.checkAppointment(appointments[0]);
-
     return this.sanitizer.sanitizeMany(appointments);
   }
 

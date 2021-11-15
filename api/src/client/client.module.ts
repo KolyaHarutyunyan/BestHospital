@@ -7,7 +7,7 @@ import { ClientSanitizer } from './interceptor';
 
 //check
 import { HistorySanitizer, HistoryService } from 'src/history';
-import { CredentialService } from 'src/credential';
+import { CredentialModule, CredentialService } from 'src/credential';
 import { ServiceModule } from '../service'
 import { FundingSanitizer } from 'src/funding/interceptor';
 import { AddressSanitizer } from 'src/address';
@@ -17,9 +17,9 @@ import { AuthorizationserviceModule } from './authorizationservice/authorization
 import { ContactModule } from './contact/contact.module';
 
 @Module({
-  imports: [ServiceModule, EnrollmentModule, AuthorizationModule, AuthorizationserviceModule, ContactModule, FundingModule],
+  imports: [ServiceModule, EnrollmentModule, AuthorizationModule, AuthorizationserviceModule, ContactModule, FundingModule, CredentialModule],
   controllers: [ClientController],
-  providers: [ClientService, HistoryService, CredentialService,
+  providers: [ClientService, HistoryService,
      ClientSanitizer,
     HistorySanitizer, AddressSanitizer],
   exports: [ClientService]

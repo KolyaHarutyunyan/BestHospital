@@ -26,7 +26,6 @@ export class ClientService {
     this.mongooseUtil = new MongooseUtil();
   }
   private model: Model<IClient>;
-
   private mongooseUtil: MongooseUtil;
 
   /** Create a new client */
@@ -43,12 +42,9 @@ export class ClientService {
         gender: dto.gender,
         status: dto.status,
         birthday: dto.birthday
-        // address: await this.addressService.getAddress(dto.address),
       });
-
       await client.save();
       await this.historyService.create({ resource: client._id, onModel: "Client", title: serviceLog.createClient })
-
       return this.sanitizer.sanitize(client);
     } catch (e) {
       console.log(e);
