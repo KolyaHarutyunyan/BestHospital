@@ -6,8 +6,8 @@ const AuthorizationServiceSchema = new Schema({
     serviceId: { type: Types.ObjectId, ref: 'FundingService' },
     modifiers: [{ type:  Types.ObjectId, ref: 'Modifier' }],
     total: { type: Number },
-    // completed: { type: Number },
-    // available: { type: Number },
+    completed: { type: Number, default: 0 },
+    available: { type: Number, default: 0 },
     createdDate: { type: Date, default: Date.now() },
     updatedDate: { type: Date, default: null },
 });

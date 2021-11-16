@@ -9,6 +9,7 @@ import { ClientAuthorizationServiceModel } from './authorizationService.model';
 import { ClientAuthorizationModel } from '../authorization/authorization.model';
 import { FundingService } from '../../funding';
 import { ModifierService } from '../../funding/modifier/modifier.service';
+import { ServiceDTO } from '../../funding/dto/service.dto';
 
 @Injectable()
 export class AuthorizationserviceService {
@@ -160,7 +161,9 @@ export class AuthorizationserviceService {
   async findAll(authorizationId: string): Promise<AuthorizationServiceDTO[]> {
     try {
       // let modifiers = []
-      const authorizationService: any = await this.model.find({ authorizationId }).populate("[modifiers]").populate('serviceId');
+      const authorizationService: any = await this.model.find({ authorizationId }).populate('serviceId').populate({
+        path: '[modifiers]'
+      });
       // const findModifiers: any = await this.modifierService.findByServiceId(authorizationService.serviceId._id);
       // for(let i = 0; i < authorizationService.length; i++){
       //   modifiers = authorizationService[i].modifiers;
@@ -268,6 +271,16 @@ export class AuthorizationserviceService {
     catch (e) {
       throw e
     }
+  }
+
+  async countCompletedUnits(_id: string, minutes: number) {
+    const authService: any = await this.model.findById(_id).populate('serviceId');
+    this.checkAuthorizationService(authService);
+    const size = authService.serviceId.size;
+    const completedUnits = minutes / size;
+    authService.completed += Math.floor(completedUnits);
+    authService.available -= Math.floor(authService.total - completedUnits)
+    await authService.save();
   }
 
   /** Private methods */

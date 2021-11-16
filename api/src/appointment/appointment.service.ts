@@ -30,6 +30,12 @@ export class AppointmentService {
 
   // create Appointment
   async create(dto: CreateAppointmentDto): Promise<AppointmentDto> {
+    if(new Date(dto.startTime) > new Date(dto.endTime)){
+      throw new HttpException(
+        `startTime can't be high then endTime`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     let appointment;
     const [staff, staffPayCode]: any = await Promise.all([
       this.staffService.findById(dto.staff),
@@ -346,11 +352,15 @@ export class AppointmentService {
           HttpStatus.BAD_REQUEST,
         );
       }
-      if (status.eventStatus == 'RENDERED' || !appointment.signature) {
-        throw new HttpException(
-          `EventStatus can't be completed without signature`,
-          HttpStatus.BAD_REQUEST,
-        );
+      // if (status.eventStatus == 'RENDERED' || !appointment.signature) {
+      //   throw new HttpException(
+      //     `EventStatus can't be completed without signature`,
+      //     HttpStatus.BAD_REQUEST,
+      //   );
+      // }
+      if (status.eventStatus == 'RENDERED') {
+        const minutes = await this.timeDiffCalc(appointment.endTime, appointment.startTime);
+        await this.authorizedService.countCompletedUnits(appointment.authorizedService, minutes)
       }
       appointment.eventStatus = status.eventStatus;
     };
@@ -521,5 +531,11 @@ export class AppointmentService {
       curDate.setDate(curDate.getDate() + 1);
     }
     return { count, dates };
+  }
+
+  // calculate minutes between two dates
+  async timeDiffCalc(dateFuture, dateNow):Promise<number> {
+    const hours = Math.abs(dateNow - dateFuture) / 36e5 * 60;
+    return hours
   }
 }
