@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsPhoneNumber, IsString, IsUrl } from 'class-validator';
+import { CreateModifierDto } from '../modifier/dto';
 
 export class ServiceDTO {
     @ApiProperty()
@@ -20,4 +21,6 @@ export class ServiceDTO {
     min: number
     @ApiProperty()
     max: number;
+    @ApiProperty()
+    modifiers?: Array<CreateModifierDto>;
 }

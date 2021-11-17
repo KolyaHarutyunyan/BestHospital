@@ -13,6 +13,7 @@ import { ServiceService } from '../service';
 import { HistoryService, serviceLog } from '../history';
 import { CredentialService } from '../credential';
 import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
+import { CreateModifierDto } from './modifier/dto';
 
 @Injectable()
 export class FundingService {
@@ -85,7 +86,7 @@ export class FundingService {
   async findAll(skip: number, limit: number, status: string): Promise<any> {
     if (status == "INACTIVE" || status == "HOLD" || status == "TERMINATE") {
       let [funders, count] = await Promise.all([
-        this.model.find({ $or: [{ status: "INACTIVE" }, { status: "HOLD"}, { status: "TERMINATE" }] }).sort({ '_id': -1 }).skip(skip).limit(limit),
+        this.model.find({ $or: [{ status: "INACTIVE" }, { status: "HOLD" }, { status: "TERMINATE" }] }).sort({ '_id': -1 }).skip(skip).limit(limit),
         this.model.countDocuments({ $or: [{ status: "INACTIVE" }, { status: "HOLD" }, { status: "TERMINATE" }] })
       ]);
       const sanFun = this.sanitizer.sanitizeMany(funders);
@@ -219,7 +220,7 @@ export class FundingService {
   ): Promise<FundingDTO> => {
     const funder = await this.model.findById({ _id });
     this.checkFunder(funder);
-    if(status != "ACTIVE" && !dto.date){
+    if (status != "ACTIVE" && !dto.date) {
       throw new HttpException('If status is not active, then date is required field', HttpStatus.BAD_REQUEST);
     }
     funder.termination.date = dto.date;
@@ -230,6 +231,24 @@ export class FundingService {
     await funder.save();
     return this.sanitizer.sanitize(funder);
   };
+
+  /** save modifiers */
+  async saveModifiers(_id: string, modifiers: any): Promise<ServiceDTO> {
+    const fundingService = await this.serviceModel.findOne({ _id });
+    this.checkFundingService(fundingService);
+    modifiers.map(modifier => {
+      fundingService.modifiers.push(modifier)
+    })
+    return await fundingService.save();
+  }
+
+  /** update modifiers */
+  async updateModifiers(_id: string, modifier: any): Promise<ServiceDTO> {
+    const fundingService = await this.serviceModel.findById(_id);
+    this.checkFundingService(fundingService);
+    fundingService.modifiers = modifier;
+    return await fundingService.save();
+  }
 
   /** Private methods */
   /** if the funder is not found, throws an exception */

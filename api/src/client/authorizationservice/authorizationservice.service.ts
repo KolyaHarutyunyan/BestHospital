@@ -116,7 +116,7 @@ export class AuthorizationserviceService {
 
       if (dto.modifiers && findModifiers.modifiers[0].length == []) {
         throw new HttpException(
-          'Current Funding service has not modifier',
+          'Current Funding service have not modifier',
           HttpStatus.NOT_FOUND,
         );
       }
@@ -161,9 +161,17 @@ export class AuthorizationserviceService {
   async findAll(authorizationId: string): Promise<AuthorizationServiceDTO[]> {
     try {
       // let modifiers = []
-      const authorizationService: any = await this.model.find({ authorizationId }).populate('serviceId').populate({
-        path: '[modifiers]'
+      const authorizationService: any = await this.model.find({ authorizationId }).populate('[modifiers]').populate('serviceId');
+      // console.log(authorizationService.serviceId.modifiers, 'modifiersssss')
+      // console.log(authorizationService.modifiers, 'modifiers')
+
+      var result = authorizationService[0].serviceId.modifiers.filter(function (o1) {
+        return authorizationService[0].modifiers.some(function (o2) {
+          console.log(o1._id, o2)
+          return o1._id === o2; // return the ones with equal id
+        });
       });
+      console.log(result)
       // const findModifiers: any = await this.modifierService.findByServiceId(authorizationService.serviceId._id);
       // for(let i = 0; i < authorizationService.length; i++){
       //   modifiers = authorizationService[i].modifiers;
@@ -278,8 +286,9 @@ export class AuthorizationserviceService {
     this.checkAuthorizationService(authService);
     const size = authService.serviceId.size;
     const completedUnits = minutes / size;
+
     authService.completed += Math.floor(completedUnits);
-    authService.available -= Math.floor(authService.total - completedUnits)
+    authService.available = Math.floor(authService.total - authService.completed)
     await authService.save();
   }
 

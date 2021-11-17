@@ -1,74 +1,50 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Model, model } from 'mongoose';
 import { MongooseUtil } from '../../util/mongoose.util';
-import { CreateModifiersDTO, ModifyDTO, UpdateModifiersDto } from './dto';
-import { ModifyModel } from './modifier.model';
+import { CreateModifiersDTO, UpdateModifiersDto } from './dto';
 import { FundingService } from '../funding.service';
 import { IModify } from './interface/modify.interface';
-import { ModifySanitizer } from './interceptor/modifier.interceptor';
+import { ServiceDTO } from '../dto';
 
 @Injectable()
 export class ModifierService {
   constructor(
     private readonly fundingService: FundingService,
-    private readonly sanitizer: ModifySanitizer,
   ) {
-    this.model = ModifyModel;
     this.mongooseUtil = new MongooseUtil();
   }
-  private model: Model<any>;
   private mongooseUtil: MongooseUtil;
 
-  async create(dto: CreateModifiersDTO): Promise<ModifyDTO[]> {
+  /** create the modifier */
+  async create(dto: CreateModifiersDTO): Promise<ServiceDTO> {
     try {
-      const credentials = [];
-      const fundingService = await this.fundingService.findService(dto.serviceId);
-      const modifiers: any = await this.model.findOne({ serviceId: fundingService._id })
-      
-      if (modifiers) {
-        dto.modifiers.map(modifier => {
-          modifiers.modifiers.push(modifier)
-        })
-        await modifiers.save()
-        return modifiers
-      }
-      const modifier = new this.model({
-        serviceId: dto.serviceId,
-        modifiers: dto.modifiers
-      })
-      await modifier.save()
-      return modifier
+      return await this.fundingService.saveModifiers(dto.serviceId, dto.modifiers);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Modifier already exists');
       throw e;
     }
   }
-  async findByServiceId(fundingServiceId: string): Promise<ModifyDTO[]> {
-    const modifiers = await this.model.findOne({ serviceId: fundingServiceId });
-    this.checkModify(modifiers?.modifiers[0]);
 
-    return modifiers
-    // return this.sanitizer.sanitizeMany(modifiers);
-  }
-
-  async findByServiceByIds(ids: string[], serviceId: string): Promise<ModifyDTO[]> {
-    const modifiers = await this.model.findOne({serviceId, 'modifiers._id': { $in: ids } });
+  /** find modifier by service id */
+  async findByServiceId(fundingServiceId: string): Promise<ServiceDTO> {
+    const modifiers = await this.fundingService.findService(fundingServiceId);
     return modifiers;
-    // const modifiers = await this.model.findOne({ serviceId: fundingServiceId });
-    // this.checkModify(modifiers?.modifiers[0]);
-
-    // return modifiers
     // return this.sanitizer.sanitizeMany(modifiers);
   }
 
-  async update(fundingServiceId: string, dto: UpdateModifiersDto): Promise<any> {
+  // async findByServiceByIds(ids: string[], serviceId: string): Promise<ModifyDTO[]> {
+  //   const modifiers = await this.model.findOne({serviceId, 'modifiers._id': { $in: ids } });
+  //   return modifiers;
+  //   // const modifiers = await this.model.findOne({ serviceId: fundingServiceId });
+  //   // this.checkModify(modifiers?.modifiers[0]);
+
+  //   // return modifiers
+  //   // return this.sanitizer.sanitizeMany(modifiers);
+  // }
+
+  /** Update the modifier */
+  async update(fundingServiceId: string, dto: UpdateModifiersDto): Promise<ServiceDTO> {
     try {
-      const credentials = [];
-      const modifier: any = await this.model.findOne({ serviceId: fundingServiceId });
-      this.checkModify(modifier);
-      modifier.modifiers = dto.modifiers;
-      await modifier.save()
-      return modifier
+      return await this.fundingService.updateModifiers(fundingServiceId, dto.modifiers);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Modifier already exists');
       throw e;

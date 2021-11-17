@@ -20,7 +20,6 @@ export class CreateModifierDto {
     @ApiProperty({ enum: TypeStatus })
     @IsEnum(TypeStatus)
     type: number;
-    serviceId?: string;
 }
 export class CreateModifiersDTO {
     @ApiProperty({type: [CreateModifierDto]})
