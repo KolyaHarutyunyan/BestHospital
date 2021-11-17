@@ -4,7 +4,7 @@ import { IAuthorizationService } from './interface';
 const AuthorizationServiceSchema = new Schema({
     authorizationId: { type: Types.ObjectId, ref: 'ClientAuthorization' },
     serviceId: { type: Types.ObjectId, ref: 'FundingService' },
-    modifiers: [{ type:  Types.ObjectId, ref: 'Modifier' }],
+    modifiers: [{ type:  Types.ObjectId, ref: 'FundingService' }],
     total: { type: Number },
     completed: { type: Number, default: 0 },
     available: { type: Number, default: 0 },

@@ -9,15 +9,15 @@ import { AuthorizationModifiersDTO, AuthorizationServiceDTO, CreateAuthorization
 export class AuthorizationserviceController {
   constructor(private readonly authorizationserviceService: AuthorizationserviceService) {}
 
-  // @Post('authorization/:authorizationId/fundingService/:fundingServiceId')
-  // @Public()
-  // @ApiOkResponse({type: AuthorizationServiceDTO})
-  // create(
-  //   @Param('authorizationId', ParseObjectIdPipe) authorizationId: string,
-  //   @Param('fundingServiceId', ParseObjectIdPipe) fundingServiceId: string,
-  //   @Body() createAuthorizationserviceDto: CreateAuthorizationServiceDTO) {
-  //   return this.authorizationserviceService.create(authorizationId, fundingServiceId, createAuthorizationserviceDto);
-  // }
+  @Post('authorization/:authorizationId/fundingService/:fundingServiceId')
+  @Public()
+  @ApiOkResponse({type: AuthorizationServiceDTO})
+  create(
+    @Param('authorizationId', ParseObjectIdPipe) authorizationId: string,
+    @Param('fundingServiceId', ParseObjectIdPipe) fundingServiceId: string,
+    @Body() createAuthorizationserviceDto: CreateAuthorizationServiceDTO) {
+    return this.authorizationserviceService.create(authorizationId, fundingServiceId, createAuthorizationserviceDto);
+  }
   
   @Post('authorization/:authorizationId/fundingService/:fundingServiceId/checkModifiers')
   @Public()

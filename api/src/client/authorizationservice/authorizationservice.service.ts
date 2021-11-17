@@ -80,14 +80,20 @@ export class AuthorizationserviceService {
 
       if (dto.modifiers) {
         const findAuthorizationService: any = await this.model.find({ authorizationId: authorizationId, serviceId: fundingServiceId }).populate('[modifiers]');
-        if (findAuthorizationService.length != []) {
+        console.log(!findAuthorizationService.length, 'findAuthorizationService')
+        if (!findAuthorizationService.length) {
+          console.log('s', 'dtoM')
+
           findAuthorizationService.forEach(item => {
             item.modifiers.map(modifier => {
               modifiers.push(modifier._id)
             })
           })
 
+
           let dtoM = dto.modifiers;
+          console.log(dtoM, 'dtoM')
+
           for (let i = 0; i < dtoM.length; i++) {
             for (let j = 0; j < modifiers.length; j++) {
               if (dtoM[i] == modifiers[j]) {
@@ -103,10 +109,12 @@ export class AuthorizationserviceService {
           }
           modifiers = [];
         }
+        console.log('a')
       }
       const authorization = await this.authorizationModel.findOne({ _id: authorizationId });
       this.checkAuthorization(authorization);
       const findModifiers: any = await this.modifierService.findByServiceId(fundingServiceId);
+      console.log(findModifiers.modifiers[0])
       // if (!fundingService.length) {
       //   throw new HttpException(
       //     'Invalid fundingServiceId',
@@ -114,17 +122,18 @@ export class AuthorizationserviceService {
       //   );
       // }
 
-      if (dto.modifiers && findModifiers.modifiers[0].length == []) {
+      if (dto.modifiers && !findModifiers.modifiers[0]) {
         throw new HttpException(
           'Current Funding service have not modifier',
           HttpStatus.NOT_FOUND,
         );
       }
 
-      if (dto.modifiers && findModifiers.modifiers[0].length != []) {
-        findModifiers.modifiers.map(modifier => modifiers.push(modifier.id))
+      if (dto.modifiers && findModifiers.modifiers[0]) {
+        findModifiers.modifiers.map(modifier => modifiers.push(modifier._id))
         dto.modifiers.map(modifier => {
           if (!modifiers.includes(modifier)) {
+            console.log(modifiers, 'uuuuuuu', dto.modifiers);
             throw new HttpException(
               'Invalid modifier',
               HttpStatus.NOT_FOUND,
@@ -165,13 +174,8 @@ export class AuthorizationserviceService {
       // console.log(authorizationService.serviceId.modifiers, 'modifiersssss')
       // console.log(authorizationService.modifiers, 'modifiers')
 
-      var result = authorizationService[0].serviceId.modifiers.filter(function (o1) {
-        return authorizationService[0].modifiers.some(function (o2) {
-          console.log(o1._id, o2)
-          return o1._id === o2; // return the ones with equal id
-        });
-      });
-      console.log(result)
+
+      // console.log(result, 'ressss');
       // const findModifiers: any = await this.modifierService.findByServiceId(authorizationService.serviceId._id);
       // for(let i = 0; i < authorizationService.length; i++){
       //   modifiers = authorizationService[i].modifiers;
