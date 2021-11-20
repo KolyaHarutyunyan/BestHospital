@@ -9,8 +9,7 @@ export class ModifySanitizer implements ISanitize {
 
     sanitize(modifier: IModify): ModifyDTO {
         const modifierDTO: ModifyDTO = {
-            id: modifier.id,
-            serviceId: modifier.serviceId,
+            _id: modifier._id,
             credentialId: modifier.credentialId,
             chargeRate: modifier.chargeRate,
             name: modifier.name,

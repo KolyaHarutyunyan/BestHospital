@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
 import { ModifierService } from './modifier.service';
 import { ParseObjectIdPipe, Public } from '../../util';
 import { ServiceDTO } from '../dto';
-import { CreateModifiersDTO, UpdateModifiersDto } from './dto';
+import { CreateModifiersDTO, UpdateModifiersDto, UpdateModifierDto } from './dto';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('modifier')

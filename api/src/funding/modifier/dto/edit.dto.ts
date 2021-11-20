@@ -10,6 +10,7 @@ export class UpdateModifierDto {
     credentialId: string;
     @ApiProperty()
     @IsNumber()
+    @IsNotEmpty()
     chargeRate: number;
     @ApiProperty()
     @IsString()

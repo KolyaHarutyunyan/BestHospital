@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { MongooseUtil } from '../../util/mongoose.util';
-import { CreateModifiersDTO, UpdateModifiersDto } from './dto';
+import { CreateModifiersDTO, UpdateModifiersDto, UpdateModifierDto } from './dto';
 import { FundingService } from '../funding.service';
 import { IModify } from './interface/modify.interface';
 import { ServiceDTO } from '../dto';
@@ -44,7 +44,7 @@ export class ModifierService {
   /** Update the modifier */
   async update(fundingServiceId: string, dto: UpdateModifiersDto): Promise<ServiceDTO> {
     try {
-      return await this.fundingService.updateModifiers(fundingServiceId, dto.modifiers);
+      return await this.fundingService.updateModifiers(fundingServiceId, dto);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Modifier already exists');
       throw e;

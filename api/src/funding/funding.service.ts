@@ -1,19 +1,19 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
+import { AddressService } from '../address/address.service';
+import { CredentialService } from '../credential';
+import { HistoryService, serviceLog } from '../history';
+import { ServiceService } from '../service';
+import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
+import { MongooseUtil } from '../util';
+import { CreateServiceDTO, FundingDTO, ServiceDTO, UpdateServiceDto } from './dto';
 import { CreateFundingDTO } from './dto/create.dto';
 import { UpdateFundingDto } from './dto/edit.dto';
 import { FundingModel } from './funding.model';
-import { ServiceModel } from './service.model';
-import { IFunder, IService } from './interface';
-import { MongooseUtil } from '../util';
-import { AddressService } from '../address/address.service';
 import { FundingSanitizer } from './interceptor';
-import { FundingDTO, ServiceDTO, UpdateServiceDto, CreateServiceDTO } from './dto';
-import { ServiceService } from '../service';
-import { HistoryService, serviceLog } from '../history';
-import { CredentialService } from '../credential';
-import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
-import { CreateModifierDto } from './modifier/dto';
+import { IFunder, IService } from './interface';
+import { UpdateModifiersDto } from './modifier/dto';
+import { ServiceModel } from './service.model';
 
 @Injectable()
 export class FundingService {
@@ -236,6 +236,7 @@ export class FundingService {
   async saveModifiers(_id: string, modifiers: any): Promise<ServiceDTO> {
     const fundingService = await this.serviceModel.findOne({ _id });
     this.checkFundingService(fundingService);
+    console.log(fundingService, 'fundingSErviceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
     modifiers.map(modifier => {
       fundingService.modifiers.push(modifier)
     })
@@ -243,11 +244,12 @@ export class FundingService {
   }
 
   /** update modifiers */
-  async updateModifiers(_id: string, modifier: any): Promise<ServiceDTO> {
-    const fundingService = await this.serviceModel.findById(_id);
+  async updateModifiers(_id: string, dto: UpdateModifiersDto): Promise<ServiceDTO> {
+    const fundingService = await this.serviceModel.findById({_id});
     this.checkFundingService(fundingService);
-    fundingService.modifiers = modifier;
-    return await fundingService.save();
+    fundingService.modifiers = dto.modifiers;
+    await fundingService.save();
+    return fundingService;
   }
 
   /** Private methods */
