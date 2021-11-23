@@ -19,6 +19,7 @@ export class AuthorizationController {
     @Body() createAuthorizationDTO: CreateAuthorizationDTO) {
     return this.authorizationService.create(clientId, funderId, createAuthorizationDTO);
   }
+
   @Get(':client/:clientId')
   @ApiOkResponse({ type: AuthorizationDTO })
   @Public()

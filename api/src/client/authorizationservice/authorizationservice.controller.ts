@@ -36,6 +36,13 @@ export class AuthorizationserviceController {
     return this.authorizationserviceService.findAll(authorizationId);
   }
 
+  @Get('authorization/:authorizationIds')
+  @ApiOkResponse({type: AuthorizationServiceDTO})
+  @Public()
+  findAllByAuthorizations(@Param('authorizationIds') authorizationIds: Array<string>) {
+    return this.authorizationserviceService.findAllByAuthorizations(authorizationIds);
+  }
+  
   @Patch(':id')
   @Public()
   @ApiOkResponse({type: AuthorizationServiceDTO})

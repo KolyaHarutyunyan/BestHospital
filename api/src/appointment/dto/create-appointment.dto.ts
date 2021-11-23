@@ -41,7 +41,7 @@ export class CreateAppointmentDto {
     endTime: Date;
     @ApiProperty({ enum: EventStatus })
     @IsEnum(EventStatus)
-    eventStatus: string;
+    eventStatus: EventStatus;
     @ApiProperty({ enum: AppointmentStatus })
     @IsEnum(AppointmentStatus)
     status: string;

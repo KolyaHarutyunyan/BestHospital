@@ -67,7 +67,7 @@ export class AuthorizationserviceService {
   }
 
   // check if modifiers received
-  async compareModifiersByAuthService(authorizationId: string, fundingServiceId: string, dto, brokenModifiers: String[]):Promise<void> {
+  async compareModifiersByAuthService(authorizationId: string, fundingServiceId: string, dto, brokenModifiers: String[]): Promise<void> {
     const findAuthorizationService: any = await this.model.find({ authorizationId: authorizationId }).populate('serviceId');
     findAuthorizationService.map(authService => {
       dto.modifiers.map(dtoModifier => {
@@ -86,7 +86,7 @@ export class AuthorizationserviceService {
   }
 
   // check if modifiers match to the fundingService
-  async compareModifiersByFundingService(dto, findService, modifiers):Promise<ModifyDTO> {
+  async compareModifiersByFundingService(dto, findService, modifiers): Promise<ModifyDTO> {
     findService.modifiers.map(serviceModifier => {
       dto.modifiers.map(dtoModifier => {
         if (serviceModifier._id == dtoModifier) {
@@ -109,6 +109,17 @@ export class AuthorizationserviceService {
       const authorizationService = await this.model.find({ authorizationId }).populate('serviceId');
       this.checkAuthorizationService(authorizationService[0]);
       return this.sanitizer.sanitizeMany(authorizationService);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  // find all authorization services by multi authorizationId
+  async findAllByAuthorizations(authorizationIds: Array<string>): Promise<AuthorizationServiceDTO[]> {
+    try {
+      const authorizationServices = await this.model.find({ authorizationId: { $in: authorizationIds } });
+      // this.checkAuthorizationService(authorizationServices[0]);
+      return this.sanitizer.sanitizeMany(authorizationServices);
     } catch (e) {
       throw e;
     }

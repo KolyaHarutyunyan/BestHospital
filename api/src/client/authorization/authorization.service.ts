@@ -8,11 +8,13 @@ import { AuthorizationSanitizer } from './interceptor/authorization.sanitizer';
 import { ClientAuthorizationModel } from './authorization.model';
 import { ClientModel } from '../client.model';
 import { EnrollmentService } from '../enrollment';
+import { AuthorizationserviceService } from '../authorizationservice/authorizationservice.service';
 
 @Injectable()
 export class AuthorizationService {
   constructor(
     private readonly enrollmentService: EnrollmentService,
+    private readonly authService: AuthorizationserviceService,
     private readonly sanitizer: AuthorizationSanitizer,
   ) {
     this.model = ClientAuthorizationModel;
