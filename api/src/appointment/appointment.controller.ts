@@ -43,14 +43,14 @@ export class AppointmentController {
     return this.appointmentService.findAll(filter);
   }
 
-  @Get(':clientId')
+  @Get(':clientId/client')
   @Public()
   @ApiOkResponse({ type: AppointmentDto })
   findClients(@Param('clientId', ParseObjectIdPipe) clientId: string,) {
     return this.appointmentService.findClients(clientId);
   }
 
-  @Get(':staffId')
+  @Get(':staffId/staff')
   @Public()
   @ApiOkResponse({ type: AppointmentDto })
   findStaff(@Param('staffId', ParseObjectIdPipe) staffId: string,) {

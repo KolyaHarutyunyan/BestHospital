@@ -4,7 +4,7 @@ import { AppointmentStatus, AppointmentType, EventStatus } from "../appointment.
 
 export class UpdateAppointmentDto {
     @ApiProperty()
-    @IsOptional()
+    @IsNotEmpty()
     @IsEnum(AppointmentType)
     type: string;
     @ApiProperty()
@@ -18,11 +18,11 @@ export class UpdateAppointmentDto {
     @ApiProperty()
     @IsMongoId()
     @IsString()
-    @IsOptional()
+    @IsNotEmpty()
     staff: string;
     @ApiProperty()
     @IsMongoId()
-    @IsOptional()
+    @IsNotEmpty()
     staffPayCode: string;
     @ApiProperty()
     @IsDateString()
