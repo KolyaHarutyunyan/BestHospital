@@ -147,7 +147,7 @@ export class AppointmentService {
       this.clientService.findById(dto.client),
       this.authorizedService.findById(dto.authorizedService),
     ]);
-    if(client.id != authService.authorizationId.clientId){
+    if (client.id != authService.authorizationId.clientId) {
       throw new HttpException(
         `Client haven't authService`,
         HttpStatus.BAD_REQUEST,
@@ -383,7 +383,7 @@ export class AppointmentService {
     if (filter.status) query.status = filter.status;
     if (filter.eventStatus) query.eventStatus = filter.eventStatus;
     if (filter.type) query.type = filter.type;
-  
+
     const appointments = await this.model.find({ ...query }).populate({
       path: 'client',
       select: 'firstName lastName'
@@ -391,15 +391,13 @@ export class AppointmentService {
       path: 'staff',
       select: 'firstName lastName'
     }).sort('startTime');
-    // let groupByDays = {
-    //   day: 
-    // }
+    let data = [];
+    let groupByDays: any = {
+      time: undefined,
+      appointments: []
+    }
     this.checkAppointment(appointments[0]);
-    // groupByDays.day = appointments[0];
 
-    // appointments.map(appointment =>{
-
-    // })
     return this.sanitizer.sanitizeMany(appointments);
   }
 
@@ -448,7 +446,7 @@ export class AppointmentService {
         this.clientService.findById(dto.client ? dto.client : appointment.client),
         this.authorizedService.findById(dto.authorizedService ? dto.authorizedService : appointment.authorizedService),
       ]);
-      if(client.id != authService.authorizationId.clientId){
+      if (client.id != authService.authorizationId.clientId) {
         throw new HttpException(
           `Client haven't authService`,
           HttpStatus.BAD_REQUEST,
@@ -472,7 +470,9 @@ export class AppointmentService {
     appointment.staff = dto.staff;
     appointment.staffPayCode = dto.staffPayCode;
     appointment.type = dto.type;
-
+    if(dto.type == "DRIVE" && dto.miles){
+      appointment.miles = dto.miles;
+    }
 
     // if (dto.type) {
     //   if (dto.type == 'SERVICE' && !dto.client || !dto.authorizedService) {
