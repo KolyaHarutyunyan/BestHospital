@@ -14,6 +14,7 @@ import { AppointmentQueryDTO } from './dto/appointment.dto';
 import { AppointmentSanitizer } from './interceptor/appointment.interceptor';
 import { IAppointment } from './interface';
 import { AppointmentType } from './appointment.constants';
+import * as mongoose from 'mongoose';
 
 @Injectable()
 export class AppointmentService {
@@ -376,10 +377,10 @@ export class AppointmentService {
   }
 
   // find all appointments
-  async findAll(filter: AppointmentQueryDTO): Promise<AppointmentDto[]> {
+  async findAll(filter: AppointmentQueryDTO): Promise<any> {
     let query: any = {}
-    if (filter.client) query.client = filter.client;
-    if (filter.staff) query.staff = filter.staff;
+    if (filter.client) query.client = mongoose.Types.ObjectId(filter.client);
+    if (filter.staff) query.staff = mongoose.Types.ObjectId(filter.staff);
     if (filter.status) query.status = filter.status;
     if (filter.eventStatus) query.eventStatus = filter.eventStatus;
     if (filter.type) query.type = filter.type;
@@ -390,15 +391,20 @@ export class AppointmentService {
     }).populate({
       path: 'staff',
       select: 'firstName lastName'
-    }).sort('startTime');
-    let data = [];
-    let groupByDays: any = {
-      time: undefined,
-      appointments: []
-    }
-    this.checkAppointment(appointments[0]);
-
-    return this.sanitizer.sanitizeMany(appointments);
+    }).sort('-startTime');
+    const test = await this.model.aggregate([
+      { $match: { ...query } },
+      { $lookup: {from: 'appointments', localField: 'client', foreignField: '_id', as: 'client'} },
+      { $sort: { '_id': 1 } },
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$startTime" } },
+          data: { $push: "$$ROOT" }
+        }
+      }
+    ])
+    return test;
+    // return this.sanitizer.sanitizeMany(appointments);
   }
 
   //filter appointments by client
@@ -470,7 +476,7 @@ export class AppointmentService {
     appointment.staff = dto.staff;
     appointment.staffPayCode = dto.staffPayCode;
     appointment.type = dto.type;
-    if(dto.type == "DRIVE" && dto.miles){
+    if (dto.type == "DRIVE" && dto.miles) {
       appointment.miles = dto.miles;
     }
 

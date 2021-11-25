@@ -4,7 +4,7 @@ import { IAddress } from '../../address';
 export interface IAppointment extends Document {
   _id: string,
   type: string,
-  client: string,
+  client: any,
   authorizedService: string,
   staff: string,
   staffPayCode: string,
