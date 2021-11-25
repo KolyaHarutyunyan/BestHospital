@@ -201,6 +201,7 @@ export class AppointmentService {
       status: dto.status,
       require: dto.require,
       type: dto.type,
+      miles: dto.miles
     });
     return appointment;
   }
