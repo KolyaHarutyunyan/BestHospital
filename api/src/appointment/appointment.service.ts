@@ -385,16 +385,10 @@ export class AppointmentService {
     if (filter.eventStatus) query.eventStatus = filter.eventStatus;
     if (filter.type) query.type = filter.type;
 
-    const appointments = await this.model.find({ ...query }).populate({
-      path: 'client',
-      select: 'firstName lastName'
-    }).populate({
-      path: 'staff',
-      select: 'firstName lastName'
-    }).sort('-startTime');
-    const test = await this.model.aggregate([
+    const appointments = await this.model.aggregate([
       { $match: { ...query } },
-      { $lookup: {from: 'appointments', localField: 'client', foreignField: '_id', as: 'client'} },
+      { $lookup: { from: 'clients', localField: 'client', foreignField: '_id', as: 'client' } },
+      { $lookup: { from: 'staffs', localField: 'staff', foreignField: '_id', as: 'staff' } },
       { $sort: { '_id': 1 } },
       {
         $group: {
@@ -403,7 +397,8 @@ export class AppointmentService {
         }
       }
     ])
-    return test;
+
+    return appointments;
     // return this.sanitizer.sanitizeMany(appointments);
   }
 
