@@ -19,8 +19,6 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
     const params = useParams()
     let dispatch = useDispatch()
 
-    console.log(postModifiers,'postModifiers')
-    console.log(modifiersEdit,'modifiersEdit')
     const classes = foundingSourceModalStyle()
     let addNewMod = (newMod)=>{
         setModifiersEdit([...modifiersEdit, newMod])

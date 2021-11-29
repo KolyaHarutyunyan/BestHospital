@@ -92,8 +92,8 @@ export const AddAuthorization = ({handleClose, info}) => {
     }
 
     const list = [
-        {name: '0'},
-        {name: 1}
+        {name: '0', id:0, code: 0},
+        {name: 1, id:1, code: 1}
     ]
 
     return (
@@ -145,6 +145,7 @@ export const AddAuthorization = ({handleClose, info}) => {
                             />
                         </div>
                         <SelectInput
+                            type={'status'}
                             name={"status"}
                             label={"Status*"}
                             handleSelect={handleChange}
