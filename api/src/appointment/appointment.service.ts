@@ -423,11 +423,16 @@ export class AppointmentService {
   }
 
   // find appointment
-  async findOne(_id: string): Promise<AppointmentDto> {
+  async findOne(_id: string): Promise<any> {
     const appointment = await this.model.findById(_id).populate('client').
       populate('authorizedService').populate('staff').populate('staffPayCode');
+    const staff = [];
+    const client = [];
+    staff.push(appointment.staff);
+    client.push(appointment.client);
     this.checkAppointment(appointment)
-    return this.sanitizer.sanitize(appointment);
+    return { data: appointment, staff, client };
+    // return this.sanitizer.sanitize(appointment);
   }
 
   // update appointment
