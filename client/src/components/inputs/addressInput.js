@@ -64,6 +64,7 @@ export const AddressInput = ({handleSelectValue, info, disabled, flex, oneInput,
                     <input
                         className={errorBoolean ? classes.searchAddressError : classes.searchAddress}
                         {...getInputProps({
+
                             placeholder: placeholder,
                             disabled: disabled,
                             onBlur: (e) => {

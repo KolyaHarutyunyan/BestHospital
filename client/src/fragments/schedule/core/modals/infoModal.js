@@ -7,7 +7,7 @@ import {Link} from "react-router-dom";
 import {scheduleStyle} from "../styles";
 
 
-export const InfoModal =({type, handleOpenClose, openCloseRecur})=>{
+export const InfoModal =({info, handleOpenClose, openCloseRecur})=>{
     const classes = scheduleStyle()
     const global = modalsStyle()
 

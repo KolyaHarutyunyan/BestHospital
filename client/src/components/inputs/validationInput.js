@@ -9,7 +9,7 @@ export const ValidationInput = ({
                                     multiline, style, className, autoComplete, placeholder,
                                     typeError, Length, disabled,
                                     value, type, onChange, name,
-                                    label, validator, sendBoolean, variant, loader, styles,handleBlur
+                                    label, validator, sendBoolean, variant, loader, styles,handleBlur, size
                                 }) => {
     const classes = inputsStyle();
     const [validEmail, setValidEmail] = useState(false);
@@ -42,7 +42,12 @@ export const ValidationInput = ({
                 <TextField
                     onInput={(e) => maxLength(e)}
                     style={{...styles}}
-                    className={className ? className : classes.inputTextField}
+                    className={className ? className :
+                        size === 'small' ?
+                        classes.inputTextFieldSmall
+                            :
+                        classes.inputTextField
+                    }
                     variant={variant}
                     label={label}
                     name={name}

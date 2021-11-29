@@ -113,7 +113,7 @@ export const buttonsStyle = makeStyles(() => ({
     width:'100%',
     height: "48px",
     background: Backgrounds.blue,
-    boxShadow: "0px 0px 6px #00C8514D",
+    // boxShadow: "0px 0px 6px #00C8514D",
     borderRadius: "8px",
     padding: "0 15px",
     fontSize: "16px",

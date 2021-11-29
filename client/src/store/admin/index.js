@@ -41,7 +41,7 @@ export const adminActions = {
     createStaffService,
     getStaffService,
     deleteStaffService,
-     isClinician,
+    isClinician,
     getTimesheet,
     getTimesheetById,
     createTimesheet,
