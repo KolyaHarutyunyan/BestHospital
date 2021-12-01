@@ -28,8 +28,8 @@ export const TimesheetModal = ({handleClose, info, allPaycodes}) => {
     const globalPayCodes = useSelector(state => state.payroll.PayCodes)
 
 
-
-
+        console.log(allPaycodes,'allPaycodes')
+        console.log(payCode,'payCode')
 
 const params = useParams()
 
@@ -48,9 +48,7 @@ const params = useParams()
 
 
 
-    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
-        httpOnSuccess: state.httpOnSuccess,
-        httpOnError: state.httpOnError,
+    const {httpOnLoad} = useSelector((state) => ({
         httpOnLoad: state.httpOnLoad,
     }));
 
@@ -81,6 +79,7 @@ const params = useParams()
     let onCheck  = (e)=>{
         setChecked(e.target.checked)
     }
+    console.log(newallPaycodes,'newallPaycodesnewallPaycodesnewallPaycodes')
 
     const handleCreate = () => {
         if (inputs.description && inputs.hours && inputs.startDate && checked ? "Present" : inputs.endDate ) {
@@ -101,6 +100,7 @@ const params = useParams()
         else {
             setError(
                 !inputs.payCode ? 'payCode' :
+                !inputs.description ? 'description' :
                     !inputs.hours ? 'hours' :
                         !inputs.startDate ? 'startDate' :
                             !inputs.endDate ? 'endDate' :
@@ -108,6 +108,7 @@ const params = useParams()
             )
         }
     }
+
 
     return (
         <div className={classes.createFoundingSource}>
@@ -130,11 +131,11 @@ const params = useParams()
                         <div className={classes.displayCodeBlock}>
                             <div className={classes_v2.paycodeBox} >
                                 <p className={classes_v2.paycodeBoxTitle}>Rate:</p>
-                                <p className={classes_v2.paycodeBoxText}> {payCode?.code ? payCode.code : ' N/A'} </p>
+                                <p className={classes_v2.paycodeBoxText}> {payCode ? payCode.payCodeTypeId.code  : ' N/A'} </p>
                             </div>
                             <div className={classes_v2.paycodeBox} style={{marginBottom : 0}}>
                                 <p className={classes_v2.paycodeBoxTitle}>Type:</p>
-                                <p className={classes_v2.paycodeBoxText}>{payCode?.type ? payCode.type : 'N/A'}</p>
+                                <p className={classes_v2.paycodeBoxText}>{payCode ? payCode.payCodeTypeId.type   : 'N/A'}</p>
                             </div>
                         </div>
                         <Textarea

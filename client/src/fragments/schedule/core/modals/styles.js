@@ -135,6 +135,14 @@ export const scheduleModalsStyle = makeStyles(() => ({
         color: Colors.TextSecondary,
     },
 
+    smallInput: {
+        width: '50px',
+        height: '36px',
+        border: '1px solid #347AF0',
+        borderRadius: '4px',
+        padding: '0 5px'
+    },
+
     dateInputs: {
         display: 'flex',
         width: '100%',
@@ -160,20 +168,47 @@ export const scheduleModalsStyle = makeStyles(() => ({
         background: '#EBF2FD 0% 0% no-repeat padding-box',
         borderRadius: '8px',
         display: 'flex',
-        alignItems:'center',
-        padding:'0 16px',
-        marginBottom:'24px',
+        alignItems: 'center',
+        padding: '0 16px',
+        marginBottom: '24px',
         '& p': {
             fontSize: '14px',
             color: Colors.TextSecondary,
         },
-        '& span':{
+        '& span': {
             fontSize: '14px',
             color: Colors.TextSecondary,
-            fontWeight:'bold',
-            marginLeft:'8px',
+            fontWeight: 'bold',
+            marginLeft: '8px',
         },
     },
 
+    days: {
+        fontSize: '16px',
+        fontWeight: '600',
+        color: '#4B5C68',
+        marginLeft: '8px',
+    },
+
+    formGroup: {
+        display: 'flex',
+        flexDirection: 'row',
+        marginTop: '20px',
+        '& .MuiIconButton-label': {
+            color: '#347AF0',
+        },
+        '& .MuiTypography-body1': {
+            fontSize: '16px',
+            fontWeight: '600',
+            color: '#4B5C68',
+        },
+    },
+
+    weeks: {
+        fontSize: '16px',
+        fontWeight: '600',
+        color: '#4B5C68',
+        marginRight: '8px',
+    },
 
 }))

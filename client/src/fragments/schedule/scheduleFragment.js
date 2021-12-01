@@ -15,6 +15,7 @@ export const ScheduleFragment = ({}) => {
     const [openRecur, setOpenRecur] = useState(false)
     const [date, setDate] = useState('')
     const [modalDate, setModalDate] = useState('')
+    const [recurDate, setRecurDate] = useState('')
 
 
     const [createModalType, setCreateModalType] = useState('')
@@ -52,7 +53,17 @@ export const ScheduleFragment = ({}) => {
 
     const openCloseRecur = (date) => {
         setOpenRecur(!openRecur)
+        setRecurDate(date)
     }
+
+    const successRecur = FindSuccess('APPOINTMENT_REPEAT')
+
+    useEffect(() =>{
+        if(successRecur.length){
+            setOpenRecur(!openRecur)
+        }
+    },[successRecur])
+
 
     const handleEdit = (item) => {
         dispatch(adminActions.getAllPaycodes(item.staff._id))
@@ -163,7 +174,7 @@ export const ScheduleFragment = ({}) => {
                 openDefault={openRecur}
                 content={
                     <Recur
-                        date={date}
+                        date={recurDate}
                         openCloseRecur={openCloseRecur}
                     />
                 }

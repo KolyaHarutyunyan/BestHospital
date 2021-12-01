@@ -134,6 +134,7 @@ export const serviceSingleStyles = makeStyles(() => ({
     },
     bcbaWrapper: {
         marginTop:30,
+        width:'35%',
         padding: 16,
         boxShadow: Shadow.noteModalShadow,
         borderRadius: 8,

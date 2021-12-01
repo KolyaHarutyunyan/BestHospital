@@ -170,13 +170,14 @@ function* setAppointmentStatusSaga(action) {
 
 /** Appointment Repeat */
 function* appointmentRepeatSaga(action) {
-    // yield put(httpRequestsOnErrorsActions.removeError(action.type));
-    // yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
        yield call(appointmentService.appointmentRepeatService, action.payload.id, action.payload.body);
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
     } catch (error) {
-        // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        // yield put(httpRequestsOnErrorsActions.appendError(action.type));
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
     }
 }
 /** end */

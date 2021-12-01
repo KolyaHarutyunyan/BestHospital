@@ -31,6 +31,14 @@ export const inputsStyle = makeStyles(() => ({
     fontSize: 16,
     color: Colors.TextSecondary,
   },
+
+  days:{
+    fontSize:'16px',
+    fontWeight:'600',
+    color:'#4B5C68',
+    marginLeft:'8px',
+  },
+
   checked: {
     color :'green'
   },

@@ -29,15 +29,15 @@ export const ListView = ({
     const [type, setType] = useState('')
     const [stusType, setStusType] = useState('')
     const [item, setItem] = useState(appointmentById ? appointmentById : '')
-    const defItem = item.length === 0 ?'' : item
+    const defItem = item.length === 0 ? '' : item
 
-    useEffect(() =>{
-        if(appointments){
+    useEffect(() => {
+        if (appointments) {
             console.log()
             dispatch(appointmentActions.getAppointmentById(appointments[0] && appointments[0].data[0]._id))
         }
 
-    },[appointments])
+    }, [appointments])
 
     useEffect(() => {
         setItem(appointmentById)
@@ -71,20 +71,20 @@ export const ListView = ({
         defItem && defItem.type === 'SERVICE' ?
             [
                 {name: 'RENDERED', value: 'RENDERED'},
-                {name: 'COMPLETED', value: 'COMPLETED'},
+                // {name: 'COMPLETED', value: 'COMPLETED'},
                 {name: 'NOTRENDERED', value: 'NOTRENDERED'},
-                {name: 'PENDING', value: 'PENDING'},
+                // {name: 'PENDING', value: 'PENDING'},
                 {name: 'CANCELLED', value: 'CANCELLED'},
             ]
             :
             [
                 {name: 'COMPLETED', value: 'COMPLETED'},
-                {name: 'NOTRENDERED', value: 'NOTRENDERED'},
+                // {name: 'NOTRENDERED', value: 'NOTRENDERED'},
                 {name: 'PENDING', value: 'PENDING'},
                 {name: 'CANCELLED', value: 'CANCELLED'},
             ]
 
-
+    console.log(defItem.type,'defItem.isRepeat')
     return (
         <div>
             <Filters
@@ -132,22 +132,36 @@ export const ListView = ({
                                         }
                                     </p>
                                     <div>
-                                        <HtmlTooltip
-                                            title={<p>{'Recur Event'}</p>}
-                                            placement="top-end"
-                                        >
-                                            <button onClick={openCloseRecur}>
-                                                <img src={Images.recurrance} alt="icon"/>
-                                            </button>
-                                        </HtmlTooltip>
-                                        <HtmlTooltip
-                                            title={<p>{'Edit'}</p>}
-                                            placement="top-end"
-                                        >
-                                            <button onClick={() => handleEdit(defItem)}>
-                                                <img src={Images.edit} alt="icon"/>
-                                            </button>
-                                        </HtmlTooltip>
+                                        {defItem && defItem.isRepeat === true ?
+
+                                            <HtmlTooltip
+                                                title={<p>{'Recurring Event'}</p>}
+                                                placement="top-end"
+                                            >
+                                                <button className={classes.recurEdit} onClick={() => handleEdit(defItem)}>
+                                                   <p>Recurring Event</p>  <img src={Images.edit} alt="icon"/>
+                                                </button>
+                                            </HtmlTooltip>
+                                            :
+                                            <>
+                                                <HtmlTooltip
+                                                    title={<p>{'Recur Event'}</p>}
+                                                    placement="top-end"
+                                                >
+                                                    <button onClick={() => openCloseRecur(defItem)}>
+                                                        <img src={Images.recurrance} alt="icon"/>
+                                                    </button>
+                                                </HtmlTooltip>
+                                                <HtmlTooltip
+                                                    title={<p>{'Edit'}</p>}
+                                                    placement="top-end"
+                                                >
+                                                    <button onClick={() => handleEdit(defItem)}>
+                                                        <img src={Images.edit} alt="icon"/>
+                                                    </button>
+                                                </HtmlTooltip>
+                                            </>
+                                        }
                                     </div>
                                 </div>
                                 <p className={classes.infoDate}>
@@ -181,6 +195,8 @@ export const ListView = ({
                                 </div>
 
                                 <div className={classes.infoFooter}>
+
+
                                     <p className={classes.infoFooterTitle}>Event Status</p>
                                     <SelectInput
                                         name={"rendered"}
@@ -190,6 +206,7 @@ export const ListView = ({
                                         list={list}
                                     />
 
+                                    {defItem.type === 'SERVICE' &&
                                     <div className={classes.switch}>
                                         <div>
                                             <Link className={classes.link}>Signature.csv</Link>
@@ -200,8 +217,8 @@ export const ListView = ({
                                             <p>Require Signature</p>
                                             <Switcher/>
                                         </div>
-
                                     </div>
+                                    }
                                 </div>
                             </>}
                     </div>
