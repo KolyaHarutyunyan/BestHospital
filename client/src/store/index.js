@@ -15,6 +15,7 @@ export {mileagesActions} from './mileage'
 export {payrollActions} from './payroll'
 export {noteActions} from './notes'
 export {availabilityScheduleActions} from './availabilitySchedule'
+export { appointmentActions } from './appointment'
 
 export {httpRequestsOnSuccessActions} from './http_requests_on_success'
 export {httpRequestsOnErrorsActions} from './http_requests_on_errors'

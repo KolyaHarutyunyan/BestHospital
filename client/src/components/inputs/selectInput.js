@@ -70,7 +70,7 @@ export const SelectInput = ({errorFalse,
                                     {option}
                                 </option>
                             )) :
-                            list.length && list.map((option, j) => (
+                            list && list.length && list.map((option, j) => (
                                 <option data-key={option.code ? option.code : j} key={j}
                                         value={type === 'id' ? option.id || option._id : option.firstName || option.name}
                                 >
