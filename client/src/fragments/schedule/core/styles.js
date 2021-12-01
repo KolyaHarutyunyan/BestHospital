@@ -149,6 +149,17 @@ export const scheduleStyle = makeStyles(() => ({
         },
     },
 
+    recurEdit:{
+        display:'flex',
+        alignItems:'center',
+
+        '& p':{
+            fontSize:'14px',
+            color:Colors.ThemeBlue,
+            marginRight:'16px'
+        },
+    },
+
     infoDate: {
         fontSize: '14px',
         fontWeight: '600',
