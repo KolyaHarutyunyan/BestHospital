@@ -431,7 +431,7 @@ export class AppointmentService {
     staff.push(appointment.staff);
     client.push(appointment.client);
     this.checkAppointment(appointment)
-    return { data: appointment, staff, client };
+    return appointment;
     // return this.sanitizer.sanitize(appointment);
   }
 
