@@ -73,6 +73,7 @@ export class AuthNController {
 
   /** Reseting the password */
   @Post('resetPassword')
+  @Public()
   @ApiBody({ type: ResetPassDTO })
   @ApiHeader({ name: RESET_TOKEN })
   @ApiOkResponse({ type: AuthDTO })

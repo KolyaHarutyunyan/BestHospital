@@ -1,6 +1,6 @@
 import { model, Schema, Types } from 'mongoose';
 import * as bcrypt from 'bcryptjs';
-import { IAuth } from './interface';
+import { IAuth } from './interface/';
 import { RegistrationStatus, UserType } from './authN.constants';
 
 const authnSchema = new Schema({

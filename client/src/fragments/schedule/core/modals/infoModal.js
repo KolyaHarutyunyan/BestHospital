@@ -50,6 +50,7 @@ export const InfoModal =({info, handleOpenClose, openCloseRecur})=>{
                 </div>
 
                 <div className={classes.infoFooter}>
+
                     <p className={classes.infoFooterTitle}>Event Status</p>
                     <SelectInput
                         // language={null}

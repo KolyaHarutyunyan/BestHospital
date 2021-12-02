@@ -19,6 +19,6 @@ export class ResetPassDTO {
   confirmation: string;
 
   // Following values are set by the system
-  user: UserDTO;
+  userId: string;
   token: string;
 }

@@ -19,7 +19,6 @@ export const CreateEvent = ({handleOpenClose, date, clientList, staffList, place
     }
 
 
-    console.log(createModalDate,'createModalTypecreateModalTypecreateModalType')
     const handleCloseModal = () => {
         handleOpenClose && handleOpenClose()
     }

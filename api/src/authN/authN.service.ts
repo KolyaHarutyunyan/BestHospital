@@ -87,7 +87,7 @@ export class AuthNService {
 
   /** Complete registration */
   completeRegistration = async (resetPassDTO: ResetPassDTO): Promise<AuthDTO> => {
-    let auth = await this.model.findById(resetPassDTO.user?.id);
+    let auth = await this.model.findById(resetPassDTO.userId);
     this.canRegister(auth);
     this.confirmPassword(resetPassDTO.newPassword, resetPassDTO.confirmation);
     auth.password = resetPassDTO.newPassword;
@@ -95,7 +95,7 @@ export class AuthNService {
     const token = await this.getSigninToken(auth);
     auth.sessions.push(token);
     auth = await auth.save();
-    return this.getSigninResponse(auth, token);
+    return await this.getSigninResponse(auth, token);
   };
 
   /** Signing in the user */
@@ -108,7 +108,7 @@ export class AuthNService {
     const token = await this.getSigninToken(auth);
     auth.sessions.push(token);
     auth = await auth.save();
-    return this.getSigninResponse(auth, token);
+    return await this.getSigninResponse(auth, token);
   };
 
   /** Verify session */
@@ -132,13 +132,8 @@ export class AuthNService {
     this.confirmPassword(changePassDTO.newPassword, changePassDTO.confirmation);
     auth.password = changePassDTO.newPassword;
     const token = await this.getSigninToken(auth);
-    //clean the old token and replace it with a new one
-    const tokenIndex = auth.sessions.findIndex((element) => element === changePassDTO.token);
-    if (tokenIndex == -1) {
-      auth.sessions.push(token);
-    } else {
-      auth.sessions.splice(tokenIndex, 1, token);
-    }
+    //clean the old tokens and replace it with a new one
+    auth.sessions = [token]
     auth = await auth.save();
     return await this.getSigninResponse(auth, token);
   };
@@ -158,11 +153,13 @@ export class AuthNService {
 
   /** Resets users password */
   resetPassword = async (resetPassDTO: ResetPassDTO): Promise<AuthDTO> => {
-    let auth = await this.model.findOne({ _id: resetPassDTO.user?.id });
+    let auth = await this.model.findOne({ _id: resetPassDTO.userId });
     this.checkAuth(auth);
     auth.password = resetPassDTO.newPassword;
+    const token = await this.getSigninToken(auth);
+    auth.sessions = [token];
     auth = await auth.save();
-    return this.getSigninResponse(auth, resetPassDTO.token);
+    return await this.getSigninResponse(auth, token);
   };
 
   /** find the auth object using its id */
