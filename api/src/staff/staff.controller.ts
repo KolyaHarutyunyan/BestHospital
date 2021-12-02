@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestj
 import { ApiHeader, ApiOkResponse, ApiProperty, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { StaffService } from './staff.service';
 import { StaffDTO, CreateStaffDto, EditStaffDTO, StaffQueryDTO } from './dto';
-import { ACCESS_TOKEN } from '../authN';
+import { ACCESS_TOKEN, UserDTO } from '../authN';
 import { Public, ParseObjectIdPipe } from '../util';
 import { StaffStatus } from './staff.constants';
 import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
@@ -11,7 +11,7 @@ import { CreateTerminationDto } from '../termination/dto/create-termination.dto'
 @ApiTags('Staff Endpoints')
 @ApiHeader({ name: ACCESS_TOKEN })
 export class StaffController {
-  constructor(private readonly staffService: StaffService) { }
+  constructor(private readonly staffService: StaffService) {}
 
   /** Create a new staff */
   @Post()
@@ -60,7 +60,7 @@ export class StaffController {
   async getUsers(
     @Query('skip') skip: number,
     @Query('limit') limit: number,
-    @Query("status") status: string
+    @Query('status') status: string,
   ): Promise<StaffDTO[]> {
     return await this.staffService.getUsers(skip, limit, status);
   }
@@ -73,6 +73,13 @@ export class StaffController {
     return await this.staffService.getProfile(userId);
   }
 
+  /** Get the staff profile */
+  @Get('myProfile')
+  @ApiOkResponse({ type: StaffDTO })
+  async getMyProfile(@Body('user') user: UserDTO): Promise<StaffDTO> {
+    return await this.staffService.getProfile(user.id);
+  }
+
   /** Inactivate a staff */
   @Patch(':id/setStatus')
   @Public()
@@ -81,7 +88,7 @@ export class StaffController {
   async setStatus(
     @Param('id', ParseObjectIdPipe) staffId: string,
     @Body() dto: CreateTerminationDto,
-    @Query() status: StaffQueryDTO
+    @Query() status: StaffQueryDTO,
   ): Promise<StaffDTO> {
     console.log(status);
     const staff = await this.staffService.setStatus(staffId, status.status, dto);
@@ -101,8 +108,10 @@ export class StaffController {
   @Patch(':id/:isClinical')
   @Public()
   @ApiOkResponse({ type: StaffDTO })
-  async isClinical(@Param('id', ParseObjectIdPipe) staffId: string,
-    @Param('isClinical') isClinical: boolean): Promise<StaffDTO> {
+  async isClinical(
+    @Param('id', ParseObjectIdPipe) staffId: string,
+    @Param('isClinical') isClinical: boolean,
+  ): Promise<StaffDTO> {
     const staff = await this.staffService.isClinical(staffId, isClinical);
     return staff;
   }
@@ -112,7 +121,8 @@ export class StaffController {
   @Public()
   async addService(
     @Param('serviceId', ParseObjectIdPipe) serviceId: string,
-    @Param('id', ParseObjectIdPipe) id: string): Promise<StaffDTO> {
+    @Param('id', ParseObjectIdPipe) id: string,
+  ): Promise<StaffDTO> {
     const service = await this.staffService.addService(id, serviceId);
     return service;
   }
@@ -120,8 +130,7 @@ export class StaffController {
   @Get(':id/service')
   @ApiOkResponse({ type: StaffDTO })
   @Public()
-  async getService(
-    @Param('id', ParseObjectIdPipe) id: string): Promise<StaffDTO> {
+  async getService(@Param('id', ParseObjectIdPipe) id: string): Promise<StaffDTO> {
     const service = await this.staffService.getService(id);
     return service;
   }
@@ -131,7 +140,8 @@ export class StaffController {
   @Public()
   async deleteService(
     @Param('serviceId', ParseObjectIdPipe) serviceId: string,
-    @Param('id', ParseObjectIdPipe) id: string): Promise<string> {
+    @Param('id', ParseObjectIdPipe) id: string,
+  ): Promise<string> {
     const service = await this.staffService.deleteService(id, serviceId);
     return service;
   }
