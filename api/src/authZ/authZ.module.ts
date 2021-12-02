@@ -7,6 +7,6 @@ import { AuthZService } from './authZ.service';
   imports: [RoleModule, PermissionModule],
   controllers: [AuthZController],
   providers: [AuthZService],
-  exports: [RoleModule, AuthZService],
+  exports: [RoleModule, AuthZService, PermissionModule],
 })
 export class AuthZModule {}

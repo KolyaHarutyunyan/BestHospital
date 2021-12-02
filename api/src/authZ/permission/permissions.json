@@ -20,8 +20,8 @@
     "code": 4
   },
   {
-    "title": "OFFICE_MANAGEMENT",
-    "description": "Can create, delete and update office related information",
+    "title": "BRANCH_MANAGEMENT",
+    "description": "Can create, delete and update branch related information",
     "code": 5
   }
 ]

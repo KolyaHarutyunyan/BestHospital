@@ -6,9 +6,9 @@ export class AuthZService {
    * @returns true if user permission is matched to a permission, or false if not
    */
   hasPermission(neededPermissions: number[], userPermissions: Set<number>): boolean {
-    if (!neededPermissions || neededPermissions.length < 1) return false;
+    if (!neededPermissions || neededPermissions.length < 1 || !userPermissions) return false;
     const newSet = new Set(userPermissions);
-    //Check for super Admin
+    //Check for super Admi
     if (newSet.has(0)) {
       return true;
     }

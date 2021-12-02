@@ -30,7 +30,7 @@ export class AuthNGuard implements CanActivate {
     if (this.isPublic(context)) {
       return true;
     }
-    const request: IRequest = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest();
     const token: string = request.get(ACCESS_TOKEN);
     //Decoded token
     const decoded: IToken = await this.decodeToken(token);
@@ -65,7 +65,7 @@ export class AuthNGuard implements CanActivate {
     }
     try {
       // Verify token
-      const decoded: any = await jwt.verify(token, JWT_SECRET_SIGNIN);
+      const decoded: IToken = await jwt.verify(token, JWT_SECRET_SIGNIN);
       return decoded;
     } catch (err) {
       throw new HttpException(
