@@ -33,7 +33,7 @@ export class AuthNGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const token: string = request.get(ACCESS_TOKEN);
     //Decoded token
-    const decoded: IToken = await this.decodeToken(token);
+    const decoded: any = await this.decodeToken(token);
     //get user and auth
     const auth = await this.authNService.getSession(decoded.id, token);
     const user: UserDTO = {
@@ -65,7 +65,7 @@ export class AuthNGuard implements CanActivate {
     }
     try {
       // Verify token
-      const decoded: IToken = await jwt.verify(token, JWT_SECRET_SIGNIN);
+      const decoded: any = await jwt.verify(token, JWT_SECRET_SIGNIN);
       return decoded;
     } catch (err) {
       throw new HttpException(

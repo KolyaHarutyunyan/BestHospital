@@ -17,7 +17,7 @@ export class RegistrationGuard implements CanActivate {
     try {
       const token = request.get(REGISTRATION_TOKEN);
       this.checkToken(token);
-      const decoded: IToken = await this.decodeToken(token);
+      const decoded: any = await this.decodeToken(token);
       request.body.userId = decoded.id;
       return true;
     } catch (err) {
@@ -46,7 +46,7 @@ export class RegistrationGuard implements CanActivate {
     }
     try {
       // Verify token
-      const decoded: IToken = await jwt.verify(token, JWT_SECRET_REGISTER);
+      const decoded: any = await jwt.verify(token, JWT_SECRET_REGISTER);
       return decoded;
     } catch (err) {
       throw new HttpException(
