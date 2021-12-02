@@ -97,6 +97,7 @@ export class TimesheetService {
     const paytable: IPayTable = { totalAmount: 0, totalHours: 0, overtimes: [] };
     let overtimeRules = await this.overtimeService.findAll();
     const consecutiveMaxDays = this.getMaxDays(overtimeRules);
+    console.log('kkkk')
     const [dailyHours, weeklyHours, consecutiveDays] = await Promise.all([
       this.getDailyHours(dto.startDate),
       this.getWeeklyHours(dto.startDate),
@@ -106,17 +107,25 @@ export class TimesheetService {
     let hours = dto.hours;
     let calculatedOT: ICalculatedOT;
     while (hours > 0 && overtimeRules.length > 0) {
+      console.log('bbbb', hours)
+
       maxMultiplierOT = this.getMaxMultiplierOT(overtimeRules);
+      console.log(maxMultiplierOT, 'hhhhh')
       switch (maxMultiplierOT.type) {
         case OvertimeStatus.DAILY:
+          console.log('aaa')
           calculatedOT = this.calculateByHours(maxMultiplierOT, hours, dailyHours);
           console.log(calculatedOT, 'calculatedOT Day')
           break
         case OvertimeStatus.WEEKLY:
+          console.log('aafa')
+
           calculatedOT = this.calculateByHours(maxMultiplierOT, hours, weeklyHours);
           console.log(calculatedOT, 'calculatedOT Week')
           break
         case OvertimeStatus.CONSECUTIVE:
+          console.log('aadsda')
+
           const startDate = new Date(dto.startDate);
           calculatedOT = this.calculateByDays(maxMultiplierOT, hours, startDate, consecutiveDays);
           console.log(calculatedOT, 'calculatedOT Consecutive')
@@ -164,6 +173,11 @@ export class TimesheetService {
         $lt: new Date(new Date(date).setHours(23, 59, 59)),
       },
     });
+    if (!timesheets.length) return 0;
+
+    console.log(timesheets, 'day')
+
+  
     let totalHours = 0;
     for (let i = 0; i < timesheets.length; i++) {
       totalHours += timesheets[i].hours;
@@ -180,6 +194,8 @@ export class TimesheetService {
     const timesheets = await this.model.find({
       startDate: { $gte: lastday, $lte: firstday },
     });
+    if (!timesheets.length) return 0;
+
     let totalHours = 0;
     for (let i = 0; i < timesheets.length; i++) {
       totalHours += timesheets[i].hours;
@@ -202,7 +218,7 @@ export class TimesheetService {
       .select('startDate');
     // console.log(arr, 'arrr Timesheets');
     const uniqueDates = [];
-    if (!timesheets) return uniqueDates;
+    if (!timesheets.length) return uniqueDates;
     uniqueDates.push(new Date(timesheets[0].startDate));
     for (let j = 1; j < timesheets.length; j++) {
       let prevDate = new Date(timesheets[j - 1].startDate);
@@ -230,6 +246,7 @@ export class TimesheetService {
       remainder: hours,
       used: 0,
     };
+    console.log(response)
     if (prevTotals >= ot.threshold) {
       // we use all hours as overtime
       response.remainder = 0;
