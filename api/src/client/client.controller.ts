@@ -62,6 +62,7 @@ export class ClientController {
   /** Delete Client By Id */
   @Delete(':id')
   @Public()
+  @ApiOkResponse({ type: String })
   remove(@Param('id', ParseObjectIdPipe) id: string) {
     return this.clientService.remove(id);
   }

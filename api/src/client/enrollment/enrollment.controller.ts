@@ -27,7 +27,7 @@ export class EnrollmentController {
     return this.enrollmentService.findAll(clientId);
   }
 
-
+  // update the enrollment
   @Patch(':id/client/:clientId/funder/:funderId')
   @Public()
   update(
@@ -37,7 +37,8 @@ export class EnrollmentController {
     @Body() updateEnrollmentDto: UpdateEnrollmentDTO) {
     return this.enrollmentService.update(id, clientId, funderId, updateEnrollmentDto);
   }
-
+  
+  //delete the enrollment
   @Delete(':id')
   @Public()
   remove(@Param('id', ParseObjectIdPipe) id: string) {

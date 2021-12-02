@@ -6,6 +6,6 @@ export interface IAuthorizationService extends Document {
     serviceId: string;
     modifiers: Array<string>;
     total: number;
-    // completed: number;
-    // available: number;
+    completed: number;
+    available: number;
 }

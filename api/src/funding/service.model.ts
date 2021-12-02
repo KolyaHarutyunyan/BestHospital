@@ -1,12 +1,13 @@
 import { model, Schema, Types } from 'mongoose';
+import { TypeStatus } from './funding.constants';
 import { IService } from './interface';
-import { ModifierStatus, TypeStatus } from './funding.constants';
 
-const chargeSchema = new Schema({
+export const modifier = {
     chargeRate: { type: Number },
-    credentials: [{ type: Types.ObjectId, ref: 'Credential' }],
-    modifier: { type: String },
-});
+    credentialId: { type: Types.ObjectId, ref: 'Credential' },
+    name: { type: String },
+    type: { type: Number, enum: TypeStatus }
+}
 
 export const serviceSchema = new Schema({
     funderId: { type: Types.ObjectId, ref: 'Funder' },
@@ -16,7 +17,8 @@ export const serviceSchema = new Schema({
     cptCode: { type: String },
     size: { type: Number },
     min: { type: Number },
-    max: { type: Number }
+    max: { type: Number },
+    modifiers: [modifier]
 });
 
 export const ServiceModel = model<IService>('FundingService', serviceSchema);

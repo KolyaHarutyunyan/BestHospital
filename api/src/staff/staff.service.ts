@@ -19,7 +19,6 @@ export class StaffService {
   constructor(
     private readonly addressService: AddressService,
     private readonly globalService: ServiceService,
-
     private readonly authnService: AuthNService,
     private readonly historyService: HistoryService,
     // private readonly credentialService: CredentialService,
@@ -66,6 +65,7 @@ export class StaffService {
       throw e;
     }
   };
+
   /** add a new service */
   addService = async (_id: string, serviceId: string): Promise<StaffDTO> => {
     try {
@@ -86,6 +86,7 @@ export class StaffService {
       throw e;
     }
   };
+
   /** delete a service */
   deleteService = async (_id: string, serviceId: string): Promise<string> => {
     try {
@@ -103,6 +104,7 @@ export class StaffService {
       throw e;
     }
   };
+
   /** get service */
   getService = async (_id: string): Promise<StaffDTO> => {
     try {
@@ -115,6 +117,7 @@ export class StaffService {
       throw e;
     }
   };
+
   /** Edit a Staff */
   edit = async (id: string, dto: EditStaffDTO): Promise<StaffDTO> => {
     try {

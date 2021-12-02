@@ -1,30 +1,21 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { CommentModel } from './comment.model';
-import { MongooseUtil } from '../util';
 import { IComment } from './interface';
 import { CommentDTO, CreateCommentDTO, UpdateCommentDTO } from './dto';
-import { CommentStatus } from './comment.constants';
-import { ClientService } from '../client/client.service';
-import { FundingService } from '../funding/funding.service';
-import { StaffService } from '../staff/staff.service';
 import { CommentSanitizer } from './interceptor/comment.sanitizer';
 
 @Injectable()
 export class CommentService {
   constructor(
-    private readonly Client: ClientService,
-    private readonly Staff: StaffService,
-    private readonly Funder: FundingService,
     private readonly sanitizer: CommentSanitizer,
 
   ) {
     this.model = CommentModel;
-    this.mongooseUtil = new MongooseUtil();
   }
   private model: Model<IComment>;
-  private mongooseUtil: MongooseUtil;
 
+  // create a comment
   async create(dto: CreateCommentDTO, user: string): Promise<CommentDTO> {
     try {
       const onMod = dto.onModel;
@@ -43,6 +34,7 @@ export class CommentService {
     }
   }
 
+  // find all comments
   async findAll(onModel: string, resource: string, skip: number, limit: number): Promise<CommentDTO[]> {
     try {
       const comments = await this.model.find({ onModel, resource }).skip(skip).limit(limit).populate('user', 'firstName lastName');
@@ -53,6 +45,7 @@ export class CommentService {
     }
   }
 
+  // update the comments
   async update(_id: string, dto: UpdateCommentDTO, user: string): Promise<CommentDTO> {
     const comment = await this.model.findById({ _id, user });
     this.checkComment(comment);
@@ -62,7 +55,8 @@ export class CommentService {
     return this.sanitizer.sanitize(comment)
   }
 
-  async remove(_id: string, user: string) {
+  // remove the comments
+  async remove(_id: string, user: string): Promise<string> {
     try {
       const comment = await this.model.findByIdAndDelete({ _id, user });
       this.checkComment(comment)

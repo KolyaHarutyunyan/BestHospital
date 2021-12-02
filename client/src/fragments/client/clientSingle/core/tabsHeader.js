@@ -78,9 +78,6 @@ export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setG
         setInputs(e.target.value)
     };
 
-
-    console.log(activeTab,'AddAuthorization')
-
     return (
         <div>
             <ul className={classes.tabsWrapper}>

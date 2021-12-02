@@ -31,6 +31,14 @@ export const inputsStyle = makeStyles(() => ({
     fontSize: 16,
     color: Colors.TextSecondary,
   },
+
+  days:{
+    fontSize:'16px',
+    fontWeight:'600',
+    color:'#4B5C68',
+    marginLeft:'8px',
+  },
+
   checked: {
     color :'green'
   },
@@ -132,6 +140,30 @@ export const inputsStyle = makeStyles(() => ({
     },
     '& .MuiOutlinedInput-root':{
       height:'48px',
+      color: Colors.TextPrimary
+    },
+    '& .MuiInputLabel-outlined':{
+      marginTop:'-3px',
+      color :Colors.TextPrimary
+    },
+    '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+      transform: 'translate(14px, -2px) scale(0.75)'
+    },
+    '&:hover .MuiOutlinedInput-notchedOutline':{
+      borderColor:Colors.BackgroundBlue,
+    },
+    '& .MuiInputBase-input::placeholder':{
+      fontSize: 14,
+      color: Colors.TextLightGray
+    }
+  },
+  inputTextFieldSmall:{
+    width:'100%',
+    '& .MuiOutlinedInput-notchedOutline':{
+      borderColor:Colors.BackgroundBlue,
+    },
+    '& .MuiOutlinedInput-root':{
+      height:'36px',
       color: Colors.TextPrimary
     },
     '& .MuiInputLabel-outlined':{

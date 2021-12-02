@@ -14,6 +14,7 @@ export class JobService {
   private model: Model<IJob>;
   private mongooseUtil: MongooseUtil;
 
+  // create the job
   async create(dto: CreateJobDTO): Promise<JobDTO> {
     try {
       let job = new this.model({
@@ -28,6 +29,7 @@ export class JobService {
     }
   }
 
+  // find all jobs
   async findAll(): Promise<JobDTO[]> {
     try {
       const jobs = await this.model.find();
@@ -39,12 +41,14 @@ export class JobService {
     }
   }
 
+  // find job by id
   async findOne(_id: string): Promise<JobDTO> {
     let job = await this.model.findById({ _id })
     this.checkJob(job)
     return job;
   }
 
+  // update the job
   async update(_id: string, dto: UpdateJobDTO): Promise<JobDTO> {
     try {
       const job = await this.model.findById({ _id });
@@ -58,6 +62,7 @@ export class JobService {
     }
   }
 
+  // remove the job
   async remove(_id: string): Promise<string> {
     try {
       const job = await this.model.findByIdAndDelete({ _id });
@@ -68,6 +73,7 @@ export class JobService {
       throw e
     }
   }
+  
   /** Private methods */
   /** if the department is not valid, throws an exception */
   private checkJob(department: IJob) {

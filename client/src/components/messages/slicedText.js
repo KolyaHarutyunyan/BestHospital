@@ -8,7 +8,7 @@ export const SlicedText = ({data, size, type}) => {
     const classType = type === 'name' ? globalText.nameEllipsis :
                        type === 'address' ? globalText.addressEllipsis :
                         type === 'email' ? globalText.emailEllipsis :
-                        type === 'desc' ? globalText.desc :
+                         type === 'desc' ? globalText.desc :
                         type === 'responsive' ? globalText.responsive : ''
     return (
         <>

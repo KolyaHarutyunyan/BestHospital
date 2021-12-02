@@ -1,21 +1,20 @@
-import { Body, HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { MongooseUtil } from '../../util';
-import { AuthorizationServiceSanitizer } from './interceptor/authorizationService.interceptor';
-import { AuthorizationServiceDTO, CreateAuthorizationServiceDTO, UpdateAuthorizationserviceDTO, AuthorizationModifiersDTO } from './dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { IAuthorizationService } from './interface';
+import { ModifyDTO } from '../../funding/modifier/dto';
+import { FundingService } from '../../funding';
+import { MongooseUtil } from '../../util';
+import { ClientAuthorizationModel } from '../authorization/authorization.model';
 import { IAuthorization } from '../authorization/interface';
 import { ClientAuthorizationServiceModel } from './authorizationService.model';
-import { ClientAuthorizationModel } from '../authorization/authorization.model';
-import { FundingService } from '../../funding';
-import { ModifierService } from '../../funding/modifier/modifier.service';
+import { AuthorizationModifiersDTO, AuthorizationServiceDTO, CreateAuthorizationServiceDTO, UpdateAuthorizationserviceDTO } from './dto';
+import { AuthorizationServiceSanitizer } from './interceptor/authorizationService.interceptor';
+import { IAuthorizationService } from './interface';
 
 @Injectable()
 export class AuthorizationserviceService {
   constructor(
     private readonly sanitizer: AuthorizationServiceSanitizer,
     private readonly fundingService: FundingService,
-    private readonly modifierService: ModifierService,
 
   ) {
     this.model = ClientAuthorizationServiceModel;
@@ -26,125 +25,37 @@ export class AuthorizationserviceService {
   private authorizationModel: Model<IAuthorization>;
   private mongooseUtil: MongooseUtil;
 
-  async checkModifiers(authorizationId: string, fundingServiceId: string, dto: AuthorizationModifiersDTO): Promise<any> {
+  // check if modifiers are received
+  async checkModifiers(authorizationId: string, fundingServiceId: string, dto: AuthorizationModifiersDTO): Promise<ModifyDTO> {
     try {
       let modifiers = [];
       let brokenModifiers = [];
-
-      if (dto.modifiers) {
-        const findAuthorizationService: any = await this.model.find({ authorizationId: authorizationId, serviceId: fundingServiceId }).populate('[modifiers]');
-        if (findAuthorizationService) {
-          findAuthorizationService.forEach(item => {
-            item.modifiers.map(modifier => {
-              modifiers.push(modifier._id)
-            })
-          })
-          let dtoM = dto.modifiers;
-          for (let i = 0; i < dtoM.length; i++) {
-            for (let j = 0; j < modifiers.length; j++) {
-              if (dtoM[i] == modifiers[j]) {
-                brokenModifiers.push(dtoM[i])
-              }
-            }
-          }
-          if (brokenModifiers.length !== 0) {
-            throw new HttpException(
-              brokenModifiers,
-              HttpStatus.BAD_REQUEST,
-            );
-          }
-          return new HttpException('modifiers are free', HttpStatus.ACCEPTED)
-        }
-        throw new HttpException(
-          `authorization services not found`,
-          HttpStatus.NOT_FOUND,
-        );
-      }
-      throw new HttpException(
-        `modifiers was not found`,
-        HttpStatus.NOT_FOUND,
-      );
+      const findService = await this.fundingService.findService(fundingServiceId);
+      await this.compareModifiersByAuthService(authorizationId, fundingServiceId, dto, brokenModifiers);
+      let compareByFundingService = await this.compareModifiersByFundingService(dto, findService, modifiers);
+      return compareByFundingService
     }
     catch (e) {
       throw e
     }
   }
 
-
+  // create authorization service
   async create(authorizationId: string, fundingServiceId: string, dto: CreateAuthorizationServiceDTO): Promise<AuthorizationServiceDTO> {
     try {
       let modifiers = [];
       let brokenModifiers = [];
-
+      let compareByFundingService;
+      const findService = await this.fundingService.findService(fundingServiceId);
       if (dto.modifiers) {
-        const findAuthorizationService: any = await this.model.find({ authorizationId: authorizationId, serviceId: fundingServiceId }).populate('[modifiers]');
-        if (findAuthorizationService.length != []) {
-          findAuthorizationService.forEach(item => {
-            item.modifiers.map(modifier => {
-              modifiers.push(modifier._id)
-            })
-          })
-
-          let dtoM = dto.modifiers;
-          for (let i = 0; i < dtoM.length; i++) {
-            for (let j = 0; j < modifiers.length; j++) {
-              if (dtoM[i] == modifiers[j]) {
-                brokenModifiers.push(dtoM[i])
-              }
-            }
-          }
-          if (brokenModifiers.length !== 0) {
-            throw new HttpException(
-              `Modifier received ${brokenModifiers}`,
-              HttpStatus.NOT_FOUND,
-            );
-          }
-          modifiers = [];
-        }
+        await this.compareModifiersByAuthService(authorizationId, fundingServiceId, dto, brokenModifiers);
+        compareByFundingService = await this.compareModifiersByFundingService(dto, findService, modifiers);
       }
-      const authorization = await this.authorizationModel.findOne({ _id: authorizationId });
-      this.checkAuthorization(authorization);
-      const findModifiers: any = await this.modifierService.findByServiceId(fundingServiceId);
-      // if (!fundingService.length) {
-      //   throw new HttpException(
-      //     'Invalid fundingServiceId',
-      //     HttpStatus.NOT_FOUND,
-      //   );
-      // }
-
-      if (dto.modifiers && findModifiers.modifiers[0].length == []) {
-        throw new HttpException(
-          'Current Funding service has not modifier',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-
-      if (dto.modifiers && findModifiers.modifiers[0].length != []) {
-        findModifiers.modifiers.map(modifier => modifiers.push(modifier.id))
-        dto.modifiers.map(modifier => {
-          if (!modifiers.includes(modifier)) {
-            throw new HttpException(
-              'Invalid modifier',
-              HttpStatus.NOT_FOUND,
-            );
-          }
-        })
-      }
-
-      else {
-        throw new HttpException(
-          'Incorrect modifier',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-
       let authorizationService = new this.model({
         total: dto.total,
-        // completed: dto.completed,
-        // available: dto.available,
-        authorizationId: authorization.id,
+        authorizationId: authorizationId,
         serviceId: fundingServiceId,
-        modifiers: dto.modifiers
+        modifiers: compareByFundingService || []
       });
       await authorizationService.save();
       return this.sanitizer.sanitize(authorizationService);
@@ -155,46 +66,73 @@ export class AuthorizationserviceService {
     }
   }
 
+  // check if modifiers received
+  async compareModifiersByAuthService(authorizationId: string, fundingServiceId: string, dto, brokenModifiers: String[]): Promise<void> {
+    const findAuthorizationService: any = await this.model.find({ authorizationId: authorizationId }).populate('serviceId');
+    findAuthorizationService.map(authService => {
+      dto.modifiers.map(dtoModifier => {
+        if (authService.modifiers.some(e => e._id == dtoModifier)) {
+          brokenModifiers.push(dtoModifier);
+          brokenModifiers = [...new Set(brokenModifiers)];
+        }
+        if (brokenModifiers.length) {
+          throw new HttpException(
+            `Modifier received ${brokenModifiers}`,
+            HttpStatus.BAD_REQUEST,
+          );
+        }
+      })
+    })
+  }
+
+  // check if modifiers match to the fundingService
+  async compareModifiersByFundingService(dto, findService, modifiers): Promise<ModifyDTO> {
+    findService.modifiers.map(serviceModifier => {
+      dto.modifiers.map(dtoModifier => {
+        if (serviceModifier._id == dtoModifier) {
+          modifiers.push(serviceModifier);
+        }
+      })
+    })
+    if (dto.modifiers.length > modifiers.length) {
+      throw new HttpException(
+        `Modifiers does not belong to fundingService`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    return modifiers;
+  }
+
+  // find all authorization services
   async findAll(authorizationId: string): Promise<AuthorizationServiceDTO[]> {
     try {
-      // let modifiers = []
-      const authorizationService: any = await this.model.find({ authorizationId }).populate("[modifiers]").populate('serviceId');
-      // const findModifiers: any = await this.modifierService.findByServiceId(authorizationService.serviceId._id);
-      // for(let i = 0; i < authorizationService.length; i++){
-      //   modifiers = authorizationService[i].modifiers;
-      //   console.log(modifiers, 'modifiersmodifiersmodifiersmodifiersmodifiersmodifiers');
-      //   const findModifiers: any = await this.modifierService.findByServiceByIds(modifiers, authorizationService[i].serviceId);
-      //   console.log(findModifiers, 'findModifiersfindModifiersfindModifiersfindModifiersfindModifiersfindModifiers');
-      //   authorizationService[i].modifiers = findModifiers
-      //   modifiers = []
-      // }
-      // console.log(authorizationService);
-      // authorizationService.map(authService =>{
-      //   modifiers = authService.modifiers;
-
-      // })
-      // authorizationService.map(service => {
-      //   test.indexOf(service.serviceId._id) === -1 ? test.push(service.serviceId._id) : null
-      // })
-      // const findModifiers: any = await this.modifierService.findByServiceByIds(test);
-      // console.log(findModifiers, 'findModifiers');
-      // console.log(authorizationService, 'authorizationService');
+      const authorizationService = await this.model.find({ authorizationId }).populate('serviceId');
       this.checkAuthorizationService(authorizationService[0]);
       return this.sanitizer.sanitizeMany(authorizationService);
     } catch (e) {
       throw e;
     }
   }
-  async getClient(authServiceId: string): Promise<AuthorizationServiceDTO> {
-    const authorizationService = await this.model.findById({ _id: authServiceId }).populate("authorizationId");
-    this.checkAuthorizationService(authorizationService);
-    // console.log(authorizationService, 'authorizationService');
-    return this.sanitizer.sanitize(authorizationService);
-  }
-  async findByClientId(_id: string): Promise<any> {
-    
+
+  // find all authorization services by multi authorizationId
+  async findAllByAuthorizations(authorizationIds: Array<string>): Promise<AuthorizationServiceDTO[]> {
+    try {
+      const authorizationServices = await this.model.find({ authorizationId: { $in: authorizationIds } });
+      // this.checkAuthorizationService(authorizationServices[0]);
+      return this.sanitizer.sanitizeMany(authorizationServices);
+    } catch (e) {
+      throw e;
+    }
   }
 
+  // find authorization service by id
+  async findById(authServiceId: string): Promise<AuthorizationServiceDTO> {
+    const authorizationService = await this.model.findById({ _id: authServiceId }).populate("authorizationId");
+    this.checkAuthorizationService(authorizationService);
+    return this.sanitizer.sanitize(authorizationService);
+  }
+
+  // update authorization service
   async update(_id: string, dto: UpdateAuthorizationserviceDTO): Promise<AuthorizationServiceDTO> {
     try {
       const modifiers = [];
@@ -245,7 +183,8 @@ export class AuthorizationserviceService {
     }
   }
 
-  async remove(_id: string) {
+  // remove the authorization service
+  async remove(_id: string): Promise<String> {
     try {
       const authorizationService = await this.model.findByIdAndDelete({ _id });
       this.checkAuthorizationService(authorizationService);
@@ -255,9 +194,11 @@ export class AuthorizationserviceService {
       throw e
     }
   }
-  async checkByServiceId(serviceId: string) {
+
+  // get by funding service id
+  async getByServiceId(serviceId: string) {
     try {
-      const authorizationService = await this.model.findOne({ serviceId });
+      const authorizationService = await this.model.findOne({ serviceId }).populate("authorizationId");
       this.checkAuthorizationService(authorizationService);
       return authorizationService;
     }
@@ -265,6 +206,19 @@ export class AuthorizationserviceService {
       throw e
     }
   }
+
+  async countCompletedUnits(_id: string, minutes: number) {
+    const authService: any = await this.model.findById(_id).populate('serviceId');
+    this.checkAuthorizationService(authService);
+    const size = authService.serviceId.size;
+    const completedUnits = minutes / size;
+
+    authService.completed += Math.floor(completedUnits);
+    authService.available = Math.floor(authService.total - authService.completed)
+    await authService.save();
+  }
+
+  /** Private methods */
   /** if the contact is not found, throws an exception */
   private checkAuthorization(authorization: IAuthorization) {
     if (!authorization) {
@@ -274,6 +228,7 @@ export class AuthorizationserviceService {
       );
     }
   }
+
   private checkAuthorizationService(authorizationService: IAuthorizationService) {
     if (!authorizationService) {
       throw new HttpException(

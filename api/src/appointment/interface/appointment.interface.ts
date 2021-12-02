@@ -4,7 +4,7 @@ import { IAddress } from '../../address';
 export interface IAppointment extends Document {
   _id: string,
   type: string,
-  client: string,
+  client: any,
   authorizedService: string,
   staff: string,
   staffPayCode: string,
@@ -17,5 +17,12 @@ export interface IAppointment extends Document {
   miles: number,
   isRepeat: boolean,
   address: IAddress,
-  files: String[]
+  signature: string
+}
+export interface IFilterQuery extends Document {
+  client: string;
+  staff: string;
+  status: string;
+  eventStatus: string;
+  type: string
 }

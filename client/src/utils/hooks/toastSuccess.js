@@ -70,6 +70,7 @@ export const ToastSuccess = (success) => {
             success === 'DELETE_PLACE_BY_ID_GLOBAL' ? 'Successfully deleted Place' :
             success === 'CREATE_UPLOAD' ? 'Successfully uploaded File' :
             success === 'DELETE_UPLOADS' ? 'Successfully deleted File' :
+            success === 'APPOINTMENT_REPEAT' ? 'Appointment repeat was edited' :
 
             false
         )

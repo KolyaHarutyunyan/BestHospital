@@ -1,0 +1,26 @@
+/** Create Appointment */
+export const CREATE_APPOINTMENT = 'CREATE_APPOINTMENT';
+
+/** Edit Appointment */
+export const EDIT_APPOINTMENT = 'EDIT_APPOINTMENT';
+
+/** Get Appointments */
+export const GET_APPOINTMENT = 'GET_APPOINTMENT';
+export const GET_APPOINTMENT_SUCCESS = 'GET_APPOINTMENT_SUCCESS';
+
+export const GET_APPOINTMENT_BY_ID = 'GET_APPOINTMENT_BY_ID';
+export const GET_APPOINTMENT_BY_ID_SUCCESS = 'GET_APPOINTMENT_BY_ID_SUCCESS';
+
+/** Delete Appointment */
+export const DELETE_APPOINTMENT = 'DELETE_APPOINTMENT';
+
+/** Filter Appointment Date*/
+export const FILTER_APPOINTMENT_DATE = 'FILTER_APPOINTMENT_DATE';
+export const GET_APPOINTMENT_FILTERED = 'GET_APPOINTMENT_FILTERED';
+
+/** Appointment Status */
+export const SET_APPOINTMENT_STATUS = 'SET_APPOINTMENT_STATUS'
+export const SET_APPOINTMENT_STATUS_SUCCESS = 'SET_APPOINTMENT_STATUS_SUCCESS'
+
+/** Appointment Repeat */
+export const APPOINTMENT_REPEAT = 'APPOINTMENT_REPEAT'

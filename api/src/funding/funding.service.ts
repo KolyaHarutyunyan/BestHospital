@@ -1,26 +1,25 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
+import { AddressService } from '../address/address.service';
+import { CredentialService } from '../credential';
+import { HistoryService, serviceLog } from '../history';
+import { ServiceService } from '../service';
+import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
+import { MongooseUtil } from '../util';
+import { CreateServiceDTO, FundingDTO, ServiceDTO, UpdateServiceDto } from './dto';
 import { CreateFundingDTO } from './dto/create.dto';
 import { UpdateFundingDto } from './dto/edit.dto';
 import { FundingModel } from './funding.model';
-import { ServiceModel } from './service.model';
-import { IFunder, IService } from './interface';
-import { isValidObjectId, MongooseUtil, ParseObjectIdPipe } from '../util';
-import { AddressService } from '../address/address.service';
 import { FundingSanitizer } from './interceptor';
-import { FundingDTO, ServiceDTO, UpdateServiceDto, CreateServiceDTO } from './dto';
-import { AuthNService } from 'src/authN';
-import { ServiceService } from '../service';
-import { HistoryService, serviceLog } from '../history';
-import { CredentialService } from '../credential';
-import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
+import { IFunder, IService } from './interface';
+import { UpdateModifiersDto } from './modifier/dto';
+import { ServiceModel } from './service.model';
 
 @Injectable()
 export class FundingService {
   constructor(
     private readonly addressService: AddressService,
     private readonly service: ServiceService,
-    // private readonly commentService: CommentService,
     private readonly historyService: HistoryService,
     private readonly credentialService: CredentialService,
     private readonly sanitizer: FundingSanitizer,
@@ -83,58 +82,20 @@ export class FundingService {
 
   }
 
-  /** Create a new modifier */
-  // async createModifier(dto: CreateModifiersDTO): Promise<any> {
-  //   try {
-  //     const fundingService = await this.serviceModel.findById({ _id: dto.serviceId });
-  //     this.checkFundingService(fundingService)
-  //     dto.modifiers.map(modifier => {
-  //       modifier.serviceId = fundingService._id;
-  //     })
-  //     //checkCredential
-  //     const modifiers = await this.modifyModel.collection.insertMany(dto.modifiers);
-  //     return modifiers.ops
-  //   } catch (e) {
-  //     this.mongooseUtil.checkDuplicateKey(e, 'Modifier already exists');
-  //     throw e;
-  //   }
-  // }
-
-
-
-
-
-
-    // console.log(status)
-  // if (status == "INACTIVE" || status == "HOLD" || status == "TERMINATE") {
-  //   const [staff, count] = await Promise.all([
-  //     this.model.find({ $or: [{ status: "INACTIVE" }, { status: "HOLD" }, { status: "TERMINATE" }] }).sort({ _id: -1 }).skip(skip).limit(limit),
-  //     this.model.countDocuments({ $or: [{ status: "INACTIVE" }, { status: "HOLD" }, { status: "TERMINATE" }] }),
-  //   ]);
-  //   const sanFun = this.sanitizer.sanitizeMany(staff);
-  //   return { staff: sanFun, count };
-  // }
-
-  // const [staff, count] = await Promise.all([
-  //   (await this.model.find({ status: "ACTIVE" }).sort({ _id: 1 }).skip(skip).limit(limit)).reverse(),
-  //   this.model.countDocuments({ status: "ACTIVE" }),
-  // ]);
   /** returns all funders */
   async findAll(skip: number, limit: number, status: string): Promise<any> {
     if (status == "INACTIVE" || status == "HOLD" || status == "TERMINATE") {
       let [funders, count] = await Promise.all([
-        this.model.find({ $or: [{ status: "INACTIVE" }, { status: "HOLD"}, { status: "TERMINATE" }] }).sort({ '_id': -1 }).skip(skip).limit(limit),
+        this.model.find({ $or: [{ status: "INACTIVE" }, { status: "HOLD" }, { status: "TERMINATE" }] }).sort({ '_id': -1 }).skip(skip).limit(limit),
         this.model.countDocuments({ $or: [{ status: "INACTIVE" }, { status: "HOLD" }, { status: "TERMINATE" }] })
       ]);
       const sanFun = this.sanitizer.sanitizeMany(funders);
       return { funders: sanFun, count }
     }
-
     let [funders, count] = await Promise.all([
       (await this.model.find({ status: "ACTIVE" }).sort({ '_id': 1 }).skip(skip).limit(limit)).reverse(),
       this.model.countDocuments({ status: "ACTIVE" })
     ]);
-    console.log(funders);
     const sanFun = this.sanitizer.sanitizeMany(funders);
     return { funders: sanFun, count }
   }
@@ -181,14 +142,6 @@ export class FundingService {
     this.checkFunder(funder);
     return this.sanitizer.sanitize(funder);
   }
-
-  /** Get modifier By funding Service ID */
-  // async findmodifier(_id: string): Promise<any> {
-  //   const modifiers = await this.modifyModel.find({ serviceId: _id });
-  //   this.checkModify(modifiers[0]);
-  //   return modifiers
-  //   // return this.sanitizer.sanitize(funder);
-  // }
 
   /** Get Funder Service By Id */
   async findOneService(_id: string): Promise<any> {
@@ -252,27 +205,6 @@ export class FundingService {
     }
   }
 
-  /** Update the modifier */
-  // async updateModifier(_id: string, dto: UpdateModifierDto): Promise<any> {
-  //   try {
-  //     // const service = await this.serviceModel.findOne({ _id: serviceId });
-  //     // this.checkFundingService(service);
-  //     const modifier = await this.modifyModel.findById({ _id });
-  //     this.checkModify(modifier);
-  //     if (dto.chargeRate) modifier.chargeRate = dto.chargeRate;
-  //     if (dto.name) modifier.name = dto.name;
-  //     if (dto.type || dto.type === 0) modifier.type = dto.type;
-  //     if (dto.credentialId) {
-  //       await this.checkCredential(dto.credentialId)
-  //       modifier.credentialId = dto.credentialId
-  //     }
-  //     return await modifier.save()
-  //   } catch (e) {
-  //     this.mongooseUtil.checkDuplicateKey(e, 'Modifier already exists');
-  //     throw e;
-  //   }
-  // }
-
   /** Delete the funder */
   async remove(_id: string): Promise<FundingDTO> {
     const funder = await this.model.findByIdAndDelete({ _id });
@@ -288,7 +220,7 @@ export class FundingService {
   ): Promise<FundingDTO> => {
     const funder = await this.model.findById({ _id });
     this.checkFunder(funder);
-    if(status != "ACTIVE" && !dto.date){
+    if (status != "ACTIVE" && !dto.date) {
       throw new HttpException('If status is not active, then date is required field', HttpStatus.BAD_REQUEST);
     }
     funder.termination.date = dto.date;
@@ -300,19 +232,25 @@ export class FundingService {
     return this.sanitizer.sanitize(funder);
   };
 
-  /** Set Status of a Funder Active */
-  // setStatusActive = async (
-  //   id: string,
-  //   status: number,
-  // ): Promise<FundingDTO> => {
-  //   const funder = await this.model.findOneAndUpdate(
-  //     { _id: id },
-  //     { $set: { status: status, termination: null } },
-  //     { new: true },
-  //   );
-  //   this.checkFunder(funder);
-  //   return this.sanitizer.sanitize(funder);
-  // };
+  /** save modifiers */
+  async saveModifiers(_id: string, modifiers: any): Promise<ServiceDTO> {
+    const fundingService = await this.serviceModel.findOne({ _id });
+    this.checkFundingService(fundingService);
+    console.log(fundingService, 'fundingSErviceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
+    modifiers.map(modifier => {
+      fundingService.modifiers.push(modifier)
+    })
+    return await fundingService.save();
+  }
+
+  /** update modifiers */
+  async updateModifiers(_id: string, dto: UpdateModifiersDto): Promise<ServiceDTO> {
+    const fundingService = await this.serviceModel.findById({_id});
+    this.checkFundingService(fundingService);
+    fundingService.modifiers = dto.modifiers;
+    await fundingService.save();
+    return fundingService;
+  }
 
   /** Private methods */
   /** if the funder is not found, throws an exception */
@@ -325,7 +263,6 @@ export class FundingService {
     }
   }
 
-  /** Private methods */
   /** if the fundingService is not found, throws an exception */
   private checkFundingService(funder: IService) {
     if (!funder) {
@@ -335,5 +272,4 @@ export class FundingService {
       );
     }
   }
-
 }

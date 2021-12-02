@@ -5,8 +5,6 @@ export const historySchema = new Schema({
     resource: {
         type: Schema.Types.ObjectId,
         required: true,
-        // Instead of a hardcoded model name in `ref`, `refPath` means Mongoose
-        // will look at the `onModel` property to find the right model.
         refPath: 'onModel'
     },
     onModel: {

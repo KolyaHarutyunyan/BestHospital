@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Calendar, momentLocalizer, Views} from 'react-big-calendar'
 import defEvents from './defEvents'
 import moment from "moment";
@@ -6,20 +6,38 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import {NavigateBefore, NavigateNext} from "@material-ui/icons";
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import {scheduleStyle} from "./styles";
-import {AddButton, ButtonsTab, SelectInput, ValidationInput} from "@eachbase/components";
+import {AddButton, AddModalButton, ButtonsTab, SelectInput, ValidationInput} from "@eachbase/components";
 import {InputBase, InputLabel, NativeSelect, styled} from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
+import {useDispatch} from "react-redux";
+import {appointmentActions} from "../../../store";
+import {ErrorText} from "../../../utils";
 
-export const Filters = ({goToBack, goToNext, label, handleChangeScreenView, viewType, handleOpenClose}) =>{
-    const BootstrapInput = styled(InputBase)(({ theme }) => ({
+const filterBtn = {
+    width: 93,
+    height: 36
+}
 
-        marginRight:'24px',
+export const Filters = ({
+                            goToBack,
+                            goToNext,
+                            label,
+                            handleChangeScreenView,
+                            viewType,
+                            handleOpen,
+                            adminsList,
+                            clientList,
+                            handleSendDate,
+                        }) => {
+    const BootstrapInput = styled(InputBase)(({theme}) => ({
+
+        marginRight: '24px',
         'label + &': {
             marginTop: theme.spacing(3),
         },
         '& .MuiInputBase-input': {
             borderRadius: 4,
-            width:200,
+            width: 200,
             position: 'relative',
             backgroundColor: theme.palette.background.paper,
             border: '1px solid #ced4da',
@@ -48,21 +66,54 @@ export const Filters = ({goToBack, goToNext, label, handleChangeScreenView, view
 
     const [events, setEvents] = useState(defEvents ? defEvents : '')
     const [displayDragItemInCell, setDisplayDragItemInCell] = useState(true)
-    const [draggedEvent, setDraggedEvent] = useState('')
+    const [draggedEvent, setDraggedEvent] = useState(1)
+
+
     const [screen, setScreen] = useState('calendar')
+
+    const [filterDate, setFilterDate] = useState('')
     const classes = scheduleStyle()
-    const [age, setAge] = React.useState(10);
-    const handleChange = (event) => {
-        setAge(event.target.value);
-    };
-    const handleChangeScreen = (type) =>{
+
+
+    const [inputs, setInputs] = useState({});
+    const dispatch = useDispatch()
+
+    const handleChange = e => {
+        e.target.value === 'All' ?
+            setInputs(prevState => ({...prevState, [e.target.name]: 'All'}))
+            :
+            setInputs(prevState => ({...prevState, [e.target.name]: e.target.value}));
+
+    }
+
+    const handleFilter = () =>{
+         dispatch(appointmentActions.searchAppointmentDate(filterDate))
+    }
+
+    useEffect(() => {
+        const newFilters = {
+            staff: inputs.staff,
+            client: inputs.client,
+            type: inputs.type,
+            eventStatus: inputs.eventStatus,
+        }
+        delete newFilters[inputs.staff === 'All' ? 'staff' : '']
+        delete newFilters[inputs.client === 'All' ? 'client' : '']
+        delete newFilters[inputs.type === 'All' ? 'type' : '']
+        delete newFilters[inputs.eventStatus === 'All' ? 'eventStatus' : '']
+        handleSendDate && handleSendDate(newFilters)
+        dispatch(appointmentActions.getAppointmentFiltered(newFilters))
+    }, [inputs])
+
+
+
+    const handleChangeScreen = (type) => {
         setScreen(type)
         handleChangeScreenView && handleChangeScreenView(type)
     }
 
-
-    return(
-        <div  className={classes.selectButtonsLabel}>
+    return (
+        <div className={classes.selectButtonsLabel}>
             <div className={classes.calendarNextPrewButtons}>
                 <div className={classes.buttonsWrapper}>
                     <ButtonsTab
@@ -76,97 +127,107 @@ export const Filters = ({goToBack, goToNext, label, handleChangeScreenView, view
                         <span> {label}</span>
                     </div>
 
-                    <div className={classes.navigationButtons} >
-                        <NavigateBefore style={{ color: '#387DFF', cursor: 'pointer' }} onClick={() => goToBack()} />
-                        <NavigateNext style={{ color: '#387DFF', cursor: 'pointer' }} onClick={() => goToNext()} />
+                    <div className={classes.navigationButtons}>
+                        <NavigateBefore style={{color: '#387DFF', cursor: 'pointer'}} onClick={() => goToBack()}/>
+                        <NavigateNext style={{color: '#387DFF', cursor: 'pointer'}} onClick={() => goToNext()}/>
                     </div>
                 </div>
                 <div className={classes.searchWrapper}>
                     <ValidationInput
                         variant={"outlined"}
-                        // onChange={handleChange}
-                        // value={inputs.startDate}
+                        onChange={(ev) =>  setFilterDate(ev.target.value) }
+                        value={filterDate}
                         type={"date"}
                         label={""}
-                        name='startDate'
-                        // typeError={error === 'startDate' && ErrorText.field}
+                        size={'small'}
+                        name='filterDate'
                     />
-                    <AddButton styles={{width: 93}} text='Search' Icon={false}
-                        // handleClick={handleSubmit}
+                    <AddModalButton
+                        disabled={!filterDate.length}
+                        handleClick={handleFilter} text='Search'
+                        btnStyles={filterBtn}
                     />
-
                 </div>
             </div>
             <div className={classes.filtersWrapper}>
                 <div className={classes.filtersWrapperRow}>
-                <div>
-                    <FormControl sx={{ m: 1 }} variant="standard">
-                        <InputLabel className={classes.label} htmlFor="demo-customized-select-native">Staff Member</InputLabel>
-                        <NativeSelect
-                            id="demo-customized-select-native"
-                            value={age}
-                            onChange={handleChange}
-                            input={<BootstrapInput />}
-                        >
-                            <option aria-label="None" value="" />
-                            <option value={10}>All</option>
-                            <option value={20}>Twenty</option>
-                            <option value={30}>Thirty</option>
-                        </NativeSelect>
-                    </FormControl>
+                    <div>
+                        <FormControl sx={{m: 1}} variant="standard">
+                            <InputLabel className={classes.label} htmlFor="demo-customized-select-native">Staff
+                                Member</InputLabel>
+                            <NativeSelect
+                                id="demo-customized-select-native"
+                                value={inputs.staff}
+                                name={'staff'}
+                                onChange={handleChange}
+                                input={<BootstrapInput/>}
+                            >
+                                <option value="All">All</option>
+                                {adminsList && adminsList.staff && adminsList.staff.map((i, j) => (
+                                    <option key={j} value={i.id}>{`${i.firstName} ${i.lastName}`}</option>
+                                ))}
+                            </NativeSelect>
+                        </FormControl>
+                    </div>
+                    <div>
+                        <FormControl sx={{m: 1}} variant="standard">
+                            <InputLabel className={classes.label}
+                                        htmlFor="demo-customized-select-native">Client</InputLabel>
+                            <NativeSelect
+                                id="demo-customized-select-native"
+                                value={inputs.client}
+                                name={'client'}
+                                onChange={handleChange}
+                                input={<BootstrapInput/>}
+                            >
+                                <option value="All">All</option>
+                                {clientList && clientList.clients && clientList.clients.map((i, j) => (
+                                    <option key={j} value={i.id}>{`${i.firstName} ${i.lastName}`}</option>
+                                ))}
+                            </NativeSelect>
+                        </FormControl>
+                    </div>
+                    <div>
+                        <FormControl sx={{m: 1}} variant="standard">
+                            <InputLabel className={classes.label} htmlFor="demo-customized-select-native">Event
+                                Type</InputLabel>
+                            <NativeSelect
+                                id="demo-customized-select-native"
+                                name={'type'}
+                                value={inputs.type}
+                                onChange={handleChange}
+                                input={<BootstrapInput/>}
+                            >
+                                <option value="All">All</option>
+                                <option value={'DRIVE'}>Drive</option>
+                                <option value={'PAID'}>Paid</option>
+                                <option value={'BREAK'}>Break</option>
+                                <option value={'SERVICE'}>Service</option>
+                            </NativeSelect>
+                        </FormControl>
+                    </div>
+                    <div>
+                        <FormControl sx={{m: 1}} variant="standard">
+                            <InputLabel className={classes.label} htmlFor="demo-customized-select-native">Event
+                                Status</InputLabel>
+                            <NativeSelect
+                                id="demo-customized-select-native"
+                                name={'eventStatus'}
+                                value={inputs.eventStatus}
+                                onChange={handleChange}
+                                input={<BootstrapInput/>}
+                            >
+                                <option value="All">All</option>
+                                <option value={'RENDERED'}>Rendered</option>
+                                <option value={'COMPLETED'}>Completed</option>
+                                <option value={'NOTRENDERED'}>Not Rendered</option>
+                                <option value={'PENDING'}>Pending</option>
+                                <option value={'CANCELLED'}>Cancelled</option>
+                            </NativeSelect>
+                        </FormControl>
+                    </div>
                 </div>
-                <div>
-                    <FormControl sx={{ m: 1 }} variant="standard">
-                        <InputLabel className={classes.label} htmlFor="demo-customized-select-native">Client</InputLabel>
-                        <NativeSelect
-                            id="demo-customized-select-native"
-                            value={age}
-                            onChange={handleChange}
-                            input={<BootstrapInput />}
-                        >
-                            <option aria-label="None" value="" />
-                            <option value={10}>Ten</option>
-                            <option value={20}>Twenty</option>
-                            <option value={30}>Thirty</option>
-                        </NativeSelect>
-                    </FormControl>
-                </div>
-                <div>
-                    <FormControl sx={{ m: 1 }} variant="standard">
-                        <InputLabel className={classes.label} htmlFor="demo-customized-select-native">Event Type</InputLabel>
-                        <NativeSelect
-                            id="demo-customized-select-native"
-                            value={age}
-                            onChange={handleChange}
-                            input={<BootstrapInput />}
-                        >
-                            <option aria-label="None" value="" />
-                            <option value={10}>Ten</option>
-                            <option value={20}>Twenty</option>
-                            <option value={30}>Thirty</option>
-                        </NativeSelect>
-                    </FormControl>
-                </div>
-                <div>
-                    <FormControl sx={{ m: 1 }} variant="standard">
-                        <InputLabel className={classes.label} htmlFor="demo-customized-select-native">Event Status</InputLabel>
-                        <NativeSelect
-                            id="demo-customized-select-native"
-                            value={age}
-                            onChange={handleChange}
-                            input={<BootstrapInput />}
-                        >
-                            <option aria-label="None" value="" />
-                            <option value={10}>Ten</option>
-                            <option value={20}>Twenty</option>
-                            <option value={30}>Thirty</option>
-                        </NativeSelect>
-                    </FormControl>
-                </div>
-
-
-            </div>
-                <div onClick={handleOpenClose} className={classes.addEvent}>
+                <div onClick={handleOpen} className={classes.addEvent}>
                     <div>+</div>
                     <p>Add Event</p>
                 </div>

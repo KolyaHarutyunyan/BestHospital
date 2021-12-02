@@ -47,6 +47,7 @@ export class ContactService {
       throw e;
     }
   };
+
   /** returns all contact */
   async findAllContacts(clientId: string): Promise<ContactDTO[]> {
     try {
@@ -57,6 +58,7 @@ export class ContactService {
       throw e;
     }
   }
+
   /** Get Contact By Id */
   async findContact(_id: string): Promise<ContactDTO> {
     const contact = await this.model.findOne({ _id });
@@ -89,7 +91,8 @@ export class ContactService {
     this.checkContact(contact);
     return contact._id;
   }
-
+  
+  /** Private methods */
   /** if the contact is not found, throws an exception */
   private checkContact(contact: IContact) {
     if (!contact) {

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Calendar, momentLocalizer, Views} from 'react-big-calendar'
 import defEvents from './defEvents'
 import moment from "moment";
@@ -11,19 +11,35 @@ import {InputBase, InputLabel, NativeSelect, styled} from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import {Filters} from "./filters";
 import {InfoModal} from "./modals";
+import {useDispatch} from "react-redux";
+import {appointmentActions} from "../../../store";
+import {getAppointmentById} from "../../../store/appointment/appointment.action";
 
 const DragAndDropCalendar = withDragAndDrop(Calendar)
 
-export const Selectable =({handleChangeScreenView, handleOpenClose, openCloseRecur}) => {
-    const BootstrapInput = styled(InputBase)(({ theme }) => ({
+export const Selectable = ({
+                               handleChangeScreenView,
+                               handleOpenClose,
+                               openCloseRecur,
+                               appointments,
+                               adminsList,
+                               clientList,
+                               appointmentById,
+                               handleOpen,
 
-        marginRight:'24px',
+
+                               handleSendDate
+                           }) => {
+    const dispatch = useDispatch()
+    const BootstrapInput = styled(InputBase)(({theme}) => ({
+
+        marginRight: '24px',
         'label + &': {
             marginTop: theme.spacing(3),
         },
         '& .MuiInputBase-input': {
             borderRadius: 4,
-            width:200,
+            width: 200,
             position: 'relative',
             backgroundColor: theme.palette.background.paper,
             border: '1px solid #ced4da',
@@ -50,47 +66,36 @@ export const Selectable =({handleChangeScreenView, handleOpenClose, openCloseRec
         },
     }));
 
-    const [events, setEvents] = useState(defEvents ? defEvents : '')
-    const [displayDragItemInCell, setDisplayDragItemInCell] = useState(true)
-    const [draggedEvent, setDraggedEvent] = useState('')
-    const [screen, setScreen] = useState('calendar')
-    const [age, setAge] = React.useState(10);
+    // const [events, setEvents] = useState(defEvents ? defEvents : '')
+    // const [displayDragItemInCell, setDisplayDragItemInCell] = useState(true)
+    // const [draggedEvent, setDraggedEvent] = useState('')
+    // const [screen, setScreen] = useState('calendar')
+    // const [age, setAge] = React.useState(10);
+
     const [open, setOpen] = useState(false)
     const [info, setInfo] = useState('')
+    const events = appointments.map((i) => ({
+        id: i._id,
+        title:
+            i.type === 'DRIVE' ? 'Drive Time' :
+                i.type === 'SERVICE' ? 'Service Appointment' :
+                    i.type === 'BREAK' ? 'Break' :
+                        i.type === 'PAID' ? 'Paid Time Off' : '',
+        start: new Date(i.startDate),
+        end: new Date(i.endTime),
+    }));
 
-    const handleOpenCloseModal =(date) =>{
+
+
+    const handleOpenCloseModal = (date) => {
         setOpen(!open)
         setInfo(date)
+        if (date) {
+            dispatch(appointmentActions.getAppointmentById(date.id))
+        }
     }
-    // const handleChange = (event) => {
-    //     setAge(event.target.value);
-    // };
-    //
-    // const  handleDragStart = event => {
-    //     setDraggedEvent(event)
-    //
-    //     // this.setState({ draggedEvent: event })
-    // }
-    //
-    // const  dragFromOutsideItem = () => {
-    //     return draggedEvent
-    // }
-    //
-    // const onDropFromOutside = ({ start, end, allDay }) => {
-    //
-    //     const event = {
-    //         id: draggedEvent.id,
-    //         title: draggedEvent.title,
-    //         start,
-    //         end,
-    //         allDay: allDay,
-    //     }
-    //     setDraggedEvent(null)
-    //     // this.setState({ draggedEvent: null })
-    //     // this.moveEvent({ event, start, end })
-    // }
 
-    const moveEvent = ({ event, start, end, isAllDay: droppedOnAllDaySlot }) => {
+    const moveEvent = ({event, start, end, isAllDay: droppedOnAllDaySlot}) => {
         let allDay = event.allDay
         if (!event.allDay && droppedOnAllDaySlot) {
             allDay = true
@@ -98,144 +103,129 @@ export const Selectable =({handleChangeScreenView, handleOpenClose, openCloseRec
             allDay = false
         }
         const nextEvents = events.map(existingEvent => {
-            return existingEvent.id == event.id
-                ? { ...existingEvent, start, end, allDay }
+            return existingEvent.id === event.id
+                ? {...existingEvent, start, end, allDay}
                 : existingEvent
         })
-        setEvents(nextEvents)
 
-        // alert(`${event.title} was dropped onto ${updatedEvent.start}`)
-    }
+        const filteredDate = appointments.filter((i) => (
+            i._id === event.id
+        ))
 
-    // const resizeEvent = ({ event, start, end }) => {
-    //     const nextEvents = events.map(existingEvent => {
-    //         return existingEvent.id == event.id
-    //             ? { ...existingEvent, start, end }
-    //             : existingEvent
-    //     })
-    //    setEvents(nextEvents)
-    // }
-    //
-    // const  newEvent = (_event) => {
-    //     // let idList = this.state.events.map(a => a.id)
-    //     // let newId = Math.max(...idList) + 1
-    //     // let hour = {
-    //     //   id: newId,
-    //     //   title: 'New Event',
-    //     //   allDay: event.slots.length == 1,
-    //     //   start: event.start,
-    //     //   end: event.end,
-    //     // }
-    //     // this.setState({
-    //     //   events: this.state.events.concat([hour]),
-    //     // })
-    // }
-
-
-    const  handleSelect = ({ start, end }) => {
         const date = {
-            startDate:moment(start).format('YYYY-MM-DD'),
-            startTime:moment(start).format('hh:mm'),
-            endTime:moment(end).format('hh:mm'),
+            ...filteredDate[0]
         }
-        handleOpenClose(date)
-        // const title = window.prompt('New Event name')
-        // if (title)
-        //     setEvents(
-        //          [
-        //     ...events,
-        //     {
-        //         start,
-        //         end,
-        //         title,
-        //     },
-        // ])
+
+        const editDate = {
+            ...date,
+        }
+        editDate['startDate'] = start
+        editDate['startTime'] = start
+        editDate['endTime'] = end
+        editDate['staff'] = date.staff[0]._id ? date.staff[0]._id : date.staff
+        editDate['client'] = null
+        date.miles ? editDate['miles'] = date.miles ? +date.miles : '' : ''
+
+        dispatch(appointmentActions.editAppointment(editDate, filteredDate[0]._id))
     }
 
-        const localizer = momentLocalizer(moment);
+    const handleSelect = ({start, end}) => {
+        const date = {
+            startDate: new Date(start),
+            startTime: new Date(start),
+            endTime: new Date(end),
+        }
+        handleOpenClose('', date,)
+    }
 
-        const classes = scheduleStyle()
+    const localizer = momentLocalizer(moment);
 
-        const CustomToolbar = (toolbar) => {
-            const goToBack = () => {
-                if (toolbar.view === 'day') {
-                    toolbar.date.setDate(toolbar.date.getDate() - 1);
-                    toolbar.onNavigate('next');
-                } else if (toolbar.view === 'week') {
-                    toolbar.date.setDate(toolbar.date.getDate() - 7);
-                    toolbar.onNavigate('next');
-                } else {
-                    toolbar.date.setMonth(toolbar.date.getMonth() - 1);
-                    toolbar.onNavigate('next');
-                }
-            };
+    const classes = scheduleStyle()
 
-            const goToNext = () => {
-                if (toolbar.view === 'day') {
-                    toolbar.date.setDate(toolbar.date.getDate() + 1);
-                    toolbar.onNavigate('next');
-                } else if (toolbar.view === 'week') {
-                    toolbar.date.setDate(toolbar.date.getDate() + 7);
-                    toolbar.onNavigate('next');
-                } else {
-                    toolbar.date.setMonth(toolbar.date.getMonth() + 1);
-                    toolbar.onNavigate('next');
-                }
-            };
-
-
-            return (
-                <Filters
-                    handleOpenClose={handleOpenClose}
-                    handleChangeScreenView={handleChangeScreenView}
-                    goToBack={goToBack}
-                    goToNext={goToNext}
-                    viewType={'calendar'}
-                    label={toolbar.label}
-                />
-            );
+    const CustomToolbar = (toolbar) => {
+        const goToBack = () => {
+            if (toolbar.view === 'day') {
+                toolbar.date.setDate(toolbar.date.getDate() - 1);
+                toolbar.onNavigate('next');
+            } else if (toolbar.view === 'week') {
+                toolbar.date.setDate(toolbar.date.getDate() - 7);
+                toolbar.onNavigate('next');
+            } else {
+                toolbar.date.setMonth(toolbar.date.getMonth() - 1);
+                toolbar.onNavigate('next');
+            }
         };
 
-
-
+        const goToNext = () => {
+            if (toolbar.view === 'day') {
+                toolbar.date.setDate(toolbar.date.getDate() + 1);
+                toolbar.onNavigate('next');
+            } else if (toolbar.view === 'week') {
+                toolbar.date.setDate(toolbar.date.getDate() + 7);
+                toolbar.onNavigate('next');
+            } else {
+                toolbar.date.setMonth(toolbar.date.getMonth() + 1);
+                toolbar.onNavigate('next');
+            }
+        };
 
         return (
-            <>
-                <DragAndDropCalendar
-                    components={{
-                        toolbar: CustomToolbar,
-                    }}
+            <Filters
+                handleSendDate={handleSendDate}
+                handleOpen={handleOpen}
+                adminsList={adminsList}
+                clientList={clientList}
+                handleOpenClose={handleOpenClose}
+                handleChangeScreenView={handleChangeScreenView}
+                goToBack={goToBack}
+                goToNext={goToNext}
+                viewType={'calendar'}
+                label={toolbar.label}
+            />
+        );
+    };
 
-                    // onShowMore={(events, date) => console.log(date)}
-                    // timeslots={4}
+    return (
+        <>
+            <DragAndDropCalendar
+                components={{
+                    toolbar: CustomToolbar,
+                }}
 
-                    formats={{
-                        // timeGutterFormat: 'HH:mm',
-                        // dateFormat: `dd ${'asdasdas'}`,
-                        // dayFormat: `dd`,
-                    }}
-                    onEventDrop={moveEvent}
-                    resizable
-                    view={'week'}
-                    selectable
-                    localizer={localizer}
-                    events={events}
-                    defaultView={Views.WEEK}
-                    // scrollToTime={new Date(1970, 1, 1, 6)}
-                    defaultDate={new Date()}
-                    onSelectEvent={handleOpenCloseModal}
-                    onSelectSlot={handleSelect}
-                />
+                // onShowMore={(events, date) => console.log(date)}
+                // timeslots={4}
+
+                formats={{
+                    // timeGutterFormat: 'HH:mm',
+                    // dateFormat: `dd ${'asdasdas'}`,
+                    // dayFormat: `dd`,
+                }}
+                onEventDrop={moveEvent}
+                resizable
+                view={'week'}
+                selectable
+                localizer={localizer}
+                events={events}
+                defaultView={Views.WEEK}
+                // scrollToTime={new Date(1970, 1, 1, 6)}
+                defaultDate={new Date()}
+                onSelectEvent={(i) => handleOpenCloseModal(i)}
+                onSelectSlot={handleSelect}
+            />
             {/*}*/}
 
-                <SimpleModal
-                    handleOpenClose = {handleOpenCloseModal}
-                    openDefault={open}
-                    content={
-                        <InfoModal openCloseRecur={openCloseRecur} type={info}  handleOpenClose = {handleOpenCloseModal}/>
-                    }
-                />
-            </>
-        )
+            <SimpleModal
+                handleOpenClose={handleOpenCloseModal}
+                openDefault={open}
+                content={
+                    <InfoModal
+                        openCloseRecur={openCloseRecur}
+                        info={info}
+                        handleOpenClose={handleOpenCloseModal}
+                    />
+                }
+            />
+        </>
+    )
 }
 

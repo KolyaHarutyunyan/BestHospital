@@ -5,14 +5,10 @@ import { CreatePayCodeTypeDTO, UpdatePayCodeTypeDTO, PayCodeTypeDTO } from './dt
 import { IPayCodeType } from './interface';
 import { PayCodeTypeModel } from './payCodeModel';
 import { PayCodeTypeSanitizer } from './interceptor/paycodetype.interceptor';
-import { PayCodeDTO } from 'src/employment/paycode/dto';
-
 
 @Injectable()
 export class PaycodetypeService {
   constructor(
-    // private readonly employmentService: EmploymentService,
-    // private readonly PayCodeTypeService: PayCodeTypeService,
     private readonly sanitizer: PayCodeTypeSanitizer,
 
   ) {
@@ -22,6 +18,7 @@ export class PaycodetypeService {
   private model: Model<IPayCodeType>;
   private mongooseUtil: MongooseUtil;
 
+  // create the payCodeType
   async create(dto: CreatePayCodeTypeDTO): Promise<PayCodeTypeDTO> {
     const payCodeType = new this.model({
       name: dto.name,
@@ -34,6 +31,7 @@ export class PaycodetypeService {
     return this.sanitizer.sanitize(payCodeType)
   }
 
+  // find all payCodeTypes
   async findAll(): Promise<PayCodeTypeDTO[]> {
     try {
       const payCodeType = await this.model.find();
@@ -45,12 +43,14 @@ export class PaycodetypeService {
     }
   }
 
+  // find payCodeType by id
   async findOne(_id: string): Promise<PayCodeTypeDTO> {
     let payCodeType = await this.model.findById({ _id })
     this.checkPayCodeType(payCodeType)
     return this.sanitizer.sanitize(payCodeType)
   }
 
+  // update the payCodeType
   async update(_id: string, dto: UpdatePayCodeTypeDTO): Promise<PayCodeTypeDTO> {
     try {
       const payCodeType = await this.model.findById({ _id });
@@ -69,7 +69,8 @@ export class PaycodetypeService {
     }
   }
 
- async remove(_id: string): Promise<string> {
+  // remove the payCodeType
+  async remove(_id: string): Promise<string> {
     const payCodeType = await this.model.findById({ _id });
     this.checkPayCodeType(payCodeType);
     await payCodeType.remove()

@@ -21,6 +21,7 @@ export class EmploymentService {
   private model: Model<IEmployment>;
   private mongooseUtil: MongooseUtil;
 
+  // create the employment
   async create(dto: CreateEmploymentDto): Promise<EmploymentDto> {
     try {
       const staff = await this.staffService.findById(dto.staffId);
@@ -73,6 +74,7 @@ export class EmploymentService {
     }
   }
 
+  // find all employments
   async findAll(staffId: string): Promise<EmploymentDto[]> {
     const employments = await this.model
       .find({ staffId })
@@ -81,6 +83,8 @@ export class EmploymentService {
     this.checkEmployment(employments[0]);
     return this.sanitizer.sanitizeMany(employments);
   }
+  
+  // find employments by staff id
   async findAllEmploymentsByStaffId(staffId: string): Promise<String[]> {
     const ids = [];
     const employments = await this.model.find({ staffId });
@@ -93,6 +97,7 @@ export class EmploymentService {
     // return this.sanitizer.sanitizeMany(employments);
   }
 
+  // find employment by id
   async findOne(_id: string): Promise<EmploymentDto> {
     let employment = await this.model
       .findById({ _id })
@@ -101,11 +106,12 @@ export class EmploymentService {
     this.checkEmployment(employment);
     return this.sanitizer.sanitize(employment);
   }
+
+  // update the employment
   async update(_id: string, dto: UpdateEmploymentDto): Promise<EmploymentDto> {
     let employment = await this.model.findById({ _id });
     this.checkEmployment(employment);
     if (dto.title) employment.title = dto.title;
-
     if (dto.supervisor == employment._id) {
       throw new HttpException(
         'staff@ inq@ ir manager@ chi karox linel chnayac hayastanum hnaravor e',
@@ -114,7 +120,6 @@ export class EmploymentService {
     }
     if (dto.supervisor) {
       const staff = await this.staffService.findById(dto.supervisor);
-
       if (!staff) {
         throw new HttpException('supervisor is not found', HttpStatus.NOT_FOUND);
       }
@@ -145,7 +150,6 @@ export class EmploymentService {
       employment.endDate = dto.endDate;
     }
     if (dto.startDate) employment.startDate = dto.startDate;
-
     employment = await employment.save();
     await employment
       .populate('departmentId', 'name')
@@ -153,9 +157,12 @@ export class EmploymentService {
       .execPopulate();
     return this.sanitizer.sanitize(employment);
   }
+
+  // remove the employment
   remove(id: number) {
     return `This action removes a #${id} employment`;
   }
+
   /** Private methods */
   /** if the employment is not valid, throws an exception */
   private checkEmployment(employment: IEmployment) {

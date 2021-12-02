@@ -9,7 +9,6 @@ export class AuthorizationSanitizer implements ISanitize {
     constructor(
           private readonly addressSanitizer: AddressSanitizer
     ) { }
-
     sanitize(authorization: IAuthorization): AuthorizationDTO {
         const authorizationDTO: AuthorizationDTO = {
             id: authorization.id,

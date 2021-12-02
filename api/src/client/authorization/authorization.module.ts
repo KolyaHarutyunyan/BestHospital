@@ -5,9 +5,10 @@ import { AuthorizationSanitizer } from './interceptor/authorization.sanitizer';
 import { FundingModule } from '../../funding';
 import { AddressModule } from '../../address';
 import { EnrollmentModule } from '../enrollment';
+import { AuthorizationserviceModule } from '../authorizationservice/authorizationservice.module';
 
 @Module({
-  imports: [FundingModule, AddressModule, EnrollmentModule],
+  imports: [FundingModule, AddressModule, EnrollmentModule, AuthorizationserviceModule],
   controllers: [AuthorizationController],
   providers: [AuthorizationService, AuthorizationSanitizer]
 })

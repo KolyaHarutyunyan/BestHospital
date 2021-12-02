@@ -22,9 +22,7 @@ export class EnrollmentSanitizer implements ISanitize {
         return enrollmentDTO;
     }
 
-
     sanitizeMany(enrollments: IEnrollment[]): EnrollmentDTO[] {
-        console.log(enrollments, 'hii');
         const enrollmentDTOs: EnrollmentDTO[] = [];
         for (let i = 0; i < enrollments.length; i++) {
             enrollmentDTOs.push(this.sanitize(enrollments[i]));

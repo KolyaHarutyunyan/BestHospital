@@ -38,7 +38,6 @@ export const scheduleStyle = makeStyles(() => ({
 
     searchWrapper: {
         display: 'flex',
-        alignItems: 'center',
         '& button': {
             marginLeft: '24px',
         },
@@ -71,13 +70,14 @@ export const scheduleStyle = makeStyles(() => ({
         height: '100%',
         maxHeight: '550px',
         overflow: 'auto',
+        marginTop:'13px'
     },
 
     cardWrapper: {
         background: '#FFFFFF 0% 0% no-repeat padding-box',
         boxShadow: '0px 0px 6px #347AF04D',
         borderRadius: '8px',
-        margin: '16px 16px 8px 5px ',
+        margin: '3px 16px 16px 5px ',
         padding: '16px',
     },
 
@@ -97,12 +97,16 @@ export const scheduleStyle = makeStyles(() => ({
         alignItems: 'center',
         marginBottom: '8px',
         boxShadow: '0px 0px 6px #347AF04D',
+
         '& :hover': {
             background: '#EBF2FD80 0% 0% no-repeat padding-box',
             height: '100%',
             borderRadius: '8px',
             display: 'flex',
             alignItems: 'center',
+            '& p':{
+                background:'none'
+            },
         },
     },
 
@@ -113,13 +117,14 @@ export const scheduleStyle = makeStyles(() => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
+        lineHeight:'25px',
     },
 
     infoWrapper: {
         background: '#FFFFFF 0% 0% no-repeat padding-box',
         boxShadow: '0px 0px 6px #347AF04D',
         borderRadius: '8px',
-        width: '100%',
+        width: '75%',
         padding: '32px',
         marginTop: '16px',
     },
@@ -144,13 +149,21 @@ export const scheduleStyle = makeStyles(() => ({
         },
     },
 
+    recurEdit:{
+        display:'flex',
+        alignItems:'center',
+
+        '& p':{
+            fontSize:'14px',
+            color:Colors.ThemeBlue,
+            marginRight:'16px'
+        },
+    },
+
     infoDate: {
         fontSize: '14px',
         fontWeight: '600',
         color: '#4B5C68',
-        '& span': {
-            marginLeft: '16px',
-        },
     },
 
     infoItems: {
