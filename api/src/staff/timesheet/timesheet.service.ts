@@ -97,7 +97,6 @@ export class TimesheetService {
     const paytable: IPayTable = { totalAmount: 0, totalHours: 0, overtimes: [] };
     let overtimeRules = await this.overtimeService.findAll();
     const consecutiveMaxDays = this.getMaxDays(overtimeRules);
-    console.log('kkkk')
     const [dailyHours, weeklyHours, consecutiveDays] = await Promise.all([
       this.getDailyHours(dto.startDate),
       this.getWeeklyHours(dto.startDate),
@@ -107,25 +106,17 @@ export class TimesheetService {
     let hours = dto.hours;
     let calculatedOT: ICalculatedOT;
     while (hours > 0 && overtimeRules.length > 0) {
-      console.log('bbbb', hours)
-
       maxMultiplierOT = this.getMaxMultiplierOT(overtimeRules);
-      console.log(maxMultiplierOT, 'hhhhh')
       switch (maxMultiplierOT.type) {
         case OvertimeStatus.DAILY:
-          console.log('aaa')
           calculatedOT = this.calculateByHours(maxMultiplierOT, hours, dailyHours);
           console.log(calculatedOT, 'calculatedOT Day')
           break
         case OvertimeStatus.WEEKLY:
-          console.log('aafa')
-
           calculatedOT = this.calculateByHours(maxMultiplierOT, hours, weeklyHours);
           console.log(calculatedOT, 'calculatedOT Week')
           break
         case OvertimeStatus.CONSECUTIVE:
-          console.log('aadsda')
-
           const startDate = new Date(dto.startDate);
           calculatedOT = this.calculateByDays(maxMultiplierOT, hours, startDate, consecutiveDays);
           console.log(calculatedOT, 'calculatedOT Consecutive')
@@ -174,10 +165,6 @@ export class TimesheetService {
       },
     });
     if (!timesheets.length) return 0;
-
-    console.log(timesheets, 'day')
-
-  
     let totalHours = 0;
     for (let i = 0; i < timesheets.length; i++) {
       totalHours += timesheets[i].hours;
@@ -216,7 +203,6 @@ export class TimesheetService {
       })
       .sort({ startDate: -1 })
       .select('startDate');
-    // console.log(arr, 'arrr Timesheets');
     const uniqueDates = [];
     if (!timesheets.length) return uniqueDates;
     uniqueDates.push(new Date(timesheets[0].startDate));
