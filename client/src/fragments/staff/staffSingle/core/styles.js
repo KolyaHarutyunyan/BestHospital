@@ -15,11 +15,12 @@ export const serviceSingleStyles = makeStyles(() => ({
     },
     roleInformation: {
         width: '50%',
+        height:'413px',
         flex: '0 0 50%',
         marginLeft: 24,
         border: `1px solid ${Colors.TextCadetBlue}`,
         borderRadius: 8,
-        padding: 26
+        padding: 26,
     },
     cardIcon: {
         width: '36px',
@@ -62,6 +63,10 @@ export const serviceSingleStyles = makeStyles(() => ({
         margin: '25px 0 16px',
         lineHeight: '25px'
     },
+    permissionsList:{
+        height:'120px',
+        overflow:'auto',
+    },
     roleText: {
         fontSize: 14,
         color: Colors.TextMiddleGray,
@@ -79,6 +84,19 @@ export const serviceSingleStyles = makeStyles(() => ({
         color: Colors.TextMiddleGray,
         lineHeight: '21px',
         paddingLeft: 8
+    },
+
+    selectRole: {
+        height:'100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        '& p': {
+            color: '#4B5C68',
+            fontSize: '32px',
+            fontWeight: 'bold',
+            lineHeight: '43px',
+        }
     },
     // header
     tabsWrapper: {
@@ -133,8 +151,8 @@ export const serviceSingleStyles = makeStyles(() => ({
         alignItems: 'flex-start'
     },
     bcbaWrapper: {
-        marginTop:30,
-        width:'35%',
+        marginTop: 30,
+        width: '850px',
         padding: 16,
         boxShadow: Shadow.noteModalShadow,
         borderRadius: 8,
@@ -226,14 +244,14 @@ export const serviceSingleStyles = makeStyles(() => ({
 
     },
 
-    clinicalWrapper:{
+    clinicalWrapper: {
         display: 'flex',
         alignItems: "center",
-        '& p':{
+        '& p': {
             color: Colors.ThemeBlue,
             fontWeight: 'bold'
         },
-        '& div':{
+        '& div': {
             margin: '0 24px 0 8px'
         },
     },
@@ -272,27 +290,27 @@ export const serviceSingleStyles = makeStyles(() => ({
             color: Colors.TextLightGray
         }
     },
-    headerRight :{
-        display:'flex',
+    headerRight: {
+        display: 'flex',
     },
-    inputTextField:{
+    inputTextField: {
         alignItems: 'flex-end',
-        width:'100%',
-        '& .MuiOutlinedInput-notchedOutline':{
-            borderColor:Colors.BackgroundBlue,
+        width: '100%',
+        '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: Colors.BackgroundBlue,
         },
-        '& .MuiOutlinedInput-root':{
-            height:'48px'
+        '& .MuiOutlinedInput-root': {
+            height: '48px'
         },
-        '& .MuiInputLabel-outlined':{
-            marginTop:'-3px',
-            color :Colors.TextPrimary
+        '& .MuiInputLabel-outlined': {
+            marginTop: '-3px',
+            color: Colors.TextPrimary
         },
         '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
             transform: 'translate(14px, -2px) scale(0.75)'
         },
-        '&:hover .MuiOutlinedInput-notchedOutline':{
-            borderColor:Colors.BackgroundBlue,
+        '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: Colors.BackgroundBlue,
         },
     },
 

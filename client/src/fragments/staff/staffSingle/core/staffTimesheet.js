@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Loader, Notes, SimpleModal, SlicedText, TableBodyComponent} from "@eachbase/components";
 import {TableCell} from "@material-ui/core";
 import {FindLoad, Images} from "@eachbase/utils";
@@ -77,31 +77,44 @@ export const StaffTimesheet = ({info}) => {
     const allPaycodes = useSelector(state => state.admins.allPaycodes)
     const [openModal, setOpenModal] = useState(false)
 
+    const [serviceIndex, setServiceIndex] = useState(0)
 
     const classes = serviceSingleStyles()
     const [active, setActive] = useState('active')
     const [index, setIndex] = useState(0)
-
+    const [item, setItem] = useState('')
 
     const handleOpenClose = () => {
         setOpenModal(!openModal)
-    }
-    const handleOpen = (item) => {
-        dispatch(adminActions.getTimesheetById(item.id))
+        setItem('')
     }
 
+    const handleEditClose = (item) => {
+        setOpenModal(!openModal)
+        setItem(item)
+    }
+
+    const handleOpen = (item, index) => {
+        setServiceIndex(index)
+        dispatch(adminActions.getTimesheetById(item.id))
+    }
 
     const {timesheetById} = useSelector((state) => ({
         timesheetById: state.admins.timesheetById
     }));
 
+    useEffect(() => {
+        if (info.length) {
+            dispatch(adminActions.getTimesheetById(info[0].id))
+        }
+    }, [dispatch])
+
     const loader = FindLoad('GET_TIMESHEET_BY_ID')
 
     const timesheetItem = (item, index) => {
         return (
-            <TableBodyComponent key={index}
-                                handleOpenInfo={() => handleOpen(item)}
-                // handleOpenInfo={()=>setIndex(index)}
+            <TableBodyComponent active={index === serviceIndex} key={index}
+                                handleOpenInfo={() => handleOpen(item, index)}
             >
                 <TableCell>
                     <SlicedText size={30} type={'name'} data={item?.payCode?.payCodeTypeId?.name}/>
@@ -120,25 +133,30 @@ export const StaffTimesheet = ({info}) => {
     const bcbaItem = (item, index) => {
         return (
             <TableBodyComponent key={index}>
-                <TableCell><SlicedText size={30} type={'name'} data={item?.payCode?.payCodeTypeId?.type}/></TableCell>
-                <TableCell>{item?.payCode?.rate}</TableCell>
-                <TableCell>{item?.hours}</TableCell>
-                <TableCell>{item.totalAmount}</TableCell>
+                <TableCell>
+                    <SlicedText size={30} type={'name'}
+                                data={item.description ? item?.payCode?.payCodeTypeId?.type : 'aa'}
+                    />
+                </TableCell>
+                <TableCell>{`$${timesheetById?.payCode?.rate}`}</TableCell>
+                <TableCell>{item.regularHours ? item.regularHours : item?.hours}</TableCell>
+                <TableCell>{item.description ? `$${item.totalAmount}` : `$${item?.amount}`}</TableCell>
             </TableBodyComponent>
         )
     }
 
-    console.log(timesheetById,'timesheetByIdtimesheetById')
 
     return (
         <>
             <SimpleModal
                 openDefault={openModal}
                 handleOpenClose={handleOpenClose}
-                content={<TimesheetModal
-                    info={info[index]}
-                    handleClose={handleOpenClose} allPaycodes={allPaycodes}
-                />}
+                content={
+                    <TimesheetModal
+                        info={item}
+                        handleClose={handleOpenClose}
+                        allPaycodes={allPaycodes}
+                    />}
             />
             <div className={classes.switcher}>
                 <p className={active === 'active' ? classes.switcherActive : classes.switcherProcessed}
@@ -149,7 +167,7 @@ export const StaffTimesheet = ({info}) => {
 
             <div className={classes.timesheetWrapper}>
                 <Notes
-                    restHeight='560px'
+                    restHeight='460px'
                     data={info}
                     items={timesheetItem}
                     headerTitles={headerTitles}
@@ -161,26 +179,39 @@ export const StaffTimesheet = ({info}) => {
                         :
                         <>
                             <div className={classes.bcbaHeader}>
-                                <h1>
-                                    <SlicedText size={30} type={'name'} data={timesheetById ? timesheetById.payCode && timesheetById.payCode.name : ''}/>
-                                </h1>
+                                <p>
+                                    <SlicedText size={30} type={'name'}
+                                                data={timesheetById ? timesheetById.payCode && timesheetById.payCode.name : ''}/>
+                                </p>
                                 <div className={classes.dateEdite}>
-                                    <p>{timesheetById ? `${moment(timesheetById.startDate).format('DD/MM/YYYY')} - ${moment(timesheetById.endDate).format('DD/MM/YYYY')}` : ''}</p>
-                                    <img src={Images.edit} alt="edit" onClick={handleOpenClose}/>
+                                    <p>
+                                        {timesheetById ?
+                                            `${moment(timesheetById.startDate).format('DD/MM/YYYY')} - ${timesheetById.endDate ? moment(timesheetById.endDate).format('DD/MM/YYYY') : 'Present'}`
+                                            : ''}
+                                    </p>
+                                    <img src={Images.edit} alt="edit" onClick={() => handleEditClose(timesheetById)}/>
                                 </div>
                             </div>
                             <p>{timesheetById ? timesheetById.description : ''}</p>
-                            {timesheetById.overtimes.length ?
-                            <Notes
-                                restHeight='560px'
-                                data={info}
-                                items={bcbaItem}
-                                headerTitles={headerTitlesBcba}
-                                defaultStyle={true}
-                            />:""}
+                            {timesheetById &&
+                            timesheetById.overtimes ?
+                                <Notes
+                                    restHeight='560px'
+                                    data={timesheetById.overtimes.length > 0 ? timesheetById.overtimes : [{...timesheetById}]}
+                                    items={bcbaItem}
+                                    headerTitles={headerTitlesBcba}
+                                    defaultStyle={true}
+                                /> : ""}
                             <div className={classes.amountContainer}>
-                                <p>Total hours: <span className={classes.hours}>{timesheetById ? `${timesheetById.hours} hrs` : ''}</span></p>
-                                <p>Total Amount: <span className={classes.amount}>{timesheetById ? `$${timesheetById.totalAmount}` : ''}</span></p>
+                                <p>Total hours:
+                                    <span className={classes.hours}>{timesheetById ?
+                                        `${timesheetById.hours ? timesheetById.hours : timesheetById.regularHours ? timesheetById.regularHours : ''} hrs`
+                                        : ''}
+                                    </span>
+                                </p>
+                                <p>Total Amount: <span
+                                    className={classes.amount}>{timesheetById ? `$${timesheetById.totalAmount}` : ''}</span>
+                                </p>
                             </div>
                         </>
                     }

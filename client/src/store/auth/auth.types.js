@@ -5,6 +5,10 @@ export const LOG_IN = 'LOG_IN';
 export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
 export const LOG_IN_FAIL = 'LOG_IN_FAIL';
 
+//
+export const GET_MY_AUTHN = 'GET_MY_AUTHN';
+export const GET_MY_PROFILE = 'GET_MY_PROFILE';
+
 // Log out
 export const LOG_OUT = 'LOG_OUT';
 
@@ -22,6 +26,12 @@ export const CLEAR_ERROR='CLEAR_ERROR';
 
 //Change password
 export const CHANGE_PASSWORD_REQUEST = 'CHANGE_PASSWORD_REQUEST'
+
+//Access service
+export const GET_ACCESS = 'GET_ACCESS'
+export const GET_ACCESS_SUCCESS = 'GET_ACCESS_SUCCESS'
+export const ASSIGN_ACCESS = 'ASSIGN_ACCESS'
+export const REMOVE_ACCESS = 'REMOVE_ACCESS'
 
 
 

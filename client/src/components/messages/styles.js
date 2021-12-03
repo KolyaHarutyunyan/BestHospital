@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
+import {Colors} from "../../utils";
 
 export const errMessageStyle = makeStyles(() => ({
   errMessageCenterPosition: {
@@ -88,4 +89,20 @@ export const errMessageStyle = makeStyles(() => ({
       width:'200px',
     },
   },
+
+  notYetText:{
+    fontSize: "16px",
+    lineHeight: "24px",
+    color:Colors.TextLight,
+    fontWeight:'bold'
+  },
+
+  notYetCenter:{
+    width:'100%',
+    display:'flex',
+    margin:'16px',
+    "@media (min-width: 1918px)": {
+      margin:'24px',
+    }
+  }
 }));

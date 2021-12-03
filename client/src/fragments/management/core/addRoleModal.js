@@ -32,6 +32,8 @@ export const AddRoleModal = ({handleClose, permissionsList}) => {
             permissionsList.push(i.id)
         }
 
+
+
         if (roleName && permissions && description) {
             const body = {
                 "title": roleName,

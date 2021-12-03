@@ -13,11 +13,11 @@ export const ForgotModal = ({}) => {
   const [validEmail, setValidEmail] = useState(false);
 
 
-  const { httpOnError, httpOnLoad } = useSelector((state) => ({
+  const {httpOnSuccess, httpOnError, httpOnLoad } = useSelector((state) => ({
     httpOnLoad: state.httpOnLoad,
+    httpOnSuccess: state.httpOnSuccess,
     httpOnError: state.httpOnError
   }));
-
 
   const GetLink = () => {
     if (validEmail === false && email && email !== "Not valid email") {
@@ -31,10 +31,8 @@ export const ForgotModal = ({}) => {
   const loginError =  httpOnError.length && httpOnError[0].error
   const handleChange = (ev) => {
     setEmail(ev.target.value);
-    setError('')
-    if(loginError.length) {
-      dispatch(httpRequestsOnErrorsActions.removeError('GET_RECOVERY_LINK'))
-    }
+    loginError === "User with this email was not found" && dispatch(httpRequestsOnErrorsActions.removeError('GET_RECOVERY_LINK'))
+    // dispatch (authActions.clearError ())
   };
 
   const handleCheck = (bool) => {
@@ -42,48 +40,44 @@ export const ForgotModal = ({}) => {
       setValidEmail("Not valid email");
     } else {
       setValidEmail(false);
-      setError('')
     }
   };
 
   const NotMathEmail =
-      loginError === "User with this email was not found" ? "User with this email was not found" :
-          loginError === 'Not Found' ? 'User with this email was not found' :
-              error === "notMathLogin" ? "Input is not field" :
-                  validEmail === "Not valid email" ? "Not valid email" :
-                      "";
+      loginError === "User with this email was not found" ? "User with this email was not found"
+          : error === "notMathLogin" ? "Input is not field" : validEmail === "Not valid email"
+          ? "Not valid email" : "";
 
   return (
-    <div className={classes.LoginModalWrapper}>
-      <p>Forgot your password?</p>
-      <span className={classes.LoginModalForgotText}>
-        Enter your email address and we'll send you a recovery email to reset
-        your password.
+      <div className={classes.LoginModalWrapper}>
+        <p>Forgot your Password?</p>
+        <span className={classes.LoginModalForgotText}>
+      Enter your email address and we'll send you a recovery email to reset your password.
       </span>
 
-      <div style={{ margin: "10px 0 20px 0" }}>
-        <ValidationInput
-            className={classes.inputMargins}
-            validator={EmailValidator}
-            value={email}
-            onChange={handleChange}
-            sendBoolean={handleCheck}
-            typeError={NotMathEmail}
-            name={"email"}
-            type={"email"}
-            label={"Email"}
-            id={"email"}
-            autoComplete={"current-email"}
+        <div>
+          <ValidationInput
+              className={classes.inputMargins}
+              validator={EmailValidator}
+              value={email}
+              onChange={handleChange}
+              sendBoolean={handleCheck}
+              typeError={NotMathEmail}
+              name={"email"}
+              type={"email"}
+              label={"Email"}
+              id={"email"}
+              autoComplete={"current-email"}
+          />
+        </div>
+
+        <SignIn
+            margin={'15px 0 0 0'}
+            loader={httpOnLoad && httpOnLoad[0] === 'GET_RECOVERY_LINK' }
+            handleClick={GetLink}
+            width={"100%"}
+            text={"Get Recovery Link"}
         />
       </div>
-
-      <SignIn
-          margin={'15px 0 0 0'}
-          loader={httpOnLoad.length}
-          handleClick={GetLink}
-          width={"100%"}
-          text={"Get Recovery Link"}
-      />
-    </div>
   );
 };

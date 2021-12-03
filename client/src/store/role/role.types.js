@@ -21,6 +21,7 @@ export const SEARCH_ROLE = 'SEARCH_ROLE';
 /**Open role*/
 
 export const OPEN_ROLE ='OPEN_ROLE'
+export const REMOVE_ROLE ='REMOVE_ROLE'
 
 /**Delete role*/
 

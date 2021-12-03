@@ -173,10 +173,10 @@ export const getTimesheetById = (id) => {
     }
 }
 
-export const createTimesheet = (body,id) => {
+export const createTimesheet = (body) => {
     return {
         type: CREATE_TIMESHEET,
-        payload: { body,id}
+        payload: { body }
     }
 }
 

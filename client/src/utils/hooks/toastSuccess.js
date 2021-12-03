@@ -71,6 +71,11 @@ export const ToastSuccess = (success) => {
             success === 'CREATE_UPLOAD' ? 'Successfully uploaded File' :
             success === 'DELETE_UPLOADS' ? 'Successfully deleted File' :
             success === 'APPOINTMENT_REPEAT' ? 'Appointment repeat was edited' :
+            success === 'DELETE_ROLE' ? 'Role was deleted' :
+            success === 'DELETE_ROLE_PERMISSION' ? 'Role Permission was deleted' :
+            success === 'ASSIGN_ACCESS' ? 'Access was assigned' :
+            success === 'REMOVE_ACCESS' ? 'Access was deleted' :
+            success === 'CHANGE_PASSWORD_REQUEST' ? 'Password was edited' :
 
             false
         )

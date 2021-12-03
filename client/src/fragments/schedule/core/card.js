@@ -12,8 +12,6 @@ export const Card = ({openModal, info, style, key}) => {
                     info.eventStatus === 'COMPLETED' ? '#347AF0' :
                         info.eventStatus === 'NOTRENDERED' ? '#6FD23180' : ''
 
-    // console.log(info,'info')
-
     return (
         <div
             key={key}

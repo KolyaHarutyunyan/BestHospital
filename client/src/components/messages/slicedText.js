@@ -2,14 +2,14 @@ import {HtmlTooltip} from "./HtmlTool";
 import React from "react";
 import {errMessageStyle} from "./styles";
 
-export const SlicedText = ({data, size, type}) => {
+export const SlicedText = ({data, size, type, fontSize}) => {
     const globalText = errMessageStyle()
 
     const classType = type === 'name' ? globalText.nameEllipsis :
                        type === 'address' ? globalText.addressEllipsis :
                         type === 'email' ? globalText.emailEllipsis :
                          type === 'desc' ? globalText.desc :
-                        type === 'responsive' ? globalText.responsive : ''
+                          type === 'responsive' ? globalText.responsive : ''
     return (
         <>
             {data && data.length > size ?
@@ -19,7 +19,7 @@ export const SlicedText = ({data, size, type}) => {
                 >
 
                     {type === 'desc' ?
-                        <span className={classType}>
+                        <span style={fontSize ? {fontSize:fontSize} : {}} className={classType}>
                             {data && `${data.slice(0, size)}...`}
                         </span>
                         :
@@ -30,7 +30,7 @@ export const SlicedText = ({data, size, type}) => {
                 </HtmlTooltip>
                 :
                 type === 'desc' ?
-                    <span>{data}</span>
+                    <span style={fontSize ? {fontSize:fontSize} : {}}>{data}</span>
                     :
                 <p className={classType}>{data}</p>
             }

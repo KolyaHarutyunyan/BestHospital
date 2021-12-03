@@ -13,7 +13,6 @@ const initialState = {
 };
 
 export const appointmentReducer = (state = initialState, action) => {
-    // console.log(state.calendarAppointmentsReserve,'calendarAppointmentsReserve')
     switch (action.type) {
         case  GET_APPOINTMENT_SUCCESS :
             return {

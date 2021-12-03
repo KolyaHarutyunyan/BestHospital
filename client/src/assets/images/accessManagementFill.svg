@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="Access_Management_Fill" data-name="Access Management Fill" transform="translate(-79 -228)">
+    <rect id="Base" width="24" height="24" transform="translate(79 228)" fill="#fff" opacity="0"/>
+    <g id="Access_Management_Fill-2" data-name="Access Management Fill" transform="translate(82 231)">
+      <path id="Path_3115" data-name="Path 3115" d="M325.674,259.13h-.2v-1.174a1.956,1.956,0,0,0-3.913,0v1.174h-.2A1.371,1.371,0,0,0,320,260.5v2.739a1.371,1.371,0,0,0,1.37,1.37h4.3a1.371,1.371,0,0,0,1.37-1.37V260.5A1.371,1.371,0,0,0,325.674,259.13Zm-2.935-1.174a.783.783,0,0,1,1.565,0v1.174h-1.565Zm0,0" transform="translate(-308.261 -246.609)" fill="#fff"/>
+      <path id="Path_3116" data-name="Path 3116" d="M10.565,260.5a2.548,2.548,0,0,1,1.565-2.348v-.2a3.094,3.094,0,0,1,.306-1.327A3.7,3.7,0,0,0,10.37,256H3.717A3.722,3.722,0,0,0,0,259.717v2.739a.587.587,0,0,0,.587.587h9.978Zm0,0" transform="translate(0 -246.609)" fill="#fff"/>
+      <path id="Path_3117" data-name="Path 3117" d="M93.158,3.913A3.913,3.913,0,1,1,89.245,0,3.913,3.913,0,0,1,93.158,3.913Zm0,0" transform="translate(-82.202)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

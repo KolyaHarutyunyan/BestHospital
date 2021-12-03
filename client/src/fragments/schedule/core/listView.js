@@ -33,7 +33,6 @@ export const ListView = ({
 
     useEffect(() => {
         if (appointments) {
-            console.log()
             dispatch(appointmentActions.getAppointmentById(appointments[0] && appointments[0].data[0]._id))
         }
 
@@ -84,7 +83,6 @@ export const ListView = ({
                 {name: 'CANCELLED', value: 'CANCELLED'},
             ]
 
-    console.log(defItem.type,'defItem.isRepeat')
     return (
         <div>
             <Filters

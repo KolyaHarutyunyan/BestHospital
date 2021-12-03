@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import { myProfileFragment } from "./style";
 import {PasswordValidator, ErrorText, Images, Colors} from "@eachbase/utils";
 import { Button } from "@material-ui/core";
 import {MinLoader, PasswordInput} from "@eachbase/components";
-import {authActions} from "@eachbase/store";
+import {authActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
+import {CHANGE_PASSWORD_REQUEST} from "../../../store/auth/auth.types";
 
 export const ChangePassword = ({}) => {
     const dispatch = useDispatch()
@@ -12,10 +13,20 @@ export const ChangePassword = ({}) => {
     const [showInputs, setShowInputs] = useState(false)
     const [inputs, setInputs] = useState(false)
 
-    const { httpOnSuccess, httpOnError } = useSelector((state) => ({
+
+    const { httpOnSuccess, httpOnLoad } = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
-        httpOnError: state.httpOnError
+        httpOnLoad: state.httpOnLoad
     }));
+    const successType = httpOnSuccess.length && httpOnSuccess[0].type === 'CHANGE_PASSWORD_REQUEST'
+
+    useEffect(() => {
+        if (successType === true) {
+            httpOnSuccess.length && dispatch(httpRequestsOnSuccessActions.removeSuccess(httpOnSuccess.length && httpOnSuccess[0].type)),
+                setShowInputs(false)
+        }
+    }, [successType]);
+
 
     const handleChange = e => setInputs(prevState =>
             ({...prevState, [e.target.name]: e.target.value}),
@@ -49,8 +60,9 @@ export const ChangePassword = ({}) => {
         }
     };
 
-    const classes = myProfileFragment()
 
+
+    const classes = myProfileFragment()
     return (
         <div className={classes.changePasswordWrapper}>
             <div className={classes.changePasswordContent}>
@@ -58,13 +70,13 @@ export const ChangePassword = ({}) => {
 
                 {showInputs ?
                     <div>
-                        {httpOnError.length ?
-                            <div className={classes.miniLoader}>
-                            <MinLoader/>
-                            </div>
-                            :
-                            <Button className={classes.saveButton} onClick={handleChangePassword}>Save</Button>
-                        }
+                        <Button className={classes.saveButton} onClick={handleChangePassword}>
+                            {httpOnLoad.length && httpOnLoad[0] === 'CHANGE_PASSWORD_REQUEST' ?
+                                <MinLoader/>
+                                :
+                                'Save'
+
+                            }</Button>
                         <Button className={classes.cancelButton} onClick={() => setShowInputs(false)}>Cancel</Button>
                     </div>
                     :

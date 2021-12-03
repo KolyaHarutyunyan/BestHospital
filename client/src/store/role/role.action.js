@@ -5,7 +5,7 @@ import {
   SEARCH_ROLE,
   OPEN_ROLE,
   DELETE_ROLE,
-  ADD_ROLE_PERMISSION, DELETE_ROLE_PERMISSION
+  ADD_ROLE_PERMISSION, DELETE_ROLE_PERMISSION, REMOVE_ROLE
 } from "./role.types";
 
 export const createRole = (body) => {
@@ -46,6 +46,11 @@ export const openRole = (role) => {
   return {
     type:OPEN_ROLE,
     payload: {role}
+  }
+}
+export const removeRole = ( ) => {
+  return {
+    type:REMOVE_ROLE,
   }
 }
 
