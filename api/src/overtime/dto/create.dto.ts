@@ -1,6 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger"
-import { IsEnum, IsNotEmpty, IsNumber, IsPositive, IsString } from "class-validator"
-import {OvertimeStatus} from '../overtime.constants';
+import { ApiProperty } from "@nestjs/swagger";
+import { IsEnum, IsNotEmpty, IsNumber, IsPositive, IsString } from "class-validator";
+import { OvertimeStatus } from '../overtime.constants';
 
 export class CreateOvertimeDTO {
     @ApiProperty()

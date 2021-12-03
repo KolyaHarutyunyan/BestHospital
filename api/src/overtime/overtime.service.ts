@@ -36,7 +36,7 @@ export class OvertimeService {
   async findAll(): Promise<OvertimeDTO[]> {
     try {
       const overtimes = await this.model.find();
-      this.checkOvertime(overtimes[0]);
+      // this.checkOvertime(overtimes[0]);
       return this.sanitizer.sanitizeMany(overtimes);
     } catch (e) {
       throw e;

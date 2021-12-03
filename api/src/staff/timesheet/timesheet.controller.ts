@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { TimesheetService } from './timesheet.service';
-import { CreateTimesheetDTO, TimeSheetDTO } from './dto';
+import { CreateTimesheetDTO, TimeSheetDTO, EditTimesheetDTO } from './dto';
 import { ParseObjectIdPipe, Public } from '../../util';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
@@ -14,6 +14,13 @@ export class TimesheetController {
   @ApiOkResponse({ type: TimeSheetDTO })
   async create(@Body() createTimesheetDto: CreateTimesheetDTO) {
     return await this.timesheetService.create(createTimesheetDto);
+  }
+
+  @Patch(':id')
+  @Public()
+  @ApiOkResponse({ type: TimeSheetDTO })
+  async update(@Param('id', ParseObjectIdPipe) id: string, @Body() editTimesheetDto: EditTimesheetDTO) {
+    return await this.timesheetService.update(id, editTimesheetDto);
   }
 
   @Get('staff/:staffId')

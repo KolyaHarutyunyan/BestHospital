@@ -70,7 +70,13 @@ export class AppointmentService {
   // repeat an appointments
   async repeat(dto: CreateRepeatDto, _id: string): Promise<Object> {
     const appointment = await this.model.findById(_id);
-    this.checkAppointment(appointment)
+    this.checkAppointment(appointment);
+    if(appointment.isRepeat){
+      throw new HttpException(
+        `appointment can not repeat`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     let now = new Date();
     if (dto.startDate > dto.endDate) {
       throw new HttpException(
@@ -255,7 +261,7 @@ export class AppointmentService {
     const diffDays = Math.floor(Math.abs((startDate - endDate) / day));
     let count = 0;
     let dates = [], x;
-    for (let d = startDate; d <= endDate; d.setDate(d.getDate() + dto.repeatCount + 1)) {
+    for (let d = startDate; d <= endDate; d.setDate(d.getDate() + dto.repeatCount)) {
       count++;
       x = new Date(d.getTime());
       dates.push(x)
@@ -294,7 +300,7 @@ export class AppointmentService {
       3: { sum: 0, date: [] }, 4: { sum: 0, date: [] }, 5: { sum: 0, date: [] },
       6: { sum: 0, date: [] }
     }; //0 is sunday and 6 is saturday
-    for (var d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
+    for (var d = startDate; d <= endDate; d.setDate(d.getDate())) {
       dayCount[d.getDay()].sum++;
       x = new Date(d.getTime());
       dayCount[d.getDay()].date.push(x);
@@ -331,7 +337,7 @@ export class AppointmentService {
     let end = new Date(dto.endDate);
     let count = 0;
     let dates = [], x;
-    for (let d = start; d <= end; d.setMonth(d.getMonth() + 1)) {
+    for (let d = start; d <= end; d.setMonth(d.getMonth())) {
       if (d.getMonth() == end.getMonth() && end.getDate() < dto.repeatDayMonth) {
         break
       }

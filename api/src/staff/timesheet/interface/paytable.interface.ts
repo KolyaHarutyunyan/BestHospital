@@ -4,6 +4,8 @@ export interface IPaytableItem {
   id: string;
   hours: number;
   amount: number;
+  rateType: string;
+  name: string;
 }
 
 export interface IPayTable {
