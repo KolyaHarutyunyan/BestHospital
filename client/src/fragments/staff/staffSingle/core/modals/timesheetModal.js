@@ -16,20 +16,18 @@ export const TimesheetModal = ({handleClose, info, allPaycodes}) => {
     const [inputs, setInputs] = useState(info ? {...info,
         startDate :  moment(info.startDate).format('YYYY-MM-DD') ,
         endDate :  moment(info.endDate).format('YYYY-MM-DD'),
-        payCode : allPaycodes.find(item=> item?.payCodeTypeId.name === info.payCode.payCodeTypeId.name ).payCodeTypeId.name
+        payCode :  info.payCode.payCodeTypeId
+            // allPaycodes.find(item=> item?.payCodeTypeId.name === info.payCode.payCodeTypeId.name ).payCodeTypeId.name
     }
         : {});
+
     const [checked, setChecked] = useState(true);
-    const [payCode, setPayCode] = useState(null);
+    const [payCode, setPayCode] = useState(info ? info.payCode : null);
     const [newallPaycodes, setnewallPaycodes] = useState([]);
     const dispatch = useDispatch()
     const classes = createClientStyle()
     const classes_v2 = staffModalsStyle()
     const globalPayCodes = useSelector(state => state.payroll.PayCodes)
-
-
-        console.log(allPaycodes,'allPaycodes')
-        console.log(payCode,'payCode')
 
 const params = useParams()
 
@@ -79,7 +77,6 @@ const params = useParams()
     let onCheck  = (e)=>{
         setChecked(e.target.checked)
     }
-    console.log(newallPaycodes,'newallPaycodesnewallPaycodesnewallPaycodes')
 
     const handleCreate = () => {
         if (inputs.description && inputs.hours && inputs.startDate && checked ? "Present" : inputs.endDate ) {
@@ -92,7 +89,7 @@ const params = useParams()
                 "endDate": inputs.endDate ? inputs.endDate : undefined
             }
             if (info){
-                dispatch(adminActions.createTimesheet(data))
+                dispatch(adminActions.editTimesheet(data, inputs.id))
             }else {
                 dispatch(adminActions.createTimesheet(data))
             }
@@ -109,7 +106,6 @@ const params = useParams()
         }
     }
 
-
     return (
         <div className={classes.createFoundingSource}>
             <ModalHeader
@@ -121,11 +117,12 @@ const params = useParams()
                 <div className={classes.clientModalBlock}>
                     <div className={classes.clientModalBox}>
                         <SelectInput
+                            language={null}
                             name={"payCode"}
                             label={"Paycode*"}
                             handleSelect={handleChange}
-                            value={inputs.payCode}
-                            list={newallPaycodes}
+                            value={payCode ? payCode.name : ''}
+                            list={allPaycodes ? allPaycodes : []}
                             typeError={error === 'payCode' ? ErrorText.field : ''}
                         />
                         <div className={classes.displayCodeBlock}>
@@ -149,7 +146,7 @@ const params = useParams()
                         <ValidationInput
                             variant={"outlined"}
                             onChange={handleChange}
-                            value={inputs.hours}
+                            value={inputs.hours ? inputs.hours : inputs.regularHours ? inputs.regularHours :''}
                             type={"number"}
                             label={"Hours*"}
                             name='hours'

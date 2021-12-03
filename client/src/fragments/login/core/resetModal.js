@@ -1,13 +1,14 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {authActions} from "@eachbase/store";
-import {loginFragments} from "./style";
-import {ErrMessage, PasswordInput, SignIn} from "@eachbase/components";
-import {ErrorText, PasswordValidator} from "../../../utils";
+import { authActions } from "@eachbase/store";
+import { loginFragments } from "./style";
+import { PasswordInput, SignIn } from "@eachbase/components";
+import {ErrorText, PasswordValidator} from "@eachbase/utils";
 
-export const ResetModal = ({resetToken}) => {
+export const ResetModal = ({ resetToken,reset, register }) => {
     const classes = loginFragments();
     const dispatch = useDispatch();
+
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState({});
 
@@ -18,19 +19,11 @@ export const ResetModal = ({resetToken}) => {
 
 
     const handleChange = e => setInputs(prevState =>
-            ({...prevState, [e.target.name]: e.target.value}),
+        ({...prevState, [e.target.name]: e.target.value}),
         error === e.target.name && setError(''),
         error === 'confirmationNotEqual' && setError(''),
-        error === 'assword and confirm password does not match' && setError(''),
+        error === 'Password and confirm password does not match' && setError(''),
     );
-    // const handleChange = (ev) => {
-    //     // setError("");
-    //     if (ev.target.name === "newPassword") {
-    //         setNewPassword(ev.target.value);
-    //     } else {
-    //         setConfirmPassword(ev.target.value);
-    //     }
-    // };
 
     const resetPassword = () => {
         if (inputs.newPassword && inputs.confirmPassword) {
@@ -38,6 +31,7 @@ export const ResetModal = ({resetToken}) => {
                 newPassword: inputs.newPassword,
                 confirmation: inputs.confirmPassword,
                 token: resetToken,
+                type: register ? 'register' : 'reset'
             };
             if (inputs.newPassword === inputs.confirmPassword) {
                 dispatch(authActions.resetPassword(passwords));
@@ -52,7 +46,6 @@ export const ResetModal = ({resetToken}) => {
             }
         }
     };
-
     const handleCheck = (bool, name) => {
         if (bool === true) {
             setError(name);
@@ -64,18 +57,22 @@ export const ResetModal = ({resetToken}) => {
 
     const errorNewPassword =
         error === 'newPasswordNotValid' ? ErrorText.passwordValid :
-        error === "New password is not field" ? "New password is not field" : "";
+            error === "New password is not field" ? "New password is not field" : "";
     const errorConfirmPassword =
         error === 'confirmationNotValid' ? ErrorText.passwordValid :
-        error === "Password and confirm password does not match" ? "Password and confirm password does not match" :
-            error === "Confirm password is not field" ? "Confirm password is not field" : "";
+            error === "Password and confirm password does not match" ? "Password and confirm password does not match" :
+                error === "Confirm password is not field" ? "Confirm password is not field" : "";
 
     return (
-        <div className={classes.LoginModalWrapper}>
-            <p>Reset Password</p>
+        <div  className={classes.LoginModalWrapper}>
+            <p>{register === true ? 'Welcome Wellness Daisy ' : 'Reset Password'}</p>
             <span className={classes.LoginModalForgotText}>
-        Enter your new password.
-        <br/> Use at least 8 characters, 1 upper case and 1 digit.
+          {register === true ?
+              <span>You have been invited to join Wellness Daisy as a an admin. Please create password for testuser@gmail.com</span>
+              :
+              <span> Enter your new password.<br/>
+                  bv Use at least 8 characters, 1 upper case and 1 digit.</span>
+          }
       </span>
 
             <PasswordInput
@@ -89,7 +86,7 @@ export const ResetModal = ({resetToken}) => {
                 value={inputs.newPassword}
                 onChange={handleChange}
                 typeError={errorNewPassword}
-                placeholder={"New Password"}
+                placeholder={register ? "Password" : "New Password"}
             />
 
             <PasswordInput
@@ -103,14 +100,14 @@ export const ResetModal = ({resetToken}) => {
                 value={inputs.confirmPassword}
                 onChange={handleChange}
                 typeError={errorConfirmPassword}
-                placeholder={"Confirm New Password"}
+                placeholder={register ? "Confirm Password" : "Confirm New Password"}
             />
 
             <SignIn
                 loader={!!httpOnLoad.length}
                 handleClick={resetPassword}
                 width={"100%"}
-                text={"Reset Password"}
+                text={register ? "Complete Registration" : "Reset Password"}
             />
         </div>
     );

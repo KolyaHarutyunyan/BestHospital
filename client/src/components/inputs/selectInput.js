@@ -3,34 +3,14 @@ import {inputsStyle} from "./styles";
 import {InputMinLoader} from "./inputMiniLoader";
 import React from "react";
 
-export const SelectInput = ({errorFalse,
-                                className,
-                                loader,
-                                name,
-                                label,
-                                handleSelect,
-                                style,
-                                value,
-                                list,
-                                handleChangeCountryCode,
-                                typeError,
-                                type,
-                                disabled,
-                                language,
-                                styles
-                            }) => {
+export const SelectInput = ({errorFalse, className, loader, name, label, handleSelect, style, value, list, handleChangeCountryCode, typeError, type, disabled, language, styles}) => {
     const classes = inputsStyle();
-
-
     const [current, setCurrent] = React.useState('');
 
     const handleChange = (event) => {
-
         handleSelect(event)
         setCurrent(event.target.value);
-
         const selectedIndex = event.target.options.selectedIndex;
-
         if (handleChangeCountryCode) {
             handleChangeCountryCode(event.target.options[selectedIndex].getAttribute('data-key'))
         }

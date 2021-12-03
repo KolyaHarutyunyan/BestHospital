@@ -24,7 +24,8 @@ export const Management = ({}) => {
 
         <AddButton
           handleClick={ handleOpenClose }
-          text={"Add Role"} />
+          text={"Add Role"}
+        />
       </div>
 
       <AccessManagement

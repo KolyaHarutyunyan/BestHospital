@@ -8,7 +8,7 @@ import {
   GET_RECOVERY_LINK_TRY_AGAIN,
   GET_RECOVERY_LINK_FAIL,
   RESET_PASSWORD_SUCCESS,
-  RESET_PASSWORD_CLEAR
+  RESET_PASSWORD_CLEAR, GET_ACCESS_SUCCESS
 } from './auth.types';
 
 const initialState = {
@@ -22,7 +22,9 @@ const initialState = {
   getLinkLoading: false,
   getLinkSuccess: null,
   resetSuccess: false,
-  closeResetSuccess:null
+  closeResetSuccess:null,
+
+  accessList:[],
 };
 
 export const authReducer = (state = initialState, action) => {
@@ -95,6 +97,12 @@ export const authReducer = (state = initialState, action) => {
         ...state,
         loginErr: []
       };
+
+    case GET_ACCESS_SUCCESS:
+      return {
+        ...state,
+        accessList: action.payload,
+      }
 
     default:
       return state;

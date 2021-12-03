@@ -73,6 +73,8 @@ export const StaffItem = ({ gen }) => {
     const staffServices = useSelector(state => state.admins.staffServices.service)
     const staffTimesheet = useSelector(state => state.admins.timesheet)
     const services = useSelector(state => state.system.services)
+    const rolesList = useSelector(state => state.roles.rolesList)
+    const accessList = useSelector(state => state.auth.accessList)
 
     const handleOpenClose = () => {
         setOpen(!open)
@@ -197,13 +199,13 @@ export const StaffItem = ({ gen }) => {
             tabComponent: (employments.length > 0 ? <StaffEmployment info={employments}/> : <NoItemText text='No Employments Yet'/>)
         },
         {
-            tabComponent: (<StaffTimesheet info={staffTimesheet} />)
+            tabComponent: (staffTimesheet.length > 0 ? <StaffTimesheet info={staffTimesheet} /> : <NoItemText text='No Timesheets Yet'/>)
         },
         {
             tabComponent: (<StaffCredentials credentialData={credentialData} openModal={openCloseCredModal}/>)
         },
         {
-            tabComponent: (<StaffAccess/>)
+            tabComponent: (<StaffAccess rolesList={rolesList} accessList={accessList}/>)
         },
         {
             tabComponent: (<StaffAvailability availabilityData={availabilityData} staffGeneral={staffGeneral}/>)

@@ -91,6 +91,8 @@ import jpegIcon from '@eachbase/assets/images/icons/jpegIcon.svg';
 import pdfIcon from '@eachbase/assets/images/icons/pdfIcon.svg';
 import csvIcon from '@eachbase/assets/images/icons/csvIcon.svg';
 import eventsPassive from '@eachbase/assets/images/icons/eventsPassive.svg'
+import accessManagementFill from '@eachbase/assets/images/accessManagementFill.svg'
+import accessManagementOutline from '@eachbase/assets/images/accessManagementOutline.svg'
 
 export const Images = {
     doctors: doctors,
@@ -183,5 +185,7 @@ export const Images = {
     pdfIcon: pdfIcon,
     csvIcon: csvIcon,
     removeIcon: removeIcon,
-    eventsPassive:eventsPassive
+    eventsPassive:eventsPassive,
+    accessManagementFill:accessManagementFill,
+    accessManagementOutline:accessManagementOutline,
 }

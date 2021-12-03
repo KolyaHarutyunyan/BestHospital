@@ -84,7 +84,6 @@ export const ListView = ({
                 {name: 'CANCELLED', value: 'CANCELLED'},
             ]
 
-    console.log(defItem.type,'defItem.isRepeat')
     return (
         <div>
             <Filters

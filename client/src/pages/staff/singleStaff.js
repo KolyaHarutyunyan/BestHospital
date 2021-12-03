@@ -1,7 +1,14 @@
 import React, {useEffect} from "react";
 import {StaffItem} from "@eachbase/fragments";
 import {useDispatch, useSelector} from "react-redux";
-import {adminActions, fundingSourceActions, systemActions, noteActions, availabilityScheduleActions} from "../../store";
+import {
+    adminActions,
+    fundingSourceActions,
+    systemActions,
+    noteActions,
+    availabilityScheduleActions,
+    roleActions, authActions
+} from "../../store";
 import {useParams} from "react-router-dom";
 
 export const SingleStaff = () => {
@@ -20,6 +27,8 @@ export const SingleStaff = () => {
         dispatch(adminActions.getStaffService(params.id))
         dispatch(adminActions.getTimesheet(params.id))
         dispatch(systemActions.getServices())
+        dispatch(roleActions.getRole());
+        dispatch(authActions.getAccess(params.id))
     }, [])
 
     return (

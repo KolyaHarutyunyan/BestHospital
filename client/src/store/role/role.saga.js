@@ -15,12 +15,12 @@ import {httpRequestsOnLoadActions} from "../http_requests_on_load";
 import {httpRequestsOnSuccessActions} from "../http_requests_on_success";
 
 function* createRole(action) {
-  yield put(httpRequestsOnErrorsActions.removeError(action.type));
+  // yield put(httpRequestsOnErrorsActions.removeError(action.type));
   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
-  yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
+  // yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
   try {
     const res = yield call( authService.createRoleService, action.payload.body );
-    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    // yield put(httpRequestsOnErrorsActions.removeError(action.type));
     yield put(httpRequestsOnLoadActions.removeLoading(action.type));
     yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     yield put({
@@ -28,16 +28,14 @@ function* createRole(action) {
       payload: res.data,
     });
   } catch (err) {
-    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    // yield put(httpRequestsOnErrorsActions.removeError(action.type));
     yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-    yield put(httpRequestsOnErrorsActions.appendError(action.type,err.data.message));
+    // yield put(httpRequestsOnErrorsActions.appendError(action.type,err.data.message));
   }
 }
 
+
 function* getRole(action) {
-  yield put(httpRequestsOnErrorsActions.removeError(action.type));
-  yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-  yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
   try {
     const res = yield call( authService.getRoleService, action.payload );
     yield put({
@@ -76,26 +74,27 @@ function* getRoleById(action) {
 
 
 function* addRolePermission(action){
-  yield put(httpRequestsOnErrorsActions.removeError(action.type));
-  yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
-  yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+  // yield put(httpRequestsOnErrorsActions.removeError(action.type));
+  // yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
+  // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
   try {
     yield call( authService.addRolePermissionService, action.payload.body );
     yield put ( roleActions.getRoleById(action.payload.body.roleId) )
-    yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+    // yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
   }catch (err){
-    yield put(httpRequestsOnErrorsActions.removeError(action.type));
-    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
+    // yield put(httpRequestsOnErrorsActions.removeError(action.type));
+    // yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
   }
 }
 function* deleteRolePermission(action){
   yield put(httpRequestsOnErrorsActions.removeError(action.type));
   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
-  yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+  yield put(httpRequestsOnLoadActions.appendLoading(action.type));
   try {
     const res = yield call( authService.deleteRolePermissionService, action.payload.data );
     yield put ( roleActions.getRoleById(action.payload.data.roleId) )
     yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+    yield put(httpRequestsOnLoadActions.removeLoading(action.type));
 
   }catch (err){
     yield put(httpRequestsOnErrorsActions.removeError(action.type));
@@ -108,6 +107,6 @@ export const watchRole = function* watchRoleSaga() {
   yield takeLatest( GET_ROLE, getRole );
   yield takeLatest( DELETE_ROLE, deleteRole );
   yield takeLatest( GET_ROLE_BY_ID, getRoleById );
-  yield takeLatest(ADD_ROLE_PERMISSION, addRolePermission)
-  yield takeLatest(DELETE_ROLE_PERMISSION, deleteRolePermission)
+  yield takeLatest( ADD_ROLE_PERMISSION, addRolePermission )
+  yield takeLatest( DELETE_ROLE_PERMISSION, deleteRolePermission )
 };

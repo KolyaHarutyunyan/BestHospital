@@ -64,62 +64,63 @@ export const LoginModal = ({ handleForgot }) => {
   };
 
   const loginError =  httpOnError.length && httpOnError[0].error
-  const NotMathEmail = loginError === "User with this email was not found" ? "User with this email was not found"
-      : error === "notMathLogin" ? "Input is not field"
+  const NotMathEmail = loginError === "User with this email was not found" ? "User with this email was not found" :
+      error === "notMathLogin" ? "Input is not field"
           : validEmail === "Not valid email" ? "Not valid email"
-              : "";
+          : "";
 
   const NotMathPassword = loginError === "user password does not match" ? "User password does not match" :
       error === "notMathPassword" ? "Input is not field" : "";
 
   return (
-    <div className={classes.LoginModalWrapper}>
-      <p>Sign in</p>
+      <div className={classes.LoginModalWrapper}>
+        <p>Sign In</p>
 
-      <ValidationInput
-          validator={EmailValidator}
-          value={login}
-          onChange={handleChange}
-          sendBoolean={handleCheck}
-          typeError={NotMathEmail}
-          name={"email"}
-          type={"email"}
-          label={"Email"}
-          id={"email"}
-          autoComplete={"current-email"}
-      />
-
-
-      <PasswordInput
-          styles={{marginTop:'25px'}}
-          handleChangePassword={handleChange}
-          type={"password"}
-          name={"password"}
-          disabled={false}
-          value={password}
-          onChange={handleChange}
-          typeError={NotMathPassword}
-          placeholder={"Password"}
-      />
-
-      <ErrMessage
-          type={'login'}
-          text={loginError === 'Check your email to activate your account' ? 'Check your email to activate your account' : ''  }
-      />
-
-      <div className={classes.LoginModalButtons}>
-        <SignIn
-            loader={!!httpOnLoad.length}
-            handleClick={logInRequest}
-            width={"200px"}
-            text={"Sign In"}
+        <ValidationInput
+            validator={EmailValidator}
+            value={login}
+            onChange={handleChange}
+            sendBoolean={handleCheck}
+            typeError={NotMathEmail}
+            name={"email"}
+            type={"email"}
+            label={"Email"}
+            id={"email"}
+            autoComplete={"current-email"}
         />
 
-        <button onClick={handleForgot} className={classes.LoginModalForgot}>
-          {" "}
-          Forgot Password?
-        </button>
+        <PasswordInput
+            styles={{marginTop:'25px'}}
+            handleChangePassword={handleChange}
+            type={"password"}
+            name={"password"}
+            disabled={false}
+            value={password}
+            onChange={handleChange}
+            typeError={NotMathPassword}
+            placeholder={"Password"}
+        />
+
+        <ErrMessage
+            type={'login'}
+            text={loginError === 'Check your email to activate your account' ? 'Check your email to activate your account' :
+                loginError === "Your account has been inactivated, contact an administrator." ? "Your account has been inactivated, contact an administrator." :
+
+                    ''  }
+        />
+        <div className={classes.LoginModalButtons}>
+          <SignIn
+              loader={!!httpOnLoad.length}
+              handleClick={logInRequest}
+              width={"50%"}
+              text={"Sign In"}
+          />
+
+          <button onClick={handleForgot} className={classes.LoginModalForgot}>
+            {" "}
+            Forgot Password?
+          </button>
+        </div>
       </div>
-    </div>
   );
 };

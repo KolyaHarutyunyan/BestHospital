@@ -4,7 +4,7 @@ import {
   deleteRole, deleteRolePermission,
   getRole,
   getRoleById,
-  openRole,
+  openRole, removeRole,
   searchRoles
 } from "./role.action";
 
@@ -18,6 +18,7 @@ export const roleActions = {
   getRoleById,
   searchRoles,
   openRole,
+  removeRole,
 
 
   addRolePermission,

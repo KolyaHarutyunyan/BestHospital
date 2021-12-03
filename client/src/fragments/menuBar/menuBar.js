@@ -4,7 +4,7 @@ import {Router} from "@eachbase/root/router";
 import {useDispatch, useSelector} from "react-redux";
 import {TopBar, LeftBar} from "./core";
 import {navBarStyles} from "./core/style";
-import {httpRequestsOnSuccessActions} from "@eachbase/store";
+import {authActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 import {Toast} from "@eachbase/components";
 import {ToastSuccess, ToastFail} from "@eachbase/utils";
 
@@ -54,6 +54,13 @@ export const MenuBar = ({}) => {
     const setLinksStyle = () => {
         setLinkInfo(window.location.pathname);
     };
+
+    const type = localStorage.getItem('userType');
+
+    useEffect(() => {
+        dispatch(authActions.getMyAuth())
+        dispatch(authActions.getMyProfile(type))
+    }, []);
 
     return (
         <div className={classes.root}>

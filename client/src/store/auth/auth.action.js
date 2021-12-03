@@ -1,9 +1,10 @@
 import {
-    CHANGE_PASSWORD_REQUEST,
+    ASSIGN_ACCESS,
+    CHANGE_PASSWORD_REQUEST, GET_ACCESS, GET_MY_AUTHN, GET_MY_PROFILE,
     GET_RECOVERY_LINK,
     GET_RECOVERY_LINK_TRY_AGAIN,
     LOG_IN,
-    LOG_OUT,
+    LOG_OUT, REMOVE_ACCESS,
     RESET_PASSWORD_CLEAR,
     RESET_PASSWORD_REQUEST,
 } from './auth.types';
@@ -19,6 +20,19 @@ export const logIn = (user) => {
 export const logOut = () => {
     return {
         type: LOG_OUT,
+    };
+};
+
+export const getMyAuth = () => {
+    return {
+        type: GET_MY_AUTHN,
+    };
+};
+
+export const getMyProfile = (type) => {
+    return {
+        type: GET_MY_PROFILE,
+        payload:{type}
     };
 };
 
@@ -62,6 +76,30 @@ export const clearError = () => {
 };
 
 
+/** Access service */
+export const getAccess = ( userId ) =>{
+    return {
+        type: GET_ACCESS,
+        payload: { userId }
+    }
+}
+
+export const assignAccess = ( userId, roleId ) =>{
+    return {
+        type: ASSIGN_ACCESS,
+        payload: { userId, roleId }
+    }
+}
+
+export const removeAccess = ( userId, roleId ) =>{
+    return {
+        type: REMOVE_ACCESS,
+        payload: { userId, roleId }
+    }
+}
+
+
+/** End */
 
 
 
