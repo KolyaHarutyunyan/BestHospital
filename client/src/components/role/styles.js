@@ -1,11 +1,11 @@
 import {makeStyles} from "@material-ui/core/styles";
 import {Colors} from '@eachbase/utils'
-import {SelectInputWidthTags} from "../inputs";
 
 export const roleStyles = makeStyles(() => ({
     roleWrapper: {
         width: '100%'
     },
+
     roleItemContainer: {
         marginTop: 32
     },
@@ -18,6 +18,15 @@ export const roleStyles = makeStyles(() => ({
             background: '#FFFFFF 0% 0% no-repeat padding-box',
             border: '1px solid #A3B2BD80',
             borderRadius: 8,
+            '& p':{
+                border:'none'
+            },
+            '& img':{
+                border:'none'
+            },
+            '& div':{
+                border:'none'
+            },
         },
     },
 

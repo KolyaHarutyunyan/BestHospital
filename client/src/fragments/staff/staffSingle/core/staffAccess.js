@@ -1,19 +1,44 @@
 import {NoItemText, Role} from '@eachbase/components';
-import {Images} from '@eachbase/utils'
+import {FindSuccess, Images} from '@eachbase/utils'
 import {serviceSingleStyles} from "./styles";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 export const StaffAccess = ({rolesList, accessList}) => {
     const classes = serviceSingleStyles()
-    const [info, setInfo] = useState('')
+    const [info, setInfo] = useState(accessList ? accessList.roles && accessList.roles[0] : '')
 
     const sendItem = (item) => {
         setInfo(item)
     }
 
+    const handleRemoveSelected = () =>{
+        if(accessList && accessList.roles.length){
+            if(accessList && accessList.roles.length === 1){
+                setInfo('')
+            }else{
+                setInfo(accessList.roles[0])
+            }
+        }else{
+            setInfo('')
+        }
+    }
+
+    const newList =  rolesList.filter(function (array_el) {
+        return accessList && accessList.roles && accessList.roles.filter(function (anotherOne_el) {
+            return anotherOne_el.id === array_el.id;
+        }).length === 0
+    });
+
+
     return (
         <div className={classes.staffAccessWrapper}>
-            <Role rolesList={rolesList} accessList={accessList} sendItem={sendItem}/>
+            <Role
+                newList={newList}
+                rolesList={rolesList}
+                accessList={accessList}
+                sendItem={sendItem}
+                handleRemoveSelected={handleRemoveSelected}
+            />
             <div className={classes.roleInformation}>
                 {info ?
                     <>

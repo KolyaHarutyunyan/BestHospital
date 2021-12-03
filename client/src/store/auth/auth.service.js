@@ -6,7 +6,7 @@ export const authService = {
     signIn: (body) => axios.post('/authn/signin', body),
 
 
-    logOut: () => axios.post( `/authn/logout`, {},),
+    logOut: () => axios.post( `/authn/logout`, {}, {auth:true} ),
 
     getLink: (email) => axios.get(`/authn/forgotPassword/${email}` ),
 
@@ -34,13 +34,13 @@ export const authService = {
         return res;
     },
 
-    changePasswordService: (data)=> axios.post('/authn/changePassword', data, ),
+    changePasswordService: (data)=> axios.post('/authn/changePassword', data,{auth:true} ),
 
     muAuthnService :()=> axios.get(`/authn/myAuth`,{auth:true}  ),
 
     myProfileService :(type)=>  axios.get(
-        type === 'ADMIN' ? `/admins/myProfile` :
-            type === 'AGENT' && `/agents/myProfile`, {auth:true}  ),
+        type === 'ADMIN' ? `/staff/myProfile` :
+            type === 'AGENT' && `/staff/myProfile`, {auth:true}  ),
 
     /** Access service */
     getAccessService :(id) => axios.get(`/authn/${id}`, {auth:true} ),

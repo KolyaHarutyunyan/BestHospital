@@ -30,18 +30,20 @@ function* logIn({payload,type}) {
     }
 }
 
-function* logOut() {
+function* logOut(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call( authService.logOut, );
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         localStorage.removeItem('access-token');
-        localStorage.removeItem('poloUserInfo'  );
+        localStorage.removeItem('wellUserInfo'  );
         localStorage.removeItem('userType'  );
         window.location.replace('/login')
     } catch (err) {
-
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         if(err.response.data.statusCode === 401){
             localStorage.removeItem('access-token');
-            localStorage.removeItem('poloUserInfo'  );
+            localStorage.removeItem('wellUserInfo'  );
             localStorage.removeItem('userType'  );
             window.location.replace('/login')
         }
@@ -125,7 +127,7 @@ function* getMuAuthn(action){
 function* getMuProfile(action){
     try{
         const res = yield call( authService.myProfileService, action.payload.type, );
-        localStorage.setItem('poloUserInfo', JSON.stringify(res.data) );
+        localStorage.setItem('wellUserInfo', JSON.stringify(res.data) );
     }catch (err){
 
     }
@@ -151,7 +153,7 @@ function* assignAccess(action){
     try{
         yield call( authService.addAccessService, action.payload.userId, action.payload.roleId );
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        // yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         yield put({
             type: GET_ACCESS,
             payload: { userId : action.payload.userId}
@@ -165,12 +167,12 @@ function* removeAccess(action){
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try{
         yield call( authService.removeAccessService, action.payload.userId, action.payload.roleId );
-        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
         yield put({
             type: GET_ACCESS,
             payload: { userId : action.payload.userId}
         })
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     }catch (err){
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
     }

@@ -1,78 +1,76 @@
 import {roleStyles} from "./styles";
-import {CheckboxesTags, DeleteElement, NoItemText, SelectInputWidthTags, SimpleModal} from "@eachbase/components";
+import {CheckboxesTags, DeleteElement, NoItemText, SimpleModal} from "@eachbase/components";
 import {RoleItem} from "./rollItem";
 import React, {useEffect, useState} from "react";
-import {authActions, roleActions} from "../../store";
-import axios from "axios";
+import {authActions} from "@eachbase/store";
 import {useParams} from "react-router-dom";
-import {FindLoad, FindSuccess, Images} from "../../utils";
+import {FindLoad, FindSuccess} from "@eachbase/utils";
 import {useDispatch} from "react-redux";
-import {assignAccess} from "../../store/auth/auth.action";
 
-export const Role = ({rolesList, accessList, sendItem}) => {
+export const Role = ({rolesList, accessList, sendItem, handleRemoveSelected, newList}) => {
+    const params = useParams()
+    const dispatch = useDispatch()
     const classes = roleStyles()
     const [index, setIndex] = useState(0)
     const [item, setItem] = useState('')
     const [open, setOpen] = useState(false)
+    const loader = FindLoad('REMOVE_ACCESS')
+    const success = FindSuccess('REMOVE_ACCESS')
 
-    const getRoleItemId = (item) =>{
+    const getRoleItemId = (item) => {
         setItem(item)
         setOpen(!open)
     }
 
-    const handleOpenCloseDel = ( ) =>{
+    const handleOpenCloseDel = () => {
         setItem('')
         setOpen(!open)
     }
 
-    const handleOpen = (item, j) =>{
+    const handleOpen = (item, j) => {
         setIndex(j)
         setItem(item)
         sendItem(item)
     }
-    const params = useParams()
-    const dispatch = useDispatch()
 
-    const addPermissions = (item) =>{
+    const addPermissions = (item) => {
         if (item.length) {
             dispatch(authActions.assignAccess(params.id, item[item.length - 1].id))
         }
     }
 
-    const handleDelete = () =>{
+    const handleDelete = () => {
         dispatch(authActions.removeAccess(params.id, item.id))
     }
 
-    const loader = FindLoad('REMOVE_ACCESS')
-    const success = FindSuccess('REMOVE_ACCESS')
-
-    useEffect(() =>{
-        if(success.length){
+    useEffect(() => {
+        if (success.length) {
             setItem('')
+            setIndex(0)
             setOpen(!open)
-            setIndex('')
+            handleRemoveSelected && handleRemoveSelected()
         }
-    },[success])
+    }, [success])
 
     return (
         <div className={classes.roleWrapper}>
             <CheckboxesTags
                 handleChange={addPermissions}
-                permissionsList={rolesList}
+                permissionsList={newList}
                 label={"Add Role"}
                 placeholder={'Add Role'}
             />
             <div className={classes.roleItemContainer}>
                 {
-                    accessList && accessList.roles ? accessList.roles.map((item, j) =>(
-                        <RoleItem
-                            key={j}
-                            handleOpen={() => handleOpen(item,j)}
-                            handleClick={()=> getRoleItemId(item)}
-                            roleItem={item.title}
-                            active={ index === j }
-                        />
-                    ))
+                    accessList && accessList.roles ? accessList.roles.map((item, j) => (
+                            <RoleItem
+                                key={j}
+                                handleOpen={() => handleOpen(item, j)}
+                                handleClick={() => getRoleItemId(item)}
+                                roleItem={item.title}
+                                active={index === j}
+                            />
+                        ))
                         :
                         <NoItemText text={'No Roles Yet'}/>
                 }

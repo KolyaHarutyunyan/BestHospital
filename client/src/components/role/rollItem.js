@@ -2,7 +2,6 @@ import {Images} from '@eachbase/utils'
 import {roleStyles} from "./styles";
 
 export const RoleItem = ({key, roleItem, handleClick, handleOpen, active}) => {
-
     const classes = roleStyles()
 
     return (
