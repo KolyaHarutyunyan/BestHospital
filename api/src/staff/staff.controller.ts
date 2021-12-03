@@ -66,18 +66,18 @@ export class StaffController {
   }
 
   /** Get the staff profile */
+  @Get('myProfile')
+  @ApiOkResponse({ type: StaffDTO })
+  async getMyProfile(@Body('user') user: UserDTO): Promise<StaffDTO> {
+    return await this.staffService.getProfile(user.id);
+  }
+
+  /** Get the staff profile */
   @Get(':id')
   @ApiOkResponse({ type: StaffDTO })
   @Public()
   async getAdminProfile(@Param('id', ParseObjectIdPipe) userId: string): Promise<StaffDTO> {
     return await this.staffService.getProfile(userId);
-  }
-
-  /** Get the staff profile */
-  @Get('myProfile')
-  @ApiOkResponse({ type: StaffDTO })
-  async getMyProfile(@Body('user') user: UserDTO): Promise<StaffDTO> {
-    return await this.staffService.getProfile(user.id);
   }
 
   /** Inactivate a staff */
