@@ -12,7 +12,7 @@ const TimesheetSchema = new Schema({
   totalAmount: { type: Number },
   regularPay: { type: Number },
   regularHours: { type: Number },
-  overtimes: [{ id: Types.ObjectId, amount: Number, hours: Number }],
+  overtimes: [{ id: Types.ObjectId, amount: Number, hours: Number, rateType: String, name: String }],
 });
 
 export const TimeSheetModel = model<ITimeSheet>('timesheet', TimesheetSchema);

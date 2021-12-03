@@ -8,7 +8,7 @@ import { PaycodeService } from '../../employment/paycode/paycode.service';
 import { OvertimeService } from '../../overtime/overtime.service';
 import { MongooseUtil } from '../../util';
 import { StaffService } from '../staff.service';
-import { CreateTimesheetDTO, TimeSheetDTO } from './dto';
+import { CreateTimesheetDTO, EditTimesheetDTO, TimeSheetDTO } from './dto';
 import { TimeSheetSanitizer } from './interceptor';
 import { ICalculatedOT, ITimeSheet } from './interface';
 import { IPayTable } from './interface/paytable.interface';
@@ -46,6 +46,7 @@ export class TimesheetService {
         description: dto.description,
         totalHours: dto.hours,
         startDate: dto.startDate,
+        hours: dto.hours,
         endDate: dto.endDate ? dto.endDate : null,
         totalAmount: payTable ? regularPay + payTable.totalAmount : regularPay,
         regularHours: regularHours,
@@ -86,6 +87,36 @@ export class TimesheetService {
       });
       this.checkTimeSheet(timesheet);
       return this.sanitizer.sanitizeMany(timesheet);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  /** Update the timesheet */
+  async update(_id: string, dto: EditTimesheetDTO): Promise<any> {
+    try {
+      const timesheet = await this.model.findById(_id);
+      this.checkTimeSheet(timesheet);
+      const payCode: PayCodeDTO = await this.payCodeService.findOne(dto.payCode);
+      let payTable: IPayTable;
+      const payCodeType = payCode.payCodeTypeId as PayCodeTypeDTO;
+      if (payCodeType.overtime) {
+        dto.staffId = timesheet.staffId;
+        payTable = await this.calculateOTs(dto, payCode.rate);
+      }
+      const regularHours = payTable ? dto.hours - payTable.totalHours : dto.hours;
+      const regularPay = regularHours * payCode.rate;
+      timesheet.totalAmount = payTable ? regularPay + payTable.totalAmount : regularPay;
+      timesheet.regularHours = regularHours;
+      timesheet.regularPay = regularPay;
+      timesheet.overtimes = payTable ? payTable.overtimes : [];
+      timesheet.description = dto.description;
+      timesheet.hours = dto.hours;
+      timesheet.startDate = dto.startDate;
+      if (dto.endDate) timesheet.endDate = dto.endDate;
+      await timesheet.save()
+      return timesheet;
+      // return this.sanitizer.sanitizeMany(timesheet);
     } catch (e) {
       throw e;
     }
@@ -134,10 +165,12 @@ export class TimesheetService {
         id: maxMultiplierOT.id,
         hours: calculatedOT.used,
         amount: otAmount,
+        rateType: maxMultiplierOT.type,
+        name: maxMultiplierOT.name
       });
       overtimeRules = overtimeRules.filter((rule) => rule.id !== maxMultiplierOT.id);
     }
-    
+
     return paytable;
   }
 
@@ -232,7 +265,6 @@ export class TimesheetService {
       remainder: hours,
       used: 0,
     };
-    console.log(response)
     if (prevTotals >= ot.threshold) {
       // we use all hours as overtime
       response.remainder = 0;
