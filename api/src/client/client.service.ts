@@ -56,23 +56,14 @@ export class ClientService {
   /** returns all clients */
   async findAll(skip: number, limit: number, status: string): Promise<any> {
     try {
-      if (status == "INACTIVE" || status == "HOLD" || status == "TERMINATE") {
-        let [clients, count] = await Promise.all([
-          this.model.find({ $or: [{ status: "INACTIVE" }, { status: "HOLD" }, { status: "TERMINATE" }] })
-            .populate({ path: 'enrollment', select: 'name' }).sort({ '_id': 1 }).skip(skip).limit(limit),
-          this.model.countDocuments({ $or: [{ status: "INACTIVE" }, { status: "HOLD" }, { status: "TERMINATE" }] })
-        ]);
-        this.checkClient(clients[0]);
-        const sanClient = this.sanitizer.sanitizeMany(clients);
-        return { clients: sanClient, count }
+      if(!status){
+        status = "ACTIVE"
       }
-
       let [clients, count] = await Promise.all([
-        this.model
-          .find({ status: "ACTIVE" })
+        this.model.find({ status })
           .populate({ path: 'enrollment', select: 'name' }).sort({ '_id': 1 }).skip(skip).limit(limit),
-        this.model.countDocuments({ status: "ACTIVE" })
-      ]);
+        this.model.countDocuments({ status })
+      ]); 
       const sanClient = this.sanitizer.sanitizeMany(clients);
       return { clients: sanClient, count }
     } catch (e) {
@@ -103,7 +94,7 @@ export class ClientService {
       if (dto.birthday) {
         client.birthday = dto.birthday
       }
-      
+
       await client.save();
       await this.historyService.create({ resource: client._id, onModel: "Client", title: serviceLog.updateClient })
       return this.sanitizer.sanitize(client);
@@ -129,7 +120,7 @@ export class ClientService {
   ): Promise<ClientDTO> => {
     const client = await this.model.findById({ _id });
     this.checkClient(client);
-    if(status != "ACTIVE" && !dto.date){
+    if (status != "ACTIVE" && !dto.date) {
       throw new HttpException('If status is not active, then date is required field', HttpStatus.BAD_REQUEST);
     }
     client.termination.date = dto.date;
