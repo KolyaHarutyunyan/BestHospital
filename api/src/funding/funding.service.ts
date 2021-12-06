@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
+import { Model, Mongoose, Types } from 'mongoose';
 import { AddressService } from '../address/address.service';
 import { CredentialService } from '../credential';
 import { HistoryService, serviceLog } from '../history';
@@ -84,17 +84,12 @@ export class FundingService {
 
   /** returns all funders */
   async findAll(skip: number, limit: number, status: string): Promise<any> {
-    if (status == "INACTIVE" || status == "HOLD" || status == "TERMINATE") {
-      let [funders, count] = await Promise.all([
-        this.model.find({ $or: [{ status: "INACTIVE" }, { status: "HOLD" }, { status: "TERMINATE" }] }).sort({ '_id': -1 }).skip(skip).limit(limit),
-        this.model.countDocuments({ $or: [{ status: "INACTIVE" }, { status: "HOLD" }, { status: "TERMINATE" }] })
-      ]);
-      const sanFun = this.sanitizer.sanitizeMany(funders);
-      return { funders: sanFun, count }
+    if (!status) {
+      status = "ACTIVE"
     }
     let [funders, count] = await Promise.all([
-      (await this.model.find({ status: "ACTIVE" }).sort({ '_id': 1 }).skip(skip).limit(limit)).reverse(),
-      this.model.countDocuments({ status: "ACTIVE" })
+      this.model.find({ status }).sort({ '_id': -1 }).skip(skip).limit(limit),
+      this.model.countDocuments({ status })
     ]);
     const sanFun = this.sanitizer.sanitizeMany(funders);
     return { funders: sanFun, count }
@@ -245,11 +240,21 @@ export class FundingService {
 
   /** update modifiers */
   async updateModifiers(_id: string, dto: UpdateModifiersDto): Promise<ServiceDTO> {
-    const fundingService = await this.serviceModel.findById({_id});
+    const fundingService = await this.serviceModel.findById({ _id });
     this.checkFundingService(fundingService);
-    fundingService.modifiers = dto.modifiers;
-    await fundingService.save();
-    return fundingService;
+    let dbModifier: any = fundingService.modifiers;
+    for (let i = 0; i < dbModifier.length; i++) {
+      for (let j = 0; j < dto.modifiers.length; j++) {
+        if (dto.modifiers[j]._id == dbModifier[i]._id) {
+          dbModifier[i].credentialId = dto.modifiers[j].credentialId;
+          dbModifier[i].chargeRate = dto.modifiers[j].chargeRate;
+          dbModifier[i].name = dto.modifiers[j].name;
+          dbModifier[i].type = dto.modifiers[j].type;
+        }
+      }
+    }
+    // handmade :)
+    return await fundingService.save();
   }
 
   /** Private methods */
