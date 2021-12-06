@@ -12,7 +12,7 @@ export const Client = ({}) => {
     const [deleteClient, setDeleteClient] = useState('')
     const [page, setPage] = useState(1)
     const dispatch = useDispatch()
-    const [status, setStatus] = useState(1)
+    const [status, setStatus] = useState('ACTIVE')
 
     useEffect(() => {
         dispatch(clientActions.getClients({status: status, start: 0, end: 10}))

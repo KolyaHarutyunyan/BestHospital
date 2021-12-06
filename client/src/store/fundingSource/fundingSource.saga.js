@@ -296,15 +296,17 @@ function* setStatus(action) {
 
         const res = yield call(authService.setStatusService, action.payload.id, action.payload.path, action.payload.status, body,);
 
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+
         yield put({
             type: action.payload.type,
             payload: res.data,
         });
-        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+
     } catch (error) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
+        yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data));
     }
 }
 

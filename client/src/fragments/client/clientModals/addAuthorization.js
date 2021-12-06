@@ -19,9 +19,13 @@ export const AddAuthorization = ({handleClose, info}) => {
     const params = useParams()
     const dispatch = useDispatch()
     // const fSelect = useSelector(state => state?.fundingSource?.fSelect?.funders)
-    let enrolments = useSelector(state => state?.client?.clientEnrollment).map(item=> item.funderId )
+    const enrolment = useSelector(state => state.client.clientEnrollment)
 
 
+    let enrolments = useSelector(state => state?.client?.clientEnrollment).filter(item => item.funderId )
+
+
+    let fSelect = useSelector(state => state.fundingSource.fSelect.funders)
 
 
     const classes = createClientStyle()
@@ -66,6 +70,10 @@ export const AddAuthorization = ({handleClose, info}) => {
                     funderId = item._id
                 }
             })
+          let id =  fSelect.filter((i) =>(
+                   i.name === inputs.funding
+          ))
+
             const data = {
                 "authId": inputs.authId,
                 "startDate": inputs.startDate,
@@ -76,7 +84,7 @@ export const AddAuthorization = ({handleClose, info}) => {
             if (info) {
                 dispatch(clientActions.editClientsAuthorizations(data, info.id, params.id))
             } else {
-                dispatch(clientActions.createClientsAuthorizations(data, params.id, funderId))
+                dispatch(clientActions.createClientsAuthorizations(data, params.id, id[0].id))
             }
         } else {
             setError(
@@ -116,11 +124,15 @@ export const AddAuthorization = ({handleClose, info}) => {
                             typeError={error === 'authId' && ErrorText.field}
                         />
                         <SelectInput
+
+
+
+                            language={null}
                             name={"funding"}
                             label={"Funding Source*"}
                             handleSelect={handleChange}
                             value={inputs.funding}
-                            list={enrolments ? enrolments : []}
+                            list={fSelect ? fSelect : []}
                             typeError={error === 'funding' ? ErrorText.field : ''}
                         />
                         <div style={{display: 'flex'}}>

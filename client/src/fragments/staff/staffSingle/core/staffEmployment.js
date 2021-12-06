@@ -11,7 +11,7 @@ import {adminActions, clientActions, httpRequestsOnErrorsActions, httpRequestsOn
 import {serviceSingleStyles} from "@eachbase/fragments/client/clientSingle/core";
 
 
-export const StaffEmployment = ({ info}) => {
+export const StaffEmployment = ({ info }) => {
     const classes = serviceSingleStyles()
     const dispatch = useDispatch()
     const [delEdit, setDelEdit] = useState(null)

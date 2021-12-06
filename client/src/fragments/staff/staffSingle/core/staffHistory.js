@@ -1,9 +1,10 @@
 import {HistoryCard, NoItemText} from '@eachbase/components';
 import {useSelector} from "react-redux";
 import React from "react";
+import {useGlobalStyles} from "@eachbase/utils";
 
 export const StaffHistory = ({data}) => {
-
+    const classes = useGlobalStyles()
     const {httpOnError} = useSelector((state) => ({
             httpOnError: state.httpOnError
         })
@@ -11,14 +12,19 @@ export const StaffHistory = ({data}) => {
 
     let errorMessage = httpOnError.length && httpOnError.filter(param => param.error === 'History with this id was not found')
 
-    return(
-        <div style={{marginTop: 50}}>
+    return (
+        <div>
             {
-                errorMessage ?<NoItemText text='There is no history in this date'/>  : data && data.map((item,index)=>{
-                    return(
-                        <HistoryCard key={index} data={item} />
-                    )
-                })
+                errorMessage ?
+                    <NoItemText text='There is no history in this date'/>
+                    :
+                    <div className={classes.globalHistory}>
+                        {data && data.map((item, index) => {
+                            return (
+                                <HistoryCard key={index} data={item}/>
+                            )
+                        })}
+                    </div>
             }
         </div>
     )

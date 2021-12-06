@@ -18,7 +18,7 @@ export const EmploymentModal = ({handleClose, info}) => {
         ...info,
         supervisor: info.supervisor.firstName,
         departmentId: info?.departmentId?.name,
-        startDate: moment(info?.date).format('YYYY-MM-DD'),
+        startDate: moment(info?.startDate).format('YYYY-MM-DD'),
         endDate: moment(info?.termination?.date).format('YYYY-MM-DD'),
         employmentType: info?.schedule
     } : {});
@@ -89,11 +89,13 @@ export const EmploymentModal = ({handleClose, info}) => {
                 "departmentId": depId,
                 "active": true,
                 "startDate": inputs.startDate ? new Date(inputs.startDate).toISOString() : '',
+                "endDate": inputs.endDate ? new Date(inputs.endDate).toISOString() : '',
                 "schedule": +inputs.employmentType,
                 "termination": {
                     "date": inputs.endDate ? inputs.endDate : undefined
                 }
             }
+
 
             if (info) {
                 dispatch(adminActions.editEmployment(data, info.id, params.id))
@@ -166,7 +168,11 @@ export const EmploymentModal = ({handleClose, info}) => {
                             <ValidationInput
                                 variant={"outlined"}
                                 onChange={handleChange}
-                                value={inputs.startDate}
+                                value={
+                                    inputs.startDate ?
+                                        moment(inputs.startDate).format('YYYY-MM-DD')
+                                        : inputs.startDate }
+                                    // inputs.startDate ? new Date(inputs.startDate) : ''}
                                 type={"date"}
                                 label={"Start Date*"}
                                 name='startDate'

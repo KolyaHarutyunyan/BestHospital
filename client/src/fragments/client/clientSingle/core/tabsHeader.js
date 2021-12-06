@@ -26,29 +26,15 @@ const filterBtn = {
     height: 36
 }
 
-export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setGetStatus ,setPrevStatus ,getStatus, type, handleOpenHour, availabilityData}) => {
-
+export const TabsHeader = ({activeTab, data, authActive, handleOpenHour, availabilityData}) => {
     const classes = serviceSingleStyles()
+    const dispatch = useDispatch()
     const [open, setOpen] = useState()
-    const [inputs, setInputs] = useState(status);
-    const params = useParams()
-
-
-    useEffect(()=>{
-        setInputs(getStatus)
-    },[getStatus])
-
-    useEffect(()=>{
-        setInputs(status)
-    },[])
+    const [searchDate, setSearchDate] = useState('')
 
     const handleOpenClose = () => {
         setOpen(!open)
     }
-
-    const dispatch = useDispatch()
-
-    const [searchDate, setSearchDate] = useState('')
 
     const handleChangeDate = e => {
         setSearchDate(e.target.value)
@@ -57,26 +43,6 @@ export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setG
     const handleSubmit = () => {
         dispatch(fundingSourceActions.getFundingSourceHistoriesById('Client', searchDate && new Date(searchDate).toISOString()))
     }
-
-    const list = [
-        {name: 'ACTIVE'},
-        {name: 'INACTIVE'},
-        {name: 'HOLD'},
-        {name: 'TERMINATE'},
-    ]
-
-
-    const handleChange = e => {
-        setPrevStatus(inputs)
-        setGetStatus(e.target.value)
-        if (e.target.value === 'INACTIVE' || e.target.value === 'HOLD' || e.target.value === 'TERMINATE'){
-            handleOpen()
-        }if (e.target.value === 'ACTIVE') {
-            dispatch(fundingSourceActions.setStatus(params.id,'funding', e.target.value, type ))
-        }
-
-        setInputs(e.target.value)
-    };
 
     return (
         <div>
@@ -93,16 +59,6 @@ export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setG
                     </div>
                 </li>
                 <li className={classes.headerRight}>
-                    {activeTab !== 6 &&
-                    <SelectInput
-                        styles={inputStyle}
-                        name={"active"}
-                        handleSelect={handleChange}
-                        value={inputs ? inputs : status}
-                        list={list}
-                        className={classes.inputTextField}
-                    />
-                    }
                     {
                         activeTab === 6 ? <>
                                 <div className={classes.searchContainer}>
@@ -124,23 +80,18 @@ export const TabsHeader = ({activeTab, data, authActive, status,handleOpen, setG
                             </> :
 
                         activeTab === 0 ?
-                            <AddModalButton btnStyles={editButtonStyle} handleClick={() => setOpen(true)}
-                                            text='Edit'/> :
+                            <AddModalButton btnStyles={editButtonStyle} handleClick={() => setOpen(true)} text='Edit'/>
+                            :
                             activeTab === 4 ?
-                                <AddButton styles={{width: 450}} text='Available Hours'
-                                           handleClick={handleOpenClose}/>
+                                <AddButton  text='Available Hours' handleClick={handleOpenClose}/>
                                 :
                             activeTab !== 6 && activeTab !== 4 ?
-                                <AddButton text={
-                                    authActive ? 'Add Authorization Service' :
-                                        activeTab === 1 ?
-                                            'Add Contact' :
-                                            activeTab === 2 ?
-                                                'Add Enrollments' :
-                                                activeTab === 3 ?
-                                                    'Add Authorization'
-                                                    : 'Add Notes'
-                                } handleClick={handleOpenClose} styles={{width: 450}}/> : null
+                                <AddButton text={authActive ? 'Add Authorization Service' :
+                                        activeTab === 1 ? 'Add Contact' :
+                                            activeTab === 2 ? 'Add Enrollments' :
+                                                activeTab === 3 ? 'Add Authorization'
+                                                    : 'Add Notes'} handleClick={handleOpenClose} />
+                                : null
                     }
                 </li>
             </ul>

@@ -211,6 +211,11 @@ export const useGlobalStyles = makeStyles({
         top: '254px',
         left: '50%',
         transform: 'translate(-50%)'
+    },
+
+    globalHistory: {
+        height: 'calc(100vh - 380px)',
+        overflow:'auto',
     }
 
 });

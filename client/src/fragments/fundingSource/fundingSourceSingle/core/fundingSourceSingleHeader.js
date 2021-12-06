@@ -26,20 +26,18 @@ export const FundingSourceSingleHeader = ({activeTab, title, status, handleOpen,
     const dispatch = useDispatch()
     const prevData = useSelector(state => state.fundingSource.fundingSourceItem)
     const classes = fundingSourceSingleStyles()
-    const [inputs, setInputs] = useState( '');
+
     const {httpOnSuccess,} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
     }));
 
-    const params = useParams()
+
 
     const handleOpenClose = () => {
         setOpen(!open)
     }
 
-    useEffect(()=>{
-        setInputs(getStatus)
-    },[getStatus])
+
 
     const [searchDate, setSearchDate] = useState('')
 
@@ -55,12 +53,6 @@ export const FundingSourceSingleHeader = ({activeTab, title, status, handleOpen,
 
     const successServ = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_FUNDING_SOURCE_SERVICE_BY_ID'
 
-    const list = [
-        {name: 'ACTIVE', id:'ACTIVE'},
-        {name: 'INACTIVE', id:'INACTIVE'},
-        {name: 'HOLD', id:'HOLD'},
-        {name: 'TERMINATE', id:'TERMINATE'},
-    ]
 
     useEffect(() => {
         if (successServ) {
@@ -70,19 +62,6 @@ export const FundingSourceSingleHeader = ({activeTab, title, status, handleOpen,
 
     }, [successServ])
 
-    const handleChange = e => {
-        setPrevStatus(inputs)
-        setGetStatus(e.target.value)
-       // if (e.target.value === 'INACTIVE' || e.target.value === 'HOLD' || e.target.value === 'TERMINATE'){
-        e.target.value !== 'ACTIVE' && handleOpen()
-       // }if (e.target.value === 'ACTIVE') {
-        e.target.value === 'ACTIVE' && dispatch(fundingSourceActions.setStatus(params.id,'funding', e.target.value,'', type ))
-       // }
-        setInputs(e.target.value)
-        handleGetStatus && handleGetStatus(e.target.value)
-    };
-
-
     return (
         <div className={classes.fundingSourceSingleHeaderWrapStyles}>
             <div className={classes.fundingSourceSingleHeaderStyles}>
@@ -90,15 +69,6 @@ export const FundingSourceSingleHeader = ({activeTab, title, status, handleOpen,
                 <p className={classes.title}>{title && title}</p>
             </div>
             <div style={{display: 'flex'}}>
-                <SelectStatusInput
-                    errorFalse={true}
-                    styles={inputStyle}
-                    name={"active"}
-                    handleSelect={handleChange}
-                    value={inputs ? inputs : status}
-                    list={list}
-                    className={classes.inputTextField}
-                />
                 <SimpleModal
                     openDefault={open}
                     handleOpenClose={handleOpenClose}
@@ -110,7 +80,7 @@ export const FundingSourceSingleHeader = ({activeTab, title, status, handleOpen,
                                 <AddNotes model='Funder' handleClose={handleOpenClose}/> : null}/>
 
                 {activeTab === 0 ?
-                    <AddModalButton styles={{width: 450}} handleClick={handleOpenClose} text='Edit'
+                    <AddModalButton  handleClick={handleOpenClose} text='Edit'
                                     btnStyles={editButtonStyle}/> :
                     activeTab === 3 ?
                         <>
@@ -134,7 +104,6 @@ export const FundingSourceSingleHeader = ({activeTab, title, status, handleOpen,
                         : activeTab >= 3 ?
                         <div className={classes.clear}/> :
                         <AddButton
-                            styles={{width: 450}}
                             text={activeTab === 1 ? 'Add Service' : activeTab === 2 ? 'Add Note' : ''}
                             handleClick={handleOpenClose}/>}
             </div>

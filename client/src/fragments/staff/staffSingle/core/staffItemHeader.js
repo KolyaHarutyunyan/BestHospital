@@ -33,24 +33,17 @@ export const StaffItemHeader = ({
                                     onModel, availabilityData, title, noteModalTypeInfo,
                                     openModal, handleOpenClose, globalCredentialInformation,
                                     globalCredentials, credModalType, openCloseCredModal,
-                                    openCredModal, activeTab, status, handleOpen, setGetStatus,
-                                    setPrevStatus, getStatus, type, info
+                                    openCredModal, activeTab,  info
                                 }) => {
     const classes = serviceSingleStyles()
     const dispatch = useDispatch()
     const params = useParams()
-    const [inputs, setInputs] = useState({active: 'Active'});
     const [switchBoolean, setSwitchBoolean] = useState('')
     const [searchDate, setSearchDate] = useState('')
     const disabled = !searchDate.length
 
     useEffect(() => {
-        setInputs(getStatus)
-    }, [getStatus])
-
-    useEffect(() => {
         dispatch(adminActions.getAllPaycodes(params.id))
-        setInputs(status)
     }, [])
 
     useEffect(() => {
@@ -81,25 +74,6 @@ export const StaffItemHeader = ({
         dispatch(fundingSourceActions.getFundingSourceHistoriesById('Staff', searchDate && new Date(searchDate).toISOString()))
     }
 
-    const list = [
-        {name: 'ACTIVE'},
-        {name: 'INACTIVE'},
-        {name: 'HOLD'},
-        {name: 'TERMINATE'},
-    ]
-
-    const handleChange2 = e => {
-        setPrevStatus(inputs)
-        setGetStatus(e.target.value)
-        if (e.target.value === 'INACTIVE' || e.target.value === 'HOLD' || e.target.value === 'TERMINATE') {
-            handleOpen()
-        }
-        if (e.target.value === 'ACTIVE') {
-            dispatch(fundingSourceActions.setStatus(params.id, 'funding', e.target.value, type))
-        }
-        setInputs(e.target.value)
-    };
-
     return (
         <div>
             <ul className={classes.tabsWrapper}>
@@ -115,27 +89,11 @@ export const StaffItemHeader = ({
                     </div>
                 </li>
                 <li className={classes.headerRight}>
-                    <SelectInput
-                        errorFalse={true}
-                        styles={inputStyle}
-                        name={"active"}
-                        handleSelect={handleChange2}
-                        value={inputs ? inputs : status}
-                        list={list}
-                        className={classes.inputTextField}
-                    />
                     {
-                        activeTab === 0 ?
-                            <AddModalButton styles={{width: 450}} btnStyles={editButtonStyle}
-                                            handleClick={handleOpenClose}
-                                            text='edit'/>
-                            : activeTab === 2 ? <AddButton styles={{width: 450}} text='Add Timesheet'
-                                                           handleClick={handleOpenClose}/>
-                            : activeTab === 3 ?
-                                <AddButton styles={{width: 450}} text='Add Credential'
-                                           handleClick={() => openCloseCredModal('addCredential')}/>
-                                : activeTab === 5 ? <AddButton styles={{width: 450}} text='Available Hours'
-                                                               handleClick={handleOpenClose}/>
+                        activeTab === 0 ? <AddModalButton  btnStyles={editButtonStyle} handleClick={handleOpenClose} text='edit'/>
+                            : activeTab === 2 ? <AddButton  text='Add Timesheet' handleClick={handleOpenClose}/>
+                            : activeTab === 3 ? <AddButton  text='Add Credential' handleClick={() => openCloseCredModal('addCredential')}/>
+                                : activeTab === 5 ? <AddButton  text='Available Hours' handleClick={handleOpenClose}/>
                                     : activeTab === 1 ?
                                         <>
                                             <div className={classes.clinicalWrapper}>
@@ -147,17 +105,14 @@ export const StaffItemHeader = ({
                                                     />
                                                 </div>
                                             </div>
-                                            <AddButton styles={{width: 450}} text='Add Employment'
-                                                       handleClick={handleOpenClose}/>
+                                            <AddButton  text='Add Employment' handleClick={handleOpenClose}/>
                                         </>
 
 
                                         : activeTab === 7 ?
-                                            <AddButton styles={{width: 450}} text='Add Note'
-                                                       handleClick={handleOpenClose}/>
+                                            <AddButton  text='Add Note' handleClick={handleOpenClose}/>
                                             : activeTab === 3 ?
-                                                <AddButton styles={{width: 450}} text='Add Credential'
-                                                           handleClick={() => openCloseCredModal('addCredential')}/>
+                                                <AddButton  text='Add Credential' handleClick={() => openCloseCredModal('addCredential')}/>
                                                 : activeTab === 1 ?
                                                     <div className={classes.clinicalWrapper}>
                                                         <p>Clinician</p>
@@ -167,7 +122,7 @@ export const StaffItemHeader = ({
                                                                 onClick={changeSwitch}
                                                             />
                                                         </div>
-                                                        <AddButton styles={{width: 450}} text='Add Employment'
+                                                        <AddButton  text='Add Employment'
                                                                    handleClick={handleOpenClose}/>
                                                     </div>
                                                     : activeTab === 7 ?
