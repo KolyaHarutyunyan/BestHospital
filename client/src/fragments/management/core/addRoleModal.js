@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {
     AddModalButton,
     CheckboxesTags,
-    CloseButton, Toast,
+    CloseButton,
     ValidationInput
 } from "@eachbase/components";
 import {managementFragments} from "./style";
@@ -32,8 +32,6 @@ export const AddRoleModal = ({handleClose, permissionsList}) => {
             permissionsList.push(i.id)
         }
 
-
-
         if (roleName && permissions && description) {
             const body = {
                 "title": roleName,
@@ -41,43 +39,47 @@ export const AddRoleModal = ({handleClose, permissionsList}) => {
                 "permissions": permissionsList,
             }
             dispatch(roleActions.createRole(body))
-
         } else {
             !roleName ? setError('role') :
                 !permissions ? setError('permissions') :
                     !description ? setError('description') : ''
-
         }
     }
+
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_ROLE'
     const loader = httpOnLoad.length && httpOnLoad[0] === 'CREATE_ROLE'
     const errorText = httpOnError.length && httpOnError[0].error
 
-
-
     useEffect(() => {
         if (success) {
-            dispatch(httpRequestsOnSuccessActions.removeSuccess(httpOnSuccess[0].type ))
+            dispatch(httpRequestsOnSuccessActions.removeSuccess(httpOnSuccess[0].type))
             handleClose()
         }
     }, [success]);
 
+    useEffect(() => {
+        return () => {
+            dispatch(httpRequestsOnErrorsActions.removeError('CREATE_ROLE'))
+        }
+    }, [])
+
     const handleChange = (ev) => {
-        if(httpOnError.length) {
+        if (httpOnError.length) {
             dispatch(httpRequestsOnErrorsActions.removeError(httpOnError[0].type))
         }
         setRoleName(ev.target.value)
         if (error === 'role') setError('')
     }
+
     const changePermissions = (ev) => {
         setPermissions(ev)
         if (error === 'permissions') setError('')
     }
+
     const changeDescription = (ev) => {
         setDescription(ev.target.value)
         if (error === 'description') setError('')
     }
-
 
     return (
         <div className={globalModalsClasses.smallModalWrapper}>

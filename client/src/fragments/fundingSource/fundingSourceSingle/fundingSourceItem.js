@@ -17,6 +17,7 @@ import {
 } from "./core";
 import {fundingSourceItemStyle} from "./styles";
 import {FindLoad} from "@eachbase/utils";
+import {useParams} from "react-router-dom";
 
 export const FundingSourceItem = ({}) => {
     const classes = fundingSourceItemStyle()
@@ -29,7 +30,6 @@ export const FundingSourceItem = ({}) => {
     const [activeTab, setActiveTab] = useState(0)
     const [getStatus, setGetStatus] = useState('')
     const [prevStatus, setPrevStatus] = useState('')
-    const [statusType, setStatusType] = useState('')
 
     const tabsLabels = [
         {label: 'General Information'},
@@ -39,9 +39,11 @@ export const FundingSourceItem = ({}) => {
     ]
 
     const loader = FindLoad('GET_FUNDING_SOURCE_HISTORIES_BY_ID')
+    const [statusType, setStatusType] = useState('')
 
-    const handleOpenClose = () => {
+    const handleOpenClose = (status) => {
         setGetStatus(data?.status)
+        setStatusType(status)
         setOpen(!open)
     }
 
@@ -78,9 +80,21 @@ export const FundingSourceItem = ({}) => {
 
 
 
+
+    const params = useParams()
     return (
         <>
             <TableWrapperGeneralInfo
+                selectStatus={true}
+                setGetStatus={setGetStatus}
+                getStatus={getStatus}
+                setPrevStatus={setPrevStatus}
+                status={data?.status}
+                id={params.id}
+                handleOpen={handleOpenClose}
+                path={'funding'}
+                type={'GET_FUNDING_SOURCE_BY_ID_SUCCESS'}
+
                 title={data?.name}
                 parent='Funding Source'
                 parentLink='/fundingSource'
@@ -93,8 +107,6 @@ export const FundingSourceItem = ({}) => {
                         statusType={statusType}
                         status={data?.status}
                         name={data?.name}
-                        setGetStatus={setGetStatus}
-                        prevStatus={prevStatus}
                         info={{
                             status: getStatus,
                             path: 'funding',
@@ -106,15 +118,9 @@ export const FundingSourceItem = ({}) => {
             >
                 <div className={classes.fundingSourceItemHeader}>
                     <FundingSourceSingleHeader
-                        handleGetStatus={setStatusType}
-                        type='GET_FUNDING_SOURCE_BY_ID_SUCCESS'
-                        setGetStatus={setGetStatus}
-                        getStatus={getStatus}
-                        setPrevStatus={setPrevStatus}
-                        handleOpen={handleOpenClose}
-                        status={data?.status}
                         title={data?.name}
-                        activeTab={activeTab}/>
+                        activeTab={activeTab}
+                    />
                     <SimpleTabs
                         setActiveTab={setActiveTab}
                         tabsLabels={tabsLabels}

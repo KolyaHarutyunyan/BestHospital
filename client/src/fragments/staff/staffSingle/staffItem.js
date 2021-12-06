@@ -75,8 +75,10 @@ export const StaffItem = ({ gen }) => {
     const services = useSelector(state => state.system.services)
     const rolesList = useSelector(state => state.roles.rolesList)
     const accessList = useSelector(state => state.auth.accessList)
+    const [statusType, setStatusType] = useState('')
 
-    const handleOpenClose = () => {
+    const handleOpenClose = (status) => {
+        setStatusType(status)
         setOpen(!open)
     }
 
@@ -254,6 +256,18 @@ export const StaffItem = ({ gen }) => {
     return (
         <>
             <TableWrapperGeneralInfo
+                selectStatus={true}
+                setGetStatus={setGetStatus}
+                getStatus={getStatus}
+                setPrevStatus={setPrevStatus}
+                status={staffGeneral?.status}
+                id={params.id}
+                handleOpen={handleOpenClose}
+                path={'staff'}
+                type={'GET_ADMIN_BY_ID_SUCCESS'}
+
+
+
                 parent='Staff'
                 title={staffGeneral?.firstName}
                 parentLink='/staff'
@@ -262,6 +276,7 @@ export const StaffItem = ({ gen }) => {
                 handleOpenClose={handleOpenClose}
                 body={
                     <InactiveModal
+                        statusType={statusType}
                         name={staffGeneral?.firstName}
                         setGetStatus={setGetStatus}
                         prevStatus={prevStatus}
@@ -276,8 +291,6 @@ export const StaffItem = ({ gen }) => {
                 }
             >
                 <div className={classes.staffSingleItem}>
-
-
                     <StaffItemHeader onModel='Staff'
                                      availabilityData={availabilityData}
                                      title={`${staffGeneral?.firstName}${staffGeneral?.lastName}`}
@@ -291,12 +304,6 @@ export const StaffItem = ({ gen }) => {
                                      openCredModal={openCredModal}
                                      info={gen}
                                      activeTab={activeTab}
-                                     status={staffGeneral?.status}
-                                     type= 'GET_ADMIN_BY_ID_SUCCESS'
-                                     setGetStatus={setGetStatus}
-                                     getStatus={getStatus}
-                                     setPrevStatus={setPrevStatus}
-                                     handleOpen={handleOpenClose}
                     />
                     <SimpleTabs setActiveTab={setActiveTab} tabsLabels={tabsLabels} tabsContent={tabsContent}/>
                 </div>

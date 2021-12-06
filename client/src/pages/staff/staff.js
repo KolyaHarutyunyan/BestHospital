@@ -8,7 +8,7 @@ export const Staff = () => {
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const [page, setPage] = useState(1)
-    const [status,setStatus] = useState(1)
+    const [status,setStatus] = useState('ACTIVE')
 
     const { adminsList } = useSelector((state) => ({
         adminsList: state.admins.adminsList,

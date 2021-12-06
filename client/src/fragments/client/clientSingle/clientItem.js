@@ -22,6 +22,7 @@ import {
 import {AddContact} from "../clientModals";
 import {clientItemStyles} from "./styles";
 import {FindLoad} from "@eachbase/utils";
+import {useParams} from "react-router-dom";
 
 export const ClientItem = () => {
     const dispatch = useDispatch()
@@ -55,7 +56,10 @@ export const ClientItem = () => {
     const clientsNotes = useSelector(state => state.note.notes)
     const availabilityData = useSelector(state => state.availabilitySchedule.availabilitySchedule)
 
-    const handleOpenClose = () => {
+    const [statusType, setStatusType] = useState('')
+
+    const handleOpenClose = (status) => {
+        setStatusType(status)
         setOpen(!open)
     }
 
@@ -114,10 +118,24 @@ export const ClientItem = () => {
         },
     ];
 
+const params = useParams()
 
     return (
         <>
             <TableWrapperGeneralInfo
+                selectStatus={true}
+                setGetStatus={setGetStatus}
+                getStatus={getStatus}
+                setPrevStatus={setPrevStatus}
+                status={data?.status}
+                id={params.id}
+                handleOpen={handleOpenClose}
+                path={'client'}
+                type={'GET_CLIENT_BY_ID_SUCCESS'}
+
+
+
+
                 parent='Clients'
                 title={data ? `${data?.firstName} ${data?.lastName}` : ''}
                 parentLink='/client'
@@ -126,14 +144,14 @@ export const ClientItem = () => {
                 handleOpenClose={handleOpenClose}
                 body={
                     <InactiveModal
+                        statusType={statusType}
                         name={data?.firstName}
-                        setGetStatus={setGetStatus}
-                        prevStatus={prevStatus}
                         info={{
                             status: getStatus,
                             path: 'client',
                             type: 'GET_CLIENT_BY_ID_SUCCESS'
-                        }} handleOpenClose={handleOpenClose}
+                        }}
+                        handleOpenClose={handleOpenClose}
                         handleClose={handleOpenClose}
                     />}
             >
@@ -149,12 +167,11 @@ export const ClientItem = () => {
                         authActive={authActive}
                         data={data}
                         activeTab={activeTab}
-                        status={data?.status}
-                        type='GET_CLIENT_BY_ID_SUCCESS'
-                        setGetStatus={setGetStatus}
-                        getStatus={getStatus}
-                        setPrevStatus={setPrevStatus}
-                        handleOpen={handleOpenClose}
+                        // status={data?.status}
+                        // setGetStatus={setGetStatus}
+                        // getStatus={getStatus}
+                        // setPrevStatus={setPrevStatus}
+                        // handleOpen={handleOpenClose}
                     />
                     <SimpleTabs setAuthActive={setAuthActive}
                                 setActiveTab={setActiveTab}

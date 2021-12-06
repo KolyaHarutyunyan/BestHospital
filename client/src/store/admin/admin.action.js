@@ -17,7 +17,13 @@ import {
     DELETE_STAFF_SERVICE,
     GET_TIMESHEET,
     CREATE_TIMESHEET,
-    GET_ALL_PAYCODES, EDIT_TIMESHEET, GET_ALL_ADMINS, EDIT_PAY_CODE, IS_CLINICIAN, GET_TIMESHEET_BY_ID
+    GET_ALL_PAYCODES,
+    EDIT_TIMESHEET,
+    GET_ALL_ADMINS,
+    EDIT_PAY_CODE,
+    IS_CLINICIAN,
+    GET_TIMESHEET_BY_ID,
+    CLEAR_ALL_PAYCODES
 
 } from "./admin.types";
 
@@ -192,5 +198,10 @@ export const getAllPaycodes = (id) => {
     return {
         type: GET_ALL_PAYCODES,
         payload: {id}
+    }
+}
+export const clearAllPaycodes = ( ) => {
+    return {
+        type: CLEAR_ALL_PAYCODES,
     }
 }

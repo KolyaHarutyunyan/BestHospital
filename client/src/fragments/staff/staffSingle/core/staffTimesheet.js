@@ -138,13 +138,18 @@ export const StaffTimesheet = ({info}) => {
                                 data={item.description ? item?.payCode?.payCodeTypeId?.type : 'aa'}
                     />
                 </TableCell>
-                <TableCell>{`$${timesheetById?.payCode?.rate}`}</TableCell>
+                <TableCell>{
+                    `$${item.amount && item.hours ? item.amount / item.hours : timesheetById?.payCode?.rate }`
+                }</TableCell>
                 <TableCell>{item.regularHours ? item.regularHours : item?.hours}</TableCell>
                 <TableCell>{item.description ? `$${item.totalAmount}` : `$${item?.amount}`}</TableCell>
             </TableBodyComponent>
         )
     }
 
+    useEffect(() =>{
+       return()=>(dispatch(adminActions.clearAllPaycodes()))
+    },[])
 
     return (
         <>
@@ -180,8 +185,10 @@ export const StaffTimesheet = ({info}) => {
                         <>
                             <div className={classes.bcbaHeader}>
                                 <p>
-                                    <SlicedText size={30} type={'name'}
-                                                data={timesheetById ? timesheetById.payCode && timesheetById.payCode.name : ''}/>
+                                    <SlicedText size={30}
+                                                type={'name'}
+                                                data={timesheetById ? timesheetById.payCode && timesheetById.payCode.name : ''}
+                                    />
                                 </p>
                                 <div className={classes.dateEdite}>
                                     <p>
@@ -193,6 +200,7 @@ export const StaffTimesheet = ({info}) => {
                                 </div>
                             </div>
                             <p>{timesheetById ? timesheetById.description : ''}</p>
+
                             {timesheetById &&
                             timesheetById.overtimes ?
                                 <Notes
@@ -202,6 +210,20 @@ export const StaffTimesheet = ({info}) => {
                                     headerTitles={headerTitlesBcba}
                                     defaultStyle={true}
                                 /> : ""}
+
+                            {/*{timesheetById && timesheetById.overtimes && timesheetById.overtimes.length > 0 &&*/}
+                            {/*<TableBodyComponent>*/}
+                            {/*    <TableCell>*/}
+                            {/*        <SlicedText size={30} type={'name'} data={'Regular'}/>*/}
+                            {/*    </TableCell>*/}
+                            {/*    <TableCell>{`$${timesheetById.regularPay && timesheetById.regularHours ? timesheetById.regularPay / timesheetById.regularHours :''}`}</TableCell>*/}
+                            {/*    <TableCell>{timesheetById.regularHours}</TableCell>*/}
+                            {/*    /!*<TableCell>{item.description ? `$${item.totalAmount}` : `$${item?.amount}`}</TableCell>*!/*/}
+                            {/*</TableBodyComponent>*/}
+                            {/*}*/}
+
+
+
                             <div className={classes.amountContainer}>
                                 <p>Total hours:
                                     <span className={classes.hours}>{timesheetById ?

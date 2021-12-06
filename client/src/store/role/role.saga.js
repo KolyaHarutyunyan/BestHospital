@@ -30,7 +30,7 @@ function* createRole(action) {
   } catch (err) {
     // yield put(httpRequestsOnErrorsActions.removeError(action.type));
     yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-    // yield put(httpRequestsOnErrorsActions.appendError(action.type,err.data.message));
+    yield put(httpRequestsOnErrorsActions.appendError(action.type,err.data.message));
   }
 }
 

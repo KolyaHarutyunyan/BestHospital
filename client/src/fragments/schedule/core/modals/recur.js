@@ -51,7 +51,7 @@ export const Recur = ({openCloseRecur, date}) => {
             6: {sum: 0, date: []}
         };
 
-        for (var d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
+        for (var d = startDate; d <= endDate; d.setDate(d.getDate() )) {
             dayCount[d.getDay()].sum++;
             x = new Date(d.getTime());
             dayCount[d.getDay()].date.push(x);
@@ -85,7 +85,7 @@ export const Recur = ({openCloseRecur, date}) => {
         let end = new Date(inputs.endDate);
         let count = 0;
         let dates = [], x;
-        for (let d = start; d <= end; d.setMonth(d.getMonth() + 1)) {
+        for (let d = start; d <= end; d.setMonth(d.getMonth() )) {
             if (d.getMonth() === end.getMonth() && end.getDate() < +e.target.value) {
                 break
             }
@@ -103,7 +103,7 @@ export const Recur = ({openCloseRecur, date}) => {
         let end = new Date(inputs.endDate);
         let count = 0;
         let dates = [], x;
-        for (let d = start; d <= end; d.setMonth(d.getMonth() + 1)) {
+        for (let d = start; d <= end; d.setMonth(d.getMonth() )) {
             if (d.getMonth() === end.getMonth() && end.getDate() < +inputs.repeatDayMonth) {
                 break
             }

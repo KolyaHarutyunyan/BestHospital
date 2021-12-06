@@ -142,9 +142,6 @@ export const serviceSingleStyles = makeStyles(() => ({
             marginTop: -32,
             width: '100%'
         },
-        clientHistory: {
-            marginTop: 50,
-        },
         headerRight: {
             display: 'flex',
         },

@@ -8,7 +8,7 @@ export const FundingSource = () => {
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const [page, setPage] = useState(1)
-    const [status, setStatus] = useState(1)
+    const [status, setStatus] = useState('ACTIVE')
 
     useEffect(() => {
         dispatch(fundingSourceActions.getFundingSource({status: status, start: 0, end: 10}))
