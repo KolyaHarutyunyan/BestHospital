@@ -122,6 +122,14 @@ export const serviceSingleStyles = makeStyles(() => ({
             width: 100,
             overflow: 'hidden'
         },
+    sircule:{
+      display:'flex',
+      alignItems:'center',
+        '& p':{
+          marginRight:'15px',
+            fontSize:'14px',
+        }
+    },
         tableID: {
             textOverflow: 'ellipsis',
             width: 60,
@@ -206,7 +214,11 @@ export const serviceSingleStyles = makeStyles(() => ({
             fontWeight: "bold",
             marginLeft: 8,
             cursor: 'pointer'
-        }
+        },
+    modifiers:{
+            fontSize:'14px',
+            color:'#4B5C68'
+    }
     }))
 ;
 

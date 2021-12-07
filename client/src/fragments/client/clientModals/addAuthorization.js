@@ -3,7 +3,7 @@ import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {ValidationInput, SelectInput, CreateChancel, ModalHeader, AddressInput} from "@eachbase/components";
 import {createClientStyle,} from "./styles";
-import {ErrorText} from "@eachbase/utils";
+import {ErrorText, FindLoad} from "@eachbase/utils";
 import {
     clientActions,
     fundingSourceActions,
@@ -104,6 +104,9 @@ export const AddAuthorization = ({handleClose, info}) => {
         {name: 1, id:1, code: 1}
     ]
 
+    const editLoader = FindLoad('EDIT_CLIENT_AUTHORIZATION')
+    const successLoader = FindLoad('CREATE_CLIENT_AUTHORIZATION')
+
     return (
         <div className={classes.createFoundingSource}>
             <ModalHeader
@@ -124,9 +127,6 @@ export const AddAuthorization = ({handleClose, info}) => {
                             typeError={error === 'authId' && ErrorText.field}
                         />
                         <SelectInput
-
-
-
                             language={null}
                             name={"funding"}
                             label={"Funding Source*"}
@@ -178,7 +178,7 @@ export const AddAuthorization = ({handleClose, info}) => {
                 </div>
                 <div className={classes.clientModalBlock}>
                     <CreateChancel
-                        loader={httpOnLoad.length > 0}
+                        loader={!!editLoader.length || !!successLoader.length}
                         create={info ? "Save" : 'Add'}
                         chancel={"Cancel"}
                         onCreate={handleCreate}

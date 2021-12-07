@@ -4,11 +4,10 @@ import {useDispatch, useSelector} from "react-redux";
 import {Card, DeleteElement, NoItemText, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
 import {serviceSingleStyles} from './styles';
 import {Colors, Images} from "@eachbase/utils";
-import {TableCell} from "@material-ui/core";
+import {CircularProgress, TableCell} from "@material-ui/core";
 import {clientActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, uploadActions} from "@eachbase/store";
-import {AddAuthorization, AuthorizationFile} from "../../clientModals";
+import {AddAuthorization, AuthorizationFile, AddAuthorizationService} from "../../clientModals";
 import {AuthHeader} from "@eachbase/components/headers/auth/authHeader";
-import {AddAuthorizationService} from "../../clientModals/addAuthorizationService";
 
 
 export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) => {
@@ -39,13 +38,14 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) =>
     const successDelServ = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION_SERV'
 
 
-    const handleClose = () =>{
+    const handleClose = () => {
         setCreateEditFile(!createEditFile)
     }
 
-
     useEffect(() => {
-        dispatch(clientActions.getClientsAuthorizationsServ(info[authIndex].id))
+        if (info) {
+            dispatch(clientActions.getClientsAuthorizationsServ(info[authIndex].id))
+        }
     }, [authIndex])
 
     useEffect(() => {
@@ -57,7 +57,6 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) =>
     }, [success])
 
     useEffect(() => {
-
         if (successDelServ) {
             setToggleModal3(!toggleModal3)
             dispatch(httpRequestsOnSuccessActions.removeSuccess('DELETE_CLIENT_AUTHORIZATION_SERV'))
@@ -77,6 +76,18 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) =>
         },
         {
             title: 'Total Units',
+            sortable: false
+        },
+        {
+            title: 'Completed Units',
+            sortable: false
+        },
+        {
+            title: 'Available Units',
+            sortable: false
+        },
+        {
+            title: 'Percent Utilization',
             sortable: false
         },
         {
@@ -101,8 +112,20 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) =>
                 setAuthActive(true)
             }}>
                 <TableCell><p className={classes.tableName}>{item?.serviceId?.name}</p></TableCell>
-                <TableCell>  {item?.modifiers && item?.modifiers.length > 0 && item?.modifiers[0]}  </TableCell>
+                <TableCell>  {item.modifiers && item.modifiers.length > 0 ?
+                    <span> {`${item.modifiers.map((i) => (i.name))}, `}</span>
+                    : item.modifiers[0].name}  </TableCell>
                 <TableCell>  {item?.total}  </TableCell>
+
+                <TableCell>  {item?.completed}  </TableCell>
+                <TableCell>  {item?.available}  </TableCell>
+                <TableCell>
+                    <div className={classes.sircule}>
+                        <p>10%</p>
+                        <CircularProgress variant="determinate" value={100}/>
+                    </div>
+                </TableCell>
+
                 <TableCell>
                     <>
                         <img src={Images.edit} alt="edit" className={classes.iconStyle}
@@ -126,7 +149,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) =>
         )
     }
 
-    const getId = (id)=> {
+    const getId = (id) => {
         setAuthentications(id)
     }
 
@@ -175,7 +198,8 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) =>
             <SimpleModal
                 handleOpenClose={() => setCreateEditFile(!createEditFile)}
                 openDefault={createEditFile}
-                content={<AuthorizationFile handleClose={handleClose} authenticationsId={authenticationsId} uploadedFiles={uploadedFiles}/>}
+                content={<AuthorizationFile handleClose={handleClose} authenticationsId={authenticationsId}
+                                            uploadedFiles={uploadedFiles}/>}
             />
             <Card
                 width='234px'
@@ -203,12 +227,12 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) =>
                            className={classes.authorizationServicesText}>Add Authorization Service</p>
                     </div>
                 </div>
-                {services && services?.length ? <Notes
+                {services && services.length ? <Notes
                     restHeight='560px'
                     data={services}
                     items={clientAuthorizationServiceItem}
                     headerTitles={headerTitles}
-                    defaultStyle={true}/> : <NoItemText text={'No Authorization Services Yet'} /> }
+                    defaultStyle={true}/> : <NoItemText text={'No Authorization Services Yet'}/>}
             </div>
         </div>
     )

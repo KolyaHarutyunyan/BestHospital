@@ -31,15 +31,12 @@ import {useDispatch, useSelector} from "react-redux";
 import {staffStyle} from "@eachbase/pages/staff/styles";
 import {noteActions} from "@eachbase/store/notes";
 import moment from "moment";
-import {availabilityScheduleActions} from "@eachbase/store/availabilitySchedule";
 import {StaffService} from "./core/staffService";
 
 export const StaffItem = ({ gen }) => {
-
     const dispatch = useDispatch()
     const params = useParams()
     const classes = staffStyle()
-
     const [open, setOpen] = useState(false)
     const [activeTab, setActiveTab] = useState(0)
     const [openCredModal, setOpenCredModal] = useState(false)
@@ -48,21 +45,13 @@ export const StaffItem = ({ gen }) => {
     const [globalCredentialInformation, setGlobalCredentialInformation] = useState({})
     const [noteModalData, setNoteModalData] = useState({})
 
-
-    const [getStatus, setGetStatus] = useState('')
-    const [prevStatus, setPrevStatus] = useState('')
-
-
     const [noteModalInfo, setNoteModalInfo] = useState({
         right: '-1000px',
         created: '',
         subject: '',
     })
-
     const [noteModalTypeInfo, setNoteModalTypeInfo] = useState({})
-
     const [openModal, setOpenModal] = useState()
-
     const staffGeneral = useSelector(state => state.admins.adminInfoById)
     const credentialData = useSelector(state => state.admins.credential)
     const globalCredentials = useSelector(state => state.system.credentials)
@@ -83,53 +72,22 @@ export const StaffItem = ({ gen }) => {
     }
 
     const tabsLabels = [
-        {
-            label: 'General'
-        },
-        {
-            label: 'Employment'
-        },
-        {
-            label: 'Timesheet'
-        },
-        {
-            label: 'Credentials & Clearances'
-        },
-        {
-            label: 'Access'
-        },
-        {
-            label: 'Availability'
-        },
-        {
-            label: 'Services'
-        },
-        {
-            label: 'Notes'
-        },
-        {
-            label: 'History'
-        },
-
+        {label: 'General'},
+        {label: 'Employment'},
+        {label: 'Timesheet'},
+        {label: 'Credentials & Clearances'},
+        {label: 'Access'},
+        {label: 'Availability'},
+        {label: 'Services'},
+        {label: 'Notes'},
+        {label: 'History'},
     ]
 
     const headerTitles = [
-        {
-            title: 'Date',
-            sortable: true
-        },
-        {
-            title: 'Creator Name',
-            sortable: true
-        },
-        {
-            title: 'Subject',
-            sortable: false
-        },
-        {
-            title: 'Action',
-            sortable: false
-        },
+        {title: 'Date', sortable: true},
+        {title: 'Creator Name', sortable: true},
+        {title: 'Subject', sortable: false},
+        {title: 'Action', sortable: false},
     ];
 
     const openCloseCredModal = (modalType, globalCredentialInfo) => {
@@ -257,17 +215,11 @@ export const StaffItem = ({ gen }) => {
         <>
             <TableWrapperGeneralInfo
                 selectStatus={true}
-                setGetStatus={setGetStatus}
-                getStatus={getStatus}
-                setPrevStatus={setPrevStatus}
                 status={staffGeneral?.status}
                 id={params.id}
                 handleOpen={handleOpenClose}
                 path={'staff'}
                 type={'GET_ADMIN_BY_ID_SUCCESS'}
-
-
-
                 parent='Staff'
                 title={staffGeneral?.firstName}
                 parentLink='/staff'
@@ -278,10 +230,7 @@ export const StaffItem = ({ gen }) => {
                     <InactiveModal
                         statusType={statusType}
                         name={staffGeneral?.firstName}
-                        setGetStatus={setGetStatus}
-                        prevStatus={prevStatus}
                         info={{
-                            status: getStatus,
                             path: 'staff',
                             type: 'GET_ADMIN_BY_ID_SUCCESS'
                         }}

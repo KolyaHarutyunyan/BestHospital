@@ -7,10 +7,10 @@ const header = { headers: { 'access-token': token } }
 
 export const authService = {
 
-  createAgentService: ( body ) => axios.post('/agents', body),
+  createAgentService: ( body ) => axios.post('/agents', body, {auth:true}),
 
-  getAgentsService: ( ) => axios.get('/agents', header),
+  getAgentsService: ( ) => axios.get('/agents', header, {auth:true}),
 
-  getAgentByIdService: ( id ) => axios.get(`/agents/${id}`, header),
+  getAgentByIdService: ( id ) => axios.get(`/agents/${id}`, header, {auth:true}),
 
 };

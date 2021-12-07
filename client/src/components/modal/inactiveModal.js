@@ -35,7 +35,6 @@ export const InactiveModal = ({handleOpenClose, info, name, statusType }) => {
         handleOpenClose()
     }
 
-
     const handleCreate = () => {
         const data = {
             "date": inputs.date,
@@ -43,6 +42,7 @@ export const InactiveModal = ({handleOpenClose, info, name, statusType }) => {
         }
         if (inputs.date && inputs.reason) {
             dispatch(fundingSourceActions.setStatus(params.id, info.path, statusType, data, info.type))
+            setInputs(statusType)
         } else {
             setError(
                 !inputs.date ? 'date' :

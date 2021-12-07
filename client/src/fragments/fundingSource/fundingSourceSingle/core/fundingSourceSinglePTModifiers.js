@@ -1,5 +1,5 @@
 import React from "react";
-import {Notes, TableBodyComponent} from "@eachbase/components";
+import {NoItemText, Notes, TableBodyComponent} from "@eachbase/components";
 import {fundingSourceSingleStyles} from "./styles";
 import {TableCell} from "@material-ui/core";
 
@@ -27,8 +27,7 @@ export const FundingSourceSinglePTModifiers = ({data, title, globalCredentials})
         },
     ];
 
-
-    let modifiersItem = (item,index) => {
+    let modifiersItem = (item, index) => {
         return (
             <TableBodyComponent key={index}>
                 <TableCell>  {item?.name}  </TableCell>
@@ -41,7 +40,14 @@ export const FundingSourceSinglePTModifiers = ({data, title, globalCredentials})
     return (
         <div className={classes.fundingSourceSinglePTModifiersStyles}>
             <p className={classes.fundingSourceSinglePTModifiersTitleStyles}>{`${title && title} Charge Table`}</p>
-            <Notes noItemsYet={true} data={data} items={modifiersItem} headerTitles={headerTitles} defaultStyle={true} />
+            {data && data.length ?
+                <Notes noItemsYet={true} data={data} items={modifiersItem} headerTitles={headerTitles}
+                       defaultStyle={true}/>
+                :
+                <div className={classes.noItemWrapper}>
+                    <p>No Modifier yet</p>
+                </div>
+            }
         </div>
     )
 }

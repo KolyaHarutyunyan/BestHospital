@@ -15,8 +15,10 @@ export const AuthHeader = ({getId, setCreateEditFile,createEditFile, info, setTo
                     <p className={classes.AuthHeaderTopLeftTitle}>{empoloyment ? info?.title : `# ${info?.authId}`}</p>
                     {empoloyment ?
 
-                        <p className={classes.AuthHeaderTopLeftText}>{info?.startDate && `${moment(info?.startDate).format('DD/MM/YYYY')} - ${info?.endDate !=='Precent'  ? moment(info?.endDate).format('DD/MM/YYYY') : 'Present'}`}</p>:
-                        <p className={classes.AuthHeaderTopLeftText}>{info?.startDate && `${info?.startDate} - ${info?.endDate}`}</p>}
+                        <p className={classes.AuthHeaderTopLeftText}>{info?.startDate && `${moment(info?.startDate).format('DD/MM/YYYY')} - ${info?.endDate !=='Precent'  ? moment(info?.endDate).format('DD/MM/YYYY') : 'Present'}`}</p>
+                        :
+                        <p className={classes.AuthHeaderTopLeftText}>{info?.startDate && `${moment(info?.startDate).format('DD/MM/YYYY')} - ${moment(info?.endDate).format('DD/MM/YYYY')}`}</p>
+                    }
                 </div>
                 <div className={classes.AuthHeaderTopRight} style={{display: 'flex', alignItems: 'center'}}>
                     <p style={{cursor: 'pointer',marginRight: 10}}
