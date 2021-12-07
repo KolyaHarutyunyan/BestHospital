@@ -76,6 +76,7 @@ export const ToastSuccess = (success) => {
             success === 'ASSIGN_ACCESS' ? 'Access was assigned' :
             success === 'REMOVE_ACCESS' ? 'Access was deleted' :
             success === 'CHANGE_PASSWORD_REQUEST' ? 'Password was edited' :
+            success === 'EDIT_TIMESHEET' ? 'Timesheet was edited' :
 
             false
         )

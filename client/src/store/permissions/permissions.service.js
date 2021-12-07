@@ -8,10 +8,10 @@ const body ={
 
 export const authService = {
 
-  createPermissionService: (  ) => axios.post(`/authz/permissions`, body),
+  createPermissionService: (  ) => axios.post(`/authz/permissions`, body, {auth:true}),
 
-  getPermissionsService: ( ) => axios.get(`/authz/permissions`),
+  getPermissionsService: ( ) => axios.get(`/authz/permissions`, {auth:true}),
 
-  deletePermission: ( id ) =>  axios.delete(`/authz/permissions/${id}`)
+  deletePermission: ( id ) =>  axios.delete(`/authz/permissions/${id}`, {auth:true})
 
 };

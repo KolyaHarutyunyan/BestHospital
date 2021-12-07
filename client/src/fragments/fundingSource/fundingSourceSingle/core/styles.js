@@ -124,7 +124,18 @@ export const fundingSourceSingleStyles = makeStyles(() => ({
             fontSize: 14,
             color: Colors.TextLightGray
         }
-    }
+    },
+    noItemWrapper:{
+        width:'100%',
+        display:'flex',
+        justifyContent:'center',
+        '& p': {
+            fontSize: 18,
+            color: Colors.TextLightGray,
+            fontWeight: 'bold',
+            marginTop:'50px'
+        }
+    },
 }));
 
 export const editButtonStyle = {

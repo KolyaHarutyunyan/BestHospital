@@ -8,7 +8,7 @@ import {
     TableBodyComponent
 } from "@eachbase/components";
 import {FundingSourceSinglePTModifiers} from "./fundingSourceSinglePTModifiers";
-import {Images} from "@eachbase/utils";
+import {FindSuccess, Images} from "@eachbase/utils";
 import {TableCell} from "@material-ui/core";
 import {fundingSourceSingleStyles} from "./styles";
 import {FundingSourceServiceAdd,} from "./modals";
@@ -25,37 +25,48 @@ export const FundingSourceSingleServices = ({data,}) => {
     const modifiers = useSelector(state => state.fundingSource?.modifiers.modifiers)
     const globalCredentials = useSelector(state => state.system.credentials)
 
-    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
-        httpOnSuccess: state.httpOnSuccess,
-        httpOnError: state.httpOnError,
-        httpOnLoad: state.httpOnLoad,
-    }));
+    // const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
+    //     httpOnSuccess: state.httpOnSuccess,
+    //     httpOnError: state.httpOnError,
+    //     httpOnLoad: state.httpOnLoad,
+    // }));
+
+    const [modif, setModif] = useState( '')
 
 
+    // useEffect(() =>{
+    //     setModif(data[serviceIndex].modifiers)
+    // },[data])
 
-    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'GET_FUNDING_SOURCE_SERVICE_MODIFIERS'
+    // useEffect(() =>{
+    //     if(edited.length) {
+    //         setModif(data[index].modifiers)
+    //     }
+    // },[edited])
 
-    useEffect(() => {
-        if (success) {
-            dispatch(httpRequestsOnSuccessActions.removeSuccess('GET_FUNDING_SOURCE_SERVICE_MODIFIERS'))
-            if (accept) {
-                setToggleModal(!toggleModal)
-                setAccept(false)
-            }
-        }
-    }, [success])
+    // const success = httpOnSuccess.length && httpOnSuccess[0].type === 'GET_FUNDING_SOURCE_SERVICE_MODIFIERS'
 
-    useEffect(() => {
-        if (httpOnError.length && httpOnError[0].error === 'Modifier was not found') {
-            dispatch(httpRequestsOnSuccessActions.removeSuccess('GET_FUNDING_SOURCE_SERVICE_MODIFIERS'))
-            dispatch(httpRequestsOnErrorsActions.removeError('GET_FUNDING_SOURCE_SERVICE_MODIFIERS'))
-            if (accept) {
-                setToggleModal(!toggleModal)
-                setAccept(false)
-            }
-        }
-
-    }, [httpOnError])
+    // useEffect(() => {
+    //     if (success) {
+    //         dispatch(httpRequestsOnSuccessActions.removeSuccess('GET_FUNDING_SOURCE_SERVICE_MODIFIERS'))
+    //         if (accept) {
+    //             setToggleModal(!toggleModal)
+    //             setAccept(false)
+    //         }
+    //     }
+    // }, [success])
+    //
+    // useEffect(() => {
+    //     if (httpOnError.length && httpOnError[0].error === 'Modifier was not found') {
+    //         dispatch(httpRequestsOnSuccessActions.removeSuccess('GET_FUNDING_SOURCE_SERVICE_MODIFIERS'))
+    //         dispatch(httpRequestsOnErrorsActions.removeError('GET_FUNDING_SOURCE_SERVICE_MODIFIERS'))
+    //         if (accept) {
+    //             setToggleModal(!toggleModal)
+    //             setAccept(false)
+    //         }
+    //     }
+    //
+    // }, [httpOnError])
 
 
     const headerTitles = [
@@ -86,32 +97,36 @@ export const FundingSourceSingleServices = ({data,}) => {
     ];
 
 
+
     let onEdit = (index) => {
         setIndex(index)
         setDelEdit('edit')
         setAccept(true)
-        dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(data[serviceIndex]._id))
+        setToggleModal(!toggleModal)
+        setModif(data[index])
+        // dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(data[serviceIndex]._id))
     }
 
-    let onRow = (id, index) => {
+
+    let onRow = (item, index) => {
         setServiceIndex(index)
-        dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(id))
+        setModif(item.modifiers)
+        // dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(id))
     }
 
-    useEffect(() => {
-        if (data) {
-            dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(data[serviceIndex]._id))
-        }
-    }, [])
+    // useEffect(() => {
+    //     if (data) {
+    //         dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(data[serviceIndex]._id))
+    //     }
+    // }, [])
 
     let deleteService = () => {
-        // alert('wait Edgar')
         dispatch(fundingSourceActions.deleteFoundingSourceServiceById(data[serviceIndex]._id))
     }
 
     let serviceItem = (item, index) => {
         return (
-            <TableBodyComponent active={index === serviceIndex} key={index} handleOpenInfo={() => onRow(item._id, index)}>
+            <TableBodyComponent active={index === serviceIndex} key={index} handleOpenInfo={() => onRow(item, index)}>
                 <TableCell><p className={classes.tableTitle}>{item.name}</p></TableCell>
                 <TableCell>  {item.cptCode}  </TableCell>
                 <TableCell>  {item.size}  </TableCell>
@@ -146,16 +161,23 @@ export const FundingSourceSingleServices = ({data,}) => {
                         info={index !== null ? data[index].name : ''}
                         text={'Delete Service'}
                         handleClose={() => setToggleModal(!toggleModal)}/> :
-                    <FundingSourceServiceAdd modifiersID={modifiers} info={data ? data[index] : {}}
-                                             handleClose={() => setToggleModal(!toggleModal)}/>}
+                    <FundingSourceServiceAdd
+                        modifiersID={modif}
+                        info={data ? data[index] : {}}
+                        handleClose={() => setToggleModal(!toggleModal)}
+                    />
+                }
             />
             <div className={classes.fundindServiceItems}>
-                <Notes restHeight={'360px'} data={data} items={serviceItem} headerTitles={headerTitles} defaultStyle={true}/>
+                <Notes restHeight={'360px'} data={data}
+                       items={serviceItem}
+                       headerTitles={headerTitles} defaultStyle={true}/>
             </div>
             <FundingSourceSinglePTModifiers
                     globalCredentials={globalCredentials}
-                    data={modifiers}
-                    title={data && data[serviceIndex]?.name}/>
+                    data={data ? data[serviceIndex].modifiers : ''}
+                    title={data && data[serviceIndex]?.name}
+            />
         </div>
     )
 }

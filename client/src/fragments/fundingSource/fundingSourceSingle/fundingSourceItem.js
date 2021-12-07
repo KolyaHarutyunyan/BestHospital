@@ -28,8 +28,6 @@ export const FundingSourceItem = ({}) => {
     const globalServices = useSelector(state => state.system.services)
     const [open, setOpen] = useState(false)
     const [activeTab, setActiveTab] = useState(0)
-    const [getStatus, setGetStatus] = useState('')
-    const [prevStatus, setPrevStatus] = useState('')
 
     const tabsLabels = [
         {label: 'General Information'},
@@ -42,53 +40,32 @@ export const FundingSourceItem = ({}) => {
     const [statusType, setStatusType] = useState('')
 
     const handleOpenClose = (status) => {
-        setGetStatus(data?.status)
         setStatusType(status)
         setOpen(!open)
     }
 
     const tabsContent = [
         {
-            tabComponent: loader.length ?
-                <Loader/>
-                :
-                <FundingSourceSingleGeneral data={data}/>
+            tabComponent:
+                // loader.length ? <Loader/> :
+                    <FundingSourceSingleGeneral data={data}/>
         },
         {
-            tabComponent: servicesData.length ?
-                <FundingSourceSingleServices data={servicesData} globalServices={globalServices}/>
-                :
-                <NoItemText text='No Services Yet'/>
+            tabComponent: servicesData.length ? <FundingSourceSingleServices data={servicesData} globalServices={globalServices}/> : <NoItemText text='No Services Yet'/>
         },
         {
-            tabComponent: globalNotes.length ? <FundingSourceSingleNotes data={globalNotes}/>
-                :
-                <NoItemText text='No Notes Yet'/>
+            tabComponent: globalNotes.length ? <FundingSourceSingleNotes data={globalNotes}/> : <NoItemText text='No Notes Yet'/>
         },
         {
-            tabComponent: historiesData.length ? <FundingSourceSingleHistories data={historiesData}/>
-                :
-                <NoItemText text='No Histories Yet'/>
+            tabComponent: historiesData.length ? <FundingSourceSingleHistories data={historiesData}/> : <NoItemText text='No Histories Yet'/>
         },
     ];
-    const list = [
-        {name: 'ACTIVE', id:'ACTIVE'},
-        {name: 'INACTIVE', id:'INACTIVE'},
-        {name: 'HOLD', id:'HOLD'},
-        {name: 'TERMINATE', id:'TERMINATE'},
-    ]
-
-
-
 
     const params = useParams()
     return (
         <>
             <TableWrapperGeneralInfo
                 selectStatus={true}
-                setGetStatus={setGetStatus}
-                getStatus={getStatus}
-                setPrevStatus={setPrevStatus}
                 status={data?.status}
                 id={params.id}
                 handleOpen={handleOpenClose}
@@ -100,15 +77,12 @@ export const FundingSourceItem = ({}) => {
                 parentLink='/fundingSource'
                 buttonsTabAddButton={true}
                 openCloseInfo={open}
-                list={list}
                 handleOpenClose={handleOpenClose}
                 body={
                     <InactiveModal
                         statusType={statusType}
-                        status={data?.status}
                         name={data?.name}
                         info={{
-                            status: getStatus,
                             path: 'funding',
                             type: 'GET_FUNDING_SOURCE_BY_ID_SUCCESS'
                         }}
