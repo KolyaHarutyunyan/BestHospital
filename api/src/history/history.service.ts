@@ -55,14 +55,22 @@ export class HistoryService {
       if (noDate) {
         query.createdDate = { $gte: startDate, $lte: endDate }
       }
-
+      query.onModel = onModel;
       if (isNaN(skip)) skip = 0;
       // if (isNaN(limit)) limit = 100;
-      const histories = await this.model.find({
-        onModel, ...query
-      }).skip(skip).limit(limit).populate('user', 'firstName lastName');
-      this.checkHistory(histories[0])
-      return this.sanitizer.sanitizeMany(histories);
+
+      const histories = await this.model.aggregate([
+        { $match: { ...query } },
+        { $lookup: { from: 'staffs', localField: 'user', foreignField: '_id', as: 'user' } },
+        { $sort: { '_id': 1 } },
+        {
+          $group: {
+            _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdDate" } },
+            data: { $push: "$$ROOT" }
+          }
+        }
+      ]).skip(skip).limit(limit)
+      return histories
     } catch (e) {
       throw e;
     }

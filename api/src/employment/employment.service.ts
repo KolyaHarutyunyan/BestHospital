@@ -39,6 +39,9 @@ export class EmploymentService {
         employment.active = false;
         employment.endDate = dto.endDate;
       }
+      if (dto.endDate && dto.active) {
+        throw new HttpException('can not set endDate untill employment is active ', HttpStatus.BAD_REQUEST);
+      }
       if (dto.supervisor == dto.staffId) {
         throw new HttpException(
           'staff@ inq@ ir manager@ chi karox linel chnayac hayastanum hnaravor e',
@@ -52,6 +55,7 @@ export class EmploymentService {
           await activeEmployment.save();
         }
         employment.active = true;
+        employment.startDate = activeEmployment.endDate;
       }
 
       const findStaff = await this.staffService.findById(dto.supervisor);

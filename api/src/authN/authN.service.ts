@@ -46,6 +46,7 @@ export class AuthNService {
         userType: type,
       }).save();
       const regToken = await this.generateToken(auth, JWT_SECRET_REGISTER);
+      console.log(regToken)
       this.mailerService.sendInviteMail(auth.email, regToken);
       return;
     } catch (e) {
@@ -87,6 +88,7 @@ export class AuthNService {
 
   /** Complete registration */
   completeRegistration = async (resetPassDTO: ResetPassDTO): Promise<AuthDTO> => {
+    console.log(resetPassDTO)
     let auth = await this.model.findById(resetPassDTO.userId);
     this.canRegister(auth);
     this.confirmPassword(resetPassDTO.newPassword, resetPassDTO.confirmation);

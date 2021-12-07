@@ -87,7 +87,7 @@ export class AuthTemplate {
   generateTestEmail = (): SendEmailCommandInput => {
     const input: SendEmailCommandInput = {
       Destination: {
-        ToAddresses: ['harryminasyan@gmail.com'],
+        ToAddresses: ['edgarc@eachbase.com'],
       },
       Source: 'eachbase@gmail.com',
       Message: {

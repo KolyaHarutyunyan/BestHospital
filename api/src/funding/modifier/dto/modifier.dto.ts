@@ -11,5 +11,7 @@ export class ModifyDTO {
     @ApiProperty()
     chargeRate: number
     @ApiProperty()
-    credentialId: string
+    credentialId: string;
+    @ApiProperty()
+    status: boolean
 }

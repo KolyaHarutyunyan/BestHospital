@@ -6,7 +6,8 @@ export const modifier = {
     chargeRate: { type: Number },
     credentialId: { type: Types.ObjectId, ref: 'Credential' },
     name: { type: String },
-    type: { type: Number, enum: TypeStatus }
+    type: { type: Number, enum: TypeStatus },
+    status: { type: Boolean, default: true }
 }
 
 export const serviceSchema = new Schema({

@@ -11,7 +11,7 @@ const EmploymentSchema = new Schema({
     termination: TerminationSchema,
     active: { type: Boolean, default: false },
     startDate: { type: Date, default: Date.now },
-    endDate: { type: Schema.Types.Mixed, default: "Precent" }
+    endDate: { type: Date, default: null }
 });
 
 export const EmploymentModel = model<IEmployment>('Employment', EmploymentSchema);
