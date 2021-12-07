@@ -231,7 +231,6 @@ export class FundingService {
   async saveModifiers(_id: string, modifiers: any): Promise<ServiceDTO> {
     const fundingService = await this.serviceModel.findOne({ _id });
     this.checkFundingService(fundingService);
-    console.log(fundingService, 'fundingSErviceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
     modifiers.map(modifier => {
       fundingService.modifiers.push(modifier)
     })
@@ -255,6 +254,21 @@ export class FundingService {
     }
     // handmade :)
     return await fundingService.save();
+  }
+
+  /** delete modifiers */
+  async deleteModifiers(_id: string, ids: String[]): Promise<ServiceDTO> {
+    const fundingService = await this.serviceModel.findById({ _id });
+    this.checkFundingService(fundingService);
+    fundingService.modifiers.map(dbModifier => {
+      ids.map(dtoModifier => {
+        if (dtoModifier == dbModifier._id) {
+          dbModifier.status = false;
+        }
+      })
+    })
+    return await fundingService.save();
+    // return await fundingService.save();
   }
 
   /** Private methods */

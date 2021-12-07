@@ -21,4 +21,5 @@ export class ResetPassDTO {
   // Following values are set by the system
   user: UserDTO;
   token: string;
+  userId: string;
 }

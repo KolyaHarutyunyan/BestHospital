@@ -51,6 +51,15 @@ export class ModifierService {
     }
   }
 
+  /** Delete the modifiers */
+  async delete(fundingServiceId: string, ids: String[]): Promise<any> {
+    try {
+      return await this.fundingService.deleteModifiers(fundingServiceId, ids);
+    } catch (e) {
+      this.mongooseUtil.checkDuplicateKey(e, 'Modifier already exists');
+      throw e;
+    }
+  }
   /** Private methods */
   /** if the modifier is not found, throws an exception */
   private checkModify(modify: IModify) {

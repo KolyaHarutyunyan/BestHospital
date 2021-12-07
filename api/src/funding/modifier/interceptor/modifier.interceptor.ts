@@ -13,7 +13,8 @@ export class ModifySanitizer implements ISanitize {
             credentialId: modifier.credentialId,
             chargeRate: modifier.chargeRate,
             name: modifier.name,
-            type: modifier.type
+            type: modifier.type,
+            status: modifier.status
         };
         return modifierDTO;
     }

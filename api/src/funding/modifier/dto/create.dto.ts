@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { ArrayContains, IsEmail, IsEmpty, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString, IsUrl, ValidateNested } from 'class-validator';
+import { ArrayContains, IsBoolean, IsEmail, IsEmpty, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString, IsUrl, ValidateNested } from 'class-validator';
 import { ModifierStatus, TypeStatus } from '../../funding.constants';
 
 // import { FundingStatus } from '../funding.constants';
@@ -20,6 +20,10 @@ export class CreateModifierDto {
     @ApiProperty({ enum: TypeStatus })
     @IsEnum(TypeStatus)
     type: number;
+    @ApiProperty()
+    @IsBoolean()
+    @IsOptional()
+    status: boolean;
 }
 export class CreateModifiersDTO {
     @ApiProperty({type: [CreateModifierDto]})

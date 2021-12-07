@@ -5,7 +5,7 @@ export interface IService extends Document {
   id: string;
   funderId: string;
   serviceId: string,
-  modifiers?: Array<CreateModifierDto>; 
+  modifiers?: Array<CreateModifierDto> | any; 
   name: string;
   rate: number;
   cptCode: string;

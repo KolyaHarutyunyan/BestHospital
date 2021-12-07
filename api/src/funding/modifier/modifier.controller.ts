@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ModifierService } from './modifier.service';
 import { ParseObjectIdPipe, Public } from '../../util';
 import { ServiceDTO } from '../dto';
@@ -36,4 +36,12 @@ export class ModifierController {
     return modifier;
   }
 
+  @Patch('/setStatus/:fundingServiceId')
+  @Public()
+  @ApiOkResponse({ type: ServiceDTO })
+  async delete(@Param('fundingServiceId', ParseObjectIdPipe) fundingServiceId: string, @Query('ids') ids: String[]): Promise<any> {
+    const staffId = '60f01ec194abb63ff8f0aa75';
+    const modifier = await this.modifierService.delete(fundingServiceId, ids);
+    return modifier;
+  }
 }

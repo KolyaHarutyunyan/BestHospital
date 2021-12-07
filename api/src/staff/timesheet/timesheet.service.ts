@@ -113,9 +113,8 @@ export class TimesheetService {
       timesheet.description = dto.description;
       timesheet.hours = dto.hours;
       timesheet.startDate = dto.startDate;
-      if (dto.endDate) timesheet.endDate = dto.endDate;
-      await timesheet.save()
-      return timesheet;
+      dto.endDate ? timesheet.endDate = dto.endDate : timesheet.endDate = null;
+      return await timesheet.save()
       // return this.sanitizer.sanitizeMany(timesheet);
     } catch (e) {
       throw e;

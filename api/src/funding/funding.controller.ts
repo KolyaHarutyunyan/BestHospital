@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
-import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { FundingService } from './funding.service';
 import { HistoryService } from '../history/history.service';
 
@@ -17,7 +17,7 @@ export class FundingController {
 
   /** Create a new funder */
   @Post()
-  @Public()
+  @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
   @ApiOkResponse({ type: FundingDTO })
   async create(@Body() createFundingDTO: CreateFundingDTO): Promise<FundingDTO> {
     return await this.fundingService.create(createFundingDTO);
@@ -25,7 +25,7 @@ export class FundingController {
 
   /** Create a new service */
   @Post(':id/service')
-  @Public()
+  @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
   @ApiOkResponse({ type: ServiceDTO })
   async createService(
     @Param('id', ParseObjectIdPipe) id: string,
@@ -48,7 +48,7 @@ export class FundingController {
 
   /** Get all funders */
   @Get()
-  @Public()
+  @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
   @ApiOkResponse({ type: [FundingDTO] })
   @ApiQuery({
     name: "skip",
@@ -77,14 +77,14 @@ export class FundingController {
 
   /** Get all services */
   @Get(':id/service')
-  @Public()
+  @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
   @ApiOkResponse({ type: [ServiceDTO] })
   async findAllServices(@Param('id', ParseObjectIdPipe) id: string): Promise<ServiceDTO[]> {
     return await this.fundingService.findAllServices(id);
   }
   /** Get service by Id */
   @Get('service/:serviceId')
-  @Public()
+  @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
   @ApiOkResponse({ type: [ServiceDTO] })
   async findService(@Param('serviceId', ParseObjectIdPipe) serviceId: string): Promise<ServiceDTO[]> {
     return await this.fundingService.findService(serviceId);
@@ -92,7 +92,7 @@ export class FundingController {
 
   /** Get Funder By Id */
   @Get(':id')
-  @Public()
+  @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
   @ApiOkResponse({ type: FundingDTO })
   async findById(@Param('id', ParseObjectIdPipe) id: string): Promise<FundingDTO> {
     return await this.fundingService.findById(id);
@@ -108,7 +108,7 @@ export class FundingController {
 
   /** Edit the Funder */
   @Patch(':id')
-  @Public()
+  @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
   @ApiOkResponse({ type: FundingDTO })
   async update(@Param('id', ParseObjectIdPipe) id: string, @Body() updateFundingDto: UpdateFundingDto): Promise<FundingDTO> {
     const staffId = '60f01ec194abb63ff8f0aa75';
@@ -118,7 +118,7 @@ export class FundingController {
 
   /** Edit the Service */
   @Patch('/service/:serviceId')
-  @Public()
+  @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
   @ApiOkResponse({ type: ServiceDTO })
   async updateService(
     @Param('serviceId', ParseObjectIdPipe) serviceId: string,
@@ -140,14 +140,14 @@ export class FundingController {
 
   /** Delete the funder */
   @Delete(':id')
-  @Public()
+  @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
   @ApiOkResponse({ type: FundingDTO })
   async remove(@Param('id', ParseObjectIdPipe) id: string): Promise<FundingDTO> {
     return await this.fundingService.remove(id);
   }
   /** Inactivate a funder */
   @Patch(':id/setStatus')
-  @Public()
+  @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
   @ApiOkResponse({ type: FundingDTO })
   async setStatus(
     @Param('id', ParseObjectIdPipe) funderId: string,
