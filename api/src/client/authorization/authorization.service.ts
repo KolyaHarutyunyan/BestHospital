@@ -41,6 +41,8 @@ export class AuthorizationService {
         status: dto.status,
         location: dto.location
       });
+      // chka status 
+      // if startDate >= date.now && <= endDate then status == true
       await authorization.save();
       return this.sanitizer.sanitize(authorization);
     } catch (e) {

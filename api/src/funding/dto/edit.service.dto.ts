@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsPhoneNumber, IsString, IsUrl } from 'class-validator';
-import { AddressDTO } from '../../address';
+import { IsNotEmpty, IsNumber, IsString,  } from 'class-validator';
+import { UserDTO } from '../../authN';
 
 export class UpdateServiceDto {
     @ApiProperty()
@@ -29,5 +29,6 @@ export class UpdateServiceDto {
     @IsNotEmpty()
     @IsNumber()
     max: number;
+    user: UserDTO
 }
 

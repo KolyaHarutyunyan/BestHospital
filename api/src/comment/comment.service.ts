@@ -38,7 +38,6 @@ export class CommentService {
   async findAll(onModel: string, resource: string, skip: number, limit: number): Promise<CommentDTO[]> {
     try {
       const comments = await this.model.find({ onModel, resource }).skip(skip).limit(limit).populate('user', 'firstName lastName');
-      this.checkComment(comments[0])
       return this.sanitizer.sanitizeMany(comments);
     } catch (e) {
       throw e;

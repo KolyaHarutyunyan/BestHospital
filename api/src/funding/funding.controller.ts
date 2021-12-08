@@ -20,7 +20,7 @@ export class FundingController {
   @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
   @ApiOkResponse({ type: FundingDTO })
   async create(@Body() createFundingDTO: CreateFundingDTO): Promise<FundingDTO> {
-    return await this.fundingService.create(createFundingDTO);
+    return await this.fundingService.create(createFundingDTO, createFundingDTO.user.id);
   }
 
   /** Create a new service */
@@ -30,8 +30,7 @@ export class FundingController {
   async createService(
     @Param('id', ParseObjectIdPipe) id: string,
     @Body() createServiceDTO: CreateServiceDTO): Promise<ServiceDTO> {
-    const staffId = '60f01ec194abb63ff8f0aa75';
-    const service = await this.fundingService.createService(createServiceDTO, id);
+    const service = await this.fundingService.createService(createServiceDTO, id, createServiceDTO.user.id);
     return service
   }
 
@@ -111,8 +110,7 @@ export class FundingController {
   @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
   @ApiOkResponse({ type: FundingDTO })
   async update(@Param('id', ParseObjectIdPipe) id: string, @Body() updateFundingDto: UpdateFundingDto): Promise<FundingDTO> {
-    const staffId = '60f01ec194abb63ff8f0aa75';
-    const funder = await this.fundingService.update(id, updateFundingDto);
+    const funder = await this.fundingService.update(id, updateFundingDto, updateFundingDto.user.id);
     return funder;
   }
 
@@ -123,8 +121,7 @@ export class FundingController {
   async updateService(
     @Param('serviceId', ParseObjectIdPipe) serviceId: string,
     @Body() updateServiceDto: UpdateServiceDto): Promise<ServiceDTO> {
-    const staffId = '60f01ec194abb63ff8f0aa75';
-    const service = await this.fundingService.updateService(serviceId, updateServiceDto);
+    const service = await this.fundingService.updateService(serviceId, updateServiceDto, updateServiceDto.user.id);
     return service
   }
 

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDateString, IsEmail, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString, IsUrl } from 'class-validator';
-import { ClientStatus } from '../client.constants';
+import { UserDTO } from '../../authN';
 
 export class UpdateClientDto {
     @ApiProperty()
@@ -39,5 +39,6 @@ export class UpdateClientDto {
     @IsOptional()
     @IsDateString()
     birthday: Date;
+    user: UserDTO
 }
 

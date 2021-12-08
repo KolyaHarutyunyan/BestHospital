@@ -28,12 +28,8 @@ export class AuthorizationserviceService {
   // check if modifiers are received
   async checkModifiers(authorizationId: string, fundingServiceId: string, dto: AuthorizationModifiersDTO): Promise<ModifyDTO> {
     try {
-      let modifiers = [];
-      let brokenModifiers = [];
       const findService = await this.fundingService.findService(fundingServiceId);
-      await this.compareModifiersByAuthService(authorizationId, fundingServiceId, dto, brokenModifiers);
-      let compareByFundingService = await this.compareModifiersByFundingService(dto, findService, modifiers);
-      return compareByFundingService
+      return await this.availableModifiers(authorizationId, findService);
     }
     catch (e) {
       throw e
@@ -66,7 +62,7 @@ export class AuthorizationserviceService {
     }
   }
 
-  // check if modifiers received
+  // check if modifiers received only for create function
   async compareModifiersByAuthService(authorizationId: string, fundingServiceId: string, dto, brokenModifiers: String[]): Promise<void> {
     const findAuthorizationService: any = await this.model.find({ authorizationId: authorizationId }).populate('serviceId');
     findAuthorizationService.map(authService => {
@@ -75,17 +71,17 @@ export class AuthorizationserviceService {
           brokenModifiers.push(dtoModifier);
           brokenModifiers = [...new Set(brokenModifiers)];
         }
-        if (brokenModifiers.length) {
-          throw new HttpException(
-            `Modifier received ${brokenModifiers}`,
-            HttpStatus.BAD_REQUEST,
-          );
-        }
       })
     })
+    if (brokenModifiers.length) {
+      throw new HttpException(
+        `Modifier received ${brokenModifiers}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
-  // check if modifiers match to the fundingService
+  // check if modifiers match to the fundingService only for create function
   async compareModifiersByFundingService(dto, findService, modifiers): Promise<ModifyDTO> {
     findService.modifiers.map(serviceModifier => {
       dto.modifiers.map(dtoModifier => {
@@ -101,6 +97,28 @@ export class AuthorizationserviceService {
       );
     }
     return modifiers;
+  }
+
+  /** get available modifiers only for checkModifiers function */
+  async availableModifiers(authorizationId: string, fundingService: any): Promise<any> {
+    let dbModifiers = [];
+    let available = [];
+    const authServices: any = await this.model.find({ authorizationId });
+    this.checkAuthorizationService(authServices[0]);
+    authServices.map(authService => { 
+      authService.modifiers.map(modifier =>{
+        dbModifiers.push(modifier._id.toString())
+      })
+    })
+    if(dbModifiers.length){
+      fundingService.modifiers.map(modifier =>{
+        if(dbModifiers.indexOf(modifier._id.toString()) === -1){
+          available.push(modifier)
+        }
+      })
+      return available;
+    }
+    return fundingService.modifiers;
   }
 
   // find all authorization services
@@ -214,7 +232,7 @@ export class AuthorizationserviceService {
     const completedUnits = minutes / size;
 
     authService.completed += Math.floor(completedUnits);
-    authService.available = Math.floor(authService.total - authService.completed)
+    // authService.available = Math.floor(authService.total - authService.completed)
     await authService.save();
   }
 

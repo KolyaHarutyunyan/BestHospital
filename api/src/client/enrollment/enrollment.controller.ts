@@ -2,7 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ParseObjectIdPipe, Public } from '../../util';
 import { EnrollmentService } from './enrollment.service';
 import { CreateEnrollmentDTO, EnrollmentDTO, UpdateEnrollmentDTO } from './dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiTags } from '@nestjs/swagger';
+import { ACCESS_TOKEN } from '../../authN/authN.constants';
 
 @Controller('enrollment')
 @ApiTags('Enrollment Endpoints')
@@ -11,7 +12,7 @@ export class EnrollmentController {
 
   /** Create a new enrollment */
   @Post('client/:clientId/funder/:funderId')
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   async createEnrollment(
     @Param('clientId', ParseObjectIdPipe) clientId: string,
     @Param('funderId', ParseObjectIdPipe) funderId: string,
@@ -21,7 +22,7 @@ export class EnrollmentController {
 
   /**Get All Enrollment */
   @Get('client/:clientId')
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   findAllEnrollment(
     @Param('clientId', ParseObjectIdPipe) clientId: string) {
     return this.enrollmentService.findAll(clientId);
@@ -29,7 +30,7 @@ export class EnrollmentController {
 
   // update the enrollment
   @Patch(':id/client/:clientId/funder/:funderId')
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   update(
     @Param('id', ParseObjectIdPipe) id: string,
     @Param('clientId', ParseObjectIdPipe) clientId: string,
@@ -40,7 +41,7 @@ export class EnrollmentController {
   
   //delete the enrollment
   @Delete(':id')
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   remove(@Param('id', ParseObjectIdPipe) id: string) {
     return this.enrollmentService.remove(id);
   }

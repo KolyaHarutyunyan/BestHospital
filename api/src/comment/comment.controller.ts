@@ -1,6 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
-import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { ParseObjectIdPipe, Public } from '../util';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Headers } from '@nestjs/common';
+import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { UserDTO } from '../authN/dto/user.dto';
+import { ACCESS_TOKEN } from '../authN/authN.constants';
+import { ParseObjectIdPipe } from '../util';
 import { CommentService } from './comment.service';
 import { CommentDTO, CreateCommentDTO, UpdateCommentDTO } from './dto';
 
@@ -10,15 +12,14 @@ export class CommentController {
   constructor(private readonly commentService: CommentService) { }
 
   @Post()
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: CommentDTO })
   async create(@Body() createCommentDto: CreateCommentDTO) {
-    const user = "610ba0a7b8944a30bcb15da4";
-    return await this.commentService.create(createCommentDto, user);
+    return await this.commentService.create(createCommentDto, createCommentDto.user.id);
   }
 
   @Get(':resourceId/:onModel')
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: CommentDTO })
   @ApiQuery({
     name: "skip",
@@ -43,21 +44,19 @@ export class CommentController {
 
   /** Update Client By Id */
   @Patch(':id')
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({type: CommentDTO})
   update(@Param('id', ParseObjectIdPipe) id: string, @Body() updateCommentDto: UpdateCommentDTO) {
-    const user = "610ba0a7b8944a30bcb15da4";
-    return this.commentService.update(id, updateCommentDto, user);
+    return this.commentService.update(id, updateCommentDto, updateCommentDto.user.id);
   }
 
   /** Delete the comment */
   @Delete(':id/comments')
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: String })
   async remove(
-    @Param('id', ParseObjectIdPipe) id: string): Promise<string> {
-    const user = "610ba0a7b8944a30bcb15da4"
-    return await this.commentService.remove(id, user);
+    @Param('id', ParseObjectIdPipe) id: string, @Body() body: any): Promise<string> {
+    return await this.commentService.remove(id, body.user.id);
   }
 
   // @Get(':id')

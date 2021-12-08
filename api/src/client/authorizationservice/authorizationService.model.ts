@@ -7,7 +7,6 @@ const AuthorizationServiceSchema = new Schema({
     modifiers: [{ type:  Object }],
     total: { type: Number },
     completed: { type: Number, default: 0 },
-    available: { type: Number, default: 0 },
     createdDate: { type: Date, default: Date.now() },
     updatedDate: { type: Date, default: null },
 });

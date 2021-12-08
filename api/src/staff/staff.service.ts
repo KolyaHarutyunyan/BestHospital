@@ -31,7 +31,7 @@ export class StaffService {
   private mongooseUtil: MongooseUtil;
 
   /** Create a new user */
-  create = async (dto: CreateStaffDto): Promise<StaffDTO> => {
+  create = async (dto: CreateStaffDto, userId: string): Promise<StaffDTO> => {
     try {
       const _id = Types.ObjectId();
       let user = new this.model({
@@ -57,6 +57,7 @@ export class StaffService {
         resource: user._id,
         onModel: 'Staff',
         title: serviceLog.createStaff,
+        user: userId
       });
       return this.sanitizer.sanitize(user);
     } catch (e) {
@@ -119,7 +120,7 @@ export class StaffService {
   };
 
   /** Edit a Staff */
-  edit = async (id: string, dto: EditStaffDTO): Promise<StaffDTO> => {
+  edit = async (id: string, dto: EditStaffDTO, userId: string): Promise<StaffDTO> => {
     try {
       const admin: any = await this.model.findOne({ _id: id });
       this.checkStaff(admin);
@@ -146,6 +147,7 @@ export class StaffService {
         resource: admin._id,
         onModel: 'Staff',
         title: serviceLog.updateStaff,
+        user: userId
       });
       return this.sanitizer.sanitize(admin);
     } catch (e) {

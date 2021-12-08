@@ -1,9 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsEmpty, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString, IsUrl } from 'class-validator';
-import { ParseObjectIdPipe } from '../../util';
-import { ModifierStatus, TypeStatus } from '../funding.constants';
-
-// import { FundingStatus } from '../funding.constants';
+import { IsMongoId, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { UserDTO } from '../../authN/dto/user.dto';
 
 export class CreateServiceDTO {
     @ApiProperty()
@@ -34,7 +31,7 @@ export class CreateServiceDTO {
     @IsNotEmpty()
     @IsNumber()
     max: number;
-
+    user: UserDTO
     // @ApiProperty({ enum: TypeStatus })
     // @IsEnum(TypeStatus)
     // type: number;

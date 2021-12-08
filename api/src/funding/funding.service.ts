@@ -35,7 +35,7 @@ export class FundingService {
   private mongooseUtil: MongooseUtil;
 
   /** Create a new funder */
-  async create(dto: CreateFundingDTO): Promise<FundingDTO> {
+  async create(dto: CreateFundingDTO, userId: string): Promise<FundingDTO> {
     try {
       let funder = new this.model({
         name: dto.name,
@@ -47,7 +47,7 @@ export class FundingService {
         address: await this.addressService.getAddress(dto.address)
       });
       await funder.save();
-      await this.historyService.create({ resource: funder._id, onModel: "Funder", title: serviceLog.createFundingSource });
+      await this.historyService.create({ resource: funder._id, onModel: "Funder", title: serviceLog.createFundingSource, user: userId });
       return this.sanitizer.sanitize(funder);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Funder already exists');
@@ -56,7 +56,7 @@ export class FundingService {
   }
 
   /** Create a new service */
-  async createService(dto: CreateServiceDTO, _id: string): Promise<ServiceDTO> {
+  async createService(dto: CreateServiceDTO, _id: string, userId: string): Promise<ServiceDTO> {
     try {
       const funder = await this.model.findById({ _id });
       this.checkFunder(funder)
@@ -72,7 +72,7 @@ export class FundingService {
         max: dto.max
       });
       await service.save();
-      await this.historyService.create({ resource: _id, onModel: "Funder", title: serviceLog.createServiceTitle });
+      await this.historyService.create({ resource: _id, onModel: "Funder", title: serviceLog.createServiceTitle, user: userId });
       // return this.sanitizer.sanitize(service)
       return service;
     } catch (e) {
@@ -153,7 +153,7 @@ export class FundingService {
   }
 
   /** Update the funder */
-  async update(_id: string, dto: UpdateFundingDto): Promise<FundingDTO> {
+  async update(_id: string, dto: UpdateFundingDto, userId: string): Promise<FundingDTO> {
     try {
       const funder = await this.model.findOne({ _id });
       this.checkFunder(funder);
@@ -166,7 +166,7 @@ export class FundingService {
       if (dto.address)
         funder.address = await this.addressService.getAddress(dto.address);
       await funder.save();
-      await this.historyService.create({ resource: _id, onModel: "Funder", title: serviceLog.updateFundingSource });
+      await this.historyService.create({ resource: _id, onModel: "Funder", title: serviceLog.updateFundingSource, user: userId });
       return this.sanitizer.sanitize(funder);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Funder already exists');
@@ -175,7 +175,7 @@ export class FundingService {
   }
 
   /** Update the service */
-  async updateService(serviceId: string, dto: UpdateServiceDto): Promise<ServiceDTO> {
+  async updateService(serviceId: string, dto: UpdateServiceDto, userId: string): Promise<ServiceDTO> {
     try {
       const service = await this.serviceModel.findOne({ _id: serviceId });
       this.checkFundingService(service)
@@ -191,7 +191,7 @@ export class FundingService {
         service.serviceId = dto.globServiceId
       }
       await service.save();
-      await this.historyService.create({ resource: funder._id, onModel: "Funder", title: serviceLog.updateServiceTitle });
+      await this.historyService.create({ resource: funder._id, onModel: "Funder", title: serviceLog.updateServiceTitle, user: userId });
       return service;
       // return this.sanitizer.sanitize(service);
     } catch (e) {

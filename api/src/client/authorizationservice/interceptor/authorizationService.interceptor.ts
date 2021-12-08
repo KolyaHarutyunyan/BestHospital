@@ -16,8 +16,7 @@ export class AuthorizationServiceSanitizer implements ISanitize {
             serviceId: authorizationService.serviceId,
             modifiers: authorizationService.modifiers,
             total: authorizationService.total,
-            completed: authorizationService.completed,
-            available: authorizationService.available
+            completed: authorizationService.completed
         };
         return authorizationServiceDTO;
     }

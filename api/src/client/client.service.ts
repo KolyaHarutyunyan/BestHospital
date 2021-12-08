@@ -29,7 +29,7 @@ export class ClientService {
   private mongooseUtil: MongooseUtil;
 
   /** Create a new client */
-  create = async (dto: CreateClientDTO): Promise<ClientDTO> => {
+  create = async (dto: CreateClientDTO, userId: string): Promise<ClientDTO> => {
     try {
       let client = new this.model({
         firstName: dto.firstName,
@@ -44,7 +44,7 @@ export class ClientService {
         birthday: dto.birthday
       });
       await client.save();
-      await this.historyService.create({ resource: client._id, onModel: "Client", title: serviceLog.createClient })
+      await this.historyService.create({ resource: client._id, onModel: "Client", title: serviceLog.createClient, user: userId })
       return this.sanitizer.sanitize(client);
     } catch (e) {
       console.log(e);
@@ -79,7 +79,7 @@ export class ClientService {
   }
 
   /** Update the Client */
-  async update(_id: string, dto: UpdateClientDto): Promise<ClientDTO> {
+  async update(_id: string, dto: UpdateClientDto, userId: string): Promise<ClientDTO> {
     try {
       const client = await this.model.findOne({ _id });
       this.checkClient(client);
@@ -96,7 +96,7 @@ export class ClientService {
       }
 
       await client.save();
-      await this.historyService.create({ resource: client._id, onModel: "Client", title: serviceLog.updateClient })
+      await this.historyService.create({ resource: client._id, onModel: "Client", title: serviceLog.updateClient, user: userId })
       return this.sanitizer.sanitize(client);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Client already exists');

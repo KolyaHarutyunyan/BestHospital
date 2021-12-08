@@ -21,14 +21,13 @@ export class HistoryService {
   /** Create a new history */
   async create(dto: CreateHistoryDTO): Promise<HistoryDTO> {
     try {
-      const user = "610ba0a7b8944a30bcb15da4";
       const onMod = dto.onModel;
       const history = new this.model({
         resource: dto.resource,
         onModel: dto.onModel,
         title: dto.title,
         time: this.formatAMPM(new Date()),
-        user,
+        user: dto.user,
       });
       return await history.save();
     } catch (e) {
@@ -57,7 +56,7 @@ export class HistoryService {
       }
       query.onModel = onModel;
       if (isNaN(skip)) skip = 0;
-      // if (isNaN(limit)) limit = 100;
+      if (isNaN(limit)) limit = 100;
 
       const histories = await this.model.aggregate([
         { $match: { ...query } },

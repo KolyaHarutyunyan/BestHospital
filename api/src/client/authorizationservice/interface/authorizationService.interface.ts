@@ -7,5 +7,4 @@ export interface IAuthorizationService extends Document {
     modifiers: Array<string>;
     total: number;
     completed: number;
-    available: number;
 }

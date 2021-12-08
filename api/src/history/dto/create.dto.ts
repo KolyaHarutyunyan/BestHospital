@@ -13,4 +13,5 @@ export class CreateHistoryDTO {
     @ApiProperty({ enum: HistoryStatus })
     @IsEnum(HistoryStatus)
     onModel: string;
+    user: string;
 }

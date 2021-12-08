@@ -1,9 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
-import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { ParseObjectIdPipe, Public } from '../util';
+import { Controller, Get, Param, Query } from '@nestjs/common';
+import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { HistoryService } from './history.service';
 import { HistoryDTO } from './dto';
-import { IsDateString, isDateString } from 'class-validator';
+import { ACCESS_TOKEN } from '../authN/authN.constants';
 
 @Controller('history')
 @ApiTags('History Endpoints')
@@ -11,7 +10,7 @@ export class HistoryController {
   constructor(private readonly historyService: HistoryService) { }
 
   @Get(':onModel')
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: HistoryDTO })
   @ApiQuery({
     name: "skip",

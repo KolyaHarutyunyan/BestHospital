@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEnum, IsMongoId, IsNotEmpty, IsString } from "class-validator";
+import { UserDTO } from "../../authN";
 import { CommentStatus } from '../comment.constants';
 
 export class UpdateCommentDTO {
@@ -11,4 +12,5 @@ export class UpdateCommentDTO {
     @IsNotEmpty()
     @ApiProperty()
     subject: string;
+    user: UserDTO
 }

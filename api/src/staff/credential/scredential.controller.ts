@@ -1,8 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { ParseObjectIdPipe, Public } from '../../util';
+import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ParseObjectIdPipe } from '../../util';
 import { SCredentialService } from './scredential.service';
 import { SCredentialDTO, SCreateCredentialDTO, SUpdateCredentialDTO } from './dto';
+import { ACCESS_TOKEN } from '../../authN/authN.constants';
 
 @Controller('scredential')
 @ApiTags('Staff Credential Endpoints')
@@ -12,7 +13,7 @@ export class SCredentialController {
   /** Create a new staff credential */
   @Post()
   @ApiOkResponse({ type: SCredentialDTO })
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   async createStaffCredential(
     @Body() dto: SCreateCredentialDTO,
   ): Promise<SCredentialDTO> {
@@ -22,7 +23,7 @@ export class SCredentialController {
 
   /** Edit a scredential */
   @Patch(':id')
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: SCredentialDTO })
   async edit(
     @Param('id', ParseObjectIdPipe) id: string,
@@ -34,7 +35,7 @@ export class SCredentialController {
 
   //  /** Delete a credential */
   @Delete(':id')
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: 'string' })
   async delete(
     @Param('id', ParseObjectIdPipe) id: string
@@ -46,7 +47,7 @@ export class SCredentialController {
   /** Get the credential profile */
   @Get('staff/:staffId/credential')
   @ApiOkResponse({ type: [SCredentialDTO] })
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   async find(
     @Param('staffId', ParseObjectIdPipe) staffId: string,
   ): Promise<SCredentialDTO[]> {
@@ -56,7 +57,7 @@ export class SCredentialController {
   /** Get the credential profile By Id */
   @Get(':id')
   @ApiOkResponse({ type: SCredentialDTO })
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   async findById(
     @Param('id', ParseObjectIdPipe) id: string,
   ): Promise<SCredentialDTO> {

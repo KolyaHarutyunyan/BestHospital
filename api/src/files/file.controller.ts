@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { Public, ParseObjectIdPipe } from '../util';
+import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ParseObjectIdPipe } from '../util';
 import { FileService } from './file.service';
 import { CreateImageDTO, FileDTO, EditImageDTO } from './dto';
+import { ACCESS_TOKEN } from '../authN/authN.constants';
 
 @Controller('files')
 @ApiTags('File Endpoints')
@@ -11,7 +12,7 @@ export class FileController {
   constructor(private readonly imagesService: FileService) { }
 
   @Post('upload')
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   @UseInterceptors(FileInterceptor('file'))
   async uploadImage(@UploadedFile() file) {
     const fileURLs = await this.imagesService.saveImage(file);
@@ -20,7 +21,7 @@ export class FileController {
   }
 
   @Post()
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: FileDTO })
   async create(
     @Body() createDTO: CreateImageDTO): Promise<FileDTO> {
@@ -29,7 +30,7 @@ export class FileController {
   }
 
   @Get(':resource')
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: [FileDTO] })
   async get(@Param('resource', ParseObjectIdPipe) resource: string
   ): Promise<FileDTO[]> {
@@ -39,7 +40,7 @@ export class FileController {
 
   /** Edit a File profile */
   @Patch(':id')
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   // @ApiBody({ type: EditFactoringDTO })
   @ApiOkResponse({ type: FileDTO })
   async edit(
@@ -52,7 +53,7 @@ export class FileController {
 
   @Delete(':id')
   // @ApiOkResponse({type: FileDTO})
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   async delete(
     @Param('id', ParseObjectIdPipe) id: string): Promise<any> {
     const file = await this.imagesService.deleteImages(id);

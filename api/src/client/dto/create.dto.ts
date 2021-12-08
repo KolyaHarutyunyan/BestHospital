@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDateString, IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { UserDTO } from '../../authN';
 import { ClientStatus } from '../client.constants';
 
 export class CreateClientDTO {
@@ -40,5 +41,6 @@ export class CreateClientDTO {
     @ApiProperty({ enum: ClientStatus })
     @IsEnum(ClientStatus)
     status: number;
+    user: UserDTO
     // address
 }

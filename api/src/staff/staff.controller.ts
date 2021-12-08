@@ -16,27 +16,27 @@ export class StaffController {
   /** Create a new staff */
   @Post()
   @ApiOkResponse({ type: StaffDTO })
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   async createSuperAdmin(@Body() createStaffDTO: CreateStaffDto): Promise<StaffDTO> {
-    const admin = await this.staffService.create(createStaffDTO);
+    const admin = await this.staffService.create(createStaffDTO, createStaffDTO.user.id);
     return admin;
   }
 
   /** Edit a staff */
   @Patch(':id')
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: StaffDTO })
   async edit(
     @Param('id', ParseObjectIdPipe) id: string,
     @Body() dto: EditStaffDTO,
   ): Promise<StaffDTO> {
-    const admin = await this.staffService.edit(id, dto);
+    const admin = await this.staffService.edit(id, dto, dto.user.id);
     return admin;
   }
 
   /** Get All Staffs */
   @Get()
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: [StaffDTO] })
   @ApiQuery({
     name: 'skip',
@@ -75,14 +75,14 @@ export class StaffController {
   /** Get the staff profile */
   @Get(':id')
   @ApiOkResponse({ type: StaffDTO })
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   async getAdminProfile(@Param('id', ParseObjectIdPipe) userId: string): Promise<StaffDTO> {
     return await this.staffService.getProfile(userId);
   }
 
   /** Inactivate a staff */
   @Patch(':id/setStatus')
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   @ApiQuery({ name: 'status', enum: StaffStatus })
   @ApiOkResponse({ type: StaffDTO })
   async setStatus(
@@ -106,7 +106,7 @@ export class StaffController {
 
   /** IsClinical a staff */
   @Patch(':id/:isClinical')
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: StaffDTO })
   async isClinical(
     @Param('id', ParseObjectIdPipe) staffId: string,
@@ -118,7 +118,7 @@ export class StaffController {
   /** Create a new service */
   @Post(':id/service/:serviceId')
   @ApiOkResponse({ type: StaffDTO })
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   async addService(
     @Param('serviceId', ParseObjectIdPipe) serviceId: string,
     @Param('id', ParseObjectIdPipe) id: string,
@@ -129,7 +129,7 @@ export class StaffController {
   /** Get service */
   @Get(':id/service')
   @ApiOkResponse({ type: StaffDTO })
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   async getService(@Param('id', ParseObjectIdPipe) id: string): Promise<StaffDTO> {
     const service = await this.staffService.getService(id);
     return service;
@@ -137,7 +137,7 @@ export class StaffController {
   /** Delete a service */
   @Delete(':id/service/:serviceId')
   @ApiOkResponse({ type: String })
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   async deleteService(
     @Param('serviceId', ParseObjectIdPipe) serviceId: string,
     @Param('id', ParseObjectIdPipe) id: string,
