@@ -11,7 +11,7 @@ import {adminActions, clientActions, httpRequestsOnErrorsActions, httpRequestsOn
 import {serviceSingleStyles} from "@eachbase/fragments/client/clientSingle/core";
 
 
-export const StaffEmployment = ({ info }) => {
+export const StaffEmployment = ({info}) => {
     const classes = serviceSingleStyles()
     const dispatch = useDispatch()
     const [delEdit, setDelEdit] = useState(null)
@@ -94,22 +94,21 @@ export const StaffEmployment = ({ info }) => {
             <>
                 {loader.length ?
                     <Loader/>
-                      :
-            <TableBodyComponent key={index} handleOpenInfo={() => {
-                setPaycodeIndex(index)
-                setToggleModal3(!toggleModal3)
+                    :
+                    <TableBodyComponent key={index} handleOpenInfo={() => {
+                        setPaycodeIndex(index)
+                        setToggleModal3(!toggleModal3)
+                    }}>
+                        <TableCell><p className={classes.tableName}>{item.payCodeTypeId.name}</p></TableCell>
+                        <TableCell>  {item.payCodeTypeId.code} </TableCell>
+                        <TableCell> {item.payCodeTypeId.type} </TableCell>
+                        <TableCell>{item.rate} </TableCell>
+                        <TableCell>{moment(item.startDate).format('DD/MM/YYYY')} </TableCell>
+                        <TableCell>{item.endDate === "Precent" ? 'Not Set' : moment(item.endDate).format('DD/MM/YYYY')} </TableCell>
+                        <TableCell>{Number(item.active)} </TableCell>
+                    </TableBodyComponent>}
 
-            }}>
-                <TableCell><p className={classes.tableName}>{item.payCodeTypeId.name}</p></TableCell>
-                <TableCell>  {item.payCodeTypeId.code} </TableCell>
-                <TableCell> {item.payCodeTypeId.type} </TableCell>
-                <TableCell>{item.rate} </TableCell>
-                <TableCell>{moment(item.startDate).format('DD/MM/YYYY')} </TableCell>
-                <TableCell>{moment(item.endDate).format('DD/MM/YYYY')} </TableCell>
-                <TableCell>{Number(item.active)} </TableCell>
-            </TableBodyComponent>}
-
-                </>
+            </>
         )
     }
 
@@ -135,8 +134,8 @@ export const StaffEmployment = ({ info }) => {
                 openDefault={toggleModal2}
                 content={
 
-                    <PaycodeModal employmentId={info[authIndex]?.id}  authId={info[authIndex]?.id}
-                                  handleClose={() => setToggleModal2(!toggleModal2)}   />
+                    <PaycodeModal employmentId={info[authIndex]?.id} authId={info[authIndex]?.id}
+                                  handleClose={() => setToggleModal2(!toggleModal2)}/>
                 }
             />
             <SimpleModal
@@ -180,7 +179,7 @@ export const StaffEmployment = ({ info }) => {
                     data={payCodes}
                     items={payCodeItem}
                     headerTitles={headerTitles}
-                    defaultStyle={true}/> : <NoItemText text={'No Paycodes Yet'} />}
+                    defaultStyle={true}/> : <NoItemText text={'No Paycodes Yet'}/>}
             </div>
         </div>
     )

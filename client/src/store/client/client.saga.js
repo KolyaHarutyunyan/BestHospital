@@ -462,7 +462,7 @@ function* editClientAuthorizationsServ(action) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
-        console.log(err)
+
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
     }

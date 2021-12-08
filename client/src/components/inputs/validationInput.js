@@ -60,6 +60,7 @@ export const ValidationInput = ({
                     id="standard-basic"
                     autoComplete={autoComplete}
                     error={typeError}
+                    onWheel={() => document.activeElement.blur()}
                     disabled={disabled}
                     maxLength={Length}
                     onChange={(ev) => onChange(ev)}

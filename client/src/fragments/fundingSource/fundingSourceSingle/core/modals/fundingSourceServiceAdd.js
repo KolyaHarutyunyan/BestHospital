@@ -20,12 +20,20 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
     const params = useParams()
     let dispatch = useDispatch()
 
+
     const [cre, setCre] = useState([])
     const classes = foundingSourceModalStyle()
     let addNewMod = (newMod) => {
         setModifiersEdit([...modifiersEdit, newMod])
-        setCre([...cre, newMod])
+    }
 
+    // console.log(modifiersEdit,'modifiersEditmodifiersEditmodifiersEdit')
+    const handleNew = (item) =>{
+        setGetLastMod(item)
+
+        if(item !== null) {
+            setCre([...cre, item])
+        }
     }
 
     const {httpOnSuccess, httpOnLoad} = useSelector((state) => ({
@@ -82,9 +90,10 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
             } else {
                 if (cre.length) {
                     const date = {modifiers: [...cre], serviceId: info._id}
-
+                    const newArr = arr && arr.length &&  arr.filter((i) => i._id)
                     axios.post(`/modifier`, date, {auth: true}).then(res =>
-                            dispatch(fundingSourceActions.editFoundingSourceServiceById(info?._id, data, res.data.modifiers, params.id)), setCre([])).then(
+                            dispatch(fundingSourceActions.editFoundingSourceServiceById(info?._id, data, newArr, params.id)),
+                        setCre([])).then(
                             dispatch(fundingSourceActions.getFoundingSourceServiceById(params.id))
                     )
                 }
@@ -185,7 +194,7 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
                     modifiersServ={modifiersID}
                     setPostModifiers={setPostModifiers}
                     globalCredentials={globalCredentials}
-                    setGetLastMod={setGetLastMod}
+                    setGetLastMod={handleNew}
                 />
 
                 <div className={classes.foundingSourceModalsBodyBlock}>

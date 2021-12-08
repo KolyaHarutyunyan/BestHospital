@@ -67,7 +67,7 @@ export const EmploymentModal = ({handleClose, info}) => {
 
 
     const handleCreate = () => {
-        if (inputs.title && inputs.departmentId && inputs.supervisor && inputs.employmentType && inputs.startDate && checked ? "Present" : inputs.endDate) {
+        if (inputs.title && inputs.departmentId && inputs.supervisor && inputs.employmentType && checked ? "Present" : inputs.endDate) {
             let depId;
             let supervisorID;
             departments.forEach(item => {
@@ -87,9 +87,9 @@ export const EmploymentModal = ({handleClose, info}) => {
                 "staffId": params.id,
                 "supervisor": supervisorID,
                 "departmentId": depId,
-                "active": true,
-                "startDate": inputs.startDate ? new Date(inputs.startDate).toISOString() : '',
-                "endDate": inputs.endDate ? new Date(inputs.endDate).toISOString() : '',
+                "active": false,
+                "startDate": new Date().toISOString() ,
+                "endDate": inputs.endDate ? new Date(inputs.endDate).toISOString() : undefined,
                 "schedule": +inputs.employmentType,
                 "termination": {
                     "date": inputs.endDate ? inputs.endDate : undefined
@@ -168,11 +168,12 @@ export const EmploymentModal = ({handleClose, info}) => {
                             <ValidationInput
                                 variant={"outlined"}
                                 onChange={handleChange}
-                                value={
-                                    inputs.startDate ?
-                                        moment(inputs.startDate).format('YYYY-MM-DD')
-                                        : inputs.startDate }
-                                    // inputs.startDate ? new Date(inputs.startDate) : ''}
+                                value={ inputs.startDate ?
+                                    moment(inputs.startDate).format('YYYY-MM-DD') :
+                                    moment( new Date() ).format('YYYY-MM-DD')
+                                }
+                                disabled={true}
+
                                 type={"date"}
                                 label={"Start Date*"}
                                 name='startDate'
