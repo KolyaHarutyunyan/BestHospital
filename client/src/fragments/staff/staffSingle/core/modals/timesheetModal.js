@@ -10,7 +10,7 @@ import {staffModalsStyle} from "./styles";
 import {useParams} from "react-router-dom";
 import moment from "moment";
 
-export const TimesheetModal = ({handleClose, info, allPaycodes}) => {
+export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
     const params = useParams()
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {...info,

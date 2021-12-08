@@ -77,7 +77,6 @@ export const ClientItem = () => {
         {label: 'History'}
     ]
 
-    console.log(clientsAuthorizations,'clientsAuthorizationsclientsAuthorizationsclientsAuthorizations')
     const load = FindLoad('GET_CLIENT_BY_ID')
 
     const tabsContent = [

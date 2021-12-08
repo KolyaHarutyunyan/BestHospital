@@ -45,7 +45,6 @@ function* createCredentialGlobal(action) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
-        console.log(err)
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
@@ -60,7 +59,6 @@ function* getCredentialGlobal() {
         });
 
     } catch (err) {
-        console.log(err)
         yield put({
             type: GET_CREDENTIAL_GLOBAL_SUCCESS,
             payload: '',
@@ -81,7 +79,6 @@ function* editCredentialById(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        console.log(err)
     }
 }
 
@@ -98,7 +95,6 @@ function* deleteCredentialByIdGlobal(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        console.log(err)
     }
 }
 
@@ -118,7 +114,6 @@ function* createServiceGlobal(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        console.log(err)
     }
 }
 
@@ -153,7 +148,6 @@ function* editServiceByIdGlobal(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        console.log(err)
     }
 }
 
@@ -170,7 +164,6 @@ function* deleteServiceByIdGlobal(action) {
         });
 
     } catch (err) {
-        console.log(err)
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
@@ -192,7 +185,6 @@ function* createDepartmentGlobal(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        console.log(err)
     }
 }
 
@@ -205,7 +197,6 @@ function* getDepartments() {
         });
 
     } catch (err) {
-        console.log(err)
         yield put({
             type: GET_DEPARTMENTS_SUCCESS,
             payload: '',
@@ -226,7 +217,6 @@ function* editDepartmentByIdGlobal(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        console.log(err)
     }
 }
 
@@ -243,7 +233,6 @@ function* deleteDepartmentByIdGlobal(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        console.log(err)
     }
 }
 
@@ -263,7 +252,6 @@ function* createJobGlobal(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        console.log(err)
     }
 }
 
@@ -276,7 +264,6 @@ function* getJobs() {
         });
 
     } catch (err) {
-        console.log(err)
         yield put({
             type: GET_JOBS_SUCCESS,
             payload: '',
@@ -297,7 +284,6 @@ function* editJobByIdGlobal(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        console.log(err)
     }
 }
 
@@ -314,7 +300,6 @@ function* deleteJobByIdGlobal(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        console.log(err)
     }
 }
 

@@ -28,7 +28,6 @@ function* createPayCodeGlobal(action) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
-        console.log(err)
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
@@ -43,7 +42,7 @@ function* getPayCodeGlobal() {
         });
 
     } catch (err) {
-        console.log(err)
+
     }
 }
 
@@ -59,7 +58,6 @@ function* editPayCodeById(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        console.log(err)
     }
 }
 
@@ -75,7 +73,6 @@ function* deletePayCodeByIdGlobal(action) {
     } catch (err) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
-        console.log(err)
     }
 }
 
@@ -91,7 +88,6 @@ function* createOvertimeSettingsGlobal(action) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
-        console.log(err)
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
@@ -106,7 +102,7 @@ function* getOvertimeSettingsGlobal() {
         });
 
     } catch (err) {
-        console.log(err)
+
     }
 }
 
@@ -120,7 +116,7 @@ function* editOvertimeSettingsById(action) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
-        console.log(err)
+
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
@@ -136,7 +132,6 @@ function* deleteOvertimeSettingsByIdGlobal(action) {
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {
-        console.log(err)
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }

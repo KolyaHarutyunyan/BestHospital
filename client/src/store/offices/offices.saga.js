@@ -18,7 +18,7 @@ function* createOffice(action) {
     const res = yield call( authService.createOfficeService, action.payload.body );
     window.location.replace('/fundingSource')
   } catch (err) {
-    console.log(err)
+
   }
 }
 
@@ -28,7 +28,7 @@ function* editOffice(action) {
     const res = yield call( authService.editOfficeService, action.payload.body );
     window.location.replace('/fundingSource')
   } catch (err) {
-    console.log(err)
+
   }
 }
 
@@ -48,7 +48,7 @@ function* getOffice({ action,type }) {
   } catch (err) {
     // yield put(httpRequestsOnLoadActions.removeLoading(type));
     // yield put(httpRequestsOnErrorsActions.removeError(type));
-    console.log(err)
+
   }
 }
 
@@ -61,7 +61,7 @@ function* getOfficeById(action) {
     });
 
   } catch (err) {
-    console.log(err)
+
   }
 }
 
@@ -69,7 +69,7 @@ function* activateOffice(action) {
   try {
     const res = yield call( authService.activateOfficeService, action.payload.id );
   } catch (err) {
-    console.log(err)
+
   }
 }
 
@@ -77,7 +77,7 @@ function* inactivateOffice(action) {
   try {
     const res = yield call( authService.inactivateOfficeService, action.payload.id );
   } catch (err) {
-    console.log(err)
+
   }
 }
 
