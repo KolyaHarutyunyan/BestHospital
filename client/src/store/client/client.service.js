@@ -7,71 +7,71 @@ export const authService = {
     getClientsService: ({data}) => {
 
         if (data) {
-            return axios.get(`/client/?skip=${data.start}&&limit=${data.end}&&status=${data.status}`)
+            return axios.get(`/client/?skip=${data.start}&&limit=${data.end}&&status=${data.status}`, {auth:true})
         } else {
-            return axios.get('/client')
+            return axios.get('/client', {auth:true})
         }
     },
 
-    createClientService: ({payload}) => axios.post(`/client`, payload.body),
+    createClientService: ({payload}) => axios.post(`/client`, payload.body, {auth:true}),
 
-    deleteClientService: ({payload}) => axios.delete(`/client/${payload.id}`),
+    deleteClientService: ({payload}) => axios.delete(`/client/${payload.id}`, {auth:true}),
 
-    editClientService: ({payload}) => axios.patch(`/client/${payload.id}`, payload.body),
+    editClientService: ({payload}) => axios.patch(`/client/${payload.id}`, payload.body, {auth:true}),
 
-    getClientByIdService: ({payload}) => axios.get(`/client/${payload.id}`, ),
+    getClientByIdService: ({payload}) => axios.get(`/client/${payload.id}`, {auth:true} ),
 
-    getClientContactsService: ({payload}) => axios.get(`/contact/client/${payload.id}`, ),
+    getClientContactsService: ({payload}) => axios.get(`/contact/client/${payload.id}`, {auth:true}),
 
-    createClientContactService: ({payload}) => axios.post(`/contact/client/${payload.id}`, payload.body),
+    createClientContactService: ({payload}) => axios.post(`/contact/client/${payload.id}`, payload.body, {auth:true}),
 
-    editClientContactService: ({payload}) => axios.patch(`/contact/${payload.id}`, payload.body),
+    editClientContactService: ({payload}) => axios.patch(`/contact/${payload.id}`, payload.body, {auth:true}),
 
-    deleteClientContactService: ({payload}) => axios.delete(`/contact/${payload.id}`),
+    deleteClientContactService: ({payload}) => axios.delete(`/contact/${payload.id}`, {auth:true}),
 
-    getClientEnrollmentService: ({payload}) => axios.get(`/enrollment/client/${payload.id}`, ),
+    getClientEnrollmentService: ({payload}) => axios.get(`/enrollment/client/${payload.id}`, {auth:true} ),
 
-    createClientEnrollmentService: ({payload}) => axios.post(`/enrollment/client/${payload.id}/funder/${payload.funderId}`, payload.body),
+    createClientEnrollmentService: ({payload}) => axios.post(`/enrollment/client/${payload.id}/funder/${payload.funderId}`, payload.body, {auth:true}),
 
-    editClientEnrollmentService: ({payload}) =>  axios.patch(`/enrollment/${payload.id}/client/${payload.clientId}/funder/${payload.funderId}`, payload.body),
+    editClientEnrollmentService: ({payload}) =>  axios.patch(`/enrollment/${payload.id}/client/${payload.clientId}/funder/${payload.funderId}`, payload.body, {auth:true}),
 
-    deleteClientEnrollmentService: ({payload}) =>  axios.delete(`/enrollment/${payload.id}`),
+    deleteClientEnrollmentService: ({payload}) =>  axios.delete(`/enrollment/${payload.id}`, {auth:true}),
 
-    getClientAuthorizationService: (id) => axios.get(`/authorization/client/${id}` ),
+    getClientAuthorizationService: (id) => axios.get(`/authorization/client/${id}` , {auth:true}),
 
-    createClientAuthorizationService: ({payload}) => axios.post(`/authorization/client/${payload.id}/funder/${payload.funderId}`, payload.body),
+    createClientAuthorizationService: ({payload}) => axios.post(`/authorization/client/${payload.id}/funder/${payload.funderId}`, payload.body, {auth:true}),
 
-    editClientAuthorizationService: ({payload}) =>  axios.patch(`/authorization/${payload.id}`, payload.body),
+    editClientAuthorizationService: ({payload}) =>  axios.patch(`/authorization/${payload.id}`, payload.body, {auth:true}),
 
-    deleteClientAuthorizationService: ({payload}) =>  axios.delete(`/authorization/${payload.id}`),
+    deleteClientAuthorizationService: ({payload}) =>  axios.delete(`/authorization/${payload.id}`, {auth:true}),
 
-    getClientAuthorizationServService: ({payload}) => axios.get(`/authorizationservice/authorization/${payload.id}` ),
+    getClientAuthorizationServService: ({payload}) => axios.get(`/authorizationservice/authorization/${payload.id}` , {auth:true}),
 
-    createClientAuthorizationServService: ({payload}) => axios.post(`/authorizationservice/authorization/${payload.id}/fundingService/${payload.funderId}`, payload.body),
+    createClientAuthorizationServService: ({payload}) => axios.post(`/authorizationservice/authorization/${payload.id}/fundingService/${payload.funderId}`, payload.body, {auth:true}),
 
 
     // Authorization file
 
-    editClientAuthorizationFileService: ({payload}) =>  axios.patch(`/files/${payload.id}`, payload.body),
+    editClientAuthorizationFileService: ({payload}) =>  axios.patch(`/files/${payload.id}`, payload.body, {auth:true}),
 
-    deleteClientAuthorizationFileService: ({payload}) =>  axios.delete(`/files/${payload.id}`),
+    deleteClientAuthorizationFileService: ({payload}) =>  axios.delete(`/files/${payload.id}`, {auth:true}),
 
-    getClientAuthorizationFileService: ({payload}) => axios.get(`/files/${payload.id}` ),
+    getClientAuthorizationFileService: ({payload}) => axios.get(`/files/${payload.id}` , {auth:true}),
 
-    createClientAuthorizationFileService: ({payload}) => axios.post(`/files/upload`,payload.body),
+    createClientAuthorizationFileService: ({payload}) => axios.post(`/files/upload`,payload.body, {auth:true}),
 
-    createClientAuthorizationRestFileService: ({payload}) => axios.post(`/files`,payload.body),
+    createClientAuthorizationRestFileService: ({payload}) => axios.post(`/files`,payload.body, {auth:true}),
 
     // end
 
 
-    getClientAuthorizationServCheckModService: ({payload}) => axios.post(`/authorizationservice/authorization/${payload.id}/fundingService/${payload.funderId}`,payload.body),
+    getClientAuthorizationServCheckModService: ({payload}) => axios.post(`/authorizationservice/authorization/${payload.id}/fundingService/${payload.funderId}`,payload.body, {auth:true}),
 
-    editClientAuthorizationServService: ({payload}) =>  axios.patch(`/authorizationservice/${payload.id}`, payload.body),
+    editClientAuthorizationServService: ({payload}) =>  axios.patch(`/authorizationservice/${payload.id}`, payload.body, {auth:true}),
 
-    deleteClientAuthorizationServService: ({payload}) =>  axios.delete(`/authorizationservice/${payload.id}`),
+    deleteClientAuthorizationServService: ({payload}) =>  axios.delete(`/authorizationservice/${payload.id}`, {auth:true}),
 
-    getClientHistoriesService: (id,onModal) => axios.get(`/history/${id}/${onModal}`),
+    getClientHistoriesService: (id,onModal) => axios.get(`/history/${id}/${onModal}`, {auth:true}),
 
 };
 

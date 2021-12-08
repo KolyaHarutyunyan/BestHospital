@@ -29,7 +29,6 @@ export const ClientEnrollment = ({data, info}) => {
         httpOnLoad: state.httpOnLoad,
     }));
 
-
     const headerTitles = [
         {title: 'Primary', sortable: false},
         {title: 'Funding Source', sortable: true},
@@ -65,7 +64,7 @@ export const ClientEnrollment = ({data, info}) => {
 
     let enrollmentsItem = (item, index) => {
         let startDate = moment(item?.startDate).format('DD/MM/YYYY')
-        let terminationDate = moment(item?.terminationDate).format('DD/MM/YYYY')
+        let terminationDate =item.terminationDate ? moment(item?.terminationDate).format('DD/MM/YYYY') : 'Present'
 
         return (
             <TableBodyComponent key={index} >

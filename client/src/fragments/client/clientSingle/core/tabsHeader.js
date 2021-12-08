@@ -26,7 +26,7 @@ const filterBtn = {
     height: 36
 }
 
-export const TabsHeader = ({activeTab, data, authActive, handleOpenHour, availabilityData}) => {
+export const TabsHeader = ({activeTab, data, authActive, availabilityData}) => {
     const classes = serviceSingleStyles()
     const dispatch = useDispatch()
     const [open, setOpen] = useState()

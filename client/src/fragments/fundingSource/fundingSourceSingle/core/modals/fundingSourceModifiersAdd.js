@@ -52,8 +52,8 @@ export const FundingSourceModifiersAdd = ({setPostModifiers, globalCredentials, 
                 setCredentialID(item._id)
             }
             if (inputs.credentialId && inputs.chargeRate && inputs.name && inputs.type) {
-                if (inputs.credentialId !== '0' && inputs.chargeRate !== ' ' && inputs.name !== ' ') {
-                    setBtnStyle(true)
+                if (inputs.credentialId !== ' ' && inputs.chargeRate !== ' ' && inputs.name !== ' ' && inputs.type !== ' ') {
+                    // setBtnStyle(true)
                     setPostModifiers([...modifiers, {
                         "credentialId": credentialID,
                         "chargeRate": +inputs.chargeRate,
@@ -66,6 +66,34 @@ export const FundingSourceModifiersAdd = ({setPostModifiers, globalCredentials, 
                         "name": inputs.name,
                         'type': +inputs.type
                     })
+                    addNewMod({
+                        "credentialId": credentialID,
+                        "chargeRate": +inputs.chargeRate,
+                        "name": inputs.name,
+                        'type': +inputs.type
+                    })
+                    setModifiers([...modifiers, {
+                        "credentialId": credentialID,
+                        "chargeRate": +inputs.chargeRate,
+                        "name": inputs.name,
+                        'type': +inputs.type
+                    }])
+
+
+                    setGetLastMod(null)
+                    // setModifiers([...modifiers, {
+                    //     "credentialId": credentialID,
+                    //     "chargeRate": +inputs.chargeRate,
+                    //     "name": inputs.name,
+                    //     'type': +inputs.type
+                    // }])
+                    // addNewMod({
+                    //     "credentialId": credentialID,
+                    //     "chargeRate": +inputs.chargeRate,
+                    //     "name": inputs.name,
+                    //     'type': +inputs.type
+                    // })
+                    setInputs({name: ' ', chargeRate: ' ', credentialId: ' ', type: ' '})
                 }
             } else {
                 setPostModifiers([...modifiers])
@@ -77,8 +105,9 @@ export const FundingSourceModifiersAdd = ({setPostModifiers, globalCredentials, 
 
     const handleCreate = () => {
         setBtnStyle(false)
+
         if (inputs.credentialId && inputs.chargeRate && inputs.name && inputs.type) {
-            if (inputs.credentialId !== '0' && inputs.chargeRate !== ' ' && inputs.name !== ' ') {
+            if (inputs.credentialId !== ' ' && inputs.chargeRate !== ' ' && inputs.name !== ' ' && inputs.type !== ' ') {
                 setGetLastMod(null)
                 setModifiers([...modifiers, {
                     "credentialId": credentialID,
@@ -92,7 +121,7 @@ export const FundingSourceModifiersAdd = ({setPostModifiers, globalCredentials, 
                     "name": inputs.name,
                     'type': +inputs.type
                 })
-                setInputs({name: ' ', chargeRate: ' ', credentialId: credentialID, type: '0'})
+                setInputs({name: ' ', chargeRate: ' ', credentialId: ' ', type: ' '})
             }
         } else {
             setError(

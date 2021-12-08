@@ -186,10 +186,10 @@ export const createTimesheet = (body) => {
     }
 }
 
-export const editTimesheet = (body,id) => {
+export const editTimesheet = (body,id, params) => {
     return {
         type: EDIT_TIMESHEET,
-        payload: { body,id}
+        payload: { body,id, params }
     }
 }
 

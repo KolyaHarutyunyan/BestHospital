@@ -23,7 +23,7 @@ export const StaffAccess = ({rolesList, accessList}) => {
         }
     }
 
-    const newList =  rolesList.filter(function (array_el) {
+    const newList =  rolesList && rolesList.filter(function (array_el) {
         return accessList && accessList.roles && accessList.roles.filter(function (anotherOne_el) {
             return anotherOne_el.id === array_el.id;
         }).length === 0

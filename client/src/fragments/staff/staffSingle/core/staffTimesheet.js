@@ -135,7 +135,8 @@ export const StaffTimesheet = ({info}) => {
             <TableBodyComponent key={index}>
                 <TableCell>
                     <SlicedText size={30} type={'name'}
-                                data={item.description ? item?.payCode?.payCodeTypeId?.type : 'aa'}
+                                data={item.description ? item?.payCode?.payCodeTypeId?.type : item ? item.rateType : ''}
+                                // data={item.description ? item?.payCode?.payCodeTypeId?.type : ''}
                     />
                 </TableCell>
                 <TableCell>{
@@ -158,6 +159,7 @@ export const StaffTimesheet = ({info}) => {
                 handleOpenClose={handleOpenClose}
                 content={
                     <TimesheetModal
+                        // setIndex={() => setServiceIndex(0)}
                         info={item}
                         handleClose={handleOpenClose}
                         allPaycodes={allPaycodes}
@@ -201,15 +203,29 @@ export const StaffTimesheet = ({info}) => {
                             </div>
                             <p>{timesheetById ? timesheetById.description : ''}</p>
 
+                            <div style={{height:'250px'}}>
                             {timesheetById &&
-                            timesheetById.overtimes ?
+                              timesheetById.overtimes ?
                                 <Notes
                                     restHeight='560px'
-                                    data={timesheetById.overtimes.length > 0 ? timesheetById.overtimes : [{...timesheetById}]}
+                                    data={timesheetById.overtimes.length > 0 ?
+                                        timesheetById.regularHours > 0 ? [{
+                                            amount: timesheetById.regularPay,
+                                            hours: timesheetById.regularHours,
+                                            name: "Regular",
+                                            rateType: "Regular",
+                                        },
+                                        ...timesheetById.overtimes
+                                    ] :
+                                            timesheetById.overtimes
+                                        : [{...timesheetById}]}
                                     items={bcbaItem}
                                     headerTitles={headerTitlesBcba}
                                     defaultStyle={true}
-                                /> : ""}
+                                /> :
+                                ""}
+
+                            </div>
 
                             {/*{timesheetById && timesheetById.overtimes && timesheetById.overtimes.length > 0 &&*/}
                             {/*<TableBodyComponent>*/}

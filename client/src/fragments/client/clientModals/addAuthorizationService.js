@@ -10,13 +10,15 @@ import {
     httpRequestsOnSuccessActions
 } from "@eachbase/store";
 import {getClientsAuthorizationsServModifiersCheck} from "../../../store/client/client.action";
+import {getFundingSourceServById} from "../../../store/fundingSource/fundingSource.action";
+import axios from "axios";
 
 export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) => {
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {...info, modifiers: info.serviceId.name} : {});
     const [modCheck, setModCheck] = useState([]);
     const dispatch = useDispatch()
-    const modifiers = useSelector(state => state.fundingSource.modifiers.modifiers)
+    // const modifiers = useSelector(state => state.fundingSource.modifiers.modifiers)
     const fSelect = useSelector(state => state.fundingSource.fundingSourceServices)
     const classes = createClientStyle()
 
@@ -54,11 +56,14 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
     }, [success, successCreate])
 
 
+    const [modif, setModif] = useState('')
     const handleChange = e => {
         if (e.target.name === 'modifiers') {
             setModCheck([])
             let id = fSelect.find(item => item.name === e.target.value)._id
-            dispatch(fundingSourceActions.getFoundingSourceServiceModifiersForClient(id))
+
+            axios.get(`/funding/service/${id}`, {auth:true}).then(res => setModif(res.data.modifiers))
+            // dispatch(fundingSourceActions.getFundingSourceServById(id))
 
         }
         setInputs(
@@ -71,7 +76,7 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
     const handleCreate = () => {
         let modifiersPost = [];
         modCheck.forEach(item => {
-            return modifiers.forEach((item2, index2) => {
+            return modif.forEach((item2, index2) => {
                 if (item === index2) {
                     modifiersPost.push(item2?._id)
                 }
@@ -139,26 +144,26 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
                             label={"Service Code*"}
                             handleSelect={handleChange}
                             value={inputs.modifiers}
-                            list={fSelect}
+                            list={fSelect ? fSelect : ''}
                             typeError={error === 'modifiers' ? ErrorText.field : ''}
                         />
                         <div style={error === 'modifiersPost' ? {border:`1px solid ${Colors.ThemeRed}`} :{}} className={classes.displayCodeBlock2}>
                             <p className={classes.displayCodeBlockText}>Available Modfiers </p>
                             <div className={classes.availableModfiers}>
-                                {info ? info?.modifiers && info?.modifiers?.length > 0 && info.modifiers.map((item, index) => {
+                                {info ? info.modifiers && info.modifiers.length > 0 && info.modifiers.map((item, index) => {
                                     return (
-                                        <div className={classes.availableModfier}
+                                        <div key={index} className={classes.availableModfier}
                                              style={{
                                                  background: '#347AF080',
                                                  color: '#fff',
                                                  border: "none",
                                                  cursor: 'default'
-                                             }}><p style={{width: 19, height: 20, overflow: 'hidden'}}>{item}</p></div>
+                                             }}><p style={{width: 19, height: 20, overflow: 'hidden'}}>{item.name}</p></div>
                                     )
                                 })
-                                    : modifiers && modifiers.length > 0 ? modifiers.map((item, index) => {
+                                    : modif && modif.length > 0 ? modif.map((item, index) => {
                                         return (
-                                            <p className={classes.availableModfier} onClick={() => onModifier(index)}
+                                            <p  key={index} className={classes.availableModfier} onClick={() => onModifier(index)}
                                                style={modCheck.includes(index) ? {
                                                    background: '#347AF0',
                                                    color: '#fff'

@@ -9,9 +9,12 @@ import {createClientStyle} from "@eachbase/fragments/client";
 import {staffModalsStyle} from "./styles";
 import moment from "moment";
 
-
-
 export const PaycodeModal = ({handleClose, info,employmentId}) => {
+    const {httpOnSuccess, httpOnLoad} = useSelector((state) => ({
+        httpOnSuccess: state.httpOnSuccess,
+        httpOnLoad: state.httpOnLoad,
+    }));
+
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {
         "employmentId": info.employmentId,
@@ -19,27 +22,21 @@ export const PaycodeModal = ({handleClose, info,employmentId}) => {
          "rate": +info?.rate,
          "active": info?.active,
          "startDate": moment(info.startDate).format('YYYY-MM-DD'),
-         "endDate":  moment(info.startDate).format('YYYY-MM-DD')
+         "endDate":  moment(info.endDate).format('YYYY-MM-DD')
     }
     : {});
-    const [checked, setChecked] = useState(info ? info.active : true);
+    const [checked, setChecked] = useState(info ? info.endDate === 'Precent' : true);
     const [payCode, setPayCode] = useState(null);
     const dispatch = useDispatch()
     const classes = createClientStyle()
     const classes_v2 = staffModalsStyle()
     const globalPayCodes = useSelector(state => state.payroll.PayCodes)
+    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_PAY_CODE'
+    const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_PAY_CODE'
 
     useEffect(() => {
         dispatch(payrollActions.getPayCodeGlobal())
     }, []);
-
-    const {httpOnSuccess, httpOnLoad} = useSelector((state) => ({
-        httpOnSuccess: state.httpOnSuccess,
-        httpOnLoad: state.httpOnLoad,
-    }));
-
-    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_PAY_CODE'
-    const successEdit = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_PAY_CODE'
 
     useEffect(() => {
         if (success) {
@@ -63,7 +60,6 @@ export const PaycodeModal = ({handleClose, info,employmentId}) => {
         }
     },[])
 
-
     const handleChange = e => {
         if (e.target.name === 'payCodeTypeId') {
             setPayCode(globalPayCodes.find(item => item.name === e.target.value))
@@ -76,7 +72,7 @@ export const PaycodeModal = ({handleClose, info,employmentId}) => {
 
     let onCheck  = (e)=>{
         setChecked(e.target.checked)
-       
+        inputs['endDate'] = null
     }
 
     const handleCreate = () => {

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {ValidationInput, SelectInput, CreateChancel, ModalHeader, Textarea} from "@eachbase/components";
 import {Checkbox} from "@material-ui/core";
-import {Colors, ErrorText, FindSuccess} from "@eachbase/utils";
+import {Colors, ErrorText, FindLoad, FindSuccess} from "@eachbase/utils";
 import {adminActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 import {payrollActions} from "@eachbase/store/payroll";
 import {createClientStyle} from "@eachbase/fragments/client";
@@ -10,8 +10,8 @@ import {staffModalsStyle} from "./styles";
 import {useParams} from "react-router-dom";
 import moment from "moment";
 
-export const TimesheetModal = ({handleClose, info, allPaycodes}) => {
-
+export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
+    const params = useParams()
     const [error, setError] = useState("");
     const [inputs, setInputs] = useState(info ? {...info,
         startDate :  moment(info.startDate).format('YYYY-MM-DD') ,
@@ -21,37 +21,29 @@ export const TimesheetModal = ({handleClose, info, allPaycodes}) => {
     }
         : {});
 
-    const [checked, setChecked] = useState(true);
+    const [checked, setChecked] = useState(info ? info.endDate ? false : true : true);
     const [payCode, setPayCode] = useState(info ? info.payCode : null);
-    const [newallPaycodes, setnewallPaycodes] = useState([]);
+    // const [newallPaycodes, setnewallPaycodes] = useState([]);
     const dispatch = useDispatch()
     const classes = createClientStyle()
     const classes_v2 = staffModalsStyle()
     const globalPayCodes = useSelector(state => state.payroll.PayCodes)
 
-const params = useParams()
-
     useEffect(() => {
         dispatch(payrollActions.getPayCodeGlobal())
     }, []);
 
-    useEffect(()=>{
-        setnewallPaycodes(allPaycodes.map(item=>{
-            return {
-                id : item.id,
-                name : item.payCodeTypeId.name
-            }
-        }))
-    },[])
+    // useEffect(()=>{
+    //     setnewallPaycodes(allPaycodes.map(item=>{
+    //         return {
+    //             id : item.id,
+    //             name : item.payCodeTypeId.name
+    //         }
+    //     }))
+    // },[])
 
-
-
-    const {httpOnLoad} = useSelector((state) => ({
-        httpOnLoad: state.httpOnLoad,
-    }));
-
-
-
+    const loader = FindLoad('CREATE_TIMESHEET')
+    const loaderEdit = FindLoad('EDIT_TIMESHEET')
     const success = FindSuccess('CREATE_TIMESHEET')
 
     useEffect(() => {
@@ -86,10 +78,19 @@ const params = useParams()
                 "description": inputs.description,
                 "hours": parseInt(inputs.hours),
                 "startDate": inputs.startDate,
-                "endDate": inputs.endDate ? inputs.endDate : undefined
+                "endDate": inputs.endDate ? inputs.endDate : null
             }
+            const editDate = {
+                "staffId": params.id,
+                "payCode":  payCode._id,
+                "description": inputs.description,
+                "hours": parseInt(inputs.hours),
+                "startDate": inputs.startDate,
+                "endDate": checked === true ? null : inputs.endDate && inputs.endDate !== 'Invalid date' ? inputs.endDate : null
+            }
+
             if (info){
-                dispatch(adminActions.editTimesheet(data, inputs.id))
+                dispatch(adminActions.editTimesheet(editDate, inputs.id, params.id))
             }else {
                 dispatch(adminActions.createTimesheet(data))
             }
@@ -110,7 +111,7 @@ const params = useParams()
         <div className={classes.createFoundingSource}>
             <ModalHeader
                 handleClose={handleClose}
-                title={info ? "Add a New Timesheet" : 'Add a New Timesheet'}
+                title={info ? "Edit Timesheet" : 'Add a New Timesheet'}
                 text={!info && 'Please fulfill the below fields to add a timesheet.'}
             />
             <div className={classes.createFoundingSourceBody}>
@@ -153,7 +154,7 @@ const params = useParams()
                             typeError={error === 'hours' && ErrorText.field}
                         />
                         <div className={classes_v2.paycodeBox}>
-                            <Checkbox defaultChecked={true} onClick={onCheck} color={Colors.ThemeBlue} />
+                            <Checkbox defaultChecked={info ? checked : true} onClick={onCheck} color={Colors.ThemeBlue} />
                             <p className={classes_v2.activePaycode}>Active Paycode</p>
                         </div>
                         <div style={{display: 'flex'}}>
@@ -169,9 +170,9 @@ const params = useParams()
                             <div style={{width: 16}}/>
                             <ValidationInput
                                 variant={"outlined"}
-                                disabled={checked}
+                                disabled={ inputs.endDate ? false : checked}
                                 onChange={handleChange}
-                                value={checked ? 'Present' : inputs.endDate}
+                                value={ checked ? 'Present' : inputs.endDate}
                                 type={checked ? 'text' :"date"}
                                 label={"End Date*"}
                                 name='endDate'
@@ -182,7 +183,7 @@ const params = useParams()
                 </div>
                 <div className={classes.clientModalBlock}>
                     <CreateChancel
-                        loader={httpOnLoad.length > 0}
+                        loader={ !!loader.length || !!loaderEdit.length }
                         create={info ? "Save" : 'Add'}
                         chancel={"Cancel"}
                         onCreate={handleCreate}

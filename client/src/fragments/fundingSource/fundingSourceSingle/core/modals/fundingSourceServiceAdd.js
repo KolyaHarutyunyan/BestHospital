@@ -6,6 +6,7 @@ import {foundingSourceModalStyle} from "./styles";
 import {ErrorText} from "@eachbase/utils";
 import {fundingSourceActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 import {FundingSourceModifiersAdd} from "./fundingSourceModifiersAdd";
+import axios from "axios";
 
 export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
     const systemServices = useSelector(state => state.system.services)
@@ -19,9 +20,20 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
     const params = useParams()
     let dispatch = useDispatch()
 
+
+    const [cre, setCre] = useState([])
     const classes = foundingSourceModalStyle()
-    let addNewMod = (newMod)=>{
+    let addNewMod = (newMod) => {
         setModifiersEdit([...modifiersEdit, newMod])
+    }
+
+    // console.log(modifiersEdit,'modifiersEditmodifiersEditmodifiersEdit')
+    const handleNew = (item) =>{
+        setGetLastMod(item)
+
+        if(item !== null) {
+            setCre([...cre, item])
+        }
     }
 
     const {httpOnSuccess, httpOnLoad} = useSelector((state) => ({
@@ -41,12 +53,12 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
 
     useEffect(() => {
         if (success) {
-              handleClose()
+            handleClose()
             dispatch(httpRequestsOnSuccessActions.removeSuccess('EDIT_FUNDING_SOURCE_SERVICE'))
             dispatch(httpRequestsOnErrorsActions.removeError('EDIT_FUNDING_SOURCE_SERVICE'))
         }
         if (successCreate) {
-             handleClose()
+            handleClose()
             dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_FUNDING_SOURCE_SERVICE_BY_ID'))
             dispatch(httpRequestsOnErrorsActions.removeError('CREATE_FUNDING_SOURCE_SERVICE_BY_ID'))
         }
@@ -73,10 +85,22 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
                 "max": +inputs.max
             }
             let arr = postModifiers
-             if (!info){
+            if (!info) {
                 dispatch(fundingSourceActions.createFoundingSourceServiceById(params.id, data, arr))
-            }else {
-                dispatch(fundingSourceActions.editFoundingSourceServiceById(info?._id, data, arr,params.id))
+            } else {
+                if (cre.length) {
+                    const date = {modifiers: [...cre], serviceId: info._id}
+                    const newArr = arr && arr.length &&  arr.filter((i) => i._id)
+                    axios.post(`/modifier`, date, {auth: true}).then(res =>
+                            dispatch(fundingSourceActions.editFoundingSourceServiceById(info?._id, data, newArr, params.id)),
+                        setCre([])).then(
+                            dispatch(fundingSourceActions.getFoundingSourceServiceById(params.id))
+                    )
+                }
+                else {
+                    dispatch(fundingSourceActions.editFoundingSourceServiceById(info?._id, data, arr, params.id))
+                }
+
             }
 
         } else {
@@ -90,6 +114,8 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
             )
         }
     }
+
+    // fundingSourceActions.createFoundingSourceServiceModifier
 
     return (
         <div className={classes.createFoundingSource}>
@@ -122,7 +148,7 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
                             onChange={handleChange}
                             value={inputs.cptCode}
                             variant={"outlined"}
-                             type={"text"}
+                            type={"text"}
                             label={"CPT Code*"}
                             name={'cptCode'}
                             typeError={error === 'cptCode' && ErrorText.field}
@@ -168,7 +194,7 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
                     modifiersServ={modifiersID}
                     setPostModifiers={setPostModifiers}
                     globalCredentials={globalCredentials}
-                    setGetLastMod = {setGetLastMod}
+                    setGetLastMod={handleNew}
                 />
 
                 <div className={classes.foundingSourceModalsBodyBlock}>

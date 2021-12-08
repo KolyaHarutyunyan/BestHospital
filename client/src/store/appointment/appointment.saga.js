@@ -50,7 +50,6 @@ function* editAppointmentSaga(action) {
         yield call(appointmentService.editAppointmentService, action.payload.body, action.payload.id, );
 
         // const res = yield call(appointmentService.getAppointmentService, );
-        // console.log(res, 'qweqweqweqweqweqwe')
         //
         // yield put({
         //     type: GET_APPOINTMENT_SUCCESS,

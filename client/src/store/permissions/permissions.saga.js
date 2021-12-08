@@ -10,7 +10,7 @@ function* createPermission(action) {
     const res = yield call( authService.createPermissionService, action.payload.body );
 
   } catch (err) {
-    console.log(err)
+
   }
 }
 
@@ -28,10 +28,8 @@ function* getPermissions({action, type}) {
 
 
   } catch (err) {
-
     yield put(httpRequestsOnLoadActions.removeLoading(type));
     yield put(httpRequestsOnErrorsActions.removeError(type));
-    console.log(err)
   }
 }
 
@@ -40,7 +38,7 @@ function* deletePermission(action) {
     const res = yield call( authService.deletePermission, action.payload );
 
   } catch (err) {
-    console.log(err)
+
   }
 }
 

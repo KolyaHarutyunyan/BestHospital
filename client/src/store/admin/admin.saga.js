@@ -410,11 +410,17 @@ function* createTimesheet(action) {
 function* editTimesheet(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
-        yield call(authService.editTimesheetService, action.payload.body)
+        yield call(authService.editTimesheetService, action.payload.body, action.payload.id)
+        const res = yield call(authService.getTimesheetById, action.payload.id)
+        yield put({
+            type: GET_TIMESHEET_BY_ID_SUCCESS,
+            payload: res.data
+        });
         yield put({
             type: GET_TIMESHEET,
-            payload: {id : action.payload.id}
+            payload: {id : action.payload.params}
         });
+
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
     } catch (err) {

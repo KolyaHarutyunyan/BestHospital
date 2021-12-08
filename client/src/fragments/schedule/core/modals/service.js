@@ -60,7 +60,9 @@ export const Service = ({handleOpenClose, info, date, clientList, staffList, pla
     const handleSelect = (ev) => {
         setInputs(prevState => ({...prevState, [ev.target.name]: ev.target.value}),)
         ev.target.name === 'staff' &&  handleGetService(ev.target.value)
-        dispatch(adminActions.getStaffService(ev.target.value))
+
+        // dispatch(adminActions.getStaffService(ev.target.value))
+
         ev.target.name === 'client' && dispatch(clientActions.getClientsAuthorizations(ev.target.value))
     }
 
