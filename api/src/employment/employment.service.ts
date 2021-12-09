@@ -145,6 +145,9 @@ export class EmploymentService {
       }
       employment.endDate = dto.endDate;
     }
+    else{
+      employment.active = true;
+    }
     if (dto.startDate) employment.startDate = dto.startDate;
     employment = await employment.save();
     await employment
