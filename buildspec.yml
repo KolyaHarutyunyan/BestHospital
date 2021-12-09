@@ -8,9 +8,9 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 10
+      nodejs: 12
     commands:
-      - npm i npm -g
+      # - npm i npm -g
   pre_build:
     commands:
   build:
