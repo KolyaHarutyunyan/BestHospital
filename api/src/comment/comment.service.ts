@@ -25,14 +25,14 @@ export class CommentService {
     try {
       const onMod = dto.onModel;
       const resource = await this[onMod].findById(dto.resource);
-      const comment = new this.model({
+      let comment = new this.model({
         text: dto.text,
         subject: dto.subject,
         resource: dto.resource,
         onModel: dto.onModel,
         user
       })
-      await comment.save()
+      comment = await (await comment.save()).populate('user').execPopulate();
       return this.sanitizer.sanitize(comment);
     } catch (e) {
       throw e;
