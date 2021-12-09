@@ -26,7 +26,7 @@ export class AuthorizationserviceService {
   private mongooseUtil: MongooseUtil;
 
   // check if modifiers are received
-  async checkModifiers(authorizationId: string, fundingServiceId: string, dto: AuthorizationModifiersDTO): Promise<ModifyDTO> {
+  async checkModifiers(authorizationId: string, fundingServiceId: string): Promise<ModifyDTO> {
     try {
       const findService = await this.fundingService.findService(fundingServiceId);
       return await this.availableModifiers(authorizationId, findService);
@@ -105,6 +105,7 @@ export class AuthorizationserviceService {
     let available = [];
     const authServices: any = await this.model.find({ authorizationId });
     this.checkAuthorizationService(authServices[0]);
+ 
     authServices.map(authService => { 
       authService.modifiers.map(modifier =>{
         dbModifiers.push(modifier._id.toString())

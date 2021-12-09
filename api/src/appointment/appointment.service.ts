@@ -161,6 +161,7 @@ export class AppointmentService {
       );
     }
     const compareService = await this.authorizedService.getByServiceId(authService.serviceId);
+    console.log(staff, 'stafffffff')
     if (staff.service.indexOf(compareService.serviceId) == -1) {
       throw new HttpException(
         'Staff service have not current service',

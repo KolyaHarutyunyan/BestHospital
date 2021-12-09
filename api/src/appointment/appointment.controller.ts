@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ACCESS_TOKEN } from '../authN/authN.constants';
-import { ParseObjectIdPipe } from 'src/util';
+import { ParseObjectIdPipe, Public } from 'src/util';
 import { AppointmentService } from './appointment.service';
 import { CreateAppointmentDto, UpdateAppointmentDto, AppointmentDto, CreateRepeatDto } from './dto';
 import { AppointmentQueryDTO, AppointmentQuerySetEventStatusDTO } from './dto/appointment.dto';
@@ -12,7 +12,8 @@ export class AppointmentController {
   constructor(private readonly appointmentService: AppointmentService) { }
 
   @Post()
-  @ApiHeader({ name: ACCESS_TOKEN })
+  @Public()
+  // @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: AppointmentDto })
   create(@Body() createAppointmentDto: CreateAppointmentDto) {
     return this.appointmentService.create(createAppointmentDto);

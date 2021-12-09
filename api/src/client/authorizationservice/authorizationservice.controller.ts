@@ -25,9 +25,8 @@ export class AuthorizationserviceController {
   @ApiOkResponse({type: AuthorizationServiceDTO})
   checkModifiers(
     @Param('authorizationId', ParseObjectIdPipe) authorizationId: string,
-    @Param('fundingServiceId', ParseObjectIdPipe) fundingServiceId: string,
-    @Body() createAuthorizationserviceDto: AuthorizationModifiersDTO) {
-    return this.authorizationserviceService.checkModifiers(authorizationId, fundingServiceId, createAuthorizationserviceDto);
+    @Param('fundingServiceId', ParseObjectIdPipe) fundingServiceId: string) {
+    return this.authorizationserviceService.checkModifiers(authorizationId, fundingServiceId);
   }
 
   @Get('authorization/:authorizationId')
