@@ -7,6 +7,7 @@ export interface IAppointment extends Document {
   client: any,
   authorizedService: string,
   staff: string,
+  placeService: string,
   staffPayCode: string,
   startDate: Date,
   startTime: Date,

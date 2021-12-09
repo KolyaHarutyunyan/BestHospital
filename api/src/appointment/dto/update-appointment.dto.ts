@@ -17,6 +17,10 @@ export class UpdateAppointmentDto {
     authorizedService: string;
     @ApiProperty()
     @IsMongoId()
+    @IsOptional()
+    placeService: string;
+    @ApiProperty()
+    @IsMongoId()
     @IsString()
     @IsNotEmpty()
     staff: string;

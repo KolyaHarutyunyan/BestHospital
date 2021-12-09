@@ -15,6 +15,8 @@ export class AppointmentDto {
     @ApiProperty()
     staff: string;
     @ApiProperty()
+    placeService: string;
+    @ApiProperty()
     staffPayCode: string;
     @ApiProperty()
     startDate: Date;

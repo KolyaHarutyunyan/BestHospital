@@ -28,6 +28,10 @@ export class CreateAppointmentDto {
     @IsNotEmpty()
     staffPayCode: string;
     @ApiProperty()
+    @IsMongoId()
+    @IsNotEmpty()
+    placeService: string;
+    @ApiProperty()
     @IsDateString()
     @IsNotEmpty()
     startDate: Date;

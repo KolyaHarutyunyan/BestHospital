@@ -15,6 +15,7 @@ import { AppointmentSanitizer } from './interceptor/appointment.interceptor';
 import { IAppointment } from './interface';
 import { AppointmentType } from './appointment.constants';
 import * as mongoose from 'mongoose';
+import { PlaceService } from '../place/place.service';
 
 @Injectable()
 export class AppointmentService {
@@ -23,6 +24,7 @@ export class AppointmentService {
     private readonly authorizedService: AuthorizationserviceService,
     private readonly staffService: StaffService,
     private readonly payCodeService: PaycodeService,
+    private readonly placeService: PlaceService,
     private readonly sanitizer: AppointmentSanitizer
   ) {
     this.model = AppointmentModel;
@@ -38,13 +40,14 @@ export class AppointmentService {
       );
     }
     let appointment;
-    const [staff, staffPayCode]: any = await Promise.all([
+    const [staff, staffPayCode, place]: any = await Promise.all([
       this.staffService.findById(dto.staff),
-      this.payCodeService.findOne(dto.staffPayCode)
+      this.payCodeService.findOne(dto.staffPayCode),
+      this.placeService.findOne(dto.placeService)
     ]);
     switch (dto.type) {
       case AppointmentType.SERVICE:
-        appointment = await this.appointmentService(dto, staff)
+        appointment = await this.appointmentService(dto, staff, place)
         break
       case AppointmentType.DRIVE:
         appointment = await this.appointmentDrive(dto)
@@ -56,7 +59,7 @@ export class AppointmentService {
         appointment = await this.appointmentBreak(dto)
         break
     }
-
+console.log(staffPayCode, 'aaaaaaaa');
     if (staff.id != staffPayCode.employmentId.staffId && staffPayCode.employmentId.active != true) {
       throw new HttpException(
         'PayCode is not staff pay code or employment is not active',
@@ -133,7 +136,7 @@ export class AppointmentService {
   }
 
   // create the service appointment
-  async appointmentService(dto, staff): Promise<AppointmentDto> {
+  async appointmentService(dto, staff, place): Promise<AppointmentDto> {
     const [overlappingStaff, overlappingClient] = await Promise.all([
       this.model.find({ staff: dto.staff, startTime: { $lt: new Date(dto.endTime) }, endTime: { $gt: new Date(dto.startDate) } }),
       this.model.find({ client: dto.client, startTime: { $lt: new Date(dto.endTime) }, endTime: { $gt: new Date(dto.startDate) } })
@@ -160,14 +163,14 @@ export class AppointmentService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const compareService = await this.authorizedService.getByServiceId(authService.serviceId);
-    console.log(staff, 'stafffffff')
-    if (staff.service.indexOf(compareService.serviceId) == -1) {
-      throw new HttpException(
-        'Staff service have not current service',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    // const compareService = await this.authorizedService.getByServiceId(authService.serviceId);
+    // console.log(staff, 'stafffffff')
+    // if (staff.service.indexOf(compareService.serviceId) == -1) {
+    //   throw new HttpException(
+    //     'Staff service have not current service',
+    //     HttpStatus.BAD_REQUEST,
+    //   );
+    // }
     if (client.id != authService.authorizationId.clientId) {
       throw new HttpException(
         'Authorization Service is not Client authorization service',
@@ -193,6 +196,7 @@ export class AppointmentService {
       require: dto.require,
       signature: dto.signature,
       type: dto.type,
+      placeService: place._id
     });
     return appointment;
   }
@@ -432,7 +436,7 @@ export class AppointmentService {
   // find appointment
   async findOne(_id: string): Promise<any> {
     const appointment = await this.model.findById(_id).populate('client').
-      populate('authorizedService').populate('staff').populate('staffPayCode');
+      populate('authorizedService').populate('staff').populate('staffPayCode').populate('placeService');
     const staff = [];
     const client = [];
     staff.push(appointment.staff);
@@ -447,7 +451,10 @@ export class AppointmentService {
     const appointment = await this.model.findById(_id);
     let compareService;
     this.checkAppointment(appointment);
-
+    if(dto.placeService){
+      await this.placeService.findOne(dto.placeService);
+      appointment.placeService = dto.placeService
+    }
     if (dto.type == 'SERVICE') {
       if (!dto.client || !dto.authorizedService) {
         throw new HttpException(
