@@ -24,6 +24,12 @@ export class EmploymentService {
   // create the employment
   async create(dto: CreateEmploymentDto): Promise<EmploymentDto> {
     try {
+      if (new Date(dto.startDate) > new Date(dto.endDate)) {
+        throw new HttpException(
+          `startDate can't be high then endDate`,
+          HttpStatus.BAD_REQUEST,
+        );
+      }
       const staff = await this.staffService.findById(dto.staffId);
       let employment = new this.model({
         staffId: dto.staffId,
@@ -31,33 +37,21 @@ export class EmploymentService {
         termination: dto.termination,
         startDate: dto.startDate,
         title: dto.title,
-      });
-      if (!dto.active && !dto.endDate) {
-        throw new HttpException('endDate required field', HttpStatus.BAD_REQUEST);
-      }
-      if (dto.endDate && !dto.active) {
-        employment.active = false;
+      }); 
+      const date = new Date().getTime();
+      if (dto.endDate) {
+        const endDate = new Date(dto.endDate).getTime();
+        if (endDate >= date) {
+          let activeEmployment = await this.model.findOne({ active: true, staffId: staff.id });
+          if (activeEmployment) {
+            activeEmployment.active = false;
+            activeEmployment.endDate = new Date(new Date(dto.startDate).setDate(new Date(dto.startDate).getDate() - 1));
+            await activeEmployment.save();
+          }
+          employment.active = true;
+        }
         employment.endDate = dto.endDate;
       }
-      if (dto.endDate && dto.active) {
-        throw new HttpException('can not set endDate untill employment is active ', HttpStatus.BAD_REQUEST);
-      }
-      if (dto.supervisor == dto.staffId) {
-        throw new HttpException(
-          'staff@ inq@ ir manager@ chi karox linel chnayac hayastanum hnaravor e',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-      if (dto.active) {
-        let activeEmployment = await this.model.findOne({ active: true, staffId: staff.id });
-        if (activeEmployment) {
-          activeEmployment.active = false;
-          await activeEmployment.save();
-        }
-        employment.active = true;
-        employment.startDate = activeEmployment.endDate;
-      }
-
       const findStaff = await this.staffService.findById(dto.supervisor);
       employment.supervisor = dto.supervisor;
 
@@ -87,7 +81,7 @@ export class EmploymentService {
     this.checkEmployment(employments[0]);
     return this.sanitizer.sanitizeMany(employments);
   }
-  
+
   // find employments by staff id
   async findAllEmploymentsByStaffId(staffId: string): Promise<String[]> {
     const ids = [];
@@ -113,6 +107,12 @@ export class EmploymentService {
 
   // update the employment
   async update(_id: string, dto: UpdateEmploymentDto): Promise<EmploymentDto> {
+    if (new Date(dto.startDate) > new Date(dto.endDate)) {
+      throw new HttpException(
+        `startDate can't be high then endDate`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     let employment = await this.model.findById({ _id });
     this.checkEmployment(employment);
     if (dto.title) employment.title = dto.title;
@@ -134,23 +134,18 @@ export class EmploymentService {
       employment.departmentId = dto.departmentId;
     }
     if (dto.schedule) employment.schedule = dto.schedule;
-    if (!dto.active && !dto.endDate) {
-      throw new HttpException('endDate required field', HttpStatus.BAD_REQUEST);
-    }
-    if (dto.active && !dto.endDate) {
-      let activeEmployment = await this.model.findOne({
-        active: true,
-        staffId: employment.staffId,
-      });
-      if (activeEmployment) {
-        activeEmployment.active = false;
-        await activeEmployment.save();
+    const date = new Date().getTime();
+    if (dto.endDate) {
+      const endDate = new Date(dto.endDate).getTime();
+      if (endDate >= date) {
+        let activeEmployment = await this.model.findOne({ active: true, staffId: employment.staffId });
+        if (activeEmployment) {
+          activeEmployment.active = false;
+          activeEmployment.endDate = new Date(new Date(dto.startDate).setDate(new Date(dto.startDate).getDate() - 1));
+          await activeEmployment.save();
+        }
+        employment.active = true;
       }
-      employment.active = true;
-      employment.endDate = 'Precent';
-    }
-    if (dto.endDate && !dto.active) {
-      employment.active = false;
       employment.endDate = dto.endDate;
     }
     if (dto.startDate) employment.startDate = dto.startDate;
