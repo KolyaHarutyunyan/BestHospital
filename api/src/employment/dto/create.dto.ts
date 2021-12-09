@@ -28,10 +28,6 @@ export class CreateEmploymentDto {
     @IsDateString()
     @IsOptional()
     endDate: Date;
-    @ApiProperty({type: Boolean})
-    @IsBoolean()
-    @IsNotEmpty()
-    active: Boolean;
     @ApiProperty({ enum: ScheduleStatus })
     @IsEnum(ScheduleStatus)
     schedule: number;

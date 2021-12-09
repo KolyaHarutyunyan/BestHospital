@@ -30,10 +30,6 @@ export class UpdateEmploymentDto {
     @IsEnum(ScheduleStatus)
     @IsOptional()
     schedule: number;
-    @ApiProperty({type: Boolean})
-    @IsBoolean()
-    @IsOptional()
-    active: Boolean;
     @ApiProperty({ type: TerminationDTO })
     @IsOptional()
     termination: CreateTerminationDto;
