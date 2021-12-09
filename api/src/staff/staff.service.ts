@@ -216,16 +216,6 @@ export class StaffService {
     return this.sanitizer.sanitize(staff);
   };
 
-  /** Set Status of a staff Active */
-  // setStatusActive = async (id: string, status: number): Promise<StaffDTO> => {
-  //   const staff = await this.model.findOneAndUpdate(
-  //     { _id: id },
-  //     { $set: { status: status, termination: null } },
-  //     { new: true },
-  //   );
-  //   this.checkStaff(staff);
-  //   return this.sanitizer.sanitize(staff);
-  // };
   /** Set isClinical of a staff Active */
   isClinical = async (id: string, status: boolean): Promise<StaffDTO> => {
     const staff = await this.model.findOneAndUpdate(

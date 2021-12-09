@@ -35,7 +35,6 @@ export class PaycodetypeService {
   async findAll(): Promise<PayCodeTypeDTO[]> {
     try {
       const payCodeType = await this.model.find();
-      this.checkPayCodeType(payCodeType[0]);
       return this.sanitizer.sanitizeMany(payCodeType)
     }
     catch (e) {

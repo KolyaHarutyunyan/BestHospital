@@ -62,7 +62,6 @@ export class EnrollmentService {
   async findAll(clientId: string): Promise<EnrollmentDTO[]> {
     try {
       const enrollments = await this.model.find({ clientId }).populate({ path: 'funderId', select: 'name' });
-      this.checkEnrollment(enrollments[0]);
       return this.sanitizer.sanitizeMany(enrollments);
     } catch (e) {
       throw e;
