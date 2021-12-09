@@ -136,7 +136,6 @@ export class AuthorizationserviceService {
   async findAllByAuthorizations(authorizationIds: Array<string>): Promise<AuthorizationServiceDTO[]> {
     try {
       const authorizationServices = await this.model.find({ authorizationId: { $in: authorizationIds } });
-      // this.checkAuthorizationService(authorizationServices[0]);
       return this.sanitizer.sanitizeMany(authorizationServices);
     } catch (e) {
       throw e;
@@ -158,7 +157,6 @@ export class AuthorizationserviceService {
       this.checkAuthorizationService(authorizationService)
       const authorization = await this.authorizationModel.findOne({ _id: dto.authorizationId });
       this.checkAuthorization(authorization);
-
       const fundingService: any = await this.fundingService.findAllServiceForClient(authorization.funderId, dto.fundingServiceId);
       if (!fundingService.length) {
         throw new HttpException(
@@ -166,34 +164,10 @@ export class AuthorizationserviceService {
           HttpStatus.NOT_FOUND,
         );
       }
-
-      // if (dto.modifiers && fundingService[0].modifiers.length != []) {    
-      //   fundingService[0].modifiers.map(modifier => modifiers.push(modifier.id));
-      //    dto.modifiers.map(modifier => {
-      //     if (!modifiers.includes(modifier)) {
-      //       throw new HttpException(
-      //         'Invalid modifier',
-      //         HttpStatus.NOT_FOUND,
-      //       );
-      //     }
-      //   })
-      //   authorizationService.modifiers = dto.modifiers;
-      //   authorizationService.serviceId = dto.fundingServiceId;
-      // }
-
-
-      // if (dto.available) {
-      //   authorizationService.available = dto.available;
-      // }
-      // if (dto.completed) {
-      //   authorizationService.completed = dto.completed;
-      // }
       if (dto.total) {
         authorizationService.total = dto.total;
       }
-
       await authorizationService.save()
-
       return this.sanitizer.sanitize(authorizationService);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Authorization Service already exists');

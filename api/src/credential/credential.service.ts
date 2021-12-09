@@ -35,9 +35,7 @@ export class CredentialService {
   async findAll(): Promise<CredentialDTO[]> {
     try {
       const credential = await this.model.find({});
-      this.checkCredential(credential[0]);
       return credential;
-      // return this.sanitizer.sanitizeMany(credential);
     }
     catch (e) {
       throw e

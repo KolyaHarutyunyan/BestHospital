@@ -36,7 +36,6 @@ export class DepartmentService {
   async findAll(): Promise<DepartmentDTO[]> {
     try {
       const departments = await this.model.find();
-      this.checkDepartment(departments[0]);
       return this.sanitizer.sanitizeMany(departments)
     }
     catch (e) {

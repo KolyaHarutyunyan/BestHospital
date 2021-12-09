@@ -52,7 +52,6 @@ export class ContactService {
   async findAllContacts(clientId: string): Promise<ContactDTO[]> {
     try {
       const contacts = await this.model.find({ clientId });
-      this.checkContact(contacts[0]);
       return this.sanitizer.sanitizeMany(contacts);
     } catch (e) {
       throw e;

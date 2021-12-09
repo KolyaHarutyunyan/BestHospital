@@ -36,7 +36,6 @@ export class PlaceService {
   // find all places
   async findAll(): Promise<PlaceDTO[]> {
     const places = await this.model.find();
-    this.checkPlace(places[0]);
     return this.sanitizer.sanitizeMany(places);
   }
 

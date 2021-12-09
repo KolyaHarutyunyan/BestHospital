@@ -78,7 +78,6 @@ export class EmploymentService {
       .find({ staffId })
       .populate('departmentId', 'name')
       .populate('supervisor', 'firstName');
-    this.checkEmployment(employments[0]);
     return this.sanitizer.sanitizeMany(employments);
   }
 
@@ -91,8 +90,6 @@ export class EmploymentService {
       ids.push(employment._id);
     });
     return ids;
-    // this.checkEmployment(employments[0])
-    // return this.sanitizer.sanitizeMany(employments);
   }
 
   // find employment by id
