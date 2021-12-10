@@ -1,17 +1,14 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model, Types } from 'mongoose';
-import { StaffDTO, CreateStaffDto, EditStaffDTO, StaffQueryDTO } from './dto';
+import { StaffDTO, CreateStaffDto, EditStaffDTO } from './dto';
 import { StaffSanitizer } from './interceptor';
 import { IStaff } from './interface';
 import { StaffModel } from './staff.model';
 import { AuthNService, UserType } from '../authN';
 import { MongooseUtil } from '../util';
 import { AddressService } from '../address';
-import { CreateCredentialDto } from '../credential';
 import { HistoryService, serviceLog } from '../history';
-import { StaffStatus } from '../staff/staff.constants';
 import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
-import { CreateStaffDtoTest } from './dto/createTest.dto';
 import { ServiceService } from '../service'
 
 @Injectable()
@@ -33,9 +30,7 @@ export class StaffService {
   /** Create a new user */
   create = async (dto: CreateStaffDto, userId: string): Promise<StaffDTO> => {
     try {
-      const _id = Types.ObjectId();
       let user = new this.model({
-        _id,
         email: dto.email,
         secondaryEmail: dto.secondaryEmail,
         firstName: dto.firstName,

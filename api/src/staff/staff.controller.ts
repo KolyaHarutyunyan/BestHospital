@@ -19,7 +19,7 @@ export class StaffController {
   @Public()
   // @ApiHeader({ name: ACCESS_TOKEN })
   async createSuperAdmin(@Body() createStaffDTO: CreateStaffDto): Promise<StaffDTO> {
-    const admin = await this.staffService.create(createStaffDTO, createStaffDTO.user.id);
+    const admin = await this.staffService.create(createStaffDTO, '61880e23318e3b4c700b0270');
     return admin;
   }
 
@@ -32,7 +32,7 @@ export class StaffController {
     @Param('id', ParseObjectIdPipe) id: string,
     @Body() dto: EditStaffDTO,
   ): Promise<StaffDTO> {
-    const admin = await this.staffService.edit(id, dto, dto.user.id);
+    const admin = await this.staffService.edit(id, dto, '61880e23318e3b4c700b0270');
     return admin;
   }
 
