@@ -29,7 +29,7 @@ export class CreateAppointmentDto {
     staffPayCode: string;
     @ApiProperty()
     @IsMongoId()
-    @IsNotEmpty()
+    @IsOptional()
     placeService: string;
     @ApiProperty()
     @IsDateString()

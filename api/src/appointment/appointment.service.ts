@@ -40,14 +40,13 @@ export class AppointmentService {
       );
     }
     let appointment;
-    const [staff, staffPayCode, place]: any = await Promise.all([
+    const [staff, staffPayCode]: any = await Promise.all([
       this.staffService.findById(dto.staff),
       this.payCodeService.findOne(dto.staffPayCode),
-      this.placeService.findOne(dto.placeService)
     ]);
     switch (dto.type) {
       case AppointmentType.SERVICE:
-        appointment = await this.appointmentService(dto, staff, place)
+        appointment = await this.appointmentService(dto, staff)
         break
       case AppointmentType.DRIVE:
         appointment = await this.appointmentDrive(dto)
@@ -136,11 +135,19 @@ console.log(staffPayCode, 'aaaaaaaa');
   }
 
   // create the service appointment
-  async appointmentService(dto, staff, place): Promise<AppointmentDto> {
+  async appointmentService(dto, staff): Promise<AppointmentDto> {
     const [overlappingStaff, overlappingClient] = await Promise.all([
       this.model.find({ staff: dto.staff, startTime: { $lt: new Date(dto.endTime) }, endTime: { $gt: new Date(dto.startDate) } }),
       this.model.find({ client: dto.client, startTime: { $lt: new Date(dto.endTime) }, endTime: { $gt: new Date(dto.startDate) } })
     ]);
+    if(!dto.placeService){
+      throw new HttpException(
+        `placeService is required`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const place = await this.placeService.findOne(dto.placeService);
+    const placeId = place._id as string;
     if (overlappingStaff[0] || overlappingClient[0]) {
       throw new HttpException(
         `appointment overlapping`,
@@ -196,7 +203,7 @@ console.log(staffPayCode, 'aaaaaaaa');
       require: dto.require,
       signature: dto.signature,
       type: dto.type,
-      placeService: place._id
+      placeService: placeId
     });
     return appointment;
   }
