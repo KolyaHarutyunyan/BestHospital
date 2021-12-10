@@ -17,22 +17,20 @@ export class StaffController {
   @Post()
   @ApiOkResponse({ type: StaffDTO })
   @Public()
-  // @ApiHeader({ name: ACCESS_TOKEN })
   async createSuperAdmin(@Body() createStaffDTO: CreateStaffDto): Promise<StaffDTO> {
-    const admin = await this.staffService.create(createStaffDTO, '61880e23318e3b4c700b0270');
+    const admin = await this.staffService.create(createStaffDTO);
     return admin;
   }
 
   /** Edit a staff */
   @Patch(':id')
-  @Public()
-  // @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: StaffDTO })
   async edit(
     @Param('id', ParseObjectIdPipe) id: string,
     @Body() dto: EditStaffDTO,
   ): Promise<StaffDTO> {
-    const admin = await this.staffService.edit(id, dto, '61880e23318e3b4c700b0270');
+    const admin = await this.staffService.edit(id, dto);
     return admin;
   }
 
@@ -111,8 +109,7 @@ export class StaffController {
 
   /** IsClinical a staff */
   @Patch(':id/:isClinical')
-  @Public()
-  // @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: StaffDTO })
   async isClinical(
     @Param('id', ParseObjectIdPipe) staffId: string,
@@ -124,8 +121,7 @@ export class StaffController {
   /** Create a new service */
   @Post(':id/service/:serviceId')
   @ApiOkResponse({ type: StaffDTO })
-  @Public()
-  // @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiHeader({ name: ACCESS_TOKEN })
   async addService(
     @Param('serviceId', ParseObjectIdPipe) serviceId: string,
     @Param('id', ParseObjectIdPipe) id: string,
@@ -136,8 +132,7 @@ export class StaffController {
   /** Get service */
   @Get(':id/service')
   @ApiOkResponse({ type: StaffDTO })
-  @Public()
-  // @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiHeader({ name: ACCESS_TOKEN })
   async getService(@Param('id', ParseObjectIdPipe) id: string): Promise<StaffDTO> {
     const service = await this.staffService.getService(id);
     return service;
@@ -145,8 +140,7 @@ export class StaffController {
   /** Delete a service */
   @Delete(':id/service/:serviceId')
   @ApiOkResponse({ type: String })
-  @Public()
-  // @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiHeader({ name: ACCESS_TOKEN })
   async deleteService(
     @Param('serviceId', ParseObjectIdPipe) serviceId: string,
     @Param('id', ParseObjectIdPipe) id: string,
