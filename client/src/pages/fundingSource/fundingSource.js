@@ -3,6 +3,7 @@ import {TableWrapper} from "@eachbase/components";
 import {FundingSourceTable, CreateFundingSource,} from "@eachbase/fragments";
 import {fundingSourceActions} from "@eachbase/store";
 import {useDispatch} from "react-redux";
+import {FindLoad} from "../../utils";
 
 export const FundingSource = () => {
     const dispatch = useDispatch()
@@ -23,8 +24,10 @@ export const FundingSource = () => {
         dispatch(fundingSourceActions.getFundingSource({status: status, start: 0, end: 10}))
     }
 
+    const loader = FindLoad('GET_FUNDING_SOURCE')
     return (
         <TableWrapper
+            loader={!!loader.length}
             handleType={handleActiveOrInactive}
             firstButton={"Active"}
             secondButton={"Inactive"}

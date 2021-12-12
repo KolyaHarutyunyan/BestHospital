@@ -38,7 +38,7 @@ export const authService = {
 
     getStaffServService: (id) => axios.get(`/staff/${id}/service`, {auth:true}),
 
-    createStaffServService: (id,serviceId) => axios.post(`/staff/${id}/service/${serviceId}`, {auth:true}),
+    createStaffServService: (id,serviceId) => axios.post(`/staff/${id}/service/${serviceId}`, null, {auth:true}),
 
     deleteStaffServService: (id,serviceId) => axios.delete(`/staff/${id}/service/${serviceId}`, {auth:true}),
 

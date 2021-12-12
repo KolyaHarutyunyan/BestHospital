@@ -136,13 +136,13 @@ export const FundingSourceSingleServices = ({data,}) => {
                     <>
                         <img src={Images.edit} alt="edit" className={classes.iconCursor}
                              onClick={() => onEdit(index)}/>
-                        <img src={Images.remove} alt="delete" className={classes.iconCursordelete}
-                             onClick={(e) => {
-                                 e.stopPropagation()
-                                 setIndex(index)
-                                 setDelEdit('del')
-                                 setToggleModal(!toggleModal)
-                             }}/>
+                        {/*<img src={Images.remove} alt="delete" className={classes.iconCursordelete}*/}
+                        {/*     onClick={(e) => {*/}
+                        {/*         e.stopPropagation()*/}
+                        {/*         setIndex(index)*/}
+                        {/*         setDelEdit('del')*/}
+                        {/*         setToggleModal(!toggleModal)*/}
+                        {/*     }}/>*/}
                     </>
                 </TableCell>
             </TableBodyComponent>

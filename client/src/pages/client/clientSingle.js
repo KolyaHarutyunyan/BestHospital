@@ -4,11 +4,14 @@ import {clientActions, fundingSourceActions, noteActions, availabilityScheduleAc
 
 import {useDispatch} from "react-redux";
 import {useParams} from "react-router-dom";
+import {Loader} from "@eachbase/components";
+import {FindLoad} from "@eachbase/utils";
 
 export const ClientSingle = () => {
 
     const dispatch = useDispatch()
     const params = useParams()
+    const loader = FindLoad('GET_CLIENT_BY_ID')
 
     useEffect(() => {
         dispatch(clientActions.getClientsById(params.id))
@@ -22,6 +25,16 @@ export const ClientSingle = () => {
     }, []);
 
     return (
-        <ClientItem/>
+        <>
+            {
+                loader.length ?
+                    <div style={{height:'85vh'}}>
+                        <Loader/>
+                    </div>
+                    :
+                    <ClientItem/>
+            }
+        </>
+
     )
 }

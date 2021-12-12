@@ -30,6 +30,7 @@ export const Client = ({}) => {
 
     const removeClient = () => dispatch(clientActions.deleteClient(deleteClient.id))
     const loader = FindLoad('DELETE_CLIENT')
+    const getLoader = FindLoad('GET_CLIENTS')
     const success = FindSuccess('DELETE_CLIENT')
 
     useEffect(() => {
@@ -42,6 +43,7 @@ export const Client = ({}) => {
         <>
 
             <TableWrapper
+                loader={!!getLoader.length}
                 handleType={handleActiveOrInactive}
                 firstButton={"Active"}
                 secondButton={"Inactive"}

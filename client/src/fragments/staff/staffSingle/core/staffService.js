@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
 import {useParams} from "react-router-dom";
-import {AddButton, Card, DeleteElement, NoItemText, SimpleModal, SlicedText} from "@eachbase/components";
+import {AddButton, Card, DeleteElement, NoItemText, SelectInput, SimpleModal, SlicedText} from "@eachbase/components";
 import {Colors, ErrorText, FindError, FindLoad, FindSuccess, Images,} from "@eachbase/utils";
 import {SelectInputPlaceholder} from "@eachbase/components";
 import {adminActions, httpRequestsOnErrorsActions} from "@eachbase/store";
@@ -70,7 +70,7 @@ export const StaffService = ({staffGeneral, info, services}) => {
         {title: 'Secondary Phone Number', value: staffGeneral?.secondaryPhone},
     ]
 
-    const filteredList = services.filter(function (array_el) {
+    const filteredList = services && services.length && services.filter(function (array_el) {
         return info && info.filter(function (anotherOne_el) {
             return anotherOne_el._id === array_el.id;
         }).length === 0
@@ -106,7 +106,7 @@ export const StaffService = ({staffGeneral, info, services}) => {
                 width: '100%',
                 flexDirection: 'column'
             }}>
-                <p className={classes.title} style={{marginBottom: 24}}>Services</p>
+                <span className={classes.title} style={{marginBottom: 24}}>Services</span>
                 <div style={{display: 'flex', width: "100%"}}>
                     <SelectInputPlaceholder
                         placeholder='Service Type'
@@ -114,7 +114,7 @@ export const StaffService = ({staffGeneral, info, services}) => {
                         name={"serviceType"}
                         handleSelect={handleChange}
                         value={inputs.serviceType}
-                        list={filteredList}
+                        list={filteredList ? filteredList : []}
                         typeError={error === 'serviceType' ? ErrorText.field : fail && fail.length && fail[0].error === 'Service already exist' ? 'Service already exist' : ''}
                     />
                     <AddButton
@@ -125,7 +125,7 @@ export const StaffService = ({staffGeneral, info, services}) => {
                         text='Add Service Type'
                     />
                 </div>
-                {services && services.length ? <></> : <p className={classes.noTypeYet}>No services found</p>}
+                {services && services.length ? <></> : <span className={classes.noTypeYet}>No services found</span>}
                 <div className={classes.credentialTable}>
                     {
                         info && info.length ? info.map((item, index) => {

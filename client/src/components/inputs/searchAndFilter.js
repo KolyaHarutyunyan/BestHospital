@@ -14,7 +14,7 @@ export const SearchAndFilter = ({
   return (
     <div className={classes.searchInputWrapper}>
       <div className={classes.searchInputTitle}>
-        <p>{title}</p>
+        <span>{title}</span>
         {custom !== false && (
           <img onClick={handleClick} src={type ?  Images.bluePhone  : Images.aToZ} alt={"filter icon"} />
         )}

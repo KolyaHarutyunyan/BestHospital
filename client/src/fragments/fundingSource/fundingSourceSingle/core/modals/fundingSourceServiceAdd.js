@@ -7,6 +7,7 @@ import {ErrorText} from "@eachbase/utils";
 import {fundingSourceActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
 import {FundingSourceModifiersAdd} from "./fundingSourceModifiersAdd";
 import axios from "axios";
+import {httpRequestsOnLoadActions} from "../../../../../store/http_requests_on_load";
 
 export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
     const systemServices = useSelector(state => state.system.services)
@@ -27,7 +28,6 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
         setModifiersEdit([...modifiersEdit, newMod])
     }
 
-    // console.log(modifiersEdit,'modifiersEditmodifiersEditmodifiersEdit')
     const handleNew = (item) =>{
         setGetLastMod(item)
 
@@ -90,10 +90,12 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
             } else {
                 if (cre.length) {
                     const date = {modifiers: [...cre], serviceId: info._id}
-                    const newArr = arr && arr.length &&  arr.filter((i) => i._id)
+                    const newArr = arr && arr.length && arr.filter((i) => i._id)
+
+                    dispatch(httpRequestsOnLoadActions.appendLoading('EDIT_FUNDING_SOURCE_SERVICE'))
                     axios.post(`/modifier`, date, {auth: true}).then(res =>
                             dispatch(fundingSourceActions.editFoundingSourceServiceById(info?._id, data, newArr, params.id)),
-                        setCre([])).then(
+                           setCre([])).then(
                             dispatch(fundingSourceActions.getFoundingSourceServiceById(params.id))
                     )
                 }
@@ -114,8 +116,6 @@ export const FundingSourceServiceAdd = ({handleClose, info, modifiersID}) => {
             )
         }
     }
-
-    // fundingSourceActions.createFoundingSourceServiceModifier
 
     return (
         <div className={classes.createFoundingSource}>

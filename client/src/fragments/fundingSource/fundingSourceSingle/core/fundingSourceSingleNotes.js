@@ -45,7 +45,8 @@ export const FundingSourceSingleNotes = ({data}) => {
                 created: item?.created,
                 subject: item?.subject,
                 id: item?.id,
-                text: item?.text
+                text: item?.text,
+                creatorName: item && item.user && `${item.user.firstName} ${item.user.lastName}`,
             })}>
                 <TableCell>{moment(item?.created).format('DD/MM/YYYY')}</TableCell>
                 <TableCell>{`${item?.user?.firstName} ${item?.user?.lastName}`}</TableCell>
@@ -67,11 +68,12 @@ export const FundingSourceSingleNotes = ({data}) => {
 
     const openNoteModal = (data) => {
         setNoteModalInfo({
-            right: '87px',
+            right: '38px',
             created: data?.created,
             subject: data?.subject,
             id: data?.id,
-            text: data?.text
+            text: data?.text,
+            creatorName: data?.creatorName
         })
     }
 
@@ -80,7 +82,8 @@ export const FundingSourceSingleNotes = ({data}) => {
             right: '-1000px',
             created: '',
             subject: '',
-            id: ''
+            id: '',
+            creatorName: '',
         })
     }
 

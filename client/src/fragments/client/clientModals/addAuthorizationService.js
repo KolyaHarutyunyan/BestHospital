@@ -32,6 +32,14 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
         })
     }, []);
 
+    // useEffect(() =>{
+    //     axios.post(`/authorizationservice/authorization/${authId}/fundingService/${fundingId}/checkModifiers`, null, {auth:true}).then(
+    //         res => console.log(res,'resssssss')
+    //     )
+    //     // console.log(fundingId,'fundingIdfundingId')
+    // },[])
+
+
 
     const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
@@ -55,14 +63,19 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
         }
     }, [success, successCreate])
 
-
     const [modif, setModif] = useState('')
     const handleChange = e => {
         if (e.target.name === 'modifiers') {
             setModCheck([])
-            let id = fSelect.find(item => item.name === e.target.value)._id
+            let id = fSelect.find(item => item.name === e.target.value)
 
-            axios.get(`/funding/service/${id}`, {auth:true}).then(res => setModif(res.data.modifiers))
+
+            axios.post(`/authorizationservice/authorization/${authId}/fundingService/${id && id._id}/checkModifiers`, null, {auth:true}).then(
+                res => setModif(res.data)
+            )
+            // console.log(e.target.value,'idid')
+            // axios.get(`/funding/service/${id}`, {auth:true}).then(res => setModif(res.data.modifiers))
+
             // dispatch(fundingSourceActions.getFundingSourceServById(id))
 
         }

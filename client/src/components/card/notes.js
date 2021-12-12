@@ -61,6 +61,7 @@ export const Notes = ({restHeight, closeModal, noteModalInfo, showModal, data, h
         }
     },[success])
 
+
     return (
         <div className={globalStyle.tableWrapper}>
             <TableContainer style={{maxHeight: `calc(100vh - ${restHeight})`}} className={globalStyle.tableContainer}
@@ -86,9 +87,9 @@ export const Notes = ({restHeight, closeModal, noteModalInfo, showModal, data, h
                         data ? data.map((item, index) => {
 
                             return (
-                                <>
+                                <React.Fragment key={index}>
                                     {items(item, index)}
-                                </>
+                                </React.Fragment>
                             )
                         }) : null
                     }
@@ -102,8 +103,8 @@ export const Notes = ({restHeight, closeModal, noteModalInfo, showModal, data, h
                 showModal &&
                 <>
                     <div className={globalStyle.previewModal} style={{right: noteModalInfo.right}}>
-                        <p>{noteModalInfo.subject}</p>
-                        <span>By John Smith</span>
+                        <h2 className={globalStyle.subject}>{noteModalInfo.subject}</h2>
+                        <span>{noteModalInfo.creatorName}</span>
                         <div className={globalStyle.dateContainer}>
                             <p>{moment(noteModalInfo?.created).format('DD/MM/YYYY')}</p>
                             <div>

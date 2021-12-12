@@ -52,9 +52,12 @@ export const SelectInput = ({errorFalse, className, loader, name, label, handleS
                             )) :
                             list && list.length && list.map((option, j) => (
                                 <option data-key={option.code ? option.code : j} key={j}
-                                        value={type === 'id' ? option.id || option._id : option.firstName || option.name}
+                                        value={type === 'id' ?
+                                            option.id || option._id :
+                                            type === 'service' ? option.id :
+                                            option.firstName || option.name}
                                 >
-                                    {option.firstName || option.name}
+                                    {type === 'service' ? option.serviceId.name  : option.firstName || option.name}
                                 </option>
                             ))
                         }

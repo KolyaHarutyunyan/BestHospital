@@ -19,7 +19,6 @@ export const ClientNotes = ({data}) => {
         subject: '',
     })
 
-
     const headerTitles = [
         {
             title: 'Date',
@@ -39,16 +38,14 @@ export const ClientNotes = ({data}) => {
         },
     ];
 
-
-
-
     let notesItem = (item, index) => {
         return (
             <TableBodyComponent key={index} handleOpenInfo={()=> openNoteModal({
                 created:item?.created,
                 subject: item?.subject,
                 id: item?.id,
-                text: item?.text
+                text: item?.text,
+                creatorName: item && item.user && `${item.user.firstName} ${item.user.lastName}`,
             })}>
                 <TableCell>{moment(item?.created).format('DD/MM/YYYY')}</TableCell>
                 <TableCell>{`${item?.user?.firstName} ${item?.user?.lastName}`}</TableCell>
@@ -70,11 +67,12 @@ export const ClientNotes = ({data}) => {
 
     const openNoteModal = (data) =>{
         setNoteModalInfo({
-            right: '1px',
+            right: '38px',
             created: data?.created,
             subject: data?.subject,
             id: data?.id,
-            text: data?.text
+            text: data?.text,
+            creatorName: data?.creatorName
         })
     }
 
@@ -86,11 +84,13 @@ export const ClientNotes = ({data}) => {
             id: ''
         })
     }
+
     const handleDeleteNote = () =>{
         dispatch(noteActions.deleteGlobalNote(noteModalData.id, params.id, 'Client'))
         setOpenDelModal(false)
         closeNoteModal()
     }
+
     return (
         <>
             {data ? <Notes

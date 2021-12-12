@@ -5,7 +5,7 @@ import {fundingSourceSingleStyles} from "./styles";
 export const FundingSourceSingleGeneral = ({data}) => {
     const classes = fundingSourceSingleStyles()
     return (
-        <div>
+        <React.Fragment>
             <div className={classes.fundingSourceSingleGeneralStyles}>
                 <Card cardInfo={[
                     {title: 'Name', value: data?.name,},
@@ -28,6 +28,6 @@ export const FundingSourceSingleGeneral = ({data}) => {
                 ]}
                       width={'32.5%'}/>
             </div>
-        </div>
+        </React.Fragment>
     )
 }

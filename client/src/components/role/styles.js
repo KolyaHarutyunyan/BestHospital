@@ -10,6 +10,13 @@ export const roleStyles = makeStyles(() => ({
         marginTop: 32
     },
 
+    noItem:{
+        fontSize: 18,
+        color: Colors.TextLightGray,
+        fontWeight: 'bold',
+        position: 'relative',
+        marginLeft:'5px',
+    },
     roleItemHover:{
         backgroundColor: Colors.BackgroundCatskillWhite,
         borderRadius: 8,

@@ -5,7 +5,7 @@ export const useGlobalStyles = makeStyles({
     previewModal: {
         position: 'fixed',
         width: 395,
-        top: 360,
+        top: 320,
         height: 550,
         background: 'white',
         padding: 16,
@@ -48,6 +48,13 @@ export const useGlobalStyles = makeStyles({
             color: Colors.TextLightGray,
             paddingBottom: 32,
         },
+    },
+    subject:{
+        fonSize:'18px',
+        fontWeight:'bold',
+        lineHeight:'22px',
+        color: Colors.ThemeBlue,
+        marginTop:'20px',
     },
     dateContainer: {
         display: 'flex',

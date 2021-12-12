@@ -91,20 +91,24 @@ function* getFundingSource(action) {
 }
 
 function* getFundingSourceById(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.getFoundingSourceByIdService, action.payload);
         yield put({
             type: GET_FUNDING_SOURCE_BY_ID_SUCCESS,
             payload: res.data,
         });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
     } catch (error) {
-
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
     }
 }
 
 function* getFundingSourceServicesById(action) {
     try {
         const res = yield call(authService.getFoundingSourceServiceByIdService, action.payload);
+
+
         yield put({
             type: GET_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
             payload: res.data,
@@ -121,13 +125,19 @@ function* createFundingSourceServicesById(action) {
     yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
     try {
         const res = yield call(authService.createFoundingSourceServiceByIdService, action.payload.id, action.payload.body);
-        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+
+        yield put({
+                type:GET_FUNDING_SOURCE_SERVICE_BY_ID,
+                payload: action.payload.id
+        })
 
         yield put({
             type: CREATE_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
             payload: res.data,
         });
+
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
 
         // const date = yield call(authService.getFoundingSourceServiceByIdService, action.payload.id);
         //

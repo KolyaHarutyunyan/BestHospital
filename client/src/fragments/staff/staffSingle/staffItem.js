@@ -98,11 +98,12 @@ export const StaffItem = ({ gen }) => {
 
     const openNoteModal = (data) => {
         setNoteModalInfo({
-            right: '25px',
+            right: '38px',
             created: data?.created,
             subject: data?.subject,
             id: data?.id,
-            text: data?.text
+            text: data?.text,
+            creatorName: data?.creatorName
         })
     }
 
@@ -121,7 +122,8 @@ export const StaffItem = ({ gen }) => {
                 created: item?.created,
                 subject: item?.subject,
                 id: item?.id,
-                text: item?.text
+                text: item?.text,
+                creatorName: item && item.user && `${item.user.firstName} ${item.user.lastName}`,
             })}>
                 <TableCell>{moment(item?.created).format('DD/MM/YYYY')}</TableCell>
                 <TableCell>{`${item?.user?.firstName} ${item?.user?.lastName}`}</TableCell>

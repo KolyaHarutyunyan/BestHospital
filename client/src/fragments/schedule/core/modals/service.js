@@ -1,22 +1,31 @@
 import React, {useEffect, useState} from "react";
-import {CreateChancel, SelectInput, ValidationInput} from "@eachbase/components";
-import {ErrorText} from "@eachbase/utils";
+import {CreateChancel, SelectInput, Switcher, ValidationInput} from "@eachbase/components";
+import {ErrorText, FindLoad} from "@eachbase/utils";
 import {scheduleModalsStyle} from "./styles";
 import {modalsStyle} from "../../../../components/modal/styles";
 import {useDispatch, useSelector} from "react-redux";
-import {adminActions, appointmentActions, clientActions} from "@eachbase/store";
+import {adminActions, appointmentActions, clientActions, systemActions} from "@eachbase/store";
 import axios from "axios";
+import moment from "moment";
 
-export const Service = ({handleOpenClose, info, date, clientList, staffList, places}) => {
+export const Service = ({handleOpenClose, info, date, clientList, staffList, places,allPaycodes, modalDate, day, createModalDate}) => {
     const dispatch = useDispatch()
     const classes = scheduleModalsStyle()
     const global = modalsStyle()
     const [inputs, setInputs] = useState(
-        // date ? {...date} :
-        {});
+        modalDate ? {...modalDate} :
+                  day ? {...day, ...createModalDate } :
+                  createModalDate ? {...createModalDate} :
+                {});
+    const [times, setTimes] = useState(date ? {...date} : {});
     const [error, setError] = useState({});
     const [service, setService] = useState('');
     const [staffService, setStaffService] = useState('');
+    const [clientService, setClientService] = useState('');
+    const [signature, setSignature] = useState(false)
+
+
+
 
     const handleChange = e => {
         setInputs(prevState => ({...prevState, [e.target.name]: e.target.value}),);
@@ -27,60 +36,58 @@ export const Service = ({handleOpenClose, info, date, clientList, staffList, pla
     const handleCreate = () => {
         const date = {
             type: 'SERVICE',
-            // ...inputs,
-            authorizedService: inputs.service,
-            client: inputs.client,
-            staff: inputs.staff,
-            staffPayCode: '619ce46b620c886016d9bc55',
-            startDate: inputs.startDate,
-            startTime: new Date(),
-            endTime: new Date(),
+
+            ...inputs,
+            // authorizedService: inputs.service,
+            // client: inputs.client,
+            // staff: inputs.staff,
+            // placeService: inputs.placeService,
+            // staffPayCode: inputs.staffPayCode,
+            ...times,
+            // startDate: inputs.startDate,
+            // startTime: new Date(),
+            // endTime: new Date(),
             eventStatus: 'PENDING',
             status: "ACTIVE",
-            require: false
+            require: signature
         }
-
         dispatch(appointmentActions.createAppointment(date))
-
-
-        // const timeDate =  new Date("01-01-2017 " + inputs.startTime + ":00")
-        //
-        // // new Date(null, null, null, '17:36');
-        // const setedDate = new Date(inputs.startDate);
-        //
-        // setedDate.setHours(timeDate.getUTCHours(), timeDate.getMinutes());
-        //
-        // let tzDifference = item.timezoneOffset * 60 + new Date(setedDate).getTimezoneOffset();
-        // const localTime = moment(setedDate)
-        //     .utcOffset(tzDifference / 60)
-        //     .format('llll');
-        // return item.startTime ? new Date(localTime) : item.startDate;
     }
+
 
     const handleSelect = (ev) => {
         setInputs(prevState => ({...prevState, [ev.target.name]: ev.target.value}),)
-        ev.target.name === 'staff' &&  handleGetService(ev.target.value)
-
-        // dispatch(adminActions.getStaffService(ev.target.value))
-
-        ev.target.name === 'client' && dispatch(clientActions.getClientsAuthorizations(ev.target.value))
+        ev.target.name === 'staff' && dispatch(adminActions.getAllPaycodes(ev.target.value))
+        ev.target.name === 'client' && handleGetClientServ(ev.target.value)
+    }
+    const handleGetClientServ  = (id) =>{
+        axios.get(`/authorization/client/${id}`, {auth: true}).then(
+            res=> res.data.length ?
+                axios.get(`/authorizationservice/authorization/${res.data[res.data.length - 1].id}`, { auth: true }).then(date =>
+                    setClientService(date.data) )
+    : ''
+        ).catch(() => setClientService(''))
     }
 
-    const handleGetService = (id) =>{
-        axios.get( `/staff/${id}/service`).then(
-            (res) => setStaffService(res.data.service)
-        )
+    // const handleGetService = (id) =>{
+    //     axios.get( `/staff/${id}/service`, { auth:true }).then(
+    //         (res) => setStaffService(res.data.service)
+    //     ).catch(() => setStaffService(''))
+    // }
+    // const clientsAuthorizations = useSelector(state => state.client.clientsAuthorizations)
+    // useEffect(() => {
+    //     if (clientsAuthorizations.length) {
+    //         axios.get( `/authorizationservice/authorization/${clientsAuthorizations[0].id}`).then(
+    //             (res) => setService(res.data)
+    //         )
+    //     }
+    // }, [clientsAuthorizations])
+
+    const loader = FindLoad('CREATE_APPOINTMENT')
+
+    const handleChangeSignature = () =>{
+        setSignature(!signature)
     }
-    const clientsAuthorizations = useSelector(state => state.client.clientsAuthorizations)
-
-
-    useEffect(() => {
-        if (clientsAuthorizations.length) {
-            axios.get( `/authorizationservice/authorization/${clientsAuthorizations[0].id}`).then(
-                (res) => setService(res.data)
-            )
-        }
-    }, [clientsAuthorizations])
 
     return (
         <div className={classes.serciveModall}>
@@ -100,6 +107,16 @@ export const Service = ({handleOpenClose, info, date, clientList, staffList, pla
                         typeError={error === 'client' && ErrorText.field}
                     />
                     <SelectInput
+                        type={'service'}
+                        language={null}
+                        name={"service"}
+                        label={"Authorized Service*"}
+                        handleSelect={handleSelect}
+                        value={inputs.service}
+                        list={clientService ? clientService : []}
+                        typeError={error === 'service' && ErrorText.field}
+                    />
+                    <SelectInput
                         type={'id'}
                         language={null}
                         name={"staff"}
@@ -109,25 +126,16 @@ export const Service = ({handleOpenClose, info, date, clientList, staffList, pla
                         list={staffList ? staffList : []}
                         typeError={error === 'staff' && ErrorText.field}
                     />
+
                     <SelectInput
                         type={'id'}
                         language={null}
-                        name={"placeofService"}
+                        name={"placeService"}
                         label={"Place of Service*"}
                         handleSelect={handleSelect}
-                        value={inputs.placeofService}
-                        list={staffService ? staffService : []}
-                        typeError={error === 'placeofService' && ErrorText.field}
-                    />
-                    <SelectInput
-                        type={'id'}
-                        language={null}
-                        name={"service"}
-                        label={"Service*"}
-                        handleSelect={handleSelect}
-                        value={inputs.service}
-                        list={service ? service : []}
-                        typeError={error === 'service' && ErrorText.field}
+                        value={inputs.placeService}
+                        list={places ? places : []}
+                        typeError={error === 'placeService' && ErrorText.field}
                     />
                 </div>
 
@@ -136,7 +144,9 @@ export const Service = ({handleOpenClose, info, date, clientList, staffList, pla
                     <ValidationInput
                         variant={"outlined"}
                         onChange={handleChange}
-                        value={inputs.startDate}
+                        value={inputs.startDate ?
+                            moment(inputs.startDate).format('YYYY-MM-DD')
+                            : inputs.startDate}
                         type={"date"}
                         label={"Start Date*"}
                         name='startDate'
@@ -148,7 +158,9 @@ export const Service = ({handleOpenClose, info, date, clientList, staffList, pla
                         <ValidationInput
                             variant={"outlined"}
                             onChange={handleChange}
-                            value={inputs.startTime}
+                            value={times.startTime ?
+                                `${times.startTime.getHours() < 10 ? `0${times.startTime.getHours()}` : times.startTime.getHours()}:${times.startTime.getMinutes() < 10 ? `0${times.startTime.getMinutes()}` : times.startTime.getMinutes()}`
+                                : ''}
                             type={"time"}
                             label={"Start Time*"}
                             name='startTime'
@@ -158,19 +170,40 @@ export const Service = ({handleOpenClose, info, date, clientList, staffList, pla
                         <ValidationInput
                             variant={"outlined"}
                             onChange={handleChange}
-                            value={inputs.endTime}
+                            value={times.endTime ?
+                                `${times.endTime.getHours() < 10 ? `0${times.endTime.getHours()}` : times.endTime.getHours()}:${times.endTime.getMinutes() < 10 ? `0${times.endTime.getMinutes()}` : times.endTime.getMinutes()}`
+                                : ''}
                             type={"time"}
                             label={"End Time*"}
                             name='endTime'
                             typeError={error === 'endDate' && ErrorText.field}
                         />
                     </div>
+                    <SelectInput
+                        type={'id'}
+                        language={null}
+                        name={"staffPayCode"}
+                        label={"Staff Paycode*"}
+                        handleSelect={handleChange}
+                        value={modalDate ?
+                            inputs.staffPayCode._id ? inputs.staffPayCode._id : inputs.staffPayCode
+                            : inputs.staffPayCode}
+                        list={allPaycodes ? allPaycodes : []}
+                        typeError={error === 'staffPayCode' && ErrorText.field}
+                    />
+
+                    <div className={classes.signature}>
+                        <p>Require Signature</p>
+                        <Switcher checked={signature} handleClick={handleChangeSignature}/>
+                    </div>
+
+
                 </div>
 
 
             </div>
             <CreateChancel
-                // loader={httpOnLoad.length > 0}
+                loader={!!loader.length}
                 create={info ? "Save" : "Add"}
                 chancel={"Cancel"}
                 onCreate={handleCreate}
