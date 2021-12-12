@@ -21,7 +21,9 @@ export const StaffHistory = ({data}) => {
                     <div className={classes.globalHistory}>
                         {data && data.map((item, index) => {
                             return (
-                                <HistoryCard key={index} data={item}/>
+                                <div key={index}>
+                                  <HistoryCard data={item}/>
+                                </div>
                             )
                         })}
                     </div>

@@ -9,8 +9,8 @@ export const CardHeader = ({color, title, icon,hideHeaderLine}) => {
             <div className={classes.cardIcon} style={{backgroundColor: color ? color : 'gray'}}>
                 <img src={icon} alt="g"/>
             </div>
-            <p className={classes.cardTitle}>{title}</p>
-            {hideHeaderLine && <p className={classes.topLine} style={{backgroundColor: color ? color : 'gray'}}/>}
+            <span className={classes.cardTitle}>{title}</span>
+            {hideHeaderLine && <span className={classes.topLine} style={{backgroundColor: color ? color : 'gray'}}/>}
         </div>
     )
 }

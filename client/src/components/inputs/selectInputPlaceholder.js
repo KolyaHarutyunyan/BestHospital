@@ -49,7 +49,7 @@ export const SelectInputPlaceholder = ({
         httpOnSuccess: state.httpOnSuccess,
     }));
 
-    const success = httpOnSuccess.length && httpOnSuccess.filter((i) => console.log(i.type === status))
+    const success = httpOnSuccess.length && httpOnSuccess.filter((i) => i.type === status)
 
     useEffect(() => {
         if (success) {
@@ -57,6 +57,7 @@ export const SelectInputPlaceholder = ({
             setCurrent('')
         }
     }, [success.length])
+
 
     return (
         <>
@@ -86,7 +87,7 @@ export const SelectInputPlaceholder = ({
                                     {option}
                                 </MenuItem>
                             )) :
-                            list.length && list.map((option, j) => (
+                            list && list.length > 0 && list.map((option, j) => (
                                 <MenuItem
                                     data-key={option.code ? option.code : j} key={j}
                                     value={type === 'id' ? option.id : option.name}

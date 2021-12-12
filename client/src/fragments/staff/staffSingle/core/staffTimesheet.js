@@ -7,6 +7,7 @@ import moment from "moment";
 import {TimesheetModal} from "./modals";
 import {useDispatch, useSelector} from "react-redux";
 import {adminActions} from "../../../../store";
+import {useParams} from "react-router-dom";
 
 const headerTitles = [
     {
@@ -74,6 +75,7 @@ const headerTitlesBcba = [
 
 export const StaffTimesheet = ({info}) => {
     const dispatch = useDispatch()
+    const params = useParams()
     const allPaycodes = useSelector(state => state.admins.allPaycodes)
     const [openModal, setOpenModal] = useState(false)
 
@@ -83,6 +85,7 @@ export const StaffTimesheet = ({info}) => {
     const [active, setActive] = useState('active')
     const [index, setIndex] = useState(0)
     const [item, setItem] = useState('')
+
 
     const handleOpenClose = () => {
         setOpenModal(!openModal)

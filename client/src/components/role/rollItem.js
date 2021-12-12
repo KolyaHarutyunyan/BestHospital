@@ -1,11 +1,11 @@
 import {Images} from '@eachbase/utils'
 import {roleStyles} from "./styles";
 
-export const RoleItem = ({key, roleItem, handleClick, handleOpen, active}) => {
+export const RoleItem = ({ roleItem, handleClick, handleOpen, active}) => {
     const classes = roleStyles()
 
     return (
-        <div onClick={handleOpen} key={key} className={active ? classes.roleItemActive : classes.roleItemHover}>
+        <div onClick={handleOpen} className={active ? classes.roleItemActive : classes.roleItemHover}>
             <div className={classes.roleItem}>
                 <div>
                     <img src={Images.accessManagementOutline} alt="roleManagement"/>

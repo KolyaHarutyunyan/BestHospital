@@ -65,7 +65,7 @@ export const inputsStyle = makeStyles(() => ({
 
   searchInputTitle: {
     display: "flex",
-    "& p": {
+    "& span": {
       fontSize: "14px",
       lineHeight: "19px",
       fontWeight: "600",

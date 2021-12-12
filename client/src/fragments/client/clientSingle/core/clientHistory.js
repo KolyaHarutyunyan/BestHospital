@@ -10,9 +10,9 @@ export const ClientHistory = ({info}) => {
             <div className={classes.globalHistory}>
                 {info && info.map((item, index) => {
                     return (
-                        <React.Fragment key={index}>
+                        <div key={index}>
                             <HistoryCard data={item}/>
-                        </React.Fragment>
+                        </div>
                     )
                 })}
             </div>

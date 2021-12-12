@@ -5,6 +5,7 @@ import { SimpleModal } from "../modal";
 import {SelectInput} from "../inputs";
 import {ActiveInactiveStatus, ErrorText} from "../../utils";
 import moment from "moment";
+import {Loader} from "../loader";
 
 export const TableWrapper = ({
   buttonsTab,
@@ -12,6 +13,7 @@ export const TableWrapper = ({
   children,
   firstButton,
   secondButton,
+                               loader,
   addButtonText, body,
   openCloseInfo, handleOpenClose,getActive,getInactive,handleType
 }) => {
@@ -60,7 +62,13 @@ export const TableWrapper = ({
           )}
         </div>
       )}
-      {children}
+      {loader ?
+          <div style={{height:'85vh'}}>
+             <Loader/>
+          </div>
+          :
+          children
+      }
     </div>
   );
-};
+}

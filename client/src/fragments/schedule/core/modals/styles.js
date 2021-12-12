@@ -77,6 +77,17 @@ export const scheduleModalsStyle = makeStyles(() => ({
         width: '100%',
     },
 
+    signature:{
+        display:'flex',
+        alignItems:'center',
+        justifyContent:'flex-end',
+        '& p':{
+            fontSize:'14px',
+            fontWeight:'600',
+            color:Colors.TextSecondary,
+        },
+    },
+
     seviceModalWrapper: {
         display: 'flex',
         width: '100%',

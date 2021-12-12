@@ -56,23 +56,24 @@ export const Role = ({rolesList, accessList, sendItem, handleRemoveSelected, new
         <div className={classes.roleWrapper}>
             <CheckboxesTags
                 handleChange={addPermissions}
-                permissionsList={newList}
+                permissionsList={newList.length ? newList : rolesList}
                 label={"Add Role"}
                 placeholder={'Add Role'}
             />
             <div className={classes.roleItemContainer}>
                 {
                     accessList && accessList.roles ? accessList.roles.map((item, j) => (
-                            <RoleItem
-                                key={j}
-                                handleOpen={() => handleOpen(item, j)}
-                                handleClick={() => getRoleItemId(item)}
-                                roleItem={item.title}
-                                active={index === j}
-                            />
+                            <div key={j}>
+                                <RoleItem
+                                    handleOpen={() => handleOpen(item, j)}
+                                    handleClick={() => getRoleItemId(item)}
+                                    roleItem={item.title}
+                                    active={index === j}
+                                />
+                            </div>
                         ))
                         :
-                        <NoItemText text={'No Roles Yet'}/>
+                        <p className={classes.noItem}>No Roles Yet</p>
                 }
             </div>
 

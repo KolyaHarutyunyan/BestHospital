@@ -21,6 +21,7 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
     }
         : {});
 
+
     const [checked, setChecked] = useState(info ? info.endDate ? false : true : true);
     const [payCode, setPayCode] = useState(info ? info.payCode : null);
     // const [newallPaycodes, setnewallPaycodes] = useState([]);
@@ -31,7 +32,13 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
 
     useEffect(() => {
         dispatch(payrollActions.getPayCodeGlobal())
+        dispatch(adminActions.getAllPaycodes(params.id))
     }, []);
+
+
+
+
+
 
     // useEffect(()=>{
     //     setnewallPaycodes(allPaycodes.map(item=>{

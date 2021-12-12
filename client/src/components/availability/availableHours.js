@@ -35,8 +35,12 @@ export const AvailableHours = ({onModel, availabilityData, marginLeft}) => {
                     :
                     Array.isArray(availabilityData) === false ? Object.keys(availabilityData).map((item, index) => {
                             return (
-                                <AvailableHourseBox day={shortDayNames(item)}
+                                <React.Fragment key={index}>
+                                <AvailableHourseBox
+                                    key={index}
+                                    day={shortDayNames(item)}
                                                     info={availabilityData && availabilityData[item]}/>
+                                </React.Fragment>
                             )
                         }) :
                         <p className={classes.noItems}>No Hours Yet</p>

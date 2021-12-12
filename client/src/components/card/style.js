@@ -70,7 +70,7 @@ export const cardStyle = makeStyles(() => ({
         paddingLeft: '16px',
         borderRadius: '8px',
         marginBottom: '8px',
-        '& p:first-child': {
+        '& span:first-child': {
             fontSize: '14px',
             color: Colors.TextSecondary,
             fontWeight: '600',
@@ -80,7 +80,7 @@ export const cardStyle = makeStyles(() => ({
             overflow: 'hidden',
             textOverflow: 'ellipsis',
         },
-        '& p:last-child': {
+        '& span:last-child': {
             fontSize: '14px',
             color: Colors.TextMiddleGray,
             paddingLeft: '8px',
@@ -107,7 +107,8 @@ export const cardStyle = makeStyles(() => ({
     },
     historyCardBoxStyle: {
         width: '100%',
-        background: Colors.BackgroundWhite,
+        background: '#FFFFFF 0% 0% no-repeat padding-box',
+        boxShadow: '0px 0px 6px #347AF033',
         borderRadius: 8,
         padding: '16px 32px',
         display: "flex",

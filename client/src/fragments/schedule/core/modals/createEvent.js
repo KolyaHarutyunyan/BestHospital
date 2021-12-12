@@ -47,6 +47,7 @@ export const CreateEvent = ({handleOpenClose, date, clientList, staffList, place
 
                 {screenType === 'Service' ?
                     <Service
+                        createModalDate={createModalDate}
                         modalDate={modalDate}
                         allPaycodes={allPaycodes}
                         places={places}

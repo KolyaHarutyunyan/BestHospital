@@ -8,13 +8,16 @@ import {
     noteActions,
     availabilityScheduleActions,
     roleActions, authActions
-} from "../../store";
+} from "@eachbase/store";
 import {useParams} from "react-router-dom";
+import {Loader} from "@eachbase/components";
+import {FindLoad} from "@eachbase/utils";
 
 export const SingleStaff = () => {
     const staffGeneral = useSelector(state => state.admins.adminInfoById)
     const dispatch = useDispatch()
     const params = useParams()
+    const loader = FindLoad('GET_ADMIN_BY_ID')
 
     useEffect(() => {
         dispatch(adminActions.getCredential(params.id))
@@ -33,7 +36,16 @@ export const SingleStaff = () => {
 
     return (
         <>
-            <StaffItem gen={staffGeneral}/>
+            {
+                loader.length ?
+                    <div style={{height:'85vh'}}>
+                        <Loader/>
+                    </div>
+                    :
+                    <StaffItem gen={staffGeneral}/>
+            }
+
+
         </>
     );
 }

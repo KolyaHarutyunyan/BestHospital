@@ -23,12 +23,11 @@ export const StaffAccess = ({rolesList, accessList}) => {
         }
     }
 
-    const newList =  rolesList && rolesList.filter(function (array_el) {
+    const newList = rolesList && rolesList.filter(function (array_el) {
         return accessList && accessList.roles && accessList.roles.filter(function (anotherOne_el) {
             return anotherOne_el.id === array_el.id;
         }).length === 0
     });
-
 
     return (
         <div className={classes.staffAccessWrapper}>
@@ -46,7 +45,7 @@ export const StaffAccess = ({rolesList, accessList}) => {
                             <div className={classes.cardIcon}>
                                 <img src={Images.address} alt="role"/>
                             </div>
-                            <h1 className={classes.roleTitle}>{info ? info.title : ''}</h1>
+                            <p className={classes.roleTitle}>{info ? info.title : ''}</p>
                         </div>
                         <p className={classes.roleSubtitle}>Description</p>
                         <p className={classes.roleText}>{info ? info.description : ''}</p>
