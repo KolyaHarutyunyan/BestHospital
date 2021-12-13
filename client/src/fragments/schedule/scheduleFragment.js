@@ -58,11 +58,11 @@ export const ScheduleFragment = ({}) => {
 
     const successRecur = FindSuccess('APPOINTMENT_REPEAT')
 
-    useEffect(() =>{
-        if(successRecur.length){
+    useEffect(() => {
+        if (successRecur.length) {
             setOpenRecur(!openRecur)
         }
-    },[successRecur])
+    }, [successRecur])
 
 
     const handleEdit = (item) => {
@@ -150,14 +150,16 @@ export const ScheduleFragment = ({}) => {
                             createModalType.type === "BREAK" ? 'Break' :
                                 createModalType.type === "DRIVE" ? 'Drive' :
                                     createModalType.type === "PAID" ? 'Paid' :
-                                        ''
+                                        createModalType.type === "SERVICE" ? 'Service' :
+                                            ''
                         }
                         createModalDate={createModalType}
                         screen={
                             modalDate.type === "BREAK" ? 'Break' :
                                 modalDate.type === "DRIVE" ? 'Drive' :
                                     modalDate.type === "PAID" ? 'Paid' :
-                                        ''
+                                        modalDate.type === "SERVICE" ? 'Service' :
+                                            ''
                         }
                         allPaycodes={allPaycodes}
                         places={places}

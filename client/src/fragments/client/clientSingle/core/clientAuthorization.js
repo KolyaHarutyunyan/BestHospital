@@ -112,15 +112,15 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) =>
                 setAuthActive(true)
             }}>
                 <TableCell><p className={classes.tableName}>{item?.serviceId?.name}</p></TableCell>
-                {/*<TableCell>  {item.modifiers && item.modifiers.length > 0 ?*/}
-                {/*    <span> {`${item && item.modifiers && item.modifiers.map((i) => (i.name))}, `}</span>*/}
-                {/*    : item && item.modifiers && item.modifiers[0].name}  */}
+                <TableCell>  {item.modifiers && item.modifiers.length > 0 ?
+                    <span> {`${item && item.modifiers && item.modifiers.map((i) => (i.name))}, `}</span>
+                    : item && item.modifiers && item.modifiers[0].name}
 
-                {/*</TableCell>*/}
+                </TableCell>
                 <TableCell>  {item?.total}  </TableCell>
 
                 <TableCell>  {item?.completed}  </TableCell>
-                <TableCell>  {item?.available}  </TableCell>
+                <TableCell>  {item && item.total - item.completed}  </TableCell>
                 <TableCell>
                     <div className={classes.sircule}>
                         <p>10%</p>
