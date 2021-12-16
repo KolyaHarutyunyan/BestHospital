@@ -7,9 +7,10 @@ import {PaycodeModule} from '../employment/paycode/paycode.module';
 import { AuthorizationserviceModule } from '../client/authorizationservice/authorizationservice.module';
 import { AppointmentSanitizer } from './interceptor/appointment.interceptor';
 import { PlaceModule } from '../place/place.module';
+import { BillingModule } from '../billing/billing.module';
 
 @Module({
-  imports: [ClientModule, StaffModule, PaycodeModule, AuthorizationserviceModule, PlaceModule],
+  imports: [ClientModule, StaffModule, PaycodeModule, AuthorizationserviceModule, PlaceModule, BillingModule],
   controllers: [AppointmentController],
   providers: [AppointmentService, AppointmentSanitizer],
   exports: [AppointmentService]

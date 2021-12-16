@@ -1,0 +1,1 @@
+export { ReceivableSanitizer } from './receivable.interceptor';

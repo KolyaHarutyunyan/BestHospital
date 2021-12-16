@@ -16,6 +16,7 @@ import { IAppointment } from './interface';
 import { AppointmentType } from './appointment.constants';
 import * as mongoose from 'mongoose';
 import { PlaceService } from '../place/place.service';
+import { BillingService } from '../billing/billing.service';
 
 @Injectable()
 export class AppointmentService {
@@ -25,6 +26,7 @@ export class AppointmentService {
     private readonly staffService: StaffService,
     private readonly payCodeService: PaycodeService,
     private readonly placeService: PlaceService,
+    private readonly billingService: BillingService,
     private readonly sanitizer: AppointmentSanitizer
   ) {
     this.model = AppointmentModel;
@@ -58,7 +60,7 @@ export class AppointmentService {
         appointment = await this.appointmentBreak(dto)
         break
     }
-console.log(staffPayCode, 'aaaaaaaa');
+    console.log(staffPayCode, 'aaaaaaaa');
     if (staff.id != staffPayCode.employmentId.staffId && staffPayCode.employmentId.active != true) {
       throw new HttpException(
         'PayCode is not staff pay code or employment is not active',
@@ -73,7 +75,7 @@ console.log(staffPayCode, 'aaaaaaaa');
   async repeat(dto: CreateRepeatDto, _id: string): Promise<Object> {
     const appointment = await this.model.findById(_id);
     this.checkAppointment(appointment);
-    if(appointment.isRepeat){
+    if (appointment.isRepeat) {
       throw new HttpException(
         `appointment can not repeat`,
         HttpStatus.BAD_REQUEST,
@@ -140,7 +142,7 @@ console.log(staffPayCode, 'aaaaaaaa');
       this.model.find({ staff: dto.staff, startTime: { $lt: new Date(dto.endTime) }, endTime: { $gt: new Date(dto.startDate) } }),
       this.model.find({ client: dto.client, startTime: { $lt: new Date(dto.endTime) }, endTime: { $gt: new Date(dto.startDate) } })
     ]);
-    if(!dto.placeService){
+    if (!dto.placeService) {
       throw new HttpException(
         `placeService is required`,
         HttpStatus.BAD_REQUEST,
@@ -368,7 +370,10 @@ console.log(staffPayCode, 'aaaaaaaa');
 
   //set Status(EventStatus)
   async setStatus(_id: string, status: any): Promise<AppointmentDto> {
-    const appointment = await this.model.findById(_id);
+    const appointment: any = await this.model.findById(_id).populate({
+      path: 'authorizedService',
+      populate: { path: 'serviceId' }
+    });
     this.checkAppointment(appointment);
     if (status.status) appointment.status = status.status;
     if (status.eventStatus) {
@@ -386,7 +391,10 @@ console.log(staffPayCode, 'aaaaaaaa');
       // }
       if (status.eventStatus == 'RENDERED') {
         const minutes = await this.timeDiffCalc(appointment.endTime, appointment.startTime);
-        await this.authorizedService.countCompletedUnits(appointment.authorizedService, minutes)
+        await this.authorizedService.countCompletedUnits(appointment.authorizedService, minutes);
+  
+
+        await this.billingService.create(appointment)
       }
       appointment.eventStatus = status.eventStatus;
     };
@@ -458,7 +466,7 @@ console.log(staffPayCode, 'aaaaaaaa');
     const appointment = await this.model.findById(_id);
     let compareService;
     this.checkAppointment(appointment);
-    if(dto.placeService){
+    if (dto.placeService) {
       await this.placeService.findOne(dto.placeService);
       appointment.placeService = dto.placeService
     }

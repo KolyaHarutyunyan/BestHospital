@@ -1,0 +1,1 @@
+export { IReceivable } from './receivable.interface';

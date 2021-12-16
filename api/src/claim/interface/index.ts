@@ -1,0 +1,1 @@
+export { IClaim } from './claim.interface';

@@ -26,7 +26,8 @@ export class AppointmentController {
   }
   /** set status */
   @Patch(':id/setStatus')
-  @ApiHeader({ name: ACCESS_TOKEN })
+  @Public()
+  // @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: AppointmentDto })
   async setStatus(
     @Param('id', ParseObjectIdPipe) id: string,
