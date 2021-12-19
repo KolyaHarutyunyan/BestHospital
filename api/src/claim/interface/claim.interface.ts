@@ -11,5 +11,6 @@ export interface IClaim extends Document {
     link: string,
     date: Date,
     createdDate: Date,
+    details: string,
     receivable: string[]
 }

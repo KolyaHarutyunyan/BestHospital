@@ -62,7 +62,7 @@ export class ReceivableService {
     return this.sanitizer.sanitizeMany(receivables);
   }
 
-  /** find receivable by id */
+  /** find receivable by id */  
   async findOne(_id: string): Promise<ReceivableDto> {
     const receivable = await this.model.findById(_id);
     this.checkReceivable(receivable);

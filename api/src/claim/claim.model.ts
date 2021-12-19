@@ -14,6 +14,7 @@ export const ClaimSchema = new Schema({
     date: { type: Date },
     status: { type: String, enum: ClaimStatus },
     createdDate: { type: Date },
+    details: { type: String },
     receivable: [{ type: Types.ObjectId, ref: 'receivable' }]
 });
 // remaining

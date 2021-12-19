@@ -165,7 +165,7 @@ export class BillingService {
     ])
     billing.status = status;
     this.checkBilling(billing);
-    await billing.save();
+    return await billing.save();
   };
 
   /** Private methods */

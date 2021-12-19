@@ -7,5 +7,6 @@ export interface IReceivable extends Document {
     totalBill: number,
     renderProvider: number,
     dateOfService: Date,
+    status: string,
     bills: string[]
 }

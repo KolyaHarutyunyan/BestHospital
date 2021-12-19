@@ -1,5 +1,6 @@
 export enum ClaimStatus {
     PENDING = "PENDING",
+    CLOSED = "CLOSED",
     CLAIMED = "SUBMITTED",
     POSTED = "POSTED"
 }

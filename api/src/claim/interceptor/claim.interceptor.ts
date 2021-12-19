@@ -19,7 +19,8 @@ export class ClaimSanitizer implements ISanitize {
             date: claim.date,
             status: claim.status,
             createdDate: claim.createdDate,
-            receivable: claim.receivable
+            receivable: claim.receivable,
+            details: claim.details
         };
         return claimDTO;
     }

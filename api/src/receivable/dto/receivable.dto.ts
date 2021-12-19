@@ -9,5 +9,6 @@ export class ReceivableDto {
     totalBill: number;
     renderProvider: number;
     dateOfService: Date;
+    status: string;
     bills: any;
 }

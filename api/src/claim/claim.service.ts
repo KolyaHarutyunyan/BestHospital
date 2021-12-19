@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import * as _ from 'lodash';
 import { Model } from 'mongoose';
+import { StaffService } from '../staff/staff.service';
 import { BillingService } from '../billing/billing.service';
 import { ReceivableService } from '../receivable/receivable.service';
 import { MongooseUtil } from '../util';
@@ -16,6 +16,8 @@ export class ClaimService {
     private readonly sanitizer: ClaimSanitizer,
     private readonly billingService: BillingService,
     private readonly receivableService: ReceivableService,
+    private readonly staffService: StaffService,
+    
   ) {
     this.model = ClaimModel;
     this.mongooseUtil = new MongooseUtil();
@@ -134,7 +136,7 @@ export class ClaimService {
       claims.push(claim._id)
     }
 
-    /** set claimStatus CLAIMED */
+    /** set bill claimStatus to CLAIMED */
     await this.billingService.billClaim(bills);
     return claims;
   }
@@ -205,7 +207,7 @@ export class ClaimService {
       claims.push(claim._id)
     }
 
-    /** set claimStatus CLAIMED */
+    /** set bill claimStatus to CLAIMED */
     await this.billingService.billClaim(bills);
     return claims;
 
@@ -213,6 +215,26 @@ export class ClaimService {
     //  Client Funder appointment startDate
   }
 
+  /** Set claim status */
+  setStatus = async (
+    _id: string,
+    status: string,
+    userId: string,
+    details:  string
+  ) => {
+    let [staff, claim] = await Promise.all([
+      this.staffService.findById(userId),
+      this.model.findById({ _id })
+    ])
+    claim.status = status;
+    if(details) {
+      claim.details = details
+    }else{
+      claim.details = ''
+    };
+    this.checkClaim(claim);
+    return await claim.save();
+  };
   /** Private methods */
   /** group the bills */
   private groupBy(array, f) {

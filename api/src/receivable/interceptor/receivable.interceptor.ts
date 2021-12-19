@@ -14,6 +14,7 @@ export class ReceivableSanitizer implements ISanitize {
             totalBill: receivable.totalBill,
             renderProvider: receivable.renderProvider,
             dateOfService: receivable.dateOfService,
+            status: receivable.status,
             bills: receivable.bills
         };
         return receivableDTO;

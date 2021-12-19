@@ -1,5 +1,6 @@
 import { model, Schema, Types } from 'mongoose';
 import { IReceivable } from './interface';
+import { ReceivableStatus } from './receivable.constants';
 
 export const ReceivableSchema = new Schema({
     placeService: { type: Types.ObjectId, ref: 'Place' },
@@ -8,6 +9,7 @@ export const ReceivableSchema = new Schema({
     totalBill: { type: Number },
     renderProvider: { type: Number },
     dateOfService: { type: Date },
+    status: { type: String, enum: ReceivableStatus },
     bills: [{ type: Types.ObjectId, ref: 'billing' }]
 });
 
