@@ -392,8 +392,6 @@ export class AppointmentService {
       if (status.eventStatus == 'RENDERED') {
         const minutes = await this.timeDiffCalc(appointment.endTime, appointment.startTime);
         await this.authorizedService.countCompletedUnits(appointment.authorizedService, minutes);
-  
-
         await this.billingService.create(appointment)
       }
       appointment.eventStatus = status.eventStatus;
@@ -508,58 +506,6 @@ export class AppointmentService {
     if (dto.type == "DRIVE" && dto.miles) {
       appointment.miles = dto.miles;
     }
-
-    // if (dto.type) {
-    //   if (dto.type == 'SERVICE' && !dto.client || !dto.authorizedService) {
-    //     console.log('ggg', dto.type, dto.client, dto.authorizedService)
-    //     throw new HttpException(
-    //       'Client and(or) Authorization service is not found',
-    //       HttpStatus.NOT_FOUND,
-    //     );
-    //   }
-    //   else if (dto.type == 'SERVICE' && dto.client || dto.authorizedService) {
-    //     const [client, authService]: any = await Promise.all([
-    //       this.clientService.findById(dto.client ? dto.client : appointment.client),
-    //       this.authorizedService.findById(dto.authorizedService ? dto.authorizedService : appointment.authorizedService),
-    //     ]);
-    //     compareService = await this.authorizedService.getByServiceId(authService.serviceId);
-    //   }
-    //   appointment.type = dto.type;
-    // }
-    // console.log('a', dto.type)
-    // if (dto.staff) {
-    //   const [staff, authService]: any = await Promise.all([
-    //     this.staffService.findById(dto.staff),
-    //     this.authorizedService.findById(appointment.authorizedService),
-    //   ]);
-    // console.log('b', authService)
-
-    // compareService = await this.authorizedService.getByServiceId(authService.serviceId);
-    // if (staff.service.indexOf(compareService.serviceId) == -1) {
-    //   throw new HttpException(
-    //     'Staff service have not current service',
-    //     HttpStatus.BAD_REQUEST,
-    //   );
-    // }
-    //   const payCode: any = await this.payCodeService.findOne(dto.staffPayCode ? dto.staffPayCode : appointment.staffPayCode);
-    //   if (payCode.employmentId.active != true) {
-    //     throw new HttpException(
-    //       'employment is not active',
-    //       HttpStatus.BAD_REQUEST,
-    //     );
-    //   }
-    //   appointment.staff = dto.staff;
-    // }
-    // if (dto.staffPayCode) {
-    //   const payCode: any = await this.payCodeService.findPayCodesByStaffId(dto.staff ? dto.staff : appointment.staff);
-    //   if (payCode.employmentId.active != true) {
-    //     throw new HttpException(
-    //       'employment is not active',
-    //       HttpStatus.BAD_REQUEST,
-    //     );
-    //   }
-    //   appointment.staffPayCode = dto.staffPayCode
-    // };
     if (dto.startDate) appointment.startDate = dto.startDate;
     if (dto.startTime) appointment.startTime = dto.startTime;
     if (dto.endTime) appointment.endTime = dto.endTime;

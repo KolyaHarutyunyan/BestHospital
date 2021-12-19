@@ -8,7 +8,7 @@ export const ReceivableSchema = new Schema({
     totalBill: { type: Number },
     renderProvider: { type: Number },
     dateOfService: { type: Date },
-    bills: [{ type: String, ref: 'Bill' }]
+    bills: [{ type: Types.ObjectId, ref: 'billing' }]
 });
 
 export const ReceivableModel = model<IReceivable>('receivable', ReceivableSchema);

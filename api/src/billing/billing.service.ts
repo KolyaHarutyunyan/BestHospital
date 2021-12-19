@@ -1,10 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
+// import * as mongoose from 'mongoose';
 import { MongooseUtil } from '../util/mongoose.util';
 import { BillingModel } from './billing.model';
 import { IBilling } from './interface';
 import { CreateBillingDto, UpdateBillingDto, BillingDto, TransactionDto } from './dto';
 import { StaffService } from '../staff/staff.service';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class BillingService {
@@ -41,7 +42,7 @@ export class BillingService {
         invoiceStatus: "NOTINVOICED",
         status: "OPEN"
       });
-       // clientPaid - transaction
+      // clientPaid - transaction
       billing.billedAmount = billing.billedRate * billing.totalUnits;
       billing.payerTotal = dto.billedAmount;
       billing.balance = dto.billedAmount;
@@ -53,6 +54,7 @@ export class BillingService {
       throw e;
     }
   }
+
   /** startTransaction */
   async startTransaction(dto: TransactionDto, billingId: string, session: any): Promise<any> {
     try {
@@ -101,28 +103,45 @@ export class BillingService {
       billing.payerTotal += billing.amount
       billing.clientResp -= billing.amount;
     }
-    billing.transaction.status = "VOID"; 
+    billing.transaction.status = "VOID";
     await billing.save()
     return billing;
   }
 
+  /** set status claimed */
+  async billClaim(ids: string[]): Promise<any> {
+    const bills = await this.model.update({ _id: { $in: ids } },
+      { $set: { claimStatus: 'CLAIMED' } },
+      { multi: true })
+  }
+
   /** find all bills */
-  async findAll(): Promise<any> {
-    let billings = await this.model.find();
+  async findAll(claimStatus: string): Promise<any> {
+    let billings = await this.model.find({ claimStatus });
     return billings;
   }
 
+  /** find all with many ids */
+  async findByIds(bills: string[], isClaimed = null): Promise<any> {
+    let billings = await this.model.find({ _id: { $in: bills } });
+    if(isClaimed){
+    billings.map(bill => {
+      if(bill.claimStatus == "CLAIMED"){
+        throw new HttpException(
+          'Billing has already been used',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+    })
+  }
+    return billings;
+  }
+
+  /** find bill by id */
   async findOne(_id: string): Promise<any> {
     const billing = await this.model.findById(_id).populate('authService').populate('client').populate('payer').populate('placeService');
     this.checkBilling(billing)
     return billing;
-    //     Id, 
-    // Date - this will be the date of service and time ( e.g. 11/21/22 11:45a-1:30p)
-    // Payer - the funding source name
-    // Client - the client name
-    // Providers - this is the staff members
-    // Service - the service CPT code, Modifier pair (e.g. H1121 (HM) )
-    // Location - the location for the appt. Display code and name (e.g. 12:home)
   }
 
   update(id: number, updateBillingDto: UpdateBillingDto) {
@@ -160,4 +179,3 @@ export class BillingService {
     }
   }
 }
-// cptCode Client Funder appointment startDate

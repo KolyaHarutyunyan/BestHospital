@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ParseObjectIdPipe } from 'src/util';
 import { ACCESS_TOKEN } from '../authN';
+import { MergeClaims } from './claim.constants';
 import { ClaimService } from './claim.service';
-import { ClaimDto, CreateClaimDto, UpdateClaimDto } from './dto';
+import { ClaimDto, CreateClaimDto, UpdateClaimDto, GenerateClaimDto } from './dto';
 
 @Controller('claim')
 @ApiTags('Claim Endpoints')
@@ -14,6 +15,14 @@ export class ClaimController {
   @ApiHeader({ name: ACCESS_TOKEN })
   create(@Body() createClaimDto: CreateClaimDto) {
     return this.claimService.create(createClaimDto);
+  }
+  @Post('generate')
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiQuery({ name: 'group', enum: MergeClaims })
+  generateClaims(@Body() generateClaims: GenerateClaimDto,
+  @Query('group') group: MergeClaims
+  ) {
+    return this.claimService.generateClaims(generateClaims, group);
   }
 
   @Get()

@@ -30,11 +30,30 @@ export class ReceivableService {
       totalBill: dto.totalBill,
       renderProvider: dto.totalBill,
       dateOfService: dto.dateOfService,
-      bills: []
+      bills: dto.bills
     })
     // BillingSanitizer.push()
     await receivable.save();
     return this.sanitizer.sanitize(receivable)
+  }
+
+  /** Insert many documents */
+  async insertManyDocs(dto: CreateReceivableDto[]): Promise<ReceivableDto[]> {
+    // const place = await this.placeService.findOne(dto.placeService);
+    // const placeId = place._id as string;
+    // let receivable = new this.model({
+    //   placeService: placeId,
+    //   cptCode: dto.cptCode,
+    //   totalUnits: dto.totalUnits,
+    //   totalBill: dto.totalBill,
+    //   renderProvider: dto.totalBill,
+    //   dateOfService: dto.dateOfService,
+    //   bills: dto.bills
+    // })
+    // // BillingSanitizer.push()
+    // await receivable.save();
+    const receivables = await this.model.insertMany(dto);
+    return this.sanitizer.sanitizeMany(receivables)
   }
 
   /**find all receivables */

@@ -25,7 +25,7 @@ export class CreateReceivableDto {
     @ApiProperty()
     @IsDateString()
     @IsNotEmpty()
-    dateOfService: Date;
+    dateOfService: any;
     @ApiProperty()
     bills: string[]
 }

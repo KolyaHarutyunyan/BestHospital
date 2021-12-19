@@ -39,4 +39,4 @@ const BillingSchema = new Schema({
     updatedDate: { type: Date, default: null }
 });
 
-export const BillingModel = model<IBilling>('Bill', BillingSchema);
+export const BillingModel = model<IBilling>('billing', BillingSchema);

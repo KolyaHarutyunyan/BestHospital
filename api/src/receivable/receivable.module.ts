@@ -7,6 +7,7 @@ import { PlaceModule } from '../place/place.module';
 @Module({
   imports: [PlaceModule],
   controllers: [ReceivableController],
-  providers: [ReceivableService, ReceivableSanitizer]
+  providers: [ReceivableService, ReceivableSanitizer],
+  exports: [ReceivableService]
 })
 export class ReceivableModule { }

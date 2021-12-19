@@ -4,7 +4,7 @@ import { startSession } from 'mongoose';
 import { BillingService } from './billing.service';
 import { CreateBillingDto, UpdateBillingDto, BillingDto, TransactionDto } from './dto';
 import { ApiHeader, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { BillingStatus } from './billing.constants';
+import { BillingStatus, ClaimStatus } from './billing.constants';
 import { ACCESS_TOKEN } from '../authN/authN.constants';
 
 @Controller('billing')
@@ -33,8 +33,9 @@ export class BillingController {
 
   @Get()
   @Public()
-  async findAll() {
-    return await this.billingService.findAll();
+  @ApiQuery({ name: 'claimStatus', enum: ClaimStatus })
+  async findAll(@Query('claimStatus') claimStatus: ClaimStatus) {
+    return await this.billingService.findAll(claimStatus);
   }
 
   @Get(':id')

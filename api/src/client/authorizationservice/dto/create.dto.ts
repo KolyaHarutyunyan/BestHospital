@@ -3,11 +3,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsArray,
-  IsMongoId,
   IsNotEmpty,
   IsNumber,
   IsOptional,
-  ValidateNested,
 } from 'class-validator';
 
 export class CreateAuthorizationServiceDTO {
@@ -15,14 +13,6 @@ export class CreateAuthorizationServiceDTO {
   @IsNotEmpty()
   @IsNumber()
   total: number;
-  // @ApiProperty()
-  // @IsNotEmpty()
-  // @IsNumber()
-  // completed: number;
-  // @ApiProperty()
-  // @IsNotEmpty()
-  // @IsNumber()
-  // available: number;
   @ApiProperty()
   @IsOptional()
   @IsArray()
@@ -34,4 +24,3 @@ export class AuthorizationModifiersDTO {
   @IsArray()
   modifiers: Array<string>;
 }
-// @IsIn(values: any[])

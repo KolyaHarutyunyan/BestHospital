@@ -14,7 +14,7 @@ export const ClaimSchema = new Schema({
     date: { type: Date },
     status: { type: String, enum: ClaimStatus },
     createdDate: { type: Date },
-    receivable: [{ type: String, ref: 'Receivable' }]
+    receivable: [{ type: Types.ObjectId, ref: 'receivable' }]
 });
 // remaining
 export const ClaimModel = model<IClaim>('claim', ClaimSchema);
