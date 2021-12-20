@@ -1,0 +1,1 @@
+export { InvoiceSanitizer } from './invoice.interceptor';

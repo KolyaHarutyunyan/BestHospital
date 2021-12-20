@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ISanitize } from '../../util';
 import { BillingDto } from '../dto';
-import { AddressSanitizer } from '../../address';
 import { IBilling } from '../interface/billing.interface';
 
 @Injectable()
 export class BillingSanitizer implements ISanitize {
-  constructor(private readonly addressSanitizer: AddressSanitizer) {}
+  constructor() {}
 
   sanitize(billing: IBilling): BillingDto {
     const billingDTO: BillingDto = {
@@ -14,6 +13,7 @@ export class BillingSanitizer implements ISanitize {
       appointment: billing.appointment,
       client: billing.client,
       staff: billing.staff,
+      payer: billing.payer,
       authorization: billing.authorization,
       authService: billing.authService,
       placeService: billing.placeService,

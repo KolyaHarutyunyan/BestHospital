@@ -9,6 +9,7 @@ import { ClaimModel } from './claim.model';
 import { ClaimDto, CreateClaimDto, GenerateClaimDto, UpdateClaimDto } from './dto';
 import { ClaimSanitizer } from './interceptor/claim.interceptor';
 import { IClaim } from './interface';
+import { IBilling } from '../billing/interface';
 
 @Injectable()
 export class ClaimService {
@@ -17,7 +18,7 @@ export class ClaimService {
     private readonly billingService: BillingService,
     private readonly receivableService: ReceivableService,
     private readonly staffService: StaffService,
-    
+
   ) {
     this.model = ClaimModel;
     this.mongooseUtil = new MongooseUtil();
@@ -35,8 +36,7 @@ export class ClaimService {
   }
 
   /**generate claims */
-  async generateClaims(dto: GenerateClaimDto, group: MergeClaims): Promise<any> {
-    console.log(group)
+  async generateClaims(dto: GenerateClaimDto, group: MergeClaims): Promise<ClaimDto[]> {
     const bills = await this.billingService.findByIds(dto.bills, true);
     if (!bills.length || bills.length < dto.bills.length) {
       throw new HttpException(
@@ -46,13 +46,11 @@ export class ClaimService {
     }
 
     if (group === "OFF") {
-      const ids = await this.singleBill(dto.bills);
-      const claims = await this.model.find({ _id: { $in: ids } }).populate('receivable');
+      const claims = await this.singleBill(dto.bills);
       return this.sanitizer.sanitizeMany(claims);
     }
     if (group === "ON") {
-      const ids = await this.groupBills(bills)
-      const claims = await this.model.find({ _id: { $in: ids } }).populate('receivable');
+      const claims = await this.groupBills(bills)
       return this.sanitizer.sanitizeMany(claims);
     };
   }
@@ -79,11 +77,31 @@ export class ClaimService {
   }
 
   /** create claim with receivables with bills */
-  async singleBill(bills: any) {
-    let data = [];
-    let claims = [];
+  async singleBill(bills: string[]): Promise<any> {
+    let claim = [];
+    let receivable = [];
+
+    /** if the date remains generate a new claim */
+    // if (data.length) {
     for (let i = 0; i < bills.length; i++) {
-      const receivableData = {
+      if (i !== 0 && i % 6 === 0) {
+        claim.push({
+          client: '61b3604a7c05a231f27e00ed',
+          staff: '61b34ed57c05a231f27df01b',
+          funder: '61b354f77c05a231f27df422',
+          totalCharge: 50,
+          ammountPaid: 50,
+          submittedDate: '2021-12-10T13:26:31.581+00:00',
+          paymentRef: 'test',
+          link: 'test',
+          date: '2021-12-10T13:26:31.581+00:00',
+          status: "PENDING",
+          createdDate: '2021-12-10T13:26:31.581+00:00',
+          receivable
+        })
+        receivable = []
+      }
+      receivable.push({
         placeService: '61b354b67c05a231f27df3f3',
         cptCode: 50,
         totalUnits: 50,
@@ -91,125 +109,88 @@ export class ClaimService {
         renderProvider: 50,
         dateOfService: '2021-12-17T14:07:19.470Z',
         bills: bills[i]
-      }
-      data.push(receivableData)
-      if (i === 5) {
-        const receivable = await this.receivableService.insertManyDocs(data);
-        const claim = new this.model({
-          client: '61b3604a7c05a231f27e00ed',
-          staff: '61b34ed57c05a231f27df01b',
-          funder: '61b354f77c05a231f27df422',
-          totalCharge: 50,
-          ammountPaid: 50,
-          submittedDate: '2021-12-17T14:05:22.703Z',
-          paymentRef: 'test3',
-          link: 'test3',
-          date: '2021-12-17T14:05:22.703Z',
-          status: "PENDING",
-          createdDate: '2021-12-17T14:05:22.703Z',
-          receivable: receivable.map(receivable => receivable._id)
-        })
-        await claim.save();
-        claims.push(claim._id)
-        data = [];
-      }
-    }
-
-    /** if the date remains generate a new claim */
-    if (data.length) {
-      const receivable = await this.receivableService.insertManyDocs(data);
-      const claim = new this.model({
-        client: '61b3604a7c05a231f27e00ed',
-        staff: '61b34ed57c05a231f27df01b',
-        funder: '61b354f77c05a231f27df422',
-        totalCharge: 50,
-        ammountPaid: 50,
-        submittedDate: '2021-12-10T13:26:31.581+00:00',
-        paymentRef: 'test',
-        link: 'test',
-        date: '2021-12-10T13:26:31.581+00:00',
-        status: "PENDING",
-        createdDate: '2021-12-10T13:26:31.581+00:00',
-        receivable: receivable.map(receivable => receivable._id)
       })
-      await claim.save();
-      claims.push(claim._id)
     }
+    claim.push({
+      client: '61b3604a7c05a231f27e00ed',
+      staff: '61b34ed57c05a231f27df01b',
+      funder: '61b354f77c05a231f27df422',
+      totalCharge: 50,
+      ammountPaid: 50,
+      submittedDate: '2021-12-10T13:26:31.581+00:00',
+      paymentRef: 'test',
+      link: 'test',
+      date: '2021-12-10T13:26:31.581+00:00',
+      status: "PENDING",
+      createdDate: '2021-12-10T13:26:31.581+00:00',
+      receivable
+    })
 
     /** set bill claimStatus to CLAIMED */
     await this.billingService.billClaim(bills);
-    return claims;
+    return await this.model.insertMany(claim)
   }
 
   /** create claim with receivables with grouping bills */
-  async groupBills(bills: any) {
+  async groupBills(bills: any): Promise<any> {
     /** group the bills with client and placeService */
     const result = this.groupBy(bills, function (item) {
       return [item.client, item.placeService];
     });
-
-    let data = [];
-    let claims = [];
+    let claim = [];
+    let receivable = [];
+    let bill = [];
     for (let i = 0; i < result.length; i++) {
-      const ids = [];
-      if (i === 5) {
-        /** if receivables more than 5 create receivables and generate a claim */
-        const receivable = await this.receivableService.insertManyDocs(data);
-        const claim = new this.model({
+      bill = []
+      console.log(i)
+      if (i !== 0 && i % 6 === 0) {
+        claim.push({
           client: '61b3604a7c05a231f27e00ed',
           staff: '61b34ed57c05a231f27df01b',
           funder: '61b354f77c05a231f27df422',
           totalCharge: 50,
           ammountPaid: 50,
-          submittedDate: '2021-12-17T14:05:22.703Z',
-          paymentRef: 'test3',
-          link: 'test3',
-          date: '2021-12-17T14:05:22.703Z',
+          submittedDate: '2021-12-10T13:26:31.581+00:00',
+          paymentRef: 'test',
+          link: 'test',
+          date: '2021-12-10T13:26:31.581+00:00',
           status: "PENDING",
-          createdDate: '2021-12-17T14:05:22.703Z',
-          receivable: receivable.map(receivable => receivable._id)
+          createdDate: '2021-12-10T13:26:31.581+00:00',
+          receivable
         })
-        await claim.save();
-        claims.push(claim._id)
-        data = [];
+        receivable = []
       }
-      for (let bill of result[i]) {
-        ids.push(bill._id)
-      }
-      const receivableData = {
+      result[i].map(bills => {
+        bill.push(bills._id);
+      })
+      receivable.push({
         placeService: '61b354b67c05a231f27df3f3',
         cptCode: 50,
         totalUnits: 50,
         totalBill: 50,
         renderProvider: 50,
         dateOfService: '2021-12-17T14:07:19.470Z',
-        bills: ids
-      }
-      data.push(receivableData)
-    }
-    if (data.length) {
-      const receivable = await this.receivableService.insertManyDocs(data);
-      const claim = new this.model({
-        client: '61b3604a7c05a231f27e00ed',
-        staff: '61b34ed57c05a231f27df01b',
-        funder: '61b354f77c05a231f27df422',
-        totalCharge: 50,
-        ammountPaid: 50,
-        submittedDate: '2021-12-10T13:26:31.581+00:00',
-        paymentRef: 'test',
-        link: 'test',
-        date: '2021-12-10T13:26:31.581+00:00',
-        status: "PENDING",
-        createdDate: '2021-12-10T13:26:31.581+00:00',
-        receivable: receivable.map(receivable => receivable._id)
+        bills: bill
       })
-      await claim.save();
-      claims.push(claim._id)
     }
+    claim.push({
+      client: '61b3604a7c05a231f27e00ed',
+      staff: '61b34ed57c05a231f27df01b',
+      funder: '61b354f77c05a231f27df422',
+      totalCharge: 50,
+      ammountPaid: 50,
+      submittedDate: '2021-12-10T13:26:31.581+00:00',
+      paymentRef: 'test',
+      link: 'test',
+      date: '2021-12-10T13:26:31.581+00:00',
+      status: "PENDING",
+      createdDate: '2021-12-10T13:26:31.581+00:00',
+      receivable
+    })
 
     /** set bill claimStatus to CLAIMED */
     await this.billingService.billClaim(bills);
-    return claims;
+    return await this.model.insertMany(claim)
 
     // date of service, cpt code + modifier, place of service
     //  Client Funder appointment startDate
@@ -220,16 +201,16 @@ export class ClaimService {
     _id: string,
     status: string,
     userId: string,
-    details:  string
+    details: string
   ) => {
     let [staff, claim] = await Promise.all([
       this.staffService.findById(userId),
       this.model.findById({ _id })
     ])
     claim.status = status;
-    if(details) {
+    if (details) {
       claim.details = details
-    }else{
+    } else {
       claim.details = ''
     };
     this.checkClaim(claim);

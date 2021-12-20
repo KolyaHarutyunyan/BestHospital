@@ -27,12 +27,14 @@ import { MileageModule } from '../mileage/mileage.module';
 import { BillingModule } from '../billing/billing.module';
 import { ClaimModule } from '../claim/claim.module';
 import { ReceivableModule } from '../receivable/receivable.module';
+import { InvoiceModule } from '../invoice/invoice.module';
 
 @Module({
   imports: [AuthNModule, AuthZModule, AddressModule, StaffModule, FundingModule,
     EmploymentModule, ClientModule, DepartmentModule, CommentModule, HistoryModule,
     JobModule, SCredentialModule, PaycodeModule, PaycodetypeModule, AvailabilityModule,
-    OvertimeModule, TimesheetModule, FileModule, AppointmentModule, PlaceModule, MileageModule, BillingModule, ClaimModule, ReceivableModule],
+    OvertimeModule, TimesheetModule, FileModule, AppointmentModule, PlaceModule, MileageModule, 
+    BillingModule, ClaimModule, ReceivableModule, InvoiceModule],
   controllers: [AppController],
   providers: [AppService, DatabaseConnection],
 })

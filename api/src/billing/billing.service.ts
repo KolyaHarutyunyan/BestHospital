@@ -6,11 +6,12 @@ import { IBilling } from './interface';
 import { CreateBillingDto, UpdateBillingDto, BillingDto, TransactionDto } from './dto';
 import { StaffService } from '../staff/staff.service';
 import { Model } from 'mongoose';
+import { BillingSanitizer } from './interceptor/billing.interceptor';
 
 @Injectable()
 export class BillingService {
   constructor(
-    // private readonly sanitizer: BillingSanitizer,
+    private readonly sanitizer: BillingSanitizer,
     private readonly staffService: StaffService,
   ) {
     this.model = BillingModel;
@@ -122,7 +123,7 @@ export class BillingService {
   }
 
   /** find all with many ids */
-  async findByIds(bills: string[], isClaimed = null): Promise<any> {
+  async findByIds(bills: string[], isClaimed = null): Promise<BillingDto[]> {
     let billings = await this.model.find({ _id: { $in: bills } });
     if(isClaimed){
     billings.map(bill => {
@@ -134,7 +135,7 @@ export class BillingService {
       }
     })
   }
-    return billings;
+    return this.sanitizer.sanitizeMany(billings);
   }
 
   /** find bill by id */

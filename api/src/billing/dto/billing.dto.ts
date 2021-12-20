@@ -7,6 +7,8 @@ export class BillingDto {
     @ApiProperty()
     appointment: string;
     @ApiProperty()
+    payer: string;
+    @ApiProperty()
     client: string;
     @ApiProperty()
     staff: string;

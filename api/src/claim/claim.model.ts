@@ -1,7 +1,16 @@
 import { model, Schema, Types } from 'mongoose';
 import { IClaim } from './interface';
-import { ClaimStatus } from './claim.constants';
-
+import { ClaimStatus, ReceivableStatus } from './claim.constants';
+const receivable = {
+    placeService: { type: Types.ObjectId, ref: 'Place' },
+    cptCode: { type: Number },
+    totalUnits: { type: Number },
+    totalBill: { type: Number },
+    renderProvider: { type: Number },
+    dateOfService: { type: Date },
+    status: { type: String, enum: ReceivableStatus },
+    bills: [{ type: Types.ObjectId, ref: 'billing' }]
+}
 export const ClaimSchema = new Schema({
     client: { type: Types.ObjectId, ref: 'Client' },
     staff: { type: Types.ObjectId, ref: 'Staff' },
@@ -15,7 +24,8 @@ export const ClaimSchema = new Schema({
     status: { type: String, enum: ClaimStatus },
     createdDate: { type: Date },
     details: { type: String },
-    receivable: [{ type: Types.ObjectId, ref: 'receivable' }]
+    receivable: [receivable]
 });
 // remaining
 export const ClaimModel = model<IClaim>('claim', ClaimSchema);
+
