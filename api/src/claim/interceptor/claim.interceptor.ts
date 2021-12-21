@@ -7,7 +7,7 @@ import { IClaim } from '../interface';
 export class ClaimSanitizer implements ISanitize {
     sanitize(claim: IClaim): ClaimDto {
         const claimDTO: ClaimDto = {
-            _id: claim.id,
+            _id: claim._id,
             client: claim.client,
             staff: claim.staff,
             funder: claim.funder,

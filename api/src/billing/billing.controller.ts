@@ -3,7 +3,7 @@ import { IRequest, ParseObjectIdPipe, Public } from '../util';
 import { startSession } from 'mongoose';
 import { BillingService } from './billing.service';
 import { CreateBillingDto, UpdateBillingDto, BillingDto, TransactionDto } from './dto';
-import { ApiHeader, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { BillingStatus, ClaimStatus } from './billing.constants';
 import { ACCESS_TOKEN } from '../authN/authN.constants';
 
@@ -13,26 +13,30 @@ export class BillingController {
   constructor(private readonly billingService: BillingService) { }
 
   @Post()
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: BillingDto })
   async create(@Body() createBillingDto: CreateBillingDto): Promise<BillingDto> {
     return this.billingService.create(createBillingDto);
   }
 
   @Post('/addTransaction/:id')
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: BillingDto })
   async startTransaction(@Body() createTransactionDto: TransactionDto, @Param('id', ParseObjectIdPipe) billingId: string) {
     const session = await startSession()
     return this.billingService.startTransaction(createTransactionDto, billingId, session);
   }
 
   @Post('/abortTransaction/:id')
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: BillingDto })
   async abortTransaction(@Param('id', ParseObjectIdPipe) billingId: string) {
     return this.billingService.abortTransaction(billingId);
   }
 
   @Get()
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: [BillingDto] })
   @ApiQuery({ name: 'claimStatus', enum: ClaimStatus })
   async findAll(@Query('claimStatus') claimStatus: ClaimStatus) {
     return await this.billingService.findAll(claimStatus);
@@ -57,6 +61,7 @@ export class BillingController {
   /** Set billing status */
   @Patch(':id/setStatus')
   @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: BillingDto })
   @ApiQuery({ name: 'status', enum: BillingStatus })
   async setStatus(
     @Param('id', ParseObjectIdPipe) billingId: string,

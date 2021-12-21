@@ -2,7 +2,6 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { StaffService } from '../staff/staff.service';
 import { BillingService } from '../billing/billing.service';
-import { ReceivableService } from '../receivable/receivable.service';
 import { MongooseUtil } from '../util';
 import { MergeClaims } from './claim.constants';
 import { ClaimModel } from './claim.model';
@@ -16,7 +15,6 @@ export class ClaimService {
   constructor(
     private readonly sanitizer: ClaimSanitizer,
     private readonly billingService: BillingService,
-    private readonly receivableService: ReceivableService,
     private readonly staffService: StaffService,
 
   ) {
@@ -44,15 +42,8 @@ export class ClaimService {
         HttpStatus.NOT_FOUND,
       );
     }
-
-    if (group === "OFF") {
-      const claims = await this.singleBill(dto.bills);
-      return this.sanitizer.sanitizeMany(claims);
-    }
-    if (group === "ON") {
-      const claims = await this.groupBills(bills)
-      return this.sanitizer.sanitizeMany(claims);
-    };
+    const claims = group === "OFF" ? await this.singleBill(dto.bills) : await this.groupBills(bills);
+    return this.sanitizer.sanitizeMany(claims);
   }
 
   /** find all claims */
@@ -77,7 +68,7 @@ export class ClaimService {
   }
 
   /** create claim with receivables with bills */
-  async singleBill(bills: string[]): Promise<any> {
+  async singleBill(bills: string[]): Promise<ClaimDto> {
     let claim = [];
     let receivable = [];
 
@@ -96,6 +87,7 @@ export class ClaimService {
           link: 'test',
           date: '2021-12-10T13:26:31.581+00:00',
           status: "PENDING",
+          details: '',
           createdDate: '2021-12-10T13:26:31.581+00:00',
           receivable
         })
@@ -155,6 +147,7 @@ export class ClaimService {
           link: 'test',
           date: '2021-12-10T13:26:31.581+00:00',
           status: "PENDING",
+          details: '',
           createdDate: '2021-12-10T13:26:31.581+00:00',
           receivable
         })
@@ -216,6 +209,7 @@ export class ClaimService {
     this.checkClaim(claim);
     return await claim.save();
   };
+  
   /** Private methods */
   /** group the bills */
   private groupBy(array, f) {

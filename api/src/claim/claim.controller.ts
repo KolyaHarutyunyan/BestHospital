@@ -14,6 +14,7 @@ export class ClaimController {
 
   @Post()
   @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: ClaimDto })
   create(@Body() createClaimDto: CreateClaimDto) {
     return this.claimService.create(createClaimDto);
   }
@@ -21,6 +22,7 @@ export class ClaimController {
   @Post('generate')
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiQuery({ name: 'group', enum: MergeClaims })
+  @ApiOkResponse({ type: [ClaimDto] })
   generateClaims(@Body() generateClaims: GenerateClaimDto,
     @Query('group') group: MergeClaims
   ) {
@@ -54,6 +56,7 @@ export class ClaimController {
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiQuery({ name: 'status', enum: ClaimStatus })
   @ApiQuery({ name: 'details', required: false })
+  @ApiOkResponse({ type: ClaimDto })
   async setStatus(
     @Param('id', ParseObjectIdPipe) claimId: string,
     @Request() req: IRequest,

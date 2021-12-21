@@ -1,6 +1,7 @@
 import { model, Schema, Types } from 'mongoose';
 import { IClaim } from './interface';
 import { ClaimStatus, ReceivableStatus } from './claim.constants';
+
 const receivable = {
     placeService: { type: Types.ObjectId, ref: 'Place' },
     cptCode: { type: Number },

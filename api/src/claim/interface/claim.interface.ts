@@ -1,5 +1,7 @@
+import { IReceivable } from ".";
+
 export interface IClaim extends Document {
-    id: string,
+    _id: string,
     status: string,
     client: string,
     staff: string,
@@ -12,5 +14,5 @@ export interface IClaim extends Document {
     date: Date,
     createdDate: Date,
     details: string,
-    receivable: string[]
+    receivable: IReceivable
 }

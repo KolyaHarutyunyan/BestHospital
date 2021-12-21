@@ -26,7 +26,6 @@ import { PlaceModule } from '../place/place.module';
 import { MileageModule } from '../mileage/mileage.module';
 import { BillingModule } from '../billing/billing.module';
 import { ClaimModule } from '../claim/claim.module';
-import { ReceivableModule } from '../receivable/receivable.module';
 import { InvoiceModule } from '../invoice/invoice.module';
 
 @Module({
@@ -34,7 +33,7 @@ import { InvoiceModule } from '../invoice/invoice.module';
     EmploymentModule, ClientModule, DepartmentModule, CommentModule, HistoryModule,
     JobModule, SCredentialModule, PaycodeModule, PaycodetypeModule, AvailabilityModule,
     OvertimeModule, TimesheetModule, FileModule, AppointmentModule, PlaceModule, MileageModule, 
-    BillingModule, ClaimModule, ReceivableModule, InvoiceModule],
+    BillingModule, ClaimModule, InvoiceModule],
   controllers: [AppController],
   providers: [AppService, DatabaseConnection],
 })

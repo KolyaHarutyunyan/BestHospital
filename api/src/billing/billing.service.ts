@@ -1,11 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-// import * as mongoose from 'mongoose';
-import { MongooseUtil } from '../util/mongoose.util';
+import { Model } from 'mongoose';
 import { BillingModel } from './billing.model';
 import { IBilling } from './interface';
 import { CreateBillingDto, UpdateBillingDto, BillingDto, TransactionDto } from './dto';
 import { StaffService } from '../staff/staff.service';
-import { Model } from 'mongoose';
 import { BillingSanitizer } from './interceptor/billing.interceptor';
 
 @Injectable()
@@ -15,13 +13,11 @@ export class BillingService {
     private readonly staffService: StaffService,
   ) {
     this.model = BillingModel;
-    this.mongooseUtil = new MongooseUtil();
   }
   private model: Model<IBilling>;
-  private mongooseUtil: MongooseUtil;
 
   /** create the billing */
-  async create(dto: any): Promise<any> {
+  async create(dto: any): Promise<BillingDto> {
     try {
       let billing = new this.model({
         appointment: dto.appointment,
@@ -49,7 +45,7 @@ export class BillingService {
       billing.balance = dto.billedAmount;
       if (dto.clientResp) billing.clientResp = dto.clientResp
       await billing.save();
-      return billing;
+      return this.sanitizer.sanitize(billing);
     }
     catch (e) {
       throw e;
@@ -57,12 +53,16 @@ export class BillingService {
   }
 
   /** startTransaction */
-  async startTransaction(dto: TransactionDto, billingId: string, session: any): Promise<any> {
+  async startTransaction(dto: TransactionDto, billingId: string, session: any): Promise<BillingDto> {
     try {
       const billing = await this.model.findById({ _id: billingId }).session(session);
       this.checkBilling(billing);
       session.startTransaction()
-      billing.transaction.push({ type: dto.type, date: dto.date, amount: dto.amount, paymentRef: dto.paymentRef, creator: dto.creator, note: dto.note });
+      billing.transaction.push({
+        type: dto.type, date: dto.date,
+        amount: dto.amount, paymentRef: dto.paymentRef,
+        creator: dto.creator, note: dto.note
+      });
       billing.billedAmount -= dto.amount;
       if (dto.type == 'PAYERPAID') {
         billing.payerPaid += dto.amount
@@ -78,7 +78,7 @@ export class BillingService {
       await billing.save();
       await session.commitTransaction()
       session.endSession()
-      return 'This action adds a new billing';
+      return this.sanitizer.sanitize(billing)
     }
     catch (e) {
       await session.abortTransaction()
@@ -89,7 +89,7 @@ export class BillingService {
   }
 
   /** abort the transaction */
-  async abortTransaction(billingId: string): Promise<any> {
+  async abortTransaction(billingId: string): Promise<BillingDto> {
     // set status to the transaction object, when aborting(void) set status void and recerve 
     const billing: any = await this.model.findById({ _id: billingId });
     this.checkBilling(billing);
@@ -106,43 +106,52 @@ export class BillingService {
     }
     billing.transaction.status = "VOID";
     await billing.save()
-    return billing;
+    return this.sanitizer.sanitize(billing);
   }
 
   /** set status claimed */
-  async billClaim(ids: string[]): Promise<any> {
+  async billClaim(ids: string[]): Promise<void> {
     const bills = await this.model.update({ _id: { $in: ids } },
       { $set: { claimStatus: 'CLAIMED' } },
       { multi: true })
+    if (bills.nModified === 0) {
+      throw new HttpException(
+        `Can't set status`,
+        HttpStatus.NOT_MODIFIED,
+      );
+    }
   }
 
   /** find all bills */
-  async findAll(claimStatus: string): Promise<any> {
+  async findAll(claimStatus: string): Promise<BillingDto[]> {
     let billings = await this.model.find({ claimStatus });
-    return billings;
+    return this.sanitizer.sanitizeMany(billings);
   }
 
   /** find all with many ids */
   async findByIds(bills: string[], isClaimed = null): Promise<BillingDto[]> {
     let billings = await this.model.find({ _id: { $in: bills } });
-    if(isClaimed){
-    billings.map(bill => {
-      if(bill.claimStatus == "CLAIMED"){
-        throw new HttpException(
-          'Billing has already been used',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-    })
-  }
+    if (isClaimed) {
+      billings.map(bill => {
+        if (bill.claimStatus == "CLAIMED") {
+          throw new HttpException(
+            'Billing has already been used',
+            HttpStatus.NOT_FOUND,
+          );
+        }
+      })
+    }
     return this.sanitizer.sanitizeMany(billings);
   }
 
   /** find bill by id */
-  async findOne(_id: string): Promise<any> {
-    const billing = await this.model.findById(_id).populate('authService').populate('client').populate('payer').populate('placeService');
+  async findOne(_id: string): Promise<BillingDto> {
+    const billing = await this.model.findById(_id).populate('authService')
+      .populate('client')
+      .populate('payer')
+      .populate('placeService');
     this.checkBilling(billing)
-    return billing;
+    return this.sanitizer.sanitize(billing);
   }
 
   update(id: number, updateBillingDto: UpdateBillingDto) {
