@@ -77,7 +77,6 @@ export class ClaimService {
 
     for (let i = 0; i < result.length; i++) {
       for (let j = 0; j < result[i].length; ++j) {
-        console.log(j)
         receivable.push({
           placeService: '61b354b67c05a231f27df3f3',
           cptCode: 50,
