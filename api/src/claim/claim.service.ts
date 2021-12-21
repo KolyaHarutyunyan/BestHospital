@@ -35,14 +35,14 @@ export class ClaimService {
 
   /**generate claims */
   async generateClaims(dto: GenerateClaimDto, group: MergeClaims): Promise<ClaimDto[]> {
-    const bills = await this.billingService.findByIds(dto.bills, true);
+    const bills: any = await this.billingService.findByIds(dto.bills, true);
     if (!bills.length || bills.length < dto.bills.length) {
       throw new HttpException(
         'Bills with this ids was not found',
         HttpStatus.NOT_FOUND,
       );
     }
-    const claims = group === "OFF" ? await this.singleBill(dto.bills) : await this.groupBills(bills);
+    const claims = group === "OFF" ? await this.singleBill(bills) : await this.groupBills(bills);
     return this.sanitizer.sanitizeMany(claims);
   }
 
@@ -68,63 +68,68 @@ export class ClaimService {
   }
 
   /** create claim with receivables with bills */
-  async singleBill(bills: string[]): Promise<ClaimDto> {
+  async singleBill(bills: string[]): Promise<IClaim[]> {
     let claim = [];
     let receivable = [];
+    const result = this.groupBy(bills, function (item) {
+      return [item.client, item.placeService];
+    });
 
-    /** if the date remains generate a new claim */
-    // if (data.length) {
-    for (let i = 0; i < bills.length; i++) {
-      if (i !== 0 && i % 6 === 0) {
-        claim.push({
-          client: '61b3604a7c05a231f27e00ed',
-          staff: '61b34ed57c05a231f27df01b',
-          funder: '61b354f77c05a231f27df422',
-          totalCharge: 50,
-          ammountPaid: 50,
-          submittedDate: '2021-12-10T13:26:31.581+00:00',
-          paymentRef: 'test',
-          link: 'test',
-          date: '2021-12-10T13:26:31.581+00:00',
-          status: "PENDING",
-          details: '',
-          createdDate: '2021-12-10T13:26:31.581+00:00',
-          receivable
+    for (let i = 0; i < result.length; i++) {
+      for (let j = 0; j < result[i].length; ++j) {
+        console.log(j)
+        receivable.push({
+          placeService: '61b354b67c05a231f27df3f3',
+          cptCode: 50,
+          totalUnits: 50,
+          totalBill: 50,
+          renderProvider: 50,
+          dateOfService: '2021-12-17T14:07:19.470Z',
+          bills: result[i][j]._id
         })
-        receivable = []
+        if(j !== 0 && j === 5){
+          claim.push({
+            client: result[i].client,
+            staff: result[i].staff,
+            funder: result[i].payer,
+            totalCharge: 0,
+            ammountPaid: 0,
+            submittedDate: '2021-12-10T13:26:31.581+00:00',
+            paymentRef: 'test',
+            link: 'testiiiiiiiik',
+            date: '2021-12-10T13:26:31.581+00:00',
+            status: "PENDING",
+            createdDate: '2021-12-10T13:26:31.581+00:00',
+            receivable
+          })
+          receivable = [];
+        }
       }
-      receivable.push({
-        placeService: '61b354b67c05a231f27df3f3',
-        cptCode: 50,
-        totalUnits: 50,
-        totalBill: 50,
-        renderProvider: 50,
-        dateOfService: '2021-12-17T14:07:19.470Z',
-        bills: bills[i]
+      claim.push({
+        client: result[i].client,
+        staff: result[i].staff,
+        funder: result[i].payer,
+        totalCharge: 0,
+        ammountPaid: 0,
+        submittedDate: '2021-12-10T13:26:31.581+00:00',
+        paymentRef: 'test',
+        link: 'test',
+        date: '2021-12-10T13:26:31.581+00:00',
+        status: "PENDING",
+        createdDate: '2021-12-10T13:26:31.581+00:00',
+        receivable
       })
+      receivable = [];
     }
-    claim.push({
-      client: '61b3604a7c05a231f27e00ed',
-      staff: '61b34ed57c05a231f27df01b',
-      funder: '61b354f77c05a231f27df422',
-      totalCharge: 50,
-      ammountPaid: 50,
-      submittedDate: '2021-12-10T13:26:31.581+00:00',
-      paymentRef: 'test',
-      link: 'test',
-      date: '2021-12-10T13:26:31.581+00:00',
-      status: "PENDING",
-      createdDate: '2021-12-10T13:26:31.581+00:00',
-      receivable
-    })
 
     /** set bill claimStatus to CLAIMED */
+    await this.model.insertMany(claim)
     await this.billingService.billClaim(bills);
-    return await this.model.insertMany(claim)
+    return claim
   }
 
   /** create claim with receivables with grouping bills */
-  async groupBills(bills: any): Promise<any> {
+  async groupBills(bills: any): Promise<IClaim[]> {
     /** group the bills with client and placeService */
     const result = this.groupBy(bills, function (item) {
       return [item.client, item.placeService];
@@ -133,26 +138,6 @@ export class ClaimService {
     let receivable = [];
     let bill = [];
     for (let i = 0; i < result.length; i++) {
-      bill = []
-      console.log(i)
-      if (i !== 0 && i % 6 === 0) {
-        claim.push({
-          client: '61b3604a7c05a231f27e00ed',
-          staff: '61b34ed57c05a231f27df01b',
-          funder: '61b354f77c05a231f27df422',
-          totalCharge: 50,
-          ammountPaid: 50,
-          submittedDate: '2021-12-10T13:26:31.581+00:00',
-          paymentRef: 'test',
-          link: 'test',
-          date: '2021-12-10T13:26:31.581+00:00',
-          status: "PENDING",
-          details: '',
-          createdDate: '2021-12-10T13:26:31.581+00:00',
-          receivable
-        })
-        receivable = []
-      }
       result[i].map(bills => {
         bill.push(bills._id);
       })
@@ -165,26 +150,30 @@ export class ClaimService {
         dateOfService: '2021-12-17T14:07:19.470Z',
         bills: bill
       })
+      
+      claim.push({
+        client: result[i].client,
+        staff: result[i].staff,
+        funder: result[i].payer,
+        totalCharge: 0,
+        ammountPaid: 0,
+        submittedDate: '2021-12-10T13:26:31.581+00:00',
+        paymentRef: 'test',
+        link: 'test',
+        date: '2021-12-10T13:26:31.581+00:00',
+        status: "PENDING",
+        createdDate: '2021-12-10T13:26:31.581+00:00',
+        receivable
+      })
+      bill = [];
+      receivable = [];
     }
-    claim.push({
-      client: '61b3604a7c05a231f27e00ed',
-      staff: '61b34ed57c05a231f27df01b',
-      funder: '61b354f77c05a231f27df422',
-      totalCharge: 50,
-      ammountPaid: 50,
-      submittedDate: '2021-12-10T13:26:31.581+00:00',
-      paymentRef: 'test',
-      link: 'test',
-      date: '2021-12-10T13:26:31.581+00:00',
-      status: "PENDING",
-      createdDate: '2021-12-10T13:26:31.581+00:00',
-      receivable
-    })
+ 
 
     /** set bill claimStatus to CLAIMED */
+    await this.model.insertMany(claim);
     await this.billingService.billClaim(bills);
-    return await this.model.insertMany(claim)
-
+    return claim;
     // date of service, cpt code + modifier, place of service
     //  Client Funder appointment startDate
   }
@@ -209,7 +198,7 @@ export class ClaimService {
     this.checkClaim(claim);
     return await claim.save();
   };
-  
+
   /** Private methods */
   /** group the bills */
   private groupBy(array, f) {
