@@ -8,10 +8,11 @@ const receivable = {
     totalUnits: { type: Number },
     totalBill: { type: Number },
     renderProvider: { type: Number },
-    dateOfService: { type: Date },
+    dateOfService: { start: {type: Date}, end: {type: Date} },
     status: { type: String, enum: ReceivableStatus },
     bills: [{ type: Types.ObjectId, ref: 'billing' }]
 }
+
 export const ClaimSchema = new Schema({
     client: { type: Types.ObjectId, ref: 'Client' },
     staff: { type: Types.ObjectId, ref: 'Staff' },

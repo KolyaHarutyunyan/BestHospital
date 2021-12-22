@@ -130,7 +130,7 @@ export class BillingService {
 
   /** find all with many ids */
   async findByIds(bills: string[], isClaimed = null): Promise<BillingDto[]> {
-    let billings = await this.model.find({ _id: { $in: bills } });
+    let billings = await this.model.find({ _id: { $in: bills } }).populate({path: 'authService', populate: 'serviceId'});
     if (isClaimed) {
       billings.map(bill => {
         if (bill.claimStatus == "CLAIMED") {

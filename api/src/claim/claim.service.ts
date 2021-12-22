@@ -71,22 +71,24 @@ export class ClaimService {
   async singleBill(bills: string[]): Promise<IClaim[]> {
     let claim = [];
     let receivable = [];
+    let billCreatedAt = [];
     const result = this.groupBy(bills, function (item) {
       return [item.client, item.placeService];
     });
-
     for (let i = 0; i < result.length; i++) {
       for (let j = 0; j < result[i].length; ++j) {
+        billCreatedAt.push(result[i][j].createdDate)
+        const dateRange = this.minMax(billCreatedAt);
         receivable.push({
-          placeService: '61b354b67c05a231f27df3f3',
-          cptCode: 50,
+          placeService: result[i][0].placeService,
+          cptCode: result[i][0].authService.serviceId.cptCode,
           totalUnits: 50,
           totalBill: 50,
           renderProvider: 50,
-          dateOfService: '2021-12-17T14:07:19.470Z',
+          dateOfService: { start: result[i][j].createdDate, end: result[i][j].createdDate },
           bills: result[i][j]._id
         })
-        if(j !== 0 && j === 5){
+        if (j !== 0 && j === 5) {
           claim.push({
             client: result[i].client,
             staff: result[i].staff,
@@ -123,7 +125,7 @@ export class ClaimService {
 
     /** set bill claimStatus to CLAIMED */
     await this.model.insertMany(claim)
-    await this.billingService.billClaim(bills);
+    // await this.billingService.billClaim(bills);
     return claim
   }
 
@@ -131,25 +133,29 @@ export class ClaimService {
   async groupBills(bills: any): Promise<IClaim[]> {
     /** group the bills with client and placeService */
     const result = this.groupBy(bills, function (item) {
-      return [item.client, item.placeService];
+      // item.authService.serviceId.cptCode, 
+      return [item.placeService, item.client];
     });
     let claim = [];
-    let receivable = [];
+    let receivable: any = [];
     let bill = [];
+    let billCreatedAt = [];
     for (let i = 0; i < result.length; i++) {
+
       result[i].map(bills => {
         bill.push(bills._id);
+        billCreatedAt.push(bills.createdDate)
       })
+      const dateRange = this.minMax(billCreatedAt);
       receivable.push({
-        placeService: '61b354b67c05a231f27df3f3',
-        cptCode: 50,
+        placeService: result[i][0].placeService,
+        cptCode: result[i][0].authService.serviceId.cptCode,
         totalUnits: 50,
         totalBill: 50,
         renderProvider: 50,
-        dateOfService: '2021-12-17T14:07:19.470Z',
+        dateOfService: { start: dateRange[0], end: dateRange[1] },
         bills: bill
       })
-      
       claim.push({
         client: result[i].client,
         staff: result[i].staff,
@@ -166,12 +172,12 @@ export class ClaimService {
       })
       bill = [];
       receivable = [];
+      billCreatedAt = []
     }
- 
 
     /** set bill claimStatus to CLAIMED */
     await this.model.insertMany(claim);
-    await this.billingService.billClaim(bills);
+    // await this.billingService.billClaim(bills);
     return claim;
     // date of service, cpt code + modifier, place of service
     //  Client Funder appointment startDate
@@ -210,6 +216,11 @@ export class ClaimService {
     return Object.keys(groups).map(function (group) {
       return groups[group];
     })
+  }
+
+  /** return min max date in date range */
+  private minMax(arr) {
+    return [new Date(Math.min(...arr)), new Date(Math.max(...arr))];
   }
 
   /** if the claim is not found, throws an exception */
