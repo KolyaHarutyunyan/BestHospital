@@ -8,7 +8,7 @@ const receivable = {
     totalUnits: { type: Number },
     totalBill: { type: Number },
     renderProvider: { type: Number },
-    dateOfService: { start: {type: Date}, end: {type: Date} },
+    dateOfService: { start: { type: Date }, end: { type: Date } },
     status: { type: String, enum: ReceivableStatus },
     bills: [{ type: Types.ObjectId, ref: 'billing' }]
 }

@@ -23,10 +23,6 @@ export class CreateClaimDto {
     @IsNotEmpty()
     ammountPaid: number
     @ApiProperty()
-    @IsDateString()
-    @IsNotEmpty()
-    submittedDate: Date
-    @ApiProperty()
     @IsString()
     @IsNotEmpty()
     paymentRef: string

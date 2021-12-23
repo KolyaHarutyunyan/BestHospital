@@ -73,7 +73,7 @@ export class ClaimService {
     let receivable = [];
     let billCreatedAt = [];
     const result = this.groupBy(bills, function (item) {
-      return [item.client, item.placeService];
+      return [item.authorization.funderId, item.client];
     });
     for (let i = 0; i < result.length; i++) {
       for (let j = 0; j < result[i].length; ++j) {
@@ -133,48 +133,57 @@ export class ClaimService {
   async groupBills(bills: any): Promise<IClaim[]> {
     /** group the bills with client and placeService */
     const result = this.groupBy(bills, function (item) {
-      // item.authService.serviceId.cptCode, 
-      return [item.placeService, item.client];
+      return [item.authorization.funderId, item.client];
     });
     let claim = [];
     let receivable: any = [];
     let bill = [];
     let billCreatedAt = [];
+    let groupBill = [];
+    let testBill = [];
+    let totalBillCharge = [];
     for (let i = 0; i < result.length; i++) {
-
       result[i].map(bills => {
         bill.push(bills._id);
-        billCreatedAt.push(bills.createdDate)
+        groupBill.push(bills)
+      })
+    }
+    const billGroup = this.groupBy(groupBill, function (item) {
+      return [item.placeService, item.authService.serviceId.cptCode];
+    });
+    for (let i = 0; i < billGroup.length; i++) {
+      billGroup[i].map(bill => {
+        testBill.push(bill._id);
+        totalBillCharge.push(bill);
+        billCreatedAt.push(bill.createdDate)
       })
       const dateRange = this.minMax(billCreatedAt);
       receivable.push({
-        placeService: result[i][0].placeService,
-        cptCode: result[i][0].authService.serviceId.cptCode,
-        totalUnits: 50,
-        totalBill: 50,
+        placeService: billGroup[i][0].placeService,
+        cptCode: billGroup[i][0].authService.serviceId.cptCode,
+        totalUnits: 0,
+        // bills can have different fundingService so (payor total - payor paid / fundingService(unitSize)) which fundingService(unit size)
+        totalBill: 0,
         renderProvider: 50,
         dateOfService: { start: dateRange[0], end: dateRange[1] },
-        bills: bill
+        bills: testBill
       })
       claim.push({
-        client: result[i].client,
-        staff: result[i].staff,
-        funder: result[i].payer,
+        client: billGroup[i][0].client,
+        staff: billGroup[i][0].staff,
+        funder: billGroup[i][0].payer,
         totalCharge: 0,
         ammountPaid: 0,
-        submittedDate: '2021-12-10T13:26:31.581+00:00',
         paymentRef: 'test',
         link: 'test',
-        date: '2021-12-10T13:26:31.581+00:00',
         status: "PENDING",
-        createdDate: '2021-12-10T13:26:31.581+00:00',
         receivable
-      })
-      bill = [];
+      });
+
+      testBill = [];
       receivable = [];
       billCreatedAt = []
     }
-
     /** set bill claimStatus to CLAIMED */
     await this.model.insertMany(claim);
     // await this.billingService.billClaim(bills);
@@ -194,6 +203,7 @@ export class ClaimService {
       this.staffService.findById(userId),
       this.model.findById({ _id })
     ])
+    if (status === "SUBMITTED") claim.submittedDate = new Date()
     claim.status = status;
     if (details) {
       claim.details = details

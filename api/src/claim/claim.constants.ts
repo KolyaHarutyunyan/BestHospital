@@ -1,7 +1,7 @@
 export enum ClaimStatus {
     PENDING = "PENDING",
     CLOSED = "CLOSED",
-    CLAIMED = "SUBMITTED",
+    SUBMITTED = "SUBMITTED",
     POSTED = "POSTED"
 }
 export enum MergeClaims {
