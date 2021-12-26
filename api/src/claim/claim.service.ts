@@ -234,13 +234,14 @@ export class ClaimService {
   }
 
   /** count the total billed amount */
+  //development
   private countTotalBills(bills): Promise<number> {
     return bills.reduce((a, b) => (a.payerTotal - a.payerPaid) + (b.payerTotal - b.payerPaid), 0);
   }
 
   /** count the total charge */
   //development
-  private countTotalCharge(receivables): Promise<any> {
+  private countTotalCharge(receivables) {
     let bills = [];
     receivables.map(receivable =>{
       bills.push(receivable)
