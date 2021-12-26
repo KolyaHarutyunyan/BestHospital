@@ -239,7 +239,8 @@ export class ClaimService {
   }
 
   /** count the total charge */
-  private countTotalCharge(receivables): Promise<number> {
+  //development
+  private countTotalCharge(receivables): Promise<any> {
     let bills = [];
     receivables.map(receivable =>{
       bills.push(receivable)
