@@ -72,6 +72,8 @@ export class ClaimService {
     let claim = [];
     let receivable = [];
     let billCreatedAt = [];
+    let subBills = [];
+    let subReceivables = [];
     const result = this.groupBy(bills, function (item) {
       return [item.authorization.funderId, item.client];
     });
@@ -79,21 +81,22 @@ export class ClaimService {
       for (let j = 0; j < result[i].length; ++j) {
         billCreatedAt.push(result[i][j].createdDate)
         const dateRange = this.minMax(billCreatedAt);
+        subBills.push(result[i][j]);
         receivable.push({
           placeService: result[i][0].placeService,
           cptCode: result[i][0].authService.serviceId.cptCode,
           totalUnits: 50,
-          totalBill: 50,
           renderProvider: 50,
           dateOfService: { start: result[i][j].createdDate, end: result[i][j].createdDate },
           bills: result[i][j]._id
         })
+        receivable['totalBill'] = this.countTotalBills(subBills);
+        subBills = []
         if (j !== 0 && j === 5) {
           claim.push({
             client: result[i].client,
             staff: result[i].staff,
             funder: result[i].payer,
-            totalCharge: 0,
             ammountPaid: 0,
             submittedDate: '2021-12-10T13:26:31.581+00:00',
             paymentRef: 'test',
@@ -103,6 +106,7 @@ export class ClaimService {
             createdDate: '2021-12-10T13:26:31.581+00:00',
             receivable
           })
+          claim['totalCharge'] = this.countTotalCharge(receivable)
           receivable = [];
         }
       }
@@ -110,7 +114,6 @@ export class ClaimService {
         client: result[i].client,
         staff: result[i].staff,
         funder: result[i].payer,
-        totalCharge: 0,
         ammountPaid: 0,
         submittedDate: '2021-12-10T13:26:31.581+00:00',
         paymentRef: 'test',
@@ -120,6 +123,8 @@ export class ClaimService {
         createdDate: '2021-12-10T13:26:31.581+00:00',
         receivable
       })
+      claim['totalCharge'] = this.countTotalCharge(receivable)
+
       receivable = [];
     }
 
@@ -225,6 +230,19 @@ export class ClaimService {
     });
     return Object.keys(groups).map(function (group) {
       return groups[group];
+    })
+  }
+
+  /** count the total billed amount */
+  private countTotalBills(bills): Promise<number> {
+    return bills.reduce((a, b) => (a.payerTotal - a.payerPaid) + (b.payerTotal - b.payerPaid), 0);
+  }
+
+  /** count the total charge */
+  private countTotalCharge(receivables): Promise<number> {
+    let bills = [];
+    receivables.map(receivable =>{
+      bills.push(receivable)
     })
   }
 
