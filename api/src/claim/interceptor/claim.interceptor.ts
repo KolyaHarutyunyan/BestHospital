@@ -16,7 +16,7 @@ export class ClaimSanitizer implements ISanitize {
             submittedDate: claim.submittedDate,
             paymentRef: claim.paymentRef,
             link: claim.link,
-            date: claim.date,
+            dateRange: claim.dateRange,
             status: claim.status,
             createdDate: claim.createdDate,
             receivable: claim.receivable,

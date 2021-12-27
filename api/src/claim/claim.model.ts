@@ -10,6 +10,7 @@ const receivable = {
     renderProvider: { type: Number },
     dateOfService: { start: { type: Date }, end: { type: Date } },
     status: { type: String, enum: ReceivableStatus },
+    createdAt: { type: Date, default: Date.now() },
     bills: [{ type: Types.ObjectId, ref: 'billing' }]
 }
 
@@ -18,13 +19,13 @@ export const ClaimSchema = new Schema({
     staff: { type: Types.ObjectId, ref: 'Staff' },
     funder: { type: Types.ObjectId, ref: 'Funder' },
     totalCharge: { type: Number },
-    ammountPaid: { type: Number },
+    ammountPaid: { type: Number, default: 0 },
     submittedDate: { type: Date },
     paymentRef: { type: String },
     link: { type: String },
-    date: { type: Date },
+    dateRange: { early: { type: Date }, latest: { type: Date } },
     status: { type: String, enum: ClaimStatus },
-    createdDate: { type: Date },
+    createdDate: { type: Date, default: Date.now() },
     details: { type: String },
     receivable: [receivable]
 });

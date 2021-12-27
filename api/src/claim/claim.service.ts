@@ -7,7 +7,7 @@ import { MergeClaims } from './claim.constants';
 import { ClaimModel } from './claim.model';
 import { ClaimDto, CreateClaimDto, GenerateClaimDto, UpdateClaimDto } from './dto';
 import { ClaimSanitizer } from './interceptor/claim.interceptor';
-import { IClaim } from './interface';
+import { IClaim, IReceivable } from './interface';
 import { IBilling } from '../billing/interface';
 
 @Injectable()
@@ -69,84 +69,55 @@ export class ClaimService {
 
   /** create claim with receivables with bills */
   async singleBill(bills: string[]): Promise<IClaim[]> {
-    let claim = [];
-    let receivable = [];
-    let billCreatedAt = [];
-    let subBills = [];
-    let subReceivables = [];
+    let claim = [], receivable = [], receivableCreatedAt = [], subBills = [];
+
+    /** group the bills by payer and clent */
     const result = this.groupBy(bills, function (item) {
-      return [item.authorization.funderId, item.client];
+      return [item.payer, item.client];
     });
+
+    /** create receivables and claims */
     for (let i = 0; i < result.length; i++) {
       for (let j = 0; j < result[i].length; ++j) {
-        billCreatedAt.push(result[i][j].createdDate)
-        const dateRange = this.minMax(billCreatedAt);
+        // billCreatedAt.push(result[i][j].createdDate)
+        // const dateRange = this.minMax(billCreatedAt);
+
         subBills.push(result[i][j]);
-        receivable.push({
-          placeService: result[i][0].placeService,
-          cptCode: result[i][0].authService.serviceId.cptCode,
-          totalUnits: 50,
-          renderProvider: 50,
-          dateOfService: { start: result[i][j].createdDate, end: result[i][j].createdDate },
-          bills: result[i][j]._id
-        })
-        receivable['totalBill'] = this.countTotalBills(subBills);
-        subBills = []
+        await this.addReceivable(receivable, result[i][j], result[i][0].placeService, result[i][0].authService.serviceId.cptCode);
+        receivableCreatedAt.push(new Date())
+
         if (j !== 0 && j === 5) {
-          claim.push({
-            client: result[i].client,
-            staff: result[i].staff,
-            funder: result[i].payer,
-            ammountPaid: 0,
-            submittedDate: '2021-12-10T13:26:31.581+00:00',
-            paymentRef: 'test',
-            link: 'testiiiiiiiik',
-            date: '2021-12-10T13:26:31.581+00:00',
-            status: "PENDING",
-            createdDate: '2021-12-10T13:26:31.581+00:00',
-            receivable
-          })
-          claim['totalCharge'] = this.countTotalCharge(receivable)
+          await this.addClaim(claim, result[i][j], receivable, receivableCreatedAt, subBills);
+          subBills = [];
           receivable = [];
+          receivableCreatedAt = [];
         }
       }
-      claim.push({
-        client: result[i].client,
-        staff: result[i].staff,
-        funder: result[i].payer,
-        ammountPaid: 0,
-        submittedDate: '2021-12-10T13:26:31.581+00:00',
-        paymentRef: 'test',
-        link: 'test',
-        date: '2021-12-10T13:26:31.581+00:00',
-        status: "PENDING",
-        createdDate: '2021-12-10T13:26:31.581+00:00',
-        receivable
-      })
-      claim['totalCharge'] = this.countTotalCharge(receivable)
-
+      if (receivable.length) {
+        await this.addClaim(claim, result[i][0], receivable, receivableCreatedAt, subBills);
+      }
+      subBills = [];
       receivable = [];
+      receivableCreatedAt = [];
     }
 
     /** set bill claimStatus to CLAIMED */
     await this.model.insertMany(claim)
     // await this.billingService.billClaim(bills);
-    return claim
+    return claim;
   }
 
   /** create claim with receivables with grouping bills */
   async groupBills(bills: any): Promise<IClaim[]> {
     /** group the bills with client and placeService */
     const result = this.groupBy(bills, function (item) {
-      return [item.authorization.funderId, item.client];
+      return [item.payer, item.client];
     });
-    let claim = [];
-    let receivable: any = [];
-    let bill = [];
-    let billCreatedAt = [];
-    let groupBill = [];
-    let testBill = [];
-    let totalBillCharge = [];
+    let claim = [], receivable = [],
+      bill = [], billCreatedAt = [],
+      groupBill = [], subBills = [], testBill = [],
+      totalBillCharge = [], receivableCreatedAt = [];
+
     for (let i = 0; i < result.length; i++) {
       result[i].map(bills => {
         bill.push(bills._id);
@@ -160,32 +131,15 @@ export class ClaimService {
       billGroup[i].map(bill => {
         testBill.push(bill._id);
         totalBillCharge.push(bill);
-        billCreatedAt.push(bill.createdDate)
+        billCreatedAt.push(bill.createdDate);
+        subBills.push(bill)
       })
       const dateRange = this.minMax(billCreatedAt);
-      receivable.push({
-        placeService: billGroup[i][0].placeService,
-        cptCode: billGroup[i][0].authService.serviceId.cptCode,
-        totalUnits: 0,
-        // bills can have different fundingService so (payor total - payor paid / fundingService(unitSize)) which fundingService(unit size)
-        totalBill: 0,
-        renderProvider: 50,
-        dateOfService: { start: dateRange[0], end: dateRange[1] },
-        bills: testBill
-      })
-      claim.push({
-        client: billGroup[i][0].client,
-        staff: billGroup[i][0].staff,
-        funder: billGroup[i][0].payer,
-        totalCharge: 0,
-        ammountPaid: 0,
-        paymentRef: 'test',
-        link: 'test',
-        status: "PENDING",
-        receivable
-      });
-
+      await this.addReceivables(receivable, billGroup[i][0], testBill, subBills, dateRange);
+      receivableCreatedAt.push(new Date())
+      await this.addClaim(claim, billGroup[i][0], receivable, receivableCreatedAt, subBills);
       testBill = [];
+      subBills = [];
       receivable = [];
       billCreatedAt = []
     }
@@ -233,19 +187,65 @@ export class ClaimService {
     })
   }
 
+  /** add receivable */
+  private async addReceivable(receivable, result, placeService: string, cptCode: number): Promise<void> {
+    receivable.push({
+      placeService,
+      cptCode,
+      // result[i][j].payerTotal - result[i][j].payerPaid / unitZise?
+      totalUnits: 0,
+      totalBill: result.payerTotal - result.payerPaid,
+      dateOfService: { start: new Date(result.createdDate), end: new Date(result.createdDate) },
+      createdAt: new Date(),
+      bills: result._id
+    })
+  }
+
+  /** add many receivables */
+  private async addReceivables(receivable, billGroup, bills, subBills, dateRange): Promise<void> {
+    receivable.push({
+      placeService: billGroup.placeService,
+      cptCode: billGroup.authService.serviceId.cptCode,
+      totalUnits: 0,
+      // bills can have different fundingService so (payor total - payor paid / fundingService(unitSize)) which fundingService(unit size)
+      totalBill: await this.countTotalBills(subBills),
+      renderProvider: 50,
+      dateOfService: { start: dateRange[0], end: dateRange[1] },
+      bills
+    })
+  }
+
+  /** add claim */
+  private async addClaim(claim, result, receivable, receivableCreatedAt, subBills): Promise<void> {
+    claim.push({
+      client: result.client,
+      staff: result.staff,
+      funder: result.payer,
+      ammountPaid: 0,
+      totalCharge: await this.countTotalCharge(subBills),
+      dateRange: { early: this.minMax(receivableCreatedAt)[0], latest: this.minMax(receivableCreatedAt)[1] },
+      status: "PENDING",
+      receivable
+    })
+  }
+
   /** count the total billed amount */
-  //development
-  private countTotalBills(bills): Promise<number> {
-    return bills.reduce((a, b) => (a.payerTotal - a.payerPaid) + (b.payerTotal - b.payerPaid), 0);
+  private async countTotalBills(bills: IBilling[]): Promise<number> {
+    let sum : number = 0;
+    for (let i = 0; i < bills.length - 1; i++) {
+      sum += (bills[i].payerTotal - bills[i].payerPaid) + (bills[i + 1].payerTotal - bills[i + 1].payerPaid);
+      i++;
+    }
+    return sum;
   }
 
   /** count the total charge */
-  //development
-  private countTotalCharge(receivables) {
-    let bills = [];
-    receivables.map(receivable =>{
-      bills.push(receivable)
-    })
+  private async countTotalCharge(bills: IBilling[]): Promise<number> {
+    let totalCharge: number = 0;
+    for (let i = 0; i < bills.length; i++) {
+      totalCharge += (bills[i].billedAmount - bills[i].payerTotal - bills[i].clientResp);
+    }
+    return totalCharge;
   }
 
   /** return min max date in date range */

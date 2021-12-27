@@ -11,7 +11,7 @@ export interface IClaim extends Document {
     submittedDate: Date,
     paymentRef: string,
     link: string,
-    date: Date,
+    dateRange: Date,
     createdDate: Date,
     details: string,
     receivable: IReceivable

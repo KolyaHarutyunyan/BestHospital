@@ -33,7 +33,7 @@ export class CreateClaimDto {
     @ApiProperty()
     @IsDateString()
     @IsNotEmpty()
-    date: Date
+    dateRange: Date
     @ApiProperty()
     @IsDateString()
     @IsNotEmpty()

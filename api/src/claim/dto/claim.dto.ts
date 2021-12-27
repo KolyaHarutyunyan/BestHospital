@@ -25,7 +25,7 @@ export class ClaimDto {
     @ApiProperty()
     details: string
     @ApiProperty()
-    date: Date
+    dateRange: Date
     @ApiProperty()
     createdDate: Date
     @ApiProperty()

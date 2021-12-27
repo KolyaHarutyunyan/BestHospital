@@ -12,9 +12,13 @@ export class ReceivableDto {
     @ApiProperty()
     totalBill: number;
     @ApiProperty()
-    renderProvider: number;
+    renderProvider?: number;
     @ApiProperty()
-    dateOfService: Date;
+    dateOfService: Object;
+    @ApiProperty()
+    status?: string;
+    @ApiProperty()
+    createdAt?: Date;
     @ApiProperty()
     bills: string[]
 }
