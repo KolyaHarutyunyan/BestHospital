@@ -1,19 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { InvoiceService } from './invoice.service';
-import { CreateInvoiceDto, UpdateInvoiceDto, InvoiceDto } from './dto';
-import { ApiHeader, ApiTags } from '@nestjs/swagger';
+import { CreateInvoiceDto, UpdateInvoiceDto, InvoiceDto, GenerateInvoiceDto } from './dto';
+import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ACCESS_TOKEN } from '../authN';
 import { ParseObjectIdPipe } from '../util';
 
 @Controller('invoice')
 @ApiTags('Invoice Endpoints')
 export class InvoiceController {
-  constructor(private readonly invoiceService: InvoiceService) {}
+  constructor(private readonly invoiceService: InvoiceService) { }
 
   @Post()
   @ApiHeader({ name: ACCESS_TOKEN })
   async create(@Body() createInvoiceDto: CreateInvoiceDto) {
     return await this.invoiceService.create(createInvoiceDto);
+  }
+
+  @Post('generate')
+  @ApiHeader({ name: ACCESS_TOKEN })
+  // @ApiQuery({ name: 'group', enum: MergeClaims })
+  @ApiOkResponse({ type: [InvoiceDto] })
+  generateClaims(@Body() generateInvoices: GenerateInvoiceDto,
+    // @Query('group') group: MergeClaims
+  ) {
+    return this.invoiceService.generateInvoices(generateInvoices);
   }
 
   @Get()

@@ -79,9 +79,6 @@ export class ClaimService {
     /** create receivables and claims */
     for (let i = 0; i < result.length; i++) {
       for (let j = 0; j < result[i].length; ++j) {
-        // billCreatedAt.push(result[i][j].createdDate)
-        // const dateRange = this.minMax(billCreatedAt);
-
         subBills.push(result[i][j]);
         await this.addReceivable(receivable, result[i][j], result[i][0].placeService, result[i][0].authService.serviceId.cptCode);
         receivableCreatedAt.push(new Date())

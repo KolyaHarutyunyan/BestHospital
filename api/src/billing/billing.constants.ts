@@ -1,6 +1,7 @@
 export enum ClaimStatus {
     NOTCLAIMED = "NOTCLAIMED",
     CLAIMED = "CLAIMED",
+    INCOMPLETE = "INCOMPLETE",
     COMPLETE = "COMPLETE",
     PARTIAL = "PARTIAL"
 }

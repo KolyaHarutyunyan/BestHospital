@@ -1,10 +1,11 @@
 import { model, Schema, Types } from 'mongoose';
 import { ReceivableStatus } from '../claim/claim.constants';
-import { InvoiceStatus } from '../billing/billing.constants';
+import { InvoiceStatus } from './invoice.constants';
 import { IInvoice } from './interface/invoice.interface';
 
 const receivable = {
     dateOfService: { start: { type: Date }, end: { type: Date } },
+    serviceDate: { type: Date },
     hours: { type: Number },
     amountTotal: { type: Number },
     clientResp: { type: Number },
@@ -12,12 +13,13 @@ const receivable = {
     balance: { type: Number },
     cptCode: { type: Number },
     status: { type: String, enum: ReceivableStatus },
+    // description: { typ: String },
     bills: [{ type: Types.ObjectId, ref: 'billing' }]
 }
 
 const InvoiceSchema = new Schema({
     client: { type: Types.ObjectId, ref: 'Client' },
-    dateRange: { type: Date },
+    dateRange: { early: { type: Date }, latest: { type: Date } },
     invoiceTotal: { type: Number },
     totalTime: { type: Number },
     dueDate: { type: Date },
