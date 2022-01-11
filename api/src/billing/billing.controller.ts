@@ -10,7 +10,7 @@ import { ACCESS_TOKEN } from '../authN/authN.constants';
 @Controller('billing')
 @ApiTags('Billing Endpoints')
 export class BillingController {
-  constructor(private readonly billingService: BillingService) { }
+  constructor(private readonly billingService: BillingService) {}
 
   @Post()
   @ApiHeader({ name: ACCESS_TOKEN })
@@ -22,8 +22,11 @@ export class BillingController {
   @Post('/addTransaction/:id')
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: BillingDto })
-  async startTransaction(@Body() createTransactionDto: TransactionDto, @Param('id', ParseObjectIdPipe) billingId: string) {
-    const session = await startSession()
+  async startTransaction(
+    @Body() createTransactionDto: TransactionDto,
+    @Param('id', ParseObjectIdPipe) billingId: string,
+  ) {
+    const session = await startSession();
     return this.billingService.startTransaction(createTransactionDto, billingId, session);
   }
 
@@ -66,15 +69,10 @@ export class BillingController {
   async setStatus(
     @Param('id', ParseObjectIdPipe) billingId: string,
     @Request() req: IRequest,
-    @Query('status') status: BillingStatus
+    @Query('status') status: BillingStatus,
   ) {
     const userId: string = req.body.user.id;
-    const billing = await this.billingService.setStatus(
-      billingId,
-      status,
-      userId
-    );
+    const billing = await this.billingService.setStatus(billingId, status, userId);
     return billing;
   }
-
 }

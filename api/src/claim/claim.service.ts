@@ -16,7 +16,6 @@ export class ClaimService {
     private readonly sanitizer: ClaimSanitizer,
     private readonly billingService: BillingService,
     private readonly staffService: StaffService,
-
   ) {
     this.model = ClaimModel;
     this.mongooseUtil = new MongooseUtil();
@@ -26,9 +25,7 @@ export class ClaimService {
 
   /** create the claim */
   async create(dto: CreateClaimDto): Promise<ClaimDto> {
-    const claim = new this.model({
-
-    })
+    const claim = new this.model({});
     await claim.save();
     return this.sanitizer.sanitize(claim);
   }
@@ -37,12 +34,9 @@ export class ClaimService {
   async generateClaims(dto: GenerateClaimDto, group: MergeClaims): Promise<ClaimDto[]> {
     const bills: any = await this.billingService.findByIds(dto.bills, true);
     if (!bills.length || bills.length < dto.bills.length) {
-      throw new HttpException(
-        'Bills with this ids was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Bills with this ids was not found', HttpStatus.NOT_FOUND);
     }
-    const claims = group === "OFF" ? await this.singleBill(bills) : await this.groupBills(bills);
+    const claims = group === 'OFF' ? await this.singleBill(bills) : await this.groupBills(bills);
     return this.sanitizer.sanitizeMany(claims);
   }
 
@@ -55,8 +49,8 @@ export class ClaimService {
   /** find claim by id] */
   async findOne(_id: string): Promise<ClaimDto> {
     const claim = await this.model.findById(_id);
-    this.checkClaim(claim)
-    return this.sanitizer.sanitize(claim)
+    this.checkClaim(claim);
+    return this.sanitizer.sanitize(claim);
   }
 
   update(id: number, updateClaimDto: UpdateClaimDto) {
@@ -69,7 +63,10 @@ export class ClaimService {
 
   /** create claim with receivables with bills */
   async singleBill(bills: string[]): Promise<IClaim[]> {
-    let claim = [], receivable = [], receivableCreatedAt = [], subBills = [];
+    let claim = [],
+      receivable = [],
+      receivableCreatedAt = [],
+      subBills = [];
 
     /** group the bills by payer and clent */
     const result = this.groupBy(bills, function (item) {
@@ -80,8 +77,13 @@ export class ClaimService {
     for (let i = 0; i < result.length; i++) {
       for (let j = 0; j < result[i].length; ++j) {
         subBills.push(result[i][j]);
-        await this.addReceivable(receivable, result[i][j], result[i][0].placeService, result[i][0].authService.serviceId.cptCode);
-        receivableCreatedAt.push(new Date())
+        await this.addReceivable(
+          receivable,
+          result[i][j],
+          result[i][0].placeService,
+          result[i][0].authService.serviceId.cptCode,
+        );
+        receivableCreatedAt.push(new Date());
 
         if (j !== 0 && j === 5) {
           await this.addClaim(claim, result[i][j], receivable, receivableCreatedAt, subBills);
@@ -99,7 +101,7 @@ export class ClaimService {
     }
 
     /** set bill claimStatus to CLAIMED */
-    await this.model.insertMany(claim)
+    await this.model.insertMany(claim);
     // await this.billingService.billClaim(bills);
     return claim;
   }
@@ -110,35 +112,40 @@ export class ClaimService {
     const result = this.groupBy(bills, function (item) {
       return [item.payer, item.client];
     });
-    let claim = [], receivable = [],
-      bill = [], billCreatedAt = [],
-      groupBill = [], subBills = [], testBill = [],
-      totalBillCharge = [], receivableCreatedAt = [];
+    let claim = [],
+      receivable = [],
+      bill = [],
+      billCreatedAt = [],
+      groupBill = [],
+      subBills = [],
+      testBill = [],
+      totalBillCharge = [],
+      receivableCreatedAt = [];
 
     for (let i = 0; i < result.length; i++) {
-      result[i].map(bills => {
+      result[i].map((bills) => {
         bill.push(bills._id);
-        groupBill.push(bills)
-      })
+        groupBill.push(bills);
+      });
     }
     const billGroup = this.groupBy(groupBill, function (item) {
       return [item.placeService, item.authService.serviceId.cptCode];
     });
     for (let i = 0; i < billGroup.length; i++) {
-      billGroup[i].map(bill => {
+      billGroup[i].map((bill) => {
         testBill.push(bill._id);
         totalBillCharge.push(bill);
         billCreatedAt.push(bill.createdDate);
-        subBills.push(bill)
-      })
+        subBills.push(bill);
+      });
       const dateRange = this.minMax(billCreatedAt);
       await this.addReceivables(receivable, billGroup[i][0], testBill, subBills, dateRange);
-      receivableCreatedAt.push(new Date())
+      receivableCreatedAt.push(new Date());
       await this.addClaim(claim, billGroup[i][0], receivable, receivableCreatedAt, subBills);
       testBill = [];
       subBills = [];
       receivable = [];
-      billCreatedAt = []
+      billCreatedAt = [];
     }
     /** set bill claimStatus to CLAIMED */
     await this.model.insertMany(claim);
@@ -149,23 +156,18 @@ export class ClaimService {
   }
 
   /** Set claim status */
-  setStatus = async (
-    _id: string,
-    status: string,
-    userId: string,
-    details: string
-  ) => {
+  setStatus = async (_id: string, status: string, userId: string, details: string) => {
     let [staff, claim] = await Promise.all([
       this.staffService.findById(userId),
-      this.model.findById({ _id })
-    ])
-    if (status === "SUBMITTED") claim.submittedDate = new Date()
+      this.model.findById({ _id }),
+    ]);
+    if (status === 'SUBMITTED') claim.submittedDate = new Date();
     claim.status = status;
     if (details) {
-      claim.details = details
+      claim.details = details;
     } else {
-      claim.details = ''
-    };
+      claim.details = '';
+    }
     this.checkClaim(claim);
     return await claim.save();
   };
@@ -181,11 +183,16 @@ export class ClaimService {
     });
     return Object.keys(groups).map(function (group) {
       return groups[group];
-    })
+    });
   }
 
   /** add receivable */
-  private async addReceivable(receivable, result, placeService: string, cptCode: number): Promise<void> {
+  private async addReceivable(
+    receivable,
+    result,
+    placeService: string,
+    cptCode: number,
+  ): Promise<void> {
     receivable.push({
       placeService,
       cptCode,
@@ -194,8 +201,8 @@ export class ClaimService {
       totalBill: result.payerTotal - result.payerPaid,
       dateOfService: { start: new Date(result.createdDate), end: new Date(result.createdDate) },
       createdAt: new Date(),
-      bills: result._id
-    })
+      bills: result._id,
+    });
   }
 
   /** add many receivables */
@@ -208,8 +215,8 @@ export class ClaimService {
       totalBill: await this.countTotalBills(subBills),
       renderProvider: 50,
       dateOfService: { start: dateRange[0], end: dateRange[1] },
-      bills
-    })
+      bills,
+    });
   }
 
   /** add claim */
@@ -220,17 +227,23 @@ export class ClaimService {
       funder: result.payer,
       ammountPaid: 0,
       totalCharge: await this.countTotalCharge(subBills),
-      dateRange: { early: this.minMax(receivableCreatedAt)[0], latest: this.minMax(receivableCreatedAt)[1] },
-      status: "PENDING",
-      receivable
-    })
+      dateRange: {
+        early: this.minMax(receivableCreatedAt)[0],
+        latest: this.minMax(receivableCreatedAt)[1],
+      },
+      status: 'PENDING',
+      receivable,
+    });
   }
 
   /** count the total billed amount */
   private async countTotalBills(bills: IBilling[]): Promise<number> {
-    let sum : number = 0;
+    let sum: number = 0;
     for (let i = 0; i < bills.length - 1; i++) {
-      sum += (bills[i].payerTotal - bills[i].payerPaid) + (bills[i + 1].payerTotal - bills[i + 1].payerPaid);
+      sum +=
+        bills[i].payerTotal -
+        bills[i].payerPaid +
+        (bills[i + 1].payerTotal - bills[i + 1].payerPaid);
       i++;
     }
     return sum;
@@ -240,7 +253,7 @@ export class ClaimService {
   private async countTotalCharge(bills: IBilling[]): Promise<number> {
     let totalCharge: number = 0;
     for (let i = 0; i < bills.length; i++) {
-      totalCharge += (bills[i].billedAmount - bills[i].payerTotal - bills[i].clientResp);
+      totalCharge += bills[i].billedAmount - bills[i].payerTotal - bills[i].clientResp;
     }
     return totalCharge;
   }
@@ -253,10 +266,7 @@ export class ClaimService {
   /** if the claim is not found, throws an exception */
   private checkClaim(claim: IClaim) {
     if (!claim) {
-      throw new HttpException(
-        'Claim with this id was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Claim with this id was not found', HttpStatus.NOT_FOUND);
     }
   }
 }

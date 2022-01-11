@@ -12,13 +12,13 @@ export const RESTAURANT_FOLDER = 'restaurants';
 export const IMAGE_BUCKET = 'armat-images';
 
 export const FileStatus = {
-    OFFICE: "office",
-    BRANCH: "branch",
-    AGENT: "agent",
-    CUSTOMER: "customer",
-    CARRIER: "carrier",
-    LOAD: "load"
-}
+  OFFICE: 'office',
+  BRANCH: 'branch',
+  AGENT: 'agent',
+  CUSTOMER: 'customer',
+  CARRIER: 'carrier',
+  LOAD: 'load',
+};
 
 // export enum FileType {
 //     PERSONAL = 'PERSONAL',

@@ -9,7 +9,7 @@ import { AppointmentQueryDTO, AppointmentQuerySetEventStatusDTO } from './dto/ap
 @Controller('appointment')
 @ApiTags('Appointment Endpoints')
 export class AppointmentController {
-  constructor(private readonly appointmentService: AppointmentService) { }
+  constructor(private readonly appointmentService: AppointmentService) {}
 
   @Post()
   @Public()
@@ -31,12 +31,9 @@ export class AppointmentController {
   @ApiOkResponse({ type: AppointmentDto })
   async setStatus(
     @Param('id', ParseObjectIdPipe) id: string,
-    @Query() status: AppointmentQuerySetEventStatusDTO
+    @Query() status: AppointmentQuerySetEventStatusDTO,
   ): Promise<AppointmentDto> {
-    const staff = await this.appointmentService.setStatus(
-      id,
-      status
-    );
+    const staff = await this.appointmentService.setStatus(id, status);
     return staff;
   }
   @Get()
@@ -48,14 +45,14 @@ export class AppointmentController {
   @Get(':clientId/client')
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: AppointmentDto })
-  findClients(@Param('clientId', ParseObjectIdPipe) clientId: string,) {
+  findClients(@Param('clientId', ParseObjectIdPipe) clientId: string) {
     return this.appointmentService.findClients(clientId);
   }
 
   @Get(':staffId/staff')
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: AppointmentDto })
-  findStaff(@Param('staffId', ParseObjectIdPipe) staffId: string,) {
+  findStaff(@Param('staffId', ParseObjectIdPipe) staffId: string) {
     return this.appointmentService.findStaff(staffId);
   }
 
@@ -69,7 +66,10 @@ export class AppointmentController {
   @Patch(':id')
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: AppointmentDto })
-  update(@Param('id', ParseObjectIdPipe) id: string, @Body() updateAppointmentDto: UpdateAppointmentDto) {
+  update(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Body() updateAppointmentDto: UpdateAppointmentDto,
+  ) {
     return this.appointmentService.update(id, updateAppointmentDto);
   }
 

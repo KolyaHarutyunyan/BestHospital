@@ -10,7 +10,7 @@ import { ClaimStatus } from './claim.constants';
 @Controller('claim')
 @ApiTags('Claim Endpoints')
 export class ClaimController {
-  constructor(private readonly claimService: ClaimService) { }
+  constructor(private readonly claimService: ClaimService) {}
 
   @Post()
   @ApiHeader({ name: ACCESS_TOKEN })
@@ -23,9 +23,7 @@ export class ClaimController {
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiQuery({ name: 'group', enum: MergeClaims })
   @ApiOkResponse({ type: [ClaimDto] })
-  generateClaims(@Body() generateClaims: GenerateClaimDto,
-    @Query('group') group: MergeClaims
-  ) {
+  generateClaims(@Body() generateClaims: GenerateClaimDto, @Query('group') group: MergeClaims) {
     return this.claimService.generateClaims(generateClaims, group);
   }
 
@@ -64,12 +62,7 @@ export class ClaimController {
     @Query('details') details: string,
   ) {
     const userId: string = req.body.user.id;
-    const billing = await this.claimService.setStatus(
-      claimId,
-      status,
-      userId,
-      details
-    );
+    const billing = await this.claimService.setStatus(claimId, status, userId, details);
     return billing;
   }
 }

@@ -8,6 +8,6 @@ import { StaffModule } from '../staff/staff.module';
 @Module({
   imports: [BillingModule, StaffModule],
   controllers: [ClaimController],
-  providers: [ClaimService, ClaimSanitizer]
+  providers: [ClaimService, ClaimSanitizer],
 })
 export class ClaimModule {}

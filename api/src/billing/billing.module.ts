@@ -8,6 +8,6 @@ import { BillingSanitizer } from './interceptor/billing.interceptor';
   imports: [StaffModule],
   controllers: [BillingController],
   providers: [BillingService, BillingSanitizer],
-  exports: [BillingService]
+  exports: [BillingService],
 })
 export class BillingModule {}
