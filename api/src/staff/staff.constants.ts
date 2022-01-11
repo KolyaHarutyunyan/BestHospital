@@ -3,8 +3,8 @@ export const summaries = {
 };
 
 export enum StaffStatus {
-  INACTIVE = "INACTIVE",
-  ACTIVE = "ACTIVE",
-  HOLD = "HOLD",
-  TERMINATE = "TERMINATE"
+  INACTIVE = 'INACTIVE',
+  ACTIVE = 'ACTIVE',
+  HOLD = 'HOLD',
+  TERMINATE = 'TERMINATE',
 }

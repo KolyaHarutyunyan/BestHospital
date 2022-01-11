@@ -9,7 +9,7 @@ import { ACCESS_TOKEN } from '../authN/authN.constants';
 @Controller('service')
 @ApiTags('Service Endpoints')
 export class ServiceController {
-  constructor(private readonly serviceService: ServiceService) { }
+  constructor(private readonly serviceService: ServiceService) {}
 
   @Post()
   @ApiHeader({ name: ACCESS_TOKEN })

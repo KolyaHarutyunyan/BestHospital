@@ -2,8 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsDateString,
-  IsEmail,
-  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsPhoneNumber,
@@ -12,7 +10,7 @@ import {
 } from 'class-validator';
 import { UserDTO } from 'src/authN';
 import { AddressDTO } from '../../address';
-import {LicenseDTO} from './license.dto';
+import { LicenseDTO } from './license.dto';
 
 export class CreateStaffDto {
   @ApiProperty()

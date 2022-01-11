@@ -14,7 +14,6 @@ export class EnrollmentService {
   constructor(
     private readonly fundingService: FundingService,
     private readonly sanitizer: EnrollmentSanitizer,
-
   ) {
     this.model = ClientEnrollmentModel;
     this.clientModel = ClientModel;
@@ -26,7 +25,11 @@ export class EnrollmentService {
   private mongooseUtil: MongooseUtil;
 
   // create enrollment
-  async create(dto: CreateEnrollmentDTO, clientId: string, funderId: string): Promise<EnrollmentDTO> {
+  async create(
+    dto: CreateEnrollmentDTO,
+    clientId: string,
+    funderId: string,
+  ): Promise<EnrollmentDTO> {
     try {
       const client = await this.clientModel.findById({ _id: clientId });
       this.checkClient(client);
@@ -35,7 +38,7 @@ export class EnrollmentService {
         const findEnrollment = await this.model.findOne({ clientId, primary: true });
         if (findEnrollment !== null) {
           findEnrollment.primary = false;
-          await findEnrollment.save()
+          await findEnrollment.save();
         }
       }
       let enrollment = new this.model({
@@ -43,7 +46,7 @@ export class EnrollmentService {
         funderId,
         primary: dto.primary,
         startDate: dto.startDate,
-        terminationDate: dto.terminationDate
+        terminationDate: dto.terminationDate,
       });
       await enrollment.save();
       if (enrollment.primary) {
@@ -61,7 +64,9 @@ export class EnrollmentService {
   // find all enrollments
   async findAll(clientId: string): Promise<EnrollmentDTO[]> {
     try {
-      const enrollments = await this.model.find({ clientId }).populate({ path: 'funderId', select: 'name' });
+      const enrollments = await this.model
+        .find({ clientId })
+        .populate({ path: 'funderId', select: 'name' });
       return this.sanitizer.sanitizeMany(enrollments);
     } catch (e) {
       throw e;
@@ -78,26 +83,31 @@ export class EnrollmentService {
     }
   }
   // update the enrollment
-  async update(_id: string, clientId: string, funderId: string, dto: UpdateEnrollmentDTO): Promise<EnrollmentDTO> {
+  async update(
+    _id: string,
+    clientId: string,
+    funderId: string,
+    dto: UpdateEnrollmentDTO,
+  ): Promise<EnrollmentDTO> {
     try {
       const enrollment = await this.model.findById({ _id, clientId });
       this.checkEnrollment(enrollment);
       const client = await this.clientModel.findById({ _id: clientId });
       this.checkClient(client);
-      if (dto.startDate) enrollment.startDate = dto.startDate
-      if (dto.terminationDate) enrollment.terminationDate = dto.terminationDate
+      if (dto.startDate) enrollment.startDate = dto.startDate;
+      if (dto.terminationDate) enrollment.terminationDate = dto.terminationDate;
 
       if (dto.primary) {
         const findEnrollment = await this.model.findOne({ clientId, primary: true });
         if (findEnrollment !== null && enrollment.id != findEnrollment.id) {
           findEnrollment.primary = false;
-          await findEnrollment.save()
+          await findEnrollment.save();
         }
       }
 
       enrollment.primary = dto.primary;
       // enrollment.funderId = funderId;
-      await enrollment.save()
+      await enrollment.save();
       if (enrollment.primary) {
         client.enrollment = funderId;
         await client.save();
@@ -114,12 +124,9 @@ export class EnrollmentService {
     const enrollment = await this.model.findById({ _id });
     this.checkEnrollment(enrollment);
     if (enrollment.primary) {
-      throw new HttpException(
-        'Can not delete the primary enrollment',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Can not delete the primary enrollment', HttpStatus.NOT_FOUND);
     }
-    await enrollment.remove()
+    await enrollment.remove();
     return enrollment._id;
   }
 
@@ -127,20 +134,14 @@ export class EnrollmentService {
   /** if the client is not found, throws an exception */
   private checkClient(client: IClient) {
     if (!client) {
-      throw new HttpException(
-        'Client with this id was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Client with this id was not found', HttpStatus.NOT_FOUND);
     }
   }
-  
+
   /** if the enrollment is not found, throws an exception */
   private checkEnrollment(enrollment: IEnrollment) {
     if (!enrollment) {
-      throw new HttpException(
-        'Enrollment with this id was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Enrollment with this id was not found', HttpStatus.NOT_FOUND);
     }
   }
 }

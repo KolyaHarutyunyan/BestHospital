@@ -6,13 +6,13 @@ import { IStaff } from './interface';
 
 export const TerminationSchema = {
   date: { type: Date },
-  reason: { type: String }
-}
+  reason: { type: String },
+};
 export const LicenseSchema = {
   driverLicense: { type: String },
   expireDate: { type: String },
-  state: { type: String }
-}
+  state: { type: String },
+};
 
 const StaffSchema = new Schema({
   email: { type: String, unique: true },
@@ -28,15 +28,12 @@ const StaffSchema = new Schema({
   birthday: { type: Date },
   residency: { type: String },
   ssn: { type: Number },
-  status: { type: String, enum: StaffStatus, default: "ACTIVE" },
+  status: { type: String, enum: StaffStatus, default: 'ACTIVE' },
   createdDate: { type: Date, default: Date.now },
   license: LicenseSchema,
-  // availability: {type: Number, enum: UserAvailabilityStatus}
   termination: TerminationSchema,
-  // credentailStatus: { type: Number, enum: CredentialsStatus }
-  // employmentId: { type: Types.ObjectId, ref: 'Employment' },
   address: addressSchema,
-  clinical: { type: Boolean }
+  clinical: { type: Boolean },
 });
 
 export const StaffModel = model<IStaff>('Staff', StaffSchema);

@@ -8,7 +8,7 @@ import { ACCESS_TOKEN } from '../../authN/authN.constants';
 @Controller('timesheet')
 @ApiTags('TimeSheet Endpoints')
 export class TimesheetController {
-  constructor(private readonly timesheetService: TimesheetService) { }
+  constructor(private readonly timesheetService: TimesheetService) {}
 
   @Post()
   @ApiHeader({ name: ACCESS_TOKEN })
@@ -20,7 +20,10 @@ export class TimesheetController {
   @Patch(':id')
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: TimeSheetDTO })
-  async update(@Param('id', ParseObjectIdPipe) id: string, @Body() editTimesheetDto: EditTimesheetDTO) {
+  async update(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Body() editTimesheetDto: EditTimesheetDTO,
+  ) {
     return await this.timesheetService.update(id, editTimesheetDto);
   }
 

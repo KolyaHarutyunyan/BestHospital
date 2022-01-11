@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ISanitize } from '../../util';
-import { IService} from '../interface';
+import { IService } from '../interface';
 import { ServiceDTO } from '../dto';
 
 @Injectable()
@@ -12,16 +12,15 @@ export class ServiceSanitizer implements ISanitize {
       id: service._id,
       name: service.name,
       displayCode: service.displayCode,
-      category: service.category
+      category: service.category,
     };
     return serviceDTO;
   }
 
-
   sanitizeMany(services: IService[]): ServiceDTO[] {
     const serviceDTOs: ServiceDTO[] = [];
     for (let i = 0; i < services.length; i++) {
-        serviceDTOs.push(this.sanitize(services[i]));
+      serviceDTOs.push(this.sanitize(services[i]));
     }
     return serviceDTOs;
   }

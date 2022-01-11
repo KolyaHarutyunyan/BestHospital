@@ -75,7 +75,6 @@ export class TimesheetService {
     }
   }
 
-
   /** Private Methods */
   /**  */
   async getTotalAmount(
@@ -224,7 +223,7 @@ export class TimesheetService {
       throw e;
     }
   }
-  
+
   async findOne(_id: string): Promise<TimeSheetDTO> {
     try {
       const timesheet: any = await this.model.findById(_id).populate({

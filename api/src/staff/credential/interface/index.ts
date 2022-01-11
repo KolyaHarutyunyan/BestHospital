@@ -1,1 +1,1 @@
-export { ICredential } from './credential.interface'
+export { ICredential } from './credential.interface';

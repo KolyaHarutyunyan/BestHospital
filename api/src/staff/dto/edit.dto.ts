@@ -1,6 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsDateString, IsEmail, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsPhoneNumber, IsString, ValidateNested } from 'class-validator';
+import {
+  IsDateString,
+  IsNumber,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { UserDTO } from '../../authN';
 import { LicenseDTO } from './license.dto';
 
@@ -60,5 +67,5 @@ export class EditStaffDTO {
   @Type(() => LicenseDTO)
   @IsOptional()
   license: LicenseDTO;
-  user: UserDTO
+  user: UserDTO;
 }

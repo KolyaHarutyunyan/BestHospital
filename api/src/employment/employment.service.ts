@@ -25,10 +25,7 @@ export class EmploymentService {
   async create(dto: CreateEmploymentDto): Promise<EmploymentDto> {
     try {
       if (new Date(dto.startDate) > new Date(dto.endDate)) {
-        throw new HttpException(
-          `startDate can't be high then endDate`,
-          HttpStatus.BAD_REQUEST,
-        );
+        throw new HttpException(`startDate can't be high then endDate`, HttpStatus.BAD_REQUEST);
       }
       const staff = await this.staffService.findById(dto.staffId);
       let employment = new this.model({
@@ -37,7 +34,7 @@ export class EmploymentService {
         termination: dto.termination,
         startDate: dto.startDate,
         title: dto.title,
-      }); 
+      });
       const date = new Date().getTime();
       if (dto.endDate) {
         const endDate = new Date(dto.endDate).getTime();
@@ -45,7 +42,9 @@ export class EmploymentService {
           let activeEmployment = await this.model.findOne({ active: true, staffId: staff.id });
           if (activeEmployment) {
             activeEmployment.active = false;
-            activeEmployment.endDate = new Date(new Date(dto.startDate).setDate(new Date(dto.startDate).getDate() - 1));
+            activeEmployment.endDate = new Date(
+              new Date(dto.startDate).setDate(new Date(dto.startDate).getDate() - 1),
+            );
             await activeEmployment.save();
           }
           employment.active = true;
@@ -105,10 +104,7 @@ export class EmploymentService {
   // update the employment
   async update(_id: string, dto: UpdateEmploymentDto): Promise<EmploymentDto> {
     if (new Date(dto.startDate) > new Date(dto.endDate)) {
-      throw new HttpException(
-        `startDate can't be high then endDate`,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(`startDate can't be high then endDate`, HttpStatus.BAD_REQUEST);
     }
     let employment = await this.model.findById({ _id });
     this.checkEmployment(employment);
@@ -135,17 +131,21 @@ export class EmploymentService {
     if (dto.endDate) {
       const endDate = new Date(dto.endDate).getTime();
       if (endDate >= date) {
-        let activeEmployment = await this.model.findOne({ active: true, staffId: employment.staffId });
+        let activeEmployment = await this.model.findOne({
+          active: true,
+          staffId: employment.staffId,
+        });
         if (activeEmployment) {
           activeEmployment.active = false;
-          activeEmployment.endDate = new Date(new Date(dto.startDate).setDate(new Date(dto.startDate).getDate() - 1));
+          activeEmployment.endDate = new Date(
+            new Date(dto.startDate).setDate(new Date(dto.startDate).getDate() - 1),
+          );
           await activeEmployment.save();
         }
         employment.active = true;
       }
       employment.endDate = dto.endDate;
-    }
-    else{
+    } else {
       employment.active = true;
     }
     if (dto.startDate) employment.startDate = dto.startDate;

@@ -1,5 +1,4 @@
 export const ScheduleStatus = {
-    HALF: 0,
-    FULL: 1
-  }
-  
+  HALF: 0,
+  FULL: 1,
+};

@@ -7,6 +7,6 @@ import { AddressModule } from '../../address/address.module';
 @Module({
   imports: [AddressModule],
   controllers: [ContactController],
-  providers: [ContactService, ContactSanitizer]
+  providers: [ContactService, ContactSanitizer],
 })
-export class ContactModule { }
+export class ContactModule {}

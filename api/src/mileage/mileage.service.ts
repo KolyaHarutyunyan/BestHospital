@@ -7,9 +7,7 @@ import { MileageModel } from './mileage.model';
 
 @Injectable()
 export class MileageService {
-  constructor(
-    private readonly sanitizer: MileageSanitizer,
-  ) {
+  constructor(private readonly sanitizer: MileageSanitizer) {
     this.model = MileageModel;
   }
   private model: Model<IMileage>;
@@ -18,8 +16,8 @@ export class MileageService {
   async create(dto: CreateMileageDto): Promise<MileageDTO> {
     const mileage = new this.model({
       compensation: dto.compensation,
-      startDate: dto.startDate
-    })
+      startDate: dto.startDate,
+    });
     await mileage.save();
     return this.sanitizer.sanitize(mileage);
   }
@@ -44,7 +42,7 @@ export class MileageService {
     this.checkMileage(mileage);
     if (dto.compensation) mileage.compensation = dto.compensation;
     if (dto.startDate) mileage.startDate = dto.startDate;
-    await mileage.save()
+    await mileage.save();
     return this.sanitizer.sanitize(mileage);
   }
 
@@ -59,10 +57,7 @@ export class MileageService {
   /** if the Mileage is not found, throws an exception */
   private checkMileage(mileage: IMileage) {
     if (!mileage) {
-      throw new HttpException(
-        'Mileage with this id was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Mileage with this id was not found', HttpStatus.NOT_FOUND);
     }
   }
 }

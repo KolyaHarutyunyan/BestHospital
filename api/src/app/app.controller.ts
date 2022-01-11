@@ -4,7 +4,7 @@ import { Get, Controller, Render, Res } from '@nestjs/common';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) { }
+  constructor(private readonly appService: AppService) {}
 
   @Get('dropDatabase')
   @Public()
@@ -21,11 +21,8 @@ export class AppController {
 
   @Get('pdf')
   @Public()
-  async getInvoicePdfByUUID(
-    @Res() res: any,
-  ): Promise<void> {
-
-    const buffer = await this.appService.generatePDF()
+  async getInvoicePdfByUUID(@Res() res: any): Promise<void> {
+    const buffer = await this.appService.generatePDF();
 
     res.set({
       // pdf
@@ -35,11 +32,10 @@ export class AppController {
 
       // prevent cache
       'Cache-Control': 'no-cache, no-store, must-revalidate',
-      'Pragma': 'no-cache',
-      'Expires': 0,
-    })
+      Pragma: 'no-cache',
+      Expires: 0,
+    });
 
-    res.end(buffer)
+    res.end(buffer);
   }
-
 }

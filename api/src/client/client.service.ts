@@ -3,24 +3,18 @@ import { CreateClientDTO, UpdateClientDto } from './dto';
 import { MongooseUtil } from '../util';
 import { Model, Types } from 'mongoose';
 import { ClientModel } from './client.model';
-import { FundingService } from '../funding';
 import { ServiceService } from '../service';
 import { ClientSanitizer } from './interceptor';
 import { IClient } from './interface';
 import { HistoryService, serviceLog } from '../history';
-import {
-  ClientDTO,
-} from './dto';
+import { ClientDTO } from './dto';
 import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
 
 @Injectable()
 export class ClientService {
   constructor(
-    // private readonly addressService: AddressService,
     private readonly sanitizer: ClientSanitizer,
     private readonly historyService: HistoryService,
-    private readonly fundingService: FundingService,
-    private readonly service: ServiceService,
   ) {
     this.model = ClientModel;
     this.mongooseUtil = new MongooseUtil();
@@ -41,10 +35,15 @@ export class ClientService {
         familyLanguage: dto.familyLanguage,
         gender: dto.gender,
         status: dto.status,
-        birthday: dto.birthday
+        birthday: dto.birthday,
       });
       await client.save();
-      await this.historyService.create({ resource: client._id, onModel: "Client", title: serviceLog.createClient, user: userId })
+      await this.historyService.create({
+        resource: client._id,
+        onModel: 'Client',
+        title: serviceLog.createClient,
+        user: userId,
+      });
       return this.sanitizer.sanitize(client);
     } catch (e) {
       console.log(e);
@@ -56,16 +55,20 @@ export class ClientService {
   /** returns all clients */
   async findAll(skip: number, limit: number, status: string): Promise<any> {
     try {
-      if(!status){
-        status = "ACTIVE"
+      if (!status) {
+        status = 'ACTIVE';
       }
       let [clients, count] = await Promise.all([
-        this.model.find({ status })
-          .populate({ path: 'enrollment', select: 'name' }).sort({ '_id': 1 }).skip(skip).limit(limit),
-        this.model.countDocuments({ status })
-      ]); 
+        this.model
+          .find({ status })
+          .populate({ path: 'enrollment', select: 'name' })
+          .sort({ _id: 1 })
+          .skip(skip)
+          .limit(limit),
+        this.model.countDocuments({ status }),
+      ]);
       const sanClient = this.sanitizer.sanitizeMany(clients);
-      return { clients: sanClient, count }
+      return { clients: sanClient, count };
     } catch (e) {
       throw e;
     }
@@ -73,7 +76,9 @@ export class ClientService {
 
   /** Get Client By Id */
   async findById(_id: string): Promise<ClientDTO> {
-    const client = await this.model.findById({ _id }).populate({ path: 'enrollment', select: "name" });
+    const client = await this.model
+      .findById({ _id })
+      .populate({ path: 'enrollment', select: 'name' });
     this.checkClient(client);
     return this.sanitizer.sanitize(client);
   }
@@ -92,11 +97,16 @@ export class ClientService {
       if (dto.familyLanguage) client.familyLanguage = dto.familyLanguage;
       if (dto.gender) client.gender = dto.gender;
       if (dto.birthday) {
-        client.birthday = dto.birthday
+        client.birthday = dto.birthday;
       }
 
       await client.save();
-      await this.historyService.create({ resource: client._id, onModel: "Client", title: serviceLog.updateClient, user: userId })
+      await this.historyService.create({
+        resource: client._id,
+        onModel: 'Client',
+        title: serviceLog.updateClient,
+        user: userId,
+      });
       return this.sanitizer.sanitize(client);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Client already exists');
@@ -108,7 +118,7 @@ export class ClientService {
   async remove(_id: string): Promise<string> {
     const client = await this.model.findById({ _id });
     this.checkClient(client);
-    await client.remove()
+    await client.remove();
     return client._id;
   }
 
@@ -116,12 +126,15 @@ export class ClientService {
   setStatus = async (
     _id: string,
     status: string,
-    dto: CreateTerminationDto
+    dto: CreateTerminationDto,
   ): Promise<ClientDTO> => {
     const client = await this.model.findById({ _id });
     this.checkClient(client);
-    if (status != "ACTIVE" && !dto.date) {
-      throw new HttpException('If status is not active, then date is required field', HttpStatus.BAD_REQUEST);
+    if (status != 'ACTIVE' && !dto.date) {
+      throw new HttpException(
+        'If status is not active, then date is required field',
+        HttpStatus.BAD_REQUEST,
+      );
     }
     client.termination.date = dto.date;
     client.status = status;
@@ -136,19 +149,13 @@ export class ClientService {
   /** if the date is not valid, throws an exception */
   private checkTime(date: Date) {
     if (isNaN(date.getTime())) {
-      throw new HttpException(
-        'Date with this format was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Date with this format was not found', HttpStatus.NOT_FOUND);
     }
   }
   /** if the client is not found, throws an exception */
   private checkClient(client: IClient) {
     if (!client) {
-      throw new HttpException(
-        'Client with this id was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Client with this id was not found', HttpStatus.NOT_FOUND);
     }
   }
 }

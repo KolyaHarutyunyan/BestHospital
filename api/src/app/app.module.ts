@@ -29,12 +29,33 @@ import { ClaimModule } from '../claim/claim.module';
 import { InvoiceModule } from '../invoice/invoice.module';
 
 @Module({
-  imports: [AuthNModule, AuthZModule, AddressModule, StaffModule, FundingModule,
-    EmploymentModule, ClientModule, DepartmentModule, CommentModule, HistoryModule,
-    JobModule, SCredentialModule, PaycodeModule, PaycodetypeModule, AvailabilityModule,
-    OvertimeModule, TimesheetModule, FileModule, AppointmentModule, PlaceModule, MileageModule, 
-    BillingModule, ClaimModule, InvoiceModule],
+  imports: [
+    AuthNModule,
+    AuthZModule,
+    AddressModule,
+    StaffModule,
+    FundingModule,
+    EmploymentModule,
+    ClientModule,
+    DepartmentModule,
+    CommentModule,
+    HistoryModule,
+    JobModule,
+    SCredentialModule,
+    PaycodeModule,
+    PaycodetypeModule,
+    AvailabilityModule,
+    OvertimeModule,
+    TimesheetModule,
+    FileModule,
+    AppointmentModule,
+    PlaceModule,
+    MileageModule,
+    BillingModule,
+    ClaimModule,
+    InvoiceModule,
+  ],
   controllers: [AppController],
   providers: [AppService, DatabaseConnection],
 })
-export class AppModule { }
+export class AppModule {}

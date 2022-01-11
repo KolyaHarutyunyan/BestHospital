@@ -5,11 +5,10 @@ import { ParseObjectIdPipe } from '../util';
 import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ACCESS_TOKEN } from '../authN/authN.constants';
 
-
 @Controller('job')
 @ApiTags('Job Endpoints')
 export class JobController {
-  constructor(private readonly jobService: JobService) { }
+  constructor(private readonly jobService: JobService) {}
 
   @Post()
   @ApiHeader({ name: ACCESS_TOKEN })

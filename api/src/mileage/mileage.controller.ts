@@ -8,7 +8,7 @@ import { ACCESS_TOKEN } from '../authN/authN.constants';
 @Controller('mileage')
 @ApiTags('Mileage Endpoints')
 export class MileageController {
-  constructor(private readonly mileageService: MileageService) { }
+  constructor(private readonly mileageService: MileageService) {}
 
   @Post()
   @ApiHeader({ name: ACCESS_TOKEN })

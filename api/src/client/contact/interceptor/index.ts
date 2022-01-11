@@ -1,1 +1,1 @@
-export { ContactSanitizer } from './contact.interceptor'
+export { ContactSanitizer } from './contact.interceptor';

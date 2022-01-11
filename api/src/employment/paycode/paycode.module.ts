@@ -9,6 +9,6 @@ import { PaycodetypeModule } from '../../paycodetype/paycodetype.module';
   imports: [EmploymentModule, PaycodetypeModule],
   controllers: [PaycodeController],
   providers: [PaycodeService, PayCodeSanitizer],
-  exports: [PaycodeService]
+  exports: [PaycodeService],
 })
-export class PaycodeModule { }
+export class PaycodeModule {}

@@ -12,35 +12,38 @@ export class PaycodetypeController {
 
   @Post()
   @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({type: PayCodeTypeDTO})
+  @ApiOkResponse({ type: PayCodeTypeDTO })
   async create(@Body() createPaycodetypeDto: CreatePayCodeTypeDTO) {
     return await this.paycodetypeService.create(createPaycodetypeDto);
   }
 
   @Get()
   @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({type: [PayCodeTypeDTO]})
+  @ApiOkResponse({ type: [PayCodeTypeDTO] })
   async findAll() {
     return this.paycodetypeService.findAll();
   }
 
   @Get(':id')
   @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({type: PayCodeTypeDTO})
+  @ApiOkResponse({ type: PayCodeTypeDTO })
   async findOne(@Param('id', ParseObjectIdPipe) id: string) {
     return await this.paycodetypeService.findOne(id);
   }
 
   @Patch(':id')
   @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({type: PayCodeTypeDTO})
-  async update(@Param('id', ParseObjectIdPipe) id: string, @Body() updatePaycodetypeDto: UpdatePayCodeTypeDTO) {
+  @ApiOkResponse({ type: PayCodeTypeDTO })
+  async update(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Body() updatePaycodetypeDto: UpdatePayCodeTypeDTO,
+  ) {
     return await this.paycodetypeService.update(id, updatePaycodetypeDto);
   }
 
   @Delete(':id')
   @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({type: String})
+  @ApiOkResponse({ type: String })
   async remove(@Param('id', ParseObjectIdPipe) id: string) {
     return await this.paycodetypeService.remove(id);
   }

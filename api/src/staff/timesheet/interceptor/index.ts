@@ -1,1 +1,1 @@
-export {TimeSheetSanitizer} from './timesheet.interceptor';
+export { TimeSheetSanitizer } from './timesheet.interceptor';

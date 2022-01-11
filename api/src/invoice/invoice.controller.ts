@@ -8,7 +8,7 @@ import { ParseObjectIdPipe } from '../util';
 @Controller('invoice')
 @ApiTags('Invoice Endpoints')
 export class InvoiceController {
-  constructor(private readonly invoiceService: InvoiceService) { }
+  constructor(private readonly invoiceService: InvoiceService) {}
 
   @Post()
   @ApiHeader({ name: ACCESS_TOKEN })
@@ -20,7 +20,8 @@ export class InvoiceController {
   @ApiHeader({ name: ACCESS_TOKEN })
   // @ApiQuery({ name: 'group', enum: MergeClaims })
   @ApiOkResponse({ type: [InvoiceDto] })
-  generateClaims(@Body() generateInvoices: GenerateInvoiceDto,
+  generateClaims(
+    @Body() generateInvoices: GenerateInvoiceDto,
     // @Query('group') group: MergeClaims
   ) {
     return this.invoiceService.generateInvoices(generateInvoices);

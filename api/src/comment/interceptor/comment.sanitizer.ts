@@ -6,7 +6,7 @@ import { AddressSanitizer } from '../../address';
 
 @Injectable()
 export class CommentSanitizer implements ISanitize {
-  constructor(private readonly addressSanitizer: AddressSanitizer) { }
+  constructor(private readonly addressSanitizer: AddressSanitizer) {}
 
   sanitize(comment: IComment): CommentDTO {
     const CommentDTO: CommentDTO = {
@@ -16,7 +16,7 @@ export class CommentSanitizer implements ISanitize {
       resource: comment.resource,
       onModel: comment.onModel,
       user: comment.user,
-      created: comment.created
+      created: comment.created,
     };
     return CommentDTO;
   }

@@ -1,1 +1,1 @@
-export { IEmployment } from './employment.interface'
+export { IEmployment } from './employment.interface';

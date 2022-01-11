@@ -12,10 +12,10 @@ export class InvoiceService {
   constructor(
     private readonly sanitizer: InvoiceSanitizer,
     private readonly billingService: BillingService,
-    // private readonly receivableService: ReceivableService,
-    // private readonly staffService: StaffService,
+  ) // private readonly receivableService: ReceivableService,
+  // private readonly staffService: StaffService,
 
-  ) {
+  {
     this.model = InvoiceModel;
     this.mongooseUtil = new MongooseUtil();
   }
@@ -31,16 +31,12 @@ export class InvoiceService {
   async generateInvoices(dto: GenerateInvoiceDto): Promise<any> {
     const bills: any = await this.billingService.findByIds(dto.bills, true);
     if (!bills.length || bills.length < dto.bills.length) {
-      throw new HttpException(
-        'Bills with this ids was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Bills with this ids was not found', HttpStatus.NOT_FOUND);
     }
-    const invoices = await this.groupBills(bills)
+    const invoices = await this.groupBills(bills);
     return invoices;
     // return this.sanitizer.sanitizeMany(claims);
   }
-
 
   /** get all invoices */
   async findAll() {
@@ -63,7 +59,10 @@ export class InvoiceService {
   /** Private methods */
   /** create invoice with receivables with bills */
   async groupBills(bills: string[]): Promise<any> {
-    let invoice = [], receivable = [], receivableCreatedAt = [], subBills = [];
+    let invoice = [],
+      receivable = [],
+      receivableCreatedAt = [],
+      subBills = [];
 
     /** group the bills by payer and clent */
     const result = this.groupBy(bills, function (item) {
@@ -74,8 +73,13 @@ export class InvoiceService {
     for (let i = 0; i < result.length; i++) {
       for (let j = 0; j < result[i].length; ++j) {
         subBills.push(result[i][j]);
-        await this.addReceivable(receivable, result[i][j], result[i][0].placeService, result[i][0].authService.serviceId.cptCode);
-        receivableCreatedAt.push(new Date())
+        await this.addReceivable(
+          receivable,
+          result[i][j],
+          result[i][0].placeService,
+          result[i][0].authService.serviceId.cptCode,
+        );
+        receivableCreatedAt.push(new Date());
 
         if (j !== 0 && j === 5) {
           await this.addInvoice(invoice, result[i][j], receivable, receivableCreatedAt, subBills);
@@ -93,7 +97,7 @@ export class InvoiceService {
     }
 
     /** set bill claimStatus to CLAIMED */
-    await this.model.insertMany(invoice)
+    await this.model.insertMany(invoice);
     // await this.billingService.billClaim(bills);
     return invoice;
   }
@@ -108,12 +112,17 @@ export class InvoiceService {
     });
     return Object.keys(groups).map(function (group) {
       return groups[group];
-    })
+    });
   }
 
   /** add receivable */
   /** development */
-  private async addReceivable(receivable, result, placeService: string, cptCode: number): Promise<void> {
+  private async addReceivable(
+    receivable,
+    result,
+    placeService: string,
+    cptCode: number,
+  ): Promise<void> {
     receivable.push({
       placeService,
       cptCode,
@@ -123,25 +132,34 @@ export class InvoiceService {
       dateOfService: { start: new Date(result.createdDate), end: new Date(result.createdDate) },
       // serviceDate: result.appointment.createdDate,
       createdAt: new Date(),
-      bills: result._id
-    })
+      bills: result._id,
+    });
   }
 
   /** add claim */
-  private async addInvoice(invoice, result, receivable, receivableCreatedAt, subBills): Promise<void> {
+  private async addInvoice(
+    invoice,
+    result,
+    receivable,
+    receivableCreatedAt,
+    subBills,
+  ): Promise<void> {
     invoice.push({
       client: result.client,
       staff: result.staff,
       funder: result.payer,
       ammountPaid: 0,
-      dateRange: { early: this.minMax(receivableCreatedAt)[0], latest: this.minMax(receivableCreatedAt)[1] },
-      status: "PENDING",
+      dateRange: {
+        early: this.minMax(receivableCreatedAt)[0],
+        latest: this.minMax(receivableCreatedAt)[1],
+      },
+      status: 'PENDING',
       invoiceTotal: 1500,
       totalTime: 5892,
       dueDate: '2021-12-28T07:02:16.250Z',
       downloadLink: '',
-      receivable
-    })
+      receivable,
+    });
   }
 
   /** return min max date in date range */
@@ -152,10 +170,7 @@ export class InvoiceService {
   /** if the invoice is not found, throws an exception */
   private checkInvoice(invoice: IInvoice) {
     if (!invoice) {
-      throw new HttpException(
-        'Invoice with this id was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Invoice with this id was not found', HttpStatus.NOT_FOUND);
     }
   }
 }

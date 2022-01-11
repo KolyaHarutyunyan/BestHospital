@@ -10,6 +10,6 @@ import { AddressSanitizer } from '../address';
 @Module({
   imports: [ClientModule, FundingModule, StaffModule],
   controllers: [CommentController],
-  providers: [CommentService, CommentSanitizer, AddressSanitizer]
+  providers: [CommentService, CommentSanitizer, AddressSanitizer],
 })
-export class CommentModule { }
+export class CommentModule {}

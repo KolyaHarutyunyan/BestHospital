@@ -8,9 +8,7 @@ import { PlaceModel } from './place.model';
 
 @Injectable()
 export class PlaceService {
-  constructor(
-    private readonly sanitizer: PlaceSanitizer,
-  ) {
+  constructor(private readonly sanitizer: PlaceSanitizer) {
     this.model = PlaceModel;
     this.mongooseUtil = new MongooseUtil();
   }
@@ -22,12 +20,11 @@ export class PlaceService {
     try {
       const place = new this.model({
         name: dto.name,
-        code: dto.code
-      })
-      await place.save()
-      return this.sanitizer.sanitize(place)
-    }
-    catch (e) {
+        code: dto.code,
+      });
+      await place.save();
+      return this.sanitizer.sanitize(place);
+    } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Place already exists');
       throw e;
     }
@@ -42,9 +39,8 @@ export class PlaceService {
   // find place by id
   async findOne(_id: string): Promise<PlaceDTO> {
     const place = await this.model.findById(_id);
-    this.checkPlace(place)
-    return this.sanitizer.sanitize(place)
-
+    this.checkPlace(place);
+    return this.sanitizer.sanitize(place);
   }
 
   // update the place
@@ -68,10 +64,7 @@ export class PlaceService {
   /** if the place is not found, throws an exception */
   private checkPlace(place: IPlace) {
     if (!place) {
-      throw new HttpException(
-        'Place with this id was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Place with this id was not found', HttpStatus.NOT_FOUND);
     }
   }
 }

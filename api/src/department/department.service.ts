@@ -1,6 +1,6 @@
 import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
 import { MongooseUtil } from '../util';
-import { UpdateDepartmentDTO, CreateDepartmentDTO, DepartmentDTO } from './dto'
+import { UpdateDepartmentDTO, CreateDepartmentDTO, DepartmentDTO } from './dto';
 import { DepartmentModel } from './department.model';
 import { IDepartment } from './interface';
 import { Model } from 'mongoose';
@@ -8,9 +8,7 @@ import { DepartmentSanitizer } from './interceptor/department.sanitizer';
 
 @Injectable()
 export class DepartmentService {
-  constructor(
-    private readonly sanitizer: DepartmentSanitizer
-  ) {
+  constructor(private readonly sanitizer: DepartmentSanitizer) {
     this.model = DepartmentModel;
     this.mongooseUtil = new MongooseUtil();
   }
@@ -21,12 +19,11 @@ export class DepartmentService {
   async create(dto: CreateDepartmentDTO): Promise<DepartmentDTO> {
     try {
       let department = new this.model({
-        name: dto.name
+        name: dto.name,
       });
       await department.save();
-      return this.sanitizer.sanitize(department)
-    }
-    catch (e) {
+      return this.sanitizer.sanitize(department);
+    } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Department already exists');
       throw e;
     }
@@ -36,18 +33,17 @@ export class DepartmentService {
   async findAll(): Promise<DepartmentDTO[]> {
     try {
       const departments = await this.model.find();
-      return this.sanitizer.sanitizeMany(departments)
-    }
-    catch (e) {
-      throw e
+      return this.sanitizer.sanitizeMany(departments);
+    } catch (e) {
+      throw e;
     }
   }
 
   // find the department
   async findOne(_id: string): Promise<DepartmentDTO> {
-    let department = await this.model.findById({ _id })
+    let department = await this.model.findById({ _id });
     this.checkDepartment(department);
-    return this.sanitizer.sanitize(department)
+    return this.sanitizer.sanitize(department);
   }
 
   // update the department
@@ -56,11 +52,10 @@ export class DepartmentService {
       const department = await this.model.findById({ _id });
       this.checkDepartment(department);
       department.name = dto.name;
-      await department.save()
-      return this.sanitizer.sanitize(department)
-    }
-    catch (e) {
-      throw e
+      await department.save();
+      return this.sanitizer.sanitize(department);
+    } catch (e) {
+      throw e;
     }
   }
 
@@ -70,9 +65,8 @@ export class DepartmentService {
       const department = await this.model.findByIdAndDelete({ _id });
       this.checkDepartment(department);
       return department._id;
-    }
-    catch (e) {
-      throw e
+    } catch (e) {
+      throw e;
     }
   }
 
@@ -80,10 +74,7 @@ export class DepartmentService {
   /** if the department is not valid, throws an exception */
   private checkDepartment(department: IDepartment) {
     if (!department) {
-      throw new HttpException(
-        'Department with this id was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Department with this id was not found', HttpStatus.NOT_FOUND);
     }
   }
 }

@@ -13,4 +13,4 @@ import { ServiceModule } from '../service';
   controllers: [StaffController],
   exports: [StaffService],
 })
-export class StaffModule { }
+export class StaffModule {}

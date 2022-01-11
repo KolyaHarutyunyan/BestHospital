@@ -9,11 +9,16 @@ import { CredentialService } from '../../credential/credential.service';
 import { CredentialModule } from '../../credential';
 import { ModifySanitizer } from '../../funding/modifier/interceptor/modifier.interceptor';
 import { CredentialSanitizer } from 'src/credential/interceptor/credential.sanitizer';
-// import { ModifierModule } from 'test/modules';
+
 @Module({
   imports: [FundingModule, ModifierModule, CredentialModule],
   controllers: [AuthorizationserviceController],
-  providers: [AuthorizationserviceService, AuthorizationServiceSanitizer, ModifierService, ModifySanitizer],
-  exports: [AuthorizationserviceService]
+  providers: [
+    AuthorizationserviceService,
+    AuthorizationServiceSanitizer,
+    ModifierService,
+    ModifySanitizer,
+  ],
+  exports: [AuthorizationserviceService],
 })
-export class AuthorizationserviceModule { }
+export class AuthorizationserviceModule {}

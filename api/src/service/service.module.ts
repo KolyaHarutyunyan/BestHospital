@@ -6,6 +6,6 @@ import { ServiceSanitizer } from './interceptor';
 @Module({
   controllers: [ServiceController],
   providers: [ServiceService, ServiceSanitizer],
-  exports: [ServiceModule, ServiceService]
+  exports: [ServiceModule, ServiceService],
 })
 export class ServiceModule {}

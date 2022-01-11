@@ -8,10 +8,7 @@ import { PayCodeTypeSanitizer } from './interceptor/paycodetype.interceptor';
 
 @Injectable()
 export class PaycodetypeService {
-  constructor(
-    private readonly sanitizer: PayCodeTypeSanitizer,
-
-  ) {
+  constructor(private readonly sanitizer: PayCodeTypeSanitizer) {
     this.model = PayCodeTypeModel;
     this.mongooseUtil = new MongooseUtil();
   }
@@ -25,28 +22,27 @@ export class PaycodetypeService {
       code: dto.code,
       type: dto.type,
       overtime: dto.overtime,
-      pto: dto.pto
-    })
+      pto: dto.pto,
+    });
     await payCodeType.save();
-    return this.sanitizer.sanitize(payCodeType)
+    return this.sanitizer.sanitize(payCodeType);
   }
 
   // find all payCodeTypes
   async findAll(): Promise<PayCodeTypeDTO[]> {
     try {
       const payCodeType = await this.model.find();
-      return this.sanitizer.sanitizeMany(payCodeType)
-    }
-    catch (e) {
-      throw e
+      return this.sanitizer.sanitizeMany(payCodeType);
+    } catch (e) {
+      throw e;
     }
   }
 
   // find payCodeType by id
   async findOne(_id: string): Promise<PayCodeTypeDTO> {
-    let payCodeType = await this.model.findById({ _id })
-    this.checkPayCodeType(payCodeType)
-    return this.sanitizer.sanitize(payCodeType)
+    let payCodeType = await this.model.findById({ _id });
+    this.checkPayCodeType(payCodeType);
+    return this.sanitizer.sanitize(payCodeType);
   }
 
   // update the payCodeType
@@ -72,7 +68,7 @@ export class PaycodetypeService {
   async remove(_id: string): Promise<string> {
     const payCodeType = await this.model.findById({ _id });
     this.checkPayCodeType(payCodeType);
-    await payCodeType.remove()
+    await payCodeType.remove();
     return payCodeType._id;
   }
 
@@ -80,10 +76,7 @@ export class PaycodetypeService {
   /** if the employment is not valid, throws an exception */
   private checkPayCodeType(payCodeType: IPayCodeType) {
     if (!payCodeType) {
-      throw new HttpException(
-        'PayCodeType with this id was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('PayCodeType with this id was not found', HttpStatus.NOT_FOUND);
     }
   }
 }

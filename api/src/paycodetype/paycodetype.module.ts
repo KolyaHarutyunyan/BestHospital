@@ -6,6 +6,6 @@ import { PaycodetypeService } from './paycodetype.service';
 @Module({
   controllers: [PaycodetypeController],
   providers: [PaycodetypeService, PayCodeTypeSanitizer],
-  exports: [PaycodetypeService]
+  exports: [PaycodetypeService],
 })
-export class PaycodetypeModule { }
+export class PaycodetypeModule {}

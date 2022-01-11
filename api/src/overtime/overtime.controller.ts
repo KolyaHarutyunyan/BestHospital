@@ -8,7 +8,7 @@ import { ACCESS_TOKEN } from '../authN/authN.constants';
 @Controller('overtime')
 @ApiTags('Overtime Endpoints')
 export class OvertimeController {
-  constructor(private readonly overtimeService: OvertimeService) { }
+  constructor(private readonly overtimeService: OvertimeService) {}
 
   @Post()
   @ApiHeader({ name: ACCESS_TOKEN })
@@ -19,28 +19,31 @@ export class OvertimeController {
 
   @Get()
   @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({type: [OvertimeDTO]})
+  @ApiOkResponse({ type: [OvertimeDTO] })
   async findAll() {
     return await this.overtimeService.findAll();
   }
 
   @Get(':id')
   @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({type: OvertimeDTO})
+  @ApiOkResponse({ type: OvertimeDTO })
   async findOne(@Param('id', ParseObjectIdPipe) id: string) {
     return await this.overtimeService.findOne(id);
   }
 
   @Patch(':id')
   @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({type: OvertimeDTO})
-  async update(@Param('id', ParseObjectIdPipe) id: string, @Body() updateOvertimeDto: UpdateOvertimeDTO) {
+  @ApiOkResponse({ type: OvertimeDTO })
+  async update(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Body() updateOvertimeDto: UpdateOvertimeDTO,
+  ) {
     return await this.overtimeService.update(id, updateOvertimeDto);
   }
 
   @Delete(':id')
   @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({type: String})
+  @ApiOkResponse({ type: String })
   remove(@Param('id', ParseObjectIdPipe) id: string) {
     return this.overtimeService.remove(id);
   }

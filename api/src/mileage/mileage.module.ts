@@ -6,6 +6,6 @@ import { MileageSanitizer } from './interceptor/mileage.interceptor';
 @Module({
   controllers: [MileageController],
   providers: [MileageService, MileageSanitizer],
-  exports: [MileageService]
+  exports: [MileageService],
 })
-export class MileageModule { }
+export class MileageModule {}

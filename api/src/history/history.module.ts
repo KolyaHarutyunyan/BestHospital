@@ -8,4 +8,4 @@ import { HistorySanitizer } from './interceptor';
   providers: [HistoryService, HistorySanitizer],
   exports: [HistoryService],
 })
-export class HistoryModule { }
+export class HistoryModule {}

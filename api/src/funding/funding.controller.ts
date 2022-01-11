@@ -1,9 +1,16 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { FundingService } from './funding.service';
-import { HistoryService } from '../history/history.service';
 
-import { CreateFundingDTO, FundingDTO, UpdateFundingDto, ServiceDTO, UpdateServiceDto, CreateServiceDTO, FundingQueryDTO } from './dto';
+import {
+  CreateFundingDTO,
+  FundingDTO,
+  UpdateFundingDto,
+  ServiceDTO,
+  UpdateServiceDto,
+  CreateServiceDTO,
+  FundingQueryDTO,
+} from './dto';
 import { Public, ParseObjectIdPipe } from '../util';
 import { CreateTerminationDto } from 'src/termination/dto/create-termination.dto';
 
@@ -12,8 +19,7 @@ import { CreateTerminationDto } from 'src/termination/dto/create-termination.dto
 export class FundingController {
   constructor(
     private readonly fundingService: FundingService,
-    private readonly historyService: HistoryService,
-  ) { }
+  ) {}
 
   /** Create a new funder */
   @Post()
@@ -29,48 +35,43 @@ export class FundingController {
   @ApiOkResponse({ type: ServiceDTO })
   async createService(
     @Param('id', ParseObjectIdPipe) id: string,
-    @Body() createServiceDTO: CreateServiceDTO): Promise<ServiceDTO> {
-    const service = await this.fundingService.createService(createServiceDTO, id, createServiceDTO.user.id);
-    return service
+    @Body() createServiceDTO: CreateServiceDTO,
+  ): Promise<ServiceDTO> {
+    const service = await this.fundingService.createService(
+      createServiceDTO,
+      id,
+      createServiceDTO.user.id,
+    );
+    return service;
   }
-
-  /** Create a new modifier */
-  // @Post('/modifier')
-  // @Public()
-  // @ApiOkResponse({ type: ServiceDTO })
-  // async createModifier(
-  //   @Body() createModifierDTO: CreateModifiersDTO): Promise<ModifyDTO> {
-  //   const staffId = '60f01ec194abb63ff8f0aa75';
-  //   const modifier = await this.fundingService.createModifier(createModifierDTO);
-  //   return modifier
-  // }
 
   /** Get all funders */
   @Get()
   @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
   @ApiOkResponse({ type: [FundingDTO] })
   @ApiQuery({
-    name: "skip",
-    description: "where",
+    name: 'skip',
+    description: 'where',
     required: false,
-    type: Number
+    type: Number,
   })
   @ApiQuery({
-    name: "limit",
-    description: "how",
+    name: 'limit',
+    description: 'how',
     required: false,
-    type: Number
+    type: Number,
   })
   @ApiQuery({
-    name: "status",
-    description: "status",
+    name: 'status',
+    description: 'status',
     required: false,
-    type: FundingQueryDTO
+    type: FundingQueryDTO,
   })
   async findAll(
     @Query('skip') skip: number,
     @Query('limit') limit: number,
-    @Query('status') status: string): Promise<FundingDTO[]> {
+    @Query('status') status: string,
+  ): Promise<FundingDTO[]> {
     return await this.fundingService.findAll(skip, limit, status);
   }
 
@@ -85,7 +86,9 @@ export class FundingController {
   @Get('service/:serviceId')
   @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
   @ApiOkResponse({ type: [ServiceDTO] })
-  async findService(@Param('serviceId', ParseObjectIdPipe) serviceId: string): Promise<ServiceDTO[]> {
+  async findService(
+    @Param('serviceId', ParseObjectIdPipe) serviceId: string,
+  ): Promise<ServiceDTO[]> {
     return await this.fundingService.findService(serviceId);
   }
 
@@ -97,19 +100,14 @@ export class FundingController {
     return await this.fundingService.findById(id);
   }
 
-  /** Get Modifier By funding Service Id */
-  // @Get('modifier/:fundingserviceId')
-  // @Public()
-  // @ApiOkResponse({ type: FundingDTO })
-  // async findmodifier(@Param('fundingserviceId', ParseObjectIdPipe) fundingserviceId: string): Promise<FundingDTO> {
-  //   return await this.fundingService.findmodifier(fundingserviceId);
-  // }
-
   /** Edit the Funder */
   @Patch(':id')
   @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
   @ApiOkResponse({ type: FundingDTO })
-  async update(@Param('id', ParseObjectIdPipe) id: string, @Body() updateFundingDto: UpdateFundingDto): Promise<FundingDTO> {
+  async update(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Body() updateFundingDto: UpdateFundingDto,
+  ): Promise<FundingDTO> {
     const funder = await this.fundingService.update(id, updateFundingDto, updateFundingDto.user.id);
     return funder;
   }
@@ -120,20 +118,15 @@ export class FundingController {
   @ApiOkResponse({ type: ServiceDTO })
   async updateService(
     @Param('serviceId', ParseObjectIdPipe) serviceId: string,
-    @Body() updateServiceDto: UpdateServiceDto): Promise<ServiceDTO> {
-    const service = await this.fundingService.updateService(serviceId, updateServiceDto, updateServiceDto.user.id);
-    return service
+    @Body() updateServiceDto: UpdateServiceDto,
+  ): Promise<ServiceDTO> {
+    const service = await this.fundingService.updateService(
+      serviceId,
+      updateServiceDto,
+      updateServiceDto.user.id,
+    );
+    return service;
   }
-
-  /** Edit the Modifier */
-  // @Patch(':modifyId/modifier')
-  // @Public()
-  // // @ApiOkResponse({ type: FundingDTO })
-  // async updateModify(@Param('modifyId', ParseObjectIdPipe) modifyId: string, @Body() updateModifierDto: UpdateModifierDto): Promise<any> {
-  //   const staffId = '60f01ec194abb63ff8f0aa75';
-  //   const modifier = await this.fundingService.updateModifier(modifyId, updateModifierDto);
-  //   return modifier;
-  // }
 
   /** Delete the funder */
   @Delete(':id')
@@ -149,43 +142,9 @@ export class FundingController {
   async setStatus(
     @Param('id', ParseObjectIdPipe) funderId: string,
     @Body() dto: CreateTerminationDto,
-    @Query() status: FundingQueryDTO
+    @Query() status: FundingQueryDTO,
   ): Promise<FundingDTO> {
-    const funder = await this.fundingService.setStatus(
-      funderId,
-      status.status,
-      dto
-    );
+    const funder = await this.fundingService.setStatus(funderId, status.status, dto);
     return funder;
   }
- /** Inactivate a client */
-//  @Patch(':id/setStatus')
-//  @Public()
-//  @ApiQuery({ name: 'status', enum: ClientStatus })
-//  @ApiOkResponse({ type: ClientDTO })
-//  async inactivate(
-//    @Param('id', ParseObjectIdPipe) clientId: string,
-//    @Body() dto: CreateTerminationDto,
-//    @Query() status: ClientQueryDTO
-//  ): Promise<ClientDTO> {
-//    const staff = await this.clientService.setStatus(
-//      clientId,
-//      status.status,
-//      dto
-//    );
-//    return staff;
-//  }
-  /** Activated a funder */
-  // @Patch(':id/activate')
-  // @Public()
-  // @ApiOkResponse({ type: FundingDTO })
-  // async activate(
-  //   @Param('id', ParseObjectIdPipe) funderId: string,
-  // ): Promise<FundingDTO> {
-  //   const funder = await this.fundingService.setStatusActive(
-  //     funderId,
-  //     1,
-  //   );
-  //   return funder;
-  // }
 }

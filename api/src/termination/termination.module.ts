@@ -4,6 +4,6 @@ import { TerminationController } from './termination.controller';
 
 @Module({
   controllers: [TerminationController],
-  providers: [TerminationService]
+  providers: [TerminationService],
 })
 export class TerminationModule {}

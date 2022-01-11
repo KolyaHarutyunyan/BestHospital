@@ -6,29 +6,29 @@ import { IEmployment } from '../interface';
 
 @Injectable()
 export class EmploymentSanitizer implements ISanitize {
-    constructor() { }
+  constructor() {}
 
-    sanitize(employment: IEmployment): EmploymentDto {
-        const employmentDTO: EmploymentDto = {
-            id: employment.id,
-            title: employment.title,
-            staffId: employment.staffId,
-            supervisor: employment.supervisor,
-            departmentId: employment.departmentId,
-            startDate: employment.startDate,
-            endDate: employment.endDate,
-            active: employment.active,
-            schedule: employment.schedule,
-            termination: employment.termination
-        };
-        return employmentDTO;
-    }
+  sanitize(employment: IEmployment): EmploymentDto {
+    const employmentDTO: EmploymentDto = {
+      id: employment.id,
+      title: employment.title,
+      staffId: employment.staffId,
+      supervisor: employment.supervisor,
+      departmentId: employment.departmentId,
+      startDate: employment.startDate,
+      endDate: employment.endDate,
+      active: employment.active,
+      schedule: employment.schedule,
+      termination: employment.termination,
+    };
+    return employmentDTO;
+  }
 
-    sanitizeMany(employments: IEmployment[]): EmploymentDto[] {
-        const employmentDTOs: EmploymentDto[] = [];
-        for (let i = 0; i < employments.length; i++) {
-            employmentDTOs.push(this.sanitize(employments[i]));
-        }
-        return employmentDTOs;
+  sanitizeMany(employments: IEmployment[]): EmploymentDto[] {
+    const employmentDTOs: EmploymentDto[] = [];
+    for (let i = 0; i < employments.length; i++) {
+      employmentDTOs.push(this.sanitize(employments[i]));
     }
+    return employmentDTOs;
+  }
 }

@@ -22,5 +22,5 @@ export interface IStaff extends Document {
   termination: ITermination;
   address: IAddress;
   license: ILicense;
-  clinical: boolean
+  clinical: boolean;
 }

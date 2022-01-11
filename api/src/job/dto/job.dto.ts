@@ -1,8 +1,8 @@
-import { ApiProperty } from "@nestjs/swagger"
+import { ApiProperty } from '@nestjs/swagger';
 
 export class JobDTO {
-    @ApiProperty()
-    id: string
-    @ApiProperty()
-    name: string
+  @ApiProperty()
+  id: string;
+  @ApiProperty()
+  name: string;
 }

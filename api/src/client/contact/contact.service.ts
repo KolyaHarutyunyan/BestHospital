@@ -24,10 +24,7 @@ export class ContactService {
   private mongooseUtil: MongooseUtil;
 
   /** Create a new contact */
-  create = async (
-    dto: CreateContactDTO,
-    clientId: string,
-  ): Promise<ContactDTO> => {
+  create = async (dto: CreateContactDTO, clientId: string): Promise<ContactDTO> => {
     try {
       const client = await this.clientModel.findById({ _id: clientId });
       this.checkClient(client);
@@ -74,8 +71,7 @@ export class ContactService {
       if (dto.lastName) contact.lastName = dto.lastName;
       if (dto.relationship) contact.relationship = dto.relationship;
       if (dto.phoneNumber) contact.phoneNumber = dto.phoneNumber;
-      if (dto.address)
-        contact.address = await this.addressService.getAddress(dto.address);
+      if (dto.address) contact.address = await this.addressService.getAddress(dto.address);
       await contact.save();
       return this.sanitizer.sanitize(contact);
     } catch (e) {
@@ -90,24 +86,18 @@ export class ContactService {
     this.checkContact(contact);
     return contact._id;
   }
-  
+
   /** Private methods */
   /** if the contact is not found, throws an exception */
   private checkContact(contact: IContact) {
     if (!contact) {
-      throw new HttpException(
-        'Client contact with this id was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Client contact with this id was not found', HttpStatus.NOT_FOUND);
     }
   }
   /** if the client is not found, throws an exception */
   private checkClient(client: IClient) {
     if (!client) {
-      throw new HttpException(
-        'Profile with this id was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Profile with this id was not found', HttpStatus.NOT_FOUND);
     }
   }
 }

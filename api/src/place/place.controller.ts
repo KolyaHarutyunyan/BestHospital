@@ -8,7 +8,7 @@ import { ACCESS_TOKEN } from '../authN/authN.constants';
 @Controller('place')
 @ApiTags('Place Endpoints')
 export class PlaceController {
-  constructor(private readonly placeService: PlaceService) { }
+  constructor(private readonly placeService: PlaceService) {}
 
   @Post()
   @ApiHeader({ name: ACCESS_TOKEN })

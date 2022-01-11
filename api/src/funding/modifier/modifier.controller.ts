@@ -1,36 +1,31 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Query } from '@nestjs/common';
 import { ModifierService } from './modifier.service';
 import { ParseObjectIdPipe, Public } from '../../util';
 import { ServiceDTO } from '../dto';
-import { CreateModifiersDTO, UpdateModifiersDto, UpdateModifierDto } from './dto';
+import { CreateModifiersDTO, UpdateModifiersDto } from './dto';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('modifier')
 @ApiTags('Modifier Endpoints')
 export class ModifierController {
-  constructor(private readonly modifierService: ModifierService) { }
+  constructor(private readonly modifierService: ModifierService) {}
 
   @Post()
   @Public()
   @ApiOkResponse({ type: ServiceDTO })
-  async createModifier(
-    @Body() createModifierDTO: CreateModifiersDTO): Promise<ServiceDTO> {
+  async createModifier(@Body() createModifierDTO: CreateModifiersDTO): Promise<ServiceDTO> {
     const staffId = '60f01ec194abb63ff8f0aa75';
     const modifier = await this.modifierService.create(createModifierDTO);
-    return modifier
+    return modifier;
   }
-
-  // @Get(':fundingserviceId')
-  // @Public()
-  // @ApiOkResponse({ type: [ModifyDTO] })
-  // async findByServiceId(@Param('fundingserviceId', ParseObjectIdPipe) fundingserviceId: string): Promise<ModifyDTO[]> {
-  //   return await this.modifierService.findByServiceId(fundingserviceId);
-  // }
 
   @Patch(':fundingServiceId')
   @Public()
   @ApiOkResponse({ type: ServiceDTO })
-  async updateModify(@Param('fundingServiceId', ParseObjectIdPipe) fundingServiceId: string, @Body() updateModifierDto: UpdateModifiersDto): Promise<any> {
+  async updateModify(
+    @Param('fundingServiceId', ParseObjectIdPipe) fundingServiceId: string,
+    @Body() updateModifierDto: UpdateModifiersDto,
+  ): Promise<any> {
     const staffId = '60f01ec194abb63ff8f0aa75';
     const modifier = await this.modifierService.update(fundingServiceId, updateModifierDto);
     return modifier;
@@ -39,7 +34,10 @@ export class ModifierController {
   @Patch('/setStatus/:fundingServiceId')
   @Public()
   @ApiOkResponse({ type: ServiceDTO })
-  async delete(@Param('fundingServiceId', ParseObjectIdPipe) fundingServiceId: string, @Query('ids') ids: String[]): Promise<any> {
+  async delete(
+    @Param('fundingServiceId', ParseObjectIdPipe) fundingServiceId: string,
+    @Query('ids') ids: String[],
+  ): Promise<any> {
     const staffId = '60f01ec194abb63ff8f0aa75';
     const modifier = await this.modifierService.delete(fundingServiceId, ids);
     return modifier;

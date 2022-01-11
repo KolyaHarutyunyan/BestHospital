@@ -8,6 +8,6 @@ import { EnrollmentSanitizer } from './interceptor/enrollment.sanitizer';
   imports: [FundingModule],
   controllers: [EnrollmentController],
   providers: [EnrollmentService, EnrollmentSanitizer],
-  exports: [EnrollmentService]
+  exports: [EnrollmentService],
 })
-export class EnrollmentModule { }
+export class EnrollmentModule {}

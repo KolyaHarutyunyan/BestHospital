@@ -1,15 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { MongooseUtil } from '../../util/mongoose.util';
-import { CreateModifiersDTO, UpdateModifiersDto, UpdateModifierDto } from './dto';
+import { CreateModifiersDTO, UpdateModifiersDto } from './dto';
 import { FundingService } from '../funding.service';
 import { IModify } from './interface/modify.interface';
 import { ServiceDTO } from '../dto';
 
 @Injectable()
 export class ModifierService {
-  constructor(
-    private readonly fundingService: FundingService,
-  ) {
+  constructor(private readonly fundingService: FundingService) {
     this.mongooseUtil = new MongooseUtil();
   }
   private mongooseUtil: MongooseUtil;
@@ -30,16 +28,6 @@ export class ModifierService {
     return modifiers;
     // return this.sanitizer.sanitizeMany(modifiers);
   }
-
-  // async findByServiceByIds(ids: string[], serviceId: string): Promise<ModifyDTO[]> {
-  //   const modifiers = await this.model.findOne({serviceId, 'modifiers._id': { $in: ids } });
-  //   return modifiers;
-  //   // const modifiers = await this.model.findOne({ serviceId: fundingServiceId });
-  //   // this.checkModify(modifiers?.modifiers[0]);
-
-  //   // return modifiers
-  //   // return this.sanitizer.sanitizeMany(modifiers);
-  // }
 
   /** Update the modifier */
   async update(fundingServiceId: string, dto: UpdateModifiersDto): Promise<ServiceDTO> {
@@ -64,10 +52,7 @@ export class ModifierService {
   /** if the modifier is not found, throws an exception */
   private checkModify(modify: IModify) {
     if (!modify) {
-      throw new HttpException(
-        'Modifier was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Modifier was not found', HttpStatus.NOT_FOUND);
     }
   }
 }

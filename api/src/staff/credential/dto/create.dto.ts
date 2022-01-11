@@ -17,5 +17,5 @@ export class SCreateCredentialDTO {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  receiveData: string
+  receiveData: string;
 }

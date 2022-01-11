@@ -13,5 +13,5 @@ export class SUpdateCredentialDTO {
   @ApiProperty()
   @IsString()
   @IsOptional()
-  receiveData: string
+  receiveData: string;
 }

@@ -4,8 +4,8 @@ import { CreateModifierDto } from '../modifier/dto';
 export interface IService extends Document {
   id: string;
   funderId: string;
-  serviceId: string,
-  modifiers?: Array<CreateModifierDto> | any; 
+  serviceId: string;
+  modifiers?: Array<CreateModifierDto> | any;
   name: string;
   rate: number;
   cptCode: string;

@@ -14,14 +14,11 @@ export class AppService {
     return 'Welcome to the API of the Armat. Please visit https://armat.org/api-doc to see documentation about the possible endpoints';
   }
   async generatePDF(): Promise<Buffer> {
-    const content = fs.readFileSync(
-      path.resolve(__dirname, '../../views/index.hbs'),
-      'utf-8'
-    )
+    const content = fs.readFileSync(path.resolve(__dirname, '../../views/index.hbs'), 'utf-8');
 
-    const browser = await puppeteer.launch({ headless: true })
-    const page = await browser.newPage()
-    await page.setContent(content)
+    const browser = await puppeteer.launch({ headless: true });
+    const page = await browser.newPage();
+    await page.setContent(content);
 
     const buffer = await page.pdf({
       // format: 'A4',
@@ -30,11 +27,11 @@ export class AppService {
         left: '0px',
         top: '0px',
         right: '0px',
-        bottom: '0px'
-      }
-    })
-    await browser.close()
-    return buffer
+        bottom: '0px',
+      },
+    });
+    await browser.close();
+    return buffer;
   }
 
   async dropDatabase() {

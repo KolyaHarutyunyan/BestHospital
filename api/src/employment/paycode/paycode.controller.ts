@@ -1,14 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
 import { PaycodeService } from './paycode.service';
 import { CreatePaycodeDTO, UpdatePayCodeDTO, PayCodeDTO } from './dto';
-import { ParseObjectIdPipe, Public } from '../../util';
-import { ApiHeader, ApiOkResponse, ApiProperty, ApiTags } from '@nestjs/swagger';
+import { ParseObjectIdPipe } from '../../util';
+import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ACCESS_TOKEN } from '../../authN/authN.constants';
 
 @Controller('paycode')
-@ApiTags("PayCode Endpoints")
+@ApiTags('PayCode Endpoints')
 export class PaycodeController {
-  constructor(private readonly paycodeService: PaycodeService) { }
+  constructor(private readonly paycodeService: PaycodeService) {}
 
   @Post()
   @ApiHeader({ name: ACCESS_TOKEN })
@@ -26,10 +26,12 @@ export class PaycodeController {
   @Get('staff/:staffId')
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: [PayCodeDTO] })
-  async findPayCodesByStaffId(@Param('staffId', ParseObjectIdPipe) staffId: string):Promise<PayCodeDTO[]> {
+  async findPayCodesByStaffId(
+    @Param('staffId', ParseObjectIdPipe) staffId: string,
+  ): Promise<PayCodeDTO[]> {
     return await this.paycodeService.findPayCodesByStaffId(staffId);
   }
-  
+
   @Get(':id')
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: PayCodeDTO })

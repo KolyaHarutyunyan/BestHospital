@@ -6,6 +6,6 @@ import { PlaceSanitizer } from './interceptor/place.interceptor';
 @Module({
   controllers: [PlaceController],
   providers: [PlaceService, PlaceSanitizer],
-  exports: [PlaceService]
+  exports: [PlaceService],
 })
-export class PlaceModule { }
+export class PlaceModule {}

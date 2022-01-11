@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { ModifierService } from './modifier.service';
 import { ModifierController } from './modifier.controller';
 import { FundingModule } from '../funding.module';
-import { FundingService } from '..';
 import { CredentialModule } from '../../credential/credential.module';
 import { CredentialService } from '../../credential/credential.service';
 import { ModifySanitizer } from './interceptor/modifier.interceptor';
@@ -13,4 +12,4 @@ import { ModifySanitizer } from './interceptor/modifier.interceptor';
   providers: [ModifierService, CredentialService, ModifySanitizer],
   exports: [ModifierService],
 })
-export class ModifierModule { }
+export class ModifierModule {}

@@ -12,35 +12,38 @@ export class DepartmentController {
 
   @Post()
   @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({type: DepartmentDTO})
+  @ApiOkResponse({ type: DepartmentDTO })
   create(@Body() createDepartmentDto: CreateDepartmentDTO) {
     return this.departmentService.create(createDepartmentDto);
   }
 
   @Get()
   @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({type: [DepartmentDTO]})
+  @ApiOkResponse({ type: [DepartmentDTO] })
   findAll() {
     return this.departmentService.findAll();
   }
 
   @Get(':id')
   @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({type: DepartmentDTO})
+  @ApiOkResponse({ type: DepartmentDTO })
   findOne(@Param('id', ParseObjectIdPipe) id: string) {
     return this.departmentService.findOne(id);
   }
 
   @Patch(':id')
   @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({type: DepartmentDTO})
-  update(@Param('id', ParseObjectIdPipe) id: string, @Body() updateDepartmentDto: UpdateDepartmentDTO) {
+  @ApiOkResponse({ type: DepartmentDTO })
+  update(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Body() updateDepartmentDto: UpdateDepartmentDTO,
+  ) {
     return this.departmentService.update(id, updateDepartmentDto);
   }
 
   @Delete(':id')
   @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({type: String})
+  @ApiOkResponse({ type: String })
   remove(@Param('id', ParseObjectIdPipe) id: string) {
     return this.departmentService.remove(id);
   }

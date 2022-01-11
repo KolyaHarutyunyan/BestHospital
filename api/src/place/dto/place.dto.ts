@@ -1,10 +1,10 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class PlaceDTO {
-    @ApiProperty()
-    _id: string;
-    @ApiProperty()
-    name: string;
-    @ApiProperty()
-    code: string;
+  @ApiProperty()
+  _id: string;
+  @ApiProperty()
+  name: string;
+  @ApiProperty()
+  code: string;
 }

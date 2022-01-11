@@ -3,6 +3,6 @@ export { FundingDTO, FundingQueryDTO } from './founder.dto';
 export { UpdateFundingDto } from './edit.dto';
 
 // services
-export { CreateServiceDTO } from './create.service.dto'
-export { ServiceDTO } from './service.dto'
-export { UpdateServiceDto } from './edit.service.dto'
+export { CreateServiceDTO } from './create.service.dto';
+export { ServiceDTO } from './service.dto';
+export { UpdateServiceDto } from './edit.service.dto';

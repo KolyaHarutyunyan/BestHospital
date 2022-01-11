@@ -19,7 +19,7 @@ export class FundingSanitizer implements ISanitize {
       website: funder.website,
       status: funder.status,
       termination: funder.termination,
-      address: this.addressSanitizer.sanitize(funder.address)
+      address: this.addressSanitizer.sanitize(funder.address),
     };
     return funderDTO;
   }
@@ -27,7 +27,7 @@ export class FundingSanitizer implements ISanitize {
   sanitizeMany(funders: IFunder[]): FundingDTO[] {
     const funderDTOs: FundingDTO[] = [];
     for (let i = 0; i < funders.length; i++) {
-        funderDTOs.push(this.sanitize(funders[i]));
+      funderDTOs.push(this.sanitize(funders[i]));
     }
     return funderDTOs;
   }

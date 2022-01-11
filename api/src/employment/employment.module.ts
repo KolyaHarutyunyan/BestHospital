@@ -10,6 +10,6 @@ import { PaycodeModule } from './paycode/paycode.module';
   imports: [StaffModule, DepartmentModule],
   controllers: [EmploymentController],
   providers: [EmploymentService, EmploymentSanitizer],
-  exports: [EmploymentService]
+  exports: [EmploymentService],
 })
-export class EmploymentModule { }
+export class EmploymentModule {}

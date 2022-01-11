@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsOptional } from 'class-validator';
+import { IsEnum } from 'class-validator';
 import { AddressDTO } from '../../address';
 import { LicenseDTO } from './license.dto';
 import { StaffStatus } from '../staff.constants';

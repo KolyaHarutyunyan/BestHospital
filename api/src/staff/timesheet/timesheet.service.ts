@@ -113,8 +113,8 @@ export class TimesheetService {
       timesheet.description = dto.description;
       timesheet.hours = dto.hours;
       timesheet.startDate = dto.startDate;
-      dto.endDate ? timesheet.endDate = dto.endDate : timesheet.endDate = null;
-      return await timesheet.save()
+      dto.endDate ? (timesheet.endDate = dto.endDate) : (timesheet.endDate = null);
+      return await timesheet.save();
       // return this.sanitizer.sanitizeMany(timesheet);
     } catch (e) {
       throw e;
@@ -140,22 +140,22 @@ export class TimesheetService {
       switch (maxMultiplierOT.type) {
         case OvertimeStatus.DAILY:
           calculatedOT = this.calculateByHours(maxMultiplierOT, hours, dailyHours);
-          console.log(calculatedOT, 'calculatedOT Day')
-          break
+          console.log(calculatedOT, 'calculatedOT Day');
+          break;
         case OvertimeStatus.WEEKLY:
           calculatedOT = this.calculateByHours(maxMultiplierOT, hours, weeklyHours);
-          console.log(calculatedOT, 'calculatedOT Week')
-          break
+          console.log(calculatedOT, 'calculatedOT Week');
+          break;
         case OvertimeStatus.CONSECUTIVE:
           const startDate = new Date(dto.startDate);
           calculatedOT = this.calculateByDays(maxMultiplierOT, hours, startDate, consecutiveDays);
-          console.log(calculatedOT, 'calculatedOT Consecutive')
-          break
+          console.log(calculatedOT, 'calculatedOT Consecutive');
+          break;
       }
       hours = calculatedOT.remainder;
       if (calculatedOT.used === 0) {
         overtimeRules = overtimeRules.filter((rule) => rule.id !== maxMultiplierOT.id);
-        continue
+        continue;
       }
       const otAmount = calculatedOT.used * (maxMultiplierOT.multiplier * rate);
       paytable.totalAmount += otAmount;
@@ -165,7 +165,7 @@ export class TimesheetService {
         hours: calculatedOT.used,
         amount: otAmount,
         rateType: maxMultiplierOT.type,
-        name: maxMultiplierOT.name
+        name: maxMultiplierOT.name,
       });
       overtimeRules = overtimeRules.filter((rule) => rule.id !== maxMultiplierOT.id);
     }
@@ -288,11 +288,12 @@ export class TimesheetService {
     dates: Date[],
   ): ICalculatedOT {
     let matchesRule = true;
-    let currDate = new Date(startDate), index;
+    let currDate = new Date(startDate),
+      index;
     for (let i = 1; i <= ot.threshold; i++) {
       currDate = new Date(currDate.setDate(startDate.getDate() - i));
       index = dates.findIndex((date) => date.getDate() === currDate.getDate());
-      console.log(index)
+      console.log(index);
       if (index < 0) {
         matchesRule = false;
         break;

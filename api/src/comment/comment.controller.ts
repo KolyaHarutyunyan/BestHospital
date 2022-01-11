@@ -1,6 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Headers } from '@nestjs/common';
 import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { UserDTO } from '../authN/dto/user.dto';
 import { ACCESS_TOKEN } from '../authN/authN.constants';
 import { ParseObjectIdPipe } from '../util';
 import { CommentService } from './comment.service';
@@ -9,7 +8,7 @@ import { CommentDTO, CreateCommentDTO, UpdateCommentDTO } from './dto';
 @Controller('comment')
 @ApiTags('Comment Endpoints')
 export class CommentController {
-  constructor(private readonly commentService: CommentService) { }
+  constructor(private readonly commentService: CommentService) {}
 
   @Post()
   @ApiHeader({ name: ACCESS_TOKEN })
@@ -22,22 +21,22 @@ export class CommentController {
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: CommentDTO })
   @ApiQuery({
-    name: "skip",
-    description: "where",
+    name: 'skip',
+    description: 'where',
     required: false,
-    type: Number
+    type: Number,
   })
   @ApiQuery({
-    name: "limit",
-    description: "how",
+    name: 'limit',
+    description: 'how',
     required: false,
-    type: Number
+    type: Number,
   })
   async findAll(
     @Query('skip') skip: number,
     @Query('limit') limit: number,
     @Param('resourceId') resourceId: string,
-    @Param('onModel') onModel: string
+    @Param('onModel') onModel: string,
   ) {
     return await this.commentService.findAll(onModel, resourceId, skip, limit);
   }
@@ -45,7 +44,7 @@ export class CommentController {
   /** Update Client By Id */
   @Patch(':id')
   @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({type: CommentDTO})
+  @ApiOkResponse({ type: CommentDTO })
   update(@Param('id', ParseObjectIdPipe) id: string, @Body() updateCommentDto: UpdateCommentDTO) {
     return this.commentService.update(id, updateCommentDto, updateCommentDto.user.id);
   }
@@ -54,8 +53,7 @@ export class CommentController {
   @Delete(':id/comments')
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: String })
-  async remove(
-    @Param('id', ParseObjectIdPipe) id: string, @Body() body: any): Promise<string> {
+  async remove(@Param('id', ParseObjectIdPipe) id: string, @Body() body: any): Promise<string> {
     return await this.commentService.remove(id, body.user.id);
   }
 

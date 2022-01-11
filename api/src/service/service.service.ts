@@ -2,19 +2,16 @@ import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { MongooseUtil } from '../util';
 import { ServiceModel } from './service.model';
-import { IService } from './interface'
+import { IService } from './interface';
 import { ServiceSanitizer } from './interceptor';
 import { CreateServiceDto } from './dto/create.dto';
 import { UpdateServiceDto } from './dto/edit.dto';
-import { ServiceDTO } from './dto'
+import { ServiceDTO } from './dto';
 import { isValidObjectId } from '../util';
 
 @Injectable()
 export class ServiceService {
-
-  constructor(
-    private readonly sanitizer: ServiceSanitizer,
-  ) {
+  constructor(private readonly sanitizer: ServiceSanitizer) {
     this.model = ServiceModel;
     this.mongooseUtil = new MongooseUtil();
   }
@@ -27,10 +24,10 @@ export class ServiceService {
       let service = new this.model({
         name: dto.name,
         displayCode: dto.displayCode,
-        category: dto.category
+        category: dto.category,
       });
       await service.save();
-      return this.sanitizer.sanitize(service)
+      return this.sanitizer.sanitize(service);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Service already exists');
       throw e;
@@ -50,7 +47,7 @@ export class ServiceService {
   /** Get Service By Id */
   async findOne(_id: string) {
     try {
-      isValidObjectId(_id)
+      isValidObjectId(_id);
       const service = await this.model.findOne({ _id });
       this.checkService(service);
       return this.sanitizer.sanitize(service);
@@ -86,10 +83,7 @@ export class ServiceService {
   /** if the service is not found, throws an exception */
   private checkService(service: IService) {
     if (!service) {
-      throw new HttpException(
-        'Service with this id was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Service with this id was not found', HttpStatus.NOT_FOUND);
     }
   }
 }

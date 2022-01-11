@@ -6,12 +6,9 @@ import { HistoryModel } from './history.model';
 import { IHistory } from './interface';
 import { HistorySanitizer } from './interceptor';
 
-
 @Injectable()
 export class HistoryService {
-  constructor(
-    private readonly sanitizer: HistorySanitizer
-  ) {
+  constructor(private readonly sanitizer: HistorySanitizer) {
     this.model = HistoryModel;
     this.mongooseUtil = new MongooseUtil();
   }
@@ -44,32 +41,34 @@ export class HistoryService {
 
       if (isNaN(start.getTime())) {
         noDate = false;
-      }
-      else {
+      } else {
         startDate = new Date(new Date(start).setHours(4, 0, 0));
         endDate = new Date(new Date(start).setHours(27, 59, 59));
       }
       const query: any = {};
 
       if (noDate) {
-        query.createdDate = { $gte: startDate, $lte: endDate }
+        query.createdDate = { $gte: startDate, $lte: endDate };
       }
       query.onModel = onModel;
       if (isNaN(skip)) skip = 0;
       if (isNaN(limit)) limit = 100;
 
-      const histories = await this.model.aggregate([
-        { $match: { ...query } },
-        { $lookup: { from: 'staffs', localField: 'user', foreignField: '_id', as: 'user' } },
-        { $sort: { '_id': 1 } },
-        {
-          $group: {
-            _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdDate" } },
-            data: { $push: "$$ROOT" }
-          }
-        }
-      ]).skip(skip).limit(limit)
-      return histories
+      const histories = await this.model
+        .aggregate([
+          { $match: { ...query } },
+          { $lookup: { from: 'staffs', localField: 'user', foreignField: '_id', as: 'user' } },
+          { $sort: { _id: 1 } },
+          {
+            $group: {
+              _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdDate' } },
+              data: { $push: '$$ROOT' },
+            },
+          },
+        ])
+        .skip(skip)
+        .limit(limit);
+      return histories;
     } catch (e) {
       throw e;
     }
@@ -79,10 +78,7 @@ export class HistoryService {
   /** if the history is not found, throws an exception */
   private checkHistory(history: IHistory) {
     if (!history) {
-      throw new HttpException(
-        'History with this id was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('History with this id was not found', HttpStatus.NOT_FOUND);
     }
   }
 

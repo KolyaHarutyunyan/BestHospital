@@ -8,15 +8,13 @@ import { ACCESS_TOKEN } from '../../authN/authN.constants';
 @Controller('scredential')
 @ApiTags('Staff Credential Endpoints')
 export class SCredentialController {
-  constructor(private readonly credentialService: SCredentialService) { }
+  constructor(private readonly credentialService: SCredentialService) {}
 
   /** Create a new staff credential */
   @Post()
   @ApiOkResponse({ type: SCredentialDTO })
   @ApiHeader({ name: ACCESS_TOKEN })
-  async createStaffCredential(
-    @Body() dto: SCreateCredentialDTO,
-  ): Promise<SCredentialDTO> {
+  async createStaffCredential(@Body() dto: SCreateCredentialDTO): Promise<SCredentialDTO> {
     const credential = await this.credentialService.create(dto);
     return credential;
   }
@@ -37,9 +35,7 @@ export class SCredentialController {
   @Delete(':id')
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: 'string' })
-  async delete(
-    @Param('id', ParseObjectIdPipe) id: string
-  ): Promise<string> {
+  async delete(@Param('id', ParseObjectIdPipe) id: string): Promise<string> {
     const credential = await this.credentialService.delete(id);
     return credential;
   }
@@ -48,9 +44,7 @@ export class SCredentialController {
   @Get('staff/:staffId/credential')
   @ApiOkResponse({ type: [SCredentialDTO] })
   @ApiHeader({ name: ACCESS_TOKEN })
-  async find(
-    @Param('staffId', ParseObjectIdPipe) staffId: string,
-  ): Promise<SCredentialDTO[]> {
+  async find(@Param('staffId', ParseObjectIdPipe) staffId: string): Promise<SCredentialDTO[]> {
     return await this.credentialService.find(staffId);
   }
 
@@ -58,9 +52,7 @@ export class SCredentialController {
   @Get(':id')
   @ApiOkResponse({ type: SCredentialDTO })
   @ApiHeader({ name: ACCESS_TOKEN })
-  async findById(
-    @Param('id', ParseObjectIdPipe) id: string,
-  ): Promise<SCredentialDTO> {
+  async findById(@Param('id', ParseObjectIdPipe) id: string): Promise<SCredentialDTO> {
     return await this.credentialService.findById(id);
   }
 }

@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { SCredentialDTO, SCreateCredentialDTO, SUpdateCredentialDTO } from './dto';
 import { CredentialService } from '../../credential';
 import { StaffService } from '..';
-import { StaffCredentialModel } from './scredential.model'
+import { StaffCredentialModel } from './scredential.model';
 import { MongooseUtil } from '../../util';
 import { Model } from 'mongoose';
 import { ICredential } from './interface';
@@ -12,7 +12,6 @@ export class SCredentialService {
   constructor(
     private readonly credentialService: CredentialService,
     private readonly staffService: StaffService,
-
   ) {
     this.model = StaffCredentialModel;
     this.mongooseUtil = new MongooseUtil();
@@ -29,11 +28,11 @@ export class SCredentialService {
         staffId: dto.staffId,
         credentialId: dto.credentialId,
         expirationDate: dto.expirationDate,
-        receiveData: dto.receiveData
+        receiveData: dto.receiveData,
       });
 
       var staffC = await staffCredential.save();
-      staffC = await staffC.populate('credentialId').execPopulate()
+      staffC = await staffC.populate('credentialId').execPopulate();
       return staffC;
       // return this.sanitizer.sanitize(user);
     } catch (e) {
@@ -47,19 +46,18 @@ export class SCredentialService {
     try {
       const credential = await this.model.findById({ _id });
       this.checkCredential(credential);
-      if(dto.receiveData){
+      if (dto.receiveData) {
         credential.receiveData = dto.receiveData;
       }
       if (dto.expirationDate) {
         credential.expirationDate = dto.expirationDate;
-      }
-      else {
-        credential.expirationDate = null
+      } else {
+        credential.expirationDate = null;
       }
       const globCredential = await this.credentialService.findOne(dto.credentialId);
       credential.credentialId = dto.credentialId;
 
-      await credential.save()
+      await credential.save();
       return credential;
     } catch (e) {
       console.log(e);
@@ -83,7 +81,7 @@ export class SCredentialService {
   async find(staffId: string): Promise<SCredentialDTO[]> {
     try {
       const credential = await this.model.find({ staffId }).populate('credentialId');
-      this.checkCredential(credential[0])
+      this.checkCredential(credential[0]);
       return credential;
     } catch (e) {
       console.log(e);
@@ -95,7 +93,7 @@ export class SCredentialService {
   async findById(_id: string): Promise<SCredentialDTO> {
     try {
       const credential = await this.model.findById({ _id }).populate('credentialId');
-      this.checkCredential(credential)
+      this.checkCredential(credential);
       return credential;
     } catch (e) {
       console.log(e);
@@ -107,10 +105,7 @@ export class SCredentialService {
   /** if the credential is not valid, throws an exception */
   private checkCredential(credential: ICredential) {
     if (!credential) {
-      throw new HttpException(
-        'Staff Credential with this id was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Staff Credential with this id was not found', HttpStatus.NOT_FOUND);
     }
   }
 }

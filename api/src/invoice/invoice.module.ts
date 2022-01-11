@@ -8,6 +8,6 @@ import { BillingModule } from '../billing/billing.module';
   imports: [BillingModule],
   controllers: [InvoiceController],
   providers: [InvoiceService, InvoiceSanitizer],
-  exports: [InvoiceService]
+  exports: [InvoiceService],
 })
-export class InvoiceModule { }
+export class InvoiceModule {}

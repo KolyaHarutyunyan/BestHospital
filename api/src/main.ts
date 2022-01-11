@@ -34,9 +34,6 @@ async function bootstrap() {
   //swagger documentation setup
   setupSwagger(app);
 
-
-  await app
-    .listen(PORT)
-    .then(() => console.log(`server running on port ${PORT}`));
+  await app.listen(PORT).then(() => console.log(`server running on port ${PORT}`));
 }
 bootstrap();

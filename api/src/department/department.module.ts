@@ -6,6 +6,6 @@ import { DepartmentSanitizer } from './interceptor/department.sanitizer';
 @Module({
   controllers: [DepartmentController],
   providers: [DepartmentService, DepartmentSanitizer],
-  exports: [DepartmentService]
+  exports: [DepartmentService],
 })
-export class DepartmentModule { }
+export class DepartmentModule {}

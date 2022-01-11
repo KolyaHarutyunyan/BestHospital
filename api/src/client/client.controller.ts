@@ -5,15 +5,12 @@ import { CreateTerminationDto } from 'src/termination/dto/create-termination.dto
 import { ParseObjectIdPipe, Public } from '../util';
 import { ClientStatus } from './client.constants';
 import { ClientService } from './client.service';
-import {
-  ClientDTO,
-  CreateClientDTO, UpdateClientDto, ClientQueryDTO
-} from './dto';
+import { ClientDTO, CreateClientDTO, UpdateClientDto, ClientQueryDTO } from './dto';
 
 @Controller('client')
 @ApiTags('Client Endpoints')
 export class ClientController {
-  constructor(private readonly clientService: ClientService) { }
+  constructor(private readonly clientService: ClientService) {}
   /** Create a new client */
   @Post()
   @ApiHeader({ name: ACCESS_TOKEN })
@@ -25,27 +22,28 @@ export class ClientController {
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: [ClientDTO] })
   @ApiQuery({
-    name: "skip",
-    description: "where",
+    name: 'skip',
+    description: 'where',
     required: false,
-    type: Number
+    type: Number,
   })
   @ApiQuery({
-    name: "limit",
-    description: "how",
+    name: 'limit',
+    description: 'how',
     required: false,
-    type: Number
+    type: Number,
   })
   @ApiQuery({
-    name: "status",
-    description: "status",
+    name: 'status',
+    description: 'status',
     required: false,
-    type: ClientQueryDTO
+    type: ClientQueryDTO,
   })
   findAll(
     @Query('skip') skip: number,
     @Query('limit') limit: number,
-    @Query('status') status: string) {
+    @Query('status') status: string,
+  ) {
     return this.clientService.findAll(skip, limit, status);
   }
   /** Get Client By Id */
@@ -76,13 +74,9 @@ export class ClientController {
   async setStatus(
     @Param('id', ParseObjectIdPipe) clientId: string,
     @Body() dto: CreateTerminationDto,
-    @Query() status: ClientQueryDTO
+    @Query() status: ClientQueryDTO,
   ): Promise<ClientDTO> {
-    const staff = await this.clientService.setStatus(
-      clientId,
-      status.status,
-      dto
-    );
+    const staff = await this.clientService.setStatus(clientId, status.status, dto);
     return staff;
   }
 }

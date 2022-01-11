@@ -1,12 +1,12 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class MileageDTO {
-    @ApiProperty()
-    _id: string;
-    @ApiProperty()
-    compensation: number;
-    @ApiProperty()
-    startDate: Date;
-    @ApiProperty()
-    endDate: Date;
+  @ApiProperty()
+  _id: string;
+  @ApiProperty()
+  compensation: number;
+  @ApiProperty()
+  startDate: Date;
+  @ApiProperty()
+  endDate: Date;
 }

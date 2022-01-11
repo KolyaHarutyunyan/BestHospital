@@ -1,5 +1,5 @@
 export const CommentStatus = {
-    STAFF: "Staff",
-    CLIENT: "Client",
-    FUNDER: "Funder"
-}
+  STAFF: 'Staff',
+  CLIENT: 'Client',
+  FUNDER: 'Funder',
+};

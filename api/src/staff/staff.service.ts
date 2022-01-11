@@ -9,7 +9,7 @@ import { MongooseUtil } from '../util';
 import { AddressService } from '../address';
 import { HistoryService, serviceLog } from '../history';
 import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
-import { ServiceService } from '../service'
+import { ServiceService } from '../service';
 
 @Injectable()
 export class StaffService {
@@ -18,7 +18,6 @@ export class StaffService {
     private readonly globalService: ServiceService,
     private readonly authnService: AuthNService,
     private readonly historyService: HistoryService,
-    // private readonly credentialService: CredentialService,
     private readonly sanitizer: StaffSanitizer,
   ) {
     this.model = StaffModel;
@@ -46,13 +45,18 @@ export class StaffService {
         license: dto.license ? dto.license : {},
         address: await this.addressService.getAddress(dto.address),
       });
-      user = (await Promise.all([user.save(), this.authnService.create(user._id, user.email, UserType.ADMIN)]))[0];
+      user = (
+        await Promise.all([
+          user.save(),
+          this.authnService.create(user._id, user.email, UserType.ADMIN),
+        ])
+      )[0];
 
       await this.historyService.create({
         resource: user._id,
         onModel: 'Staff',
         title: serviceLog.createStaff,
-        user: user._id
+        user: user._id,
       });
       return this.sanitizer.sanitize(user);
     } catch (e) {
@@ -69,10 +73,10 @@ export class StaffService {
       this.checkStaff(staff);
       const service = await this.globalService.findOne(serviceId);
       if (staff.service.indexOf(service.id) != -1) {
-        console.log(staff.service.indexOf(service.id))
-        throw new HttpException('Service already exist', HttpStatus.BAD_REQUEST)
+        console.log(staff.service.indexOf(service.id));
+        throw new HttpException('Service already exist', HttpStatus.BAD_REQUEST);
       }
-      staff.service.push(service.id)
+      staff.service.push(service.id);
       staff = await (await staff.save()).populate('service').execPopulate();
 
       return this.sanitizer.sanitize(staff);
@@ -135,14 +139,16 @@ export class StaffService {
       if (dto.middleName) admin.middleName = dto.middleName;
       if (dto.email) admin.email = dto.email;
       if (dto.secondaryEmail) admin.secondaryEmail = dto.secondaryEmail;
-      if (dto.license) { admin.license = dto.license }
+      if (dto.license) {
+        admin.license = dto.license;
+      }
       if (dto.address) admin.address = await this.addressService.getAddress(dto.address);
       await admin.save();
       await this.historyService.create({
         resource: admin._id,
         onModel: 'Staff',
         title: serviceLog.updateStaff,
-        user: admin._id
+        user: admin._id,
       });
       return this.sanitizer.sanitize(admin);
     } catch (e) {
@@ -180,7 +186,7 @@ export class StaffService {
   /** returns all users */
   getUsers = async (skip: number, limit: number, status: string): Promise<any> => {
     if (!status) {
-      status = "ACTIVE"
+      status = 'ACTIVE';
     }
     const [staff, count] = await Promise.all([
       this.model.find({ status }).sort({ _id: -1 }).skip(skip).limit(limit),
@@ -191,15 +197,14 @@ export class StaffService {
   };
 
   /** Set Status of a staff Inactive*/
-  setStatus = async (
-    _id: string,
-    status: any,
-    dto: CreateTerminationDto,
-  ): Promise<StaffDTO> => {
+  setStatus = async (_id: string, status: any, dto: CreateTerminationDto): Promise<StaffDTO> => {
     const staff = await this.model.findById({ _id });
     this.checkStaff(staff);
-    if (status != "ACTIVE" && !dto.date) {
-      throw new HttpException('If status is not active, then date is required field', HttpStatus.BAD_REQUEST);
+    if (status != 'ACTIVE' && !dto.date) {
+      throw new HttpException(
+        'If status is not active, then date is required field',
+        HttpStatus.BAD_REQUEST,
+      );
     }
     staff.termination.date = dto.date;
     if (dto.reason) {

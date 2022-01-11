@@ -3,4 +3,3 @@ export enum OvertimeStatus {
   WEEKLY = 'WEEKLY',
   CONSECUTIVE = 'CONSECUTIVE',
 }
-// Upercase

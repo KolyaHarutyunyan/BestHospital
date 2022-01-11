@@ -18,12 +18,11 @@ export class JobService {
   async create(dto: CreateJobDTO): Promise<JobDTO> {
     try {
       let job = new this.model({
-        name: dto.name
+        name: dto.name,
       });
       await job.save();
       return job;
-    }
-    catch (e) {
+    } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Job already exists');
       throw e;
     }
@@ -34,17 +33,16 @@ export class JobService {
     try {
       const jobs = await this.model.find();
       this.checkJob(jobs[0]);
-      return jobs
-    }
-    catch (e) {
-      throw e
+      return jobs;
+    } catch (e) {
+      throw e;
     }
   }
 
   // find job by id
   async findOne(_id: string): Promise<JobDTO> {
-    let job = await this.model.findById({ _id })
-    this.checkJob(job)
+    let job = await this.model.findById({ _id });
+    this.checkJob(job);
     return job;
   }
 
@@ -54,11 +52,10 @@ export class JobService {
       const job = await this.model.findById({ _id });
       this.checkJob(job);
       job.name = dto.name;
-      await job.save()
-      return job
-    }
-    catch (e) {
-      throw e
+      await job.save();
+      return job;
+    } catch (e) {
+      throw e;
     }
   }
 
@@ -68,20 +65,16 @@ export class JobService {
       const job = await this.model.findByIdAndDelete({ _id });
       this.checkJob(job);
       return job._id;
-    }
-    catch (e) {
-      throw e
+    } catch (e) {
+      throw e;
     }
   }
-  
+
   /** Private methods */
   /** if the department is not valid, throws an exception */
   private checkJob(department: IJob) {
     if (!department) {
-      throw new HttpException(
-        'Job with this id was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Job with this id was not found', HttpStatus.NOT_FOUND);
     }
   }
 }

@@ -15,16 +15,15 @@ export class HistorySanitizer implements ISanitize {
       onModel: history.onModel,
       title: history.title,
       time: history.time,
-      createdDate: history.createdDate
+      createdDate: history.createdDate,
     };
     return historyrDTO;
   }
 
-
   sanitizeMany(histories: IHistory[]): HistoryDTO[] {
     const historyDTOs: HistoryDTO[] = [];
     for (let i = 0; i < histories.length; i++) {
-        historyDTOs.push(this.sanitize(histories[i]));
+      historyDTOs.push(this.sanitize(histories[i]));
     }
     return historyDTOs;
   }
