@@ -3,7 +3,7 @@ import { InvoiceService } from './invoice.service';
 import { CreateInvoiceDto, UpdateInvoiceDto, InvoiceDto, GenerateInvoiceDto } from './dto';
 import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ACCESS_TOKEN } from '../authN';
-import { ParseObjectIdPipe } from '../util';
+import { ParseObjectIdPipe, Public } from '../util';
 
 @Controller('invoice')
 @ApiTags('Invoice Endpoints')
@@ -17,10 +17,11 @@ export class InvoiceController {
   }
 
   @Post('generate')
-  @ApiHeader({ name: ACCESS_TOKEN })
+  // @ApiHeader({ name: ACCESS_TOKEN })
   // @ApiQuery({ name: 'group', enum: MergeClaims })
+  @Public()
   @ApiOkResponse({ type: [InvoiceDto] })
-  generateClaims(
+  generateInvoices(
     @Body() generateInvoices: GenerateInvoiceDto,
     // @Query('group') group: MergeClaims
   ) {

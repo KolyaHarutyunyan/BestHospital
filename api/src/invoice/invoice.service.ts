@@ -11,11 +11,8 @@ import { InvoiceModel } from './invoice.model';
 export class InvoiceService {
   constructor(
     private readonly sanitizer: InvoiceSanitizer,
-    private readonly billingService: BillingService,
-  ) // private readonly receivableService: ReceivableService,
-  // private readonly staffService: StaffService,
-
-  {
+    private readonly billingService: BillingService, // private readonly receivableService: ReceivableService, // private readonly staffService: StaffService,
+  ) {
     this.model = InvoiceModel;
     this.mongooseUtil = new MongooseUtil();
   }
@@ -95,7 +92,6 @@ export class InvoiceService {
       receivable = [];
       receivableCreatedAt = [];
     }
-
     /** set bill claimStatus to CLAIMED */
     await this.model.insertMany(invoice);
     // await this.billingService.billClaim(bills);
@@ -136,7 +132,7 @@ export class InvoiceService {
     });
   }
 
-  /** add claim */
+  /** add invoice */
   private async addInvoice(
     invoice,
     result,
@@ -154,13 +150,24 @@ export class InvoiceService {
         latest: this.minMax(receivableCreatedAt)[1],
       },
       status: 'PENDING',
-      invoiceTotal: 1500,
-      totalTime: 5892,
+      invoiceTotal: subBills.reduce((a, b) => {
+        return a + b.clientResp;
+      }, 0),
+      totalTime: subBills.reduce((a, b) => {
+        return a + b.totalHours;
+      }, 0),
       dueDate: '2021-12-28T07:02:16.250Z',
       downloadLink: '',
       receivable,
     });
+    // console.log(subBills, 'subBillllls');
   }
+
+  /** return min max date in date range */
+  // private countInvoiceTotal(a, b) {
+  //   console.log(a.clientResp, ' a.clientResp')
+  //   return parseInt(a.clientResp) + parseInt(b.clientResp);
+  // }
 
   /** return min max date in date range */
   private minMax(arr) {
