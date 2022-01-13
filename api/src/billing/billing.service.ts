@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { BillingModel } from './billing.model';
 import { IBilling } from './interface';
-import { CreateBillingDto, UpdateBillingDto, BillingDto, TransactionDto } from './dto';
+import { BillingDto, TransactionDto } from './dto';
 import { StaffService } from '../staff/staff.service';
 import { BillingSanitizer } from './interceptor/billing.interceptor';
 
@@ -19,9 +19,9 @@ export class BillingService {
   /** create the billing */
   async create(dto: any): Promise<BillingDto> {
     try {
-      let billing = new this.model({
-        appointment: dto.appointment,
-        payer: dto.payer,
+      const billing = new this.model({
+        appointment: dto._id,
+        payer: dto.funder,
         client: dto.client,
         staff: dto.staff,
         authorization: dto.authorizedService.authorizationId,
@@ -129,13 +129,13 @@ export class BillingService {
 
   /** find all bills */
   async findAll(claimStatus: string): Promise<BillingDto[]> {
-    let billings = await this.model.find({ claimStatus });
+    const billings = await this.model.find({ claimStatus });
     return this.sanitizer.sanitizeMany(billings);
   }
 
   /** find all with many ids */
   async findByIds(bills: string[], isClaimed = null): Promise<BillingDto[]> {
-    let billings = await this.model
+    const billings = await this.model
       .find({ _id: { $in: bills } })
       .populate({ path: 'authService', populate: 'serviceId' })
       .populate('authorization');
@@ -161,18 +161,18 @@ export class BillingService {
     return this.sanitizer.sanitize(billing);
   }
 
-  update(id: number, updateBillingDto: UpdateBillingDto) {
-    return `This action updates a #${id} billing`;
-  }
+  // update(id: number, updateBillingDto: UpdateBillingDto) {
+  //   return `This action updates a #${id} billing`;
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} billing`;
-  }
+  // remove(id: number) {
+  //   return `This action removes a #${id} billing`;
+  // }
 
   /** Set billing status */
   setStatus = async (_id: string, status: string, userId: string) => {
     // can automatically
-    let [staff, billing] = await Promise.all([
+    const [, billing] = await Promise.all([
       this.staffService.findById(userId),
       this.model.findById({ _id }),
     ]);

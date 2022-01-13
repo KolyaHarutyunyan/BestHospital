@@ -239,8 +239,8 @@ export class TimesheetService {
     if (!timesheets.length) return uniqueDates;
     uniqueDates.push(new Date(timesheets[0].startDate));
     for (let j = 1; j < timesheets.length; j++) {
-      let prevDate = new Date(timesheets[j - 1].startDate);
-      let currDate = new Date(timesheets[j].startDate);
+      const prevDate = new Date(timesheets[j - 1].startDate);
+      const currDate = new Date(timesheets[j].startDate);
       if (prevDate.getDay() != currDate.getDay()) {
         uniqueDates.push(new Date(timesheets[j].startDate));
       }

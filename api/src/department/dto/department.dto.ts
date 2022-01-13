@@ -1,9 +1,8 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class DepartmentDTO {
-    @ApiProperty()
-    id: string
-    @ApiProperty()
-    name: string
+  @ApiProperty()
+  id: string;
+  @ApiProperty()
+  name: string;
 }

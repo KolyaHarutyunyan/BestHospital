@@ -1,5 +1,3 @@
-import { Types } from 'mongoose';
-
 export interface IPaytableItem {
   id: string;
   hours: number;

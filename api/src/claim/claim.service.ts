@@ -5,9 +5,9 @@ import { BillingService } from '../billing/billing.service';
 import { MongooseUtil } from '../util';
 import { MergeClaims } from './claim.constants';
 import { ClaimModel } from './claim.model';
-import { ClaimDto, CreateClaimDto, GenerateClaimDto, UpdateClaimDto } from './dto';
+import { ClaimDto, GenerateClaimDto } from './dto';
 import { ClaimSanitizer } from './interceptor/claim.interceptor';
-import { IClaim, IReceivable } from './interface';
+import { IClaim } from './interface';
 import { IBilling } from '../billing/interface';
 
 @Injectable()
@@ -24,11 +24,11 @@ export class ClaimService {
   private mongooseUtil: MongooseUtil;
 
   /** create the claim */
-  async create(dto: CreateClaimDto): Promise<ClaimDto> {
-    const claim = new this.model({});
-    await claim.save();
-    return this.sanitizer.sanitize(claim);
-  }
+  // async create(dto: CreateClaimDto): Promise<ClaimDto> {
+  //   const claim = new this.model({});
+  //   await claim.save();
+  //   return this.sanitizer.sanitize(claim);
+  // }
 
   /**generate claims */
   async generateClaims(dto: GenerateClaimDto, group: MergeClaims): Promise<ClaimDto[]> {
@@ -53,20 +53,20 @@ export class ClaimService {
     return this.sanitizer.sanitize(claim);
   }
 
-  update(id: number, updateClaimDto: UpdateClaimDto) {
-    return `This action updates a #${id} claim`;
-  }
+  // update(id: number, updateClaimDto: UpdateClaimDto) {
+  //   return `This action updates a #${id} claim`;
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} claim`;
-  }
+  // remove(id: number) {
+  //   return `This action removes a #${id} claim`;
+  // }
 
   /** create claim with receivables with bills */
   async singleBill(bills: string[]): Promise<IClaim[]> {
-    let claim = [],
-      receivable = [],
+    const claim = [];
+    let subBills = [],
       receivableCreatedAt = [],
-      subBills = [];
+      receivable = [];
 
     /** group the bills by payer and clent */
     const result = this.groupBy(bills, function (item) {
@@ -112,15 +112,16 @@ export class ClaimService {
     const result = this.groupBy(bills, function (item) {
       return [item.payer, item.client];
     });
-    let claim = [],
-      receivable = [],
+    const claim = [],
       bill = [],
-      billCreatedAt = [],
       groupBill = [],
-      subBills = [],
-      testBill = [],
       totalBillCharge = [],
       receivableCreatedAt = [];
+
+    let subBills = [],
+      billCreatedAt = [],
+      receivable = [],
+      testBill = [];
 
     for (let i = 0; i < result.length; i++) {
       result[i].map((bills) => {
@@ -157,7 +158,7 @@ export class ClaimService {
 
   /** Set claim status */
   setStatus = async (_id: string, status: string, userId: string, details: string) => {
-    let [staff, claim] = await Promise.all([
+    const [, claim] = await Promise.all([
       this.staffService.findById(userId),
       this.model.findById({ _id }),
     ]);
@@ -175,9 +176,9 @@ export class ClaimService {
   /** Private methods */
   /** group the bills */
   private groupBy(array, f) {
-    var groups = {};
+    const groups = {};
     array.forEach(function (o) {
-      var group = JSON.stringify(f(o));
+      const group = JSON.stringify(f(o));
       groups[group] = groups[group] || [];
       groups[group].push(o);
     });
@@ -238,7 +239,7 @@ export class ClaimService {
 
   /** count the total billed amount */
   private async countTotalBills(bills: IBilling[]): Promise<number> {
-    let sum: number = 0;
+    let sum = 0;
     for (let i = 0; i < bills.length - 1; i++) {
       sum +=
         bills[i].payerTotal -
@@ -251,7 +252,7 @@ export class ClaimService {
 
   /** count the total charge */
   private async countTotalCharge(bills: IBilling[]): Promise<number> {
-    let totalCharge: number = 0;
+    let totalCharge = 0;
     for (let i = 0; i < bills.length; i++) {
       totalCharge += bills[i].billedAmount - bills[i].payerTotal - bills[i].clientResp;
     }

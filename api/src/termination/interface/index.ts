@@ -1,1 +1,1 @@
-export { ITermination } from './termination.interface'
+export { ITermination } from './termination.interface';

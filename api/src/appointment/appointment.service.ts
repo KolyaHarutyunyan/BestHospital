@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Model, Query } from 'mongoose';
+import { Model } from 'mongoose';
 import { AuthorizationserviceService } from '../client/authorizationservice/authorizationservice.service';
 import { ClientService } from '../client/client.service';
 import { PaycodeService } from '../employment/paycode/paycode.service';
@@ -7,13 +7,14 @@ import { StaffService } from '../staff/staff.service';
 import { EventStatus } from './appointment.constants';
 import { AppointmentModel } from './appointment.model';
 import { AppointmentDto, CreateAppointmentDto, CreateRepeatDto, UpdateAppointmentDto } from './dto';
-import { AppointmentQueryDTO } from './dto/appointment.dto';
+import { AppointmentQueryDTO, AppointmentQuerySetEventStatusDTO } from './dto/appointment.dto';
 import { AppointmentSanitizer } from './interceptor/appointment.interceptor';
 import { IAppointment } from './interface';
 import { AppointmentType } from './appointment.constants';
 import * as mongoose from 'mongoose';
 import { PlaceService } from '../place/place.service';
 import { BillingService } from '../billing/billing.service';
+import { IFilterQuery, IRepeat } from './interface/appointment.interface';
 
 @Injectable()
 export class AppointmentService {
@@ -42,7 +43,7 @@ export class AppointmentService {
     ]);
     switch (dto.type) {
       case AppointmentType.SERVICE:
-        appointment = await this.appointmentService(dto, staff);
+        appointment = await this.appointmentService(dto);
         break;
       case AppointmentType.DRIVE:
         appointment = await this.appointmentDrive(dto);
@@ -54,7 +55,6 @@ export class AppointmentService {
         appointment = await this.appointmentBreak(dto);
         break;
     }
-    console.log(staffPayCode, 'aaaaaaaa');
     if (staff.id != staffPayCode.employmentId.staffId && staffPayCode.employmentId.active != true) {
       throw new HttpException(
         'PayCode is not staff pay code or employment is not active',
@@ -66,13 +66,13 @@ export class AppointmentService {
   }
 
   // repeat an appointments
-  async repeat(dto: CreateRepeatDto, _id: string): Promise<Object> {
+  async repeat(dto: CreateRepeatDto, _id: string): Promise<IRepeat> {
     const appointment = await this.model.findById(_id);
     this.checkAppointment(appointment);
     if (appointment.isRepeat) {
       throw new HttpException(`appointment can not repeat`, HttpStatus.BAD_REQUEST);
     }
-    let now = new Date();
+    const now = new Date();
     if (dto.startDate > dto.endDate) {
       throw new HttpException(`startDate can not be higher than endDate`, HttpStatus.BAD_REQUEST);
     }
@@ -123,7 +123,7 @@ export class AppointmentService {
   }
 
   // create the service appointment
-  async appointmentService(dto, staff): Promise<AppointmentDto> {
+  async appointmentService(dto): Promise<AppointmentDto> {
     const [overlappingStaff, overlappingClient] = await Promise.all([
       this.model.find({
         staff: dto.staff,
@@ -177,9 +177,10 @@ export class AppointmentService {
     //     HttpStatus.BAD_REQUEST,
     //   );
     // }
-    let appointment = new this.model({
+    const appointment = new this.model({
       client: dto.client,
       authorizedService: dto.authorizedService,
+      payer: authService.authorizationId.funderId,
       staff: dto.staff,
       staffPayCode: dto.staffPayCode,
       startDate: dto.startDate,
@@ -200,7 +201,7 @@ export class AppointmentService {
     if (!dto.miles) {
       throw new HttpException(`Miles can not not be empty`, HttpStatus.BAD_REQUEST);
     }
-    let appointment = new this.model({
+    const appointment = new this.model({
       staff: dto.staff,
       staffPayCode: dto.staffPayCode,
       startDate: dto.startDate,
@@ -217,7 +218,7 @@ export class AppointmentService {
 
   // create the paid appointment
   async appointmentPaid(dto): Promise<AppointmentDto> {
-    let appointment = new this.model({
+    const appointment = new this.model({
       staff: dto.staff,
       staffPayCode: dto.staffPayCode,
       startDate: dto.startDate,
@@ -233,7 +234,7 @@ export class AppointmentService {
 
   // create the break appointment
   async appointmentBreak(dto): Promise<AppointmentDto> {
-    let appointment = new this.model({
+    const appointment = new this.model({
       staff: dto.staff,
       staffPayCode: dto.staffPayCode,
       startDate: dto.startDate,
@@ -248,17 +249,17 @@ export class AppointmentService {
   }
 
   // repeat with interval days
-  async repeatDaily(dto: CreateRepeatDto, appointment: IAppointment): Promise<Object> {
+  async repeatDaily(dto: CreateRepeatDto, appointment: IAppointment): Promise<IRepeat> {
     console.log('dto.repeatCount && !dto.repeatConsecutive');
     const appointments = [];
     const day = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-    const startDate: any = new Date(dto.startDate);
-    const endDate: any = new Date(new Date(dto.endDate).setHours(23, 59, 59));
-    const diffDays = Math.floor(Math.abs((startDate - endDate) / day));
+    const startDate = new Date(dto.startDate) as unknown as number;
+    const endDate = new Date(new Date(dto.endDate).setHours(23, 59, 59)) as unknown as number;
+    Math.floor(Math.abs((startDate - endDate) / day));
     let count = 0;
-    let dates = [],
-      x;
-    for (let d = startDate; d <= endDate; d.setDate(d.getDate() + dto.repeatCount)) {
+    const dates = [];
+    let x;
+    for (let d: any = startDate; d <= endDate; d.setDate(d.getDate() + dto.repeatCount)) {
       count++;
       x = new Date(d.getTime());
       dates.push(x);
@@ -271,10 +272,10 @@ export class AppointmentService {
   }
 
   // repeat every day
-  async repeatConsecutiveDays(dto: CreateRepeatDto, appointment: IAppointment): Promise<Object> {
+  async repeatConsecutiveDays(dto: CreateRepeatDto, appointment: IAppointment): Promise<IRepeat> {
     const appointments = [];
-    const startDate: any = new Date(dto.startDate);
-    const endDateDate: any = new Date(dto.endDate);
+    const startDate = new Date(dto.startDate);
+    const endDateDate = new Date(dto.endDate);
     const days = this.getBusinessDatesCount(startDate, endDateDate);
     for (let i = 0; i < days.count; i++) {
       this.cloneDoc(appointment, days.dates[i], appointments);
@@ -284,16 +285,16 @@ export class AppointmentService {
   }
 
   // repeat every week
-  async repeatWeekly(dto: CreateRepeatDto, appointment: IAppointment): Promise<Object> {
+  async repeatWeekly(dto: CreateRepeatDto, appointment: IAppointment): Promise<IRepeat> {
     const appointments = [];
     const weeks = [];
     let totalCount = 0;
-    const startDate: any = new Date(dto.startDate);
-    const endDate: any = new Date(dto.endDate);
+    const startDate = new Date(dto.startDate);
+    const endDate = new Date(dto.endDate);
     let current = true;
-    let dates = [],
-      x;
-    var dayCount = {
+    const dates = [];
+    let x;
+    const dayCount = {
       0: { sum: 0, date: [] },
       1: { sum: 0, date: [] },
       2: { sum: 0, date: [] },
@@ -302,7 +303,7 @@ export class AppointmentService {
       5: { sum: 0, date: [] },
       6: { sum: 0, date: [] },
     }; //0 is sunday and 6 is saturday
-    for (var d = startDate; d <= endDate; d.setDate(d.getDate())) {
+    for (const d = startDate; d <= endDate; d.setDate(d.getDate())) {
       dayCount[d.getDay()].sum++;
       x = new Date(d.getTime());
       dayCount[d.getDay()].date.push(x);
@@ -320,7 +321,7 @@ export class AppointmentService {
       totalCount += dayCount[days].sum;
     });
 
-    for (let prop of weeks) {
+    for (const prop of weeks) {
       prop.map((date) => {
         dates.push(date);
       });
@@ -333,13 +334,13 @@ export class AppointmentService {
   }
 
   // repeat every month
-  async repeatMonthly(dto: CreateRepeatDto, appointment: IAppointment): Promise<Object> {
+  async repeatMonthly(dto: CreateRepeatDto, appointment: IAppointment): Promise<IRepeat> {
     const appointments = [];
-    let start = new Date(dto.startDate);
-    let end = new Date(dto.endDate);
+    const start = new Date(dto.startDate);
+    const end = new Date(dto.endDate);
     let count = 0;
-    let dates = [],
-      x;
+    const dates = [];
+    let x;
     for (let d = start; d <= end; d.setMonth(d.getMonth())) {
       if (d.getMonth() == end.getMonth() && end.getDate() < dto.repeatDayMonth) {
         break;
@@ -354,11 +355,11 @@ export class AppointmentService {
       this.cloneDoc(appointment, dates[i], appointments);
     }
     await this.saveDb(appointments);
-    return { occurrency: count };
+    return { occurency: count };
   }
 
   //set Status(EventStatus)
-  async setStatus(_id: string, status: any): Promise<AppointmentDto> {
+  async setStatus(_id: string, status: AppointmentQuerySetEventStatusDTO): Promise<AppointmentDto> {
     const appointment: any = await this.model.findById(_id).populate({
       path: 'authorizedService',
       populate: { path: 'serviceId' },
@@ -375,7 +376,10 @@ export class AppointmentService {
       //     HttpStatus.BAD_REQUEST,
       //   );
       // }
-      if (status.eventStatus == 'RENDERED') {
+      if (status.eventStatus === 'RENDERED' && appointment.type !== 'SERVICE') {
+        throw new HttpException(`can't render the appointment`, HttpStatus.BAD_REQUEST);
+      }
+      if (status.eventStatus === 'RENDERED' && appointment.type === 'SERVICE') {
         const minutes = await this.timeDiffCalc(appointment.endTime, appointment.startTime);
         await this.authorizedService.countCompletedUnits(appointment.authorizedService, minutes);
         await this.billingService.create(appointment);
@@ -388,7 +392,7 @@ export class AppointmentService {
 
   // find all appointments
   async findAll(filter: AppointmentQueryDTO): Promise<any> {
-    let query: any = {};
+    let query: IFilterQuery;
     if (filter.client) query.client = mongoose.Types.ObjectId(filter.client);
     if (filter.staff) query.staff = mongoose.Types.ObjectId(filter.staff);
     if (filter.status) query.status = filter.status;
@@ -407,9 +411,7 @@ export class AppointmentService {
         },
       },
     ]);
-
     return appointments;
-    // return this.sanitizer.sanitizeMany(appointments);
   }
 
   //filter appointments by client
@@ -451,9 +453,8 @@ export class AppointmentService {
   }
 
   // update appointment
-  async update(_id: string, dto: UpdateAppointmentDto): Promise<any> {
+  async update(_id: string, dto: UpdateAppointmentDto): Promise<AppointmentDto> {
     const appointment = await this.model.findById(_id);
-    let compareService;
     this.checkAppointment(appointment);
     if (dto.placeService) {
       await this.placeService.findOne(dto.placeService);
@@ -475,10 +476,10 @@ export class AppointmentService {
       if (client.id != authService.authorizationId.clientId) {
         throw new HttpException(`Client haven't authService`, HttpStatus.BAD_REQUEST);
       }
-      compareService = await this.authorizedService.getByServiceId(authService.serviceId);
+      await this.authorizedService.getByServiceId(authService.serviceId);
       appointment.type = dto.type;
     }
-    const [staff, payCode, payCodeByStaff]: any = await Promise.all([
+    const [, payCode, ,]: any = await Promise.all([
       this.staffService.findById(dto.staff),
       this.payCodeService.findOne(dto.staffPayCode ? dto.staffPayCode : appointment.staffPayCode),
       this.payCodeService.findPayCodesByStaffId(dto.staff ? dto.staff : appointment.staff),
@@ -516,7 +517,7 @@ export class AppointmentService {
   }
 
   // clone appointment
-  async cloneDoc(appointment: IAppointment, date, appointments: Array<Object>) {
+  async cloneDoc(appointment: IAppointment, date, appointments) {
     const cloneDoc = new this.model({
       client: appointment.client,
       authorizedService: appointment.authorizedService,
@@ -536,7 +537,7 @@ export class AppointmentService {
   }
 
   // save the appointments
-  async saveDb(appointments: Array<Object>) {
+  async saveDb(appointments) {
     return await this.model.insertMany(appointments);
   }
 
@@ -544,8 +545,8 @@ export class AppointmentService {
   getBusinessDatesCount(startDate, endDate) {
     let count = 0;
     const curDate = new Date(startDate.getTime());
-    let dates = [],
-      x;
+    const dates = [];
+    let x;
     while (curDate <= endDate) {
       const dayOfWeek = curDate.getDay();
       if (dayOfWeek !== 0 && dayOfWeek !== 6) {

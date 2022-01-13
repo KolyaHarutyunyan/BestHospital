@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ACCESS_TOKEN } from '../../authN/authN.constants';
-import { ParseObjectIdPipe, Public } from '../../util';
+import { ParseObjectIdPipe } from '../../util';
 import { AuthorizationserviceService } from './authorizationservice.service';
 import {
   AuthorizationServiceDTO,

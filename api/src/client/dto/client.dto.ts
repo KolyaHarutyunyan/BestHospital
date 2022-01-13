@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsEnum, IsNotEmpty, IsPhoneNumber, IsUrl } from 'class-validator';
+import { IsEnum } from 'class-validator';
 import { ClientStatus } from '../client.constants';
+import { ITermination } from '../../termination/interface';
 
 export class ClientDTO {
   @ApiProperty()
@@ -28,7 +29,7 @@ export class ClientDTO {
   @ApiProperty({ enum: ClientStatus })
   status: string;
   @ApiProperty()
-  termination: Object;
+  termination: ITermination;
 }
 
 export class ClientQueryDTO {

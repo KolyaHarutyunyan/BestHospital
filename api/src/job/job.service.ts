@@ -17,7 +17,7 @@ export class JobService {
   // create the job
   async create(dto: CreateJobDTO): Promise<JobDTO> {
     try {
-      let job = new this.model({
+      const job = new this.model({
         name: dto.name,
       });
       await job.save();
@@ -41,7 +41,7 @@ export class JobService {
 
   // find job by id
   async findOne(_id: string): Promise<JobDTO> {
-    let job = await this.model.findById({ _id });
+    const job = await this.model.findById({ _id });
     this.checkJob(job);
     return job;
   }

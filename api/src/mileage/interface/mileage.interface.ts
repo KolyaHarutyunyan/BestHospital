@@ -1,5 +1,4 @@
 import { Document } from 'mongoose';
-import { ITermination } from '../../termination/interface';
 
 export interface IMileage extends Document {
   id: string;

@@ -5,9 +5,6 @@ import { EnrollmentDTO } from '../dto';
 
 @Injectable()
 export class EnrollmentSanitizer implements ISanitize {
-  constructor()
-  {}
-
   sanitize(enrollment: IEnrollment): EnrollmentDTO {
     const enrollmentDTO: EnrollmentDTO = {
       id: enrollment.id,

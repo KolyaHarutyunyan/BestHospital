@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { StaffDTO, CreateStaffDto, EditStaffDTO } from './dto';
 import { StaffSanitizer } from './interceptor';
 import { IStaff } from './interface';
@@ -92,7 +92,7 @@ export class StaffService {
     try {
       console.log(_id);
       console.log(serviceId);
-      let staff = await this.model.updateOne({ _id }, { $pull: { service: serviceId } });
+      const staff = await this.model.updateOne({ _id }, { $pull: { service: serviceId } });
       console.log(staff);
       if (staff.nModified) {
         return serviceId;
@@ -108,7 +108,7 @@ export class StaffService {
   /** get service */
   getService = async (_id: string): Promise<StaffDTO> => {
     try {
-      let staff = await this.model.findById({ _id }).populate('service');
+      const staff = await this.model.findById({ _id }).populate('service');
       this.checkStaff(staff);
       return this.sanitizer.sanitize(staff);
     } catch (e) {

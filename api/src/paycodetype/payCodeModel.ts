@@ -1,5 +1,4 @@
-import { model, Schema, Types } from 'mongoose';
-import { IEmployment, ScheduleStatus } from '../employment';
+import { model, Schema } from 'mongoose';
 import { PayCodeTypeStatus } from './paycodetypes.constants';
 import { IPayCodeType } from './interface';
 

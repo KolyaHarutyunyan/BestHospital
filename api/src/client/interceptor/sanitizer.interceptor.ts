@@ -5,9 +5,6 @@ import { ClientDTO } from '../dto';
 
 @Injectable()
 export class ClientSanitizer implements ISanitize {
-  constructor()
-  {}
-
   sanitize(client: IClient): ClientDTO {
     const clientDTO: ClientDTO = {
       id: client.id,

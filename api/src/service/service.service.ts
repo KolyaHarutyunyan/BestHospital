@@ -21,7 +21,7 @@ export class ServiceService {
   /** Create a new service */
   async create(dto: CreateServiceDto): Promise<ServiceDTO> {
     try {
-      let service = new this.model({
+      const service = new this.model({
         name: dto.name,
         displayCode: dto.displayCode,
         category: dto.category,

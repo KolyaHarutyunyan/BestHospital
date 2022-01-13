@@ -46,7 +46,7 @@ export class AuthNService {
         userType: type,
       }).save();
       const regToken = await this.generateToken(auth, JWT_SECRET_REGISTER);
-      console.log(regToken)
+      console.log(regToken);
       this.mailerService.sendInviteMail(auth.email, regToken);
       return;
     } catch (e) {
@@ -62,7 +62,7 @@ export class AuthNService {
     type: UserType,
   ): Promise<MailStatus> => {
     try {
-      const auth = await new this.model({
+      await new this.model({
         _id: id,
         email: email,
         roles: [],
@@ -88,7 +88,7 @@ export class AuthNService {
 
   /** Complete registration */
   completeRegistration = async (resetPassDTO: ResetPassDTO): Promise<AuthDTO> => {
-    console.log(resetPassDTO)
+    console.log(resetPassDTO);
     let auth = await this.model.findById(resetPassDTO.userId);
     this.canRegister(auth);
     this.confirmPassword(resetPassDTO.newPassword, resetPassDTO.confirmation);
@@ -135,7 +135,7 @@ export class AuthNService {
     auth.password = changePassDTO.newPassword;
     const token = await this.getSigninToken(auth);
     //clean the old tokens and replace it with a new one
-    auth.sessions = [token]
+    auth.sessions = [token];
     auth = await auth.save();
     return await this.getSigninResponse(auth, token);
   };

@@ -8,16 +8,17 @@ import { ACCESS_TOKEN } from '../authN/authN.constants';
 @Controller('availability')
 @ApiTags('Availability Endpoints')
 export class AvailabilityController {
-  constructor(private readonly scheduleService: AvailabilityService) { }
+  constructor(private readonly scheduleService: AvailabilityService) {}
 
-  @Post(":ownerId/:onModel")
+  @Post(':ownerId/:onModel')
   @Public()
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: AvailabilityDTO })
   createSchedule(
     @Body() createScheduleDto: CreateAvailabilityDTO,
     @Param('ownerId', ParseObjectIdPipe) ownerId: string,
-    @Param('onModel') onModel: string) {
+    @Param('onModel') onModel: string,
+  ) {
     return this.scheduleService.createSchedule(createScheduleDto, ownerId, onModel);
   }
 

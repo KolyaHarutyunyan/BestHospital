@@ -5,9 +5,9 @@ import { AuthorizationService } from './authorization.service';
 import { AuthorizationDTO, CreateAuthorizationDTO, UpdateAuthorizationDTO } from './dto';
 
 @Controller('authorization')
-@ApiTags("Authorization Endpoints")
+@ApiTags('Authorization Endpoints')
 export class AuthorizationController {
-  constructor(private readonly authorizationService: AuthorizationService) { }
+  constructor(private readonly authorizationService: AuthorizationService) {}
 
   /** Create a new authorization */
   @Post('client/:clientId/funder/:funderId')
@@ -16,7 +16,8 @@ export class AuthorizationController {
   create(
     @Param('clientId', ParseObjectIdPipe) clientId: string,
     @Param('funderId', ParseObjectIdPipe) funderId: string,
-    @Body() createAuthorizationDTO: CreateAuthorizationDTO) {
+    @Body() createAuthorizationDTO: CreateAuthorizationDTO,
+  ) {
     return this.authorizationService.create(clientId, funderId, createAuthorizationDTO);
   }
 
@@ -30,7 +31,10 @@ export class AuthorizationController {
   @Patch(':id')
   @Public()
   @ApiOkResponse({ type: AuthorizationDTO })
-  update(@Param('id', ParseObjectIdPipe) id: string, @Body() updateAuthorizationserviceDto: UpdateAuthorizationDTO) {
+  update(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Body() updateAuthorizationserviceDto: UpdateAuthorizationDTO,
+  ) {
     return this.authorizationService.update(id, updateAuthorizationserviceDto);
   }
   @Delete(':id')

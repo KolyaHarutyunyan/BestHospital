@@ -54,7 +54,7 @@ export class PlaceService {
   }
 
   // remove the place
-  async remove(_id: string): Promise<String> {
+  async remove(_id: string): Promise<string> {
     const place = await this.model.findByIdAndDelete(_id);
     this.checkPlace(place);
     return place._id;

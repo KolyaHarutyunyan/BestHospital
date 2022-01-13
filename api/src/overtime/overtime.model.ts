@@ -1,5 +1,4 @@
-import { model, Schema, Types } from 'mongoose';
-import { IEmployment, ScheduleStatus } from '../employment';
+import { model, Schema } from 'mongoose';
 import { OvertimeStatus } from './overtime.constants';
 import { IOverTime } from './interface';
 

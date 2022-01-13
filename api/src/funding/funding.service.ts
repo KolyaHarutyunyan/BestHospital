@@ -34,7 +34,7 @@ export class FundingService {
   /** Create a new funder */
   async create(dto: CreateFundingDTO, userId: string): Promise<FundingDTO> {
     try {
-      let funder = new this.model({
+      const funder = new this.model({
         name: dto.name,
         email: dto.email,
         phoneNumber: dto.phoneNumber,
@@ -63,7 +63,7 @@ export class FundingService {
       const funder = await this.model.findById({ _id });
       this.checkFunder(funder);
       const globService = await this.service.findOne(dto.serviceId);
-      let service = new this.serviceModel({
+      const service = new this.serviceModel({
         funderId: _id,
         serviceId: globService.id,
         name: dto.name,
@@ -93,7 +93,7 @@ export class FundingService {
     if (!status) {
       status = 'ACTIVE';
     }
-    let [funders, count] = await Promise.all([
+    const [funders, count] = await Promise.all([
       this.model.find({ status }).sort({ _id: -1 }).skip(skip).limit(limit),
       this.model.countDocuments({ status }),
     ]);
@@ -265,7 +265,7 @@ export class FundingService {
   async updateModifiers(_id: string, dto: UpdateModifiersDto): Promise<ServiceDTO> {
     const fundingService = await this.serviceModel.findById({ _id });
     this.checkFundingService(fundingService);
-    let dbModifier: any = fundingService.modifiers;
+    const dbModifier: any = fundingService.modifiers;
     for (let i = 0; i < dbModifier.length; i++) {
       for (let j = 0; j < dto.modifiers.length; j++) {
         if (dto.modifiers[j]._id == dbModifier[i]._id) {
@@ -281,7 +281,7 @@ export class FundingService {
   }
 
   /** delete modifiers */
-  async deleteModifiers(_id: string, ids: String[]): Promise<ServiceDTO> {
+  async deleteModifiers(_id: string, ids: string[]): Promise<ServiceDTO> {
     const fundingService = await this.serviceModel.findById({ _id });
     this.checkFundingService(fundingService);
     fundingService.modifiers.map((dbModifier) => {

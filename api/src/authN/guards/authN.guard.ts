@@ -3,15 +3,12 @@ import {
   ExecutionContext,
   HttpException,
   HttpStatus,
-  Inject,
   Injectable,
 } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { AuthNService } from '../authN.service';
-import { JWT_SECRET_SIGNIN, ACCESS_TOKEN, RegistrationStatus } from '../authN.constants';
-import { IAuth, IToken } from '../interface';
+import { JWT_SECRET_SIGNIN, ACCESS_TOKEN } from '../authN.constants';
 import { Reflector } from '@nestjs/core';
-import { IRequest } from '../../util';
 import { RoleService } from '../../authZ';
 import { UserDTO } from '../dto';
 

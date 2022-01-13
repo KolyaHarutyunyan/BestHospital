@@ -1,4 +1,4 @@
-import { model, Schema, Types } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import { ITermination } from './interface';
 
 export const TerminationSchema = new Schema({

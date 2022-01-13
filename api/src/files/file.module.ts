@@ -9,4 +9,4 @@ import { FileSanitizer } from './interceptor';
   controllers: [FileController],
   exports: [FileService],
 })
-export class FileModule { }
+export class FileModule {}

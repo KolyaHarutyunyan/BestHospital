@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum } from 'class-validator';
-import {CredentialsStatus} from '../credential.constants';
+import { CredentialsStatus } from '../credential.constants';
 
 export class CredentialDTO {
   @ApiProperty()
@@ -9,5 +9,5 @@ export class CredentialDTO {
   name: string;
   @ApiProperty({ enum: CredentialsStatus })
   @IsEnum(CredentialsStatus)
-  type: number
+  type: number;
 }

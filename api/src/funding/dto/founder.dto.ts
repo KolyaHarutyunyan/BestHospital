@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum } from 'class-validator';
+import { ITermination } from '../../termination/interface';
 import { AddressDTO } from '../../address';
 import { FundingStatus } from '../funding.constants';
 
@@ -25,7 +26,7 @@ export class FundingDTO {
   @ApiProperty({ enum: FundingStatus })
   status: string;
   @ApiProperty()
-  termination: Object;
+  termination: ITermination;
 }
 
 export class FundingQueryDTO {

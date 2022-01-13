@@ -5,7 +5,6 @@ import { IPayCode } from '../interface';
 
 @Injectable()
 export class PayCodeSanitizer implements ISanitize {
-  constructor() {}
   sanitize(payCode: IPayCode): PayCodeDTO {
     const payCodeDTO: PayCodeDTO = {
       id: payCode.id,

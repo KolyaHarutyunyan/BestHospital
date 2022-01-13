@@ -19,7 +19,7 @@ export class EmploymentDto {
   @ApiProperty()
   endDate: Date;
   @ApiProperty({ type: Boolean })
-  active: Boolean;
+  active: boolean;
   @ApiProperty({ enum: ScheduleStatus })
   @IsEnum(ScheduleStatus)
   schedule: number;

@@ -1,9 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsOptional,
-  IsPhoneNumber,
-  IsString,
-} from 'class-validator';
+import { IsOptional, IsPhoneNumber, IsString } from 'class-validator';
 import { AddressDTO } from '../../../address';
 
 export class UpdateContactDTO {

@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { JWT_SECRET_FORGET_PASS } from '../authN.constants';
-import { IToken } from '../interface';
 
 @Injectable()
 export class ResetPassGuard implements CanActivate {
@@ -21,10 +20,7 @@ export class ResetPassGuard implements CanActivate {
       return true;
     } catch (err) {
       if (err.name === 'TokenExpiredError') {
-        throw new HttpException(
-          'Token is expired, request another reset',
-          HttpStatus.FORBIDDEN,
-        );
+        throw new HttpException('Token is expired, request another reset', HttpStatus.FORBIDDEN);
       }
       //unknown error
       throw err;
@@ -34,10 +30,7 @@ export class ResetPassGuard implements CanActivate {
   //private members
   private checkToken(token: string) {
     if (!token) {
-      throw new HttpException(
-        'reset-token header was not set',
-        HttpStatus.UNAUTHORIZED,
-      );
+      throw new HttpException('reset-token header was not set', HttpStatus.UNAUTHORIZED);
     }
   }
 }

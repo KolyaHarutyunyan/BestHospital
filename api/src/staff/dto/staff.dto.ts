@@ -3,6 +3,7 @@ import { IsEnum } from 'class-validator';
 import { AddressDTO } from '../../address';
 import { LicenseDTO } from './license.dto';
 import { StaffStatus } from '../staff.constants';
+import { ITermination } from '../../termination/interface';
 
 export class StaffDTO {
   @ApiProperty()
@@ -36,7 +37,7 @@ export class StaffDTO {
   @ApiProperty({ enum: StaffStatus })
   status: string;
   @ApiProperty()
-  termination: Object;
+  termination: ITermination;
   @ApiProperty({ type: AddressDTO })
   address: AddressDTO;
   @ApiProperty({ type: LicenseDTO })

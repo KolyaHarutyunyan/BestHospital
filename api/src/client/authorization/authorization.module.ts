@@ -10,6 +10,6 @@ import { AuthorizationserviceModule } from '../authorizationservice/authorizatio
 @Module({
   imports: [FundingModule, AddressModule, EnrollmentModule, AuthorizationserviceModule],
   controllers: [AuthorizationController],
-  providers: [AuthorizationService, AuthorizationSanitizer]
+  providers: [AuthorizationService, AuthorizationSanitizer],
 })
-export class AuthorizationModule { }
+export class AuthorizationModule {}

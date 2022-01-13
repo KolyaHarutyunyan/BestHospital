@@ -5,8 +5,6 @@ import { ModifyDTO } from '../dto';
 
 @Injectable()
 export class ModifySanitizer implements ISanitize {
-  constructor() {}
-
   sanitize(modifier: IModify): ModifyDTO {
     const modifierDTO: ModifyDTO = {
       _id: modifier._id,

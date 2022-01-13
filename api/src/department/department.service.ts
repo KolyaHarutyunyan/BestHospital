@@ -18,7 +18,7 @@ export class DepartmentService {
   // create the department
   async create(dto: CreateDepartmentDTO): Promise<DepartmentDTO> {
     try {
-      let department = new this.model({
+      const department = new this.model({
         name: dto.name,
       });
       await department.save();
@@ -41,7 +41,7 @@ export class DepartmentService {
 
   // find the department
   async findOne(_id: string): Promise<DepartmentDTO> {
-    let department = await this.model.findById({ _id });
+    const department = await this.model.findById({ _id });
     this.checkDepartment(department);
     return this.sanitizer.sanitize(department);
   }

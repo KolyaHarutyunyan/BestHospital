@@ -11,15 +11,13 @@ import {
   CreateServiceDTO,
   FundingQueryDTO,
 } from './dto';
-import { Public, ParseObjectIdPipe } from '../util';
+import { ParseObjectIdPipe } from '../util';
 import { CreateTerminationDto } from 'src/termination/dto/create-termination.dto';
 
 @Controller('funding')
 @ApiTags('Funding Endpoints')
 export class FundingController {
-  constructor(
-    private readonly fundingService: FundingService,
-  ) {}
+  constructor(private readonly fundingService: FundingService) {}
 
   /** Create a new funder */
   @Post()

@@ -7,6 +7,7 @@ export const appointmentSchema = new Schema({
   type: { type: String, enum: AppointmentType },
   client: { type: Types.ObjectId, ref: 'Client', default: null },
   authorizedService: { type: Types.ObjectId, ref: 'ClientAuthorizationService', default: null },
+  payer: { type: Types.ObjectId, ref: 'Funder' },
   placeService: { type: Types.ObjectId, ref: 'Place' },
   staff: { type: Types.ObjectId, ref: 'Staff' },
   staffPayCode: { type: Types.ObjectId, ref: 'PayCode' },

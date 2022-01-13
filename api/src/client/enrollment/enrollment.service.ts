@@ -33,7 +33,7 @@ export class EnrollmentService {
     try {
       const client = await this.clientModel.findById({ _id: clientId });
       this.checkClient(client);
-      const funder = await this.fundingService.findById(funderId);
+      await this.fundingService.findById(funderId);
       if (dto.primary) {
         const findEnrollment = await this.model.findOne({ clientId, primary: true });
         if (findEnrollment !== null) {
@@ -41,7 +41,7 @@ export class EnrollmentService {
           await findEnrollment.save();
         }
       }
-      let enrollment = new this.model({
+      const enrollment = new this.model({
         clientId,
         funderId,
         primary: dto.primary,

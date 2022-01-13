@@ -8,6 +8,6 @@ import { AvailabilitySanitizer } from './interceptor';
 @Module({
   imports: [ClientModule, StaffModule],
   controllers: [AvailabilityController],
-  providers: [AvailabilityService, AvailabilitySanitizer]
+  providers: [AvailabilityService, AvailabilitySanitizer],
 })
-export class AvailabilityModule { }
+export class AvailabilityModule {}

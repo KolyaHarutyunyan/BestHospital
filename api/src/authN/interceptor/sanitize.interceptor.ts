@@ -21,10 +21,10 @@ export class AuthNSanitizer implements ISanitize {
     if (!roles || roles.length < 1) {
       return [];
     }
-    const role = (roles[0] as unknown) as IRole;
+    const role = roles[0] as unknown as IRole;
     if (role.title) {
       //permission was populated
-      return this.roleSanitizer.sanitizeMany((roles as unknown) as IRole[]);
+      return this.roleSanitizer.sanitizeMany(roles as unknown as IRole[]);
     } else {
       //not populated
       return roles;

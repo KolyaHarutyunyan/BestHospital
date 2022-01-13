@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Query, Request } from '@nestjs/common';
 import { IRequest, ParseObjectIdPipe, Public } from '../util';
 import { startSession } from 'mongoose';
 import { BillingService } from './billing.service';
-import { CreateBillingDto, UpdateBillingDto, BillingDto, TransactionDto } from './dto';
+import { CreateBillingDto, BillingDto, TransactionDto } from './dto';
 import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { BillingStatus, ClaimStatus } from './billing.constants';
 import { ACCESS_TOKEN } from '../authN/authN.constants';
@@ -51,15 +51,15 @@ export class BillingController {
     return await this.billingService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBillingDto: UpdateBillingDto) {
-    return this.billingService.update(+id, updateBillingDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateBillingDto: UpdateBillingDto) {
+  //   return this.billingService.update(+id, updateBillingDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.billingService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.billingService.remove(+id);
+  // }
 
   /** Set billing status */
   @Patch(':id/setStatus')

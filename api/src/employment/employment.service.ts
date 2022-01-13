@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { MongooseUtil } from '../util';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { EmploymentModel } from './employment.model';
 import { IEmployment } from './interface';
 import { StaffService } from '../staff/staff.service';
@@ -39,7 +39,7 @@ export class EmploymentService {
       if (dto.endDate) {
         const endDate = new Date(dto.endDate).getTime();
         if (endDate >= date) {
-          let activeEmployment = await this.model.findOne({ active: true, staffId: staff.id });
+          const activeEmployment = await this.model.findOne({ active: true, staffId: staff.id });
           if (activeEmployment) {
             activeEmployment.active = false;
             activeEmployment.endDate = new Date(
@@ -51,11 +51,11 @@ export class EmploymentService {
         }
         employment.endDate = dto.endDate;
       }
-      const findStaff = await this.staffService.findById(dto.supervisor);
+      await this.staffService.findById(dto.supervisor);
       employment.supervisor = dto.supervisor;
 
       if (dto.departmentId) {
-        let department = await this.departmentService.findOne(dto.departmentId);
+        await this.departmentService.findOne(dto.departmentId);
         employment.departmentId = dto.departmentId;
       }
       employment = await employment.save();
@@ -81,7 +81,7 @@ export class EmploymentService {
   }
 
   // find employments by staff id
-  async findAllEmploymentsByStaffId(staffId: string): Promise<String[]> {
+  async findAllEmploymentsByStaffId(staffId: string): Promise<string[]> {
     const ids = [];
     const employments = await this.model.find({ staffId });
     this.checkEmployment(employments[0]);
@@ -93,7 +93,7 @@ export class EmploymentService {
 
   // find employment by id
   async findOne(_id: string): Promise<EmploymentDto> {
-    let employment = await this.model
+    const employment = await this.model
       .findById({ _id })
       .populate('departmentId', 'name')
       .populate('supervisor', 'firstName');
@@ -123,7 +123,7 @@ export class EmploymentService {
       employment.supervisor = dto.supervisor;
     }
     if (dto.departmentId) {
-      let department = await this.departmentService.findOne(dto.departmentId);
+      await this.departmentService.findOne(dto.departmentId);
       employment.departmentId = dto.departmentId;
     }
     if (dto.schedule) employment.schedule = dto.schedule;
@@ -131,7 +131,7 @@ export class EmploymentService {
     if (dto.endDate) {
       const endDate = new Date(dto.endDate).getTime();
       if (endDate >= date) {
-        let activeEmployment = await this.model.findOne({
+        const activeEmployment = await this.model.findOne({
           active: true,
           staffId: employment.staffId,
         });

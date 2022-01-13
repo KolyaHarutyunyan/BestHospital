@@ -1,9 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateClientDTO, UpdateClientDto } from './dto';
 import { MongooseUtil } from '../util';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { ClientModel } from './client.model';
-import { ServiceService } from '../service';
 import { ClientSanitizer } from './interceptor';
 import { IClient } from './interface';
 import { HistoryService, serviceLog } from '../history';
@@ -25,7 +24,7 @@ export class ClientService {
   /** Create a new client */
   create = async (dto: CreateClientDTO, userId: string): Promise<ClientDTO> => {
     try {
-      let client = new this.model({
+      const client = new this.model({
         firstName: dto.firstName,
         middleName: dto.middleName,
         lastName: dto.lastName,
@@ -58,7 +57,7 @@ export class ClientService {
       if (!status) {
         status = 'ACTIVE';
       }
-      let [clients, count] = await Promise.all([
+      const [clients, count] = await Promise.all([
         this.model
           .find({ status })
           .populate({ path: 'enrollment', select: 'name' })

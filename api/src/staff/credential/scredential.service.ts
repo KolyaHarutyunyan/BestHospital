@@ -23,15 +23,15 @@ export class SCredentialService {
   create = async (dto: SCreateCredentialDTO): Promise<SCredentialDTO> => {
     try {
       await this.staffService.findById(dto.staffId);
-      const credential = await this.credentialService.findOne(dto.credentialId);
-      let staffCredential = new this.model({
+      await this.credentialService.findOne(dto.credentialId);
+      const staffCredential = new this.model({
         staffId: dto.staffId,
         credentialId: dto.credentialId,
         expirationDate: dto.expirationDate,
         receiveData: dto.receiveData,
       });
 
-      var staffC = await staffCredential.save();
+      let staffC = await staffCredential.save();
       staffC = await staffC.populate('credentialId').execPopulate();
       return staffC;
       // return this.sanitizer.sanitize(user);
@@ -54,7 +54,7 @@ export class SCredentialService {
       } else {
         credential.expirationDate = null;
       }
-      const globCredential = await this.credentialService.findOne(dto.credentialId);
+      await this.credentialService.findOne(dto.credentialId);
       credential.credentialId = dto.credentialId;
 
       await credential.save();

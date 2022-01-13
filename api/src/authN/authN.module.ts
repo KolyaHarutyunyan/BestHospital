@@ -1,4 +1,4 @@
-import { Global, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AuthNService } from './authN.service';
 import { AuthNController } from './authN.controller';
 import { AuthNSanitizer } from './interceptor';

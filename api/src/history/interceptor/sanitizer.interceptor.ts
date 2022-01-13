@@ -5,8 +5,6 @@ import { HistoryDTO } from '../dto';
 
 @Injectable()
 export class HistorySanitizer implements ISanitize {
-  constructor() {}
-
   sanitize(history: IHistory): HistoryDTO {
     const historyrDTO: HistoryDTO = {
       id: history.id,

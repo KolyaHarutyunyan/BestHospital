@@ -45,8 +45,8 @@ export class AuthorizationserviceService {
     dto: CreateAuthorizationServiceDTO,
   ): Promise<AuthorizationServiceDTO> {
     try {
-      let modifiers = [];
-      let brokenModifiers = [];
+      const modifiers = [];
+      const brokenModifiers = [];
       let compareByFundingService;
       const findService = await this.fundingService.findService(fundingServiceId);
       if (dto.modifiers) {
@@ -62,7 +62,7 @@ export class AuthorizationserviceService {
           modifiers,
         );
       }
-      let authorizationService = new this.model({
+      const authorizationService = new this.model({
         total: dto.total,
         authorizationId: authorizationId,
         serviceId: fundingServiceId,
@@ -82,7 +82,7 @@ export class AuthorizationserviceService {
     authorizationId: string,
     fundingServiceId: string,
     dto,
-    brokenModifiers: String[],
+    brokenModifiers: string[],
   ): Promise<void> {
     const findAuthorizationService: any = await this.model
       .find({ authorizationId: authorizationId })
@@ -120,16 +120,14 @@ export class AuthorizationserviceService {
 
   /** get available modifiers only for checkModifiers function */
   async availableModifiers(authorizationId: string, fundingService: any): Promise<any> {
-    let dbModifiers = [];
-    let available = [];
-    console.log(authorizationId);
-    const authServices: any = await this.model.find({ authorizationId });
-    console.log(authServices);
+    const dbModifiers = [],
+      available = [];
+    const authServices = await this.model.find({ authorizationId });
     // this.checkAuthorizationService(authServices[0]);
 
     authServices.map((authService) => {
       authService.modifiers.map((modifier) => {
-        dbModifiers.push(modifier._id.toString());
+        dbModifiers.push(modifier.toString());
       });
     });
     if (dbModifiers.length) {
@@ -180,7 +178,6 @@ export class AuthorizationserviceService {
   // update authorization service
   async update(_id: string, dto: UpdateAuthorizationserviceDTO): Promise<AuthorizationServiceDTO> {
     try {
-      const modifiers = [];
       const authorizationService = await this.model.findById({
         _id,
         authorizationId: dto.authorizationId,
@@ -207,7 +204,7 @@ export class AuthorizationserviceService {
   }
 
   // remove the authorization service
-  async remove(_id: string): Promise<String> {
+  async remove(_id: string): Promise<string> {
     try {
       const authorizationService = await this.model.findByIdAndDelete({ _id });
       this.checkAuthorizationService(authorizationService);

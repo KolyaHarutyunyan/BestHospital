@@ -1,35 +1,22 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { AVATAR_FOLDER, EVENT_FOLDER, QR_FOLDER, RESTAURANT_FOLDER } from './constants';
+import { EVENT_FOLDER } from './constants';
 import { FileStorage } from './file.storage';
 import * as sharp from 'sharp';
 import { EditImageDTO, EventImageDTO } from './dto';
-import * as fs from "fs";
 import { CreateImageDTO, FileDTO } from './dto';
-// import { OfficeService } from '../office';
-// import { BranchService } from '../branch';
-// import { AgentService } from '../agent';
+
 import { Model } from 'mongoose';
 import { MongooseUtil } from '../util';
 import { IFile } from './interface';
 import { FileModel } from './file.model';
 import { FileSanitizer } from './interceptor';
-// import { CustomerService } from '../customer';
-// import { CarrierService } from '../carrier';
-// import { LoadService } from '../load';
 
 @Injectable()
 export class FileService {
   constructor(
     private readonly storage: FileStorage,
-    // private readonly office: OfficeService,
-    // private readonly branch: BranchService,
-    // private readonly agent: AgentService,
-    // private readonly customer: CustomerService,
-    // private readonly load: LoadService,
-    // private readonly carrier: CarrierService,
 
     private readonly sanitizer: FileSanitizer,
-
   ) {
     this.model = FileModel;
     this.mongooseUtil = new MongooseUtil();
@@ -37,10 +24,10 @@ export class FileService {
   private model: Model<IFile>;
   private mongooseUtil: MongooseUtil;
 
-  saveImage = async (file): Promise<Object> => {
+  saveImage = async (file): Promise<any> => {
     const url = await this.storage.storeImage(file, 'Polo');
-    return { url: url, mimetype: file.mimetype, size: file.size, name: file.originalname }
-  }
+    return { url: url, mimetype: file.mimetype, size: file.size, name: file.originalname };
+  };
 
   create = async (dto: CreateImageDTO): Promise<FileDTO> => {
     const file = new this.model({
@@ -50,17 +37,17 @@ export class FileService {
       size: dto.size,
       name: dto.name,
       resource: dto.resource,
-    })
+    });
 
-    await file.save()
-    return this.sanitizer.sanitize(file)
-  }
+    await file.save();
+    return this.sanitizer.sanitize(file);
+  };
 
   get = async (resource: string): Promise<FileDTO[]> => {
     const files = await this.model.find({ resource });
-    this.checkFile(files[0])
-    return this.sanitizer.sanitizeMany(files)
-  }
+    this.checkFile(files[0]);
+    return this.sanitizer.sanitizeMany(files);
+  };
 
   edit = async (_id: string, dto: EditImageDTO): Promise<FileDTO> => {
     const file = await this.model.findById(_id);
@@ -70,9 +57,9 @@ export class FileService {
     if (dto.size) file.size = dto.size;
     if (dto.name) file.name = dto.name;
     if (dto.url) file.url = dto.url;
-    await file.save()
-    return this.sanitizer.sanitize(file)
-  }
+    await file.save();
+    return this.sanitizer.sanitize(file);
+  };
   /** if the file is attached, it saves the file for the event and returns the image object */
   saveEventImage = async (file): Promise<EventImageDTO> => {
     if (!file) {
@@ -109,13 +96,10 @@ export class FileService {
   };
 
   deleteImages = async (_id: string) => {
-    const file = await this.model.findById(_id)
-    this.checkFile(file)
-    const fileId = await Promise.all([
-      this.storage.deleteImages([file.url]),
-      file.remove()
-    ])
-    return fileId[1]._id
+    const file = await this.model.findById(_id);
+    this.checkFile(file);
+    const fileId = await Promise.all([this.storage.deleteImages([file.url]), file.remove()]);
+    return fileId[1]._id;
   };
 
   /** Private Methods */

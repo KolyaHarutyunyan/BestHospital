@@ -7,9 +7,7 @@ import { CommentSanitizer } from './interceptor/comment.sanitizer';
 
 @Injectable()
 export class CommentService {
-  constructor(
-    private readonly sanitizer: CommentSanitizer,
-  ) {
+  constructor(private readonly sanitizer: CommentSanitizer) {
     this.model = CommentModel;
   }
   private model: Model<IComment>;
@@ -18,7 +16,7 @@ export class CommentService {
   async create(dto: CreateCommentDTO, user: string): Promise<CommentDTO> {
     try {
       const onMod = dto.onModel;
-      const resource = await this[onMod].findById(dto.resource);
+      await this[onMod].findById(dto.resource);
       let comment = new this.model({
         text: dto.text,
         subject: dto.subject,

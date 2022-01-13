@@ -5,8 +5,6 @@ import { IBilling } from '../interface/billing.interface';
 
 @Injectable()
 export class BillingSanitizer implements ISanitize {
-  constructor() {}
-
   sanitize(billing: IBilling): BillingDto {
     const billingDTO: BillingDto = {
       _id: billing.id,
@@ -32,7 +30,7 @@ export class BillingSanitizer implements ISanitize {
       location: billing.location,
       // transaction: billing.transaction,
       createdDate: billing.createdDate,
-      updatedDate: billing.updatedDate
+      updatedDate: billing.updatedDate,
     };
     return billingDTO;
   }
@@ -40,7 +38,7 @@ export class BillingSanitizer implements ISanitize {
   sanitizeMany(billings: IBilling[]): BillingDto[] {
     const billingDTOs: BillingDto[] = [];
     for (let i = 0; i < billings.length; i++) {
-        billingDTOs.push(this.sanitize(billings[i]));
+      billingDTOs.push(this.sanitize(billings[i]));
     }
     return billingDTOs;
   }

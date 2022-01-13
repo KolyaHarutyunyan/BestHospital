@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { MileageService } from './mileage.service';
-import { ParseObjectIdPipe, Public } from 'src/util';
+import { ParseObjectIdPipe } from 'src/util';
 import { MileageDTO, CreateMileageDto, UpdateMileageDto } from './dto';
 import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ACCESS_TOKEN } from '../authN/authN.constants';

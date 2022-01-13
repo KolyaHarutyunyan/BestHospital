@@ -5,8 +5,6 @@ import { ITimeSheet } from '../interface';
 
 @Injectable()
 export class TimeSheetSanitizer implements ISanitize {
-  constructor() {}
-
   sanitize(timesheet: ITimeSheet): TimeSheetDTO {
     const timesheetDTO: TimeSheetDTO = {
       id: timesheet.id,

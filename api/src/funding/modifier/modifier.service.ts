@@ -40,7 +40,7 @@ export class ModifierService {
   }
 
   /** Delete the modifiers */
-  async delete(fundingServiceId: string, ids: String[]): Promise<any> {
+  async delete(fundingServiceId: string, ids: string[]): Promise<any> {
     try {
       return await this.fundingService.deleteModifiers(fundingServiceId, ids);
     } catch (e) {

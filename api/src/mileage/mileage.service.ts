@@ -47,7 +47,7 @@ export class MileageService {
   }
 
   // remove the mileage
-  async remove(_id: string): Promise<String> {
+  async remove(_id: string): Promise<string> {
     const mileage = await this.model.findByIdAndDelete(_id);
     this.checkMileage(mileage);
     return mileage._id;

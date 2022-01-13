@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ParseObjectIdPipe } from '../util';
@@ -9,7 +19,7 @@ import { ACCESS_TOKEN } from '../authN/authN.constants';
 @Controller('files')
 @ApiTags('File Endpoints')
 export class FileController {
-  constructor(private readonly imagesService: FileService) { }
+  constructor(private readonly imagesService: FileService) {}
 
   @Post('upload')
   @ApiHeader({ name: ACCESS_TOKEN })
@@ -23,8 +33,7 @@ export class FileController {
   @Post()
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: FileDTO })
-  async create(
-    @Body() createDTO: CreateImageDTO): Promise<FileDTO> {
+  async create(@Body() createDTO: CreateImageDTO): Promise<FileDTO> {
     const image = await this.imagesService.create(createDTO);
     return image;
   }
@@ -32,8 +41,7 @@ export class FileController {
   @Get(':resource')
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: [FileDTO] })
-  async get(@Param('resource', ParseObjectIdPipe) resource: string
-  ): Promise<FileDTO[]> {
+  async get(@Param('resource', ParseObjectIdPipe) resource: string): Promise<FileDTO[]> {
     const file = await this.imagesService.get(resource);
     return file;
   }
@@ -54,8 +62,7 @@ export class FileController {
   @Delete(':id')
   // @ApiOkResponse({type: FileDTO})
   @ApiHeader({ name: ACCESS_TOKEN })
-  async delete(
-    @Param('id', ParseObjectIdPipe) id: string): Promise<any> {
+  async delete(@Param('id', ParseObjectIdPipe) id: string): Promise<any> {
     const file = await this.imagesService.deleteImages(id);
     return file;
   }

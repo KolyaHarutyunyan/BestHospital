@@ -28,7 +28,7 @@ export class ContactService {
     try {
       const client = await this.clientModel.findById({ _id: clientId });
       this.checkClient(client);
-      let contact = new this.model({
+      const contact = new this.model({
         clientId,
         firstName: dto.firstName,
         lastName: dto.lastName,

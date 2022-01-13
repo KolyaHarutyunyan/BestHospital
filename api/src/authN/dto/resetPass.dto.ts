@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { MaxLength, MinLength } from 'class-validator';
-import { UserDTO } from '.';
 
 export class ResetPassDTO {
   // password

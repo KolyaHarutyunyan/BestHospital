@@ -1,1 +1,1 @@
-export { IDepartment } from './interface'
+export { IDepartment } from './interface';

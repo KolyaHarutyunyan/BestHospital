@@ -1,14 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateCredentialDto, CredentialDTO, UpdateCredentialDTO } from './dto';
 import { ICredential } from './interface';
-import { CredentialModel } from './credential.model'
+import { CredentialModel } from './credential.model';
 import { Model } from 'mongoose';
 import { MongooseUtil } from '../util';
 
 @Injectable()
 export class CredentialService {
-  constructor(
-  ) {
+  constructor() {
     this.model = CredentialModel;
     this.mongooseUtil = new MongooseUtil();
   }
@@ -18,10 +17,10 @@ export class CredentialService {
   // create a new Credential
   async create(dto: CreateCredentialDto): Promise<CredentialDTO> {
     try {
-      let credential = new this.model({
+      const credential = new this.model({
         name: dto.name,
-        type: dto.type
-      })
+        type: dto.type,
+      });
       await credential.save();
       return credential;
       // return this.sanitizer.sanitize(credential);
@@ -36,20 +35,18 @@ export class CredentialService {
     try {
       const credential = await this.model.find({});
       return credential;
-    }
-    catch (e) {
-      throw e
+    } catch (e) {
+      throw e;
     }
   }
 
   /** Get All Credentials By Ids */
   async findAllByIds(ids): Promise<CredentialDTO[]> {
     try {
-      const credential = await this.model.find({ '_id': { $in: ids } });
+      const credential = await this.model.find({ _id: { $in: ids } });
       return credential;
-    }
-    catch (e) {
-      throw e
+    } catch (e) {
+      throw e;
     }
   }
 
@@ -60,23 +57,21 @@ export class CredentialService {
       this.checkCredential(credential);
       return credential;
       // return this.sanitizer.sanitize(credential);
-    }
-    catch (e) {
-      throw e
+    } catch (e) {
+      throw e;
     }
   }
 
   // update the credential
   async update(_id: string, dto: UpdateCredentialDTO): Promise<CredentialDTO> {
     try {
-      let credential = await this.model.findById({ _id })
-      this.checkCredential(credential)
+      const credential = await this.model.findById({ _id });
+      this.checkCredential(credential);
       if (dto.name) credential.name = dto.name;
       if (dto.type || dto.type === 0) credential.type = dto.type;
       await credential.save();
       return credential;
-    }
-    catch (e) {
+    } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Credential already exists');
       throw e;
     }
@@ -86,7 +81,7 @@ export class CredentialService {
   async remove(_id: string): Promise<string> {
     const credential = await this.model.findById({ _id });
     this.checkCredential(credential);
-    await credential.remove()
+    await credential.remove();
     return credential._id;
   }
 
@@ -94,10 +89,7 @@ export class CredentialService {
   /** if the comment is not found, throws an exception */
   private checkCredential(credential: ICredential) {
     if (!credential) {
-      throw new HttpException(
-        'Credential was not found',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException('Credential was not found', HttpStatus.NOT_FOUND);
     }
   }
 }

@@ -1,4 +1,3 @@
-import { Type } from 'class-transformer';
 import { RegistrationStatus, UserType } from '../authN.constants';
 
 export class UserDTO {

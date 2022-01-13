@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { ISanitize } from '../../util';
-import { AddressSanitizer } from '../../address';
 import { FileDTO } from '../dto';
 import { IFile } from '../interface';
 
 @Injectable()
 export class FileSanitizer implements ISanitize {
-  constructor() {}
   sanitize(file: IFile): FileDTO {
     const sanitizedOffice: FileDTO = {
       id: file.id,

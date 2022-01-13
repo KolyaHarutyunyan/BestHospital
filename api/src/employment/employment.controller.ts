@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
 import { EmploymentService } from './employment.service';
-import { Public, ParseObjectIdPipe } from '../util';
+import { ParseObjectIdPipe } from '../util';
 import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { EmploymentDto, CreateEmploymentDto, UpdateEmploymentDto } from './dto';
 import { ACCESS_TOKEN } from '../authN/authN.constants';

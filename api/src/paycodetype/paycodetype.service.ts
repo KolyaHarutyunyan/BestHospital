@@ -40,7 +40,7 @@ export class PaycodetypeService {
 
   // find payCodeType by id
   async findOne(_id: string): Promise<PayCodeTypeDTO> {
-    let payCodeType = await this.model.findById({ _id });
+    const payCodeType = await this.model.findById({ _id });
     this.checkPayCodeType(payCodeType);
     return this.sanitizer.sanitize(payCodeType);
   }

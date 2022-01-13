@@ -5,8 +5,6 @@ import { PlaceDTO } from '../dto';
 
 @Injectable()
 export class PlaceSanitizer implements ISanitize {
-  constructor() {}
-
   sanitize(place: IPlace): PlaceDTO {
     const placeDTO: PlaceDTO = {
       _id: place.id,

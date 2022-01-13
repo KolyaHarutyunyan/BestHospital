@@ -1,4 +1,4 @@
 export enum ScheduleStatus {
-    CLIENT = "Client",
-    STAFF = "Staff"
+  CLIENT = 'Client',
+  STAFF = 'Staff',
 }

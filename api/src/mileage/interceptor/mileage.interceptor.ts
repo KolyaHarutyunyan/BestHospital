@@ -5,8 +5,6 @@ import { MileageDTO } from '../dto';
 
 @Injectable()
 export class MileageSanitizer implements ISanitize {
-  constructor() {}
-
   sanitize(mileage: IMileage): MileageDTO {
     const mileageDTO: MileageDTO = {
       _id: mileage.id,

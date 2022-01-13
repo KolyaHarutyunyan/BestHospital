@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { JWT_SECRET_REGISTER, REGISTRATION_TOKEN } from '../authN.constants';
-import { IToken } from '../interface';
 
 @Injectable()
 export class RegistrationGuard implements CanActivate {
@@ -29,10 +28,7 @@ export class RegistrationGuard implements CanActivate {
   /** Private Methods */
   private checkToken(token: string) {
     if (!token) {
-      throw new HttpException(
-        'reset-token header was not set',
-        HttpStatus.UNAUTHORIZED,
-      );
+      throw new HttpException('reset-token header was not set', HttpStatus.UNAUTHORIZED);
     }
   }
 

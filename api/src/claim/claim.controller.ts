@@ -1,10 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Request } from '@nestjs/common';
-import { ApiHeader, ApiOkResponse, ApiProperty, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Patch, Param, Query, Request } from '@nestjs/common';
+import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { IRequest, ParseObjectIdPipe } from '../util';
 import { ACCESS_TOKEN } from '../authN';
 import { MergeClaims } from './claim.constants';
 import { ClaimService } from './claim.service';
-import { ClaimDto, CreateClaimDto, UpdateClaimDto, GenerateClaimDto } from './dto';
+import { ClaimDto, GenerateClaimDto } from './dto';
 import { ClaimStatus } from './claim.constants';
 
 @Controller('claim')
@@ -12,12 +12,12 @@ import { ClaimStatus } from './claim.constants';
 export class ClaimController {
   constructor(private readonly claimService: ClaimService) {}
 
-  @Post()
-  @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({ type: ClaimDto })
-  create(@Body() createClaimDto: CreateClaimDto) {
-    return this.claimService.create(createClaimDto);
-  }
+  // @Post()
+  // @ApiHeader({ name: ACCESS_TOKEN })
+  // @ApiOkResponse({ type: ClaimDto })
+  // create(@Body() createClaimDto: CreateClaimDto) {
+  //   return this.claimService.create(createClaimDto);
+  // }
 
   @Post('generate')
   @ApiHeader({ name: ACCESS_TOKEN })
@@ -39,15 +39,15 @@ export class ClaimController {
     return this.claimService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateClaimDto: UpdateClaimDto) {
-    return this.claimService.update(+id, updateClaimDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateClaimDto: UpdateClaimDto) {
+  //   return this.claimService.update(+id, updateClaimDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.claimService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.claimService.remove(+id);
+  // }
 
   /** Set claim status */
   @Patch(':id/setStatus')
