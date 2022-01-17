@@ -40,6 +40,13 @@ export class InvoiceService {
     return `This action returns all invoice`;
   }
 
+  /** get all invoices */
+  async findByIds(ids: string[]) {
+    return await this.model.find({
+      _id: { $in: ids },
+    });
+  }
+
   /** get invoice by id */
   async findOne(_id: string) {
     return `s action returns a #${_id} invoice`;
@@ -92,6 +99,7 @@ export class InvoiceService {
       receivable = [];
       receivableCreatedAt = [];
     }
+    console.log(invoice[0].receivable, 'invoiceeee');
     /** set bill claimStatus to CLAIMED */
     await this.model.insertMany(invoice);
     // await this.billingService.billClaim(bills);

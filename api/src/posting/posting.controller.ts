@@ -1,13 +1,16 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { PostingService } from './posting.service';
-import { CreatePostingDto } from './dto/create-posting.dto';
-import { UpdatePostingDto } from './dto/update-posting.dto';
+import { CreatePostingDto, UpdatePostingDto, PostingDto } from './dto';
+import { ApiTags } from '@nestjs/swagger';
+import { Public } from 'src/util';
 
 @Controller('posting')
+@ApiTags('Posting Endpoints')
 export class PostingController {
   constructor(private readonly postingService: PostingService) {}
 
   @Post()
+  @Public()
   create(@Body() createPostingDto: CreatePostingDto) {
     return this.postingService.create(createPostingDto);
   }

@@ -3,7 +3,6 @@ import { StaffModule } from '../staff';
 import { AuthNModule } from 'src/authN';
 import { AuthZModule } from 'src/authZ';
 import { FundingModule } from 'src/funding';
-import { MailerModule } from '../mailer';
 import { AppController } from './app.controller';
 import { DatabaseConnection } from './app.database';
 import { AppService } from './app.service';
@@ -27,6 +26,7 @@ import { MileageModule } from '../mileage/mileage.module';
 import { BillingModule } from '../billing/billing.module';
 import { ClaimModule } from '../claim/claim.module';
 import { InvoiceModule } from '../invoice/invoice.module';
+import { PostingModule } from '../posting/posting.module';
 
 @Module({
   imports: [
@@ -54,6 +54,7 @@ import { InvoiceModule } from '../invoice/invoice.module';
     BillingModule,
     ClaimModule,
     InvoiceModule,
+    PostingModule,
   ],
   controllers: [AppController],
   providers: [AppService, DatabaseConnection],

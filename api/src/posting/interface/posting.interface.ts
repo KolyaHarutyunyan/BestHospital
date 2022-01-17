@@ -1,11 +1,10 @@
 import { Document } from 'mongoose';
 
 export interface IPosting extends Document {
-  id: string;
-  subject: string;
-  text: string;
-  resource: string;
-  onModel: string;
-  user: string;
-  created: Date;
+  paymentType: string;
+  paymentReference: string;
+  paymentDocument: string;
+  paymentAmount: number;
+  payer: string;
+  invoices: Array<string>;
 }
