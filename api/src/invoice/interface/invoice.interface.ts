@@ -1,3 +1,1 @@
-export interface IInvoice extends Document {
-
-}
+export interface IInvoice extends Document {}
