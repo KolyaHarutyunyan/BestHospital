@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { PostingService } from './posting.service';
 import { CreatePostingDto, UpdatePostingDto, PostingDto } from './dto';
-import { ApiTags } from '@nestjs/swagger';
-import { Public } from 'src/util';
+import { ApiHeader, ApiTags } from '@nestjs/swagger';
+import { ACCESS_TOKEN } from '../authN';
 
 @Controller('posting')
 @ApiTags('Posting Endpoints')
@@ -10,7 +10,7 @@ export class PostingController {
   constructor(private readonly postingService: PostingService) {}
 
   @Post()
-  @Public()
+  @ApiHeader({ name: ACCESS_TOKEN })
   create(@Body() createPostingDto: CreatePostingDto) {
     return this.postingService.create(createPostingDto);
   }

@@ -26,5 +26,5 @@ export class TransactionDto {
   @IsNotEmpty()
   @IsString()
   note: string;
-  status: string;
+  status?: string;
 }

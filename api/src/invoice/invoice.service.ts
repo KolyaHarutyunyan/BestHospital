@@ -42,9 +42,11 @@ export class InvoiceService {
 
   /** get all invoices */
   async findByIds(ids: string[]) {
-    return await this.model.find({
-      _id: { $in: ids },
-    });
+    return await this.model
+      .find({
+        _id: { $in: ids },
+      })
+      .populate('receivable.bills');
   }
 
   /** get invoice by id */
@@ -99,7 +101,6 @@ export class InvoiceService {
       receivable = [];
       receivableCreatedAt = [];
     }
-    console.log(invoice[0].receivable, 'invoiceeee');
     /** set bill claimStatus to CLAIMED */
     await this.model.insertMany(invoice);
     // await this.billingService.billClaim(bills);
@@ -127,9 +128,18 @@ export class InvoiceService {
     placeService: string,
     cptCode: number,
   ): Promise<void> {
+    // Description - includes the appointment service name, time and staff name
+    // balance - [ copay - prior paid ]
+
     receivable.push({
       placeService,
       cptCode,
+      hours: result.totalHours,
+      clientResp: result.clientPaid,
+      clientPaid: result.clientPaid,
+      amountTotal: result.billedAmount,
+      balance: 100,
+      // sum of all bills? 
       // result[i][j].payerTotal - result[i][j].payerPaid / unitZise?
       totalUnits: 0,
       totalBill: result.payerTotal - result.payerPaid,

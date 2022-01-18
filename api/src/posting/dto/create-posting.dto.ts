@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { UserDTO } from '../../authN';
 import { PaymentType } from '../posting.constants';
 
 export class CreatePostingDto {
@@ -23,4 +24,5 @@ export class CreatePostingDto {
   payer: string;
   @ApiProperty()
   invoices: Array<string>;
+  user?: UserDTO;
 }

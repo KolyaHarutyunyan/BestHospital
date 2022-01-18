@@ -3,7 +3,6 @@ import { BillingStatus, InvoiceStatus, ClaimStatus } from './billing.constants';
 import { IBilling } from './interface';
 
 const TransactionSchema = new Schema({
-  transaction: { typ: String },
   date: { type: Date },
   amount: { type: Number },
   paymentRef: { type: String },

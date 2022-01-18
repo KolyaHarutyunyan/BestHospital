@@ -59,6 +59,7 @@ export class BillingService {
     session: any,
   ): Promise<BillingDto> {
     try {
+      console.log(billingId, ' billingId');
       const billing = await this.model.findById({ _id: billingId }).session(session);
       this.checkBilling(billing);
       session.startTransaction();
