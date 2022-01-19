@@ -1,8 +1,9 @@
 import { model, Schema, Types } from 'mongoose';
-import { BillingStatus, InvoiceStatus, ClaimStatus } from './billing.constants';
+import { BillingStatus, InvoiceStatus, ClaimStatus, TransactionType } from './billing.constants';
 import { IBilling } from './interface';
 
 const TransactionSchema = new Schema({
+  type: { type: String, enum: TransactionType },
   date: { type: Date },
   amount: { type: Number },
   paymentRef: { type: String },

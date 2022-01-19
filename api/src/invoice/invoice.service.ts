@@ -138,8 +138,7 @@ export class InvoiceService {
       clientResp: result.clientPaid,
       clientPaid: result.clientPaid,
       amountTotal: result.billedAmount,
-      balance: 100,
-      // sum of all bills? 
+      // sum of all bills? 50
       // result[i][j].payerTotal - result[i][j].payerPaid / unitZise?
       totalUnits: 0,
       totalBill: result.payerTotal - result.payerPaid,
