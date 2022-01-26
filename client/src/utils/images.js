@@ -93,6 +93,8 @@ import eventsPassive from "@eachbase/assets/images/icons/eventsPassive.svg";
 import accessManagementFill from "@eachbase/assets/images/accessManagementFill.svg";
 import accessManagementOutline from "@eachbase/assets/images/accessManagementOutline.svg";
 import dropdownArrow from "@eachbase/assets/images/icons/dropdownArrow.svg";
+import dropdownArrowBlue from "@eachbase/assets/images/icons/dropdownArrowBlue.svg";
+import search from "@eachbase/assets/images/icons/search.svg";
 
 export const Images = {
    doctors: doctors,
@@ -189,4 +191,6 @@ export const Images = {
    accessManagementFill: accessManagementFill,
    accessManagementOutline: accessManagementOutline,
    dropdownArrow,
+   dropdownArrowBlue,
+   search,
 };

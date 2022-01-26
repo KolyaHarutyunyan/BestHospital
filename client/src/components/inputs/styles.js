@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { Colors, Shadow } from "@eachbase/utils";
+import { Colors, Images, Shadow } from "@eachbase/utils";
 import { Switch, withStyles } from "@material-ui/core";
 
 export const inputsStyle = makeStyles(() => ({
@@ -9,7 +9,6 @@ export const inputsStyle = makeStyles(() => ({
          backgroundColor: "white",
          border: "none!important",
       },
-      width: "164px",
       height: "36px",
       outline: "none!important",
    },
@@ -63,6 +62,7 @@ export const inputsStyle = makeStyles(() => ({
 
    searchInputTitle: {
       display: "flex",
+      alignItems: "center",
       "& span": {
          fontSize: "14px",
          lineHeight: "19px",
@@ -256,9 +256,9 @@ export const inputsStyle = makeStyles(() => ({
 
    errorText: {
       color: "#F07379!important",
-      fontSize: "14px!important",
+      fontSize: "12px!important",
       fontWeight: "600!important",
-      margin: "0px 0 16px!important",
+      minHeight: "20px !important",
    },
 
    inputShrink: {
@@ -283,6 +283,42 @@ export const inputsStyle = makeStyles(() => ({
       borderRadius: "24px",
       background: "red",
    },
+
+   // ** SearchInput styles **
+   searchInputBoxStyle: {
+      width: "500px",
+      backgroundColor: "#F2F4F8",
+      borderRadius: "8px",
+      marginRight: "35px",
+      padding: "9px 16px 9px 38px",
+      backgroundImage: `url(${Images.search})`,
+      backgroundRepeat: "no-repeat",
+      backgroundSize: "18px 18px",
+      backgroundPosition: "16px 50%",
+      cursor: "text",
+      "& > input": {
+         width: "100%",
+         outline: "none",
+         border: "none",
+         backgroundColor: "inherit",
+         fontSize: "14px",
+         fontWeight: 400,
+         color: Colors.TextPrimary,
+         "&::placeholder": {
+            color: "#4B5C6899 !important",
+            opacity: 1 /* Firefox */,
+         },
+         "&:-ms-input-placeholder": {
+            /* Internet Explorer 10-11 */
+            color: "#4B5C6899 !important",
+         },
+         "&::-ms-input-placeholder": {
+            /* Microsoft Edge */
+            color: "#4B5C6899 !important",
+         },
+      },
+   },
+   // ** end **
 }));
 
 export const AntSwitch = withStyles((theme) => ({

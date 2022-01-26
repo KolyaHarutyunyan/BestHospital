@@ -1,0 +1,7 @@
+<svg id="Dropdown_Arrow" data-name="Dropdown Arrow" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+  <g id="Base" fill="#347af0" stroke="#707070" stroke-width="1" opacity="0">
+    <rect width="18" height="18" stroke="none"/>
+    <rect x="0.5" y="0.5" width="17" height="17" fill="none"/>
+  </g>
+  <path id="Down_Arrow_Icon" data-name="Down Arrow Icon" d="M10.142,11.76l3.717,3.709,3.717-3.709L18.717,12.9,13.858,17.76,9,12.9Z" transform="translate(-5 -5.76)" fill="#347af0"/>
+</svg>

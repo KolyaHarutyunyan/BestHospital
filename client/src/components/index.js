@@ -26,6 +26,7 @@ export {
    SelectInputPlaceholder,
    AntSwitch,
    SelectStatusInput,
+   SearchInput,
 } from "./inputs";
 export { Loader, MinLoader } from "./loader";
 export { GlobalLogo } from "./logo";
