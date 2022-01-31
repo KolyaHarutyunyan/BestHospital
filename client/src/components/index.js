@@ -9,6 +9,7 @@ export {
    AddModalButton,
    EditButton,
    EditSaveButtons,
+   SendButton,
 } from "./buttons";
 export { Title } from "./titles";
 export { ErrMessage, HtmlTooltip, SlicedText, NoYet } from "./messages";
@@ -39,6 +40,7 @@ export {
    InfoWrapper,
    CreateWrapperHead,
    Management,
+   BillingTransactionWrapper,
 } from "./wrapper";
 export { SimpleModal, DeleteElement, InactiveModal, AddNotes, AvailabilitySchedule } from "./modal";
 export { SimpleToolTip } from "./toolTip";

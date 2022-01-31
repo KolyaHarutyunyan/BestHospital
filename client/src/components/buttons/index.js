@@ -6,5 +6,6 @@ export { AddCircle } from "./addCircle";
 export { CloseButton } from "./closeButton";
 export { CreateChancel } from "./createChancel";
 export { AddModalButton } from "./addModalButton";
-export { EditButton } from './editButton';
-export { EditSaveButtons } from './editSaveButtons'
+export { EditButton } from "./editButton";
+export { EditSaveButtons } from "./editSaveButtons";
+export { SendButton } from "./sendButton";
