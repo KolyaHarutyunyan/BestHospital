@@ -12,3 +12,4 @@ export { ActiveInactiveStatus } from "./activeInactiveStatus";
 export { FindError } from "./findError";
 export { getPhoneErrorText } from "./getPhoneErrorText";
 export { isNotEmpty } from "./isNotEmpty";
+export { makeEnum } from "./makeEnum";

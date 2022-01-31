@@ -27,6 +27,7 @@ export {
    ActiveInactiveStatus,
    getPhoneErrorText,
    isNotEmpty,
+   makeEnum,
 } from "./hooks";
 export { ErrorText } from "./errorTexts";
 export { CountryList } from "./jsons";
