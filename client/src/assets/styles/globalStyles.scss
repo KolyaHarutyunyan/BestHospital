@@ -1,120 +1,125 @@
-#spin{
-  display: none;
+#spin {
+   display: none;
 }
 
-.MuiTabs-root{
-  min-height: 36px!important;
+.MuiTabs-root {
+   min-height: 36px !important;
 }
-.MuiAppBar-colorPrimary{
-   background: #FFFFFF 0 0 no-repeat padding-box!important;
+.MuiAppBar-colorPrimary {
+   background: #ffffff 0 0 no-repeat padding-box !important;
 }
 
-.my-profile{
-  .MuiBackdrop-root{
-    background: transparent!important;
-  }
+.my-profile {
+   .MuiBackdrop-root {
+      background: transparent !important;
+   }
 }
 
 input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 30px #FFFFFF inset;
-  color: #545F7E
+   -webkit-box-shadow: 0 0 0 30px #ffffff inset;
+   color: #545f7e;
 }
 
 input {
-
-  &::placeholder {
-    color: #4B5C68 !important
-  }
+   &::placeholder {
+      color: #4b5c68 !important;
+   }
 }
 
 .success {
-  .Toastify__progress-bar--default {
-    background: #00C851;
-  }
+   .Toastify__progress-bar--default {
+      background: #00c851;
+   }
 }
 .error {
-  .Toastify__progress-bar--default {
-    background:#D72525;
-  }
+   .Toastify__progress-bar--default {
+      background: #d72525;
+   }
 }
 
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+   -webkit-appearance: none;
+   margin: 0;
 }
 
-.rbc-time-view{
-  background: #FFFFFF 0% 0% no-repeat padding-box;
-  box-shadow: 0px 0px 6px #347AF04D;
-  border-radius: 8px;
-  border: none;
+.rbc-time-view {
+   background: #ffffff 0% 0% no-repeat padding-box;
+   box-shadow: 0px 0px 6px #347af04d;
+   border-radius: 8px;
+   border: none;
 }
 
-.rbc-time-header-content{
-  //border-left: 1px solid #EBF2FD;
-  border:none
-
+.rbc-time-header-content {
+   //border-left: 1px solid #EBF2FD;
+   border: none;
 }
-.rbc-time-content > * + * > *{
-  border-left: 1px solid #EBF2FD;
+.rbc-time-content > * + * > * {
+   border-left: 1px solid #ebf2fd;
 }
-.rbc-time-content{
-  border-top: 1px solid #EBF2FD;
-}
-
-.rbc-event, .rbc-day-slot .rbc-background-event{
-  background: #EBF2FD 0% 0% no-repeat padding-box;
-  border-radius: 0px 4px 4px 0px;
-  font-size: 12px;
-  line-height: 22px;
-  letter-spacing: 0px;
-  color: #4B5C68;
-  border-left: 4px solid #347AF0!important;
+.rbc-time-content {
+   border-top: 1px solid #ebf2fd;
 }
 
-.rbc-event.rbc-selected, .rbc-day-slot .rbc-selected.rbc-background-event{
-  background: #d2dff5 0% 0% no-repeat padding-box;
+.rbc-event,
+.rbc-day-slot .rbc-background-event {
+   background: #ebf2fd 0% 0% no-repeat padding-box;
+   border-radius: 0px 4px 4px 0px;
+   font-size: 12px;
+   line-height: 22px;
+   letter-spacing: 0px;
+   color: #4b5c68;
+   border-left: 4px solid #347af0 !important;
 }
 
-.rbc-timeslot-group{
-  color: #347AF0;
-  border-bottom: none;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 19px;
+.rbc-event.rbc-selected,
+.rbc-day-slot .rbc-selected.rbc-background-event {
+   background: #d2dff5 0% 0% no-repeat padding-box;
 }
 
-.rbc-header{
-  color: #347AF0;
-  font-size: 14px;
-  line-height: 30px;
-  border-bottom: none;
+.rbc-timeslot-group {
+   color: #347af0;
+   border-bottom: none;
+   font-size: 14px;
+   font-weight: 600;
+   line-height: 19px;
 }
 
-.rbc-day-slot .rbc-event, .rbc-day-slot .rbc-background-event{
-  border: none;
-}
-.rbc-day-bg + .rbc-day-bg{
-  border-left: 1px solid #EBF2FD;
-}
-.rbc-time-view .rbc-allday-cell{
-  height: 17px;
-  border-left: 1px solid #EBF2FD;
-}
-.rbc-today{
-  background: transparent;
+.rbc-header {
+   color: #347af0;
+   font-size: 14px;
+   line-height: 30px;
+   border-bottom: none;
 }
 
-.rbc-header + .rbc-today{
+.rbc-day-slot .rbc-event,
+.rbc-day-slot .rbc-background-event {
+   border: none;
+}
+.rbc-day-bg + .rbc-day-bg {
+   border-left: 1px solid #ebf2fd;
+}
+.rbc-time-view .rbc-allday-cell {
+   height: 17px;
+   border-left: 1px solid #ebf2fd;
+}
+.rbc-today {
+   background: transparent;
+}
+
+.rbc-header + .rbc-today {
    //background:  #347AF0;
 }
 
-.rbc-header + .rbc-header{
-  border: none;
-  height: 50px;
+.rbc-header + .rbc-header {
+   border: none;
+   height: 50px;
 }
 
 ::-webkit-scrollbar {
-  display: none;
+   display: none;
+}
+
+::-webkit-search-cancel-button {
+   cursor: pointer;
 }

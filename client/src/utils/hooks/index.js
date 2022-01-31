@@ -1,12 +1,14 @@
-export {RoleHooks} from './roleHooks'
-export {PermissionsList} from './permissionsList'
-export {paginate} from './paginate'
-export {filterByFirstName} from './filterFunctions'
-export {activeInactive} from './activeInactive'
-export {initAxiosInterceptors} from './axios'
-export {ToastSuccess} from './toastSuccess'
-export {ToastFail} from './toastFail'
-export {FindSuccess} from './findSuccess'
-export {FindLoad} from './findLoad'
-export {ActiveInactiveStatus} from './activeInactiveStatus'
-export {FindError} from './findError'
+export { RoleHooks } from "./roleHooks";
+export { PermissionsList } from "./permissionsList";
+export { paginate } from "./paginate";
+export { filterByFirstName } from "./filterFunctions";
+export { activeInactive } from "./activeInactive";
+export { initAxiosInterceptors } from "./axios";
+export { ToastSuccess } from "./toastSuccess";
+export { ToastFail } from "./toastFail";
+export { FindSuccess } from "./findSuccess";
+export { FindLoad } from "./findLoad";
+export { ActiveInactiveStatus } from "./activeInactiveStatus";
+export { FindError } from "./findError";
+export { getPhoneErrorText } from "./getPhoneErrorText";
+export { isNotEmpty } from "./isNotEmpty";
