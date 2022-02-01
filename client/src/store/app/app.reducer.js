@@ -18,6 +18,8 @@ import { uploadReducer } from "../upload";
 import { mileageReducer } from "../mileage";
 import { appointmentReducer } from "../appointment";
 import { billingReducer } from "../billing";
+import { claimReducer } from "../claim";
+import { invoiceReducer } from "../invoice";
 
 const initialState = {
    isLoading: false,
@@ -49,6 +51,8 @@ export const appReducer = combineReducers({
    mileage: mileageReducer,
    appointment: appointmentReducer,
    billing: billingReducer,
+   claim: claimReducer,
+   invoice: invoiceReducer,
 
    httpOnLoad: httpRequestsOnLoadReducer,
    httpOnSuccess: httpRequestsOnSuccessReducer,
