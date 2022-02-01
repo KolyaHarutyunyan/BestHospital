@@ -52,7 +52,7 @@ function* getBillingById(action) {
    }
 }
 
-function* creteBilling(action) {
+function* createBilling(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    try {
@@ -117,10 +117,10 @@ function* abortBillingTransaction(action) {
    }
 }
 
-export const watchBilling = function* watchNoteSaga() {
+export const watchBilling = function* watchBillingSaga() {
    yield takeLatest(GET_BILLINGS, getBillings);
    yield takeLatest(GET_BILLING_BY_ID, getBillingById);
-   yield takeLatest(CREATE_BILLING, creteBilling);
+   yield takeLatest(CREATE_BILLING, createBilling);
    yield takeLatest(EDIT_BILLING_STATUS, editBillingStatus);
    yield takeLatest(ADD_BILLLING_TRANSACTION, addBillingTransaction);
    yield takeLatest(ABORT_BILLLING_TRANSACTION, abortBillingTransaction);
