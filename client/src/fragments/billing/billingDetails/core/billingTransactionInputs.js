@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ValidationInput, UserInputsDropdown, AddButton, SendButton } from "@eachbase/components";
+import { ValidationInput, SendButton, SelectInput } from "@eachbase/components";
 import { billingTransactionInputsStyle } from "./styles";
 import { enumValues, makeEnum, ErrorText, FindLoad } from "@eachbase/utils";
 import { billingActions } from "@eachbase/store";
@@ -12,7 +12,6 @@ export const BillingTransactionInputs = ({ billingId }) => {
 
    const [inputs, setInputs] = useState({});
    const [error, setError] = useState("");
-
    const [selectedType, setSelectedType] = useState("");
 
    const handleChange = (e) => {
@@ -21,6 +20,11 @@ export const BillingTransactionInputs = ({ billingId }) => {
          [e.target.name]: e.target.value,
       }));
       error === e.target.name && setError("");
+   };
+
+   const handleSelect = (evt) => {
+      setSelectedType(evt.target.value);
+      error === "type" && setError("");
    };
 
    const handleSubmit = () => {
@@ -32,21 +36,24 @@ export const BillingTransactionInputs = ({ billingId }) => {
          creator: "string",
          note: "string",
       };
-      const billingTransactionDataIsValid = !!inputs.amount;
+      const billingTransactionDataIsValid = !!selectedType && !!inputs.amount;
       if (billingTransactionDataIsValid) {
          dispatch(billingActions.addBillingTransaction(billingId, billingTransactionData));
+         console.log(billingTransactionData, "  billingTransactionData");
       } else {
-         setError(!inputs.amount ? "amount" : "Input is not filled");
+         setError(!selectedType ? "type" : !inputs.amount ? "amount" : "Input is not filled");
       }
    };
 
    return (
       <div>
-         <UserInputsDropdown
-            dropdownOptions={enumValues.BILLING_TRANSACTION_TYPES}
-            onPass={(selected) => setSelectedType(selected)}
-            selected={selectedType}
-            dropdownTitle={"Select transaction type"}
+         <SelectInput
+            name={"type"}
+            label={"Transaction Type"}
+            handleSelect={handleSelect}
+            value={selectedType}
+            typeError={error === "type" && ErrorText.selectField}
+            language={enumValues.BILLING_TRANSACTION_TYPES}
          />
          <ValidationInput
             variant={"outlined"}
