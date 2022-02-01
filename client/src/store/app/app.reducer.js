@@ -20,6 +20,7 @@ import { appointmentReducer } from "../appointment";
 import { billingReducer } from "../billing";
 import { claimReducer } from "../claim";
 import { invoiceReducer } from "../invoice";
+import { postingReducer } from "../posting";
 
 const initialState = {
    isLoading: false,
@@ -53,6 +54,7 @@ export const appReducer = combineReducers({
    billing: billingReducer,
    claim: claimReducer,
    invoice: invoiceReducer,
+   posting: postingReducer,
 
    httpOnLoad: httpRequestsOnLoadReducer,
    httpOnSuccess: httpRequestsOnSuccessReducer,
