@@ -3,7 +3,6 @@ import { billingDetailsStyle } from "./styles";
 import {
    AddModalButton,
    BillingTransactionWrapper,
-   CloseButton,
    SimpleModal,
    UserInputsDropdown,
 } from "@eachbase/components";
@@ -11,6 +10,7 @@ import { enumValues } from "@eachbase/utils";
 import { useDispatch } from "react-redux";
 import { billingActions } from "@eachbase/store";
 import { BillingTransactionInputs } from "./core";
+import { useParams } from "react-router";
 
 export const BillingDetailsFragment = ({ billingDetails }) => {
    const classes = billingDetailsStyle();
@@ -24,10 +24,12 @@ export const BillingDetailsFragment = ({ billingDetails }) => {
       dispatch(billingActions.editBillingStatus(billingDetails.id, selected.toUpperCase()));
    };
 
+   const params = useParams();
+
    return (
       <>
          <div>
-            <h1>billing details here</h1>
+            <h1>{`billing ${params.id} details here`}</h1>
             <UserInputsDropdown
                dropdownOptions={enumValues.BILLING_STATUSES}
                onPass={handleSelection}

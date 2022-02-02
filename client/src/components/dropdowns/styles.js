@@ -1,7 +1,7 @@
 import { Colors, Images } from "@eachbase/utils";
 import { makeStyles } from "@material-ui/core/styles";
 
-export const userInputDropdownStyle = makeStyles(() => ({
+export const dropdownsStyle = makeStyles(() => ({
    dropOverlayStyle: {
       top: 0,
       left: 0,
@@ -10,9 +10,10 @@ export const userInputDropdownStyle = makeStyles(() => ({
       position: "fixed",
       zIndex: 9,
    },
+
+   // UserInputsDropdown Style **
    userDropStyle: {
-      maxWidth: "164px",
-      width: "100%",
+      width: "164px",
       "& .dropdown-box": {
          position: "relative",
          width: "100%",
@@ -85,4 +86,46 @@ export const userInputDropdownStyle = makeStyles(() => ({
       "&.HOLD::before": { backgroundColor: Colors.ThemeBlue },
       "&.TERMINATE::before": { backgroundColor: Colors.ThemeRed },
    },
+   // end **
+
+   // CheckBoxDropdown Style **
+   dropdownBoxStyle: {
+      width: "100%",
+      position: "relative",
+      backgroundColor: Colors.BackgroundWhite,
+      border: `1px solid ${Colors.ThemeBlue}`,
+      borderRadius: "4px",
+   },
+   showDropdownBoxStyle: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      padding: "13px 16px",
+      cursor: "pointer",
+   },
+   dropdownSelectedStyle: {
+      fontSize: "16px",
+      fontWeight: 400,
+      color: "#4B5C6880",
+   },
+   dropArrowStyle: {
+      width: "18px",
+      height: "18px",
+      "&.rotate": { transform: "rotate(180deg)" },
+      "& img": { width: "100%" },
+   },
+   dropdownStyle: {
+      position: "absolute",
+      width: "100%",
+      maxHeight: "296px",
+      overflowY: "auto",
+      top: "56px",
+      left: 0,
+      backgroundColor: Colors.BackgroundWhite,
+      boxShadow: "0 0 6px #8A8A8A3D",
+      borderRadius: "4px",
+      padding: "4px 0",
+      zIndex: 999,
+   },
+   // end **
 }));

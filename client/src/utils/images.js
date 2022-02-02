@@ -95,6 +95,7 @@ import accessManagementOutline from "@eachbase/assets/images/accessManagementOut
 import dropdownArrow from "@eachbase/assets/images/icons/dropdownArrow.svg";
 import dropdownArrowBlue from "@eachbase/assets/images/icons/dropdownArrowBlue.svg";
 import search from "@eachbase/assets/images/icons/search.svg";
+import checkmarkWhite from "@eachbase/images/icons/checkmarkWhite.svg";
 
 export const Images = {
    doctors: doctors,
@@ -193,4 +194,5 @@ export const Images = {
    dropdownArrow,
    dropdownArrowBlue,
    search,
+   checkmarkWhite,
 };

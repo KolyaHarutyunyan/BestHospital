@@ -218,7 +218,24 @@ export const inputsStyle = makeStyles(() => ({
          color: Colors.TextLightGray,
       },
    },
+
+   /**AutoComplete style */
+   autocompleteStyle: {
+      border: "3px solid red",
+      "& > div > div > div": {
+         border: "1px solid brown",
+         padding: 0,
+         backgroundColor: "inherit",
+         "& > svg": { backgroundColor: Colors.BackgroundWater },
+      },
+      "& > div > div > input": {
+         padding: "0px !important",
+         border: "1px dashed",
+      },
+   },
    inputTextFieldAutoHeight: {
+      border: "1px dotted green",
+      padding: 0,
       "& .MuiOutlinedInput-root": {
          // minHeight:'48px',
          // height:'auto'
@@ -233,6 +250,7 @@ export const inputsStyle = makeStyles(() => ({
          transform: "translate(14px, -2px) scale(0.75)",
       },
    },
+   /**end */
 
    searchAddress: {
       height: "48px",
@@ -284,7 +302,7 @@ export const inputsStyle = makeStyles(() => ({
       background: "red",
    },
 
-   // ** SearchInput styles **
+   // SearchInput Style **
    searchInputBoxStyle: {
       width: "500px",
       backgroundColor: "#F2F4F8",
@@ -296,6 +314,10 @@ export const inputsStyle = makeStyles(() => ({
       backgroundSize: "18px 18px",
       backgroundPosition: "16px 50%",
       cursor: "text",
+      "@media(max-width: 1280px)": {
+         width: "450px",
+         marginRight: "27px",
+      },
       "& > input": {
          width: "100%",
          outline: "none",
@@ -318,7 +340,40 @@ export const inputsStyle = makeStyles(() => ({
          },
       },
    },
-   // ** end **
+   // end **
+
+   // CheckBoxInput Style **
+   checkBoxLabelStyle: {
+      display: "flex",
+      alignItems: "center",
+      transition: "all 0.2s linear",
+      cursor: "pointer",
+      padding: "15px 16px",
+      "& input": { display: "none" },
+      "& input:checked + $inputCheckBoxStyle": {
+         backgroundImage: `url(${Images.checkmarkWhite})`,
+         backgroundRepeat: "no-repeat",
+         backgroundSize: "13px 10px",
+         backgroundPosition: "center",
+         backgroundColor: Colors.ThemeBlue,
+      },
+      "&:hover": { backgroundColor: Colors.BackgroundWater },
+   },
+   inputCheckBoxStyle: {
+      backgroundColor: "inherit",
+      transition: "background-color 0.2s linear",
+      width: "18px",
+      height: "18px",
+      border: "1px solid #438AFE",
+      borderRadius: "2px",
+      marginRight: "16px",
+   },
+   inputLabelStyle: {
+      fontSize: "16px",
+      fontWeight: 400,
+      color: Colors.TextPrimary,
+   },
+   // end **
 }));
 
 export const AntSwitch = withStyles((theme) => ({
