@@ -95,6 +95,7 @@ export const dropdownsStyle = makeStyles(() => ({
       backgroundColor: Colors.BackgroundWhite,
       border: `1px solid ${Colors.ThemeBlue}`,
       borderRadius: "4px",
+      "&.error": { borderColor: Colors.ThemeRed },
    },
    showDropdownBoxStyle: {
       display: "flex",

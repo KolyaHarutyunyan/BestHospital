@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Images, transformPermission } from "@eachbase/utils";
 import { dropdownsStyle } from "./styles";
 import { CheckBoxInput } from "@eachbase/components";
@@ -8,24 +8,26 @@ export const CheckBoxDropdown = ({
    dropdownClassName,
    dropdownOptions = [],
    dropdownTitle,
+   handleDropdownOpenClose,
+   onCloseDropdown,
+   dropdownIsShown,
    onPass,
+   checkboxError,
 }) => {
    const classes = dropdownsStyle();
-   const [dropdownIsShown, setDropdownIsShown] = useState(false);
 
    return (
       <>
-         {dropdownIsShown && (
-            <div className={classes.dropOverlayStyle} onClick={() => setDropdownIsShown(false)} />
-         )}
-         <div className={`${classes.dropdownBoxStyle} ${dropdownBoxClassName}`}>
-            <div
-               className={classes.showDropdownBoxStyle}
-               onClick={() => setDropdownIsShown((prevState) => !prevState)}
-            >
+         {dropdownIsShown && <div className={classes.dropOverlayStyle} onClick={onCloseDropdown} />}
+         <div
+            className={`${classes.dropdownBoxStyle} ${
+               checkboxError ? "error" : ""
+            } ${dropdownBoxClassName}`}
+         >
+            <div className={classes.showDropdownBoxStyle} onClick={handleDropdownOpenClose}>
                <h6 className={classes.dropdownSelectedStyle}>{dropdownTitle}</h6>
                <div className={`${classes.dropArrowStyle} ${dropdownIsShown ? "rotate" : ""}`}>
-                  <img src={Images.dropdownArrow} alt="" />
+                  <img src={Images.dropdownArrowFilledBlue} alt="" />
                </div>
             </div>
             {dropdownIsShown && (

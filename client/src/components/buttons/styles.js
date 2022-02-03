@@ -160,7 +160,7 @@ export const buttonsStyle = makeStyles(() => ({
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      marginRight: "8px",
+      "&.modalView": { marginRight: "8px" },
    },
 
    addCircleTextStyle: {

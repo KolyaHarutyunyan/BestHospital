@@ -10,7 +10,6 @@ import {
    DeleteElement,
    CheckboxesTags,
    NoInfoYet,
-   CheckBoxDropdown,
 } from "@eachbase/components";
 import { useDispatch, useSelector } from "react-redux";
 import { roleActions } from "@eachbase/store";
@@ -108,16 +107,11 @@ export const RolePermissions = ({ permissionsList }) => {
 
             {show === true && (
                <div className={classes.tablePermissionsBodyStyle}>
-                  {/* <CheckboxesTags
+                  <CheckboxesTags
                      handleChange={addPermissions}
                      permissionsList={filter}
                      label={"Select Permissions"}
                      placeholder={"Permissions"}
-                  /> */}
-                  <CheckBoxDropdown
-                     dropdownOptions={filter}
-                     dropdownTitle={"Select Permissions"}
-                     onPass={(permission) => {}}
                   />
                </div>
             )}

@@ -191,26 +191,7 @@ export const inputsStyle = makeStyles(() => ({
       "&::-webkit-scrollbar": {
          display: "none",
       },
-
-      "&::placeholder": {
-         fontSize: "14px",
-         lineHeight: "19px",
-         color: Colors.TextLightGray,
-      },
-   },
-   errorTextareaTextField: {
-      width: "100%",
-      resize: "none",
-      height: "128px!important",
-      borderColor: Colors.ThemeRed,
-      padding: "13px 0 10px 16px",
-      borderRadius: "4px",
-      overflow: "unset!important",
-      msOverflowStyle: "none",
-      scrollbarWidth: "none",
-      "&::-webkit-scrollbar": {
-         display: "none",
-      },
+      "&.error": { borderColor: Colors.ThemeRed },
 
       "&::placeholder": {
          fontSize: "14px",
@@ -220,36 +201,8 @@ export const inputsStyle = makeStyles(() => ({
    },
 
    /**AutoComplete style */
-   autocompleteStyle: {
-      border: "3px solid red",
-      "& > div > div > div": {
-         border: "1px solid brown",
-         padding: 0,
-         backgroundColor: "inherit",
-         "& > svg": { backgroundColor: Colors.BackgroundWater },
-      },
-      "& > div > div > input": {
-         padding: "0px !important",
-         border: "1px dashed",
-      },
-   },
-   inputTextFieldAutoHeight: {
-      border: "1px dotted green",
-      padding: 0,
-      "& .MuiOutlinedInput-root": {
-         // minHeight:'48px',
-         // height:'auto'
-      },
-      "& .MuiOutlinedInput-notchedOutline": {
-         borderColor: Colors.BackgroundBlue,
-      },
-      "& .MuiInputLabel-outlined": {
-         // marginTop:'-3px'
-      },
-      "& .MuiInputLabel-outlined.MuiInputLabel-shrink": {
-         transform: "translate(14px, -2px) scale(0.75)",
-      },
-   },
+   autocompleteStyle: {},
+   inputTextFieldAutoHeight: {},
    /**end */
 
    searchAddress: {

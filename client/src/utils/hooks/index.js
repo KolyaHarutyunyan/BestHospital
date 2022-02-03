@@ -15,3 +15,5 @@ export { getPhoneErrorText } from "./getPhoneErrorText";
 export { isNotEmpty } from "./isNotEmpty";
 export { makeEnum } from "./makeEnum";
 export { transformPermission } from "./transformPermissions";
+export { useCheckboxDropdown } from "./useCheckboxDropdown";
+export { getValTillTenDig } from "./getValTillTenDig";

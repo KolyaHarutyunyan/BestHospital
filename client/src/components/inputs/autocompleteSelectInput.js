@@ -17,7 +17,7 @@ export const CheckboxesTags = ({
    typeError,
 }) => {
    const classes = inputsStyle();
-   console.log(permissionsList, " permissionsList");
+
    return (
       <Autocomplete
          className={classes.autocompleteStyle}

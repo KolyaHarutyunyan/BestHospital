@@ -63,7 +63,7 @@ export const Role = ({ key, roleInfo }) => {
          dispatch(roleActions.removeRole());
       }
    }, [success]);
-   console.log(roleInfo, " role info");
+
    return (
       <div key={key} className={classes.tableStyle}>
          <div className={classes.tableHeadStyle}>

@@ -142,9 +142,9 @@ export const managementFragments = makeStyles(() => ({
    },
 
    tablePermissionsBodyStyle: {
-      padding: "0 16px 16px 16px",
-      "@media (min-width: 1920px)": {
-         padding: "0 32px 32px 32px",
+      padding: "0 32px 32px",
+      "@media (max-width: 1280px)": {
+         padding: "0 16px 16px",
       },
    },
 
@@ -160,9 +160,9 @@ export const managementFragments = makeStyles(() => ({
          textTransform: "uppercase",
       },
 
-      padding: "25px 16px 25px 16px",
-      "@media (min-width: 1920px)": {
-         padding: "33px 32px 25px 32px",
+      padding: "33px 32px 25px 32px",
+      "@media (max-width: 1280px)": {
+         padding: "25px 16px",
       },
    },
 
@@ -222,40 +222,56 @@ export const managementFragments = makeStyles(() => ({
    },
 
    input: {
-      "& .MuiOutlinedInput-root": {
-         height: "56px",
+      "& > .MuiFormControl-root > label": {
+         color: "#4B5C6880",
       },
    },
 
    inputDescription: {
-      height: "70px",
-      marginTop: "16px",
       width: "100%",
+      height: "96px",
+      overflowY: "auto",
+      marginTop: "16px",
+      borderRadius: "4px",
+      border: `1px solid ${Colors.ThemeBlue}`,
+      padding: "10px 0",
+      "& > label": {
+         position: "relative",
+         zIndex: 99999999,
+         backgroundColor: "white",
+      },
       "& .MuiOutlinedInput-inputMultiline": {
-         maxHeight: "60px",
+         // maxHeight: "60px",
       },
       "& .MuiFormLabel-root": {
-         color: "rgba(0, 0, 0, 0.54)",
+         color: "#4B5C6880",
       },
       "& .MuiOutlinedInput-notchedOutline": {
-         borderColor: Colors.ThemeBorder,
-      },
-      "& .MuiInputLabel-outlined": {
-         marginTop: "-3px",
-      },
-      "& .MuiInputLabel-outlined.MuiInputLabel-shrink": {
-         transform: "translate(14px, -2px) scale(0.75)",
-      },
-      "& .MuiOutlinedInput-root": {
+         // border: `1px solid ${Colors.ThemeBlue}`,
          height: "96px",
-         minHeight: "96px",
+         // overflowY: "auto",
+         border: "none",
       },
+      "& .MuiInputLabel-outlined": {},
+      "& .MuiInputLabel-outlined.MuiInputLabel-shrink": {
+         // transform: "translate(14px, -2px) scale(0.75)",
+      },
+      "& .MuiOutlinedInput-root": { height: "96px" },
+   },
+
+   descriptionTextAreaStyle: {
+      marginTop: "16px",
+      maxHeight: "96px",
+      overflowY: "auto",
+      "&::placeholder": { color: "#4B5C6880" },
    },
 
    maxCharacter: {
       fontSize: "12px",
+      fontWeight: 400,
       color: Colors.TextPrimary,
-      margin: "26px 16px 0 16px",
+      marginTop: "-10px",
+      paddingLeft: "16px",
    },
 
    deleteModal: {
