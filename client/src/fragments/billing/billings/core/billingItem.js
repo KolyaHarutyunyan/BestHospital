@@ -10,7 +10,7 @@ export const BillingItem = ({ billingItem, index }) => {
    return (
       <div>
          <h1 style={{ cursor: "pointer" }} onClick={() => history.push(`/billing/${index}`)}>
-            billing item here
+            {`billing item ${index} here`}
          </h1>
       </div>
    );

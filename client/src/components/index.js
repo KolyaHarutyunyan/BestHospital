@@ -28,6 +28,7 @@ export {
    AntSwitch,
    SelectStatusInput,
    SearchInput,
+   CheckBoxInput,
 } from "./inputs";
 export { Loader, MinLoader } from "./loader";
 export { GlobalLogo } from "./logo";
@@ -56,4 +57,4 @@ export { Toast } from "./toast";
 export { NoItemText } from "./noItem";
 export { AvailableHours } from "./availability";
 
-export { UserInputsDropdown } from "./dropdowns";
+export { UserInputsDropdown, CheckBoxDropdown } from "./dropdowns";

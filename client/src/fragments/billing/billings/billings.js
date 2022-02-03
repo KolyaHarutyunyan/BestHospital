@@ -9,8 +9,8 @@ export const BillingsFragment = ({ billings }) => {
    return (
       <>
          <div>billings here</div>
-         {[1, 2].map((billing, index) => (
-            <BillingItem key={index} billingItem={billing} index={index} />
+         {[1, 2, 3, 4].map((billing, index) => (
+            <BillingItem key={index} billingItem={billing} index={index + 1} />
          ))}
       </>
    );

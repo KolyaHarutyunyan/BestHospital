@@ -27,6 +27,10 @@ export const navBarStyles = makeStyles((theme) => ({
          minHeight: "80px",
          paddingLeft: "40px",
          paddingRight: "36px",
+         "@media (max-width: 1280px)": {
+            paddingLeft: "32px",
+            paddingRight: "24px",
+         },
       },
    },
 
@@ -39,6 +43,9 @@ export const navBarStyles = makeStyles((theme) => ({
       }),
       "& > div": {
          paddingLeft: "16px",
+         "@media (max-width: 1280px)": {
+            paddingLeft: "247px",
+         },
       },
    },
 
@@ -125,8 +132,8 @@ export const navBarStyles = makeStyles((theme) => ({
       height: "100%",
       background: `${Colors.BackgroundSecondary} 0% 0% no-repeat padding-box`,
 
-      "@media (min-width: 1920px)": {
-         padding: "90px 40px 24px 40px",
+      "@media (max-width: 1280px)": {
+         padding: "104px 24px 24px 28px",
       },
    },
 

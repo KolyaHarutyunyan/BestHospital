@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { userInputDropdownStyle } from "./styles";
+import { dropdownsStyle } from "./styles";
 import { ActiveInactiveStatus } from "@eachbase/utils";
 
 export const UserInputsDropdown = ({ dropdownOptions = [], onPass, selected, dropdownTitle }) => {
    const [dropdownIsShown, setDropdownIsShown] = useState(false);
-   const classes = userInputDropdownStyle();
+   const classes = dropdownsStyle();
    const itemClassName = ActiveInactiveStatus(selected);
    const chooseOptionHandler = (option) => {
       onPass(option);
