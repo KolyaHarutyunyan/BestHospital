@@ -3,7 +3,6 @@ import {
    AddModalButton,
    CheckboxesTags,
    CloseButton,
-   Textarea,
    UserTextArea,
    ValidationInput,
 } from "@eachbase/components";
@@ -129,26 +128,6 @@ export const AddRoleModal = ({ handleClose, permissionsList }) => {
                placeholder={"Permissions"}
             />
 
-            {/* <ValidationInput
-                    onChange={changeDescription}
-                    typeError={error === 'description'}
-                    className={classes.inputDescription}
-                    variant={"outlined"}
-                    name={"description"}
-                    value={description}
-                    label={"Role Description"}
-                    type={"text"}
-                    multiline={true}
-                /> */}
-            {/* <Textarea
-               multiline
-               className={""}
-               typeError={error === "description"}
-               value={description}
-               onChange={changeDescription}
-               name={"description"}
-               label={"Role Description*"}
-            /> */}
             <UserTextArea
                label={"Role Description*"}
                value={description}
@@ -156,7 +135,6 @@ export const AddRoleModal = ({ handleClose, permissionsList }) => {
                hasError={error === "description"}
                hasText={!!description}
                name={"description"}
-               className={""}
                id={"roleDescription"}
             />
             <p className={classes.maxCharacter}>Max 100 characters</p>
