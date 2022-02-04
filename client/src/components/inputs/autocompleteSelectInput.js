@@ -30,23 +30,15 @@ export const CheckboxesTags = ({
          onChange={(event, value) => handleChange(value)}
          getOptionLabel={(option) => option.title}
          renderOption={(option, { selected }) => (
-            <React.Fragment>
-               <Checkbox
-                  icon={icon}
-                  checkedIcon={checkedIcon}
-                  style={{
-                     marginRight: 8,
-                  }}
-                  checked={selected}
-               />
+            <div className={classes.optionsStyle}>
+               <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
                {transformPermission(option.title)}
-            </React.Fragment>
+            </div>
          )}
          renderInput={(params) => (
             <TextField
                {...params}
                error={typeError}
-               className={classes.inputTextFieldAutoHeight}
                variant="outlined"
                label={label}
                placeholder={placeholder}
