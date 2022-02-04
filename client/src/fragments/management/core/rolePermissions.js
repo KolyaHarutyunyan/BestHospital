@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { managementFragments } from "./style";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import { Colors, FindLoad, FindSuccess, Images } from "@eachbase/utils";
+import { Colors, FindLoad, FindSuccess, Images, transformPermission } from "@eachbase/utils";
 import {
    AddCircle,
    DeleteButton,
@@ -28,8 +28,8 @@ export const RolePermissions = ({ permissionsList }) => {
 
    const handleOpenClose = (item) => {
       setOpen(!open);
-      sePermission(item.id);
-      setTitle(item.title);
+      sePermission(item?.id);
+      setTitle(item?.title);
    };
 
    const deletePermissions = () => {
@@ -122,7 +122,7 @@ export const RolePermissions = ({ permissionsList }) => {
                      <div key={j} className={classes.tablePermissionsBodyContentStyle}>
                         <div>
                            <img src={Images.checked} alt={"checked"} />
-                           <p>{i.title}</p>
+                           <p>{transformPermission(i.title)}</p>
                         </div>
 
                         <div>

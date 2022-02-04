@@ -143,9 +143,10 @@ export const managementFragments = makeStyles(() => ({
 
    tablePermissionsBodyStyle: {
       padding: "0 32px 32px",
-      "@media (max-width: 1280px)": {
-         padding: "0 16px 16px",
-      },
+      "@media (max-width: 1280px)": { padding: "0 16px 16px" },
+      // "& fieldset": { borderColor: Colors.ThemeBlue },
+      // "& .MuiInputBase-root.MuiOutlinedInput-root.MuiAutocomplete-inputRoot.MuiInputBase-fullWidth.MuiInputBase-formControl.MuiInputBase-adornedEnd.MuiOutlinedInput-adornedEnd:hover fieldset":
+      //    { borderColor: Colors.ThemeBlue },
    },
 
    roleNameStyle: {
@@ -222,8 +223,8 @@ export const managementFragments = makeStyles(() => ({
    },
 
    input: {
-      "& > .MuiFormControl-root > label": {
-         color: "#4B5C6880",
+      "& label": {
+         color: "#4B5C6880 !important",
       },
    },
 

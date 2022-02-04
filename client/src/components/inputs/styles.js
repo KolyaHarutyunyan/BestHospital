@@ -201,7 +201,35 @@ export const inputsStyle = makeStyles(() => ({
    },
 
    /**AutoComplete style */
-   autocompleteStyle: {},
+   autocompleteStyle: {
+      "& fieldset": { borderColor: Colors.ThemeBlue },
+      "& .MuiInputBase-root.MuiOutlinedInput-root.MuiAutocomplete-inputRoot.MuiInputBase-fullWidth.MuiInputBase-formControl.MuiInputBase-adornedEnd.MuiOutlinedInput-adornedEnd:hover fieldset":
+         { borderColor: Colors.ThemeBlue },
+      "& label": {
+         color: "#4B5C6880 !important",
+         top: "-5px",
+         "&.Mui-focused": { top: 0 },
+      },
+      "& input": { padding: "0 16px !important" },
+      "& .MuiAutocomplete-endAdornment > button:first-of-type, button svg": { display: "none" },
+      "& .MuiAutocomplete-endAdornment > button:last-of-type": {
+         position: "absolute",
+         top: "3px",
+         right: 0,
+      },
+      "& .MuiAutocomplete-endAdornment > button:last-of-type span:first-of-type": {
+         display: "block",
+         width: "18px",
+         height: "18px",
+         backgroundImage: `url(${Images.dropdownArrowFilledBlue})`,
+         backgroundRepeat: "no-repeat",
+         backgroundSize: "contain",
+         backgroundPosition: "center",
+      },
+      "& .MuiInputBase-root.MuiOutlinedInput-root.MuiAutocomplete-inputRoot.MuiInputBase-fullWidth.MuiInputBase-formControl.MuiInputBase-adornedEnd.MuiOutlinedInput-adornedEnd":
+         { padding: 0, height: "48px" },
+      "& $checkboxes-tags-demo-popup": { border: "1px solid green !important" },
+   },
    inputTextFieldAutoHeight: {},
    /**end */
 
