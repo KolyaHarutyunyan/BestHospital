@@ -4,6 +4,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@material-ui/icons/CheckBox";
 import { inputsStyle } from "./styles";
+import { transformPermission } from "@eachbase/utils";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -29,23 +30,15 @@ export const CheckboxesTags = ({
          onChange={(event, value) => handleChange(value)}
          getOptionLabel={(option) => option.title}
          renderOption={(option, { selected }) => (
-            <React.Fragment>
-               <Checkbox
-                  icon={icon}
-                  checkedIcon={checkedIcon}
-                  style={{
-                     marginRight: 8,
-                  }}
-                  checked={selected}
-               />
-               {option.title}
-            </React.Fragment>
+            <div className={classes.optionsStyle}>
+               <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
+               {transformPermission(option.title)}
+            </div>
          )}
          renderInput={(params) => (
             <TextField
                {...params}
                error={typeError}
-               className={classes.inputTextFieldAutoHeight}
                variant="outlined"
                label={label}
                placeholder={placeholder}

@@ -143,9 +143,7 @@ export const managementFragments = makeStyles(() => ({
 
    tablePermissionsBodyStyle: {
       padding: "0 32px 32px",
-      "@media (max-width: 1280px)": {
-         padding: "0 16px 16px",
-      },
+      "@media (max-width: 1280px)": { padding: "0 16px 16px" },
    },
 
    roleNameStyle: {
@@ -222,55 +220,16 @@ export const managementFragments = makeStyles(() => ({
    },
 
    input: {
-      "& > .MuiFormControl-root > label": {
-         color: "#4B5C6880",
+      "& label": {
+         color: "#4B5C6880 !important",
       },
-   },
-
-   inputDescription: {
-      width: "100%",
-      height: "96px",
-      overflowY: "auto",
-      marginTop: "16px",
-      borderRadius: "4px",
-      border: `1px solid ${Colors.ThemeBlue}`,
-      padding: "10px 0",
-      "& > label": {
-         position: "relative",
-         zIndex: 99999999,
-         backgroundColor: "white",
-      },
-      "& .MuiOutlinedInput-inputMultiline": {
-         // maxHeight: "60px",
-      },
-      "& .MuiFormLabel-root": {
-         color: "#4B5C6880",
-      },
-      "& .MuiOutlinedInput-notchedOutline": {
-         // border: `1px solid ${Colors.ThemeBlue}`,
-         height: "96px",
-         // overflowY: "auto",
-         border: "none",
-      },
-      "& .MuiInputLabel-outlined": {},
-      "& .MuiInputLabel-outlined.MuiInputLabel-shrink": {
-         // transform: "translate(14px, -2px) scale(0.75)",
-      },
-      "& .MuiOutlinedInput-root": { height: "96px" },
-   },
-
-   descriptionTextAreaStyle: {
-      marginTop: "16px",
-      maxHeight: "96px",
-      overflowY: "auto",
-      "&::placeholder": { color: "#4B5C6880" },
    },
 
    maxCharacter: {
       fontSize: "12px",
       fontWeight: 400,
       color: Colors.TextPrimary,
-      marginTop: "-10px",
+      marginTop: "8px",
       paddingLeft: "16px",
    },
 

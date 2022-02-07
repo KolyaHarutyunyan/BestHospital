@@ -123,7 +123,7 @@ export const CreateStaff = ({handleClose, resetData, staffGeneral}) => {
                     setError(
                         !license.driverLicense ? 'driverLicense' :
                             !license.state ? 'state' :
-                                !license.expireDate ? 'expirationDate' :
+                                !license.expireDate ? 'expireDate' :
                                     'Input is not filled'
                     )
                 }
