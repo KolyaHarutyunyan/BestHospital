@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
    AddressInput,
    ValidationInput,
@@ -8,7 +8,13 @@ import {
    ModalHeader,
 } from "@eachbase/components";
 import { createFoundingSourceStyle } from "./styles";
-import { EmailValidator, ErrorText, FindSuccess, getPhoneErrorText } from "@eachbase/utils";
+import {
+   EmailValidator,
+   ErrorText,
+   FindLoad,
+   FindSuccess,
+   getPhoneErrorText,
+} from "@eachbase/utils";
 import {
    fundingSourceActions,
    httpRequestsOnErrorsActions,
@@ -18,22 +24,27 @@ import { FindError } from "@eachbase/utils";
 
 export const CreateFundingSource = ({ handleClose, info }) => {
    const [error, setError] = useState("");
-   const [inputs, setInputs] = useState(info ? { ...info } : {});
+   const [inputs, setInputs] = useState(
+      info
+         ? { ...info }
+         : {
+              name: "",
+              email: "",
+              phoneNumber: "",
+              type: "",
+              contact: "",
+              website: "",
+           }
+   );
    const [fullAddress, setFullAddress] = useState(
       info && info.address ? info.address.formattedAddress : ""
    );
    const classes = createFoundingSourceStyle();
    const dispatch = useDispatch();
 
-   const { httpOnError, httpOnLoad } = useSelector((state) => ({
-      httpOnError: state.httpOnError,
-      httpOnLoad: state.httpOnLoad,
-   }));
-
-   const success = FindSuccess("EDIT_FUNDING_SOURCE");
-   const successCreate = FindSuccess("CREATE_FUNDING_SOURCE");
+   const success = info ? FindSuccess("EDIT_FUNDING_SOURCE") : FindSuccess("CREATE_FUNDING_SOURCE");
+   const loader = info ? FindLoad("EDIT_FUNDING_SOURCE") : FindLoad("CREATE_FUNDING_SOURCE");
    const backError = info ? FindError("EDIT_FUNDING_SOURCE") : FindError("CREATE_FUNDING_SOURCE");
-   //    const phoneError = backError && Array.isArray(backError[0].error) && backError[0].error[0];
 
    const phoneErrorMsg = getPhoneErrorText(inputs.phoneNumber);
    const emailErrorMsg = !EmailValidator.test(inputs.email) ? ErrorText.emailValid : "";
@@ -62,13 +73,6 @@ export const CreateFundingSource = ({ handleClose, info }) => {
          setError("");
       }
    };
-
-   // const handleChange = e => setInputs(
-   //     prevState => ({...prevState, [e.target.name]: e.target.value}),
-   //     error === e.target.name && setError(''),
-   //     e.target.name === 'email' && httpOnError.length && dispatch(httpRequestsOnErrorsActions.removeError('EDIT_FUNDING_SOURCE')),
-   //     backError && backError.length && dispatch(httpRequestsOnErrorsActions.removeError(backError[0].type))
-   // );
 
    const handleChange = (evt) => {
       setInputs((prevState) => ({
@@ -151,19 +155,17 @@ export const CreateFundingSource = ({ handleClose, info }) => {
       backError &&
          backError.length &&
          dispatch(httpRequestsOnErrorsActions.removeError(backError[0].type));
-      //   phoneError && dispatch(httpRequestsOnErrorsActions.removeError(backError[0].type));
    };
 
    useEffect(() => {
-      if (success) {
-         handleClose();
+      if (!success) return;
+      if (info) {
          dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_FUNDING_SOURCE"));
-      }
-      if (successCreate) {
-         handleClose();
+      } else {
          dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_FUNDING_SOURCE"));
       }
-   }, [success.length, successCreate.length]);
+      handleClose();
+   }, [success]);
 
    return (
       <div className={classes.createFoundingSource}>
@@ -243,7 +245,7 @@ export const CreateFundingSource = ({ handleClose, info }) => {
             </div>
             <div className={classes.createFoundingSourceBodyBlock}>
                <CreateChancel
-                  loader={httpOnLoad.length > 0}
+                  loader={!!loader.length}
                   create={info ? "Save" : "Add"}
                   chancel={"Cancel"}
                   onCreate={handleCreate}

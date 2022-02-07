@@ -22,7 +22,6 @@ export const Textarea = ({
    variant,
    loader,
    styles,
-   ...props
 }) => {
    const classes = inputsStyle();
    const [validEmail, setValidEmail] = useState(false);
@@ -45,7 +44,7 @@ export const Textarea = ({
    return (
       <>
          <TextareaAutosize
-            maxRows={maxRows}
+            rowsMax={maxRows}
             style={{ ...styles }}
             className={`${classes.TextareaTextField} ${typeError ? "error" : ""} ${className}`}
             variant={variant}
@@ -60,9 +59,8 @@ export const Textarea = ({
             onChange={(ev) => onChange(ev)}
             onFocus={() => setValidEmail(false)}
             onBlur={(e) => chechValid(e)}
-            fullWidth
             multiline={multiline}
-            InputProps={{
+            props={{
                endAdornment: loader && <InputMinLoader />,
             }}
          />

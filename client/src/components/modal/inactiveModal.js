@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Colors, ErrorText, useGlobalTextStyles } from "@eachbase/utils";
+import { Colors, ErrorText, FindLoad, FindSuccess, useGlobalTextStyles } from "@eachbase/utils";
 import { modalsStyle } from "./styles";
 import { AddModalButton, CloseButton } from "../buttons";
 import { ValidationInput, Textarea } from "../inputs";
@@ -15,14 +15,11 @@ export const InactiveModal = ({ handleOpenClose, info, name, statusType }) => {
       info?.status === 1 ? "inactivate" : "activate"
    );
    const [error, setError] = useState("");
-   const [inputs, setInputs] = useState({});
+   const [inputs, setInputs] = useState({ date: "", reason: "" });
    const dispatch = useDispatch();
-   const { httpOnSuccess, httpOnLoad } = useSelector((state) => ({
-      httpOnSuccess: state.httpOnSuccess,
-      httpOnLoad: state.httpOnLoad,
-   }));
 
-   const success = httpOnSuccess.length && httpOnSuccess[0].type === "SET_STATUS";
+   const success = FindSuccess("SET_STATUS");
+   const loader = FindLoad("SET_STATUS");
 
    const inactivateButtonStyle = {
       backgroundColor: activeOrInactive === "activate" ? Colors.BackgroundBlue : Colors.ThemeRed,
@@ -47,7 +44,6 @@ export const InactiveModal = ({ handleOpenClose, info, name, statusType }) => {
          dispatch(
             fundingSourceActions.setStatus(params.id, info.path, statusType, data, info.type)
          );
-         setInputs(statusType);
       } else {
          setError(!inputs.date ? "date" : !inputs.reason ? "reason" : "Input is not field");
       }
@@ -85,13 +81,13 @@ export const InactiveModal = ({ handleOpenClose, info, name, statusType }) => {
             onChange={handleChange}
             label={"Write  reason here..."}
             name="reason"
-            typeError={error === "reason" && ErrorText.field}
+            typeError={error === "reason" ? ErrorText.field : ""}
          />
          <AddModalButton
             btnStyles={inactivateButtonStyle}
             text={"Send"}
             handleClick={handleCreate}
-            loader={httpOnLoad.length > 0}
+            loader={!!loader.length}
          />
       </div>
    );

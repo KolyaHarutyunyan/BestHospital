@@ -7,8 +7,16 @@ import {
    ValidationInput,
 } from "@eachbase/components";
 import { managementFragments } from "./style";
-import { getValTillTenDig, globalModals, useGlobalTextStyles } from "@eachbase/utils";
-import { useDispatch, useSelector } from "react-redux";
+import {
+   ErrorText,
+   FindError,
+   FindLoad,
+   FindSuccess,
+   getValTillTenDig,
+   globalModals,
+   useGlobalTextStyles,
+} from "@eachbase/utils";
+import { useDispatch } from "react-redux";
 import {
    httpRequestsOnErrorsActions,
    httpRequestsOnSuccessActions,
@@ -25,11 +33,22 @@ export const AddRoleModal = ({ handleClose, permissionsList }) => {
    const [description, setDescription] = useState("");
    const dispatch = useDispatch();
 
-   const { httpOnLoad, httpOnError, httpOnSuccess } = useSelector((state) => ({
-      httpOnLoad: state.httpOnLoad,
-      httpOnError: state.httpOnError,
-      httpOnSuccess: state.httpOnSuccess,
-   }));
+   const success = FindSuccess("CREATE_ROLE");
+   const loader = FindLoad("CREATE_ROLE");
+   const backError = FindError("CREATE_ROLE");
+
+   useEffect(() => {
+      if (success) {
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_ROLE"));
+         handleClose();
+      }
+   }, [success]);
+
+   useEffect(() => {
+      return () => {
+         dispatch(httpRequestsOnErrorsActions.removeError("CREATE_ROLE"));
+      };
+   }, []);
 
    const addRole = () => {
       const permissionsList = [];
@@ -55,26 +74,9 @@ export const AddRoleModal = ({ handleClose, permissionsList }) => {
       }
    };
 
-   const success = httpOnSuccess.length && httpOnSuccess[0].type === "CREATE_ROLE";
-   const loader = httpOnLoad.length && httpOnLoad[0] === "CREATE_ROLE";
-   const errorText = httpOnError.length && httpOnError[0].error;
-
-   useEffect(() => {
-      if (success) {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess(httpOnSuccess[0].type));
-         handleClose();
-      }
-   }, [success]);
-
-   useEffect(() => {
-      return () => {
-         dispatch(httpRequestsOnErrorsActions.removeError("CREATE_ROLE"));
-      };
-   }, []);
-
    const handleChange = (ev) => {
-      if (httpOnError.length) {
-         dispatch(httpRequestsOnErrorsActions.removeError(httpOnError[0].type));
+      if (backError) {
+         dispatch(httpRequestsOnErrorsActions.removeError("CREATE_ROLE"));
       }
       setRoleName(ev.target.value);
       if (error === "role") setError("");
@@ -105,13 +107,7 @@ export const AddRoleModal = ({ handleClose, permissionsList }) => {
 
             <ValidationInput
                onChange={handleChange}
-               typeError={
-                  error === "role"
-                     ? true
-                     : errorText === "A role with this title already exists"
-                     ? "A role with this title already exists"
-                     : ""
-               }
+               typeError={error === "role" ? ErrorText.field : backError ? backError[0]?.error : ""}
                style={classes.input}
                value={roleName}
                variant={"outlined"}
@@ -121,7 +117,7 @@ export const AddRoleModal = ({ handleClose, permissionsList }) => {
             />
 
             <CheckboxesTags
-               typeError={error === "permissions"}
+               typeError={error === "permissions" ? ErrorText.selectField : ""}
                handleChange={changePermissions}
                permissionsList={permissionsList}
                label={"Select Permissions*"}
@@ -129,18 +125,18 @@ export const AddRoleModal = ({ handleClose, permissionsList }) => {
             />
 
             <UserTextArea
+               id={"roleDescription"}
+               name={"description"}
                label={"Role Description*"}
                value={description}
                onChange={changeDescription}
-               hasError={error === "description"}
+               typeError={error === "description" ? ErrorText.field : ""}
                hasText={!!description}
-               name={"description"}
-               id={"roleDescription"}
+               maxCharsLabel={"Max 100 characters"}
             />
-            <p className={classes.maxCharacter}>Max 100 characters</p>
 
             <AddModalButton
-               loader={loader}
+               loader={!!loader.length}
                styles={{ marginTop: "16px" }}
                handleClick={addRole}
                text={"Add"}

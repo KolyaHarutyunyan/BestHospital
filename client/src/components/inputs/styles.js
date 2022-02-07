@@ -200,6 +200,7 @@ export const inputsStyle = makeStyles(() => ({
 
    // AutoComplete style **
    autocompleteStyle: {
+      minHeight: "70px",
       "& fieldset": { borderColor: Colors.ThemeBlue },
       "& .MuiInputBase-root.MuiOutlinedInput-root.MuiAutocomplete-inputRoot.MuiInputBase-fullWidth.MuiInputBase-formControl.MuiInputBase-adornedEnd.MuiOutlinedInput-adornedEnd:hover fieldset":
          { borderColor: Colors.ThemeBlue },
@@ -239,7 +240,7 @@ export const inputsStyle = makeStyles(() => ({
    userTextAreaStyle: {
       position: "relative",
       width: "100%",
-      marginTop: "20px",
+      marginTop: "8px",
       "& label": {
          position: "absolute",
          top: "17px",
@@ -272,6 +273,20 @@ export const inputsStyle = makeStyles(() => ({
       },
       "&:focus-within textarea": { border: `2px solid ${Colors.ThemeBlue}` },
       "&.error textarea": { borderColor: Colors.ThemeRed },
+   },
+   errorAndCharsBoxStyle: {
+      width: "100%",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      "& .maxCharacter": {
+         width: "100%",
+         paddingRight: "16px",
+         textAlign: "right",
+         fontSize: "12px",
+         fontWeight: 400,
+         color: Colors.TextPrimary,
+      },
    },
    // end **
 

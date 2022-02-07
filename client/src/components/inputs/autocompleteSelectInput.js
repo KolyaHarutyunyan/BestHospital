@@ -38,7 +38,8 @@ export const CheckboxesTags = ({
          renderInput={(params) => (
             <TextField
                {...params}
-               error={typeError}
+               error={!!typeError}
+               helperText={typeError}
                variant="outlined"
                label={label}
                placeholder={placeholder}

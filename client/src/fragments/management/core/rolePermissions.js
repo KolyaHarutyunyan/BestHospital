@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { managementFragments } from "./style";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import { Colors, FindLoad, FindSuccess, Images, transformPermission } from "@eachbase/utils";
+import { FindLoad, FindSuccess, Images, transformPermission } from "@eachbase/utils";
 import {
    AddCircle,
    DeleteButton,
@@ -78,13 +77,6 @@ export const RolePermissions = ({ permissionsList }) => {
                <div className={classes.permissionIcon}>
                   <img src={Images.accessManagementFill} alt={"accessManagementFill"} />
                </div>
-               {/*<AccountCircleIcon*/}
-               {/*    style={{*/}
-               {/*        width: "36px",*/}
-               {/*        height: "36px",*/}
-               {/*        color: Colors.ThemePurple,*/}
-               {/*    }}*/}
-               {/*/>*/}
                <p>Role Permissions</p>
             </div>
          </div>

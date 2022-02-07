@@ -225,14 +225,6 @@ export const managementFragments = makeStyles(() => ({
       },
    },
 
-   maxCharacter: {
-      fontSize: "12px",
-      fontWeight: 400,
-      color: Colors.TextPrimary,
-      marginTop: "8px",
-      paddingLeft: "16px",
-   },
-
    deleteModal: {
       width: "500px",
       height: "auto",
