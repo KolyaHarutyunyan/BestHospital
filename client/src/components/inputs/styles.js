@@ -188,9 +188,8 @@ export const inputsStyle = makeStyles(() => ({
       overflow: "unset!important",
       msOverflowStyle: "none",
       scrollbarWidth: "none",
-      "&::-webkit-scrollbar": {
-         display: "none",
-      },
+      "&::-webkit-scrollbar": { display: "none" },
+      "&.error": { borderColor: Colors.ThemeRed },
 
       "&::placeholder": {
          fontSize: "14px",
@@ -198,41 +197,156 @@ export const inputsStyle = makeStyles(() => ({
          color: Colors.TextLightGray,
       },
    },
-   errorTextareaTextField: {
+
+   // AutoComplete style **
+   autocompleteStyle: {
+      "& fieldset": { borderColor: Colors.ThemeBlue },
+      "& .MuiInputBase-root.MuiOutlinedInput-root.MuiAutocomplete-inputRoot.MuiInputBase-fullWidth.MuiInputBase-formControl.MuiInputBase-adornedEnd.MuiOutlinedInput-adornedEnd:hover fieldset":
+         { borderColor: Colors.ThemeBlue },
+      "& label": {
+         color: "#4B5C6880 !important",
+         top: "-5px",
+         "&.Mui-focused": { top: 0 },
+      },
+      "& input": { padding: "0 16px !important" },
+      "& .MuiAutocomplete-endAdornment > button:first-of-type, button svg": { display: "none" },
+      "& .MuiAutocomplete-endAdornment > button:last-of-type": {
+         position: "absolute",
+         top: "3px",
+         right: 0,
+      },
+      "& .MuiAutocomplete-endAdornment > button:last-of-type span:first-of-type": {
+         display: "block",
+         width: "18px",
+         height: "18px",
+         backgroundImage: `url(${Images.dropdownArrowFilledBlue})`,
+         backgroundRepeat: "no-repeat",
+         backgroundSize: "contain",
+         backgroundPosition: "center",
+      },
+      "& .MuiInputBase-root.MuiOutlinedInput-root.MuiAutocomplete-inputRoot.MuiInputBase-fullWidth.MuiInputBase-formControl.MuiInputBase-adornedEnd.MuiOutlinedInput-adornedEnd":
+         { padding: 0, height: "48px" },
+   },
+   optionsStyle: {
+      fontSize: "16px",
+      fontWeight: 400,
+      color: "#4B5C68",
+      "& *, & *:hover": { backgroundColor: "inherit" },
+   },
+   // end **
+
+   // UserTextArea Style **
+   userTextAreaStyle: {
+      position: "relative",
       width: "100%",
-      resize: "none",
-      height: "128px!important",
-      borderColor: Colors.ThemeRed,
-      padding: "13px 0 10px 16px",
-      borderRadius: "4px",
-      overflow: "unset!important",
-      msOverflowStyle: "none",
-      scrollbarWidth: "none",
-      "&::-webkit-scrollbar": {
-         display: "none",
+      marginTop: "20px",
+      "& label": {
+         position: "absolute",
+         top: "17px",
+         left: "17px",
+         cursor: "text",
+         fontSize: "16px",
+         fontWeight: 400,
+         color: "#4B5C6880",
+         transition: "all 0.1s ease-in-out",
       },
+      "&.filled label": {
+         backgroundColor: Colors.BackgroundWhite,
+         padding: "0 4px",
+         top: "-4px",
+         left: "8px",
+         fontSize: "12px",
+      },
+      "& textarea": {
+         resize: "none",
+         outline: "none",
+         border: `1px solid ${Colors.ThemeBlue}`,
+         borderRadius: "4px",
+         padding: "13px 16px",
+         width: "100%",
+         height: "96px",
+         overflowY: "auto",
+         fontSize: "16px",
+         fontWeight: 400,
+         color: Colors.TextPrimary,
+      },
+      "&:focus-within textarea": { border: `2px solid ${Colors.ThemeBlue}` },
+      "&.error textarea": { borderColor: Colors.ThemeRed },
+   },
+   // end **
 
-      "&::placeholder": {
+   // SearchInput Style **
+   searchInputBoxStyle: {
+      width: "500px",
+      backgroundColor: "#F2F4F8",
+      borderRadius: "8px",
+      marginRight: "35px",
+      padding: "9px 16px 9px 38px",
+      backgroundImage: `url(${Images.search})`,
+      backgroundRepeat: "no-repeat",
+      backgroundSize: "18px 18px",
+      backgroundPosition: "16px 50%",
+      cursor: "text",
+      "@media(max-width: 1280px)": {
+         width: "450px",
+         marginRight: "27px",
+      },
+      "& > input": {
+         width: "100%",
+         outline: "none",
+         border: "none",
+         backgroundColor: "inherit",
          fontSize: "14px",
-         lineHeight: "19px",
-         color: Colors.TextLightGray,
+         fontWeight: 400,
+         color: Colors.TextPrimary,
+         "&::placeholder": {
+            color: "#4B5C6899 !important",
+            opacity: 1 /* Firefox */,
+         },
+         "&:-ms-input-placeholder": {
+            /* Internet Explorer 10-11 */
+            color: "#4B5C6899 !important",
+         },
+         "&::-ms-input-placeholder": {
+            /* Microsoft Edge */
+            color: "#4B5C6899 !important",
+         },
       },
    },
-   inputTextFieldAutoHeight: {
-      "& .MuiOutlinedInput-root": {
-         // minHeight:'48px',
-         // height:'auto'
+   // end **
+
+   // CheckBoxInput Style **
+   checkBoxLabelStyle: {
+      display: "flex",
+      alignItems: "center",
+      transition: "all 0.2s linear",
+      cursor: "pointer",
+      padding: "15px 16px",
+      "& input": { display: "none" },
+      "& input:checked + $inputCheckBoxStyle": {
+         backgroundImage: `url(${Images.checkmarkWhite})`,
+         backgroundRepeat: "no-repeat",
+         backgroundSize: "13px 10px",
+         backgroundPosition: "center",
+         backgroundColor: Colors.ThemeBlue,
       },
-      "& .MuiOutlinedInput-notchedOutline": {
-         borderColor: Colors.BackgroundBlue,
-      },
-      "& .MuiInputLabel-outlined": {
-         // marginTop:'-3px'
-      },
-      "& .MuiInputLabel-outlined.MuiInputLabel-shrink": {
-         transform: "translate(14px, -2px) scale(0.75)",
-      },
+      "&:hover": { backgroundColor: Colors.BackgroundWater },
    },
+   inputCheckBoxStyle: {
+      backgroundColor: "inherit",
+      transition: "background-color 0.2s linear",
+      width: "18px",
+      height: "18px",
+      border: "1px solid #438AFE",
+      borderRadius: "2px",
+      marginRight: "16px",
+   },
+   inputLabelStyle: {
+      fontSize: "16px",
+      fontWeight: 400,
+      color: Colors.TextPrimary,
+   },
+   // end **
 
    searchAddress: {
       height: "48px",
@@ -283,42 +397,6 @@ export const inputsStyle = makeStyles(() => ({
       borderRadius: "24px",
       background: "red",
    },
-
-   // ** SearchInput styles **
-   searchInputBoxStyle: {
-      width: "500px",
-      backgroundColor: "#F2F4F8",
-      borderRadius: "8px",
-      marginRight: "35px",
-      padding: "9px 16px 9px 38px",
-      backgroundImage: `url(${Images.search})`,
-      backgroundRepeat: "no-repeat",
-      backgroundSize: "18px 18px",
-      backgroundPosition: "16px 50%",
-      cursor: "text",
-      "& > input": {
-         width: "100%",
-         outline: "none",
-         border: "none",
-         backgroundColor: "inherit",
-         fontSize: "14px",
-         fontWeight: 400,
-         color: Colors.TextPrimary,
-         "&::placeholder": {
-            color: "#4B5C6899 !important",
-            opacity: 1 /* Firefox */,
-         },
-         "&:-ms-input-placeholder": {
-            /* Internet Explorer 10-11 */
-            color: "#4B5C6899 !important",
-         },
-         "&::-ms-input-placeholder": {
-            /* Microsoft Edge */
-            color: "#4B5C6899 !important",
-         },
-      },
-   },
-   // ** end **
 }));
 
 export const AntSwitch = withStyles((theme) => ({

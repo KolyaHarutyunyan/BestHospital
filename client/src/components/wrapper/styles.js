@@ -81,4 +81,26 @@ export const wrapperStyle = makeStyles(() => ({
          borderColor: Colors.BackgroundBlue,
       },
    },
+
+   //**Billing Transaction Wrapper Styles */
+   billingTransactionContainerStyle: {
+      backgroundColor: Colors.BackgroundWhite,
+      padding: "24px",
+      borderRadius: "8px",
+   },
+   billingTransactionTitleBoxStyle: {
+      width: "100%",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      "& > button": { marginLeft: "24px" },
+      marginBottom: "40px",
+   },
+   billingTransactionTitleStyle: {
+      fontSize: "40px",
+      fontWeight: 600,
+      color: Colors.TextPrimary,
+      textTransform: "capitalize",
+   },
+   //**end */
 }));
