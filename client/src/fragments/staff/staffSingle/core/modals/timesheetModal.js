@@ -8,12 +8,8 @@ import {
    Textarea,
 } from "@eachbase/components";
 import { Checkbox } from "@material-ui/core";
-import { Colors, ErrorText, FindLoad, FindSuccess } from "@eachbase/utils";
-import {
-   adminActions,
-   httpRequestsOnErrorsActions,
-   httpRequestsOnSuccessActions,
-} from "@eachbase/store";
+import { ErrorText, FindLoad, FindSuccess } from "@eachbase/utils";
+import { adminActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 import { payrollActions } from "@eachbase/store/payroll";
 import { createClientStyle } from "@eachbase/fragments/client";
 import { staffModalsStyle } from "./styles";
@@ -32,7 +28,12 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
               payCode: info.payCode.payCodeTypeId,
               // allPaycodes.find(item=> item?.payCodeTypeId.name === info.payCode.payCodeTypeId.name ).payCodeTypeId.name
            }
-         : {}
+         : {
+              description: "",
+              hours: "",
+              startDate: "",
+              endDate: "",
+           }
    );
 
    const [checked, setChecked] = useState(info ? (info.endDate ? false : true) : true);
@@ -57,15 +58,18 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
    //     }))
    // },[])
 
-   const loader = FindLoad("CREATE_TIMESHEET");
-   const loaderEdit = FindLoad("EDIT_TIMESHEET");
-   const success = FindSuccess("CREATE_TIMESHEET");
+   const success = info ? FindSuccess("EDIT_TIMESHEET") : FindSuccess("CREATE_TIMESHEET");
+   const loader = info ? FindLoad("EDIT_TIMESHEET") : FindLoad("CREATE_TIMESHEET");
 
    useEffect(() => {
-      if (success) {
-         handleClose();
+      if (!success) return;
+      handleClose();
+      if (info) {
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_TIMESHEET"));
+      } else {
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_TIMESHEET"));
       }
-   }, [success.length]);
+   }, [success]);
 
    const handleChange = (e) => {
       if (e.target.name === "payCode") {
@@ -91,7 +95,7 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
       ) {
          const data = {
             staffId: params.id,
-            payCode: payCode.id,
+            payCode: payCode?.id,
             description: inputs.description,
             hours: parseInt(inputs.hours),
             startDate: inputs.startDate,
@@ -99,7 +103,7 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
          };
          const editDate = {
             staffId: params.id,
-            payCode: payCode._id,
+            payCode: payCode?._id,
             description: inputs.description,
             hours: parseInt(inputs.hours),
             startDate: inputs.startDate,
@@ -156,8 +160,7 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
                      <div className={classes_v2.paycodeBox}>
                         <p className={classes_v2.paycodeBoxTitle}>Rate:</p>
                         <p className={classes_v2.paycodeBoxText}>
-                           {" "}
-                           {payCode ? payCode.payCodeTypeId.code : " N/A"}{" "}
+                           {payCode ? payCode.payCodeTypeId.code : " N/A"}
                         </p>
                      </div>
                      <div className={classes_v2.paycodeBox} style={{ marginBottom: 0 }}>
@@ -190,7 +193,7 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
                      <Checkbox
                         defaultChecked={info ? checked : true}
                         onClick={onCheck}
-                        color={Colors.ThemeBlue}
+                        color="primary"
                      />
                      <p className={classes_v2.activePaycode}>Active Paycode</p>
                   </div>
@@ -220,7 +223,7 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
             </div>
             <div className={classes.clientModalBlock}>
                <CreateChancel
-                  loader={!!loader.length || !!loaderEdit.length}
+                  loader={!!loader.length}
                   create={info ? "Save" : "Add"}
                   chancel={"Cancel"}
                   onCreate={handleCreate}

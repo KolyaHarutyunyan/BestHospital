@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import { ValidationInput, SelectInput, CreateChancel, ModalHeader } from "@eachbase/components";
-import { Colors, ErrorText } from "@eachbase/utils";
+import { ErrorText, FindLoad, FindSuccess } from "@eachbase/utils";
 import {
    adminActions,
    httpRequestsOnErrorsActions,
@@ -50,26 +50,19 @@ export const EmploymentModal = ({ handleClose, info }) => {
       dispatch(adminActions.getAllAdmins());
    }, []);
 
-   const { httpOnSuccess, httpOnLoad } = useSelector((state) => ({
-      httpOnSuccess: state.httpOnSuccess,
-      httpOnLoad: state.httpOnLoad,
-   }));
-
-   const success = httpOnSuccess.length && httpOnSuccess[0].type === "EDIT_EMPLOYMENT";
-   const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === "CREATE_EMPLOYMENT";
+   const success = info ? FindSuccess("EDIT_EMPLOYMENT") : FindSuccess("CREATE_EMPLOYMENT");
+   const loader = info ? FindLoad("EDIT_EMPLOYMENT") : FindLoad("CREATE_EMPLOYMENT");
 
    useEffect(() => {
-      if (success) {
-         handleClose();
+      if (!success) return;
+      handleClose();
+      dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION"));
+      if (info) {
          dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_EMPLOYMENT"));
-         dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION"));
-      }
-      if (successCreate) {
-         handleClose();
+      } else {
          dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_EMPLOYMENT"));
-         dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION"));
       }
-   }, [success, successCreate]);
+   }, [success]);
 
    const handleChange = (e) =>
       setInputs(
@@ -221,7 +214,7 @@ export const EmploymentModal = ({ handleClose, info }) => {
             </div>
             <div className={classes.clientModalBlock}>
                <CreateChancel
-                  loader={httpOnLoad.length > 0}
+                  loader={!!loader.length}
                   create={info ? "Save" : "Add"}
                   chancel={"Cancel"}
                   onCreate={handleCreate}

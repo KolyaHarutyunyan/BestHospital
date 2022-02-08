@@ -15,7 +15,7 @@ export const RadioButton = ({styles,value,radioData, onChange}) => {
                 {
                     radioData &&  radioData.map((item, index) => {
                         return (
-                            <FormControlLabel className={classes.radioInputLabel} index={index} value={item.value} control={
+                            <FormControlLabel key={index} className={classes.radioInputLabel} index={index} value={item.value} control={
                                 <Radio disableRipple classes={{root: classes.radio, checked: classes.checked}}/>
                             } label={item.label}/>
                         )

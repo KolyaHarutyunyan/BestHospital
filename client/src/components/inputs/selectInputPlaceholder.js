@@ -63,7 +63,7 @@ export const SelectInputPlaceholder = ({
         <>
             <div className={style ? style : classes.SignInInput}>
                 <FormControl variant="outlined" className={className ? className : classes.inputTextField}
-                             error={typeError && true}>
+                             error={!!typeError}>
                     <Select
                         style={{...styles}}
                         className={classes.selectPlaceholder}
@@ -71,7 +71,7 @@ export const SelectInputPlaceholder = ({
                         onChange={handleChange}
                         displayEmpty
                         name={name}
-                        error={typeError}
+                        error={!!typeError}
                         endAdornment={
                             loader && <InputMinLoader/>
                         }

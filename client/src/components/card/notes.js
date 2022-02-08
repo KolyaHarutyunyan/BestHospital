@@ -45,10 +45,11 @@ export const Notes = ({
    const globalStyle = useGlobalStyles();
    const [open, setOpen] = useState(false);
    const [openDelModal, setOpenDelModal] = useState(false);
-   const [noteModalInfoEdit, setNoteModalInfoEdit] = useState({});
+   const [noteModalInfoEdit, setNoteModalInfoEdit] = useState();
    const [deletedData, setDeletedData] = useState("");
+
    const handleOpenClose = (data) => {
-      setNoteModalInfoEdit(data);
+      //    setNoteModalInfoEdit(data);
       setOpen(!open);
    };
    const handleOpenCloseDel = (data) => {

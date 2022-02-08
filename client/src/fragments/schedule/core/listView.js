@@ -207,7 +207,7 @@ export const ListView = ({
                                     {defItem.type === 'SERVICE' &&
                                     <div className={classes.switch}>
                                         <div>
-                                            <Link className={classes.link}>Signature.csv</Link>
+                                            <Link to="*" className={classes.link}>Signature.csv</Link>
                                             <img className={classes.download} src={Images.download} alt="icon"/>
                                         </div>
 

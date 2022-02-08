@@ -11,13 +11,13 @@ import { initAxiosInterceptors } from "@eachbase/utils";
 initAxiosInterceptors();
 
 ReactDOM.render(
-   <React.StrictMode>
-      <BrowserRouter>
-         <Provider store={store}>
-            <App />
-         </Provider>
-      </BrowserRouter>
-   </React.StrictMode>,
+   // <React.StrictMode>
+   <BrowserRouter>
+      <Provider store={store}>
+         <App />
+      </Provider>
+   </BrowserRouter>,
+   // </React.StrictMode>,
    document.getElementById("root")
 );
 

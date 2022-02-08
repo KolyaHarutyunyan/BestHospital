@@ -32,7 +32,7 @@ export const CredentialModal = ({globalCredentialInformation, globalCredentials,
     const [checkboxValue, setCheckboxValue] = useState('nonExpiring');
 
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(globalCredentialInformation ? globalCredentialInformation : {});
+    const [inputs, setInputs] = useState(globalCredentialInformation ? globalCredentialInformation : { expirationDate: "" });
 
     const [globalCredId, setGlobalCredId] = useState('')
 

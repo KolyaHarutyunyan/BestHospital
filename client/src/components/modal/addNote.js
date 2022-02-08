@@ -13,7 +13,7 @@ export const AddNotes = ({ closeModal, model, noteModalTypeInfo, handleClose }) 
    const params = useParams();
    const [error, setError] = useState("");
    const [inputs, setInputs] = useState(
-      noteModalTypeInfo ? noteModalTypeInfo : { text: "", subject: "" }
+      noteModalTypeInfo ? noteModalTypeInfo : { subject: "", text: "" }
    );
    const handleChange = (e) => {
       setInputs((prevState) => ({
