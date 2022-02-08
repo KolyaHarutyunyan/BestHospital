@@ -33,7 +33,7 @@ export class PostingService {
     // let receivable = await this.findLowReceivable(findInvoices[0].receivable);
     while (paymentAmount > 0) {
       if (!receivables.length) {
-        console.log('iii')
+        console.log('iii');
         return await findInvoices[0].save();
       }
       const lowReceivable: any = await this.findLowReceivable(findInvoices[0].receivable);
@@ -120,7 +120,7 @@ export class PostingService {
     // paymentAmount -= receivable.amountTotal;
 
     receivable.amountTotal = receivable.amountTotal - paymentAmount;
-    console.log(receivable.amountTotal, 'aaaaa')
+    console.log(receivable.amountTotal, 'aaaaa');
     return receivable.amountTotal;
   }
 }

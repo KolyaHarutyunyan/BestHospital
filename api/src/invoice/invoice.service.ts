@@ -36,8 +36,9 @@ export class InvoiceService {
   }
 
   /** get all invoices */
-  async findAll() {
-    return `This action returns all invoice`;
+  async findAll(): Promise<InvoiceDto> {
+    const invoices = await this.model.find();
+    return this.sanitizer.sanitizeMany(invoices);
   }
 
   /** get all invoices */
@@ -50,8 +51,10 @@ export class InvoiceService {
   }
 
   /** get invoice by id */
-  async findOne(_id: string) {
-    return `s action returns a #${_id} invoice`;
+  async findOne(_id: string): Promise<InvoiceDto> {
+    const invoice = await this.model.findById(_id);
+    this.checkInvoice(invoice);
+    return this.sanitizer.sanitize(invoice);
   }
 
   async update(id: string, updateInvoiceDto: UpdateInvoiceDto) {
