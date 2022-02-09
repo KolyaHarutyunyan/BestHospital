@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Paper, Table, TableContainer } from "@material-ui/core";
+import { Paper, Table, TableBody, TableContainer } from "@material-ui/core";
 import { ClientTableBody, ClientTableHead } from "./core";
 import { FindLoad, useGlobalStyles } from "@eachbase/utils";
 import { Loader, NoItemText, PaginationItem } from "@eachbase/components";
@@ -43,16 +43,18 @@ export const ClientTable = ({ setOpen, handleClose, setDeleteClient, handleGetPa
                   {loader.length ? (
                      <Loader />
                   ) : (
-                     clientList?.clients?.map((item, i) => (
-                        <ClientTableBody
-                           key={i}
-                           data={item}
-                           index={i}
-                           setOpen={setOpen}
-                           handleClose={handleClose}
-                           setDeleteClient={setDeleteClient}
-                        />
-                     ))
+                     <TableBody>
+                        {clientList?.clients?.map((item, i) => (
+                           <ClientTableBody
+                              key={i}
+                              data={item}
+                              index={i}
+                              setOpen={setOpen}
+                              handleClose={handleClose}
+                              setDeleteClient={setDeleteClient}
+                           />
+                        ))}
+                     </TableBody>
                   )}
                </Table>
             </TableContainer>

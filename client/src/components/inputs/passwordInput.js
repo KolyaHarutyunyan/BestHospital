@@ -65,13 +65,10 @@ export const PasswordInput = ({
       <div style={{ ...styles }}>
          {variant === "accountPassword" ? (
             <FormControl className={classes.SignInInput} variant="outlined">
-               <InputLabel className={classes.inputShrink} htmlFor="outlined-adornment-password">
-                  {placeholder}
-               </InputLabel>
+               <InputLabel className={classes.inputShrink}>{placeholder}</InputLabel>
                <OutlinedInput
                   error={!!typeError}
                   disabled={disabled}
-                  id="outlined-adornment-password"
                   name={name}
                   type={values.showPassword ? "text" : "password"}
                   value={value}
@@ -101,13 +98,12 @@ export const PasswordInput = ({
             </FormControl>
          ) : (
             <FormControl disabled={disabled} className={classes.SignInInput}>
-               <InputLabel htmlFor="outlined-adornment-password">{placeholder}</InputLabel>
+               <InputLabel>{placeholder}</InputLabel>
                <Input
                   onBlur={(e) => chechValid(e)}
                   error={!!typeError}
                   className={classes.PasswordInput}
                   disabled={disabled}
-                  id="standard-adornment-password"
                   name={name}
                   type={values.showPassword ? "text" : "password"}
                   value={value}

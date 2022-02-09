@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CreateChancel, SelectInput, ValidationInput } from "@eachbase/components";
-import { ErrorText, FindLoad } from "@eachbase/utils";
+import { ErrorText, FindLoad, getDynamicContent } from "@eachbase/utils";
 import { scheduleModalsStyle } from "./styles";
 import { modalsStyle } from "../../../../components/modal/styles";
 import { adminActions, appointmentActions } from "@eachbase/store";
@@ -50,9 +50,7 @@ export const Break = ({
    }, [createModalDate]);
 
    const handleChange = (e) => {
-      e.target.name === "miles"
-         ? setInputs((prevState) => ({ ...prevState, [e.target.name]: +e.target.value }))
-         : setInputs((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
+      setInputs((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
       error === e.target.name && setError("");
       e.target.name === "staff" && dispatch(adminActions.getAllPaycodes(e.target.value));
    };
@@ -182,40 +180,15 @@ export const Break = ({
       }
    };
 
-   const title =
-      type === "Paid"
-         ? "Add a Paid Time Off"
-         : type === "Break"
-         ? "Add a Break"
-         : type === "Drive"
-         ? "Add a Drive Time"
-         : "";
+   const loader = modalDate ? FindLoad("EDIT_APPOINTMENT") : FindLoad("CREATE_APPOINTMENT");
 
-   const edit =
-      type === "Paid"
-         ? "Edit Paid Time Off"
-         : type === "Break"
-         ? "Edit Break"
-         : type === "Drive"
-         ? "Edit Drive Time"
-         : "";
+   const titleContent = getDynamicContent("TITLE", modalDate, type);
+   const subtitleContent = getDynamicContent("SUBTITLE", modalDate, type);
 
-   const sub =
-      type === "Paid"
-         ? "To add a Paid Time Off, please fulfill the below fields."
-         : type === "Break"
-         ? "To add a Break, please fulfill the below fields."
-         : type === "Drive"
-         ? "To add a Drive Time, please fulfill the below fields."
-         : "";
-
-   const loader = FindLoad("CREATE_APPOINTMENT");
-   const editLoader = FindLoad("EDIT_APPOINTMENT");
-   console.log(info, "info");
    return (
       <div>
-         <p className={global.availableScheduleTitle}>{info ? edit : title}</p>
-         <p className={classes.subTitle}>{sub}</p>
+         <p className={global.availableScheduleTitle}>{titleContent}</p>
+         <p className={classes.subTitle}>{subtitleContent}</p>
 
          <div className={classes.breakWrapper}>
             <SelectInput
@@ -316,8 +289,8 @@ export const Break = ({
                />
             )}
             <CreateChancel
-               loader={!!loader.length || !!editLoader.length}
-               create={info ? "Save" : "Add"}
+               loader={!!loader.length}
+               create={modalDate ? "Save" : "Add"}
                chancel={"Cancel"}
                onCreate={handleCreate}
                onClose={handleCloseModal}

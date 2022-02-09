@@ -7,6 +7,7 @@ export const SearchInput = ({
    searchInputValue,
    onSearchInputChange,
    searchInputPlaceholder,
+   searchInputAutoComplete,
 }) => {
    const classes = inputsStyle();
    const searchInputRef = useRef();
@@ -22,6 +23,7 @@ export const SearchInput = ({
             value={searchInputValue}
             onChange={onSearchInputChange}
             placeholder={searchInputPlaceholder}
+            autoComplete={searchInputAutoComplete ? searchInputAutoComplete : "off"}
          />
       </div>
    );

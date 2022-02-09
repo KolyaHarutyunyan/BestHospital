@@ -14,6 +14,7 @@ import {
    FindLoad,
    FindSuccess,
    getPhoneErrorText,
+   isNotEmpty,
 } from "@eachbase/utils";
 import {
    fundingSourceActions,
@@ -37,6 +38,9 @@ export const CreateFundingSource = ({ handleClose, info }) => {
            }
    );
    const [fullAddress, setFullAddress] = useState(
+      info && info.address ? info.address.formattedAddress : ""
+   );
+   const [enteredAddress, setEnteredAddress] = useState(
       info && info.address ? info.address.formattedAddress : ""
    );
    const classes = createFoundingSourceStyle();
@@ -115,7 +119,8 @@ export const CreateFundingSource = ({ handleClose, info }) => {
          !!inputs.type &&
          !!inputs.contact &&
          !!inputs.website &&
-         !!fullAddress;
+         !!enteredAddress &&
+         isNotEmpty(fullAddress);
       const errorText = !inputs.name
          ? "name"
          : !inputs.email
@@ -132,7 +137,9 @@ export const CreateFundingSource = ({ handleClose, info }) => {
          ? "contact"
          : !inputs.website
          ? "website"
-         : "address";
+         : !enteredAddress
+         ? "enteredAddress"
+         : "";
       if (dataIsValid) {
          if (info) {
             dispatch(fundingSourceActions.editFundingSource(info.id, data));
@@ -145,9 +152,10 @@ export const CreateFundingSource = ({ handleClose, info }) => {
    };
 
    const list = [{ name: "first" }, { name: "second" }];
-   const handleFullAddress = (e) => {
-      setFullAddress(e);
-      error === "address" && setError("");
+
+   const handleAddressChange = (selectedAddress) => {
+      setEnteredAddress(selectedAddress);
+      error === "enteredAddress" && setError("");
    };
 
    const closeModal = () => {
@@ -236,9 +244,10 @@ export const CreateFundingSource = ({ handleClose, info }) => {
                </div>
                <div className={classes.createFoundingSourceBodyBox}>
                   <AddressInput
-                     errorBoolean={error === "address" ? "Input is not field" : ""}
+                     errorBoolean={error === "enteredAddress" ? ErrorText.field : ""}
                      info={info && info.address ? info : ""}
-                     handleSelectValue={handleFullAddress}
+                     handleSelectValue={handleAddressChange}
+                     onTrigger={setFullAddress}
                      flex="block"
                   />
                </div>

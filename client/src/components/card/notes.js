@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Paper, Table, TableCell, TableContainer } from "@material-ui/core";
+import { Paper, Table, TableBody, TableCell, TableContainer } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import {
    TableHeadComponent,
@@ -97,14 +97,16 @@ export const Notes = ({
                         );
                      })}
                </TableHeadComponent>
-               {data
-                  ? data.map((item, index) => {
-                       return <React.Fragment key={index}>{items(item, index)}</React.Fragment>;
-                    })
-                  : null}
+               {!!data.length && (
+                  <TableBody>
+                     {data.map((item, index) => {
+                        return <React.Fragment key={index}>{items(item, index)}</React.Fragment>;
+                     })}
+                  </TableBody>
+               )}
             </Table>
 
-            {!noItemsYet && !data && <NoItemText text="No Items Yet" />}
+            {!noItemsYet && !data.length && <NoItemText text="No Items Yet" />}
          </TableContainer>
 
          {showModal && (

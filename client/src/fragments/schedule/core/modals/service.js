@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CreateChancel, SelectInput, Switcher, ValidationInput } from "@eachbase/components";
-import { ErrorText, FindLoad } from "@eachbase/utils";
+import { ErrorText, FindLoad, getDynamicContent } from "@eachbase/utils";
 import { scheduleModalsStyle } from "./styles";
 import { modalsStyle } from "../../../../components/modal/styles";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,7 +12,6 @@ import { inputsStyle } from "../../../../components/inputs/styles";
 
 export const Service = ({
    handleOpenClose,
-   info,
    date,
    clientList,
    staffList,
@@ -51,7 +50,7 @@ export const Service = ({
            }
    );
    const [times, setTimes] = useState(date ? { ...date } : { startTime: "", endTime: "" });
-   const [error, setError] = useState({});
+   const [error, setError] = useState("");
    const [clientService, setClientService] = useState("");
    const [signature, setSignature] = useState(modalDate ? modalDate.require : false);
    const loader = FindLoad("CREATE_APPOINTMENT");
@@ -171,14 +170,14 @@ export const Service = ({
    const handleChangeSignature = () => {
       setSignature(!signature);
    };
+
+   const titleContent = getDynamicContent("TITLE", modalDate, "Service Appointment");
+   const subtitleContent = getDynamicContent("SUBTITLE", modalDate, "Service Appointment");
+
    return (
       <div className={classes.serciveModall}>
-         <p className={global.availableScheduleTitle}>
-            {info ? "Edit the Service Appointment" : "Add a Service Appointment"}
-         </p>
-         <p className={classes.subTitle}>
-            {"To add a Service Appointment, please fulfill the below fields."}
-         </p>
+         <p className={global.availableScheduleTitle}>{titleContent}</p>
+         <p className={classes.subTitle}>{subtitleContent}</p>
 
          <div className={classes.seviceModalWrapper}>
             <div>
@@ -317,7 +316,7 @@ export const Service = ({
 
          <CreateChancel
             loader={!!loader.length}
-            create={info ? "Save" : "Add"}
+            create={modalDate ? "Save" : "Add"}
             chancel={"Cancel"}
             onCreate={handleCreate}
             onClose={handleOpenClose}

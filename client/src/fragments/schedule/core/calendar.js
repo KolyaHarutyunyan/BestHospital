@@ -202,7 +202,7 @@ export const Selectable = ({
                 }}
                 onEventDrop={moveEvent}
                 resizable
-                view={'week'}
+                defaultView={'week'}
                 selectable
                 localizer={localizer}
                 events={events}

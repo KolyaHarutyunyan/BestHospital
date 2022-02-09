@@ -188,7 +188,7 @@ export const Recur = ({ openCloseRecur, date }) => {
          setError("Inputs are not field");
       }
    };
-   console.log("okokokoko");
+
    const handleChange = (e) => {
       e.target.name === "mode" && setOccurrence(0);
       // e.target.name === 'repeatConsecutive' && setOccurrence(0), delete inputs['repeatCount'] && delete inputs['repeatCountCheckbox']

@@ -49,6 +49,7 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
 
    useEffect(() => {
       if (!success) return;
+      handleClose();
       if (info) {
          dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_PAY_CODE"));
          dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION"));
@@ -56,7 +57,6 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
          dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_PAY_CODE"));
          dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION"));
       }
-      handleClose();
    }, [success]);
 
    useEffect(() => {
@@ -129,7 +129,8 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
                      name={"payCodeTypeId"}
                      label={"Name"}
                      handleSelect={handleChange}
-                     value={info ? info?.payCodeTypeId?.name : inputs.payCodeTypeId}
+                     value={info ? info?.payCodeTypeId?.name : inputs.name}
+                     type={"id"}
                      list={globalPayCodes}
                      typeError={error === "payCodeTypeId" ? ErrorText.field : ""}
                   />
