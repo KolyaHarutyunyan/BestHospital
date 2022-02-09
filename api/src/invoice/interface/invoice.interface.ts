@@ -8,6 +8,7 @@ interface IDateOfService extends Document {
 }
 export interface IReceivable extends Document {
   reduce(arg0: (prev: any, curr: any) => any);
+  _id: string;
   dateOfService: IDateOfService;
   serviceDate: Date;
   hours: number;
@@ -20,6 +21,7 @@ export interface IReceivable extends Document {
   bills: Array<string>;
 }
 export interface IInvoice extends Document {
+  _id: string;
   client: string;
   dateRange: IDateRange;
   invoiceTotal: number;
@@ -27,5 +29,5 @@ export interface IInvoice extends Document {
   dueDate: Date;
   downloadLink: string;
   status: string;
-  receivable: IReceivable;
+  receivable: IReceivable[];
 }

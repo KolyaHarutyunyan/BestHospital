@@ -60,7 +60,27 @@ export class InvoiceService {
   async update(id: string, updateInvoiceDto: UpdateInvoiceDto) {
     return `This action updates a #${id} invoice`;
   }
-
+  /** update amountTotal (posting) */
+  async updateReceivableAmount(
+    _id: string,
+    receivableId: string,
+    amount: number,
+  ): Promise<InvoiceDto> {
+    try {
+      const invoice = await this.model.findById({ _id });
+      this.checkInvoice(invoice);
+      invoice.invoiceTotal -= amount;
+      invoice.receivable.map((receivable) => {
+        if (receivable._id.toString() === receivableId.toString()) {
+          receivable.amountTotal = 0;
+        }
+      });
+      await invoice.save();
+      return this.sanitizer.sanitize(invoice);
+    } catch (e) {
+      throw e;
+    }
+  }
   remove(id: number) {
     return `This action removes a #${id} invoice`;
   }

@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { IPosting } from './interface/posting.interface';
 import { MongooseUtil } from '../util/mongoose.util';
 import { PostingModel } from './posting.model';
-import { IReceivable } from '../invoice/interface/invoice.interface';
+import { IInvoice, IReceivable } from '../invoice/interface/invoice.interface';
 import { BillingService } from '../billing/billing.service';
 import { startSession } from 'mongoose';
 
@@ -23,46 +23,67 @@ export class PostingService {
   private mongooseUtil: MongooseUtil;
 
   async create(dto: CreatePostingDto) {
-    const findInvoices: any = await this.invoiceService.findByIds(dto.invoices);
-    let receivables = findInvoices[0].receivable;
-    if (!findInvoices.length || findInvoices.length < dto.invoices.length) {
+    let invoices = await this.invoiceService.findByIds(dto.invoices);
+    if (!invoices.length || invoices.length < dto.invoices.length) {
       throw new HttpException('Invoices with this ids was not found', HttpStatus.NOT_FOUND);
     }
+    // let invoice = await this.findLowInvoiceTotal(invoices);
+    // let receivable = invoice.receivable;
     let paymentAmount = dto.paymentAmount;
+    let receivable, invoice;
     /** find lowest receivable by balance */
     // let receivable = await this.findLowReceivable(findInvoices[0].receivable);
-    while (paymentAmount > 0) {
-      if (!receivables.length) {
-        console.log('iii');
-        return await findInvoices[0].save();
-      }
-      const lowReceivable: any = await this.findLowReceivable(findInvoices[0].receivable);
-      console.log(lowReceivable.amountTotal, 'okokokokoko');
-      console.log(paymentAmount, 'paymentAmount');
+    for (let i = 0; i < invoices.length; i++) {
+      console.log('eeeeeee');
+      invoice = await this.findLowInvoiceTotal(invoices);
+      if (!invoice.receivable.length) {
+        invoices = invoices.filter((rec) => rec._id !== invoice._id);
+        invoice = await this.findLowInvoiceTotal(invoices);
 
-      if (paymentAmount >= lowReceivable.amountTotal) {
-        const receivableBalance = await this.fullPayReceivable(
-          lowReceivable,
-          paymentAmount,
-          dto.user.id,
-        );
-        paymentAmount -= receivableBalance;
-      } else if (paymentAmount < lowReceivable.amountTotal) {
-        this.partialPayReceivable(lowReceivable, paymentAmount, dto.user.id);
+        // console.log('ppppp');
+        // return await invoices[0].save();
       }
-      receivables = receivables.filter((rec) => rec._id !== lowReceivable._id);
+      receivable = invoice.receivable;
 
-      // const postying = new this.model({
-      //   paymentType: dto.paymentType,
-      //   paymentReference: dto.paymentReference,
-      //   paymentDocument: dto.paymentDocument,
-      //   paymentAmount: dto.paymentAmount,
-      //   payer: dto.payer,
-      //   invoices: dto.invoices,
-      // });
-      // await posting.save();
+      while (paymentAmount > 0) {
+        console.log('uuuuuuu', receivable);
+
+        if (!receivable.length) {
+          console.log('iii');
+          return await invoices[0].save();
+        }
+        const lowReceivable: any = await this.findLowReceivable(receivable);
+        console.log(lowReceivable, 'lowReceivableeeeeeeeeeeeeeeeeeeee');
+        if (paymentAmount >= lowReceivable.amountTotal) {
+          const receivableBalance = await this.fullPayReceivable(
+            lowReceivable,
+            paymentAmount,
+            dto.user.id,
+            invoice._id,
+          );
+          // console.log(receivableBalance, 'receivableBalancereceivableBalancereceivableBalance');
+          paymentAmount -= receivableBalance;
+          // lowReceivable.amountTotal = 0;
+          // invoices[i].receivable[0].amountTotal
+          // console.log(paymentAmount, 'paymentAmount', receivableBalance, 'receivableBalance');
+        } else if (paymentAmount < lowReceivable.amountTotal) {
+          this.partialPayReceivable(lowReceivable, paymentAmount, dto.user.id);
+        }
+        receivable = receivable.filter((rec) => rec._id !== lowReceivable._id);
+
+        // const postying = new this.model({
+        //   paymentType: dto.paymentType,
+        //   paymentReference: dto.paymentReference,
+        //   paymentDocument: dto.paymentDocument,
+        //   paymentAmount: dto.paymentAmount,
+        //   payer: dto.payer,
+        //   invoices: dto.invoices,
+        // });
+        // await posting.save();
+      }
+      invoices = invoices.filter((rec) => rec._id !== invoice._id);
     }
-    await findInvoices[0].save();
+    await invoices[0].save();
   }
   findAll() {
     return `This action returns all posting`;
@@ -81,13 +102,26 @@ export class PostingService {
   }
 
   /** Private methods */
-  async findLowReceivable(receivable): Promise<IReceivable> {
-    return receivable.reduce((prev, curr) => {
+  /** find low receivable amount */
+  async findLowReceivable(receivables): Promise<IReceivable> {
+    return receivables.reduce((prev, curr) => {
       return prev.amountTotal < curr.amountTotal ? prev : curr;
     });
   }
 
-  async fullPayReceivable(receivable, paymentAmount, userId) {
+  /** find low invoice total */
+  async findLowInvoiceTotal(invoices: IInvoice[]): Promise<IInvoice> {
+    return invoices.reduce((prev, curr) => {
+      return prev.invoiceTotal < curr.invoiceTotal ? prev : curr;
+    });
+  }
+
+  async fullPayReceivable(
+    receivable,
+    paymentAmount,
+    userId: string,
+    invoiceId: string,
+  ): Promise<number> {
     console.log('sxal');
     paymentAmount -= receivable.amountTotal;
     const transactionInfo = {
@@ -98,10 +132,16 @@ export class PostingService {
       creator: userId,
       note: 'chka',
     };
+    console.log(invoiceId, 'aaaaaaaaaaaaaaa');
     const session = await startSession();
+    await this.invoiceService.updateReceivableAmount(
+      invoiceId,
+      receivable._id,
+      receivable.amountTotal,
+    );
     await this.billingService.startTransaction(transactionInfo, receivable.bills[0]._id, session);
-    receivable.amountTotal = 0;
-    return receivable.amountTotal;
+    // receivable.amountTotal = 0;
+    return transactionInfo.amount;
   }
   async partialPayReceivable(receivable, paymentAmount, userId) {
     console.log('mtav');
