@@ -211,10 +211,12 @@ export const useGlobalStyles = makeStyles({
       fontSize: 18,
       color: Colors.TextLightGray,
       fontWeight: "bold",
-      position: "absolute",
-      top: "254px",
-      left: "50%",
-      transform: "translate(-50%)",
+      // position: "absolute",
+      // top: "254px",
+      // left: "50%",
+      // transform: "translate(-50%)",
+      textAlign: "center",
+      marginTop: "40px",
    },
 
    globalHistory: {

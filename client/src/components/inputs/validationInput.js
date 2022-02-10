@@ -70,7 +70,7 @@ export const ValidationInput = ({
                name={name}
                placeholder={placeholder}
                type={type}
-               value={value}
+               value={value ? value : ''}
                InputLabelProps={{
                   shrink: type === "date" ? true : !!value,
                }}

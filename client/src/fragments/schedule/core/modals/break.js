@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CreateChancel, SelectInput, ValidationInput } from "@eachbase/components";
-import { ErrorText, FindLoad, getDynamicContent } from "@eachbase/utils";
+import { ErrorText, FindLoad, getActiveDatas, getDynamicContent } from "@eachbase/utils";
 import { scheduleModalsStyle } from "./styles";
 import { modalsStyle } from "../../../../components/modal/styles";
 import { adminActions, appointmentActions } from "@eachbase/store";
@@ -185,6 +185,8 @@ export const Break = ({
    const titleContent = getDynamicContent("TITLE", modalDate, type);
    const subtitleContent = getDynamicContent("SUBTITLE", modalDate, type);
 
+   const activeStaffPaycodes = getActiveDatas(allPaycodes);
+
    return (
       <div>
          <p className={global.availableScheduleTitle}>{titleContent}</p>
@@ -214,7 +216,7 @@ export const Break = ({
                         : inputs.staffPayCode
                      : inputs.staffPayCode
                }
-               list={allPaycodes ? allPaycodes : []}
+               list={activeStaffPaycodes}
                typeError={error === "staffPayCode" && ErrorText.field}
             />
             <ValidationInput

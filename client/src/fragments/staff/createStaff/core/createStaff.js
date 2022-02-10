@@ -9,7 +9,7 @@ import {
    CloseButton,
 } from "@eachbase/components";
 import { createStaffModalStyle } from "./style";
-import { useGlobalTextStyles, EmailValidator, ErrorText } from "@eachbase/utils";
+import { useGlobalTextStyles, EmailValidator, ErrorText, isNotEmpty } from "@eachbase/utils";
 import { adminActions, httpRequestsOnErrorsActions } from "@eachbase/store";
 import { inputStyle } from "../../../fundingSource/createFundingSource/core/styles";
 
@@ -20,43 +20,34 @@ const residencyList = [{ name: "7" }, { name: "8" }];
 
 const genderList = [{ name: "Male" }, { name: "Female" }, { name: "Other" }];
 
-const initialInputs = {
-   firstName: "",
-   middleName: "",
-   lastName: "",
-   email: "",
-   secondaryEmail: "",
-   phone: "",
-   secondaryPhone: "",
-   gender: "",
-   birthday: "",
-   residency: "",
-   ssn: "",
-};
-
 export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
    const [error, setError] = useState("");
+   const [emailError, setEmailError] = useState("");
    const [errorSec, setErrorSec] = useState("");
-   const [inputs, setInputs] = useState(
-      resetData ? initialInputs : staffGeneral ? staffGeneral : initialInputs
-   );
+   const [inputs, setInputs] = useState(resetData ? {} : staffGeneral ? staffGeneral : {});
    const [fullAddress, setFullAddress] = useState(
       staffGeneral ? staffGeneral.address.formattedAddress : ""
    );
+   const [enteredAddress, setEnteredAddress] = useState("");
 
    const [license, setLicense] = useState(
       staffGeneral ? staffGeneral.license : { driverLicense: "", expireDate: "", state: "" }
    );
 
+   const phoneIsValid =
+      !!inputs.phone && inputs.phone.trim().length >= 10 && !/[a-zA-Z]/g.test(inputs.phone);
+
+   const emailIsValid = !!inputs.email && EmailValidator.test(inputs.email);
+   const secEmailIsValid = !!inputs.secondaryEmail && EmailValidator.test(inputs.secondaryEmail);
+
    const disabledOne =
       inputs.firstName &&
-      error !== "Not valid email" &&
-      errorSec !== "Not valid email" &&
       inputs.lastName &&
-      inputs.email &&
-      inputs.phone;
+      phoneIsValid &&
+      emailIsValid &&
+      (inputs.secondaryEmail ? secEmailIsValid : true);
 
-   const disableSecond = !fullAddress.length;
+   const disableSecond = !isNotEmpty(fullAddress) && !enteredAddress;
 
    const dispatch = useDispatch();
 
@@ -65,9 +56,9 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
 
    const handleCheck = (bool) => {
       if (bool === true) {
-         setError("Not valid email");
+         setEmailError("Not valid email");
       } else {
-         setError("");
+         setEmailError("");
       }
    };
    const handleCheckSecondary = (bool) => {
@@ -94,15 +85,20 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
       error === e.target.name && setError("");
    };
 
+   const handleAddressChange = (selectedAddress) => {
+      setEnteredAddress(selectedAddress);
+      error === "enteredAddress" && setError("");
+   };
+
    const handleCreate = () => {
       const data = {
          firstName: inputs.firstName,
-         middleName: inputs.middleName,
+         middleName: inputs.middleName ? inputs.middleName : "",
          lastName: inputs.lastName,
          email: inputs.email,
-         secondaryEmail: inputs.secondaryEmail,
+         secondaryEmail: inputs.secondaryEmail ? inputs.secondaryEmail : "",
          phone: inputs.phone,
-         secondaryPhone: inputs.secondaryPhone,
+         secondaryPhone: inputs.secondaryPhone ? inputs.secondaryPhone : "",
          state: "state",
          gender: inputs.gender,
          birthday: inputs.birthday && new Date(inputs.birthday).toISOString(),
@@ -129,7 +125,8 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
          inputs.birthday &&
          inputs.residency &&
          inputs.ssn &&
-         fullAddress
+         isNotEmpty(fullAddress) &&
+         enteredAddress
       ) {
          if (license.driverLicense || license.state || license.expireDate) {
             if (license.driverLicense && license.state && license.expireDate) {
@@ -170,6 +167,8 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
                ? "gender"
                : !inputs.birthday
                ? "birthday"
+               : enteredAddress
+               ? "enteredAddress"
                : "Input is not filled"
          );
       }
@@ -243,7 +242,7 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
             typeError={
                error === "email"
                   ? ErrorText.field
-                  : error === "Not valid email"
+                  : emailError === "Not valid email"
                   ? "Not valid email"
                   : ""
             }
@@ -295,11 +294,13 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
    const secondStep = (
       <React.Fragment>
          <AddressInput
-            handleSelectValue={setFullAddress}
+            handleSelectValue={handleAddressChange}
+            onTrigger={setFullAddress}
             Value={"Street Address*"}
             flex="block"
             info={staffGeneral}
             styles={inputStyle}
+            errorBoolean={error === "enteredAddress" ? ErrorText.field : ""}
          />
       </React.Fragment>
    );

@@ -66,6 +66,7 @@ export const AddEnrollment = ({ handleClose, info }) => {
                funderId = item.id;
             }
          });
+         console.log(inputs.funding,'inputsinputsinputs');
          const data = {
             primary: info ? info.primary : true,
             startDate: inputs.startDate,
@@ -75,6 +76,8 @@ export const AddEnrollment = ({ handleClose, info }) => {
                ? inputs.terminationDate
                : null,
          };
+
+         console.log(funderId,'datadatadata');
          if (info) {
             dispatch(clientActions.editClientEnrollment(data, params.id, funderId, info.id));
          } else {

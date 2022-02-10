@@ -278,6 +278,8 @@ function* getFundingSourceHistoriesById(action) {
     yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.getFundingSourceHistoriesByIdService, action.payload.onModal, action.payload.searchDate);
+
+        console.log(res,'resresresres');
         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put({
             type: GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS,

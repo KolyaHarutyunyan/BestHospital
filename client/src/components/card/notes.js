@@ -5,7 +5,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import {
    TableHeadComponent,
    SearchAndFilter,
-   NoItemText,
    CloseButton,
    SimpleModal,
    AddNotes,
@@ -21,11 +20,10 @@ export const Notes = ({
    closeModal,
    noteModalInfo,
    showModal,
-   data,
+   data = [],
    headerTitles,
    defaultStyle,
    items,
-   noItemsYet,
    model,
 }) => {
    const officesStyle = makeStyles(({}) => ({
@@ -49,7 +47,7 @@ export const Notes = ({
    const [deletedData, setDeletedData] = useState("");
 
    const handleOpenClose = (data) => {
-      //    setNoteModalInfoEdit(data);
+         setNoteModalInfoEdit(data);
       setOpen(!open);
    };
    const handleOpenCloseDel = (data) => {
@@ -72,43 +70,43 @@ export const Notes = ({
    }, [success]);
 
    return (
-      <div className={globalStyle.tableWrapper}>
-         <TableContainer
-            style={{ maxHeight: `calc(100vh - ${restHeight})` }}
-            className={globalStyle.tableContainer}
-            component={Paper}
-         >
-            <Table
-               stickyHeader
-               className={globalStyle.table}
-               size="small"
-               aria-label="a dense table"
+      <>
+         <div className={globalStyle.tableWrapper}>
+            <TableContainer
+               style={{ maxHeight: `calc(100vh - ${restHeight})` }}
+               className={globalStyle.tableContainer}
+               component={Paper}
             >
-               <TableHeadComponent>
-                  {headerTitles &&
-                     headerTitles.map((headerItem, index) => {
-                        return (
-                           <TableCell key={index} className={defaultStyle ? null : classes.thWidth}>
-                              <SearchAndFilter
-                                 title={headerItem.title}
-                                 custom={headerItem.sortable}
-                              />
-                           </TableCell>
-                        );
-                     })}
-               </TableHeadComponent>
-               {!!data.length && (
+               <Table
+                  stickyHeader
+                  className={globalStyle.table}
+                  size="small"
+                  aria-label="a dense table"
+               >
+                  <TableHeadComponent>
+                     {headerTitles &&
+                        headerTitles.map((headerItem, index) => {
+                           return (
+                              <TableCell
+                                 key={index}
+                                 className={defaultStyle ? null : classes.thWidth}
+                              >
+                                 <SearchAndFilter
+                                    title={headerItem.title}
+                                    custom={headerItem.sortable}
+                                 />
+                              </TableCell>
+                           );
+                        })}
+                  </TableHeadComponent>
                   <TableBody>
                      {data.map((item, index) => {
                         return <React.Fragment key={index}>{items(item, index)}</React.Fragment>;
                      })}
                   </TableBody>
-               )}
-            </Table>
-
-            {!noItemsYet && !data.length && <NoItemText text="No Items Yet" />}
-         </TableContainer>
-
+               </Table>
+            </TableContainer>
+         </div>
          {showModal && (
             <>
                <div className={globalStyle.previewModal} style={{ right: noteModalInfo.right }}>
@@ -175,6 +173,6 @@ export const Notes = ({
                />
             </>
          )}
-      </div>
+      </>
    );
 };

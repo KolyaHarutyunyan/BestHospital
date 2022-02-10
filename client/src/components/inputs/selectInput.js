@@ -12,7 +12,7 @@ export const SelectInput = ({
    handleSelect,
    style,
    value,
-   list,
+   list = [],
    handleChangeCountryCode,
    typeError,
    type,

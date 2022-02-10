@@ -107,11 +107,14 @@ export const CreateFundingSource = ({ handleClose, info }) => {
          address: fullAddress,
          status: "ACTIVE",
       };
+
       const phoneIsValid =
          !!inputs.phoneNumber &&
          inputs.phoneNumber.trim().length >= 10 &&
          !/[a-zA-Z]/g.test(inputs.phoneNumber);
+
       const emailIsValid = !!inputs.email && EmailValidator.test(inputs.email);
+
       const dataIsValid =
          !!inputs.name &&
          phoneIsValid &&
@@ -121,6 +124,7 @@ export const CreateFundingSource = ({ handleClose, info }) => {
          !!inputs.website &&
          !!enteredAddress &&
          isNotEmpty(fullAddress);
+
       const errorText = !inputs.name
          ? "name"
          : !inputs.email

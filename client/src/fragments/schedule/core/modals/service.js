@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CreateChancel, SelectInput, Switcher, ValidationInput } from "@eachbase/components";
-import { ErrorText, FindLoad, getDynamicContent } from "@eachbase/utils";
+import { ErrorText, FindLoad, getActiveDatas, getDynamicContent } from "@eachbase/utils";
 import { scheduleModalsStyle } from "./styles";
 import { modalsStyle } from "../../../../components/modal/styles";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,15 +39,7 @@ export const Service = ({
          ? { ...day, ...createModalDate }
          : createModalDate
          ? { ...createModalDate }
-         : {
-              client: "",
-              authorizedService: "",
-              staff: "",
-              placeService: "",
-              staffPayCode: "",
-              startDate: "",
-              eventStatus: "PENDING",
-           }
+         : {}
    );
    const [times, setTimes] = useState(date ? { ...date } : { startTime: "", endTime: "" });
    const [error, setError] = useState("");
@@ -77,7 +69,7 @@ export const Service = ({
       setInputs((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
       error === e.target.name && setError("");
    };
-
+   console.log(inputs, " inputsss");
    const handleCreate = () => {
       const date = {
          type: "SERVICE",
@@ -87,13 +79,13 @@ export const Service = ({
          placeService: inputs.placeService,
          staffPayCode: inputs.staffPayCode,
          startDate: inputs.startDate && moment(inputs.startDate).format("YYYY-MM-DD"),
-         eventStatus: inputs.eventStatus,
+         eventStatus: inputs.eventStatus ? inputs.eventStatus : "PENDING",
          startTime: times.startTime,
          endTime: times.endTime,
-         eventStatus: inputs.eventStatus,
          status: "ACTIVE",
          require: signature,
       };
+      console.log(date, "  date**");
       if (
          inputs.client &&
          inputs.authorizedService &&
@@ -173,6 +165,8 @@ export const Service = ({
 
    const titleContent = getDynamicContent("TITLE", modalDate, "Service Appointment");
    const subtitleContent = getDynamicContent("SUBTITLE", modalDate, "Service Appointment");
+
+   const activeStaffPaycodes = getActiveDatas(allPaycodes);
 
    return (
       <div className={classes.serciveModall}>
@@ -297,7 +291,7 @@ export const Service = ({
                            : inputs.staffPayCode
                         : inputs.staffPayCode
                   }
-                  list={allPaycodes ? allPaycodes : []}
+                  list={activeStaffPaycodes}
                   typeError={error === "staffPayCode" && ErrorText.field}
                />
 

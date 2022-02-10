@@ -125,38 +125,36 @@ export const FundingSourceSingleServices = ({ data }) => {
 
    let serviceItem = (item, index) => {
       return (
-         <TableBody>
-            <TableBodyComponent
-               active={index === serviceIndex}
-               key={index}
-               handleOpenInfo={() => onRow(item, index)}
-            >
-               <TableCell>
-                  <p className={classes.tableTitle}>{item.name}</p>
-               </TableCell>
-               <TableCell> {item.cptCode} </TableCell>
-               <TableCell> {item.size} </TableCell>
-               <TableCell> {item.min} </TableCell>
-               <TableCell> {item.max} </TableCell>
-               <TableCell>
-                  <>
-                     <img
-                        src={Images.edit}
-                        alt="edit"
-                        className={classes.iconCursor}
-                        onClick={() => onEdit(index)}
-                     />
-                     {/*<img src={Images.remove} alt="delete" className={classes.iconCursordelete}*/}
-                     {/*     onClick={(e) => {*/}
-                     {/*         e.stopPropagation()*/}
-                     {/*         setIndex(index)*/}
-                     {/*         setDelEdit('del')*/}
-                     {/*         setToggleModal(!toggleModal)*/}
-                     {/*     }}/>*/}
-                  </>
-               </TableCell>
-            </TableBodyComponent>
-         </TableBody>
+         <TableBodyComponent
+            active={index === serviceIndex}
+            key={index}
+            handleOpenInfo={() => onRow(item, index)}
+         >
+            <TableCell>
+               <p className={classes.tableTitle}>{item.name}</p>
+            </TableCell>
+            <TableCell> {item.cptCode} </TableCell>
+            <TableCell> {item.size} </TableCell>
+            <TableCell> {item.min} </TableCell>
+            <TableCell> {item.max} </TableCell>
+            <TableCell>
+               <>
+                  <img
+                     src={Images.edit}
+                     alt="edit"
+                     className={classes.iconCursor}
+                     onClick={() => onEdit(index)}
+                  />
+                  {/*<img src={Images.remove} alt="delete" className={classes.iconCursordelete}*/}
+                  {/*     onClick={(e) => {*/}
+                  {/*         e.stopPropagation()*/}
+                  {/*         setIndex(index)*/}
+                  {/*         setDelEdit('del')*/}
+                  {/*         setToggleModal(!toggleModal)*/}
+                  {/*     }}/>*/}
+               </>
+            </TableCell>
+         </TableBodyComponent>
       );
    };
 

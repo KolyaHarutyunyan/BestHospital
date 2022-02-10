@@ -41,40 +41,37 @@ export const FundingSourceSingleNotes = ({ data }) => {
 
    let notesItem = (item, index) => {
       return (
-         <TableBody>
-            <TableBodyComponent
-               key={index}
-               handleOpenInfo={() =>
-                  openNoteModal({
-                     created: item?.created,
-                     subject: item?.subject,
-                     id: item?.id,
-                     text: item?.text,
-                     creatorName:
-                        item && item.user && `${item.user.firstName} ${item.user.lastName}`,
-                  })
-               }
-            >
-               <TableCell>{moment(item?.created).format("DD/MM/YYYY")}</TableCell>
-               <TableCell>{`${item?.user?.firstName} ${item?.user?.lastName}`}</TableCell>
-               <TableCell>{item?.subject}</TableCell>
-               <TableCell>
-                  <img
-                     src={Images.remove}
-                     alt="delete"
-                     style={{ cursor: "pointer" }}
-                     onClick={(e) => {
-                        e.stopPropagation();
-                        handleOpenCloseDel({
-                           id: item.id,
-                           deletedName: item.subject,
-                           text: item.text,
-                        });
-                     }}
-                  />
-               </TableCell>
-            </TableBodyComponent>
-         </TableBody>
+         <TableBodyComponent
+            key={index}
+            handleOpenInfo={() =>
+               openNoteModal({
+                  created: item?.created,
+                  subject: item?.subject,
+                  id: item?.id,
+                  text: item?.text,
+                  creatorName: item && item.user && `${item.user.firstName} ${item.user.lastName}`,
+               })
+            }
+         >
+            <TableCell>{moment(item?.created).format("DD/MM/YYYY")}</TableCell>
+            <TableCell>{`${item?.user?.firstName} ${item?.user?.lastName}`}</TableCell>
+            <TableCell>{item?.subject}</TableCell>
+            <TableCell>
+               <img
+                  src={Images.remove}
+                  alt="delete"
+                  style={{ cursor: "pointer" }}
+                  onClick={(e) => {
+                     e.stopPropagation();
+                     handleOpenCloseDel({
+                        id: item.id,
+                        deletedName: item.subject,
+                        text: item.text,
+                     });
+                  }}
+               />
+            </TableCell>
+         </TableBodyComponent>
       );
    };
 

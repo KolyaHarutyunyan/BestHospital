@@ -14,38 +14,32 @@ import { staffModalsStyle } from "./styles";
 import moment from "moment";
 
 export const PaycodeModal = ({ handleClose, info, employmentId }) => {
-   const [error, setError] = useState("");
-   const [inputs, setInputs] = useState(
-      info
-         ? {
-              employmentId: info.employmentId,
-              payCodeTypeId: info?.payCodeTypeId?._id,
-              rate: +info?.rate,
-              active: info?.active,
-              startDate: moment(info.startDate).format("YYYY-MM-DD"),
-              endDate: moment(info.endDate).format("YYYY-MM-DD"),
-           }
-         : {
-              payCodeTypeId: "",
-              rate: "",
-              startDate: "",
-              endDate: "",
-              name: "",
-           }
-   );
-   const [checked, setChecked] = useState(info ? info.endDate === "Precent" : true);
-   const [payCode, setPayCode] = useState(null);
    const dispatch = useDispatch();
    const classes = createClientStyle();
    const classes_v2 = staffModalsStyle();
    const globalPayCodes = useSelector((state) => state.payroll.PayCodes);
 
+   const [error, setError] = useState("");
+   const [inputs, setInputs] = useState(
+      info
+         ? {
+              employmentId: info.employmentId,
+              payCodeTypeId: info.payCodeTypeId._id,
+              rate: +info.rate,
+              active: info.active,
+              startDate: moment(info.startDate).format("YYYY-MM-DD"),
+              endDate: moment(info.endDate).format("YYYY-MM-DD"),
+           }
+         : {}
+   );
+   const [checked, setChecked] = useState(info ? info.endDate === "Precent" : true);
+   const [payCode, setPayCode] = useState(
+      info ? globalPayCodes.find((item) => item.id === info.payCodeTypeId._id) : null
+   );
+
+   const payCodeName =  globalPayCodes.find((item) => item.id === inputs.payCodeTypeId)?.name;
    const success = info ? FindSuccess("EDIT_PAY_CODE") : FindSuccess("CREATE_PAY_CODE");
    const loader = info ? FindLoad("EDIT_PAY_CODE") : FindLoad("CREATE_PAY_CODE");
-
-   useEffect(() => {
-      dispatch(payrollActions.getPayCodeGlobal());
-   }, []);
 
    useEffect(() => {
       if (!success) return;
@@ -59,15 +53,9 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
       }
    }, [success]);
 
-   useEffect(() => {
-      if (info) {
-         setPayCode(globalPayCodes.find((item) => item.name === info.payCodeTypeId.name));
-      }
-   }, []);
-
    const handleChange = (e) => {
       if (e.target.name === "payCodeTypeId") {
-         setPayCode(globalPayCodes.find((item) => item.name === e.target.value));
+         setPayCode(globalPayCodes.find((item) => item.id === e.target.value));
       }
       setInputs(
          (prevState) => ({ ...prevState, [e.target.name]: e.target.value }),
@@ -77,7 +65,7 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
 
    let onCheck = (e) => {
       setChecked(e.target.checked);
-      inputs["endDate"] = "";
+      inputs["endDate"] = null;
    };
 
    const handleCreate = () => {
@@ -87,13 +75,13 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
             : inputs.endDate
       ) {
          const data = {
-            employmentId: employmentId,
+            name: payCodeName,
             payCodeTypeId: inputs.payCodeTypeId,
+            employmentId: employmentId,
             rate: +inputs.rate,
             active: checked,
             startDate: inputs.startDate,
-            endDate: inputs.endDate ? inputs.endDate : "",
-            name: inputs.payCodeTypeId,
+            endDate: inputs.endDate ? inputs.endDate : null,
          };
          if (!info) {
             dispatch(adminActions.createPayCode(data, employmentId));
@@ -129,7 +117,7 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
                      name={"payCodeTypeId"}
                      label={"Name"}
                      handleSelect={handleChange}
-                     value={info ? info?.payCodeTypeId?.name : inputs.name}
+                     value={inputs.payCodeTypeId}
                      type={"id"}
                      list={globalPayCodes}
                      typeError={error === "payCodeTypeId" ? ErrorText.field : ""}
