@@ -58,6 +58,7 @@ export class AppointmentService {
     if (staff.id != staffPayCode.employmentId.staffId) {
       throw new HttpException('PayCode is not staff pay code', HttpStatus.BAD_REQUEST);
     }
+    console.log(staffPayCode)
     if (staffPayCode.employmentId.active != true) {
       throw new HttpException('Employment is not active', HttpStatus.BAD_REQUEST);
     }
@@ -484,7 +485,7 @@ export class AppointmentService {
       this.payCodeService.findOne(dto.staffPayCode ? dto.staffPayCode : appointment.staffPayCode),
       this.payCodeService.findPayCodesByStaffId(dto.staff ? dto.staff : appointment.staff),
     ]);
-
+    console.log(payCode);
     if (payCode.employmentId.active != true) {
       throw new HttpException('employment is not active', HttpStatus.BAD_REQUEST);
     }
