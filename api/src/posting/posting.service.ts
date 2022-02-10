@@ -54,7 +54,7 @@ export class PostingService {
         }
         const lowReceivable: any = await this.findLowReceivable(receivable);
         console.log(lowReceivable, 'lowReceivableeeeeeeeeeeeeeeeeeeee');
-        if (paymentAmount >= lowReceivable.amountTotal) {
+        if (paymentAmount >= lowReceivable.amountTotal && lowReceivable.amountTotal !== 0) {
           const receivableBalance = await this.fullPayReceivable(
             lowReceivable,
             paymentAmount,

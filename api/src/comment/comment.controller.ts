@@ -14,6 +14,7 @@ export class CommentController {
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: CommentDTO })
   async create(@Body() createCommentDto: CreateCommentDTO) {
+    console.log(createCommentDto.user.id, 'idddd')
     return await this.commentService.create(createCommentDto, createCommentDto.user.id);
   }
 

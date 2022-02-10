@@ -94,9 +94,11 @@ export class PaycodeService {
 
       if (dto.payCodeTypeId) {
         await this.PayCodeTypeService.findOne(dto.payCodeTypeId);
+        payCode.payCodeTypeId = dto.payCodeTypeId;
       }
       if (dto.employmentId) {
         await this.employmentService.findOne(dto.employmentId);
+        payCode.employmentId = dto.employmentId;
       }
       if (dto.name) {
         payCode.name = dto.name;

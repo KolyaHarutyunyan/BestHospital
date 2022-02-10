@@ -4,10 +4,18 @@ import { CommentModel } from './comment.model';
 import { IComment } from './interface';
 import { CommentDTO, CreateCommentDTO, UpdateCommentDTO } from './dto';
 import { CommentSanitizer } from './interceptor/comment.sanitizer';
+import { StaffService } from '../staff';
+import { ClientService } from '../client/client.service';
+import { FundingService } from '../funding';
 
 @Injectable()
 export class CommentService {
-  constructor(private readonly sanitizer: CommentSanitizer) {
+  constructor(
+    private readonly sanitizer: CommentSanitizer,
+    private readonly Staff: StaffService,
+    private readonly Client: ClientService,
+    private readonly Funder: FundingService,
+  ) {
     this.model = CommentModel;
   }
   private model: Model<IComment>;
