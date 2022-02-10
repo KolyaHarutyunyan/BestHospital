@@ -55,11 +55,11 @@ export class AppointmentService {
         appointment = await this.appointmentBreak(dto);
         break;
     }
-    if (staff.id != staffPayCode.employmentId.staffId && staffPayCode.employmentId.active != true) {
-      throw new HttpException(
-        'PayCode is not staff pay code or employment is not active',
-        HttpStatus.BAD_REQUEST,
-      );
+    if (staff.id != staffPayCode.employmentId.staffId) {
+      throw new HttpException('PayCode is not staff pay code', HttpStatus.BAD_REQUEST);
+    }
+    if (staffPayCode.employmentId.active != true) {
+      throw new HttpException('Employment is not active', HttpStatus.BAD_REQUEST);
     }
     await appointment.save();
     return this.sanitizer.sanitize(appointment);
