@@ -74,25 +74,27 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
    const handleChange = (e) => {
       if (e.target.name === "payCode") {
          setPayCode(allPaycodes.find((item) => item.payCodeTypeId.name === e.target.value));
-
-         // setPayCode(allPaycodes.find(item => item.name === e.target.value))
       }
-      setInputs(
-         (prevState) => ({ ...prevState, [e.target.name]: e.target.value }),
-         error === e.target.name && setError("")
-      );
+      setInputs((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
+      (error === e.target.name || error === ErrorText.dateError) && setError("");
    };
 
-   let onCheck = (e) => {
+   const onCheck = (e) => {
       setChecked(e.target.checked);
+      inputs["endDate"] = null;
+      (error === "endDate" || error === ErrorText.dateError) && setError("");
    };
 
    const handleCreate = () => {
-      if (
+      const dateComparingIsValid =
+         inputs.endDate &&
+         new Date(inputs.startDate).getTime() < new Date(inputs.endDate).getTime();
+
+      const timeSheetDataIsValid =
          inputs.description && inputs.hours && inputs.startDate && checked
             ? "Present"
-            : inputs.endDate
-      ) {
+            : dateComparingIsValid;
+      if (timeSheetDataIsValid) {
          const data = {
             staffId: params.id,
             payCode: payCode?.id,
@@ -132,6 +134,8 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
                ? "startDate"
                : !inputs.endDate
                ? "endDate"
+               : !dateComparingIsValid
+               ? ErrorText.dateError
                : "Input is not field"
          );
       }
@@ -216,7 +220,13 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
                         type={checked ? "text" : "date"}
                         label={"End Date*"}
                         name="endDate"
-                        typeError={error === "endDate" && ErrorText.field}
+                        typeError={
+                           error === "endDate"
+                              ? ErrorText.field
+                              : error === ErrorText.dateError
+                              ? ErrorText.dateError
+                              : ""
+                        }
                      />
                   </div>
                </div>

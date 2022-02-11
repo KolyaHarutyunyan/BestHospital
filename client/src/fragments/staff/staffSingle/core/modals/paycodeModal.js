@@ -8,7 +8,6 @@ import {
    httpRequestsOnErrorsActions,
    httpRequestsOnSuccessActions,
 } from "@eachbase/store";
-import { payrollActions } from "@eachbase/store/payroll";
 import { createClientStyle } from "@eachbase/fragments/client";
 import { staffModalsStyle } from "./styles";
 import moment from "moment";
@@ -37,7 +36,8 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
       info ? globalPayCodes.find((item) => item.id === info.payCodeTypeId._id) : null
    );
 
-   const payCodeName =  globalPayCodes.find((item) => item.id === inputs.payCodeTypeId)?.name;
+   const payCodeName = globalPayCodes.find((item) => item.id === inputs.payCodeTypeId)?.name;
+
    const success = info ? FindSuccess("EDIT_PAY_CODE") : FindSuccess("CREATE_PAY_CODE");
    const loader = info ? FindLoad("EDIT_PAY_CODE") : FindLoad("CREATE_PAY_CODE");
 
@@ -57,23 +57,27 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
       if (e.target.name === "payCodeTypeId") {
          setPayCode(globalPayCodes.find((item) => item.id === e.target.value));
       }
-      setInputs(
-         (prevState) => ({ ...prevState, [e.target.name]: e.target.value }),
-         error === e.target.name && setError("")
-      );
+      setInputs((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
+      (error === e.target.name || error === ErrorText.dateError) && setError("");
    };
 
-   let onCheck = (e) => {
+   const onCheck = (e) => {
       setChecked(e.target.checked);
       inputs["endDate"] = null;
+      (error === "endDate" || error === ErrorText.dateError) && setError("");
    };
 
    const handleCreate = () => {
-      if (
+      const dateComparingIsValid =
+         inputs.endDate &&
+         new Date(inputs.startDate).getTime() < new Date(inputs.endDate).getTime();
+
+      const payCodeDataIsValid =
          inputs.rate && inputs.payCodeTypeId && inputs.startDate && checked
             ? "Precent"
-            : inputs.endDate
-      ) {
+            : dateComparingIsValid;
+
+      if (payCodeDataIsValid) {
          const data = {
             name: payCodeName,
             payCodeTypeId: inputs.payCodeTypeId,
@@ -98,6 +102,8 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
                ? "startDate"
                : !inputs.endDate
                ? "endDate"
+               : !dateComparingIsValid
+               ? ErrorText.dateError
                : "Input is not field"
          );
       }
@@ -168,7 +174,13 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
                         type={checked ? "text" : "date"}
                         label={"End Date*"}
                         name="endDate"
-                        typeError={error === "endDate" && ErrorText.field}
+                        typeError={
+                           error === "endDate"
+                              ? ErrorText.field
+                              : error === ErrorText.dateError
+                              ? ErrorText.dateError
+                              : ""
+                        }
                      />
                   </div>
                </div>

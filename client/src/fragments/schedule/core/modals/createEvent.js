@@ -1,7 +1,7 @@
 import { scheduleModalsStyle } from "./styles";
-import { modalsStyle } from "../../../../components/modal/styles";
+import { modalsStyle } from "@eachbase/components/modal/styles";
 import { CloseButton } from "@eachbase/components";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Images } from "@eachbase/utils";
 import { Break } from "./break";
 import { Service } from "./service";

@@ -22,16 +22,12 @@ export const EmploymentModal = ({ handleClose, info }) => {
               supervisor: info.supervisor.firstName,
               departmentId: info?.departmentId?.name,
               startDate: moment(info?.startDate).format("YYYY-MM-DD"),
-              endDate: moment(info?.termination?.date).format("YYYY-MM-DD"),
+              endDate: moment(info.endDate).format("YYYY-MM-DD"),
               employmentType: info?.schedule,
            }
-         : {
-              title: "",
-              endDate: "",
-              schedule: "",
-           }
+         : {}
    );
-   const [checked, setChecked] = useState(true);
+   const [checked, setChecked] = useState(info ? info.endDate === "Precent" : true);
    const params = useParams();
    const dispatch = useDispatch();
    const departments = useSelector((state) => state.system.departments);
@@ -40,18 +36,13 @@ export const EmploymentModal = ({ handleClose, info }) => {
    );
    const classes = createClientStyle();
 
-   let onCheck = (e) => {
-      setChecked(e.target.checked);
-      error === "endDate" && setError("");
-   };
+   const success = info ? FindSuccess("EDIT_EMPLOYMENT") : FindSuccess("CREATE_EMPLOYMENT");
+   const loader = info ? FindLoad("EDIT_EMPLOYMENT") : FindLoad("CREATE_EMPLOYMENT");
 
    useEffect(() => {
       dispatch(systemActions.getDepartments());
       dispatch(adminActions.getAllAdmins());
    }, []);
-
-   const success = info ? FindSuccess("EDIT_EMPLOYMENT") : FindSuccess("CREATE_EMPLOYMENT");
-   const loader = info ? FindLoad("EDIT_EMPLOYMENT") : FindLoad("CREATE_EMPLOYMENT");
 
    useEffect(() => {
       if (!success) return;
@@ -64,25 +55,34 @@ export const EmploymentModal = ({ handleClose, info }) => {
       }
    }, [success]);
 
-   const handleChange = (e) =>
-      setInputs(
-         (prevState) => ({
-            ...prevState,
-            [e.target.name]: e.target.value === 0 ? "0" : e.target.value,
-         }),
-         error === e.target.name && setError("")
-      );
+   const onCheck = (e) => {
+      setChecked(e.target.checked);
+      inputs["endDate"] = null;
+      (error === "endDate" || error === ErrorText.dateError) && setError("");
+   };
+
+   const handleChange = (e) => {
+      setInputs((prevState) => ({
+         ...prevState,
+         [e.target.name]: e.target.value === 0 ? "0" : e.target.value,
+      }));
+      (error === e.target.name || error === ErrorText.dateError) && setError("");
+   };
 
    const handleCreate = () => {
-      if (
+      const dateComparingIsValid =
+         inputs.endDate &&
+         new Date(inputs.startDate).getTime() < new Date(inputs.endDate).getTime();
+
+      const employmentDataIsValid =
          inputs.title &&
          inputs.departmentId &&
          inputs.supervisor &&
          inputs.employmentType &&
-         checked
-            ? "Present"
-            : inputs.endDate
-      ) {
+         inputs.startDate &&
+         (checked ? "Present" : dateComparingIsValid);
+
+      if (employmentDataIsValid) {
          let depId;
          let supervisorID;
          departments.forEach((item) => {
@@ -90,6 +90,7 @@ export const EmploymentModal = ({ handleClose, info }) => {
                depId = item.id;
             }
          });
+
          staffList &&
             staffList.forEach((item) => {
                if (inputs.supervisor === item.firstName) {
@@ -103,12 +104,12 @@ export const EmploymentModal = ({ handleClose, info }) => {
             supervisor: supervisorID,
             departmentId: depId,
             active: false,
-            startDate: new Date().toISOString(),
-            endDate: inputs.endDate ? new Date(inputs.endDate).toISOString() : undefined,
+            startDate: new Date(),
+            endDate: inputs.endDate ? inputs.endDate : null,
             schedule: +inputs.employmentType,
-            termination: {
-               date: inputs.endDate ? inputs.endDate : undefined,
-            },
+            // termination: {
+            //    date: inputs.endDate ? inputs.endDate : null,
+            // },
          };
 
          if (info) {
@@ -130,6 +131,8 @@ export const EmploymentModal = ({ handleClose, info }) => {
                ? "startDate"
                : !inputs.endDate
                ? "endDate"
+               : !dateComparingIsValid
+               ? ErrorText.dateError
                : "Input is not field"
          );
       }
@@ -176,11 +179,11 @@ export const EmploymentModal = ({ handleClose, info }) => {
                      handleSelect={handleChange}
                      value={String(inputs.employmentType)}
                      list={[{ name: 0 }, { name: 1 }]}
-                     typeError={error === "employmentType" && ErrorText.field}
+                     typeError={error === "employmentType" ? ErrorText.field : ""}
                   />
 
                   <div className={classes.curentlyCheckbox}>
-                     <Checkbox defaultChecked={true} onClick={onCheck} color="primary" />
+                     <Checkbox checked={checked} onClick={onCheck} color="primary" />
                      <p className={classes.curently}>Currently works in this role</p>
                   </div>
                   <div style={{ display: "flex" }}>
@@ -189,14 +192,13 @@ export const EmploymentModal = ({ handleClose, info }) => {
                         onChange={handleChange}
                         value={
                            inputs.startDate
-                              ? moment(inputs.startDate).format("YYYY-MM-DD")
-                              : moment(new Date()).format("YYYY-MM-DD")
+                           // ? moment(inputs.startDate).format("YYYY-MM-DD")
+                           // : moment(new Date()).format("YYYY-MM-DD")
                         }
-                        disabled={true}
                         type={"date"}
                         label={"Start Date*"}
                         name="startDate"
-                        typeError={error === "startDate" && ErrorText.field}
+                        typeError={error === "startDate" ? ErrorText.field : ""}
                      />
                      <div style={{ width: 16 }} />
                      <ValidationInput
@@ -207,7 +209,13 @@ export const EmploymentModal = ({ handleClose, info }) => {
                         type={checked ? "text" : "date"}
                         label={"End Date*"}
                         name="endDate"
-                        typeError={error === "endDate" && ErrorText.field}
+                        typeError={
+                           error === "endDate"
+                              ? ErrorText.field
+                              : error === ErrorText.dateError
+                              ? ErrorText.dateError
+                              : ""
+                        }
                      />
                   </div>
                </div>

@@ -41,6 +41,7 @@ export const AddAuthorization = ({ handleClose, info }) => {
    let fSelect = useSelector((state) => state.fundingSource.fSelect.funders);
 
    const classes = createClientStyle();
+
    const [fullAddress, setFullAddress] = useState(info?.location ? info?.location : "");
    const [enteredAddress, setEnteredAddress] = useState("");
 
@@ -66,14 +67,13 @@ export const AddAuthorization = ({ handleClose, info }) => {
       dispatch(fundingSourceActions.getFundingSource());
    }, []);
 
-   const handleChange = (e) =>
-      setInputs(
-         (prevState) => ({
-            ...prevState,
-            [e.target.name]: e.target.value === 0 ? "0" : e.target.value,
-         }),
-         error === e.target.name && setError("")
-      );
+   const handleChange = (e) => {
+      setInputs((prevState) => ({
+         ...prevState,
+         [e.target.name]: e.target.value === 0 ? "0" : e.target.value,
+      }));
+      (error === e.target.name || error === ErrorText.dateError) && setError("");
+   };
 
    const handleAddressChange = (selectedAddress) => {
       setEnteredAddress(selectedAddress);
@@ -81,15 +81,20 @@ export const AddAuthorization = ({ handleClose, info }) => {
    };
 
    const handleCreate = () => {
-      if (
-         inputs.authId &&
-         inputs.funding &&
+      const dateComparingIsValid =
          inputs.startDate &&
          inputs.endDate &&
+         new Date(inputs.startDate).getTime() < new Date(inputs.endDate).getTime();
+
+      const authorizationDataIsValid =
+         inputs.authId &&
+         inputs.funding &&
+         dateComparingIsValid &&
          inputs.status &&
          enteredAddress &&
-         isNotEmpty(fullAddress)
-      ) {
+         isNotEmpty(fullAddress);
+
+      if (authorizationDataIsValid) {
          let funderId;
          enrolments.forEach((item) => {
             if (inputs.funding === item.name) {
@@ -120,6 +125,8 @@ export const AddAuthorization = ({ handleClose, info }) => {
                ? "startDate"
                : !inputs.endDate
                ? "endDate"
+               : !dateComparingIsValid
+               ? ErrorText.dateError
                : !inputs.status
                ? "status"
                : !enteredAddress
@@ -180,7 +187,13 @@ export const AddAuthorization = ({ handleClose, info }) => {
                         type={"date"}
                         label={"End Date*"}
                         name="endDate"
-                        typeError={error === "endDate" ? ErrorText.field : ""}
+                        typeError={
+                           error === "endDate"
+                              ? ErrorText.field
+                              : error === ErrorText.dateError
+                              ? ErrorText.dateError
+                              : ""
+                        }
                      />
                   </div>
                   <SelectInput

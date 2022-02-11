@@ -23,13 +23,10 @@ export const AddEnrollment = ({ handleClose, info }) => {
               terminationDate:
                  info?.terminationDate && moment(info?.terminationDate).format("YYYY-MM-DD"),
            }
-         : {
-              funding: "",
-              startDate: "",
-              terminationDate: "",
-           }
+         : {}
    );
-   const [checked, setChecked] = useState(info ? !info.terminationDate : true);
+
+   const [checked, setChecked] = useState(info ? info.terminationDate === null : true);
    const classes = createClientStyle();
    const params = useParams();
    const dispatch = useDispatch();
@@ -52,32 +49,39 @@ export const AddEnrollment = ({ handleClose, info }) => {
       }
    }, [success]);
 
-   const handleChange = (e) =>
-      setInputs(
-         (prevState) => ({ ...prevState, [e.target.name]: e.target.value }),
-         error === e.target.name && setError("")
-      );
+   const handleChange = (e) => {
+      setInputs((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
+      (error === e.target.name || error === ErrorText.dateError) && setError("");
+   };
+
+   const onCheck = (e) => {
+      setChecked(e.target.checked);
+      inputs["terminationDate"] = null;
+      (error === "terminationDate" || error === ErrorText.dateError) && setError("");
+   };
 
    const handleCreate = () => {
-      if (inputs.funding && inputs.startDate && checked ? "Present" : inputs.terminationDate) {
+      const dateComparingIsValid =
+         inputs.terminationDate &&
+         new Date(inputs.startDate).getTime() < new Date(inputs.terminationDate).getTime();
+
+      const enrollmentDataIsValid =
+         inputs.funding && inputs.startDate && checked ? "Present" : dateComparingIsValid;
+
+      if (enrollmentDataIsValid) {
          let funderId;
          fSelect.forEach((item) => {
             if (inputs.funding === item.name) {
                funderId = item.id;
             }
          });
-         console.log(inputs.funding,'inputsinputsinputs');
+
          const data = {
             primary: info ? info.primary : true,
             startDate: inputs.startDate,
-            terminationDate: checked
-               ? null
-               : inputs.terminationDate
-               ? inputs.terminationDate
-               : null,
+            terminationDate: inputs.terminationDate ? inputs.terminationDate : null,
          };
 
-         console.log(funderId,'datadatadata');
          if (info) {
             dispatch(clientActions.editClientEnrollment(data, params.id, funderId, info.id));
          } else {
@@ -91,14 +95,11 @@ export const AddEnrollment = ({ handleClose, info }) => {
                ? "startDate"
                : !inputs.terminationDate
                ? "terminationDate"
+               : !dateComparingIsValid
+               ? ErrorText.dateError
                : "Input is not field"
          );
       }
-   };
-
-   let onCheck = (e) => {
-      setChecked(e.target.checked);
-      error === "terminationDate" && setError("");
    };
 
    return (
@@ -143,7 +144,13 @@ export const AddEnrollment = ({ handleClose, info }) => {
                      type={checked ? "text" : "date"}
                      label={"Terminated Date"}
                      name="terminationDate"
-                     typeError={error === "terminationDate" && ErrorText.field}
+                     typeError={
+                        error === "terminationDate"
+                           ? ErrorText.field
+                           : error === ErrorText.dateError
+                           ? ErrorText.dateError
+                           : ""
+                     }
                   />
 
                   {/*<ValidationInput*/}

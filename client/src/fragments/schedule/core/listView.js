@@ -14,7 +14,7 @@ import {
 } from "@eachbase/components";
 import { Link } from "react-router-dom";
 import { InfoModal } from "./modals";
-import { adminActions, appointmentActions } from "@eachbase/store";
+import { appointmentActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import moment from "moment";
 
@@ -27,14 +27,11 @@ export const ListView = ({
    adminsList,
    clientList,
    appointmentById,
-
    handleSendDate,
 }) => {
    const classes = scheduleStyle();
    const [date, setDate] = useState(0);
-   const [open, setOpen] = useState(false);
-   const [type, setType] = useState("");
-   const [stusType, setStusType] = useState("");
+   const [stusType, setStusType] = useState(appointmentById ? appointmentById.eventStatus : "");
    const [item, setItem] = useState(appointmentById ? appointmentById : "");
    const defItem = item.length === 0 ? "" : item;
 
@@ -53,25 +50,21 @@ export const ListView = ({
    const dispatch = useDispatch();
    const handleOpenCloseModal = (info) => {
       dispatch(appointmentActions.getAppointmentById(info._id));
-
-      // setItem(info)
-      // if(info.staffPayCode){
-      // dispatch(adminActions.getPayCode('619cda73620c886016d9baf5'))
-      // }
-      // setType(modalType)
-      // setOpen(!open)
    };
 
    const getLoader = FindLoad("GET_APPOINTMENT_BY_ID");
 
    const handleChange = (e) => {
-      // setStusType(e.target.value)
+      setStusType(e.target.value);
+   };
+
+   useEffect(() => {
       const info = {
-         eventStatus: e.target.value,
+         eventStatus: stusType,
          status: defItem.status,
       };
       dispatch(appointmentActions.setAppointmentStatus(defItem._id, info));
-   };
+   }, [stusType]);
 
    const list =
       defItem && defItem.type === "SERVICE"
@@ -228,7 +221,7 @@ export const ListView = ({
                               name={"rendered"}
                               label={defItem ? defItem.eventStatus : "Rendered"}
                               handleSelect={handleChange}
-                              // value={defItem ? defItem.eventStatus  : ''}
+                              value={stusType}
                               list={list}
                            />
 
@@ -262,8 +255,7 @@ export const ListView = ({
 
          <SimpleModal
             handleOpenClose={handleOpenCloseModal}
-            openDefault={open}
-            content={<InfoModal type={type} handleOpenClose={handleOpenCloseModal} />}
+            content={<InfoModal handleOpenClose={handleOpenCloseModal} />}
          />
       </div>
    );

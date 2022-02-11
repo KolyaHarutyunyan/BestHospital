@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CreateChancel, SelectInput, ValidationInput } from "@eachbase/components";
 import { ErrorText, FindLoad, getActiveDatas, getDynamicContent } from "@eachbase/utils";
 import { scheduleModalsStyle } from "./styles";
-import { modalsStyle } from "../../../../components/modal/styles";
+import { modalsStyle } from "@eachbase/components/modal/styles";
 import { adminActions, appointmentActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import moment from "moment";
@@ -27,14 +27,9 @@ export const Break = ({
          ? { ...day, ...createModalDate }
          : createModalDate
          ? { ...createModalDate }
-         : {
-              staff: "",
-              staffPayCode: "",
-              startDate: "",
-              miles: "",
-           }
+         : {}
    );
-   const [times, setTimes] = useState(date ? { ...date } : { startTime: "", endTime: "" });
+   const [times, setTimes] = useState(date ? { ...date } : {});
    const [error, setError] = useState({});
 
    const handleCloseModal = () => {
@@ -66,117 +61,73 @@ export const Break = ({
          0
       );
       setTimes((prevState) => ({ ...prevState, [e.target.name]: myToday }));
-      e.target.name === error && setError("");
+      (e.target.name === error || error === ErrorText.timeError) && setError("");
    };
 
-   const info = "";
    const modalType =
       type === "Break" ? "BREAK" : type === "Drive" ? "DRIVE" : type === "Paid" ? "PAID" : "";
 
    const handleCreate = () => {
-      const modalBool =
-         modalType === "BREAK"
-            ? inputs.staff &&
-              inputs.staffPayCode &&
-              inputs.startDate &&
-              times.startTime &&
-              times.endTime
-            : modalType === "DRIVE"
-            ? inputs.staff &&
-              inputs.staffPayCode &&
-              inputs.startDate &&
-              times.startTime &&
-              times.endTime &&
-              inputs.miles
-            : modalType === "PAID"
-            ? inputs.staff &&
-              inputs.staffPayCode &&
-              inputs.startDate &&
-              times.startTime &&
-              times.endTime
-            : "";
+      const timeComparingIsValid =
+         !!times.startTime &&
+         !!times.endTime &&
+         Date.parse(times.startTime) < Date.parse(times.endTime);
 
-      const date = {
-         type: modalType,
-         ...inputs,
-         ...times,
-         miles: +inputs.miles,
-         eventStatus: "PENDING",
-         status: "ACTIVE",
-         require: false,
-      };
-      const editDate = {
-         type: inputs.type,
-         ...times,
-         miles: +inputs.miles,
-         eventStatus: "PENDING",
-         status: "ACTIVE",
-         require: false,
-         staff: inputs.staff ? (inputs.staff._id ? inputs.staff._id : inputs.staff) : "",
-         staffPayCode: inputs.staffPayCode
-            ? inputs.staffPayCode._id
-               ? inputs.staffPayCode._id
-               : inputs.staffPayCode
-            : "",
-         startDate: inputs.startDate,
-         _id: inputs.inputs,
-      };
+      const datasValid =
+         inputs.staff && inputs.staffPayCode && inputs.startDate && timeComparingIsValid;
+      const modalBool = modalType === "DRIVE" ? datasValid && inputs.miles : datasValid;
+
       inputs.type === "DRIVE" ? (editDate["miles"] = +inputs.miles) : "";
 
       if (modalBool) {
+         const date = {
+            type: modalType,
+            ...inputs,
+            ...times,
+            miles: +inputs.miles,
+            eventStatus: "PENDING",
+            status: "ACTIVE",
+            require: false,
+         };
+
+         const editDate = {
+            type: inputs.type,
+            ...times,
+            miles: +inputs.miles,
+            eventStatus: "PENDING",
+            status: "ACTIVE",
+            require: false,
+            staff: inputs.staff ? (inputs.staff._id ? inputs.staff._id : inputs.staff) : "",
+            staffPayCode: inputs.staffPayCode
+               ? inputs.staffPayCode._id
+                  ? inputs.staffPayCode._id
+                  : inputs.staffPayCode
+               : "",
+            startDate: inputs.startDate,
+            _id: inputs.inputs,
+         };
+
          if (modalDate) {
             dispatch(appointmentActions.editAppointment(editDate, inputs._id));
          } else {
             dispatch(appointmentActions.createAppointment(date));
          }
       } else {
-         if (modalType === "BREAK") {
-            setError(
-               !inputs.staff
-                  ? "staff"
-                  : !inputs.staffPayCode
-                  ? "staffPayCode"
-                  : !inputs.startDate
-                  ? "startDate"
-                  : !times.startTime
-                  ? "startTime"
-                  : !times.endTime
-                  ? "endTime"
-                  : ""
-            );
-         }
-         if (modalType === "DRIVE") {
-            setError(
-               !inputs.staff
-                  ? "staff"
-                  : !inputs.staffPayCode
-                  ? "staffPayCode"
-                  : !inputs.startDate
-                  ? "startDate"
-                  : !times.startTime
-                  ? "startTime"
-                  : !times.endTime
-                  ? "endTime"
-                  : !inputs.miles
-                  ? "miles"
-                  : ""
-            );
-         }
-         if (modalType === "PAID") {
-            setError(
-               !inputs.staff
-                  ? "staff"
-                  : !inputs.staffPayCode
-                  ? "staffPayCode"
-                  : !inputs.startDate
-                  ? "startDate"
-                  : !times.startTime
-                  ? "startTime"
-                  : !times.endTime
-                  ? "endTime"
-                  : ""
-            );
-         }
+         const errorText = !inputs.staff
+            ? "staff"
+            : !inputs.staffPayCode
+            ? "staffPayCode"
+            : !inputs.startDate
+            ? "startDate"
+            : !times.startTime
+            ? "startTime"
+            : !times.endTime
+            ? "endTime"
+            : !timeComparingIsValid
+            ? ErrorText.timeError
+            : "";
+         if (modalType === "DRIVE") setError(errorText ? errorText : !inputs.miles ? "miles" : "");
+         else setError(errorText);
       }
    };
 
@@ -275,7 +226,13 @@ export const Break = ({
                   type={"time"}
                   label={"End Time*"}
                   name="endTime"
-                  typeError={error === "endTime" && ErrorText.field}
+                  typeError={
+                     error === "endTime"
+                        ? ErrorText.field
+                        : error === ErrorText.timeError
+                        ? ErrorText.timeError
+                        : ""
+                  }
                />
             </div>
 
