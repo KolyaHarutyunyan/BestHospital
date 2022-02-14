@@ -34,6 +34,9 @@ export class PaycodeService {
       throw new HttpException('endDate required field', HttpStatus.BAD_REQUEST);
     }
     if (dto.endDate && !dto.active) paycode.endDate = dto.endDate;
+    if (dto.startDate > dto.endDate) {
+      throw new HttpException('startDate can not be higher than endDate', HttpStatus.BAD_REQUEST);
+    }
     await paycode.save();
     return this.sanitizer.sanitize(paycode);
   }

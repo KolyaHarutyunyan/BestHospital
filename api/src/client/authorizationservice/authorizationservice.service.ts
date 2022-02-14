@@ -124,15 +124,19 @@ export class AuthorizationserviceService {
       available = [];
     const authServices = await this.model.find({ authorizationId });
     // this.checkAuthorizationService(authServices[0]);
-
     authServices.map((authService) => {
       authService.modifiers.map((modifier) => {
-        dbModifiers.push(modifier.toString());
+        dbModifiers.push(modifier);
       });
     });
+
     if (dbModifiers.length) {
       fundingService.modifiers.map((modifier) => {
-        if (dbModifiers.indexOf(modifier._id.toString()) === -1) {
+        if (
+          dbModifiers.findIndex(
+            (innerModifier) => innerModifier._id.toString() === modifier._id.toString(),
+          ) === -1
+        ) {
           available.push(modifier);
         }
       });
