@@ -23,16 +23,16 @@ export const SlicedText = ({data, size, type, fontSize}) => {
                             {data && `${data.slice(0, size)}...`}
                         </span>
                         :
-                        <p className={classType}>
+                        <span className={classType}>
                             {data && `${data.slice(0, size)}...`}
-                        </p>
+                        </span>
                     }
                 </HtmlTooltip>
                 :
                 type === 'desc' ?
                     <span style={fontSize ? {fontSize:fontSize} : {}}>{data}</span>
                     :
-                <p className={classType}>{data}</p>
+                <span className={classType}>{data}</span>
             }
 
         </>

@@ -211,7 +211,7 @@ export const SystemItemAddService = ({modalInformation, modalType, handleClose})
                             variant={"outlined"}
                             onChange={handleChange}
                             type={"text"}
-                            label={"category"}
+                            label={"Category*"}
                             name='category'
                             value={inputs.category}
                             typeError={error === 'category' && ErrorText.field}

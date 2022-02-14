@@ -18,10 +18,10 @@ export const ClientSingle = () => {
         dispatch(clientActions.getClientsContacts(params.id))
         dispatch(clientActions.getClientsEnrollment(params.id))
         dispatch(clientActions.getClientsAuthorizations(params.id))
-        dispatch(fundingSourceActions.getFundingSourceHistoriesById('Client'))
         dispatch(noteActions.getGlobalNotes(params.id, 'Client'))
         dispatch(availabilityScheduleActions.getAvailabilitySchedule(params.id))
         dispatch(fundingSourceActions.getFundingSource())
+        dispatch(fundingSourceActions.getFundingSourceHistoriesById('Client'))
     }, []);
 
     return (

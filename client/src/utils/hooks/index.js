@@ -17,3 +17,5 @@ export { makeEnum } from "./makeEnum";
 export { transformPermission } from "./transformPermissions";
 export { useCheckboxDropdown } from "./useCheckboxDropdown";
 export { getValTillTenDig } from "./getValTillTenDig";
+export { getDynamicContent } from "./getDynamicContent";
+export { getActiveDatas } from "./getActiveDatas";

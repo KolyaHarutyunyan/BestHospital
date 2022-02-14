@@ -1,4 +1,4 @@
-export const transformPermission = (permission) => {
+export const transformPermission = (permission = "") => {
    return permission === "SUPER_ADMIN"
       ? "Super Admin"
       : permission === "STAFF"
@@ -7,5 +7,5 @@ export const transformPermission = (permission) => {
       ? "User"
       : permission === "CLIENT"
       ? "Client"
-      : "";
+      : permission;
 };

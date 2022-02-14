@@ -12,7 +12,7 @@ export const errMessageStyle = makeStyles(() => ({
    errMessageLeftPosition: {
       display: "flex",
       width: "100%",
-      padding: "4px 16px",
+      padding: "4px 0 4px 16px",
       minHeight: "20px",
    },
 

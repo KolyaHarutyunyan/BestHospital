@@ -12,7 +12,7 @@ export const SelectInput = ({
    handleSelect,
    style,
    value,
-   list,
+   list = [],
    handleChangeCountryCode,
    typeError,
    type,
@@ -38,7 +38,7 @@ export const SelectInput = ({
             <FormControl
                variant="outlined"
                className={className ? className : classes.inputTextField}
-               error={typeError && true}
+               error={!!typeError}
             >
                <InputLabel htmlFor="outlined-age-native-simple">{label}</InputLabel>
                <Select
@@ -49,9 +49,8 @@ export const SelectInput = ({
                   value={value ? value : current}
                   onChange={handleChange}
                   label={label}
-                  defaultValue={value ? value : current}
                   name={name}
-                  error={typeError}
+                  error={!!typeError}
                   inputProps={{
                      name: name,
                      id: "outlined-age-native-simple",
@@ -90,9 +89,7 @@ export const SelectInput = ({
                        ))}
                </Select>
                {errorFalse ? null : (
-                  <FormHelperText className={classes.errorText}>
-                     {typeError && typeError}
-                  </FormHelperText>
+                  <FormHelperText className={classes.errorText}>{typeError}</FormHelperText>
                )}
             </FormControl>
          </div>

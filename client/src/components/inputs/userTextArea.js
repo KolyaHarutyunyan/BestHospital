@@ -1,23 +1,31 @@
 import React from "react";
+import { ErrMessage } from "@eachbase/components";
 import { inputsStyle } from "./styles";
 
 export const UserTextArea = ({
+   className,
+   id,
+   name,
    label,
    value,
    onChange,
-   hasError,
+   typeError,
    hasText,
-   name,
-   className,
-   id,
+   maxCharsLabel,
 }) => {
    const classes = inputsStyle();
-   const condStyles = `${hasError ? "error" : hasText ? "filled" : ""}`;
+   const condStyles = `${typeError ? "error" : hasText ? "filled" : ""}`;
 
    return (
-      <div className={`${classes.userTextAreaStyle} ${condStyles} ${className}`}>
-         <label htmlFor={id}> {label} </label>
-         <textarea name={name} id={id} value={value} onChange={onChange} />
-      </div>
+      <>
+         <div className={`${classes.userTextAreaStyle} ${condStyles} ${className}`}>
+            <label htmlFor={id}> {label} </label>
+            <textarea name={name} id={id} value={value} onChange={onChange} />
+         </div>
+         <div className={classes.errorAndCharsBoxStyle}>
+            <ErrMessage text={typeError} />
+            <p className="maxCharacter">{maxCharsLabel}</p>
+         </div>
+      </>
    );
 };

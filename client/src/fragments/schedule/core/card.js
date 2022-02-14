@@ -3,7 +3,7 @@ import moment from "moment";
 import {SlicedText} from "@eachbase/components";
 import React from "react";
 
-export const Card = ({openModal, info, style, key}) => {
+export const Card = ({openModal, info, style }) => {
     const classes = scheduleStyle()
     const border =
         info.eventStatus === 'RENDERED' ? '#6FD231' :
@@ -14,7 +14,6 @@ export const Card = ({openModal, info, style, key}) => {
 
     return (
         <div
-            key={key}
             onClick={() => openModal(info)} style={style ? {
             borderRight: `8px solid ${border}`,
             background: '#EBF2FD80 0% 0% no-repeat padding-box',

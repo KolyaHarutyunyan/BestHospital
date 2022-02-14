@@ -32,6 +32,8 @@ export {
    transformPermission,
    useCheckboxDropdown,
    getValTillTenDig,
+   getDynamicContent,
+   getActiveDatas,
 } from "./hooks";
 export { ErrorText } from "./errorTexts";
 export { CountryList } from "./jsons";
