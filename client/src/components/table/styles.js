@@ -32,16 +32,12 @@ export const tableStyle = makeStyles(() => ({
          },
       },
    },
-   tableBody: {},
-   activeTableRow: {},
    tableRow: {
       boxShadow: "0px 3px 6px #347AF01A",
       cursor: "pointer",
       borderRadius: "8px",
       backgroundColor: Colors.BackgroundWhite,
-      "& td": {
-         backgroundColor: Colors.BackgroundWhite,
-      },
+      "& td": { backgroundColor: Colors.BackgroundWhite },
       "& > td:first-child": {
          borderTopLeftRadius: "8px",
          borderBottomLeftRadius: "8px",
@@ -51,10 +47,8 @@ export const tableStyle = makeStyles(() => ({
          borderBottomRightRadius: "8px",
       },
       "&:hover": {
-         background: "#EAF2FF 0% 0% no-repeat padding-box",
-         "& > td": {
-            background: "#EAF2FF 0% 0% no-repeat padding-box",
-         },
+         backgroundColor: "#EBF2FD80",
+         "& > td": { backgroundColor: "#EBF2FD80" },
       },
       height: "50px",
       "& .makeStyles-membersTableWrapper-26 .MuiTableContainer-root": {

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Paper, Table, TableCell, TableContainer } from "@material-ui/core";
+import { Paper, Table, TableBody, TableCell, TableContainer } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import {
    TableHeadComponent,
    SearchAndFilter,
-   NoItemText,
    CloseButton,
    SimpleModal,
    AddNotes,
@@ -21,11 +20,10 @@ export const Notes = ({
    closeModal,
    noteModalInfo,
    showModal,
-   data,
+   data = [],
    headerTitles,
    defaultStyle,
    items,
-   noItemsYet,
    model,
 }) => {
    const officesStyle = makeStyles(({}) => ({
@@ -45,10 +43,11 @@ export const Notes = ({
    const globalStyle = useGlobalStyles();
    const [open, setOpen] = useState(false);
    const [openDelModal, setOpenDelModal] = useState(false);
-   const [noteModalInfoEdit, setNoteModalInfoEdit] = useState({});
+   const [noteModalInfoEdit, setNoteModalInfoEdit] = useState();
    const [deletedData, setDeletedData] = useState("");
+
    const handleOpenClose = (data) => {
-      setNoteModalInfoEdit(data);
+         setNoteModalInfoEdit(data);
       setOpen(!open);
    };
    const handleOpenCloseDel = (data) => {
@@ -71,41 +70,43 @@ export const Notes = ({
    }, [success]);
 
    return (
-      <div className={globalStyle.tableWrapper}>
-         <TableContainer
-            style={{ maxHeight: `calc(100vh - ${restHeight})` }}
-            className={globalStyle.tableContainer}
-            component={Paper}
-         >
-            <Table
-               stickyHeader
-               className={globalStyle.table}
-               size="small"
-               aria-label="a dense table"
+      <>
+         <div className={globalStyle.tableWrapper}>
+            <TableContainer
+               style={{ maxHeight: `calc(100vh - ${restHeight})` }}
+               className={globalStyle.tableContainer}
+               component={Paper}
             >
-               <TableHeadComponent>
-                  {headerTitles &&
-                     headerTitles.map((headerItem, index) => {
-                        return (
-                           <TableCell key={index} className={defaultStyle ? null : classes.thWidth}>
-                              <SearchAndFilter
-                                 title={headerItem.title}
-                                 custom={headerItem.sortable}
-                              />
-                           </TableCell>
-                        );
+               <Table
+                  stickyHeader
+                  className={globalStyle.table}
+                  size="small"
+                  aria-label="a dense table"
+               >
+                  <TableHeadComponent>
+                     {headerTitles &&
+                        headerTitles.map((headerItem, index) => {
+                           return (
+                              <TableCell
+                                 key={index}
+                                 className={defaultStyle ? null : classes.thWidth}
+                              >
+                                 <SearchAndFilter
+                                    title={headerItem.title}
+                                    custom={headerItem.sortable}
+                                 />
+                              </TableCell>
+                           );
+                        })}
+                  </TableHeadComponent>
+                  <TableBody>
+                     {data.map((item, index) => {
+                        return <React.Fragment key={index}>{items(item, index)}</React.Fragment>;
                      })}
-               </TableHeadComponent>
-               {data
-                  ? data.map((item, index) => {
-                       return <React.Fragment key={index}>{items(item, index)}</React.Fragment>;
-                    })
-                  : null}
-            </Table>
-
-            {!noItemsYet && !data && <NoItemText text="No Items Yet" />}
-         </TableContainer>
-
+                  </TableBody>
+               </Table>
+            </TableContainer>
+         </div>
          {showModal && (
             <>
                <div className={globalStyle.previewModal} style={{ right: noteModalInfo.right }}>
@@ -172,6 +173,6 @@ export const Notes = ({
                />
             </>
          )}
-      </div>
+      </>
    );
 };

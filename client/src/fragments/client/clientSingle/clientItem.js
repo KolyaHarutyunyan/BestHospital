@@ -55,7 +55,7 @@ export const ClientItem = () => {
     const clientsHistories = useSelector(state => state.fundingSource.fundingSourceHistories)
     const clientsNotes = useSelector(state => state.note.notes)
     const availabilityData = useSelector(state => state.availabilitySchedule.availabilitySchedule)
-
+    
     const [statusType, setStatusType] = useState('')
 
     const handleOpenClose = (status) => {

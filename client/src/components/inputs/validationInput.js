@@ -6,7 +6,6 @@ import { InputMinLoader } from "./inputMiniLoader";
 
 export const ValidationInput = ({
    errorFalse,
-   errorMessageStyle,
    multiline,
    style,
    className,
@@ -71,13 +70,13 @@ export const ValidationInput = ({
                name={name}
                placeholder={placeholder}
                type={type}
-               value={value}
+               value={value ? value : ''}
                InputLabelProps={{
                   shrink: type === "date" ? true : !!value,
                }}
                id="standard-basic"
                autoComplete={autoComplete ? autoComplete : "Off"}
-               error={typeError}
+               error={!!typeError}
                onWheel={() => document.activeElement.blur()}
                disabled={disabled}
                maxLength={Length}
@@ -90,7 +89,7 @@ export const ValidationInput = ({
                   endAdornment: loader && <InputMinLoader />,
                }}
             />
-            {errorFalse ? null : <ErrMessage style={errorMessageStyle} text={typeError} />}
+            {errorFalse ? null : <ErrMessage style={{ marginBottom: "12px" }} text={typeError} />}
          </div>
       </>
    );

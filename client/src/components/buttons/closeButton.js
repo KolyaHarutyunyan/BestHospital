@@ -7,7 +7,7 @@ export const CloseButton = ({ handleCLic, styles, isInModal }) => {
    const classes = buttonsStyle();
    return (
       <button
-         style={styles && { ...styles }}
+         style={styles ? { ...styles } : {}}
          className={`${classes.closeCircleStyle} ${isInModal ? "modalView" : ""}`}
          onClick={handleCLic}
       >

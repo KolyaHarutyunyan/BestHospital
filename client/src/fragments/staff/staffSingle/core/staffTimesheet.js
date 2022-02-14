@@ -189,12 +189,10 @@ export const StaffTimesheet = ({info}) => {
                         :
                         <>
                             <div className={classes.bcbaHeader}>
-                                <p>
-                                    <SlicedText size={30}
-                                                type={'name'}
-                                                data={timesheetById ? timesheetById.payCode && timesheetById.payCode.name : ''}
-                                    />
-                                </p>
+                                <SlicedText size={30}
+                                            type={'name'}
+                                            data={timesheetById ? timesheetById.payCode && timesheetById.payCode.name : ''}
+                                />
                                 <div className={classes.dateEdite}>
                                     <p>
                                         {timesheetById ?

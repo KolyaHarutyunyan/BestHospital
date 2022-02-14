@@ -29,9 +29,9 @@ export const Role = ({ key, roleInfo }) => {
    }));
 
    const handleOpenClose = (item) => {
-      setTitle(item.title);
+      setTitle(item?.title);
       setOpen(!open);
-      setRole(item.id);
+      setRole(item?.id);
    };
 
    const changePage = (number) => {

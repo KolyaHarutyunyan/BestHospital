@@ -9,13 +9,13 @@ import {
     httpRequestsOnErrorsActions,
     httpRequestsOnSuccessActions
 } from "@eachbase/store";
-import {getClientsAuthorizationsServModifiersCheck} from "../../../store/client/client.action";
-import {getFundingSourceServById} from "../../../store/fundingSource/fundingSource.action";
+// import {getClientsAuthorizationsServModifiersCheck} from "../../../store/client/client.action";0
+// import {getFundingSourceServById} from "../../../store/fundingSource/fundingSource.action";
 import axios from "axios";
 
 export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) => {
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info, modifiers: info.serviceId.name} : {});
+    const [inputs, setInputs] = useState(info ? {...info, modifiers: info.serviceId.name} : { total: "" });
     const [modCheck, setModCheck] = useState([]);
     const dispatch = useDispatch()
     // const modifiers = useSelector(state => state.fundingSource.modifiers.modifiers)

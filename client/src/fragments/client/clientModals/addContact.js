@@ -1,156 +1,198 @@
-import React, {useEffect, useState} from "react";
-import {useDispatch, useSelector,} from "react-redux";
-import {useParams} from "react-router-dom";
-import {ValidationInput, CreateChancel, ModalHeader, AddressInput} from "@eachbase/components";
-import {createClientStyle} from "./styles";
-import {ErrorText} from "@eachbase/utils";
-import {clientActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions} from "@eachbase/store";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { ValidationInput, CreateChancel, ModalHeader, AddressInput } from "@eachbase/components";
+import { createClientStyle } from "./styles";
+import {
+   ErrorText,
+   FindError,
+   FindLoad,
+   FindSuccess,
+   getPhoneErrorText,
+   isNotEmpty,
+} from "@eachbase/utils";
+import {
+   clientActions,
+   httpRequestsOnErrorsActions,
+   httpRequestsOnSuccessActions,
+} from "@eachbase/store";
 
+export const AddContact = ({ handleClose, info }) => {
+   const [error, setError] = useState("");
+   const [inputs, setInputs] = useState(
+      info
+         ? { ...info }
+         : {
+              firstName: "",
+              lastName: "",
+              phoneNumber: "",
+              relationship: "",
+           }
+   );
+   const [step, setStep] = useState("first");
+   const [fullAddress, setFullAddress] = useState("");
+   const [enteredAddress, setEnteredAddress] = useState("");
+   const classes = createClientStyle();
+   const dispatch = useDispatch();
+   const params = useParams();
 
-export const AddContact = ({handleClose, info}) => {
-    const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info,} : {});
-    const [step, setStep] = useState('first')
-    const [fullAddress, setFullAddress] = useState(null)
-    const classes = createClientStyle()
-    const dispatch = useDispatch()
-    const params = useParams()
+   const success = info ? FindSuccess("EDIT_CLIENT_CONTACT") : FindSuccess("CREATE_CLIENT_CONTACT");
+   const loader = info ? FindLoad("EDIT_CLIENT_CONTACT") : FindLoad("CREATE_CLIENT_CONTACT");
+   const backError = info ? FindError("EDIT_CLIENT_CONTACT") : FindError("CREATE_CLIENT_CONTACT");
 
+   useEffect(() => {
+      if (!success) return;
+      handleClose();
+      dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_CONTACTS"));
+      if (info) {
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_CLIENT_CONTACT"));
+      } else {
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_CLIENT_CONTACT"));
+      }
+   }, [success]);
 
-    const handleChange = e => setInputs(
-        prevState => ({...prevState, [e.target.name]: e.target.value}),
-        error === e.target.name && setError(''),
-    );
+   const phoneErrorMsg = getPhoneErrorText(inputs.phoneNumber);
+   const phoneErrorText =
+      error === "phoneNumber"
+         ? ErrorText.field
+         : error === phoneErrorMsg
+         ? phoneErrorMsg
+         : backError.length && backError[0].error[0] === "phoneNumber must be a valid phone number"
+         ? "Phone number must be a valid phone number"
+         : "";
 
+   const handleChange = (e) => {
+      setInputs((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
+      if (error === e.target.name || error === phoneErrorMsg || (backError && backError.length)) {
+         setError("");
+      }
+      if (backError && backError.length) {
+         dispatch(httpRequestsOnErrorsActions.removeError(backError[0].type));
+      }
+   };
 
-    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
-        httpOnSuccess: state.httpOnSuccess,
-        httpOnError: state.httpOnError,
-        httpOnLoad: state.httpOnLoad,
-    }));
+   const handleAddressChange = (selectedAddress) => {
+      setEnteredAddress(selectedAddress);
+      error === "enteredAddress" && setError("");
+   };
 
-    const success = httpOnSuccess.length && httpOnSuccess[0].type === 'EDIT_CLIENT_CONTACT'
-    const successCreate = httpOnSuccess.length && httpOnSuccess[0].type === 'CREATE_CLIENT_CONTACT'
-
-    useEffect(() => {
-        if (success) {
-            handleClose()
-            dispatch(httpRequestsOnSuccessActions.removeSuccess('EDIT_CLIENT_CONTACT'))
-            dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_CONTACTS'))
-        }
-        if (successCreate) {
-            handleClose()
-            dispatch(httpRequestsOnSuccessActions.removeSuccess('CREATE_CLIENT_CONTACT'))
-            dispatch(httpRequestsOnErrorsActions.removeError('GET_CLIENT_CONTACTS'))
-        }
-    }, [success, successCreate])
-
-
-    const handleCreate = () => {
-        if (step === 'first') {
-            if (inputs.firstName && inputs.lastName && inputs.phoneNumber && inputs.relationship) {
-                setStep('second')
-            } else {
-                setError(
-                    !inputs.firstName ? 'firstName' :
-                        !inputs.lastName ? 'lastName' :
-                            !inputs.phoneNumber ? 'phoneNumber' :
-                                !inputs.relationship ? 'relationship' :
-                                    'Input is not field'
-                )
+   const handleCreate = () => {
+      if (step === "first") {
+         const phoneIsValid =
+            !!inputs.phoneNumber &&
+            inputs.phoneNumber.trim().length >= 10 &&
+            !/[a-zA-Z]/g.test(inputs.phoneNumber);
+         if (inputs.firstName && inputs.lastName && phoneIsValid && inputs.relationship) {
+            setStep("second");
+         } else {
+            setError(
+               !inputs.firstName
+                  ? "firstName"
+                  : !inputs.lastName
+                  ? "lastName"
+                  : !inputs.phoneNumber
+                  ? "phoneNumber"
+                  : !phoneIsValid
+                  ? phoneErrorMsg
+                  : !inputs.relationship
+                  ? "relationship"
+                  : "Input is not field"
+            );
+         }
+      } else if (step === "second") {
+         if (isNotEmpty(fullAddress) && enteredAddress) {
+            const data = {
+               firstName: inputs.firstName,
+               lastName: inputs.lastName,
+               phoneNumber: inputs.phoneNumber,
+               relationship: inputs.relationship,
+               address: fullAddress,
+            };
+            if (!info) {
+               dispatch(clientActions.createClientContact(data, params.id));
+            } else if (info) {
+               dispatch(clientActions.editClientContact(data, info.id, params.id));
             }
-        } else if (step === 'second') {
-            if ('fullAddress') {
-                const data = {
-                    "firstName": inputs.firstName,
-                    "lastName": inputs.lastName,
-                    "phoneNumber": inputs.phoneNumber,
-                    "relationship": inputs.relationship,
-                    address: fullAddress
-                }
-                if (!info) {
-                    dispatch(clientActions.createClientContact(data, params.id))
+         } else {
+            setError(!enteredAddress ? "enteredAddress" : "Input is not field");
+         }
+      }
+   };
 
-                } else if (info) {
-                    dispatch(clientActions.editClientContact(data, info.id, params.id))
-                }
-            } else {
-                setError(
-                    !inputs.gender ? 'gender' :
-                        !inputs.birthday ? 'birthday' :
-                            !inputs.age ? 'age' :
-                                !inputs.language ? 'language' :
-                                    !inputs.familyLanguage ? 'familyLanguage' :
-                                        'Input is not field'
-                )
-            }
-        }
-    }
-
-    return (
-        <div className={classes.createFoundingSource}>
-            <ModalHeader secondStepInfo={'Address'} setStep={setStep} steps={step} handleClose={handleClose}
-                         title={info ? 'Edit Contact' : 'Add Contact'}/>
-            <div className={classes.createFoundingSourceBody}>
-                <div className={classes.clientModalBlock}>
-                    {step === 'first' ? <div className={classes.clientModalBox}>
-                            <ValidationInput
-                                variant={"outlined"}
-                                onChange={handleChange}
-                                value={inputs.firstName}
-                                type={"text"}
-                                label={"First Name*"}
-                                name='firstName'
-                                typeError={error === 'firstName' && ErrorText.field}
-                            />
-                            <ValidationInput
-                                variant={"outlined"}
-                                onChange={handleChange}
-                                value={inputs.lastName}
-                                type={"text"}
-                                label={"Last Name*"}
-                                name='lastName'
-                                typeError={error === 'lastName' && ErrorText.field}
-                            />
-                            <ValidationInput
-                                Length={11}
-                                variant={"outlined"}
-                                onChange={handleChange}
-                                value={inputs.phoneNumber}
-                                type={"number"}
-                                label={"Phone Number*"}
-                                name='phoneNumber'
-                                typeError={error === 'phoneNumber' && ErrorText.field}
-                            />
-                            <ValidationInput
-                                variant={"outlined"}
-                                onChange={handleChange}
-                                value={inputs.relationship}
-                                type={"text"}
-                                label={"Relationship*"}
-                                name='relationship'
-                                typeError={error === 'relationship' && ErrorText.field}
-                            />
-                        </div> :
-                        <div className={classes.clientModalBox}>
-                            <AddressInput
-                                flex={true}
-                                handleSelectValue={setFullAddress}
-                                info={info && info.address ? info : ''}
-                            />
-                        </div>}
-                </div>
-                <div className={classes.clientModalBlock}>
-                    <CreateChancel
-                        loader={httpOnLoad.length > 0}
-                        create={step === 'first' ? 'Next' : info ? 'Save' : "Add"}
-                        chancel={"Cancel"}
-                        onCreate={handleCreate}
-                        onClose={handleClose}
-                        buttonWidth='224px'
-                    />
-                </div>
+   return (
+      <div className={classes.createFoundingSource}>
+         <ModalHeader
+            secondStepInfo={"Address"}
+            setStep={setStep}
+            steps={step}
+            handleClose={handleClose}
+            title={info ? "Edit Contact" : "Add Contact"}
+         />
+         <div className={classes.createFoundingSourceBody}>
+            <div className={classes.clientModalBlock}>
+               {step === "first" ? (
+                  <div className={classes.clientModalBox}>
+                     <ValidationInput
+                        variant={"outlined"}
+                        onChange={handleChange}
+                        value={inputs.firstName}
+                        type={"text"}
+                        label={"First Name*"}
+                        name="firstName"
+                        typeError={error === "firstName" ? ErrorText.field : ""}
+                     />
+                     <ValidationInput
+                        variant={"outlined"}
+                        onChange={handleChange}
+                        value={inputs.lastName}
+                        type={"text"}
+                        label={"Last Name*"}
+                        name="lastName"
+                        typeError={error === "lastName" ? ErrorText.field : ""}
+                     />
+                     <ValidationInput
+                        Length={11}
+                        variant={"outlined"}
+                        onChange={handleChange}
+                        value={inputs.phoneNumber}
+                        type={"number"}
+                        label={"Phone Number*"}
+                        name="phoneNumber"
+                        typeError={phoneErrorText}
+                     />
+                     <ValidationInput
+                        variant={"outlined"}
+                        onChange={handleChange}
+                        value={inputs.relationship}
+                        type={"text"}
+                        label={"Relationship*"}
+                        name="relationship"
+                        typeError={error === "relationship" ? ErrorText.field : ""}
+                     />
+                  </div>
+               ) : (
+                  <div className={classes.clientModalBox}>
+                     <AddressInput
+                        flex={true}
+                        handleSelectValue={handleAddressChange}
+                        info={info && info.address ? info : ""}
+                        errorBoolean={error === "enteredAddress" ? ErrorText.field : ""}
+                        onTrigger={setFullAddress}
+                     />
+                  </div>
+               )}
             </div>
-        </div>
-    );
+            <div className={classes.clientModalBlock}>
+               <CreateChancel
+                  loader={!!loader.length}
+                  create={step === "first" ? "Next" : info ? "Save" : "Add"}
+                  chancel={"Cancel"}
+                  onCreate={handleCreate}
+                  onClose={handleClose}
+                  buttonWidth="224px"
+               />
+            </div>
+         </div>
+      </div>
+   );
 };
