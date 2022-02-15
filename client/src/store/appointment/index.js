@@ -1,8 +1,4 @@
 import {
-    getGlobalNotes,
-    createGlobalNote,
-    editGlobalNote,
-    deleteGlobalNote,
     createAppointment,
     editAppointment,
     getAppointment,
@@ -10,7 +6,6 @@ import {
     deleteAppointment,
     searchAppointmentDate, getAppointmentFiltered, setAppointmentStatus, appointmentRepeat
 } from "./appointment.action";
-import {CREATE_APPOINTMENT, EDIT_APPOINTMENT} from "./appointment.type";
 
 export {appointmentReducer} from './appointment.reducer';
 export {watchAppointments} from './appointment.saga';

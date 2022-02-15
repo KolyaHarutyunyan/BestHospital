@@ -2,9 +2,10 @@ import {authHeaderStyles} from "./styles";
 import {Colors, Images} from "@eachbase/utils";
 import React from "react";
 import moment from "moment";
+import {SlicedText} from "../../messages";
 
 
-export const AuthHeader = ({getId, setCreateEditFile,createEditFile, info, setToggleModal, toggleModal, setDelEdit, empoloyment}) => {
+export const AuthHeader = ({getId, setCreateEditFile,createEditFile, info, setToggleModal, toggleModal, setDelEdit, empoloyment, type}) => {
     const classes = authHeaderStyles()
 
     return (
@@ -19,7 +20,17 @@ export const AuthHeader = ({getId, setCreateEditFile,createEditFile, info, setTo
                         :
                         <p className={classes.AuthHeaderTopLeftText}>{info?.startDate && `${moment(info?.startDate).format('DD/MM/YYYY')} - ${moment(info?.endDate).format('DD/MM/YYYY')}`}</p>
                     }
+
+                    {type === 'staff' &&
+                    <div className={classes.activeInactive}>
+                        <p> {info?.active === true ? 'Active' : 'Inactive'}</p>
+                        <div
+                            style={info?.active === true ? {background: Colors.ThemeGreen} : {background: Colors.ThemeRed}}
+                            className={classes.circle}/>
+                    </div>
+                    }
                 </div>
+
                 <div className={classes.AuthHeaderTopRight} style={{display: 'flex', alignItems: 'center'}}>
                     <p style={{cursor: 'pointer',marginRight: 10}}
                        onClick={()=>{
@@ -55,7 +66,13 @@ export const AuthHeader = ({getId, setCreateEditFile,createEditFile, info, setTo
                 </div>
                 <div className={classes.AuthHeaderBottomBox}>
                     <p className={classes.AuthHeaderBottomBoxTitle}>{empoloyment ? "Employment Type:" : 'Service Location:'} </p>
-                    <p className={classes.AuthHeaderBottomBoxText}>{empoloyment ? info?.schedule : info?.location}</p>
+                    <p className={classes.AuthHeaderBottomBoxText}>
+                    <SlicedText
+                        type={"address"}
+                        size={25}
+                        data={empoloyment ? info?.schedule : info?.location}
+                    />
+                    </p>
                 </div>
             </div>
         </div>

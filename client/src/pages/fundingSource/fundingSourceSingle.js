@@ -21,7 +21,11 @@ export const FundingSourceSingle = () => {
     useEffect(() => {
         dispatch(adminActions.getAdmins())
         dispatch(fundingSourceActions.getFundingSourceById(params.id))
+
+
         dispatch(fundingSourceActions.getFoundingSourceServiceById(params.id))
+
+
         dispatch(fundingSourceActions.getFundingSourceHistoriesById('Funder'))
         dispatch(noteActions.getGlobalNotes(params.id, 'Funder'))
         dispatch(systemActions.getServices())

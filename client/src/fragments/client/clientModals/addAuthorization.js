@@ -16,6 +16,7 @@ import {
    httpRequestsOnErrorsActions,
    httpRequestsOnSuccessActions,
 } from "@eachbase/store";
+import moment from "moment";
 
 export const AddAuthorization = ({ handleClose, info }) => {
    const [error, setError] = useState("");
@@ -41,9 +42,9 @@ export const AddAuthorization = ({ handleClose, info }) => {
    let fSelect = useSelector((state) => state.fundingSource.fSelect.funders);
 
    const classes = createClientStyle();
+   const [fullAddress, setFullAddress] = useState(info  ? info.location : "");
 
-   const [fullAddress, setFullAddress] = useState(info?.location ? info?.location : "");
-   const [enteredAddress, setEnteredAddress] = useState("");
+   const [enteredAddress, setEnteredAddress] = useState(info?.location ? info.location : "");
 
    const success = info
       ? FindSuccess("EDIT_CLIENT_AUTHORIZATION")
@@ -80,20 +81,22 @@ export const AddAuthorization = ({ handleClose, info }) => {
       error === "enteredAddress" && setError("");
    };
 
+
+
    const handleCreate = () => {
       const dateComparingIsValid =
          inputs.startDate &&
          inputs.endDate &&
          new Date(inputs.startDate).getTime() < new Date(inputs.endDate).getTime();
 
+
       const authorizationDataIsValid =
          inputs.authId &&
          inputs.funding &&
          dateComparingIsValid &&
          inputs.status &&
-         enteredAddress &&
-         isNotEmpty(fullAddress);
-
+         enteredAddress
+      ;
       if (authorizationDataIsValid) {
          let funderId;
          enrolments.forEach((item) => {
@@ -141,6 +144,8 @@ export const AddAuthorization = ({ handleClose, info }) => {
       { name: 1, id: 1, code: 1 },
    ];
 
+
+
    return (
       <div className={classes.createFoundingSource}>
          <ModalHeader
@@ -173,7 +178,11 @@ export const AddAuthorization = ({ handleClose, info }) => {
                      <ValidationInput
                         variant={"outlined"}
                         onChange={handleChange}
-                        value={inputs.startDate}
+                        value={
+                           inputs.startDate
+                               ? moment(inputs.startDate).format("YYYY-MM-DD")
+                               : inputs.startDate
+                        }
                         type={"date"}
                         label={"Start Date*"}
                         name="startDate"
@@ -183,7 +192,11 @@ export const AddAuthorization = ({ handleClose, info }) => {
                      <ValidationInput
                         variant={"outlined"}
                         onChange={handleChange}
-                        value={inputs.endDate}
+                        value={
+                           inputs.endDate
+                               ? moment(inputs.endDate).format("YYYY-MM-DD")
+                               : inputs.endDate
+                        }
                         type={"date"}
                         label={"End Date*"}
                         name="endDate"

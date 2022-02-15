@@ -61,7 +61,7 @@ export const foundingSourceModalStyle = makeStyles(() => ({
         color: Colors.TextPrimary,
         fontWeight: 600,
         marginBottom: 16,
-        marginTop: 40,
+        marginTop: 16,
     },
     iconsCursor : {
         cursor : "pointer"

@@ -233,6 +233,7 @@ export const FundingSourceModifiersAdd = ({
       <div>
          <p className={classes.ModifiresTitle}>Modifiers</p>
 
+         <div style={{height:'150px', overflow:'auto', marginBottom:'26px', padding:'5px 0'}}>
          <div className={classes.foundingSourceModalsBodyBlock}>
             <ValidationInput
                onChange={handleChange}
@@ -260,7 +261,7 @@ export const FundingSourceModifiersAdd = ({
                name={"credentialId"}
                label={"Credential*"}
                handleSelect={handleChange}
-               value={inputs.credentialId}
+               value={inputs.credentialId ? inputs.credentialId : []}
                list={globalCredentials ? globalCredentials : []}
                typeError={error === "credentialId" ? ErrorText.field : ""}
                styles={{ width: 198 }}
@@ -270,7 +271,7 @@ export const FundingSourceModifiersAdd = ({
                name={"type"}
                label={"Type*"}
                handleSelect={handleChange}
-               value={inputs.type}
+               value={inputs.type ? inputs.type : []}
                list={list}
                typeError={error === "type" ? ErrorText.field : ""}
                styles={{ width: 198 }}
@@ -281,7 +282,7 @@ export const FundingSourceModifiersAdd = ({
             modifiers.map((item, index) => {
                return renderInputs(item, index);
             })}
-
+         </div>
          <div className={classes.addmodifiersBlock}>
             <img
                onClick={handleCreate}

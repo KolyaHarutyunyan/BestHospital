@@ -35,7 +35,7 @@ import {
     GET_ALL_ADMINS,
     EDIT_PAY_CODE,
     IS_CLINICIAN,
-    GET_TIMESHEET_BY_ID, GET_TIMESHEET_BY_ID_SUCCESS,
+    GET_TIMESHEET_BY_ID, GET_TIMESHEET_BY_ID_SUCCESS, GET_ALL_PAYCODES_FAIL,
 
 
 } from "./admin.types";
@@ -440,7 +440,9 @@ function* getAllPaycodes(action) {
         });
 
     } catch (err) {
-        
+        yield put({
+            type: GET_ALL_PAYCODES_FAIL,
+        });
     }
 }
 

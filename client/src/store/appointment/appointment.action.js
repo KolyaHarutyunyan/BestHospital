@@ -30,9 +30,10 @@ export const editAppointment = (body, id) => {
 
 /** Get Appointment */
 
-export const getAppointment = () => {
+export const getAppointment = ( load ) => {
     return {
         type: GET_APPOINTMENT,
+        payload: load
     }
 }
 export const getAppointmentFiltered = (filterDate) => {
@@ -45,7 +46,7 @@ export const getAppointmentFiltered = (filterDate) => {
 export const getAppointmentById = (id) => {
     return {
         type: GET_APPOINTMENT_BY_ID,
-        payload: {id}
+        payload: { id }
     }
 }
 

@@ -9,21 +9,17 @@ export const Schedule = ({}) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(appointmentActions.getAppointment())
+        dispatch(appointmentActions.getAppointment('load'))
         dispatch(clientActions.getClients({status: 'ACTIVE'}))
         dispatch(adminActions.getAdmins({status: 'ACTIVE'}))
         dispatch(systemActions.getPlaces())
     }, [])
 
-    const loader = FindLoad('GET_APPOINTMENT')
+
 
     return (
         <div>
-            {loader.length ?
-                <Loader/>
-                :
                 <ScheduleFragment/>
-            }
         </div>
     )
 }

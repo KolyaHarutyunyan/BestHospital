@@ -17,6 +17,9 @@ export const authService = {
 
     getFoundingSourceByIdService: (id) => axios.get(`/funding/${id}`, {auth:true}),
 
+    getFoundingS: (id) => axios.get(`/funding/service/${id}`, {auth:true}),
+
+
     getFoundingSourceServiceByIdService: (id) => axios.get(`/funding/${id}/service`, {auth:true}),
 
     createFoundingSourceServiceByIdService: (id, body) => axios.post(`/funding/${id}/service`, body, {auth:true}),
