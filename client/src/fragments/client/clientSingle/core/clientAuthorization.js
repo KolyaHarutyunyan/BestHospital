@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {Card, DeleteElement, NoItemText, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
+import {Card, DeleteElement, Loader, NoItemText, Notes, SimpleModal, TableBodyComponent} from '@eachbase/components';
 import {serviceSingleStyles} from './styles';
-import {Colors, Images} from "@eachbase/utils";
+import {Colors, FindLoad, Images} from "@eachbase/utils";
 import {CircularProgress, TableCell} from "@material-ui/core";
 import {clientActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions, uploadActions} from "@eachbase/store";
 import {AddAuthorization, AuthorizationFile, AddAuthorizationService} from "../../clientModals";
@@ -36,7 +36,7 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) =>
 
     const success = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION'
     const successDelServ = httpOnSuccess.length && httpOnSuccess[0].type === 'DELETE_CLIENT_AUTHORIZATION_SERV'
-
+    const loader = FindLoad('GET_CLIENT_AUTHORIZATION_SERV')
 
     const handleClose = () => {
         setCreateEditFile(!createEditFile)
@@ -118,26 +118,24 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) =>
 
                 </TableCell>
                 <TableCell>  {item?.total}  </TableCell>
-
                 <TableCell>  {item?.completed}  </TableCell>
                 <TableCell>  {item && item.total - item.completed}  </TableCell>
                 <TableCell>
                     <div className={classes.sircule}>
-                        <p>10%</p>
-                        <CircularProgress variant="determinate" value={100}/>
+                        <p>{item && item.completed / item.total}%</p>
+                        <CircularProgress variant="determinate" value={item && item.completed / item.total}/>
                     </div>
                 </TableCell>
 
                 <TableCell>
                     <>
-                        <img src={Images.edit} alt="edit" className={classes.iconStyle}
-                             onClick={(e) => {
-                                 e.stopPropagation()
-                                 setDelEdit2(true)
-                                 setServiceIndex(index)
-                                 setToggleModal3(!toggleModal3)
-
-                             }}/>
+                        {/*<img src={Images.edit} alt="edit" className={classes.iconStyle}*/}
+                        {/*     onClick={(e) => {*/}
+                        {/*         e.stopPropagation()*/}
+                        {/*         setDelEdit2(true)*/}
+                        {/*         setServiceIndex(index)*/}
+                        {/*         setToggleModal3(!toggleModal3)*/}
+                        {/*     }}/>*/}
                         <img src={Images.remove} alt="delete" className={classes.iconDeleteStyle}
                              onClick={(e) => {
                                  e.stopPropagation()
@@ -229,12 +227,13 @@ export const ClientAuthorization = ({info, setAuthActive, setAuthItemIndex,}) =>
                            className={classes.authorizationServicesText}>Add Authorization Service</p>
                     </div>
                 </div>
-                {services && services.length ? <Notes
-                    restHeight='560px'
-                    data={services}
-                    items={clientAuthorizationServiceItem}
-                    headerTitles={headerTitles}
-                    defaultStyle={true}/> : <NoItemText text={'No Authorization Services Yet'}/>}
+                {loader.length ?
+                    <Loader/> : services && services.length ? <Notes
+                        restHeight='560px'
+                        data={services}
+                        items={clientAuthorizationServiceItem}
+                        headerTitles={headerTitles}
+                        defaultStyle={true}/> : <NoItemText text={'No Authorization Services Yet'}/>}
             </div>
         </div>
     )

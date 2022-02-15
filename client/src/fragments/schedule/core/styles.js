@@ -70,7 +70,7 @@ export const scheduleStyle = makeStyles(() => ({
         height: '100%',
         maxHeight: '550px',
         overflow: 'auto',
-        marginTop:'13px'
+        marginTop: '13px'
     },
 
     cardWrapper: {
@@ -88,22 +88,36 @@ export const scheduleStyle = makeStyles(() => ({
         color: Colors.ThemeBlue,
     },
 
+    hoverClass: {
+        height: '50px',
+        background: 'white',
+        marginBottom: '8px',
+        '& :hover': {
+            background: '#EBF2FD80 0% 0% no-repeat padding-box',
+            '& div': {
+                background: 'none'
+            },
+            '& p': {
+                background: 'none'
+            },
+        }
+    },
     cardItemWrapper: {
         cursor: 'pointer',
         height: '50px',
-        background: 'white',
+        background: 'none',
         borderRadius: '8px',
         display: 'flex',
         alignItems: 'center',
-        marginBottom: '8px',
-        boxShadow: '0px 0px 6px #347AF04D',
 
+        boxShadow: '0px 0px 6px #347AF04D',
+        //
         '& :hover': {
-            background: '#EBF2FD80 0% 0% no-repeat padding-box',
-            height: '100%',
-            borderRadius: '8px',
-            display: 'flex',
-            alignItems: 'center',
+            // background: '#EBF2FD80 0% 0% no-repeat padding-box',
+            // height: '100%',
+            // borderRadius: '8px',
+            // display: 'flex',
+            // alignItems: 'center',
             '& p':{
                 background:'none'
             },
@@ -117,7 +131,7 @@ export const scheduleStyle = makeStyles(() => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        lineHeight:'25px',
+        lineHeight: '25px',
     },
 
     infoWrapper: {
@@ -149,14 +163,14 @@ export const scheduleStyle = makeStyles(() => ({
         },
     },
 
-    recurEdit:{
-        display:'flex',
-        alignItems:'center',
+    recurEdit: {
+        display: 'flex',
+        alignItems: 'center',
 
-        '& p':{
-            fontSize:'14px',
-            color:Colors.ThemeBlue,
-            marginRight:'16px'
+        '& p': {
+            fontSize: '14px',
+            color: Colors.ThemeBlue,
+            marginRight: '16px'
         },
     },
 
@@ -223,7 +237,7 @@ export const scheduleStyle = makeStyles(() => ({
     },
 
     addEvent: {
-        cursor:'pointer',
+        cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
         '& div': {
@@ -232,16 +246,16 @@ export const scheduleStyle = makeStyles(() => ({
             background: '#347AF0 0% 0% no-repeat padding-box',
             boxShadow: '0px 0px 6px #347AF04D',
             borderRadius: '20px',
-            color:'white',
-            display:'flex',
-            justifyContent:'center',
-            alignItems:'center',
-            fontSize:'32px',
-            marginRight:'8px',
+            color: 'white',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            fontSize: '32px',
+            marginRight: '8px',
         },
-        '& p':{
-            fontSize:'14px',
-            fontWeight:'600',
+        '& p': {
+            fontSize: '14px',
+            fontWeight: '600',
             color: '#347AF0',
         }
     }

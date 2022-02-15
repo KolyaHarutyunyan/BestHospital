@@ -410,13 +410,16 @@ function* deleteClientAuthorizationFile(action) {
 // end
 
 function* getClientsAuthorizationsServ(action) {
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
         const res = yield call(authService.getClientAuthorizationServService, action);
         yield put({
             type: GET_CLIENT_AUTHORIZATION_SERV_SUCCESS,
             payload: res.data,
         });
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
     } catch (err) {
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         yield put({
             type: GET_CLIENT_AUTHORIZATION_SERV_ERROR,
         });

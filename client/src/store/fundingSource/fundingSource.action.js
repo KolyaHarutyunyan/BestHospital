@@ -16,7 +16,7 @@ import {
     GET_FUNDING_SOURCE_SERVICE_MODIFIERS,
     EDIT_ACTIVE_OR_INACTIVE,
     EDIT_FUNDING_SOURCE_SERVICE_MODIFIER,
-    GET_FUNDING_SOURCE_SERVICE_MODIFIERS_CLIENT, SET_STATUS,
+    GET_FUNDING_SOURCE_SERVICE_MODIFIERS_CLIENT, SET_STATUS, GET_FUNDING_SOURCE_SERVICE_BY_ID_NO_LOAD,
 } from "./fundingSource.types";
 
 export const createFundingSource = (body) => {
@@ -48,14 +48,20 @@ export const getFundingSourceById = (id) => {
     }
 }
 
-
-
 export const getFoundingSourceServiceById = (id) => {
     return {
         type: GET_FUNDING_SOURCE_SERVICE_BY_ID,
         payload: id
     }
 }
+
+export const getFoundingSourceServiceByIdNoLoad = (id) => {
+    return {
+        type: GET_FUNDING_SOURCE_SERVICE_BY_ID_NO_LOAD,
+        payload: id
+    }
+}
+
 export const createFoundingSourceServiceById = (id, body, modifier) => {
     return {
         type: CREATE_FUNDING_SOURCE_SERVICE_BY_ID,

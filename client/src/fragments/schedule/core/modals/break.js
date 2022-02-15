@@ -77,7 +77,7 @@ export const Break = ({
          inputs.staff && inputs.staffPayCode && inputs.startDate && timeComparingIsValid;
       const modalBool = modalType === "DRIVE" ? datasValid && inputs.miles : datasValid;
 
-      inputs.type === "DRIVE" ? (editDate["miles"] = +inputs.miles) : "";
+
 
       if (modalBool) {
          const date = {
@@ -106,7 +106,7 @@ export const Break = ({
             startDate: inputs.startDate,
             _id: inputs.inputs,
          };
-
+         inputs.type === "DRIVE" ? (editDate["miles"] = +inputs.miles) : "";
          if (modalDate) {
             dispatch(appointmentActions.editAppointment(editDate, inputs._id));
          } else {

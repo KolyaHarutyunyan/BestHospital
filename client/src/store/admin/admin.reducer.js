@@ -14,7 +14,7 @@ import {
     GET_ALL_PAYCODES_SUCCESS,
     GET_TIMESHEET_SUCCESS,
     GET_ALL_ADMINS_SUCCESS,
-    GET_TIMESHEET_BY_ID_SUCCESS, CLEAR_ALL_PAYCODES
+    GET_TIMESHEET_BY_ID_SUCCESS, CLEAR_ALL_PAYCODES, GET_ALL_PAYCODES_FAIL
 } from "./admin.types";
 
 const initialState = {
@@ -112,6 +112,11 @@ export const adminReducer = (state = initialState, action) => {
             return {
                 ...state,
                 allPaycodes: action.payload
+            }
+            case GET_ALL_PAYCODES_FAIL :
+            return {
+                ...state,
+                allPaycodes: []
             }
             case CLEAR_ALL_PAYCODES:
             return {

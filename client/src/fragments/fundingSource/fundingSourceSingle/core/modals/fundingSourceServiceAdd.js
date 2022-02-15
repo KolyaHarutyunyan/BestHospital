@@ -12,6 +12,7 @@ import {
 import { FundingSourceModifiersAdd } from "./fundingSourceModifiersAdd";
 import axios from "axios";
 import { httpRequestsOnLoadActions } from "../../../../../store/http_requests_on_load";
+import {getFoundingSourceServiceByIdNoLoad} from "../../../../../store/fundingSource/fundingSource.action";
 
 export const FundingSourceServiceAdd = ({ handleClose, info, modifiersID }) => {
    const systemServices = useSelector((state) => state.system.services);
@@ -67,11 +68,14 @@ export const FundingSourceServiceAdd = ({ handleClose, info, modifiersID }) => {
          dispatch(httpRequestsOnErrorsActions.removeError("EDIT_FUNDING_SOURCE_SERVICE"));
       }
       if (successCreate) {
-         handleClose();
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess("CREATE_FUNDING_SOURCE_SERVICE_BY_ID")
-         );
-         dispatch(httpRequestsOnErrorsActions.removeError("CREATE_FUNDING_SOURCE_SERVICE_BY_ID"));
+
+         setTimeout(() => {
+            dispatch(fundingSourceActions.getFoundingSourceServiceByIdNoLoad(params.id,))
+            dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_FUNDING_SOURCE_SERVICE_BY_ID"));
+            dispatch(httpRequestsOnErrorsActions.removeError("CREATE_FUNDING_SOURCE_SERVICE_BY_ID"));
+            handleClose();
+         }, 1000)
+
       }
    }, [success, successCreate]);
 

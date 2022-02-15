@@ -189,6 +189,7 @@ export const StaffEmployment = ({ info }) => {
          <div className={classes.clearBoth} />
          <div className={classes.notesWrap}>
             <AuthHeader
+                type={'staff'}
                empoloyment={true}
                setDelEdit={setDelEdit}
                info={info[authIndex]}
