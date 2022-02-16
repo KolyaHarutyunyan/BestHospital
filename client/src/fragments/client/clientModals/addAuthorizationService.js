@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {ValidationInput, SelectInput, CreateChancel, ModalHeader, ErrMessage} from "@eachbase/components";
+import {ValidationInput, SelectInput, CreateChancel, ModalHeader, ErrMessage, MinLoader} from "@eachbase/components";
 import {createClientStyle,} from "./styles";
 import {Colors, ErrorText} from "@eachbase/utils";
 import {
@@ -9,16 +9,13 @@ import {
     httpRequestsOnErrorsActions,
     httpRequestsOnSuccessActions
 } from "@eachbase/store";
-// import {getClientsAuthorizationsServModifiersCheck} from "../../../store/client/client.action";0
-// import {getFundingSourceServById} from "../../../store/fundingSource/fundingSource.action";
 import axios from "axios";
 
 export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) => {
     const [error, setError] = useState("");
-    const [inputs, setInputs] = useState(info ? {...info, modifiers: info.serviceId.name} : { total: "" });
+    const [inputs, setInputs] = useState(info ? {...info, modifiers: info.serviceId.name} : {total: ""});
     const [modCheck, setModCheck] = useState([]);
     const dispatch = useDispatch()
-    // const modifiers = useSelector(state => state.fundingSource.modifiers.modifiers)
     const fSelect = useSelector(state => state.fundingSource.fundingSourceServices)
     const classes = createClientStyle()
 
@@ -32,18 +29,8 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
         })
     }, []);
 
-    // useEffect(() =>{
-    //     axios.post(`/authorizationservice/authorization/${authId}/fundingService/${fundingId}/checkModifiers`, null, {auth:true}).then(
-    //         res => console.log(res,'resssssss')
-    //     )
-    //     // console.log(fundingId,'fundingIdfundingId')
-    // },[])
-
-
-
-    const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
+    const {httpOnSuccess, httpOnLoad} = useSelector((state) => ({
         httpOnSuccess: state.httpOnSuccess,
-        httpOnError: state.httpOnError,
         httpOnLoad: state.httpOnLoad,
     }));
 
@@ -64,27 +51,34 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
     }, [success, successCreate])
 
     const [modif, setModif] = useState('')
+    const [loader, setLoader] = useState(false)
     const handleChange = e => {
         if (e.target.name === 'modifiers') {
+            setLoader(true)
             setModCheck([])
             let id = fSelect.find(item => item.name === e.target.value)
-
-
-            axios.post(`/authorizationservice/authorization/${authId}/fundingService/${id && id._id}/checkModifiers`, null, {auth:true}).then(
-                res => setModif(res.data)
-            )
-            // console.log(e.target.value,'idid')
-            // axios.get(`/funding/service/${id}`, {auth:true}).then(res => setModif(res.data.modifiers))
-
-            // dispatch(fundingSourceActions.getFundingSourceServById(id))
-
+            axios.post(`/authorizationservice/authorization/${authId}/fundingService/${id && id._id}/checkModifiers`, null, {auth: true})
+                .then(
+                    res => {
+                        setModif(res.data),
+                            setLoader(false)
+                    }
+                ).catch(() => {
+                setLoader(false)
+            })
         }
-        setInputs(
-            prevState => ({...prevState, [e.target.name]: e.target.value}),
-            error === e.target.name && setError(''),
-        )
+        setInputs(prevState => ({...prevState, [e.target.name]: e.target.value}),)
+        error === e.target.name && setError(''),
+        error === 'notZero' && setError('')
     };
 
+    const handleChangeTotal = (e) => {
+        if (e.target.value >= 0 && e.target.value.indexOf('.') === -1) {
+            setInputs(prevState => ({...prevState, [e.target.name]: e.target.value}),)
+            error === e.target.name && setError(''),
+            error === 'notZero' && setError('')
+        }
+    }
 
     const handleCreate = () => {
         let modifiersPost = [];
@@ -102,25 +96,27 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
             }
         })
 
-        if (inputs.total && modifiersPost?.length > 0) {
+        if (inputs.total && inputs.total > 0 && modifiersPost?.length > 0) {
             const data = {
                 "total": +inputs.total,
                 "modifiers": modifiersPost,
             }
-            dispatch(clientActions.createClientsAuthorizationsServ(data, authId, funderId,))
-        } else if (inputs.total && info) {
-            dispatch(clientActions.editClientsAuthorizationsServ({
-                "total": +inputs.total,
-                "fundingServiceId": funderId,
-                "authorizationId": authId,
-            }, info.id, authId))
-
+            if (info) {
+                dispatch(clientActions.editClientsAuthorizationsServ({
+                    "total": +inputs.total,
+                    "fundingServiceId": funderId,
+                    "authorizationId": authId,
+                }, info.id, authId))
+            } else {
+                dispatch(clientActions.createClientsAuthorizationsServ(data, authId, funderId,))
+            }
         } else {
             setError(
                 !inputs.modifiers ? 'modifiers' :
                     !modifiersPost.length ? 'modifiersPost' :
                         !inputs.total ? 'total' :
-                            'Input is not field'
+                            inputs.total <= 0 ? 'notZero' :
+                                'Input is not field'
             )
         }
     }
@@ -160,7 +156,8 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
                             list={fSelect ? fSelect : ''}
                             typeError={error === 'modifiers' ? ErrorText.field : ''}
                         />
-                        <div style={error === 'modifiersPost' ? {border:`1px solid ${Colors.ThemeRed}`} :{}} className={classes.displayCodeBlock2}>
+                        <div style={error === 'modifiersPost' ? {border: `1px solid ${Colors.ThemeRed}`} : {}}
+                             className={classes.displayCodeBlock2}>
                             <p className={classes.displayCodeBlockText}>Available Modfiers </p>
                             <div className={classes.availableModfiers}>
                                 {info ? info.modifiers && info.modifiers.length > 0 && info.modifiers.map((item, index) => {
@@ -171,31 +168,41 @@ export const AddAuthorizationService = ({handleClose, info, fundingId, authId}) 
                                                  color: '#fff',
                                                  border: "none",
                                                  cursor: 'default'
-                                             }}><p style={{width: 19, height: 20, overflow: 'hidden'}}>{item.name}</p></div>
+                                             }}><p style={{width: 19, height: 20, overflow: 'hidden'}}>{item.name}</p>
+                                        </div>
                                     )
                                 })
                                     : modif && modif.length > 0 ? modif.map((item, index) => {
-                                        return (
-                                            <p  key={index} className={classes.availableModfier} onClick={() => onModifier(index)}
-                                               style={modCheck.includes(index) ? {
-                                                   background: '#347AF0',
-                                                   color: '#fff'
-                                               } : {}}>
-                                                {item.name}</p>
-                                        )
-                                    }) : <p>N/A</p>}
+                                            return (
+                                                <p key={index} className={classes.availableModfier}
+                                                   onClick={() => onModifier(index)}
+                                                   style={modCheck.includes(index) ? {
+                                                       background: '#347AF0',
+                                                       color: '#fff'
+                                                   } : {}}>
+                                                    {item.name}</p>
+                                            )
+                                        }) :
+                                        loader === true ?
+                                            <div style={{height: '20px'}}>
+                                                <MinLoader margin={"0"} color={Colors.ThemeBlue}/>
+                                            </div>
+                                            :
+                                            <p>N/A</p>
+                                }
                             </div>
                         </div>
-                        {error === 'modifiersPost' &&  <ErrMessage text={'Please select some modifier'}/>}
+                        {error === 'modifiersPost' && <ErrMessage text={'Please select some modifier'}/>}
                         <p className={classes.inputInfo}>Availability</p>
                         <ValidationInput
                             variant={"outlined"}
-                            onChange={handleChange}
+                            onChange={handleChangeTotal}
                             value={inputs.total === 0 ? '0' : inputs.total}
-                            type={"number"}
                             label={"Total Units*"}
                             name='total'
-                            typeError={error === 'total' && ErrorText.field}
+                            typeError={error === 'total' ? ErrorText.field :
+                                error === 'notZero' ? 'Total Units must be greater than 0' : ''
+                            }
                         />
                     </div>
                 </div>

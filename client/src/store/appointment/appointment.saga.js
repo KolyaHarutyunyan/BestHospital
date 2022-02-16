@@ -71,20 +71,22 @@ function* editAppointmentSaga(action) {
 
 /** Get Appointment */
 function* getAppointmentSaga(action) {
-    // yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    if(action.payload === 'load'){
+        yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    }
     try {
         const res = yield call(appointmentService.getAppointmentService);
         yield put({
             type: GET_APPOINTMENT_SUCCESS,
             payload: res.data,
         });
-        // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
     } catch (error) {
         yield put({
             type: GET_APPOINTMENT_SUCCESS,
             payload: [],
         });
-        // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
     }
 }
 
@@ -146,21 +148,21 @@ function* deleteAppointmentSaga(action) {
 /** Appointment Status */
 function* setAppointmentStatusSaga(action) {
     // yield put(httpRequestsOnErrorsActions.removeError(action.type));
-    // yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
     try {
        yield call(appointmentService.setAppointmentStatusService, action.payload.id, action.payload.info);
 
-        const res = yield call(appointmentService.getAppointmentService);
+        // const res = yield call(appointmentService.getAppointmentService);
         yield put({
-            type: GET_APPOINTMENT_SUCCESS,
-            payload: res.data,
+            type: GET_APPOINTMENT,
+            // payload: res.data,
         });
-        // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-        // yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
 
         // yield put({ type: SET_APPOINTMENT_STATUS_SUCCESS, payload: res.data });
     } catch (error) {
-        // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+        yield put(httpRequestsOnLoadActions.removeLoading(action.type));
         // yield put(httpRequestsOnErrorsActions.appendError(action.type));
     }
 }

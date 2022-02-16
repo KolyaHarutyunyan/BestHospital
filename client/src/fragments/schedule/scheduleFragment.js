@@ -1,7 +1,7 @@
 import { ListView, scheduleStyle } from "./core";
 import { Selectable } from "./core/calendar";
 import React, { useEffect, useState } from "react";
-import { SimpleModal } from "@eachbase/components";
+import {Loader, SimpleModal} from "@eachbase/components";
 import { CreateEvent } from "./core/modals/createEvent";
 import { Recur } from "./core/modals";
 import { useDispatch, useSelector } from "react-redux";
@@ -110,9 +110,13 @@ export const ScheduleFragment = ({}) => {
    appointments.forEach((appointment) => {
       filteredAppointments.push(appointment.data[0]);
    });
-
+   const loader = FindLoad('GET_APPOINTMENT')
    return (
       <div className={classes.wrapper}>
+         {loader.length ?
+             <Loader/>
+             :
+             <>
          {type === "calendar" ? (
             <Selectable
                handleSendDate={handleSendDate}
@@ -182,6 +186,8 @@ export const ScheduleFragment = ({}) => {
             openDefault={openRecur}
             content={<Recur date={recurDate} openCloseRecur={openCloseRecur} />}
          />
+             </>
+         }
       </div>
    );
 };

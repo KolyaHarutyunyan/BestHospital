@@ -133,7 +133,7 @@ export const AddEnrollment = ({ handleClose, info }) => {
 
                   <div className={classes.curentlyCheckbox}>
                      <Checkbox checked={checked} onClick={onCheck} color="primary" />
-                     <p className={classes.curently}>Currently works in this role</p>
+                     <p className={classes.curently}>Set as primary enrollment</p>
                   </div>
 
                   <ValidationInput
