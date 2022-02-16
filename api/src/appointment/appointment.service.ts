@@ -4,7 +4,7 @@ import { AuthorizationserviceService } from '../client/authorizationservice/auth
 import { ClientService } from '../client/client.service';
 import { PaycodeService } from '../employment/paycode/paycode.service';
 import { StaffService } from '../staff/staff.service';
-import { EventStatus } from './appointment.constants';
+import { EventStatus, AppointmentStatus } from './appointment.constants';
 import { AppointmentModel } from './appointment.model';
 import { AppointmentDto, CreateAppointmentDto, CreateRepeatDto, UpdateAppointmentDto } from './dto';
 import { AppointmentQueryDTO, AppointmentQuerySetEventStatusDTO } from './dto/appointment.dto';
@@ -41,6 +41,7 @@ export class AppointmentService {
       this.staffService.findById(dto.staff),
       this.payCodeService.findOne(dto.staffPayCode),
     ]);
+    console.log(staffPayCode, 'aaa');
     switch (dto.type) {
       case AppointmentType.SERVICE:
         appointment = await this.appointmentService(dto);
@@ -58,7 +59,7 @@ export class AppointmentService {
     if (staff.id != staffPayCode.employmentId.staffId) {
       throw new HttpException('PayCode is not staff pay code', HttpStatus.BAD_REQUEST);
     }
-    console.log(staffPayCode)
+    console.log(staffPayCode);
     if (staffPayCode.employmentId.active != true) {
       throw new HttpException('Employment is not active', HttpStatus.BAD_REQUEST);
     }
@@ -202,6 +203,7 @@ export class AppointmentService {
     if (!dto.miles) {
       throw new HttpException(`Miles can not not be empty`, HttpStatus.BAD_REQUEST);
     }
+    console.log(dto);
     const appointment = new this.model({
       staff: dto.staff,
       staffPayCode: dto.staffPayCode,
@@ -368,7 +370,10 @@ export class AppointmentService {
     this.checkAppointment(appointment);
     if (status.status) appointment.status = status.status;
     if (status.eventStatus) {
-      if (status.eventStatus == 'COMPLETED' && appointment.status !== 'ACTIVE') {
+      if (
+        status.eventStatus == EventStatus.COMPLETED &&
+        appointment.status !== AppointmentStatus.ACTIVE
+      ) {
         throw new HttpException(`EventStatus can't be completed`, HttpStatus.BAD_REQUEST);
       }
       // if (status.eventStatus == 'RENDERED' || !appointment.signature) {
@@ -377,10 +382,16 @@ export class AppointmentService {
       //     HttpStatus.BAD_REQUEST,
       //   );
       // }
-      if (status.eventStatus === 'RENDERED' && appointment.type !== 'SERVICE') {
+      if (
+        status.eventStatus === EventStatus.RENDERED &&
+        appointment.type !== AppointmentType.SERVICE
+      ) {
         throw new HttpException(`can't render the appointment`, HttpStatus.BAD_REQUEST);
       }
-      if (status.eventStatus === 'RENDERED' && appointment.type === 'SERVICE') {
+      if (
+        status.eventStatus === EventStatus.RENDERED &&
+        appointment.type === AppointmentType.SERVICE
+      ) {
         const minutes = await this.timeDiffCalc(appointment.endTime, appointment.startTime);
         await this.authorizedService.countCompletedUnits(appointment.authorizedService, minutes);
         await this.billingService.create(appointment);
@@ -393,13 +404,12 @@ export class AppointmentService {
 
   // find all appointments
   async findAll(filter: AppointmentQueryDTO): Promise<any> {
-    let query: IFilterQuery;
+    let query: any = {};
     if (filter.client) query.client = mongoose.Types.ObjectId(filter.client);
     if (filter.staff) query.staff = mongoose.Types.ObjectId(filter.staff);
     if (filter.status) query.status = filter.status;
     if (filter.eventStatus) query.eventStatus = filter.eventStatus;
     if (filter.type) query.type = filter.type;
-
     const appointments = await this.model.aggregate([
       { $match: { ...query } },
       { $lookup: { from: 'clients', localField: 'client', foreignField: '_id', as: 'client' } },
@@ -407,7 +417,7 @@ export class AppointmentService {
       { $sort: { _id: 1 } },
       {
         $group: {
-          _id: { $dateToString: { format: '%Y-%m-%d', date: '$startTime' } },
+          _id: { $dateToString: { format: '%Y-%m-%d', date: '$startDate' } },
           data: { $push: '$$ROOT' },
         },
       },
@@ -455,31 +465,33 @@ export class AppointmentService {
 
   // update appointment
   async update(_id: string, dto: UpdateAppointmentDto): Promise<AppointmentDto> {
+    // the first check if appointment is not complete or cancelled status
     const appointment = await this.model.findById(_id);
     this.checkAppointment(appointment);
+
     if (dto.placeService) {
       await this.placeService.findOne(dto.placeService);
       appointment.placeService = dto.placeService;
     }
-    if (dto.type == 'SERVICE') {
-      if (!dto.client || !dto.authorizedService) {
-        throw new HttpException(
-          'Client and(or) Authorization service is not found',
-          HttpStatus.NOT_FOUND,
-        );
-      }
-      const [client, authService]: any = await Promise.all([
-        this.clientService.findById(dto.client ? dto.client : appointment.client),
-        this.authorizedService.findById(
-          dto.authorizedService ? dto.authorizedService : appointment.authorizedService,
-        ),
-      ]);
-      if (client.id != authService.authorizationId.clientId) {
-        throw new HttpException(`Client haven't authService`, HttpStatus.BAD_REQUEST);
-      }
-      await this.authorizedService.getByServiceId(authService.serviceId);
-      appointment.type = dto.type;
-    }
+    // if (dto.type == AppointmentType.SERVICE) {
+    //   if (!dto.client || !dto.authorizedService) {
+    //     throw new HttpException(
+    //       'Client and(or) Authorization service is not found',
+    //       HttpStatus.NOT_FOUND,
+    //     );
+    //   }
+    //   const [client, authService]: any = await Promise.all([
+    //     this.clientService.findById(dto.client ? dto.client : appointment.client),
+    //     this.authorizedService.findById(
+    //       dto.authorizedService ? dto.authorizedService : appointment.authorizedService,
+    //     ),
+    //   ]);
+    //   if (client.id != authService.authorizationId.clientId) {
+    //     throw new HttpException(`Client haven't authService`, HttpStatus.BAD_REQUEST);
+    //   }
+    //   await this.authorizedService.getByServiceId(authService.serviceId);
+    //   appointment.type = dto.type;
+    // }
     const [, payCode, ,]: any = await Promise.all([
       this.staffService.findById(dto.staff),
       this.payCodeService.findOne(dto.staffPayCode ? dto.staffPayCode : appointment.staffPayCode),
@@ -491,10 +503,10 @@ export class AppointmentService {
     }
     appointment.staff = dto.staff;
     appointment.staffPayCode = dto.staffPayCode;
-    appointment.type = dto.type;
-    if (dto.type == 'DRIVE' && dto.miles) {
-      appointment.miles = dto.miles;
-    }
+    // appointment.type = dto.type;
+    // if (dto.type == 'DRIVE' && dto.miles) {
+    //   appointment.miles = dto.miles;
+    // }
     if (dto.startDate) appointment.startDate = dto.startDate;
     if (dto.startTime) appointment.startTime = dto.startTime;
     if (dto.endTime) appointment.endTime = dto.endTime;

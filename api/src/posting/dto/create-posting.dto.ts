@@ -24,5 +24,7 @@ export class CreatePostingDto {
   payer: string;
   @ApiProperty()
   invoices: Array<string>;
+  // @ApiProperty()
+  // client: string;
   user?: UserDTO;
 }

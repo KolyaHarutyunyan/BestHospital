@@ -8,15 +8,13 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  IsUrl,
 } from 'class-validator';
-import { AppointmentType } from '../appointment.constants';
 
 export class UpdateAppointmentDto {
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsEnum(AppointmentType)
-  type: string;
+  // @ApiProperty()
+  // @IsNotEmpty()
+  // @IsEnum(AppointmentType)
+  // type: string;
   @ApiProperty()
   @IsMongoId()
   @IsOptional()
@@ -60,6 +58,6 @@ export class UpdateAppointmentDto {
   miles?: number;
   @ApiProperty({ required: false })
   @IsOptional()
-  @IsUrl()
-  signature: string;
+  @IsBoolean()
+  signature: boolean;
 }

@@ -84,7 +84,6 @@ export class EmploymentService {
   async findAllEmploymentsByStaffId(staffId: string): Promise<string[]> {
     const ids = [];
     const employments = await this.model.find({ staffId });
-    this.checkEmployment(employments[0]);
     employments.map((employment) => {
       ids.push(employment._id);
     });

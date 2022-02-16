@@ -12,7 +12,7 @@ import {
 import { AppointmentStatus, AppointmentType, EventStatus } from '../appointment.constants';
 
 export class CreateAppointmentDto {
-  @ApiProperty()
+  @ApiProperty({ enum: AppointmentType })
   @IsNotEmpty()
   @IsEnum(AppointmentType)
   type: string;
@@ -67,5 +67,7 @@ export class CreateAppointmentDto {
   @IsNumber()
   miles?: number;
   @ApiProperty({ required: false })
-  signature: string;
+  @IsOptional()
+  @IsBoolean()
+  signature: boolean;
 }

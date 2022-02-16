@@ -37,7 +37,7 @@ export class AppointmentDto {
   @ApiProperty({ type: AddressDTO })
   address: AddressDTO;
   @ApiProperty({ required: false })
-  signature: string;
+  signature: boolean;
 }
 
 export class AppointmentQueryDTO {

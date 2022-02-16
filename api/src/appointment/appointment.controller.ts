@@ -13,7 +13,7 @@ export class AppointmentController {
 
   @Post()
   @Public()
-  // @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: AppointmentDto })
   create(@Body() createAppointmentDto: CreateAppointmentDto) {
     return this.appointmentService.create(createAppointmentDto);
@@ -27,7 +27,7 @@ export class AppointmentController {
   /** set status */
   @Patch(':id/setStatus')
   @Public()
-  // @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: AppointmentDto })
   async setStatus(
     @Param('id', ParseObjectIdPipe) id: string,

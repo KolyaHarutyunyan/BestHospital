@@ -19,7 +19,7 @@ export interface IAppointment extends Document {
   miles: number;
   isRepeat: boolean;
   address: IAddress;
-  signature: string;
+  signature: boolean;
 }
 export interface IFilterQuery {
   client: any;
