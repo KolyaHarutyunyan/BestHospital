@@ -82,13 +82,13 @@ export const wrapperStyle = makeStyles(() => ({
       },
    },
 
-   //**Billing Transaction Wrapper Styles */
-   billingTransactionContainerStyle: {
+   //**Bill Transaction Wrapper Styles */
+   billTransactionContainerStyle: {
       backgroundColor: Colors.BackgroundWhite,
       padding: "24px",
       borderRadius: "8px",
    },
-   billingTransactionTitleBoxStyle: {
+   billTransactionTitleBoxStyle: {
       width: "100%",
       display: "flex",
       justifyContent: "space-between",
@@ -96,7 +96,7 @@ export const wrapperStyle = makeStyles(() => ({
       "& > button": { marginLeft: "24px" },
       marginBottom: "40px",
    },
-   billingTransactionTitleStyle: {
+   billTransactionTitleStyle: {
       fontSize: "40px",
       fontWeight: 600,
       color: Colors.TextPrimary,
