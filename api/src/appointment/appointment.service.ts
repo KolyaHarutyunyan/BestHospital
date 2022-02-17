@@ -515,9 +515,9 @@ export class AppointmentService {
     appointment.staff = dto.staff;
     appointment.staffPayCode = dto.staffPayCode;
     // appointment.type = dto.type;
-    // if (dto.type == 'DRIVE' && dto.miles) {
-    //   appointment.miles = dto.miles;
-    // }
+    if (appointment.type == AppointmentType.DRIVE && dto.miles) {
+      appointment.miles = dto.miles;
+    }
     if (dto.startDate) appointment.startDate = dto.startDate;
     if (dto.startTime) appointment.startTime = dto.startTime;
     if (dto.endTime) appointment.endTime = dto.endTime;
