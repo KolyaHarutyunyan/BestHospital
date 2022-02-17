@@ -41,7 +41,6 @@ export class AppointmentService {
       this.staffService.findById(dto.staff),
       this.payCodeService.findOne(dto.staffPayCode),
     ]);
-    console.log(staffPayCode, 'aaa');
     switch (dto.type) {
       case AppointmentType.SERVICE:
         appointment = await this.appointmentService(dto);
@@ -59,7 +58,6 @@ export class AppointmentService {
     if (staff.id != staffPayCode.employmentId.staffId) {
       throw new HttpException('PayCode is not staff pay code', HttpStatus.BAD_REQUEST);
     }
-    console.log(staffPayCode);
     if (staffPayCode.employmentId.active != true) {
       throw new HttpException('Employment is not active', HttpStatus.BAD_REQUEST);
     }
@@ -130,12 +128,12 @@ export class AppointmentService {
       this.model.find({
         staff: dto.staff,
         startTime: { $lt: new Date(dto.endTime) },
-        endTime: { $gt: new Date(dto.startDate) },
+        endTime: { $gt: new Date(dto.startTime) },
       }),
       this.model.find({
         client: dto.client,
         startTime: { $lt: new Date(dto.endTime) },
-        endTime: { $gt: new Date(dto.startDate) },
+        endTime: { $gt: new Date(dto.startTime) },
       }),
     ]);
     if (!dto.placeService) {
@@ -404,7 +402,7 @@ export class AppointmentService {
 
   // find all appointments
   async findAll(filter: AppointmentQueryDTO): Promise<any> {
-    let query: any = {};
+    const query: any = {};
     if (filter.client) query.client = mongoose.Types.ObjectId(filter.client);
     if (filter.staff) query.staff = mongoose.Types.ObjectId(filter.staff);
     if (filter.status) query.status = filter.status;
@@ -468,7 +466,21 @@ export class AppointmentService {
     // the first check if appointment is not complete or cancelled status
     const appointment = await this.model.findById(_id);
     this.checkAppointment(appointment);
-
+    const [overlappingStaff, overlappingClient] = await Promise.all([
+      this.model.find({
+        staff: dto.staff,
+        startTime: { $lt: new Date(dto.endTime) },
+        endTime: { $gt: new Date(dto.startTime) },
+      }),
+      this.model.find({
+        client: dto.client,
+        startTime: { $lt: new Date(dto.endTime) },
+        endTime: { $gt: new Date(dto.startTime) },
+      }),
+    ]);
+    if (overlappingStaff[0] || overlappingClient[0]) {
+      throw new HttpException(`appointment overlapping`, HttpStatus.BAD_REQUEST);
+    }
     if (dto.placeService) {
       await this.placeService.findOne(dto.placeService);
       appointment.placeService = dto.placeService;

@@ -24,9 +24,6 @@ export class EmploymentService {
   // create the employment
   async create(dto: CreateEmploymentDto): Promise<EmploymentDto> {
     try {
-      if (new Date(dto.startDate) > new Date(dto.endDate)) {
-        throw new HttpException(`startDate can't be high then endDate`, HttpStatus.BAD_REQUEST);
-      }
       const staff = await this.staffService.findById(dto.staffId);
       let employment = new this.model({
         staffId: dto.staffId,
@@ -36,21 +33,43 @@ export class EmploymentService {
         title: dto.title,
       });
       const date = new Date().getTime();
-      if (dto.endDate) {
-        const endDate = new Date(dto.endDate).getTime();
-        if (endDate >= date) {
-          const activeEmployment = await this.model.findOne({ active: true, staffId: staff.id });
-          if (activeEmployment) {
-            activeEmployment.active = false;
-            activeEmployment.endDate = new Date(
-              new Date(dto.startDate).setDate(new Date(dto.startDate).getDate() - 1),
-            );
-            await activeEmployment.save();
-          }
-          employment.active = true;
+      const employments: any = await this.model.findOne({
+        startDate: { $gte: new Date(new Date(dto.startDate).setHours(0, 0, 0)) },
+      });
+      console.log(employments, 'aaa');
+      if (employments && employments.length != []) {
+        if (new Date(employments.startDate) >= new Date(dto.startDate)) {
+          throw new HttpException('Overlapping', HttpStatus.BAD_REQUEST);
+        } else if (
+          (new Date(employments.startDate) <= new Date(dto.startDate) &&
+            new Date(employments.endDate) >= new Date(dto.startDate)) ||
+          !employments.endDate
+        ) {
+          console.log('stex em');
+          employments.endDate = dto.startDate;
+          await employments.save();
+          // return;
         }
-        employment.endDate = dto.endDate;
+        console.log(employments.endDate);
       }
+      // if (dto.endDate) {
+      //   if (new Date(dto.startDate) > new Date(dto.endDate)) {
+      //     throw new HttpException(`startDate can't be high then endDate`, HttpStatus.BAD_REQUEST);
+      //   }
+      //   const endDate = new Date(dto.endDate).getTime();
+      //   if (endDate >= date) {
+      //     const activeEmployment = await this.model.findOne({ active: true, staffId: staff.id });
+      //     if (activeEmployment) {
+      //       activeEmployment.active = false;
+      //       activeEmployment.endDate = new Date(
+      //         new Date(dto.startDate).setDate(new Date(dto.startDate).getDate() - 1),
+      //       );
+      //       await activeEmployment.save();
+      //     }
+      //     employment.active = true;
+      //   }
+      //   employment.endDate = dto.endDate;
+      // }
       await this.staffService.findById(dto.supervisor);
       employment.supervisor = dto.supervisor;
 
