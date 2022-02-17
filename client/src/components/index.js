@@ -33,7 +33,13 @@ export {
 } from "./inputs";
 export { Loader, MinLoader } from "./loader";
 export { GlobalLogo } from "./logo";
-export { MessageScreen, MessageMiniScreen, NoInfoYet, Circle, Line } from "./screens";
+export {
+   MessageScreen,
+   MessageMiniScreen,
+   NoInfoYet,
+   Circle,
+   Line,
+} from "./screens";
 export { TableHeadComponent, TableBodyComponent } from "./table";
 export {
    TableWrapperGeneralInfo,
@@ -42,9 +48,15 @@ export {
    InfoWrapper,
    CreateWrapperHead,
    Management,
-   BillingTransactionWrapper,
+   BillTransactionWrapper,
 } from "./wrapper";
-export { SimpleModal, DeleteElement, InactiveModal, AddNotes, AvailabilitySchedule } from "./modal";
+export {
+   SimpleModal,
+   DeleteElement,
+   InactiveModal,
+   AddNotes,
+   AvailabilitySchedule,
+} from "./modal";
 export { SimpleToolTip } from "./toolTip";
 export { CustomBreadcrumbs } from "./breadcrumbs";
 export { PaginationItem } from "./pagination";

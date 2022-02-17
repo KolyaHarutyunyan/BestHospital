@@ -1,20 +1,4 @@
-import {
-   getBillings,
-   getBillingById,
-   createBilling,
-   editBillingStatus,
-   addBillingTransaction,
-   abortBillingTransaction,
-} from "./billing.action";
-
-export { billingReducer } from "./billing.reducer";
-export { watchBilling } from "./billing.saga";
-
-export const billingActions = {
-   getBillings,
-   getBillingById,
-   createBilling,
-   editBillingStatus,
-   addBillingTransaction,
-   abortBillingTransaction,
-};
+export { billReducer, watchBill, billActions } from "./bill";
+export { claimReducer, watchClaim, claimActions } from "./claim";
+export { invoiceReducer, watchInvoice, invoiceActions } from "./invoice";
+export { postingReducer, watchPosting, postingActions } from "./posting";
