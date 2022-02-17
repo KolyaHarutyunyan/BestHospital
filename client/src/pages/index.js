@@ -9,4 +9,4 @@ export { Management } from "./management";
 export { Single } from "./single";
 export { System } from "./system";
 export { Schedule } from "./schedule";
-export { Billings, BillingDetails } from "./billing";
+export * from "./billing";

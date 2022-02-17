@@ -1,0 +1,1 @@
+export { BillDetailsFragment } from "./billDetails";

@@ -37,10 +37,13 @@ export const navBarStyles = makeStyles((theme) => ({
    appBarShift: {
       marginLeft: drawerWidth,
       width: "100%",
-      transition: theme.transitions.create(["width", "margin", "padding-left"], {
-         easing: theme.transitions.easing.sharp,
-         duration: theme.transitions.duration.enteringScreen,
-      }),
+      transition: theme.transitions.create(
+         ["width", "margin", "padding-left"],
+         {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+         }
+      ),
       "& > div": {
          paddingLeft: "16px",
          "@media (max-width: 1280px)": {
@@ -150,49 +153,6 @@ export const navBarStyles = makeStyles((theme) => ({
       "& a": {
          textDecoration: "none",
       },
-   },
-
-   linkWrapperActive: {
-      borderLeft: `4px solid ${Colors.BackgroundBlue}`,
-      borderRadius: "0px 8px 8px 0px",
-   },
-   activeListItem: {
-      background: Backgrounds.lightBlue,
-      marginTop: "16px",
-      paddingLeft: "8px",
-      marginLeft: "8px",
-      height: "36px",
-      width: "200px",
-      borderRadius: "8px",
-   },
-   activeListItemFalse: {
-      background: Backgrounds.lightBlue,
-      marginTop: "16px",
-      paddingLeft: "8px",
-      marginLeft: "8px",
-      height: "36px",
-      width: "40px",
-      borderRadius: "8px",
-   },
-   listItem: {
-      width: "40px",
-      marginTop: "16px",
-      paddingLeft: "8px",
-      marginLeft: "12px",
-      borderRadius: "4px",
-      height: "36px",
-   },
-   menuItemsStyle: {
-      lineHeight: "21px",
-      fontSize: "14px",
-      color: Colors.TextSecondary,
-      marginLeft: "8px",
-   },
-   menuActiveItemsStyle: {
-      lineHeight: "21px",
-      fontSize: "14px",
-      color: Colors.BackgroundBlue,
-      marginLeft: "8px",
    },
 
    boxWrapper: {
