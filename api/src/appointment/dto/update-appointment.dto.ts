@@ -38,15 +38,15 @@ export class UpdateAppointmentDto {
   staffPayCode: string;
   @ApiProperty()
   @IsDateString()
-  @IsOptional()
+  @IsNotEmpty()
   startDate: Date;
   @ApiProperty()
   @IsDateString()
-  @IsOptional()
+  @IsNotEmpty()
   startTime: Date;
   @ApiProperty()
   @IsDateString()
-  @IsOptional()
+  @IsNotEmpty()
   endTime: Date;
   @ApiProperty()
   @IsBoolean()
