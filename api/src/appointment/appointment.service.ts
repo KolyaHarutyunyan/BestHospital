@@ -485,25 +485,24 @@ export class AppointmentService {
       await this.placeService.findOne(dto.placeService);
       appointment.placeService = dto.placeService;
     }
-    // if (dto.type == AppointmentType.SERVICE) {
-    //   if (!dto.client || !dto.authorizedService) {
-    //     throw new HttpException(
-    //       'Client and(or) Authorization service is not found',
-    //       HttpStatus.NOT_FOUND,
-    //     );
-    //   }
-    //   const [client, authService]: any = await Promise.all([
-    //     this.clientService.findById(dto.client ? dto.client : appointment.client),
-    //     this.authorizedService.findById(
-    //       dto.authorizedService ? dto.authorizedService : appointment.authorizedService,
-    //     ),
-    //   ]);
-    //   if (client.id != authService.authorizationId.clientId) {
-    //     throw new HttpException(`Client haven't authService`, HttpStatus.BAD_REQUEST);
-    //   }
-    //   await this.authorizedService.getByServiceId(authService.serviceId);
-    //   appointment.type = dto.type;
-    // }
+    if (appointment.type == AppointmentType.SERVICE) {
+      if (!dto.client || !dto.authorizedService) {
+        throw new HttpException(
+          'Client and(or) Authorization service is not found',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      const [client, authService]: any = await Promise.all([
+        this.clientService.findById(dto.client ? dto.client : appointment.client),
+        this.authorizedService.findById(
+          dto.authorizedService ? dto.authorizedService : appointment.authorizedService,
+        ),
+      ]);
+      if (client.id != authService.authorizationId.clientId) {
+        throw new HttpException(`Client haven't authService`, HttpStatus.BAD_REQUEST);
+      }
+      await this.authorizedService.getByServiceId(authService.serviceId);
+    }
     const [, payCode, ,]: any = await Promise.all([
       this.staffService.findById(dto.staff),
       this.payCodeService.findOne(dto.staffPayCode ? dto.staffPayCode : appointment.staffPayCode),
