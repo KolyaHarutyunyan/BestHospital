@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <g id="Arrow" transform="translate(-15 229) rotate(-90)">
+    <rect id="Base" width="16" height="16" transform="translate(213 15)" fill="#347af0" opacity="0"/>
+    <path id="Arrow_Icon" data-name="Arrow Icon" d="M13.4,12.414l4.709-4.7a.889.889,0,0,0-1.26-1.256L11.51,11.784a.888.888,0,0,0-.026,1.226l5.357,5.368a.889.889,0,0,0,1.26-1.256Z" transform="translate(206.194 10.584)" fill="#347af0"/>
+  </g>
+</svg>

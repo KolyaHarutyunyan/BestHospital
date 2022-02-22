@@ -5,7 +5,7 @@ import { Drawer, IconButton, List } from "@material-ui/core";
 import { ChevronLeft, ChevronRight } from "@material-ui/icons";
 import { GlobalLogo } from "@eachbase/components";
 import { Colors, superAdminRouters } from "@eachbase/utils";
-import { CustomLink } from "./common";
+import { CustomListItem } from "./common";
 
 export const LeftBar = ({
    handleDrawerClose,
@@ -51,7 +51,7 @@ export const LeftBar = ({
             <GlobalLogo />
             <List onClick={setLinksStyle} className={classes.menuItems}>
                {superAdminRouters.map((item, i) => (
-                  <CustomLink
+                  <CustomListItem
                      key={i}
                      linkInfo={linkInfo}
                      item={item}

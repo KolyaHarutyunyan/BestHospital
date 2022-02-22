@@ -4,7 +4,6 @@ import { billItemStyle } from "./styles";
 
 export const BillItem = ({ billItem, index }) => {
    const classes = billItemStyle();
-   console.log("billItem ", billItem);
 
    const history = useHistory();
    return (

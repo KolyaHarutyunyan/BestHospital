@@ -39,7 +39,6 @@ export const BillTransactionInputs = ({ billId }) => {
       const billTransactionDataIsValid = !!selectedType && !!inputs.amount;
       if (billTransactionDataIsValid) {
          dispatch(billActions.addBillTransaction(billId, billTransactionData));
-         console.log(billTransactionData, "  billTransactionData");
       } else {
          setError(
             !selectedType

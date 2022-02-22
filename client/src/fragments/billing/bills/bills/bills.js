@@ -4,7 +4,6 @@ import { billsStyle } from "./styles";
 
 export const BillsFragment = ({ bills }) => {
    const classes = billsStyle();
-   console.log("bills ", bills);
 
    return (
       <>
