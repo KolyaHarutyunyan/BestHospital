@@ -50,9 +50,9 @@ export const LeftBar = ({
          >
             <GlobalLogo />
             <List onClick={setLinksStyle} className={classes.menuItems}>
-               {superAdminRouters.map((item, i) => (
+               {superAdminRouters.map((item, index) => (
                   <CustomListItem
-                     key={i}
+                     key={index}
                      linkInfo={linkInfo}
                      item={item}
                      open={open}

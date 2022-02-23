@@ -44,59 +44,75 @@ export const CustomListItem = ({ linkInfo, item, open, accordion }) => {
       billingIsActive ? "active" : ""
    }`;
 
-   const handleAccordionClick = () =>
-      open ? setIsShown((pS) => !pS) : history.push("/bills");
+   const accordArrowClassName = `${classes.accordArrowStyle} ${
+      isShown ? "rotate" : ""
+   }`;
+   const sectionsListClassName = `${classes.sectionsListBoxStyle} ${
+      open && isShown ? "shown" : ""
+   }`;
 
-   return (
-      <Fragment>
-         {accordion ? (
-            <div>
-               <div
-                  onClick={handleAccordionClick}
-                  className={`${classes.accordionStyle} ${accordionClassName}`}
-               >
-                  <ListItem className={accordionItemClassName} button>
-                     <LeftBarImages
-                        item={item}
-                        linkInfo={linkInfo}
-                        billingIsActive={billingIsActive}
+   const handleAccordionClick = () =>
+      open ? setIsShown((prevState) => !prevState) : history.push("/bills");
+
+   return accordion ? (
+      <div>
+         <div
+            onClick={handleAccordionClick}
+            className={`${classes.accordionStyle} ${accordionClassName}`}
+         >
+            <ListItem className={accordionItemClassName} button>
+               <LeftBarImages
+                  item={item}
+                  linkInfo={linkInfo}
+                  billingIsActive={billingIsActive}
+               />
+               {open && (
+                  <Fragment>
+                     <ListItemText
+                        className={accordionItemTextClassName}
+                        primary={getLimitedVal(item.name, 13)}
                      />
-                     {open && (
-                        <Fragment>
-                           <ListItemText
-                              className={accordionItemTextClassName}
-                              primary={getLimitedVal(item.name, 13)}
-                           />
-                           <img src={Images.accordArrow} alt="" />
-                        </Fragment>
-                     )}
-                  </ListItem>
-               </div>
-               {open && isShown && (
-                  <ol>
-                     {billingSections.map((section, index) => (
-                        <li key={index}>
-                           <Link to={section.path}>{section.label}</Link>
-                        </li>
-                     ))}
-                  </ol>
+                     <img
+                        className={accordArrowClassName}
+                        src={
+                           billingIsActive
+                              ? Images.accordArrowBlue
+                              : Images.accordArrowBlack
+                        }
+                        alt=""
+                     />
+                  </Fragment>
                )}
-            </div>
-         ) : (
-            <Link to={item.path}>
-               <div className={linkClassName}>
-                  <ListItem className={listItemClassName} button>
-                     {<LeftBarImages item={item} linkInfo={linkInfo} />}
-                     {open && (
-                        <ListItemText
-                           className={listItemTextClassName}
-                           primary={getLimitedVal(item.name, 13)}
-                        />
-                     )}
-                  </ListItem>
-               </div>
-            </Link>
-         )}
-      </Fragment>
+            </ListItem>
+         </div>
+         <div className={sectionsListClassName}>
+            <ol>
+               {billingSections.map((section, index) => {
+                  const activeClassName =
+                     linkInfo === section.path ? "active" : "";
+
+                  return (
+                     <li key={index} className={activeClassName}>
+                        <Link to={section.path}>{section.label}</Link>
+                     </li>
+                  );
+               })}
+            </ol>
+         </div>
+      </div>
+   ) : (
+      <Link to={item.path}>
+         <div className={linkClassName}>
+            <ListItem className={listItemClassName} button>
+               {<LeftBarImages item={item} linkInfo={linkInfo} />}
+               {open && (
+                  <ListItemText
+                     className={listItemTextClassName}
+                     primary={getLimitedVal(item.name, 13)}
+                  />
+               )}
+            </ListItem>
+         </div>
+      </Link>
    );
 };

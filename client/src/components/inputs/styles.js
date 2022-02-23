@@ -62,6 +62,7 @@ export const inputsStyle = makeStyles(() => ({
 
    searchInputTitle: {
       display: "flex",
+      "&.scrollable": { width: "125px" },
       alignItems: "center",
       "& span": {
          fontSize: "14px",
@@ -210,21 +211,24 @@ export const inputsStyle = makeStyles(() => ({
          "&.Mui-focused": { top: 0 },
       },
       "& input": { padding: "0 16px !important" },
-      "& .MuiAutocomplete-endAdornment > button:first-of-type, button svg": { display: "none" },
+      "& .MuiAutocomplete-endAdornment > button:first-of-type, button svg": {
+         display: "none",
+      },
       "& .MuiAutocomplete-endAdornment > button:last-of-type": {
          position: "absolute",
          top: "3px",
          right: 0,
       },
-      "& .MuiAutocomplete-endAdornment > button:last-of-type span:first-of-type": {
-         display: "block",
-         width: "18px",
-         height: "18px",
-         backgroundImage: `url(${Images.dropdownArrowFilledBlue})`,
-         backgroundRepeat: "no-repeat",
-         backgroundSize: "contain",
-         backgroundPosition: "center",
-      },
+      "& .MuiAutocomplete-endAdornment > button:last-of-type span:first-of-type":
+         {
+            display: "block",
+            width: "18px",
+            height: "18px",
+            backgroundImage: `url(${Images.dropdownArrowFilledBlue})`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "contain",
+            backgroundPosition: "center",
+         },
       "& .MuiInputBase-root.MuiOutlinedInput-root.MuiAutocomplete-inputRoot.MuiInputBase-fullWidth.MuiInputBase-formControl.MuiInputBase-adornedEnd.MuiOutlinedInput-adornedEnd":
          { padding: 0, height: "48px" },
    },

@@ -37,6 +37,10 @@ export const tableStyle = makeStyles(() => ({
       cursor: "pointer",
       borderRadius: "8px",
       backgroundColor: Colors.BackgroundWhite,
+      "&.billingSystem:hover": {
+         backgroundColor: Colors.BackgroundWhite,
+         "& > td": { backgroundColor: Colors.BackgroundWhite },
+      },
       "& td": { backgroundColor: Colors.BackgroundWhite },
       "& > td:first-child": {
          borderTopLeftRadius: "8px",
