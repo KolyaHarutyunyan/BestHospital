@@ -13,7 +13,7 @@ const DUMMY_CLIENTS = ["All", "Client-1", "Client-2", "Client-3", "Client-4"];
 
 export const BillsFragment = ({ bills, open }) => {
    const classes = billsStyle();
-   const billsFragmentClassName = `${classes.billsFragmentStyle} ${
+   const billsTableClassName = `${classes.billsTableStyle} ${
       open ? "narrow" : ""
    }`;
 
@@ -23,7 +23,7 @@ export const BillsFragment = ({ bills, open }) => {
 
    return (
       <div>
-         <div style={{ display: "flex" }}>
+         <div className={classes.filtersBoxStyle}>
             <UserInputsDropdown
                label={"Payor"}
                dropdownOptions={DUMMY_PAYORS}
@@ -51,7 +51,7 @@ export const BillsFragment = ({ bills, open }) => {
          </div>
          {!!bills.length ? (
             <Fragment>
-               <div className={billsFragmentClassName}>
+               <div className={billsTableClassName}>
                   <BillTableWithoutScroll bills={bills} />
                   <BillTableWithScroll bills={bills} />
                </div>

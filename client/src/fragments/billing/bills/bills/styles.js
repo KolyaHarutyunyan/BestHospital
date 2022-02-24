@@ -2,7 +2,8 @@ import { makeStyles } from "@material-ui/core";
 import { Colors } from "@eachbase/utils";
 
 export const billsStyle = makeStyles(() => ({
-   billsFragmentStyle: {
+   filtersBoxStyle: { display: "flex" },
+   billsTableStyle: {
       display: "flex",
       width: "100%",
       maxWidth: "1780px",
