@@ -52,14 +52,19 @@ export const inputsStyle = makeStyles(() => ({
       width: "100%",
       "& .MuiFormLabel-root": {
          fontSize: "16px",
-         color: `${Colors.TextPrimary}`,
+         color: Colors.TextPrimary,
       },
 
       "& .MuiInput-underline.Mui-error:after": {
-         borderBottomColor: `${Colors.ThemeRed}`,
+         borderBottomColor: Colors.ThemeRed,
       },
    },
-
+   labelStyle: {
+      fontSize: "14px",
+      fontWeight: 600,
+      color: Colors.BackgroundBlue,
+      marginBottom: "8px",
+   },
    searchInputTitle: {
       display: "flex",
       "&.scrollable": { width: "125px" },
@@ -93,7 +98,7 @@ export const inputsStyle = makeStyles(() => ({
       },
 
       "& .MuiInput-underline.Mui-error:after": {
-         borderBottomColor: `${Colors.ThemeRed}`,
+         borderBottomColor: Colors.ThemeRed,
       },
    },
 
@@ -114,7 +119,7 @@ export const inputsStyle = makeStyles(() => ({
    PasswordInput: {
       "& .MuiInputBase-input::-webkit-input-placeholder": {
          fontSize: "16px",
-         color: `${Colors.TextPrimary}`,
+         color: Colors.TextPrimary,
          opacity: 1,
       },
    },

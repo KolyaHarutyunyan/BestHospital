@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { billActions } from "@eachbase/store";
 import { Loader } from "@eachbase/components";
 import { FindLoad } from "@eachbase/utils";
-import { DUMMY_BILLS } from "@eachbase/utils/dummyData/dummyBills";
+import { DUMMY_BILLS } from "@eachbase/utils/dummyDatas/dummyBills";
 
 export const Bills = ({ open }) => {
    const dispatch = useDispatch();

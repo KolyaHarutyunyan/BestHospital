@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import { inputsStyle } from "./styles";
 import TextField from "@material-ui/core/TextField";
 import { ErrMessage } from "../messages";
 import { InputMinLoader } from "./inputMiniLoader";
 
 export const ValidationInput = ({
+   inputLabel,
    errorFalse,
    multiline,
    style,
@@ -53,8 +54,9 @@ export const ValidationInput = ({
    };
 
    return (
-      <>
+      <Fragment>
          <div className={style ? style : classes.SignInInput}>
+            {inputLabel && <p className={classes.labelStyle}>{inputLabel}</p>}
             <TextField
                onInput={(e) => maxLength(e)}
                style={{ ...styles }}
@@ -70,7 +72,7 @@ export const ValidationInput = ({
                name={name}
                placeholder={placeholder}
                type={type}
-               value={value ? value : ''}
+               value={value ? value : ""}
                InputLabelProps={{
                   shrink: type === "date" ? true : !!value,
                }}
@@ -89,8 +91,10 @@ export const ValidationInput = ({
                   endAdornment: loader && <InputMinLoader />,
                }}
             />
-            {errorFalse ? null : <ErrMessage style={{ marginBottom: "12px" }} text={typeError} />}
+            {errorFalse ? null : (
+               <ErrMessage style={{ marginBottom: "12px" }} text={typeError} />
+            )}
          </div>
-      </>
+      </Fragment>
    );
 };

@@ -1,8 +1,15 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import { dropdownsStyle } from "./styles";
 import { ActiveInactiveStatus } from "@eachbase/utils";
 
-export const UserInputsDropdown = ({ dropdownOptions = [], onPass, selected, dropdownTitle }) => {
+export const UserInputsDropdown = ({
+   label,
+   dropdownOptions = [],
+   onPass,
+   selected,
+   dropdownTitle,
+   dropdownClassName,
+}) => {
    const [dropdownIsShown, setDropdownIsShown] = useState(false);
    const classes = dropdownsStyle();
    const itemClassName = ActiveInactiveStatus(selected);
@@ -12,17 +19,23 @@ export const UserInputsDropdown = ({ dropdownOptions = [], onPass, selected, dro
    };
 
    return (
-      <>
+      <Fragment>
          {dropdownIsShown && (
-            <div className={classes.dropOverlayStyle} onClick={() => setDropdownIsShown(false)} />
+            <div
+               className={classes.dropOverlayStyle}
+               onClick={() => setDropdownIsShown(false)}
+            />
          )}
-         <div className={classes.userDropStyle}>
+         <div className={`${classes.userDropStyle} ${dropdownClassName}`}>
+            {label && <p className="userDropLabel"> {label} </p>}
             <div className={`dropdown-box ${dropdownIsShown ? "focused" : ""}`}>
                <div
                   className="show-dropdown-box"
                   onClick={() => setDropdownIsShown((prevState) => !prevState)}
                >
-                  <h6 className={`dropdown-selected ${classes.optionStyle} ${itemClassName}`}>
+                  <h6
+                     className={`dropdown-selected ${classes.optionStyle} ${itemClassName}`}
+                  >
                      {selected ? selected : dropdownTitle}
                   </h6>
                   <i className={`${dropdownIsShown ? "active" : ""}`} />
@@ -51,6 +64,6 @@ export const UserInputsDropdown = ({ dropdownOptions = [], onPass, selected, dro
                )}
             </div>
          </div>
-      </>
+      </Fragment>
    );
 };

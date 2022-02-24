@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { navBarStyles } from "./style";
 import clsx from "clsx";
-import { SearchAndFilter, SearchInput, Title } from "@eachbase/components";
+import { SearchInput, Title } from "@eachbase/components";
 import { UserInfo } from "./userInfo";
 import { AppBar, Toolbar } from "@material-ui/core";
 
@@ -28,6 +28,8 @@ export const TopBar = ({ handleClick, open }) => {
          ? "Customer"
          : url === "/factoring"
          ? "Factoring Companies"
+         : url === "/bills"
+         ? "Bills"
          : "";
 
    return (
@@ -39,7 +41,11 @@ export const TopBar = ({ handleClick, open }) => {
       >
          <Toolbar className={classes.headerContent}>
             <div className={classes.Toolbar}>
-               <div className={open === true ? classes.openToolbar : classes.closeToolbar}>
+               <div
+                  className={
+                     open === true ? classes.openToolbar : classes.closeToolbar
+                  }
+               >
                   <Title text={menuTittle} />
                </div>
                <div className={classes.userActionsBoxStyle}>
