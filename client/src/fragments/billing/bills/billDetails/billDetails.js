@@ -22,7 +22,7 @@ export const BillDetailsFragment = ({ billDetails }) => {
    const handleSelection = (selected) => {
       setSelectedStatus(selected);
       dispatch(
-         billActions.editBillStatus(billDetails.id, selected.toUpperCase())
+         billActions.editBillStatus(billDetails?.id, selected.toUpperCase())
       );
    };
 

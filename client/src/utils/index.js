@@ -34,6 +34,8 @@ export {
    getValTillTenDig,
    getDynamicContent,
    getActiveDatas,
+   getLimitedVal,
+   resetRadius,
 } from "./hooks";
 export { ErrorText } from "./errorTexts";
 export { CountryList } from "./jsons";

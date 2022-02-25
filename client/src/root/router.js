@@ -21,7 +21,7 @@ import {
    PostingDetails,
 } from "@eachbase/pages";
 
-export const Router = ({}) => {
+export const Router = ({ open }) => {
    return (
       <Switch>
          <Route path="/" exact component={FundingSource} />
@@ -45,7 +45,9 @@ export const Router = ({}) => {
 
          <Route path="/schedule" exact component={Schedule} />
 
-         <Route path="/bills" exact component={Bills} />
+         <Route path="/bills" exact>
+            <Bills open={open} />
+         </Route>
          <Route path="/bill/:id" exact component={BillDetails} />
 
          <Route path="/claims" exact component={Claims} />

@@ -14,6 +14,12 @@ export const dropdownsStyle = makeStyles(() => ({
    // UserInputsDropdown Style **
    userDropStyle: {
       width: "164px",
+      "& .userDropLabel": {
+         fontSize: "14px",
+         fontWeight: 600,
+         color: Colors.BackgroundBlue,
+         marginBottom: "8px",
+      },
       "& .dropdown-box": {
          position: "relative",
          width: "100%",

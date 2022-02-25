@@ -23,5 +23,6 @@ export const BillDetails = () => {
       };
    }, [params.id]);
 
+   console.log(billById, "bill");
    return loader ? <Loader /> : <BillDetailsFragment billDetails={billById} />;
 };

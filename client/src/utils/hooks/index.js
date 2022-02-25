@@ -19,3 +19,5 @@ export { useCheckboxDropdown } from "./useCheckboxDropdown";
 export { getValTillTenDig } from "./getValTillTenDig";
 export { getDynamicContent } from "./getDynamicContent";
 export { getActiveDatas } from "./getActiveDatas";
+export { getLimitedVal } from "./getLimitedVal";
+export { resetRadius } from "./resetRadius";
