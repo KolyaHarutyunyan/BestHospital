@@ -76,8 +76,6 @@ export const tableStyle = makeStyles(() => ({
          fontSize: "16px",
          lineHeight: "30px",
          color: "#545F7E",
-         display: "flex",
-         alignItems: "center",
       },
 
       "& MuiSwitch-track": {
