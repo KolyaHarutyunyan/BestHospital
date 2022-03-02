@@ -17,6 +17,6 @@ export const Bills = ({ open }) => {
    useEffect(() => {
       dispatch(billActions.getBills());
    }, []);
-
+   console.log(bills, " bills");
    return loader ? <Loader /> : <BillsFragment bills={bills} open={open} />;
 };

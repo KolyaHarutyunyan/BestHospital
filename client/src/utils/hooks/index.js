@@ -21,3 +21,5 @@ export { getDynamicContent } from "./getDynamicContent";
 export { getActiveDatas } from "./getActiveDatas";
 export { getLimitedVal } from "./getLimitedVal";
 export { resetRadius } from "./resetRadius";
+export { handleCreatedAtDate } from "./handleCreatedAtDate";
+export { manageStatus } from "./manageStatus";
