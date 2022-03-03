@@ -1,19 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import clsx from "clsx";
 import { navBarStyles } from "./style";
 import { Drawer, IconButton, List } from "@material-ui/core";
 import { ChevronLeft, ChevronRight } from "@material-ui/icons";
 import { GlobalLogo } from "@eachbase/components";
-import { Colors, superAdminRouters } from "@eachbase/utils";
+import { Colors, DrawerContext, superAdminRouters } from "@eachbase/utils";
 import { CustomListItem } from "./common";
 
-export const LeftBar = ({
-   handleDrawerClose,
-   open,
-   setLinksStyle,
-   linkInfo,
-}) => {
+export const LeftBar = ({ setLinksStyle, linkInfo }) => {
    const classes = navBarStyles();
+
+   const { open, handleDrawerOpenClose } = useContext(DrawerContext);
 
    return (
       <div>
@@ -29,7 +26,7 @@ export const LeftBar = ({
                   border: `2px solid ${Colors.TextWhite}`,
                }}
                className={classes.IconButtonStyle}
-               onClick={handleDrawerClose}
+               onClick={handleDrawerOpenClose}
             >
                {open === false ? <ChevronRight /> : <ChevronLeft />}
             </IconButton>

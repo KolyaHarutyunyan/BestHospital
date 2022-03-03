@@ -1,102 +1,57 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
    DeleteElement,
-   NoItemText,
    Notes,
    SimpleModal,
    TableBodyComponent,
 } from "@eachbase/components";
 import { FundingSourceSinglePTModifiers } from "./fundingSourceSinglePTModifiers";
-import { FindSuccess, Images } from "@eachbase/utils";
-import { TableBody, TableCell } from "@material-ui/core";
+import { DrawerContext, Images } from "@eachbase/utils";
+import { TableCell } from "@material-ui/core";
 import { fundingSourceSingleStyles } from "./styles";
 import { FundingSourceServiceAdd } from "./modals";
-import {
-   fundingSourceActions,
-   httpRequestsOnErrorsActions,
-   httpRequestsOnSuccessActions,
-} from "@eachbase/store";
+import { fundingSourceActions } from "@eachbase/store";
 
+const headerTitles = [
+   {
+      title: "Service",
+      sortable: true,
+   },
+   {
+      title: "CPT Code",
+      sortable: false,
+   },
+   {
+      title: "Unit Size",
+      sortable: false,
+   },
+   {
+      title: "Min Unit",
+      sortable: false,
+   },
+   {
+      title: "Max Unit",
+      sortable: false,
+   },
+   {
+      title: "Action",
+      sortable: false,
+   },
+];
 export const FundingSourceSingleServices = ({ data }) => {
    const [toggleModal, setToggleModal] = useState(false);
    const [index, setIndex] = useState(null);
    const [delEdit, setDelEdit] = useState(null);
    const [serviceIndex, setServiceIndex] = useState(0);
    const [accept, setAccept] = useState(false);
-   const classes = fundingSourceSingleStyles();
-   const dispatch = useDispatch();
-   const modifiers = useSelector((state) => state.fundingSource?.modifiers.modifiers);
-   const globalCredentials = useSelector((state) => state.system.credentials);
-
-   // const {httpOnSuccess, httpOnError, httpOnLoad} = useSelector((state) => ({
-   //     httpOnSuccess: state.httpOnSuccess,
-   //     httpOnError: state.httpOnError,
-   //     httpOnLoad: state.httpOnLoad,
-   // }));
-
    const [modif, setModif] = useState("");
 
-   // useEffect(() =>{
-   //     setModif(data[serviceIndex].modifiers)
-   // },[data])
+   const classes = fundingSourceSingleStyles();
+   const dispatch = useDispatch();
+   const globalCredentials = useSelector((state) => state.system.credentials);
 
-   // useEffect(() =>{
-   //     if(edited.length) {
-   //         setModif(data[index].modifiers)
-   //     }
-   // },[edited])
-
-   // const success = httpOnSuccess.length && httpOnSuccess[0].type === 'GET_FUNDING_SOURCE_SERVICE_MODIFIERS'
-
-   // useEffect(() => {
-   //     if (success) {
-   //         dispatch(httpRequestsOnSuccessActions.removeSuccess('GET_FUNDING_SOURCE_SERVICE_MODIFIERS'))
-   //         if (accept) {
-   //             setToggleModal(!toggleModal)
-   //             setAccept(false)
-   //         }
-   //     }
-   // }, [success])
-   //
-   // useEffect(() => {
-   //     if (httpOnError.length && httpOnError[0].error === 'Modifier was not found') {
-   //         dispatch(httpRequestsOnSuccessActions.removeSuccess('GET_FUNDING_SOURCE_SERVICE_MODIFIERS'))
-   //         dispatch(httpRequestsOnErrorsActions.removeError('GET_FUNDING_SOURCE_SERVICE_MODIFIERS'))
-   //         if (accept) {
-   //             setToggleModal(!toggleModal)
-   //             setAccept(false)
-   //         }
-   //     }
-   //
-   // }, [httpOnError])
-
-   const headerTitles = [
-      {
-         title: "Service",
-         sortable: true,
-      },
-      {
-         title: "CPT Code",
-         sortable: false,
-      },
-      {
-         title: "Unit Size",
-         sortable: false,
-      },
-      {
-         title: "Min Unit",
-         sortable: false,
-      },
-      {
-         title: "Max Unit",
-         sortable: false,
-      },
-      {
-         title: "Action",
-         sortable: false,
-      },
-   ];
+   const { open } = useContext(DrawerContext);
 
    let onEdit = (index) => {
       setIndex(index);
@@ -104,23 +59,19 @@ export const FundingSourceSingleServices = ({ data }) => {
       setAccept(true);
       setToggleModal(!toggleModal);
       setModif(data[index]);
-      // dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(data[serviceIndex]._id))
    };
 
    let onRow = (item, index) => {
       setServiceIndex(index);
       setModif(item.modifiers);
-      // dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(id))
    };
 
-   // useEffect(() => {
-   //     if (data) {
-   //         dispatch(fundingSourceActions.getFoundingSourceServiceModifiers(data[serviceIndex]._id))
-   //     }
-   // }, [])
-
    let deleteService = () => {
-      dispatch(fundingSourceActions.deleteFoundingSourceServiceById(data[serviceIndex]._id));
+      dispatch(
+         fundingSourceActions.deleteFoundingSourceServiceById(
+            data[serviceIndex]._id
+         )
+      );
    };
 
    let serviceItem = (item, index) => {
@@ -145,13 +96,6 @@ export const FundingSourceSingleServices = ({ data }) => {
                      className={classes.iconCursor}
                      onClick={() => onEdit(index)}
                   />
-                  {/*<img src={Images.remove} alt="delete" className={classes.iconCursordelete}*/}
-                  {/*     onClick={(e) => {*/}
-                  {/*         e.stopPropagation()*/}
-                  {/*         setIndex(index)*/}
-                  {/*         setDelEdit('del')*/}
-                  {/*         setToggleModal(!toggleModal)*/}
-                  {/*     }}/>*/}
                </>
             </TableCell>
          </TableBodyComponent>
@@ -180,13 +124,15 @@ export const FundingSourceSingleServices = ({ data }) => {
                )
             }
          />
-         <div className={classes.fundindServiceItems}>
+         <div
+            className={`${classes.fundindServiceItems} ${open ? "narrow" : ""}`}
+         >
             <Notes
                restHeight={"360px"}
                data={data}
                items={serviceItem}
-               headerTitles={headerTitles}
                defaultStyle={true}
+               headerTitles={headerTitles}
             />
          </div>
          <FundingSourceSinglePTModifiers

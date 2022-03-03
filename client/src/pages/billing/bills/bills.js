@@ -6,7 +6,7 @@ import { Loader } from "@eachbase/components";
 import { FindLoad } from "@eachbase/utils";
 // import { DUMMY_BILLS } from "@eachbase/utils/dummyDatas/dummyBills";
 
-export const Bills = ({ open }) => {
+export const Bills = () => {
    const dispatch = useDispatch();
 
    const bills = useSelector((state) => state.bill.bills);
@@ -18,5 +18,5 @@ export const Bills = ({ open }) => {
       dispatch(billActions.getBills());
    }, []);
    console.log(bills, " bills");
-   return loader ? <Loader /> : <BillsFragment bills={bills} open={open} />;
+   return loader ? <Loader /> : <BillsFragment bills={bills} />;
 };
