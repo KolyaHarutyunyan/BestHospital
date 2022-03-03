@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useContext, useState } from "react";
 import { BillTableWithoutScroll, BillTableWithScroll } from "./core";
 import { billsStyle } from "./styles";
 import {
@@ -7,12 +7,16 @@ import {
    UserInputsDropdown,
    ValidationInput,
 } from "@eachbase/components";
+import { DrawerContext } from "@eachbase/utils";
 
 const DUMMY_PAYORS = ["All", "Payor-1", "Payor-2", "Payor-3", "Payor-4"];
 const DUMMY_CLIENTS = ["All", "Client-1", "Client-2", "Client-3", "Client-4"];
 
-export const BillsFragment = ({ bills, open }) => {
+export const BillsFragment = ({ bills }) => {
    const classes = billsStyle();
+
+   const { open } = useContext(DrawerContext);
+
    const billsTableClassName = `${classes.billsTableStyle} ${
       open ? "narrow" : ""
    }`;

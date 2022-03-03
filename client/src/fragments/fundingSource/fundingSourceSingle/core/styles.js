@@ -45,12 +45,13 @@ export const fundingSourceSingleStyles = makeStyles(() => ({
       marginLeft: 8,
    },
    fundingSourceSinglePTModifiersStyles: {
-      width: "710px",
+      maxWidth: "710px",
+      width: "100%",
+      "&.narrow": { maxWidth: "450px" },
       padding: 24,
       borderRadius: 8,
       border: "1px solid #347AF080",
       marginLeft: 16,
-      flex: "0 0 710px",
    },
    fundingSourceSinglePTModifiersTitleStyles: {
       fontSize: 24,
@@ -92,6 +93,10 @@ export const fundingSourceSingleStyles = makeStyles(() => ({
    fundindServiceItems: {
       marginTop: -32,
       width: "100%",
+      "@media(max-width: 1280px)": {
+         maxWidth: "600px",
+         "&.narrow": { maxWidth: "450px" },
+      },
    },
    searchContainer: {
       display: "flex",

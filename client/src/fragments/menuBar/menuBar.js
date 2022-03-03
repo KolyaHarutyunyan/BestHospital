@@ -11,11 +11,7 @@ import { ToastSuccess, ToastFail } from "@eachbase/utils";
 export const MenuBar = ({}) => {
    const classes = navBarStyles(),
       theme = useTheme(),
-      [open, setOpen] = React.useState(false),
-      [linkInfo, setLinkInfo] = React.useState(""),
-      handleDrawerClose = () => {
-         setOpen(!open);
-      };
+      [linkInfo, setLinkInfo] = React.useState("");
 
    const dispatch = useDispatch();
 
@@ -64,17 +60,15 @@ export const MenuBar = ({}) => {
 
    return (
       <div className={classes.root}>
-         <TopBar open={open} handleClick={handleDrawerClose} />
+         <TopBar />
 
          <LeftBar
-            handleDrawerClose={handleDrawerClose}
-            open={open}
             theme={theme}
             setLinksStyle={setLinksStyle}
             linkInfo={linkInfo}
          />
          <main className={classes.content}>
-            <Router open={open} />
+            <Router />
          </main>
          <Toast
             type={toastSuccess ? "success" : toastFail ? "error" : ""}

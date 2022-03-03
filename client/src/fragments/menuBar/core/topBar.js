@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { navBarStyles } from "./style";
 import clsx from "clsx";
 import { SearchInput, Title } from "@eachbase/components";
 import { UserInfo } from "./userInfo";
 import { AppBar, Toolbar } from "@material-ui/core";
+import { DrawerContext } from "@eachbase/utils";
 
-export const TopBar = ({ handleClick, open }) => {
+export const TopBar = () => {
    const classes = navBarStyles();
    const url = window.location.pathname;
    const menuTittle =
@@ -31,6 +32,8 @@ export const TopBar = ({ handleClick, open }) => {
          : url === "/bills"
          ? "Bills"
          : "";
+
+   const { open } = useContext(DrawerContext);
 
    return (
       <AppBar
