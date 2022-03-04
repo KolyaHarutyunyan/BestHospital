@@ -5,7 +5,10 @@ import { resetRadius } from "@eachbase/utils";
 
 export const BillTHeadWithScroll = () => {
    return (
-      <TableHeadComponent tHeadStyle={{ backgroundColor: "#EBF2FD" }}>
+      <TableHeadComponent
+         tHeadStyle={{ backgroundColor: "#EBF2FD" }}
+         hasIndividualStyles
+      >
          <TableCell style={resetRadius("left")}>
             <SearchAndFilter
                title={"Hrs"}

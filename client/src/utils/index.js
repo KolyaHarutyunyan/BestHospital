@@ -38,6 +38,7 @@ export {
    resetRadius,
    handleCreatedAtDate,
    manageStatus,
+   getMenuTitle,
 } from "./hooks";
 export { ErrorText } from "./errorTexts";
 export { CountryList } from "./jsons";

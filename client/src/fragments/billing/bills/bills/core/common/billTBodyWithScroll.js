@@ -16,17 +16,35 @@ export const BillTBodyWithScroll = ({ bills }) => {
                className={"billingSystem"}
             >
                <TableCell style={resetRadius("left")}>
-                  {bill.totalHours}
+                  <div>{bill.totalHours}</div>
                </TableCell>
-               <TableCell>{bill.totalUnits}</TableCell>
-               <TableCell>{bill.billedRate}</TableCell>
-               <TableCell>{bill.totalAmount}</TableCell>
-               <TableCell>{bill.payerTotal}</TableCell>
-               <TableCell>{bill.clientResp}</TableCell>
-               <TableCell>{bill.billedAmount}</TableCell>
-               <TableCell>{manageStatus(bill.claimStatus)}</TableCell>
-               <TableCell>{manageStatus(bill.invoiceStatus)}</TableCell>
-               <TableCell>{manageStatus(bill.status)}</TableCell>
+               <TableCell>
+                  <div>{bill.totalUnits}</div>
+               </TableCell>
+               <TableCell>
+                  <div>{bill.billedRate}</div>
+               </TableCell>
+               <TableCell>
+                  <div>{bill.totalAmount}</div>
+               </TableCell>
+               <TableCell>
+                  <div>{bill.payerTotal}</div>
+               </TableCell>
+               <TableCell>
+                  <div>{bill.clientResp}</div>
+               </TableCell>
+               <TableCell>
+                  <div>{bill.billedAmount}</div>
+               </TableCell>
+               <TableCell>
+                  <div>{manageStatus(bill.claimStatus)}</div>
+               </TableCell>
+               <TableCell>
+                  <div>{manageStatus(bill.invoiceStatus)}</div>
+               </TableCell>
+               <TableCell>
+                  <div>{manageStatus(bill.status)}</div>
+               </TableCell>
             </TableBodyComponent>
          ))}
       </TableBody>

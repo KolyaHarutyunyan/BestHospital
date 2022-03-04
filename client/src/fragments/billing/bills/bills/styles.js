@@ -10,8 +10,8 @@ export const billsStyle = makeStyles(() => ({
       "&.narrow": { maxWidth: "1622px" },
       marginBottom: "10px",
       "@media (max-width: 1280px)": {
-         maxWidth: "1162px",
-         "&.narrow": { maxWidth: "1024px" },
+         maxWidth: "1145px",
+         "&.narrow": { maxWidth: "990px" },
       },
    },
    filterDropStyle: {
