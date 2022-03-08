@@ -4,34 +4,13 @@ import clsx from "clsx";
 import { SearchInput, Title } from "@eachbase/components";
 import { UserInfo } from "./userInfo";
 import { AppBar, Toolbar } from "@material-ui/core";
-import { DrawerContext } from "@eachbase/utils";
+import { DrawerContext, getMenuTitle } from "@eachbase/utils";
 
 export const TopBar = () => {
    const classes = navBarStyles();
+
    const url = window.location.pathname;
-   const menuTittle =
-      // url === '/' ? 'Home' :
-      url === "/fundingSource"
-         ? "Funding Source"
-         : url === "/createFundingSource"
-         ? "Add Office"
-         : url === "/branches"
-         ? "Branches"
-         : url === "/staff"
-         ? "Staff"
-         : url === "/client"
-         ? "Client"
-         : url === "/humanResources"
-         ? "Human Resources"
-         : url === "/management"
-         ? "Access Management"
-         : url === "/customers"
-         ? "Customer"
-         : url === "/factoring"
-         ? "Factoring Companies"
-         : url === "/bills"
-         ? "Bills"
-         : "";
+   const menuTittle = getMenuTitle(url);
 
    const { open } = useContext(DrawerContext);
 

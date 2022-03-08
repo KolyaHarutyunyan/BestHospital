@@ -11,7 +11,7 @@ const tHeadStyle = {
 
 export const BillTHeadWithoutScroll = () => {
    return (
-      <TableHeadComponent tHeadStyle={tHeadStyle}>
+      <TableHeadComponent tHeadStyle={tHeadStyle} hasIndividualStyles>
          <TableCell>
             <SearchAndFilter title={"ID"} custom={false} />
          </TableCell>

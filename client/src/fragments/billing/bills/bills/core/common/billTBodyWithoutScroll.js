@@ -19,14 +19,20 @@ export const BillTBodyWithoutScroll = ({ bills }) => {
                handleOpenInfo={() => history.push(`/bill/${bill._id}`)}
                className={"billingSystem"}
             >
-               <TableCell>{getLimitedVal(bill._id, 5)}</TableCell>
                <TableCell>
-                  {handleCreatedAtDate(bill.dateOfService, 10, "/")}
+                  <div>{getLimitedVal(bill._id, 13)}</div>
                </TableCell>
-               <TableCell>{getLimitedVal(bill.payor, 5)}</TableCell>
-               <TableCell>{getLimitedVal(bill.client, 5)}</TableCell>
+               <TableCell>
+                  <div>{handleCreatedAtDate(bill.dateOfService, 10, "/")}</div>
+               </TableCell>
+               <TableCell>
+                  <div>{getLimitedVal(bill.payor, 13)}</div>
+               </TableCell>
+               <TableCell>
+                  <div>{getLimitedVal(bill.client, 13)}</div>
+               </TableCell>
                <TableCell style={resetRadius("right")}>
-                  {getLimitedVal(bill.authService, 5)}
+                  <div>{getLimitedVal(bill.authService, 13)}</div>
                </TableCell>
             </TableBodyComponent>
          ))}

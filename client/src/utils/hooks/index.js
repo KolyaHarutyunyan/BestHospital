@@ -23,3 +23,4 @@ export { getLimitedVal } from "./getLimitedVal";
 export { resetRadius } from "./resetRadius";
 export { handleCreatedAtDate } from "./handleCreatedAtDate";
 export { manageStatus } from "./manageStatus";
+export { getMenuTitle } from "./getMenuTitle";
