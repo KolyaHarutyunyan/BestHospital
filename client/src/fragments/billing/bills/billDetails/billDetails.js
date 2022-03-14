@@ -22,7 +22,7 @@ export const BillDetailsFragment = ({ billDetails }) => {
    const handleSelection = (selected) => {
       setSelectedStatus(selected);
       dispatch(
-         billActions.editBillStatus(billDetails?.id, selected.toUpperCase())
+         billActions.editBillStatus(billDetails?._id, selected.toUpperCase())
       );
    };
 
@@ -31,7 +31,7 @@ export const BillDetailsFragment = ({ billDetails }) => {
    return (
       <>
          <div>
-            <h1>{`bill ${params.id} details here`}</h1>
+            <h1>{`bill ${billDetails?._id} details here`}</h1>
             <UserInputsDropdown
                dropdownOptions={enumValues.BILLING_STATUSES}
                onPass={handleSelection}
@@ -46,8 +46,17 @@ export const BillDetailsFragment = ({ billDetails }) => {
             openDefault={open}
             handleOpenClose={() => setOpen((prevState) => !prevState)}
             content={
-               <BillTransactionWrapper onClose={() => setOpen(false)}>
-                  <BillTransactionInputs billId={billDetails?.id} />
+               <BillTransactionWrapper
+                  onClose={() => setOpen(false)}
+                  titleContent={"Add Transcation"}
+                  subtitleContent={
+                     "Please fill out the below fields to add a transaction."
+                  }
+               >
+                  <BillTransactionInputs
+                     billId={billDetails?._id}
+                     closeModal={() => setOpen(false)}
+                  />
                </BillTransactionWrapper>
             }
          />

@@ -14,6 +14,7 @@ import {
    FindSuccess,
    getValTillTenDig,
    globalModals,
+   isNotEmpty,
    useGlobalTextStyles,
 } from "@eachbase/utils";
 import { useDispatch } from "react-redux";
@@ -52,25 +53,34 @@ export const AddRoleModal = ({ handleClose, permissionsList }) => {
 
    const addRole = () => {
       const permissionsList = [];
+
       for (let i of permissions) {
          permissionsList.push(i.id);
       }
 
-      if (roleName && permissions && description) {
+      const roleDataIsValid =
+         isNotEmpty(roleName) &&
+         isNotEmpty(permissions) &&
+         isNotEmpty(description);
+
+      if (roleDataIsValid) {
          const body = {
             title: roleName,
             description: description,
             permissions: permissionsList,
          };
+
          dispatch(roleActions.createRole(body));
       } else {
-         !roleName
-            ? setError("role")
-            : !permissions
-            ? setError("permissions")
-            : !description
-            ? setError("description")
+         const errorText = !isNotEmpty(roleName)
+            ? "role"
+            : !isNotEmpty(permissions)
+            ? "permissions"
+            : !isNotEmpty(description)
+            ? "description"
             : "";
+
+         setError(errorText);
       }
    };
 
@@ -101,13 +111,19 @@ export const AddRoleModal = ({ handleClose, permissionsList }) => {
          <div className={globalModalsClasses.modalWrapperContent}>
             <p className={globalText.modalTitle}>Want to Add Role?</p>
             <p className={globalText.modalText}>
-               To add new role in the system, please set the name and assign permissions to that
-               role.
+               To add new role in the system, please set the name and assign
+               permissions to that role.
             </p>
 
             <ValidationInput
                onChange={handleChange}
-               typeError={error === "role" ? ErrorText.field : backError ? backError[0]?.error : ""}
+               typeError={
+                  error === "role"
+                     ? ErrorText.field
+                     : backError
+                     ? backError[0]?.error
+                     : ""
+               }
                style={classes.input}
                value={roleName}
                variant={"outlined"}

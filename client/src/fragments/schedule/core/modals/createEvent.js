@@ -59,7 +59,7 @@ export const CreateEvent = ({
                <CloseButton handleCLic={handleCloseModal} />
             </div>
 
-            {screenType === "Service" ? (
+            {screenType && screenType === "Service" ? (
                <Service
                   createModalDate={createModalDate}
                   modalDate={modalDate}

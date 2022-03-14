@@ -15,6 +15,7 @@ export const BillDetails = () => {
 
    useEffect(() => {
       dispatch(billActions.getBillById(params.id));
+
       return () => {
          dispatch({
             type: GET_BILL_BY_ID_SUCCESS,
@@ -23,6 +24,6 @@ export const BillDetails = () => {
       };
    }, [params.id]);
 
-   console.log(billById, "bill");
+   console.log(billById, " bill*********");
    return loader ? <Loader /> : <BillDetailsFragment billDetails={billById} />;
 };

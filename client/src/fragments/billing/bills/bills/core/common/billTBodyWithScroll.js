@@ -2,7 +2,12 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { TableBodyComponent } from "@eachbase/components";
 import { TableBody, TableCell } from "@material-ui/core";
-import { manageStatus, resetRadius } from "@eachbase/utils";
+import {
+   addSignToValueFromStart,
+   getValueByFixedNumber,
+   manageStatus,
+   resetRadius,
+} from "@eachbase/utils";
 
 export const BillTBodyWithScroll = ({ bills }) => {
    const history = useHistory();
@@ -22,19 +27,39 @@ export const BillTBodyWithScroll = ({ bills }) => {
                   <div>{bill.totalUnits}</div>
                </TableCell>
                <TableCell>
-                  <div>{bill.billedRate}</div>
+                  <div>
+                     {addSignToValueFromStart(
+                        getValueByFixedNumber(bill.billedRate)
+                     )}
+                  </div>
                </TableCell>
                <TableCell>
-                  <div>{bill.totalAmount}</div>
+                  <div>
+                     {addSignToValueFromStart(
+                        getValueByFixedNumber(bill.totalAmount)
+                     )}
+                  </div>
                </TableCell>
                <TableCell>
-                  <div>{bill.payerTotal}</div>
+                  <div>
+                     {addSignToValueFromStart(
+                        getValueByFixedNumber(bill.payerTotal)
+                     )}
+                  </div>
                </TableCell>
                <TableCell>
-                  <div>{bill.clientResp}</div>
+                  <div>
+                     {addSignToValueFromStart(
+                        getValueByFixedNumber(bill.clientResp)
+                     )}
+                  </div>
                </TableCell>
                <TableCell>
-                  <div>{bill.billedAmount}</div>
+                  <div>
+                     {addSignToValueFromStart(
+                        getValueByFixedNumber(bill.billedAmount)
+                     )}
+                  </div>
                </TableCell>
                <TableCell>
                   <div>{manageStatus(bill.claimStatus)}</div>

@@ -39,6 +39,8 @@ export {
    handleCreatedAtDate,
    manageStatus,
    getMenuTitle,
+   addSignToValueFromStart,
+   getValueByFixedNumber,
 } from "./hooks";
 export { ErrorText } from "./errorTexts";
 export { CountryList } from "./jsons";

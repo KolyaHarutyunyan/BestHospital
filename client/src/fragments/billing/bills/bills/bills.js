@@ -9,11 +9,16 @@ import {
 } from "@eachbase/components";
 import { DrawerContext } from "@eachbase/utils";
 
-const DUMMY_PAYORS = ["All", "Payor-1", "Payor-2", "Payor-3", "Payor-4"];
-const DUMMY_CLIENTS = ["All", "Client-1", "Client-2", "Client-3", "Client-4"];
+// const DUMMY_PAYORS = ["All", "Payor-1", "Payor-2", "Payor-3", "Payor-4"];
+// const DUMMY_CLIENTS = ["All", "Client-1", "Client-2", "Client-3", "Client-4"];
 
-export const BillsFragment = ({ bills }) => {
+const addAllTextToTheList = (list = []) => ["All", ...list];
+
+export const BillsFragment = ({ bills = [], clients = [], payors = [] }) => {
    const classes = billsStyle();
+
+   const clientsNames = clients.map((client) => client.firstName);
+   const payorsNames = payors.map((payor) => payor.name);
 
    const { open } = useContext(DrawerContext);
 
@@ -30,14 +35,14 @@ export const BillsFragment = ({ bills }) => {
          <div className={classes.filtersBoxStyle}>
             <UserInputsDropdown
                label={"Payor"}
-               dropdownOptions={DUMMY_PAYORS}
+               dropdownOptions={addAllTextToTheList(payorsNames)}
                onPass={(selPayor) => setSelectedPayor(selPayor)}
                selected={selectedPayor}
                dropdownClassName={classes.filterDropStyle}
             />
             <UserInputsDropdown
                label={"Client"}
-               dropdownOptions={DUMMY_CLIENTS}
+               dropdownOptions={addAllTextToTheList(clientsNames)}
                onPass={(selClient) => setSelectedClient(selClient)}
                selected={selectedClient}
                dropdownClassName={classes.filterDropStyle}
