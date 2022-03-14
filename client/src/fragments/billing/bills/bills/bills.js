@@ -9,9 +9,6 @@ import {
 } from "@eachbase/components";
 import { DrawerContext } from "@eachbase/utils";
 
-// const DUMMY_PAYORS = ["All", "Payor-1", "Payor-2", "Payor-3", "Payor-4"];
-// const DUMMY_CLIENTS = ["All", "Client-1", "Client-2", "Client-3", "Client-4"];
-
 const addAllTextToTheList = (list = []) => ["All", ...list];
 
 export const BillsFragment = ({ bills = [], clients = [], payors = [] }) => {

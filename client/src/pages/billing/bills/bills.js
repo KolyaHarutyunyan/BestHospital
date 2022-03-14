@@ -8,7 +8,7 @@ import {
 } from "@eachbase/store";
 import { Loader } from "@eachbase/components";
 import { FindLoad } from "@eachbase/utils";
-import { DUMMY_BILLS } from "@eachbase/utils/dummyDatas/dummyBills";
+// import { DUMMY_BILLS } from "@eachbase/utils/dummyDatas/dummyBills";
 
 export const Bills = () => {
    const dispatch = useDispatch();
@@ -32,10 +32,6 @@ export const Bills = () => {
       dispatch(clientActions.getClients());
       dispatch(fundingSourceActions.getFundingSource());
    }, []);
-
-   console.log(bills, " bills");
-   console.log(clients, " clients");
-   console.log(payors, " payors");
 
    return loader ? (
       <Loader />
