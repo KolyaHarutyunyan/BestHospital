@@ -29,8 +29,6 @@ function* createAppointmentSaga(action) {
          action.payload.body
       );
 
-      console.log(res, "  response from appointment");
-
       yield put({ type: GET_APPOINTMENT });
 
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
