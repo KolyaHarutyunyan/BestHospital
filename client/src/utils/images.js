@@ -103,6 +103,9 @@ import accordArrowBlue from "@eachbase/images/icons/accordArrowBlue.svg";
 import accordArrowBlack from "@eachbase/images/icons/accordArrowBlack.svg";
 import latestEarliest from "@eachbase/images/icons/latestEarliest.svg";
 
+import billingOutline from "@eachbase/images/icons/billingOutline.svg";
+import addOrange from "@eachbase/images/icons/addOrange.svg";
+
 export const Images = {
    doctors: doctors,
    phone: phone,
@@ -207,4 +210,6 @@ export const Images = {
    accordArrowBlue,
    accordArrowBlack,
    latestEarliest,
+   billingOutline,
+   addOrange,
 };

@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { BillTableWithoutScroll, BillTableWithScroll } from "./core";
 import { billsStyle } from "./styles";
 import {
@@ -56,7 +56,7 @@ export const BillsFragment = ({ bills = [], clients = [], payors = [] }) => {
             />
          </div>
          {!!bills.length ? (
-            <Fragment>
+            <>
                <div className={billsTableClassName}>
                   <BillTableWithoutScroll bills={bills} />
                   <BillTableWithScroll bills={bills} />
@@ -67,7 +67,7 @@ export const BillsFragment = ({ bills = [], clients = [], payors = [] }) => {
                   count={bills.length}
                   entries={bills.length}
                />
-            </Fragment>
+            </>
          ) : (
             <NoItemText text={"No Bills Yet"} />
          )}
