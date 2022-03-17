@@ -25,7 +25,6 @@ export const billDetailsStyle = makeStyles(() => ({
       borderRadius: "8px",
       boxShadow: "0px 0px 6px #8A8A8A3D",
       padding: "16px",
-      marginBottom: "32px",
    },
    billOutlineStyle: {
       display: "flex",
@@ -90,10 +89,11 @@ export const billDetailsStyle = makeStyles(() => ({
    billDetailsSecondPartStyle: { width: "100%" },
    billDetailsTitleBoxStyle: {
       width: "100%",
+      height: "24px",
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
-      marginBottom: "16px",
+      margin: "32px 0 16px",
    },
    billDetailsTitleStyle: {
       fontSize: "18px",
@@ -120,4 +120,12 @@ export const billDetailsStyle = makeStyles(() => ({
          marginRight: "6px",
       },
    },
+   billTransactionsTableBoxStyle: { width: "100%" },
+   paginationBoxStyle: {
+      width: "100%",
+      marginTop: "16px",
+      display: "flex",
+      justifyContent: "flex-end",
+   },
+   billDetailsThirdPartStyle: {},
 }));

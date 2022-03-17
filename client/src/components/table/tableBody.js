@@ -1,5 +1,6 @@
 import { TableRow } from "@material-ui/core";
 import { tableStyle } from "./styles";
+import { Colors } from "@eachbase/utils";
 
 export const TableBodyComponent = ({
    children,
@@ -10,7 +11,7 @@ export const TableBodyComponent = ({
    const classes = tableStyle();
    return (
       <TableRow
-         style={active ? { background: "#EBF2FD " } : {}}
+         style={active ? { backgroundColor: Colors.BackgroundWater } : {}}
          onClick={handleOpenInfo}
          className={`${classes.tableRow} ${className}`}
       >

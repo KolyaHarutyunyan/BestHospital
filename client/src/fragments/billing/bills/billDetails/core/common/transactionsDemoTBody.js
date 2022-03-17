@@ -1,26 +1,65 @@
 import React from "react";
 import { TableBody, TableCell } from "@material-ui/core";
 import { TableBodyComponent } from "@eachbase/components";
+import {
+   addSignToValueFromStart,
+   getLimitedVal,
+   getValueByFixedNumber,
+   handleCreatedAtDate,
+} from "@eachbase/utils";
+import { tableTheadTbodyStyle } from "./styles";
 
-export const TransactionsDemoTBody = ({ transactionDetails = [] }) => {
+export const TransactionsDemoTBody = ({
+   billTransactionDetails = [],
+   openConfirmingModal,
+}) => {
+   const classes = tableTheadTbodyStyle();
+
    return (
       <TableBody>
-         {transactionDetails.map((item, index) => (
-            <TableBodyComponent key={index} className={"billingSystem"}>
+         {billTransactionDetails.map((item, index) => (
+            <TableBodyComponent
+               key={index}
+               active
+               className={classes.tbodyRowStyle}
+            >
                <TableCell>
                   <div>{getLimitedVal(item._id, 13)}</div>
                </TableCell>
                <TableCell>
-                  <div>{handleCreatedAtDate(item.dateOfService, 10, "/")}</div>
+                  <div>{handleCreatedAtDate(item.date, 10, "/")}</div>
                </TableCell>
                <TableCell>
-                  <div>{getLimitedVal(item.payor, 13)}</div>
+                  <div>{getLimitedVal(item.creator, 15)}</div>
                </TableCell>
                <TableCell>
-                  <div>{getLimitedVal(item.client, 13)}</div>
+                  <div>{getLimitedVal(item.type, 21)}</div>
                </TableCell>
-               <TableCell style={resetRadius("right")}>
-                  <div>{getLimitedVal(item.authService, 13)}</div>
+               <TableCell>
+                  <div>
+                     {addSignToValueFromStart(
+                        getValueByFixedNumber(item.amount, 2)
+                     )}
+                  </div>
+               </TableCell>
+               <TableCell>
+                  <div>{getLimitedVal(item.paymentRefNumber, 13)}</div>
+               </TableCell>
+               <TableCell>
+                  <div>{getLimitedVal(item.note, 70)}</div>
+               </TableCell>
+               <TableCell>
+                  <button
+                     className={`${classes.voidActionStyle} ${
+                        item.isVoided ? "voided" : ""
+                     }`}
+                     onClick={() => {
+                        if (item.isVoided) return;
+                        openConfirmingModal();
+                     }}
+                  >
+                     {item.isVoided ? "Voided" : "Void"}
+                  </button>
                </TableCell>
             </TableBodyComponent>
          ))}

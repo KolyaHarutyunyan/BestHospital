@@ -4,6 +4,7 @@ import { billDetailsStyle } from "./styles";
 import {
    AddModalButton,
    BillTransactionWrapper,
+   CreateChancel,
    SimpleModal,
    UserInputsDropdown,
 } from "@eachbase/components";
@@ -15,43 +16,45 @@ import {
    makeCapitalize,
 } from "@eachbase/utils";
 import { billActions } from "@eachbase/store";
-import { BillTransactionInputs, TransactionsDemoTable } from "./core";
+import {
+   BillTransactionInputs,
+   TransactionsDemoTable,
+   BillTotalsDemoTable,
+} from "./core";
+import Pagination from "@material-ui/lab/Pagination";
+import { dummyBillTransactions } from "@eachbase/utils/dummyDatas/dummyBillTransactions";
 
 export const BillDetailsFragment = ({ billDetails }) => {
    const classes = billDetailsStyle();
 
    const {
-      appointment,
       authService,
-      authorization,
       billedAmount,
-      claimStatus,
       client,
       clientPaid,
       clientResp,
-      createdDate,
       dateOfService,
-      invoiceStatus,
-      location,
       payerPaid,
       payerTotal,
-      placeService,
-      staff,
-      status,
       totalHours,
       totalUnits,
-      updatedDate,
       _id,
    } = billDetails || {};
 
+   const BILL_TOTALS = {
+      billedRate: billedAmount,
+      totalAmount: clientPaid + payerPaid,
+      payorBalance: payerTotal,
+      clientBalance: clientResp,
+      totalBalance: clientResp + payerTotal,
+   };
+
    const dispatch = useDispatch();
 
-   console.log(billDetails, "  billDetails");
-
-   const [selectedBillClaimStatus, setSelectedBillClaimStatus] = useState(
+   const [selectedClaimStatus, setSelectedClaimStatus] = useState(
       enumValues.BILLING_CLAIM_STATUSES[0]
    );
-   const [selectedBillInvoiceStatus, setSelectedBillInvoiceStatus] = useState(
+   const [selectedInvoiceStatus, setSelectedInvoiceStatus] = useState(
       enumValues.INVOICE_STATUSES[1]
    );
    const [selectedBillStatus, setSelectedBillStatus] = useState(
@@ -59,12 +62,60 @@ export const BillDetailsFragment = ({ billDetails }) => {
    );
    const [open, setOpen] = useState(false);
 
-   const handleSelection = (selected, handleSelectedStatus) => {
-      handleSelectedStatus(selected);
-      dispatch(
-         billActions.editBillStatus(billDetails?._id, selected.toUpperCase())
-      );
+   const [claimStatusModalIsOpen, setClaimStatusModalIsOpen] = useState(false);
+   const [invoiceStatusModalIsOpen, setInvoiceStatusModalIsOpen] =
+      useState(false);
+   const [billStatusModalIsOpen, setBillStatusModalIsOpen] = useState(false);
+   const [page, setPage] = useState(1);
+
+   const handleOpen = (selectedStatus, handleStatusModalOpen) => {
+      handleStatusModalOpen((prevState) => !prevState);
    };
+
+   const handleStatus = (
+      selected,
+      givenStatus,
+      setSelectedStatus,
+      selectedStatus,
+      setModalIsOpen
+   ) => {
+      if (selected === givenStatus) {
+         if (selectedStatus === givenStatus) return;
+         setSelectedStatus(selected);
+         // dispatch(.......selected status);
+      } else {
+         handleOpen(selected, setModalIsOpen);
+      }
+   };
+
+   const handleOpenClose = () => {
+      if (claimStatusModalIsOpen) {
+         setClaimStatusModalIsOpen((prevState) => !prevState);
+      } else if (invoiceStatusModalIsOpen) {
+         setInvoiceStatusModalIsOpen((prevState) => !prevState);
+      } else if (billStatusModalIsOpen) {
+         setBillStatusModalIsOpen((prevState) => !prevState);
+      }
+   };
+
+   const handleNewStatusSelect = () => {
+      handleOpenClose();
+   };
+
+   const modalTitleContent = claimStatusModalIsOpen
+      ? "Change Claim Status"
+      : invoiceStatusModalIsOpen
+      ? "Change Invoice Status"
+      : billStatusModalIsOpen
+      ? "Change Bill Status"
+      : "";
+   const modalSubtitleContent = claimStatusModalIsOpen
+      ? "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text. Claim"
+      : invoiceStatusModalIsOpen
+      ? "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text. Invoice"
+      : billStatusModalIsOpen
+      ? "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text. Bill"
+      : "";
 
    const BILL_DETAILS = [
       {
@@ -91,6 +142,13 @@ export const BillDetailsFragment = ({ billDetails }) => {
       (billDetail) => billDetail.detail
    );
 
+   const billTransactions = dummyBillTransactions;
+
+   const changePage = (number) => {
+      let start = number > 1 ? number - 1 + "0" : 0;
+      setPage(number);
+   };
+
    return (
       <>
          <div className={classes.billDetailsContainerStyle}>
@@ -100,25 +158,43 @@ export const BillDetailsFragment = ({ billDetails }) => {
                   label={"Claim Status"}
                   dropdownOptions={enumValues.BILLING_CLAIM_STATUSES}
                   onPass={(selected) =>
-                     handleSelection(selected, setSelectedBillClaimStatus)
+                     handleStatus(
+                        selected,
+                        "Claim",
+                        setSelectedClaimStatus,
+                        selectedClaimStatus,
+                        setClaimStatusModalIsOpen
+                     )
                   }
-                  selected={selectedBillClaimStatus}
+                  selected={selectedClaimStatus}
                />
                <UserInputsDropdown
                   dropdownClassName={"statusSelectForBill"}
                   label={"Invoice Status"}
                   dropdownOptions={enumValues.INVOICE_STATUSES}
                   onPass={(selected) =>
-                     handleSelection(selected, setSelectedBillInvoiceStatus)
+                     handleStatus(
+                        selected,
+                        "Not Invoiced",
+                        setSelectedInvoiceStatus,
+                        selectedInvoiceStatus,
+                        setInvoiceStatusModalIsOpen
+                     )
                   }
-                  selected={selectedBillInvoiceStatus}
+                  selected={selectedInvoiceStatus}
                />
                <UserInputsDropdown
                   dropdownClassName={"statusSelectForBill"}
                   label={"Bill Status"}
                   dropdownOptions={enumValues.BILLING_STATUSES}
                   onPass={(selected) =>
-                     handleSelection(selected, setSelectedBillStatus)
+                     handleStatus(
+                        selected,
+                        "Open",
+                        setSelectedBillStatus,
+                        selectedBillStatus,
+                        setBillStatusModalIsOpen
+                     )
                   }
                   selected={selectedBillStatus}
                />
@@ -158,9 +234,27 @@ export const BillDetailsFragment = ({ billDetails }) => {
                      handleClick={() => setOpen(true)}
                   />
                </div>
-               <TransactionsDemoTable />
+               <div className={classes.billTransactionsTableBoxStyle}>
+                  <TransactionsDemoTable billTransactions={billTransactions} />
+                  <div className={classes.paginationBoxStyle}>
+                     <Pagination
+                        onChange={(event, val) => changePage(val, "vvv")}
+                        page={page}
+                        count={
+                           !!billTransactions.length &&
+                           Math.ceil(billTransactions.length / 10)
+                        }
+                        color={"primary"}
+                     />
+                  </div>
+               </div>
             </div>
-            <div className={classes.billDetailsThirdPartStyle}></div>
+            <div className={classes.billDetailsThirdPartStyle}>
+               <div className={classes.billDetailsTitleBoxStyle}>
+                  <h2 className={classes.billDetailsTitleStyle}>Bill Totals</h2>
+               </div>
+               <BillTotalsDemoTable billTotals={BILL_TOTALS} />
+            </div>
          </div>
          <SimpleModal
             openDefault={open}
@@ -168,7 +262,7 @@ export const BillDetailsFragment = ({ billDetails }) => {
             content={
                <BillTransactionWrapper
                   onClose={() => setOpen(false)}
-                  titleContent={"Add Transcation"}
+                  titleContent={"Add Transaction"}
                   subtitleContent={
                      "Please fill out the below fields to add a transaction."
                   }
@@ -176,6 +270,31 @@ export const BillDetailsFragment = ({ billDetails }) => {
                   <BillTransactionInputs
                      billId={billDetails?._id}
                      closeModal={() => setOpen(false)}
+                  />
+               </BillTransactionWrapper>
+            }
+         />
+         <SimpleModal
+            openDefault={
+               claimStatusModalIsOpen ||
+               invoiceStatusModalIsOpen ||
+               billStatusModalIsOpen
+            }
+            handleOpenClose={handleOpenClose}
+            content={
+               <BillTransactionWrapper
+                  onClose={handleOpenClose}
+                  titleContent={modalTitleContent}
+                  subtitleContent={modalSubtitleContent}
+               >
+                  <CreateChancel
+                     butnClassName={classes.addOrCancelButnStyle}
+                     //  loader={!!loader.length}
+                     create={"Change"}
+                     chancel={"Cancel"}
+                     onCreate={handleNewStatusSelect}
+                     onClose={handleOpenClose}
+                     buttonWidth="195px"
                   />
                </BillTransactionWrapper>
             }

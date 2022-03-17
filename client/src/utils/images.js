@@ -105,6 +105,9 @@ import latestEarliest from "@eachbase/images/icons/latestEarliest.svg";
 
 import billingOutline from "@eachbase/images/icons/billingOutline.svg";
 import addOrange from "@eachbase/images/icons/addOrange.svg";
+import aToZWhite from "@eachbase/images/icons/aToZWhite.svg";
+import latestEarliestWhite from "@eachbase/images/icons/latestEarliestWhite.svg";
+import dropdownArrowWhite from "@eachbase/images/icons/dropdownArrowWhite.svg";
 
 export const Images = {
    doctors: doctors,
@@ -212,4 +215,7 @@ export const Images = {
    latestEarliest,
    billingOutline,
    addOrange,
+   aToZWhite,
+   latestEarliestWhite,
+   dropdownArrowWhite,
 };

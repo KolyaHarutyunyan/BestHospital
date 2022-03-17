@@ -1,4 +1,4 @@
-export const DUMMY_BILLS = [
+export const dummyBills = [
    {
       _id: "1",
       dateOfService: "10/21/2021",
