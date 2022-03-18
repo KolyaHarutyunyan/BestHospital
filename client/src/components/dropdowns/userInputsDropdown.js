@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import { dropdownsStyle } from "./styles";
 import { ActiveInactiveStatus } from "@eachbase/utils";
 
@@ -19,7 +19,7 @@ export const UserInputsDropdown = ({
    };
 
    return (
-      <Fragment>
+      <>
          {dropdownIsShown && (
             <div
                className={classes.dropOverlayStyle}
@@ -64,6 +64,6 @@ export const UserInputsDropdown = ({
                )}
             </div>
          </div>
-      </Fragment>
+      </>
    );
 };

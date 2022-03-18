@@ -1,5 +1,5 @@
-import { Table } from "@material-ui/core";
 import React from "react";
+import { Table } from "@material-ui/core";
 import { BillTBodyWithoutScroll, BillTHeadWithoutScroll } from "./common";
 import { billTableStyle } from "./styles";
 

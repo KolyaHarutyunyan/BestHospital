@@ -123,7 +123,6 @@ export const BillTransactionInputs = ({ billId, closeModal }) => {
             chancel={"Cancel"}
             onCreate={handleSubmit}
             onClose={closeModal}
-            buttonWidth="400px"
          />
       </div>
    );

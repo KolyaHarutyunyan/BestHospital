@@ -51,10 +51,11 @@ export const leftBarCommonStyle = makeStyles(() => ({
          "& li": {
             fontSize: "14px",
             fontWeight: 400,
-            color: Colors.TextSecondary,
-            "&.active": { color: Colors.BackgroundBlue },
             "&:not(:first-of-type)": { marginTop: "16px" },
-            "& a": { color: "inherit" },
+            "& a": {
+               color: Colors.TextSecondary,
+               "&.active": { color: Colors.BackgroundBlue },
+            },
          },
       },
    },

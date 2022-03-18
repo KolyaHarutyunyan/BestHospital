@@ -8,24 +8,28 @@ export const SearchAndFilter = ({
    custom,
    handleClick,
    style,
+   iconsAreLight,
 }) => {
    const classes = inputsStyle();
+
+   const _iconSrc = iconsAreLight
+      ? type === "arrow"
+         ? Images.dropdownArrowWhite
+         : type === "latestEarliest"
+         ? Images.latestEarliestWhite
+         : Images.aToZWhite
+      : type === "arrow"
+      ? Images.dropdownArrowBlue
+      : type === "latestEarliest"
+      ? Images.latestEarliest
+      : Images.aToZ;
+
    return (
       <div className={classes.searchInputWrapper}>
          <div className={`${classes.searchInputTitle} ${style}`}>
             <span>{title}</span>
             {custom !== false && (
-               <img
-                  onClick={handleClick}
-                  src={
-                     type === "arrow"
-                        ? Images.dropdownArrowBlue
-                        : type === "latestEarliest"
-                        ? Images.latestEarliest
-                        : Images.aToZ
-                  }
-                  alt={"filter icon"}
-               />
+               <img onClick={handleClick} src={_iconSrc} alt={"filter icon"} />
             )}
          </div>
       </div>

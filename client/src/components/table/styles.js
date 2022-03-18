@@ -56,10 +56,10 @@ export const tableStyle = makeStyles(() => ({
          },
          "&:hover": {
             backgroundColor: Colors.BackgroundWhite,
-            "& > td": { backgroundColor: Colors.BackgroundWhite },
+            "& > td": { backgroundColor: "inherit" },
          },
       },
-      "& td": { backgroundColor: Colors.BackgroundWhite },
+      "& td": { backgroundColor: "inherit" },
       "& > td:first-child": {
          borderTopLeftRadius: "8px",
          borderBottomLeftRadius: "8px",
@@ -70,7 +70,7 @@ export const tableStyle = makeStyles(() => ({
       },
       "&:hover": {
          backgroundColor: "#EBF2FD80",
-         "& > td": { backgroundColor: "#EBF2FD80" },
+         "& > td": { backgroundColor: "inherit" },
       },
       height: "50px",
       "& .makeStyles-membersTableWrapper-26 .MuiTableContainer-root": {

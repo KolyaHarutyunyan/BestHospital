@@ -4,7 +4,11 @@ import { wrapperStyle } from "./styles";
 import { SimpleModal } from "../modal";
 import { fundingSourceActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
-import { ActiveInactiveStatus, ActiveInactiveStatusReverse, enumValues } from "@eachbase/utils";
+import {
+   ActiveInactiveStatus,
+   ActiveInactiveStatusReverse,
+   enumValues,
+} from "@eachbase/utils";
 import { UserInputsDropdown } from "../dropdowns";
 
 export const TableWrapperGeneralInfo = ({
@@ -28,10 +32,13 @@ export const TableWrapperGeneralInfo = ({
 
    const handleSelectionChange = (selected) => {
       const upperCasedStatus = ActiveInactiveStatus(selected);
+
       if (upperCasedStatus === "ACTIVE") {
          if (selectedStatus === "Active") return;
          setSelectedStatus(selected);
-         dispatch(fundingSourceActions.setStatus(id, path, upperCasedStatus, type));
+         dispatch(
+            fundingSourceActions.setStatus(id, path, upperCasedStatus, type)
+         );
       } else {
          handleOpen(upperCasedStatus);
       }

@@ -1,46 +1,145 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useParams } from "react-router";
+import React, { useContext, useState } from "react";
 import { billDetailsStyle } from "./styles";
 import {
    AddModalButton,
    BillTransactionWrapper,
    SimpleModal,
-   UserInputsDropdown,
 } from "@eachbase/components";
-import { enumValues } from "@eachbase/utils";
-import { billActions } from "@eachbase/store";
-import { BillTransactionInputs } from "./core";
+import {
+   DrawerContext,
+   getLimitedVal,
+   handleCreatedAtDate,
+   Images,
+   makeCapitalize,
+} from "@eachbase/utils";
+import {
+   BillTransactionInputs,
+   TransactionsDemoTable,
+   BillTotalsDemoTable,
+   StatusSelectors,
+} from "./core";
+import Pagination from "@material-ui/lab/Pagination";
+import { dummyBillTransactions } from "@eachbase/utils/dummyDatas/dummyBillTransactions";
 
 export const BillDetailsFragment = ({ billDetails }) => {
    const classes = billDetailsStyle();
-   const dispatch = useDispatch();
 
-   const [selectedStatus, setSelectedStatus] = useState("Open");
-   const [open, setOpen] = useState(false);
+   const { open: drawerOpen } = useContext(DrawerContext);
 
-   const handleSelection = (selected) => {
-      setSelectedStatus(selected);
-      dispatch(
-         billActions.editBillStatus(billDetails?._id, selected.toUpperCase())
-      );
+   const {
+      authService,
+      billedAmount,
+      client,
+      clientPaid,
+      clientResp,
+      dateOfService,
+      payerPaid,
+      payerTotal,
+      totalHours,
+      totalUnits,
+      _id,
+   } = billDetails || {};
+
+   const BILL_TOTALS = {
+      billedRate: billedAmount,
+      totalAmount: clientPaid + payerPaid,
+      payorBalance: payerTotal,
+      clientBalance: clientResp,
+      totalBalance: clientResp + payerTotal,
    };
 
-   const params = useParams();
+   const [open, setOpen] = useState(false);
+   const [page, setPage] = useState(1);
+
+   const BILL_DETAILS = [
+      {
+         detailText: "DoS:",
+         detail: handleCreatedAtDate(dateOfService, 10, "/"),
+      },
+      { detailText: "Payor:", detail: makeCapitalize("payor name here") },
+      { detailText: "Client:", detail: makeCapitalize(client?.middleName) },
+      {
+         detailText: "Service:",
+         detail: getLimitedVal(authService?.authorizationId, 13),
+      },
+      {
+         detailText: "Hrs:",
+         detail: totalHours === 0 ? totalHours + "" : totalHours,
+      },
+      {
+         detailText: "Units:",
+         detail: totalUnits === 0 ? totalUnits + "" : totalUnits,
+      },
+   ];
+
+   const filteredDetails = BILL_DETAILS.filter((billDtl) => billDtl.detail);
+
+   const billTransactions = dummyBillTransactions;
+
+   const changePage = (number) => {
+      let start = number > 1 ? number - 1 + "0" : 0;
+      setPage(number);
+   };
 
    return (
       <>
-         <div>
-            <h1>{`bill ${billDetails?._id} details here`}</h1>
-            <UserInputsDropdown
-               dropdownOptions={enumValues.BILLING_STATUSES}
-               onPass={handleSelection}
-               selected={selectedStatus}
-            />
-            <AddModalButton
-               text={"Add a transaction"}
-               handleClick={() => setOpen(true)}
-            />
+         <div className={classes.billDetailsContainerStyle}>
+            <StatusSelectors />
+            <div className={classes.billDetailsFirstPartStyle}>
+               <div className={classes.billOutlineStyle}>
+                  <div className={classes.billIdIconBoxStyle}>
+                     <div>
+                        <img src={Images.billingOutline} alt="" />
+                     </div>
+                  </div>
+                  <span className={classes.billIdTextBoxStyle}>
+                     ID: {getLimitedVal(_id, 5)}
+                  </span>
+               </div>
+               {!!filteredDetails.length && (
+                  <ol className={classes.billDetailsListStyle}>
+                     {filteredDetails.map((item, index) => (
+                        <li key={index} className={drawerOpen ? "narrow" : ""}>
+                           <span>
+                              {item.detailText} <em> {item.detail} </em>
+                           </span>
+                        </li>
+                     ))}
+                  </ol>
+               )}
+            </div>
+            <div className={classes.billDetailsSecondPartStyle}>
+               <div className={classes.billDetailsTitleBoxStyle}>
+                  <h2 className={classes.billDetailsTitleStyle}>
+                     Transactions
+                  </h2>
+                  <AddModalButton
+                     buttonClassName={classes.addTransactionButnStyle}
+                     text={"Add Transactions"}
+                     handleClick={() => setOpen(true)}
+                  />
+               </div>
+               <div className={classes.billTransactionsTableBoxStyle}>
+                  <TransactionsDemoTable billTransactions={billTransactions} />
+                  <div className={classes.paginationBoxStyle}>
+                     <Pagination
+                        onChange={(event, val) => changePage(val, "vvv")}
+                        page={page}
+                        count={
+                           !!billTransactions.length &&
+                           Math.ceil(billTransactions.length / 10)
+                        }
+                        color={"primary"}
+                     />
+                  </div>
+               </div>
+            </div>
+            <div className={classes.billDetailsThirdPartStyle}>
+               <div className={classes.billDetailsTitleBoxStyle}>
+                  <h2 className={classes.billDetailsTitleStyle}>Bill Totals</h2>
+               </div>
+               <BillTotalsDemoTable billTotals={BILL_TOTALS} />
+            </div>
          </div>
          <SimpleModal
             openDefault={open}
@@ -48,13 +147,13 @@ export const BillDetailsFragment = ({ billDetails }) => {
             content={
                <BillTransactionWrapper
                   onClose={() => setOpen(false)}
-                  titleContent={"Add Transcation"}
+                  titleContent={"Add Transaction"}
                   subtitleContent={
                      "Please fill out the below fields to add a transaction."
                   }
                >
                   <BillTransactionInputs
-                     billId={billDetails?._id}
+                     billId={_id}
                      closeModal={() => setOpen(false)}
                   />
                </BillTransactionWrapper>

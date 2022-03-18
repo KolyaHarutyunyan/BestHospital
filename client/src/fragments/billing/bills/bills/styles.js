@@ -17,10 +17,7 @@ export const billsStyle = makeStyles(() => ({
    filterDropStyle: {
       width: "220px",
       marginRight: "24px",
-      "& > div > div": {
-         paddingLeft: "8px !important",
-         "& > h6": { display: "block !important" },
-      },
+      "& h6:before, & li:before": { content: "unset" },
    },
    dateInputStyle: {
       width: "220px",
@@ -34,4 +31,10 @@ export const billsStyle = makeStyles(() => ({
             border: "none",
          },
    },
+   tableAndPaginationBoxStyle: {
+      minHeight: "700px",
+      display: "flex",
+      flexDirection: "column",
+   },
+   tableBoxStyle: { flexGrow: 1 },
 }));

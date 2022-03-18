@@ -1,5 +1,5 @@
-import React, { Fragment, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, NavLink, useHistory } from "react-router-dom";
 import { ListItem, ListItemText } from "@material-ui/core";
 import { leftBarCommonStyle } from "./styles";
 import { LeftBarImages } from "../leftBarImages";
@@ -67,7 +67,7 @@ export const CustomListItem = ({ linkInfo, item, open, accordion }) => {
                   billingIsActive={billingIsActive}
                />
                {open && (
-                  <Fragment>
+                  <>
                      <ListItemText
                         className={accordionItemTextClassName}
                         primary={getLimitedVal(item.name, 13)}
@@ -81,19 +81,16 @@ export const CustomListItem = ({ linkInfo, item, open, accordion }) => {
                         }
                         alt=""
                      />
-                  </Fragment>
+                  </>
                )}
             </ListItem>
          </div>
          <div className={sectionsListClassName}>
             <ol>
                {billingSections.map((section, index) => {
-                  const activeClassName =
-                     linkInfo === section.path ? "active" : "";
-
                   return (
-                     <li key={index} className={activeClassName}>
-                        <Link to={section.path}>{section.label}</Link>
+                     <li key={index}>
+                        <NavLink to={section.path}>{section.label}</NavLink>
                      </li>
                   );
                })}

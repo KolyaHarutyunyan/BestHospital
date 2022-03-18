@@ -110,9 +110,12 @@ export const wrapperStyle = makeStyles(() => ({
       marginBottom: "16px",
    },
    transactionSubtitle: {
+      maxWidth: "406px",
+      width: "100%",
       fontSize: "16px",
       fontWeight: 400,
       color: Colors.TextSecondary,
+      lineHeight: "24px",
    },
    //**end */
 }));

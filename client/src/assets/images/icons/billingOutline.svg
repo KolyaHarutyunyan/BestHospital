@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="Billing_Outline" data-name="Billing Outline" transform="translate(-333 -306)">
+    <g id="Base" transform="translate(333 306)" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <g id="invoice_3_" data-name="invoice (3)" transform="translate(337.51 308)">
+      <g id="Group_1092" data-name="Group 1092" transform="translate(5.23 3.138)">
+        <g id="Group_1091" data-name="Group 1091" transform="translate(0)">
+          <path id="Path_3298" data-name="Path 3298" d="M200.833,84.1H200a.669.669,0,0,1,0-1.339h1.674a.586.586,0,0,0,0-1.172H201V80.92a.586.586,0,0,0-1.172,0V81.6A1.841,1.841,0,0,0,200,85.271h.837a.669.669,0,0,1,0,1.339h-1.674a.586.586,0,0,0,0,1.172h.669v.669a.586.586,0,0,0,1.172,0v-.677a1.841,1.841,0,0,0-.167-3.674Z" transform="translate(-198.155 -80.334)" fill="#fff"/>
+        </g>
+      </g>
+      <g id="Group_1094" data-name="Group 1094" transform="translate(3.766 13.807)">
+        <g id="Group_1093" data-name="Group 1093" transform="translate(0)">
+          <path id="Path_3299" data-name="Path 3299" d="M167.529,353.467h-6.276a.586.586,0,0,0,0,1.172h6.276a.586.586,0,0,0,0-1.172Z" transform="translate(-160.667 -353.467)" fill="#fff"/>
+        </g>
+      </g>
+      <g id="Group_1096" data-name="Group 1096" transform="translate(0)">
+        <g id="Group_1095" data-name="Group 1095">
+          <path id="Path_3300" data-name="Path 3300" d="M78.66,0H64.853a.586.586,0,0,0-.586.586v17.1a.586.586,0,0,0,.172.414l1.726,1.726a.586.586,0,0,0,.829,0L68.3,18.517l1.312,1.312a.586.586,0,0,0,.829,0l1.311-1.312,1.312,1.312a.586.586,0,0,0,.829,0l1.312-1.312,1.312,1.312a.586.586,0,0,0,.829,0L79.075,18.1a.586.586,0,0,0,.172-.414V.586A.586.586,0,0,0,78.66,0ZM76.934,18.585l-1.312-1.312a.586.586,0,0,0-.829,0l-1.312,1.312-1.312-1.312a.586.586,0,0,0-.829,0l-1.312,1.312-1.312-1.312a.586.586,0,0,0-.829,0l-1.312,1.312-1.14-1.14V1.172H78.074V17.445h0Z" transform="translate(-64.267)" fill="#fff"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

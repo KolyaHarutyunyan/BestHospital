@@ -41,6 +41,8 @@ export {
    getMenuTitle,
    addSignToValueFromStart,
    getValueByFixedNumber,
+   makeCapitalize,
+   useWidth,
 } from "./hooks";
 export { ErrorText } from "./errorTexts";
 export { CountryList } from "./jsons";
