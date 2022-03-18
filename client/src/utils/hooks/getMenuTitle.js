@@ -1,4 +1,6 @@
 export const getMenuTitle = (url = "") => {
+   if (url.startsWith("/bill/")) return "Bills";
+
    switch (url) {
       // case "/":
       //    return "Home";
@@ -21,6 +23,7 @@ export const getMenuTitle = (url = "") => {
       case "/factoring":
          return "Factoring Companies";
       case "/bills":
+      case "/bill/:id":
          return "Bills";
       case "/claims":
          return "Claims";

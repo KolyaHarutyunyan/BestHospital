@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { TableBody, TableCell } from "@material-ui/core";
 import { TableBodyComponent } from "@eachbase/components";
 import {
    addSignToValueFromStart,
+   DrawerContext,
    getLimitedVal,
    getValueByFixedNumber,
    handleCreatedAtDate,
+   useWidth,
 } from "@eachbase/utils";
 import { tableTheadTbodyStyle } from "./styles";
 
@@ -14,6 +16,10 @@ export const TransactionsDemoTBody = ({
    openConfirmingModal,
 }) => {
    const classes = tableTheadTbodyStyle();
+
+   const { open } = useContext(DrawerContext);
+
+   const width = useWidth();
 
    return (
       <TableBody>
@@ -46,7 +52,15 @@ export const TransactionsDemoTBody = ({
                   <div>{getLimitedVal(item.paymentRefNumber, 13)}</div>
                </TableCell>
                <TableCell>
-                  <div>{getLimitedVal(item.note, 70)}</div>
+                  <div>
+                     {width <= 1345
+                        ? getLimitedVal(item.note, open ? 5 : 25)
+                        : width > 1345 && width <= 1640
+                        ? getLimitedVal(item.note, open ? 10 : 35)
+                        : width > 1640 && width <= 1770
+                        ? getLimitedVal(item.note, open ? 40 : 65)
+                        : getLimitedVal(item.note, open ? 75 : 95)}
+                  </div>
                </TableCell>
                <TableCell>
                   <button

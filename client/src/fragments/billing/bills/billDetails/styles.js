@@ -9,16 +9,6 @@ export const billDetailsStyle = makeStyles(() => ({
       boxShadow: "0px 0px 6px #347AF033",
       padding: "24px",
    },
-   billStatusesBoxStyle: {
-      width: "100%",
-      display: "flex",
-      marginBottom: "24px",
-      "& .statusSelectForBill": {
-         marginRight: "24px",
-         "& li:hover": { backgroundColor: "#EBF2FD !important" },
-         "& h6::before, & li::before": { content: "unset" },
-      },
-   },
    billDetailsFirstPartStyle: {
       width: "100%",
       backgroundColor: Colors.BackgroundWhite,
@@ -67,7 +57,8 @@ export const billDetailsStyle = makeStyles(() => ({
       justifyContent: "space-between",
       flexWrap: "wrap",
       "& li": {
-         maxWidth: "505px",
+         maxWidth: "557px",
+         "&.narrow": { maxWidth: "505px" },
          width: "100%",
          padding: "9px 16px",
          backgroundColor: Colors.BackgroundCatskillWhite,
@@ -83,6 +74,22 @@ export const billDetailsStyle = makeStyles(() => ({
                color: Colors.TextMiddleGray,
                marginLeft: "8px",
             },
+         },
+         "@media(max-width: 1919px)": {
+            maxWidth: "500px",
+            "&.narrow": { maxWidth: "450px" },
+         },
+         "@media(max-width: 1760px)": {
+            maxWidth: "450px",
+            "&.narrow": { maxWidth: "400px" },
+         },
+         "@media(max-width: 1600px)": {
+            maxWidth: "400px",
+            "&.narrow": { maxWidth: "350px" },
+         },
+         "@media(max-width: 1440px)": {
+            maxWidth: "350px",
+            "&.narrow": { maxWidth: "300px" },
          },
       },
    },

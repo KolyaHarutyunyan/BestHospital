@@ -6,7 +6,7 @@ export const dummyBillTransactions = [
       type: "Client Responsibility",
       amount: 200,
       paymentRefNumber: "123123431",
-      note: "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+      note: "Lorem Ipsum is simply dummy text of the printing and typesetting industry dummy text of the printing and typesetting industry",
       isVoided: false,
    },
    {
@@ -16,7 +16,7 @@ export const dummyBillTransactions = [
       type: "Client Responsibility",
       amount: 200,
       paymentRefNumber: "123123431",
-      note: "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+      note: "Lorem Ipsum is simply dummy text of the printing and typesetting industry dummy text of the printing and typesetting industry",
       isVoided: true,
    },
    {
@@ -26,7 +26,7 @@ export const dummyBillTransactions = [
       type: "Client Responsibility",
       amount: 200,
       paymentRefNumber: "123123431",
-      note: "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+      note: "Lorem Ipsum is simply dummy text of the printing and typesetting industry dummy text of the printing and typesetting industry",
       isVoided: false,
    },
    {
@@ -36,7 +36,7 @@ export const dummyBillTransactions = [
       type: "Client Responsibility",
       amount: 200,
       paymentRefNumber: "123123431",
-      note: "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+      note: "Lorem Ipsum is simply dummy text of the printing and typesetting industry dummy text of the printing and typesetting industry",
       isVoided: false,
    },
    {
@@ -46,7 +46,7 @@ export const dummyBillTransactions = [
       type: "Client Responsibility",
       amount: 200,
       paymentRefNumber: "123123431",
-      note: "Lorem Ipsum is simply dummy text of the printing and typesetting industry...",
+      note: "Lorem Ipsum is simply dummy text of the printing and typesetting industry dummy text of the printing and typesetting industry",
       isVoided: true,
    },
    {
@@ -56,7 +56,7 @@ export const dummyBillTransactions = [
       type: "Client Responsibility",
       amount: 200,
       paymentRefNumber: "123123431",
-      note: "Lorem Ipsum is simply dummy text of the printing and typesetting industry...",
+      note: "Lorem Ipsum is simply dummy text of the printing and typesetting industry dummy text of the printing and typesetting industry",
       isVoided: false,
    },
    {
@@ -66,7 +66,7 @@ export const dummyBillTransactions = [
       type: "Client Responsibility",
       amount: 200,
       paymentRefNumber: "123123431",
-      note: "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+      note: "Lorem Ipsum is simply dummy text of the printing and typesetting industry dummy text of the printing and typesetting industry",
       isVoided: false,
    },
    {
@@ -76,7 +76,7 @@ export const dummyBillTransactions = [
       type: "Client Responsibility",
       amount: 200,
       paymentRefNumber: "123123431",
-      note: "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+      note: "Lorem Ipsum is simply dummy text of the printing and typesetting industry dummy text of the printing and typesetting industry",
       isVoided: true,
    },
 ];

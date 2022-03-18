@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, NavLink, useHistory } from "react-router-dom";
 import { ListItem, ListItemText } from "@material-ui/core";
 import { leftBarCommonStyle } from "./styles";
 import { LeftBarImages } from "../leftBarImages";
@@ -88,12 +88,9 @@ export const CustomListItem = ({ linkInfo, item, open, accordion }) => {
          <div className={sectionsListClassName}>
             <ol>
                {billingSections.map((section, index) => {
-                  const activeClassName =
-                     linkInfo === section.path ? "active" : "";
-
                   return (
-                     <li key={index} className={activeClassName}>
-                        <Link to={section.path}>{section.label}</Link>
+                     <li key={index}>
+                        <NavLink to={section.path}>{section.label}</NavLink>
                      </li>
                   );
                })}
