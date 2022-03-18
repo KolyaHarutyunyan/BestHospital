@@ -31,4 +31,10 @@ export const billsStyle = makeStyles(() => ({
             border: "none",
          },
    },
+   tableAndPaginationBoxStyle: {
+      minHeight: "700px",
+      display: "flex",
+      flexDirection: "column",
+   },
+   tableBoxStyle: { flexGrow: 1 },
 }));

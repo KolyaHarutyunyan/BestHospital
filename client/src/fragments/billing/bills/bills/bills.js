@@ -56,10 +56,12 @@ export const BillsFragment = ({ bills = [], clients = [], payors = [] }) => {
             />
          </div>
          {!!bills.length ? (
-            <>
-               <div className={billsTableClassName}>
-                  <BillTableWithoutScroll bills={bills} />
-                  <BillTableWithScroll bills={bills} />
+            <div className={classes.tableAndPaginationBoxStyle}>
+               <div className={classes.tableBoxStyle}>
+                  <div className={billsTableClassName}>
+                     <BillTableWithoutScroll bills={bills} />
+                     <BillTableWithScroll bills={bills} />
+                  </div>
                </div>
                <PaginationItem
                   listLength={bills.length}
@@ -67,7 +69,7 @@ export const BillsFragment = ({ bills = [], clients = [], payors = [] }) => {
                   count={bills.length}
                   entries={bills.length}
                />
-            </>
+            </div>
          ) : (
             <NoItemText text={"No Bills Yet"} />
          )}
