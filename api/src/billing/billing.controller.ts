@@ -46,9 +46,10 @@ export class BillingController {
   @Get()
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: [BillingDto] })
-  @ApiQuery({ name: 'claimStatus', enum: ClaimStatus })
-  async findAll(@Query('claimStatus') claimStatus: ClaimStatus) {
-    return await this.billingService.findAll(claimStatus);
+  // @ApiQuery({ name: 'claimStatus', enum: ClaimStatus })
+  // @Query('claimStatus') claimStatus: ClaimStatus
+  async findAll() {
+    return await this.billingService.findAll();
   }
 
   @Get(':id')

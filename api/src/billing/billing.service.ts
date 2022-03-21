@@ -125,8 +125,8 @@ export class BillingService {
   }
 
   /** find all bills */
-  async findAll(claimStatus: string): Promise<BillingDto[]> {
-    const billings = await this.model.find({ claimStatus });
+  async findAll(): Promise<BillingDto[]> {
+    const billings = await this.model.find({ });
     return this.sanitizer.sanitizeMany(billings);
   }
 
