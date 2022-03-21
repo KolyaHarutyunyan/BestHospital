@@ -126,7 +126,13 @@ export class BillingService {
 
   /** find all bills */
   async findAll(): Promise<BillingDto[]> {
-    const billings = await this.model.find({ });
+    const billings = await this.model
+      .find({})
+      .populate('authService')
+      .populate('client')
+      .populate('payer')
+      .populate('placeService')
+      .populate('transaction');
     return this.sanitizer.sanitizeMany(billings);
   }
 
@@ -153,7 +159,8 @@ export class BillingService {
       .populate('authService')
       .populate('client')
       .populate('payer')
-      .populate('placeService');
+      .populate('placeService')
+      .populate('transaction');
     this.checkBilling(billing);
     return this.sanitizer.sanitize(billing);
   }

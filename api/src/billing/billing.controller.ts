@@ -53,6 +53,8 @@ export class BillingController {
   }
 
   @Get(':id')
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: BillingDto })
   @Public()
   async findOne(@Param('id', ParseObjectIdPipe) id: string) {
     return await this.billingService.findOne(id);
