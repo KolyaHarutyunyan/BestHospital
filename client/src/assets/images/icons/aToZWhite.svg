@@ -1,0 +1,25 @@
+<svg id="A_to_Z_Z_to_A_Icons" data-name="A to Z / Z to A Icons" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+  <g id="A_to_Z" data-name="A to Z">
+    <g id="Base" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="18" height="18" stroke="none"/>
+      <rect x="0.5" y="0.5" width="17" height="17" fill="none"/>
+    </g>
+    <g id="A_to_Z_Icon" data-name="A to Z Icon" transform="translate(2.25 2.25)">
+      <g id="Group_287" data-name="Group 287" transform="translate(0.026)">
+        <g id="Group_286" data-name="Group 286">
+          <path id="Path_1478" data-name="Path 1478" d="M4.258,0h-.8L1.5,5.6H2.611l.295-.842H4.787l.29.842H6.19ZM3.273,3.708l.579-1.656.571,1.656Z" transform="translate(-1.496)" fill="#fff"/>
+        </g>
+      </g>
+      <g id="Group_289" data-name="Group 289" transform="translate(6.936)">
+        <g id="Group_288" data-name="Group 288">
+          <path id="Path_1479" data-name="Path 1479" d="M269.348,9.487l-2,2V0H266.3V11.486l-2-2-.744.744,3.269,3.269,3.269-3.269Z" transform="translate(-263.555)" fill="#fff"/>
+        </g>
+      </g>
+      <g id="Group_291" data-name="Group 291" transform="translate(0 7.89)">
+        <g id="Group_290" data-name="Group 290">
+          <path id="Path_1480" data-name="Path 1480" d="M5.286,299.247H.5V300.3H3.7L.5,304.023v.827H5.233V303.8H2.081l3.2-3.724Z" transform="translate(-0.499 -299.247)" fill="#fff"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

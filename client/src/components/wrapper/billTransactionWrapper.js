@@ -2,16 +2,23 @@ import React from "react";
 import { CloseButton } from "@eachbase/components";
 import { wrapperStyle } from "./styles";
 
-export const BillTransactionWrapper = ({ onClose, children }) => {
+export const BillTransactionWrapper = ({
+   onClose,
+   titleContent,
+   subtitleContent,
+   children,
+   wrapperStylesName,
+}) => {
    const classes = wrapperStyle();
 
+   const wrapperClassName = `${classes.billTransactionContainerStyle} ${wrapperStylesName}`;
+
    return (
-      <div className={classes.billTransactionContainerStyle}>
+      <div className={wrapperClassName}>
+         <CloseButton handleCLic={onClose} />
          <div className={classes.billTransactionTitleBoxStyle}>
-            <h2 className={classes.billTransactionTitleStyle}>
-               bill transaction title here
-            </h2>
-            <CloseButton handleCLick={onClose} />
+            <h2 className={classes.transactionTitle}>{titleContent}</h2>
+            <p className={classes.transactionSubtitle}>{subtitleContent}</p>
          </div>
          {children}
       </div>

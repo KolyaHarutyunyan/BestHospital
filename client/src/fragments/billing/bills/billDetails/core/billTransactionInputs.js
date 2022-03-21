@@ -1,16 +1,38 @@
-import React, { useState } from "react";
-import { ValidationInput, SendButton, SelectInput } from "@eachbase/components";
+import React, { useState, useEffect } from "react";
+import {
+   ValidationInput,
+   SelectInput,
+   UserTextArea,
+   CreateChancel,
+} from "@eachbase/components";
 import { billTransactionInputsStyle } from "./styles";
-import { enumValues, makeEnum, ErrorText, FindLoad } from "@eachbase/utils";
-import { billActions } from "@eachbase/store";
+import {
+   enumValues,
+   makeEnum,
+   ErrorText,
+   FindLoad,
+   isNotEmpty,
+   FindSuccess,
+} from "@eachbase/utils";
+import { billActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 
-export const BillTransactionInputs = ({ billId }) => {
+export const BillTransactionInputs = ({ billId, closeModal }) => {
    const classes = billTransactionInputsStyle();
-   const dispatch = useDispatch();
-   const loader = !!FindLoad("ADD_BILLING_TRANSACTION").length;
 
-   const [inputs, setInputs] = useState({ amount: "" });
+   const dispatch = useDispatch();
+
+   const loader = FindLoad("ADD_BILL_TRANSACTION");
+   const success = FindSuccess("ADD_BILL_TRANSACTION");
+
+   useEffect(() => {
+      if (success && success.length) {
+         closeModal();
+         httpRequestsOnSuccessActions.removeSuccess("ADD_BILL_TRANSACTION");
+      }
+   }, [success]);
+
+   const [inputs, setInputs] = useState({});
    const [error, setError] = useState("");
    const [selectedType, setSelectedType] = useState("");
 
@@ -28,26 +50,32 @@ export const BillTransactionInputs = ({ billId }) => {
    };
 
    const handleSubmit = () => {
-      const billTransactionData = {
-         type: makeEnum(selectedType),
-         date: new Date(),
-         amount: +inputs.amount,
-         paymentRef: "string",
-         creator: "string",
-         note: "string",
-      };
-      const billTransactionDataIsValid = !!selectedType && !!inputs.amount;
+      const billTransactionDataIsValid =
+         isNotEmpty(selectedType) &&
+         isNotEmpty(inputs.amount) &&
+         isNotEmpty(inputs.paymentRef);
+
       if (billTransactionDataIsValid) {
+         const billTransactionData = {
+            type: makeEnum(selectedType),
+            date: new Date(),
+            amount: +inputs.amount,
+            paymentRef: inputs.paymentRef,
+            creator: "string",
+            note: inputs.transactionNote,
+         };
+
          dispatch(billActions.addBillTransaction(billId, billTransactionData));
-         console.log(billTransactionData, "  billTransactionData");
       } else {
-         setError(
-            !selectedType
-               ? "type"
-               : !inputs.amount
-               ? "amount"
-               : "Input is not filled"
-         );
+         const errorText = !selectedType
+            ? "type"
+            : !isNotEmpty(inputs.amount)
+            ? "amount"
+            : !isNotEmpty(inputs.paymentRef)
+            ? "paymentRef"
+            : "";
+
+         setError(errorText);
       }
    };
 
@@ -55,7 +83,7 @@ export const BillTransactionInputs = ({ billId }) => {
       <div>
          <SelectInput
             name={"type"}
-            label={"Transaction Type"}
+            label={"Type*"}
             handleSelect={handleSelect}
             value={selectedType}
             typeError={error === "type" && ErrorText.selectField}
@@ -70,12 +98,31 @@ export const BillTransactionInputs = ({ billId }) => {
             value={inputs.amount}
             typeError={error === "amount" && ErrorText.field}
          />
-         <SendButton
-            butnClassName={""}
-            butnType={"button"}
-            butnSendingText={"Add"}
-            onClickButn={handleSubmit}
-            loader={loader}
+         <ValidationInput
+            variant={"outlined"}
+            name={"paymentRef"}
+            type={"text"}
+            label={"Payment Reference*"}
+            onChange={handleChange}
+            value={inputs.paymentRef}
+            typeError={error === "paymentRef" && ErrorText.field}
+         />
+         <UserTextArea
+            id={"transactionNote"}
+            name={"transactionNote"}
+            label={"Note"}
+            value={inputs.transactionNote}
+            onChange={handleChange}
+            hasText={!!inputs.transactionNote}
+            maxCharsLabel={"Max 250 characters"}
+         />
+         <CreateChancel
+            butnClassName={classes.addOrCancelButnStyle}
+            loader={!!loader.length}
+            create={"Add"}
+            chancel={"Cancel"}
+            onCreate={handleSubmit}
+            onClose={closeModal}
          />
       </div>
    );

@@ -48,12 +48,18 @@ export const CreateEvent = ({
 
    return (
       <>
-         <div className={screenType === "Service" ? classes.bigModal : global.inactiveModalBody}>
+         <div
+            className={
+               screenType === "Service"
+                  ? classes.bigModal
+                  : global.inactiveModalBody
+            }
+         >
             <div className={global.positionedButton}>
                <CloseButton handleCLic={handleCloseModal} />
             </div>
 
-            {screenType === "Service" ? (
+            {screenType && screenType === "Service" ? (
                <Service
                   createModalDate={createModalDate}
                   modalDate={modalDate}
@@ -63,6 +69,7 @@ export const CreateEvent = ({
                   staffList={staffList}
                   date={dateTime}
                   day={day}
+                  type={screenType}
                   handleOpenClose={handleCloseModal}
                />
             ) : screenType ? (
@@ -82,22 +89,38 @@ export const CreateEvent = ({
                )
             ) : (
                <>
-                  <p className={global.availableScheduleTitle}>Select the Event Type</p>
-                  <p className={classes.subTitle}>Please select the event type you want to add.</p>
+                  <p className={global.availableScheduleTitle}>
+                     Select the Event Type
+                  </p>
+                  <p className={classes.subTitle}>
+                     Please select the event type you want to add.
+                  </p>
                   <div className={classes.typesWrapper}>
-                     <div onClick={() => handleChange("Service")} className={classes.typesItem}>
+                     <div
+                        onClick={() => handleChange("Service")}
+                        className={classes.typesItem}
+                     >
                         <p>Service Appointment</p>
                         <img src={Images.forward} alt="icon" />
                      </div>
-                     <div onClick={() => handleChange("Break")} className={classes.typesItem}>
+                     <div
+                        onClick={() => handleChange("Break")}
+                        className={classes.typesItem}
+                     >
                         <p>Break</p>
                         <img src={Images.forward} alt="icon" />
                      </div>
-                     <div onClick={() => handleChange("Drive")} className={classes.typesItem}>
+                     <div
+                        onClick={() => handleChange("Drive")}
+                        className={classes.typesItem}
+                     >
                         <p>Drive Time</p>
                         <img src={Images.forward} alt="icon" />
                      </div>
-                     <div onClick={() => handleChange("Paid")} className={classes.typesItem}>
+                     <div
+                        onClick={() => handleChange("Paid")}
+                        className={classes.typesItem}
+                     >
                         <p>Paid Time Off</p>
                         <img src={Images.forward} alt="icon" />
                      </div>

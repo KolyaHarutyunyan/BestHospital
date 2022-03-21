@@ -52,16 +52,22 @@ export const inputsStyle = makeStyles(() => ({
       width: "100%",
       "& .MuiFormLabel-root": {
          fontSize: "16px",
-         color: `${Colors.TextPrimary}`,
+         color: Colors.TextPrimary,
       },
 
       "& .MuiInput-underline.Mui-error:after": {
-         borderBottomColor: `${Colors.ThemeRed}`,
+         borderBottomColor: Colors.ThemeRed,
       },
    },
-
+   labelStyle: {
+      fontSize: "14px",
+      fontWeight: 600,
+      color: Colors.BackgroundBlue,
+      marginBottom: "8px",
+   },
    searchInputTitle: {
       display: "flex",
+      "&.scrollable": { width: "125px" },
       alignItems: "center",
       "& span": {
          fontSize: "14px",
@@ -92,7 +98,7 @@ export const inputsStyle = makeStyles(() => ({
       },
 
       "& .MuiInput-underline.Mui-error:after": {
-         borderBottomColor: `${Colors.ThemeRed}`,
+         borderBottomColor: Colors.ThemeRed,
       },
    },
 
@@ -113,7 +119,7 @@ export const inputsStyle = makeStyles(() => ({
    PasswordInput: {
       "& .MuiInputBase-input::-webkit-input-placeholder": {
          fontSize: "16px",
-         color: `${Colors.TextPrimary}`,
+         color: Colors.TextPrimary,
          opacity: 1,
       },
    },
@@ -210,21 +216,24 @@ export const inputsStyle = makeStyles(() => ({
          "&.Mui-focused": { top: 0 },
       },
       "& input": { padding: "0 16px !important" },
-      "& .MuiAutocomplete-endAdornment > button:first-of-type, button svg": { display: "none" },
+      "& .MuiAutocomplete-endAdornment > button:first-of-type, button svg": {
+         display: "none",
+      },
       "& .MuiAutocomplete-endAdornment > button:last-of-type": {
          position: "absolute",
          top: "3px",
          right: 0,
       },
-      "& .MuiAutocomplete-endAdornment > button:last-of-type span:first-of-type": {
-         display: "block",
-         width: "18px",
-         height: "18px",
-         backgroundImage: `url(${Images.dropdownArrowFilledBlue})`,
-         backgroundRepeat: "no-repeat",
-         backgroundSize: "contain",
-         backgroundPosition: "center",
-      },
+      "& .MuiAutocomplete-endAdornment > button:last-of-type span:first-of-type":
+         {
+            display: "block",
+            width: "18px",
+            height: "18px",
+            backgroundImage: `url(${Images.dropdownArrowFilledBlue})`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "contain",
+            backgroundPosition: "center",
+         },
       "& .MuiInputBase-root.MuiOutlinedInput-root.MuiAutocomplete-inputRoot.MuiInputBase-fullWidth.MuiInputBase-formControl.MuiInputBase-adornedEnd.MuiOutlinedInput-adornedEnd":
          { padding: 0, height: "48px" },
    },

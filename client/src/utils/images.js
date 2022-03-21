@@ -99,6 +99,15 @@ import checkmarkWhite from "@eachbase/images/icons/checkmarkWhite.svg";
 import dropdownArrowFilledBlue from "@eachbase/assets/images/icons/dropdownArrowFilledBlue.svg";
 import billingFill from "@eachbase/images/icons/billingFill.svg";
 import billingPassive from "@eachbase/images/icons/billingPassive.svg";
+import accordArrowBlue from "@eachbase/images/icons/accordArrowBlue.svg";
+import accordArrowBlack from "@eachbase/images/icons/accordArrowBlack.svg";
+import latestEarliest from "@eachbase/images/icons/latestEarliest.svg";
+
+import billingOutline from "@eachbase/images/icons/billingOutline.svg";
+import addOrange from "@eachbase/images/icons/addOrange.svg";
+import aToZWhite from "@eachbase/images/icons/aToZWhite.svg";
+import latestEarliestWhite from "@eachbase/images/icons/latestEarliestWhite.svg";
+import dropdownArrowWhite from "@eachbase/images/icons/dropdownArrowWhite.svg";
 
 export const Images = {
    doctors: doctors,
@@ -201,4 +210,12 @@ export const Images = {
    dropdownArrowFilledBlue,
    billingFill,
    billingPassive,
+   accordArrowBlue,
+   accordArrowBlack,
+   latestEarliest,
+   billingOutline,
+   addOrange,
+   aToZWhite,
+   latestEarliestWhite,
+   dropdownArrowWhite,
 };

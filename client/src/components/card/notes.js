@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Paper, Table, TableBody, TableCell, TableContainer } from "@material-ui/core";
+import {
+   Paper,
+   Table,
+   TableBody,
+   TableCell,
+   TableContainer,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import {
    TableHeadComponent,
@@ -10,7 +16,12 @@ import {
    AddNotes,
    DeleteElement,
 } from "@eachbase/components";
-import { FindLoad, FindSuccess, Images, useGlobalStyles } from "@eachbase/utils";
+import {
+   FindLoad,
+   FindSuccess,
+   Images,
+   useGlobalStyles,
+} from "@eachbase/utils";
 import moment from "moment";
 import { noteActions } from "@eachbase/store/notes";
 import { useParams } from "react-router-dom";
@@ -21,8 +32,8 @@ export const Notes = ({
    noteModalInfo,
    showModal,
    data = [],
-   headerTitles,
    defaultStyle,
+   headerTitles,
    items,
    model,
 }) => {
@@ -47,7 +58,7 @@ export const Notes = ({
    const [deletedData, setDeletedData] = useState("");
 
    const handleOpenClose = (data) => {
-         setNoteModalInfoEdit(data);
+      setNoteModalInfoEdit(data);
       setOpen(!open);
    };
    const handleOpenCloseDel = (data) => {
@@ -89,7 +100,9 @@ export const Notes = ({
                            return (
                               <TableCell
                                  key={index}
-                                 className={defaultStyle ? null : classes.thWidth}
+                                 className={
+                                    defaultStyle ? null : classes.thWidth
+                                 }
                               >
                                  <SearchAndFilter
                                     title={headerItem.title}
@@ -101,7 +114,11 @@ export const Notes = ({
                   </TableHeadComponent>
                   <TableBody>
                      {data.map((item, index) => {
-                        return <React.Fragment key={index}>{items(item, index)}</React.Fragment>;
+                        return (
+                           <React.Fragment key={index}>
+                              {items(item, index)}
+                           </React.Fragment>
+                        );
                      })}
                   </TableBody>
                </Table>
@@ -109,11 +126,18 @@ export const Notes = ({
          </div>
          {showModal && (
             <>
-               <div className={globalStyle.previewModal} style={{ right: noteModalInfo.right }}>
-                  <h2 className={globalStyle.subject}>{noteModalInfo.subject}</h2>
+               <div
+                  className={globalStyle.previewModal}
+                  style={{ right: noteModalInfo.right }}
+               >
+                  <h2 className={globalStyle.subject}>
+                     {noteModalInfo.subject}
+                  </h2>
                   <span>{noteModalInfo.creatorName}</span>
                   <div className={globalStyle.dateContainer}>
-                     <p>{moment(noteModalInfo?.created).format("DD/MM/YYYY")}</p>
+                     <p>
+                        {moment(noteModalInfo?.created).format("DD/MM/YYYY")}
+                     </p>
                      <div>
                         <div className={globalStyle.icons}>
                            <img

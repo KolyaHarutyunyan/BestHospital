@@ -21,7 +21,7 @@ import {
    PostingDetails,
 } from "@eachbase/pages";
 
-export const Router = ({}) => {
+export const Router = () => {
    return (
       <Switch>
          <Route path="/" exact component={FundingSource} />

@@ -84,23 +84,38 @@ export const wrapperStyle = makeStyles(() => ({
 
    //**Bill Transaction Wrapper Styles */
    billTransactionContainerStyle: {
-      backgroundColor: Colors.BackgroundWhite,
-      padding: "24px",
+      position: "relative",
+      padding: "40px",
       borderRadius: "8px",
+      backgroundColor: Colors.BackgroundWhite,
+      "& > button": {
+         position: "absolute",
+         top: 8,
+         right: 8,
+         backgroundColor: "#A3B2BD80",
+      },
+      "@media (max-width: 1280px)": {
+         padding: "32px",
+      },
    },
    billTransactionTitleBoxStyle: {
       width: "100%",
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      "& > button": { marginLeft: "24px" },
+      textAlign: "center",
       marginBottom: "40px",
    },
-   billTransactionTitleStyle: {
-      fontSize: "40px",
-      fontWeight: 600,
-      color: Colors.TextPrimary,
-      textTransform: "capitalize",
+   transactionTitle: {
+      fontSize: "32px",
+      fontWeight: 700,
+      color: Colors.TextSecondary,
+      marginBottom: "16px",
+   },
+   transactionSubtitle: {
+      maxWidth: "406px",
+      width: "100%",
+      fontSize: "16px",
+      fontWeight: 400,
+      color: Colors.TextSecondary,
+      lineHeight: "24px",
    },
    //**end */
 }));

@@ -1,7 +1,8 @@
 import axios from "axios";
 
 export const billService = {
-   getBillsService: () => axios.get("/billing", { auth: true }),
+   getBillsService: () =>
+      axios.get("/billing?claimStatus=NOTCLAIMED", { auth: true }),
 
    getBillByIdService: (id) => axios.get(`/billing/${id}`),
 

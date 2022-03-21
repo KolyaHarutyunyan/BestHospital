@@ -1,40 +1,37 @@
 import React from "react";
-import TextField from "@material-ui/core/TextField";
 import { inputsStyle } from "./styles";
 import { Images } from "@eachbase/utils";
 
-export const SearchAndFilter = ({ title, type, custom, handleClick }) => {
+export const SearchAndFilter = ({
+   title,
+   type,
+   custom,
+   handleClick,
+   style,
+   iconsAreLight,
+}) => {
    const classes = inputsStyle();
+
+   const _iconSrc = iconsAreLight
+      ? type === "arrow"
+         ? Images.dropdownArrowWhite
+         : type === "latestEarliest"
+         ? Images.latestEarliestWhite
+         : Images.aToZWhite
+      : type === "arrow"
+      ? Images.dropdownArrowBlue
+      : type === "latestEarliest"
+      ? Images.latestEarliest
+      : Images.aToZ;
+
    return (
       <div className={classes.searchInputWrapper}>
-         <div className={classes.searchInputTitle}>
+         <div className={`${classes.searchInputTitle} ${style}`}>
             <span>{title}</span>
             {custom !== false && (
-               <img
-                  onClick={handleClick}
-                  src={type ? Images.dropdownArrowBlue : Images.aToZ}
-                  alt={"filter icon"}
-               />
+               <img onClick={handleClick} src={_iconSrc} alt={"filter icon"} />
             )}
          </div>
-
-         {/*<div*/}
-         {/*  className={*/}
-         {/*    title === "Action" ? classes.actionStyle : classes.searchInput*/}
-         {/*  }*/}
-         {/*>*/}
-         {/*  <TextField*/}
-         {/*    name={name}*/}
-         {/*    // type={ type }*/}
-         {/*    type="search"*/}
-         {/*    id="standard-basic"*/}
-         {/*    disabled={title === "Action"}*/}
-         {/*    onChange={handleSearch}*/}
-         {/*    // onFocus={ () => setValidEmail (false) }*/}
-         {/*    // onBlur={ (e) => chechValid (e) }*/}
-         {/*    fullWidth*/}
-         {/*  />*/}
-         {/*</div>*/}
       </div>
    );
 };

@@ -3,7 +3,7 @@ import { buttonsStyle } from "./styles";
 import CloseIcon from "@material-ui/icons/Close";
 import { Colors } from "@eachbase/utils";
 
-export const CloseButton = ({ handleCLick, styles, isInModal }) => {
+export const CloseButton = ({ handleCLic, styles, isInModal }) => {
    const classes = buttonsStyle();
    return (
       <button
@@ -11,7 +11,7 @@ export const CloseButton = ({ handleCLick, styles, isInModal }) => {
          className={`${classes.closeCircleStyle} ${
             isInModal ? "modalView" : ""
          }`}
-         onClick={handleCLick}
+         onClick={handleCLic}
       >
          <CloseIcon
             style={{ color: Colors.TextPrimary, width: "15px", height: "15px" }}
