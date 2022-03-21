@@ -30,6 +30,7 @@ export const BillDetailsFragment = ({ billDetails }) => {
       authService,
       billedAmount,
       client,
+      payor,
       clientPaid,
       clientResp,
       dateOfService,
@@ -38,6 +39,10 @@ export const BillDetailsFragment = ({ billDetails }) => {
       totalHours,
       totalUnits,
       _id,
+      claimStatus,
+      invoiceStatus,
+      status,
+      transaction: billTransactions,
    } = billDetails || {};
 
    const BILL_TOTALS = {
@@ -56,7 +61,7 @@ export const BillDetailsFragment = ({ billDetails }) => {
          detailText: "DoS:",
          detail: handleCreatedAtDate(dateOfService, 10, "/"),
       },
-      { detailText: "Payor:", detail: makeCapitalize("payor name here") },
+      { detailText: "Payor:", detail: payor ? makeCapitalize(payor) : "" },
       { detailText: "Client:", detail: makeCapitalize(client?.middleName) },
       {
          detailText: "Service:",
@@ -74,7 +79,9 @@ export const BillDetailsFragment = ({ billDetails }) => {
 
    const filteredDetails = BILL_DETAILS.filter((billDtl) => billDtl.detail);
 
-   const billTransactions = dummyBillTransactions;
+   // const billTransactions = dummyBillTransactions;
+
+   console.log(billDetails, "  ssss");
 
    const changePage = (number) => {
       let start = number > 1 ? number - 1 + "0" : 0;
@@ -84,7 +91,12 @@ export const BillDetailsFragment = ({ billDetails }) => {
    return (
       <>
          <div className={classes.billDetailsContainerStyle}>
-            <StatusSelectors />
+            <StatusSelectors
+               billId={_id}
+               claim={claimStatus}
+               invoice={invoiceStatus}
+               bill={status}
+            />
             <div className={classes.billDetailsFirstPartStyle}>
                <div className={classes.billOutlineStyle}>
                   <div className={classes.billIdIconBoxStyle}>
@@ -126,8 +138,9 @@ export const BillDetailsFragment = ({ billDetails }) => {
                         onChange={(event, val) => changePage(val, "vvv")}
                         page={page}
                         count={
-                           !!billTransactions.length &&
-                           Math.ceil(billTransactions.length / 10)
+                           !!billTransactions?.length
+                              ? Math.ceil(billTransactions?.length / 10)
+                              : null
                         }
                         color={"primary"}
                      />

@@ -28,3 +28,4 @@ export { addSignToValueFromStart } from "./addSignToValueFromStart";
 export { getValueByFixedNumber } from "./getValueByFixedNumber";
 export { makeCapitalize } from "./makeCapitalize";
 export { useWidth } from "./useWidth";
+export { showDashIfEmpty } from "./showDashIfEmpty";

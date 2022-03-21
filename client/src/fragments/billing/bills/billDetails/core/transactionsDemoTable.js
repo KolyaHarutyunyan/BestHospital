@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Table } from "@material-ui/core";
 import { TransactionsDemoTBody, TransactionsDemoTHead } from "./common";
 import {
@@ -7,11 +7,29 @@ import {
    SimpleModal,
 } from "@eachbase/components";
 import { billTransactionInputsStyle } from "./styles";
+import { useDispatch } from "react-redux";
+import { billActions, httpRequestsOnSuccessActions } from "@eachbase/store";
+import { FindLoad, FindSuccess } from "@eachbase/utils";
 
-export const TransactionsDemoTable = ({ billTransactions }) => {
+export const TransactionsDemoTable = ({ billTransactions = [] }) => {
    const classes = billTransactionInputsStyle();
 
+   const dispatch = useDispatch();
+
    const [open, setOpen] = useState(false);
+   const [transactionId, setTransactionId] = useState("");
+
+   const voidTransactionSuccess = FindSuccess("ABORT_BILL_TRANSACTION");
+   const voidTransactionLoader = FindLoad("ABORT_BILL_TRANSACTION");
+
+   useEffect(() => {
+      if (!!voidTransactionSuccess.length) {
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess("ABORT_BILL_TRANSACTION")
+         );
+         setOpen(false);
+      }
+   }, [voidTransactionSuccess]);
 
    return (
       <>
@@ -20,6 +38,7 @@ export const TransactionsDemoTable = ({ billTransactions }) => {
             <TransactionsDemoTBody
                billTransactionDetails={billTransactions}
                openConfirmingModal={() => setOpen(true)}
+               onTrigger={(id) => setTransactionId(id)}
             />
          </Table>
          <SimpleModal
@@ -36,10 +55,14 @@ export const TransactionsDemoTable = ({ billTransactions }) => {
                >
                   <CreateChancel
                      butnClassName={classes.voidOrCancelButnStyle}
-                     // loader={!!loader.length}
+                     loader={!!voidTransactionLoader.length}
                      create={"Void"}
                      chancel={"Cancel"}
-                     // onCreate={handleSubmit}
+                     onCreate={() =>
+                        dispatch(
+                           billActions.abortBillTransaction(transactionId)
+                        )
+                     }
                      onClose={() => setOpen(false)}
                   />
                </BillTransactionWrapper>

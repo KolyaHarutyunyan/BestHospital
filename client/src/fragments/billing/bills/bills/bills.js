@@ -27,6 +27,8 @@ export const BillsFragment = ({ bills = [], clients = [], payors = [] }) => {
    const [selectedClient, setSelectedClient] = useState("All");
    const [filteredDate, setFilteredDate] = useState("All");
 
+   console.log(bills, "  bills");
+
    return (
       <div>
          <div className={classes.filtersBoxStyle}>

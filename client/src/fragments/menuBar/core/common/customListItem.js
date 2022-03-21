@@ -88,9 +88,15 @@ export const CustomListItem = ({ linkInfo, item, open, accordion }) => {
          <div className={sectionsListClassName}>
             <ol>
                {billingSections.map((section, index) => {
+                  const activeClassName = linkInfo.startsWith(section.path)
+                     ? "active"
+                     : "";
+
                   return (
                      <li key={index}>
-                        <NavLink to={section.path}>{section.label}</NavLink>
+                        <NavLink to={section.path} className={activeClassName}>
+                           {section.label}
+                        </NavLink>
                      </li>
                   );
                })}
