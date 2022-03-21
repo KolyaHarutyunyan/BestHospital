@@ -76,9 +76,13 @@ function* editBillStatus(action) {
          action.payload.id,
          action.payload.status
       );
-      yield put({
-         type: GET_BILLS,
-      });
+
+      // yield put({
+      //    type: GET_BILLS,
+      // });
+
+      window.location.replace(`/bill/${action.payload.id}`);
+
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (error) {
@@ -96,9 +100,13 @@ function* addBillTransaction(action) {
          action.payload.id,
          action.payload.body
       );
-      yield put({
-         type: GET_BILLS,
-      });
+
+      // yield put({
+      //    type: GET_BILL_BY_ID,
+      // });
+
+      window.location.replace(`bill/${action.payload.id}`);
+
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (error) {
@@ -112,9 +120,13 @@ function* abortBillTransaction(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    try {
       yield call(billService.addBillTransactionService, action.payload.id);
-      yield put({
-         type: GET_BILLS,
-      });
+
+      // yield put({
+      //    type: GET_BILLS,
+      // });
+
+      window.location.replace(`bill/${action.payload.id}`);
+
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (error) {

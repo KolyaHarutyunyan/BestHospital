@@ -30,6 +30,7 @@ export const BillDetailsFragment = ({ billDetails }) => {
       authService,
       billedAmount,
       client,
+      payor,
       clientPaid,
       clientResp,
       dateOfService,
@@ -38,6 +39,7 @@ export const BillDetailsFragment = ({ billDetails }) => {
       totalHours,
       totalUnits,
       _id,
+      status,
    } = billDetails || {};
 
    const BILL_TOTALS = {
@@ -56,7 +58,7 @@ export const BillDetailsFragment = ({ billDetails }) => {
          detailText: "DoS:",
          detail: handleCreatedAtDate(dateOfService, 10, "/"),
       },
-      { detailText: "Payor:", detail: makeCapitalize("payor name here") },
+      { detailText: "Payor:", detail: payor ? makeCapitalize(payor) : "" },
       { detailText: "Client:", detail: makeCapitalize(client?.middleName) },
       {
          detailText: "Service:",
@@ -84,7 +86,12 @@ export const BillDetailsFragment = ({ billDetails }) => {
    return (
       <>
          <div className={classes.billDetailsContainerStyle}>
-            <StatusSelectors />
+            <StatusSelectors
+               billId={_id}
+               claim={""}
+               invoice={""}
+               bill={status}
+            />
             <div className={classes.billDetailsFirstPartStyle}>
                <div className={classes.billOutlineStyle}>
                   <div className={classes.billIdIconBoxStyle}>

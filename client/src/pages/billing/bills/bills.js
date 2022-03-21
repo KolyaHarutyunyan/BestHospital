@@ -8,17 +8,17 @@ import {
 } from "@eachbase/store";
 import { Loader } from "@eachbase/components";
 import { FindLoad } from "@eachbase/utils";
-// import { dummyBills } from "@eachbase/utils/dummyDatas/dummyBills";
+import { dummyBills } from "@eachbase/utils/dummyDatas/dummyBills";
 
 export const Bills = () => {
    const dispatch = useDispatch();
 
-   const bills = useSelector((state) => state.bill.bills);
+   // const bills = useSelector((state) => state.bill.bills);
    const clients = useSelector((state) => state.client.clientList.clients);
    const payors = useSelector(
       (state) => state.fundingSource.fundingSourceList.funders
    );
-   // const bills = dummyBills;
+   const bills = dummyBills;
 
    const billsLoader = FindLoad("GET_BILLS");
    const clientsLoader = FindLoad("GET_CLIENTS");
