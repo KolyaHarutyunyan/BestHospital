@@ -101,11 +101,7 @@ function* addBillTransaction(action) {
          action.payload.body
       );
 
-      // yield put({
-      //    type: GET_BILL_BY_ID,
-      // });
-
-      window.location.replace(`bill/${action.payload.id}`);
+      // window.location.replace(`bill/${action.payload.id}`);
 
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));

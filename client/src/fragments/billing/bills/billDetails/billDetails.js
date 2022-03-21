@@ -39,7 +39,10 @@ export const BillDetailsFragment = ({ billDetails }) => {
       totalHours,
       totalUnits,
       _id,
+      claimStatus,
+      invoiceStatus,
       status,
+      transaction: billTransactions,
    } = billDetails || {};
 
    const BILL_TOTALS = {
@@ -76,7 +79,9 @@ export const BillDetailsFragment = ({ billDetails }) => {
 
    const filteredDetails = BILL_DETAILS.filter((billDtl) => billDtl.detail);
 
-   const billTransactions = dummyBillTransactions;
+   // const billTransactions = dummyBillTransactions;
+
+   console.log(billDetails, "  ssss");
 
    const changePage = (number) => {
       let start = number > 1 ? number - 1 + "0" : 0;
@@ -88,8 +93,8 @@ export const BillDetailsFragment = ({ billDetails }) => {
          <div className={classes.billDetailsContainerStyle}>
             <StatusSelectors
                billId={_id}
-               claim={""}
-               invoice={""}
+               claim={claimStatus}
+               invoice={invoiceStatus}
                bill={status}
             />
             <div className={classes.billDetailsFirstPartStyle}>
@@ -133,8 +138,9 @@ export const BillDetailsFragment = ({ billDetails }) => {
                         onChange={(event, val) => changePage(val, "vvv")}
                         page={page}
                         count={
-                           !!billTransactions.length &&
-                           Math.ceil(billTransactions.length / 10)
+                           !!billTransactions?.length
+                              ? Math.ceil(billTransactions?.length / 10)
+                              : null
                         }
                         color={"primary"}
                      />

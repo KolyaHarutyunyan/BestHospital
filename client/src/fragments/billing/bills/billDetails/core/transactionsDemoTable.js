@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux";
 import { billActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 import { FindLoad, FindSuccess } from "@eachbase/utils";
 
-export const TransactionsDemoTable = ({ billTransactions }) => {
+export const TransactionsDemoTable = ({ billTransactions = [] }) => {
    const classes = billTransactionInputsStyle();
 
    const dispatch = useDispatch();
