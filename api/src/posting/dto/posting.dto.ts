@@ -13,5 +13,5 @@ export class PostingDto {
   @ApiProperty()
   payer: string;
   @ApiProperty()
-  invoices: Array<string>;
+  invoice: string;
 }

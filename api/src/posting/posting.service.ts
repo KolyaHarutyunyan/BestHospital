@@ -23,67 +23,68 @@ export class PostingService {
   private mongooseUtil: MongooseUtil;
 
   async create(dto: CreatePostingDto) {
-    let invoices = await this.invoiceService.findByIds(dto.invoices);
-    if (!invoices.length || invoices.length < dto.invoices.length) {
-      throw new HttpException('Invoices with this ids was not found', HttpStatus.NOT_FOUND);
-    }
+    // let invoices = await this.invoiceService.findByIds(dto.invoices);
+    // if (!invoices.length || invoices.length < dto.invoices.length) {
+    //   throw new HttpException('Invoices with this ids was not found', HttpStatus.NOT_FOUND);
+    // }
     // let invoice = await this.findLowInvoiceTotal(invoices);
     // let receivable = invoice.receivable;
+    const invoice = await this.invoiceService.findOne(dto.invoice);
     let paymentAmount = dto.paymentAmount;
-    let receivable, invoice;
+    let receivable;
     /** find lowest receivable by balance */
     // let receivable = await this.findLowReceivable(findInvoices[0].receivable);
-    for (let i = 0; i < invoices.length; i++) {
-      console.log('eeeeeee');
-      invoice = await this.findLowInvoiceTotal(invoices);
-      if (!invoice.receivable.length) {
-        invoices = invoices.filter((rec) => rec._id !== invoice._id);
-        invoice = await this.findLowInvoiceTotal(invoices);
+    // for (let i = 0; i < invoices.length; i++) {
+    //   console.log('eeeeeee');
+    //   invoice = await this.findLowInvoiceTotal(invoices);
+    //   if (!invoice.receivable.length) {
+    //     invoices = invoices.filter((rec) => rec._id !== invoice._id);
+    //     invoice = await this.findLowInvoiceTotal(invoices);
 
-        // console.log('ppppp');
-        // return await invoices[0].save();
+    // console.log('ppppp');
+    // return await invoices[0].save();
+    // }
+    receivable = invoice.receivable;
+
+    while (paymentAmount > 0) {
+      console.log('uuuuuuu', receivable);
+
+      if (!receivable.length) {
+        console.log('iii');
+        return await this.invoiceService.saveDoc(invoice);
       }
-      receivable = invoice.receivable;
-
-      while (paymentAmount > 0) {
-        console.log('uuuuuuu', receivable);
-
-        if (!receivable.length) {
-          console.log('iii');
-          return await invoices[0].save();
-        }
-        const lowReceivable: any = await this.findLowReceivable(receivable);
-        console.log(lowReceivable, 'lowReceivableeeeeeeeeeeeeeeeeeeee');
-        if (paymentAmount >= lowReceivable.amountTotal && lowReceivable.amountTotal !== 0) {
-          const receivableBalance = await this.fullPayReceivable(
-            lowReceivable,
-            paymentAmount,
-            dto.user.id,
-            invoice._id,
-          );
-          // console.log(receivableBalance, 'receivableBalancereceivableBalancereceivableBalance');
-          paymentAmount -= receivableBalance;
-          // lowReceivable.amountTotal = 0;
-          // invoices[i].receivable[0].amountTotal
-          // console.log(paymentAmount, 'paymentAmount', receivableBalance, 'receivableBalance');
-        } else if (paymentAmount < lowReceivable.amountTotal) {
-          this.partialPayReceivable(lowReceivable, paymentAmount, dto.user.id);
-        }
-        receivable = receivable.filter((rec) => rec._id !== lowReceivable._id);
-
-        // const postying = new this.model({
-        //   paymentType: dto.paymentType,
-        //   paymentReference: dto.paymentReference,
-        //   paymentDocument: dto.paymentDocument,
-        //   paymentAmount: dto.paymentAmount,
-        //   payer: dto.payer,
-        //   invoices: dto.invoices,
-        // });
-        // await posting.save();
+      const lowReceivable: any = await this.findLowReceivable(receivable);
+      console.log(lowReceivable, 'lowReceivableeeeeeeeeeeeeeeeeeeee');
+      if (paymentAmount >= lowReceivable.amountTotal && lowReceivable.amountTotal !== 0) {
+        const receivableBalance = await this.fullPayReceivable(
+          lowReceivable,
+          paymentAmount,
+          dto.user.id,
+          invoice._id,
+        );
+        // console.log(receivableBalance, 'receivableBalancereceivableBalancereceivableBalance');
+        paymentAmount -= receivableBalance;
+        // lowReceivable.amountTotal = 0;
+        // invoices[i].receivable[0].amountTotal
+        // console.log(paymentAmount, 'paymentAmount', receivableBalance, 'receivableBalance');
+      } else if (paymentAmount < lowReceivable.amountTotal) {
+        this.partialPayReceivable(lowReceivable, paymentAmount, dto.user.id);
       }
-      invoices = invoices.filter((rec) => rec._id !== invoice._id);
+      receivable = receivable.filter((rec) => rec._id !== lowReceivable._id);
+
+      // const postying = new this.model({
+      //   paymentType: dto.paymentType,
+      //   paymentReference: dto.paymentReference,
+      //   paymentDocument: dto.paymentDocument,
+      //   paymentAmount: dto.paymentAmount,
+      //   payer: dto.payer,
+      //   invoices: dto.invoices,
+      // });
+      // await posting.save();
     }
-    await invoices[0].save();
+    // invoices = invoices.filter((rec) => rec._id !== invoice._id);
+    // }
+    await this.invoiceService.saveDoc(invoice);
   }
   findAll() {
     return `This action returns all posting`;
@@ -139,7 +140,7 @@ export class PostingService {
       receivable._id,
       receivable.amountTotal,
     );
-    await this.billingService.startTransaction(transactionInfo, receivable.bills[0]._id, session);
+    // await this.billingService.startTransaction(transactionInfo, receivable.bills[0]._id, session);
     // receivable.amountTotal = 0;
     return transactionInfo.amount;
   }
@@ -156,7 +157,7 @@ export class PostingService {
       note: 'chka',
     };
     const session = await startSession();
-    await this.billingService.startTransaction(transactionInfo, receivable.bills[0]._id, session);
+    // await this.billingService.startTransaction(transactionInfo, receivable.bills[0]._id, session);
     // paymentAmount -= receivable.amountTotal;
 
     receivable.amountTotal = receivable.amountTotal - paymentAmount;

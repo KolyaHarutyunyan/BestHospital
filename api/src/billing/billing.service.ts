@@ -2,15 +2,20 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { BillingModel } from './billing.model';
 import { IBilling } from './interface';
-import { BillingDto, TransactionDto } from './dto';
+import { BillingDto } from './dto';
+import { TransactionDto } from './transaction/dto';
 import { StaffService } from '../staff/staff.service';
 import { BillingSanitizer } from './interceptor/billing.interceptor';
+import { TransactionService } from './transaction/transaction.service';
+import { TransactionType } from './transaction/transaction.constants';
+import { InvoiceStatus, BillingStatus, ClaimStatus } from './billing.constants';
 
 @Injectable()
 export class BillingService {
   constructor(
     private readonly sanitizer: BillingSanitizer,
     private readonly staffService: StaffService,
+    private readonly transactionService: TransactionService,
   ) {
     this.model = BillingModel;
   }
@@ -36,11 +41,10 @@ export class BillingService {
         payerTotal: 0,
         balance: 0,
         location: dto.location,
-        claimStatus: 'NOTCLAIMED',
-        invoiceStatus: 'NOTINVOICED',
-        status: 'OPEN',
+        claimStatus: ClaimStatus.NOTCLAIMED,
+        invoiceStatus: InvoiceStatus.NOTINVOICED,
+        status: BillingStatus.OPEN,
       });
-      // clientPaid - transaction
       billing.billedAmount = billing.billedRate * billing.totalUnits;
       billing.payerTotal = dto.billedAmount;
       billing.balance = dto.billedAmount;
@@ -51,7 +55,6 @@ export class BillingService {
       throw e;
     }
   }
-
   /** startTransaction */
   async startTransaction(
     dto: TransactionDto,
@@ -59,31 +62,26 @@ export class BillingService {
     session: any,
   ): Promise<BillingDto> {
     try {
-      console.log(billingId, ' billingId');
-      const billing = await this.model.findById({ _id: billingId }).session(session);
+      let billing = await this.model.findById({ _id: billingId }).session(session);
       this.checkBilling(billing);
+      dto.billing = billingId;
       session.startTransaction();
-      billing.transaction.push({
-        type: dto.type,
-        date: dto.date,
-        amount: dto.amount,
-        paymentRef: dto.paymentRef,
-        creator: dto.creator,
-        note: dto.note,
-      });
-      billing.billedAmount -= dto.amount;
-      if (dto.type == 'PAYERPAID') {
-        billing.payerPaid += dto.amount;
-        billing.billedAmount -= dto.amount;
+      const tsxId = await this.transactionService.create(dto);
+
+      const rate = dto.rate;
+      if (dto.type == TransactionType.PAYERPAID) {
+        billing.payerPaid += rate;
+        billing.billedAmount -= rate;
       }
-      if (dto.type == 'CLIENTPAID') {
-        billing.clientPaid += dto.amount;
+      if (dto.type == TransactionType.CLIENTPAID) {
+        billing.clientPaid += rate;
       }
-      if (dto.type == 'CLIENTRESP') {
-        billing.payerTotal -= dto.amount;
-        billing.clientResp += dto.amount;
+      if (dto.type == TransactionType.CLIENTRESP) {
+        billing.payerTotal -= rate;
+        billing.clientResp += rate;
       }
-      await billing.save();
+      billing.transaction.push(tsxId);
+      billing = await (await billing.save()).populate('transaction').execPopulate();
       await session.commitTransaction();
       session.endSession();
       return this.sanitizer.sanitize(billing);
@@ -94,25 +92,23 @@ export class BillingService {
       throw e;
     }
   }
-
   /** abort the transaction */
-  async abortTransaction(billingId: string): Promise<BillingDto> {
-    // set status to the transaction object, when aborting(void) set status void and recerve
-    const billing: any = await this.model.findById({ _id: billingId });
+  async abortTransaction(_id: string, tsxId: string, userId: string): Promise<BillingDto> {
+    let billing: any = await this.model.findById({ _id });
     this.checkBilling(billing);
-    if (billing.transaction.type == 'PAYERPAID') {
+    await this.transactionService.void(_id, tsxId, userId);
+    if (billing.transaction.type == TransactionType.PAYERPAID) {
       billing.payerPaid -= billing.amount;
       billing.billedAmount += billing.amount;
     }
-    if (billing.transaction.type == 'CLIENTPAID') {
+    if (billing.transaction.type == TransactionType.CLIENTPAID) {
       billing.clientPaid -= billing.amount;
     }
-    if (billing.transaction.type == 'CLIENTRESP') {
+    if (billing.transaction.type == TransactionType.CLIENTRESP) {
       billing.payerTotal += billing.amount;
       billing.clientResp -= billing.amount;
     }
-    billing.transaction.status = 'VOID';
-    await billing.save();
+    billing = await (await billing.save()).populate('transaction').execPopulate();
     return this.sanitizer.sanitize(billing);
   }
 
@@ -120,7 +116,7 @@ export class BillingService {
   async billClaim(ids: string[]): Promise<void> {
     const bills = await this.model.update(
       { _id: { $in: ids } },
-      { $set: { claimStatus: 'CLAIMED' } },
+      { $set: { claimStatus: ClaimStatus.CLAIMED } },
       { multi: true },
     );
     if (bills.nModified === 0) {
@@ -162,14 +158,6 @@ export class BillingService {
     return this.sanitizer.sanitize(billing);
   }
 
-  // update(id: number, updateBillingDto: UpdateBillingDto) {
-  //   return `This action updates a #${id} billing`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} billing`;
-  // }
-
   /** Set billing status */
   setStatus = async (_id: string, status: string, userId: string) => {
     // can automatically
@@ -181,7 +169,26 @@ export class BillingService {
     this.checkBilling(billing);
     return await billing.save();
   };
-
+  /** set claim status in billing */
+  async setClaimStatus(_id: string, claimStatus: string): Promise<BillingDto> {
+    const billing = await this.model.findOneAndUpdate(
+      { _id },
+      { $set: { claimStatus } },
+      { new: true },
+    );
+    this.checkBilling(billing);
+    return this.sanitizer.sanitize(billing);
+  }
+  /** set invoice status in billing */
+  async setInvoiceStatus(_id: string, invoiceStatus: string): Promise<BillingDto> {
+    const billing = await this.model.findOneAndUpdate(
+      { _id },
+      { $set: { invoiceStatus } },
+      { new: true },
+    );
+    this.checkBilling(billing);
+    return this.sanitizer.sanitize(billing);
+  }
   /** Private methods */
   /** if the billing is not found, throws an exception */
   private checkBilling(billing: IBilling) {

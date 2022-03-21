@@ -18,7 +18,7 @@ const PostingSchema = new Schema({
   paymentDocument: { type: String },
   paymentAmount: { type: Number },
   payer: { type: Types.ObjectId, ref: 'Client' },
-  invoices: [String],
+  invoice: { type: Types.ObjectId, ref: 'invoice' },
   transaction: [TransactionSchema],
 });
 

@@ -1,16 +1,6 @@
 import { model, Schema, Types } from 'mongoose';
-import { BillingStatus, InvoiceStatus, ClaimStatus, TransactionType } from './billing.constants';
+import { BillingStatus, InvoiceStatus, ClaimStatus } from './billing.constants';
 import { IBilling } from './interface';
-
-const TransactionSchema = new Schema({
-  type: { type: String, enum: TransactionType },
-  date: { type: Date },
-  amount: { type: Number },
-  paymentRef: { type: String },
-  creator: { type: Types.ObjectId, ref: 'Staff' },
-  note: { type: String },
-  status: { type: String },
-});
 
 const BillingSchema = new Schema({
   appointment: { type: Types.ObjectId, ref: 'Appointment' },
@@ -34,7 +24,7 @@ const BillingSchema = new Schema({
   claimStatus: { type: String, enum: ClaimStatus, default: 'NOTCLAIMED' },
   invoiceStatus: { type: String, enum: InvoiceStatus, default: 'NOTINVOICED' },
   status: { type: String, enum: BillingStatus, default: 'OPEN' },
-  transaction: [TransactionSchema],
+  transaction: [{ type: Types.ObjectId, ref: 'BillingTransaction' }],
   createdDate: { type: Date, default: Date.now() },
   updatedDate: { type: Date, default: null },
 });

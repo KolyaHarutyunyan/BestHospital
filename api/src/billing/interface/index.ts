@@ -1,1 +1,1 @@
-export { IBilling, ITransaction } from './billing.interface'
+export { IBilling } from './billing.interface';

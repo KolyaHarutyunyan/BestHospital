@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDateString, IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { TransactionType } from '../billing.constants';
+import { DTO } from '../../../util';
+import { TransactionType } from '../transaction.constants';
 
-export class TransactionDto {
+export class TransactionDto extends DTO {
   @ApiProperty({ enum: TransactionType })
   @IsEnum(TransactionType)
   type: string;
@@ -13,7 +14,7 @@ export class TransactionDto {
   @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
-  amount: number;
+  rate: number;
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
@@ -21,10 +22,8 @@ export class TransactionDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  creator: string;
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
   note: string;
   status?: string;
+  billing: string;
+  creator: string;
 }

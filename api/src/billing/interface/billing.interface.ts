@@ -1,12 +1,5 @@
 import { Document } from 'mongoose';
-export interface ITransaction {
-  type: string;
-  date: Date;
-  amount: number;
-  paymentRef: string;
-  creator: string;
-  note: string;
-}
+import { ITransaction } from '../transaction/interface';
 
 export interface IBilling extends Document {
   id: string;

@@ -15,6 +15,6 @@ export interface IPosting extends Document {
   paymentDocument: string;
   paymentAmount: number;
   payer: string;
-  invoices: Array<string>;
+  invoice: string;
   transaction: ITransaction[];
 }

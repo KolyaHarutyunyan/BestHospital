@@ -28,7 +28,7 @@ export class BillingSanitizer implements ISanitize {
       invoiceStatus: billing.invoiceStatus,
       status: billing.status,
       location: billing.location,
-      // transaction: billing.transaction,
+      transaction: billing.transaction,
       createdDate: billing.createdDate,
       updatedDate: billing.updatedDate,
     };

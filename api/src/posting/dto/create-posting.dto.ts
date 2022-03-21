@@ -23,7 +23,9 @@ export class CreatePostingDto {
   @IsMongoId()
   payer: string;
   @ApiProperty()
-  invoices: Array<string>;
+  @IsNotEmpty()
+  @IsMongoId()
+  invoice: string;
   // @ApiProperty()
   // client: string;
   user?: UserDTO;

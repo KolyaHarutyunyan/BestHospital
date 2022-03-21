@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ITransaction } from '../interface/billing.interface';
+import { ITransaction } from '../transaction/interface';
 
 export class BillingDto {
   @ApiProperty()
@@ -45,9 +45,10 @@ export class BillingDto {
   @ApiProperty()
   status: string;
   @ApiProperty()
-  transaction?: ITransaction;
+  transaction?: ITransaction[];
   @ApiProperty()
   createdDate: Date;
   @ApiProperty()
   updatedDate: Date;
+  billing?: string;
 }

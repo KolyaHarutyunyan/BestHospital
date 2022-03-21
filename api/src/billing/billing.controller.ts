@@ -2,10 +2,11 @@ import { Controller, Get, Post, Body, Patch, Param, Query, Request } from '@nest
 import { IRequest, ParseObjectIdPipe, Public } from '../util';
 import { startSession } from 'mongoose';
 import { BillingService } from './billing.service';
-import { CreateBillingDto, BillingDto, TransactionDto } from './dto';
+import { CreateBillingDto, BillingDto } from './dto';
 import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { BillingStatus, ClaimStatus } from './billing.constants';
+import { BillingStatus, ClaimStatus, InvoiceStatus } from './billing.constants';
 import { ACCESS_TOKEN } from '../authN/authN.constants';
+import { TransactionDto } from './transaction/dto';
 
 @Controller('billing')
 @ApiTags('Billing Endpoints')
@@ -30,11 +31,16 @@ export class BillingController {
     return this.billingService.startTransaction(createTransactionDto, billingId, session);
   }
 
-  @Post('/abortTransaction/:id')
+  @Post(':id/abortTransaction/:tsxId')
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: BillingDto })
-  async abortTransaction(@Param('id', ParseObjectIdPipe) billingId: string) {
-    return this.billingService.abortTransaction(billingId);
+  async abortTransaction(
+    @Request() req: IRequest,
+    @Param('id', ParseObjectIdPipe) billingId: string,
+    @Param('tsxId', ParseObjectIdPipe) tsxId: string,
+  ) {
+    const userId: string = req.body.user.id;
+    return this.billingService.abortTransaction(billingId, tsxId, userId);
   }
 
   @Get()
@@ -74,5 +80,27 @@ export class BillingController {
     const userId: string = req.body.user.id;
     const billing = await this.billingService.setStatus(billingId, status, userId);
     return billing;
+  }
+  /** set claim status */
+  @Patch(':id/claimStatus')
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: [BillingDto] })
+  @ApiQuery({ name: 'claimStatus', enum: ClaimStatus })
+  async setClaimStatus(
+    @Query('claimStatus') claimStatus: ClaimStatus,
+    @Param('id', ParseObjectIdPipe) id: string,
+  ) {
+    return await this.billingService.setClaimStatus(id, claimStatus);
+  }
+  /** set invoice status */
+  @Patch(':id/invoiceStatus')
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: [BillingDto] })
+  @ApiQuery({ name: 'invoiceStatus', enum: InvoiceStatus })
+  async setInvoiceStatus(
+    @Query('invoiceStatus') invoiceStatus: InvoiceStatus,
+    @Param('id', ParseObjectIdPipe) id: string,
+  ) {
+    return await this.billingService.setInvoiceStatus(id, invoiceStatus);
   }
 }

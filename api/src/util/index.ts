@@ -4,3 +4,4 @@ export { IRequest, ISanitize } from './interface';
 export { ParseObjectIdPipe } from './pipes';
 export { isValidObjectId } from './pipes';
 export { Public } from './decorators';
+export { PaginationDTO, DTO } from './dto';
