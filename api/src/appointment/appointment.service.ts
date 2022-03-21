@@ -469,17 +469,24 @@ export class AppointmentService {
     const [overlappingStaff, overlappingClient] = await Promise.all([
       this.model.find({
         staff: dto.staff,
+        startDate: dto.startDate,
         startTime: { $lt: new Date(dto.endTime) },
         endTime: { $gt: new Date(dto.startTime) },
       }),
       this.model.find({
         client: dto.client,
+        startDate: dto.startDate,
         startTime: { $lt: new Date(dto.endTime) },
         endTime: { $gt: new Date(dto.startTime) },
       }),
     ]);
     if (overlappingStaff[0] || overlappingClient[0]) {
-      throw new HttpException(`appointment overlapping`, HttpStatus.BAD_REQUEST);
+      if (
+        overlappingStaff[0]._id.toString() !== _id.toString() &&
+        overlappingClient[0]._id.toString() !== _id.toString()
+      ) {
+        throw new HttpException(`appointment overlapping`, HttpStatus.BAD_REQUEST);
+      }
     }
     if (dto.placeService) {
       await this.placeService.findOne(dto.placeService);
@@ -508,7 +515,6 @@ export class AppointmentService {
       this.payCodeService.findOne(dto.staffPayCode ? dto.staffPayCode : appointment.staffPayCode),
       this.payCodeService.findPayCodesByStaffId(dto.staff ? dto.staff : appointment.staff),
     ]);
-    console.log(payCode);
     if (payCode.employmentId.active != true) {
       throw new HttpException('employment is not active', HttpStatus.BAD_REQUEST);
     }
