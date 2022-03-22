@@ -14,6 +14,7 @@ import { tableTheadTbodyStyle } from "./styles";
 export const TransactionsDemoTBody = ({
    billTransactionDetails = [],
    openConfirmingModal,
+   onTrigger,
 }) => {
    const classes = tableTheadTbodyStyle();
 
@@ -70,6 +71,7 @@ export const TransactionsDemoTBody = ({
                      onClick={() => {
                         if (item.isVoided) return;
                         openConfirmingModal();
+                        onTrigger(item._id);
                      }}
                   >
                      {item.isVoided ? "Voided" : "Void"}

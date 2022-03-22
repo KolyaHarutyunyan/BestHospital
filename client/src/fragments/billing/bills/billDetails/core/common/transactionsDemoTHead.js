@@ -2,9 +2,12 @@ import React from "react";
 import { TableCell } from "@material-ui/core";
 import { TableHeadComponent, SearchAndFilter } from "@eachbase/components";
 import { tableTheadTbodyStyle } from "./styles";
+import { getLimitedVal, useWidth } from "@eachbase/utils";
 
 export const TransactionsDemoTHead = () => {
    const classes = tableTheadTbodyStyle();
+
+   const width = useWidth();
 
    return (
       <TableHeadComponent theadClassName={classes.tableTheadStyle}>
@@ -29,7 +32,11 @@ export const TransactionsDemoTHead = () => {
          </TableCell>
          <TableCell>
             <SearchAndFilter
-               title={"Payment Ref. Number"}
+               title={
+                  width <= 1440
+                     ? getLimitedVal("Payment Ref. Number", 5)
+                     : "Payment Ref. Number"
+               }
                custom={false}
                iconsAreLight
             />

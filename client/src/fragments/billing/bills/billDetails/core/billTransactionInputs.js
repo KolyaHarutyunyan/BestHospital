@@ -52,14 +52,14 @@ export const BillTransactionInputs = ({ billId, closeModal }) => {
    const handleSubmit = () => {
       const billTransactionDataIsValid =
          isNotEmpty(selectedType) &&
-         isNotEmpty(inputs.amount) &&
+         isNotEmpty(inputs.rate) &&
          isNotEmpty(inputs.paymentRef);
 
       if (billTransactionDataIsValid) {
          const billTransactionData = {
             type: makeEnum(selectedType),
             date: new Date(),
-            amount: +inputs.amount,
+            rate: +inputs.rate,
             paymentRef: inputs.paymentRef,
             creator: "string",
             note: inputs.transactionNote,
@@ -69,8 +69,8 @@ export const BillTransactionInputs = ({ billId, closeModal }) => {
       } else {
          const errorText = !selectedType
             ? "type"
-            : !isNotEmpty(inputs.amount)
-            ? "amount"
+            : !isNotEmpty(inputs.rate)
+            ? "rate"
             : !isNotEmpty(inputs.paymentRef)
             ? "paymentRef"
             : "";
@@ -91,12 +91,12 @@ export const BillTransactionInputs = ({ billId, closeModal }) => {
          />
          <ValidationInput
             variant={"outlined"}
-            name={"amount"}
+            name={"rate"}
             type={"number"}
             label={"Amount*"}
             onChange={handleChange}
-            value={inputs.amount}
-            typeError={error === "amount" && ErrorText.field}
+            value={inputs.rate}
+            typeError={error === "rate" && ErrorText.field}
          />
          <ValidationInput
             variant={"outlined"}

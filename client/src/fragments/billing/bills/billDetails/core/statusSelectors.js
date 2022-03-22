@@ -1,30 +1,80 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
    BillTransactionWrapper,
    CreateChancel,
    SimpleModal,
    UserInputsDropdown,
 } from "@eachbase/components";
-import { enumValues } from "@eachbase/utils";
+import {
+   enumValues,
+   FindLoad,
+   FindSuccess,
+   makeCapitalize,
+} from "@eachbase/utils";
 import { billTransactionInputsStyle } from "./styles";
-// import { useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
+import { billActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 
-export const StatusSelectors = () => {
+export const StatusSelectors = ({ billId, claim, invoice, bill }) => {
    const classes = billTransactionInputsStyle();
 
-   // const dispatch = useDispatch();
+   const dispatch = useDispatch();
 
-   const [claimStatus, setClaimStatus] = useState("Claimed");
-   const [invoiceStatus, setInvoiceStatus] = useState("Not Invoiced");
-   const [billStatus, setBillStatus] = useState("Open");
+   const [claimStatus, setClaimStatus] = useState(
+      claim ? makeCapitalize(claim) : "Claimed"
+   );
+   const [invoiceStatus, setInvoiceStatus] = useState(
+      invoice ? makeCapitalize(invoice) : "Not Invoiced"
+   );
+   const [billStatus, setBillStatus] = useState(
+      bill ? makeCapitalize(bill) : "Open"
+   );
 
-   const [selClaimStatus, setSelClaimStatus] = useState("Claimed");
-   const [selInvoiceStatus, setSelInvoiceStatus] = useState("Not Invoiced");
-   const [selBillStatus, setSelBillStatus] = useState("Open");
+   const [selClaimStatus, setSelClaimStatus] = useState(claimStatus);
+   const [selInvoiceStatus, setSelInvoiceStatus] = useState(invoiceStatus);
+   const [selBillStatus, setSelBillStatus] = useState(billStatus);
 
    const [claimStatusModal, setClaimStatusModal] = useState(false);
    const [invoiceStatusModal, setInvoiceStatusModal] = useState(false);
    const [billStatusModal, setBillStatusModal] = useState(false);
+
+   const claimStatusSuccess = FindSuccess(".....");
+   const invoiceStatusSuccess = FindSuccess(".....");
+   const billStatusSuccess = FindSuccess("EDIT_BILL_STATUS");
+
+   useEffect(() => {
+      if (!!claimStatusSuccess.length) {
+         dispatch(httpRequestsOnSuccessActions.removeSuccess(""));
+         setSelClaimStatus(makeCapitalize(claim));
+         setClaimStatusModal(false);
+         return;
+      }
+
+      if (!!invoiceStatusSuccess.length) {
+         dispatch(httpRequestsOnSuccessActions.removeSuccess(""));
+         setSelInvoiceStatus(makeCapitalize(invoice));
+         setInvoiceStatusModal(false);
+         return;
+      }
+
+      if (!!billStatusSuccess.length) {
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess("EDIT_BILL_STATUS")
+         );
+         setSelBillStatus(makeCapitalize(bill));
+         setBillStatusModal(false);
+         return;
+      }
+   }, [claimStatusSuccess, invoiceStatusSuccess, billStatusSuccess]);
+
+   const claimStatusLoader = FindLoad(".....");
+   const invoiceStatusLoader = FindLoad(".....");
+   const billStatusLoader = FindLoad("EDIT_BILL_STATUS");
+
+   const loader =
+      !!claimStatusLoader.length ||
+      !!invoiceStatusLoader.length ||
+      billStatusLoader.length;
 
    const modalTitleContent = claimStatusModal
       ? "Change Claim Status"
@@ -72,23 +122,23 @@ export const StatusSelectors = () => {
 
    const handleNewStatusSelect = () => {
       // temporary
-      handleOpenClose();
+      // handleOpenClose();
 
       if (claimStatusModal) {
-         setSelClaimStatus(claimStatus);
+         // setSelClaimStatus(claimStatus);
          // dispatch(......claimStatus)
          return;
       }
 
       if (invoiceStatusModal) {
-         setSelInvoiceStatus(invoiceStatus);
+         // setSelInvoiceStatus(invoiceStatus);
          // dispatch(......invoiceStatus)
          return;
       }
 
       if (billStatusModal) {
-         setSelBillStatus(billStatus);
-         // dispatch(......billStatus)
+         // setSelBillStatus(billStatus);
+         dispatch(billActions.editBillStatus(billId, billStatus.toUpperCase()));
          return;
       }
    };
@@ -153,7 +203,7 @@ export const StatusSelectors = () => {
                >
                   <CreateChancel
                      butnClassName={classes.changeStatusButnStyle}
-                     //  loader={!!loader.length}
+                     loader={loader}
                      create={"Change"}
                      chancel={"Cancel"}
                      onCreate={handleNewStatusSelect}
