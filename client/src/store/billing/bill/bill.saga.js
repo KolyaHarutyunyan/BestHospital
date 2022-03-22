@@ -166,7 +166,7 @@ function* abortBillTransaction(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    try {
       yield call(
-         billService.addBillTransactionService,
+         billService.abortBillTransactionService,
          action.payload.id,
          action.payload.tsxId
       );

@@ -54,7 +54,6 @@ export const billDetailsStyle = makeStyles(() => ({
    billDetailsListStyle: {
       width: "100%",
       display: "flex",
-      justifyContent: "space-between",
       flexWrap: "wrap",
       "& li": {
          maxWidth: "557px",
@@ -64,6 +63,7 @@ export const billDetailsStyle = makeStyles(() => ({
          backgroundColor: Colors.BackgroundCatskillWhite,
          borderRadius: "8px",
          marginTop: "8px",
+         marginRight: "17px",
          "& > span": {
             fontSize: "14px",
             fontWeight: 600,
@@ -75,21 +75,29 @@ export const billDetailsStyle = makeStyles(() => ({
                marginLeft: "8px",
             },
          },
+         "@media(min-width: 1920px)": {
+            maxWidth: "540px",
+            "&.narrow": { maxWidth: "490px" },
+         },
          "@media(max-width: 1919px)": {
             maxWidth: "500px",
             "&.narrow": { maxWidth: "450px" },
          },
-         "@media(max-width: 1760px)": {
+         "@media(max-width: 1770px)": {
             maxWidth: "450px",
             "&.narrow": { maxWidth: "400px" },
          },
-         "@media(max-width: 1600px)": {
+         "@media(max-width: 1630px)": {
             maxWidth: "400px",
             "&.narrow": { maxWidth: "350px" },
          },
-         "@media(max-width: 1440px)": {
+         "@media(max-width: 1470px)": {
             maxWidth: "350px",
             "&.narrow": { maxWidth: "300px" },
+         },
+         "@media(max-width: 1320px)": {
+            maxWidth: "330px",
+            "&.narrow": { maxWidth: "280px" },
          },
       },
    },

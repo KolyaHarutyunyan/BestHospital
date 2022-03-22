@@ -7,15 +7,13 @@ import {
    UserInputsDropdown,
    ValidationInput,
 } from "@eachbase/components";
-import { DrawerContext } from "@eachbase/utils";
+import { DrawerContext, handleCreatedAtDate } from "@eachbase/utils";
 
-const addAllTextToTheList = (list = []) => ["All", ...list];
+const addAllTextToTheList = (list = []) =>
+   !!list[0]?.length ? ["All", ...list] : ["All"];
 
-export const BillsFragment = ({ bills = [], clients = [], payors = [] }) => {
+export const BillsFragment = ({ bills = [] }) => {
    const classes = billsStyle();
-
-   const clientsNames = clients.map((client) => client.firstName);
-   const payorsNames = payors.map((payor) => payor.name);
 
    const { open } = useContext(DrawerContext);
 
@@ -25,9 +23,33 @@ export const BillsFragment = ({ bills = [], clients = [], payors = [] }) => {
 
    const [selectedPayor, setSelectedPayor] = useState("All");
    const [selectedClient, setSelectedClient] = useState("All");
-   const [filteredDate, setFilteredDate] = useState("All");
+   const [filteredDate, setFilteredDate] = useState("");
 
-   console.log(bills, "  bills");
+   const clientsNames = bills.map((bill) => bill?.client?.middleName);
+   const payorsNames = bills.map((bill) => bill?.payor?.middleName);
+
+   const billsWithFilters =
+      selectedPayor === "All" && selectedClient === "All" && filteredDate === ""
+         ? bills
+         : selectedPayor !== "All"
+         ? bills.filter(
+              (bill) =>
+                 bill?.payor?.middleName?.toLowerCase() ===
+                 selectedPayor.toLowerCase()
+           )
+         : selectedClient !== "All"
+         ? bills.filter(
+              (bill) =>
+                 bill?.client?.middleName?.toLowerCase() ===
+                 selectedClient.toLowerCase()
+           )
+         : filteredDate !== ""
+         ? bills.filter(
+              (bill) =>
+                 handleCreatedAtDate(bill?.dateOfService, 10) ===
+                 handleCreatedAtDate(filteredDate, 10)
+           )
+         : [];
 
    return (
       <div>
@@ -57,7 +79,7 @@ export const BillsFragment = ({ bills = [], clients = [], payors = [] }) => {
                style={classes.dateInputStyle}
             />
          </div>
-         {!!bills.length ? (
+         {!!billsWithFilters.length ? (
             <div className={classes.tableAndPaginationBoxStyle}>
                <div className={classes.tableBoxStyle}>
                   <div className={billsTableClassName}>

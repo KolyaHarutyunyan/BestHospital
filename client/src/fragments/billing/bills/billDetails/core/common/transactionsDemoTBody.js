@@ -8,6 +8,7 @@ import {
    getValueByFixedNumber,
    handleCreatedAtDate,
    manageStatus,
+   showDashIfEmpty,
    useWidth,
 } from "@eachbase/utils";
 import { tableTheadTbodyStyle } from "./styles";
@@ -28,6 +29,15 @@ export const TransactionsDemoTBody = ({
          {billTransactionDetails.map((item, index) => {
             const _isVoided = item.status === "VOID";
 
+            const noteDisplay =
+               width <= 1345
+                  ? getLimitedVal(item.note, open ? 5 : 25)
+                  : width > 1345 && width <= 1640
+                  ? getLimitedVal(item.note, open ? 10 : 35)
+                  : width > 1640 && width <= 1770
+                  ? getLimitedVal(item.note, open ? 40 : 65)
+                  : getLimitedVal(item.note, open ? 75 : 95);
+
             return (
                <TableBodyComponent
                   key={index}
@@ -35,37 +45,43 @@ export const TransactionsDemoTBody = ({
                   className={classes.tbodyRowStyle}
                >
                   <TableCell>
-                     <div>{getLimitedVal(item._id, 13)}</div>
-                  </TableCell>
-                  <TableCell>
-                     <div>{handleCreatedAtDate(item.date, 10, "/")}</div>
-                  </TableCell>
-                  <TableCell>
-                     <div>{getLimitedVal(item.creator, 15)}</div>
-                  </TableCell>
-                  <TableCell>
-                     <div>{getLimitedVal(manageStatus(item.type), 21)}</div>
+                     <div>{showDashIfEmpty(getLimitedVal(item._id, 13))}</div>
                   </TableCell>
                   <TableCell>
                      <div>
-                        {addSignToValueFromStart(
-                           getValueByFixedNumber(item.rate, 2)
+                        {showDashIfEmpty(
+                           handleCreatedAtDate(item.date, 10, "/")
                         )}
                      </div>
                   </TableCell>
                   <TableCell>
-                     <div>{getLimitedVal(item.paymentRef, 13)}</div>
+                     <div>
+                        {showDashIfEmpty(getLimitedVal(item.creator, 15))}
+                     </div>
                   </TableCell>
                   <TableCell>
                      <div>
-                        {width <= 1345
-                           ? getLimitedVal(item.note, open ? 5 : 25)
-                           : width > 1345 && width <= 1640
-                           ? getLimitedVal(item.note, open ? 10 : 35)
-                           : width > 1640 && width <= 1770
-                           ? getLimitedVal(item.note, open ? 40 : 65)
-                           : getLimitedVal(item.note, open ? 75 : 95)}
+                        {showDashIfEmpty(
+                           getLimitedVal(manageStatus(item.type), 21)
+                        )}
                      </div>
+                  </TableCell>
+                  <TableCell>
+                     <div>
+                        {showDashIfEmpty(
+                           addSignToValueFromStart(
+                              getValueByFixedNumber(item.rate, 2)
+                           )
+                        )}
+                     </div>
+                  </TableCell>
+                  <TableCell>
+                     <div>
+                        {showDashIfEmpty(getLimitedVal(item.paymentRef, 13))}
+                     </div>
+                  </TableCell>
+                  <TableCell>
+                     <div>{showDashIfEmpty(noteDisplay)}</div>
                   </TableCell>
                   <TableCell>
                      <button

@@ -5,6 +5,7 @@ import { tableTheadTbodyStyle } from "./styles";
 import {
    addSignToValueFromStart,
    getValueByFixedNumber,
+   showDashIfEmpty,
 } from "@eachbase/utils";
 
 export const BillTotalsDemoTBody = ({ billTotals }) => {
@@ -15,36 +16,46 @@ export const BillTotalsDemoTBody = ({ billTotals }) => {
          <TableBodyComponent active className={classes.tbodyRowStyle}>
             <TableCell>
                <div>
-                  {addSignToValueFromStart(
-                     getValueByFixedNumber(billTotals.billedRate, 2)
+                  {showDashIfEmpty(
+                     addSignToValueFromStart(
+                        getValueByFixedNumber(billTotals.billedRate, 2)
+                     )
                   )}
                </div>
             </TableCell>
             <TableCell>
                <div>
-                  {addSignToValueFromStart(
-                     getValueByFixedNumber(billTotals.totalAmount, 2)
+                  {showDashIfEmpty(
+                     addSignToValueFromStart(
+                        getValueByFixedNumber(billTotals.totalAmount, 2)
+                     )
                   )}
                </div>
             </TableCell>
             <TableCell>
                <div>
-                  {addSignToValueFromStart(
-                     getValueByFixedNumber(billTotals.payorBalance, 2)
+                  {showDashIfEmpty(
+                     addSignToValueFromStart(
+                        getValueByFixedNumber(billTotals.payorBalance, 2)
+                     )
                   )}
                </div>
             </TableCell>
             <TableCell>
                <div>
-                  {addSignToValueFromStart(
-                     getValueByFixedNumber(billTotals.clientBalance, 2)
+                  {showDashIfEmpty(
+                     addSignToValueFromStart(
+                        getValueByFixedNumber(billTotals.clientBalance, 2)
+                     )
                   )}
                </div>
             </TableCell>
             <TableCell>
                <div>
-                  {addSignToValueFromStart(
-                     getValueByFixedNumber(billTotals.totalBalance, 2)
+                  {showDashIfEmpty(
+                     addSignToValueFromStart(
+                        getValueByFixedNumber(billTotals.totalBalance, 2)
+                     )
                   )}
                </div>
             </TableCell>

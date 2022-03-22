@@ -19,7 +19,6 @@ import {
    StatusSelectors,
 } from "./core";
 import Pagination from "@material-ui/lab/Pagination";
-import { dummyBillTransactions } from "@eachbase/utils/dummyDatas/dummyBillTransactions";
 
 export const BillDetailsFragment = ({ billDetails }) => {
    const classes = billDetailsStyle();
@@ -78,10 +77,6 @@ export const BillDetailsFragment = ({ billDetails }) => {
    ];
 
    const filteredDetails = BILL_DETAILS.filter((billDtl) => billDtl.detail);
-
-   // const billTransactions = dummyBillTransactions;
-
-   console.log(billDetails, "  ssss");
 
    const changePage = (number) => {
       let start = number > 1 ? number - 1 + "0" : 0;
