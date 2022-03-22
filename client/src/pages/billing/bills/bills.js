@@ -8,7 +8,8 @@ import { FindLoad } from "@eachbase/utils";
 export const Bills = () => {
    const dispatch = useDispatch();
 
-   const bills = useSelector((state) => state.bill.bills);
+   const billsData = useSelector((state) => state.bill.bills);
+   const { bills, count } = billsData;
 
    const billsLoader = FindLoad("GET_BILLS");
 
@@ -18,5 +19,9 @@ export const Bills = () => {
       dispatch(billActions.getBills());
    }, []);
 
-   return loader ? <Loader /> : <BillsFragment bills={bills} />;
+   return loader ? (
+      <Loader />
+   ) : (
+      <BillsFragment bills={bills} billsQty={count} />
+   );
 };

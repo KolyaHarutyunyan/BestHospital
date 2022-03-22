@@ -19,6 +19,7 @@ export const TableWrapper = ({
    const classes = wrapperStyle();
 
    const [selectedStatus, setSelectedStatus] = useState("Active");
+
    const handleSelection = (selected) => {
       setSelectedStatus(selected);
       handleType && handleType(ActiveInactiveStatus(selected));

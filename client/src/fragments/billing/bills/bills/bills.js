@@ -8,12 +8,16 @@ import {
    ValidationInput,
 } from "@eachbase/components";
 import { DrawerContext, handleCreatedAtDate } from "@eachbase/utils";
+import { billActions } from "@eachbase/store";
+import { useDispatch } from "react-redux";
 
 const addAllTextToTheList = (list = []) =>
    !!list[0]?.length ? ["All", ...list] : ["All"];
 
-export const BillsFragment = ({ bills = [] }) => {
+export const BillsFragment = ({ bills = [], billsQty }) => {
    const classes = billsStyle();
+
+   const dispatch = useDispatch();
 
    const { open } = useContext(DrawerContext);
 
@@ -24,6 +28,8 @@ export const BillsFragment = ({ bills = [] }) => {
    const [selectedPayor, setSelectedPayor] = useState("All");
    const [selectedClient, setSelectedClient] = useState("All");
    const [filteredDate, setFilteredDate] = useState("");
+
+   const [page, setPage] = useState(1);
 
    const clientsNames = bills.map((bill) => bill?.client?.middleName);
    const payorsNames = bills.map((bill) => bill?.payor?.middleName);
@@ -50,6 +56,16 @@ export const BillsFragment = ({ bills = [] }) => {
                  handleCreatedAtDate(filteredDate, 10)
            )
          : [];
+
+   const changePage = (number) => {
+      if (page === number) return;
+
+      let start = number > 1 ? number - 1 + "0" : 0;
+
+      setPage(number);
+
+      dispatch(billActions.getBills({ limit: 6, skip: start }));
+   };
 
    return (
       <div>
@@ -89,8 +105,9 @@ export const BillsFragment = ({ bills = [] }) => {
                </div>
                <PaginationItem
                   listLength={bills.length}
-                  page={1}
-                  count={bills.length}
+                  page={page}
+                  handleReturn={(number) => changePage(number)}
+                  count={billsQty}
                   entries={bills.length}
                />
             </div>

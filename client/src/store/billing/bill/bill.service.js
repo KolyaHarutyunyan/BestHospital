@@ -1,10 +1,24 @@
 import axios from "axios";
 
 export const billService = {
-   getBillsService: () =>
-      axios.get("/billing?claimStatus=CLAIMED", { auth: true }),
+   getBillsService: (data) => {
+      if (data) {
+         return axios.get(`/billing/?limit=${data.limit}&&skip=${data.skip}`, {
+            auth: true,
+         });
+      }
+      return axios.get("/billing", { auth: true });
+   },
 
-   getBillByIdService: (id) => axios.get(`/billing/${id}`),
+   getBillByIdService: (id, data) => {
+      if (data) {
+         return axios.get(
+            `/billing/${id}/?limit=${data.limit}&&skip=${data.skip}`,
+            { auth: true }
+         );
+      }
+      return axios.get(`/billing/${id}`, { auth: true });
+   },
 
    createBillService: (body) => axios.post("/billing", body, { auth: true }),
 

@@ -3,6 +3,8 @@ import { billDetailsStyle } from "./styles";
 import {
    AddModalButton,
    BillTransactionWrapper,
+   NoItemText,
+   PaginationItem,
    SimpleModal,
 } from "@eachbase/components";
 import {
@@ -19,9 +21,13 @@ import {
    StatusSelectors,
 } from "./core";
 import Pagination from "@material-ui/lab/Pagination";
+import { useDispatch } from "react-redux";
+import { billActions } from "@eachbase/store";
 
 export const BillDetailsFragment = ({ billDetails }) => {
    const classes = billDetailsStyle();
+
+   const dispatch = useDispatch();
 
    const { open: drawerOpen } = useContext(DrawerContext);
 
@@ -79,8 +85,13 @@ export const BillDetailsFragment = ({ billDetails }) => {
    const filteredDetails = BILL_DETAILS.filter((billDtl) => billDtl.detail);
 
    const changePage = (number) => {
+      if (page === number) return;
+
       let start = number > 1 ? number - 1 + "0" : 0;
+
       setPage(number);
+
+      dispatch(billActions.getBillById(_id, { limit: 8, skip: start }));
    };
 
    return (
@@ -127,22 +138,28 @@ export const BillDetailsFragment = ({ billDetails }) => {
                   />
                </div>
                <div className={classes.billTransactionsTableBoxStyle}>
-                  <TransactionsDemoTable
-                     billTransactions={billTransactions}
-                     billId={_id}
-                  />
-                  <div className={classes.paginationBoxStyle}>
-                     <Pagination
-                        onChange={(event, val) => changePage(val, "vvv")}
-                        page={page}
-                        count={
-                           !!billTransactions?.length
-                              ? Math.ceil(billTransactions?.length / 10)
-                              : null
-                        }
-                        color={"primary"}
-                     />
-                  </div>
+                  {!!billTransactions?.length ? (
+                     <>
+                        <TransactionsDemoTable
+                           billTransactions={billTransactions}
+                           billId={_id}
+                        />
+                        <div className={classes.paginationBoxStyle}>
+                           <Pagination
+                              onChange={(event, val) => changePage(val)}
+                              page={page}
+                              count={
+                                 !!billTransactions?.length
+                                    ? Math.ceil(billTransactions?.length / 10)
+                                    : null
+                              }
+                              color={"primary"}
+                           />
+                        </div>
+                     </>
+                  ) : (
+                     <NoItemText text={"No Transactions Yet"} />
+                  )}
                </div>
             </div>
             <div className={classes.billDetailsThirdPartStyle}>

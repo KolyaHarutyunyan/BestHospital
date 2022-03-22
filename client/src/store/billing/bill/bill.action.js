@@ -9,16 +9,17 @@ import {
    EDIT_BILL_INVOICE_STATUS,
 } from "./bill.type";
 
-export const getBills = () => {
+export const getBills = (data) => {
    return {
       type: GET_BILLS,
+      payload: { data },
    };
 };
 
-export const getBillById = (id) => {
+export const getBillById = (id, data) => {
    return {
       type: GET_BILL_BY_ID,
-      payload: { id },
+      payload: { id, data },
    };
 };
 

@@ -22,18 +22,24 @@ function* getBills(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    try {
-      const res = yield call(billService.getBillsService);
+      const res = yield call(
+         billService.getBillsService,
+         action?.payload?.data
+      );
+
       yield put({
          type: GET_BILLS_SUCCESS,
          payload: { bills: res.data },
       });
+
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (error) {
       yield put({
          type: GET_BILLS_SUCCESS,
-         payload: { bills: [] },
+         payload: { bills: { bills: [], count: 0 } },
       });
+
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type));
    }
@@ -43,11 +49,17 @@ function* getBillById(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    try {
-      const res = yield call(billService.getBillByIdService, action.payload.id);
+      const res = yield call(
+         billService.getBillByIdService,
+         action.payload.id,
+         action.payload?.data
+      );
+
       yield put({
          type: GET_BILL_BY_ID_SUCCESS,
          payload: { billById: res.data },
       });
+
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (error) {
