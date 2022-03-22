@@ -3,6 +3,8 @@ import {
    getBillById,
    createBill,
    editBillStatus,
+   editBillClaimStatus,
+   editBillInvoiceStatus,
    addBillTransaction,
    abortBillTransaction,
 } from "./bill.action";
@@ -15,6 +17,8 @@ export const billActions = {
    getBillById,
    createBill,
    editBillStatus,
+   editBillClaimStatus,
+   editBillInvoiceStatus,
    addBillTransaction,
    abortBillTransaction,
 };

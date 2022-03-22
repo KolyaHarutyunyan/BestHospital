@@ -132,7 +132,10 @@ export const BillDetailsFragment = ({ billDetails }) => {
                   />
                </div>
                <div className={classes.billTransactionsTableBoxStyle}>
-                  <TransactionsDemoTable billTransactions={billTransactions} />
+                  <TransactionsDemoTable
+                     billTransactions={billTransactions}
+                     billId={_id}
+                  />
                   <div className={classes.paginationBoxStyle}>
                      <Pagination
                         onChange={(event, val) => changePage(val, "vvv")}

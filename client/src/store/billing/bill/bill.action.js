@@ -5,6 +5,8 @@ import {
    EDIT_BILL_STATUS,
    GET_BILL_BY_ID,
    GET_BILLS,
+   EDIT_BILL_CLAIM_STATUS,
+   EDIT_BILL_INVOICE_STATUS,
 } from "./bill.type";
 
 export const getBills = () => {
@@ -34,6 +36,20 @@ export const editBillStatus = (id, status) => {
    };
 };
 
+export const editBillClaimStatus = (id, status) => {
+   return {
+      type: EDIT_BILL_CLAIM_STATUS,
+      payload: { id, status },
+   };
+};
+
+export const editBillInvoiceStatus = (id, status) => {
+   return {
+      type: EDIT_BILL_INVOICE_STATUS,
+      payload: { id, status },
+   };
+};
+
 export const addBillTransaction = (id, body) => {
    return {
       type: ADD_BILL_TRANSACTION,
@@ -41,9 +57,9 @@ export const addBillTransaction = (id, body) => {
    };
 };
 
-export const abortBillTransaction = (id) => {
+export const abortBillTransaction = (id, tsxId) => {
    return {
       type: ABORT_BILL_TRANSACTION,
-      payload: { id },
+      payload: { id, tsxId },
    };
 };
