@@ -1,8 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { PostingService } from './posting.service';
 import { CreatePostingDto, UpdatePostingDto, PostingDto } from './dto';
-import { ApiHeader, ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ACCESS_TOKEN } from '../authN';
+import { ParseObjectIdPipe } from 'src/util';
 
 @Controller('posting')
 @ApiTags('Posting Endpoints')
@@ -16,22 +17,45 @@ export class PostingController {
   }
 
   @Get()
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: [PostingDto] })
   findAll() {
     return this.postingService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postingService.findOne(+id);
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: PostingDto })
+  findOne(@Param('id', ParseObjectIdPipe) id: string) {
+    return this.postingService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostingDto: UpdatePostingDto) {
-    return this.postingService.update(+id, updatePostingDto);
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: PostingDto })
+  update(@Param('id', ParseObjectIdPipe) id: string, @Body() updatePostingDto: UpdatePostingDto) {
+    return this.postingService.update(id, updatePostingDto);
   }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.postingService.remove(+id);
+  @Patch(':id/file/add/:fileId')
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: PostingDto })
+  addDocument(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Param('fileId', ParseObjectIdPipe) fileId: string,
+  ) {
+    return this.postingService.addDocument(id, fileId);
   }
+  @Patch(':id/file/delete/:fileId')
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: PostingDto })
+  deleteDocument(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Param('fileId', ParseObjectIdPipe) fileId: string,
+  ) {
+    return this.postingService.deleteDocument(id, fileId);
+  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.postingService.remove(+id);
+  // }
 }

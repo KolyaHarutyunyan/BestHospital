@@ -1,5 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsDateString,
+  IsEnum,
+  IsMongoId,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+} from 'class-validator';
 import { UserDTO } from '../../authN';
 import { PaymentType } from '../posting.constants';
 
@@ -17,6 +26,7 @@ export class CreatePostingDto {
   paymentDocument: string;
   @ApiProperty()
   @IsNumber()
+  @IsPositive()
   @IsNotEmpty()
   paymentAmount: number;
   @ApiProperty()
@@ -26,6 +36,10 @@ export class CreatePostingDto {
   @IsNotEmpty()
   @IsMongoId()
   invoice: string;
+  @ApiProperty()
+  @IsOptional()
+  @IsDateString()
+  paymentDate: Date;
   // @ApiProperty()
   // client: string;
   user?: UserDTO;

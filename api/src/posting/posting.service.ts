@@ -8,12 +8,16 @@ import { PostingModel } from './posting.model';
 import { IInvoice, IReceivable } from '../invoice/interface/invoice.interface';
 import { BillingService } from '../billing/billing.service';
 import { startSession } from 'mongoose';
+import { ClientService } from '../client/client.service';
+import { PostingSanitizer } from './posting.sanitizer';
+import { InvoiceStatus } from '../invoice/invoice.constants';
 
 @Injectable()
 export class PostingService {
   constructor(
-    // private readonly sanitizer: PostingSanitizer,
+    private readonly sanitizer: PostingSanitizer,
     private readonly invoiceService: InvoiceService,
+    private readonly clientService: ClientService,
     private readonly billingService: BillingService,
   ) {
     this.model = PostingModel;
@@ -22,39 +26,35 @@ export class PostingService {
   private model: Model<IPosting>;
   private mongooseUtil: MongooseUtil;
 
+  /** create invoice payment */
   async create(dto: CreatePostingDto) {
-    // let invoices = await this.invoiceService.findByIds(dto.invoices);
-    // if (!invoices.length || invoices.length < dto.invoices.length) {
-    //   throw new HttpException('Invoices with this ids was not found', HttpStatus.NOT_FOUND);
-    // }
-    // let invoice = await this.findLowInvoiceTotal(invoices);
-    // let receivable = invoice.receivable;
-    const invoice = await this.invoiceService.findOne(dto.invoice);
+    const [invoice, client] = await Promise.all([
+      this.invoiceService.findOne(dto.invoice),
+      this.clientService.findById(dto.payer),
+    ]);
+    if (invoice.status !== InvoiceStatus.SUBMITTED) {
+      throw new HttpException('Invoice must be submitted', HttpStatus.BAD_REQUEST);
+    }
     let paymentAmount = dto.paymentAmount;
-    let receivable;
-    /** find lowest receivable by balance */
-    // let receivable = await this.findLowReceivable(findInvoices[0].receivable);
-    // for (let i = 0; i < invoices.length; i++) {
-    //   console.log('eeeeeee');
-    //   invoice = await this.findLowInvoiceTotal(invoices);
-    //   if (!invoice.receivable.length) {
-    //     invoices = invoices.filter((rec) => rec._id !== invoice._id);
-    //     invoice = await this.findLowInvoiceTotal(invoices);
-
-    // console.log('ppppp');
-    // return await invoices[0].save();
-    // }
-    receivable = invoice.receivable;
-
+    let receivable = invoice.receivable;
+    let payed = false;
     while (paymentAmount > 0) {
-      console.log('uuuuuuu', receivable);
-
       if (!receivable.length) {
-        console.log('iii');
-        return await this.invoiceService.saveDoc(invoice);
+        if (!payed) {
+          throw new HttpException('Invoice with this amount was not found', HttpStatus.NOT_FOUND);
+        }
+        const posting = new this.model({
+          paymentType: dto.paymentType,
+          paymentReference: dto.paymentReference,
+          paymentDocument: dto.paymentDocument,
+          paymentAmount: paymentAmount,
+          payer: client.id,
+          invoice: dto.invoice,
+        });
+        await posting.save();
+        return this.sanitizer.sanitize(posting);
       }
       const lowReceivable: any = await this.findLowReceivable(receivable);
-      console.log(lowReceivable, 'lowReceivableeeeeeeeeeeeeeeeeeeee');
       if (paymentAmount >= lowReceivable.amountTotal && lowReceivable.amountTotal !== 0) {
         const receivableBalance = await this.fullPayReceivable(
           lowReceivable,
@@ -62,46 +62,53 @@ export class PostingService {
           dto.user.id,
           invoice._id,
         );
-        // console.log(receivableBalance, 'receivableBalancereceivableBalancereceivableBalance');
         paymentAmount -= receivableBalance;
-        // lowReceivable.amountTotal = 0;
-        // invoices[i].receivable[0].amountTotal
-        // console.log(paymentAmount, 'paymentAmount', receivableBalance, 'receivableBalance');
+        payed = true;
       } else if (paymentAmount < lowReceivable.amountTotal) {
-        this.partialPayReceivable(lowReceivable, paymentAmount, dto.user.id);
+        this.partialPayReceivable(lowReceivable, paymentAmount, dto.user.id, invoice._id);
+        payed = true;
       }
       receivable = receivable.filter((rec) => rec._id !== lowReceivable._id);
-
-      // const postying = new this.model({
-      //   paymentType: dto.paymentType,
-      //   paymentReference: dto.paymentReference,
-      //   paymentDocument: dto.paymentDocument,
-      //   paymentAmount: dto.paymentAmount,
-      //   payer: dto.payer,
-      //   invoices: dto.invoices,
-      // });
-      // await posting.save();
     }
-    // invoices = invoices.filter((rec) => rec._id !== invoice._id);
-    // }
-    await this.invoiceService.saveDoc(invoice);
   }
-  findAll() {
-    return `This action returns all posting`;
+  /** add document to posting */
+  async addDocument(_id: string, fileId: string): Promise<PostingDto> {
+    const posting = await this.model.findById(_id);
+    this.checkPosting(posting);
+    posting.documents.push(fileId);
+    await posting.save();
+    return this.sanitizer.sanitize(posting);
   }
-
-  findOne(id: number) {
-    return `This action returns a #${id} posting`;
+  /** delete document in the posting */
+  async deleteDocument(_id: string, fileId: string): Promise<PostingDto> {
+    const posting = await this.model.findById(_id);
+    this.checkPosting(posting);
+    this.removeFromList(posting.documents, fileId);
+    await posting.save();
+    return this.sanitizer.sanitize(posting);
   }
-
-  update(id: number, updatePostingDto: UpdatePostingDto) {
-    return `This action updates a #${id} posting`;
+  /** get all posting */
+  async findAll(): Promise<PostingDto[]> {
+    const postings = await this.model.find();
+    return this.sanitizer.sanitizeMany(postings);
   }
-
-  remove(id: number) {
-    return `This action removes a #${id} posting`;
+  /** get one posting */
+  async findOne(_id: string): Promise<PostingDto> {
+    const posting = await this.model.findById(_id);
+    this.checkPosting(posting);
+    return this.sanitizer.sanitize(posting);
   }
-
+  /** update posting */
+  async update(_id: string, dto: UpdatePostingDto): Promise<PostingDto> {
+    const posting = await this.model.findById(_id);
+    this.checkPosting(posting);
+    if (dto.paymentType) posting.paymentType = dto.paymentType;
+    // When the payment type is edited, payment reference should be updated as well
+    if (dto.paymentReference) posting.paymentReference = dto.paymentReference;
+    if (dto.paymentDate) posting.paymentDate = dto.paymentDate;
+    await posting.save();
+    return this.sanitizer.sanitize(posting);
+  }
   /** Private methods */
   /** find low receivable amount */
   async findLowReceivable(receivables): Promise<IReceivable> {
@@ -109,21 +116,13 @@ export class PostingService {
       return prev.amountTotal < curr.amountTotal ? prev : curr;
     });
   }
-
-  /** find low invoice total */
-  async findLowInvoiceTotal(invoices: IInvoice[]): Promise<IInvoice> {
-    return invoices.reduce((prev, curr) => {
-      return prev.invoiceTotal < curr.invoiceTotal ? prev : curr;
-    });
-  }
-
+  /** full receivable pay */
   async fullPayReceivable(
     receivable,
     paymentAmount,
     userId: string,
     invoiceId: string,
   ): Promise<number> {
-    console.log('sxal');
     paymentAmount -= receivable.amountTotal;
     const transactionInfo = {
       type: 'CLIENTPAID',
@@ -133,7 +132,6 @@ export class PostingService {
       creator: userId,
       note: 'chka',
     };
-    console.log(invoiceId, 'aaaaaaaaaaaaaaa');
     const session = await startSession();
     await this.invoiceService.updateReceivableAmount(
       invoiceId,
@@ -141,13 +139,15 @@ export class PostingService {
       receivable.amountTotal,
     );
     // await this.billingService.startTransaction(transactionInfo, receivable.bills[0]._id, session);
-    // receivable.amountTotal = 0;
     return transactionInfo.amount;
   }
-  async partialPayReceivable(receivable, paymentAmount, userId) {
-    console.log('mtav');
-    console.log(receivable.amountTotal, paymentAmount, 'oooo');
-    console.log(receivable.amountTotal - paymentAmount);
+  /** partial receivable pay */
+  async partialPayReceivable(
+    receivable,
+    paymentAmount,
+    userId,
+    invoiceId: string,
+  ): Promise<number> {
     const transactionInfo = {
       type: 'PARTIALPAID',
       date: new Date(),
@@ -157,11 +157,26 @@ export class PostingService {
       note: 'chka',
     };
     const session = await startSession();
+    await this.invoiceService.updateReceivableAmount(invoiceId, receivable._id, paymentAmount);
     // await this.billingService.startTransaction(transactionInfo, receivable.bills[0]._id, session);
-    // paymentAmount -= receivable.amountTotal;
-
-    receivable.amountTotal = receivable.amountTotal - paymentAmount;
-    console.log(receivable.amountTotal, 'aaaaa');
+    paymentAmount = receivable.amountTotal - paymentAmount;
     return receivable.amountTotal;
+  }
+
+  /** Private methods */
+  /** if the posting is not found, throws an exception */
+  private checkPosting(posting: IPosting) {
+    if (!posting) {
+      throw new HttpException('Posting with this id was not found', HttpStatus.NOT_FOUND);
+    }
+  }
+  /** Removes a file from the list if the file exists */
+  private removeFromList(list: any[], element: any) {
+    const index = list.findIndex((id) => id == element);
+    if (index !== -1) {
+      list.splice(index, 1);
+    } else {
+      throw new HttpException('Was not found in list', HttpStatus.NOT_FOUND);
+    }
   }
 }

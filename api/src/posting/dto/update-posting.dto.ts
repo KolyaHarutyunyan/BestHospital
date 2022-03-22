@@ -1,4 +1,17 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreatePostingDto } from './create-posting.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsDateString, IsEnum, IsOptional, IsString } from 'class-validator';
+import { PaymentType } from '../posting.constants';
 
-export class UpdatePostingDto extends PartialType(CreatePostingDto) {}
+export class UpdatePostingDto {
+  @ApiProperty({ enum: PaymentType })
+  @IsEnum(PaymentType)
+  paymentType: string;
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  paymentReference: string;
+  @ApiProperty()
+  @IsOptional()
+  @IsDateString()
+  paymentDate: Date;
+}

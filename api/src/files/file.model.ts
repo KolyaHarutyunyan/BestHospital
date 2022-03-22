@@ -11,3 +11,12 @@ const fileSchema = new Schema({
 });
 
 export const FileModel = model<IFile>('file', fileSchema);
+export const FileSchema = new Schema(
+  {
+    url: { type: String },
+    thumbUrl: { type: String },
+    id: { type: String },
+    name: { type: String },
+  },
+  { _id: false },
+);

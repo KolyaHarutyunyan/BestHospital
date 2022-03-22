@@ -1,5 +1,5 @@
 export enum PaymentType {
   CHECK = 'CHECK',
-  ACH = 'SUBMITTED',
+  ACH = 'ACH',
   CASH = 'CASH',
 }

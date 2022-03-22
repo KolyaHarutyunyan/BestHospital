@@ -125,15 +125,24 @@ export class BillingService {
   }
 
   /** find all bills */
-  async findAll(): Promise<BillingDto[]> {
-    const billings = await this.model
-      .find({})
-      .populate('authService')
-      .populate('client')
-      .populate('payer')
-      .populate('placeService')
-      .populate('transaction');
-    return this.sanitizer.sanitizeMany(billings);
+  async findAll(skip: number, limit: number): Promise<any> {
+    skip ? skip : (skip = 0);
+    limit ? limit : (limit = 6);
+    const [billings, count] = await Promise.all([
+      this.model
+        .find({})
+        .populate('authService')
+        .populate('client')
+        .populate('payer')
+        .populate('placeService')
+        .populate('transaction')
+        .sort({ _id: 1 })
+        .skip(skip)
+        .limit(limit),
+      this.model.countDocuments(),
+    ]);
+    const sanitizeBills = this.sanitizer.sanitizeMany(billings);
+    return { bills: sanitizeBills, count };
   }
 
   /** find all with many ids */
@@ -153,14 +162,24 @@ export class BillingService {
   }
 
   /** find bill by id */
-  async findOne(_id: string): Promise<BillingDto> {
+  async findOne(_id: string, skip: number, limit: number): Promise<BillingDto> {
+    skip ? skip : (skip = 0);
+    limit ? limit : (limit = 8);
     const billing = await this.model
       .findById(_id)
       .populate('authService')
       .populate('client')
       .populate('payer')
       .populate('placeService')
-      .populate('transaction');
+      .populate([
+        {
+          path: 'transaction',
+          options: {
+            skip,
+            limit,
+          },
+        },
+      ]);
     this.checkBilling(billing);
     return this.sanitizer.sanitize(billing);
   }
@@ -176,6 +195,7 @@ export class BillingService {
     this.checkBilling(billing);
     return await billing.save();
   };
+
   /** set claim status in billing */
   async setClaimStatus(_id: string, claimStatus: string): Promise<BillingDto> {
     const billing = await this.model.findOneAndUpdate(
@@ -186,6 +206,7 @@ export class BillingService {
     this.checkBilling(billing);
     return this.sanitizer.sanitize(billing);
   }
+
   /** set invoice status in billing */
   async setInvoiceStatus(_id: string, invoiceStatus: string): Promise<BillingDto> {
     const billing = await this.model.findOneAndUpdate(
@@ -196,6 +217,7 @@ export class BillingService {
     this.checkBilling(billing);
     return this.sanitizer.sanitize(billing);
   }
+
   /** Private methods */
   /** if the billing is not found, throws an exception */
   private checkBilling(billing: IBilling) {

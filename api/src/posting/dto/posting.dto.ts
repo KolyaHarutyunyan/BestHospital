@@ -1,7 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { ITransaction } from '../interface/posting.interface';
 import { PaymentType } from '../posting.constants';
 
 export class PostingDto {
+  @ApiProperty()
+  _id: string;
   @ApiProperty({ enum: PaymentType })
   paymentType: string;
   @ApiProperty()
@@ -14,4 +17,8 @@ export class PostingDto {
   payer: string;
   @ApiProperty()
   invoice: string;
+  @ApiProperty()
+  paymentDate: Date;
+  transaction: ITransaction[];
+  documents: string[];
 }

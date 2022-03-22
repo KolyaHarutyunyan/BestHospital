@@ -42,13 +42,18 @@ export class FileService {
     await file.save();
     return this.sanitizer.sanitize(file);
   };
-
+  /** get all files */
   get = async (resource: string): Promise<FileDTO[]> => {
     const files = await this.model.find({ resource });
     this.checkFile(files[0]);
     return this.sanitizer.sanitizeMany(files);
   };
-
+  /** get file */
+  getOne = async (_id: string): Promise<FileDTO> => {
+    const file = await this.model.findById(_id);
+    this.checkFile(file);
+    return this.sanitizer.sanitize(file);
+  };
   edit = async (_id: string, dto: EditImageDTO): Promise<FileDTO> => {
     const file = await this.model.findById(_id);
     this.checkFile(file);

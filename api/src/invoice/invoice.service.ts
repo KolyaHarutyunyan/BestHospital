@@ -6,6 +6,7 @@ import { CreateInvoiceDto, UpdateInvoiceDto, InvoiceDto, GenerateInvoiceDto } fr
 import { InvoiceSanitizer } from './interceptor';
 import { IInvoice } from './interface';
 import { InvoiceModel } from './invoice.model';
+import { InvoiceStatus } from './invoice.constants';
 
 @Injectable()
 export class InvoiceService {
@@ -36,9 +37,11 @@ export class InvoiceService {
   }
 
   /** save document */
-  async saveDoc(dto: any): Promise<InvoiceDto> {
-    const invoice = await this.model.findByIdAndUpdate(dto._id, { ...dto });
-    return this.sanitizer.sanitize(invoice);
+  async saveDoc(dto: any): Promise<any> {
+    // console.log(dto, 'dtooooo');
+    // const invoice = await this.model.findByIdAndUpdate(dto._id, { ...dto });
+    // console.log(invoice, 'invoiceinvoiceinvoiceinvoiceinvoiceinvoice');
+    // return this.sanitizer.sanitize(invoice);
   }
 
   /** get all invoices */
@@ -78,9 +81,13 @@ export class InvoiceService {
       invoice.invoiceTotal -= amount;
       invoice.receivable.map((receivable) => {
         if (receivable._id.toString() === receivableId.toString()) {
-          receivable.amountTotal = 0;
+          receivable.amountTotal = receivable.amountTotal - amount;
         }
       });
+      if (invoice.invoiceTotal == 0) {
+        invoice.status = InvoiceStatus.PAID;
+      }
+      invoice.status = InvoiceStatus.PARTIAL;
       await invoice.save();
       return this.sanitizer.sanitize(invoice);
     } catch (e) {

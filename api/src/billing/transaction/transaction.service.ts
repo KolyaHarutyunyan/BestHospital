@@ -40,6 +40,7 @@ export class TransactionService {
     this.checkTsx(transaction);
     return transaction;
   }
+
   /** Private Methods */
   private checkTsx(tsx: ITransaction) {
     if (!tsx) {

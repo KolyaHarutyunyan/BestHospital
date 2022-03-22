@@ -4,4 +4,5 @@ export enum InvoiceStatus {
   SUBMITTED = 'SUBMITTED',
   POSTED = 'POSTED',
   PAID = 'PAID',
+  PARTIAL = 'PARTIAL',
 }

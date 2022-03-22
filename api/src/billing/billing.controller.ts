@@ -46,18 +46,45 @@ export class BillingController {
   @Get()
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: [BillingDto] })
+  @ApiQuery({
+    name: 'skip',
+    description: 'where',
+    required: false,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'how',
+    required: false,
+    type: Number,
+  })
   // @ApiQuery({ name: 'claimStatus', enum: ClaimStatus })
   // @Query('claimStatus') claimStatus: ClaimStatus
-  async findAll() {
-    return await this.billingService.findAll();
+  async findAll(@Query('limit') limit: number, @Query('skip') skip: number) {
+    return await this.billingService.findAll(skip, limit);
   }
 
   @Get(':id')
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: BillingDto })
-  @Public()
-  async findOne(@Param('id', ParseObjectIdPipe) id: string) {
-    return await this.billingService.findOne(id);
+  @ApiQuery({
+    name: 'skip',
+    description: 'where',
+    required: false,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'how',
+    required: false,
+    type: Number,
+  })
+  async findOne(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Query('limit') limit: number,
+    @Query('skip') skip: number,
+  ) {
+    return await this.billingService.findOne(id, skip, limit);
   }
 
   // @Patch(':id')
