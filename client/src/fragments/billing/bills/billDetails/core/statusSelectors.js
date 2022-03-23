@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
    BillTransactionWrapper,
    CreateChancel,
@@ -11,6 +11,7 @@ import {
    FindSuccess,
    makeEnum,
    manageStatus,
+   PaginationContext,
 } from "@eachbase/utils";
 import { billTransactionInputsStyle } from "./styles";
 import { useDispatch } from "react-redux";
@@ -123,6 +124,7 @@ export const StatusSelectors = ({
       if (selected === selectedStatus) return;
 
       setSelectedStatus(selected);
+
       setModalIsOpen(true);
    };
 

@@ -1,11 +1,9 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import { Backdrop } from "@material-ui/core";
 import { AddButton } from "../buttons";
 
 export const SimpleModal = ({
-   status,
    openDefault,
    handleOpenClose,
    content,
@@ -13,9 +11,11 @@ export const SimpleModal = ({
    addButton,
 }) => {
    const [open, setOpen] = React.useState(false);
+
    const handleOpen = () => {
       setOpen(true);
    };
+
    const handleOpenOrClose = () => {
       if (handleOpenClose) {
          handleOpenClose();
@@ -28,7 +28,9 @@ export const SimpleModal = ({
 
    return (
       <div>
-         {addButton && <AddButton text={addButton} handleClick={handleOpenOrClose} />}
+         {addButton && (
+            <AddButton text={addButton} handleClick={handleOpenOrClose} />
+         )}
 
          <Modal
             open={openDefault ? openDefault : open}

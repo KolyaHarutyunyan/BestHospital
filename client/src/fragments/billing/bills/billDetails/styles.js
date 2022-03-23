@@ -136,9 +136,16 @@ export const billDetailsStyle = makeStyles(() => ({
       },
    },
    billTransactionsTableBoxStyle: { width: "100%" },
+   tableContainerStyle: { minHeight: "470px" },
+   loaderContainerStyle: {
+      minHeight: "450px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+   },
    paginationBoxStyle: {
       width: "100%",
-      marginTop: "16px",
+      marginTop: "8px",
       display: "flex",
       justifyContent: "flex-end",
    },

@@ -3,8 +3,8 @@ import { billDetailsStyle } from "./styles";
 import {
    AddModalButton,
    BillTransactionWrapper,
+   Loader,
    NoItemText,
-   PaginationItem,
    SimpleModal,
 } from "@eachbase/components";
 import {
@@ -13,6 +13,7 @@ import {
    handleCreatedAtDate,
    Images,
    makeCapitalize,
+   PaginationContext,
 } from "@eachbase/utils";
 import {
    BillTransactionInputs,
@@ -24,12 +25,19 @@ import Pagination from "@material-ui/lab/Pagination";
 import { useDispatch } from "react-redux";
 import { billActions } from "@eachbase/store";
 
-export const BillDetailsFragment = ({ billDetails }) => {
+export const BillDetailsFragment = ({
+   billDetails,
+   transactionQty,
+   page,
+   handleGetPage,
+   tsxLoader,
+}) => {
    const classes = billDetailsStyle();
 
    const dispatch = useDispatch();
 
    const { open: drawerOpen } = useContext(DrawerContext);
+   const { handlePageChange } = useContext(PaginationContext);
 
    const {
       authService,
@@ -59,7 +67,6 @@ export const BillDetailsFragment = ({ billDetails }) => {
    };
 
    const [open, setOpen] = useState(false);
-   const [page, setPage] = useState(1);
 
    const BILL_DETAILS = [
       {
@@ -84,14 +91,12 @@ export const BillDetailsFragment = ({ billDetails }) => {
 
    const filteredDetails = BILL_DETAILS.filter((billDtl) => billDtl.detail);
 
-   const changePage = (number) => {
-      if (page === number) return;
-
-      let start = number > 1 ? number - 1 + "0" : 0;
-
-      setPage(number);
-
-      dispatch(billActions.getBillById(_id, { limit: 8, skip: start }));
+   const changePage = (event, value) => {
+      if (page === value) return;
+      handlePageChange(true);
+      let start = value > 1 ? value - 1 + "0" : 0;
+      dispatch(billActions.getBillById(_id, { limit: 10, skip: start }));
+      handleGetPage(value);
    };
 
    return (
@@ -140,20 +145,25 @@ export const BillDetailsFragment = ({ billDetails }) => {
                <div className={classes.billTransactionsTableBoxStyle}>
                   {!!billTransactions?.length ? (
                      <>
-                        <TransactionsDemoTable
-                           billTransactions={billTransactions}
-                           billId={_id}
-                        />
+                        <div className={classes.tableContainerStyle}>
+                           {tsxLoader ? (
+                              <div className={classes.loaderContainerStyle}>
+                                 <Loader circleSize={40} />
+                              </div>
+                           ) : (
+                              <TransactionsDemoTable
+                                 billTransactions={billTransactions}
+                                 billId={_id}
+                              />
+                           )}
+                        </div>
                         <div className={classes.paginationBoxStyle}>
                            <Pagination
-                              onChange={(event, val) => changePage(val)}
+                              onChange={changePage}
                               page={page}
-                              count={
-                                 !!billTransactions?.length
-                                    ? Math.ceil(billTransactions?.length / 10)
-                                    : null
-                              }
+                              count={Math.ceil(transactionQty / 10)}
                               color={"primary"}
+                              size={"small"}
                            />
                         </div>
                      </>

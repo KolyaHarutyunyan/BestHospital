@@ -37,4 +37,10 @@ export const billsStyle = makeStyles(() => ({
       flexDirection: "column",
    },
    tableBoxStyle: { flexGrow: 1 },
+   loaderContainerStyle: {
+      minHeight: "600px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+   },
 }));

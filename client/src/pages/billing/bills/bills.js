@@ -1,27 +1,44 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { BillsFragment } from "@eachbase/fragments";
 import { useDispatch, useSelector } from "react-redux";
-import { billActions } from "@eachbase/store";
+import { billActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 import { Loader } from "@eachbase/components";
-import { FindLoad } from "@eachbase/utils";
+import { FindLoad, FindSuccess, PaginationContext } from "@eachbase/utils";
 
 export const Bills = () => {
    const dispatch = useDispatch();
 
+   const [page, setPage] = useState(1);
+
+   const { pageIsChanging, handlePageChange } = useContext(PaginationContext);
+
    const billsData = useSelector((state) => state.bill.bills);
-   const { bills, count } = billsData;
+   const { bills, count } = billsData || {};
 
-   const billsLoader = FindLoad("GET_BILLS");
-
-   const loader = !!billsLoader.length;
+   const loader = !!FindLoad("GET_BILLS").length;
+   const success = FindSuccess("GET_BILLS");
 
    useEffect(() => {
       dispatch(billActions.getBills());
    }, []);
 
-   return loader ? (
+   useEffect(() => {
+      if (!!success.length) {
+         if (!pageIsChanging) setPage(1);
+         handlePageChange(false);
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("GET_BILLS"));
+      }
+   }, [success]);
+
+   return loader && !pageIsChanging ? (
       <Loader />
    ) : (
-      <BillsFragment bills={bills} billsQty={count} />
+      <BillsFragment
+         bills={bills}
+         billsQty={count}
+         page={page}
+         handleGetPage={setPage}
+         billsLoader={loader}
+      />
    );
 };

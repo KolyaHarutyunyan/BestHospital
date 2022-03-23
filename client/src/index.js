@@ -6,7 +6,11 @@ import { BrowserRouter } from "react-router-dom";
 import "./assets/styles/allStyles.scss";
 import { Provider } from "react-redux";
 import { store } from "./store";
-import { DrawerContextProvider, initAxiosInterceptors } from "@eachbase/utils";
+import {
+   DrawerContextProvider,
+   initAxiosInterceptors,
+   PaginationContextProvider,
+} from "@eachbase/utils";
 
 initAxiosInterceptors();
 
@@ -15,7 +19,9 @@ ReactDOM.render(
    <BrowserRouter>
       <Provider store={store}>
          <DrawerContextProvider>
-            <App />
+            <PaginationContextProvider>
+               <App />
+            </PaginationContextProvider>
          </DrawerContextProvider>
       </Provider>
    </BrowserRouter>,
