@@ -12,7 +12,6 @@ export interface ITransaction {
 export interface IPosting extends Document {
   paymentType: string;
   paymentReference: string;
-  paymentDocument: string;
   paymentAmount: number;
   payer: string;
   invoice: string;

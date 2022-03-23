@@ -11,6 +11,7 @@ import { startSession } from 'mongoose';
 import { ClientService } from '../client/client.service';
 import { PostingSanitizer } from './posting.sanitizer';
 import { InvoiceStatus } from '../invoice/invoice.constants';
+import { FileService } from '../files/file.service';
 
 @Injectable()
 export class PostingService {
@@ -18,6 +19,7 @@ export class PostingService {
     private readonly sanitizer: PostingSanitizer,
     private readonly invoiceService: InvoiceService,
     private readonly clientService: ClientService,
+    private readonly fileService: FileService,
     private readonly billingService: BillingService,
   ) {
     this.model = PostingModel;
@@ -41,12 +43,11 @@ export class PostingService {
     while (paymentAmount > 0) {
       if (!receivable.length) {
         if (!payed) {
-          throw new HttpException('Invoice with this amount was not found', HttpStatus.NOT_FOUND);
+          throw new HttpException('Invoice have not receivables', HttpStatus.NOT_FOUND);
         }
         const posting = new this.model({
           paymentType: dto.paymentType,
           paymentReference: dto.paymentReference,
-          paymentDocument: dto.paymentDocument,
           paymentAmount: paymentAmount,
           payer: client.id,
           invoice: dto.invoice,
@@ -73,7 +74,10 @@ export class PostingService {
   }
   /** add document to posting */
   async addDocument(_id: string, fileId: string): Promise<PostingDto> {
-    const posting = await this.model.findById(_id);
+    const [posting, file] = await Promise.all([
+      this.model.findById(_id),
+      this.fileService.getOne(fileId),
+    ]);
     this.checkPosting(posting);
     posting.documents.push(fileId);
     await posting.save();
@@ -89,12 +93,20 @@ export class PostingService {
   }
   /** get all posting */
   async findAll(): Promise<PostingDto[]> {
-    const postings = await this.model.find();
+    const postings = await this.model
+      .find()
+      .populate('documents')
+      .populate('invoice')
+      .populate('payer');
     return this.sanitizer.sanitizeMany(postings);
   }
   /** get one posting */
   async findOne(_id: string): Promise<PostingDto> {
-    const posting = await this.model.findById(_id);
+    const posting = await this.model
+      .findById(_id)
+      .populate('documents')
+      .populate('invoice')
+      .populate('payer');
     this.checkPosting(posting);
     return this.sanitizer.sanitize(posting);
   }

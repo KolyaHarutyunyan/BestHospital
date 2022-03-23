@@ -21,10 +21,6 @@ export class CreatePostingDto {
   @IsNotEmpty()
   paymentReference: string;
   @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  paymentDocument: string;
-  @ApiProperty()
   @IsNumber()
   @IsPositive()
   @IsNotEmpty()

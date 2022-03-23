@@ -15,7 +15,6 @@ const TransactionSchema = new Schema({
 const PostingSchema = new Schema({
   paymentType: { type: String, enum: PaymentType },
   paymentReference: { type: String },
-  paymentDocument: { type: String },
   paymentAmount: { type: Number },
   paymentDate: { type: Date, default: Date.now() },
   payer: { type: Types.ObjectId, ref: 'Client' },

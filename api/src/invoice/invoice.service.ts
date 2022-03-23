@@ -36,14 +36,6 @@ export class InvoiceService {
     // return this.sanitizer.sanitizeMany(claims);
   }
 
-  /** save document */
-  async saveDoc(dto: any): Promise<any> {
-    // console.log(dto, 'dtooooo');
-    // const invoice = await this.model.findByIdAndUpdate(dto._id, { ...dto });
-    // console.log(invoice, 'invoiceinvoiceinvoiceinvoiceinvoiceinvoice');
-    // return this.sanitizer.sanitize(invoice);
-  }
-
   /** get all invoices */
   async findAll(): Promise<InvoiceDto[]> {
     const invoices = await this.model.find();

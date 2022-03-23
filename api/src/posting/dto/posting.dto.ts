@@ -10,8 +10,6 @@ export class PostingDto {
   @ApiProperty()
   paymentReference: string;
   @ApiProperty()
-  paymentDocument: string;
-  @ApiProperty()
   paymentAmount: number;
   @ApiProperty()
   payer: string;
