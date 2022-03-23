@@ -127,7 +127,7 @@ export class BillingService {
   /** find all bills */
   async findAll(skip: number, limit: number): Promise<any> {
     skip ? skip : (skip = 0);
-    limit ? limit : (limit = 6);
+    limit ? limit : (limit = 10);
     const [billings, count] = await Promise.all([
       this.model
         .find({})
@@ -164,7 +164,7 @@ export class BillingService {
   /** find bill by id */
   async findOne(_id: string, skip: number, limit: number): Promise<any> {
     skip ? skip : (skip = 0);
-    limit ? limit : (limit = 8);
+    limit ? limit : (limit = 10);
     const billing = await this.model
       .findById(_id)
       .populate('authService')
