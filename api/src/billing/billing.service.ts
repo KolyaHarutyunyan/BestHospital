@@ -162,7 +162,7 @@ export class BillingService {
   }
 
   /** find bill by id */
-  async findOne(_id: string, skip: number, limit: number): Promise<BillingDto> {
+  async findOne(_id: string, skip: number, limit: number): Promise<any> {
     skip ? skip : (skip = 0);
     limit ? limit : (limit = 8);
     const billing = await this.model
@@ -181,7 +181,9 @@ export class BillingService {
         },
       ]);
     this.checkBilling(billing);
-    return this.sanitizer.sanitize(billing);
+    const billingCount = await this.model.findById(_id);
+    const sanitizeBill = this.sanitizer.sanitize(billing);
+    return { bills: sanitizeBill, count: billingCount.transaction.length };
   }
 
   /** Set billing status */

@@ -10,7 +10,6 @@ export class PostingSanitizer implements ISanitize {
       _id: posting._id,
       paymentType: posting.paymentType,
       paymentReference: posting.paymentReference,
-      paymentDocument: posting.paymentDocument,
       paymentAmount: posting.paymentAmount,
       payer: posting.payer,
       invoice: posting.invoice,
