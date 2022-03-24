@@ -21,6 +21,8 @@ export const TableWrapper = ({
    const [selectedStatus, setSelectedStatus] = useState("Active");
 
    const handleSelection = (selected) => {
+      if (selectedStatus === selected) return;
+
       setSelectedStatus(selected);
       handleType && handleType(ActiveInactiveStatus(selected));
    };

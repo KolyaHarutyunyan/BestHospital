@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { editButtonStyle, serviceSingleStyles } from "./styles";
-import { Images } from "@eachbase/utils";
+import { FindLoad, Images } from "@eachbase/utils";
 import {
    AddButton,
    AddModalButton,
@@ -24,11 +24,19 @@ const filterBtn = {
    height: 36,
 };
 
-export const TabsHeader = ({ activeTab, data, authActive, availabilityData }) => {
+export const TabsHeader = ({
+   activeTab,
+   data,
+   authActive,
+   availabilityData,
+}) => {
    const classes = serviceSingleStyles();
    const dispatch = useDispatch();
    const [open, setOpen] = useState();
    const [searchDate, setSearchDate] = useState("");
+
+   const clientHistoryLoader = !!FindLoad("GET_FUNDING_SOURCE_HISTORIES_BY_ID")
+      .length;
 
    const handleOpenClose = () => {
       setOpen(!open);
@@ -51,16 +59,15 @@ export const TabsHeader = ({ activeTab, data, authActive, availabilityData }) =>
       <div>
          <ul className={classes.tabsWrapper}>
             <li style={{ display: "flex", alignItems: "center" }}>
-               <img src={Images.userProfile} alt="avatar" className={classes.avatar} />
+               <img
+                  src={Images.userProfile}
+                  alt="avatar"
+                  className={classes.avatar}
+               />
                <div className={classes.nameContent}>
                   <h1 className={classes.name}>
                      {data ? `${data?.firstName} ${data?.lastName}` : ""}
                   </h1>
-                  {/*<div className={classes.tagContent}>*/}
-                  {/*<p>Tag Name</p>*/}
-                  {/*<p>Tag Name</p>*/}
-                  {/*<p>Tag Name</p>*/}
-                  {/*</div>*/}
                </div>
             </li>
             <li className={classes.headerRight}>
@@ -80,6 +87,7 @@ export const TabsHeader = ({ activeTab, data, authActive, availabilityData }) =>
                            handleClick={handleSubmit}
                            text="Search"
                            btnStyles={filterBtn}
+                           loader={clientHistoryLoader}
                            disabled={!searchDate}
                         />
                      </div>
@@ -91,7 +99,10 @@ export const TabsHeader = ({ activeTab, data, authActive, availabilityData }) =>
                      text="Edit"
                   />
                ) : activeTab === 4 ? (
-                  <AddButton text="Available Hours" handleClick={handleOpenClose} />
+                  <AddButton
+                     text="Available Hours"
+                     handleClick={handleOpenClose}
+                  />
                ) : activeTab !== 6 && activeTab !== 4 ? (
                   <AddButton
                      text={

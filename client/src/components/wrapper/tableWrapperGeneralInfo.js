@@ -31,10 +31,11 @@ export const TableWrapperGeneralInfo = ({
    const [selectedStatus, setSelectedStatus] = useState("");
 
    const handleSelectionChange = (selected) => {
+      if (selectedStatus === selected) return;
+
       const upperCasedStatus = ActiveInactiveStatus(selected);
 
       if (upperCasedStatus === "ACTIVE") {
-         if (selectedStatus === "Active") return;
          setSelectedStatus(selected);
          dispatch(
             fundingSourceActions.setStatus(id, path, upperCasedStatus, type)

@@ -9,11 +9,15 @@ import {
    ValidationInput,
    AntSwitch,
 } from "@eachbase/components";
-import { Images } from "@eachbase/utils";
+import { FindLoad, Images } from "@eachbase/utils";
 import { CreateStaff, CredentialModal } from "@eachbase/fragments";
 import { useDispatch, useSelector } from "react-redux";
 import { EmploymentModal, TimesheetModal } from "./modals";
-import { adminActions, fundingSourceActions, httpRequestsOnErrorsActions } from "@eachbase/store";
+import {
+   adminActions,
+   fundingSourceActions,
+   httpRequestsOnErrorsActions,
+} from "@eachbase/store";
 import { useParams } from "react-router-dom";
 
 const editButtonStyle = {
@@ -47,6 +51,9 @@ export const StaffItemHeader = ({
    const [searchDate, setSearchDate] = useState("");
    const disabled = !searchDate.length;
 
+   const staffHistoryLoader = !!FindLoad("GET_FUNDING_SOURCE_HISTORIES_BY_ID")
+      .length;
+
    useEffect(() => {
       dispatch(adminActions.getAllPaycodes(params.id));
    }, []);
@@ -63,7 +70,11 @@ export const StaffItemHeader = ({
    };
 
    const handleChange = (e) => {
-      dispatch(httpRequestsOnErrorsActions.removeError("GET_FUNDING_SOURCE_HISTORIES_BY_ID"));
+      dispatch(
+         httpRequestsOnErrorsActions.removeError(
+            "GET_FUNDING_SOURCE_HISTORIES_BY_ID"
+         )
+      );
       setSearchDate(e.target.value);
    };
 
@@ -80,7 +91,11 @@ export const StaffItemHeader = ({
       <div>
          <ul className={classes.tabsWrapper}>
             <li style={{ display: "flex", alignItems: "center" }}>
-               <img src={Images.userProfile} alt="avatar" className={classes.avatar} />
+               <img
+                  src={Images.userProfile}
+                  alt="avatar"
+                  className={classes.avatar}
+               />
                <div className={classes.nameContent}>
                   <h1 className={classes.name}>{title}</h1>
                </div>
@@ -93,23 +108,35 @@ export const StaffItemHeader = ({
                      text="edit"
                   />
                ) : activeTab === 2 ? (
-                  <AddButton text="Add Timesheet" handleClick={handleOpenClose} />
+                  <AddButton
+                     text="Add Timesheet"
+                     handleClick={handleOpenClose}
+                  />
                ) : activeTab === 3 ? (
                   <AddButton
                      text="Add Credential"
                      handleClick={() => openCloseCredModal("addCredential")}
                   />
                ) : activeTab === 5 ? (
-                  <AddButton text="Available Hours" handleClick={handleOpenClose} />
+                  <AddButton
+                     text="Available Hours"
+                     handleClick={handleOpenClose}
+                  />
                ) : activeTab === 1 ? (
                   <>
                      <div className={classes.clinicalWrapper}>
                         <p>Clinician</p>
                         <div>
-                           <AntSwitch checked={switchBoolean} onClick={changeSwitch} />
+                           <AntSwitch
+                              checked={switchBoolean}
+                              onClick={changeSwitch}
+                           />
                         </div>
                      </div>
-                     <AddButton text="Add Employment" handleClick={handleOpenClose} />
+                     <AddButton
+                        text="Add Employment"
+                        handleClick={handleOpenClose}
+                     />
                   </>
                ) : activeTab === 7 ? (
                   <AddButton text="Add Note" handleClick={handleOpenClose} />
@@ -122,9 +149,15 @@ export const StaffItemHeader = ({
                   <div className={classes.clinicalWrapper}>
                      <p>Clinician</p>
                      <div>
-                        <AntSwitch checked={switchBoolean} onClick={changeSwitch} />
+                        <AntSwitch
+                           checked={switchBoolean}
+                           onClick={changeSwitch}
+                        />
                      </div>
-                     <AddButton text="Add Employment" handleClick={handleOpenClose} />
+                     <AddButton
+                        text="Add Employment"
+                        handleClick={handleOpenClose}
+                     />
                   </div>
                ) : activeTab === 7 ? (
                   <AddButton text="Add Note" handleClick={handleOpenClose} />
@@ -143,6 +176,7 @@ export const StaffItemHeader = ({
                         disabled={disabled}
                         handleClick={handleSubmit}
                         text="Search"
+                        loader={staffHistoryLoader}
                         btnStyles={filterBtn}
                      />
                   </div>
@@ -151,7 +185,9 @@ export const StaffItemHeader = ({
          </ul>
          <SimpleModal
             openDefault={activeTab === 3 ? openCredModal : openModal}
-            handleOpenClose={activeTab === 3 ? () => openCloseCredModal() : handleOpenClose}
+            handleOpenClose={
+               activeTab === 3 ? () => openCloseCredModal() : handleOpenClose
+            }
             content={
                activeTab === 0 ? (
                   <CreateStaff
@@ -161,7 +197,10 @@ export const StaffItemHeader = ({
                      handleClose={handleOpenClose}
                   />
                ) : activeTab === 2 ? (
-                  <TimesheetModal handleClose={handleOpenClose} allPaycodes={allPaycodes} />
+                  <TimesheetModal
+                     handleClose={handleOpenClose}
+                     allPaycodes={allPaycodes}
+                  />
                ) : activeTab === 3 ? (
                   <CredentialModal
                      globalCredentialInformation={globalCredentialInformation}
