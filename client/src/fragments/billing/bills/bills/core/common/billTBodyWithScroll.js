@@ -7,9 +7,10 @@ import {
    getValueByFixedNumber,
    manageStatus,
    resetRadius,
+   showDashIfEmpty,
 } from "@eachbase/utils";
 
-export const BillTBodyWithScroll = ({ bills }) => {
+export const BillTBodyWithScroll = ({ bills = [] }) => {
    const history = useHistory();
 
    return (
@@ -21,54 +22,64 @@ export const BillTBodyWithScroll = ({ bills }) => {
                className={"billingSystem"}
             >
                <TableCell style={resetRadius("left")}>
-                  <div>{bill.totalHours}</div>
+                  <div>{showDashIfEmpty(bill.totalHours)}</div>
                </TableCell>
                <TableCell>
-                  <div>{bill.totalUnits}</div>
+                  <div>{showDashIfEmpty(bill.totalUnits)}</div>
                </TableCell>
                <TableCell>
                   <div>
-                     {addSignToValueFromStart(
-                        getValueByFixedNumber(bill.billedRate)
+                     {showDashIfEmpty(
+                        addSignToValueFromStart(
+                           getValueByFixedNumber(bill.billedRate)
+                        )
                      )}
                   </div>
                </TableCell>
                <TableCell>
                   <div>
-                     {addSignToValueFromStart(
-                        getValueByFixedNumber(bill.totalAmount)
+                     {showDashIfEmpty(
+                        addSignToValueFromStart(
+                           getValueByFixedNumber(bill.totalAmount)
+                        )
                      )}
                   </div>
                </TableCell>
                <TableCell>
                   <div>
-                     {addSignToValueFromStart(
-                        getValueByFixedNumber(bill.payerTotal)
+                     {showDashIfEmpty(
+                        addSignToValueFromStart(
+                           getValueByFixedNumber(bill.payerTotal)
+                        )
                      )}
                   </div>
                </TableCell>
                <TableCell>
                   <div>
-                     {addSignToValueFromStart(
-                        getValueByFixedNumber(bill.clientResp)
+                     {showDashIfEmpty(
+                        addSignToValueFromStart(
+                           getValueByFixedNumber(bill.clientResp)
+                        )
                      )}
                   </div>
                </TableCell>
                <TableCell>
                   <div>
-                     {addSignToValueFromStart(
-                        getValueByFixedNumber(bill.billedAmount)
+                     {showDashIfEmpty(
+                        addSignToValueFromStart(
+                           getValueByFixedNumber(bill.billedAmount)
+                        )
                      )}
                   </div>
                </TableCell>
                <TableCell>
-                  <div>{manageStatus(bill.claimStatus)}</div>
+                  <div>{showDashIfEmpty(manageStatus(bill.claimStatus))}</div>
                </TableCell>
                <TableCell>
-                  <div>{manageStatus(bill.invoiceStatus)}</div>
+                  <div>{showDashIfEmpty(manageStatus(bill.invoiceStatus))}</div>
                </TableCell>
                <TableCell>
-                  <div>{manageStatus(bill.status)}</div>
+                  <div>{showDashIfEmpty(manageStatus(bill.status))}</div>
                </TableCell>
             </TableBodyComponent>
          ))}

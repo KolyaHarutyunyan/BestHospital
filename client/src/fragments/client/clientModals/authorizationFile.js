@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { createClientStyle } from "../index";
 import { FindLoad, FindSuccess, Images } from "@eachbase/utils";
-import { AddButton, AddModalButton, Loader, ValidationInput } from "@eachbase/components";
+import {
+   AddButton,
+   AddModalButton,
+   Loader,
+   ValidationInput,
+} from "@eachbase/components";
 
 import { useDispatch, useSelector } from "react-redux";
 import { uploadActions } from "@eachbase/store";
@@ -17,13 +22,18 @@ const credentialBtn = {
    height: 48,
 };
 
-export const AuthorizationFile = ({ authenticationsId, handleClose, uploadedFiles }) => {
+export const AuthorizationFile = ({
+   authenticationsId,
+   handleClose,
+   uploadedFiles,
+}) => {
    const classes = createClientStyle();
 
    const dispatch = useDispatch();
-   // const uploadedFiles = useSelector(state => state.upload.uploadedInfo)
    const [fileName, setFileName] = useState("");
-   const [fileBack, setFileBack] = useState(uploadedFiles ? [...uploadedFiles] : []);
+   const [fileBack, setFileBack] = useState(
+      uploadedFiles ? [...uploadedFiles] : []
+   );
 
    const [selectedFile, setSelectedFile] = useState();
 
@@ -36,10 +46,6 @@ export const AuthorizationFile = ({ authenticationsId, handleClose, uploadedFile
    };
 
    const hiddenFileInput = React.useRef(null);
-
-   const handleClick = () => {
-      // hiddenFileInput.current.click();
-   };
 
    const handleSubmit = () => {
       handleClose && handleClose();
@@ -117,7 +123,9 @@ export const AuthorizationFile = ({ authenticationsId, handleClose, uploadedFile
    React.useEffect(() => {
       if (createLoader) {
          const timer = setInterval(() => {
-            setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
+            setProgress((prevProgress) =>
+               prevProgress >= 100 ? 0 : prevProgress + 10
+            );
          }, 800);
          return () => {
             clearInterval(timer);
@@ -193,7 +201,9 @@ export const AuthorizationFile = ({ authenticationsId, handleClose, uploadedFile
 
                <label htmlFor="BtnBrowseHidden" id="LblBrowse">
                   <div
-                     style={fileName ? {} : { background: "rgba(52,122,240,.5)" }}
+                     style={
+                        fileName ? {} : { background: "rgba(52,122,240,.5)" }
+                     }
                      className={classes.uploadButton}
                   >
                      <img src={Images.addCircle} alt={"icon"} />
@@ -221,7 +231,11 @@ export const AuthorizationFile = ({ authenticationsId, handleClose, uploadedFile
             {getLoader.length ? (
                <Loader height={"29.8vh"} />
             ) : (
-               <div className={!uploadedFiles.length ? classes.centered : classes.normal}>
+               <div
+                  className={
+                     !uploadedFiles.length ? classes.centered : classes.normal
+                  }
+               >
                   {createLoader.length ? (
                      <div className={classes.fileRow}>
                         <div className={classes.imageContainer}>
@@ -231,7 +245,9 @@ export const AuthorizationFile = ({ authenticationsId, handleClose, uploadedFile
                            </div>
                         </div>
                         <div className={classes.fileInput}>
-                           <p className={classes.fileName}>{selectedFile?.name}</p>
+                           <p className={classes.fileName}>
+                              {selectedFile?.name}
+                           </p>
                            <ValidationInput
                               onChange={handleChange}
                               className={classes.fileNameInput}
@@ -260,7 +276,9 @@ export const AuthorizationFile = ({ authenticationsId, handleClose, uploadedFile
                               <div className={classes.imageContainer}>
                                  <div>
                                     {checkFileType(item.mimetype)}
-                                    <p className={classes.fileSize}>{item.size}</p>
+                                    <p className={classes.fileSize}>
+                                       {item.size}
+                                    </p>
                                     <img
                                        onClick={() => deleteItem(item.id)}
                                        src={Images.removeIcon}

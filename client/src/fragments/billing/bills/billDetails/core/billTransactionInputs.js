@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
    ValidationInput,
    SelectInput,
@@ -12,9 +12,8 @@ import {
    ErrorText,
    FindLoad,
    isNotEmpty,
-   FindSuccess,
 } from "@eachbase/utils";
-import { billActions, httpRequestsOnSuccessActions } from "@eachbase/store";
+import { billActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 
 export const BillTransactionInputs = ({ billId, closeModal }) => {
@@ -23,14 +22,6 @@ export const BillTransactionInputs = ({ billId, closeModal }) => {
    const dispatch = useDispatch();
 
    const loader = FindLoad("ADD_BILL_TRANSACTION");
-   const success = FindSuccess("ADD_BILL_TRANSACTION");
-
-   useEffect(() => {
-      if (success && success.length) {
-         closeModal();
-         httpRequestsOnSuccessActions.removeSuccess("ADD_BILL_TRANSACTION");
-      }
-   }, [success]);
 
    const [inputs, setInputs] = useState({});
    const [error, setError] = useState("");

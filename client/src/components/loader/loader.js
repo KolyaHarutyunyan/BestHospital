@@ -1,7 +1,7 @@
 import React from "react";
 import { CircularProgress } from "@material-ui/core";
 
-export const Loader = ({ height }) => {
+export const Loader = ({ height, circleSize }) => {
    return (
       <div
          style={{
@@ -12,7 +12,10 @@ export const Loader = ({ height }) => {
             alignItems: "center",
          }}
       >
-         <CircularProgress size={100} color={"primary"} />
+         <CircularProgress
+            size={circleSize ? circleSize : 100}
+            color={"primary"}
+         />
       </div>
    );
 };

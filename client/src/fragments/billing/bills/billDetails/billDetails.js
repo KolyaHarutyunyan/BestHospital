@@ -3,6 +3,8 @@ import { billDetailsStyle } from "./styles";
 import {
    AddModalButton,
    BillTransactionWrapper,
+   Loader,
+   NoItemText,
    SimpleModal,
 } from "@eachbase/components";
 import {
@@ -11,6 +13,7 @@ import {
    handleCreatedAtDate,
    Images,
    makeCapitalize,
+   PaginationContext,
 } from "@eachbase/utils";
 import {
    BillTransactionInputs,
@@ -19,12 +22,22 @@ import {
    StatusSelectors,
 } from "./core";
 import Pagination from "@material-ui/lab/Pagination";
-import { dummyBillTransactions } from "@eachbase/utils/dummyDatas/dummyBillTransactions";
+import { useDispatch } from "react-redux";
+import { billActions } from "@eachbase/store";
 
-export const BillDetailsFragment = ({ billDetails }) => {
+export const BillDetailsFragment = ({
+   billDetails,
+   transactionQty,
+   page,
+   handleGetPage,
+   tsxLoader,
+}) => {
    const classes = billDetailsStyle();
 
+   const dispatch = useDispatch();
+
    const { open: drawerOpen } = useContext(DrawerContext);
+   const { handlePageChange } = useContext(PaginationContext);
 
    const {
       authService,
@@ -54,7 +67,6 @@ export const BillDetailsFragment = ({ billDetails }) => {
    };
 
    const [open, setOpen] = useState(false);
-   const [page, setPage] = useState(1);
 
    const BILL_DETAILS = [
       {
@@ -79,13 +91,12 @@ export const BillDetailsFragment = ({ billDetails }) => {
 
    const filteredDetails = BILL_DETAILS.filter((billDtl) => billDtl.detail);
 
-   // const billTransactions = dummyBillTransactions;
-
-   console.log(billDetails, "  ssss");
-
-   const changePage = (number) => {
-      let start = number > 1 ? number - 1 + "0" : 0;
-      setPage(number);
+   const changePage = (event, value) => {
+      if (page === value) return;
+      handlePageChange(true);
+      let start = value > 1 ? value - 1 + "0" : 0;
+      dispatch(billActions.getBillById(_id, { limit: 10, skip: start }));
+      handleGetPage(value);
    };
 
    return (
@@ -132,19 +143,33 @@ export const BillDetailsFragment = ({ billDetails }) => {
                   />
                </div>
                <div className={classes.billTransactionsTableBoxStyle}>
-                  <TransactionsDemoTable billTransactions={billTransactions} />
-                  <div className={classes.paginationBoxStyle}>
-                     <Pagination
-                        onChange={(event, val) => changePage(val, "vvv")}
-                        page={page}
-                        count={
-                           !!billTransactions?.length
-                              ? Math.ceil(billTransactions?.length / 10)
-                              : null
-                        }
-                        color={"primary"}
-                     />
-                  </div>
+                  {!!billTransactions?.length ? (
+                     <>
+                        <div className={classes.tableContainerStyle}>
+                           {tsxLoader ? (
+                              <div className={classes.loaderContainerStyle}>
+                                 <Loader circleSize={40} />
+                              </div>
+                           ) : (
+                              <TransactionsDemoTable
+                                 billTransactions={billTransactions}
+                                 billId={_id}
+                              />
+                           )}
+                        </div>
+                        <div className={classes.paginationBoxStyle}>
+                           <Pagination
+                              onChange={changePage}
+                              page={page}
+                              count={Math.ceil(transactionQty / 10)}
+                              color={"primary"}
+                              size={"small"}
+                           />
+                        </div>
+                     </>
+                  ) : (
+                     <NoItemText text={"No Transactions Yet"} />
+                  )}
                </div>
             </div>
             <div className={classes.billDetailsThirdPartStyle}>

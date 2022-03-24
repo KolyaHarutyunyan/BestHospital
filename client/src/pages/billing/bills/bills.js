@@ -1,41 +1,44 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { BillsFragment } from "@eachbase/fragments";
 import { useDispatch, useSelector } from "react-redux";
-import {
-   billActions,
-   clientActions,
-   fundingSourceActions,
-} from "@eachbase/store";
+import { billActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 import { Loader } from "@eachbase/components";
-import { FindLoad } from "@eachbase/utils";
-import { dummyBills } from "@eachbase/utils/dummyDatas/dummyBills";
+import { FindLoad, FindSuccess, PaginationContext } from "@eachbase/utils";
 
 export const Bills = () => {
    const dispatch = useDispatch();
 
-   const bills = useSelector((state) => state.bill.bills);
-   const clients = useSelector((state) => state.client.clientList.clients);
-   const payors = useSelector(
-      (state) => state.fundingSource.fundingSourceList.funders
-   );
-   // const bills = dummyBills;
+   const [page, setPage] = useState(1);
 
-   const billsLoader = FindLoad("GET_BILLS");
-   const clientsLoader = FindLoad("GET_CLIENTS");
-   const payorsLoader = FindLoad("GET_FUNDING_SOURCE");
+   const { pageIsChanging, handlePageChange } = useContext(PaginationContext);
 
-   const loader =
-      !!billsLoader.length || !!clientsLoader.length || !!payorsLoader.length;
+   const billsData = useSelector((state) => state.bill.bills);
+   const { bills, count } = billsData || {};
+
+   const loader = !!FindLoad("GET_BILLS").length;
+   const success = FindSuccess("GET_BILLS");
 
    useEffect(() => {
       dispatch(billActions.getBills());
-      dispatch(clientActions.getClients());
-      dispatch(fundingSourceActions.getFundingSource());
    }, []);
 
-   return loader ? (
+   useEffect(() => {
+      if (!!success.length) {
+         if (!pageIsChanging) setPage(1);
+         handlePageChange(false);
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("GET_BILLS"));
+      }
+   }, [success]);
+
+   return loader && !pageIsChanging ? (
       <Loader />
    ) : (
-      <BillsFragment bills={bills} clients={clients} payors={payors} />
+      <BillsFragment
+         bills={bills}
+         billsQty={count}
+         page={page}
+         handleGetPage={setPage}
+         billsLoader={loader}
+      />
    );
 };

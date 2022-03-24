@@ -6,9 +6,10 @@ import {
    getLimitedVal,
    handleCreatedAtDate,
    resetRadius,
+   showDashIfEmpty,
 } from "@eachbase/utils";
 
-export const BillTBodyWithoutScroll = ({ bills }) => {
+export const BillTBodyWithoutScroll = ({ bills = [] }) => {
    const history = useHistory();
 
    return (
@@ -20,19 +21,35 @@ export const BillTBodyWithoutScroll = ({ bills }) => {
                className={"billingSystem"}
             >
                <TableCell>
-                  <div>{getLimitedVal(bill._id, 13)}</div>
+                  <div>{showDashIfEmpty(getLimitedVal(bill._id, 13))}</div>
                </TableCell>
                <TableCell>
-                  <div>{handleCreatedAtDate(bill.dateOfService, 10, "/")}</div>
+                  <div>
+                     {showDashIfEmpty(
+                        handleCreatedAtDate(bill.dateOfService, 10, "/")
+                     )}
+                  </div>
                </TableCell>
                <TableCell>
-                  <div>{getLimitedVal(bill.payor, 13)}</div>
+                  <div>
+                     {showDashIfEmpty(
+                        getLimitedVal(bill.payor?.middleName, 13)
+                     )}
+                  </div>
                </TableCell>
                <TableCell>
-                  <div>{getLimitedVal(bill.client, 13)}</div>
+                  <div>
+                     {showDashIfEmpty(
+                        getLimitedVal(bill.client?.middleName, 13)
+                     )}
+                  </div>
                </TableCell>
                <TableCell style={resetRadius("right")}>
-                  <div>{getLimitedVal(bill.authService, 13)}</div>
+                  <div>
+                     {showDashIfEmpty(
+                        getLimitedVal(bill.authService?.authorizationId, 13)
+                     )}
+                  </div>
                </TableCell>
             </TableBodyComponent>
          ))}
