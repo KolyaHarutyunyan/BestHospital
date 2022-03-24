@@ -1,2 +1,2 @@
 export const isNotEmpty = (value = "") =>
-   typeof value === "string" ? value.trim() !== "" : true;
+   typeof value === "string" ? value.trim() !== "" : value;
