@@ -10,6 +10,6 @@ export const BASE_URL = {
 
 export const DOMAIN_NAME = {
   local: 'http://localhost:3000',
-  development: 'https://wellnessdaisy.eachbase.com',
+  development: 'https://wellnessdaisy.eachbase.com/',
   production: 'https://wellnessdaisy.com/socialLogin',
 }[mode];
