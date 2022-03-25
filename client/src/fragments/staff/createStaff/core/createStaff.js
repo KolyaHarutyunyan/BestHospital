@@ -14,8 +14,15 @@ import {
    EmailValidator,
    ErrorText,
    isNotEmpty,
+   FindSuccess,
+   FindError,
+   FindLoad,
 } from "@eachbase/utils";
-import { adminActions, httpRequestsOnErrorsActions } from "@eachbase/store";
+import {
+   adminActions,
+   httpRequestsOnErrorsActions,
+   httpRequestsOnSuccessActions,
+} from "@eachbase/store";
 import { inputStyle } from "../../../fundingSource/createFundingSource/core/styles";
 
 const steps = ["General Info", "Address", "Other Details"];
@@ -29,9 +36,7 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
    const [error, setError] = useState("");
    const [emailError, setEmailError] = useState("");
    const [errorSec, setErrorSec] = useState("");
-   const [inputs, setInputs] = useState(
-      resetData ? {} : staffGeneral ? staffGeneral : {}
-   );
+   const [inputs, setInputs] = useState(staffGeneral ? staffGeneral : {});
    const [fullAddress, setFullAddress] = useState(
       staffGeneral ? staffGeneral.address?.formattedAddress : ""
    );
@@ -108,31 +113,6 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
    };
 
    const handleCreate = () => {
-      const data = {
-         firstName: inputs.firstName,
-         middleName: inputs.middleName ? inputs.middleName : "",
-         lastName: inputs.lastName,
-         email: inputs.email,
-         secondaryEmail: inputs.secondaryEmail ? inputs.secondaryEmail : "",
-         phone: inputs.phone,
-         secondaryPhone: inputs.secondaryPhone ? inputs.secondaryPhone : "",
-         state: "state",
-         gender: inputs.gender,
-         birthday: inputs.birthday && new Date(inputs.birthday).toISOString(),
-         residency: inputs.residency,
-         ssn: parseInt(inputs.ssn),
-         status: staffGeneral ? staffGeneral.status : 1,
-         address: fullAddress,
-         license:
-            license.driverLicense && license.state && license.expireDate
-               ? {
-                    driverLicense: license.driverLicense,
-                    expireDate: new Date(license.expireDate).toISOString(),
-                    state: license.state,
-                 }
-               : undefined,
-      };
-
       const staffDataIsValid =
          isNotEmpty(inputs.firstName) &&
          isNotEmpty(inputs.lastName) &&
@@ -148,69 +128,77 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
          isNotEmpty(license.state) &&
          isNotEmpty(license.expireDate);
 
-      const staffDataErrorText = !inputs.firstName
-         ? "firstName"
-         : !isNotEmpty(inputs.lastName)
-         ? "lastName"
-         : !isNotEmpty(inputs.email)
-         ? "email"
-         : !isNotEmpty(inputs.phone)
-         ? "phone"
-         : !isNotEmpty(inputs.residency)
-         ? "residency"
-         : !isNotEmpty(inputs.ssn)
-         ? "ssn"
-         : !isNotEmpty(inputs.gender)
-         ? "gender"
-         : !isNotEmpty(inputs.birthday)
-         ? "birthday"
-         : isNotEmpty(enteredAddress)
-         ? "enteredAddress"
-         : !isNotEmpty(license.driverLicense)
-         ? "driverLicense"
-         : !isNotEmpty(license.state)
-         ? "state"
-         : !isNotEmpty(license.expireDate)
-         ? "expireDate"
-         : "";
-
       if (staffDataIsValid) {
+         const data = {
+            firstName: inputs.firstName,
+            middleName: inputs.middleName,
+            lastName: inputs.lastName,
+            email: inputs.email,
+            secondaryEmail: inputs.secondaryEmail,
+            phone: inputs.phone,
+            secondaryPhone: inputs.secondaryPhone,
+            state: "state",
+            gender: inputs.gender,
+            birthday:
+               inputs.birthday && new Date(inputs.birthday).toISOString(),
+            residency: inputs.residency,
+            ssn: parseInt(inputs.ssn),
+            status: staffGeneral ? staffGeneral.status : 1,
+            address: fullAddress,
+            license:
+               license.driverLicense && license.state && license.expireDate
+                  ? {
+                       driverLicense: license.driverLicense,
+                       expireDate: new Date(license.expireDate).toISOString(),
+                       state: license.state,
+                    }
+                  : undefined,
+         };
+
          if (staffGeneral) {
             dispatch(adminActions.editAdminById(data, staffGeneral.id));
          } else {
             dispatch(adminActions.createAdmin(data));
          }
       } else {
+         const staffDataErrorText = !isNotEmpty(inputs.firstName)
+            ? "firstName"
+            : !isNotEmpty(inputs.lastName)
+            ? "lastName"
+            : !isNotEmpty(inputs.email)
+            ? "email"
+            : !isNotEmpty(inputs.phone)
+            ? "phone"
+            : !isNotEmpty(inputs.residency)
+            ? "residency"
+            : !isNotEmpty(inputs.ssn)
+            ? "ssn"
+            : !isNotEmpty(inputs.gender)
+            ? "gender"
+            : !isNotEmpty(inputs.birthday)
+            ? "birthday"
+            : !isNotEmpty(enteredAddress)
+            ? "enteredAddress"
+            : !isNotEmpty(license.driverLicense)
+            ? "driverLicense"
+            : !isNotEmpty(license.state)
+            ? "state"
+            : !isNotEmpty(license.expireDate)
+            ? "expireDate"
+            : "";
+         console.log(staffDataErrorText, "  error text");
          setError(staffDataErrorText);
       }
    };
 
-   const { httpOnSuccess, httpOnError } = useSelector((state) => ({
-      httpOnSuccess: state.httpOnSuccess,
-      httpOnError: state.httpOnError,
-      httpLoad: state.httpLoad,
-   }));
-
-   const success =
-      httpOnSuccess.length && httpOnSuccess[0].type === "CREATE_ADMIN"
-         ? true
-         : httpOnSuccess.length && httpOnSuccess[0].type === "EDIT_ADMIN_BY_ID";
-
-   const errorText =
-      httpOnError.length && httpOnError[0].type === "CREATE_ADMIN"
-         ? true
-         : httpOnError.length && httpOnError[0].type === "EDIT_ADMIN_BY_ID";
+   const success = staffGeneral
+      ? FindSuccess("EDIT_ADMIN_BY_ID")
+      : FindSuccess("CREATE_ADMIN");
 
    useEffect(() => {
-      if (success) {
+      if (!!success.length) {
          handleClose();
-      }
-      if (errorText) {
-         dispatch(
-            httpRequestsOnErrorsActions.removeError(
-               httpOnError.length && httpOnError[0].type
-            )
-         );
+         dispatch(httpRequestsOnSuccessActions.removeSuccess(success.type));
       }
    }, [success]);
 
@@ -223,7 +211,7 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
             type={"text"}
             label={"First Name*"}
             name="firstName"
-            typeError={error === "firstName" && ErrorText.field}
+            typeError={error === "firstName" ? ErrorText.field : ""}
          />
          <ValidationInput
             variant={"outlined"}
@@ -232,7 +220,6 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
             type={"text"}
             label={"Middle Name"}
             name="middleName"
-            typeError={error === "middleName" && ErrorText.field}
          />
          <ValidationInput
             variant={"outlined"}
@@ -241,7 +228,7 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
             type={"text"}
             label={"Last Name*"}
             name="lastName"
-            typeError={error === "lastName" && ErrorText.field}
+            typeError={error === "lastName" ? ErrorText.field : ""}
          />
          <ValidationInput
             validator={EmailValidator}
@@ -285,7 +272,7 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
             type={"number"}
             label={"Primary Phone Number*"}
             name={"phone"}
-            typeError={error === "phone" && ErrorText.field}
+            typeError={error === "phone" ? ErrorText.field : ""}
          />
          <ValidationInput
             Length={11}
@@ -297,7 +284,7 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
             type={"number"}
             label={"Secondary Phone Number"}
             name={"secondaryPhone"}
-            typeError={error === "secondaryPhone" && ErrorText.field}
+            typeError={error === "secondaryPhone" ? ErrorText.field : ""}
          />
       </React.Fragment>
    );
@@ -326,7 +313,7 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
             type={"text"}
             label={"Driver License"}
             name="driverLicense"
-            typeError={error === "driverLicense" && ErrorText.field}
+            typeError={error === "driverLicense" ? ErrorText.field : ""}
          />
          <div className={classes.flexContainer}>
             <SelectInput
@@ -348,7 +335,7 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
                type={"date"}
                label={"Expiration Date"}
                name="expireDate"
-               typeError={error === "expireDate" && ErrorText.field}
+               typeError={error === "expireDate" ? ErrorText.field : ""}
             />
          </div>
          <p className={`${classes.otherDetailsTitle} ${classes.titlePadding}`}>
@@ -369,7 +356,7 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
             label={"SSN Number*"}
             name="ssn"
             onChange={handleChange}
-            typeError={error === "ssn" && ErrorText.field}
+            typeError={error === "ssn" ? ErrorText.field : ""}
          />
          <div className={classes.flexContainer}>
             <SelectInput
@@ -391,7 +378,7 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
                type={"date"}
                label={"Date of Birth*"}
                name="birthday"
-               typeError={error === "birthday" && ErrorText.field}
+               typeError={error === "birthday" ? ErrorText.field : ""}
             />
          </div>
       </React.Fragment>

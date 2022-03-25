@@ -104,8 +104,10 @@ export const OvertimeSettings = ({
             threshold: "",
             multiplier: "",
          });
-         httpRequestsOnSuccessActions.removeSuccess(
-            "CREATE_OVERTIME_SETTINGS_GLOBAL"
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess(
+               "CREATE_OVERTIME_SETTINGS_GLOBAL"
+            )
          );
       }
    }, [success]);
@@ -113,8 +115,10 @@ export const OvertimeSettings = ({
    useEffect(() => {
       if (!!edit.length) {
          handleOpenClose && handleOpenClose();
-         httpRequestsOnSuccessActions.removeSuccess(
-            "EDIT_OVERTIME_SETTINGS_BY_ID_GLOBAL"
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess(
+               "EDIT_OVERTIME_SETTINGS_BY_ID_GLOBAL"
+            )
          );
       }
    }, [edit]);

@@ -139,15 +139,19 @@ export const PayCodeType = ({
             code: "",
             type: "",
          });
-         httpRequestsOnSuccessActions.removeSuccess("CREATE_PAYCODE_GLOBAL");
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess("CREATE_PAYCODE_GLOBAL")
+         );
       }
    }, [success]);
 
    useEffect(() => {
       if (!!edit.length) {
          handleOpenClose && handleOpenClose();
-         httpRequestsOnSuccessActions.removeSuccess(
-            "EDIT_PAYCODE_BY_ID_GLOBAL"
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess(
+               "EDIT_PAYCODE_BY_ID_GLOBAL"
+            )
          );
       }
    }, [edit]);

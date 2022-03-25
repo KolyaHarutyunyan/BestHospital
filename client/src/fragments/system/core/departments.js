@@ -58,7 +58,11 @@ export const Departments = ({ globalDepartments, removeItem, openModal }) => {
          setInputs({
             name: "",
          });
-         httpRequestsOnSuccessActions.removeSuccess("CREATE_DEPARTMENT_GLOBAL");
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess(
+               "CREATE_DEPARTMENT_GLOBAL"
+            )
+         );
       }
    }, [success]);
 

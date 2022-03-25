@@ -58,7 +58,9 @@ export const JobTitles = ({ globalJobs, removeItem, openModal }) => {
          setInputs({
             name: "",
          });
-         httpRequestsOnSuccessActions.removeSuccess("CREATE_JOB_GLOBAL");
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess("CREATE_JOB_GLOBAL")
+         );
       }
    }, [success]);
 

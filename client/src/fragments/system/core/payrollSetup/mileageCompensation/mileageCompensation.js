@@ -75,14 +75,14 @@ export const MileageCompensation = ({
             compensation: "",
             startDate: "",
          });
-         httpRequestsOnSuccessActions.removeSuccess("CREATE_MILEAGE");
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_MILEAGE"));
       }
    }, [success]);
 
    useEffect(() => {
       if (!!editSuccess.length) {
          handleOpenClose && handleOpenClose();
-         httpRequestsOnSuccessActions.removeSuccess("EDIT_MILEAGE");
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_MILEAGE"));
       }
    }, [editSuccess]);
 

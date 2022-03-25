@@ -68,7 +68,9 @@ export const PlaceOfService = ({ globalJobs, removeItem, openModal }) => {
             name: "",
             code: "",
          });
-         httpRequestsOnSuccessActions.removeSuccess("CREATE_PLACE_GLOBAL");
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess("CREATE_PLACE_GLOBAL")
+         );
       }
    }, [success]);
 

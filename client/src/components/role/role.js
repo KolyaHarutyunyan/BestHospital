@@ -66,6 +66,7 @@ export const Role = ({
          setIndex(0);
          setOpen(!open);
          handleRemoveSelected && handleRemoveSelected();
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("REMOVE_ACCESS"));
       }
    }, [success]);
 

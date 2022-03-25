@@ -145,7 +145,9 @@ export const ServiceType = ({ globalServices, removeItem, openModal }) => {
             displayCode: "",
             category: "",
          });
-         httpRequestsOnSuccessActions.removeSuccess("CREATE_SERVICE_GLOBAL");
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess("CREATE_SERVICE_GLOBAL")
+         );
       }
    }, [success]);
 
