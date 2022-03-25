@@ -1,8 +1,4 @@
-import {
-  SESClient,
-  SendEmailCommand,
-  SendEmailRequest,
-} from '@aws-sdk/client-ses';
+import { SESClient, SendEmailCommand, SendEmailRequest } from '@aws-sdk/client-ses';
 import { Injectable } from '@nestjs/common';
 import { DOMAIN_NAME } from '../constants';
 import {
@@ -36,19 +32,13 @@ export class MailerService {
 
   /** Sends and email provided to it */
   sendForgetPasswordMail = async (mailData: any): Promise<MailStatus> => {
-    const mailOptions = this.authTemplate.getForgetPasswordTemplate(
-      mailData.token,
-      mailData.email,
-    );
+    const mailOptions = this.authTemplate.getForgetPasswordTemplate(mailData.token, mailData.email);
     return this.sendMail(mailOptions);
   };
 
   /** Sends email to invite a user for registration */
-  sendInviteMail = async (
-    email: string,
-    token: string,
-  ): Promise<MailStatus> => {
-    const link = `${DOMAIN_NAME}/register?token=${token}`;
+  sendInviteMail = async (email: string, token: string): Promise<MailStatus> => {
+    const link = `${DOMAIN_NAME}register?token=${token}`;
     const mailOptions = this.authTemplate.getInviteTemplate(email, link);
     return this.sendMail(mailOptions);
   };
