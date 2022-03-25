@@ -48,7 +48,7 @@ export const ServiceType = ({ globalServices, removeItem, openModal }) => {
       isNotEmpty(inputs.displayCode) &&
       isNotEmpty(inputs.category);
 
-   const isDisabled = !serviceDataIsValid;
+   const isDisabled = serviceDataIsValid;
 
    const classes = systemItemStyles();
 
@@ -185,7 +185,7 @@ export const ServiceType = ({ globalServices, removeItem, openModal }) => {
                loader={!!loader.length}
                type={"CREATE_SERVICE_GLOBAL"}
                styles={credentialBtn}
-               disabled={isDisabled}
+               disabled={!isDisabled}
                handleClick={handleSubmit}
                text="Add Service Type"
             />

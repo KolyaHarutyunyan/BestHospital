@@ -90,7 +90,7 @@ export const Credentials = ({ removeItem, openModal, globalCredentials }) => {
       }
    };
 
-   const isDisabled = inputs.name && inputs.type;
+   const isDisabled = isNotEmpty(inputs.name) && isNotEmpty(inputs.type);
 
    const loader = FindLoad("CREATE_CREDENTIAL_GLOBAL");
    const success = FindSuccess("CREATE_CREDENTIAL_GLOBAL");

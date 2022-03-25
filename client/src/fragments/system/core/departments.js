@@ -48,7 +48,7 @@ export const Departments = ({ globalDepartments, removeItem, openModal }) => {
       }
    };
 
-   const isDisabled = inputs.name;
+   const isDisabled = isNotEmpty(inputs.name);
 
    const loader = FindLoad("CREATE_DEPARTMENT_GLOBAL");
    const success = FindSuccess("CREATE_DEPARTMENT_GLOBAL");
