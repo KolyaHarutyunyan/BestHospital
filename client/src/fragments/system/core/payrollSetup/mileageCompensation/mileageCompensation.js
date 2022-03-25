@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { AddModalButton, ValidationInput, CreateChancel } from "@eachbase/components";
+import {
+   AddModalButton,
+   ValidationInput,
+   CreateChancel,
+} from "@eachbase/components";
 import { PayrollSetupStyles } from "../styles";
-import { ErrorText, FindLoad, FindSuccess } from "@eachbase/utils";
+import { ErrorText, FindLoad, FindSuccess, isNotEmpty } from "@eachbase/utils";
 import { useDispatch } from "react-redux";
-import { mileagesActions } from "@eachbase/store";
+import { httpRequestsOnSuccessActions, mileagesActions } from "@eachbase/store";
 import moment from "moment";
 
 const overtimeBtn = {
@@ -19,15 +23,10 @@ export const MileageCompensation = ({
    handleOpenClose,
 }) => {
    const classes = PayrollSetupStyles();
+
    const dispatch = useDispatch();
-   const [inputs, setInputs] = useState(
-      editedData
-         ? editedData
-         : {
-              compensation: "",
-              startDate: "",
-           }
-   );
+
+   const [inputs, setInputs] = useState(editedData ? editedData : {});
    const [error, setError] = useState("");
 
    const handleChange = (e) => {
@@ -39,24 +38,29 @@ export const MileageCompensation = ({
    };
 
    const handleSubmit = () => {
-      let data = {
-         compensation: parseInt(inputs.compensation),
-         startDate: inputs.startDate ? new Date(inputs.startDate).toISOString() : "",
-      };
-      if (inputs.compensation && inputs.startDate) {
+      const dataIsValid = isNotEmpty(inputs.compensation) && !!inputs.startDate;
+
+      if (dataIsValid) {
+         const data = {
+            compensation: parseInt(inputs.compensation),
+            startDate: inputs.startDate
+               ? new Date(inputs.startDate).toISOString()
+               : "",
+         };
+
          if (editedData) {
             dispatch(mileagesActions.editMileage(inputs._id, data));
          } else {
             dispatch(mileagesActions.createMileage(data));
          }
       } else {
-         setError(
-            !inputs.compensation
-               ? "compensation"
-               : !inputs.startDate
-               ? "startDate"
-               : "Input is not filled"
-         );
+         const dataErrorText = !isNotEmpty(inputs.compensation)
+            ? "compensation"
+            : !inputs.startDate
+            ? "startDate"
+            : "";
+
+         setError(dataErrorText);
       }
    };
 
@@ -66,19 +70,21 @@ export const MileageCompensation = ({
    const editLoad = FindLoad("EDIT_MILEAGE");
 
    useEffect(() => {
-      if (success) {
+      if (!!success.length) {
          setInputs({
             compensation: "",
             startDate: "",
          });
+         httpRequestsOnSuccessActions.removeSuccess("CREATE_MILEAGE");
       }
-   }, [success.length]);
+   }, [success]);
 
    useEffect(() => {
-      if (editSuccess) {
+      if (!!editSuccess.length) {
          handleOpenClose && handleOpenClose();
+         httpRequestsOnSuccessActions.removeSuccess("EDIT_MILEAGE");
       }
-   }, [editSuccess.length]);
+   }, [editSuccess]);
 
    return (
       <div
@@ -90,12 +96,17 @@ export const MileageCompensation = ({
          }}
       >
          {editedData ? (
-            <h1 className={classes.editModalTitle}>Edit Mileage Compensation</h1>
+            <h1 className={classes.editModalTitle}>
+               Edit Mileage Compensation
+            </h1>
          ) : (
             <>
-               <h1 className={classes.modalTitle}>Add a New Mileage Compensation</h1>
+               <h1 className={classes.modalTitle}>
+                  Add a New Mileage Compensation
+               </h1>
                <p className={classes.modalSubTitle}>
-                  Please fulfill the below fields to add a Mileage Compensation in the system.
+                  Please fulfill the below fields to add a Mileage Compensation
+                  in the system.
                </p>
             </>
          )}
@@ -113,7 +124,9 @@ export const MileageCompensation = ({
          <ValidationInput
             onChange={handleChange}
             value={
-               editedData ? moment(inputs.startDate).format().substring(0, 10) : inputs.startDate
+               editedData
+                  ? moment(inputs.startDate).format().substring(0, 10)
+                  : inputs.startDate
             }
             variant={"outlined"}
             name={"startDate"}

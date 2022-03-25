@@ -1,11 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Colors, ErrorText, FindLoad, FindSuccess, useGlobalTextStyles } from "@eachbase/utils";
+import {
+   Colors,
+   ErrorText,
+   FindLoad,
+   FindSuccess,
+   isNotEmpty,
+   useGlobalTextStyles,
+} from "@eachbase/utils";
 import { modalsStyle } from "./styles";
 import { AddModalButton, CloseButton } from "../buttons";
 import { ValidationInput, Textarea } from "../inputs";
 import { useDispatch, useSelector } from "react-redux";
-import { fundingSourceActions, httpRequestsOnSuccessActions } from "@eachbase/store";
+import {
+   fundingSourceActions,
+   httpRequestsOnSuccessActions,
+} from "@eachbase/store";
 
 export const InactiveModal = ({ handleOpenClose, info, name, statusType }) => {
    const classes = modalsStyle();
@@ -22,7 +32,10 @@ export const InactiveModal = ({ handleOpenClose, info, name, statusType }) => {
    const loader = FindLoad("SET_STATUS");
 
    const inactivateButtonStyle = {
-      backgroundColor: activeOrInactive === "activate" ? Colors.BackgroundBlue : Colors.ThemeRed,
+      backgroundColor:
+         activeOrInactive === "activate"
+            ? Colors.BackgroundBlue
+            : Colors.ThemeRed,
    };
 
    const handleChange = (e) =>
@@ -36,21 +49,36 @@ export const InactiveModal = ({ handleOpenClose, info, name, statusType }) => {
    };
 
    const handleCreate = () => {
-      const data = {
-         date: inputs.date,
-         reason: inputs.reason,
-      };
-      if (inputs.date && inputs.reason) {
+      const dataIsValid = isNotEmpty(inputs.date) && isNotEmpty(inputs.reason);
+
+      if (dataIsValid) {
+         const data = {
+            date: inputs.date,
+            reason: inputs.reason,
+         };
+
          dispatch(
-            fundingSourceActions.setStatus(params.id, info.path, statusType, data, info.type)
+            fundingSourceActions.setStatus(
+               params.id,
+               info.path,
+               statusType,
+               data,
+               info.type
+            )
          );
       } else {
-         setError(!inputs.date ? "date" : !inputs.reason ? "reason" : "Input is not field");
+         const dataErrorText = !isNotEmpty(inputs.date)
+            ? "date"
+            : !isNotEmpty(inputs.reason)
+            ? "reason"
+            : "";
+
+         setError(dataErrorText);
       }
    };
 
    useEffect(() => {
-      if (success) {
+      if (!!success.length) {
          handleOpenClose();
          dispatch(httpRequestsOnSuccessActions.removeSuccess("SET_STATUS"));
       }

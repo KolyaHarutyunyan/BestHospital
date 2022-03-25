@@ -8,9 +8,10 @@ import {
    CreateChancel,
 } from "@eachbase/components";
 import { PayrollSetupStyles } from "../styles";
-import { ErrorText, FindLoad, FindSuccess } from "@eachbase/utils";
+import { ErrorText, FindLoad, FindSuccess, isNotEmpty } from "@eachbase/utils";
 import { useDispatch } from "react-redux";
 import { payrollActions } from "@eachbase/store/payroll";
+import { httpRequestsOnSuccessActions } from "@eachbase/store";
 
 const payCodeType = [{ name: "HOURLY" }, { name: "SALARY" }, { name: "FIXED" }];
 
@@ -41,9 +42,19 @@ const ptoData = [
    },
 ];
 
-const checkboxStyle = { display: "flex", alignItems: "center", flexDirection: "row" };
+const checkboxStyle = {
+   display: "flex",
+   alignItems: "center",
+   flexDirection: "row",
+};
 
-export const PayCodeType = ({ handleOpenClose, editedData, maxWidth, marginRight, marginTop }) => {
+export const PayCodeType = ({
+   handleOpenClose,
+   editedData,
+   maxWidth,
+   marginRight,
+   marginTop,
+}) => {
    const classes = PayrollSetupStyles();
    const dispatch = useDispatch();
    const [inputs, setInputs] = useState(
@@ -59,7 +70,9 @@ export const PayCodeType = ({ handleOpenClose, editedData, maxWidth, marginRight
    const [applyOvertime, setApplyOvertime] = useState(
       editedData && editedData.overtime === true ? "Yes" : "No"
    );
-   const [AccruePTO, setAccruePTO] = useState(editedData && editedData.pto === true ? "Yes" : "No");
+   const [AccruePTO, setAccruePTO] = useState(
+      editedData && editedData.pto === true ? "Yes" : "No"
+   );
 
    const handleChange = (e) => {
       setInputs((prevState) => ({
@@ -70,31 +83,39 @@ export const PayCodeType = ({ handleOpenClose, editedData, maxWidth, marginRight
    };
 
    const handleSubmit = () => {
-      let data = {
-         name: inputs.name,
-         code: inputs.code,
-         type: inputs.type,
-         overtime: applyOvertime === "Yes",
-         pto: AccruePTO === "Yes",
-      };
-      if (inputs.name && inputs.type && inputs.code) {
+      const dataIsValid =
+         isNotEmpty(inputs.name) &&
+         isNotEmpty(inputs.type) &&
+         isNotEmpty(inputs.code);
+
+      if (dataIsValid) {
+         const data = {
+            name: inputs.name,
+            code: inputs.code,
+            type: inputs.type,
+            overtime: applyOvertime === "Yes",
+            pto: AccruePTO === "Yes",
+         };
+
          if (editedData) {
-            dispatch(payrollActions.editPayCodeByIdGlobal(data, editedData?.id));
+            dispatch(
+               payrollActions.editPayCodeByIdGlobal(data, editedData?.id)
+            );
          } else {
             dispatch(payrollActions.createPayCodeGlobal(data));
             setApplyOvertime("No");
             setAccruePTO("No");
          }
       } else {
-         setError(
-            !inputs.name
-               ? "name"
-               : !inputs.code
-               ? "code"
-               : !inputs.type
-               ? "type"
-               : "Input is not filled"
-         );
+         const dataErrorText = !isNotEmpty(inputs.name)
+            ? "name"
+            : !isNotEmpty(inputs.code)
+            ? "code"
+            : !isNotEmpty(inputs.type)
+            ? "type"
+            : "";
+
+         setError(dataErrorText);
       }
    };
 
@@ -112,20 +133,24 @@ export const PayCodeType = ({ handleOpenClose, editedData, maxWidth, marginRight
    const edit = FindSuccess("EDIT_PAYCODE_BY_ID_GLOBAL");
 
    useEffect(() => {
-      if (success) {
+      if (!!success.length) {
          setInputs({
             name: "",
             code: "",
             type: "",
          });
+         httpRequestsOnSuccessActions.removeSuccess("CREATE_PAYCODE_GLOBAL");
       }
-   }, [success.length]);
+   }, [success]);
 
    useEffect(() => {
-      if (edit) {
+      if (!!edit.length) {
          handleOpenClose && handleOpenClose();
+         httpRequestsOnSuccessActions.removeSuccess(
+            "EDIT_PAYCODE_BY_ID_GLOBAL"
+         );
       }
-   }, [edit.length]);
+   }, [edit]);
 
    return (
       <div
@@ -143,7 +168,8 @@ export const PayCodeType = ({ handleOpenClose, editedData, maxWidth, marginRight
             <>
                <h1 className={classes.modalTitle}>Add a New Paycode Type</h1>
                <p className={classes.modalSubTitle}>
-                  Please fulfill the below fields to add a Paycode Type in the system.
+                  Please fulfill the below fields to add a Paycode Type in the
+                  system.
                </p>
             </>
          )}

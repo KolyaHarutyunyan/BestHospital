@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { CreateChancel, SelectInput, ValidationInput } from "@eachbase/components";
-import { ErrorText, FindLoad, getActiveDatas, getDynamicContent } from "@eachbase/utils";
+import {
+   CreateChancel,
+   SelectInput,
+   ValidationInput,
+} from "@eachbase/components";
+import {
+   ErrorText,
+   FindLoad,
+   getActiveDatas,
+   getDynamicContent,
+   isNotEmpty,
+} from "@eachbase/utils";
 import { scheduleModalsStyle } from "./styles";
 import { modalsStyle } from "@eachbase/components/modal/styles";
 import { adminActions, appointmentActions } from "@eachbase/store";
@@ -45,9 +55,13 @@ export const Break = ({
    }, [createModalDate]);
 
    const handleChange = (e) => {
-      setInputs((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
+      setInputs((prevState) => ({
+         ...prevState,
+         [e.target.name]: e.target.value,
+      }));
       error === e.target.name && setError("");
-      e.target.name === "staff" && dispatch(adminActions.getAllPaycodes(e.target.value));
+      e.target.name === "staff" &&
+         dispatch(adminActions.getAllPaycodes(e.target.value));
    };
 
    const handleChangeDate = (e) => {
@@ -61,11 +75,18 @@ export const Break = ({
          0
       );
       setTimes((prevState) => ({ ...prevState, [e.target.name]: myToday }));
-      (e.target.name === error || error === ErrorText.timeError) && setError("");
+      (e.target.name === error || error === ErrorText.timeError) &&
+         setError("");
    };
 
    const modalType =
-      type === "Break" ? "BREAK" : type === "Drive" ? "DRIVE" : type === "Paid" ? "PAID" : "";
+      type === "Break"
+         ? "BREAK"
+         : type === "Drive"
+         ? "DRIVE"
+         : type === "Paid"
+         ? "PAID"
+         : "";
 
    const handleCreate = () => {
       const timeComparingIsValid =
@@ -73,11 +94,16 @@ export const Break = ({
          !!times.endTime &&
          Date.parse(times.startTime) < Date.parse(times.endTime);
 
-      const datasValid =
-         inputs.staff && inputs.staffPayCode && inputs.startDate && timeComparingIsValid;
-      const modalBool = modalType === "DRIVE" ? datasValid && inputs.miles : datasValid;
+      const dataIsValid =
+         isNotEmpty(inputs.staff) &&
+         isNotEmpty(inputs.staffPayCode) &&
+         inputs.startDate &&
+         timeComparingIsValid;
 
-
+      const modalBool =
+         modalType === "DRIVE"
+            ? datasValid && isNotEmpty(inputs.miles)
+            : dataIsValid;
 
       if (modalBool) {
          const date = {
@@ -97,7 +123,11 @@ export const Break = ({
             eventStatus: "PENDING",
             status: "ACTIVE",
             require: false,
-            staff: inputs.staff ? (inputs.staff._id ? inputs.staff._id : inputs.staff) : "",
+            staff: inputs.staff
+               ? inputs.staff._id
+                  ? inputs.staff._id
+                  : inputs.staff
+               : "",
             staffPayCode: inputs.staffPayCode
                ? inputs.staffPayCode._id
                   ? inputs.staffPayCode._id
@@ -107,6 +137,7 @@ export const Break = ({
             _id: inputs.inputs,
          };
          inputs.type === "DRIVE" ? (editDate["miles"] = +inputs.miles) : "";
+
          if (modalDate) {
             dispatch(appointmentActions.editAppointment(editDate, inputs._id));
          } else {
@@ -126,12 +157,16 @@ export const Break = ({
             : !timeComparingIsValid
             ? ErrorText.timeError
             : "";
-         if (modalType === "DRIVE") setError(errorText ? errorText : !inputs.miles ? "miles" : "");
+
+         if (modalType === "DRIVE")
+            setError(errorText ? errorText : !inputs.miles ? "miles" : "");
          else setError(errorText);
       }
    };
 
-   const loader = modalDate ? FindLoad("EDIT_APPOINTMENT") : FindLoad("CREATE_APPOINTMENT");
+   const loader = modalDate
+      ? FindLoad("EDIT_APPOINTMENT")
+      : FindLoad("CREATE_APPOINTMENT");
 
    const titleContent = getDynamicContent("TITLE", modalDate, type);
    const subtitleContent = getDynamicContent("SUBTITLE", modalDate, type);

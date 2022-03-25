@@ -58,6 +58,7 @@ export const SelectInput = ({
                   className={classes.select}
                   disabled={disabled}
                   native
+                  multiple={Array.isArray(value) || Array.isArray(current)}
                   value={value ? value : current}
                   onChange={handleChange}
                   label={label}

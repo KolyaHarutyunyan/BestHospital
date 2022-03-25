@@ -9,7 +9,12 @@ import {
    CloseButton,
 } from "@eachbase/components";
 import { createStaffModalStyle } from "./style";
-import { useGlobalTextStyles, EmailValidator, ErrorText, isNotEmpty } from "@eachbase/utils";
+import {
+   useGlobalTextStyles,
+   EmailValidator,
+   ErrorText,
+   isNotEmpty,
+} from "@eachbase/utils";
 import { adminActions, httpRequestsOnErrorsActions } from "@eachbase/store";
 import { inputStyle } from "../../../fundingSource/createFundingSource/core/styles";
 
@@ -24,30 +29,42 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
    const [error, setError] = useState("");
    const [emailError, setEmailError] = useState("");
    const [errorSec, setErrorSec] = useState("");
-   const [inputs, setInputs] = useState(resetData ? {} : staffGeneral ? staffGeneral : {});
-   const [fullAddress, setFullAddress] = useState(
-      staffGeneral ? staffGeneral.address.formattedAddress : ""
+   const [inputs, setInputs] = useState(
+      resetData ? {} : staffGeneral ? staffGeneral : {}
    );
-   const [enteredAddress, setEnteredAddress] = useState("");
+   const [fullAddress, setFullAddress] = useState(
+      staffGeneral ? staffGeneral.address?.formattedAddress : ""
+   );
+   const [enteredAddress, setEnteredAddress] = useState(
+      staffGeneral ? staffGeneral.address?.formattedAddress : ""
+   );
 
    const [license, setLicense] = useState(
-      staffGeneral ? staffGeneral.license : { driverLicense: "", expireDate: "", state: "" }
+      staffGeneral
+         ? staffGeneral.license
+         : { driverLicense: "", expireDate: "", state: "" }
    );
 
    const phoneIsValid =
-      !!inputs.phone && inputs.phone.trim().length >= 10 && !/[a-zA-Z]/g.test(inputs.phone);
+      isNotEmpty(inputs.phone) &&
+      inputs.phone.trim().length >= 10 &&
+      !/[a-zA-Z]/g.test(inputs.phone);
 
-   const emailIsValid = !!inputs.email && EmailValidator.test(inputs.email);
-   const secEmailIsValid = !!inputs.secondaryEmail && EmailValidator.test(inputs.secondaryEmail);
+   const emailIsValid =
+      isNotEmpty(inputs.email) && EmailValidator.test(inputs.email);
+   const secEmailIsValid =
+      isNotEmpty(inputs.secondaryEmail) &&
+      EmailValidator.test(inputs.secondaryEmail);
 
    const disabledOne =
-      inputs.firstName &&
-      inputs.lastName &&
+      isNotEmpty(inputs.firstName) &&
+      isNotEmpty(inputs.lastName) &&
       phoneIsValid &&
       emailIsValid &&
-      (inputs.secondaryEmail ? secEmailIsValid : true);
+      (isNotEmpty(inputs.secondaryEmail) ? secEmailIsValid : true);
 
-   const disableSecond = !isNotEmpty(fullAddress) && !enteredAddress;
+   const disableSecond =
+      !isNotEmpty(fullAddress) && !isNotEmpty(enteredAddress);
 
    const dispatch = useDispatch();
 
@@ -116,61 +133,55 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
                : undefined,
       };
 
-      if (
-         inputs.firstName &&
-         inputs.lastName &&
-         inputs.email &&
-         inputs.phone &&
-         inputs.gender &&
-         inputs.birthday &&
-         inputs.residency &&
-         inputs.ssn &&
+      const staffDataIsValid =
+         isNotEmpty(inputs.firstName) &&
+         isNotEmpty(inputs.lastName) &&
+         isNotEmpty(inputs.email) &&
+         isNotEmpty(inputs.phone) &&
+         isNotEmpty(inputs.gender) &&
+         isNotEmpty(inputs.birthday) &&
+         isNotEmpty(inputs.residency) &&
+         isNotEmpty(inputs.ssn) &&
          isNotEmpty(fullAddress) &&
-         enteredAddress
-      ) {
-         if (license.driverLicense || license.state || license.expireDate) {
-            if (license.driverLicense && license.state && license.expireDate) {
-               staffGeneral
-                  ? dispatch(adminActions.editAdminById(data, staffGeneral.id))
-                  : dispatch(adminActions.createAdmin(data));
-            } else {
-               setError(
-                  !license.driverLicense
-                     ? "driverLicense"
-                     : !license.state
-                     ? "state"
-                     : !license.expireDate
-                     ? "expireDate"
-                     : "Input is not filled"
-               );
-            }
+         isNotEmpty(enteredAddress) &&
+         isNotEmpty(license.driverLicense) &&
+         isNotEmpty(license.state) &&
+         isNotEmpty(license.expireDate);
+
+      const staffDataErrorText = !inputs.firstName
+         ? "firstName"
+         : !isNotEmpty(inputs.lastName)
+         ? "lastName"
+         : !isNotEmpty(inputs.email)
+         ? "email"
+         : !isNotEmpty(inputs.phone)
+         ? "phone"
+         : !isNotEmpty(inputs.residency)
+         ? "residency"
+         : !isNotEmpty(inputs.ssn)
+         ? "ssn"
+         : !isNotEmpty(inputs.gender)
+         ? "gender"
+         : !isNotEmpty(inputs.birthday)
+         ? "birthday"
+         : isNotEmpty(enteredAddress)
+         ? "enteredAddress"
+         : !isNotEmpty(license.driverLicense)
+         ? "driverLicense"
+         : !isNotEmpty(license.state)
+         ? "state"
+         : !isNotEmpty(license.expireDate)
+         ? "expireDate"
+         : "";
+
+      if (staffDataIsValid) {
+         if (staffGeneral) {
+            dispatch(adminActions.editAdminById(data, staffGeneral.id));
          } else {
-            staffGeneral
-               ? dispatch(adminActions.editAdminById(data, staffGeneral.id))
-               : dispatch(adminActions.createAdmin(data));
+            dispatch(adminActions.createAdmin(data));
          }
       } else {
-         setError(
-            !inputs.firstName
-               ? "firstName"
-               : !inputs.lastName
-               ? "lastName"
-               : !inputs.email
-               ? "email"
-               : !inputs.phone
-               ? "phone"
-               : !inputs.residency
-               ? "residency"
-               : !inputs.ssn
-               ? "ssn"
-               : !inputs.gender
-               ? "gender"
-               : !inputs.birthday
-               ? "birthday"
-               : enteredAddress
-               ? "enteredAddress"
-               : "Input is not filled"
-         );
+         setError(staffDataErrorText);
       }
    };
 
@@ -196,7 +207,9 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
       }
       if (errorText) {
          dispatch(
-            httpRequestsOnErrorsActions.removeError(httpOnError.length && httpOnError[0].type)
+            httpRequestsOnErrorsActions.removeError(
+               httpOnError.length && httpOnError[0].type
+            )
          );
       }
    }, [success]);
@@ -212,7 +225,6 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
             name="firstName"
             typeError={error === "firstName" && ErrorText.field}
          />
-
          <ValidationInput
             variant={"outlined"}
             onChange={handleChange}
@@ -222,7 +234,6 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
             name="middleName"
             typeError={error === "middleName" && ErrorText.field}
          />
-
          <ValidationInput
             variant={"outlined"}
             onChange={handleChange}
@@ -232,7 +243,6 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
             name="lastName"
             typeError={error === "lastName" && ErrorText.field}
          />
-
          <ValidationInput
             validator={EmailValidator}
             variant={"outlined"}
@@ -250,7 +260,6 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
             value={inputs.email}
             onChange={handleChange}
          />
-
          <ValidationInput
             validator={EmailValidator}
             variant={"outlined"}
@@ -281,7 +290,9 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
          <ValidationInput
             Length={11}
             onChange={handleChange}
-            value={inputs.secondaryPhone && inputs.secondaryPhone.replace("+", "")}
+            value={
+               inputs.secondaryPhone && inputs.secondaryPhone.replace("+", "")
+            }
             variant={"outlined"}
             type={"number"}
             label={"Secondary Phone Number"}
@@ -330,14 +341,19 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
             <ValidationInput
                variant={"outlined"}
                onChange={handleChangeLicense}
-               value={license?.expireDate && moment(license?.expireDate).format().substring(0, 10)}
+               value={
+                  license?.expireDate &&
+                  moment(license?.expireDate).format().substring(0, 10)
+               }
                type={"date"}
                label={"Expiration Date"}
                name="expireDate"
                typeError={error === "expireDate" && ErrorText.field}
             />
          </div>
-         <p className={`${classes.otherDetailsTitle} ${classes.titlePadding}`}>Other</p>
+         <p className={`${classes.otherDetailsTitle} ${classes.titlePadding}`}>
+            Other
+         </p>
          <SelectInput
             name={"residency"}
             label={"Residency Status"}
@@ -368,7 +384,10 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
             <ValidationInput
                variant={"outlined"}
                onChange={handleChange}
-               value={inputs.birthday && moment(inputs.birthday).format().substring(0, 10)}
+               value={
+                  inputs.birthday &&
+                  moment(inputs.birthday).format().substring(0, 10)
+               }
                type={"date"}
                label={"Date of Birth*"}
                name="birthday"
@@ -395,6 +414,7 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
             handleClose={handleClose}
             disabledOne={disabledOne}
             disableSecond={disableSecond}
+            staffGeneral={staffGeneral}
          />
       </div>
    );

@@ -12,6 +12,7 @@ import {
    FindSuccess,
    getActiveDatas,
    getDynamicContent,
+   isNotEmpty,
 } from "@eachbase/utils";
 import { scheduleModalsStyle } from "./styles";
 import { modalsStyle } from "@eachbase/components/modal/styles";
@@ -185,13 +186,13 @@ export const Service = ({
          Date.parse(times.startTime) < Date.parse(times.endTime);
 
       const serviceAppointmentDataIsVlid =
-         inputs.client &&
-         inputs.authorizedService &&
-         inputs.staff &&
-         inputs.placeService &&
-         inputs.startDate &&
+         isNotEmpty(inputs.client) &&
+         isNotEmpty(inputs.authorizedService) &&
+         isNotEmpty(inputs.staff) &&
+         isNotEmpty(inputs.placeService) &&
+         !!inputs.startDate &&
          timeComparingIsValid &&
-         inputs.staffPayCode;
+         isNotEmpty(inputs.staffPayCode);
 
       if (serviceAppointmentDataIsVlid) {
          const data = {
@@ -217,27 +218,27 @@ export const Service = ({
             dispatch(appointmentActions.createAppointment(data));
          }
       } else {
-         setError(
-            !inputs.client
-               ? "client"
-               : !inputs.authorizedService
-               ? "authorizedService"
-               : !inputs.staff
-               ? "staff"
-               : !inputs.placeService
-               ? "placeService"
-               : !inputs.startDate
-               ? "startDate"
-               : !times.startTime
-               ? "startTime"
-               : !times.endTime
-               ? "endTime"
-               : !timeComparingIsValid
-               ? ErrorText.timeError
-               : !inputs.staffPayCode
-               ? "staffPayCode"
-               : ""
-         );
+         const dataErrorText = !isNotEmpty(inputs.client)
+            ? "client"
+            : !isNotEmpty(inputs.authorizedService)
+            ? "authorizedService"
+            : !isNotEmpty(inputs.staff)
+            ? "staff"
+            : !isNotEmpty(inputs.placeService)
+            ? "placeService"
+            : !inputs.startDate
+            ? "startDate"
+            : !times.startTime
+            ? "startTime"
+            : !times.endTime
+            ? "endTime"
+            : !timeComparingIsValid
+            ? ErrorText.timeError
+            : !isNotEmpty(inputs.staffPayCode)
+            ? "staffPayCode"
+            : "";
+
+         setError(dataErrorText);
       }
    };
 

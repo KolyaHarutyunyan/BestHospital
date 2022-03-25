@@ -310,7 +310,7 @@ export const StaffItem = ({ gen }) => {
                <StaffItemHeader
                   onModel="Staff"
                   availabilityData={availabilityData}
-                  title={`${staffGeneral?.firstName}${staffGeneral?.lastName}`}
+                  title={`${staffGeneral?.firstName} ${staffGeneral?.lastName}`}
                   noteModalTypeInfo={noteModalTypeInfo}
                   handleOpenClose={handleOpenCloseNote}
                   openModal={openModal}

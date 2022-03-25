@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { AddModalButton, CloseButton, ValidationInput, Textarea } from "@eachbase/components";
+import {
+   AddModalButton,
+   CloseButton,
+   ValidationInput,
+   Textarea,
+} from "@eachbase/components";
 import { useGlobalTextStyles } from "@eachbase/utils";
 import { modalsStyle } from "@eachbase/components/modal/styles";
 import { useParams } from "react-router-dom";
@@ -36,6 +41,7 @@ export const StaffAddNotes = ({ noteModalTypeInfo, handleClose }) => {
          resource: params.id,
          onModel: "Staff",
       };
+
       if (inputs.subject) {
          dispatch(noteActions.createGlobalNote(data));
          handleClose();
@@ -46,8 +52,16 @@ export const StaffAddNotes = ({ noteModalTypeInfo, handleClose }) => {
          text: inputs.text,
          subject: inputs.subject,
       };
+
       if (inputs.subject) {
-         dispatch(noteActions.editGlobalNote(params.id, noteModalTypeInfo.id, data, "Staff"));
+         dispatch(
+            noteActions.editGlobalNote(
+               params.id,
+               noteModalTypeInfo.id,
+               data,
+               "Staff"
+            )
+         );
          handleClose();
       }
    };
@@ -55,7 +69,9 @@ export const StaffAddNotes = ({ noteModalTypeInfo, handleClose }) => {
    return (
       <div className={classes.inactiveModalBody}>
          <h1 className={`${globalText.modalTitle}`}>
-            {noteModalTypeInfo?.modalType === "editNote" ? "Edit Note" : "Add a New Note"}
+            {noteModalTypeInfo?.modalType === "editNote"
+               ? "Edit Note"
+               : "Add a New Note"}
          </h1>
          <div className={classes.positionedButton}>
             <CloseButton handleCLic={handleClose} />

@@ -49,7 +49,6 @@ export const StaffItemHeader = ({
    const params = useParams();
    const [switchBoolean, setSwitchBoolean] = useState(false);
    const [searchDate, setSearchDate] = useState("");
-   const disabled = !searchDate.length;
 
    const staffHistoryLoader = !!FindLoad("GET_FUNDING_SOURCE_HISTORIES_BY_ID")
       .length;
@@ -173,7 +172,6 @@ export const StaffItemHeader = ({
                         name="searchDate"
                      />
                      <AddModalButton
-                        disabled={disabled}
                         handleClick={handleSubmit}
                         text="Search"
                         loader={staffHistoryLoader}

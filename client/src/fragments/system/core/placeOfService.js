@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { AddButton, NoItemText, SlicedText, ValidationInput } from "@eachbase/components";
+import {
+   AddButton,
+   NoItemText,
+   SlicedText,
+   ValidationInput,
+} from "@eachbase/components";
 import { useDispatch } from "react-redux";
-import { FindLoad, FindSuccess, Images } from "@eachbase/utils";
+import { FindLoad, FindSuccess, Images, isNotEmpty } from "@eachbase/utils";
 import { systemItemStyles } from "./styles";
-import { systemActions } from "@eachbase/store";
+import { httpRequestsOnSuccessActions, systemActions } from "@eachbase/store";
 
 const credentialBtn = {
    maxWidth: "209px",
@@ -20,19 +25,31 @@ export const PlaceOfService = ({ globalJobs, removeItem, openModal }) => {
    const [error, setError] = useState("");
 
    const handleChange = (e) => {
-      setInputs((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
+      setInputs((prevState) => ({
+         ...prevState,
+         [e.target.name]: e.target.value,
+      }));
       error === e.target.name && setError("");
    };
 
    const handleSubmit = () => {
-      let data = {
-         name: inputs.name,
-         code: inputs.code,
-      };
-      if (inputs.name) {
+      const dataIsValid = isNotEmpty(inputs.name) && isNotEmpty(inputs.code);
+
+      if (dataIsValid) {
+         const data = {
+            name: inputs.name,
+            code: inputs.code,
+         };
+
          dispatch(systemActions.createPlaceGlobal(data));
       } else {
-         setError(!inputs.name ? "name" : !inputs.code ? "name" : "Input is not filled");
+         const dataErrorText = !isNotEmpty(inputs.name)
+            ? "name"
+            : !isNotEmpty(inputs.code)
+            ? "name"
+            : "";
+
+         setError(dataErrorText);
       }
    };
 
@@ -40,19 +57,20 @@ export const PlaceOfService = ({ globalJobs, removeItem, openModal }) => {
       openModal(modalType, modalId);
    };
 
-   const isDisabled = inputs.name && inputs.code;
+   const isDisabled = isNotEmpty(inputs.name) && isNotEmpty(inputs.code);
 
    const loader = FindLoad("CREATE_PLACE_GLOBAL");
    const success = FindSuccess("CREATE_PLACE_GLOBAL");
 
    useEffect(() => {
-      if (success) {
+      if (!!success.length) {
          setInputs({
             name: "",
             code: "",
          });
+         httpRequestsOnSuccessActions.removeSuccess("CREATE_PLACE_GLOBAL");
       }
-   }, [success.length]);
+   }, [success]);
 
    return (
       <>
@@ -92,7 +110,11 @@ export const PlaceOfService = ({ globalJobs, removeItem, openModal }) => {
                   return (
                      <div className={classes.item} key={index}>
                         <div className={classes.text}>
-                           <SlicedText type={"responsive"} size={25} data={`${item.name} - `} />
+                           <SlicedText
+                              type={"responsive"}
+                              size={25}
+                              data={`${item.name} - `}
+                           />
                            <span>{`${item.code}`}</span>
                         </div>
                         <div className={classes.icons}>
