@@ -39,8 +39,6 @@ export const FundingSourceSingleHeader = ({ activeTab, title }) => {
 
    const [searchDate, setSearchDate] = useState("");
 
-   const disabled = !searchDate.length;
-
    const fsHistoryLoader = !!FindLoad("GET_FUNDING_SOURCE_HISTORIES_BY_ID")
       .length;
 
@@ -118,7 +116,6 @@ export const FundingSourceSingleHeader = ({ activeTab, title }) => {
                         name="searchDate"
                      />
                      <AddModalButton
-                        disabled={disabled}
                         handleClick={handleSubmit}
                         text="Search"
                         loader={fsHistoryLoader}

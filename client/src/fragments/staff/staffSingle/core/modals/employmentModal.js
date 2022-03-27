@@ -2,8 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
-import { ValidationInput, SelectInput, CreateChancel, ModalHeader } from "@eachbase/components";
-import { ErrorText, FindLoad, FindSuccess } from "@eachbase/utils";
+import {
+   ValidationInput,
+   SelectInput,
+   CreateChancel,
+   ModalHeader,
+} from "@eachbase/components";
+import { ErrorText, FindLoad, FindSuccess, isNotEmpty } from "@eachbase/utils";
 import {
    adminActions,
    httpRequestsOnErrorsActions,
@@ -27,17 +32,23 @@ export const EmploymentModal = ({ handleClose, info }) => {
            }
          : {}
    );
-   const [checked, setChecked] = useState(info ? info.endDate === "Precent" : true);
+   const [checked, setChecked] = useState(
+      info ? info.endDate === "Precent" : true
+   );
    const params = useParams();
    const dispatch = useDispatch();
    const departments = useSelector((state) => state.system.departments);
-   const staffList = useSelector((state) => state.admins.adminsAllList.staff)?.filter(
-      (item) => item.id !== params.id && item
-   );
+   const staffList = useSelector(
+      (state) => state.admins.adminsAllList.staff
+   )?.filter((item) => item.id !== params.id && item);
    const classes = createClientStyle();
 
-   const success = info ? FindSuccess("EDIT_EMPLOYMENT") : FindSuccess("CREATE_EMPLOYMENT");
-   const loader = info ? FindLoad("EDIT_EMPLOYMENT") : FindLoad("CREATE_EMPLOYMENT");
+   const success = info
+      ? FindSuccess("EDIT_EMPLOYMENT")
+      : FindSuccess("CREATE_EMPLOYMENT");
+   const loader = info
+      ? FindLoad("EDIT_EMPLOYMENT")
+      : FindLoad("CREATE_EMPLOYMENT");
 
    useEffect(() => {
       dispatch(systemActions.getDepartments());
@@ -47,11 +58,17 @@ export const EmploymentModal = ({ handleClose, info }) => {
    useEffect(() => {
       if (!success) return;
       handleClose();
-      dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION"));
+      dispatch(
+         httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION")
+      );
       if (info) {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_EMPLOYMENT"));
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess("EDIT_EMPLOYMENT")
+         );
       } else {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_EMPLOYMENT"));
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess("CREATE_EMPLOYMENT")
+         );
       }
    }, [success]);
 
@@ -66,20 +83,22 @@ export const EmploymentModal = ({ handleClose, info }) => {
          ...prevState,
          [e.target.name]: e.target.value === 0 ? "0" : e.target.value,
       }));
-      (error === e.target.name || error === ErrorText.dateError) && setError("");
+      (error === e.target.name || error === ErrorText.dateError) &&
+         setError("");
    };
 
    const handleCreate = () => {
       const dateComparingIsValid =
-         inputs.endDate &&
-         new Date(inputs.startDate).getTime() < new Date(inputs.endDate).getTime();
+         !!inputs.endDate &&
+         new Date(inputs.startDate).getTime() <
+            new Date(inputs.endDate).getTime();
 
       const employmentDataIsValid =
-         inputs.title &&
-         inputs.departmentId &&
-         inputs.supervisor &&
-         inputs.employmentType &&
-         inputs.startDate &&
+         isNotEmpty(inputs.title) &&
+         isNotEmpty(inputs.departmentId) &&
+         isNotEmpty(inputs.supervisor) &&
+         isNotEmpty(inputs.employmentType) &&
+         !!inputs.startDate &&
          (checked ? "Present" : dateComparingIsValid);
 
       if (employmentDataIsValid) {
@@ -118,23 +137,23 @@ export const EmploymentModal = ({ handleClose, info }) => {
             dispatch(adminActions.createEmployment(data, params.id));
          }
       } else {
-         setError(
-            !inputs.title
-               ? "title"
-               : !inputs.supervisor
-               ? "supervisor"
-               : !inputs.departmentId
-               ? "departmentId"
-               : !inputs.employmentType
-               ? "employmentType"
-               : !inputs.startDate
-               ? "startDate"
-               : !inputs.endDate
-               ? "endDate"
-               : !dateComparingIsValid
-               ? ErrorText.dateError
-               : "Input is not field"
-         );
+         const employmentDataErrorText = !isNotEmpty(inputs.title)
+            ? "title"
+            : !isNotEmpty(inputs.supervisor)
+            ? "supervisor"
+            : !isNotEmpty(inputs.departmentId)
+            ? "departmentId"
+            : !isNotEmpty(inputs.employmentType)
+            ? "employmentType"
+            : !inputs.startDate
+            ? "startDate"
+            : !inputs.endDate
+            ? "endDate"
+            : !dateComparingIsValid
+            ? ErrorText.dateError
+            : "";
+
+         setError(employmentDataErrorText);
       }
    };
 
@@ -179,12 +198,20 @@ export const EmploymentModal = ({ handleClose, info }) => {
                      handleSelect={handleChange}
                      value={String(inputs.employmentType)}
                      list={[{ name: 0 }, { name: 1 }]}
-                     typeError={error === "employmentType" ? ErrorText.field : ""}
+                     typeError={
+                        error === "employmentType" ? ErrorText.field : ""
+                     }
                   />
 
                   <div className={classes.curentlyCheckbox}>
-                     <Checkbox checked={checked} onClick={onCheck} color="primary" />
-                     <p className={classes.curently}>Currently works in this role</p>
+                     <Checkbox
+                        checked={checked}
+                        onClick={onCheck}
+                        color="primary"
+                     />
+                     <p className={classes.curently}>
+                        Currently works in this role
+                     </p>
                   </div>
                   <div style={{ display: "flex" }}>
                      <ValidationInput

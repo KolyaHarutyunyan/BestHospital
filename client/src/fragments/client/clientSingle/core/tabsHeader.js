@@ -88,7 +88,6 @@ export const TabsHeader = ({
                            text="Search"
                            btnStyles={filterBtn}
                            loader={clientHistoryLoader}
-                           disabled={!searchDate}
                         />
                      </div>
                   </>

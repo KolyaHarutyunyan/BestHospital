@@ -25,18 +25,7 @@ import { FindError } from "@eachbase/utils";
 
 export const CreateFundingSource = ({ handleClose, info }) => {
    const [error, setError] = useState("");
-   const [inputs, setInputs] = useState(
-      info
-         ? { ...info }
-         : {
-              name: "",
-              email: "",
-              phoneNumber: "",
-              type: "",
-              contact: "",
-              website: "",
-           }
-   );
+   const [inputs, setInputs] = useState(info ? { ...info } : {});
    const [fullAddress, setFullAddress] = useState(
       info && info.address ? info.address.formattedAddress : ""
    );
@@ -46,19 +35,28 @@ export const CreateFundingSource = ({ handleClose, info }) => {
    const classes = createFoundingSourceStyle();
    const dispatch = useDispatch();
 
-   const success = info ? FindSuccess("EDIT_FUNDING_SOURCE") : FindSuccess("CREATE_FUNDING_SOURCE");
-   const loader = info ? FindLoad("EDIT_FUNDING_SOURCE") : FindLoad("CREATE_FUNDING_SOURCE");
-   const backError = info ? FindError("EDIT_FUNDING_SOURCE") : FindError("CREATE_FUNDING_SOURCE");
+   const success = info
+      ? FindSuccess("EDIT_FUNDING_SOURCE")
+      : FindSuccess("CREATE_FUNDING_SOURCE");
+   const loader = info
+      ? FindLoad("EDIT_FUNDING_SOURCE")
+      : FindLoad("CREATE_FUNDING_SOURCE");
+   const backError = info
+      ? FindError("EDIT_FUNDING_SOURCE")
+      : FindError("CREATE_FUNDING_SOURCE");
 
    const phoneErrorMsg = getPhoneErrorText(inputs.phoneNumber);
-   const emailErrorMsg = !EmailValidator.test(inputs.email) ? ErrorText.emailValid : "";
+   const emailErrorMsg = !EmailValidator.test(inputs.email)
+      ? ErrorText.emailValid
+      : "";
 
    const phoneErrorText =
       error === "phoneNumber"
          ? ErrorText.field
          : error === phoneErrorMsg
          ? phoneErrorMsg
-         : backError.length && backError[0].error[0] === "phoneNumber must be a valid phone number"
+         : backError.length &&
+           backError[0].error[0] === "phoneNumber must be a valid phone number"
          ? "Phone number must be a valid phone number"
          : "";
    const emailErrorText =
@@ -97,60 +95,62 @@ export const CreateFundingSource = ({ handleClose, info }) => {
    };
 
    const handleCreate = () => {
-      const data = {
-         name: inputs.name,
-         email: inputs.email,
-         phoneNumber: inputs.phoneNumber,
-         type: inputs.type,
-         contact: inputs.contact,
-         website: inputs.website,
-         address: fullAddress,
-         status: "ACTIVE",
-      };
-
       const phoneIsValid =
-         !!inputs.phoneNumber &&
+         isNotEmpty(inputs.phoneNumber) &&
          inputs.phoneNumber.trim().length >= 10 &&
          !/[a-zA-Z]/g.test(inputs.phoneNumber);
 
-      const emailIsValid = !!inputs.email && EmailValidator.test(inputs.email);
+      const emailIsValid =
+         isNotEmpty(inputs.email) && EmailValidator.test(inputs.email);
 
       const dataIsValid =
-         !!inputs.name &&
+         isNotEmpty(inputs.name) &&
          phoneIsValid &&
          emailIsValid &&
-         !!inputs.type &&
-         !!inputs.contact &&
-         !!inputs.website &&
-         !!enteredAddress &&
+         isNotEmpty(inputs.type) &&
+         isNotEmpty(inputs.contact) &&
+         isNotEmpty(inputs.website) &&
+         isNotEmpty(enteredAddress) &&
          isNotEmpty(fullAddress);
 
-      const errorText = !inputs.name
-         ? "name"
-         : !inputs.email
-         ? "email"
-         : !emailIsValid
-         ? emailErrorMsg
-         : !inputs.phoneNumber
-         ? "phoneNumber"
-         : !phoneIsValid
-         ? phoneErrorMsg
-         : !inputs.type
-         ? "type"
-         : !inputs.contact
-         ? "contact"
-         : !inputs.website
-         ? "website"
-         : !enteredAddress
-         ? "enteredAddress"
-         : "";
       if (dataIsValid) {
+         const data = {
+            name: inputs.name,
+            email: inputs.email,
+            phoneNumber: inputs.phoneNumber,
+            type: inputs.type,
+            contact: inputs.contact,
+            website: inputs.website,
+            address: fullAddress,
+            status: "ACTIVE",
+         };
+
          if (info) {
             dispatch(fundingSourceActions.editFundingSource(info.id, data));
          } else {
             dispatch(fundingSourceActions.createFundingSource(data));
          }
       } else {
+         const errorText = !isNotEmpty(inputs.name)
+            ? "name"
+            : !isNotEmpty(inputs.email)
+            ? "email"
+            : !emailIsValid
+            ? emailErrorMsg
+            : !isNotEmpty(inputs.phoneNumber)
+            ? "phoneNumber"
+            : !phoneIsValid
+            ? phoneErrorMsg
+            : !isNotEmpty(inputs.type)
+            ? "type"
+            : !isNotEmpty(inputs.contact)
+            ? "contact"
+            : !isNotEmpty(inputs.website)
+            ? "website"
+            : !isNotEmpty(enteredAddress)
+            ? "enteredAddress"
+            : "";
+
          setError(errorText);
       }
    };
@@ -172,9 +172,13 @@ export const CreateFundingSource = ({ handleClose, info }) => {
    useEffect(() => {
       if (!success) return;
       if (info) {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_FUNDING_SOURCE"));
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess("EDIT_FUNDING_SOURCE")
+         );
       } else {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_FUNDING_SOURCE"));
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess("CREATE_FUNDING_SOURCE")
+         );
       }
       handleClose();
    }, [success]);
@@ -248,7 +252,9 @@ export const CreateFundingSource = ({ handleClose, info }) => {
                </div>
                <div className={classes.createFoundingSourceBodyBox}>
                   <AddressInput
-                     errorBoolean={error === "enteredAddress" ? ErrorText.field : ""}
+                     errorBoolean={
+                        error === "enteredAddress" ? ErrorText.field : ""
+                     }
                      info={info && info.address ? info : ""}
                      handleSelectValue={handleAddressChange}
                      onTrigger={setFullAddress}

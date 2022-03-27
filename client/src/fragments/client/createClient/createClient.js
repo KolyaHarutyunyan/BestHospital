@@ -2,9 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import moment from "moment";
-import { ValidationInput, SelectInput, CreateChancel, ModalHeader } from "@eachbase/components";
+import {
+   ValidationInput,
+   SelectInput,
+   CreateChancel,
+   ModalHeader,
+} from "@eachbase/components";
 import { createClientStyle } from "./styles";
-import { ErrorText, FindLoad, FindSuccess, languages } from "@eachbase/utils";
+import {
+   ErrorText,
+   FindLoad,
+   FindSuccess,
+   isNotEmpty,
+   languages,
+} from "@eachbase/utils";
 import { clientActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 
 export const CreateClient = ({ handleClose, info }) => {
@@ -13,23 +24,15 @@ export const CreateClient = ({ handleClose, info }) => {
    const [inputs, setInputs] = useState(
       info
          ? { ...info, birthday: moment(info?.birthday).format("YYYY-MM-DD") }
-         : {
-              firstName: "",
-              middleName: "",
-              lastName: "",
-              ethnicity: "",
-              code: "",
-              language: "",
-              familyLanguage: "",
-              gender: "",
-              birthday: "",
-           }
+         : {}
    );
    const [step, setStep] = useState("first");
    const classes = createClientStyle();
    const dispatch = useDispatch();
 
-   const success = info ? FindSuccess("EDIT_CLIENT") : FindSuccess("CREATE_CLIENT");
+   const success = info
+      ? FindSuccess("EDIT_CLIENT")
+      : FindSuccess("CREATE_CLIENT");
    const loader = info ? FindLoad("EDIT_CLIENT") : FindLoad("CREATE_CLIENT");
 
    const handleChange = (e) =>
@@ -50,27 +53,33 @@ export const CreateClient = ({ handleClose, info }) => {
 
    const handleCreate = () => {
       if (step === "first") {
-         if (inputs.firstName && inputs.lastName && inputs.code) {
+         const firstStepIsValid =
+            isNotEmpty(inputs.firstName) &&
+            isNotEmpty(inputs.lastName) &&
+            isNotEmpty(inputs.code);
+
+         if (firstStepIsValid) {
             setStep("second");
          } else {
-            setError(
-               !inputs.firstName
-                  ? "firstName"
-                  : !inputs.lastName
-                  ? "lastName"
-                  : !inputs.code
-                  ? "code"
-                  : "Input is not field"
-            );
+            const firstStepErrorText = !isNotEmpty(inputs.firstName)
+               ? "firstName"
+               : !isNotEmpty(inputs.lastName)
+               ? "lastName"
+               : !isNotEmpty(inputs.code)
+               ? "code"
+               : "";
+
+            setError(firstStepErrorText);
          }
       } else if (step === "second") {
-         if (
-            inputs.gender &&
-            inputs.birthday &&
-            inputs.ethnicity &&
-            inputs.language &&
-            inputs.familyLanguage
-         ) {
+         const secondStepIsValid =
+            isNotEmpty(inputs.gender) &&
+            isNotEmpty(inputs.birthday) &&
+            isNotEmpty(inputs.ethnicity) &&
+            isNotEmpty(inputs.language) &&
+            isNotEmpty(inputs.familyLanguage);
+
+         if (secondStepIsValid) {
             const data = {
                firstName: inputs.firstName,
                middleName: inputs.middleName,
@@ -89,19 +98,19 @@ export const CreateClient = ({ handleClose, info }) => {
                dispatch(clientActions.editClient(data, params.id));
             }
          } else {
-            setError(
-               !inputs.gender
-                  ? "gender"
-                  : !inputs.birthday
-                  ? "birthday"
-                  : !inputs.ethnicity
-                  ? "ethnicity"
-                  : !inputs.language
-                  ? "language"
-                  : !inputs.familyLanguage
-                  ? "familyLanguage"
-                  : "Input is not field"
-            );
+            const secondStepErrorText = !isNotEmpty(inputs.gender)
+               ? "gender"
+               : !isNotEmpty(inputs.birthday)
+               ? "birthday"
+               : !isNotEmpty(inputs.ethnicity)
+               ? "ethnicity"
+               : !isNotEmpty(inputs.language)
+               ? "language"
+               : !isNotEmpty(inputs.familyLanguage)
+               ? "familyLanguage"
+               : "";
+
+            setError(secondStepErrorText);
          }
       }
    };
@@ -125,7 +134,7 @@ export const CreateClient = ({ handleClose, info }) => {
                         onChange={handleChange}
                         value={inputs.firstName}
                         type={"text"}
-                        label={"First Name"}
+                        label={"First Name*"}
                         name="firstName"
                         typeError={error === "firstName" ? ErrorText.field : ""}
                      />
@@ -136,7 +145,9 @@ export const CreateClient = ({ handleClose, info }) => {
                         type={"text"}
                         label={"Middle Name"}
                         name="middleName"
-                        typeError={error === "middleName" ? ErrorText.field : ""}
+                        typeError={
+                           error === "middleName" ? ErrorText.field : ""
+                        }
                      />
                      <ValidationInput
                         variant={"outlined"}
@@ -201,7 +212,9 @@ export const CreateClient = ({ handleClose, info }) => {
                         handleSelect={handleChange}
                         value={inputs.familyLanguage}
                         language={languages}
-                        typeError={error === "familyLanguage" ? ErrorText.field : ""}
+                        typeError={
+                           error === "familyLanguage" ? ErrorText.field : ""
+                        }
                      />
                   </div>
                )}

@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { ValidationInput, SelectInput, CreateChancel, ModalHeader } from "@eachbase/components";
+import {
+   ValidationInput,
+   SelectInput,
+   CreateChancel,
+   ModalHeader,
+} from "@eachbase/components";
 import { foundingSourceModalStyle } from "./styles";
-import { ErrorText, FindLoad, FindSuccess } from "@eachbase/utils";
+import { ErrorText, FindLoad, FindSuccess, isNotEmpty } from "@eachbase/utils";
 import {
    fundingSourceActions,
    httpRequestsOnErrorsActions,
@@ -12,32 +17,26 @@ import {
 import { FundingSourceModifiersAdd } from "./fundingSourceModifiersAdd";
 import axios from "axios";
 import { httpRequestsOnLoadActions } from "../../../../../store/http_requests_on_load";
-import {getFoundingSourceServiceByIdNoLoad} from "../../../../../store/fundingSource/fundingSource.action";
+import { getFoundingSourceServiceByIdNoLoad } from "../../../../../store/fundingSource/fundingSource.action";
 
 export const FundingSourceServiceAdd = ({ handleClose, info, modifiersID }) => {
    const systemServices = useSelector((state) => state.system.services);
    const globalCredentials = useSelector((state) => state.system.credentials);
+
    const [error, setError] = useState("");
-   const [inputs, setInputs] = useState(
-      info
-         ? { ...info }
-         : {
-              name: "",
-              cptCode: "",
-              size: "",
-              min: "",
-              max: "",
-           }
-   );
+   const [inputs, setInputs] = useState(info ? { ...info } : {});
    const [sysServiceItem, setSysServiceItem] = useState(null);
    const [postModifiers, setPostModifiers] = useState();
    const [modifiersEdit, setModifiersEdit] = useState([]);
    const [getLastMod, setGetLastMod] = useState(null);
+   const [cre, setCre] = useState([]);
+
    const params = useParams();
+
    let dispatch = useDispatch();
 
-   const [cre, setCre] = useState([]);
    const classes = foundingSourceModalStyle();
+
    let addNewMod = (newMod) => {
       setModifiersEdit([...modifiersEdit, newMod]);
    };
@@ -52,7 +51,9 @@ export const FundingSourceServiceAdd = ({ handleClose, info, modifiersID }) => {
 
    const success = FindSuccess("EDIT_FUNDING_SOURCE_SERVICE");
    const successCreate = FindSuccess("CREATE_FUNDING_SOURCE_SERVICE_BY_ID");
-   const loader = info ? FindLoad("EDIT_FUNDING_SOURCE_SERVICE") : FindLoad("CREATE_FUNDING_SOURCE_SERVICE_BY_ID");
+   const loader = info
+      ? FindLoad("EDIT_FUNDING_SOURCE_SERVICE")
+      : FindLoad("CREATE_FUNDING_SOURCE_SERVICE_BY_ID");
 
    const handleChange = (e) => {
       setInputs(
@@ -64,18 +65,36 @@ export const FundingSourceServiceAdd = ({ handleClose, info, modifiersID }) => {
    useEffect(() => {
       if (success) {
          handleClose();
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_FUNDING_SOURCE_SERVICE"));
-         dispatch(httpRequestsOnErrorsActions.removeError("EDIT_FUNDING_SOURCE_SERVICE"));
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess(
+               "EDIT_FUNDING_SOURCE_SERVICE"
+            )
+         );
+         dispatch(
+            httpRequestsOnErrorsActions.removeError(
+               "EDIT_FUNDING_SOURCE_SERVICE"
+            )
+         );
       }
       if (successCreate) {
-
          setTimeout(() => {
-            dispatch(fundingSourceActions.getFoundingSourceServiceByIdNoLoad(params.id,))
-            dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_FUNDING_SOURCE_SERVICE_BY_ID"));
-            dispatch(httpRequestsOnErrorsActions.removeError("CREATE_FUNDING_SOURCE_SERVICE_BY_ID"));
+            dispatch(
+               fundingSourceActions.getFoundingSourceServiceByIdNoLoad(
+                  params.id
+               )
+            );
+            dispatch(
+               httpRequestsOnSuccessActions.removeSuccess(
+                  "CREATE_FUNDING_SOURCE_SERVICE_BY_ID"
+               )
+            );
+            dispatch(
+               httpRequestsOnErrorsActions.removeError(
+                  "CREATE_FUNDING_SOURCE_SERVICE_BY_ID"
+               )
+            );
             handleClose();
-         }, 1000)
-
+         }, 1000);
       }
    }, [success, successCreate]);
 
@@ -90,7 +109,14 @@ export const FundingSourceServiceAdd = ({ handleClose, info, modifiersID }) => {
    }, [inputs]);
 
    const handleCreate = () => {
-      if (inputs.name && inputs.cptCode && inputs.size && inputs.min && inputs.max) {
+      const serviceDataIsValid =
+         isNotEmpty(inputs.name) &&
+         isNotEmpty(inputs.cptCode) &&
+         isNotEmpty(inputs.size) &&
+         isNotEmpty(inputs.min) &&
+         isNotEmpty(inputs.max);
+
+      if (serviceDataIsValid) {
          const data = {
             name: inputs.name,
             serviceId: sysServiceItem?.id,
@@ -100,15 +126,27 @@ export const FundingSourceServiceAdd = ({ handleClose, info, modifiersID }) => {
             min: +inputs.min,
             max: +inputs.max,
          };
+
          let arr = postModifiers;
+
          if (!info) {
-            dispatch(fundingSourceActions.createFoundingSourceServiceById(params.id, data, arr));
+            dispatch(
+               fundingSourceActions.createFoundingSourceServiceById(
+                  params.id,
+                  data,
+                  arr
+               )
+            );
          } else {
             if (cre.length) {
                const date = { modifiers: [...cre], serviceId: info._id };
                const newArr = arr && arr.length && arr.filter((i) => i._id);
 
-               dispatch(httpRequestsOnLoadActions.appendLoading("EDIT_FUNDING_SOURCE_SERVICE"));
+               dispatch(
+                  httpRequestsOnLoadActions.appendLoading(
+                     "EDIT_FUNDING_SOURCE_SERVICE"
+                  )
+               );
                axios
                   .post(`/modifier`, date, { auth: true })
                   .then(
@@ -123,7 +161,13 @@ export const FundingSourceServiceAdd = ({ handleClose, info, modifiersID }) => {
                         ),
                      setCre([])
                   )
-                  .then(dispatch(fundingSourceActions.getFoundingSourceServiceById(params.id)));
+                  .then(
+                     dispatch(
+                        fundingSourceActions.getFoundingSourceServiceById(
+                           params.id
+                        )
+                     )
+                  );
             } else {
                dispatch(
                   fundingSourceActions.editFoundingSourceServiceById(
@@ -136,19 +180,19 @@ export const FundingSourceServiceAdd = ({ handleClose, info, modifiersID }) => {
             }
          }
       } else {
-         setError(
-            !inputs.name
-               ? "name"
-               : !inputs.cptCode
-               ? "cptCode"
-               : !inputs.size
-               ? "size"
-               : !inputs.min
-               ? "min"
-               : !inputs.max
-               ? "max"
-               : "Input is not field"
-         );
+         const serviceDataErrorText = !isNotEmpty(inputs.name)
+            ? "name"
+            : !isNotEmpty(inputs.cptCode)
+            ? "cptCode"
+            : !isNotEmpty(inputs.size)
+            ? "size"
+            : !isNotEmpty(inputs.min)
+            ? "min"
+            : !isNotEmpty(inputs.max)
+            ? "max"
+            : "";
+
+         setError(serviceDataErrorText);
       }
    };
 
@@ -181,7 +225,10 @@ export const FundingSourceServiceAdd = ({ handleClose, info, modifiersID }) => {
                               : "N/A"}
                         </span>
                      </p>
-                     <p className={classes.displayCodeBlockText} style={{ marginTop: 16 }}>
+                     <p
+                        className={classes.displayCodeBlockText}
+                        style={{ marginTop: 16 }}
+                     >
                         Category:{" "}
                         <span className={classes.displayCode}>
                            {sysServiceItem !== null &&

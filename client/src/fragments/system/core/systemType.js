@@ -9,7 +9,7 @@ import {
    SlicedText,
    NoItemText,
 } from "@eachbase/components";
-import { FindLoad, FindSuccess, Images } from "@eachbase/utils";
+import { FindLoad, FindSuccess, Images, isNotEmpty } from "@eachbase/utils";
 import { systemItemStyles } from "./styles";
 import { httpRequestsOnSuccessActions, systemActions } from "@eachbase/store";
 
@@ -40,14 +40,16 @@ const headerTitles = [
 ];
 
 export const ServiceType = ({ globalServices, removeItem, openModal }) => {
-   const [inputs, setInputs] = useState({
-      name: "",
-      displayCode: "",
-      category: "",
-   });
+   const [inputs, setInputs] = useState({});
    const [error, setError] = useState("");
 
-   const isDisabled = inputs.name && inputs.displayCode && inputs.category;
+   const serviceDataIsValid =
+      isNotEmpty(inputs.name) &&
+      isNotEmpty(inputs.displayCode) &&
+      isNotEmpty(inputs.category);
+
+   const isDisabled = serviceDataIsValid;
+
    const classes = systemItemStyles();
 
    const dispatch = useDispatch();
@@ -85,7 +87,11 @@ export const ServiceType = ({ globalServices, removeItem, openModal }) => {
                         src={Images.remove}
                         alt="delete"
                         onClick={() =>
-                           removeItem({ id: item.id, name: item.name, type: "editService" })
+                           removeItem({
+                              id: item.id,
+                              name: item.name,
+                              type: "editService",
+                           })
                         }
                      />
                   </div>
@@ -108,23 +114,24 @@ export const ServiceType = ({ globalServices, removeItem, openModal }) => {
    };
 
    const handleSubmit = () => {
-      let serviceData = {
-         name: inputs.name,
-         displayCode: inputs.displayCode,
-         category: inputs.category,
-      };
-      if (inputs.name && inputs.displayCode && inputs.category) {
+      if (serviceDataIsValid) {
+         const serviceData = {
+            name: inputs.name,
+            displayCode: inputs.displayCode,
+            category: inputs.category,
+         };
+
          dispatch(systemActions.createServiceGlobal(serviceData));
       } else {
-         setError(
-            !inputs.name
-               ? "name"
-               : !inputs.displayCode
-               ? "displayCode"
-               : !inputs.category
-               ? "category"
-               : "Input is not filled"
-         );
+         const serviceDataErrorText = !isNotEmpty(inputs.name)
+            ? "name"
+            : !isNotEmpty(inputs.displayCode)
+            ? "displayCode"
+            : !isNotEmpty(inputs.category)
+            ? "category"
+            : "";
+
+         setError(serviceDataErrorText);
       }
    };
 
@@ -132,14 +139,17 @@ export const ServiceType = ({ globalServices, removeItem, openModal }) => {
    const success = FindSuccess("CREATE_SERVICE_GLOBAL");
 
    useEffect(() => {
-      if (success) {
+      if (!!success.length) {
          setInputs({
             name: "",
             displayCode: "",
             category: "",
          });
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess("CREATE_SERVICE_GLOBAL")
+         );
       }
-   }, [success.length]);
+   }, [success]);
 
    return (
       <>

@@ -10,7 +10,15 @@ import {
    SimpleModal,
    SlicedText,
 } from "@eachbase/components";
-import { Colors, ErrorText, FindError, FindLoad, FindSuccess, Images } from "@eachbase/utils";
+import {
+   Colors,
+   ErrorText,
+   FindError,
+   FindLoad,
+   FindSuccess,
+   Images,
+   isNotEmpty,
+} from "@eachbase/utils";
 import { SelectInputPlaceholder } from "@eachbase/components";
 import { adminActions, httpRequestsOnErrorsActions } from "@eachbase/store";
 import { systemItemStyles } from "@eachbase/fragments/system/core";
@@ -43,8 +51,14 @@ export const StaffService = ({ staffGeneral, info, services }) => {
    }, [success.length]);
 
    const handleChange = (e) => {
-      fail.length && dispatch(httpRequestsOnErrorsActions.removeError("CREATE_STAFF_SERVICE"));
-      setInputs((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
+      fail.length &&
+         dispatch(
+            httpRequestsOnErrorsActions.removeError("CREATE_STAFF_SERVICE")
+         );
+      setInputs((prevState) => ({
+         ...prevState,
+         [e.target.name]: e.target.value,
+      }));
       error === e.target.name && setError("");
    };
 
@@ -53,15 +67,16 @@ export const StaffService = ({ staffGeneral, info, services }) => {
    };
 
    const handleSubmit = () => {
-      if (inputs.serviceType) {
+      if (isNotEmpty(inputs.serviceType)) {
          let serviceID =
             services &&
             services.length > 0 &&
             services.find((item) => item.name === inputs.serviceType).id;
+
          dispatch(adminActions.createStaffService(params.id, serviceID));
          setIndex(0);
       } else {
-         setError(!inputs.serviceType ? "serviceType" : "Input is not filled");
+         setError(!isNotEmpty(inputs.serviceType) ? "serviceType" : "");
       }
    };
 
@@ -135,7 +150,9 @@ export const StaffService = ({ staffGeneral, info, services }) => {
                   typeError={
                      error === "serviceType"
                         ? ErrorText.field
-                        : fail && fail.length && fail[0].error === "Service already exist"
+                        : fail &&
+                          fail.length &&
+                          fail[0].error === "Service already exist"
                         ? "Service already exist"
                         : ""
                   }
@@ -158,8 +175,14 @@ export const StaffService = ({ staffGeneral, info, services }) => {
                   info.map((item, index) => {
                      return (
                         <div className={classes.item} key={index}>
-                           <div style={{ display: "flex", alignItems: "center" }}>
-                              <SlicedText type={"responsive"} size={25} data={item.name} />
+                           <div
+                              style={{ display: "flex", alignItems: "center" }}
+                           >
+                              <SlicedText
+                                 type={"responsive"}
+                                 size={25}
+                                 data={item.name}
+                              />
                            </div>
                            <div className={classes.icons}>
                               <img

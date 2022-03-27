@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { ValidationInput, CreateChancel, ModalHeader, AddressInput } from "@eachbase/components";
+import {
+   ValidationInput,
+   CreateChancel,
+   ModalHeader,
+   AddressInput,
+} from "@eachbase/components";
 import { createClientStyle } from "./styles";
 import {
    ErrorText,
@@ -36,18 +41,28 @@ export const AddContact = ({ handleClose, info }) => {
    const dispatch = useDispatch();
    const params = useParams();
 
-   const success = info ? FindSuccess("EDIT_CLIENT_CONTACT") : FindSuccess("CREATE_CLIENT_CONTACT");
-   const loader = info ? FindLoad("EDIT_CLIENT_CONTACT") : FindLoad("CREATE_CLIENT_CONTACT");
-   const backError = info ? FindError("EDIT_CLIENT_CONTACT") : FindError("CREATE_CLIENT_CONTACT");
+   const success = info
+      ? FindSuccess("EDIT_CLIENT_CONTACT")
+      : FindSuccess("CREATE_CLIENT_CONTACT");
+   const loader = info
+      ? FindLoad("EDIT_CLIENT_CONTACT")
+      : FindLoad("CREATE_CLIENT_CONTACT");
+   const backError = info
+      ? FindError("EDIT_CLIENT_CONTACT")
+      : FindError("CREATE_CLIENT_CONTACT");
 
    useEffect(() => {
       if (!success) return;
       handleClose();
       dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_CONTACTS"));
       if (info) {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_CLIENT_CONTACT"));
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess("EDIT_CLIENT_CONTACT")
+         );
       } else {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_CLIENT_CONTACT"));
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess("CREATE_CLIENT_CONTACT")
+         );
       }
    }, [success]);
 
@@ -57,13 +72,21 @@ export const AddContact = ({ handleClose, info }) => {
          ? ErrorText.field
          : error === phoneErrorMsg
          ? phoneErrorMsg
-         : backError.length && backError[0].error[0] === "phoneNumber must be a valid phone number"
+         : backError.length &&
+           backError[0].error[0] === "phoneNumber must be a valid phone number"
          ? "Phone number must be a valid phone number"
          : "";
 
    const handleChange = (e) => {
-      setInputs((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
-      if (error === e.target.name || error === phoneErrorMsg || (backError && backError.length)) {
+      setInputs((prevState) => ({
+         ...prevState,
+         [e.target.name]: e.target.value,
+      }));
+      if (
+         error === e.target.name ||
+         error === phoneErrorMsg ||
+         (backError && backError.length)
+      ) {
          setError("");
       }
       if (backError && backError.length) {
@@ -79,28 +102,35 @@ export const AddContact = ({ handleClose, info }) => {
    const handleCreate = () => {
       if (step === "first") {
          const phoneIsValid =
-            !!inputs.phoneNumber &&
+            isNotEmpty(inputs.phoneNumber) &&
             inputs.phoneNumber.trim().length >= 10 &&
             !/[a-zA-Z]/g.test(inputs.phoneNumber);
-         if (inputs.firstName && inputs.lastName && phoneIsValid && inputs.relationship) {
+
+         const contactDataIsValid =
+            isNotEmpty(inputs.firstName) &&
+            isNotEmpty(inputs.lastName) &&
+            phoneIsValid &&
+            isNotEmpty(inputs.relationship);
+
+         if (contactDataIsValid) {
             setStep("second");
          } else {
-            setError(
-               !inputs.firstName
-                  ? "firstName"
-                  : !inputs.lastName
-                  ? "lastName"
-                  : !inputs.phoneNumber
-                  ? "phoneNumber"
-                  : !phoneIsValid
-                  ? phoneErrorMsg
-                  : !inputs.relationship
-                  ? "relationship"
-                  : "Input is not field"
-            );
+            const contactDataErrorText = !isNotEmpty(inputs.firstName)
+               ? "firstName"
+               : !isNotEmpty(inputs.lastName)
+               ? "lastName"
+               : !isNotEmpty(inputs.phoneNumber)
+               ? "phoneNumber"
+               : !phoneIsValid
+               ? phoneErrorMsg
+               : !isNotEmpty(inputs.relationship)
+               ? "relationship"
+               : "";
+
+            setError(contactDataErrorText);
          }
       } else if (step === "second") {
-         if (isNotEmpty(fullAddress) && enteredAddress) {
+         if (isNotEmpty(fullAddress) && isNotEmpty(enteredAddress)) {
             const data = {
                firstName: inputs.firstName,
                lastName: inputs.lastName,
@@ -111,7 +141,9 @@ export const AddContact = ({ handleClose, info }) => {
             if (!info) {
                dispatch(clientActions.createClientContact(data, params.id));
             } else if (info) {
-               dispatch(clientActions.editClientContact(data, info.id, params.id));
+               dispatch(
+                  clientActions.editClientContact(data, info.id, params.id)
+               );
             }
          } else {
             setError(!enteredAddress ? "enteredAddress" : "Input is not field");
@@ -167,7 +199,9 @@ export const AddContact = ({ handleClose, info }) => {
                         type={"text"}
                         label={"Relationship*"}
                         name="relationship"
-                        typeError={error === "relationship" ? ErrorText.field : ""}
+                        typeError={
+                           error === "relationship" ? ErrorText.field : ""
+                        }
                      />
                   </div>
                ) : (
@@ -176,7 +210,9 @@ export const AddContact = ({ handleClose, info }) => {
                         flex={true}
                         handleSelectValue={handleAddressChange}
                         info={info && info.address ? info : ""}
-                        errorBoolean={error === "enteredAddress" ? ErrorText.field : ""}
+                        errorBoolean={
+                           error === "enteredAddress" ? ErrorText.field : ""
+                        }
                         onTrigger={setFullAddress}
                      />
                   </div>
