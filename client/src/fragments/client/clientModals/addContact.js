@@ -35,8 +35,12 @@ export const AddContact = ({ handleClose, info }) => {
            }
    );
    const [step, setStep] = useState("first");
-   const [fullAddress, setFullAddress] = useState("");
-   const [enteredAddress, setEnteredAddress] = useState("");
+   const [fullAddress, setFullAddress] = useState(
+      info ? info.address?.formattedAddress : ""
+   );
+   const [enteredAddress, setEnteredAddress] = useState(
+      info ? info.address?.formattedAddress : ""
+   );
    const classes = createClientStyle();
    const dispatch = useDispatch();
    const params = useParams();

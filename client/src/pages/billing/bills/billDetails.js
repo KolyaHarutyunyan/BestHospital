@@ -19,7 +19,7 @@ export const BillDetails = () => {
    const billByIdData = useSelector((state) => state.bill.billById);
    const { bills: billById, count } = billByIdData || {};
 
-   const loader = !!FindLoad("GET_BILL_BY_ID").length;
+   const loader = FindLoad("GET_BILL_BY_ID");
    const success = FindSuccess("GET_BILL_BY_ID");
 
    useEffect(() => {
@@ -41,9 +41,9 @@ export const BillDetails = () => {
       };
    }, [params.id]);
 
-   return loader && !pageIsChanging ? (
-      <Loader />
-   ) : (
+   if (!!loader.length && !pageIsChanging) return <Loader />;
+
+   return (
       <>
          <div>
             <CustomBreadcrumbs
