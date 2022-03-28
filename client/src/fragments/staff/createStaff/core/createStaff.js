@@ -186,7 +186,7 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
             : !isNotEmpty(license.expireDate)
             ? "expireDate"
             : "";
-         console.log(staffDataErrorText, "  error text");
+
          setError(staffDataErrorText);
       }
    };
@@ -299,6 +299,7 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
             info={staffGeneral}
             styles={inputStyle}
             errorBoolean={error === "enteredAddress" ? ErrorText.field : ""}
+            enteredValue={enteredAddress}
          />
       </React.Fragment>
    );

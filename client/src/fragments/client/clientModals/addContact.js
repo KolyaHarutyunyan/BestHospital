@@ -218,6 +218,7 @@ export const AddContact = ({ handleClose, info }) => {
                            error === "enteredAddress" ? ErrorText.field : ""
                         }
                         onTrigger={setFullAddress}
+                        enteredValue={enteredAddress}
                      />
                   </div>
                )}
