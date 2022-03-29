@@ -46,15 +46,19 @@ export const leftBarCommonStyle = makeStyles(() => ({
       overflow: "hidden",
       transition: "height 0.2s linear",
       "&.shown": { height: "200px" },
-      "& ol": {
+      "& > div": {
          width: "100%",
-         "& li": {
+         "& > a": {
             fontSize: "14px",
             fontWeight: 400,
+            color: Colors.TextSecondary,
+            marginRight: "4px",
+            display: "block",
+            "&.active": { color: Colors.BackgroundBlue },
             "&:not(:first-of-type)": { marginTop: "16px" },
-            "& a": {
-               color: Colors.TextSecondary,
-               "&.active": { color: Colors.BackgroundBlue },
+            "& > div": {
+               color: "inherit",
+               borderRadius: "4px",
             },
          },
       },

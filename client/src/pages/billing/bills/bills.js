@@ -15,7 +15,7 @@ export const Bills = () => {
    const billsData = useSelector((state) => state.bill.bills);
    const { bills, count } = billsData || {};
 
-   const loader = !!FindLoad("GET_BILLS").length;
+   const loader = FindLoad("GET_BILLS");
    const success = FindSuccess("GET_BILLS");
 
    useEffect(() => {
@@ -30,9 +30,9 @@ export const Bills = () => {
       }
    }, [success]);
 
-   return loader && !pageIsChanging ? (
-      <Loader />
-   ) : (
+   if (!!loader.length && !pageIsChanging) return <Loader />;
+
+   return (
       <BillsFragment
          bills={bills}
          billsQty={count}

@@ -15,7 +15,7 @@ import { roleActions } from "@eachbase/store";
 import { useDispatch, useSelector } from "react-redux";
 import { SlicedText } from "@eachbase/components";
 
-export const Role = ({ key, roleInfo }) => {
+export const Role = ({ key, roleInfo = [] }) => {
    const dispatch = useDispatch();
    const [open, setOpen] = useState(false);
    const [role, setRole] = useState("");
@@ -64,84 +64,81 @@ export const Role = ({ key, roleInfo }) => {
       }
    }, [success]);
 
+   if (!!httpOnLoad.length && httpOnLoad[0] === "GET_PERMISSIONS")
+      return <Loader style={"relative"} />;
+
+   if (!roleInfo?.length) return <NoItemText text={"No Roles Yet"} />;
+
    return (
-      <div key={key} className={classes.tableStyle}>
-         <div className={classes.tableHeadStyle}>
-            <SearchAndFilter
-               // handleSearch={(ev) => searchRole(ev)}
-               title={"Role"}
-               // custom={false}
-            />
-         </div>
-         <div className={classes.scroll}>
-            {httpOnLoad.length && httpOnLoad[0] === "GET_PERMISSIONS" ? (
-               <Loader style={"relative"} />
-            ) : roleInfo && roleInfo.length ? (
-               <>
-                  <div>
-                     {roleInfo.map((item, j) => (
-                        <div
-                           style={{ margin: "4px", borderRadius: "8px" }}
-                           onClick={() => openRolePermission(item)}
-                           key={j}
-                           className={
-                              activeRole === item.title
-                                 ? classes.tableBodyBottomActive
-                                 : classes.tableBodyBottom
-                           }
-                        >
-                           <div className={classes.tableBodyStyle}>
-                              <div>
-                                 <img
-                                    src={Images.accessManagementUser}
-                                    alt={"accessManagementUser"}
-                                 />
-                                 <SlicedText type={"name"} size={10} data={item && item.title} />
-                                 <SlicedText
-                                    fontSize={"14px"}
-                                    type={"desc"}
-                                    size={40}
-                                    data={item && item.description}
-                                 />
-                              </div>
-                              <div>
-                                 <DeleteButton
-                                    toolTipTitle={"Remove Role"}
-                                    handleClick={() => handleOpenClose(item)}
-                                 />
-                              </div>
+      <>
+         <div key={key} className={classes.tableStyle}>
+            <div className={classes.tableHeadStyle}>
+               <SearchAndFilter title={"Role"} />
+            </div>
+            <div className={classes.scroll}>
+               <div>
+                  {roleInfo.map((item, j) => (
+                     <div
+                        style={{ margin: "4px", borderRadius: "8px" }}
+                        onClick={() => openRolePermission(item)}
+                        key={j}
+                        className={
+                           activeRole === item.title
+                              ? classes.tableBodyBottomActive
+                              : classes.tableBodyBottom
+                        }
+                     >
+                        <div className={classes.tableBodyStyle}>
+                           <div>
+                              <img
+                                 src={Images.accessManagementUser}
+                                 alt={"accessManagementUser"}
+                              />
+                              <SlicedText
+                                 type={"name"}
+                                 size={10}
+                                 data={item && item.title}
+                              />
+                              <SlicedText
+                                 fontSize={"14px"}
+                                 type={"desc"}
+                                 size={40}
+                                 data={item && item.description}
+                              />
+                           </div>
+                           <div>
+                              <DeleteButton
+                                 toolTipTitle={"Remove Role"}
+                                 handleClick={() => handleOpenClose(item)}
+                              />
                            </div>
                         </div>
-                     ))}
-                  </div>
-                  <PaginationItem
-                     page={page}
-                     listLength={roleInfo.length}
-                     entries={roleInfo.length}
-                     count={roleInfo.length}
-                     handleReturn={(number) => changePage(number)}
-                  />
-               </>
-            ) : (
-               <div className={classes.noItemPaddings}>
-                  <NoYet text={"No Role Yet"} />
+                     </div>
+                  ))}
                </div>
-            )}
-         </div>
-         <SimpleModal
-            handleOpenClose={handleOpenClose}
-            openDefault={open}
-            content={
-               <DeleteElement
-                  loader={!!loader.length}
-                  text={"Delete Role?"}
-                  className={classes}
-                  handleClose={handleOpenClose}
-                  handleDel={deleteRole}
-                  info={title}
+               <PaginationItem
+                  page={page}
+                  listLength={roleInfo.length}
+                  entries={roleInfo.length}
+                  count={roleInfo.length}
+                  handleReturn={(number) => changePage(number)}
                />
-            }
-         />
-      </div>
+            </div>
+            <SimpleModal
+               handleOpenClose={handleOpenClose}
+               openDefault={open}
+               content={
+                  <DeleteElement
+                     loader={!!loader.length}
+                     text={"Delete Role?"}
+                     className={classes}
+                     handleClose={handleOpenClose}
+                     handleDel={deleteRole}
+                     info={title}
+                  />
+               }
+            />
+         </div>
+      </>
    );
 };

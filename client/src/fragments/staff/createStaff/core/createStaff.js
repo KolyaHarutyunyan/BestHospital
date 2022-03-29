@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import moment from "moment";
 import {
    AddressInput,
@@ -15,14 +15,8 @@ import {
    ErrorText,
    isNotEmpty,
    FindSuccess,
-   FindError,
-   FindLoad,
 } from "@eachbase/utils";
-import {
-   adminActions,
-   httpRequestsOnErrorsActions,
-   httpRequestsOnSuccessActions,
-} from "@eachbase/store";
+import { adminActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 import { inputStyle } from "../../../fundingSource/createFundingSource/core/styles";
 
 const steps = ["General Info", "Address", "Other Details"];
@@ -96,6 +90,7 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
          ...prevState,
          [e.target.name]: e.target.value,
       }));
+
       error === e.target.name && setError("");
    };
 
@@ -118,25 +113,25 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
          isNotEmpty(inputs.lastName) &&
          isNotEmpty(inputs.email) &&
          isNotEmpty(inputs.phone) &&
+         isNotEmpty(license.driverLicense) &&
+         isNotEmpty(license.state) &&
+         isNotEmpty(license.expireDate) &&
          isNotEmpty(inputs.gender) &&
          isNotEmpty(inputs.birthday) &&
          isNotEmpty(inputs.residency) &&
          isNotEmpty(inputs.ssn) &&
          isNotEmpty(fullAddress) &&
-         isNotEmpty(enteredAddress) &&
-         isNotEmpty(license.driverLicense) &&
-         isNotEmpty(license.state) &&
-         isNotEmpty(license.expireDate);
+         isNotEmpty(enteredAddress);
 
       if (staffDataIsValid) {
          const data = {
             firstName: inputs.firstName,
-            middleName: inputs.middleName,
+            middleName: inputs.middleName || undefined,
             lastName: inputs.lastName,
             email: inputs.email,
-            secondaryEmail: inputs.secondaryEmail,
+            secondaryEmail: inputs.secondaryEmail || undefined,
             phone: inputs.phone,
-            secondaryPhone: inputs.secondaryPhone,
+            secondaryPhone: inputs.secondaryPhone || undefined,
             state: "state",
             gender: inputs.gender,
             birthday:
@@ -169,6 +164,12 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
             ? "email"
             : !isNotEmpty(inputs.phone)
             ? "phone"
+            : !isNotEmpty(license.driverLicense)
+            ? "driverLicense"
+            : !isNotEmpty(license.state)
+            ? "state"
+            : !isNotEmpty(license.expireDate)
+            ? "expireDate"
             : !isNotEmpty(inputs.residency)
             ? "residency"
             : !isNotEmpty(inputs.ssn)
@@ -179,14 +180,8 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
             ? "birthday"
             : !isNotEmpty(enteredAddress)
             ? "enteredAddress"
-            : !isNotEmpty(license.driverLicense)
-            ? "driverLicense"
-            : !isNotEmpty(license.state)
-            ? "state"
-            : !isNotEmpty(license.expireDate)
-            ? "expireDate"
             : "";
-         console.log(staffDataErrorText, "  error text");
+
          setError(staffDataErrorText);
       }
    };
@@ -284,7 +279,6 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
             type={"number"}
             label={"Secondary Phone Number"}
             name={"secondaryPhone"}
-            typeError={error === "secondaryPhone" ? ErrorText.field : ""}
          />
       </React.Fragment>
    );
@@ -299,6 +293,7 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
             info={staffGeneral}
             styles={inputStyle}
             errorBoolean={error === "enteredAddress" ? ErrorText.field : ""}
+            enteredValue={enteredAddress}
          />
       </React.Fragment>
    );

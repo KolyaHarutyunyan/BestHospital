@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { PayrollSetupStyles } from "../styles";
 import {
    DeleteElement,
+   NoItemText,
    Notes,
    SimpleModal,
    SlicedText,
@@ -12,7 +13,7 @@ import { FindLoad, FindSuccess, Images } from "@eachbase/utils";
 import { MileageCompensation } from "./mileageCompensation";
 import moment from "moment";
 import { useDispatch } from "react-redux";
-import { mileagesActions } from "@eachbase/store";
+import { httpRequestsOnSuccessActions, mileagesActions } from "@eachbase/store";
 
 const headerTitles = [
    {
@@ -43,13 +44,13 @@ export const MileageTable = ({ data }) => {
    const [open, setOpen] = useState(false);
 
    const handleOpenClose = (data) => {
-      data && data.item && setEditedData(data.item);
-      setEditModalOpenClose(!editModalOpenClose);
+      setEditedData(data);
+      setEditModalOpenClose((prevState) => !prevState);
    };
 
    const handleOpenCloseDelete = (data) => {
       setDeletedInfo(data);
-      setOpen(!open);
+      setOpen((prevState) => !prevState);
    };
 
    const handleDeleteItem = () => {
@@ -60,10 +61,11 @@ export const MileageTable = ({ data }) => {
    const loader = FindLoad("DELETE_MILEAGE");
 
    useEffect(() => {
-      if (success) {
+      if (!!success.length) {
          setOpen(false);
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("DELETE_MILEAGE"));
       }
-   }, [success.length]);
+   }, [success]);
 
    const notesItem = (item, index) => {
       return (
@@ -80,11 +82,7 @@ export const MileageTable = ({ data }) => {
                   <div className={classes.icons}>
                      <img
                         src={Images.edit}
-                        onClick={() =>
-                           handleOpenClose({
-                              item,
-                           })
-                        }
+                        onClick={() => handleOpenClose({ ...item })}
                         alt="edit"
                      />
                      <img
@@ -101,14 +99,18 @@ export const MileageTable = ({ data }) => {
 
    return (
       <>
-         <Notes
-            restHeight="360px"
-            defaultStyle={true}
-            data={data}
-            pagination={false}
-            items={notesItem}
-            headerTitles={headerTitles}
-         />
+         {!!data.length ? (
+            <Notes
+               restHeight="360px"
+               defaultStyle={true}
+               data={data}
+               pagination={false}
+               items={notesItem}
+               headerTitles={headerTitles}
+            />
+         ) : (
+            <NoItemText text={"No Mileage Compensations Yet"} />
+         )}
          <SimpleModal
             openDefault={editModalOpenClose}
             handleOpenClose={handleOpenClose}

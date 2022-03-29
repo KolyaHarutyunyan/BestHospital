@@ -18,10 +18,12 @@ export const AddressInput = ({
    type,
    handleGetAll,
    onTrigger,
+   enteredValue,
 }) => {
    const classes = inputsStyle();
    const globalInputs = useGlobalStyles();
-   const [address, setAddress] = useState("");
+
+   const [address, setAddress] = useState(enteredValue || "");
    const [error, setError] = useState("");
    const [fullAddress, setFullAddress] = useState("");
    const [loading, setLoading] = useState(false);
@@ -29,6 +31,7 @@ export const AddressInput = ({
    const [inputs, setInputs] = useState(
       info ? (type === "another" ? { ...info } : { ...info.address }) : {}
    );
+
    const Country = inputs.country
       ? inputs.country
       : fullAddress.country
@@ -36,6 +39,7 @@ export const AddressInput = ({
       : all
       ? all.country
       : "";
+
    const City = inputs.city
       ? inputs.city
       : fullAddress.city
@@ -43,6 +47,7 @@ export const AddressInput = ({
       : all
       ? all.city
       : "";
+
    const States = inputs.state
       ? inputs.state
       : fullAddress.state
@@ -50,8 +55,23 @@ export const AddressInput = ({
       : all
       ? all.state
       : "";
-   const Zip = inputs.zip ? inputs.zip : fullAddress.zip ? fullAddress.zip : all ? all.zip : "";
-   const Street = fullAddress ? fullAddress.street : address ? address : all ? all.street : "";
+
+   const Zip = inputs.zip
+      ? inputs.zip
+      : fullAddress.zip
+      ? fullAddress.zip
+      : all
+      ? all.zip
+      : "";
+
+   const Street = fullAddress
+      ? fullAddress.street
+      : address
+      ? address
+      : all
+      ? all.street
+      : "";
+
    const fullAddressCompleted = `${Street} ${City} ${States} ${Zip} ${Country}`;
 
    useEffect(() => {
@@ -88,7 +108,11 @@ export const AddressInput = ({
       );
 
    let authPlaceHolder = info ? info.location : "Service Location";
-   const stateList = code ? State.getStatesOfCountry(code) : State.getStatesOfCountry("US");
+
+   const stateList = code
+      ? State.getStatesOfCountry(code)
+      : State.getStatesOfCountry("US");
+
    const placeholder = auth
       ? authPlaceHolder
       : info
@@ -102,10 +126,25 @@ export const AddressInput = ({
             onChange={handleChangeAddress}
             onSelect={(ev) => handleSelect(ev)}
          >
-            {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-               <div className={!oneInput ? globalInputs.simpleInput : globalInputs.simpleInputFull}>
+            {({
+               getInputProps,
+               suggestions,
+               getSuggestionItemProps,
+               loading,
+            }) => (
+               <div
+                  className={
+                     !oneInput
+                        ? globalInputs.simpleInput
+                        : globalInputs.simpleInputFull
+                  }
+               >
                   <input
-                     className={!!errorBoolean ? classes.searchAddressError : classes.searchAddress}
+                     className={
+                        !!errorBoolean
+                           ? classes.searchAddressError
+                           : classes.searchAddress
+                     }
                      {...getInputProps({
                         placeholder: placeholder,
                         disabled: disabled,
@@ -138,7 +177,11 @@ export const AddressInput = ({
                                  })}
                               >
                                  <div>
-                                    <span className={classes.searchfAddressDescriptionText}>
+                                    <span
+                                       className={
+                                          classes.searchfAddressDescriptionText
+                                       }
+                                    >
                                        {suggestion.description}
                                     </span>
                                  </div>
@@ -166,7 +209,6 @@ export const AddressInput = ({
                   list={CountryList}
                   disabled={disabled}
                />
-
                <ValidationInput
                   style={globalInputs.simpleInput}
                   variant={"outlined"}
@@ -181,7 +223,6 @@ export const AddressInput = ({
                   loader={loading}
                   disabled={disabled}
                />
-
                <SelectInput
                   style={globalInputs.simpleInput}
                   name={"state"}
@@ -195,7 +236,6 @@ export const AddressInput = ({
                   list={stateList}
                   disabled={disabled}
                />
-
                <ValidationInput
                   variant={"outlined"}
                   name={"zip"}

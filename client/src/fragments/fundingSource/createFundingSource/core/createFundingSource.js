@@ -259,6 +259,7 @@ export const CreateFundingSource = ({ handleClose, info }) => {
                      handleSelectValue={handleAddressChange}
                      onTrigger={setFullAddress}
                      flex="block"
+                     enteredValue={enteredAddress}
                   />
                </div>
             </div>

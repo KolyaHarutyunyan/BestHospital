@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 
 export const Role = ({
    rolesList,
-   accessList,
+   accessList = [],
    sendItem,
    handleRemoveSelected,
    newList,
@@ -74,12 +74,12 @@ export const Role = ({
       <div className={classes.roleWrapper}>
          <CheckboxesTags
             handleChange={addPermissions}
-            permissionsList={newList.length ? newList : rolesList}
+            permissionsList={newList.length ? newList : []}
             label={"Add Role"}
             placeholder={"Add Role"}
          />
          <div className={classes.roleItemContainer}>
-            {accessList && accessList.roles ? (
+            {accessList?.roles ? (
                accessList.roles.map((item, j) => (
                   <div key={j}>
                      <RoleItem
@@ -91,10 +91,9 @@ export const Role = ({
                   </div>
                ))
             ) : (
-               <p className={classes.noItem}>No Roles Yet</p>
+               <NoItemText text={"No Accesses Yet"} />
             )}
          </div>
-
          <SimpleModal
             openDefault={open}
             handleOpenClose={handleOpenCloseDel}

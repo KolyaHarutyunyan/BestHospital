@@ -43,7 +43,7 @@ export function LoginPage(props) {
       }
       if (link.search("token=") !== -1) {
          const pos = link.slice(link.search("token="));
-         const registerToken = pos.substring(7);
+         const registerToken = pos.substring(6);
          setRegisterToken(registerToken);
       }
    }, []);

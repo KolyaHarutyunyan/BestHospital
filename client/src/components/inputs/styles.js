@@ -379,6 +379,7 @@ export const inputsStyle = makeStyles(() => ({
       padding: "18.5px 14px",
       fontSize: "16px",
       width: "100%",
+      color: Colors.TextPrimary,
    },
    searchAddressError: {
       height: "48px",
@@ -387,9 +388,7 @@ export const inputsStyle = makeStyles(() => ({
       padding: "18.5px 14px",
       fontSize: "16px",
       width: "100%",
-      "&::placeholder": {
-         color: Colors.ThemeRed,
-      },
+      "&::placeholder": { color: Colors.ThemeRed },
    },
 
    errorText: {
