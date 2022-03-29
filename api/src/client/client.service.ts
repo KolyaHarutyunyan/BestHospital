@@ -8,6 +8,7 @@ import { IClient } from './interface';
 import { HistoryService, serviceLog } from '../history';
 import { ClientDTO } from './dto';
 import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
+import { ClientStatus } from './client.constants';
 
 @Injectable()
 export class ClientService {
@@ -129,7 +130,7 @@ export class ClientService {
   ): Promise<ClientDTO> => {
     const client = await this.model.findById({ _id });
     this.checkClient(client);
-    if (status != 'ACTIVE' && !dto.date) {
+    if (status != ClientStatus.ACTIVE && !dto.date) {
       throw new HttpException(
         'If status is not active, then date is required field',
         HttpStatus.BAD_REQUEST,

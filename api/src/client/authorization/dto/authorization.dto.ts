@@ -17,5 +17,5 @@ export class AuthorizationDTO {
   @ApiProperty()
   location: string;
   @ApiProperty({ enum: AuthorizationStatus })
-  status: number;
+  status: string;
 }

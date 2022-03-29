@@ -4,6 +4,7 @@ import {
   IsDateString,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsPhoneNumber,
   IsString,
   ValidateNested,
@@ -19,6 +20,7 @@ export class CreateStaffDto {
   firstName: string;
   @ApiProperty({ required: false })
   @IsString()
+  @IsOptional()
   middleName: string;
   @ApiProperty()
   @IsNotEmpty()
@@ -30,6 +32,7 @@ export class CreateStaffDto {
   email: string;
   @ApiProperty({ required: false })
   @IsString()
+  @IsOptional()
   secondaryEmail: string;
   @ApiProperty()
   @IsNotEmpty()
@@ -37,6 +40,7 @@ export class CreateStaffDto {
   phone: string;
   @ApiProperty({ required: false })
   @IsString()
+  @IsOptional()
   secondaryPhone: string;
   @ApiProperty()
   @IsNotEmpty()
