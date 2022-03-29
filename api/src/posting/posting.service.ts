@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { IPosting } from './interface/posting.interface';
 import { MongooseUtil } from '../util/mongoose.util';
 import { PostingModel } from './posting.model';
-import { IInvoice, IReceivable } from '../invoice/interface/invoice.interface';
+import { IReceivable } from '../invoice/interface/invoice.interface';
 import { BillingService } from '../billing/billing.service';
 import { startSession } from 'mongoose';
 import { ClientService } from '../client/client.service';

@@ -107,7 +107,7 @@ export class InvoiceService {
     for (let i = 0; i < result.length; i++) {
       for (let j = 0; j < result[i].length; ++j) {
         subBills.push(result[i][j]);
-        await this.addReceivable(
+        this.addReceivable(
           receivable,
           result[i][j],
           result[i][0].placeService,
@@ -116,14 +116,14 @@ export class InvoiceService {
         receivableCreatedAt.push(new Date());
 
         if (j !== 0 && j === 5) {
-          await this.addInvoice(invoice, result[i][j], receivable, receivableCreatedAt, subBills);
+          this.addInvoice(invoice, result[i][j], receivable, receivableCreatedAt, subBills);
           subBills = [];
           receivable = [];
           receivableCreatedAt = [];
         }
       }
       if (receivable.length) {
-        await this.addInvoice(invoice, result[i][0], receivable, receivableCreatedAt, subBills);
+        this.addInvoice(invoice, result[i][0], receivable, receivableCreatedAt, subBills);
       }
       subBills = [];
       receivable = [];
@@ -137,9 +137,9 @@ export class InvoiceService {
 
   /** group the bills */
   private groupBy(array, f) {
-    var groups = {};
+    const groups = {};
     array.forEach(function (o) {
-      var group = JSON.stringify(f(o));
+      const group = JSON.stringify(f(o));
       groups[group] = groups[group] || [];
       groups[group].push(o);
     });

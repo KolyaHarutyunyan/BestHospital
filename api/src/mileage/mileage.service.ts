@@ -25,7 +25,6 @@ export class MileageService {
   // find all mileage
   async findAll(): Promise<MileageDTO[]> {
     const mileages = await this.model.find();
-    this.checkMileage(mileages[0]);
     return this.sanitizer.sanitizeMany(mileages);
   }
 
