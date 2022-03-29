@@ -167,6 +167,9 @@ export class EmploymentService {
       employment.active = true;
     }
     if (dto.startDate) employment.startDate = dto.startDate;
+    if (dto.endDate == null) {
+      employment.endDate = null;
+    }
     employment = await employment.save();
     await employment
       .populate('departmentId', 'name')
