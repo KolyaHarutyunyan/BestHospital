@@ -121,7 +121,7 @@ export class EmploymentService {
 
   // update the employment
   async update(_id: string, dto: UpdateEmploymentDto): Promise<EmploymentDto> {
-    if (new Date(dto.startDate) > new Date(dto.endDate)) {
+    if (dto.endDate && new Date(dto.startDate) > new Date(dto.endDate)) {
       throw new HttpException(`startDate can't be high then endDate`, HttpStatus.BAD_REQUEST);
     }
     let employment = await this.model.findById({ _id });
