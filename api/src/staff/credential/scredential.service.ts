@@ -81,7 +81,6 @@ export class SCredentialService {
   async find(staffId: string): Promise<SCredentialDTO[]> {
     try {
       const credential = await this.model.find({ staffId }).populate('credentialId');
-      this.checkCredential(credential[0]);
       return credential;
     } catch (e) {
       console.log(e);
