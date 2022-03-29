@@ -1,5 +1,5 @@
 import { authHeaderStyles } from "./styles";
-import { Colors, Images } from "@eachbase/utils";
+import { Colors, Images, makeCapitalize } from "@eachbase/utils";
 import React from "react";
 import moment from "moment";
 import { SlicedText } from "../../messages";
@@ -17,9 +17,6 @@ export const AuthHeader = ({
 }) => {
    const classes = authHeaderStyles();
 
-   const statusDisplay =
-      info?.status === 0 ? "Inactive" : info?.status === 1 ? "Active" : "";
-
    return (
       <div className={classes.AuthHeader}>
          <div className={classes.AuthHeaderTop}>
@@ -31,9 +28,9 @@ export const AuthHeader = ({
                   <p className={classes.AuthHeaderTopLeftText}>
                      {info?.startDate &&
                         `${moment(info?.startDate).format("DD/MM/YYYY")} - ${
-                           info?.endDate !== null
-                              ? moment(info?.endDate).format("DD/MM/YYYY")
-                              : "Present"
+                           info?.endDate === "Precent"
+                              ? "Present"
+                              : moment(info?.endDate).format("DD/MM/YYYY")
                         }`}
                   </p>
                ) : (
@@ -47,10 +44,10 @@ export const AuthHeader = ({
 
                {type === "staff" && (
                   <div className={classes.activeInactive}>
-                     <p> {info?.active === true ? "Active" : "Inactive"}</p>
+                     <p> {info?.active ? "Active" : "Inactive"}</p>
                      <div
                         style={
-                           info?.active === true
+                           info?.active
                               ? { background: Colors.ThemeGreen }
                               : { background: Colors.ThemeRed }
                         }
@@ -139,7 +136,9 @@ export const AuthHeader = ({
                   {empoloyment ? "Department:" : "Status:"}
                </p>
                <p className={classes.AuthHeaderBottomBoxText}>
-                  {empoloyment ? info?.departmentId?.name : statusDisplay}
+                  {empoloyment
+                     ? info?.departmentId?.name
+                     : makeCapitalize(info?.status)}
                </p>
             </div>
             <div className={classes.AuthHeaderBottomBox}>

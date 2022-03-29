@@ -9,7 +9,14 @@ import {
    AddressInput,
 } from "@eachbase/components";
 import { createClientStyle } from "./styles";
-import { ErrorText, FindLoad, FindSuccess, isNotEmpty } from "@eachbase/utils";
+import {
+   ErrorText,
+   FindLoad,
+   FindSuccess,
+   isNotEmpty,
+   makeCapitalize,
+   makeEnum,
+} from "@eachbase/utils";
 import {
    clientActions,
    fundingSourceActions,
@@ -23,9 +30,6 @@ const _list = [
    { name: "Active", id: 1, code: 1 },
 ];
 
-const _inactive = _list[0].name;
-const _active = _list[1].name;
-
 export const AddAuthorization = ({ handleClose, info }) => {
    const [error, setError] = useState("");
    const [inputs, setInputs] = useState(
@@ -36,11 +40,13 @@ export const AddAuthorization = ({ handleClose, info }) => {
            }
          : {}
    );
-
-   const currentStatus =
-      info?.status === 0 ? _inactive : info?.status === 1 ? _active : "";
-
-   const [authStatus, setAuthStatus] = useState(info ? currentStatus : "");
+   const [authStatus, setAuthStatus] = useState(
+      info ? makeCapitalize(info?.status) : ""
+   );
+   const [fullAddress, setFullAddress] = useState(info ? info.location : "");
+   const [enteredAddress, setEnteredAddress] = useState(
+      info ? info.location : ""
+   );
 
    const params = useParams();
 
@@ -55,12 +61,6 @@ export const AddAuthorization = ({ handleClose, info }) => {
    let fSelect = useSelector((state) => state.fundingSource.fSelect.funders);
 
    const classes = createClientStyle();
-
-   const [fullAddress, setFullAddress] = useState(info ? info.location : "");
-
-   const [enteredAddress, setEnteredAddress] = useState(
-      info ? info.location : ""
-   );
 
    const success = info
       ? FindSuccess("EDIT_CLIENT_AUTHORIZATION")
@@ -139,15 +139,12 @@ export const AddAuthorization = ({ handleClose, info }) => {
 
          const id = fSelect.filter((i) => i.name === inputs.funding);
 
-         const selectedStatus =
-            authStatus === _inactive ? 0 : authStatus === _active ? 1 : "";
-
          const data = {
             authId: inputs.authId,
             startDate: inputs.startDate,
             endDate: inputs.endDate,
             location: fullAddress,
-            status: selectedStatus,
+            status: makeEnum(authStatus),
          };
 
          if (info) {

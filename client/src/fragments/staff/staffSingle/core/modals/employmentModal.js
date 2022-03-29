@@ -18,6 +18,10 @@ import {
 import { createClientStyle } from "@eachbase/fragments/client";
 import { Checkbox } from "@material-ui/core";
 
+const _list = [{ name: "Part Time" }, { name: "Full Time" }];
+const _partTime = _list[0].name;
+const _fullTime = _list[1].name;
+
 export const EmploymentModal = ({ handleClose, info }) => {
    const [error, setError] = useState("");
    const [inputs, setInputs] = useState(
@@ -28,19 +32,29 @@ export const EmploymentModal = ({ handleClose, info }) => {
               departmentId: info?.departmentId?.name,
               startDate: moment(info?.startDate).format("YYYY-MM-DD"),
               endDate: moment(info.endDate).format("YYYY-MM-DD"),
-              employmentType: info?.schedule,
+              employmentType:
+                 info?.schedule === 0
+                    ? _partTime
+                    : info?.schedule === 1
+                    ? _fullTime
+                    : "",
            }
          : {}
    );
+
    const [checked, setChecked] = useState(
       info ? info.endDate === "Precent" : true
    );
+
    const params = useParams();
+
    const dispatch = useDispatch();
+
    const departments = useSelector((state) => state.system.departments);
    const staffList = useSelector(
       (state) => state.admins.adminsAllList.staff
    )?.filter((item) => item.id !== params.id && item);
+
    const classes = createClientStyle();
 
    const success = info
@@ -61,6 +75,7 @@ export const EmploymentModal = ({ handleClose, info }) => {
       dispatch(
          httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION")
       );
+
       if (info) {
          dispatch(
             httpRequestsOnSuccessActions.removeSuccess("EDIT_EMPLOYMENT")
@@ -104,6 +119,7 @@ export const EmploymentModal = ({ handleClose, info }) => {
       if (employmentDataIsValid) {
          let depId;
          let supervisorID;
+
          departments.forEach((item) => {
             if (inputs.departmentId === item.name) {
                depId = item.id;
@@ -124,8 +140,13 @@ export const EmploymentModal = ({ handleClose, info }) => {
             departmentId: depId,
             active: false,
             startDate: new Date(),
-            endDate: inputs.endDate ? inputs.endDate : null,
-            schedule: +inputs.employmentType,
+            endDate: inputs.endDate || null,
+            schedule:
+               inputs.employmentType === _partTime
+                  ? 0
+                  : inputs.employmentType === _fullTime
+                  ? 1
+                  : "",
             // termination: {
             //    date: inputs.endDate ? inputs.endDate : null,
             // },
@@ -196,8 +217,8 @@ export const EmploymentModal = ({ handleClose, info }) => {
                      name="employmentType"
                      label={"Employment Type*"}
                      handleSelect={handleChange}
-                     value={String(inputs.employmentType)}
-                     list={[{ name: 0 }, { name: 1 }]}
+                     value={inputs.employmentType}
+                     list={_list}
                      typeError={
                         error === "employmentType" ? ErrorText.field : ""
                      }
