@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux";
 import { billActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 import { FindLoad, FindSuccess } from "@eachbase/utils";
 
-export const TransactionsDemoTable = ({ billTransactions = [] }) => {
+export const TransactionsDemoTable = ({ billTransactions = [], billId }) => {
    const classes = billTransactionInputsStyle();
 
    const dispatch = useDispatch();
@@ -60,7 +60,10 @@ export const TransactionsDemoTable = ({ billTransactions = [] }) => {
                      chancel={"Cancel"}
                      onCreate={() =>
                         dispatch(
-                           billActions.abortBillTransaction(transactionId)
+                           billActions.abortBillTransaction(
+                              billId,
+                              transactionId
+                           )
                         )
                      }
                      onClose={() => setOpen(false)}

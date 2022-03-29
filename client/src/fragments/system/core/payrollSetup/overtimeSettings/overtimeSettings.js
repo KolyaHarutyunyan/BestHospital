@@ -7,11 +7,16 @@ import {
    CreateChancel,
 } from "@eachbase/components";
 import { PayrollSetupStyles } from "../styles";
-import { ErrorText, FindLoad, FindSuccess } from "@eachbase/utils";
+import { ErrorText, FindLoad, FindSuccess, isNotEmpty } from "@eachbase/utils";
 import { useDispatch } from "react-redux";
 import { payrollActions } from "@eachbase/store/payroll";
+import { httpRequestsOnSuccessActions } from "@eachbase/store";
 
-const timeType = [{ name: "DAILY" }, { name: "WEEKLY" }, { name: "CONSECUTIVE" }];
+const timeType = [
+   { name: "DAILY" },
+   { name: "WEEKLY" },
+   { name: "CONSECUTIVE" },
+];
 
 const overtimeBtn = {
    width: "100%",
@@ -46,31 +51,43 @@ export const OvertimeSettings = ({
       }));
       error === e.target.name && setError("");
    };
+
    const handleSubmit = () => {
-      let data = {
-         name: inputs.name,
-         type: inputs.type,
-         threshold: parseInt(inputs.threshold),
-         multiplier: parseInt(inputs.multiplier),
-      };
-      if (inputs.name && inputs.type && inputs.threshold && inputs.multiplier) {
+      const dataIsValid =
+         isNotEmpty(inputs.name) &&
+         isNotEmpty(inputs.type) &&
+         isNotEmpty(inputs.threshold) &&
+         isNotEmpty(inputs.multiplier);
+
+      if (dataIsValid) {
+         const data = {
+            name: inputs.name,
+            type: inputs.type,
+            threshold: parseInt(inputs.threshold),
+            multiplier: parseInt(inputs.multiplier),
+         };
          if (editedData) {
-            dispatch(payrollActions.editOvertimeSettingsByIdGlobal(data, editedData?.id));
+            dispatch(
+               payrollActions.editOvertimeSettingsByIdGlobal(
+                  data,
+                  editedData?.id
+               )
+            );
          } else {
             dispatch(payrollActions.createOvertimeSettingsGlobal(data));
          }
       } else {
-         setError(
-            !inputs.name
-               ? "name"
-               : !inputs.type
-               ? "type"
-               : !inputs.threshold
-               ? "threshold"
-               : !inputs.multiplier
-               ? "multiplier"
-               : "Input is not filled"
-         );
+         const dataErrorText = !isNotEmpty(inputs.name)
+            ? "name"
+            : !isNotEmpty(inputs.type)
+            ? "type"
+            : !isNotEmpty(inputs.threshold)
+            ? "threshold"
+            : !isNotEmpty(inputs.multiplier)
+            ? "multiplier"
+            : "";
+
+         setError(dataErrorText);
       }
    };
 
@@ -80,21 +97,31 @@ export const OvertimeSettings = ({
    const edit = FindSuccess("EDIT_OVERTIME_SETTINGS_BY_ID_GLOBAL");
 
    useEffect(() => {
-      if (success) {
+      if (!!success.length) {
          setInputs({
             name: "",
             type: "",
             threshold: "",
             multiplier: "",
          });
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess(
+               "CREATE_OVERTIME_SETTINGS_GLOBAL"
+            )
+         );
       }
-   }, [success.length]);
+   }, [success]);
 
    useEffect(() => {
-      if (edit) {
+      if (!!edit.length) {
          handleOpenClose && handleOpenClose();
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess(
+               "EDIT_OVERTIME_SETTINGS_BY_ID_GLOBAL"
+            )
+         );
       }
-   }, [edit.length]);
+   }, [edit]);
 
    return (
       <div
@@ -112,7 +139,8 @@ export const OvertimeSettings = ({
             <>
                <h1 className={classes.modalTitle}>Add an Overtime Setting</h1>
                <p className={classes.modalSubTitle}>
-                  Please fulfill the below fields to add a Paycode Type in the system.
+                  Please fulfill the below fields to add a Paycode Type in the
+                  system.
                </p>
             </>
          )}

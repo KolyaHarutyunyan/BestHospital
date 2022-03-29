@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { AddButton, NoItemText, SlicedText, ValidationInput } from "@eachbase/components";
-import { FindLoad, FindSuccess, Images } from "@eachbase/utils";
+import {
+   AddButton,
+   NoItemText,
+   SlicedText,
+   ValidationInput,
+} from "@eachbase/components";
+import { FindLoad, FindSuccess, Images, isNotEmpty } from "@eachbase/utils";
 import { systemItemStyles } from "./styles";
-import { systemActions } from "@eachbase/store";
+import { httpRequestsOnSuccessActions, systemActions } from "@eachbase/store";
 
 const credentialBtn = {
    maxWidth: "174px",
@@ -32,28 +37,34 @@ export const Departments = ({ globalDepartments, removeItem, openModal }) => {
    };
 
    const handleSubmit = () => {
-      let data = {
-         name: inputs.name,
-      };
-      if (inputs.name) {
+      if (isNotEmpty(inputs.name)) {
+         const data = {
+            name: inputs.name,
+         };
+
          dispatch(systemActions.createDepartmentGlobal(data));
       } else {
-         setError(!inputs.name ? "name" : "Input is not filled");
+         setError(!isNotEmpty(inputs.name) ? "name" : "");
       }
    };
 
-   const isDisabled = inputs.name;
+   const isDisabled = isNotEmpty(inputs.name);
 
    const loader = FindLoad("CREATE_DEPARTMENT_GLOBAL");
    const success = FindSuccess("CREATE_DEPARTMENT_GLOBAL");
 
    useEffect(() => {
-      if (success) {
+      if (!!success.length) {
          setInputs({
             name: "",
          });
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess(
+               "CREATE_DEPARTMENT_GLOBAL"
+            )
+         );
       }
-   }, [success.length]);
+   }, [success]);
 
    return (
       <>

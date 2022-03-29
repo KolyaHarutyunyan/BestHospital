@@ -1,1 +1,2 @@
-export const isNotEmpty = (val = "") => val.trim() !== "";
+export const isNotEmpty = (value = "") =>
+   typeof value === "string" ? value.trim() !== "" : value;

@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { AddButton, NoItemText, SlicedText, ValidationInput } from "@eachbase/components";
+import {
+   AddButton,
+   NoItemText,
+   SlicedText,
+   ValidationInput,
+} from "@eachbase/components";
 import { useDispatch } from "react-redux";
-import { FindLoad, FindSuccess, Images } from "@eachbase/utils";
+import { FindLoad, FindSuccess, Images, isNotEmpty } from "@eachbase/utils";
 import { systemItemStyles } from "./styles";
-import { systemActions } from "@eachbase/store";
+import { httpRequestsOnSuccessActions, systemActions } from "@eachbase/store";
 
 const credentialBtn = {
    maxWidth: "174px",
@@ -28,13 +33,14 @@ export const JobTitles = ({ globalJobs, removeItem, openModal }) => {
    };
 
    const handleSubmit = () => {
-      let data = {
-         name: inputs.name,
-      };
-      if (inputs.name) {
+      if (isNotEmpty(inputs.name)) {
+         const data = {
+            name: inputs.name,
+         };
+
          dispatch(systemActions.createJobGlobal(data));
       } else {
-         setError(!inputs.name ? "name" : "Input is not filled");
+         setError(!isNotEmpty(inputs.name) ? "name" : "");
       }
    };
 
@@ -42,18 +48,21 @@ export const JobTitles = ({ globalJobs, removeItem, openModal }) => {
       openModal(modalType, modalId);
    };
 
-   const isDisabled = inputs.name;
+   const isDisabled = isNotEmpty(inputs.name);
 
    const loader = FindLoad("CREATE_JOB_GLOBAL");
    const success = FindSuccess("CREATE_JOB_GLOBAL");
 
    useEffect(() => {
-      if (success) {
+      if (!!success.length) {
          setInputs({
             name: "",
          });
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess("CREATE_JOB_GLOBAL")
+         );
       }
-   }, [success.length]);
+   }, [success]);
 
    return (
       <>
@@ -83,7 +92,11 @@ export const JobTitles = ({ globalJobs, removeItem, openModal }) => {
                   return (
                      <div className={classes.item} key={index}>
                         <p>
-                           <SlicedText type={"responsive"} size={25} data={jobItem.name} />
+                           <SlicedText
+                              type={"responsive"}
+                              size={25}
+                              data={jobItem.name}
+                           />
                         </p>
                         <div className={classes.icons}>
                            <img

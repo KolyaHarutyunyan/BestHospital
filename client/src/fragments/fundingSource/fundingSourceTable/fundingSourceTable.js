@@ -20,53 +20,62 @@ export const FundingSourceTable = ({ status, handleGetPage }) => {
    const changePage = (number) => {
       let start = number > 1 ? number - 1 + "0" : 0;
       setPage(number);
-      dispatch(fundingSourceActions.getFundingSource({ status: status, start: start, end: 10 }));
+      dispatch(
+         fundingSourceActions.getFundingSource({
+            status: status,
+            start: start,
+            end: 10,
+         })
+      );
       handleGetPage(start);
    };
 
    return (
       <div className={globalStyle.tableWrapper}>
          <Paper className={globalStyle.tableBack}>
-            {fundingSourceList?.funders ? (
-               <TableContainer
-                  style={{
-                     height: `calc(100vh - ${
-                        fundingSourceList?.funders?.length ? "250px" : "150px"
-                     } )`,
-                  }}
-                  className={globalStyle.tableContainer}
-                  component={Paper}
-               >
-                  <Table
-                     stickyHeader
-                     className={globalStyle.table}
-                     size="small"
-                     aria-label="a dense table"
+            {!!fundingSourceList?.funders?.length ? (
+               <>
+                  <TableContainer
+                     style={{
+                        height: `calc(100vh - ${
+                           fundingSourceList?.funders?.length
+                              ? "250px"
+                              : "150px"
+                        } )`,
+                     }}
+                     className={globalStyle.tableContainer}
+                     component={Paper}
                   >
-                     <FundingSourceTableHead />
-                     {loader.length ? (
-                        <Loader />
-                     ) : (
-                        <TableBody>
-                           {fundingSourceList?.funders &&
-                              fundingSourceList.funders.map((item, i) => (
-                                 <FundingSourceTableBody data={item} key={i} />
-                              ))}
-                        </TableBody>
-                     )}
-                  </Table>
-               </TableContainer>
-            ) : (
-               <NoItemText text={"No Funding source yet"} />
-            )}
-            {fundingSourceList?.funders?.length ? (
-               <PaginationItem
-                  listLength={fundingSourceList?.funders?.length}
-                  page={page}
-                  handleReturn={(number) => changePage(number)}
-                  count={fundingSourceList?.count}
-                  entries={fundingSourceList?.funders?.length}
-               />
+                     <Table
+                        stickyHeader
+                        className={globalStyle.table}
+                        size="small"
+                        aria-label="a dense table"
+                     >
+                        <FundingSourceTableHead />
+                        {loader.length ? (
+                           <Loader />
+                        ) : (
+                           <TableBody>
+                              {fundingSourceList?.funders &&
+                                 fundingSourceList.funders.map((item, i) => (
+                                    <FundingSourceTableBody
+                                       data={item}
+                                       key={i}
+                                    />
+                                 ))}
+                           </TableBody>
+                        )}
+                     </Table>
+                  </TableContainer>
+                  <PaginationItem
+                     listLength={fundingSourceList?.funders?.length}
+                     page={page}
+                     handleReturn={(number) => changePage(number)}
+                     count={fundingSourceList?.count}
+                     entries={fundingSourceList?.funders?.length}
+                  />
+               </>
             ) : (
                <NoItemText text={"No Funding source yet"} />
             )}

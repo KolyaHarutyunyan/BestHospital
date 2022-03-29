@@ -26,45 +26,49 @@ export const StaffTable = ({ status, handleGetPage }) => {
       handleGetPage(start);
    };
 
+   if (!!loader.length) return <Loader />;
+
    return (
       <div className={globalStyle.tableWrapper}>
          <Paper className={globalStyle.tableBack}>
-            {loader.length ? (
-               <Loader />
-            ) : (
-               <TableContainer
-                  style={
-                     adminsList?.staff?.length
-                        ? { height: "calc(100vh - 260px)" }
-                        : { height: "calc(100vh - 185px)" }
-                  }
-                  component={Paper}
-               >
-                  <Table
-                     stickyHeader
-                     className={globalStyle.table}
-                     size="small"
-                     aria-label="sticky table"
+            {!!adminsList?.staff?.length ? (
+               <>
+                  <TableContainer
+                     style={
+                        adminsList?.staff?.length
+                           ? { height: "calc(100vh - 260px)" }
+                           : { height: "calc(100vh - 185px)" }
+                     }
+                     component={Paper}
                   >
-                     <StaffTableHead />
-                     <TableBody>
-                        {adminsList?.staff &&
-                           adminsList.staff.map((item, i) => (
-                              <StaffTableBody key={i} data={item} index={i} />
-                           ))}
-                     </TableBody>
-                  </Table>
-               </TableContainer>
-            )}
-            {adminsList?.staff?.length ? (
-               <PaginationItem
-                  listLength={adminsList?.staff?.length}
-                  page={page}
-                  component="div"
-                  handleReturn={(number) => changePage(number)}
-                  count={adminsList?.count}
-                  entries={adminsList?.staff?.length}
-               />
+                     <Table
+                        stickyHeader
+                        className={globalStyle.table}
+                        size="small"
+                        aria-label="sticky table"
+                     >
+                        <StaffTableHead />
+                        <TableBody>
+                           {adminsList?.staff &&
+                              adminsList.staff.map((item, i) => (
+                                 <StaffTableBody
+                                    key={i}
+                                    data={item}
+                                    index={i}
+                                 />
+                              ))}
+                        </TableBody>
+                     </Table>
+                  </TableContainer>
+                  <PaginationItem
+                     listLength={adminsList?.staff?.length}
+                     page={page}
+                     component="div"
+                     handleReturn={(number) => changePage(number)}
+                     count={adminsList?.count}
+                     entries={adminsList?.staff?.length}
+                  />
+               </>
             ) : (
                <NoItemText text="No Items Yet" />
             )}

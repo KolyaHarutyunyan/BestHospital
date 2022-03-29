@@ -1,19 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { AddModalButton, CloseButton, ValidationInput, Textarea } from "@eachbase/components";
-import { ErrorText, FindLoad, FindSuccess, useGlobalTextStyles } from "@eachbase/utils";
+import {
+   AddModalButton,
+   CloseButton,
+   ValidationInput,
+   Textarea,
+} from "@eachbase/components";
+import {
+   ErrorText,
+   FindLoad,
+   FindSuccess,
+   isNotEmpty,
+   useGlobalTextStyles,
+} from "@eachbase/utils";
 import { modalsStyle } from "@eachbase/components/modal/styles";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { noteActions } from "@eachbase/store/notes";
 
-export const AddNotes = ({ closeModal, model, noteModalTypeInfo, handleClose }) => {
+export const AddNotes = ({
+   closeModal,
+   model,
+   noteModalTypeInfo,
+   handleClose,
+}) => {
    const dispatch = useDispatch();
    const classes = modalsStyle();
    const globalText = useGlobalTextStyles();
    const params = useParams();
+
    const [error, setError] = useState("");
    const [inputs, setInputs] = useState(
-      noteModalTypeInfo ? noteModalTypeInfo : { subject: "", text: "" }
+      noteModalTypeInfo ? { ...noteModalTypeInfo } : { subject: "", text: "" }
    );
 
    const handleChange = (e) => {
@@ -25,28 +42,42 @@ export const AddNotes = ({ closeModal, model, noteModalTypeInfo, handleClose }) 
    };
 
    const handleSubmit = () => {
-      let data = {
-         text: inputs.text,
-         subject: inputs.subject,
-         resource: params.id,
-         onModel: model,
-      };
-      if (inputs.subject && inputs.text) {
-         dispatch(noteActions.createGlobalNote(data));
-      } else {
-         setError(!inputs.subject ? "subject" : !inputs.text ? "text" : "Input is not filled");
-      }
-   };
+      const noteDataIsValid =
+         isNotEmpty(inputs.subject) && isNotEmpty(inputs.text);
 
-   const handleEdit = () => {
-      let data = {
-         text: inputs.text,
-         subject: inputs.subject,
-      };
-      if (inputs.subject && inputs.text) {
-         dispatch(noteActions.editGlobalNote(params.id, noteModalTypeInfo.id, data, model));
+      if (noteDataIsValid) {
+         if (noteModalTypeInfo) {
+            const noteEditedData = {
+               text: inputs.text,
+               subject: inputs.subject,
+            };
+
+            dispatch(
+               noteActions.editGlobalNote(
+                  params.id,
+                  noteModalTypeInfo.id,
+                  noteEditedData,
+                  model
+               )
+            );
+         } else {
+            const noteData = {
+               text: inputs.text,
+               subject: inputs.subject,
+               resource: params.id,
+               onModel: model,
+            };
+
+            dispatch(noteActions.createGlobalNote(noteData));
+         }
       } else {
-         setError(!inputs.subject ? "subject" : !inputs.text ? "text" : "Input is not filled");
+         const noteDataErrorText = !isNotEmpty(inputs.subject)
+            ? "subject"
+            : !isNotEmpty(inputs.text)
+            ? "text"
+            : "";
+
+         setError(noteDataErrorText);
       }
    };
 
@@ -71,7 +102,9 @@ export const AddNotes = ({ closeModal, model, noteModalTypeInfo, handleClose }) 
    return (
       <div className={classes.inactiveModalBody}>
          <h1 className={`${globalText.modalTitle}`}>
-            {noteModalTypeInfo?.modalType === "editNote" ? "Edit Note" : "Add a New Note"}
+            {noteModalTypeInfo?.modalType === "editNote"
+               ? "Edit Note"
+               : "Add a New Note"}
          </h1>
          <div className={classes.positionedButton}>
             <CloseButton handleCLic={handleClose} />
@@ -97,12 +130,11 @@ export const AddNotes = ({ closeModal, model, noteModalTypeInfo, handleClose }) 
             onChange={handleChange}
             typeError={error === "text" ? ErrorText.field : ""}
          />
-
-         {noteModalTypeInfo?.modalType === "editNote" ? (
-            <AddModalButton loader={!!editLoad.length} handleClick={handleEdit} text="Edit" />
-         ) : (
-            <AddModalButton loader={!!loader.length} handleClick={handleSubmit} text="Add" />
-         )}
+         <AddModalButton
+            loader={!!loader.length || !!editLoad.length}
+            handleClick={handleSubmit}
+            text={noteModalTypeInfo ? "Edit" : "Add"}
+         />
       </div>
    );
 };

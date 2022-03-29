@@ -1,4 +1,9 @@
-import { InputLabel, Select, FormControl, FormHelperText } from "@material-ui/core";
+import {
+   InputLabel,
+   Select,
+   FormControl,
+   FormHelperText,
+} from "@material-ui/core";
 import { inputsStyle } from "./styles";
 import { InputMinLoader } from "./inputMiniLoader";
 import React from "react";
@@ -11,7 +16,7 @@ export const SelectInput = ({
    label,
    handleSelect,
    style,
-   value,
+   value = "",
    list = [],
    handleChangeCountryCode,
    typeError,
@@ -28,24 +33,32 @@ export const SelectInput = ({
       setCurrent(event.target.value);
       const selectedIndex = event.target.options.selectedIndex;
       if (handleChangeCountryCode) {
-         handleChangeCountryCode(event.target.options[selectedIndex].getAttribute("data-key"));
+         handleChangeCountryCode(
+            event.target.options[selectedIndex].getAttribute("data-key")
+         );
       }
    };
 
    return (
       <>
-         <div style={{ marginBottom: 0 }} className={style ? style : classes.SignInInput}>
+         <div
+            style={{ marginBottom: 0 }}
+            className={style ? style : classes.SignInInput}
+         >
             <FormControl
                variant="outlined"
                className={className ? className : classes.inputTextField}
                error={!!typeError}
             >
-               <InputLabel htmlFor="outlined-age-native-simple">{label}</InputLabel>
+               <InputLabel htmlFor="outlined-age-native-simple">
+                  {label}
+               </InputLabel>
                <Select
                   style={{ ...styles }}
                   className={classes.select}
                   disabled={disabled}
                   native
+                  multiple={Array.isArray(value) || Array.isArray(current)}
                   value={value ? value : current}
                   onChange={handleChange}
                   label={label}
@@ -89,7 +102,9 @@ export const SelectInput = ({
                        ))}
                </Select>
                {errorFalse ? null : (
-                  <FormHelperText className={classes.errorText}>{typeError}</FormHelperText>
+                  <FormHelperText className={classes.errorText}>
+                     {typeError}
+                  </FormHelperText>
                )}
             </FormControl>
          </div>

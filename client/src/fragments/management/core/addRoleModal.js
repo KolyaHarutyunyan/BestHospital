@@ -59,9 +59,7 @@ export const AddRoleModal = ({ handleClose, permissionsList }) => {
       }
 
       const roleDataIsValid =
-         isNotEmpty(roleName) &&
-         isNotEmpty(permissions) &&
-         isNotEmpty(description);
+         isNotEmpty(roleName) && !!permissions && isNotEmpty(description);
 
       if (roleDataIsValid) {
          const body = {
@@ -74,7 +72,7 @@ export const AddRoleModal = ({ handleClose, permissionsList }) => {
       } else {
          const errorText = !isNotEmpty(roleName)
             ? "role"
-            : !isNotEmpty(permissions)
+            : !permissions
             ? "permissions"
             : !isNotEmpty(description)
             ? "description"

@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ValidationInput, SelectInput, CreateChancel, ModalHeader } from "@eachbase/components";
+import {
+   ValidationInput,
+   SelectInput,
+   CreateChancel,
+   ModalHeader,
+} from "@eachbase/components";
 import { Checkbox } from "@material-ui/core";
 import { ErrorText, FindLoad, FindSuccess } from "@eachbase/utils";
 import {
@@ -31,25 +36,41 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
            }
          : {}
    );
-   const [checked, setChecked] = useState(info ? info.endDate === "Precent" : true);
+   const [checked, setChecked] = useState(
+      info ? info.endDate === "Precent" : true
+   );
    const [payCode, setPayCode] = useState(
-      info ? globalPayCodes.find((item) => item.id === info.payCodeTypeId._id) : null
+      info
+         ? globalPayCodes.find((item) => item.id === info.payCodeTypeId._id)
+         : null
    );
 
-   const payCodeName = globalPayCodes.find((item) => item.id === inputs.payCodeTypeId)?.name;
+   const payCodeName = globalPayCodes.find(
+      (item) => item.id === inputs.payCodeTypeId
+   )?.name;
 
-   const success = info ? FindSuccess("EDIT_PAY_CODE") : FindSuccess("CREATE_PAY_CODE");
-   const loader = info ? FindLoad("EDIT_PAY_CODE") : FindLoad("CREATE_PAY_CODE");
+   const success = info
+      ? FindSuccess("EDIT_PAY_CODE")
+      : FindSuccess("CREATE_PAY_CODE");
+   const loader = info
+      ? FindLoad("EDIT_PAY_CODE")
+      : FindLoad("CREATE_PAY_CODE");
 
    useEffect(() => {
       if (!success) return;
       handleClose();
       if (info) {
          dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_PAY_CODE"));
-         dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION"));
+         dispatch(
+            httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION")
+         );
       } else {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_PAY_CODE"));
-         dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION"));
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess("CREATE_PAY_CODE")
+         );
+         dispatch(
+            httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION")
+         );
       }
    }, [success]);
 
@@ -57,8 +78,12 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
       if (e.target.name === "payCodeTypeId") {
          setPayCode(globalPayCodes.find((item) => item.id === e.target.value));
       }
-      setInputs((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
-      (error === e.target.name || error === ErrorText.dateError) && setError("");
+      setInputs((prevState) => ({
+         ...prevState,
+         [e.target.name]: e.target.value,
+      }));
+      (error === e.target.name || error === ErrorText.dateError) &&
+         setError("");
    };
 
    const onCheck = (e) => {
@@ -69,11 +94,15 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
 
    const handleCreate = () => {
       const dateComparingIsValid =
-         inputs.endDate &&
-         new Date(inputs.startDate).getTime() < new Date(inputs.endDate).getTime();
+         !!inputs.endDate &&
+         new Date(inputs.startDate).getTime() <
+            new Date(inputs.endDate).getTime();
 
       const payCodeDataIsValid =
-         inputs.rate && inputs.payCodeTypeId && inputs.startDate && checked
+         !!inputs.rate &&
+         !!inputs.payCodeTypeId &&
+         !!inputs.startDate &&
+         checked
             ? "Precent"
             : dateComparingIsValid;
 
@@ -126,7 +155,9 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
                      value={inputs.payCodeTypeId}
                      type={"id"}
                      list={globalPayCodes}
-                     typeError={error === "payCodeTypeId" ? ErrorText.field : ""}
+                     typeError={
+                        error === "payCodeTypeId" ? ErrorText.field : ""
+                     }
                   />
                   <div className={classes.displayCodeBlock}>
                      <div className={classes_v2.paycodeBox}>
@@ -135,7 +166,10 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
                            {payCode?.code ? payCode.code : " N/A"}
                         </p>
                      </div>
-                     <div className={classes_v2.paycodeBox} style={{ marginBottom: 0 }}>
+                     <div
+                        className={classes_v2.paycodeBox}
+                        style={{ marginBottom: 0 }}
+                     >
                         <p className={classes_v2.paycodeBoxTitle}>Type:</p>
                         <p className={classes_v2.paycodeBoxText}>
                            {payCode?.type ? payCode.type : "N/A"}
@@ -152,7 +186,11 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
                      typeError={error === "rate" && ErrorText.field}
                   />
                   <div className={classes_v2.paycodeBox}>
-                     <Checkbox checked={checked} onClick={onCheck} color="primary" />
+                     <Checkbox
+                        checked={checked}
+                        onClick={onCheck}
+                        color="primary"
+                     />
                      <p className={classes_v2.activePaycode}>Active Paycode</p>
                   </div>
                   <div style={{ display: "flex" }}>

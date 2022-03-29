@@ -1,8 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AddButton, NoItemText, SlicedText, ValidationInput } from "@eachbase/components";
+import {
+   AddButton,
+   NoItemText,
+   SlicedText,
+   ValidationInput,
+} from "@eachbase/components";
 import { systemItemStyles } from "./styles";
-import { ErrorText, FindLoad, FindSuccess, Images } from "@eachbase/utils";
+import {
+   ErrorText,
+   FindLoad,
+   FindSuccess,
+   Images,
+   isNotEmpty,
+} from "@eachbase/utils";
 import { SelectInputPlaceholder } from "@eachbase/components";
 import { systemActions } from "@eachbase/store";
 
@@ -13,7 +24,11 @@ const credentialBtn = {
    padding: 0,
 };
 
-const credentialsList = [{ name: "Degree" }, { name: "Clearance" }, { name: "licence" }];
+const credentialsList = [
+   { name: "Degree" },
+   { name: "Clearance" },
+   { name: "licence" },
+];
 
 export const Credentials = ({ removeItem, openModal, globalCredentials }) => {
    const dispatch = useDispatch();
@@ -55,18 +70,27 @@ export const Credentials = ({ removeItem, openModal, globalCredentials }) => {
    };
 
    const handleSubmit = () => {
-      let data = {
-         name: inputs.name,
-         type: checkType(inputs.type),
-      };
-      if (inputs.name && inputs.type) {
+      const dataIsValid = isNotEmpty(inputs.name) && isNotEmpty(inputs.type);
+
+      if (dataIsValid) {
+         const data = {
+            name: inputs.name,
+            type: checkType(inputs.type),
+         };
+
          dispatch(systemActions.createCredentialGlobal(data));
       } else {
-         setError(!inputs.name ? "name" : !inputs.type ? "type" : "Input is not filled");
+         const dataErrorText = !isNotEmpty(inputs.name)
+            ? "name"
+            : !isNotEmpty(inputs.type)
+            ? "type"
+            : "";
+
+         setError(dataErrorText);
       }
    };
 
-   const isDisabled = inputs.name && inputs.type;
+   const isDisabled = isNotEmpty(inputs.name) && isNotEmpty(inputs.type);
 
    const loader = FindLoad("CREATE_CREDENTIAL_GLOBAL");
    const success = FindSuccess("CREATE_CREDENTIAL_GLOBAL");
@@ -134,7 +158,9 @@ export const Credentials = ({ removeItem, openModal, globalCredentials }) => {
                                  editCredential("editCredential", {
                                     credentialId: credentialItem._id,
                                     credentialName: credentialItem.name,
-                                    credentialType: convertType(credentialItem.type),
+                                    credentialType: convertType(
+                                       credentialItem.type
+                                    ),
                                  })
                               }
                               alt="edit"

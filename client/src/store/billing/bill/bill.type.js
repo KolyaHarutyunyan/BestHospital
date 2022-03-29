@@ -9,8 +9,10 @@ export const GET_BILL_BY_ID_SUCCESS = "GET_BILL_BY_ID_SUCCESS";
 /**create Billing */
 export const CREATE_BILL = "CREATE_BILL";
 
-/**edit Billing Status */
+/**edit Billing Statuses (bill, claim, invoice) */
 export const EDIT_BILL_STATUS = "EDIT_BILL_STATUS";
+export const EDIT_BILL_CLAIM_STATUS = "EDIT_BILL_CLAIM_STATUS";
+export const EDIT_BILL_INVOICE_STATUS = "EDIT_BILL_INVOICE_STATUS";
 
 /**add Billing Transaction */
 export const ADD_BILL_TRANSACTION = "ADD_BILL_TRANSACTION";

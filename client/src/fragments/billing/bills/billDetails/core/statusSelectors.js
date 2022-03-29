@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
    BillTransactionWrapper,
    CreateChancel,
@@ -9,26 +9,27 @@ import {
    enumValues,
    FindLoad,
    FindSuccess,
-   makeCapitalize,
+   makeEnum,
+   manageStatus,
+   PaginationContext,
 } from "@eachbase/utils";
 import { billTransactionInputsStyle } from "./styles";
 import { useDispatch } from "react-redux";
 import { billActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 
-export const StatusSelectors = ({ billId, claim, invoice, bill }) => {
+export const StatusSelectors = ({
+   billId,
+   claim = "",
+   invoice = "",
+   bill = "",
+}) => {
    const classes = billTransactionInputsStyle();
 
    const dispatch = useDispatch();
 
-   const [claimStatus, setClaimStatus] = useState(
-      claim ? makeCapitalize(claim) : "Claimed"
-   );
-   const [invoiceStatus, setInvoiceStatus] = useState(
-      invoice ? makeCapitalize(invoice) : "Not Invoiced"
-   );
-   const [billStatus, setBillStatus] = useState(
-      bill ? makeCapitalize(bill) : "Open"
-   );
+   const [claimStatus, setClaimStatus] = useState(manageStatus(claim));
+   const [invoiceStatus, setInvoiceStatus] = useState(manageStatus(invoice));
+   const [billStatus, setBillStatus] = useState(manageStatus(bill));
 
    const [selClaimStatus, setSelClaimStatus] = useState(claimStatus);
    const [selInvoiceStatus, setSelInvoiceStatus] = useState(invoiceStatus);
@@ -38,21 +39,27 @@ export const StatusSelectors = ({ billId, claim, invoice, bill }) => {
    const [invoiceStatusModal, setInvoiceStatusModal] = useState(false);
    const [billStatusModal, setBillStatusModal] = useState(false);
 
-   const claimStatusSuccess = FindSuccess(".....");
-   const invoiceStatusSuccess = FindSuccess(".....");
+   const claimStatusSuccess = FindSuccess("EDIT_BILL_CLAIM_STATUS");
+   const invoiceStatusSuccess = FindSuccess("EDIT_BILL_INVOICE_STATUS");
    const billStatusSuccess = FindSuccess("EDIT_BILL_STATUS");
 
    useEffect(() => {
       if (!!claimStatusSuccess.length) {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess(""));
-         setSelClaimStatus(makeCapitalize(claim));
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess("EDIT_BILL_CLAIM_STATUS")
+         );
+         setSelClaimStatus(manageStatus(claim));
          setClaimStatusModal(false);
          return;
       }
 
       if (!!invoiceStatusSuccess.length) {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess(""));
-         setSelInvoiceStatus(makeCapitalize(invoice));
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess(
+               "EDIT_BILL_INVOICE_STATUS"
+            )
+         );
+         setSelInvoiceStatus(manageStatus(invoice));
          setInvoiceStatusModal(false);
          return;
       }
@@ -61,14 +68,14 @@ export const StatusSelectors = ({ billId, claim, invoice, bill }) => {
          dispatch(
             httpRequestsOnSuccessActions.removeSuccess("EDIT_BILL_STATUS")
          );
-         setSelBillStatus(makeCapitalize(bill));
+         setSelBillStatus(manageStatus(bill));
          setBillStatusModal(false);
          return;
       }
    }, [claimStatusSuccess, invoiceStatusSuccess, billStatusSuccess]);
 
-   const claimStatusLoader = FindLoad(".....");
-   const invoiceStatusLoader = FindLoad(".....");
+   const claimStatusLoader = FindLoad("EDIT_BILL_CLAIM_STATUS");
+   const invoiceStatusLoader = FindLoad("EDIT_BILL_INVOICE_STATUS");
    const billStatusLoader = FindLoad("EDIT_BILL_STATUS");
 
    const loader =
@@ -117,28 +124,27 @@ export const StatusSelectors = ({ billId, claim, invoice, bill }) => {
       if (selected === selectedStatus) return;
 
       setSelectedStatus(selected);
+
       setModalIsOpen(true);
    };
 
    const handleNewStatusSelect = () => {
-      // temporary
-      // handleOpenClose();
-
       if (claimStatusModal) {
-         // setSelClaimStatus(claimStatus);
-         // dispatch(......claimStatus)
+         dispatch(
+            billActions.editBillClaimStatus(billId, makeEnum(claimStatus))
+         );
          return;
       }
 
       if (invoiceStatusModal) {
-         // setSelInvoiceStatus(invoiceStatus);
-         // dispatch(......invoiceStatus)
+         dispatch(
+            billActions.editBillInvoiceStatus(billId, makeEnum(invoiceStatus))
+         );
          return;
       }
 
       if (billStatusModal) {
-         // setSelBillStatus(billStatus);
-         dispatch(billActions.editBillStatus(billId, billStatus.toUpperCase()));
+         dispatch(billActions.editBillStatus(billId, makeEnum(billStatus)));
          return;
       }
    };

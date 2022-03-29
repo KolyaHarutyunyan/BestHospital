@@ -36,7 +36,6 @@ export const AddAuthorization = ({ handleClose, info }) => {
    );
    const params = useParams();
    const dispatch = useDispatch();
-   // const fSelect = useSelector(state => state?.fundingSource?.fSelect?.funders)
    const enrolment = useSelector((state) => state.client.clientEnrollment);
 
    let enrolments = useSelector(

@@ -1,2 +1,2 @@
 export const showDashIfEmpty = (value = "") =>
-   value.trim().length === 0 ? "-" : value;
+   value.toString().trim().length === 0 ? "---" : value;
