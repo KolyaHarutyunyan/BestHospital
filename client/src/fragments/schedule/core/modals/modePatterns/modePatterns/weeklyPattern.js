@@ -1,7 +1,17 @@
 import React from "react";
 import { Checkbox, FormControlLabel, FormGroup } from "@material-ui/core";
 import { modePatternsStyle } from "./style";
-import { makeCapitalize, WEEKDAYS } from "@eachbase/utils";
+import { makeCapitalize } from "@eachbase/utils";
+
+const WEEKDAYS = [
+   { weekdayValue: "Sun" },
+   { weekdayValue: "Mon" },
+   { weekdayValue: "Tue" },
+   { weekdayValue: "Wed" },
+   { weekdayValue: "Thu" },
+   { weekdayValue: "Fri" },
+   { weekdayValue: "Sat" },
+];
 
 export const WeeklyPattern = ({
    inputs,

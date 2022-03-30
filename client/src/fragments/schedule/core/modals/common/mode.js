@@ -7,7 +7,13 @@ import {
    Radio,
    RadioGroup,
 } from "@material-ui/core";
-import { makeCapitalize, makeEnum, MODES } from "@eachbase/utils";
+import { makeCapitalize, makeEnum } from "@eachbase/utils";
+
+const MODES = [
+   { modeValue: "DAILY" },
+   { modeValue: "WEEKLY" },
+   { modeValue: "MONTHLY" },
+];
 
 export const Mode = ({ inputs, handleChange }) => {
    const classes = scheduleCommonStyle();

@@ -57,4 +57,3 @@ export {
 } from "./contexts";
 
 export { enumValues } from "./enumValues";
-export { MODES, WEEKDAYS } from "./data";
