@@ -313,7 +313,11 @@ export const ListView = ({
                            {defItem.type === "SERVICE" && (
                               <div className={classes.switch}>
                                  <div>
-                                    <Link to="*" className={classes.link}>
+                                    <Link
+                                       to="*"
+                                       onClick={(e) => e.preventDefault()}
+                                       className={classes.link}
+                                    >
                                        Signature.csv
                                     </Link>
                                     <img

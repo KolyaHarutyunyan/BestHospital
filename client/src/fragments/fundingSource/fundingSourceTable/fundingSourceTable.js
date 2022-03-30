@@ -18,6 +18,8 @@ export const FundingSourceTable = ({ status, handleGetPage }) => {
    const loader = FindLoad("GET_FUNDING_SOURCE");
 
    const changePage = (number) => {
+      if (page === number) return;
+
       let start = number > 1 ? number - 1 + "0" : 0;
       setPage(number);
       dispatch(

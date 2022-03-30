@@ -6,7 +6,12 @@ import { Items } from "../items";
 import { Link } from "react-router-dom";
 import { scheduleStyle } from "../styles";
 
-export const InfoModal = ({ info, handleOpenClose, openCloseRecur, cardItem }) => {
+export const InfoModal = ({
+   info,
+   handleOpenClose,
+   openCloseRecur,
+   cardItem,
+}) => {
    const classes = scheduleStyle();
    const global = modalsStyle();
 
@@ -60,10 +65,18 @@ export const InfoModal = ({ info, handleOpenClose, openCloseRecur, cardItem }) =
 
             <div className={classes.switch}>
                <div>
-                  <Link to="*" className={classes.link}>
+                  <Link
+                     to="*"
+                     onClick={(e) => e.preventDefault()}
+                     className={classes.link}
+                  >
                      Signature.csv
                   </Link>
-                  <img className={classes.download} src={Images.download} alt="icon" />
+                  <img
+                     className={classes.download}
+                     src={Images.download}
+                     alt="icon"
+                  />
                </div>
 
                <div>
