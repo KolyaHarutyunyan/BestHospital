@@ -34,6 +34,7 @@ export const TabsHeader = ({
    const dispatch = useDispatch();
    const [open, setOpen] = useState();
    const [searchDate, setSearchDate] = useState("");
+   const [isDisabled, setIsDisabled] = useState(false);
 
    const clientHistoryLoader = !!FindLoad("GET_FUNDING_SOURCE_HISTORIES_BY_ID")
       .length;
@@ -43,10 +44,12 @@ export const TabsHeader = ({
    };
 
    const handleChangeDate = (e) => {
+      setIsDisabled(false);
       setSearchDate(e.target.value);
    };
 
    const handleSubmit = () => {
+      setIsDisabled(true);
       dispatch(
          fundingSourceActions.getFundingSourceHistoriesById(
             "Client",
@@ -88,6 +91,7 @@ export const TabsHeader = ({
                            text="Search"
                            btnStyles={filterBtn}
                            loader={clientHistoryLoader}
+                           disabled={isDisabled}
                         />
                      </div>
                   </>

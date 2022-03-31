@@ -107,7 +107,7 @@ export const AddressInput = ({
          handleSelectValue(fullAddressCompleted)
       );
 
-   let authPlaceHolder = info ? info.location : "Service Location";
+   let authPlaceHolder = info ? info.location : "Service Location*";
 
    const stateList = code
       ? State.getStatesOfCountry(code)

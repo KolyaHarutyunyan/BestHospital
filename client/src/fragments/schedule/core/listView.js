@@ -18,6 +18,19 @@ import { appointmentActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import moment from "moment";
 
+const getStatusList = (itemType = "") => {
+   if (typeof itemType !== "string") return [];
+
+   const status = itemType === "SERVICE" ? "Rendered" : "Completed";
+
+   return [
+      { name: status, id: status.toUpperCase(), value: status.toUpperCase() },
+      { name: "Not Rendered", id: "NOTRENDERED", value: "NOTRENDERED" },
+      { name: "Pending", id: "PENDING", value: "PENDING" },
+      { name: "Cancelled", id: "CANCELLED", value: "CANCELLED" },
+   ];
+};
+
 export const ListView = ({
    changeScreen,
    handleOpen,
@@ -30,8 +43,8 @@ export const ListView = ({
    handleSendDate,
 }) => {
    const classes = scheduleStyle();
-   const [date, setDate] = useState(0);
 
+   const [date, setDate] = useState(0);
    const [item, setItem] = useState(appointmentById ? appointmentById : "");
    const defItem = item.length === 0 ? "" : item;
    const [stusType, setStusType] = useState(defItem ? defItem.eventStatus : "");
@@ -55,67 +68,48 @@ export const ListView = ({
    }, [appointmentById]);
 
    const dispatch = useDispatch();
+
+   const loader = FindLoad("GET_APPOINTMENT_BY_ID");
+   const statusLoader = FindLoad("SET_APPOINTMENT_STATUS");
+
    const handleOpenCloseModal = (info) => {
       dispatch(appointmentActions.getAppointmentById(info._id));
    };
 
-   const getLoader = FindLoad("GET_APPOINTMENT_BY_ID");
-   const getStatusLoader = FindLoad("SET_APPOINTMENT_STATUS");
-
    const handleChange = (e) => {
       setStusType(e.target.value);
+
       const info = {
          eventStatus: e.target.value,
          status: defItem.status,
       };
+
       dispatch(appointmentActions.setAppointmentStatus(defItem._id, info));
    };
 
-   // useEffect(() => {
-   //    const info = {
-   //       eventStatus: stusType,
-   //       status: defItem.status,
-   //    };
-   //    if(stusType) {
-   //       dispatch(appointmentActions.setAppointmentStatus(defItem._id, info));
-   //    }
-   // }, [stusType]);
-
-   const list =
-      defItem && defItem.type === "SERVICE"
-         ? [
-              { name: "Rendered", id: "RENDERED", value: "RENDERED" },
-              // {name: 'COMPLETED', value: 'COMPLETED'},
-              { name: "Not Rendered", id: "NOTRENDERED", value: "NOTRENDERED" },
-              { name: "Pending", value: "PENDING" },
-              { name: "Cancelled", id: "CANCELLED", value: "CANCELLED" },
-           ]
-         : [
-              { name: "Completed", id: "COMPLETED", value: "COMPLETED" },
-              { name: "Not Rendered", id: "NOTRENDERED", value: "NOTRENDERED" },
-              { name: "Pending", id: "PENDING", value: "PENDING" },
-              { name: "Cancelled", id: "CANCELLED", value: "CANCELLED" },
-           ];
+   const list = getStatusList(defItem?.type);
 
    const handleChangeService = () => {
       setSwitcher(!switcher);
 
       const data = {
          type: "SERVICE",
-         client: defItem.client._id,
-         authorizedService: defItem.authorizedService._id,
-         staff: defItem.staff._id,
-         placeService: defItem.placeService._id,
-         staffPayCode: defItem.staffPayCode._id,
+         client: defItem?.client?._id,
+         authorizedService: defItem?.authorizedService?._id,
+         staff: defItem?.staff?._id,
+         placeService: defItem?.placeService?._id,
+         staffPayCode: defItem?.staffPayCode?._id,
          startDate:
-            defItem.startDate && moment(defItem.startDate).format("YYYY-MM-DD"),
-         eventStatus: defItem.eventStatus ? defItem.eventStatus : "PENDING",
-         startTime: defItem.startTime,
-         endTime: defItem.endTime,
+            defItem?.startDate &&
+            moment(defItem?.startDate).format("YYYY-MM-DD"),
+         eventStatus: defItem?.eventStatus ? defItem?.eventStatus : "PENDING",
+         startTime: defItem?.startTime,
+         endTime: defItem?.endTime,
          status: "ACTIVE",
          require: !switcher,
       };
-      dispatch(appointmentActions.editAppointment(data, defItem._id));
+
+      dispatch(appointmentActions.editAppointment(data, defItem?._id));
    };
 
    return (
@@ -125,7 +119,6 @@ export const ListView = ({
             adminsList={adminsList}
             clientList={clientList}
             handleOpen={handleOpen}
-            // label={convertedDate}
             goToNext={() => setDate(date + 7)}
             goToBack={() => setDate(date - 7)}
             handleChangeScreenView={(e) => changeScreen(e)}
@@ -155,8 +148,7 @@ export const ListView = ({
                      : ""}
                </div>
                <div className={classes.infoWrapper}>
-                  {getLoader.length ? (
-                     // || getStatusLoader.length
+                  {loader.length || statusLoader.length ? (
                      <Loader style={"flex"} />
                   ) : (
                      <>
@@ -313,7 +305,11 @@ export const ListView = ({
                            {defItem.type === "SERVICE" && (
                               <div className={classes.switch}>
                                  <div>
-                                    <Link to="*" className={classes.link}>
+                                    <Link
+                                       to="*"
+                                       onClick={(e) => e.preventDefault()}
+                                       className={classes.link}
+                                    >
                                        Signature.csv
                                     </Link>
                                     <img
