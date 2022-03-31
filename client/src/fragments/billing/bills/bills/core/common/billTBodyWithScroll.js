@@ -28,7 +28,7 @@ export const BillTBodyWithScroll = ({ bills = [] }) => {
                <TableCell>
                   <div>
                      {showDashIfEmpty(
-                        getLimitedVal(bill.totalUnits.toString())
+                        getLimitedVal(bill.totalUnits?.toString())
                      )}
                   </div>
                </TableCell>
