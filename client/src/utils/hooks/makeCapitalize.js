@@ -1,14 +1,14 @@
-export const makeCapitalize = (val = "") => {
-   if (typeof val !== "string") return val;
+export const makeCapitalize = (value = "") => {
+   if (typeof value !== "string") return value;
 
-   return val.includes("_")
-      ? val
+   return value.includes("_")
+      ? value
            .split("_")
            .map(
               (el) => el.slice(0, 1).toUpperCase() + el.slice(1).toLowerCase()
            )
            .join(" ")
-      : val
+      : value
            .split(" ")
            .map(
               (el) => el.slice(0, 1).toUpperCase() + el.slice(1).toLowerCase()
