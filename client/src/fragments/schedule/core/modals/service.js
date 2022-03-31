@@ -46,13 +46,13 @@ export const Service = ({
       modalDate
          ? {
               ...modalDate,
-              client: modalDate.client._id,
+              client: modalDate.client?._id,
               authorizedService: modalDate.authorizedService
-                 ? modalDate.authorizedService._id
+                 ? modalDate.authorizedService?._id
                  : "",
-              staff: modalDate.staff._id,
-              placeService: modalDate.placeService._id,
-              staffPayCode: modalDate.staffPayCode._id,
+              staff: modalDate.staff?._id,
+              placeService: modalDate.placeService?._id,
+              staffPayCode: modalDate.staffPayCode?._id,
            }
          : day
          ? { ...day, ...createModalDate }

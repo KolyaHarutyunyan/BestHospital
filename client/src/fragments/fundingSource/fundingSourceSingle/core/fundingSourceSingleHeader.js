@@ -38,15 +38,18 @@ export const FundingSourceSingleHeader = ({ activeTab, title }) => {
    };
 
    const [searchDate, setSearchDate] = useState("");
+   const [isDisabled, setIsDisabled] = useState(false);
 
    const fsHistoryLoader = !!FindLoad("GET_FUNDING_SOURCE_HISTORIES_BY_ID")
       .length;
 
    const handleChangeFile = (e) => {
+      setIsDisabled(false);
       setSearchDate(e.target.value);
    };
 
    const handleSubmit = () => {
+      setIsDisabled(true);
       dispatch(
          fundingSourceActions.getFundingSourceHistoriesById(
             "Funder",
@@ -110,7 +113,7 @@ export const FundingSourceSingleHeader = ({ activeTab, title }) => {
                         className={classes.dateInput}
                         errorFalse={true}
                         variant={"outlined"}
-                        onChange={(e) => handleChangeFile(e)}
+                        onChange={handleChangeFile}
                         value={searchDate}
                         type={"date"}
                         name="searchDate"
@@ -120,6 +123,7 @@ export const FundingSourceSingleHeader = ({ activeTab, title }) => {
                         text="Search"
                         loader={fsHistoryLoader}
                         btnStyles={filterBtn}
+                        disabled={isDisabled}
                      />
                   </div>
                </>

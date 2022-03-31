@@ -49,6 +49,7 @@ export const StaffItemHeader = ({
    const params = useParams();
    const [switchBoolean, setSwitchBoolean] = useState(false);
    const [searchDate, setSearchDate] = useState("");
+   const [isDisabled, setIsDisabled] = useState(false);
 
    const staffHistoryLoader = !!FindLoad("GET_FUNDING_SOURCE_HISTORIES_BY_ID")
       .length;
@@ -69,15 +70,17 @@ export const StaffItemHeader = ({
    };
 
    const handleChange = (e) => {
+      setIsDisabled(false);
+      setSearchDate(e.target.value);
       dispatch(
          httpRequestsOnErrorsActions.removeError(
             "GET_FUNDING_SOURCE_HISTORIES_BY_ID"
          )
       );
-      setSearchDate(e.target.value);
    };
 
    const handleSubmit = () => {
+      setIsDisabled(true);
       dispatch(
          fundingSourceActions.getFundingSourceHistoriesById(
             "Staff",
@@ -176,6 +179,7 @@ export const StaffItemHeader = ({
                         text="Search"
                         loader={staffHistoryLoader}
                         btnStyles={filterBtn}
+                        disabled={isDisabled}
                      />
                   </div>
                ) : null}
