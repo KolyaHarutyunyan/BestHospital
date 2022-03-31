@@ -102,7 +102,7 @@ export const Break = ({
 
       const modalBool =
          modalType === "DRIVE"
-            ? datasValid && isNotEmpty(inputs.miles)
+            ? dataIsValid && isNotEmpty(inputs.miles)
             : dataIsValid;
 
       if (modalBool) {
@@ -277,7 +277,7 @@ export const Break = ({
                   onChange={handleChange}
                   value={inputs.miles}
                   type={"number"}
-                  label={"Miles"}
+                  label={"Miles*"}
                   name="miles"
                   typeError={error === "miles" && ErrorText.field}
                />
