@@ -1,13 +1,11 @@
 import React, { useContext, useState } from "react";
-import { BillTableWithoutScroll, BillTableWithScroll } from "./core";
-import { billsStyle } from "./styles";
 import {
-   Loader,
-   NoItemText,
-   PaginationItem,
-   UserInputsDropdown,
-   ValidationInput,
-} from "@eachbase/components";
+   BillFiltersSelectors,
+   BillTableWithoutScroll,
+   BillTableWithScroll,
+} from "./core";
+import { billsStyle } from "./styles";
+import { Loader, NoItemText, PaginationItem } from "@eachbase/components";
 import {
    DrawerContext,
    handleCreatedAtDate,
@@ -15,9 +13,6 @@ import {
 } from "@eachbase/utils";
 import { billActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
-
-const addAllTextToTheList = (list = []) =>
-   !!list[0]?.length ? ["All", ...list] : ["All"];
 
 export const BillsFragment = ({
    bills = [],
@@ -77,32 +72,16 @@ export const BillsFragment = ({
 
    return (
       <div>
-         <div className={classes.filtersBoxStyle}>
-            <UserInputsDropdown
-               label={"Payor"}
-               dropdownOptions={addAllTextToTheList(payorsNames)}
-               onPass={(selPayor) => setSelectedPayor(selPayor)}
-               selected={selectedPayor}
-               dropdownClassName={classes.filterDropStyle}
-            />
-            <UserInputsDropdown
-               label={"Client"}
-               dropdownOptions={addAllTextToTheList(clientsNames)}
-               onPass={(selClient) => setSelectedClient(selClient)}
-               selected={selectedClient}
-               dropdownClassName={classes.filterDropStyle}
-            />
-            <ValidationInput
-               inputLabel={"Submitted Date"}
-               variant={"outlined"}
-               name={"filterDate"}
-               onChange={(ev) => setFilteredDate(ev.target.value)}
-               value={filteredDate}
-               type={"date"}
-               size={"small"}
-               style={classes.dateInputStyle}
-            />
-         </div>
+         <BillFiltersSelectors
+            clientsNames={clientsNames}
+            payorsNames={payorsNames}
+            passPayorHandler={(selPayor) => setSelectedPayor(selPayor)}
+            selectedPayor={selectedPayor}
+            passClientHandler={(selClient) => setSelectedClient(selClient)}
+            selectedClient={selectedClient}
+            changeDateInput={(ev) => setFilteredDate(ev.target.value)}
+            filteredDate={filteredDate}
+         />
          {!!billsWithFilters.length ? (
             <div className={classes.tableAndPaginationBoxStyle}>
                <div className={classes.tableBoxStyle}>
