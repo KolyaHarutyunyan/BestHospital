@@ -33,12 +33,9 @@ export class StaffService {
     try {
       let user = new this.model({
         email: dto.email,
-        secondaryEmail: dto.secondaryEmail,
         firstName: dto.firstName,
         lastName: dto.lastName,
-        middleName: dto.middleName,
         phone: dto.phone,
-        secondaryPhone: dto.secondaryPhone,
         state: dto.state,
         gender: dto.gender,
         birthday: dto.birthday,
@@ -47,6 +44,9 @@ export class StaffService {
         license: dto.license ? dto.license : {},
         address: await this.addressService.getAddress(dto.address),
       });
+      if (dto.middleName) user.middleName = dto.middleName;
+      if (dto.secondaryEmail) user.secondaryEmail = dto.secondaryEmail;
+      if (dto.secondaryPhone) user.secondaryPhone = dto.secondaryPhone;
       user = (
         await Promise.all([
           user.save(),

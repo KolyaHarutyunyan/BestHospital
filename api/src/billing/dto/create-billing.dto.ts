@@ -84,6 +84,5 @@ export class CreateBillingDto {
   @ApiProperty({ enum: BillingStatus })
   @IsEnum(BillingStatus)
   status: string;
-  @ApiProperty()
   transaction?: any;
 }

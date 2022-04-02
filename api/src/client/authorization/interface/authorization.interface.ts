@@ -8,5 +8,5 @@ export interface IAuthorization extends Document {
   startDate: Date;
   endDate: Date;
   location: string;
-  status: number;
+  status: string;
 }
