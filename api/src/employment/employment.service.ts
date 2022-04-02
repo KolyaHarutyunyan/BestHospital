@@ -1,12 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { MongooseUtil } from '../util';
 import { Model } from 'mongoose';
-import { EmploymentModel } from './employment.model';
-import { IEmployment } from './interface';
-import { StaffService } from '../staff/staff.service';
 import { DepartmentService } from '../department/department.service';
-import { EmploymentDto, CreateEmploymentDto, UpdateEmploymentDto } from './dto';
+import { StaffService } from '../staff/staff.service';
+import { MongooseUtil } from '../util';
+import { CreateEmploymentDto, EmploymentDto, UpdateEmploymentDto } from './dto';
+import { EmploymentModel } from './employment.model';
 import { EmploymentSanitizer } from './interceptor/employment.interceptor';
+import { IEmployment } from './interface';
 
 @Injectable()
 export class EmploymentService {
@@ -179,7 +179,12 @@ export class EmploymentService {
   remove(id: number) {
     return `This action removes a #${id} employment`;
   }
-
+  /** check employments status (appointment) */
+  checkEmploymentActive(status: boolean) {
+    if (!status) {
+      throw new HttpException('employment is not active', HttpStatus.BAD_REQUEST);
+    }
+  }
   /** Private methods */
   /** if the employment is not valid, throws an exception */
   private checkEmployment(employment: IEmployment) {

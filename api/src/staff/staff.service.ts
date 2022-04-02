@@ -1,15 +1,17 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { StaffDTO, CreateStaffDto, EditStaffDTO } from './dto';
+import { AddressService } from '../address';
+import { AuthNService, UserType } from '../authN';
+import { HistoryService, serviceLog } from '../history';
+import { HistoryStatus } from '../history/history.constants';
+import { ServiceService } from '../service';
+import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
+import { MongooseUtil } from '../util';
+import { CreateStaffDto, EditStaffDTO, StaffDTO } from './dto';
 import { StaffSanitizer } from './interceptor';
 import { IStaff } from './interface';
+import { StaffStatus } from './staff.constants';
 import { StaffModel } from './staff.model';
-import { AuthNService, UserType } from '../authN';
-import { MongooseUtil } from '../util';
-import { AddressService } from '../address';
-import { HistoryService, serviceLog } from '../history';
-import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
-import { ServiceService } from '../service';
 
 @Injectable()
 export class StaffService {
@@ -54,7 +56,7 @@ export class StaffService {
 
       await this.historyService.create({
         resource: user._id,
-        onModel: 'Staff',
+        onModel: HistoryStatus.STAFF,
         title: serviceLog.createStaff,
         user: user._id,
       });
@@ -73,7 +75,6 @@ export class StaffService {
       this.checkStaff(staff);
       const service = await this.globalService.findOne(serviceId);
       if (staff.service.indexOf(service.id) != -1) {
-        console.log(staff.service.indexOf(service.id));
         throw new HttpException('Service already exist', HttpStatus.BAD_REQUEST);
       }
       staff.service.push(service.id);
@@ -90,10 +91,7 @@ export class StaffService {
   /** delete a service */
   deleteService = async (_id: string, serviceId: string): Promise<string> => {
     try {
-      console.log(_id);
-      console.log(serviceId);
       const staff = await this.model.updateOne({ _id }, { $pull: { service: serviceId } });
-      console.log(staff);
       if (staff.nModified) {
         return serviceId;
       }
@@ -146,7 +144,7 @@ export class StaffService {
       await admin.save();
       await this.historyService.create({
         resource: admin._id,
-        onModel: 'Staff',
+        onModel: HistoryStatus.STAFF,
         title: serviceLog.updateStaff,
         user: admin._id,
       });
@@ -186,7 +184,7 @@ export class StaffService {
   /** returns all users */
   getUsers = async (skip: number, limit: number, status: string): Promise<any> => {
     if (!status) {
-      status = 'ACTIVE';
+      status = StaffStatus.ACTIVE;
     }
     const [staff, count] = await Promise.all([
       this.model.find({ status }).sort({ _id: -1 }).skip(skip).limit(limit),
@@ -200,7 +198,7 @@ export class StaffService {
   setStatus = async (_id: string, status: any, dto: CreateTerminationDto): Promise<StaffDTO> => {
     const staff = await this.model.findById({ _id });
     this.checkStaff(staff);
-    if (status != 'ACTIVE' && !dto.date) {
+    if (status != StaffStatus.ACTIVE && !dto.date) {
       throw new HttpException(
         'If status is not active, then date is required field',
         HttpStatus.BAD_REQUEST,

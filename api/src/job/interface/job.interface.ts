@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 
 export interface IJob extends Document {
-  id: string;
+  _id: string;
   name: string;
 }

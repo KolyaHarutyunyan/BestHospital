@@ -8,12 +8,14 @@ import { AuthorizationserviceModule } from '../client/authorizationservice/autho
 import { AppointmentSanitizer } from './interceptor/appointment.interceptor';
 import { PlaceModule } from '../place/place.module';
 import { BillingModule } from '../billing/billing.module';
+import { EmploymentModule } from '../employment/employment.module';
 
 @Module({
   imports: [
     ClientModule,
     StaffModule,
     PaycodeModule,
+    EmploymentModule,
     AuthorizationserviceModule,
     PlaceModule,
     BillingModule,

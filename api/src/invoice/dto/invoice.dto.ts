@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { InvoiceStatus } from '../invoice.constants';
 
 interface IDateRange {
   early: Date;
@@ -48,7 +49,7 @@ export class InvoiceDto {
   @ApiProperty()
   downloadLink: string;
   @ApiProperty()
-  status: string;
+  status: InvoiceStatus;
   @ApiProperty()
   receivable: IReceivable[];
 }

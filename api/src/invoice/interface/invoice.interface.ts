@@ -1,3 +1,5 @@
+import { InvoiceStatus } from "../invoice.constants";
+
 interface IDateRange extends Document {
   early: Date;
   latest: Date;
@@ -28,6 +30,6 @@ export interface IInvoice extends Document {
   totalTime: number;
   dueDate: Date;
   downloadLink: string;
-  status: string;
+  status: InvoiceStatus;
   receivable: IReceivable[];
 }

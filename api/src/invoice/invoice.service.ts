@@ -1,12 +1,12 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { BillingService } from '../billing/billing.service';
 import { MongooseUtil } from '../util';
-import { CreateInvoiceDto, UpdateInvoiceDto, InvoiceDto, GenerateInvoiceDto } from './dto';
+import { CreateInvoiceDto, GenerateInvoiceDto, InvoiceDto, UpdateInvoiceDto } from './dto';
 import { InvoiceSanitizer } from './interceptor';
 import { IInvoice } from './interface';
-import { InvoiceModel } from './invoice.model';
 import { InvoiceStatus } from './invoice.constants';
+import { InvoiceModel } from './invoice.model';
 
 @Injectable()
 export class InvoiceService {
@@ -89,7 +89,22 @@ export class InvoiceService {
   remove(id: number) {
     return `This action removes a #${id} invoice`;
   }
-
+  /** Checks if the invoice status is allowed (matches an item in allowed statuses). Throws if no match is found */
+  checkStatusInvoice(invoiceStatus: InvoiceStatus, allowedStatuses: InvoiceStatus[]) {
+    let foundStatusMatch = false;
+    for (let i = 0; i < allowedStatuses.length; i++) {
+      if (invoiceStatus === allowedStatuses[i]) {
+        foundStatusMatch = true;
+        break;
+      }
+    }
+    if (!foundStatusMatch) {
+      throw new HttpException(
+        `You can only edit invoice that are ${allowedStatuses}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
   /** Private methods */
   /** create invoice with receivables with bills */
   async groupBills(bills: string[]): Promise<any> {

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsDateString, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { DTO } from '../../../util';
 import { TransactionType } from '../transaction.constants';
 
@@ -20,7 +20,7 @@ export class TransactionDto extends DTO {
   @IsString()
   paymentRef: string;
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   note: string;
   status?: string;

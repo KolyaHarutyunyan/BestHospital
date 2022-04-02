@@ -9,7 +9,7 @@ import { ModifySanitizer } from './interceptor/modifier.interceptor';
 @Module({
   imports: [FundingModule, CredentialModule],
   controllers: [ModifierController],
-  providers: [ModifierService, CredentialService, ModifySanitizer],
+  providers: [ModifierService, ModifySanitizer],
   exports: [ModifierService],
 })
 export class ModifierModule {}

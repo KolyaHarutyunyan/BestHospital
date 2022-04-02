@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class JobDTO {
   @ApiProperty()
-  id: string;
+  _id: string;
   @ApiProperty()
   name: string;
 }

@@ -1,13 +1,14 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { MongooseUtil } from '../util/mongoose.util';
-import { CreateJobDTO, UpdateJobDTO, JobDTO } from './dto';
+import { CreateJobDTO, JobDTO, UpdateJobDTO } from './dto';
 import { IJob } from './interface';
 import { JobModel } from './job.model';
+import { JobSanitizer } from './job.sanitizer';
 
 @Injectable()
 export class JobService {
-  constructor() {
+  constructor(private readonly sanitizer: JobSanitizer) {
     this.model = JobModel;
     this.mongooseUtil = new MongooseUtil();
   }
@@ -21,7 +22,7 @@ export class JobService {
         name: dto.name,
       });
       await job.save();
-      return job;
+      return this.sanitizer.sanitize(job);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Job already exists');
       throw e;
@@ -32,8 +33,7 @@ export class JobService {
   async findAll(): Promise<JobDTO[]> {
     try {
       const jobs = await this.model.find();
-      this.checkJob(jobs[0]);
-      return jobs;
+      return this.sanitizer.sanitizeMany(jobs);
     } catch (e) {
       throw e;
     }
@@ -43,7 +43,7 @@ export class JobService {
   async findOne(_id: string): Promise<JobDTO> {
     const job = await this.model.findById({ _id });
     this.checkJob(job);
-    return job;
+    return this.sanitizer.sanitize(job);
   }
 
   // update the job
@@ -53,7 +53,7 @@ export class JobService {
       this.checkJob(job);
       job.name = dto.name;
       await job.save();
-      return job;
+      return this.sanitizer.sanitize(job);
     } catch (e) {
       throw e;
     }

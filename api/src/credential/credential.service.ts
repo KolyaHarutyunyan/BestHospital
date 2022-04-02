@@ -1,13 +1,15 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateCredentialDto, CredentialDTO, UpdateCredentialDTO } from './dto';
-import { ICredential } from './interface';
-import { CredentialModel } from './credential.model';
 import { Model } from 'mongoose';
 import { MongooseUtil } from '../util';
+import { CredentialModel } from './credential.model';
+import { CreateCredentialDto, CredentialDTO, UpdateCredentialDTO } from './dto';
+import { CredentialSanitizer } from './interceptor/credential.sanitizer';
+import { ICredential } from './interface';
 
 @Injectable()
 export class CredentialService {
-  constructor() {
+  constructor(private readonly sanitizer: CredentialSanitizer,
+  ) {
     this.model = CredentialModel;
     this.mongooseUtil = new MongooseUtil();
   }
@@ -22,8 +24,7 @@ export class CredentialService {
         type: dto.type,
       });
       await credential.save();
-      return credential;
-      // return this.sanitizer.sanitize(credential);
+      return this.sanitizer.sanitize(credential);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Credential already exists');
       throw e;
@@ -33,8 +34,8 @@ export class CredentialService {
   /** Get All Credential */
   async findAll(): Promise<CredentialDTO[]> {
     try {
-      const credential = await this.model.find({});
-      return credential;
+      const credentials = await this.model.find({});
+      return this.sanitizer.sanitizeMany(credentials);
     } catch (e) {
       throw e;
     }
@@ -43,8 +44,8 @@ export class CredentialService {
   /** Get All Credentials By Ids */
   async findAllByIds(ids): Promise<CredentialDTO[]> {
     try {
-      const credential = await this.model.find({ _id: { $in: ids } });
-      return credential;
+      const credentials = await this.model.find({ _id: { $in: ids } });
+      return this.sanitizer.sanitizeMany(credentials);
     } catch (e) {
       throw e;
     }
@@ -55,8 +56,7 @@ export class CredentialService {
     try {
       const credential = await this.model.findById({ _id });
       this.checkCredential(credential);
-      return credential;
-      // return this.sanitizer.sanitize(credential);
+      return this.sanitizer.sanitize(credential);
     } catch (e) {
       throw e;
     }
@@ -70,7 +70,7 @@ export class CredentialService {
       if (dto.name) credential.name = dto.name;
       if (dto.type || dto.type === 0) credential.type = dto.type;
       await credential.save();
-      return credential;
+      return this.sanitizer.sanitize(credential);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Credential already exists');
       throw e;
