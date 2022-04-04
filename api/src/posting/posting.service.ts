@@ -140,7 +140,7 @@ export class PostingService {
       date: new Date(),
       amount: receivable.amountTotal,
       paymentRef: 'chka',
-      creator: userId
+      creator: userId,
     };
     const session = await startSession();
     await this.invoiceService.updateReceivableAmount(
@@ -163,7 +163,7 @@ export class PostingService {
       date: new Date(),
       amount: paymentAmount,
       paymentRef: 'chka',
-      creator: userId
+      creator: userId,
     };
     const session = await startSession();
     await this.invoiceService.updateReceivableAmount(invoiceId, receivable._id, paymentAmount);
@@ -188,5 +188,4 @@ export class PostingService {
       throw new HttpException('Was not found in list', HttpStatus.NOT_FOUND);
     }
   }
-
 }

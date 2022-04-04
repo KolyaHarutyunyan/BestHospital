@@ -125,7 +125,7 @@ export class AppointmentService {
 
   // create the service appointment
   async appointmentService(dto: CreateAppointmentDto): Promise<AppointmentDto> {
-    await this.checkClientStaffOverlap(null, dto)
+    await this.checkClientStaffOverlap(null, dto);
     /** if appointment type is SERVICE client and authorization service are required */
     this.checkClient(dto.client);
     this.checkAuthorizedService(dto.authorizedService);
@@ -139,7 +139,10 @@ export class AppointmentService {
     ]);
     /** check if client and authorization client are same */
     if (client.id != authService.authorizationId.clientId) {
-      throw new HttpException(`Client and authorization client are different`, HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        `Client and authorization client are different`,
+        HttpStatus.BAD_REQUEST,
+      );
     }
     // const compareService = await this.authorizedService.getByServiceId(authService.serviceId);
     // console.log(staff, 'stafffffff')
@@ -444,7 +447,7 @@ export class AppointmentService {
     // the first check if appointment is not complete or cancelled status
     const appointment = await this.model.findById(_id);
     this.checkAppointment(appointment);
-    await this.checkClientStaffOverlap(_id, dto)
+    await this.checkClientStaffOverlap(_id, dto);
     if (dto.placeService) {
       await this.placeService.findOne(dto.placeService);
       appointment.placeService = dto.placeService;
@@ -461,7 +464,10 @@ export class AppointmentService {
       ]);
       /** check if client and authorization client are same */
       if (client.id != authService.authorizationId.clientId) {
-        throw new HttpException(`Client and authorization client are different`, HttpStatus.BAD_REQUEST);
+        throw new HttpException(
+          `Client and authorization client are different`,
+          HttpStatus.BAD_REQUEST,
+        );
       }
       await this.authorizedService.getByServiceId(authService.serviceId);
     }
@@ -471,7 +477,7 @@ export class AppointmentService {
       this.payCodeService.findPayCodesByStaffId(dto.staff ? dto.staff : appointment.staff),
     ]);
     /** check employment status */
-    this.employmentService.checkEmploymentActive(payCode.employmentId.active)
+    this.employmentService.checkEmploymentActive(payCode.employmentId.active);
     appointment.staff = dto.staff;
     appointment.staffPayCode = dto.staffPayCode;
     // appointment.type = dto.type;
@@ -579,8 +585,7 @@ export class AppointmentService {
         ) {
           throw new HttpException(`appointment overlapping`, HttpStatus.BAD_REQUEST);
         }
-      }
-      else {
+      } else {
         throw new HttpException(`appointment overlapping`, HttpStatus.BAD_REQUEST);
       }
     }
@@ -589,7 +594,10 @@ export class AppointmentService {
   /** check authorization service */
   private checkAuthorizedService(authorizedService: string) {
     if (!authorizedService) {
-      throw new HttpException('Authorization Service with this id was not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        'Authorization Service with this id was not found',
+        HttpStatus.NOT_FOUND,
+      );
     }
   }
   /** check place service */
