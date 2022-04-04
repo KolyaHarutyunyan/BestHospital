@@ -37,7 +37,7 @@ export const BillDetailsFragment = ({
    const dispatch = useDispatch();
 
    const { open: drawerOpen } = useContext(DrawerContext);
-   const { handlePageChange } = useContext(PaginationContext);
+   const { handlePageChange, pageIsChanging } = useContext(PaginationContext);
 
    const {
       authService,
@@ -93,6 +93,7 @@ export const BillDetailsFragment = ({
 
    const changePage = (event, value) => {
       if (page === value) return;
+
       handlePageChange(true);
       let start = value > 1 ? value - 1 + "0" : 0;
       dispatch(billActions.getBillById(_id, { limit: 10, skip: start }));
@@ -146,7 +147,7 @@ export const BillDetailsFragment = ({
                   {!!billTransactions?.length ? (
                      <>
                         <div className={classes.tableContainerStyle}>
-                           {tsxLoader ? (
+                           {tsxLoader && pageIsChanging ? (
                               <div className={classes.loaderContainerStyle}>
                                  <Loader circleSize={40} />
                               </div>

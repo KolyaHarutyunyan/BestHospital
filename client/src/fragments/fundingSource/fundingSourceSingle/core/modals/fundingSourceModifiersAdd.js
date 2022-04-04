@@ -4,6 +4,7 @@ import { foundingSourceModalStyle } from "./styles";
 import { ErrorText, Images } from "@eachbase/utils";
 
 export const FundingSourceModifiersAdd = ({
+   info,
    setPostModifiers,
    globalCredentials,
    modifiersServ,
@@ -23,7 +24,9 @@ export const FundingSourceModifiersAdd = ({
       credentialId: "",
       type: "",
    });
-   const [modifiers, setModifiers] = useState(modifiersServ ? [...modifiersServ] : []);
+   const [modifiers, setModifiers] = useState(
+      modifiersServ ? [...modifiersServ] : []
+   );
    const [credentialID, setCredentialID] = useState(null);
    const [btnStyle, setBtnStyle] = useState(false);
    const [indexItem, setIndexItem] = useState(null);
@@ -45,7 +48,9 @@ export const FundingSourceModifiersAdd = ({
          const modObject = modifiers[index];
          modifiers[index] = {
             ...modObject,
-            [e.target.name]: globalCredentials.find((elem) => elem.name === e.target.value)._id,
+            [e.target.name]: globalCredentials.find(
+               (elem) => elem.name === e.target.value
+            )._id,
          };
          setModifiers([...modifiers]);
       } else {
@@ -66,7 +71,12 @@ export const FundingSourceModifiersAdd = ({
             if (inputs.credentialId === item.name) {
                setCredentialID(item._id);
             }
-            if (inputs.credentialId && inputs.chargeRate && inputs.name && inputs.type) {
+            if (
+               inputs.credentialId &&
+               inputs.chargeRate &&
+               inputs.name &&
+               inputs.type
+            ) {
                if (
                   inputs.credentialId !== "" &&
                   inputs.chargeRate !== "" &&
@@ -118,7 +128,12 @@ export const FundingSourceModifiersAdd = ({
                   //     "name": inputs.name,
                   //     'type': +inputs.type
                   // })
-                  setInputs({ name: "", chargeRate: "", credentialId: "", type: "" });
+                  setInputs({
+                     name: "",
+                     chargeRate: "",
+                     credentialId: "",
+                     type: "",
+                  });
                }
             } else {
                setPostModifiers([...modifiers]);
@@ -130,7 +145,12 @@ export const FundingSourceModifiersAdd = ({
    const handleCreate = () => {
       setBtnStyle(false);
 
-      if (inputs.credentialId && inputs.chargeRate && inputs.name && inputs.type) {
+      if (
+         inputs.credentialId &&
+         inputs.chargeRate &&
+         inputs.name &&
+         inputs.type
+      ) {
          if (
             inputs.credentialId !== "" &&
             inputs.chargeRate !== "" &&
@@ -211,7 +231,11 @@ export const FundingSourceModifiersAdd = ({
                label={"Credential*"}
                handleSelect={(e) => handleChange2(e, index)}
                value={
-                  globalCredentials.find((elem) => elem._id === item.credentialId && elem._id)?.name
+                  info
+                     ? globalCredentials.find(
+                          (elem) => elem._id === item.credentialId && elem._id
+                       )?.name
+                     : ""
                }
                list={globalCredentials}
                styles={{ width: 198 }}
@@ -221,7 +245,7 @@ export const FundingSourceModifiersAdd = ({
                name={"type"}
                label={"Type*"}
                handleSelect={(e) => handleChange2(e, index)}
-               value={item.type === 0 ? "0" : item.type}
+               value={info ? (item.type === 0 ? "0" : item.type) : ""}
                list={list}
                styles={{ width: 198 }}
             />
@@ -233,55 +257,62 @@ export const FundingSourceModifiersAdd = ({
       <div>
          <p className={classes.ModifiresTitle}>Modifiers</p>
 
-         <div style={{height:'150px', overflow:'auto', marginBottom:'26px', padding:'5px 0'}}>
-         <div className={classes.foundingSourceModalsBodyBlock}>
-            <ValidationInput
-               onChange={handleChange}
-               value={inputs.name}
-               variant={"outlined"}
-               type={"text"}
-               label={"Modifier Name*"}
-               name={"name"}
-               typeError={error === "name" && ErrorText.field}
-               styles={{ width: 198 }}
-            />
-            <div style={{ width: 36 }} />
-            <ValidationInput
-               onChange={handleChange}
-               value={inputs.chargeRate}
-               variant={"outlined"}
-               type={"number"}
-               label={"Charge Rate*"}
-               name={"chargeRate"}
-               typeError={error === "chargeRate" && ErrorText.field}
-               styles={{ width: 198 }}
-            />
-            <div style={{ width: 36 }} />
-            <SelectInput
-               name={"credentialId"}
-               label={"Credential*"}
-               handleSelect={handleChange}
-               value={inputs.credentialId ? inputs.credentialId : []}
-               list={globalCredentials ? globalCredentials : []}
-               typeError={error === "credentialId" ? ErrorText.field : ""}
-               styles={{ width: 198 }}
-            />
-            <div style={{ width: 36 }} />
-            <SelectInput
-               name={"type"}
-               label={"Type*"}
-               handleSelect={handleChange}
-               value={inputs.type ? inputs.type : []}
-               list={list}
-               typeError={error === "type" ? ErrorText.field : ""}
-               styles={{ width: 198 }}
-            />
-         </div>
-         {modifiers &&
-            modifiers?.length > 0 &&
-            modifiers.map((item, index) => {
-               return renderInputs(item, index);
-            })}
+         <div
+            style={{
+               height: "150px",
+               overflow: "auto",
+               marginBottom: "26px",
+               padding: "5px 0",
+            }}
+         >
+            <div className={classes.foundingSourceModalsBodyBlock}>
+               <ValidationInput
+                  onChange={handleChange}
+                  value={inputs.name}
+                  variant={"outlined"}
+                  type={"text"}
+                  label={"Modifier Name*"}
+                  name={"name"}
+                  typeError={error === "name" && ErrorText.field}
+                  styles={{ width: 198 }}
+               />
+               <div style={{ width: 36 }} />
+               <ValidationInput
+                  onChange={handleChange}
+                  value={inputs.chargeRate}
+                  variant={"outlined"}
+                  type={"number"}
+                  label={"Charge Rate*"}
+                  name={"chargeRate"}
+                  typeError={error === "chargeRate" && ErrorText.field}
+                  styles={{ width: 198 }}
+               />
+               <div style={{ width: 36 }} />
+               <SelectInput
+                  name={"credentialId"}
+                  label={"Credential*"}
+                  handleSelect={handleChange}
+                  value={inputs.credentialId}
+                  list={globalCredentials ? globalCredentials : []}
+                  typeError={error === "credentialId" ? ErrorText.field : ""}
+                  styles={{ width: 198 }}
+               />
+               <div style={{ width: 36 }} />
+               <SelectInput
+                  name={"type"}
+                  label={"Type*"}
+                  handleSelect={handleChange}
+                  value={inputs.type}
+                  list={list}
+                  typeError={error === "type" ? ErrorText.field : ""}
+                  styles={{ width: 198 }}
+               />
+            </div>
+            {modifiers &&
+               modifiers?.length > 0 &&
+               modifiers.map((item, index) => {
+                  return renderInputs(item, index);
+               })}
          </div>
          <div className={classes.addmodifiersBlock}>
             <img

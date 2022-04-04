@@ -4,6 +4,7 @@ import { TableBodyComponent } from "@eachbase/components";
 import { TableBody, TableCell } from "@material-ui/core";
 import {
    addSignToValueFromStart,
+   getLimitedVal,
    getValueByFixedNumber,
    manageStatus,
    resetRadius,
@@ -25,7 +26,11 @@ export const BillTBodyWithScroll = ({ bills = [] }) => {
                   <div>{showDashIfEmpty(bill.totalHours)}</div>
                </TableCell>
                <TableCell>
-                  <div>{showDashIfEmpty(bill.totalUnits)}</div>
+                  <div>
+                     {showDashIfEmpty(
+                        getLimitedVal(bill.totalUnits?.toString())
+                     )}
+                  </div>
                </TableCell>
                <TableCell>
                   <div>

@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core";
+import { Colors } from "@eachbase/utils";
 
 export const billTableStyle = makeStyles(() => ({
    billTableWithoutScrollStyle: {
@@ -21,5 +22,21 @@ export const billTableStyle = makeStyles(() => ({
          borderSpacing: "0px 8px",
          borderCollapse: "separate",
       },
+   },
+   filtersBoxStyle: { display: "flex" },
+   filterDropStyle: {
+      width: "220px",
+      marginRight: "24px",
+      "& h6:before, & li:before": { content: "unset" },
+   },
+   dateInputStyle: {
+      width: "220px",
+      marginRight: "24px",
+      "& > div > div": {
+         border: "1px solid #A3B2BD80",
+         backgroundColor: Colors.BackgroundWhite,
+      },
+      "& .MuiOutlinedInput-notchedOutline, &:hover .MuiOutlinedInput-notchedOutline":
+         { border: "none" },
    },
 }));

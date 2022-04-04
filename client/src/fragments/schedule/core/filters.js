@@ -62,9 +62,10 @@ export const Filters = ({
       },
    }));
 
+   const [inputs, setInputs] = useState({});
    const [screen, setScreen] = useState("calendar");
    const [filterDate, setFilterDate] = useState("");
-   const [inputs, setInputs] = useState({});
+   const [isDisabled, setIsDisabled] = useState(false);
 
    const classes = scheduleStyle();
 
@@ -79,7 +80,13 @@ export const Filters = ({
            }));
    };
 
+   const handleChangeDate = (e) => {
+      setIsDisabled(false);
+      setFilterDate(e.target.value);
+   };
+
    const handleFilter = () => {
+      setIsDisabled(true);
       dispatch(appointmentActions.searchAppointmentDate(filterDate));
    };
 
@@ -132,7 +139,7 @@ export const Filters = ({
             <div className={classes.searchWrapper}>
                <ValidationInput
                   variant={"outlined"}
-                  onChange={(ev) => setFilterDate(ev.target.value)}
+                  onChange={handleChangeDate}
                   value={filterDate}
                   type={"date"}
                   label={""}
@@ -144,6 +151,7 @@ export const Filters = ({
                   handleClick={handleFilter}
                   text="Search"
                   btnStyles={filterBtn}
+                  disabled={isDisabled}
                />
             </div>
          </div>

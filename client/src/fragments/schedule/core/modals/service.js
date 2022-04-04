@@ -46,13 +46,13 @@ export const Service = ({
       modalDate
          ? {
               ...modalDate,
-              client: modalDate.client._id,
+              client: modalDate.client?._id,
               authorizedService: modalDate.authorizedService
-                 ? modalDate.authorizedService._id
+                 ? modalDate.authorizedService?._id
                  : "",
-              staff: modalDate.staff._id,
-              placeService: modalDate.placeService._id,
-              staffPayCode: modalDate.staffPayCode._id,
+              staff: modalDate.staff?._id,
+              placeService: modalDate.placeService?._id,
+              staffPayCode: modalDate.staffPayCode?._id,
            }
          : day
          ? { ...day, ...createModalDate }
@@ -176,7 +176,7 @@ export const Service = ({
    };
 
    const handleChangeSignature = () => {
-      setSignature(!signature);
+      setSignature((prevState) => !prevState);
    };
 
    const handleCreate = () => {
@@ -209,7 +209,8 @@ export const Service = ({
             startTime: times.startTime,
             endTime: times.endTime,
             status: "ACTIVE",
-            require: signature,
+            // require: "",
+            signature: signature,
          };
 
          if (modalDate) {
@@ -311,7 +312,6 @@ export const Service = ({
                         typeError={error === "placeService" && ErrorText.field}
                      />
                   </div>
-
                   <div>
                      <ValidationInput
                         variant={"outlined"}
@@ -326,7 +326,6 @@ export const Service = ({
                         name="startDate"
                         typeError={error === "startDate" && ErrorText.field}
                      />
-
                      <div className={classes.timeInputs}>
                         <ValidationInput
                            variant={"outlined"}
@@ -378,7 +377,6 @@ export const Service = ({
                            }
                         />
                      </div>
-
                      <SelectInput
                         type={"id"}
                         language={null}
@@ -395,7 +393,6 @@ export const Service = ({
                         list={activeStaffPaycodes}
                         typeError={error === "staffPayCode" && ErrorText.field}
                      />
-
                      <div className={classes.signature}>
                         <p>Require Signature</p>
                         <Switch
@@ -408,7 +405,6 @@ export const Service = ({
                      </div>
                   </div>
                </div>
-
                <CreateChancel
                   loader={!!loader.length}
                   create={modalDate ? "Save" : "Add"}

@@ -191,7 +191,7 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
                      </div>
                   </div>
                   <Textarea
-                     label={"Description"}
+                     label={"Description*"}
                      name="description"
                      typeError={error === "description" ? ErrorText.field : ""}
                      value={inputs.description}

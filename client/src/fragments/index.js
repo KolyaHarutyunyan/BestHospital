@@ -21,7 +21,7 @@ export { ScheduleFragment } from "./schedule";
 export {
    BillsFragment,
    BillDetailsFragment,
-   Claims,
+   ClaimsFragment,
    ClaimDetails,
    Invoices,
    InvoiceDetails,

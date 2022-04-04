@@ -22,8 +22,9 @@ export const getMenuTitle = (url = "") => {
          return "Customer";
       case "/factoring":
          return "Factoring Companies";
+      case "/schedule":
+         return "Schedule";
       case "/bills":
-      case "/bill/:id":
          return "Bills";
       case "/claims":
          return "Claims";

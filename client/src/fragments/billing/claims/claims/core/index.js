@@ -1,0 +1,1 @@
+export { ClaimTable } from "./claimTable";

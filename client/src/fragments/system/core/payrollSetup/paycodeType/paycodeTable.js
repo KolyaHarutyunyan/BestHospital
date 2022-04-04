@@ -1,9 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PayrollSetupStyles } from "../styles";
-import { Notes, SimpleModal, SlicedText, TableBodyComponent } from "@eachbase/components";
-import { TableBody, TableCell } from "@material-ui/core";
-import { Images } from "@eachbase/utils";
+import {
+   DeleteElement,
+   NoItemText,
+   Notes,
+   SimpleModal,
+   SlicedText,
+   TableBodyComponent,
+} from "@eachbase/components";
+import { TableCell } from "@material-ui/core";
+import { FindLoad, FindSuccess, Images } from "@eachbase/utils";
 import { PayCodeType } from "./paycodeType";
+import { useDispatch } from "react-redux";
+import {
+   httpRequestsOnSuccessActions,
+   payrollActions,
+   systemActions,
+} from "@eachbase/store";
 
 const headerTitles = [
    {
@@ -35,13 +48,40 @@ const headerTitles = [
 export const PayCodeTable = ({ globalPayCodes }) => {
    const classes = PayrollSetupStyles();
 
+   const dispatch = useDispatch();
+
    const [editModalOpenClose, setEditModalOpenClose] = useState(false);
    const [editedData, setEditedData] = useState({});
+   const [open, setOpen] = useState(false);
+   const [deletedInfo, setDeletedInfo] = useState({});
 
    const handleOpenClose = (data) => {
       setEditedData(data);
       setEditModalOpenClose(!editModalOpenClose);
    };
+
+   const handleOpenCloseDelete = (data) => {
+      setDeletedInfo(data);
+      setOpen((prevState) => !prevState);
+   };
+
+   const handleDeleteItem = () => {
+      dispatch(payrollActions.deletePayCodeByIdGlobal(deletedInfo.id));
+   };
+
+   const loader = FindLoad("DELETE_PAYCODE_BY_ID_GLOBAL");
+   const success = FindSuccess("DELETE_PAYCODE_BY_ID_GLOBAL");
+
+   useEffect(() => {
+      if (!!success.length) {
+         setOpen(false);
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess(
+               "DELETE_PAYCODE_BY_ID_GLOBAL"
+            )
+         );
+      }
+   }, [success]);
 
    const notesItem = (item, index) => {
       return (
@@ -72,6 +112,16 @@ export const PayCodeTable = ({ globalPayCodes }) => {
                         }
                         alt="edit"
                      />
+                     <img
+                        src={Images.remove}
+                        alt="delete"
+                        onClick={() =>
+                           handleOpenCloseDelete({
+                              id: item.id,
+                              name: item.name,
+                           })
+                        }
+                     />
                   </div>
                )}
             </TableCell>
@@ -81,14 +131,18 @@ export const PayCodeTable = ({ globalPayCodes }) => {
 
    return (
       <>
-         <Notes
-            restHeight="360px"
-            defaultStyle={true}
-            data={globalPayCodes}
-            pagination={false}
-            items={notesItem}
-            headerTitles={headerTitles}
-         />
+         {!!globalPayCodes.length ? (
+            <Notes
+               restHeight="360px"
+               defaultStyle={true}
+               data={globalPayCodes}
+               pagination={false}
+               items={notesItem}
+               headerTitles={headerTitles}
+            />
+         ) : (
+            <NoItemText text="No Paycode Types Yet" />
+         )}
          <SimpleModal
             openDefault={editModalOpenClose}
             handleOpenClose={handleOpenClose}
@@ -98,6 +152,19 @@ export const PayCodeTable = ({ globalPayCodes }) => {
                   maxWidth="480px"
                   editedData={editedData}
                   handleClose={handleOpenClose}
+               />
+            }
+         />
+         <SimpleModal
+            openDefault={open}
+            handleOpenClose={handleOpenCloseDelete}
+            content={
+               <DeleteElement
+                  loader={!!loader.length}
+                  info={deletedInfo?.name}
+                  text="some information"
+                  handleDel={handleDeleteItem}
+                  handleClose={handleOpenCloseDelete}
                />
             }
          />

@@ -67,6 +67,7 @@ export const inputsStyle = makeStyles(() => ({
    },
    searchInputTitle: {
       display: "flex",
+      cursor: "default",
       "&.scrollable": { width: "125px" },
       alignItems: "center",
       "& span": {
@@ -79,7 +80,6 @@ export const inputsStyle = makeStyles(() => ({
       "& img": {
          width: "18px",
          height: "18px",
-         cursor: "pointer",
       },
    },
 
@@ -379,6 +379,7 @@ export const inputsStyle = makeStyles(() => ({
       padding: "18.5px 14px",
       fontSize: "16px",
       width: "100%",
+      color: Colors.TextPrimary,
    },
    searchAddressError: {
       height: "48px",
@@ -387,9 +388,7 @@ export const inputsStyle = makeStyles(() => ({
       padding: "18.5px 14px",
       fontSize: "16px",
       width: "100%",
-      "&::placeholder": {
-         color: Colors.ThemeRed,
-      },
+      "&::placeholder": { color: Colors.ThemeRed },
    },
 
    errorText: {

@@ -1,2 +1,2 @@
-export { Claims } from "./claims";
+export { ClaimsFragment } from "./claims";
 export { ClaimDetails } from "./claimDetails";
