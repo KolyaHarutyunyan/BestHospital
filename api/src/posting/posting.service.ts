@@ -1,17 +1,17 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreatePostingDto, UpdatePostingDto, PostingDto } from './dto';
-import { InvoiceService } from '../invoice/invoice.service';
-import { Model } from 'mongoose';
-import { IPosting } from './interface/posting.interface';
-import { MongooseUtil } from '../util/mongoose.util';
-import { PostingModel } from './posting.model';
-import { IReceivable } from '../invoice/interface/invoice.interface';
+import { Model, startSession } from 'mongoose';
 import { BillingService } from '../billing/billing.service';
-import { startSession } from 'mongoose';
+import { TransactionType } from '../billing/transaction/transaction.constants';
 import { ClientService } from '../client/client.service';
-import { PostingSanitizer } from './posting.sanitizer';
-import { InvoiceStatus } from '../invoice/invoice.constants';
 import { FileService } from '../files/file.service';
+import { IReceivable } from '../invoice/interface/invoice.interface';
+import { InvoiceStatus } from '../invoice/invoice.constants';
+import { InvoiceService } from '../invoice/invoice.service';
+import { MongooseUtil } from '../util/mongoose.util';
+import { CreatePostingDto, PostingDto, UpdatePostingDto } from './dto';
+import { IPosting } from './interface/posting.interface';
+import { PostingModel } from './posting.model';
+import { PostingSanitizer } from './posting.sanitizer';
 
 @Injectable()
 export class PostingService {
@@ -34,9 +34,7 @@ export class PostingService {
       this.invoiceService.findOne(dto.invoice),
       this.clientService.findById(dto.payer),
     ]);
-    if (invoice.status !== InvoiceStatus.SUBMITTED) {
-      throw new HttpException('Invoice must be submitted', HttpStatus.BAD_REQUEST);
-    }
+    this.invoiceService.checkStatusInvoice(invoice.status, [InvoiceStatus.SUBMITTED]);
     let paymentAmount = dto.paymentAmount;
     let receivable = invoice.receivable;
     let payed = false;
@@ -45,6 +43,7 @@ export class PostingService {
         if (!payed) {
           throw new HttpException('Invoice have not receivables', HttpStatus.NOT_FOUND);
         }
+        /** add in array and then insert db */
         const posting = new this.model({
           paymentType: dto.paymentType,
           paymentReference: dto.paymentReference,
@@ -137,12 +136,11 @@ export class PostingService {
   ): Promise<number> {
     paymentAmount -= receivable.amountTotal;
     const transactionInfo = {
-      type: 'CLIENTPAID',
+      type: TransactionType.CLIENTPAID,
       date: new Date(),
       amount: receivable.amountTotal,
       paymentRef: 'chka',
-      creator: userId,
-      note: 'chka',
+      creator: userId
     };
     const session = await startSession();
     await this.invoiceService.updateReceivableAmount(
@@ -161,12 +159,11 @@ export class PostingService {
     invoiceId: string,
   ): Promise<number> {
     const transactionInfo = {
-      type: 'PARTIALPAID',
+      type: TransactionType.PARTIALPAID,
       date: new Date(),
       amount: paymentAmount,
       paymentRef: 'chka',
-      creator: userId,
-      note: 'chka',
+      creator: userId
     };
     const session = await startSession();
     await this.invoiceService.updateReceivableAmount(invoiceId, receivable._id, paymentAmount);
@@ -191,4 +188,5 @@ export class PostingService {
       throw new HttpException('Was not found in list', HttpStatus.NOT_FOUND);
     }
   }
+
 }

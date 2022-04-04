@@ -3,7 +3,7 @@ import { Model } from 'mongoose';
 import { StaffService } from '../staff/staff.service';
 import { BillingService } from '../billing/billing.service';
 import { MongooseUtil } from '../util';
-import { MergeClaims } from './claim.constants';
+import { ClaimStatus, MergeClaims } from './claim.constants';
 import { ClaimModel } from './claim.model';
 import { ClaimDto, GenerateClaimDto } from './dto';
 import { ClaimSanitizer } from './interceptor/claim.interceptor';
@@ -162,7 +162,7 @@ export class ClaimService {
       this.staffService.findById(userId),
       this.model.findById({ _id }),
     ]);
-    if (status === 'SUBMITTED') claim.submittedDate = new Date();
+    if (status === ClaimStatus.SUBMITTED) claim.submittedDate = new Date();
     claim.status = status;
     if (details) {
       claim.details = details;
@@ -232,7 +232,7 @@ export class ClaimService {
         early: this.minMax(receivableCreatedAt)[0],
         latest: this.minMax(receivableCreatedAt)[1],
       },
-      status: 'PENDING',
+      status: ClaimStatus.PENDING,
       receivable,
     });
   }

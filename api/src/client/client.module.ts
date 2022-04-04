@@ -6,9 +6,9 @@ import { ClientSanitizer } from './interceptor';
 
 //check
 import { HistorySanitizer, HistoryService } from 'src/history';
-import { CredentialModule } from 'src/credential';
+import { CredentialModule } from '../credential';
 import { ServiceModule } from '../service';
-import { AddressSanitizer } from 'src/address';
+import { AddressSanitizer } from '../address';
 import { EnrollmentModule } from './enrollment/enrollment.module';
 import { AuthorizationModule } from './authorization/authorization.module';
 import { AuthorizationserviceModule } from './authorizationservice/authorizationservice.module';

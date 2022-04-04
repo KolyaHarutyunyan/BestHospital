@@ -1,20 +1,20 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import * as mongoose from 'mongoose';
 import { Model } from 'mongoose';
+import { BillingService } from '../billing/billing.service';
 import { AuthorizationserviceService } from '../client/authorizationservice/authorizationservice.service';
 import { ClientService } from '../client/client.service';
+import { EmploymentService } from '../employment/employment.service';
 import { PaycodeService } from '../employment/paycode/paycode.service';
+import { PlaceService } from '../place/place.service';
 import { StaffService } from '../staff/staff.service';
-import { EventStatus, AppointmentStatus } from './appointment.constants';
+import { AppointmentStatus, AppointmentType, EventStatus } from './appointment.constants';
 import { AppointmentModel } from './appointment.model';
 import { AppointmentDto, CreateAppointmentDto, CreateRepeatDto, UpdateAppointmentDto } from './dto';
 import { AppointmentQueryDTO, AppointmentQuerySetEventStatusDTO } from './dto/appointment.dto';
 import { AppointmentSanitizer } from './interceptor/appointment.interceptor';
 import { IAppointment } from './interface';
-import { AppointmentType } from './appointment.constants';
-import * as mongoose from 'mongoose';
-import { PlaceService } from '../place/place.service';
-import { BillingService } from '../billing/billing.service';
-import { IFilterQuery, IRepeat } from './interface/appointment.interface';
+import { IRepeat } from './interface/appointment.interface';
 
 @Injectable()
 export class AppointmentService {
@@ -23,6 +23,7 @@ export class AppointmentService {
     private readonly authorizedService: AuthorizationserviceService,
     private readonly staffService: StaffService,
     private readonly payCodeService: PaycodeService,
+    private readonly employmentService: EmploymentService,
     private readonly placeService: PlaceService,
     private readonly billingService: BillingService,
     private readonly sanitizer: AppointmentSanitizer,
@@ -123,39 +124,22 @@ export class AppointmentService {
   }
 
   // create the service appointment
-  async appointmentService(dto): Promise<AppointmentDto> {
-    const [overlappingStaff, overlappingClient] = await Promise.all([
-      this.model.find({
-        staff: dto.staff,
-        startTime: { $lt: new Date(dto.endTime) },
-        endTime: { $gt: new Date(dto.startTime) },
-      }),
-      this.model.find({
-        client: dto.client,
-        startTime: { $lt: new Date(dto.endTime) },
-        endTime: { $gt: new Date(dto.startTime) },
-      }),
-    ]);
-    if (!dto.placeService) {
-      throw new HttpException(`placeService is required`, HttpStatus.BAD_REQUEST);
-    }
+  async appointmentService(dto: CreateAppointmentDto): Promise<AppointmentDto> {
+    await this.checkClientStaffOverlap(null, dto)
+    /** if appointment type is SERVICE client and authorization service are required */
+    this.checkClient(dto.client);
+    this.checkAuthorizedService(dto.authorizedService);
+    this.checkPlaceService(dto.placeService);
+
     const place = await this.placeService.findOne(dto.placeService);
     const placeId = place._id as string;
-    if (overlappingStaff[0] || overlappingClient[0]) {
-      throw new HttpException(`appointment overlapping`, HttpStatus.BAD_REQUEST);
-    }
-    if (!dto.client || !dto.authorizedService) {
-      throw new HttpException(
-        `Client or Client Authorization can not not be empty`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
     const [client, authService]: any = await Promise.all([
       this.clientService.findById(dto.client),
       this.authorizedService.findById(dto.authorizedService),
     ]);
+    /** check if client and authorization client are same */
     if (client.id != authService.authorizationId.clientId) {
-      throw new HttpException(`Client haven't authService`, HttpStatus.BAD_REQUEST);
+      throw new HttpException(`Client and authorization client are different`, HttpStatus.BAD_REQUEST);
     }
     // const compareService = await this.authorizedService.getByServiceId(authService.serviceId);
     // console.log(staff, 'stafffffff')
@@ -165,12 +149,6 @@ export class AppointmentService {
     //     HttpStatus.BAD_REQUEST,
     //   );
     // }
-    if (client.id != authService.authorizationId.clientId) {
-      throw new HttpException(
-        'Authorization Service is not Client authorization service',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
     // if (dto.require && !dto.files) {
     //   throw new HttpException(
     //     'Files should not be empty',
@@ -183,7 +161,7 @@ export class AppointmentService {
       payer: authService.authorizationId.funderId,
       staff: dto.staff,
       staffPayCode: dto.staffPayCode,
-      startDate: dto.startDate,
+      startDate: new Date(dto.startDate).setHours(23, 59),
       startTime: dto.startTime,
       endTime: dto.endTime,
       eventStatus: dto.eventStatus,
@@ -205,7 +183,7 @@ export class AppointmentService {
     const appointment = new this.model({
       staff: dto.staff,
       staffPayCode: dto.staffPayCode,
-      startDate: dto.startDate,
+      startDate: new Date(dto.startDate).setHours(23, 59),
       startTime: dto.startTime,
       endTime: dto.endTime,
       eventStatus: dto.eventStatus,
@@ -222,7 +200,7 @@ export class AppointmentService {
     const appointment = new this.model({
       staff: dto.staff,
       staffPayCode: dto.staffPayCode,
-      startDate: dto.startDate,
+      startDate: new Date(dto.startDate).setHours(23, 59),
       startTime: dto.startTime,
       endTime: dto.endTime,
       eventStatus: dto.eventStatus,
@@ -238,7 +216,7 @@ export class AppointmentService {
     const appointment = new this.model({
       staff: dto.staff,
       staffPayCode: dto.staffPayCode,
-      startDate: dto.startDate,
+      startDate: new Date(dto.startDate).setHours(23, 59),
       startTime: dto.startTime,
       endTime: dto.endTime,
       eventStatus: dto.eventStatus,
@@ -466,47 +444,24 @@ export class AppointmentService {
     // the first check if appointment is not complete or cancelled status
     const appointment = await this.model.findById(_id);
     this.checkAppointment(appointment);
-    const [overlappingStaff, overlappingClient] = await Promise.all([
-      this.model.find({
-        staff: dto.staff,
-        startDate: dto.startDate,
-        startTime: { $lt: new Date(dto.endTime) },
-        endTime: { $gt: new Date(dto.startTime) },
-      }),
-      this.model.find({
-        client: dto.client,
-        startDate: dto.startDate,
-        startTime: { $lt: new Date(dto.endTime) },
-        endTime: { $gt: new Date(dto.startTime) },
-      }),
-    ]);
-    if (overlappingStaff[0] || overlappingClient[0]) {
-      if (
-        overlappingStaff[0]._id.toString() !== _id.toString() &&
-        overlappingClient[0]._id.toString() !== _id.toString()
-      ) {
-        throw new HttpException(`appointment overlapping`, HttpStatus.BAD_REQUEST);
-      }
-    }
+    await this.checkClientStaffOverlap(_id, dto)
     if (dto.placeService) {
       await this.placeService.findOne(dto.placeService);
       appointment.placeService = dto.placeService;
     }
     if (appointment.type == AppointmentType.SERVICE) {
-      if (!dto.client || !dto.authorizedService) {
-        throw new HttpException(
-          'Client and(or) Authorization service is not found',
-          HttpStatus.NOT_FOUND,
-        );
-      }
+      /** if appountment type is SERVICE client and authorization service are required */
+      this.checkClient(dto.client);
+      this.checkAuthorizedService(dto.authorizedService);
       const [client, authService]: any = await Promise.all([
         this.clientService.findById(dto.client ? dto.client : appointment.client),
         this.authorizedService.findById(
           dto.authorizedService ? dto.authorizedService : appointment.authorizedService,
         ),
       ]);
+      /** check if client and authorization client are same */
       if (client.id != authService.authorizationId.clientId) {
-        throw new HttpException(`Client haven't authService`, HttpStatus.BAD_REQUEST);
+        throw new HttpException(`Client and authorization client are different`, HttpStatus.BAD_REQUEST);
       }
       await this.authorizedService.getByServiceId(authService.serviceId);
     }
@@ -515,9 +470,8 @@ export class AppointmentService {
       this.payCodeService.findOne(dto.staffPayCode ? dto.staffPayCode : appointment.staffPayCode),
       this.payCodeService.findPayCodesByStaffId(dto.staff ? dto.staff : appointment.staff),
     ]);
-    if (payCode.employmentId.active != true) {
-      throw new HttpException('employment is not active', HttpStatus.BAD_REQUEST);
-    }
+    /** check employment status */
+    this.employmentService.checkEmploymentActive(payCode.employmentId.active)
     appointment.staff = dto.staff;
     appointment.staffPayCode = dto.staffPayCode;
     // appointment.type = dto.type;
@@ -556,7 +510,7 @@ export class AppointmentService {
       miles: appointment.miles,
       staff: appointment.staff,
       staffPayCode: appointment.staffPayCode,
-      startDate: date,
+      startDate: new Date(date).setHours(23, 59),
       startTime: appointment.startTime,
       endTime: appointment.endTime,
       eventStatus: EventStatus.NOTRENDERED,
@@ -593,5 +547,55 @@ export class AppointmentService {
   async timeDiffCalc(dateFuture, dateNow): Promise<number> {
     const hours = (Math.abs(dateNow - dateFuture) / 36e5) * 60;
     return hours;
+  }
+  /** private methods */
+  /** check client */
+  private checkClient(client: string) {
+    if (!client) {
+      throw new HttpException('Client with this id was not found', HttpStatus.NOT_FOUND);
+    }
+  }
+  /** check appointment overlapping */
+  private async checkClientStaffOverlap(_id: string = null, dto: UpdateAppointmentDto) {
+    const [overlappingStaff, overlappingClient] = await Promise.all([
+      this.model.find({
+        staff: dto.staff,
+        startDate: dto.startDate,
+        startTime: { $lt: new Date(dto.endTime) },
+        endTime: { $gt: new Date(dto.startTime) },
+      }),
+      this.model.find({
+        client: dto.client,
+        startDate: dto.startDate,
+        startTime: { $lt: new Date(dto.endTime) },
+        endTime: { $gt: new Date(dto.startTime) },
+      }),
+    ]);
+    if (overlappingStaff[0] || overlappingClient[0]) {
+      if (_id) {
+        if (
+          overlappingStaff[0]._id.toString() !== _id.toString() &&
+          overlappingClient[0]._id.toString() !== _id.toString()
+        ) {
+          throw new HttpException(`appointment overlapping`, HttpStatus.BAD_REQUEST);
+        }
+      }
+      else {
+        throw new HttpException(`appointment overlapping`, HttpStatus.BAD_REQUEST);
+      }
+    }
+  }
+
+  /** check authorization service */
+  private checkAuthorizedService(authorizedService: string) {
+    if (!authorizedService) {
+      throw new HttpException('Authorization Service with this id was not found', HttpStatus.NOT_FOUND);
+    }
+  }
+  /** check place service */
+  private checkPlaceService(placeService: string) {
+    if (!placeService) {
+      throw new HttpException('PlaceService Service was not found', HttpStatus.NOT_FOUND);
+    }
   }
 }

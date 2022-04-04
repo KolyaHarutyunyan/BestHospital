@@ -1,15 +1,17 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { SCredentialDTO, SCreateCredentialDTO, SUpdateCredentialDTO } from './dto';
-import { CredentialService } from '../../credential';
-import { StaffService } from '..';
-import { StaffCredentialModel } from './scredential.model';
-import { MongooseUtil } from '../../util';
 import { Model } from 'mongoose';
+import { StaffService } from '..';
+import { CredentialService } from '../../credential';
+import { MongooseUtil } from '../../util';
+import { SCreateCredentialDTO, SCredentialDTO, SUpdateCredentialDTO } from './dto';
 import { ICredential } from './interface';
+import { StaffCredentialModel } from './scredential.model';
+import { SCredentialSanitizer } from './scredential.sanitizer';
 
 @Injectable()
 export class SCredentialService {
   constructor(
+    private readonly sanitizer: SCredentialSanitizer,
     private readonly credentialService: CredentialService,
     private readonly staffService: StaffService,
   ) {
@@ -22,8 +24,10 @@ export class SCredentialService {
   /** Create a new staff credential */
   create = async (dto: SCreateCredentialDTO): Promise<SCredentialDTO> => {
     try {
-      await this.staffService.findById(dto.staffId);
-      await this.credentialService.findOne(dto.credentialId);
+      await Promise.all([
+        this.staffService.findById(dto.staffId),
+        this.credentialService.findOne(dto.credentialId)
+      ]);
       const staffCredential = new this.model({
         staffId: dto.staffId,
         credentialId: dto.credentialId,
@@ -33,8 +37,7 @@ export class SCredentialService {
 
       let staffC = await staffCredential.save();
       staffC = await staffC.populate('credentialId').execPopulate();
-      return staffC;
-      // return this.sanitizer.sanitize(user);
+      return this.sanitizer.sanitize(staffC);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Staff credential already exists');
       throw e;
@@ -58,7 +61,7 @@ export class SCredentialService {
       credential.credentialId = dto.credentialId;
 
       await credential.save();
-      return credential;
+      return this.sanitizer.sanitize(credential);
     } catch (e) {
       console.log(e);
       throw e;
@@ -81,7 +84,7 @@ export class SCredentialService {
   async find(staffId: string): Promise<SCredentialDTO[]> {
     try {
       const credential = await this.model.find({ staffId }).populate('credentialId');
-      return credential;
+      return this.sanitizer.sanitizeMany(credential);
     } catch (e) {
       console.log(e);
       throw e;
@@ -93,6 +96,7 @@ export class SCredentialService {
     try {
       const credential = await this.model.findById({ _id }).populate('credentialId');
       this.checkCredential(credential);
+      return this.sanitizer.sanitize(credential);
       return credential;
     } catch (e) {
       console.log(e);

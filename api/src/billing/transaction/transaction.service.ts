@@ -24,7 +24,7 @@ export class TransactionService {
       date: dto.date,
       paymentRef: dto.paymentRef,
       creator: dto.user.id,
-      note: dto.note,
+      note: dto.note ? dto.note : undefined,
       status: TransactionStatus.APPLIED,
     });
     await transaction.save();

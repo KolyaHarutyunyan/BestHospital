@@ -6,12 +6,12 @@ import { CredentialDTO } from '../dto';
 @Injectable()
 export class CredentialSanitizer implements ISanitize {
   sanitize(credential: ICredential): CredentialDTO {
-    const CommentDTO: CredentialDTO = {
+    const CredentialDTO: CredentialDTO = {
       _id: credential.id,
       name: credential.name,
       type: credential.type,
     };
-    return CommentDTO;
+    return CredentialDTO;
   }
 
   sanitizeMany(credentials: ICredential[]): CredentialDTO[] {
