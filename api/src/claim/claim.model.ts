@@ -4,7 +4,7 @@ import { ClaimStatus, ReceivableStatus } from './claim.constants';
 
 const receivable = {
   placeService: { type: Types.ObjectId, ref: 'Place' },
-  cptCode: { type: Number },
+  cptCode: { type: String },
   totalUnits: { type: Number },
   totalBill: { type: Number },
   renderProvider: { type: Number },
