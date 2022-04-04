@@ -108,6 +108,7 @@ import addOrange from "@eachbase/images/icons/addOrange.svg";
 import aToZWhite from "@eachbase/images/icons/aToZWhite.svg";
 import latestEarliestWhite from "@eachbase/images/icons/latestEarliestWhite.svg";
 import dropdownArrowWhite from "@eachbase/images/icons/dropdownArrowWhite.svg";
+import claimInfo from "@eachbase/images/icons/claimInfo.svg";
 
 export const Images = {
    doctors: doctors,
@@ -218,4 +219,5 @@ export const Images = {
    aToZWhite,
    latestEarliestWhite,
    dropdownArrowWhite,
+   claimInfo,
 };
