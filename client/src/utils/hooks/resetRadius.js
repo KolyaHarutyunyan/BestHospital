@@ -1,4 +1,6 @@
 export const resetRadius = (corner = "") => {
+   if (typeof corner !== "string") return corner;
+
    switch (corner) {
       case "left":
          return {

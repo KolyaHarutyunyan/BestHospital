@@ -67,6 +67,7 @@ export const inputsStyle = makeStyles(() => ({
    },
    searchInputTitle: {
       display: "flex",
+      cursor: "default",
       "&.scrollable": { width: "125px" },
       alignItems: "center",
       "& span": {
@@ -79,7 +80,6 @@ export const inputsStyle = makeStyles(() => ({
       "& img": {
          width: "18px",
          height: "18px",
-         cursor: "pointer",
       },
    },
 

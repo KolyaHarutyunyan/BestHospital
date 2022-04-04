@@ -59,6 +59,12 @@ export const tableStyle = makeStyles(() => ({
             "& > td": { backgroundColor: "inherit" },
          },
       },
+      "&.billingSystem.claimTBody": {
+         "& > td > div": {
+            maxWidth: "unset",
+            width: "100%",
+         },
+      },
       "& td": { backgroundColor: "inherit" },
       "& > td:first-child": {
          borderTopLeftRadius: "8px",
