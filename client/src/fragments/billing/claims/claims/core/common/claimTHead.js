@@ -1,28 +1,28 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
    HtmlTooltip,
    SearchAndFilter,
    TableHeadComponent,
 } from "@eachbase/components";
 import { TableCell } from "@material-ui/core";
-import { getLimitedVal, useWidth } from "@eachbase/utils";
+import {
+   DrawerContext,
+   getTextDependsOnWidth,
+   useWidth,
+} from "@eachbase/utils";
 
 const tHeadStyle = {
    boxShadow: "0px 4px 2px #347af01a",
    backgroundColor: "#EBF2FD",
 };
 
-const getTheadTitle = (innerWidth, size, title = "", limit = 5) => {
-   return innerWidth < size ? getLimitedVal(title, limit) : title;
-};
-
-const getTheadDisplay = (
+function getTheadDisplay(
    tooltipTitle = "",
    theadTitle = "",
    theadType = "",
    theadCustom = true,
    tooltipPlace = "top-start"
-) => {
+) {
    if (tooltipTitle.length !== theadTitle.length) {
       return (
          <HtmlTooltip title={<p>{tooltipTitle}</p>} placement={tooltipPlace}>
@@ -43,10 +43,15 @@ const getTheadDisplay = (
          type={theadType}
       />
    );
-};
+}
 
 export const ClaimTHead = () => {
    const width = useWidth();
+
+   const { open } = useContext(DrawerContext);
+
+   const size = open ? 1575 : 1560;
+   const limit = open ? 3 : 5;
 
    return (
       <TableHeadComponent tHeadStyle={tHeadStyle}>
@@ -56,14 +61,14 @@ export const ClaimTHead = () => {
          <TableCell>
             {getTheadDisplay(
                "Date Period",
-               getTheadTitle(width, 1550, "Date Period"),
+               getTextDependsOnWidth(width, size, "Date Period", limit),
                "latestEarliest"
             )}
          </TableCell>
          <TableCell>
             {getTheadDisplay(
                "Funding Source",
-               getTheadTitle(width, 1560, "Funding Source")
+               getTextDependsOnWidth(width, size, "Funding Source", limit)
             )}
          </TableCell>
          <TableCell>
@@ -72,7 +77,7 @@ export const ClaimTHead = () => {
          <TableCell>
             {getTheadDisplay(
                "Total Charged",
-               getTheadTitle(width, 1560, "Funding Source"),
+               getTextDependsOnWidth(width, size, "Funding Source", limit),
                "",
                false
             )}
@@ -80,7 +85,7 @@ export const ClaimTHead = () => {
          <TableCell>
             {getTheadDisplay(
                "Total Paid",
-               getTheadTitle(width, 1560, "Total Paid"),
+               getTextDependsOnWidth(width, size, "Total Paid", limit),
                "",
                false
             )}
@@ -94,7 +99,7 @@ export const ClaimTHead = () => {
          <TableCell>
             {getTheadDisplay(
                "Payment Reference",
-               getTheadTitle(width, 1560, "Payment Reference"),
+               getTextDependsOnWidth(width, size, "Payment Reference", limit),
                "",
                false
             )}
