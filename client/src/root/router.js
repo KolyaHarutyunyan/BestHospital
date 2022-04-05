@@ -19,8 +19,8 @@ import {
    InvoiceDetails,
    Postings,
    PostingDetails,
+   GenerateClaim,
 } from "@eachbase/pages";
-import { GenerateClaims } from "../pages/billing";
 
 export const Router = () => {
    return (
@@ -51,7 +51,7 @@ export const Router = () => {
 
          <Route path="/claims" exact component={Claims} />
          <Route path="/claim/:id" exact component={ClaimDetails} />
-         <Route path="/generateClaims" exact component={GenerateClaims} />
+         <Route path="/generateClaim" exact component={GenerateClaim} />
 
          <Route path="/invoices" exact component={Invoices} />
          <Route path="/invoice/:id" exact component={InvoiceDetails} />

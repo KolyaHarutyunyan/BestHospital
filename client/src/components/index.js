@@ -10,6 +10,7 @@ export {
    EditButton,
    EditSaveButtons,
    SendButton,
+   DownloadLink,
 } from "./buttons";
 export { Title } from "./titles";
 export { ErrMessage, HtmlTooltip, SlicedText, NoYet } from "./messages";

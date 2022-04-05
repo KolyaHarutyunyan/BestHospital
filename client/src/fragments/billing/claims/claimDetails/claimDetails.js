@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { claimDetailsStyle } from "./styles";
 import {
    BillTransactionWrapper,
-   SendButton,
+   DownloadLink,
    SimpleModal,
 } from "@eachbase/components";
 import {
@@ -15,7 +15,7 @@ import {
    makeCapitalize,
 } from "@eachbase/utils";
 import { useDispatch } from "react-redux";
-import { BillTransactionInputs } from "../../bills/billDetails/core";
+import { ReceivableTable } from "./core";
 
 export const ClaimDetailsFragment = ({ claimDetails }) => {
    const classes = claimDetailsStyle();
@@ -35,6 +35,7 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
       totalCharge,
       ammountPaid,
       paymentRef,
+      receivables,
    } = claimDetails || {};
 
    const [open, setOpen] = useState(false);
@@ -51,7 +52,13 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
       { detailText: "Staff:", detail: makeCapitalize(staff?.middleName) },
       {
          detailText: "1500 Form:",
-         detail: "Download",
+         detail: !!"file_pdf.pdf" ? (
+            <DownloadLink
+               linkHref={"file_pdf.pdf"}
+               linkInnerText={"Download"}
+               linkDownload={true}
+            />
+         ) : null,
       },
       {
          detailText: "Client:",
@@ -139,7 +146,9 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
                      Receivables
                   </h2>
                </div>
-               <div className={classes.receivablesTableBoxStyle}></div>
+               <div className={classes.receivablesTableBoxStyle}>
+                  <ReceivableTable claimReceivables={receivables} />
+               </div>
             </div>
          </div>
          <SimpleModal
