@@ -1,18 +1,39 @@
-import React from "react";
+import React, { useContext } from "react";
+import { claimTHeadTBodyStyle } from "./styles";
 import { useHistory } from "react-router-dom";
 import { TableBodyComponent } from "@eachbase/components";
 import { TableBody, TableCell } from "@material-ui/core";
 import {
    addSignToValueFromStart,
+   DrawerContext,
    getLimitedVal,
+   getTextDependsOnWidth,
    getValueByFixedNumber,
    handleCreatedAtDate,
    manageStatus,
    showDashIfEmpty,
+   useWidth,
 } from "@eachbase/utils";
 
 export const ClaimTBody = ({ claims = [] }) => {
+   const classes = claimTHeadTBodyStyle();
+
    const history = useHistory();
+
+   const width = useWidth();
+
+   const { open } = useContext(DrawerContext);
+
+   const size = open ? 1575 : 1560;
+   const limit = open ? 4 : 10;
+
+   function getDisplayOf(givenText = "") {
+      if (typeof givenText !== "string") return givenText;
+
+      return showDashIfEmpty(
+         getTextDependsOnWidth(width, size, givenText, limit)
+      );
+   }
 
    return (
       <TableBody>
@@ -30,27 +51,17 @@ export const ClaimTBody = ({ claims = [] }) => {
                      <div>{showDashIfEmpty(getLimitedVal(claim._id, 13))}</div>
                   </TableCell>
                   <TableCell>
-                     <div>
-                        {showDashIfEmpty(`${createdDate} - ${submtDate}`)}
-                     </div>
+                     <div>{getDisplayOf(`${createdDate} - ${submtDate}`)}</div>
+                  </TableCell>
+                  <TableCell>
+                     <div>{getDisplayOf(claim.funder?.middleName)}</div>
+                  </TableCell>
+                  <TableCell>
+                     <div>{getDisplayOf(claim.client?.middleName)}</div>
                   </TableCell>
                   <TableCell>
                      <div>
-                        {showDashIfEmpty(
-                           getLimitedVal(claim.funder?.middleName, 13)
-                        )}
-                     </div>
-                  </TableCell>
-                  <TableCell>
-                     <div>
-                        {showDashIfEmpty(
-                           getLimitedVal(claim.client?.middleName, 13)
-                        )}
-                     </div>
-                  </TableCell>
-                  <TableCell>
-                     <div>
-                        {showDashIfEmpty(
+                        {getDisplayOf(
                            addSignToValueFromStart(
                               getValueByFixedNumber(claim.totalCharge)
                            )
@@ -59,7 +70,7 @@ export const ClaimTBody = ({ claims = [] }) => {
                   </TableCell>
                   <TableCell>
                      <div>
-                        {showDashIfEmpty(
+                        {getDisplayOf(
                            addSignToValueFromStart(
                               getValueByFixedNumber(claim.ammountPaid)
                            )
@@ -68,7 +79,7 @@ export const ClaimTBody = ({ claims = [] }) => {
                   </TableCell>
                   <TableCell>
                      <div>
-                        {showDashIfEmpty(
+                        {getDisplayOf(
                            addSignToValueFromStart(
                               getValueByFixedNumber(claim.remaining)
                            )
@@ -79,9 +90,15 @@ export const ClaimTBody = ({ claims = [] }) => {
                      <div>{showDashIfEmpty(manageStatus(claim.status))}</div>
                   </TableCell>
                   <TableCell>
-                     <div>
+                     <a
+                        className={classes.paymentRefStyle}
+                        href={`https://${claim.paymentRef}`}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        onClick={(event) => event.stopPropagation()}
+                     >
                         {showDashIfEmpty(getLimitedVal(claim.paymentRef, 20))}
-                     </div>
+                     </a>
                   </TableCell>
                </TableBodyComponent>
             );

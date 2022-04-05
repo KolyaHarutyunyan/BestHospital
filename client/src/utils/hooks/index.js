@@ -29,3 +29,4 @@ export { getValueByFixedNumber } from "./getValueByFixedNumber";
 export { makeCapitalize } from "./makeCapitalize";
 export { useWidth } from "./useWidth";
 export { showDashIfEmpty } from "./showDashIfEmpty";
+export { getTextDependsOnWidth } from "./getTextDependsOnWidth";

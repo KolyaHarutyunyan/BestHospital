@@ -1,15 +1,16 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { claimsStyle } from "./styles";
 import {
+   AddButton,
    Loader,
    NoItemText,
    PaginationItem,
-   SimpleModal,
 } from "@eachbase/components";
 import { DrawerContext, PaginationContext } from "@eachbase/utils";
 import { claimActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import { ClaimTable } from "./core";
+import { useHistory } from "react-router";
 
 export const ClaimsFragment = ({
    claims = [],
@@ -20,12 +21,12 @@ export const ClaimsFragment = ({
 }) => {
    const classes = claimsStyle();
 
+   const history = useHistory();
+
    const dispatch = useDispatch();
 
    const { open } = useContext(DrawerContext);
    const { handlePageChange } = useContext(PaginationContext);
-
-   const [modalIsOpen, setOpen] = useState(false);
 
    const claimsTableClassName = `${classes.claimsTableStyle} ${
       open ? "narrow" : ""
@@ -42,11 +43,9 @@ export const ClaimsFragment = ({
    return (
       <div>
          <div className={classes.addButton}>
-            <SimpleModal
-               addButton={"Generate Claim"}
-               content={<div>modal content here..</div>}
-               handleOpenClose={() => setOpen((prevState) => !prevState)}
-               openDefault={modalIsOpen}
+            <AddButton
+               text={"Generate Claim"}
+               handleClick={() => history.push("/generateClaim")}
             />
          </div>
          {!!claims.length ? (

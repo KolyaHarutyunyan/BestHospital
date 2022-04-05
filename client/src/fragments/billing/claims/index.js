@@ -1,2 +1,3 @@
 export { ClaimsFragment } from "./claims";
-export { ClaimDetails } from "./claimDetails";
+export { ClaimDetailsFragment } from "./claimDetails";
+export { GenerateClaimsFragment } from "./generateClaims.js";

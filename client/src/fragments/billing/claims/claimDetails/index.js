@@ -1,1 +1,1 @@
-export { ClaimDetails } from "./claimDetails";
+export { ClaimDetailsFragment } from "./claimDetails";
