@@ -3,6 +3,7 @@ import { claimDetailsStyle } from "./styles";
 import {
    BillTransactionWrapper,
    DownloadLink,
+   NoItemText,
    SimpleModal,
 } from "@eachbase/components";
 import {
@@ -15,7 +16,7 @@ import {
    makeCapitalize,
 } from "@eachbase/utils";
 import { useDispatch } from "react-redux";
-import { ReceivableTable } from "./core";
+import { CloseClaimInputs, ReceivableTable } from "./core";
 
 export const ClaimDetailsFragment = ({ claimDetails }) => {
    const classes = claimDetailsStyle();
@@ -146,9 +147,13 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
                      Receivables
                   </h2>
                </div>
-               <div className={classes.receivablesTableBoxStyle}>
-                  <ReceivableTable claimReceivables={receivables} />
-               </div>
+               {!!receivables?.length ? (
+                  <div className={classes.receivablesTableBoxStyle}>
+                     <ReceivableTable claimReceivables={receivables} />
+                  </div>
+               ) : (
+                  <NoItemText text={"No Receivables Yet"} />
+               )}
             </div>
          </div>
          <SimpleModal
@@ -162,7 +167,7 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
                      "Please indicate below the reason for closing the claim."
                   }
                >
-                  <div>close claim content here..</div>
+                  <CloseClaimInputs />
                </BillTransactionWrapper>
             }
          />

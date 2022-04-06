@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { Backgrounds, Colors, Images } from "@eachbase/utils";
+import { Colors } from "@eachbase/utils";
 
 export const claimDetailsStyle = makeStyles(() => ({
    claimDetailsContainerStyle: {

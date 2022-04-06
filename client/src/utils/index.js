@@ -45,6 +45,7 @@ export {
    useWidth,
    showDashIfEmpty,
    getTextDependsOnWidth,
+   getTableHeader,
 } from "./hooks";
 export { ErrorText } from "./errorTexts";
 export { CountryList } from "./jsons";

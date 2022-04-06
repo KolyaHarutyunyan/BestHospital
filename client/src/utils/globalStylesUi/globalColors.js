@@ -9,6 +9,7 @@ export const Colors = {
    BackgroundMango: "#FFC051",
    BackgroundWater: "#EBF2FD",
    BackgroundCatskillWhite: "#F2F4F8",
+   BackgroundHoverBlue: "#d8e5fb",
 
    // Text colors
 
