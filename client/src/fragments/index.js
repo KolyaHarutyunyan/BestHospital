@@ -23,7 +23,7 @@ export {
    BillDetailsFragment,
    ClaimsFragment,
    ClaimDetailsFragment,
-   GenerateClaimsFragment,
+   GenerateClaimFragment,
    Invoices,
    InvoiceDetails,
    Postings,

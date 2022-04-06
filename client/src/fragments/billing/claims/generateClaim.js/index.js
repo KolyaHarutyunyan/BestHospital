@@ -1,0 +1,1 @@
+export { GenerateClaimFragment } from "./generateClaim";

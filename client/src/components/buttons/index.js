@@ -9,3 +9,4 @@ export { AddModalButton } from "./addModalButton";
 export { EditButton } from "./editButton";
 export { EditSaveButtons } from "./editSaveButtons";
 export { SendButton } from "./sendButton";
+export { DownloadLink } from "./downloadLink";

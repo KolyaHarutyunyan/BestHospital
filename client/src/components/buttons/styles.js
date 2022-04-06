@@ -207,4 +207,13 @@ export const buttonsStyle = makeStyles(() => ({
       height: "36px",
       textTransform: "capitalize",
    },
+
+   // ** download link styles **
+   downloadLinkStyle: {
+      color: "#347AF0",
+      display: "inline-flex",
+      alignItems: "center",
+      "& img": { marginLeft: "8px" },
+   },
+   // ** end **
 }));

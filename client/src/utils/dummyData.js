@@ -1,7 +1,5 @@
-const claimsCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
 export const dummyData = {
-   CLAIMS: claimsCount.map(() => ({
+   CLAIMS: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(() => ({
       _id: Math.random().toString(),
       createdDate: "10/21/2021",
       submittedDate: "03/28/2022",
@@ -14,5 +12,22 @@ export const dummyData = {
       remaining: 300,
       status: "Submitted",
       paymentRef: "www.testlink.com",
+      receivables: [1, 2, 3].map(() => ({
+         _id: Math.random().toString(),
+         dateOfService: "10/21/2021 - 03/28/2022",
+         placeOfService: "In Home (02)",
+         cptCode: "H2001",
+         modifier: "HM",
+         totalUnits: 8,
+         totalBilled: 1000,
+         renderingProvider: "12312312",
+         bills: [1, 2, 3].map(() => ({
+            _id: Math.random().toString(),
+            dateOfService: "10/21/2022",
+            timeOfService: "09:00 AM - 10:00 AM",
+            units: 4,
+            signature: "file_pdf.pdf",
+         })),
+      })),
    })),
 };

@@ -1,0 +1,1 @@
+export { ReveivableBillTable } from "./reveivableBillTable";
