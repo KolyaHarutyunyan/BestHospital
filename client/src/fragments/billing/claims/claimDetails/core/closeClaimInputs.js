@@ -5,47 +5,36 @@ import { claimDetailsCoreStyle } from "./styles";
 import { useDispatch } from "react-redux";
 import { claimActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 
-export const CloseClaimInputs = ({ closeModal }) => {
+export const CloseClaimInputs = ({ closeModal, claimId }) => {
    const classes = claimDetailsCoreStyle();
 
    const dispatch = useDispatch();
 
-   const closingClaimLoader = FindLoad("");
-   const closingClaimSuccess = FindSuccess("");
+   const closingClaimLoader = FindLoad("EDIT_CLAIM_STATUS");
+   const closingClaimSuccess = FindSuccess("EDIT_CLAIM_STATUS");
 
    useEffect(() => {
       if (!!closingClaimSuccess.length) {
          closeModal();
-         httpRequestsOnSuccessActions.removeSuccess("");
+         httpRequestsOnSuccessActions.removeSuccess("EDIT_CLAIM_STATUS");
       }
    }, [closingClaimSuccess]);
 
-   const [inputs, setInputs] = useState({});
+   const [closingComment, setClosingComment] = useState("");
    const [error, setError] = useState("");
 
-   function handleChange(e) {
-      setInputs((prevState) => ({
-         ...prevState,
-         [e.target.name]: e.target.value,
-      }));
-      error === e.target.name && setError("");
+   function handleChange(event) {
+      setClosingComment(event.target.value);
+      !!error && setError("");
    }
 
    function handleSubmit() {
-      const closingCommentDataIsValid = isNotEmpty(inputs.closingComment);
-
-      if (closingCommentDataIsValid) {
-         const closingCommentData = {
-            comment: inputs.closingComment,
-         };
-
-         // dispatch(claimActions);
+      if (isNotEmpty(closingComment)) {
+         dispatch(
+            claimActions.editClaimStatus(claimId, "CLOSED", closingComment)
+         );
       } else {
-         const errorText = !isNotEmpty(inputs.closingComment)
-            ? "closingComment"
-            : "";
-
-         setError(errorText);
+         setError("closingComment");
       }
    }
 
@@ -56,9 +45,9 @@ export const CloseClaimInputs = ({ closeModal }) => {
             id={"closingComment"}
             name={"closingComment"}
             label={"Add your comment here ...*"}
-            value={inputs.closingComment}
+            value={closingComment}
             onChange={handleChange}
-            hasText={!!inputs.closingComment}
+            hasText={!!closingComment}
             typeError={error === "closingComment" && ErrorText.field}
          />
          <CreateChancel

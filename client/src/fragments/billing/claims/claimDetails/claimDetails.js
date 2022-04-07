@@ -168,7 +168,10 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
                      "Please indicate below the reason for closing the claim."
                   }
                >
-                  <CloseClaimInputs closeModal={() => setOpen(false)} />
+                  <CloseClaimInputs
+                     closeModal={() => setOpen(false)}
+                     claimId={_id}
+                  />
                </BillingModalWrapper>
             }
          />

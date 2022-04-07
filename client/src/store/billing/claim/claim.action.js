@@ -1,4 +1,9 @@
-import { EDIT_CLAIM_STATUS, GENERATE_CLAIM, GET_CLAIMS, GET_CLAIM_BY_ID } from "./claim.type";
+import {
+   EDIT_CLAIM_STATUS,
+   GENERATE_CLAIM,
+   GET_CLAIMS,
+   GET_CLAIM_BY_ID,
+} from "./claim.type";
 
 export const getClaims = () => {
    return {
@@ -13,16 +18,16 @@ export const getClaimById = (id) => {
    };
 };
 
-export const generateClaim = (body) => {
+export const generateClaim = (group, body) => {
    return {
       type: GENERATE_CLAIM,
-      payload: { body },
+      payload: { group, body },
    };
 };
 
-export const editClaimStatus = (id, status) => {
+export const editClaimStatus = (id, status, details) => {
    return {
       type: EDIT_CLAIM_STATUS,
-      payload: { id, status },
+      payload: { id, status, details },
    };
 };
