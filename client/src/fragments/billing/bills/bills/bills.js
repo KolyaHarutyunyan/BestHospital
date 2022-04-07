@@ -26,7 +26,7 @@ export const BillsFragment = ({
    const dispatch = useDispatch();
 
    const { open } = useContext(DrawerContext);
-   const { handlePageChange } = useContext(PaginationContext);
+   const { handlePageChange, pageIsChanging } = useContext(PaginationContext);
 
    const billsTableClassName = `${classes.billsTableStyle} ${
       open ? "narrow" : ""
@@ -85,23 +85,23 @@ export const BillsFragment = ({
          {!!billsWithFilters.length ? (
             <div className={classes.tableAndPaginationBoxStyle}>
                <div className={classes.tableBoxStyle}>
-                  {billsLoader ? (
+                  {billsLoader && pageIsChanging ? (
                      <div className={classes.loaderContainerStyle}>
                         <Loader circleSize={50} />
                      </div>
                   ) : (
                      <div className={billsTableClassName}>
-                        <BillTableWithoutScroll bills={bills} />
-                        <BillTableWithScroll bills={bills} />
+                        <BillTableWithoutScroll bills={billsWithFilters} />
+                        <BillTableWithScroll bills={billsWithFilters} />
                      </div>
                   )}
                </div>
                <PaginationItem
-                  listLength={bills.length}
+                  listLength={billsWithFilters.length}
                   page={page}
                   handleReturn={(number) => changePage(number)}
                   count={billsQty}
-                  entries={bills.length}
+                  entries={billsWithFilters.length}
                />
             </div>
          ) : (

@@ -39,4 +39,11 @@ export const billTableStyle = makeStyles(() => ({
       "& .MuiOutlinedInput-notchedOutline, &:hover .MuiOutlinedInput-notchedOutline":
          { border: "none" },
    },
+   dateRangeStyle: {
+      fontSize: "14px",
+      fontWeight: 600,
+      color: Colors.BackgroundBlue,
+      marginBottom: "8px",
+   },
+   filteredDatesBoxStyle: { display: "flex" },
 }));

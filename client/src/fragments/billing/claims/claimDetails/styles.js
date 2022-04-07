@@ -14,7 +14,7 @@ export const claimDetailsStyle = makeStyles(() => ({
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
-      marginBottom: "32px",
+      marginBottom: "24px",
    },
    closeClaimButnStyle: {
       border: "none",
