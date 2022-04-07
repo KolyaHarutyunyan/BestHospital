@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Table } from "@material-ui/core";
 import { TransactionsDemoTBody, TransactionsDemoTHead } from "./common";
 import {
-   BillTransactionWrapper,
+   BillingModalWrapper,
    CreateChancel,
    SimpleModal,
 } from "@eachbase/components";
@@ -45,7 +45,7 @@ export const TransactionsDemoTable = ({ billTransactions = [], billId }) => {
             openDefault={open}
             handleOpenClose={() => setOpen((prevState) => !prevState)}
             content={
-               <BillTransactionWrapper
+               <BillingModalWrapper
                   wrapperStylesName={classes.transactionVoidingWrapperStyle}
                   onClose={() => setOpen(false)}
                   titleContent={"Void This Transaction?"}
@@ -68,7 +68,7 @@ export const TransactionsDemoTable = ({ billTransactions = [], billId }) => {
                      }
                      onClose={() => setOpen(false)}
                   />
-               </BillTransactionWrapper>
+               </BillingModalWrapper>
             }
          />
       </>

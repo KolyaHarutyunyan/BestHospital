@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { claimDetailsStyle } from "./styles";
 import {
-   BillTransactionWrapper,
+   BillingModalWrapper,
    DownloadLink,
    NoItemText,
    SimpleModal,
@@ -160,15 +160,16 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
             openDefault={open}
             handleOpenClose={() => setOpen((prevState) => !prevState)}
             content={
-               <BillTransactionWrapper
+               <BillingModalWrapper
+                  wrapperStylesName={classes.closeClaimWrapperStyle}
                   onClose={() => setOpen(false)}
                   titleContent={"Close This Claim?"}
                   subtitleContent={
                      "Please indicate below the reason for closing the claim."
                   }
                >
-                  <CloseClaimInputs />
-               </BillTransactionWrapper>
+                  <CloseClaimInputs closeModal={() => setOpen(false)} />
+               </BillingModalWrapper>
             }
          />
       </>

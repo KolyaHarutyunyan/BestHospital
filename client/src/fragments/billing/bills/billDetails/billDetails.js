@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { billDetailsStyle } from "./styles";
 import {
    AddModalButton,
-   BillTransactionWrapper,
+   BillingModalWrapper,
    Loader,
    NoItemText,
    SimpleModal,
@@ -184,7 +184,7 @@ export const BillDetailsFragment = ({
             openDefault={open}
             handleOpenClose={() => setOpen((prevState) => !prevState)}
             content={
-               <BillTransactionWrapper
+               <BillingModalWrapper
                   onClose={() => setOpen(false)}
                   titleContent={"Add Transaction"}
                   subtitleContent={
@@ -195,7 +195,7 @@ export const BillDetailsFragment = ({
                      billId={_id}
                      closeModal={() => setOpen(false)}
                   />
-               </BillTransactionWrapper>
+               </BillingModalWrapper>
             }
          />
       </>

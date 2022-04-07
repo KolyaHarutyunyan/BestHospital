@@ -4,4 +4,4 @@ export { InfoWrapper } from "./infoWrapper";
 export { CreateWrapperHead } from "./createWrapperHead";
 export { Management } from "./management";
 export { TableWrapperGeneralInfo } from "./tableWrapperGeneralInfo";
-export { BillTransactionWrapper } from "./billTransactionWrapper";
+export { BillingModalWrapper } from "./billingModalWrapper";

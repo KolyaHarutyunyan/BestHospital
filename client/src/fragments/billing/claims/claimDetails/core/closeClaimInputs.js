@@ -1,9 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { UserTextArea, CreateChancel } from "@eachbase/components";
-import { ErrorText, isNotEmpty } from "@eachbase/utils";
+import { ErrorText, FindLoad, FindSuccess, isNotEmpty } from "@eachbase/utils";
+import { claimDetailsCoreStyle } from "./styles";
+import { useDispatch } from "react-redux";
+import { claimActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 
 export const CloseClaimInputs = ({ closeModal }) => {
-   const classes = {};
+   const classes = claimDetailsCoreStyle();
+
+   const dispatch = useDispatch();
+
+   const closingClaimLoader = FindLoad("");
+   const closingClaimSuccess = FindSuccess("");
+
+   useEffect(() => {
+      if (!!closingClaimSuccess.length) {
+         closeModal();
+         httpRequestsOnSuccessActions.removeSuccess("");
+      }
+   }, [closingClaimSuccess]);
 
    const [inputs, setInputs] = useState({});
    const [error, setError] = useState("");
@@ -24,8 +39,7 @@ export const CloseClaimInputs = ({ closeModal }) => {
             comment: inputs.closingComment,
          };
 
-         console.log(closingCommentData);
-         // dispatch();
+         // dispatch(claimActions);
       } else {
          const errorText = !isNotEmpty(inputs.closingComment)
             ? "closingComment"
@@ -38,6 +52,7 @@ export const CloseClaimInputs = ({ closeModal }) => {
    return (
       <div>
          <UserTextArea
+            className={classes.commentTextAreaStyle}
             id={"closingComment"}
             name={"closingComment"}
             label={"Add your comment here ...*"}
@@ -47,12 +62,12 @@ export const CloseClaimInputs = ({ closeModal }) => {
             typeError={error === "closingComment" && ErrorText.field}
          />
          <CreateChancel
-            butnClassName={classes.addOrCancelButnStyle}
-            // loader={!!loader.length}
+            butnClassName={classes.closeOrCancelButnStyle}
+            loader={!!closingClaimLoader.length}
             create={"Close"}
             chancel={"Cancel"}
             onCreate={handleSubmit}
-            // onClose={closeModal}
+            onClose={closeModal}
          />
       </div>
    );

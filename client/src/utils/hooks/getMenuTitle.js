@@ -1,5 +1,6 @@
 export const getMenuTitle = (url = "") => {
    if (url.startsWith("/bill/")) return "Bills";
+   if (url.startsWith("/claim/")) return "Claims";
 
    switch (url) {
       // case "/":

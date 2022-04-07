@@ -49,7 +49,7 @@ export {
    InfoWrapper,
    CreateWrapperHead,
    Management,
-   BillTransactionWrapper,
+   BillingModalWrapper,
 } from "./wrapper";
 export {
    SimpleModal,
