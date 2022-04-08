@@ -12,15 +12,18 @@ export const BillFiltersSelectors = ({
    selectedPayor,
    passClientHandler,
    selectedClient,
+   forIncompleteBills,
    changeDateInput,
    filteredDate,
 }) => {
    const classes = billTableStyle();
 
+   const dateInputLabel = forIncompleteBills ? "Service" : "Submitted";
+
    return (
       <div className={classes.filtersBoxStyle}>
          <UserInputsDropdown
-            label={"Payor"}
+            label={"Funding Source"}
             dropdownOptions={addAllTextToTheList(payorsNames)}
             onPass={passPayorHandler}
             selected={selectedPayor}
@@ -34,7 +37,7 @@ export const BillFiltersSelectors = ({
             dropdownClassName={classes.filterDropStyle}
          />
          <ValidationInput
-            inputLabel={"Submitted Date"}
+            inputLabel={`${dateInputLabel} Date`}
             variant={"outlined"}
             name={"filterDate"}
             onChange={changeDateInput}

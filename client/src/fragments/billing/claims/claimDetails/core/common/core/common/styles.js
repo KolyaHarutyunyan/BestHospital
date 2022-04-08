@@ -1,11 +1,11 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { Colors } from "@eachbase/utils";
+import { Backgrounds, Colors } from "@eachbase/utils";
 
-export const tableTheadTbodyStyle = makeStyles(() => ({
+export const receivableBillTHeadTBodyStyle = makeStyles(() => ({
    tableTheadStyle: {
       display: "flex",
       justifyContent: "space-between",
-      backgroundColor: `${Colors.BackgroundBlue}`,
+      backgroundColor: `${Colors.BackgroundWhite}`,
       padding: "9px 16px",
       borderRadius: "8px",
       "@media(max-width: 1280px)": { padding: "9px 8px" },
@@ -14,26 +14,24 @@ export const tableTheadTbodyStyle = makeStyles(() => ({
       maxWidth: "195px",
       width: "100%",
       "&:not(:last-of-type)": { marginRight: "32px" },
-      "& span": { color: `${Colors.BackgroundWhite}` },
+      "& span": {
+         fontSize: "14px",
+         fontWeight: 700,
+         color: `${Colors.TextSecondary}`,
+      },
    },
    tbodyContainerStyle: {
       width: "100%",
       borderRadius: "8px",
+      overflow: "hidden",
       marginTop: "4px",
    },
    tbodyRowStyle: {
       display: "flex",
       justifyContent: "space-between",
       padding: "9px 16px",
-      borderRadius: "8px",
-      backgroundColor: Colors.BackgroundWater,
-      cursor: "pointer",
-      transition: "background-color 0.2s linear !important",
-      "&:hover": { backgroundColor: Colors.BackgroundHoverBlue },
-      "&.opened": {
-         backgroundColor: Colors.BackgroundWater,
-         borderRadius: "8px 8px 0 0",
-      },
+      background: Backgrounds.catskillWhite,
+      cursor: "default",
       "@media(max-width: 1280px)": { padding: "9px 8px" },
    },
    tdStyle: {
@@ -43,14 +41,7 @@ export const tableTheadTbodyStyle = makeStyles(() => ({
       width: "100%",
       fontSize: "14px",
       fontWeight: 400,
-      color: Colors.TextSecondary,
-      marginRight: "32px",
-   },
-   arrowTdStyle: {
-      display: "flex",
-      justifyContent: "flex-end",
-      maxWidth: "195px",
-      width: "100%",
-      "&.opened img": { transform: "rotate(180deg)" },
+      color: Colors.TextPrimary,
+      "&:not(:last-of-type)": { marginRight: "32px" },
    },
 }));

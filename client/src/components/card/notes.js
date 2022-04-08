@@ -71,14 +71,6 @@ export const Notes = ({
    };
 
    const loader = FindLoad("DELETE_GLOBAL_NOTE");
-   const success = FindSuccess("DELETE_GLOBAL_NOTE");
-
-   useEffect(() => {
-      if (success) {
-         setOpenDelModal(false);
-         closeModal && closeModal();
-      }
-   }, [success]);
 
    return (
       <>

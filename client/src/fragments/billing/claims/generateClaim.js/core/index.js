@@ -1,0 +1,1 @@
+export { NotClaimedBillTable } from "./notClaimedBillTable";

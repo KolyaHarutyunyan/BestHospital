@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { Backgrounds, Colors, Images } from "@eachbase/utils";
+import { Colors } from "@eachbase/utils";
 
 export const claimDetailsStyle = makeStyles(() => ({
    claimDetailsContainerStyle: {
@@ -14,7 +14,7 @@ export const claimDetailsStyle = makeStyles(() => ({
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
-      marginBottom: "32px",
+      marginBottom: "24px",
    },
    closeClaimButnStyle: {
       border: "none",
@@ -119,5 +119,10 @@ export const claimDetailsStyle = makeStyles(() => ({
       fontWeight: 700,
       color: Colors.TextSecondary,
       textTransform: "capitalize",
+   },
+   closeClaimWrapperStyle: {
+      padding: "40px",
+      "@media(max-width: 1280px)": { padding: "40px 32px 32px 32px" },
+      "& > button": { backgroundColor: Colors.BackgroundWater },
    },
 }));

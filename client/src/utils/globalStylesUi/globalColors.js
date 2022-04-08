@@ -9,6 +9,7 @@ export const Colors = {
    BackgroundMango: "#FFC051",
    BackgroundWater: "#EBF2FD",
    BackgroundCatskillWhite: "#F2F4F8",
+   BackgroundHoverBlue: "#d8e5fb",
 
    // Text colors
 
@@ -57,12 +58,10 @@ export const Backgrounds = {
    catskillWhite: "#F2F4F8 0% 0% no-repeat padding-box",
    darkBlue: "#337BEFFF",
    darkGrey: "#A3B2BD80",
-
    lightBlue: "#d8e5fb 0% 0% no-repeat padding-box",
    blue: "#347AF0 0% 0% no-repeat padding-box",
    blueHover: "#347AF0 0% 0% no-repeat padding-box",
-
    headerLightBlue: "#EBF2FD 0% 0% no-repeat padding-box",
-
    grayHover: "#EBF2FD80 0% 0% no-repeat padding-box;",
+   Base: "#2A374E 0% 0% no-repeat padding-box",
 };

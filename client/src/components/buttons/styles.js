@@ -154,7 +154,7 @@ export const buttonsStyle = makeStyles(() => ({
    closeCircleStyle: {
       width: "24px",
       height: "24px",
-      background: Colors.BackgroundWater,
+      backgroundColor: Colors.BackgroundWater,
       borderRadius: "40px",
       border: "none",
       display: "flex",

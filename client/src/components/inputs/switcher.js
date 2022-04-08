@@ -2,8 +2,8 @@ import { Switch } from "@material-ui/core";
 import React, { useState } from "react";
 import { inputsStyle } from "./styles";
 
-export const Switcher = ({ handleClick, checked }) => {
-   const [switchBool, setSwitchBool] = useState(checked ? checked : false);
+export const Switcher = ({ switcherClassName, handleClick, checked }) => {
+   const [switchBool, setSwitchBool] = useState(false);
    const classes = inputsStyle();
 
    const handleChange = () => {
@@ -17,8 +17,8 @@ export const Switcher = ({ handleClick, checked }) => {
    return (
       <Switch
          onClick={handleChange}
-         className={classes.switcher}
-         checked={switchBool}
+         className={`${classes.switcher} ${switcherClassName}`}
+         checked={checked || switchBool}
          name="checkedB"
          color="primary"
       />

@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { Colors } from "@eachbase/utils";
+import { Colors, Images } from "@eachbase/utils";
 
-export const tableTheadTbodyStyle = makeStyles(() => ({
+export const notClaimedBillTHeadTBodyStyle = makeStyles(() => ({
    tableTheadStyle: {
       display: "flex",
       justifyContent: "space-between",
@@ -13,7 +13,9 @@ export const tableTheadTbodyStyle = makeStyles(() => ({
    thStyle: {
       maxWidth: "195px",
       width: "100%",
-      "&:not(:last-of-type)": { marginRight: "32px" },
+      marginRight: "16px",
+      "&:first-of-type": { maxWidth: "34px" },
+      "&:last-of-type": { marginRight: "0" },
       "& span": { color: `${Colors.BackgroundWhite}` },
    },
    tbodyContainerStyle: {
@@ -27,30 +29,23 @@ export const tableTheadTbodyStyle = makeStyles(() => ({
       padding: "9px 16px",
       borderRadius: "8px",
       backgroundColor: Colors.BackgroundWater,
-      cursor: "pointer",
+      cursor: "default",
       transition: "background-color 0.2s linear !important",
       "&:hover": { backgroundColor: Colors.BackgroundHoverBlue },
-      "&.opened": {
-         backgroundColor: Colors.BackgroundWater,
-         borderRadius: "8px 8px 0 0",
-      },
+      "&.checked-box": { backgroundColor: Colors.BackgroundHoverBlue },
       "@media(max-width: 1280px)": { padding: "9px 8px" },
    },
    tdStyle: {
       display: "flex",
       alignItems: "center",
       maxWidth: "195px",
+      "&.checkbox-td": { maxWidth: "34px" },
       width: "100%",
       fontSize: "14px",
       fontWeight: 400,
       color: Colors.TextSecondary,
-      marginRight: "32px",
+      marginRight: "16px",
+      "&.signature-td": { marginRight: "0" },
    },
-   arrowTdStyle: {
-      display: "flex",
-      justifyContent: "flex-end",
-      maxWidth: "195px",
-      width: "100%",
-      "&.opened img": { transform: "rotate(180deg)" },
-   },
+   billCheckboxStyle: { padding: "0" },
 }));

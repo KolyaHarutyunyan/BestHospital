@@ -1,1 +1,1 @@
-export { ReveivableBillTable } from "./reveivableBillTable";
+export { ReceivableBillTable } from "./receivableBillTable";

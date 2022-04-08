@@ -24,12 +24,12 @@ export const CreateChancel = ({
          }}
       >
          <Button
-            className={butnClassName}
+            className={`${butnClassName} cancel`}
             style={{
                textTransform: "capitalize",
                width: buttonWidth,
                height: "48px",
-               background: Colors.ThemeGray,
+               backgroundColor: Colors.ThemeGray,
                borderRadius: "8px",
                fontSize: "16px",
                fontWeight: "600",
@@ -40,12 +40,12 @@ export const CreateChancel = ({
             {chancel}
          </Button>
          <Button
-            className={butnClassName}
+            className={`${butnClassName} create`}
             style={{
                textTransform: "capitalize",
                width: buttonWidth,
                height: "48px",
-               background: disabled
+               backgroundColor: disabled
                   ? "rgba(52,122,240,.5)"
                   : Colors.BackgroundBlue,
                borderRadius: "8px",

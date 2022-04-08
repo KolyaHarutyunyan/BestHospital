@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-   BillTransactionWrapper,
+   BillingModalWrapper,
    CreateChancel,
    SimpleModal,
    UserInputsDropdown,
@@ -11,7 +11,6 @@ import {
    FindSuccess,
    makeEnum,
    manageStatus,
-   PaginationContext,
 } from "@eachbase/utils";
 import { billTransactionInputsStyle } from "./styles";
 import { useDispatch } from "react-redux";
@@ -201,7 +200,7 @@ export const StatusSelectors = ({
             }
             handleOpenClose={handleOpenClose}
             content={
-               <BillTransactionWrapper
+               <BillingModalWrapper
                   wrapperStylesName={classes.statusSelectorsWrapperStyle}
                   onClose={handleOpenClose}
                   titleContent={modalTitleContent}
@@ -215,7 +214,7 @@ export const StatusSelectors = ({
                      onCreate={handleNewStatusSelect}
                      onClose={handleOpenClose}
                   />
-               </BillTransactionWrapper>
+               </BillingModalWrapper>
             }
          />
       </>

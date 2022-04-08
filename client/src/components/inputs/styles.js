@@ -224,16 +224,15 @@ export const inputsStyle = makeStyles(() => ({
          top: "3px",
          right: 0,
       },
-      "& .MuiAutocomplete-endAdornment > button:last-of-type span:first-of-type":
-         {
-            display: "block",
-            width: "18px",
-            height: "18px",
-            backgroundImage: `url(${Images.dropdownArrowFilledBlue})`,
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "contain",
-            backgroundPosition: "center",
-         },
+      "& .MuiAutocomplete-endAdornment > button:last-of-type span:first-of-type": {
+         display: "block",
+         width: "18px",
+         height: "18px",
+         backgroundImage: `url(${Images.dropdownArrowFilledBlue})`,
+         backgroundRepeat: "no-repeat",
+         backgroundSize: "contain",
+         backgroundPosition: "center",
+      },
       "& .MuiInputBase-root.MuiOutlinedInput-root.MuiAutocomplete-inputRoot.MuiInputBase-fullWidth.MuiInputBase-formControl.MuiInputBase-adornedEnd.MuiOutlinedInput-adornedEnd":
          { padding: 0, height: "48px" },
    },
@@ -340,7 +339,7 @@ export const inputsStyle = makeStyles(() => ({
    // end **
 
    // CheckBoxInput Style **
-   checkBoxLabelStyle: {
+   checkboxStyle: {
       display: "flex",
       alignItems: "center",
       transition: "all 0.2s linear",
@@ -354,21 +353,27 @@ export const inputsStyle = makeStyles(() => ({
          backgroundPosition: "center",
          backgroundColor: Colors.ThemeBlue,
       },
+      "&.unique input:checked + $inputCheckBoxStyle": {
+         backgroundImage: `url(${Images.checkmarkBlue})`,
+         backgroundColor: Colors.BackgroundWhite,
+      },
       "&:hover": { backgroundColor: Colors.BackgroundWater },
+      "&.unique:hover": { backgroundColor: "inherit" },
+      "&.unique $inputCheckBoxStyle": { border: `1px solid ${Colors.BackgroundWhite}` },
    },
    inputCheckBoxStyle: {
       backgroundColor: "inherit",
       transition: "background-color 0.2s linear",
       width: "18px",
       height: "18px",
-      border: "1px solid #438AFE",
+      border: `1px solid ${Colors.ThemeBlue}`,
       borderRadius: "2px",
-      marginRight: "16px",
    },
    inputLabelStyle: {
       fontSize: "16px",
       fontWeight: 400,
       color: Colors.TextPrimary,
+      marginLeft: "16px",
    },
    // end **
 

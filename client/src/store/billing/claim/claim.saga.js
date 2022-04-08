@@ -59,7 +59,11 @@ function* generateClaim(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    try {
-      yield call(claimService.generateClaimService, action.payload.body);
+      yield call(
+         claimService.generateClaimService,
+         action.payload.group,
+         action.payload.body
+      );
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (error) {
@@ -75,7 +79,8 @@ function* editClaimStatus(action) {
       yield call(
          claimService.editClaimStatusService,
          action.payload.id,
-         action.payload.status
+         action.payload.status,
+         action.payload.details
       );
       yield put({
          type: GET_CLAIMS,

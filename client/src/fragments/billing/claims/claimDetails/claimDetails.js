@@ -1,8 +1,9 @@
 import React, { useContext, useState } from "react";
 import { claimDetailsStyle } from "./styles";
 import {
-   BillTransactionWrapper,
+   BillingModalWrapper,
    DownloadLink,
+   NoItemText,
    SimpleModal,
 } from "@eachbase/components";
 import {
@@ -15,7 +16,7 @@ import {
    makeCapitalize,
 } from "@eachbase/utils";
 import { useDispatch } from "react-redux";
-import { ReceivableTable } from "./core";
+import { CloseClaimInputs, ReceivableTable } from "./core";
 
 export const ClaimDetailsFragment = ({ claimDetails }) => {
    const classes = claimDetailsStyle();
@@ -146,24 +147,32 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
                      Receivables
                   </h2>
                </div>
-               <div className={classes.receivablesTableBoxStyle}>
-                  <ReceivableTable claimReceivables={receivables} />
-               </div>
+               {!!receivables?.length ? (
+                  <div className={classes.receivablesTableBoxStyle}>
+                     <ReceivableTable claimReceivables={receivables} />
+                  </div>
+               ) : (
+                  <NoItemText text={"No Receivables Yet"} />
+               )}
             </div>
          </div>
          <SimpleModal
             openDefault={open}
             handleOpenClose={() => setOpen((prevState) => !prevState)}
             content={
-               <BillTransactionWrapper
+               <BillingModalWrapper
+                  wrapperStylesName={classes.closeClaimWrapperStyle}
                   onClose={() => setOpen(false)}
                   titleContent={"Close This Claim?"}
                   subtitleContent={
                      "Please indicate below the reason for closing the claim."
                   }
                >
-                  <div>close claim content here..</div>
-               </BillTransactionWrapper>
+                  <CloseClaimInputs
+                     closeModal={() => setOpen(false)}
+                     claimId={_id}
+                  />
+               </BillingModalWrapper>
             }
          />
       </>
