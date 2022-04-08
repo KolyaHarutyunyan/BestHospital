@@ -30,9 +30,7 @@ export const ClaimTBody = ({ claims = [] }) => {
    function getDisplayOf(givenText = "") {
       if (typeof givenText !== "string") return givenText;
 
-      return showDashIfEmpty(
-         getTextDependsOnWidth(width, size, givenText, limit)
-      );
+      return showDashIfEmpty(getTextDependsOnWidth(width, size, givenText, limit));
    }
 
    return (
@@ -80,9 +78,7 @@ export const ClaimTBody = ({ claims = [] }) => {
                   <TableCell>
                      <div>
                         {getDisplayOf(
-                           addSignToValueFromStart(
-                              getValueByFixedNumber(claim.remaining)
-                           )
+                           addSignToValueFromStart(getValueByFixedNumber(claim.remaining))
                         )}
                      </div>
                   </TableCell>

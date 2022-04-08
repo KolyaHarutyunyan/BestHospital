@@ -28,7 +28,7 @@ export function getTableHeader(
 
    if (withTooltip) {
       return (
-         <HtmlTooltip title={<p>{tooltipTitle}</p>} placement={tooltipPlace}>
+         <HtmlTooltip title={tooltipTitle} placement={tooltipPlace}>
             <div>
                <SearchAndFilter
                   title={theadTitle}

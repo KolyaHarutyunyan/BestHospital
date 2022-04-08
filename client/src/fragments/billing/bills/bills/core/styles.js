@@ -31,6 +31,7 @@ export const billTableStyle = makeStyles(() => ({
    },
    dateInputStyle: {
       width: "220px",
+      height: "60px",
       marginRight: "24px",
       "& > div > div": {
          border: "1px solid #A3B2BD80",

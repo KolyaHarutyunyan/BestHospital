@@ -15,8 +15,8 @@ export const GenerateClaim = () => {
    const billsData = useSelector((state) => state.bill.bills);
    const { bills, count } = billsData || {};
 
-   const incompleteBills = bills?.filter(
-      (bill) => bill.claimStatus === "NOTINVOICED"
+   const notClaimedBills = bills?.filter(
+      (bill) => bill.claimStatus === "NOTCLAIMED"
    );
 
    const loader = FindLoad("GET_BILLS");
@@ -46,11 +46,11 @@ export const GenerateClaim = () => {
             />
          </div>
          <GenerateClaimFragment
-            incompleteBills={bills}
-            incompleteBillsQty={count}
+            notClaimedBills={notClaimedBills}
+            notClaimedBillsQty={count}
             page={page}
             handleGetPage={setPage}
-            incompleteBillsLoader={loader}
+            notClaimedBillsLoader={loader}
          />
       </>
    );

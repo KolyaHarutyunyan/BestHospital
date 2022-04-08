@@ -11,11 +11,13 @@ export const generateClaimStyle = makeStyles(() => ({
    generateClaimActionsStyle: {
       display: "flex",
       justifyContent: "space-between",
-      alignItems: "center",
+      alignItems: "flex-end",
+      marginBottom: "24px",
    },
    mergeBillsBoxStyle: {
       display: "flex",
       alignItems: "center",
+      marginBottom: "-10px",
    },
    mergeBillsTitleStyle: {
       fontSize: "14px",
@@ -35,7 +37,7 @@ export const generateClaimStyle = makeStyles(() => ({
       justifyContent: "center",
       alignItems: "center",
    },
-   incompleteBillsFooterStyle: {
+   notClaimedBillsFooterStyle: {
       width: "100%",
       display: "flex",
       justifyContent: "space-between",

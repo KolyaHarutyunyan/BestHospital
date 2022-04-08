@@ -1,2 +1,2 @@
-export { IncompleteBillTHead } from "./incompleteBillTHead";
-export { IncompleteBillTBody } from "./incompleteBillTBody";
+export { NotClaimedBillTHead } from "./notClaimedBillTHead";
+export { NotClaimedBillTBody } from "./notClaimedBillTBody";

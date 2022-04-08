@@ -34,13 +34,7 @@ export {
 } from "./inputs";
 export { Loader, MinLoader } from "./loader";
 export { GlobalLogo } from "./logo";
-export {
-   MessageScreen,
-   MessageMiniScreen,
-   NoInfoYet,
-   Circle,
-   Line,
-} from "./screens";
+export { MessageScreen, MessageMiniScreen, NoInfoYet, Circle, Line } from "./screens";
 export { TableHeadComponent, TableBodyComponent } from "./table";
 export {
    TableWrapperGeneralInfo,
@@ -50,6 +44,7 @@ export {
    CreateWrapperHead,
    Management,
    BillingModalWrapper,
+   CheckedItemsQtyInfoWrapper,
 } from "./wrapper";
 export {
    SimpleModal,

@@ -118,4 +118,31 @@ export const wrapperStyle = makeStyles(() => ({
       lineHeight: "24px",
    },
    //**end */
+
+   //**Checked Items Quantity Info Wrapper Styles */
+   qtyInfoContainerStyle: {
+      position: "relative",
+      width: "100%",
+      borderRadius: "8px",
+      background: Backgrounds.headerLightBlue,
+      paddingTop: "15px",
+      paddingBottom: "14px",
+      marginBottom: "4px",
+   },
+   uncheckButnStyle: {
+      border: "none",
+      outline: "none",
+      position: "absolute",
+      width: "24px",
+      height: "24px",
+      right: "16px",
+      top: "50%",
+      transform: "translateY(-50%)",
+      zIndex: 1,
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "inherit",
+   },
+   //**end */
 }));

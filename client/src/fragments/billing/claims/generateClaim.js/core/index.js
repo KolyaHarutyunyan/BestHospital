@@ -1,1 +1,1 @@
-export { IncompleteBillTable } from "./incompleteBillTable";
+export { NotClaimedBillTable } from "./notClaimedBillTable";
