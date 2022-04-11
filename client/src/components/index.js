@@ -13,7 +13,7 @@ export {
    DownloadLink,
 } from "./buttons";
 export { Title } from "./titles";
-export { ErrMessage, HtmlTooltip, SlicedText, NoYet } from "./messages";
+export { ErrMessage, SlicedText, NoYet } from "./messages";
 export {
    ValidationInput,
    PasswordInput,
@@ -53,7 +53,7 @@ export {
    AddNotes,
    AvailabilitySchedule,
 } from "./modal";
-export { SimpleToolTip } from "./toolTip";
+export { SimpleTooltip } from "./toolTip";
 export { CustomBreadcrumbs } from "./breadcrumbs";
 export { PaginationItem } from "./pagination";
 export { CircleAndTitle } from "./sections";

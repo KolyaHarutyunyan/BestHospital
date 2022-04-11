@@ -1,1 +1,1 @@
-export { SimpleToolTip } from './simpleToolTip'
+export { SimpleTooltip } from "./simpleTooltip";

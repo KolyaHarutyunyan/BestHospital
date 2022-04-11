@@ -1,4 +1,4 @@
-import { SearchAndFilter, HtmlTooltip } from "@eachbase/components";
+import { SearchAndFilter, SimpleTooltip } from "@eachbase/components";
 
 function isNotString(value = "") {
    return typeof value !== "string";
@@ -28,7 +28,7 @@ export function getTableHeader(
 
    if (withTooltip) {
       return (
-         <HtmlTooltip title={tooltipTitle} placement={tooltipPlace}>
+         <SimpleTooltip title={tooltipTitle} placement={tooltipPlace}>
             <div>
                <SearchAndFilter
                   title={theadTitle}
@@ -37,7 +37,7 @@ export function getTableHeader(
                   iconsAreLight={iconsAreLight}
                />
             </div>
-         </HtmlTooltip>
+         </SimpleTooltip>
       );
    }
 

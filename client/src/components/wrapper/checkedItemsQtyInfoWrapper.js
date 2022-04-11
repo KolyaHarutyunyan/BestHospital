@@ -1,7 +1,7 @@
 import React from "react";
 import { wrapperStyle } from "./styles";
 import { Images } from "@eachbase/utils";
-import { HtmlTooltip } from "@eachbase/components";
+import { SimpleTooltip } from "@eachbase/components";
 
 export const CheckedItemsQtyInfoWrapper = ({
    wrapperClassName,
@@ -14,7 +14,7 @@ export const CheckedItemsQtyInfoWrapper = ({
 
    return (
       <div className={qtyInfoClassName}>
-         <HtmlTooltip title={"Close"} placement={"top-start"}>
+         <SimpleTooltip title={"Close"} placement={"top-start"}>
             <button
                type="button"
                className={classes.uncheckButnStyle}
@@ -22,7 +22,7 @@ export const CheckedItemsQtyInfoWrapper = ({
             >
                <img src={Images.uncheck} alt="" />
             </button>
-         </HtmlTooltip>
+         </SimpleTooltip>
          {children}
       </div>
    );

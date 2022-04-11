@@ -1,9 +1,13 @@
-import { Tooltip } from "@material-ui/core";
+import { Tooltip, withStyles } from "@material-ui/core";
+import { Backgrounds, Colors } from "@eachbase/utils";
 
-export const SimpleToolTip =({title, content})=>{
-  return(
-  <Tooltip title={title} placement="left-end">
-    {content}
-  </Tooltip>
-  )
-}
+export const SimpleTooltip = withStyles((theme) => ({
+   tooltip: {
+      background: Backgrounds.Base,
+      padding: "8px",
+      borderRadius: "4px",
+      fontSize: "12px",
+      fontWeight: 400,
+      color: Colors.TextWhite,
+   },
+}))(Tooltip);

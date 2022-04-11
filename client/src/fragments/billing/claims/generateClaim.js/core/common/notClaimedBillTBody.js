@@ -1,6 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import {
    addSignToValueFromStart,
+   CheckupContext,
    DrawerContext,
    getLimitedVal,
    getValueByFixedNumber,
@@ -30,20 +31,17 @@ function getNotClaimedBillData(givenData = "", isOpen, givenWidth) {
    return tableData;
 }
 
-export const NotClaimedBillTBody = ({ notClaimedBill }) => {
+export const NotClaimedBillTBody = ({ notClaimedBill, triggerBill }) => {
    const classes = notClaimedBillTHeadTBodyStyle();
 
    const width = useWidth();
 
    const { open } = useContext(DrawerContext);
+   const { itemsAreChecked, handleItemsCheckup } = useContext(CheckupContext);
 
-   const [isChecked, setIsChecked] = useState(true);
-
-   function toggleBill() {
-      setIsChecked((prevState) => !prevState);
-   }
-
-   const tbodyClassName = `${classes.tbodyRowStyle} ${isChecked ? "checked-box" : ""}`;
+   const tbodyClassName = `${classes.tbodyRowStyle} ${
+      notClaimedBill.isChecked ? "checked-box" : ""
+   }`;
 
    const dateOfService = handleCreatedAtDate(notClaimedBill.dateOfService, 10, "/");
    const placeOfService = notClaimedBill.placeService?.name;
@@ -60,6 +58,14 @@ export const NotClaimedBillTBody = ({ notClaimedBill }) => {
       return showDashIfEmpty(getNotClaimedBillData(data, open, width));
    }
 
+   function handleInputCheckup(event) {
+      triggerBill({
+         ...notClaimedBill,
+         isChecked: event.target.checked,
+      });
+      itemsAreChecked && handleItemsCheckup(false);
+   }
+
    return (
       <div className={classes.tbodyContainerStyle}>
          <div className={tbodyClassName}>
@@ -67,8 +73,8 @@ export const NotClaimedBillTBody = ({ notClaimedBill }) => {
                <CheckBoxInput
                   inputId={notClaimedBill.id}
                   inputClassName={classes.billCheckboxStyle}
-                  inputChecked={isChecked}
-                  onInputChange={toggleBill}
+                  inputChecked={notClaimedBill.isChecked}
+                  onInputChange={handleInputCheckup}
                />
             </div>
             <div className={classes.tdStyle}>{getTableData(dateOfService)}</div>

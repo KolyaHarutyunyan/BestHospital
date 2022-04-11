@@ -1,12 +1,23 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { NotClaimedBillTable } from "./core";
 import { BillFiltersSelectors } from "../../bills/bills/core";
 import { generateClaimStyle } from "./styles";
 import { CreateChancel, Loader, NoItemText, Switcher } from "@eachbase/components";
-import { handleCreatedAtDate, PaginationContext } from "@eachbase/utils";
-import { billActions } from "@eachbase/store";
+import {
+   CheckupContext,
+   FindLoad,
+   handleCreatedAtDate,
+   PaginationContext,
+} from "@eachbase/utils";
+import { billActions, claimActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import Pagination from "@material-ui/lab/Pagination";
+import { useHistory } from "react-router";
+
+function mapBills(billList = [], boolean) {
+   if (!Array.isArray(billList)) return;
+   return billList.map((bill) => ({ ...bill, isChecked: boolean }));
+}
 
 export const GenerateClaimFragment = ({
    notClaimedBills = [],
@@ -17,46 +28,77 @@ export const GenerateClaimFragment = ({
 }) => {
    const classes = generateClaimStyle();
 
+   const history = useHistory();
+
    const dispatch = useDispatch();
 
+   const generateClaimLoader = FindLoad("GENERATE_CLAIM");
+
    const { handlePageChange, pageIsChanging } = useContext(PaginationContext);
+   const { itemsAreChecked, handleItemsCheckup } = useContext(CheckupContext);
 
    const [selectedPayor, setSelectedPayor] = useState("All");
    const [selectedClient, setSelectedClient] = useState("All");
    const [filteredServiceDate, setFilteredServiceDate] = useState("");
    const [merge, setMerge] = useState(true);
+   const [bills, setBills] = useState(mapBills(notClaimedBills, false));
 
-   const payorsNames = notClaimedBills.map((bill) => bill?.payor?.middleName);
-   const clientsNames = notClaimedBills.map((bill) => bill?.client?.middleName);
+   useEffect(() => {
+      if (itemsAreChecked) {
+         setBills(mapBills(bills, true));
+      }
+   }, [itemsAreChecked]);
+
+   function handleTriggeredBill(triggeredBill) {
+      return setBills(
+         bills.map((bill) => {
+            if (bill._id === triggeredBill._id) {
+               return triggeredBill;
+            }
+            return bill;
+         })
+      );
+   }
+
+   const payorsNames = bills.map((bill) => bill?.payor?.middleName);
+   const clientsNames = bills.map((bill) => bill?.client?.middleName);
 
    const notClaimedBillsWithFilters =
       selectedPayor === "All" && selectedClient === "All" && filteredServiceDate === ""
-         ? notClaimedBills
+         ? bills
          : selectedPayor !== "All"
-         ? notClaimedBills.filter(
+         ? bills.filter(
               (bill) =>
                  bill?.payor?.middleName?.toLowerCase() === selectedPayor.toLowerCase()
            )
          : selectedClient !== "All"
-         ? notClaimedBills.filter(
+         ? bills.filter(
               (bill) =>
                  bill?.client?.middleName?.toLowerCase() === selectedClient.toLowerCase()
            )
          : filteredServiceDate !== ""
-         ? notClaimedBills.filter(
+         ? bills.filter(
               (bill) =>
                  handleCreatedAtDate(bill?.dateOfService, 10) ===
                  handleCreatedAtDate(filteredServiceDate, 10)
            )
          : [];
 
-   const changePage = (number) => {
+   function changePage(number) {
       if (page === number) return;
       handlePageChange(true);
+      handleItemsCheckup(false);
+      setBills(mapBills(bills, false));
       let start = number > 1 ? number - 1 + "0" : 0;
       dispatch(billActions.getBills({ limit: 10, skip: start }));
       handleGetPage(number);
-   };
+   }
+
+   const billsGroup = merge ? "ON" : "OFF";
+
+   const checkedBillsIdList = bills
+      .filter((bill) => bill.isChecked)
+      .map((bill) => bill._id);
 
    return (
       <div className={classes.generateClaimContainerStyle}>
@@ -89,7 +131,11 @@ export const GenerateClaimFragment = ({
                         <Loader circleSize={50} />
                      </div>
                   ) : (
-                     <NotClaimedBillTable notClaimedBills={notClaimedBillsWithFilters} />
+                     <NotClaimedBillTable
+                        notClaimedBills={notClaimedBillsWithFilters}
+                        triggerBill={handleTriggeredBill}
+                        uncheckAllBills={() => setBills(mapBills(bills, false))}
+                     />
                   )}
                </div>
                <div className={classes.notClaimedBillsFooterStyle}>
@@ -101,11 +147,18 @@ export const GenerateClaimFragment = ({
                   />
                   <CreateChancel
                      classes={classes.generateOrCancelButnStyle}
-                     //  loader={!!loader.length}
+                     loader={!!generateClaimLoader.length}
                      create={"Generate Claims"}
                      chancel={"Cancel"}
-                     //  onCreate={handleSubmit}
-                     //  onClose={() => {}}
+                     onCreate={() =>
+                        dispatch(
+                           claimActions.generateClaim(billsGroup, {
+                              bills: checkedBillsIdList,
+                           })
+                        )
+                     }
+                     onClose={() => history.push("/claims")}
+                     disabled={!checkedBillsIdList.length}
                   />
                </div>
             </div>
