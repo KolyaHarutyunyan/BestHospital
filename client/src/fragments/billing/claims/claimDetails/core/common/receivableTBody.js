@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import {
    DrawerContext,
    getLimitedVal,
+   handleCreatedAtDate,
    Images,
    manageStatus,
    showDashIfEmpty,
@@ -50,6 +51,9 @@ export const ReceivableTBody = ({ receivable }) => {
 
    const { open } = useContext(DrawerContext);
 
+   const serviceStart = handleCreatedAtDate(receivable.dateOfService?.start, 10, "/");
+   const serviceEnd = handleCreatedAtDate(receivable.dateOfService?.end, 10, "/");
+
    function getTableData(data) {
       return showDashIfEmpty(getReceivData(data, open, width));
    }
@@ -58,23 +62,15 @@ export const ReceivableTBody = ({ receivable }) => {
       <div className={classes.tbodyContainerStyle}>
          <div className={tbodyClassName} onClick={toggleInfo}>
             <div className={classes.tdStyle}>
-               {getTableData(receivable.dateOfService)}
+               {getTableData(`${serviceStart} - ${serviceEnd}`)}
             </div>
-            <div className={classes.tdStyle}>
-               {getTableData(receivable.placeOfService)}
-            </div>
+            <div className={classes.tdStyle}>{getTableData(receivable.placeService)}</div>
             <div className={classes.tdStyle}>
                {getTableData(manageStatus(receivable.cptCode))}
             </div>
-            <div className={classes.tdStyle}>
-               {getTableData(receivable.modifier)}
-            </div>
-            <div className={classes.tdStyle}>
-               {getTableData(receivable.totalUnits)}
-            </div>
-            <div className={classes.tdStyle}>
-               {getTableData(receivable.totalBilled)}
-            </div>
+            <div className={classes.tdStyle}>{getTableData(receivable.modifier)}</div>
+            <div className={classes.tdStyle}>{getTableData(receivable.totalUnits)}</div>
+            <div className={classes.tdStyle}>{getTableData(receivable.totalBill)}</div>
             <div className={classes.tdStyle}>
                {getTableData(receivable.renderingProvider)}
             </div>

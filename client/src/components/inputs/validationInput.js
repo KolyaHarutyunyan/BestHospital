@@ -56,7 +56,7 @@ export const ValidationInput = ({
    return (
       <Fragment>
          <div className={style ? style : classes.SignInInput}>
-            {inputLabel && <p className={classes.labelStyle}>{inputLabel}</p>}
+            <p className={classes.labelStyle}>{inputLabel}</p>
             <TextField
                onInput={(e) => maxLength(e)}
                style={{ ...styles }}

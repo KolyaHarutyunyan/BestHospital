@@ -1,7 +1,7 @@
-import ClearIcon from "@material-ui/icons/Clear";
-import { Colors } from "@eachbase/utils";
 import React from "react";
 import { buttonsStyle } from "./styles";
+import ClearIcon from "@material-ui/icons/Clear";
+import { Colors } from "@eachbase/utils";
 import { SimpleTooltip } from "@eachbase/components";
 
 export const DeleteButton = ({ handleClick, toolTipTitle }) => {

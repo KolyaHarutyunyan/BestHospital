@@ -60,9 +60,12 @@ export const tableStyle = makeStyles(() => ({
          },
       },
       "&.billingSystem.claimTBody": {
-         "& > td > div": {
-            maxWidth: "unset",
-            width: "100%",
+         "& > td": {
+            padding: "0 32px",
+            "& > div": {
+               maxWidth: "unset",
+               width: "100%",
+            },
          },
       },
       "& td": { backgroundColor: "inherit" },

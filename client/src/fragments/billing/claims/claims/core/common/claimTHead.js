@@ -7,19 +7,17 @@ import {
    getTextDependsOnWidth,
    useWidth,
 } from "@eachbase/utils";
-
-const tHeadStyle = {
-   boxShadow: "0px 4px 2px #347af01a",
-   backgroundColor: "#EBF2FD",
-};
+import { claimTHeadTBodyStyle } from "./styles";
 
 export const ClaimTHead = () => {
+   const classes = claimTHeadTBodyStyle();
+
    const width = useWidth();
 
    const { open } = useContext(DrawerContext);
 
-   const size = open ? 1575 : 1560;
-   const limit = open ? 3 : 5;
+   const size = open ? 1830 : 1680;
+   const limit = open ? 3 : 4;
 
    function getClaimTitle(givenTitle = "", ...rest) {
       return getTableHeader(
@@ -30,7 +28,7 @@ export const ClaimTHead = () => {
    }
 
    return (
-      <TableHeadComponent tHeadStyle={tHeadStyle}>
+      <TableHeadComponent theadClassName={classes.theadStyle}>
          <TableCell>
             <SearchAndFilter title={"ID"} custom={false} />
          </TableCell>

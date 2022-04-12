@@ -3,7 +3,8 @@ import { makeStyles } from "@material-ui/core/styles";
 export const claimsStyle = makeStyles(() => ({
    addButton: {
       display: "flex",
-      justifyContent: "flex-end",
+      justifyContent: "space-between",
+      alignItems: "flex-end",
       width: "100%",
    },
    claimsTableStyle: {

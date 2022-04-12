@@ -63,6 +63,7 @@ export const inputsStyle = makeStyles(() => ({
       fontSize: "14px",
       fontWeight: 600,
       color: Colors.BackgroundBlue,
+      minHeight: "15px",
       marginBottom: "8px",
    },
    searchInputTitle: {

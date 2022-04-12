@@ -37,8 +37,9 @@ export const billTableStyle = makeStyles(() => ({
          border: "1px solid #A3B2BD80",
          backgroundColor: Colors.BackgroundWhite,
       },
-      "& .MuiOutlinedInput-notchedOutline, &:hover .MuiOutlinedInput-notchedOutline":
-         { border: "none" },
+      "& .MuiOutlinedInput-notchedOutline, &:hover .MuiOutlinedInput-notchedOutline": {
+         border: "none",
+      },
    },
    dateRangeStyle: {
       fontSize: "14px",
@@ -46,5 +47,4 @@ export const billTableStyle = makeStyles(() => ({
       color: Colors.BackgroundBlue,
       marginBottom: "8px",
    },
-   filteredDatesBoxStyle: { display: "flex" },
 }));

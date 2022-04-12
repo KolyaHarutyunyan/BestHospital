@@ -15,31 +15,32 @@ import {
    Images,
    makeCapitalize,
 } from "@eachbase/utils";
-import { useDispatch } from "react-redux";
 import { CloseClaimInputs, ReceivableTable } from "./core";
 
 export const ClaimDetailsFragment = ({ claimDetails }) => {
    const classes = claimDetailsStyle();
 
-   const dispatch = useDispatch();
-
-   const { open: drawerOpen } = useContext(DrawerContext);
-
    const {
       _id,
       createdDate,
       submittedDate,
-      dateOfRange,
+      dateRange,
       staff,
       funder,
       client,
       totalCharge,
       ammountPaid,
       paymentRef,
-      receivables,
+      receivable,
+      status,
    } = claimDetails || {};
 
+   const { open: drawerOpen } = useContext(DrawerContext);
+
    const [open, setOpen] = useState(false);
+
+   const early = handleCreatedAtDate(dateRange?.early, 10, "/");
+   const latest = handleCreatedAtDate(dateRange?.latest, 10, "/");
 
    const CLAIM_DETAILS = [
       {
@@ -48,7 +49,7 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
       },
       {
          detailText: "Date of Range:",
-         detail: handleCreatedAtDate(dateOfRange, 10, "/"),
+         detail: `${early} - ${latest}`,
       },
       { detailText: "Staff:", detail: makeCapitalize(staff?.middleName) },
       {
@@ -72,17 +73,13 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
       {
          detailText: "Total Charges:",
          detail: addSignToValueFromStart(
-            getValueByFixedNumber(
-               totalCharge === 0 ? totalCharge + "" : totalCharge
-            )
+            getValueByFixedNumber(totalCharge === 0 ? totalCharge + "" : totalCharge)
          ),
       },
       {
          detailText: "Amount Paid:",
          detail: addSignToValueFromStart(
-            getValueByFixedNumber(
-               ammountPaid === 0 ? ammountPaid + "" : ammountPaid
-            )
+            getValueByFixedNumber(ammountPaid === 0 ? ammountPaid + "" : ammountPaid)
          ),
       },
       {
@@ -102,9 +99,7 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
          <div className={classes.claimDetailsContainerStyle}>
             <div className={classes.claimDetailsStyle}>
                <div className={classes.claimDetailsTitleBoxStyle}>
-                  <h2 className={classes.claimDetailsTitleStyle}>
-                     Claim Details
-                  </h2>
+                  <h2 className={classes.claimDetailsTitleStyle}>Claim Details</h2>
                </div>
                <button
                   className={classes.closeClaimButnStyle}
@@ -132,27 +127,26 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
                   </ol>
                )}
             </div>
-            <div className={classes.claimInfoBoxStyle}>
-               <img src={Images.claimInfo} alt="" />
-               <p className={classes.claimInfoStyle}>
-                  This Claim has been deleted for Lorem Lorem Ipsum is simply
-                  dummy text of the printing and typesetting industry. Lorem
-                  Ipsum has been the industry’s standard dummy text ever since
-                  the 150.
-               </p>
-            </div>
+            {status === "CLOSED" && (
+               <div className={classes.claimInfoBoxStyle}>
+                  <img src={Images.claimInfo} alt="" />
+                  <p className={classes.claimInfoStyle}>
+                     This Claim has been deleted for Lorem Lorem Ipsum is simply dummy
+                     text of the printing and typesetting industry. Lorem Ipsum has been
+                     the industry’s standard dummy text ever since the 150.
+                  </p>
+               </div>
+            )}
             <div className={classes.claimDetailsSecondPartStyle}>
                <div className={classes.claimDetailsTitleBoxStyle}>
-                  <h2 className={classes.claimDetailsTitleStyle}>
-                     Receivables
-                  </h2>
+                  <h2 className={classes.claimDetailsTitleStyle}>receivable</h2>
                </div>
-               {!!receivables?.length ? (
+               {!!receivable?.length ? (
                   <div className={classes.receivablesTableBoxStyle}>
-                     <ReceivableTable claimReceivables={receivables} />
+                     <ReceivableTable claimReceivables={receivable} />
                   </div>
                ) : (
-                  <NoItemText text={"No Receivables Yet"} />
+                  <NoItemText text={"No receivable Yet"} />
                )}
             </div>
          </div>
@@ -168,10 +162,7 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
                      "Please indicate below the reason for closing the claim."
                   }
                >
-                  <CloseClaimInputs
-                     closeModal={() => setOpen(false)}
-                     claimId={_id}
-                  />
+                  <CloseClaimInputs closeModal={() => setOpen(false)} claimId={_id} />
                </BillingModalWrapper>
             }
          />

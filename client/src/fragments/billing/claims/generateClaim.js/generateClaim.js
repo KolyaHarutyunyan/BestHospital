@@ -60,8 +60,8 @@ export const GenerateClaimFragment = ({
       );
    }
 
-   const payorsNames = bills.map((bill) => bill?.payor?.middleName);
-   const clientsNames = bills.map((bill) => bill?.client?.middleName);
+   const payorsNames = bills.map((bill) => bill?.payor?.firstName);
+   const clientsNames = bills.map((bill) => bill?.client?.firstName);
 
    const notClaimedBillsWithFilters =
       selectedPayor === "All" && selectedClient === "All" && filteredServiceDate === ""
@@ -69,12 +69,12 @@ export const GenerateClaimFragment = ({
          : selectedPayor !== "All"
          ? bills.filter(
               (bill) =>
-                 bill?.payor?.middleName?.toLowerCase() === selectedPayor.toLowerCase()
+                 bill?.payor?.firstName?.toLowerCase() === selectedPayor.toLowerCase()
            )
          : selectedClient !== "All"
          ? bills.filter(
               (bill) =>
-                 bill?.client?.middleName?.toLowerCase() === selectedClient.toLowerCase()
+                 bill?.client?.firstName?.toLowerCase() === selectedClient.toLowerCase()
            )
          : filteredServiceDate !== ""
          ? bills.filter(
@@ -104,13 +104,13 @@ export const GenerateClaimFragment = ({
       <div className={classes.generateClaimContainerStyle}>
          <div className={classes.generateClaimActionsStyle}>
             <BillFiltersSelectors
+               filterIsForNotClaimedBill={true}
                clientsNames={clientsNames}
                payorsNames={payorsNames}
                passPayorHandler={(selPayor) => setSelectedPayor(selPayor)}
                selectedPayor={selectedPayor}
                passClientHandler={(selClient) => setSelectedClient(selClient)}
                selectedClient={selectedClient}
-               forIncompleteBills={true}
                changeDateInput={(ev) => setFilteredServiceDate(ev.target.value)}
                filteredDate={filteredServiceDate}
             />
