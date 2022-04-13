@@ -44,9 +44,11 @@ export const generateClaimStyle = makeStyles(() => ({
    },
    generateOrCancelButnStyle: {
       maxWidth: "540px",
+      "@media(max-width: 1440px)": { maxWidth: "446px" },
       width: "100%",
       "& button": {
          width: "262px",
+         "@media(max-width: 1440px)": { width: "215px" },
          height: "36px !important",
          fontSize: "14px !important",
          "&:first-of-type": {
