@@ -24,4 +24,7 @@ export const claimsStyle = makeStyles(() => ({
       justifyContent: "center",
       alignItems: "center",
    },
+   generateClaimButnStyle: {
+      "@media(max-width: 1720px)": { padding: "9px 16px" },
+   },
 }));

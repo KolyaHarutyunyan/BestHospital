@@ -13,7 +13,7 @@ export const billsStyle = makeStyles(() => ({
       },
    },
    tableAndPaginationBoxStyle: {
-      minHeight: "700px",
+      minHeight: "770px",
       display: "flex",
       flexDirection: "column",
       marginTop: "18px",

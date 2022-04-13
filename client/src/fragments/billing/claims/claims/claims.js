@@ -103,6 +103,7 @@ export const ClaimsFragment = ({
                selectedStatus={selectedStatus}
             />
             <AddButton
+               addButtonClassName={classes.generateClaimButnStyle}
                text={"Generate Claim"}
                handleClick={() => history.push("/generateClaim")}
             />

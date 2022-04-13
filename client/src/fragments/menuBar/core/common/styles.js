@@ -26,6 +26,11 @@ export const leftBarCommonStyle = makeStyles(() => ({
          background: Backgrounds.lightBlue,
       },
       "&.passive": { width: "40px" },
+      "& span": {
+         fontSize: "14px",
+         fontWeight: 600,
+         color: Colors.TextSecondary,
+      },
    },
    accordArrowStyle: {
       transform: "rotate(0deg)",
@@ -33,9 +38,10 @@ export const leftBarCommonStyle = makeStyles(() => ({
       "&.rotate": { transform: "rotate(-180deg)" },
    },
    menuItemsStyle: {
-      lineHeight: "21px",
       fontSize: "14px",
+      fontWeight: 600,
       color: Colors.TextSecondary,
+      lineHeight: "21px",
       marginLeft: "8px",
       "&.active": { color: Colors.BackgroundBlue },
    },
@@ -50,7 +56,7 @@ export const leftBarCommonStyle = makeStyles(() => ({
          width: "100%",
          "& > a": {
             fontSize: "14px",
-            fontWeight: 400,
+            fontWeight: 600,
             color: Colors.TextSecondary,
             marginRight: "4px",
             display: "block",

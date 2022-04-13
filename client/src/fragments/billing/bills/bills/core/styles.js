@@ -26,11 +26,17 @@ export const billTableStyle = makeStyles(() => ({
    filtersBoxStyle: { display: "flex" },
    filterDropStyle: {
       width: "220px",
+      "&.smallSize": {
+         "@media(max-width: 1720px)": { width: "146px" },
+      },
       marginRight: "24px",
       "& h6:before, & li:before": { content: "unset" },
    },
    dateInputStyle: {
       width: "220px",
+      "&.smallSize": {
+         "@media(max-width: 1720px)": { width: "146px" },
+      },
       height: "60px",
       marginRight: "24px",
       "&.first": { marginRight: "16px" },

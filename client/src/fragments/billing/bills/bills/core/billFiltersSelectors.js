@@ -37,6 +37,12 @@ export const BillFiltersSelectors = ({
       ? "Invoice"
       : "Submitted";
 
+   const smallSizeStyle = filterIsForClaim || filterIsForInvoice ? "smallSize" : "";
+
+   function addStyle(initialStyle = "") {
+      return `${initialStyle} ${smallSizeStyle}`;
+   }
+
    return (
       <div className={classes.filtersBoxStyle}>
          {!filterIsForInvoice && (
@@ -45,7 +51,7 @@ export const BillFiltersSelectors = ({
                dropdownOptions={addAllTextToTheList(payorsNames)}
                onPass={passPayorHandler}
                selected={selectedPayor}
-               dropdownClassName={classes.filterDropStyle}
+               dropdownClassName={addStyle(classes.filterDropStyle)}
             />
          )}
          <UserInputsDropdown
@@ -53,7 +59,7 @@ export const BillFiltersSelectors = ({
             dropdownOptions={addAllTextToTheList(clientsNames)}
             onPass={passClientHandler}
             selected={selectedClient}
-            dropdownClassName={classes.filterDropStyle}
+            dropdownClassName={addStyle(classes.filterDropStyle)}
          />
          {(filterIsForClaim || filterIsForInvoice) && (
             <div style={styles}>
@@ -67,7 +73,7 @@ export const BillFiltersSelectors = ({
                      value={filteredDateFrom}
                      type={"date"}
                      size={"small"}
-                     style={`${classes.dateInputStyle} first`}
+                     style={addStyle(`${classes.dateInputStyle} first`)}
                   />
                   <ValidationInput
                      keepLabelArea={true}
@@ -77,7 +83,7 @@ export const BillFiltersSelectors = ({
                      value={filteredDateTo}
                      type={"date"}
                      size={"small"}
-                     style={classes.dateInputStyle}
+                     style={addStyle(classes.dateInputStyle)}
                   />
                </div>
                <UserInputsDropdown
@@ -85,7 +91,7 @@ export const BillFiltersSelectors = ({
                   dropdownOptions={addAllTextToTheList(statuses)}
                   onPass={passStatusHandler}
                   selected={selectedStatus}
-                  dropdownClassName={classes.filterDropStyle}
+                  dropdownClassName={addStyle(classes.filterDropStyle)}
                />
             </div>
          )}
@@ -99,7 +105,7 @@ export const BillFiltersSelectors = ({
                value={filteredDate}
                type={"date"}
                size={"small"}
-               style={classes.dateInputStyle}
+               style={addStyle(classes.dateInputStyle)}
             />
          )}
       </div>
