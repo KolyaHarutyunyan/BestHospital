@@ -46,8 +46,10 @@ export const NotClaimedBillTBody = ({ notClaimedBill, triggerBill }) => {
    const dateOfService = handleCreatedAtDate(notClaimedBill.dateOfService, 10, "/");
    const placeOfService = notClaimedBill.placeService?.name;
    const service = notClaimedBill.authService?.serviceId;
-   const fundingSource = `${notClaimedBill.payer?.firstName} ${notClaimedBill.payer?.lastName}`;
-   const client = `${notClaimedBill.client?.firstName} ${notClaimedBill.client?.lastName}`;
+   const funderFirstName = notClaimedBill.payer?.firstName;
+   const funderLastName = notClaimedBill.payer?.lastName;
+   const clientFirstName = notClaimedBill.client?.firstName;
+   const clientLastName = notClaimedBill.client?.lastName;
    const units = getValueByFixedNumber(notClaimedBill.totalUnits, 0);
    const claimAmount = addSignToValueFromStart(
       getValueByFixedNumber(notClaimedBill.claimAmount)
@@ -80,8 +82,12 @@ export const NotClaimedBillTBody = ({ notClaimedBill, triggerBill }) => {
             <div className={classes.tdStyle}>{getTableData(dateOfService)}</div>
             <div className={classes.tdStyle}>{getTableData(placeOfService)}</div>
             <div className={classes.tdStyle}>{getTableData(service)}</div>
-            <div className={classes.tdStyle}>{getTableData(fundingSource)}</div>
-            <div className={classes.tdStyle}>{getTableData(client)}</div>
+            <div className={classes.tdStyle}>
+               {getTableData(funderFirstName)} {getTableData(funderLastName)}
+            </div>
+            <div className={classes.tdStyle}>
+               {getTableData(clientFirstName)} {getTableData(clientLastName)}
+            </div>
             <div className={classes.tdStyle}>{getTableData(units)}</div>
             <div className={classes.tdStyle}>{getTableData(claimAmount)}</div>
             <div className={`${classes.tdStyle} signature-td`}>
