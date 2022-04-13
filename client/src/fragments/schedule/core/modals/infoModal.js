@@ -1,5 +1,5 @@
 import React from "react";
-import { SimpleTooltip, SelectInput, Switcher } from "@eachbase/components";
+import { SimpleTooltip, SelectInput, CustomizedSwitch } from "@eachbase/components";
 import { modalsStyle } from "../../../../components/modal/styles";
 import { Images } from "@eachbase/utils";
 import { Items } from "../items";
@@ -72,7 +72,7 @@ export const InfoModal = ({ info, handleOpenClose, openCloseRecur, cardItem }) =
 
                <div>
                   <p>Require Signature</p>
-                  <Switcher />
+                  <CustomizedSwitch />
                </div>
             </div>
          </div>

@@ -10,7 +10,7 @@ import {
    NoItemText,
    SelectInput,
    SimpleModal,
-   Switcher,
+   CustomizedSwitch,
 } from "@eachbase/components";
 import { Link } from "react-router-dom";
 import { InfoModal } from "./modals";
@@ -298,7 +298,7 @@ export const ListView = ({
                                  </div>
                                  <div>
                                     <p>Require Signature</p>
-                                    <Switcher
+                                    <CustomizedSwitch
                                        checked={switcher}
                                        handleClick={handleChangeService}
                                     />

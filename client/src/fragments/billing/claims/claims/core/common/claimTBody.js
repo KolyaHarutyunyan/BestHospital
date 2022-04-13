@@ -15,6 +15,8 @@ import {
    useWidth,
 } from "@eachbase/utils";
 
+const styles = { display: "flex", alignItems: "center" };
+
 export const ClaimTBody = ({ claims = [] }) => {
    const classes = claimTHeadTBodyStyle();
 
@@ -52,10 +54,14 @@ export const ClaimTBody = ({ claims = [] }) => {
                      <div>{getDisplayOf(`${early} - ${latest}`)}</div>
                   </TableCell>
                   <TableCell>
-                     <div>{getDisplayOf(funder?.middleName)}</div>
+                     <div style={styles}>
+                        {getDisplayOf(funder?.firstName)} {getDisplayOf(funder?.lastName)}
+                     </div>
                   </TableCell>
                   <TableCell>
-                     <div>{getDisplayOf(client?.middleName)}</div>
+                     <div style={styles}>
+                        {getDisplayOf(client?.firstName)} {getDisplayOf(client?.lastName)}
+                     </div>
                   </TableCell>
                   <TableCell>
                      <div>

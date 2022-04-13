@@ -6,6 +6,7 @@ import { InputMinLoader } from "./inputMiniLoader";
 
 export const ValidationInput = ({
    inputLabel,
+   keepLabelArea,
    errorFalse,
    multiline,
    style,
@@ -56,7 +57,9 @@ export const ValidationInput = ({
    return (
       <Fragment>
          <div className={style ? style : classes.SignInInput}>
-            <p className={classes.labelStyle}>{inputLabel}</p>
+            <p className={`${classes.labelStyle} ${keepLabelArea ? "withoutLabel" : ""}`}>
+               {inputLabel}
+            </p>
             <TextField
                onInput={(e) => maxLength(e)}
                style={{ ...styles }}

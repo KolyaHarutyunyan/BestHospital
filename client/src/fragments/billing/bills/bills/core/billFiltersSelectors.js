@@ -59,6 +59,7 @@ export const BillFiltersSelectors = ({
             <div style={styles}>
                <div style={styles}>
                   <ValidationInput
+                     keepLabelArea={true}
                      inputLabel={"Date Range"}
                      variant={"outlined"}
                      name={"filterDateFrom"}
@@ -69,6 +70,7 @@ export const BillFiltersSelectors = ({
                      style={`${classes.dateInputStyle} first`}
                   />
                   <ValidationInput
+                     keepLabelArea={true}
                      variant={"outlined"}
                      name={"filterDateTo"}
                      onChange={changeDateToInput}
@@ -89,6 +91,7 @@ export const BillFiltersSelectors = ({
          )}
          {(filterIsForBill || filterIsForNotClaimedBill || filterIsForInvoice) && (
             <ValidationInput
+               keepLabelArea={true}
                inputLabel={`${dateInputLabel} Date`}
                variant={"outlined"}
                name={"filterDate"}

@@ -1,7 +1,7 @@
 export { ValidationInput } from "./validationInput";
 export { PasswordInput } from "./passwordInput";
 export { SearchAndFilter } from "./searchAndFilter";
-export { Switcher } from "./switcher";
+export { CustomizedSwitch } from "./customizedSwitch";
 export { SelectInputWidthTags } from "./selectInputWidthTags";
 export { CheckboxesTags } from "./autocompleteSelectInput";
 export { AddressInput } from "./addressInput";
@@ -9,7 +9,6 @@ export { SelectInput } from "./selectInput";
 export { Textarea } from "./textarea";
 export { RadioButton } from "./radio";
 export { SelectInputPlaceholder } from "./selectInputPlaceholder";
-export { AntSwitch } from "./styles";
 export { SelectStatusInput } from "./selectStatusInput";
 export { SearchInput } from "./searchInput";
 export { CheckBoxInput } from "./checkBoxInput";

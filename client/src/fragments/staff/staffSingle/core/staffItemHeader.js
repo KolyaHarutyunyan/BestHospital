@@ -7,7 +7,7 @@ import {
    AddNotes,
    AvailabilitySchedule,
    ValidationInput,
-   AntSwitch,
+   CustomizedSwitch,
 } from "@eachbase/components";
 import { FindLoad, Images } from "@eachbase/utils";
 import { CreateStaff, CredentialModal } from "@eachbase/fragments";
@@ -51,8 +51,7 @@ export const StaffItemHeader = ({
    const [searchDate, setSearchDate] = useState("");
    const [isDisabled, setIsDisabled] = useState(false);
 
-   const staffHistoryLoader = !!FindLoad("GET_FUNDING_SOURCE_HISTORIES_BY_ID")
-      .length;
+   const staffHistoryLoader = !!FindLoad("GET_FUNDING_SOURCE_HISTORIES_BY_ID").length;
 
    useEffect(() => {
       dispatch(adminActions.getAllPaycodes(params.id));
@@ -73,9 +72,7 @@ export const StaffItemHeader = ({
       setIsDisabled(false);
       setSearchDate(e.target.value);
       dispatch(
-         httpRequestsOnErrorsActions.removeError(
-            "GET_FUNDING_SOURCE_HISTORIES_BY_ID"
-         )
+         httpRequestsOnErrorsActions.removeError("GET_FUNDING_SOURCE_HISTORIES_BY_ID")
       );
    };
 
@@ -93,11 +90,7 @@ export const StaffItemHeader = ({
       <div>
          <ul className={classes.tabsWrapper}>
             <li style={{ display: "flex", alignItems: "center" }}>
-               <img
-                  src={Images.userProfile}
-                  alt="avatar"
-                  className={classes.avatar}
-               />
+               <img src={Images.userProfile} alt="avatar" className={classes.avatar} />
                <div className={classes.nameContent}>
                   <h1 className={classes.name}>{title}</h1>
                </div>
@@ -110,35 +103,26 @@ export const StaffItemHeader = ({
                      text="edit"
                   />
                ) : activeTab === 2 ? (
-                  <AddButton
-                     text="Add Timesheet"
-                     handleClick={handleOpenClose}
-                  />
+                  <AddButton text="Add Timesheet" handleClick={handleOpenClose} />
                ) : activeTab === 3 ? (
                   <AddButton
                      text="Add Credential"
                      handleClick={() => openCloseCredModal("addCredential")}
                   />
                ) : activeTab === 5 ? (
-                  <AddButton
-                     text="Available Hours"
-                     handleClick={handleOpenClose}
-                  />
+                  <AddButton text="Available Hours" handleClick={handleOpenClose} />
                ) : activeTab === 1 ? (
                   <>
                      <div className={classes.clinicalWrapper}>
                         <p>Clinician</p>
                         <div>
-                           <AntSwitch
+                           <CustomizedSwitch
                               checked={switchBoolean}
-                              onClick={changeSwitch}
+                              handleClick={changeSwitch}
                            />
                         </div>
                      </div>
-                     <AddButton
-                        text="Add Employment"
-                        handleClick={handleOpenClose}
-                     />
+                     <AddButton text="Add Employment" handleClick={handleOpenClose} />
                   </>
                ) : activeTab === 7 ? (
                   <AddButton text="Add Note" handleClick={handleOpenClose} />
@@ -151,15 +135,12 @@ export const StaffItemHeader = ({
                   <div className={classes.clinicalWrapper}>
                      <p>Clinician</p>
                      <div>
-                        <AntSwitch
+                        <CustomizedSwitch
                            checked={switchBoolean}
-                           onClick={changeSwitch}
+                           handleClick={changeSwitch}
                         />
                      </div>
-                     <AddButton
-                        text="Add Employment"
-                        handleClick={handleOpenClose}
-                     />
+                     <AddButton text="Add Employment" handleClick={handleOpenClose} />
                   </div>
                ) : activeTab === 7 ? (
                   <AddButton text="Add Note" handleClick={handleOpenClose} />

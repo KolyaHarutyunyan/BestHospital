@@ -16,6 +16,7 @@ export const billsStyle = makeStyles(() => ({
       minHeight: "700px",
       display: "flex",
       flexDirection: "column",
+      marginTop: "18px",
    },
    tableBoxStyle: { flexGrow: 1 },
    loaderContainerStyle: {

@@ -2,7 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { NotClaimedBillTable } from "./core";
 import { BillFiltersSelectors } from "../../bills/bills/core";
 import { generateClaimStyle } from "./styles";
-import { CreateChancel, Loader, NoItemText, Switcher } from "@eachbase/components";
+import {
+   CreateChancel,
+   CustomizedSwitch,
+   Loader,
+   NoItemText,
+} from "@eachbase/components";
 import {
    CheckupContext,
    FindLoad,
@@ -116,8 +121,7 @@ export const GenerateClaimFragment = ({
             />
             <div className={classes.mergeBillsBoxStyle}>
                <p className={classes.mergeBillsTitleStyle}>Merge Bills</p>
-               <Switcher
-                  switcherClassName={classes.mergeBillsSwitcherStyle}
+               <CustomizedSwitch
                   checked={merge}
                   handleClick={() => setMerge((prevState) => !prevState)}
                />

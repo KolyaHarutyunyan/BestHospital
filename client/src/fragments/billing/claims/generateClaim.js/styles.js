@@ -17,14 +17,13 @@ export const generateClaimStyle = makeStyles(() => ({
    mergeBillsBoxStyle: {
       display: "flex",
       alignItems: "center",
-      marginBottom: "-10px",
    },
    mergeBillsTitleStyle: {
       fontSize: "14px",
       fontWeight: 600,
       color: Colors.TextSecondary,
+      marginRight: "8px",
    },
-   mergeBillsSwitcherStyle: { marginRight: "-10px" },
    tableAndPaginationBoxStyle: {
       minHeight: "500px",
       display: "flex",
