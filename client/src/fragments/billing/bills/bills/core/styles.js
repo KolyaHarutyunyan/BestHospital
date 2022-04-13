@@ -33,6 +33,7 @@ export const billTableStyle = makeStyles(() => ({
       width: "220px",
       height: "60px",
       marginRight: "24px",
+      "&.first": { marginRight: "16px" },
       "& > div > div": {
          border: "1px solid #A3B2BD80",
          backgroundColor: Colors.BackgroundWhite,
@@ -40,11 +41,5 @@ export const billTableStyle = makeStyles(() => ({
       "& .MuiOutlinedInput-notchedOutline, &:hover .MuiOutlinedInput-notchedOutline": {
          border: "none",
       },
-   },
-   dateRangeStyle: {
-      fontSize: "14px",
-      fontWeight: 600,
-      color: Colors.BackgroundBlue,
-      marginBottom: "8px",
    },
 }));

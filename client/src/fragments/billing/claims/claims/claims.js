@@ -33,7 +33,6 @@ export const ClaimsFragment = ({
 
    const [selectedPayor, setSelectedPayor] = useState("All");
    const [selectedClient, setSelectedClient] = useState("All");
-   const [filteredDate, setFilteredDate] = useState("");
    const [filteredDateFrom, setFilteredDateFrom] = useState("");
    const [filteredDateTo, setFilteredDateTo] = useState("");
    const [selectedStatus, setSelectedStatus] = useState("All");

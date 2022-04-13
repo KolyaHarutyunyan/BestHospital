@@ -66,7 +66,7 @@ export const BillFiltersSelectors = ({
                      value={filteredDateFrom}
                      type={"date"}
                      size={"small"}
-                     style={classes.dateInputStyle}
+                     style={`${classes.dateInputStyle} first`}
                   />
                   <ValidationInput
                      variant={"outlined"}
