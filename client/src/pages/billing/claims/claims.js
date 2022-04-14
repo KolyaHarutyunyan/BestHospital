@@ -3,12 +3,7 @@ import { ClaimsFragment } from "@eachbase/fragments";
 import { useDispatch, useSelector } from "react-redux";
 import { claimActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 import { Loader } from "@eachbase/components";
-import {
-   dummyData,
-   FindLoad,
-   FindSuccess,
-   PaginationContext,
-} from "@eachbase/utils";
+import { FindLoad, FindSuccess, PaginationContext } from "@eachbase/utils";
 
 export const Claims = () => {
    const dispatch = useDispatch();
@@ -17,11 +12,7 @@ export const Claims = () => {
 
    const { pageIsChanging, handlePageChange } = useContext(PaginationContext);
 
-   // const claimsData = useSelector((state) => state.claim.claims);
-
-   // temporary
-   const claimsData = { claims: dummyData.CLAIMS, count: 10 };
-   // end
+   const claimsData = useSelector((state) => state.claim.claims);
 
    const { claims, count } = claimsData || {};
 
@@ -44,7 +35,7 @@ export const Claims = () => {
 
    return (
       <ClaimsFragment
-         claims={claims}
+         claims={claimsData}
          claimsQty={count}
          page={page}
          handleGetPage={setPage}

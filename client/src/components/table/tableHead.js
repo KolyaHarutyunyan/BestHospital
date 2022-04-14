@@ -2,20 +2,11 @@ import React from "react";
 import { TableRow, TableHead } from "@material-ui/core";
 import { tableStyle } from "./styles";
 
-export const TableHeadComponent = ({
-   children,
-   tHeadStyle,
-   hasIndividualStyles,
-   theadClassName,
-}) => {
+export const TableHeadComponent = ({ children, theadClassName }) => {
    const classes = tableStyle();
 
-   const tableHeadClassName = `${classes.tableHead} ${
-      hasIndividualStyles ? "individual" : ""
-   } ${theadClassName}`;
-
    return (
-      <TableHead className={tableHeadClassName} style={tHeadStyle}>
+      <TableHead className={`${classes.tableHead} ${theadClassName}`}>
          <TableRow>{children}</TableRow>
       </TableHead>
    );

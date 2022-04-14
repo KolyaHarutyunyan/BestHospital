@@ -5,12 +5,12 @@ import { scheduleStyle } from "./styles";
 import { FindLoad, Images } from "@eachbase/utils";
 import { Items } from "./items";
 import {
-   HtmlTooltip,
+   SimpleTooltip,
    Loader,
    NoItemText,
    SelectInput,
    SimpleModal,
-   Switcher,
+   CustomizedSwitch,
 } from "@eachbase/components";
 import { Link } from "react-router-dom";
 import { InfoModal } from "./modals";
@@ -99,9 +99,7 @@ export const ListView = ({
          staff: defItem?.staff?._id,
          placeService: defItem?.placeService?._id,
          staffPayCode: defItem?.staffPayCode?._id,
-         startDate:
-            defItem?.startDate &&
-            moment(defItem?.startDate).format("YYYY-MM-DD"),
+         startDate: defItem?.startDate && moment(defItem?.startDate).format("YYYY-MM-DD"),
          eventStatus: defItem?.eventStatus ? defItem?.eventStatus : "PENDING",
          startTime: defItem?.startTime,
          endTime: defItem?.endTime,
@@ -136,9 +134,7 @@ export const ListView = ({
                                 i.data.map((k, index) => (
                                    <Card
                                       style={defItem && defItem._id === k._id}
-                                      openModal={(info) =>
-                                         handleOpenCloseModal(info)
-                                      }
+                                      openModal={(info) => handleOpenCloseModal(info)}
                                       info={k}
                                       key={index}
                                    />
@@ -166,7 +162,7 @@ export const ListView = ({
                            </p>
                            <div>
                               {defItem && defItem.isRepeat === true ? (
-                                 <HtmlTooltip
+                                 <SimpleTooltip
                                     title={<p>{"Recurring Event"}</p>}
                                     placement="top-end"
                                  >
@@ -177,34 +173,25 @@ export const ListView = ({
                                        <p>Recurring Event</p>{" "}
                                        <img src={Images.edit} alt="icon" />
                                     </button>
-                                 </HtmlTooltip>
+                                 </SimpleTooltip>
                               ) : (
                                  <>
-                                    <HtmlTooltip
+                                    <SimpleTooltip
                                        title={<p>{"Recur Event"}</p>}
                                        placement="top-end"
                                     >
-                                       <button
-                                          onClick={() =>
-                                             openCloseRecur(defItem)
-                                          }
-                                       >
-                                          <img
-                                             src={Images.recurrance}
-                                             alt="icon"
-                                          />
+                                       <button onClick={() => openCloseRecur(defItem)}>
+                                          <img src={Images.recurrance} alt="icon" />
                                        </button>
-                                    </HtmlTooltip>
-                                    <HtmlTooltip
+                                    </SimpleTooltip>
+                                    <SimpleTooltip
                                        title={<p>{"Edit"}</p>}
                                        placement="top-end"
                                     >
-                                       <button
-                                          onClick={() => handleEdit(defItem)}
-                                       >
+                                       <button onClick={() => handleEdit(defItem)}>
                                           <img src={Images.edit} alt="icon" />
                                        </button>
-                                    </HtmlTooltip>
+                                    </SimpleTooltip>
                                  </>
                               )}
                            </div>
@@ -212,15 +199,11 @@ export const ListView = ({
                         <p className={classes.infoDate}>
                            {defItem && (
                               <span>
-                                 {moment(defItem.startDate).format(
-                                    "MMM DD, YYYY"
-                                 )}
+                                 {moment(defItem.startDate).format("MMM DD, YYYY")}
                                  <span style={{ marginLeft: "16px" }}>
                                     {`${moment(defItem.startTime).format(
                                        "hh:mm A"
-                                    )} - ${moment(defItem.endTime).format(
-                                       "hh:mm A"
-                                    )}`}
+                                    )} - ${moment(defItem.endTime).format("hh:mm A")}`}
                                  </span>
                               </span>
                            )}
@@ -276,25 +259,20 @@ export const ListView = ({
                            {defItem && defItem.client && (
                               <Items
                                  text={"Client Address:"}
-                                 subText={
-                                    "1100 East Broadway #302 Glendale, CA 91205"
-                                 }
+                                 subText={"1100 East Broadway #302 Glendale, CA 91205"}
                               />
                            )}
                            {defItem && defItem.placeService && (
                               <Items
                                  text={"Place of Service:"}
                                  subText={
-                                    defItem.placeService.name &&
-                                    defItem.placeService.name
+                                    defItem.placeService.name && defItem.placeService.name
                                  }
                               />
                            )}
                         </div>
                         <div className={classes.infoFooter}>
-                           <p className={classes.infoFooterTitle}>
-                              Event Status
-                           </p>
+                           <p className={classes.infoFooterTitle}>Event Status</p>
                            <SelectInput
                               name={"rendered"}
                               handleSelect={handleChange}
@@ -320,7 +298,7 @@ export const ListView = ({
                                  </div>
                                  <div>
                                     <p>Require Signature</p>
-                                    <Switcher
+                                    <CustomizedSwitch
                                        checked={switcher}
                                        handleClick={handleChangeService}
                                     />

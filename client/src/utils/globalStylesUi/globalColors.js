@@ -43,6 +43,7 @@ export const Shadow = {
    modalShadow: "0px 0px 6px #8A8A8A29",
    changeShadow: "0px 0px 6px #8A8A8A3D",
    blueButton: "0px 0px 6px #347AF04D",
+   tableTheadShadow: "0px 4px 2px #347af01a",
 };
 
 export const Backgrounds = {

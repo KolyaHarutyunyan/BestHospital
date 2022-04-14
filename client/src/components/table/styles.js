@@ -6,14 +6,6 @@ export const tableStyle = makeStyles(() => ({
       boxShadow: "0px 3px 6px #347AF01A",
       borderRadius: "8px",
       height: 51,
-      "&.individual > tr > th": {
-         "&:first-of-type": { paddingLeft: "32px" },
-         "&:last-of-type": { paddingRight: "32px" },
-         "& > div": {
-            maxWidth: "120px",
-            width: "100%",
-         },
-      },
       "& > tr": {
          borderRadius: "8px",
          "& > th:first-child": {
@@ -45,26 +37,6 @@ export const tableStyle = makeStyles(() => ({
       cursor: "pointer",
       borderRadius: "8px",
       backgroundColor: Colors.BackgroundWhite,
-      "&.billingSystem": {
-         "& > td": {
-            "&:first-of-type": { paddingLeft: "32px" },
-            "&:last-of-type": { paddingRight: "32px" },
-            "& > div": {
-               maxWidth: "120px",
-               width: "100%",
-            },
-         },
-         "&:hover": {
-            backgroundColor: Colors.BackgroundWhite,
-            "& > td": { backgroundColor: "inherit" },
-         },
-      },
-      "&.billingSystem.claimTBody": {
-         "& > td > div": {
-            maxWidth: "unset",
-            width: "100%",
-         },
-      },
       "& td": { backgroundColor: "inherit" },
       "& > td:first-child": {
          borderTopLeftRadius: "8px",
@@ -93,23 +65,19 @@ export const tableStyle = makeStyles(() => ({
             padding: "12px 32px 12px 32px",
          },
       },
-
       "& .MuiTableCell-sizeSmall:last-child": {
          paddingTop: "12px",
          fontSize: "16px",
          lineHeight: "30px",
          color: "#545F7E",
       },
-
       "& MuiSwitch-track": {
          borderRadius: "12px",
          background: "lightgray",
       },
-
       "& .MuiSwitch-colorPrimary.Mui-checked": {
          color: "white",
       },
-
       "& .MuiSwitch-colorPrimary.Mui-checked + .MuiSwitch-track": {
          background: "#387DFF",
          borderRadius: "12px",

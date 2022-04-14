@@ -13,9 +13,8 @@ export const GenerateClaim = () => {
    const { pageIsChanging, handlePageChange } = useContext(PaginationContext);
 
    const billsData = useSelector((state) => state.bill.bills);
-   const { bills, count } = billsData || {};
 
-   const notClaimedBills = bills?.filter(
+   const notClaimedBills = billsData?.bills?.filter(
       (bill) => bill.claimStatus === "NOTCLAIMED"
    );
 
@@ -47,7 +46,7 @@ export const GenerateClaim = () => {
          </div>
          <GenerateClaimFragment
             notClaimedBills={notClaimedBills}
-            notClaimedBillsQty={count}
+            notClaimedBillsQty={notClaimedBills?.length}
             page={page}
             handleGetPage={setPage}
             notClaimedBillsLoader={loader}

@@ -1,12 +1,10 @@
 import React, { useContext } from "react";
 import { claimTHeadTBodyStyle } from "./styles";
 import { useHistory } from "react-router-dom";
-import { TableBodyComponent } from "@eachbase/components";
-import { TableBody, TableCell } from "@material-ui/core";
 import {
    addSignToValueFromStart,
    DrawerContext,
-   getLimitedVal,
+   getTableHeader,
    getTextDependsOnWidth,
    getValueByFixedNumber,
    handleCreatedAtDate,
@@ -14,6 +12,8 @@ import {
    showDashIfEmpty,
    useWidth,
 } from "@eachbase/utils";
+
+const styles = { display: "flex", alignItems: "center" };
 
 export const ClaimTBody = ({ claims = [] }) => {
    const classes = claimTHeadTBodyStyle();
@@ -24,81 +24,74 @@ export const ClaimTBody = ({ claims = [] }) => {
 
    const { open } = useContext(DrawerContext);
 
-   const size = open ? 1575 : 1560;
-   const limit = open ? 4 : 10;
+   const size = open ? 1830 : 1680;
+   const limit = open ? 4 : 5;
 
    function getDisplayOf(givenText = "") {
       if (typeof givenText !== "string") return givenText;
-
       return showDashIfEmpty(getTextDependsOnWidth(width, size, givenText, limit));
    }
 
    return (
-      <TableBody>
+      <div className={classes.tbodyContainerStyle}>
          {claims.map((claim, index) => {
-            const createdDate = handleCreatedAtDate(claim.createdDate, 10, "/");
-            const submtDate = handleCreatedAtDate(claim.submittedDate, 10, "/");
+            const { dateRange, funder, client } = claim || {};
+            const early = handleCreatedAtDate(dateRange?.early, 10, "/");
+            const latest = handleCreatedAtDate(dateRange?.latest, 10, "/");
 
             return (
-               <TableBodyComponent
+               <div
                   key={index}
-                  handleOpenInfo={() => history.push(`/claim/${claim._id}`)}
-                  className={"billingSystem claimTBody"}
+                  className={classes.tbodyRowStyle}
+                  onClick={() => history.push(`/claim/${claim._id}`)}
                >
-                  <TableCell>
-                     <div>{showDashIfEmpty(getLimitedVal(claim._id, 13))}</div>
-                  </TableCell>
-                  <TableCell>
-                     <div>{getDisplayOf(`${createdDate} - ${submtDate}`)}</div>
-                  </TableCell>
-                  <TableCell>
-                     <div>{getDisplayOf(claim.funder?.middleName)}</div>
-                  </TableCell>
-                  <TableCell>
-                     <div>{getDisplayOf(claim.client?.middleName)}</div>
-                  </TableCell>
-                  <TableCell>
-                     <div>
-                        {getDisplayOf(
-                           addSignToValueFromStart(
-                              getValueByFixedNumber(claim.totalCharge)
-                           )
-                        )}
-                     </div>
-                  </TableCell>
-                  <TableCell>
-                     <div>
-                        {getDisplayOf(
-                           addSignToValueFromStart(
-                              getValueByFixedNumber(claim.ammountPaid)
-                           )
-                        )}
-                     </div>
-                  </TableCell>
-                  <TableCell>
-                     <div>
-                        {getDisplayOf(
-                           addSignToValueFromStart(getValueByFixedNumber(claim.remaining))
-                        )}
-                     </div>
-                  </TableCell>
-                  <TableCell>
-                     <div>{showDashIfEmpty(manageStatus(claim.status))}</div>
-                  </TableCell>
-                  <TableCell>
+                  <div className={classes.tdStyle}>{getDisplayOf(claim._id)}</div>
+                  <div className={classes.tdStyle}>
+                     {getDisplayOf(`${early} - ${latest}`)}
+                  </div>
+                  <div className={classes.tdStyle} style={styles}>
+                     {getDisplayOf(funder?.firstName)} {getDisplayOf(funder?.lastName)}
+                  </div>
+                  <div className={classes.tdStyle} style={styles}>
+                     {getDisplayOf(client?.firstName)} {getDisplayOf(client?.lastName)}
+                  </div>
+                  <div className={classes.tdStyle}>
+                     {getDisplayOf(
+                        addSignToValueFromStart(getValueByFixedNumber(claim.totalCharge))
+                     )}
+                  </div>
+                  <div className={classes.tdStyle}>
+                     {getDisplayOf(
+                        addSignToValueFromStart(getValueByFixedNumber(claim.ammountPaid))
+                     )}
+                  </div>
+                  <div className={classes.tdStyle}>
+                     {getDisplayOf(
+                        addSignToValueFromStart(getValueByFixedNumber(claim.remaining))
+                     )}
+                  </div>
+                  <div className={classes.tdStyle}>
+                     {showDashIfEmpty(manageStatus(claim.status))}
+                  </div>
+                  <div className={classes.tdStyle}>
                      <a
                         className={classes.paymentRefStyle}
-                        href={`https://${claim.paymentRef}`}
+                        href={`https://${claim.paymentRef || "www.testlink.com"}`}
                         target="_blank"
                         rel="noreferrer noopener"
                         onClick={(event) => event.stopPropagation()}
                      >
-                        {showDashIfEmpty(getLimitedVal(claim.paymentRef, 20))}
+                        {getTableHeader(
+                           claim.paymentRef || "www.testlink.com",
+                           getDisplayOf(claim.paymentRef || "www.testlink.com"),
+                           "",
+                           false
+                        )}
                      </a>
-                  </TableCell>
-               </TableBodyComponent>
+                  </div>
+               </div>
             );
          })}
-      </TableBody>
+      </div>
    );
 };

@@ -3,13 +3,9 @@ import { makeStyles } from "@material-ui/core/styles";
 export const claimsStyle = makeStyles(() => ({
    addButton: {
       display: "flex",
-      justifyContent: "flex-end",
+      justifyContent: "space-between",
+      alignItems: "flex-end",
       width: "100%",
-   },
-   claimsTableStyle: {
-      display: "flex",
-      width: "100%",
-      marginTop: "24px",
    },
    tableAndPaginationBoxStyle: {
       minHeight: "700px",
@@ -22,5 +18,8 @@ export const claimsStyle = makeStyles(() => ({
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
+   },
+   generateClaimButnStyle: {
+      "@media(max-width: 1720px)": { padding: "9px 16px" },
    },
 }));

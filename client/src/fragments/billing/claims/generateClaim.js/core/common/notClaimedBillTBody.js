@@ -1,6 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import {
    addSignToValueFromStart,
+   CheckupContext,
    DrawerContext,
    getLimitedVal,
    getValueByFixedNumber,
@@ -30,26 +31,25 @@ function getNotClaimedBillData(givenData = "", isOpen, givenWidth) {
    return tableData;
 }
 
-export const NotClaimedBillTBody = ({ notClaimedBill }) => {
+export const NotClaimedBillTBody = ({ notClaimedBill, triggerBill }) => {
    const classes = notClaimedBillTHeadTBodyStyle();
 
    const width = useWidth();
 
    const { open } = useContext(DrawerContext);
+   const { itemsAreChecked, handleItemsCheckup } = useContext(CheckupContext);
 
-   const [isChecked, setIsChecked] = useState(true);
-
-   function toggleBill() {
-      setIsChecked((prevState) => !prevState);
-   }
-
-   const tbodyClassName = `${classes.tbodyRowStyle} ${isChecked ? "checked-box" : ""}`;
+   const tbodyClassName = `${classes.tbodyRowStyle} ${
+      notClaimedBill.isChecked ? "checked-box" : ""
+   }`;
 
    const dateOfService = handleCreatedAtDate(notClaimedBill.dateOfService, 10, "/");
    const placeOfService = notClaimedBill.placeService?.name;
    const service = notClaimedBill.authService?.serviceId;
-   const fundingSource = `${notClaimedBill.payer?.firstName} ${notClaimedBill.payer?.lastName}`;
-   const client = `${notClaimedBill.client?.firstName} ${notClaimedBill.client?.lastName}`;
+   const funderFirstName = notClaimedBill.payer?.firstName;
+   const funderLastName = notClaimedBill.payer?.lastName;
+   const clientFirstName = notClaimedBill.client?.firstName;
+   const clientLastName = notClaimedBill.client?.lastName;
    const units = getValueByFixedNumber(notClaimedBill.totalUnits, 0);
    const claimAmount = addSignToValueFromStart(
       getValueByFixedNumber(notClaimedBill.claimAmount)
@@ -60,6 +60,14 @@ export const NotClaimedBillTBody = ({ notClaimedBill }) => {
       return showDashIfEmpty(getNotClaimedBillData(data, open, width));
    }
 
+   function handleInputCheckup(event) {
+      triggerBill({
+         ...notClaimedBill,
+         isChecked: event.target.checked,
+      });
+      itemsAreChecked && handleItemsCheckup(false);
+   }
+
    return (
       <div className={classes.tbodyContainerStyle}>
          <div className={tbodyClassName}>
@@ -67,15 +75,19 @@ export const NotClaimedBillTBody = ({ notClaimedBill }) => {
                <CheckBoxInput
                   inputId={notClaimedBill.id}
                   inputClassName={classes.billCheckboxStyle}
-                  inputChecked={isChecked}
-                  onInputChange={toggleBill}
+                  inputChecked={notClaimedBill.isChecked}
+                  onInputChange={handleInputCheckup}
                />
             </div>
             <div className={classes.tdStyle}>{getTableData(dateOfService)}</div>
             <div className={classes.tdStyle}>{getTableData(placeOfService)}</div>
             <div className={classes.tdStyle}>{getTableData(service)}</div>
-            <div className={classes.tdStyle}>{getTableData(fundingSource)}</div>
-            <div className={classes.tdStyle}>{getTableData(client)}</div>
+            <div className={classes.tdStyle}>
+               {getTableData(funderFirstName)} {getTableData(funderLastName)}
+            </div>
+            <div className={classes.tdStyle}>
+               {getTableData(clientFirstName)} {getTableData(clientLastName)}
+            </div>
             <div className={classes.tdStyle}>{getTableData(units)}</div>
             <div className={classes.tdStyle}>{getTableData(claimAmount)}</div>
             <div className={`${classes.tdStyle} signature-td`}>

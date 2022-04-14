@@ -17,14 +17,13 @@ export const generateClaimStyle = makeStyles(() => ({
    mergeBillsBoxStyle: {
       display: "flex",
       alignItems: "center",
-      marginBottom: "-10px",
    },
    mergeBillsTitleStyle: {
       fontSize: "14px",
       fontWeight: 600,
       color: Colors.TextSecondary,
+      marginRight: "8px",
    },
-   mergeBillsSwitcherStyle: { marginRight: "-10px" },
    tableAndPaginationBoxStyle: {
       minHeight: "500px",
       display: "flex",
@@ -45,9 +44,11 @@ export const generateClaimStyle = makeStyles(() => ({
    },
    generateOrCancelButnStyle: {
       maxWidth: "540px",
+      "@media(max-width: 1440px)": { maxWidth: "446px" },
       width: "100%",
       "& button": {
          width: "262px",
+         "@media(max-width: 1440px)": { width: "215px" },
          height: "36px !important",
          fontSize: "14px !important",
          "&:first-of-type": {

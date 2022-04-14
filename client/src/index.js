@@ -7,6 +7,7 @@ import "./assets/styles/allStyles.scss";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import {
+   CheckupContextProvider,
    DrawerContextProvider,
    initAxiosInterceptors,
    PaginationContextProvider,
@@ -20,7 +21,9 @@ ReactDOM.render(
       <Provider store={store}>
          <DrawerContextProvider>
             <PaginationContextProvider>
-               <App />
+               <CheckupContextProvider>
+                  <App />
+               </CheckupContextProvider>
             </PaginationContextProvider>
          </DrawerContextProvider>
       </Provider>

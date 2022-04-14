@@ -13,12 +13,11 @@ export {
    DownloadLink,
 } from "./buttons";
 export { Title } from "./titles";
-export { ErrMessage, HtmlTooltip, SlicedText, NoYet } from "./messages";
+export { ErrMessage, SlicedText, NoYet } from "./messages";
 export {
    ValidationInput,
    PasswordInput,
    SearchAndFilter,
-   Switcher,
    SelectInputWidthTags,
    CheckboxesTags,
    AddressInput,
@@ -26,11 +25,11 @@ export {
    Textarea,
    RadioButton,
    SelectInputPlaceholder,
-   AntSwitch,
    SelectStatusInput,
    SearchInput,
    CheckBoxInput,
    UserTextArea,
+   CustomizedSwitch,
 } from "./inputs";
 export { Loader, MinLoader } from "./loader";
 export { GlobalLogo } from "./logo";
@@ -53,7 +52,7 @@ export {
    AddNotes,
    AvailabilitySchedule,
 } from "./modal";
-export { SimpleToolTip } from "./toolTip";
+export { SimpleTooltip } from "./toolTip";
 export { CustomBreadcrumbs } from "./breadcrumbs";
 export { PaginationItem } from "./pagination";
 export { CircleAndTitle } from "./sections";

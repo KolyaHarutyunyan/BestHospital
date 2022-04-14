@@ -39,10 +39,7 @@ function* getClaimById(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    try {
-      const res = yield call(
-         claimService.getClaimByIdService,
-         action.payload.id
-      );
+      const res = yield call(claimService.getClaimByIdService, action.payload.id);
       yield put({
          type: GET_CLAIM_BY_ID_SUCCESS,
          payload: { claimById: res.data },
@@ -64,6 +61,7 @@ function* generateClaim(action) {
          action.payload.group,
          action.payload.body
       );
+      window.location.replace("/claims");
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (error) {
@@ -83,7 +81,7 @@ function* editClaimStatus(action) {
          action.payload.details
       );
       yield put({
-         type: GET_CLAIMS,
+         type: GET_CLAIM_BY_ID,
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));

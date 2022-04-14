@@ -6,11 +6,7 @@ import {
 } from "./core";
 import { billsStyle } from "./styles";
 import { Loader, NoItemText, PaginationItem } from "@eachbase/components";
-import {
-   DrawerContext,
-   handleCreatedAtDate,
-   PaginationContext,
-} from "@eachbase/utils";
+import { DrawerContext, handleCreatedAtDate, PaginationContext } from "@eachbase/utils";
 import { billActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 
@@ -28,9 +24,7 @@ export const BillsFragment = ({
    const { open } = useContext(DrawerContext);
    const { handlePageChange, pageIsChanging } = useContext(PaginationContext);
 
-   const billsTableClassName = `${classes.billsTableStyle} ${
-      open ? "narrow" : ""
-   }`;
+   const billsTableClassName = `${classes.billsTableStyle} ${open ? "narrow" : ""}`;
 
    const [selectedPayor, setSelectedPayor] = useState("All");
    const [selectedClient, setSelectedClient] = useState("All");
@@ -45,14 +39,12 @@ export const BillsFragment = ({
          : selectedPayor !== "All"
          ? bills.filter(
               (bill) =>
-                 bill?.payor?.middleName?.toLowerCase() ===
-                 selectedPayor.toLowerCase()
+                 bill?.payor?.middleName?.toLowerCase() === selectedPayor.toLowerCase()
            )
          : selectedClient !== "All"
          ? bills.filter(
               (bill) =>
-                 bill?.client?.middleName?.toLowerCase() ===
-                 selectedClient.toLowerCase()
+                 bill?.client?.middleName?.toLowerCase() === selectedClient.toLowerCase()
            )
          : filteredDate !== ""
          ? bills.filter(
@@ -73,6 +65,7 @@ export const BillsFragment = ({
    return (
       <div>
          <BillFiltersSelectors
+            filterIsForBill={true}
             clientsNames={clientsNames}
             payorsNames={payorsNames}
             passPayorHandler={(selPayor) => setSelectedPayor(selPayor)}

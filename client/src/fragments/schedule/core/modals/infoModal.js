@@ -1,17 +1,12 @@
 import React from "react";
-import { HtmlTooltip, SelectInput, Switcher } from "@eachbase/components";
+import { SimpleTooltip, SelectInput, CustomizedSwitch } from "@eachbase/components";
 import { modalsStyle } from "../../../../components/modal/styles";
 import { Images } from "@eachbase/utils";
 import { Items } from "../items";
 import { Link } from "react-router-dom";
 import { scheduleStyle } from "../styles";
 
-export const InfoModal = ({
-   info,
-   handleOpenClose,
-   openCloseRecur,
-   cardItem,
-}) => {
+export const InfoModal = ({ info, handleOpenClose, openCloseRecur, cardItem }) => {
    const classes = scheduleStyle();
    const global = modalsStyle();
 
@@ -23,16 +18,16 @@ export const InfoModal = ({
          <div className={classes.titleWrapper}>
             <p>Service Appointment</p>
             <div>
-               <HtmlTooltip title={<p>{"Recur Event"}</p>} placement="top-end">
+               <SimpleTooltip title={<p>{"Recur Event"}</p>} placement="top-end">
                   <button onClick={openCloseRecur}>
                      <img src={Images.recurrance} alt="icon" />
                   </button>
-               </HtmlTooltip>
-               <HtmlTooltip title={<p>{"Edit"}</p>} placement="top-end">
+               </SimpleTooltip>
+               <SimpleTooltip title={<p>{"Edit"}</p>} placement="top-end">
                   <button>
                      <img src={Images.edit} alt="icon" />
                   </button>
-               </HtmlTooltip>
+               </SimpleTooltip>
             </div>
          </div>
          <p className={classes.infoDate}>
@@ -72,16 +67,12 @@ export const InfoModal = ({
                   >
                      Signature.csv
                   </Link>
-                  <img
-                     className={classes.download}
-                     src={Images.download}
-                     alt="icon"
-                  />
+                  <img className={classes.download} src={Images.download} alt="icon" />
                </div>
 
                <div>
                   <p>Require Signature</p>
-                  <Switcher />
+                  <CustomizedSwitch />
                </div>
             </div>
          </div>

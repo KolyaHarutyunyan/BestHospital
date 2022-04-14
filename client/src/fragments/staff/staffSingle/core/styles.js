@@ -211,17 +211,6 @@ export const serviceSingleStyles = makeStyles(() => ({
       color: Colors.TextSecondary,
       fontWeight: "bold",
    },
-   switcher: {
-      width: 232,
-      height: 32,
-      display: "flex",
-      borderRadius: 8,
-      cursor: "pointer",
-      fontSize: 14,
-      fontWeight: "bold",
-      boxShadow: "0px 0px 6px #347af033",
-      padding: 1,
-   },
    switcherActive: {
       width: "50%",
       display: "flex",

@@ -1,9 +1,7 @@
 export const dummyData = {
    CLAIMS: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(() => ({
       _id: Math.random().toString(),
-      createdDate: "10/21/2021",
-      submittedDate: "03/28/2022",
-      dateOfRange: "02/26/2022",
+      dateRange: { early: "10/21/2021", latest: "03/28/2022" },
       staff: { _id: Math.random().toString(), middleName: "Alice Johansson" },
       funder: { _id: Math.random().toString(), middleName: "Blue Cross" },
       client: { _id: Math.random().toString(), middleName: "Daniel Clark" },
@@ -14,12 +12,12 @@ export const dummyData = {
       paymentRef: "www.testlink.com",
       receivables: [1, 2, 3].map(() => ({
          _id: Math.random().toString(),
-         dateOfService: "10/21/2021 - 03/28/2022",
-         placeOfService: "In Home (02)",
+         dateOfService: { start: "10/21/2021", end: "03/28/2022" },
+         placeService: "In Home (02)",
          cptCode: "H2001",
          modifier: "HM",
          totalUnits: 8,
-         totalBilled: 1000,
+         totalBill: 1000,
          renderingProvider: "12312312",
          bills: [1, 2, 3].map(() => ({
             _id: Math.random().toString(),
