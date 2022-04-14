@@ -1,12 +1,7 @@
 import React, { useContext, useState } from "react";
 import { claimsStyle } from "./styles";
 import { AddButton, Loader, NoItemText, PaginationItem } from "@eachbase/components";
-import {
-   DrawerContext,
-   enumValues,
-   handleCreatedAtDate,
-   PaginationContext,
-} from "@eachbase/utils";
+import { enumValues, handleCreatedAtDate, PaginationContext } from "@eachbase/utils";
 import { claimActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import { ClaimTable } from "./core";
@@ -26,10 +21,7 @@ export const ClaimsFragment = ({
 
    const dispatch = useDispatch();
 
-   const { open } = useContext(DrawerContext);
    const { handlePageChange } = useContext(PaginationContext);
-
-   const claimsTableClassName = `${classes.claimsTableStyle} ${open ? "narrow" : ""}`;
 
    const [selectedPayor, setSelectedPayor] = useState("All");
    const [selectedClient, setSelectedClient] = useState("All");
@@ -116,9 +108,7 @@ export const ClaimsFragment = ({
                         <Loader circleSize={50} />
                      </div>
                   ) : (
-                     <div className={claimsTableClassName}>
-                        <ClaimTable claims={claimsWithFilters} />
-                     </div>
+                     <ClaimTable claims={claimsWithFilters} />
                   )}
                </div>
                <PaginationItem

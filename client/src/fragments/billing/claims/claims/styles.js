@@ -7,11 +7,6 @@ export const claimsStyle = makeStyles(() => ({
       alignItems: "flex-end",
       width: "100%",
    },
-   claimsTableStyle: {
-      display: "flex",
-      width: "100%",
-      marginTop: "18px",
-   },
    tableAndPaginationBoxStyle: {
       minHeight: "700px",
       display: "flex",

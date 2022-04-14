@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
-import { SearchAndFilter, TableHeadComponent } from "@eachbase/components";
-import { TableCell } from "@material-ui/core";
+import { SearchAndFilter } from "@eachbase/components";
 import {
    DrawerContext,
    getTableHeader,
@@ -28,24 +27,30 @@ export const ClaimTHead = () => {
    }
 
    return (
-      <TableHeadComponent theadClassName={classes.theadStyle}>
-         <TableCell>
+      <div className={classes.tableTheadStyle}>
+         <div className={classes.thStyle}>
             <SearchAndFilter title={"ID"} custom={false} />
-         </TableCell>
-         <TableCell>{getClaimTitle("Date Period", "latestEarliest")}</TableCell>
-         <TableCell>{getClaimTitle("Funding Source")}</TableCell>
-         <TableCell>
+         </div>
+         <div className={classes.thStyle}>
+            {getClaimTitle("Date Period", "latestEarliest")}
+         </div>
+         <div className={classes.thStyle}>{getClaimTitle("Funding Source")}</div>
+         <div className={classes.thStyle}>
             <SearchAndFilter title={"Client"} />
-         </TableCell>
-         <TableCell>{getClaimTitle("Total Charged", "", false)}</TableCell>
-         <TableCell>{getClaimTitle("Total Paid", "", false)}</TableCell>
-         <TableCell>
+         </div>
+         <div className={classes.thStyle}>
+            {getClaimTitle("Total Charged", "", false)}
+         </div>
+         <div className={classes.thStyle}>{getClaimTitle("Total Paid", "", false)}</div>
+         <div className={classes.thStyle}>
             <SearchAndFilter title={"Remaining"} custom={false} />
-         </TableCell>
-         <TableCell>
+         </div>
+         <div className={classes.thStyle}>
             <SearchAndFilter title={"Status"} type={"arrow"} />
-         </TableCell>
-         <TableCell>{getClaimTitle("Payment Reference", "", false)}</TableCell>
-      </TableHeadComponent>
+         </div>
+         <div className={classes.thStyle}>
+            {getClaimTitle("Payment Reference", "", false)}
+         </div>
+      </div>
    );
 };

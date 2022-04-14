@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import { Table } from "@material-ui/core";
 import { BillTBodyWithScroll, BillTHeadWithScroll } from "./common";
 import { billTableStyle } from "./styles";
 import { DrawerContext } from "@eachbase/utils";
@@ -15,10 +14,8 @@ export const BillTableWithScroll = ({ bills }) => {
 
    return (
       <div className={tableWithScrollClassName}>
-         <Table>
-            <BillTHeadWithScroll />
-            <BillTBodyWithScroll bills={bills} />
-         </Table>
+         <BillTHeadWithScroll />
+         <BillTBodyWithScroll bills={bills} />
       </div>
    );
 };

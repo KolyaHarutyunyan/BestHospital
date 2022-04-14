@@ -70,7 +70,6 @@ export const inputsStyle = makeStyles(() => ({
    searchInputTitle: {
       display: "flex",
       cursor: "default",
-      "&.scrollable": { width: "125px" },
       alignItems: "center",
       "& span": {
          fontSize: "14px",

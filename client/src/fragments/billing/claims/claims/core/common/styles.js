@@ -1,17 +1,52 @@
 import { makeStyles } from "@material-ui/core";
-import { Colors } from "@eachbase/utils";
+import { Colors, Shadow } from "@eachbase/utils";
 
 export const claimTHeadTBodyStyle = makeStyles(() => ({
-   theadStyle: {
-      boxShadow: "0px 4px 2px #347af01a",
-      backgroundColor: "#EBF2FD",
-      "& > tr > th": {
-         padding: "0 32px",
-         "& > div": {
-            maxWidth: "unset",
-            width: "100%",
-         },
+   tableTheadStyle: {
+      width: "100%",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      boxShadow: Shadow.tableTheadShadow,
+      backgroundColor: Colors.BackgroundWater,
+      padding: "16px 32px",
+      "@media(max-width: 1720px)": { padding: "16px 16px" },
+      borderRadius: "8px",
+   },
+   thStyle: {
+      maxWidth: "242px",
+      width: "100%",
+      "&:not(:last-of-type)": {
+         marginRight: "32px",
+         "@media(max-width: 1720px)": { marginRight: "16px" },
       },
    },
-   paymentRefStyle: { color: Colors.BackgroundBlue },
+   tbodyContainerStyle: { width: "100%" },
+   tbodyRowStyle: {
+      width: "100%",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      borderRadius: "8px",
+      marginTop: "8px",
+      padding: "16px 32px",
+      "@media(max-width: 1720px)": { padding: "16px 16px" },
+      backgroundColor: Colors.BackgroundWhite,
+      cursor: "pointer",
+   },
+   tdStyle: {
+      maxWidth: "242px",
+      width: "100%",
+      "&:not(:last-of-type)": {
+         marginRight: "32px",
+         "@media(max-width: 1720px)": { marginRight: "16px" },
+      },
+      fontSize: "14px",
+      fontWeight: 400,
+      color: Colors.TextSecondary,
+   },
+   paymentRefStyle: {
+      color: Colors.BackgroundBlue,
+      cursor: "pointer !important",
+   },
 }));

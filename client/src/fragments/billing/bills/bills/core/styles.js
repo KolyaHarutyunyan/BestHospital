@@ -3,31 +3,28 @@ import { Colors } from "@eachbase/utils";
 
 export const billTableStyle = makeStyles(() => ({
    billTableWithoutScrollStyle: {
-      maxWidth: "850px",
-      "&.narrow": { maxWidth: "650px" },
-      minWidth: "550px",
+      maxWidth: "700px",
+      "&.narrow": { maxWidth: "500px" },
+      "@media(max-width: 1540px)": {
+         maxWidth: "500px",
+         "&.narrow": { maxWidth: "400px" },
+      },
       width: "100%",
       marginBottom: "6px",
-      "& table": {
-         borderSpacing: "0px 8px",
-         borderCollapse: "separate",
-      },
    },
    billTableWithScrollStyle: {
-      maxWidth: "930px",
-      "&.narrow": { maxWidth: "830px" },
-      width: "100%",
-      overflowX: "auto",
-      "& table": {
-         borderSpacing: "0px 8px",
-         borderCollapse: "separate",
-      },
+      overflow: "auto",
+      flexGrow: 1,
+      marginBottom: "6px",
    },
    filtersBoxStyle: { display: "flex" },
    filterDropStyle: {
       width: "220px",
       "&.smallSize": {
-         "@media(max-width: 1720px)": { width: "146px" },
+         "@media(max-width: 1720px)": {
+            width: "146px",
+            marginRight: "16px",
+         },
       },
       marginRight: "24px",
       "& h6:before, & li:before": { content: "unset" },
@@ -35,7 +32,11 @@ export const billTableStyle = makeStyles(() => ({
    dateInputStyle: {
       width: "220px",
       "&.smallSize": {
-         "@media(max-width: 1720px)": { width: "146px" },
+         "@media(max-width: 1720px)": {
+            width: "146px",
+            marginRight: "16px",
+            "&.first": { marginRight: "8px" },
+         },
       },
       height: "60px",
       marginRight: "24px",
