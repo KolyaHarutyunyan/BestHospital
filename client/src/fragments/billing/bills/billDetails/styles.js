@@ -1,13 +1,14 @@
 import { makeStyles } from "@material-ui/core";
-import { Colors, Images } from "@eachbase/utils";
+import { Colors, Images, Shadow } from "@eachbase/utils";
 
 export const billDetailsStyle = makeStyles(() => ({
    billDetailsContainerStyle: {
       width: "100%",
       backgroundColor: Colors.BackgroundWhite,
       borderRadius: "8px",
-      boxShadow: "0px 0px 6px #347AF033",
+      boxShadow: Shadow.noteModalShadow,
       padding: "24px",
+      "@media(max-width: 1280px)": { padding: "16px" },
    },
    billDetailsFirstPartStyle: {
       width: "100%",
