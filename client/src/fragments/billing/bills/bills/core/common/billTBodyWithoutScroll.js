@@ -16,12 +16,9 @@ export const BillTBodyWithoutScroll = ({ bills = [] }) => {
 
    const width = useWidth();
 
-   const size = 2565;
-   const limit = 5;
-
    function getDisplayOf(givenText = "") {
       if (typeof givenText !== "string") return givenText;
-      return showDashIfEmpty(getTextDependsOnWidth(width, size, givenText, limit));
+      return showDashIfEmpty(getTextDependsOnWidth(width, 2565, givenText, 5));
    }
 
    return (

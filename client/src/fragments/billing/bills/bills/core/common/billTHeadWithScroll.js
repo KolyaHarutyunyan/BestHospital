@@ -25,13 +25,10 @@ export const BillTHeadWithScroll = () => {
 
    const width = useWidth();
 
-   const size = 2565;
-   const limit = 4;
-
    function getBillTitle(givenTitle = "", ...rest) {
       return getTableHeader(
          givenTitle,
-         getTextDependsOnWidth(width, size, givenTitle, limit),
+         getTextDependsOnWidth(width, 2565, givenTitle, 4),
          ...rest
       );
    }

@@ -7,6 +7,7 @@ export const generateClaimStyle = makeStyles(() => ({
       borderRadius: "8px",
       backgroundColor: Colors.BackgroundWhite,
       padding: "24px",
+      "@media(max-width: 1280px)": { padding: "16px" },
    },
    generateClaimActionsStyle: {
       display: "flex",

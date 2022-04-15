@@ -4,8 +4,8 @@ import { useHistory } from "react-router-dom";
 import {
    addSignToValueFromStart,
    DrawerContext,
+   getLimitedVal,
    getTableHeader,
-   getTextDependsOnWidth,
    getValueByFixedNumber,
    handleCreatedAtDate,
    manageStatus,
@@ -14,6 +14,30 @@ import {
 } from "@eachbase/utils";
 
 const styles = { display: "flex", alignItems: "center" };
+
+function getClaimData(givenData = "", isOpen, givenWidth) {
+   const firstSize = isOpen ? 2040 : 1940;
+   const firstLimit = isOpen ? 14 : 16;
+
+   const secondSize = isOpen ? 1680 : 1640;
+   const secondLimit = isOpen ? 12 : 14;
+
+   const thirdSize = isOpen ? 1350 : 1345;
+   const thirdLimit = isOpen ? 8 : 10;
+
+   const initialLimit = isOpen ? 21 : 23;
+
+   const tableData =
+      givenWidth <= thirdSize
+         ? getLimitedVal(givenData, thirdLimit)
+         : givenWidth > thirdSize && givenWidth <= secondSize
+         ? getLimitedVal(givenData, secondLimit)
+         : givenWidth > secondSize && givenWidth <= firstSize
+         ? getLimitedVal(givenData, firstLimit)
+         : getLimitedVal(givenData, initialLimit);
+
+   return tableData;
+}
 
 export const ClaimTBody = ({ claims = [] }) => {
    const classes = claimTHeadTBodyStyle();
@@ -24,12 +48,8 @@ export const ClaimTBody = ({ claims = [] }) => {
 
    const { open } = useContext(DrawerContext);
 
-   const size = open ? 1830 : 1680;
-   const limit = open ? 4 : 5;
-
-   function getDisplayOf(givenText = "") {
-      if (typeof givenText !== "string") return givenText;
-      return showDashIfEmpty(getTextDependsOnWidth(width, size, givenText, limit));
+   function getTableData(data) {
+      return showDashIfEmpty(getClaimData(data, open, width));
    }
 
    return (
@@ -45,28 +65,28 @@ export const ClaimTBody = ({ claims = [] }) => {
                   className={classes.tbodyRowStyle}
                   onClick={() => history.push(`/claim/${claim._id}`)}
                >
-                  <div className={classes.tdStyle}>{getDisplayOf(claim._id)}</div>
+                  <div className={classes.tdStyle}>{getTableData(claim._id)}</div>
                   <div className={classes.tdStyle}>
-                     {getDisplayOf(`${early} - ${latest}`)}
+                     {getTableData(`${early} - ${latest}`)}
                   </div>
                   <div className={classes.tdStyle} style={styles}>
-                     {getDisplayOf(funder?.firstName)} {getDisplayOf(funder?.lastName)}
+                     {getTableData(funder?.firstName)} {getTableData(funder?.lastName)}
                   </div>
                   <div className={classes.tdStyle} style={styles}>
-                     {getDisplayOf(client?.firstName)} {getDisplayOf(client?.lastName)}
+                     {getTableData(client?.firstName)} {getTableData(client?.lastName)}
                   </div>
                   <div className={classes.tdStyle}>
-                     {getDisplayOf(
+                     {getTableData(
                         addSignToValueFromStart(getValueByFixedNumber(claim.totalCharge))
                      )}
                   </div>
                   <div className={classes.tdStyle}>
-                     {getDisplayOf(
+                     {getTableData(
                         addSignToValueFromStart(getValueByFixedNumber(claim.ammountPaid))
                      )}
                   </div>
                   <div className={classes.tdStyle}>
-                     {getDisplayOf(
+                     {getTableData(
                         addSignToValueFromStart(getValueByFixedNumber(claim.remaining))
                      )}
                   </div>
@@ -83,7 +103,7 @@ export const ClaimTBody = ({ claims = [] }) => {
                      >
                         {getTableHeader(
                            claim.paymentRef || "www.testlink.com",
-                           getDisplayOf(claim.paymentRef || "www.testlink.com"),
+                           getTableData(claim.paymentRef || "www.testlink.com"),
                            "",
                            false
                         )}
