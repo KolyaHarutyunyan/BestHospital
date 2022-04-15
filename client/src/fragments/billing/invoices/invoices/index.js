@@ -1,1 +1,1 @@
-export { Invoices } from "./invoices";
+export { InvoicesFragment } from "./invoices";

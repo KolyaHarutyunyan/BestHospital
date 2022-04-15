@@ -1,1 +1,1 @@
-export { InvoiceDetails } from "./invoiceDetails";
+export { InvoiceDetailsFragment } from "./invoiceDetails";

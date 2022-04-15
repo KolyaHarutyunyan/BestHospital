@@ -1,12 +1,17 @@
 import React, { useContext, useState } from "react";
 import { claimsStyle } from "./styles";
-import { AddButton, Loader, NoItemText, PaginationItem } from "@eachbase/components";
+import {
+   AddButton,
+   Loader,
+   NoItemText,
+   PaginationItem,
+   BillFiltersSelectors,
+} from "@eachbase/components";
 import { enumValues, handleCreatedAtDate, PaginationContext } from "@eachbase/utils";
 import { claimActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import { ClaimTable } from "./core";
 import { useHistory } from "react-router";
-import { BillFiltersSelectors } from "../../bills/bills/core";
 
 export const ClaimsFragment = ({
    claims = [],

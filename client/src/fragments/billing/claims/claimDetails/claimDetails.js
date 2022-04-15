@@ -15,7 +15,7 @@ import {
    Images,
    makeCapitalize,
 } from "@eachbase/utils";
-import { CloseClaimInputs, ReceivableTable } from "./core";
+import { ClaimReceivableTable, CloseClaimInputs } from "./core";
 
 export const ClaimDetailsFragment = ({ claimDetails }) => {
    const classes = claimDetailsStyle();
@@ -92,7 +92,7 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
       },
    ];
 
-   const filteredDetails = CLAIM_DETAILS.filter((billDtl) => billDtl.detail);
+   const filteredDetails = CLAIM_DETAILS.filter((claimDtl) => !!claimDtl.detail);
 
    return (
       <>
@@ -139,14 +139,14 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
             )}
             <div className={classes.claimDetailsSecondPartStyle}>
                <div className={classes.claimDetailsTitleBoxStyle}>
-                  <h2 className={classes.claimDetailsTitleStyle}>receivable</h2>
+                  <h2 className={classes.claimDetailsTitleStyle}>Receivables</h2>
                </div>
                {!!receivable?.length ? (
                   <div className={classes.receivablesTableBoxStyle}>
-                     <ReceivableTable claimReceivables={receivable} />
+                     <ClaimReceivableTable claimReceivables={receivable} />
                   </div>
                ) : (
-                  <NoItemText text={"No receivable Yet"} />
+                  <NoItemText text={"No Receivables Yet"} />
                )}
             </div>
          </div>

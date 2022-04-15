@@ -1,11 +1,12 @@
 import React, { useContext, useState } from "react";
-import {
-   BillFiltersSelectors,
-   BillTableWithoutScroll,
-   BillTableWithScroll,
-} from "./core";
+import { BillTableWithoutScroll, BillTableWithScroll } from "./core";
 import { billsStyle } from "./styles";
-import { Loader, NoItemText, PaginationItem } from "@eachbase/components";
+import {
+   Loader,
+   NoItemText,
+   PaginationItem,
+   BillFiltersSelectors,
+} from "@eachbase/components";
 import { DrawerContext, handleCreatedAtDate, PaginationContext } from "@eachbase/utils";
 import { billActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";

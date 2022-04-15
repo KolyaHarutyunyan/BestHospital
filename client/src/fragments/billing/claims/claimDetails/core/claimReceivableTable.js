@@ -1,16 +1,16 @@
 import React from "react";
-import { ReceivableTBody, ReceivableTHead } from "./common";
+import { ClaimReceivableTBody, ClaimReceivableTHead } from "./common";
 import { claimDetailsCoreStyle } from "./styles";
 
-export const ReceivableTable = ({ claimReceivables = [] }) => {
+export const ClaimReceivableTable = ({ claimReceivables = [] }) => {
    const classes = claimDetailsCoreStyle();
 
    return (
       <div className={classes.receivableContainerStyle}>
-         <ReceivableTHead />
+         <ClaimReceivableTHead />
          <div>
             {claimReceivables.map((item, index) => (
-               <ReceivableTBody key={index} receivable={item} />
+               <ClaimReceivableTBody key={index} receivable={item} />
             ))}
          </div>
       </div>

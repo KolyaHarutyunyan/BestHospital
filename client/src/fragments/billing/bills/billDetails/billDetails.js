@@ -89,7 +89,7 @@ export const BillDetailsFragment = ({
       },
    ];
 
-   const filteredDetails = BILL_DETAILS.filter((billDtl) => billDtl.detail);
+   const filteredDetails = BILL_DETAILS.filter((billDtl) => !!billDtl.detail);
 
    const changePage = (event, value) => {
       if (page === value) return;
@@ -134,9 +134,7 @@ export const BillDetailsFragment = ({
             </div>
             <div className={classes.billDetailsSecondPartStyle}>
                <div className={classes.billDetailsTitleBoxStyle}>
-                  <h2 className={classes.billDetailsTitleStyle}>
-                     Transactions
-                  </h2>
+                  <h2 className={classes.billDetailsTitleStyle}>Transactions</h2>
                   <AddModalButton
                      buttonClassName={classes.addTransactionButnStyle}
                      text={"Add Transactions"}
@@ -191,10 +189,7 @@ export const BillDetailsFragment = ({
                      "Please fill out the below fields to add a transaction."
                   }
                >
-                  <BillTransactionInputs
-                     billId={_id}
-                     closeModal={() => setOpen(false)}
-                  />
+                  <BillTransactionInputs billId={_id} closeModal={() => setOpen(false)} />
                </BillingModalWrapper>
             }
          />

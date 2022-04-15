@@ -35,7 +35,7 @@ function getReceivData(givenData = "", isOpen, givenWidth) {
    return tableData;
 }
 
-export const ReceivableTBody = ({ receivable }) => {
+export const ClaimReceivableTBody = ({ receivable }) => {
    const classes = tableTheadTbodyStyle();
 
    const [isShown, setIsShown] = useState(false);
@@ -51,32 +51,33 @@ export const ReceivableTBody = ({ receivable }) => {
 
    const { open } = useContext(DrawerContext);
 
-   const serviceStart = handleCreatedAtDate(receivable.dateOfService?.start, 10, "/");
-   const serviceEnd = handleCreatedAtDate(receivable.dateOfService?.end, 10, "/");
-
    function getTableData(data) {
       return showDashIfEmpty(getReceivData(data, open, width));
    }
 
+   const serviceStart = handleCreatedAtDate(receivable.dateOfService?.start, 10, "/");
+   const serviceEnd = handleCreatedAtDate(receivable.dateOfService?.end, 10, "/");
+
+   const dateOfService = getTableData(`${serviceStart} - ${serviceEnd}`);
+   const placeOfService = getTableData(receivable.placeService);
+   const cptCode = getTableData(manageStatus(receivable.cptCode));
+   const modifier = getTableData(receivable.modifier);
+   const totalUnits = getTableData(receivable.totalUnits);
+   const totalBilled = getTableData(receivable.totalBill);
+   const renderingProvider = getTableData(receivable.renderingProvider);
+   const arrowArea = <img src={Images.dropdownArrowBlue} alt="" />;
+
    return (
       <div className={classes.tbodyContainerStyle}>
          <div className={tbodyClassName} onClick={toggleInfo}>
-            <div className={classes.tdStyle}>
-               {getTableData(`${serviceStart} - ${serviceEnd}`)}
-            </div>
-            <div className={classes.tdStyle}>{getTableData(receivable.placeService)}</div>
-            <div className={classes.tdStyle}>
-               {getTableData(manageStatus(receivable.cptCode))}
-            </div>
-            <div className={classes.tdStyle}>{getTableData(receivable.modifier)}</div>
-            <div className={classes.tdStyle}>{getTableData(receivable.totalUnits)}</div>
-            <div className={classes.tdStyle}>{getTableData(receivable.totalBill)}</div>
-            <div className={classes.tdStyle}>
-               {getTableData(receivable.renderingProvider)}
-            </div>
-            <div className={tdClassName}>
-               <img src={Images.dropdownArrowBlue} alt="" />
-            </div>
+            <div className={classes.tdStyle}>{dateOfService}</div>
+            <div className={classes.tdStyle}>{placeOfService}</div>
+            <div className={classes.tdStyle}>{cptCode}</div>
+            <div className={classes.tdStyle}>{modifier}</div>
+            <div className={classes.tdStyle}>{totalUnits}</div>
+            <div className={classes.tdStyle}>{totalBilled}</div>
+            <div className={classes.tdStyle}>{renderingProvider}</div>
+            <div className={tdClassName}>{arrowArea}</div>
          </div>
          {isShown && <ReceivableBillTable receivableBills={receivable.bills} />}
       </div>

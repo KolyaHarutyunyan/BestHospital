@@ -66,3 +66,4 @@ export { NoItemText } from "./noItem";
 export { AvailableHours } from "./availability";
 
 export { UserInputsDropdown, CheckBoxDropdown } from "./dropdowns";
+export { BillFiltersSelectors } from "./selectors";
