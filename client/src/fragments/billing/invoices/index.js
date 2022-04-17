@@ -1,2 +1,3 @@
-export { Invoices } from "./invoices";
-export { InvoiceDetails } from "./invoiceDetails";
+export { InvoicesFragment } from "./invoices";
+export { InvoiceDetailsFragment } from "./invoiceDetails";
+export { GenerateInvoiceFragment } from "./generateInvoice";

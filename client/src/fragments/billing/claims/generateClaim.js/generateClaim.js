@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { NotClaimedBillTable } from "./core";
-import { BillFiltersSelectors } from "../../bills/bills/core";
 import { generateClaimStyle } from "./styles";
 import {
    CreateChancel,
    CustomizedSwitch,
    Loader,
    NoItemText,
+   BillFiltersSelectors,
 } from "@eachbase/components";
 import {
    CheckupContext,

@@ -1,0 +1,1 @@
+export { GenerateInvoiceFragment } from "./generateInvoice";

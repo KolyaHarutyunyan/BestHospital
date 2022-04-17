@@ -1,6 +1,6 @@
 import React from "react";
 import { UserInputsDropdown, ValidationInput } from "@eachbase/components";
-import { billTableStyle } from "./styles";
+import { selectorsStyle } from "./styles";
 
 function addAllTextToTheList(list = []) {
    return !!list[0]?.length ? ["All", ...list] : ["All"];
@@ -29,7 +29,7 @@ export const BillFiltersSelectors = ({
    filterIsForClaim,
    filterIsForInvoice,
 }) => {
-   const classes = billTableStyle();
+   const classes = selectorsStyle();
 
    const dateInputLabel = filterIsForNotClaimedBill
       ? "Service"
@@ -44,7 +44,7 @@ export const BillFiltersSelectors = ({
    }
 
    return (
-      <div className={classes.filtersBoxStyle}>
+      <div style={styles}>
          {!filterIsForInvoice && (
             <UserInputsDropdown
                label={"Funding Source"}

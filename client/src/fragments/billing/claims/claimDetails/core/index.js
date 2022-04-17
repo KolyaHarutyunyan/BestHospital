@@ -1,2 +1,2 @@
-export { ReceivableTable } from "./receivableTable";
+export { ClaimReceivableTable } from "./claimReceivableTable";
 export { CloseClaimInputs } from "./closeClaimInputs";

@@ -1,2 +1,2 @@
-export { ReceivableTHead } from "./receivableTHead";
-export { ReceivableTBody } from "./receivableTBody";
+export { ClaimReceivableTHead } from "./claimReceivableTHead";
+export { ClaimReceivableTBody } from "./claimReceivableTBody";
