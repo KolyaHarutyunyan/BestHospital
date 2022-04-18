@@ -26,31 +26,27 @@ export const ClaimTHead = () => {
       );
    }
 
+   const claimId = <SearchAndFilter title={"ID"} custom={false} />;
+   const datePeriod = getClaimTitle("Date Period", "latestEarliest");
+   const funder = getClaimTitle("Funding Source");
+   const client = <SearchAndFilter title={"Client"} />;
+   const totalCharged = getClaimTitle("Total Charged", "", false);
+   const totalPaid = getClaimTitle("Total Paid", "", false);
+   const remaining = <SearchAndFilter title={"Remaining"} custom={false} />;
+   const status = <SearchAndFilter title={"Status"} type={"arrow"} />;
+   const paymentReference = getClaimTitle("Payment Reference", "", false);
+
    return (
       <div className={classes.tableTheadStyle}>
-         <div className={classes.thStyle}>
-            <SearchAndFilter title={"ID"} custom={false} />
-         </div>
-         <div className={classes.thStyle}>
-            {getClaimTitle("Date Period", "latestEarliest")}
-         </div>
-         <div className={classes.thStyle}>{getClaimTitle("Funding Source")}</div>
-         <div className={classes.thStyle}>
-            <SearchAndFilter title={"Client"} />
-         </div>
-         <div className={classes.thStyle}>
-            {getClaimTitle("Total Charged", "", false)}
-         </div>
-         <div className={classes.thStyle}>{getClaimTitle("Total Paid", "", false)}</div>
-         <div className={classes.thStyle}>
-            <SearchAndFilter title={"Remaining"} custom={false} />
-         </div>
-         <div className={classes.thStyle}>
-            <SearchAndFilter title={"Status"} type={"arrow"} />
-         </div>
-         <div className={classes.thStyle}>
-            {getClaimTitle("Payment Reference", "", false)}
-         </div>
+         <div className={classes.thStyle}>{claimId}</div>
+         <div className={classes.thStyle}>{datePeriod}</div>
+         <div className={classes.thStyle}>{funder}</div>
+         <div className={classes.thStyle}>{client}</div>
+         <div className={classes.thStyle}>{totalCharged}</div>
+         <div className={classes.thStyle}>{totalPaid}</div>
+         <div className={classes.thStyle}>{remaining}</div>
+         <div className={classes.thStyle}>{status}</div>
+         <div className={classes.thStyle}>{paymentReference}</div>
       </div>
    );
 };

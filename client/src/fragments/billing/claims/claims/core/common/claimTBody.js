@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import {
    addSignToValueFromStart,
    DrawerContext,
+   getFullName,
    getLimitedVal,
    getTableHeader,
    getValueByFixedNumber,
@@ -55,9 +56,32 @@ export const ClaimTBody = ({ claims = [] }) => {
    return (
       <div className={classes.tbodyContainerStyle}>
          {claims.map((claim, index) => {
-            const { dateRange, funder, client } = claim || {};
-            const early = handleCreatedAtDate(dateRange?.early, 10, "/");
-            const latest = handleCreatedAtDate(dateRange?.latest, 10, "/");
+            const claimId = getTableData(claim._id);
+            const early = handleCreatedAtDate(claim?.dateRange?.early, 10, "/");
+            const latest = handleCreatedAtDate(claim?.dateRange?.latest, 10, "/");
+            const datePeriod = getTableData(`${early} - ${latest}`);
+            const funderFirstName = claim?.funder?.firstName;
+            const funderLastName = claim?.funder?.lastName;
+            const funder = getFullName(funderFirstName, funderLastName, getTableData);
+            const clientFirstName = claim?.client?.firstName;
+            const clientLastName = claim?.client?.firstName;
+            const client = getFullName(clientFirstName, clientLastName, getTableData);
+            const totalCharged = getTableData(
+               addSignToValueFromStart(getValueByFixedNumber(claim.totalCharge))
+            );
+            const totalPaid = getTableData(
+               addSignToValueFromStart(getValueByFixedNumber(claim.ammountPaid))
+            );
+            const remaining = getTableData(
+               addSignToValueFromStart(getValueByFixedNumber(claim.remaining))
+            );
+            const status = showDashIfEmpty(manageStatus(claim.status));
+            const paymentReference = getTableHeader(
+               claim.paymentRef || "www.testlink.com",
+               getTableData(claim.paymentRef || "www.testlink.com"),
+               "",
+               false
+            );
 
             return (
                <div
@@ -65,34 +89,18 @@ export const ClaimTBody = ({ claims = [] }) => {
                   className={classes.tbodyRowStyle}
                   onClick={() => history.push(`/claim/${claim._id}`)}
                >
-                  <div className={classes.tdStyle}>{getTableData(claim._id)}</div>
-                  <div className={classes.tdStyle}>
-                     {getTableData(`${early} - ${latest}`)}
+                  <div className={classes.tdStyle}>{claimId}</div>
+                  <div className={classes.tdStyle}>{datePeriod}</div>
+                  <div className={classes.tdStyle} style={styles}>
+                     {funder}
                   </div>
                   <div className={classes.tdStyle} style={styles}>
-                     {getTableData(funder?.firstName)} {getTableData(funder?.lastName)}
+                     {client}
                   </div>
-                  <div className={classes.tdStyle} style={styles}>
-                     {getTableData(client?.firstName)} {getTableData(client?.lastName)}
-                  </div>
-                  <div className={classes.tdStyle}>
-                     {getTableData(
-                        addSignToValueFromStart(getValueByFixedNumber(claim.totalCharge))
-                     )}
-                  </div>
-                  <div className={classes.tdStyle}>
-                     {getTableData(
-                        addSignToValueFromStart(getValueByFixedNumber(claim.ammountPaid))
-                     )}
-                  </div>
-                  <div className={classes.tdStyle}>
-                     {getTableData(
-                        addSignToValueFromStart(getValueByFixedNumber(claim.remaining))
-                     )}
-                  </div>
-                  <div className={classes.tdStyle}>
-                     {showDashIfEmpty(manageStatus(claim.status))}
-                  </div>
+                  <div className={classes.tdStyle}>{totalCharged}</div>
+                  <div className={classes.tdStyle}>{totalPaid}</div>
+                  <div className={classes.tdStyle}>{remaining}</div>
+                  <div className={classes.tdStyle}>{status}</div>
                   <div className={classes.tdStyle}>
                      <a
                         className={classes.paymentRefStyle}
@@ -101,12 +109,7 @@ export const ClaimTBody = ({ claims = [] }) => {
                         rel="noreferrer noopener"
                         onClick={(event) => event.stopPropagation()}
                      >
-                        {getTableHeader(
-                           claim.paymentRef || "www.testlink.com",
-                           getTableData(claim.paymentRef || "www.testlink.com"),
-                           "",
-                           false
-                        )}
+                        {paymentReference}
                      </a>
                   </div>
                </div>

@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import {
    addSignToValueFromStart,
    DrawerContext,
+   getFullName,
    getLimitedVal,
    getValueByFixedNumber,
    handleCreatedAtDate,
@@ -54,14 +55,13 @@ export const InvoiceTBody = ({ invoices = [] }) => {
    return (
       <div className={classes.tbodyContainerStyle}>
          {invoices.map((invoice, index) => {
-            const { dateRange, client } = invoice || {};
-
-            const early = handleCreatedAtDate(dateRange?.early, 10, "/");
-            const latest = handleCreatedAtDate(dateRange?.latest, 10, "/");
+            const early = handleCreatedAtDate(invoice?.dateRange?.early, 10, "/");
+            const latest = handleCreatedAtDate(invoice?.dateRange?.latest, 10, "/");
 
             const serviceDates = getTableData(`${early} - ${latest}`);
-            const clientFirstName = getTableData(client?.firstName);
-            const clientLastName = getTableData(client?.lastName);
+            const clientFirstName = invoice?.client?.firstName;
+            const clientLastName = invoice?.client?.lastName;
+            const client = getFullName(clientFirstName, clientLastName, getTableData);
             const totalHours = getTableData(invoice.totalHours);
             const totalAmount = getTableData(
                addSignToValueFromStart(getValueByFixedNumber(invoice.totalAmount))
@@ -79,7 +79,7 @@ export const InvoiceTBody = ({ invoices = [] }) => {
                >
                   <div className={classes.tdStyle}>{serviceDates}</div>
                   <div className={classes.tdStyle} style={styles}>
-                     {clientFirstName} {clientLastName}
+                     {client}
                   </div>
                   <div className={classes.tdStyle}>{totalHours}</div>
                   <div className={classes.tdStyle}>{totalAmount}</div>

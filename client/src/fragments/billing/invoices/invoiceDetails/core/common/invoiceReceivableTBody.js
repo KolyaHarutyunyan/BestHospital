@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import {
    addSignToValueFromStart,
    DrawerContext,
+   getFullName,
    getTextDependsOnWidth,
    getValueByFixedNumber,
    handleCreatedAtDate,
@@ -26,14 +27,7 @@ export const InvoiceReceivableTBody = ({ receivable }) => {
 
    const staffFirstName = receivable.staffMember?.firstName;
    const staffLastName = receivable.staffMember?.lastName;
-   const staff =
-      staffFirstName && staffLastName
-         ? getTableData(`${staffFirstName} ${staffLastName}`)
-         : staffFirstName
-         ? getTableData(staffFirstName)
-         : staffLastName
-         ? getTableData(staffLastName)
-         : "--- ---";
+   const staff = getFullName(staffFirstName, staffLastName, getTableData);
    const serviceDate = getTableData(receivable.dateOfService);
    const serviceCode = getTableData(receivable.serviceCode);
    const startTime = getTableData(

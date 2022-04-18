@@ -12,6 +12,8 @@ function addStyle(initialStyle) {
    return `${initialStyle} withScroll`;
 }
 
+const styles = { ...resetRadius("left"), paddingLeft: 0 };
+
 export const BillTHeadWithScroll = () => {
    const classes = billTHeadTBodyStyle();
 
@@ -33,23 +35,29 @@ export const BillTHeadWithScroll = () => {
       );
    }
 
+   const hours = getBillTitle("Hrs", "", false);
+   const units = getBillTitle("Units", "", false);
+   const billedRate = getBillTitle("Billed Rate", "", false);
+   const totalAmount = getBillTitle("Total Amount", "latestEarliest");
+   const payorBalance = getBillTitle("Payor Balance", "", false);
+   const clientBalance = getBillTitle("Client Balance", "", false);
+   const totalBalance = getBillTitle("Total Balance", "", false);
+   const claimStatus = getBillTitle("Claim Status", "arrow");
+   const invoiceStatus = getBillTitle("Invoice Status", "arrow");
+   const status = getBillTitle("Status", "arrow");
+
    return (
-      <div
-         className={tableTheadClassName}
-         style={{ ...resetRadius("left"), paddingLeft: 0 }}
-      >
-         <div className={thClassName}>{getBillTitle("Hrs", "", false)}</div>
-         <div className={thClassName}>{getBillTitle("Units", "", false)}</div>
-         <div className={thClassName}>{getBillTitle("Billed Rate", "", false)}</div>
-         <div className={thClassName}>
-            {getBillTitle("Total Amount", "latestEarliest")}
-         </div>
-         <div className={thClassName}>{getBillTitle("Payor Balance", "", false)}</div>
-         <div className={thClassName}>{getBillTitle("Client Balance", "", false)}</div>
-         <div className={thClassName}>{getBillTitle("Total Balance", "", false)}</div>
-         <div className={thClassName}>{getBillTitle("Claim Status", "arrow")}</div>
-         <div className={thClassName}>{getBillTitle("Invoice Status", "arrow")}</div>
-         <div className={thClassName}>{getBillTitle("Status", "arrow")}</div>
+      <div className={tableTheadClassName} style={styles}>
+         <div className={thClassName}>{hours}</div>
+         <div className={thClassName}>{units}</div>
+         <div className={thClassName}>{billedRate}</div>
+         <div className={thClassName}>{totalAmount}</div>
+         <div className={thClassName}>{payorBalance}</div>
+         <div className={thClassName}>{clientBalance}</div>
+         <div className={thClassName}>{totalBalance}</div>
+         <div className={thClassName}>{claimStatus}</div>
+         <div className={thClassName}>{invoiceStatus}</div>
+         <div className={thClassName}>{status}</div>
       </div>
    );
 };

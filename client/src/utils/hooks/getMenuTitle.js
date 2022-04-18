@@ -32,6 +32,7 @@ export const getMenuTitle = (url = "") => {
       case "/generateClaim":
          return "Claims";
       case "/invoices":
+      case "/generateInvoice":
          return "Invoices";
       case "/postings":
          return "Postings";

@@ -34,4 +34,9 @@ export const superAdminRouters = [
       icon: "Billing",
       path: "/bills",
    },
+   {
+      name: "Posting",
+      icon: "Posting",
+      path: "/postings",
+   },
 ];

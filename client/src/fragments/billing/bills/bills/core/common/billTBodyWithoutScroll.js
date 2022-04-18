@@ -1,6 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import {
+   getFullName,
    getTextDependsOnWidth,
    handleCreatedAtDate,
    resetRadius,
@@ -23,28 +24,34 @@ export const BillTBodyWithoutScroll = ({ bills = [] }) => {
 
    return (
       <div className={classes.tbodyContainerStyle}>
-         {bills.map((bill, index) => (
-            <div
-               key={index}
-               className={classes.tbodyRowStyle}
-               style={resetRadius("right")}
-               onClick={() => history.push(`/bill/${bill._id}`)}
-            >
-               <div className={classes.tdStyle}>{getDisplayOf(bill._id)}</div>
-               <div className={classes.tdStyle}>
-                  {getDisplayOf(handleCreatedAtDate(bill.dateOfService, 10, "/"))}
+         {bills.map((bill, index) => {
+            const billId = getDisplayOf(bill._id);
+            const dateOfService = getDisplayOf(
+               handleCreatedAtDate(bill.dateOfService, 10, "/")
+            );
+            const payorFirstName = bill.payor?.firstName;
+            const payorLastName = bill.payor?.lastName;
+            const payor = getFullName(payorFirstName, payorLastName, getDisplayOf);
+            const clientFirstName = bill.client?.firstName;
+            const clientLastName = bill.client?.lastName;
+            const client = getFullName(clientFirstName, clientLastName, getDisplayOf);
+            const service = getDisplayOf(bill.authService?.authorizationId);
+
+            return (
+               <div
+                  key={index}
+                  className={classes.tbodyRowStyle}
+                  style={resetRadius("right")}
+                  onClick={() => history.push(`/bill/${bill._id}`)}
+               >
+                  <div className={classes.tdStyle}>{billId}</div>
+                  <div className={classes.tdStyle}>{dateOfService}</div>
+                  <div className={classes.tdStyle}>{payor}</div>
+                  <div className={classes.tdStyle}>{client}</div>
+                  <div className={classes.tdStyle}>{service}</div>
                </div>
-               <div className={classes.tdStyle}>
-                  {getDisplayOf(bill.payor?.middleName)}
-               </div>
-               <div className={classes.tdStyle}>
-                  {getDisplayOf(bill.client?.middleName)}
-               </div>
-               <div className={classes.tdStyle}>
-                  {getDisplayOf(bill.authService?.authorizationId)}
-               </div>
-            </div>
-         ))}
+            );
+         })}
       </div>
    );
 };

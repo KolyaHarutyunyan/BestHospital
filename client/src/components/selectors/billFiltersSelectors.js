@@ -26,16 +26,18 @@ export const BillFiltersSelectors = ({
    selectedStatus,
    filterIsForBill,
    filterIsForNotClaimedBill,
+   filterIsForNotInvoicedBill,
    filterIsForClaim,
    filterIsForInvoice,
 }) => {
    const classes = selectorsStyle();
 
-   const dateInputLabel = filterIsForNotClaimedBill
-      ? "Service"
-      : filterIsForInvoice
-      ? "Invoice"
-      : "Submitted";
+   const dateInputLabel =
+      filterIsForNotClaimedBill || filterIsForNotInvoicedBill
+         ? "Service"
+         : filterIsForInvoice
+         ? "Invoice"
+         : "Submitted";
 
    const smallSizeStyle = filterIsForClaim || filterIsForInvoice ? "smallSize" : "";
 
@@ -45,7 +47,7 @@ export const BillFiltersSelectors = ({
 
    return (
       <div style={styles}>
-         {!filterIsForInvoice && (
+         {!filterIsForInvoice && !filterIsForNotInvoicedBill && (
             <UserInputsDropdown
                label={"Funding Source"}
                dropdownOptions={addAllTextToTheList(payorsNames)}
@@ -95,7 +97,10 @@ export const BillFiltersSelectors = ({
                />
             </div>
          )}
-         {(filterIsForBill || filterIsForNotClaimedBill || filterIsForInvoice) && (
+         {(filterIsForBill ||
+            filterIsForNotClaimedBill ||
+            filterIsForInvoice ||
+            filterIsForNotInvoicedBill) && (
             <ValidationInput
                keepLabelArea={true}
                inputLabel={`${dateInputLabel} Date`}

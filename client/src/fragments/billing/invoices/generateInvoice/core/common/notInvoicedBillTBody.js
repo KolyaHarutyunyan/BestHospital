@@ -10,10 +10,10 @@ import {
    showDashIfEmpty,
    useWidth,
 } from "@eachbase/utils";
-import { notClaimedBillTHeadTBodyStyle } from "./styles";
+import { notInvoicedBillTHeadTBodyStyle } from "./styles";
 import { CheckBoxInput, DownloadLink } from "@eachbase/components";
 
-function getNotClaimedBillData(givenData = "", isOpen, givenWidth) {
+function getNotInvoicedBillData(givenData = "", isOpen, givenWidth) {
    const firstSize = isOpen ? 1850 : 1825;
    const firstLimit = isOpen ? 12 : 14;
 
@@ -32,8 +32,8 @@ function getNotClaimedBillData(givenData = "", isOpen, givenWidth) {
    return tableData;
 }
 
-export const NotClaimedBillTBody = ({ notClaimedBill, triggerBill }) => {
-   const classes = notClaimedBillTHeadTBodyStyle();
+export const NotInvoicedBillTBody = ({ notInvoicedBill, triggerBill }) => {
+   const classes = notInvoicedBillTHeadTBodyStyle();
 
    const width = useWidth();
 
@@ -41,56 +41,54 @@ export const NotClaimedBillTBody = ({ notClaimedBill, triggerBill }) => {
    const { itemsAreChecked, handleItemsCheckup } = useContext(CheckupContext);
 
    const tbodyClassName = `${classes.tbodyRowStyle} ${
-      notClaimedBill.isChecked ? "checked-box" : ""
+      notInvoicedBill.isChecked ? "checked-box" : ""
    }`;
 
    function getTableData(data) {
-      return showDashIfEmpty(getNotClaimedBillData(data, open, width));
+      return showDashIfEmpty(getNotInvoicedBillData(data, open, width));
    }
 
    function handleInputCheckup(event) {
       triggerBill({
-         ...notClaimedBill,
+         ...notInvoicedBill,
          isChecked: event.target.checked,
       });
       itemsAreChecked && handleItemsCheckup(false);
    }
 
-   const dateOfService = getTableData(
-      handleCreatedAtDate(notClaimedBill.dateOfService, 10, "/")
+   const billId = getTableData(notInvoicedBill._id);
+   const serviceCode = getTableData(notInvoicedBill.authService?.serviceId);
+   const placeOfService = getTableData(notInvoicedBill.placeService?.name);
+   const serviceDate = getTableData(
+      handleCreatedAtDate(notInvoicedBill.dateOfService, 10, "/")
    );
-   const placeOfService = getTableData(notClaimedBill.placeService?.name);
-   const service = getTableData(notClaimedBill.authService?.serviceId);
-   const funderFirstName = notClaimedBill.payer?.firstName;
-   const funderLastName = notClaimedBill.payer?.lastName;
-   const funder = getFullName(funderFirstName, funderLastName, getTableData);
-   const clientFirstName = notClaimedBill.client?.firstName;
-   const clientLastName = notClaimedBill.client?.lastName;
+   const clientFirstName = notInvoicedBill.client?.firstName;
+   const clientLastName = notInvoicedBill.client?.lastName;
    const client = getFullName(clientFirstName, clientLastName, getTableData);
-   const units = getTableData(getValueByFixedNumber(notClaimedBill.totalUnits, 0));
-   const claimAmount = getTableData(
-      addSignToValueFromStart(getValueByFixedNumber(notClaimedBill.claimAmount))
+   const hours = getTableData(getValueByFixedNumber(notInvoicedBill.totalHours, 0));
+   const invoiceAmount = getTableData(
+      addSignToValueFromStart(getValueByFixedNumber(notInvoicedBill.invoiceAmount))
    );
-   const signature = "signature_example_pdf.pdf"; // notClaimedBill.signature
+   const signature = "signature_example_pdf.pdf"; // notInvoicedBill.signature
 
    return (
       <div className={classes.tbodyContainerStyle}>
          <div className={tbodyClassName}>
             <div className={`${classes.tdStyle} checkbox-td`}>
                <CheckBoxInput
-                  inputId={notClaimedBill._id}
+                  inputId={notInvoicedBill._id}
                   inputClassName={classes.billCheckboxStyle}
-                  inputChecked={notClaimedBill.isChecked}
+                  inputChecked={notInvoicedBill.isChecked}
                   onInputChange={handleInputCheckup}
                />
             </div>
-            <div className={classes.tdStyle}>{dateOfService}</div>
+            <div className={classes.tdStyle}>{billId}</div>
+            <div className={classes.tdStyle}>{serviceCode}</div>
             <div className={classes.tdStyle}>{placeOfService}</div>
-            <div className={classes.tdStyle}>{service}</div>
-            <div className={classes.tdStyle}>{funder}</div>
+            <div className={classes.tdStyle}>{serviceDate}</div>
             <div className={classes.tdStyle}>{client}</div>
-            <div className={classes.tdStyle}>{units}</div>
-            <div className={classes.tdStyle}>{claimAmount}</div>
+            <div className={classes.tdStyle}>{hours}</div>
+            <div className={classes.tdStyle}>{invoiceAmount}</div>
             <div className={`${classes.tdStyle} signature-td`}>
                <DownloadLink
                   linkHref={signature}
