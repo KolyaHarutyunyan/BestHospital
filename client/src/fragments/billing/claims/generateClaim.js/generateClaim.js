@@ -65,7 +65,7 @@ export const GenerateClaimFragment = ({
       );
    }
 
-   const payorsNames = bills.map((bill) => bill?.payor?.firstName);
+   const payorsNames = bills.map((bill) => bill?.funder?.firstName);
    const clientsNames = bills.map((bill) => bill?.client?.firstName);
 
    const notClaimedBillsWithFilters =
@@ -74,7 +74,7 @@ export const GenerateClaimFragment = ({
          : selectedPayor !== "All"
          ? bills.filter(
               (bill) =>
-                 bill?.payor?.firstName?.toLowerCase() === selectedPayor.toLowerCase()
+                 bill?.funder?.firstName?.toLowerCase() === selectedPayor.toLowerCase()
            )
          : selectedClient !== "All"
          ? bills.filter(

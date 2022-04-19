@@ -32,11 +32,11 @@ export const ClaimPaymentsFragment = ({
    const [selectedStatus, setSelectedStatus] = useState("All");
    const [open, setOpen] = useState(false);
 
+   const payorsNames = claimPayments.map(
+      (claimPayment) => claimPayment?.funder?.firstName
+   );
    const clientsNames = claimPayments.map(
       (claimPayment) => claimPayment?.client?.firstName
-   );
-   const payorsNames = claimPayments.map(
-      (claimPayment) => claimPayment?.payor?.firstName
    );
 
    const claimPaymentsWithFilters =
@@ -45,7 +45,7 @@ export const ClaimPaymentsFragment = ({
          : selectedPayor !== "All"
          ? claimPayments.filter(
               (claimPayment) =>
-                 claimPayment?.payor?.firstName?.toLowerCase() ===
+                 claimPayment?.funder?.firstName?.toLowerCase() ===
                  selectedPayor.toLowerCase()
            )
          : selectedClient !== "All"

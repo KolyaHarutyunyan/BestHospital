@@ -32,7 +32,7 @@ export const BillsFragment = ({
    const [filteredDate, setFilteredDate] = useState("");
 
    const clientsNames = bills.map((bill) => bill?.client?.firstName);
-   const payorsNames = bills.map((bill) => bill?.payor?.firstName);
+   const payorsNames = bills.map((bill) => bill?.funder?.firstName);
 
    const billsWithFilters =
       selectedPayor === "All" && selectedClient === "All" && filteredDate === ""
@@ -40,7 +40,7 @@ export const BillsFragment = ({
          : selectedPayor !== "All"
          ? bills.filter(
               (bill) =>
-                 bill?.payor?.firstName?.toLowerCase() === selectedPayor.toLowerCase()
+                 bill?.funder?.firstName?.toLowerCase() === selectedPayor.toLowerCase()
            )
          : selectedClient !== "All"
          ? bills.filter(
