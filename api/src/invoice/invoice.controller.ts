@@ -3,7 +3,7 @@ import { InvoiceService } from './invoice.service';
 import { CreateInvoiceDto, UpdateInvoiceDto, InvoiceDto, GenerateInvoiceDto } from './dto';
 import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ACCESS_TOKEN } from '../authN';
-import { ParseObjectIdPipe, Public } from '../util';
+import { ParseObjectIdPipe } from '../util';
 
 @Controller('invoice')
 @ApiTags('Invoice Endpoints')

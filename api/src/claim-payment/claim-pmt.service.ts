@@ -63,12 +63,15 @@ export class ClaimPmtService {
     await claimPmt.save();
     return this.sanitizer.sanitize(claimPmt);
   }
-  findAll() {
-    return `This action returns all claimPayment`;
+  /** find all claim-pmts */
+  async findAll(): Promise<ClaimPmtDto[]> {
+    const claimPmts = await this.model.find();
+    return this.sanitizer.sanitizeMany(claimPmts);
   }
-
-  findOne(id: number) {
-    return `This action returns a #${id} claimPayment`;
+  /** find claim-pmt by id */
+  async findOne(_id: string): Promise<ClaimPmtDto> {
+    const claimPmt = await this.model.findById(_id);
+    return this.sanitizer.sanitize(claimPmt);
   }
 
   update(id: string, updateClaimPmtDto: UpdateClaimPmtDto) {
