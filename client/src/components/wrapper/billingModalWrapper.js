@@ -6,21 +6,23 @@ export const BillingModalWrapper = ({
    onClose,
    titleContent,
    subtitleContent,
+   content,
    children,
    wrapperStylesName,
 }) => {
    const classes = wrapperStyle();
 
-   const wrapperClassName = `${classes.billTransactionContainerStyle} ${wrapperStylesName}`;
+   const wrapperClassName = `${classes.wrapperContainerStyle} ${wrapperStylesName}`;
 
    return (
       <div className={wrapperClassName}>
          <CloseButton handleCLic={onClose} />
-         <div className={classes.billTransactionTitleBoxStyle}>
-            <h2 className={classes.transactionTitle}>{titleContent}</h2>
-            <p className={classes.transactionSubtitle}>{subtitleContent}</p>
+         <div>
+            <h2 className={classes.wrapperTitleStyle}>{titleContent}</h2>
+            <p className={classes.wrapperSubtitleStyle}>{subtitleContent}</p>
+            {content}
          </div>
-         {children}
+         <div>{children}</div>
       </div>
    );
 };

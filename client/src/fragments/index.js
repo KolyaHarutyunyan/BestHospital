@@ -20,3 +20,9 @@ export {
    Postings,
    PostingDetails,
 } from "./billing";
+export {
+   ClaimPaymentsFragment,
+   ClaimPaymentDetailsFragment,
+   InvoicePaymentsFragment,
+   InvoicePaymentDetailsFragment,
+} from "./posting";

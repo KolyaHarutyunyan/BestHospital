@@ -2,7 +2,8 @@ import React from 'react';
 import {modalHeadersStyle} from "./styles";
 
 export const ModalHeaderBottom = ({}) => {
-    const classes = modalHeadersStyle()
+    const classes = modalHeadersStyle();
+    
     return (
         <div className={classes.createFundingSourceHeaderBottom} >
             <div className={classes.createFundingSourceHeaderBottomLine} />
