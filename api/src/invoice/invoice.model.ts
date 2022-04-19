@@ -11,7 +11,7 @@ const receivable = {
   clientResp: { type: Number },
   clientPaid: { type: Number },
   balance: { type: Number },
-  cptCode: { type: Number },
+  cptCode: { type: String },
   status: { type: String, enum: ReceivableStatus },
   // description: { typ: String },
   bills: [{ type: Types.ObjectId, ref: 'billing' }],

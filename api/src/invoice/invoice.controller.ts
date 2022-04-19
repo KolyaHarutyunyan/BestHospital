@@ -17,7 +17,7 @@ export class InvoiceController {
   }
 
   @Post('generate')
-  // @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiHeader({ name: ACCESS_TOKEN })
   // @ApiQuery({ name: 'group', enum: MergeClaims })
   @Public()
   @ApiOkResponse({ type: [InvoiceDto] })
