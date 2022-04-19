@@ -9,5 +9,6 @@ import { StaffModule } from '../staff/staff.module';
   imports: [BillingModule, StaffModule],
   controllers: [ClaimController],
   providers: [ClaimService, ClaimSanitizer],
+  exports: [ClaimService],
 })
 export class ClaimModule {}

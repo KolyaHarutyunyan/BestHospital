@@ -46,7 +46,7 @@ export class ClaimService {
     return this.sanitizer.sanitizeMany(claim);
   }
 
-  /** find claim by id] */
+  /** find claim by id] (claim-pmt) */
   async findOne(_id: string): Promise<ClaimDto> {
     const claim = await this.model.findById(_id);
     this.checkClaim(claim);
@@ -172,7 +172,17 @@ export class ClaimService {
     this.checkClaim(claim);
     return await claim.save();
   };
-
+  /** close the claim */
+  closeClaim = async (_id: string, details: string): Promise<string> => {
+    const claim = await this.model.updateOne(
+      { _id },
+      { $set: { status: ClaimStatus.CLOSED, details } },
+    );
+    if (claim.nModified) {
+      return _id;
+    }
+    throw new HttpException('claim was not found', HttpStatus.NOT_FOUND);
+  };
   /** Private methods */
   /** group the bills */
   private groupBy(array, f) {

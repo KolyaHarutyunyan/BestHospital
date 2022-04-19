@@ -1,2 +1,2 @@
-export { ClaimPaymentDto } from './claim-payment.dto.';
-export { CreateClaimPaymentDto } from './create-claim-payment.dto';
+export { ClaimPmtDto } from './claim-pmt.dto.';
+export { CreateClaimPmtDto } from './create-claim-pmt.dto';
