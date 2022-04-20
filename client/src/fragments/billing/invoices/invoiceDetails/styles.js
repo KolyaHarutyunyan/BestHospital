@@ -22,8 +22,9 @@ export const invoiceDetailsStyle = makeStyles(() => ({
       backgroundColor: Colors.BackgroundWhite,
       borderRadius: "8px",
       boxShadow: "0px 0px 6px #8A8A8A3D",
-      padding: "16px",
       marginBottom: "24px",
+      padding: "16px",
+      "@media(max-width: 1280px)": { padding: "8px" },
    },
    invoiceOutlineStyle: {
       display: "flex",
@@ -44,6 +45,7 @@ export const invoiceDetailsStyle = makeStyles(() => ({
          "&.narrow": { maxWidth: "505px" },
          width: "100%",
          padding: "9px 16px",
+         "@media(max-width: 1280px)": { padding: "9px 8px" },
          backgroundColor: Colors.BackgroundCatskillWhite,
          borderRadius: "8px",
          marginTop: "8px",

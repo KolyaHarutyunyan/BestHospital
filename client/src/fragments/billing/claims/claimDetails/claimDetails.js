@@ -51,7 +51,7 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
          detailText: "Date of Range:",
          detail: `${early} - ${latest}`,
       },
-      { detailText: "Staff:", detail: makeCapitalize(staff?.middleName) },
+      { detailText: "Staff:", detail: makeCapitalize(staff?.firstName) },
       {
          detailText: "1500 Form:",
          detail: !!"file_pdf.pdf" ? (
@@ -64,11 +64,11 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
       },
       {
          detailText: "Client:",
-         detail: makeCapitalize(client?.middleName),
+         detail: makeCapitalize(client?.firstName),
       },
       {
          detailText: "Founding Source:",
-         detail: makeCapitalize(funder?.middleName),
+         detail: makeCapitalize(funder?.firstName),
       },
       {
          detailText: "Total Charges:",

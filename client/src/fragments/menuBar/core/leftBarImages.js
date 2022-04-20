@@ -1,7 +1,7 @@
 import { Images } from "@eachbase/utils";
 import React from "react";
 
-export const LeftBarImages = ({ item, linkInfo, billingIsActive }) => {
+export const LeftBarImages = ({ item, linkInfo, accordionItemIsActive }) => {
    return (
       <img
          src={
@@ -60,9 +60,19 @@ export const LeftBarImages = ({ item, linkInfo, billingIsActive }) => {
                   ? Images.billingFill
                   : linkInfo === item.create
                   ? Images.billingFill
-                  : billingIsActive
+                  : accordionItemIsActive
                   ? Images.billingFill
                   : Images.billingPassive
+               : item.icon === "Posting"
+               ? linkInfo === item.path
+                  ? Images.postingFill
+                  : linkInfo.slice(0, 4) === item.path.slice(0, 4)
+                  ? Images.postingFill
+                  : linkInfo === item.create
+                  ? Images.postingFill
+                  : accordionItemIsActive
+                  ? Images.postingFill
+                  : Images.postingPassive
                : ""
          }
          alt={"icons"}

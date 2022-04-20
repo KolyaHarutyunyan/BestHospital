@@ -34,7 +34,7 @@ export const InvoicesFragment = ({
    const [selectedStatus, setSelectedStatus] = useState("All");
    const [filteredInvoiceDate, setFilteredInvoiceDate] = useState("");
 
-   const clientsNames = invoices.map((invoice) => invoice?.client?.middleName);
+   const clientsNames = invoices.map((invoice) => invoice?.client?.firstName);
 
    const invoicesWithFilters =
       selectedClient === "All" &&
@@ -45,7 +45,7 @@ export const InvoicesFragment = ({
          : selectedClient !== "All"
          ? invoices.filter(
               (invoice) =>
-                 invoice?.client?.middleName?.toLowerCase() ===
+                 invoice?.client?.firstName?.toLowerCase() ===
                  selectedClient.toLowerCase()
            )
          : filteredDateFrom !== ""

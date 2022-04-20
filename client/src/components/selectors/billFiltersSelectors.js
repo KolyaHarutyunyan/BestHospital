@@ -26,16 +26,19 @@ export const BillFiltersSelectors = ({
    selectedStatus,
    filterIsForBill,
    filterIsForNotClaimedBill,
+   filterIsForNotInvoicedBill,
    filterIsForClaim,
    filterIsForInvoice,
+   filterIsForClaimPayment,
 }) => {
    const classes = selectorsStyle();
 
-   const dateInputLabel = filterIsForNotClaimedBill
-      ? "Service"
-      : filterIsForInvoice
-      ? "Invoice"
-      : "Submitted";
+   const dateInputLabel =
+      filterIsForNotClaimedBill || filterIsForNotInvoicedBill
+         ? "Service"
+         : filterIsForInvoice
+         ? "Invoice"
+         : "Submitted";
 
    const smallSizeStyle = filterIsForClaim || filterIsForInvoice ? "smallSize" : "";
 
@@ -45,7 +48,7 @@ export const BillFiltersSelectors = ({
 
    return (
       <div style={styles}>
-         {!filterIsForInvoice && (
+         {!filterIsForInvoice && !filterIsForNotInvoicedBill && (
             <UserInputsDropdown
                label={"Funding Source"}
                dropdownOptions={addAllTextToTheList(payorsNames)}
@@ -61,31 +64,33 @@ export const BillFiltersSelectors = ({
             selected={selectedClient}
             dropdownClassName={addStyle(classes.filterDropStyle)}
          />
-         {(filterIsForClaim || filterIsForInvoice) && (
+         {(filterIsForClaim || filterIsForInvoice || filterIsForClaimPayment) && (
             <div style={styles}>
-               <div style={styles}>
-                  <ValidationInput
-                     keepLabelArea={true}
-                     inputLabel={"Date Range"}
-                     variant={"outlined"}
-                     name={"filterDateFrom"}
-                     onChange={changeDateFromInput}
-                     value={filteredDateFrom}
-                     type={"date"}
-                     size={"small"}
-                     style={addStyle(`${classes.dateInputStyle} first`)}
-                  />
-                  <ValidationInput
-                     keepLabelArea={true}
-                     variant={"outlined"}
-                     name={"filterDateTo"}
-                     onChange={changeDateToInput}
-                     value={filteredDateTo}
-                     type={"date"}
-                     size={"small"}
-                     style={addStyle(classes.dateInputStyle)}
-                  />
-               </div>
+               {!filterIsForClaimPayment && (
+                  <div style={styles}>
+                     <ValidationInput
+                        keepLabelArea={true}
+                        inputLabel={"Date Range"}
+                        variant={"outlined"}
+                        name={"filterDateFrom"}
+                        onChange={changeDateFromInput}
+                        value={filteredDateFrom}
+                        type={"date"}
+                        size={"small"}
+                        style={addStyle(`${classes.dateInputStyle} first`)}
+                     />
+                     <ValidationInput
+                        keepLabelArea={true}
+                        variant={"outlined"}
+                        name={"filterDateTo"}
+                        onChange={changeDateToInput}
+                        value={filteredDateTo}
+                        type={"date"}
+                        size={"small"}
+                        style={addStyle(classes.dateInputStyle)}
+                     />
+                  </div>
+               )}
                <UserInputsDropdown
                   label={"Status"}
                   dropdownOptions={addAllTextToTheList(statuses)}
@@ -95,7 +100,10 @@ export const BillFiltersSelectors = ({
                />
             </div>
          )}
-         {(filterIsForBill || filterIsForNotClaimedBill || filterIsForInvoice) && (
+         {(filterIsForBill ||
+            filterIsForNotClaimedBill ||
+            filterIsForInvoice ||
+            filterIsForNotInvoicedBill) && (
             <ValidationInput
                keepLabelArea={true}
                inputLabel={`${dateInputLabel} Date`}

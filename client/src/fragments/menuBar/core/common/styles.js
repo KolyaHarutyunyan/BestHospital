@@ -11,12 +11,12 @@ export const leftBarCommonStyle = makeStyles(() => ({
       alignItems: "center",
       justifyContent: "space-between",
       width: "100%",
-      marginTop: "16px",
+      marginTop: "8px",
    },
    listItem: {
       width: "200px",
       height: "36px",
-      marginTop: "16px",
+      marginTop: "8px",
       marginLeft: "12px",
       "&.accordionItem": { marginTop: "0px" },
       paddingLeft: "8px",
@@ -43,15 +43,13 @@ export const leftBarCommonStyle = makeStyles(() => ({
       color: Colors.TextSecondary,
       lineHeight: "21px",
       marginLeft: "8px",
-      "&.active": { color: Colors.BackgroundBlue },
+      "&.active span": { color: Colors.BackgroundBlue },
    },
    sectionsListBoxStyle: {
-      paddingLeft: "52px",
-      paddingTop: "8px",
       height: "0px",
       overflow: "hidden",
       transition: "height 0.2s linear",
-      "&.shown": { height: "200px" },
+      "&.shown": { height: "117px" },
       "& > div": {
          width: "100%",
          "& > a": {
@@ -61,7 +59,8 @@ export const leftBarCommonStyle = makeStyles(() => ({
             marginRight: "4px",
             display: "block",
             "&.active": { color: Colors.BackgroundBlue },
-            "&:not(:first-of-type)": { marginTop: "16px" },
+            marginTop: "8px",
+            marginLeft: "52px",
             "& > div": {
                color: "inherit",
                borderRadius: "4px",
