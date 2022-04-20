@@ -98,7 +98,8 @@ export const wrapperStyle = makeStyles(() => ({
          textAlign: "center",
          padding: "40px",
          "@media (max-width: 1280px)": { padding: "32px" },
-         borderRadius: "inherit",
+         "&:first-of-type": { borderRadius: "8px 8px 0 0" },
+         "&:last-of-type": { borderRadius: "0 0 8px 8px" },
       },
    },
    wrapperTitleStyle: {

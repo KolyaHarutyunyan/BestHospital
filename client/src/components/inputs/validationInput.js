@@ -28,6 +28,7 @@ export const ValidationInput = ({
    styles,
    handleBlur,
    size,
+   errorStyle,
 }) => {
    const classes = inputsStyle();
    const [validEmail, setValidEmail] = useState(false);
@@ -95,7 +96,7 @@ export const ValidationInput = ({
                }}
             />
             {errorFalse ? null : (
-               <ErrMessage style={{ marginBottom: "12px" }} text={typeError} />
+               <ErrMessage style={ errorStyle ? errorStyle : { marginBottom: "12px" }} text={typeError} />
             )}
          </div>
       </Fragment>

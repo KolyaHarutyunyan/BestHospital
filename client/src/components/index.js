@@ -52,7 +52,7 @@ export {
    AddNotes,
    AvailabilitySchedule,
 } from "./modal";
-export { SimpleTooltip } from "./toolTip";
+export { SimpleTooltip } from "./tooltip";
 export { CustomBreadcrumbs } from "./breadcrumbs";
 export { PaginationItem } from "./pagination";
 export { CircleAndTitle } from "./sections";

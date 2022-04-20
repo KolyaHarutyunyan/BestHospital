@@ -9,10 +9,10 @@ import {
    SimpleModal,
    BillingModalWrapper,
 } from "@eachbase/components";
-import { enumValues, Images, PaginationContext } from "@eachbase/utils";
+import { enumValues, PaginationContext } from "@eachbase/utils";
 import { claimActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
-import { ClaimPaymentInputs, ClaimPaymentTable } from "./core";
+import { ClaimPaymentInputs, ClaimPaymentTable, StepsContainer } from "./core";
 
 export const ClaimPaymentsFragment = ({
    claimPayments = [],
@@ -31,6 +31,16 @@ export const ClaimPaymentsFragment = ({
    const [selectedClient, setSelectedClient] = useState("All");
    const [selectedStatus, setSelectedStatus] = useState("All");
    const [open, setOpen] = useState(false);
+   const [activeStep, setActiveStep] = useState("first");
+
+   const subtitleContent = activeStep === "first" ? (
+      <>To create a payment , please fulfill the below fields.</>
+   ) : activeStep === "last" ? (
+      <>
+         Please fulfill the file type to upload a payment document. <br/>
+         <em>*</em> Only <em>PDF, PNG, CSV</em> {"&"} <em>JPEG</em> formats are supported. 
+      </>
+   ) : null;
 
    const payorsNames = claimPayments.map(
       (claimPayment) => claimPayment?.funder?.firstName
@@ -67,7 +77,7 @@ export const ClaimPaymentsFragment = ({
       let start = number > 1 ? number - 1 + "0" : 0;
       dispatch(claimActions.getClaims({ limit: 10, skip: start }));
       handleGetPage(number);
-   };
+   }; 
 
    return (
       <div>
@@ -120,18 +130,15 @@ export const ClaimPaymentsFragment = ({
                   wrapperStylesName={classes.claimPaymentWrapperStyle}
                   onClose={() => setOpen(false)}
                   titleContent={"Create a Payment"}
-                  subtitleContent={
-                     "To create a payment , please fulfill the below fields."
-                  }
-                  content={
-                     <div style={{ display: "flex", justifyContent: "space-between" }}>
-                        <div className={""}>1</div>
-                        <div className={""} />
-                        <div className={""}>2</div>
-                     </div>
-                  }
+                  subtitleContent={subtitleContent}
+                  content={<StepsContainer activeStep={activeStep} />}
                >
-                  <ClaimPaymentInputs closeModal={() => setOpen(false)} />
+                  <ClaimPaymentInputs 
+                     activeStep={activeStep}
+                     handleStep={setActiveStep} 
+                     closeModal={() => setOpen(false)}
+                     fundingSource={payorsNames} 
+                  />
                </BillingModalWrapper>
             }
          />

@@ -32,6 +32,12 @@ export const BillFiltersSelectors = ({
    filterIsForClaimPayment,
 }) => {
    const classes = selectorsStyle();
+   
+   const smallSizeStyle = filterIsForClaim || filterIsForInvoice ? "smallSize" : "";
+
+   function addStyle(initialStyle = "") {
+      return `${initialStyle} ${smallSizeStyle}`;
+   }
 
    const dateInputLabel =
       filterIsForNotClaimedBill || filterIsForNotInvoicedBill
@@ -40,15 +46,16 @@ export const BillFiltersSelectors = ({
          ? "Invoice"
          : "Submitted";
 
-   const smallSizeStyle = filterIsForClaim || filterIsForInvoice ? "smallSize" : "";
+   const shouldRenderFundingSourceInput = !filterIsForInvoice && !filterIsForNotInvoicedBill;
 
-   function addStyle(initialStyle = "") {
-      return `${initialStyle} ${smallSizeStyle}`;
-   }
+   const shouldRenderDateRangeAndStatusInputs = filterIsForClaim || filterIsForInvoice ||   filterIsForClaimPayment;
 
+   const shouldRenderDateInput = filterIsForBill || filterIsForNotClaimedBill || filterIsForInvoice ||
+      filterIsForNotInvoicedBill;
+   
    return (
       <div style={styles}>
-         {!filterIsForInvoice && !filterIsForNotInvoicedBill && (
+         {shouldRenderFundingSourceInput && (
             <UserInputsDropdown
                label={"Funding Source"}
                dropdownOptions={addAllTextToTheList(payorsNames)}
@@ -64,7 +71,7 @@ export const BillFiltersSelectors = ({
             selected={selectedClient}
             dropdownClassName={addStyle(classes.filterDropStyle)}
          />
-         {(filterIsForClaim || filterIsForInvoice || filterIsForClaimPayment) && (
+         {shouldRenderDateRangeAndStatusInputs && (
             <div style={styles}>
                {!filterIsForClaimPayment && (
                   <div style={styles}>
@@ -100,10 +107,7 @@ export const BillFiltersSelectors = ({
                />
             </div>
          )}
-         {(filterIsForBill ||
-            filterIsForNotClaimedBill ||
-            filterIsForInvoice ||
-            filterIsForNotInvoicedBill) && (
+         {shouldRenderDateInput && (
             <ValidationInput
                keepLabelArea={true}
                inputLabel={`${dateInputLabel} Date`}
