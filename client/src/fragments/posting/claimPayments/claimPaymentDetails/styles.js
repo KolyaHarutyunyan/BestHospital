@@ -128,4 +128,8 @@ export const claimPaymentDetailsStyle = makeStyles(() => ({
         "@media(max-width: 1280px)": { padding: "40px 32px 32px 32px" },
         "& > button": { backgroundColor: Colors.BackgroundWater },
     },
+    paymentRefStyle: {
+        color: Colors.BackgroundBlue,
+        cursor: "pointer !important",
+    }
 }));
