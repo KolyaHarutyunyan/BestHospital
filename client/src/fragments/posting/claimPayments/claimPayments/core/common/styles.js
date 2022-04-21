@@ -45,4 +45,8 @@ export const claimPaymentTHeadTBodyStyle = makeStyles(() => ({
       fontWeight: 400,
       color: Colors.TextSecondary,
    },
+   lastStepBoxStyle: {
+      width: "446px",
+      marginBottom: "16px",
+   },
 }));

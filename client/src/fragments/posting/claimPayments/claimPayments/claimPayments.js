@@ -37,8 +37,11 @@ export const ClaimPaymentsFragment = ({
       <>To create a payment , please fulfill the below fields.</>
    ) : activeStep === "last" ? (
       <>
-         Please fulfill the file type to upload a payment document. <br/>
-         <em>*</em> Only <em>PDF, PNG, CSV</em> {"&"} <em>JPEG</em> formats are supported. 
+         Please fulfill the file type to upload a payment document. 
+         <em className={classes.breakRowStyle} />
+         <em className={classes.warningStyle}>*</em> 
+         Only <em className={classes.highlightedTextStyle}> PDF, PNG, CSV </em> {"&"} 
+         <em className={classes.highlightedTextStyle}> JPEG </em> formats are supported. 
       </>
    ) : null;
 

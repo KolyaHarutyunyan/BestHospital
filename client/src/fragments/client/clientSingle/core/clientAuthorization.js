@@ -50,6 +50,7 @@ export const ClientAuthorization = ({
    const [authenticationsId, setAuthentications] = useState("");
 
    const params = useParams();
+   
    const { httpOnSuccess, httpOnLoad } = useSelector((state) => ({
       httpOnSuccess: state.httpOnSuccess,
       httpOnError: state.httpOnError,
@@ -287,7 +288,7 @@ export const ClientAuthorization = ({
             content={
                <AuthorizationFile
                   handleClose={handleClose}
-                  authenticationsId={authenticationsId}
+                  fileId={authenticationsId}
                   uploadedFiles={uploadedFiles}
                />
             }
