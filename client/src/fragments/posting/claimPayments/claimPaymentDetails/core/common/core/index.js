@@ -1,0 +1,1 @@
+export { ClaimReceivableTable } from "./claimReceivableTable";

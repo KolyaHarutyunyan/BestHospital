@@ -1,10 +1,10 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { AuthorizationFile } from '../../../../../client';
-import { claimPaymentTHeadTBodyStyle } from './styles';
+import { invoicePaymentTHeadTBodyStyle } from './styles';
 
-export const LastStepInputs = ({ claimPaymentId }) => {
-    const classes = claimPaymentTHeadTBodyStyle();
+export const LastStepInputs = ({ invoicePaymentId }) => {
+    const classes = invoicePaymentTHeadTBodyStyle();
 
    const uploadedFiles = useSelector((state) => state.upload.uploadedInfo);
 
@@ -12,7 +12,7 @@ export const LastStepInputs = ({ claimPaymentId }) => {
         <div className={classes.lastStepBoxStyle}>
            <AuthorizationFile 
                 fileIsForPayment={true}
-                authenticationsId={claimPaymentId}
+                authenticationsId={invoicePaymentId}
                 uploadedFiles={uploadedFiles}
            />
         </div>

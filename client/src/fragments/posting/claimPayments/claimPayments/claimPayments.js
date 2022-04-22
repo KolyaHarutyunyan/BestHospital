@@ -33,6 +33,12 @@ export const ClaimPaymentsFragment = ({
    const [open, setOpen] = useState(false);
    const [activeStep, setActiveStep] = useState("first");
 
+   const titleContent = activeStep === "first" 
+      ? "Create a Payment" 
+      : activeStep === "last" 
+      ? "Add Payment Document" 
+      : "";
+
    const subtitleContent = activeStep === "first" ? (
       <>To create a payment , please fulfill the below fields.</>
    ) : activeStep === "last" ? (
@@ -43,7 +49,7 @@ export const ClaimPaymentsFragment = ({
          Only <em className={classes.highlightedTextStyle}> PDF, PNG, CSV </em> {"&"} 
          <em className={classes.highlightedTextStyle}> JPEG </em> formats are supported. 
       </>
-   ) : null;
+   ) : "";
 
    const payorsNames = claimPayments.map(
       (claimPayment) => claimPayment?.funder?.firstName
@@ -132,7 +138,7 @@ export const ClaimPaymentsFragment = ({
                <BillingModalWrapper
                   wrapperStylesName={classes.claimPaymentWrapperStyle}
                   onClose={() => setOpen(false)}
-                  titleContent={"Create a Payment"}
+                  titleContent={titleContent}
                   subtitleContent={subtitleContent}
                   content={<StepsContainer activeStep={activeStep} />}
                >

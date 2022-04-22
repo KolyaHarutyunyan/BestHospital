@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { claimPaymentDetailsStyle } from "./styles";
 import {
+   AddButton,
    BillingModalWrapper,
    DownloadLink,
    NoItemText,
@@ -12,6 +13,7 @@ import {
    getLimitedVal,
    getValueByFixedNumber,
    handleCreatedAtDate,
+   Images,
    makeCapitalize,
    manageStatus,
 } from "@eachbase/utils";
@@ -44,7 +46,7 @@ export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
          detail: handleCreatedAtDate(paymentDate, 10, "/"),
       },
       {
-         detailText: "Payment Reference",
+         detailText: "Payment Reference:",
          detail: (
             <a
                className={classes.paymentRefStyle}
@@ -63,9 +65,7 @@ export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
       },
       {
          detailText: "Payment Amount:",
-         detail: addSignToValueFromStart(
-            getValueByFixedNumber(paymentAmount === 0 ? paymentAmount + "" : paymentAmount)
-         ),
+         detail: addSignToValueFromStart(getValueByFixedNumber(paymentAmount)),
       },
       {
          detailText: "EOB:",
@@ -88,13 +88,18 @@ export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
                <div className={classes.claimPaymentDetailsTitleBoxStyle}>
                   <h2 className={classes.claimPaymentDetailsTitleStyle}>Payment Details</h2>
                </div>
-               <button
-                  className={classes.voidClaimPaymentButnStyle}
-                  type="button"
-                  onClick={() => setOpen(true)}
-               >
-                  Void
-               </button>
+               <div className={classes.editAndVoidClaimBoxStyle}>
+                  <div className={classes.editIconStyle} onClick={() => {}}>
+                     <img src={Images.edit} alt="" />
+                  </div>
+                  <button
+                     className={classes.voidClaimPaymentButnStyle}
+                     type="button"
+                     onClick={() => setOpen(true)}
+                  >
+                     Void
+                  </button>
+               </div>
             </div>
             <div className={classes.claimPaymentDetailsFirstPartStyle}>
                <div className={classes.claimPaymentOutlineStyle}>
@@ -117,6 +122,10 @@ export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
             <div className={classes.claimPaymentDetailsSecondPartStyle}>
                <div className={classes.claimPaymentDetailsTitleBoxStyle}>
                   <h2 className={classes.claimPaymentDetailsTitleStyle}>Claims</h2>
+                  <AddButton
+                     text={"Add Claim"}
+                     handleClick={() => {}}
+                  />
                </div>
                {!!claims?.length ? (
                   <div>

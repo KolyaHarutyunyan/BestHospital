@@ -17,6 +17,9 @@ export const UserTextArea = ({
 
    const condStyles = `${typeError ? "error" : hasText ? "filled" : ""}`;
    const userTextAreaClassName = `${classes.userTextAreaStyle} ${condStyles} ${className}`;
+   const errorAndCharsBoxClassName = `
+      ${classes.errorAndCharsBoxStyle} ${!!maxCharsLabel ? "hasMaxText" : ""}
+   `;
 
    return (
       <>
@@ -24,7 +27,7 @@ export const UserTextArea = ({
             <label htmlFor={id}> {label} </label>
             <textarea name={name} id={id} value={value} onChange={onChange} />
          </div>
-         <div className={classes.errorAndCharsBoxStyle}>
+         <div className={errorAndCharsBoxClassName}>
             <ErrMessage text={typeError} />
             <p className="maxCharacter">{maxCharsLabel}</p>
          </div>

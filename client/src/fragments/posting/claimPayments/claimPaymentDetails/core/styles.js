@@ -13,7 +13,7 @@ export const claimPaymentDetailsCoreStyle = makeStyles(() => ({
             height: "160px",
         },      
     },
-    voidOrCancelButnStyle: {
+    closeOrCancelButnStyle: {
         width: "195px",
         "&.cancel": { backgroundColor: `${Colors.BackgroundWater} !important` },
         "&.create": { backgroundColor: `${Colors.ThemeRed} !important` },

@@ -17,10 +17,18 @@ export const claimPaymentDetailsStyle = makeStyles(() => ({
         alignItems: "center",
         marginBottom: "24px",
     },
+    editAndVoidClaimBoxStyle: {
+        display: "flex",
+        alignItems: "center",
+    },
+    editIconStyle: { 
+        marginRight: "16px",
+        cursor: "pointer",
+    },
     voidClaimPaymentButnStyle: {
         border: "none",
         outline: "none",
-        width: "126px",
+        width: "78px",
         height: "36px",
         borderRadius: "8px",
         backgroundColor: Colors.ThemeRed,
@@ -118,14 +126,20 @@ export const claimPaymentDetailsStyle = makeStyles(() => ({
     },
     claimPaymentDetailsSecondPartStyle: { width: "100%" },
     claimPaymentDetailsTitleBoxStyle: {
+       width: "100%",
+       display: "flex",
+       justifyContent: "space-between",
+       alignItems: "center",
+    },
+    claimPaymentDetailsTitleStyle: {
         fontSize: "18px",
         fontWeight: 700,
         color: Colors.TextSecondary,
         textTransform: "capitalize",
     },
     voidClaimPaymentWrapperStyle: {
-        padding: "40px",
-        "@media(max-width: 1280px)": { padding: "40px 32px 32px 32px" },
+        "& > div:first-of-type": { paddingBottom: 0 },
+        "& > div:last-of-type": { paddingTop: "24px" },
         "& > button": { backgroundColor: Colors.BackgroundWater },
     },
     paymentRefStyle: {

@@ -70,7 +70,7 @@ export const ClaimTBody = ({ claims = [] }) => {
                addSignToValueFromStart(getValueByFixedNumber(claim.totalCharge))
             );
             const totalPaid = getTableData(
-               addSignToValueFromStart(getValueByFixedNumber(claim.ammountPaid))
+               addSignToValueFromStart(getValueByFixedNumber(claim.amountPaid))
             );
             const remaining = getTableData(
                addSignToValueFromStart(getValueByFixedNumber(claim.remaining))

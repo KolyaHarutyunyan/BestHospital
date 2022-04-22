@@ -30,6 +30,7 @@ export const BillFiltersSelectors = ({
    filterIsForClaim,
    filterIsForInvoice,
    filterIsForClaimPayment,
+   filterIsForInvoicePayment,
 }) => {
    const classes = selectorsStyle();
    
@@ -46,12 +47,14 @@ export const BillFiltersSelectors = ({
          ? "Invoice"
          : "Submitted";
 
-   const shouldRenderFundingSourceInput = !filterIsForInvoice && !filterIsForNotInvoicedBill;
+   const shouldRenderFundingSourceInput = !filterIsForInvoice && !filterIsForNotInvoicedBill &&    !filterIsForInvoicePayment;
 
-   const shouldRenderDateRangeAndStatusInputs = filterIsForClaim || filterIsForInvoice ||   filterIsForClaimPayment;
+   const shouldRenderDateRangeAndOrStatusInputs = filterIsForClaim || filterIsForInvoice ||   filterIsForClaimPayment || filterIsForInvoicePayment;
+
+   const shouldRenderDateRangeInputs = !filterIsForClaimPayment && !filterIsForInvoicePayment;
 
    const shouldRenderDateInput = filterIsForBill || filterIsForNotClaimedBill || filterIsForInvoice ||
-      filterIsForNotInvoicedBill;
+   filterIsForNotInvoicedBill;
    
    return (
       <div style={styles}>
@@ -71,9 +74,9 @@ export const BillFiltersSelectors = ({
             selected={selectedClient}
             dropdownClassName={addStyle(classes.filterDropStyle)}
          />
-         {shouldRenderDateRangeAndStatusInputs && (
+         {shouldRenderDateRangeAndOrStatusInputs && (
             <div style={styles}>
-               {!filterIsForClaimPayment && (
+               {shouldRenderDateRangeInputs && (
                   <div style={styles}>
                      <ValidationInput
                         keepLabelArea={true}

@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { UserTextArea, CreateChancel } from "@eachbase/components";
 import { ErrorText, FindLoad, FindSuccess, isNotEmpty } from "@eachbase/utils";
-import { claimPaymentDetailsCoreStyle } from "./styles";
+import { invoicePaymentDetailsCoreStyle } from "./styles";
 import { useDispatch } from "react-redux";
-import { claimActions, httpRequestsOnSuccessActions } from "@eachbase/store";
+import { httpRequestsOnSuccessActions } from "@eachbase/store";
 
-export const VoidClaimPaymentInputs = ({ closeModal, claimPaymentId }) => {
-   const classes = claimPaymentDetailsCoreStyle();
+export const VoidInvoicePaymentInputs = ({ closeModal, invoicePaymentId }) => {
+   const classes = invoicePaymentDetailsCoreStyle();
 
    const dispatch = useDispatch();
 
-   const voidingClaimPmtLoader = FindLoad("EDIT_CLAIM_PAYMENT_STATUS");
-   const voidingClaimPmtSuccess = FindSuccess("EDIT_CLAIM_PAYMENT_STATUS");
+   const voidingInvoicePmtLoader = FindLoad("EDIT_INVOICE_PAYMENT_STATUS");
+   const voidingInvoicePmtSuccess = FindSuccess("EDIT_INVOICE_PAYMENT_STATUS");
 
    useEffect(() => {
-      if (!!voidingClaimPmtSuccess.length) {
+      if (!!voidingInvoicePmtSuccess.length) {
          closeModal();
-         httpRequestsOnSuccessActions.removeSuccess("EDIT_CLAIM_PAYMENT_STATUS");
+         httpRequestsOnSuccessActions.removeSuccess("EDIT_INVOICE_PAYMENT_STATUS");
       }
-   }, [voidingClaimPmtSuccess]);
+   }, [voidingInvoicePmtSuccess]);
 
    const [voidingComment, setVoidingComment] = useState("");
    const [error, setError] = useState("");
@@ -51,7 +51,7 @@ export const VoidClaimPaymentInputs = ({ closeModal, claimPaymentId }) => {
          />
          <CreateChancel
             butnClassName={classes.closeOrCancelButnStyle}
-            loader={!!voidingClaimPmtLoader.length}
+            loader={!!voidingInvoicePmtLoader.length}
             create={"Close"}
             chancel={"Cancel"}
             onCreate={handleSubmit}
@@ -60,3 +60,4 @@ export const VoidClaimPaymentInputs = ({ closeModal, claimPaymentId }) => {
       </div>
    );
 };
+

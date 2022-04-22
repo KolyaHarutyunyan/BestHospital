@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { uploadActions } from "@eachbase/store";
 
 export const AuthorizationFile = ({
-   fileIsForClaimPayment = false,
+   fileIsForPayment = false,
    fileId,
    handleClose,
    uploadedFiles = [],
@@ -95,7 +95,7 @@ export const AuthorizationFile = ({
       }
    };
 
-   if (fileIsForClaimPayment) {
+   if (fileIsForPayment) {
       return (
          <ImagesFileUploader
             handleChange={handleChange}
