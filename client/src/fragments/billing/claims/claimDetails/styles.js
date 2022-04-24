@@ -124,8 +124,6 @@ export const claimDetailsStyle = makeStyles(() => ({
       textTransform: "capitalize",
    },
    closeClaimWrapperStyle: {
-      padding: "40px",
-      "@media(max-width: 1280px)": { padding: "40px 32px 32px 32px" },
       "& > button": { backgroundColor: Colors.BackgroundWater },
    },
 }));

@@ -30,8 +30,15 @@ export const BillFiltersSelectors = ({
    filterIsForClaim,
    filterIsForInvoice,
    filterIsForClaimPayment,
+   filterIsForInvoicePayment,
 }) => {
    const classes = selectorsStyle();
+   
+   const smallSizeStyle = filterIsForClaim || filterIsForInvoice ? "smallSize" : "";
+
+   function addStyle(initialStyle = "") {
+      return `${initialStyle} ${smallSizeStyle}`;
+   }
 
    const dateInputLabel =
       filterIsForNotClaimedBill || filterIsForNotInvoicedBill
@@ -40,15 +47,18 @@ export const BillFiltersSelectors = ({
          ? "Invoice"
          : "Submitted";
 
-   const smallSizeStyle = filterIsForClaim || filterIsForInvoice ? "smallSize" : "";
+   const shouldRenderFundingSourceInput = !filterIsForInvoice && !filterIsForNotInvoicedBill &&    !filterIsForInvoicePayment;
 
-   function addStyle(initialStyle = "") {
-      return `${initialStyle} ${smallSizeStyle}`;
-   }
+   const shouldRenderDateRangeAndOrStatusInputs = filterIsForClaim || filterIsForInvoice ||   filterIsForClaimPayment || filterIsForInvoicePayment;
 
+   const shouldRenderDateRangeInputs = !filterIsForClaimPayment && !filterIsForInvoicePayment;
+
+   const shouldRenderDateInput = filterIsForBill || filterIsForNotClaimedBill || filterIsForInvoice ||
+   filterIsForNotInvoicedBill;
+   
    return (
       <div style={styles}>
-         {!filterIsForInvoice && !filterIsForNotInvoicedBill && (
+         {shouldRenderFundingSourceInput && (
             <UserInputsDropdown
                label={"Funding Source"}
                dropdownOptions={addAllTextToTheList(payorsNames)}
@@ -64,9 +74,9 @@ export const BillFiltersSelectors = ({
             selected={selectedClient}
             dropdownClassName={addStyle(classes.filterDropStyle)}
          />
-         {(filterIsForClaim || filterIsForInvoice || filterIsForClaimPayment) && (
+         {shouldRenderDateRangeAndOrStatusInputs && (
             <div style={styles}>
-               {!filterIsForClaimPayment && (
+               {shouldRenderDateRangeInputs && (
                   <div style={styles}>
                      <ValidationInput
                         keepLabelArea={true}
@@ -100,10 +110,7 @@ export const BillFiltersSelectors = ({
                />
             </div>
          )}
-         {(filterIsForBill ||
-            filterIsForNotClaimedBill ||
-            filterIsForInvoice ||
-            filterIsForNotInvoicedBill) && (
+         {shouldRenderDateInput && (
             <ValidationInput
                keepLabelArea={true}
                inputLabel={`${dateInputLabel} Date`}
