@@ -26,26 +26,39 @@ export const BillFiltersSelectors = ({
    selectedStatus,
    filterIsForBill,
    filterIsForNotClaimedBill,
+   filterIsForNotInvoicedBill,
    filterIsForClaim,
    filterIsForInvoice,
+   filterIsForClaimPayment,
+   filterIsForInvoicePayment,
 }) => {
    const classes = selectorsStyle();
-
-   const dateInputLabel = filterIsForNotClaimedBill
-      ? "Service"
-      : filterIsForInvoice
-      ? "Invoice"
-      : "Submitted";
-
+   
    const smallSizeStyle = filterIsForClaim || filterIsForInvoice ? "smallSize" : "";
 
    function addStyle(initialStyle = "") {
       return `${initialStyle} ${smallSizeStyle}`;
    }
 
+   const dateInputLabel =
+      filterIsForNotClaimedBill || filterIsForNotInvoicedBill
+         ? "Service"
+         : filterIsForInvoice
+         ? "Invoice"
+         : "Submitted";
+
+   const shouldRenderFundingSourceInput = !filterIsForInvoice && !filterIsForNotInvoicedBill &&    !filterIsForInvoicePayment;
+
+   const shouldRenderDateRangeAndOrStatusInputs = filterIsForClaim || filterIsForInvoice ||   filterIsForClaimPayment || filterIsForInvoicePayment;
+
+   const shouldRenderDateRangeInputs = !filterIsForClaimPayment && !filterIsForInvoicePayment;
+
+   const shouldRenderDateInput = filterIsForBill || filterIsForNotClaimedBill || filterIsForInvoice ||
+   filterIsForNotInvoicedBill;
+   
    return (
       <div style={styles}>
-         {!filterIsForInvoice && (
+         {shouldRenderFundingSourceInput && (
             <UserInputsDropdown
                label={"Funding Source"}
                dropdownOptions={addAllTextToTheList(payorsNames)}
@@ -61,31 +74,33 @@ export const BillFiltersSelectors = ({
             selected={selectedClient}
             dropdownClassName={addStyle(classes.filterDropStyle)}
          />
-         {(filterIsForClaim || filterIsForInvoice) && (
+         {shouldRenderDateRangeAndOrStatusInputs && (
             <div style={styles}>
-               <div style={styles}>
-                  <ValidationInput
-                     keepLabelArea={true}
-                     inputLabel={"Date Range"}
-                     variant={"outlined"}
-                     name={"filterDateFrom"}
-                     onChange={changeDateFromInput}
-                     value={filteredDateFrom}
-                     type={"date"}
-                     size={"small"}
-                     style={addStyle(`${classes.dateInputStyle} first`)}
-                  />
-                  <ValidationInput
-                     keepLabelArea={true}
-                     variant={"outlined"}
-                     name={"filterDateTo"}
-                     onChange={changeDateToInput}
-                     value={filteredDateTo}
-                     type={"date"}
-                     size={"small"}
-                     style={addStyle(classes.dateInputStyle)}
-                  />
-               </div>
+               {shouldRenderDateRangeInputs && (
+                  <div style={styles}>
+                     <ValidationInput
+                        keepLabelArea={true}
+                        inputLabel={"Date Range"}
+                        variant={"outlined"}
+                        name={"filterDateFrom"}
+                        onChange={changeDateFromInput}
+                        value={filteredDateFrom}
+                        type={"date"}
+                        size={"small"}
+                        style={addStyle(`${classes.dateInputStyle} first`)}
+                     />
+                     <ValidationInput
+                        keepLabelArea={true}
+                        variant={"outlined"}
+                        name={"filterDateTo"}
+                        onChange={changeDateToInput}
+                        value={filteredDateTo}
+                        type={"date"}
+                        size={"small"}
+                        style={addStyle(classes.dateInputStyle)}
+                     />
+                  </div>
+               )}
                <UserInputsDropdown
                   label={"Status"}
                   dropdownOptions={addAllTextToTheList(statuses)}
@@ -95,7 +110,7 @@ export const BillFiltersSelectors = ({
                />
             </div>
          )}
-         {(filterIsForBill || filterIsForNotClaimedBill || filterIsForInvoice) && (
+         {shouldRenderDateInput && (
             <ValidationInput
                keepLabelArea={true}
                inputLabel={`${dateInputLabel} Date`}

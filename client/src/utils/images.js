@@ -111,6 +111,8 @@ import dropdownArrowWhite from "@eachbase/images/icons/dropdownArrowWhite.svg";
 import claimInfo from "@eachbase/images/icons/claimInfo.svg";
 import checkmarkBlue from "@eachbase/images/icons/checkmarkBlue.svg";
 import uncheck from "@eachbase/images/icons/uncheck.svg";
+import postingFill from "@eachbase/images/icons/postingFill.svg";
+import postingPassive from "@eachbase/images/icons/postingPassive.svg";
 
 export const Images = {
    doctors: doctors,
@@ -224,4 +226,6 @@ export const Images = {
    claimInfo,
    checkmarkBlue,
    uncheck,
+   postingFill,
+   postingPassive,
 };

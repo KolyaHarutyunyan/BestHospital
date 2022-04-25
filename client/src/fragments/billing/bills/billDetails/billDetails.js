@@ -74,7 +74,7 @@ export const BillDetailsFragment = ({
          detail: handleCreatedAtDate(dateOfService, 10, "/"),
       },
       { detailText: "Payor:", detail: payor ? makeCapitalize(payor) : "" },
-      { detailText: "Client:", detail: makeCapitalize(client?.middleName) },
+      { detailText: "Client:", detail: makeCapitalize(client?.firstName) },
       {
          detailText: "Service:",
          detail: getLimitedVal(authService?.authorizationId, 13),

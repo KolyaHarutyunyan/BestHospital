@@ -276,13 +276,14 @@ export const inputsStyle = makeStyles(() => ({
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
+      "&.hasMaxText": { marginBottom: "16px" },
       "& .maxCharacter": {
          width: "100%",
          paddingRight: "16px",
          textAlign: "right",
          fontSize: "12px",
          fontWeight: 400,
-         color: Colors.TextPrimary,
+         color: Colors.TextSecondary,
       },
    },
    // end **

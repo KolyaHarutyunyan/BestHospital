@@ -7,6 +7,17 @@ import { GlobalLogo } from "@eachbase/components";
 import { Colors, DrawerContext, superAdminRouters } from "@eachbase/utils";
 import { CustomListItem } from "./common";
 
+const billingSections = [
+   { label: "Bills", path: "/bills" },
+   { label: "Claims", path: "/claims" },
+   { label: "Invoices", path: "/invoices" },
+];
+
+const postingSections = [
+   { label: "Claim Payments", path: "/claimPayments" },
+   { label: "Invoice Payments", path: "/invoicePayments" },
+];
+
 export const LeftBar = ({ setLinksStyle, linkInfo }) => {
    const classes = navBarStyles();
 
@@ -16,9 +27,7 @@ export const LeftBar = ({ setLinksStyle, linkInfo }) => {
       <div>
          <div
             className={classes.transition}
-            style={
-               open === false ? { marginLeft: "47px" } : { marginLeft: "203px" }
-            }
+            style={open === false ? { marginLeft: "47px" } : { marginLeft: "203px" }}
          >
             <IconButton
                style={{
@@ -47,15 +56,25 @@ export const LeftBar = ({ setLinksStyle, linkInfo }) => {
          >
             <GlobalLogo />
             <List onClick={setLinksStyle} className={classes.menuItems}>
-               {superAdminRouters.map((item, index) => (
-                  <CustomListItem
-                     key={index}
-                     linkInfo={linkInfo}
-                     item={item}
-                     open={open}
-                     accordion={item.name === "Billing"}
-                  />
-               ))}
+               {superAdminRouters.map((item, index) => {
+                  const accordionItemList =
+                     item.name === "Billing"
+                        ? billingSections
+                        : item.name === "Posting"
+                        ? postingSections
+                        : [];
+
+                  return (
+                     <CustomListItem
+                        key={index}
+                        linkInfo={linkInfo}
+                        item={item}
+                        open={open}
+                        accordion={item.name === "Billing" || item.name === "Posting"}
+                        accordionItems={accordionItemList}
+                     />
+                  );
+               })}
             </List>
          </Drawer>
       </div>

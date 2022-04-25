@@ -5,14 +5,13 @@ import { leftBarCommonStyle } from "./styles";
 import { LeftBarImages } from "../leftBarImages";
 import { getLimitedVal, Images } from "@eachbase/utils";
 
-const billingSections = [
-   { label: "Bills", path: "/bills" },
-   { label: "Claims", path: "/claims" },
-   { label: "Invoices", path: "/invoices" },
-   { label: "Postings", path: "/postings" },
-];
-
-export const CustomListItem = ({ linkInfo, item, open, accordion }) => {
+export const CustomListItem = ({
+   linkInfo,
+   item,
+   open,
+   accordion,
+   accordionItems = [],
+}) => {
    const classes = leftBarCommonStyle();
    const history = useHistory();
    const [isShown, setIsShown] = useState(false);
@@ -20,39 +19,35 @@ export const CustomListItem = ({ linkInfo, item, open, accordion }) => {
    const isActive =
       linkInfo === item.path || linkInfo.slice(0, 4) === item.path.slice(0, 4);
 
-   let billingIsActive = false;
-   for (let i = 0; i < billingSections.length; i++) {
-      if (linkInfo === billingSections[i].path) {
-         billingIsActive = true;
+   let accordionItemIsActive = false;
+   for (let i = 0; i < accordionItems.length; i++) {
+      if (linkInfo === accordionItems[i].path) {
+         accordionItemIsActive = true;
       }
    }
 
    const linkClassName = isActive ? classes.linkWrapperActive : "";
-   const accordionClassName = billingIsActive ? classes.linkWrapperActive : "";
+   const accordionClassName = accordionItemIsActive ? classes.linkWrapperActive : "";
 
    const listItemClassName = `${classes.listItem} ${isActive ? "active" : ""} ${
       !open ? "passive" : ""
    }`;
    const accordionItemClassName = `accordionItem ${classes.listItem} ${
-      billingIsActive ? "active" : ""
+      accordionItemIsActive ? "active" : ""
    } ${!open ? "passive" : ""}`;
 
-   const listItemTextClassName = `${classes.menuItemsStyle} ${
-      isActive ? "active" : ""
-   }`;
+   const listItemTextClassName = `${classes.menuItemsStyle} ${isActive ? "active" : ""}`;
    const accordionItemTextClassName = `${classes.menuItemsStyle} ${
-      billingIsActive ? "active" : ""
+      accordionItemIsActive ? "active" : ""
    }`;
 
-   const accordArrowClassName = `${classes.accordArrowStyle} ${
-      isShown ? "rotate" : ""
-   }`;
+   const accordArrowClassName = `${classes.accordArrowStyle} ${isShown ? "rotate" : ""}`;
    const sectionsListClassName = `${classes.sectionsListBoxStyle} ${
       open && isShown ? "shown" : ""
    }`;
 
    const handleAccordionClick = () =>
-      open ? setIsShown((prevState) => !prevState) : history.push("/bills");
+      open ? setIsShown((prevState) => !prevState) : history.push(accordionItems[0].path);
 
    return accordion ? (
       <div>
@@ -64,7 +59,7 @@ export const CustomListItem = ({ linkInfo, item, open, accordion }) => {
                <LeftBarImages
                   item={item}
                   linkInfo={linkInfo}
-                  billingIsActive={billingIsActive}
+                  accordionItemIsActive={accordionItemIsActive}
                />
                {open && (
                   <>
@@ -75,7 +70,7 @@ export const CustomListItem = ({ linkInfo, item, open, accordion }) => {
                      <img
                         className={accordArrowClassName}
                         src={
-                           billingIsActive
+                           accordionItemIsActive
                               ? Images.accordArrowBlue
                               : Images.accordArrowBlack
                         }
@@ -87,17 +82,13 @@ export const CustomListItem = ({ linkInfo, item, open, accordion }) => {
          </div>
          <div className={sectionsListClassName}>
             <div>
-               {billingSections.map((section, index) => {
+               {accordionItems.map((section, index) => {
                   const activeClassName = linkInfo.startsWith(section.path)
                      ? "active"
                      : "";
 
                   return (
-                     <NavLink
-                        key={index}
-                        to={section.path}
-                        className={activeClassName}
-                     >
+                     <NavLink key={index} to={section.path} className={activeClassName}>
                         <ListItem button>{section.label}</ListItem>
                      </NavLink>
                   );

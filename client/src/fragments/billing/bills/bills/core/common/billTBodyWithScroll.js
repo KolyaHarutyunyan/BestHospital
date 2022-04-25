@@ -32,53 +32,48 @@ export const BillTBodyWithScroll = ({ bills = [] }) => {
 
    return (
       <div className={classes.tbodyContainerStyle}>
-         {bills.map((bill, index) => (
-            <div
-               key={index}
-               className={tbodyRowClassName}
-               style={{ ...resetRadius("left"), paddingLeft: 0 }}
-               onClick={() => history.push(`/bill/${bill._id}`)}
-            >
-               <div className={classes.tdStyle}>{getDisplayOf(bill.totalHours)}</div>
-               <div className={classes.tdStyle}>
-                  {getDisplayOf(bill.totalUnits?.toString())}
+         {bills.map((bill, index) => {
+            const hours = getDisplayOf(bill.totalHours);
+            const units = getDisplayOf(bill.totalUnits?.toString());
+            const billedRate = getDisplayOf(
+               addSignToValueFromStart(getValueByFixedNumber(bill.billedRate))
+            );
+            const totalAmount = getDisplayOf(
+               addSignToValueFromStart(getValueByFixedNumber(bill.totalAmount))
+            );
+            const payorBalance = getDisplayOf(
+               addSignToValueFromStart(getValueByFixedNumber(bill.payerTotal))
+            );
+            const clientBalance = getDisplayOf(
+               addSignToValueFromStart(getValueByFixedNumber(bill.clientResp))
+            );
+            const totalBalance = getDisplayOf(
+               addSignToValueFromStart(getValueByFixedNumber(bill.billedAmount))
+            );
+            const claimStatus = getDisplayOf(manageStatus(bill.claimStatus));
+            const invoiceStatus = getDisplayOf(manageStatus(bill.invoiceStatus));
+            const status = getDisplayOf(manageStatus(bill.status));
+
+            return (
+               <div
+                  key={index}
+                  className={tbodyRowClassName}
+                  style={{ ...resetRadius("left"), paddingLeft: 0 }}
+                  onClick={() => history.push(`/bill/${bill._id}`)}
+               >
+                  <div className={classes.tdStyle}>{hours}</div>
+                  <div className={classes.tdStyle}>{units}</div>
+                  <div className={classes.tdStyle}>{billedRate}</div>
+                  <div className={classes.tdStyle}>{totalAmount}</div>
+                  <div className={classes.tdStyle}>{payorBalance}</div>
+                  <div className={classes.tdStyle}>{clientBalance}</div>
+                  <div className={classes.tdStyle}>{totalBalance}</div>
+                  <div className={classes.tdStyle}>{claimStatus}</div>
+                  <div className={classes.tdStyle}>{invoiceStatus}</div>
+                  <div className={classes.tdStyle}>{status}</div>
                </div>
-               <div className={classes.tdStyle}>
-                  {getDisplayOf(
-                     addSignToValueFromStart(getValueByFixedNumber(bill.billedRate))
-                  )}
-               </div>
-               <div className={classes.tdStyle}>
-                  {getDisplayOf(
-                     addSignToValueFromStart(getValueByFixedNumber(bill.totalAmount))
-                  )}
-               </div>
-               <div className={classes.tdStyle}>
-                  {getDisplayOf(
-                     addSignToValueFromStart(getValueByFixedNumber(bill.payerTotal))
-                  )}
-               </div>
-               <div className={classes.tdStyle}>
-                  {getDisplayOf(
-                     addSignToValueFromStart(getValueByFixedNumber(bill.clientResp))
-                  )}
-               </div>
-               <div className={classes.tdStyle}>
-                  {getDisplayOf(
-                     addSignToValueFromStart(getValueByFixedNumber(bill.billedAmount))
-                  )}
-               </div>
-               <div className={classes.tdStyle}>
-                  {getDisplayOf(manageStatus(bill.claimStatus))}
-               </div>
-               <div className={classes.tdStyle}>
-                  {getDisplayOf(manageStatus(bill.invoiceStatus))}
-               </div>
-               <div className={classes.tdStyle}>
-                  {getDisplayOf(manageStatus(bill.status))}
-               </div>
-            </div>
-         ))}
+            );
+         })}
       </div>
    );
 };

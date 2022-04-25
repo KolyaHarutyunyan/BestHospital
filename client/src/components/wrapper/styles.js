@@ -82,10 +82,9 @@ export const wrapperStyle = makeStyles(() => ({
       },
    },
 
-   //**Bill Transaction Wrapper Styles */
-   billTransactionContainerStyle: {
+   //**Billing Modal Wrapper Styles */
+   wrapperContainerStyle: {
       position: "relative",
-      padding: "40px",
       borderRadius: "8px",
       backgroundColor: Colors.BackgroundWhite,
       "& > button": {
@@ -94,22 +93,22 @@ export const wrapperStyle = makeStyles(() => ({
          right: 8,
          backgroundColor: "#A3B2BD80",
       },
-      "@media (max-width: 1280px)": {
-         padding: "32px",
+      "& > div": {
+         width: "100%",
+         textAlign: "center",
+         padding: "40px",
+         "@media (max-width: 1280px)": { padding: "32px" },
+         "&:first-of-type": { borderRadius: "8px 8px 0 0" },
+         "&:last-of-type": { borderRadius: "0 0 8px 8px" },
       },
    },
-   billTransactionTitleBoxStyle: {
-      width: "100%",
-      textAlign: "center",
-      marginBottom: "40px",
-   },
-   transactionTitle: {
+   wrapperTitleStyle: {
       fontSize: "32px",
       fontWeight: 700,
       color: Colors.TextSecondary,
       marginBottom: "16px",
    },
-   transactionSubtitle: {
+   wrapperSubtitleStyle: {
       maxWidth: "406px",
       width: "100%",
       fontSize: "16px",

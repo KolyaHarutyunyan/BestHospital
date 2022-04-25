@@ -24,6 +24,7 @@ export const SelectInput = ({
    disabled,
    language,
    styles,
+   errorStyle = {},
 }) => {
    const classes = inputsStyle();
    const [current, setCurrent] = React.useState("");
@@ -102,7 +103,7 @@ export const SelectInput = ({
                        ))}
                </Select>
                {errorFalse ? null : (
-                  <FormHelperText className={classes.errorText}>
+                  <FormHelperText style={errorStyle} className={classes.errorText}>
                      {typeError}
                   </FormHelperText>
                )}

@@ -21,7 +21,7 @@ export function getTableHeader(
    if (forbid) return "--";
 
    const tableHeader = theadTitle.endsWith("...")
-      ? theadTitle.substring(0, theadType.length - 3)
+      ? theadTitle.substring(0, theadTitle.length - 3)
       : theadTitle;
 
    const withTooltip = tooltipTitle.length !== tableHeader.length;

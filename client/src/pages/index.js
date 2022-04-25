@@ -10,3 +10,4 @@ export { Single } from "./single";
 export { System } from "./system";
 export { Schedule } from "./schedule";
 export * from "./billing";
+export * from "./posting";

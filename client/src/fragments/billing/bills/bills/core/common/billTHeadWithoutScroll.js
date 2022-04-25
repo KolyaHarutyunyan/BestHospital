@@ -26,15 +26,19 @@ export const BillTHeadWithoutScroll = () => {
       );
    }
 
+   const billId = getBillTitle("ID", "", false);
+   const dateOfService = getBillTitle("DoS", "latestEarliest");
+   const payor = getBillTitle("Payor");
+   const client = getBillTitle("Client");
+   const service = getBillTitle("Service", "", false);
+
    return (
       <div className={classes.tableTheadStyle} style={resetRadius("right")}>
-         <div className={classes.thStyle}>{getBillTitle("ID", "", false)}</div>
-         <div className={classes.thStyle}>{getBillTitle("DoS", "latestEarliest")}</div>
-         <div className={classes.thStyle}>{getBillTitle("Payor")}</div>
-         <div className={classes.thStyle}>{getBillTitle("Client")}</div>
-         <div className={classes.thStyle} style={resetRadius("right")}>
-            {getBillTitle("Service", "", false)}
-         </div>
+         <div className={classes.thStyle}>{billId}</div>
+         <div className={classes.thStyle}>{dateOfService}</div>
+         <div className={classes.thStyle}>{payor}</div>
+         <div className={classes.thStyle}>{client}</div>
+         <div className={classes.thStyle}>{service}</div>
       </div>
    );
 };

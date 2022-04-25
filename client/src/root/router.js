@@ -21,6 +21,10 @@ import {
    PostingDetails,
    GenerateClaim,
    GenerateInvoice,
+   ClaimPayments,
+   ClaimPaymentDetails,
+   InvoicePayments,
+   InvoicePaymentDetails,
 } from "@eachbase/pages";
 
 export const Router = () => {
@@ -56,6 +60,12 @@ export const Router = () => {
 
          <Route path="/postings" exact component={Postings} />
          <Route path="/posting/:id" exact component={PostingDetails} />
+
+         <Route path="/claimPayments" exact component={ClaimPayments} />
+         <Route path="/claimPayment/:id" exact component={ClaimPaymentDetails} />
+
+         <Route path="/invoicePayments" exact component={InvoicePayments} />
+         <Route path="/invoicePayment/:id" exact component={InvoicePaymentDetails} />
 
          <Redirect to={"/"} />
       </Switch>

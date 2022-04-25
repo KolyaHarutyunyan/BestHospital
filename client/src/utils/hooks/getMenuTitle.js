@@ -2,6 +2,8 @@ export const getMenuTitle = (url = "") => {
    if (url.startsWith("/bill/")) return "Bills";
    if (url.startsWith("/claim/")) return "Claims";
    if (url.startsWith("/invoice/")) return "Invoices";
+   if (url.startsWith("/claimPayment/")) return "Claim Payments";
+   if (url.startsWith("/invoicePayment/")) return "Invoice Payments";
 
    switch (url) {
       // case "/":
@@ -32,9 +34,12 @@ export const getMenuTitle = (url = "") => {
       case "/generateClaim":
          return "Claims";
       case "/invoices":
+      case "/generateInvoice":
          return "Invoices";
-      case "/postings":
-         return "Postings";
+      case "/claimPayments":
+         return "Claim Payments";
+      case "/invoicePayments":
+         return "Invoice Payments";
 
       default:
          return "";

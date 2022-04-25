@@ -31,3 +31,4 @@ export { useWidth } from "./useWidth";
 export { showDashIfEmpty } from "./showDashIfEmpty";
 export { getTextDependsOnWidth } from "./getTextDependsOnWidth";
 export { getTableHeader } from "./getTableHeader";
+export { getFullName } from "./getFullName";
