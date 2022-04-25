@@ -6,8 +6,7 @@ export interface IClaimPmt extends Document {
   paymentType: PaymentType;
   paymnetDate: Date;
   checkNumber: string;
-  achNumber: string;
   fundingSource: string;
-  claimId: string;
+  claimIds: string[];
   documents: string[];
 }

@@ -27,6 +27,7 @@ import { BillingModule } from '../billing/billing.module';
 import { ClaimModule } from '../claim/claim.module';
 import { InvoiceModule } from '../invoice/invoice.module';
 import { PostingModule } from '../posting/posting.module';
+import { ClaimPmtModule } from '../claim-payment/claim-pmt.module';
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { PostingModule } from '../posting/posting.module';
     ClaimModule,
     InvoiceModule,
     PostingModule,
+    ClaimPmtModule,
   ],
   controllers: [AppController],
   providers: [AppService, DatabaseConnection],

@@ -14,5 +14,5 @@ export interface IClaim extends Document {
   dateRange: Date;
   createdDate: Date;
   details: string;
-  receivable: IReceivable;
+  receivable: IReceivable[];
 }

@@ -3,6 +3,8 @@ export enum ClaimStatus {
   CLOSED = 'CLOSED',
   SUBMITTED = 'SUBMITTED',
   POSTED = 'POSTED',
+  PAID = 'PAID',
+  PARTIAL = 'PARTIAL',
 }
 export enum MergeClaims {
   OFF = 'OFF',

@@ -12,9 +12,8 @@ export class ClaimPmtSanitizer implements ISanitize {
       paymentType: claimPmt.paymentType,
       paymnetDate: claimPmt.paymnetDate,
       checkNumber: claimPmt.checkNumber,
-      achNumber: claimPmt.achNumber,
       fundingSource: claimPmt.fundingSource,
-      claimId: claimPmt.claimId,
+      claimIds: claimPmt.claimIds,
       documents: claimPmt.documents,
     };
     return claimPmtDTO;

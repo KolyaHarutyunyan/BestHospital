@@ -12,11 +12,9 @@ export class ClaimPmtDto {
   @ApiProperty()
   checkNumber: string;
   @ApiProperty()
-  achNumber: string;
-  @ApiProperty()
   fundingSource: string;
   @ApiProperty()
-  claimId: string;
+  claimIds: string[];
   @ApiProperty()
   documents: string[];
 }

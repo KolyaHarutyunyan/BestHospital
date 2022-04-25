@@ -1,21 +1,25 @@
 import { HttpStatus, Injectable, HttpException } from '@nestjs/common';
-import { Model } from 'mongoose';
+import { Model, startSession } from 'mongoose';
 import { ClaimPmtDto } from './dto/claim-pmt.dto.';
 import { ClaimService } from '../claim/claim.service';
 import { MongooseUtil } from '../util/mongoose.util';
 import { PaymentType } from './claim-pmt.contants';
 import { ClaimPmtModel } from './claim-pmt.model';
 import { ClaimPmtSanitizer } from './claim-pmt.sanitizer';
-import { CreateClaimPmtDto } from './dto';
+import { CreateClaimPmtDto, CreateReceivableDTO } from './dto';
 import { UpdateClaimPmtDto } from './dto/update-claim-payment.dto';
 import { IClaimPmt } from './interface';
 import { FileService } from '../files/file.service';
+import { TransactionType } from '../billing/transaction/transaction.constants';
+import { IReceivable } from '../claim/interface/receivable.interface';
+import { FundingService } from '../funding/funding.service';
 
 @Injectable()
 export class ClaimPmtService {
   constructor(
     private readonly sanitizer: ClaimPmtSanitizer,
     private readonly claimService: ClaimService,
+    private readonly fundingService: FundingService,
     private readonly fileService: FileService,
   ) {
     this.model = ClaimPmtModel;
@@ -26,22 +30,42 @@ export class ClaimPmtService {
 
   /** create claim payment */
   async create(dto: CreateClaimPmtDto): Promise<ClaimPmtDto> {
-    await this.claimService.findOne(dto.claimId);
+    await this.fundingService.findById(dto.fundingSource);
     const claimPmt = new this.model({
       paymentAmount: dto.paymentAmount,
       paymentType: dto.paymentType,
       fundingSource: dto.fundingSource,
-      claimId: dto.claimId,
+      checkNumber: dto.checkNumber,
     });
-    if (dto.paymentType === PaymentType.CHECK && !dto.checkNumber) {
-      throw new HttpException(`checkNumber can't be empty`, HttpStatus.BAD_REQUEST);
-    }
-    if (dto.paymentType === PaymentType.ACH && !dto.achNumber) {
-      throw new HttpException(`achNumber can't be empty`, HttpStatus.BAD_REQUEST);
-    }
-    claimPmt.checkNumber = dto.checkNumber;
-    claimPmt.achNumber = dto.achNumber;
+
     await claimPmt.save();
+    return this.sanitizer.sanitize(claimPmt);
+  }
+  /** add claim to the claim-pmt */
+  async addClaim(_id: string, claimId: string): Promise<ClaimPmtDto> {
+    const [claimPmt, claim] = await Promise.all([
+      this.model.findById(_id),
+      this.claimService.findOne(claimId),
+    ]);
+    this.checkClaimPmt(claimPmt);
+    claimPmt.claimIds.push(claimId);
+    await claimPmt.save();
+    return this.sanitizer.sanitize(claimPmt);
+  }
+  /** add claim to the claim-pmt */
+  async addReceivable(
+    _id: string,
+    claimId: string,
+    dto: CreateReceivableDTO,
+  ): Promise<ClaimPmtDto> {
+    const claimPmt = await this.model.findById(_id).populate('claimIds');
+    this.checkClaimPmt(claimPmt);
+    const claimIndex = this.checkClaim(claimPmt.claimIds, claimId);
+    const claim: any = claimPmt.claimIds[claimIndex];
+    const receivables = this.checkReceivable(claim.receivable, dto.receivableIds);
+    // console.log(claimIndex, 'claimIndex', claim, 'claim', receivables, 'receivables');
+    this.createPayment(claimPmt, receivables);
+    // await claimPmt.save();
     return this.sanitizer.sanitize(claimPmt);
   }
   /** add document to claim-pmt */
@@ -65,12 +89,12 @@ export class ClaimPmtService {
   }
   /** find all claim-pmts */
   async findAll(): Promise<ClaimPmtDto[]> {
-    const claimPmts = await this.model.find();
+    const claimPmts = await this.model.find().populate('claimIds');
     return this.sanitizer.sanitizeMany(claimPmts);
   }
   /** find claim-pmt by id */
   async findOne(_id: string): Promise<ClaimPmtDto> {
-    const claimPmt = await this.model.findById(_id);
+    const claimPmt = await this.model.findById(_id).populate('claimIds');
     return this.sanitizer.sanitize(claimPmt);
   }
 
@@ -82,6 +106,69 @@ export class ClaimPmtService {
     return `This action removes a #${id} claimPayment`;
   }
   /** Private methods */
+  private async createPayment(claimPmt, receivables) {
+    let paymentAmount = claimPmt.paymentAmount;
+    let payed = false;
+    console.log('claimPmt', claimPmt, 'receivables', receivables);
+    while (paymentAmount > 0) {
+      if (!receivables.length) {
+        if (!payed) {
+          throw new HttpException('Claim have not receivables', HttpStatus.NOT_FOUND);
+        }
+        /** add in array and then insert db */
+        // const claimPmts = new this.model({
+        //   paymentType: claimPmt.paymentType,
+        //   // paymentReference: dto.paymentReference,
+        //   paymentAmount: paymentAmount,
+        //   // payer: client.id,
+        //   // invoice: dto.invoice,
+        // });
+        // await claimPmts.save();
+        // return this.sanitizer.sanitize(claimPmts);
+      }
+      const lowReceivable: any = await this.findLowReceivable(receivables);
+      if (paymentAmount >= lowReceivable.amountTotal && lowReceivable.amountTotal !== 0) {
+        const receivableBalance = await this.fullPay(
+          lowReceivable,
+          paymentAmount,
+          // dto.user.id,
+          claimPmt._id,
+        );
+        paymentAmount -= receivableBalance;
+        payed = true;
+      } else if (paymentAmount < lowReceivable.amountTotal) {
+        // this.partialPayReceivable(lowReceivable, paymentAmount, dto.user.id, invoice._id);
+        payed = true;
+      }
+      receivables = receivables.filter((rec) => rec._id !== lowReceivable._id);
+    }
+  }
+  /** full pay */
+  private async fullPay(
+    receivable,
+    paymentAmount,
+    // userId: string,
+    claimId: string,
+  ): Promise<number> {
+    paymentAmount -= receivable.amountTotal;
+    const transactionInfo = {
+      type: TransactionType.PAYERPAID,
+      date: new Date(),
+      amount: receivable.amountTotal,
+      paymentRef: 'chka',
+      // creator: userId,
+    };
+    const session = await startSession();
+    await this.claimService.updateReceivableAmount(claimId, receivable._id, receivable.amountTotal);
+    // await this.billingService.startTransaction(transactionInfo, receivable.bills[0]._id, session);
+    return transactionInfo.amount;
+  }
+  /** find low receivable amount */
+  async findLowReceivable(receivables): Promise<IReceivable> {
+    return receivables.reduce((prev, curr) => {
+      return prev.amountTotal < curr.amountTotal ? prev : curr;
+    });
+  }
   /** if the claim-pmt is not found, throws an exception */
   private checkClaimPmt(claimPmt: IClaimPmt) {
     if (!claimPmt) {
@@ -96,5 +183,25 @@ export class ClaimPmtService {
     } else {
       throw new HttpException('Was not found in list', HttpStatus.NOT_FOUND);
     }
+  }
+  /** check if the claim exists */
+  private checkClaim(list: any[], element: string) {
+    const index = list.findIndex((claim) => claim._id == element);
+    if (index === -1) {
+      throw new HttpException('Claim was not found', HttpStatus.NOT_FOUND);
+    }
+    return index;
+  }
+  /** check if the receivable exists */
+  private checkReceivable(list: any[], receivables: string[]) {
+    const populateReceivable = [];
+    for (let i = 0; i < receivables.length; i++) {
+      const index = list.findIndex((receivable) => receivable._id == receivables[i]);
+      if (index === -1) {
+        throw new HttpException('Claim was not found', HttpStatus.NOT_FOUND);
+      }
+      populateReceivable.push(list[index]);
+    }
+    return populateReceivable;
   }
 }

@@ -29,7 +29,32 @@ export class ClaimService {
   //   await claim.save();
   //   return this.sanitizer.sanitize(claim);
   // }
-
+  /** update amountTotal (claim-pmt) */
+  async updateReceivableAmount(
+    _id: string,
+    receivableId: string,
+    amount: number,
+  ): Promise<ClaimDto> {
+    try {
+      const claim = await this.model.findById({ _id });
+      this.checkClaim(claim);
+      claim.totalCharge -= amount;
+      /** save totalAmount in receivable this is sum all bills */
+      // claim.receivable.map((receivable) => {
+      //   if (receivable._id.toString() === receivableId.toString()) {
+      //     receivable.amountTotal = receivable.amountTotal - amount;
+      //   }
+      // });
+      if (claim.totalCharge == 0) {
+        claim.status = ClaimStatus.PAID;
+      }
+      claim.status = ClaimStatus.PARTIAL;
+      await claim.save();
+      return this.sanitizer.sanitize(claim);
+    } catch (e) {
+      throw e;
+    }
+  }
   /**generate claims */
   async generateClaims(dto: GenerateClaimDto, group: MergeClaims): Promise<ClaimDto[]> {
     const bills: any = await this.billingService.findByIds(dto.bills, true);

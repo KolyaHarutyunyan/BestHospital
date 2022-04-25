@@ -29,5 +29,5 @@ export class ClaimDto {
   @ApiProperty()
   createdDate: Date;
   @ApiProperty()
-  receivable: IReceivable;
+  receivable: IReceivable[];
 }

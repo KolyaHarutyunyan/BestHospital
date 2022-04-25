@@ -26,20 +26,26 @@ export class CreateClaimPmtDto {
   @IsNotEmpty()
   paymentAmount: number;
   @ApiProperty()
-  @IsNotEmpty()
-  @IsMongoId()
-  claimId: string;
-  @ApiProperty()
   @IsOptional()
   @IsDateString()
   paymentDate: Date;
   @ApiProperty()
   @IsString()
-  @IsOptional()
+  @IsNotEmpty()
   checkNumber: string;
-  @ApiProperty()
-  @IsString()
-  @IsOptional()
-  achNumber: string;
   user?: UserDTO;
+}
+export class CreateReceivableDTO {
+  @ApiProperty()
+  receivableIds: string[];
+  @ApiProperty()
+  allowedAMT: number;
+  @ApiProperty()
+  deductible: number;
+  @ApiProperty()
+  compay: number;
+  @ApiProperty()
+  coINS: number;
+  @ApiProperty()
+  paidAMT: number;
 }
