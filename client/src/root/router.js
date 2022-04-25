@@ -17,8 +17,6 @@ import {
    ClaimDetails,
    Invoices,
    InvoiceDetails,
-   Postings,
-   PostingDetails,
    GenerateClaim,
    GenerateInvoice,
    ClaimPayments,
@@ -57,9 +55,6 @@ export const Router = () => {
          <Route path="/invoices" exact component={Invoices} />
          <Route path="/invoice/:id" exact component={InvoiceDetails} />
          <Route path="/generateInvoice" exact component={GenerateInvoice} />
-
-         <Route path="/postings" exact component={Postings} />
-         <Route path="/posting/:id" exact component={PostingDetails} />
 
          <Route path="/claimPayments" exact component={ClaimPayments} />
          <Route path="/claimPayment/:id" exact component={ClaimPaymentDetails} />

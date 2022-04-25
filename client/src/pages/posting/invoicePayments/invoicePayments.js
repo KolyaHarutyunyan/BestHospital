@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { InvoicePaymentsFragment } from "@eachbase/fragments";
 import { useDispatch, useSelector } from "react-redux";
-import { httpRequestsOnSuccessActions, postingActions } from "@eachbase/store";
+import { httpRequestsOnSuccessActions, invoicePaymentActions } from "@eachbase/store";
 import { Loader } from "@eachbase/components";
 import { dummyData, FindLoad, FindSuccess, PaginationContext } from "@eachbase/utils";
 
@@ -12,7 +12,7 @@ export const InvoicePayments = () => {
 
    const { pageIsChanging, handlePageChange } = useContext(PaginationContext);
 
-   // const invoicePaymentsData = useSelector((state) => state.....);
+   // const invoicePaymentsData = useSelector((state) => state.invoicePayment.invoicePayments);
 
    // temporary
    const invoicePaymentsData = dummyData.INVOICE_PAYMENTS;
@@ -24,7 +24,7 @@ export const InvoicePayments = () => {
    const success = FindSuccess("GET_INVOICE_PAYMENTS");
 
    useEffect(() => {
-      dispatch(postingActions.getPostings());
+      dispatch(invoicePaymentActions.getInvoicePayments());
    }, []);
 
    useEffect(() => {

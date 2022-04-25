@@ -4,8 +4,14 @@ import { invoicePaymentsCoreStyle } from "./styles";
 import { makeEnum, FindLoad, isNotEmpty } from "@eachbase/utils";
 import { useDispatch } from "react-redux";
 import { FirstStepInputs, LastStepInputs } from "./common";
+import { invoicePaymentActions } from "@eachbase/store";
 
-export const InvoicePaymentInputs = ({ activeStep, handleStep, closeModal, client = [] }) => {
+export const InvoicePaymentInputs = ({
+   activeStep,
+   handleStep,
+   closeModal,
+   client = [],
+}) => {
    const classes = invoicePaymentsCoreStyle();
 
    useEffect(() => handleStep("first"), []);
@@ -31,10 +37,10 @@ export const InvoicePaymentInputs = ({ activeStep, handleStep, closeModal, clien
    };
 
    const handleNext = () => {
-      const firstStepDataIsValid = 
+      const firstStepDataIsValid =
          isNotEmpty(inputs.paymentDate) &&
          isNotEmpty(inputs.amount) &&
-         isNotEmpty(inputs.paymentType) && 
+         isNotEmpty(inputs.paymentType) &&
          isNotEmpty(inputs.checkNumber) &&
          isNotEmpty(inputs.client);
 
@@ -58,40 +64,29 @@ export const InvoicePaymentInputs = ({ activeStep, handleStep, closeModal, clien
    };
 
    const handleSubmit = () => {
-      const lastStepDataIsValid = true;
+      const invoicePaymentData = {
+         paymentDate: inputs.paymentDate,
+         amount: inputs.amount,
+         paymentType: makeEnum(inputs.paymentType),
+         checkNumber: inputs.checkNumber,
+         client: inputs.client,
+         file: "",
+      };
 
-      if (lastStepDataIsValid) {
-         const invoicePaymentData = {
-            paymentDate: inputs.paymentDate,
-            amount: inputs.amount,
-            paymentType: makeEnum(inputs.paymentType),
-            checkNumber: inputs.checkNumber,
-            client: inputs.client,
-            file: ""
-         };
-
-         console.log(invoicePaymentData, "  data");
-         // dispatch(.....);
-      } else {
-         const errorText = "";
-
-         setError(errorText);
-      }
+      dispatch(invoicePaymentActions.createInvoicePayment(invoicePaymentData));
    };
 
    return (
       <div>
          {isFirst && (
-            <FirstStepInputs 
-               inputs={inputs} 
+            <FirstStepInputs
+               inputs={inputs}
                error={error}
                handleChange={handleChange}
-               client={client} 
+               client={client}
             />
          )}
-         {isLast && (
-            <LastStepInputs invoicePaymentId={"????"} />
-         )}
+         {isLast && <LastStepInputs invoicePaymentId={"????"} />}
          <CreateChancel
             butnClassName={classes.createOrCancelButnStyle}
             loader={!!loader.length}

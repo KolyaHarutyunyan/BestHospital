@@ -4,8 +4,14 @@ import { claimPaymentsCoreStyle } from "./styles";
 import { makeEnum, FindLoad, isNotEmpty } from "@eachbase/utils";
 import { useDispatch } from "react-redux";
 import { FirstStepInputs, LastStepInputs } from "./common";
+import { claimPaymentActions } from "@eachbase/store";
 
-export const ClaimPaymentInputs = ({ activeStep, handleStep, closeModal, fundingSource=[] }) => {
+export const ClaimPaymentInputs = ({
+   activeStep,
+   handleStep,
+   closeModal,
+   fundingSource = [],
+}) => {
    const classes = claimPaymentsCoreStyle();
 
    useEffect(() => handleStep("first"), []);
@@ -31,10 +37,10 @@ export const ClaimPaymentInputs = ({ activeStep, handleStep, closeModal, funding
    };
 
    const handleNext = () => {
-      const firstStepDataIsValid = 
+      const firstStepDataIsValid =
          isNotEmpty(inputs.paymentDate) &&
          isNotEmpty(inputs.amount) &&
-         isNotEmpty(inputs.paymentType) && 
+         isNotEmpty(inputs.paymentType) &&
          isNotEmpty(inputs.checkNumber) &&
          isNotEmpty(inputs.fundingSource);
 
@@ -58,40 +64,30 @@ export const ClaimPaymentInputs = ({ activeStep, handleStep, closeModal, funding
    };
 
    const handleSubmit = () => {
-      const lastStepDataIsValid = true;
+      const claimPaymentData = {
+         paymentDate: inputs.paymentDate,
+         amount: inputs.amount,
+         paymentType: makeEnum(inputs.paymentType),
+         checkNumber: inputs.checkNumber,
+         fundingSource: inputs.fundingSource,
+         file: "",
+      };
 
-      if (lastStepDataIsValid) {
-         const claimPaymentData = {
-            paymentDate: inputs.paymentDate,
-            amount: inputs.amount,
-            paymentType: makeEnum(inputs.paymentType),
-            checkNumber: inputs.checkNumber,
-            fundingSource: inputs.fundingSource,
-            file: ""
-         };
-
-         console.log(claimPaymentData, "  data");
-         // dispatch(.....);
-      } else {
-         const errorText = "";
-
-         setError(errorText);
-      }
+      console.log(claimPaymentData, "  data");
+      dispatch(claimPaymentActions.createClaimPayment(claimPaymentData));
    };
 
    return (
       <div>
          {isFirst && (
-            <FirstStepInputs 
-               inputs={inputs} 
+            <FirstStepInputs
+               inputs={inputs}
                error={error}
                handleChange={handleChange}
-               fundingSource={fundingSource} 
+               fundingSource={fundingSource}
             />
          )}
-         {isLast && (
-            <LastStepInputs claimPaymentId={"????"} />
-         )}
+         {isLast && <LastStepInputs claimPaymentId={"????"} />}
          <CreateChancel
             butnClassName={classes.createOrCancelButnStyle}
             loader={!!loader.length}

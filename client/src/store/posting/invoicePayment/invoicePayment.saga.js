@@ -4,49 +4,50 @@ import {
    httpRequestsOnSuccessActions,
    httpRequestsOnLoadActions,
 } from "@eachbase/store";
-import { postingService } from "./posting.service";
+import { invoicePaymentService } from "./invoicePayment.service";
 import {
-   CREATE_POSTING,
-   DELETE_POSTING,
-   EDIT_POSTING,
-   GET_POSTINGS,
-   GET_POSTINGS_SUCCESS,
-   GET_POSTING_BY_ID,
-   GET_POSTING_BY_ID_SUCCESS,
-} from "./posting.type";
+   CREATE_INVOICE_PAYMENT,
+   DELETE_INVOICE_PAYMENT,
+   EDIT_INVOICE_PAYMENT,
+   EDIT_INVOICE_PAYMENT_STATUS,
+   GET_INVOICE_PAYMENTS,
+   GET_INVOICE_PAYMENTS_SUCCESS,
+   GET_INVOICE_PAYMENT_BY_ID,
+   GET_INVOICE_PAYMENT_BY_ID_SUCCESS,
+} from "./invoicePayment.type";
 
-function* getPostings(action) {
+function* getInvoicePayments(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    try {
-      const res = yield call(postingService.getPostingsService);
+      const res = yield call(invoicePaymentService.getInvoicePaymentsService);
       yield put({
-         type: GET_POSTINGS_SUCCESS,
-         payload: { postings: res.data },
+         type: GET_INVOICE_PAYMENTS_SUCCESS,
+         payload: { invoicePayments: res.data },
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (error) {
       yield put({
-         type: GET_POSTINGS_SUCCESS,
-         payload: { postings: [] },
+         type: GET_INVOICE_PAYMENTS_SUCCESS,
+         payload: { invoicePayments: [] },
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type));
    }
 }
 
-function* getPostingById(action) {
+function* getInvoicePaymentById(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    try {
       const res = yield call(
-         postingService.getPostingByIdService,
+         invoicePaymentService.getInvoicePaymentByIdService,
          action.payload.id
       );
       yield put({
-         type: GET_POSTING_BY_ID_SUCCESS,
-         payload: { postingById: res.data },
+         type: GET_INVOICE_PAYMENT_BY_ID_SUCCESS,
+         payload: { invoicePaymentById: res.data },
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
@@ -56,11 +57,11 @@ function* getPostingById(action) {
    }
 }
 
-function* createPosting(action) {
+function* createInvoicePayment(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    try {
-      yield call(postingService.createPostingService, action.payload.body);
+      yield call(invoicePaymentService.createInvoicePaymentService, action.payload.body);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (error) {
@@ -69,17 +70,17 @@ function* createPosting(action) {
    }
 }
 
-function* editPosting(action) {
+function* editInvoicePayment(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    try {
       yield call(
-         postingService.editPostingService,
+         invoicePaymentService.editInvoicePaymentService,
          action.payload.id,
          action.payload.body
       );
       yield put({
-         type: GET_POSTINGS,
+         type: GET_INVOICE_PAYMENT_BY_ID,
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
@@ -89,13 +90,13 @@ function* editPosting(action) {
    }
 }
 
-function* deletePosting(action) {
+function* deleteInvoicePayment(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    try {
-      yield call(postingService.deletePostingService, action.payload.id);
+      yield call(invoicePaymentService.deleteInvoicePaymentService, action.payload.id);
       yield put({
-         type: GET_POSTINGS,
+         type: GET_INVOICE_PAYMENT_BY_ID,
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
@@ -105,10 +106,32 @@ function* deletePosting(action) {
    }
 }
 
-export const watchPosting = function* watchPostingSaga() {
-   yield takeLatest(GET_POSTINGS, getPostings);
-   yield takeLatest(GET_POSTING_BY_ID, getPostingById);
-   yield takeLatest(CREATE_POSTING, createPosting);
-   yield takeLatest(EDIT_POSTING, editPosting);
-   yield takeLatest(DELETE_POSTING, deletePosting);
+function* editInvoicePaymentStatus(action) {
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   try {
+      yield call(
+         invoicePaymentService.editInvoicePaymentStatusService,
+         action.payload.id,
+         action.payload.status,
+         action.payload.details
+      );
+      yield put({
+         type: GET_INVOICE_PAYMENT_BY_ID,
+      });
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+   } catch (error) {
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type));
+   }
+}
+
+export const watchInvoicePayment = function* watchInvoicePaymentSaga() {
+   yield takeLatest(GET_INVOICE_PAYMENTS, getInvoicePayments);
+   yield takeLatest(GET_INVOICE_PAYMENT_BY_ID, getInvoicePaymentById);
+   yield takeLatest(CREATE_INVOICE_PAYMENT, createInvoicePayment);
+   yield takeLatest(EDIT_INVOICE_PAYMENT, editInvoicePayment);
+   yield takeLatest(DELETE_INVOICE_PAYMENT, deleteInvoicePayment);
+   yield takeLatest(EDIT_INVOICE_PAYMENT_STATUS, editInvoicePaymentStatus);
 };

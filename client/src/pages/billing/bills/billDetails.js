@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { FindLoad, FindSuccess, PaginationContext } from "@eachbase/utils";
 import { CustomBreadcrumbs, Loader } from "@eachbase/components";
 import { billActions, httpRequestsOnSuccessActions } from "@eachbase/store";
-import { GET_BILL_BY_ID_SUCCESS } from "@eachbase/store/billing/bill/bill.type";
 
 export const BillDetails = () => {
    const params = useParams();
@@ -35,7 +34,7 @@ export const BillDetails = () => {
 
       return () => {
          dispatch({
-            type: GET_BILL_BY_ID_SUCCESS,
+            type: "GET_BILL_BY_ID_SUCCESS",
             payload: { billById: null },
          });
       };

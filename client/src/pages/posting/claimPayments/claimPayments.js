@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ClaimPaymentsFragment } from "@eachbase/fragments";
 import { useDispatch, useSelector } from "react-redux";
-import { httpRequestsOnSuccessActions, postingActions } from "@eachbase/store";
+import { httpRequestsOnSuccessActions, claimPaymentActions } from "@eachbase/store";
 import { Loader } from "@eachbase/components";
 import { dummyData, FindLoad, FindSuccess, PaginationContext } from "@eachbase/utils";
 
@@ -12,7 +12,7 @@ export const ClaimPayments = () => {
 
    const { pageIsChanging, handlePageChange } = useContext(PaginationContext);
 
-   // const claimPaymentsData = useSelector((state) => state.....);
+   // const claimPaymentsData = useSelector((state) => state.claimPayment.claimPayments);
 
    // temporary
    const claimPaymentsData = dummyData.CLAIM_PAYMENTS;
@@ -24,7 +24,7 @@ export const ClaimPayments = () => {
    const success = FindSuccess("GET_CLAIM_PAYMENTS");
 
    useEffect(() => {
-      dispatch(postingActions.getPostings());
+      dispatch(claimPaymentActions.getClaimPayments());
    }, []);
 
    useEffect(() => {
