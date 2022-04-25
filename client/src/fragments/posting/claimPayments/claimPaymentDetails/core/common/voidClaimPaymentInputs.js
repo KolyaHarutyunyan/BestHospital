@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { UserTextArea, CreateChancel } from "@eachbase/components";
 import { ErrorText, FindLoad, FindSuccess, isNotEmpty } from "@eachbase/utils";
-import { claimPaymentDetailsCoreStyle } from "./styles";
+import { tableTheadTbodyStyle } from "./styles";
 import { useDispatch } from "react-redux";
 import { claimPaymentActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 
 export const VoidClaimPaymentInputs = ({ closeModal, claimPaymentId }) => {
-   const classes = claimPaymentDetailsCoreStyle();
+   const classes = tableTheadTbodyStyle();
 
    const dispatch = useDispatch();
 

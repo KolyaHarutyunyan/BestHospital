@@ -1,50 +1,9 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { Colors } from "@eachbase/utils";
 
 export const claimPaymentsCoreStyle = makeStyles(() => ({
    claimPaymentTableStyle: {
       width: "100%",
       marginTop: "24px",
-   },
-   stepsContainerStyle: {
-      width: "100%",
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      marginTop: "40px"
-   },
-   stepStyle: {
-      width: "36px",
-      height: "36px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      position: "relative",
-      borderRadius: "50%",
-      "&::after": {
-         content: "''",
-         width: "34px",
-         height: "34px",
-         position: "absolute",
-         top: "1px",
-         left: "1px",
-         borderRadius: "inherit",
-         border: `1px solid ${Colors.BackgroundWhite}`,
-      },
-      "& span": {
-         fontSize: "18px",
-         fontWeight: 600, 
-         color: Colors.TextWhite 
-      },
-      "&.firstStep, &.lastStep.active": {
-         backgroundColor: Colors.BackgroundBlue,
-      },
-      "&.lastStep": { backgroundColor: "#A3B2BD" },
-   },
-   stepsLineStyle: {
-      flexGrow: 1,
-      borderBottom: `1px dashed ${Colors.TextSecondary}`,
-      margin: "0 16px"
    },
    createOrCancelButnStyle: { width: "215px" },
 }));

@@ -14,7 +14,7 @@ export const ClaimPaymentInputs = ({
 }) => {
    const classes = claimPaymentsCoreStyle();
 
-   useEffect(() => handleStep("first"), []);
+   useEffect(() => handleStep && handleStep("first"), []);
 
    const dispatch = useDispatch();
 
@@ -73,7 +73,6 @@ export const ClaimPaymentInputs = ({
          file: "",
       };
 
-      console.log(claimPaymentData, "  data");
       dispatch(claimPaymentActions.createClaimPayment(claimPaymentData));
    };
 

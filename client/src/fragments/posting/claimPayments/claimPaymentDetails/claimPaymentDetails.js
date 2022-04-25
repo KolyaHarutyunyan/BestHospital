@@ -1,12 +1,6 @@
 import React, { useContext, useState } from "react";
 import { claimPaymentDetailsStyle } from "./styles";
-import {
-   AddButton,
-   BillingModalWrapper,
-   DownloadLink,
-   NoItemText,
-   SimpleModal,
-} from "@eachbase/components";
+import { AddButton, DownloadLink, NoItemText } from "@eachbase/components";
 import {
    addSignToValueFromStart,
    DrawerContext,
@@ -17,7 +11,7 @@ import {
    makeCapitalize,
    manageStatus,
 } from "@eachbase/utils";
-import { ClaimPaymentClaimTable, VoidClaimPaymentInputs } from "./core";
+import { ClaimPaymentClaimTable, ClaimPaymentModals } from "./core";
 
 export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
    const classes = claimPaymentDetailsStyle();
@@ -32,9 +26,11 @@ export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
       claims,
    } = claimPaymentDetails || {};
 
-   const { open: drawerOpen } = useContext(DrawerContext);
+   const { open } = useContext(DrawerContext);
 
-   const [open, setOpen] = useState(false);
+   const [editingModalIsOpen, setEditingModalIsOpen] = useState(false);
+   const [voidingModalIsOpen, setVoidingModalIsOpen] = useState(false);
+   const [addingModalIsOpen, setAddingModalIsOpen] = useState(false);
 
    const CLAIM_PAYMENT_DETAILS = [
       {
@@ -59,9 +55,9 @@ export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
             </a>
          ),
       },
-      { 
-         detailText: "Payment Type:", 
-         detail: manageStatus(paymentType) 
+      {
+         detailText: "Payment Type:",
+         detail: manageStatus(paymentType),
       },
       {
          detailText: "Payment Amount:",
@@ -79,23 +75,30 @@ export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
       },
    ];
 
-   const filteredDetails = CLAIM_PAYMENT_DETAILS.filter((claimPmtDtl) => !!claimPmtDtl.detail);
+   const filteredDetails = CLAIM_PAYMENT_DETAILS.filter(
+      (claimPmtDtl) => !!claimPmtDtl.detail
+   );
 
    return (
       <>
          <div className={classes.claimPaymentDetailsContainerStyle}>
             <div className={classes.claimPaymentDetailsStyle}>
                <div className={classes.claimPaymentDetailsTitleBoxStyle}>
-                  <h2 className={classes.claimPaymentDetailsTitleStyle}>Payment Details</h2>
+                  <h2 className={classes.claimPaymentDetailsTitleStyle}>
+                     Payment Details
+                  </h2>
                </div>
                <div className={classes.editAndVoidClaimBoxStyle}>
-                  <div className={classes.editIconStyle} onClick={() => {}}>
+                  <div
+                     className={classes.editIconStyle}
+                     onClick={() => setEditingModalIsOpen(true)}
+                  >
                      <img src={Images.edit} alt="" />
                   </div>
                   <button
                      className={classes.voidClaimPaymentButnStyle}
                      type="button"
-                     onClick={() => setOpen(true)}
+                     onClick={() => setVoidingModalIsOpen(true)}
                   >
                      Void
                   </button>
@@ -110,7 +113,7 @@ export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
                {!!filteredDetails.length && (
                   <ol className={classes.claimPaymentDetailsListStyle}>
                      {filteredDetails.map((item, index) => (
-                        <li key={index} className={drawerOpen ? "narrow" : ""}>
+                        <li key={index} className={open ? "narrow" : ""}>
                            <span>
                               {item.detailText} <em> {item.detail} </em>
                            </span>
@@ -124,7 +127,7 @@ export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
                   <h2 className={classes.claimPaymentDetailsTitleStyle}>Claims</h2>
                   <AddButton
                      text={"Add Claim"}
-                     handleClick={() => {}}
+                     handleClick={() => setAddingModalIsOpen(true)}
                   />
                </div>
                {!!claims?.length ? (
@@ -136,24 +139,14 @@ export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
                )}
             </div>
          </div>
-         <SimpleModal
-            openDefault={open}
-            handleOpenClose={() => setOpen((prevState) => !prevState)}
-            content={
-               <BillingModalWrapper
-                  wrapperStylesName={classes.voidClaimPaymentWrapperStyle}
-                  onClose={() => setOpen(false)}
-                  titleContent={"Void This Payment?"}
-                  subtitleContent={
-                     "Please indicate below the reason for voiding the payment."
-                  }
-               >
-                  <VoidClaimPaymentInputs 
-                     closeModal={() => setOpen(false)} 
-                     claimPaymentId={_id} 
-                  />
-               </BillingModalWrapper>
-            }
+         <ClaimPaymentModals
+            claimPaymentId={_id}
+            closeEditingModal={() => setEditingModalIsOpen(false)}
+            closeVoidingModal={() => setVoidingModalIsOpen(false)}
+            closeAddingModal={() => setAddingModalIsOpen(false)}
+            editingModalIsOpen={editingModalIsOpen}
+            voidingModalIsOpen={voidingModalIsOpen}
+            addingModalIsOpen={addingModalIsOpen}
          />
       </>
    );

@@ -8,11 +8,12 @@ import {
    BillFiltersSelectors,
    SimpleModal,
    BillingModalWrapper,
+   TwoStepsContainer,
 } from "@eachbase/components";
 import { enumValues, PaginationContext } from "@eachbase/utils";
 import { claimPaymentActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
-import { ClaimPaymentInputs, ClaimPaymentTable, StepsContainer } from "./core";
+import { ClaimPaymentInputs, ClaimPaymentTable } from "./core";
 
 export const ClaimPaymentsFragment = ({
    claimPayments = [],
@@ -145,7 +146,7 @@ export const ClaimPaymentsFragment = ({
                   onClose={() => setOpen(false)}
                   titleContent={titleContent}
                   subtitleContent={subtitleContent}
-                  content={<StepsContainer activeStep={activeStep} />}
+                  content={<TwoStepsContainer activeStep={activeStep} />}
                >
                   <ClaimPaymentInputs
                      activeStep={activeStep}
