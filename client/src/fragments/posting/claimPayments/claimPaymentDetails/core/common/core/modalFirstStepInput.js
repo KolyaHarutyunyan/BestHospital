@@ -1,54 +1,35 @@
 import React, { useContext, useState } from "react";
-import { claimsStyle } from "./styles";
-import {
-   AddButton,
-   Loader,
-   NoItemText,
-   PaginationItem,
-   BillFiltersSelectors,
-} from "@eachbase/components";
-import { enumValues, handleCreatedAtDate, PaginationContext } from "@eachbase/utils";
+import { claimReceivableTableStyle } from "./styles";
+import { Loader, NoItemText, BillFiltersSelectors } from "@eachbase/components";
+import { handleCreatedAtDate, PaginationContext } from "@eachbase/utils";
 import { claimActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
-import { ClaimTable } from "./core";
-import { useHistory } from "react-router";
+import Pagination from "@material-ui/lab/Pagination";
+import { ClaimModalTable } from "./common";
 
-export const ClaimsFragment = ({
+export const ModalFirstStepInput = ({
    claims = [],
    claimsQty = claims.length,
    page,
    handleGetPage,
    claimsLoader,
+   triggerId,
 }) => {
-   const classes = claimsStyle();
-
-   const history = useHistory();
+   const classes = claimReceivableTableStyle();
 
    const dispatch = useDispatch();
 
    const { handlePageChange, pageIsChanging } = useContext(PaginationContext);
 
-   const [selectedPayor, setSelectedPayor] = useState("All");
    const [selectedClient, setSelectedClient] = useState("All");
    const [filteredDateFrom, setFilteredDateFrom] = useState("");
    const [filteredDateTo, setFilteredDateTo] = useState("");
-   const [selectedStatus, setSelectedStatus] = useState("All");
 
    const clientsNames = claims.map((claim) => claim?.client?.firstName);
-   const payorsNames = claims.map((claim) => claim?.funder?.firstName);
 
    const claimsWithFilters =
-      selectedPayor === "All" &&
-      selectedClient === "All" &&
-      filteredDateFrom === "" &&
-      filteredDateTo === "" &&
-      selectedStatus === "All"
+      selectedClient === "All" && filteredDateFrom === "" && filteredDateTo === ""
          ? claims
-         : selectedPayor !== "All"
-         ? claims.filter(
-              (claim) =>
-                 claim?.funder?.firstName?.toLowerCase() === selectedPayor.toLowerCase()
-           )
          : selectedClient !== "All"
          ? claims.filter(
               (claim) =>
@@ -66,10 +47,6 @@ export const ClaimsFragment = ({
                  handleCreatedAtDate(claim?.dateRange?.latest, 10) ===
                  handleCreatedAtDate(filteredDateTo, 10)
            )
-         : selectedStatus !== "All"
-         ? claims.filter(
-              (claim) => claim?.status.toLowerCase() === selectedStatus.toLowerCase()
-           )
          : [];
 
    const changePage = (number) => {
@@ -82,27 +59,16 @@ export const ClaimsFragment = ({
 
    return (
       <div>
-         <div className={classes.addButton}>
+         <div className={classes.filtersBoxStyle}>
             <BillFiltersSelectors
-               filterIsFor={"claim"}
+               filterIsFor={"claimInModal"}
                clientsNames={clientsNames}
-               payorsNames={payorsNames}
-               passPayorHandler={(selPayor) => setSelectedPayor(selPayor)}
-               selectedPayor={selectedPayor}
                passClientHandler={(selClient) => setSelectedClient(selClient)}
                selectedClient={selectedClient}
                changeDateFromInput={(ev) => setFilteredDateFrom(ev.target.value)}
                filteredDateFrom={filteredDateFrom}
                changeDateToInput={(ev) => setFilteredDateTo(ev.target.value)}
                filteredDateTo={filteredDateTo}
-               statuses={enumValues.CLAIM_STATUSES}
-               passStatusHandler={(selStatus) => setSelectedStatus(selStatus)}
-               selectedStatus={selectedStatus}
-            />
-            <AddButton
-               addButtonClassName={classes.generateClaimButnStyle}
-               text={"Generate Claim"}
-               handleClick={() => history.push("/generateClaim")}
             />
          </div>
          {!!claimsWithFilters.length ? (
@@ -113,16 +79,18 @@ export const ClaimsFragment = ({
                         <Loader circleSize={50} />
                      </div>
                   ) : (
-                     <ClaimTable claims={claimsWithFilters} />
+                     <ClaimModalTable claims={claimsWithFilters} triggerId={triggerId} />
                   )}
                </div>
-               <PaginationItem
-                  listLength={claimsWithFilters.length}
-                  page={page}
-                  handleReturn={(number) => changePage(number)}
-                  count={claimsQty}
-                  entries={claims.length}
-               />
+               <div className={classes.paginationBoxStyle}>
+                  <Pagination
+                     onChange={(event, number) => changePage(number)}
+                     page={page}
+                     count={Math.ceil(claimsQty / 10)}
+                     color={"primary"}
+                     size={"small"}
+                  />
+               </div>
             </div>
          ) : (
             <NoItemText text={"No Claims Yet"} />

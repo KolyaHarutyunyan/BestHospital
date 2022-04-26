@@ -44,4 +44,11 @@ export const claimReceivableTHeadTBodyStyle = makeStyles(() => ({
       color: Colors.TextPrimary,
       "&:not(:last-of-type)": { marginRight: "32px" },
    },
+
+   // *CLaim Modal Table Styles**
+   claimModalTableStyle: {
+      width: "100%",
+      marginTop: "24px",
+   },
+   // *end**
 }));

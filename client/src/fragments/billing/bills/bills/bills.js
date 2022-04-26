@@ -66,7 +66,7 @@ export const BillsFragment = ({
    return (
       <div>
          <BillFiltersSelectors
-            filterIsForBill={true}
+            filterIsFor={"bill"}
             clientsNames={clientsNames}
             payorsNames={payorsNames}
             passPayorHandler={(selPayor) => setSelectedPayor(selPayor)}

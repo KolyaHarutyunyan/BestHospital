@@ -31,6 +31,7 @@ export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
    const [editingModalIsOpen, setEditingModalIsOpen] = useState(false);
    const [voidingModalIsOpen, setVoidingModalIsOpen] = useState(false);
    const [addingModalIsOpen, setAddingModalIsOpen] = useState(false);
+   const [activeStep, setActiveStep] = useState("first");
 
    const CLAIM_PAYMENT_DETAILS = [
       {
@@ -140,6 +141,9 @@ export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
             </div>
          </div>
          <ClaimPaymentModals
+            claimPaymentDetails={claimPaymentDetails}
+            activeStep={activeStep}
+            handleActiveStep={setActiveStep}
             claimPaymentId={_id}
             closeEditingModal={() => setEditingModalIsOpen(false)}
             closeVoidingModal={() => setVoidingModalIsOpen(false)}

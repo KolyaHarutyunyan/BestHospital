@@ -98,7 +98,7 @@ export const GenerateInvoiceFragment = ({
       <div className={classes.generateInvoiceContainerStyle}>
          <div className={classes.generateInvoiceActionsStyle}>
             <BillFiltersSelectors
-               filterIsForNotInvoicedBill={true}
+               filterIsFor={"notInvoicedBill"}
                clientsNames={clientsNames}
                passClientHandler={(selClient) => setSelectedClient(selClient)}
                selectedClient={selectedClient}

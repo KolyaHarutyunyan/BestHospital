@@ -21,6 +21,7 @@ export const ClaimPaymentsFragment = ({
    page,
    handleGetPage,
    claimPaymentsLoader,
+   fundersNames,
 }) => {
    const classes = claimPaymentsStyle();
 
@@ -98,7 +99,7 @@ export const ClaimPaymentsFragment = ({
       <div>
          <div className={classes.addButton}>
             <BillFiltersSelectors
-               filterIsForClaimPayment={true}
+               filterIsFor={"claimPayment"}
                payorsNames={payorsNames}
                passPayorHandler={(selPayor) => setSelectedPayor(selPayor)}
                selectedPayor={selectedPayor}
@@ -152,7 +153,7 @@ export const ClaimPaymentsFragment = ({
                      activeStep={activeStep}
                      handleStep={setActiveStep}
                      closeModal={() => setOpen(false)}
-                     fundingSource={payorsNames}
+                     fundingSource={fundersNames}
                   />
                </BillingModalWrapper>
             }

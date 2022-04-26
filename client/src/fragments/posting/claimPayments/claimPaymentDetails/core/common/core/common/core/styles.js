@@ -1,7 +1,7 @@
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core";
 import { Colors } from "@eachbase/utils";
 
-export const tableTheadTbodyStyle = makeStyles(() => ({
+export const claimModalTHeadTBodyStyle = makeStyles(() => ({
    tableTheadStyle: {
       display: "flex",
       justifyContent: "space-between",
@@ -27,7 +27,7 @@ export const tableTheadTbodyStyle = makeStyles(() => ({
       padding: "9px 16px",
       borderRadius: "8px",
       backgroundColor: Colors.BackgroundWater,
-      cursor: "pointer",
+      cursor: "default",
       transition: "background-color 0.2s linear !important",
       "&:hover": { backgroundColor: Colors.BackgroundHoverBlue },
       "&.opened": {
@@ -44,7 +44,7 @@ export const tableTheadTbodyStyle = makeStyles(() => ({
       fontSize: "14px",
       fontWeight: 400,
       color: Colors.TextSecondary,
-      marginRight: "32px",
+      "&:not(:last-of-type)": { marginRight: "32px" },
    },
    arrowTdStyle: {
       display: "flex",
@@ -66,26 +66,23 @@ export const tableTheadTbodyStyle = makeStyles(() => ({
       "&.cancel": { backgroundColor: `${Colors.BackgroundWater} !important` },
       "&.create": { backgroundColor: `${Colors.ThemeRed} !important` },
    },
+   createOrCancelButnStyle: { width: "215px" },
    paginationAndActionsBoxStyle: {
       width: "1448px",
-      "@media(max-width: 1680px)": { width: "1152px" },
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
    },
-   addClaimButnStyle: {
-      justifyContent: "flex-end !important",
-      marginTop: "-26px",
-      "& > button": {
-         width: "174px",
-         height: "36px !important",
-         "&:first-of-type": { marginRight: "7px" },
+
+   // *Claim Modal Table Styles**
+   tbodyLabelStyle: {
+      width: "100%",
+      display: "block",
+      marginTop: "4px",
+      "& > input": { display: "none" },
+      "& input:checked + $tbodyRowStyle": {
+         backgroundColor: Colors.BackgroundHoverBlue,
       },
    },
-   loaderContainerStyle: {
-      minHeight: "600px",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-   },
+   // *end**
 }));

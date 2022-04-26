@@ -84,7 +84,7 @@ export const InvoicesFragment = ({
       <div>
          <div className={classes.addButton}>
             <BillFiltersSelectors
-               filterIsForInvoice={true}
+               filterIsFor={"invoice"}
                clientsNames={clientsNames}
                passClientHandler={(selClient) => setSelectedClient(selClient)}
                selectedClient={selectedClient}

@@ -9,9 +9,9 @@ import { AddClaimModalInputs, VoidClaimPaymentInputs } from "./common";
 import { ClaimPaymentInputs } from "../../claimPayments/core";
 
 export const ClaimPaymentModals = ({
-   activeStep = "first",
+   claimPaymentDetails,
+   activeStep,
    handleActiveStep,
-   payorsNames,
    claimPaymentId,
    closeEditingModal,
    closeVoidingModal,
@@ -22,6 +22,18 @@ export const ClaimPaymentModals = ({
 }) => {
    const classes = claimPaymentDetailsCoreStyle();
 
+   const editingClaimSubtitleContent =
+      activeStep === "last" ? (
+         <>
+            <em className={classes.warningStyle}>*</em>
+            Only <em className={classes.highlightedTextStyle}> PDF, PNG, CSV </em> {"&"}
+            <em className={classes.highlightedTextStyle}> JPEG </em> formats are
+            supported.
+         </>
+      ) : (
+         ""
+      );
+
    return (
       <>
          <SimpleModal
@@ -29,15 +41,17 @@ export const ClaimPaymentModals = ({
             handleOpenClose={closeEditingModal}
             content={
                <BillingModalWrapper
-                  wrapperStylesName={classes.voidClaimPaymentWrapperStyle}
+                  wrapperStylesName={classes.editClaimPaymentWrapperStyle}
                   onClose={closeEditingModal}
                   titleContent={"Edit Payment"}
+                  subtitleContent={editingClaimSubtitleContent}
+                  content={<TwoStepsContainer activeStep={activeStep} />}
                >
                   <ClaimPaymentInputs
+                     info={claimPaymentDetails}
                      activeStep={activeStep}
                      handleStep={handleActiveStep}
                      closeModal={closeEditingModal}
-                     fundingSource={payorsNames}
                   />
                </BillingModalWrapper>
             }
@@ -66,7 +80,7 @@ export const ClaimPaymentModals = ({
             handleOpenClose={closeAddingModal}
             content={
                <BillingModalWrapper
-                  wrapperStylesName={classes.voidClaimPaymentWrapperStyle}
+                  wrapperStylesName={classes.addClaimPaymentWrapperStyle}
                   onClose={closeAddingModal}
                   titleContent={"Add Claim to Payment"}
                   content={
@@ -77,7 +91,11 @@ export const ClaimPaymentModals = ({
                      />
                   }
                >
-                  <AddClaimModalInputs closeModal={closeAddingModal} />
+                  <AddClaimModalInputs
+                     activeStep={activeStep}
+                     handleStep={handleActiveStep}
+                     closeModal={closeAddingModal}
+                  />
                </BillingModalWrapper>
             }
          />

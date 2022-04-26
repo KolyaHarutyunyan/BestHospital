@@ -109,7 +109,7 @@ export const GenerateClaimFragment = ({
       <div className={classes.generateClaimContainerStyle}>
          <div className={classes.generateClaimActionsStyle}>
             <BillFiltersSelectors
-               filterIsForNotClaimedBill={true}
+               filterIsFor={"notClaimedBill"}
                clientsNames={clientsNames}
                payorsNames={payorsNames}
                passPayorHandler={(selPayor) => setSelectedPayor(selPayor)}
