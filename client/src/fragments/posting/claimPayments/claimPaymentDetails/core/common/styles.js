@@ -75,7 +75,9 @@ export const tableTheadTbodyStyle = makeStyles(() => ({
    },
    addClaimButnStyle: {
       justifyContent: "flex-end !important",
-      marginTop: "-26px",
+      // marginTop: "16px !important",
+      "&.atFirstStep": { marginTop: "-26px" },
+      "&.atLastStep": { marginTop: "16px" },
       "& > button": {
          width: "174px",
          height: "36px !important",

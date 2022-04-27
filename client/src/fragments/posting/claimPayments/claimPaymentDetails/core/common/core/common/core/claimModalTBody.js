@@ -1,8 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import { claimModalTHeadTBodyStyle } from "./styles";
 import {
    addSignToValueFromStart,
-   DrawerContext,
    getFullName,
    getLimitedVal,
    getValueByFixedNumber,
@@ -13,17 +12,17 @@ import {
 
 const styles = { display: "flex", alignItems: "center" };
 
-function getClaimData(givenData = "", isOpen, givenWidth) {
-   const firstSize = isOpen ? 2040 : 1940;
-   const firstLimit = isOpen ? 14 : 16;
+function getClaimData(givenData = "", givenWidth) {
+   const firstSize = 1940;
+   const firstLimit = 16;
 
-   const secondSize = isOpen ? 1680 : 1640;
-   const secondLimit = isOpen ? 12 : 14;
+   const secondSize = 1640;
+   const secondLimit = 14;
 
-   const thirdSize = isOpen ? 1350 : 1345;
-   const thirdLimit = isOpen ? 8 : 10;
+   const thirdSize = 1345;
+   const thirdLimit = 10;
 
-   const initialLimit = isOpen ? 21 : 23;
+   const initialLimit = 23;
 
    const tableData =
       givenWidth <= thirdSize
@@ -42,10 +41,8 @@ export const ClaimModalTBody = ({ claims = [], triggerId }) => {
 
    const width = useWidth();
 
-   const { open } = useContext(DrawerContext);
-
    function getTableData(data) {
-      return showDashIfEmpty(getClaimData(data, open, width));
+      return showDashIfEmpty(getClaimData(data, width));
    }
 
    return (

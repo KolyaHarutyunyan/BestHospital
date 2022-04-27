@@ -50,5 +50,9 @@ export const claimReceivableTHeadTBodyStyle = makeStyles(() => ({
       width: "100%",
       marginTop: "24px",
    },
+   receivableContainerStyle: {
+      width: "100%",
+      marginTop: "16px",
+   },
    // *end**
 }));

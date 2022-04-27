@@ -72,15 +72,11 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
       },
       {
          detailText: "Total Charges:",
-         detail: addSignToValueFromStart(
-            getValueByFixedNumber(totalCharge === 0 ? totalCharge + "" : totalCharge)
-         ),
+         detail: addSignToValueFromStart(getValueByFixedNumber(totalCharge)),
       },
       {
          detailText: "Amount Paid:",
-         detail: addSignToValueFromStart(
-            getValueByFixedNumber(ammountPaid === 0 ? ammountPaid + "" : ammountPaid)
-         ),
+         detail: addSignToValueFromStart(getValueByFixedNumber(ammountPaid)),
       },
       {
          detailText: "Submitted Date:",

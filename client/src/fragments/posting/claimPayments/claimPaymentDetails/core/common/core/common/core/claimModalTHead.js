@@ -1,29 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import { SearchAndFilter } from "@eachbase/components";
-import {
-   DrawerContext,
-   getTableHeader,
-   getTextDependsOnWidth,
-   useWidth,
-} from "@eachbase/utils";
+import { getLimitedVal, getTableHeader } from "@eachbase/utils";
 import { claimModalTHeadTBodyStyle } from "./styles";
 
 export const ClaimModalTHead = () => {
    const classes = claimModalTHeadTBodyStyle();
 
-   const width = useWidth();
-
-   const { open } = useContext(DrawerContext);
-
-   const size = open ? 1880 : 1680;
-   const limit = open ? 7 : 9;
-
    function getClaimTitle(givenTitle = "", ...rest) {
-      return getTableHeader(
-         givenTitle,
-         getTextDependsOnWidth(width, size, givenTitle, limit),
-         ...rest
-      );
+      return getTableHeader(givenTitle, getLimitedVal(givenTitle, 15), ...rest);
    }
 
    const claimId = <SearchAndFilter title={"ID"} custom={false} />;

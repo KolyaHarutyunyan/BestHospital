@@ -4,7 +4,11 @@ import { tableTheadTbodyStyle } from "./styles";
 import { FindLoad, FindSuccess, PaginationContext } from "@eachbase/utils";
 import { ModalFirstStepInput, ModalLastStepInput } from "./core";
 import { useDispatch, useSelector } from "react-redux";
-import { claimActions, httpRequestsOnSuccessActions } from "@eachbase/store";
+import {
+   claimActions,
+   claimPaymentActions,
+   httpRequestsOnSuccessActions,
+} from "@eachbase/store";
 
 export const AddClaimModalInputs = ({ activeStep, handleStep, closeModal }) => {
    const classes = tableTheadTbodyStyle();
@@ -15,23 +19,25 @@ export const AddClaimModalInputs = ({ activeStep, handleStep, closeModal }) => {
 
    const addClaimLoader = FindLoad("ADD_CLAIM");
    const addClaimSuccess = FindSuccess("ADD_CLAIM");
+   const loader = FindLoad("GET_CLAIMS");
+   const success = FindSuccess("GET_CLAIMS");
 
    const isFirst = activeStep === "first";
    const isLast = activeStep === "last";
 
+   const butnStyle = `${classes.addClaimButnStyle} ${
+      isFirst ? "atFirstStep" : isLast ? "atLastStep" : ""
+   }`;
    const butnText = isFirst ? "Next" : isLast ? "Add Claim" : "";
-
-   const [selectedClaimId, setSelectedClaimId] = useState("");
-
-   const [page, setPage] = useState(1);
 
    const { pageIsChanging, handlePageChange } = useContext(PaginationContext);
 
    const claimsData = useSelector((state) => state.claim.claims);
    const { claims, count } = claimsData || {};
 
-   const loader = FindLoad("GET_CLAIMS");
-   const success = FindSuccess("GET_CLAIMS");
+   const [selectedClaimId, setSelectedClaimId] = useState("");
+   const [page, setPage] = useState(1);
+   const [receivablesAreFilled, setReceivablesAreFilled] = useState(false);
 
    useEffect(() => {
       dispatch(claimActions.getClaims());
@@ -45,15 +51,20 @@ export const AddClaimModalInputs = ({ activeStep, handleStep, closeModal }) => {
       }
    }, [success]);
 
-   function triggerIdHandler(claimId) {
-      setSelectedClaimId(claimId);
-   }
+   useEffect(() => {
+      if (!!addClaimSuccess.length) {
+         closeModal();
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("ADD_CLAIM"));
+      }
+   }, [addClaimSuccess]);
 
    function handleNext() {
       handleStep && handleStep("last");
    }
 
-   function handleSubmit() {}
+   function handleSubmit() {
+      // dispatch(claimPaymentActions.addClaim(......))
+   }
 
    return (
       <div>
@@ -69,21 +80,25 @@ export const AddClaimModalInputs = ({ activeStep, handleStep, closeModal }) => {
                   page={page}
                   handleGetPage={setPage}
                   claimsLoader={loader}
-                  triggerId={triggerIdHandler}
+                  triggerId={(claimId) => setSelectedClaimId(claimId)}
                />
             ))}
          {isLast && (
-            <ModalLastStepInput claims={claimsData} selectedClaimId={selectedClaimId} />
+            <ModalLastStepInput
+               claims={claimsData}
+               selectedClaimId={selectedClaimId}
+               triggerBool={(filled) => setReceivablesAreFilled(filled)}
+            />
          )}
          <div className={classes.paginationAndActionsBoxStyle}>
             <CreateChancel
-               classes={classes.addClaimButnStyle}
+               classes={butnStyle}
                loader={!!addClaimLoader.length}
                create={butnText}
                chancel={"Cancel"}
                onCreate={isLast ? handleSubmit : handleNext}
                onClose={closeModal}
-               disabled={!selectedClaimId}
+               disabled={isLast ? !receivablesAreFilled : !selectedClaimId}
             />
          </div>
       </div>
