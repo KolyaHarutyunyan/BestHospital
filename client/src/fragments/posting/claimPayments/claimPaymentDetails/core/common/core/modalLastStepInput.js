@@ -11,7 +11,12 @@ import {
 } from "@eachbase/utils";
 import { ClaimReceivableModalTable } from "./common";
 
-export const ModalLastStepInput = ({ claims, selectedClaimId, triggerBool }) => {
+export const ModalLastStepInput = ({
+   claims,
+   selectedClaimId,
+   triggerBool,
+   triggerReceivables,
+}) => {
    const classes = claimReceivableTableStyle();
 
    const selectedClaim = claims.find((claim) => claim._id === selectedClaimId);
@@ -110,6 +115,7 @@ export const ModalLastStepInput = ({ claims, selectedClaimId, triggerBool }) => 
                   <ClaimReceivableModalTable
                      claimReceivables={receivable}
                      triggerBool={triggerBool}
+                     triggerReceivables={triggerReceivables}
                   />
                ) : (
                   <NoItemText text={"No Receivables Yet"} />

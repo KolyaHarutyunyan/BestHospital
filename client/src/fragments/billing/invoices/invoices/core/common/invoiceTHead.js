@@ -25,22 +25,21 @@ export const InvoiceTHead = () => {
       );
    }
 
+   const serviceDates = getInvoiceTitle("Service Dates", "latestEarliest");
+   const client = getInvoiceTitle("Client");
+   const totalHours = getInvoiceTitle("Total Hours", "", false);
+   const totalAmount = getInvoiceTitle("Total Amount", "", false);
+   const invoiceDate = getInvoiceTitle("Invoice Date", "latestEarliest");
+   const status = getInvoiceTitle("Status", "arrow");
+
    return (
       <div className={classes.tableTheadStyle}>
-         <div className={classes.thStyle}>
-            {getInvoiceTitle("Service Dates", "latestEarliest")}
-         </div>
-         <div className={classes.thStyle}>{getInvoiceTitle("Client")}</div>
-         <div className={classes.thStyle}>
-            {getInvoiceTitle("Total Hours", "", false)}
-         </div>
-         <div className={classes.thStyle}>
-            {getInvoiceTitle("Total Amount", "", false)}
-         </div>
-         <div className={classes.thStyle}>
-            {getInvoiceTitle("Invoice Date", "latestEarliest")}
-         </div>
-         <div className={classes.thStyle}>{getInvoiceTitle("Status", "arrow")}</div>
+         <div className={classes.thStyle}>{serviceDates}</div>
+         <div className={classes.thStyle}>{client}</div>
+         <div className={classes.thStyle}>{totalHours}</div>
+         <div className={classes.thStyle}>{totalAmount}</div>
+         <div className={classes.thStyle}>{invoiceDate}</div>
+         <div className={classes.thStyle}>{status}</div>
       </div>
    );
 };

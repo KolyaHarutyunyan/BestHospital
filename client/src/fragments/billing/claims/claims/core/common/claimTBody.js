@@ -14,16 +14,14 @@ import {
    useWidth,
 } from "@eachbase/utils";
 
-const styles = { display: "flex", alignItems: "center" };
-
 function getClaimData(givenData = "", isOpen, givenWidth) {
-   const firstSize = isOpen ? 2040 : 1940;
+   const firstSize = isOpen ? 2310 : 2180;
    const firstLimit = isOpen ? 14 : 16;
 
-   const secondSize = isOpen ? 1680 : 1640;
-   const secondLimit = isOpen ? 12 : 14;
+   const secondSize = isOpen ? 1870 : 1820;
+   const secondLimit = isOpen ? 10 : 14;
 
-   const thirdSize = isOpen ? 1350 : 1345;
+   const thirdSize = isOpen ? 1350 : 1440;
    const thirdLimit = isOpen ? 8 : 10;
 
    const initialLimit = isOpen ? 21 : 23;
@@ -91,12 +89,8 @@ export const ClaimTBody = ({ claims = [] }) => {
                >
                   <div className={classes.tdStyle}>{claimId}</div>
                   <div className={classes.tdStyle}>{datePeriod}</div>
-                  <div className={classes.tdStyle} style={styles}>
-                     {funder}
-                  </div>
-                  <div className={classes.tdStyle} style={styles}>
-                     {client}
-                  </div>
+                  <div className={classes.tdStyle}>{funder}</div>
+                  <div className={classes.tdStyle}>{client}</div>
                   <div className={classes.tdStyle}>{totalCharged}</div>
                   <div className={classes.tdStyle}>{totalPaid}</div>
                   <div className={classes.tdStyle}>{remaining}</div>

@@ -1,23 +1,16 @@
 import React, { useContext, useState } from "react";
 import { invoicePaymentDetailsStyle } from "./styles";
-import {
-   AddButton,
-   BillingModalWrapper,
-   DownloadLink,
-   NoItemText,
-   SimpleModal,
-} from "@eachbase/components";
+import { AddButton, DownloadLink, NoItemText } from "@eachbase/components";
 import {
    addSignToValueFromStart,
    DrawerContext,
    getLimitedVal,
    getValueByFixedNumber,
-   handleCreatedAtDate,
    Images,
    makeCapitalize,
    manageStatus,
 } from "@eachbase/utils";
-import { InvoicePaymentInvoiceTable, VoidInvoicePaymentInputs } from "./core";
+import { InvoicePaymentInvoiceTable, InvoicePaymentModals } from "./core";
 
 export const InvoicePaymentDetailsFragment = ({ invoicePaymentDetails }) => {
    const classes = invoicePaymentDetailsStyle();
@@ -33,9 +26,12 @@ export const InvoicePaymentDetailsFragment = ({ invoicePaymentDetails }) => {
       invoices,
    } = invoicePaymentDetails || {};
 
-   const { open: drawerOpen } = useContext(DrawerContext);
+   const { open } = useContext(DrawerContext);
 
-   const [open, setOpen] = useState(false);
+   const [editingModalIsOpen, setEditingModalIsOpen] = useState(false);
+   const [voidingModalIsOpen, setVoidingModalIsOpen] = useState(false);
+   const [addingModalIsOpen, setAddingModalIsOpen] = useState(false);
+   const [activeStep, setActiveStep] = useState("first");
 
    const INVOICE_PAYMENT_DETAILS = [
       {
@@ -78,29 +74,36 @@ export const InvoicePaymentDetailsFragment = ({ invoicePaymentDetails }) => {
             />
          ) : null,
       },
-      { 
-         detailText: "Payment Type:", 
-         detail: manageStatus(paymentType) 
+      {
+         detailText: "Payment Type:",
+         detail: manageStatus(paymentType),
       },
    ];
 
-   const filteredDetails = INVOICE_PAYMENT_DETAILS.filter((invoicePmtDtl) => !!invoicePmtDtl.detail);
+   const filteredDetails = INVOICE_PAYMENT_DETAILS.filter(
+      (invoicePmtDtl) => !!invoicePmtDtl.detail
+   );
 
    return (
       <>
          <div className={classes.invoicePaymentDetailsContainerStyle}>
             <div className={classes.invoicePaymentDetailsStyle}>
                <div className={classes.invoicePaymentDetailsTitleBoxStyle}>
-                  <h2 className={classes.invoicePaymentDetailsTitleStyle}>Payment Details</h2>
+                  <h2 className={classes.invoicePaymentDetailsTitleStyle}>
+                     Payment Details
+                  </h2>
                </div>
                <div className={classes.editAndVoidinvoiceBoxStyle}>
-                  <div className={classes.editIconStyle} onClick={() => {}}>
+                  <div
+                     className={classes.editIconStyle}
+                     onClick={() => setEditingModalIsOpen(true)}
+                  >
                      <img src={Images.edit} alt="" />
                   </div>
                   <button
                      className={classes.voidinvoicePaymentButnStyle}
                      type="button"
-                     onClick={() => setOpen(true)}
+                     onClick={() => setVoidingModalIsOpen(true)}
                   >
                      Void
                   </button>
@@ -115,7 +118,7 @@ export const InvoicePaymentDetailsFragment = ({ invoicePaymentDetails }) => {
                {!!filteredDetails.length && (
                   <ol className={classes.invoicePaymentDetailsListStyle}>
                      {filteredDetails.map((item, index) => (
-                        <li key={index} className={drawerOpen ? "narrow" : ""}>
+                        <li key={index} className={open ? "narrow" : ""}>
                            <span>
                               {item.detailText} <em> {item.detail} </em>
                            </span>
@@ -129,7 +132,7 @@ export const InvoicePaymentDetailsFragment = ({ invoicePaymentDetails }) => {
                   <h2 className={classes.invoicePaymentDetailsTitleStyle}>Invoices</h2>
                   <AddButton
                      text={"Add Invoice"}
-                     handleClick={() => {}}
+                     handleClick={() => setAddingModalIsOpen(true)}
                   />
                </div>
                {!!invoices?.length ? (
@@ -141,24 +144,17 @@ export const InvoicePaymentDetailsFragment = ({ invoicePaymentDetails }) => {
                )}
             </div>
          </div>
-         <SimpleModal
-            openDefault={open}
-            handleOpenClose={() => setOpen((prevState) => !prevState)}
-            content={
-               <BillingModalWrapper
-                  wrapperStylesName={classes.voidInvoicePaymentWrapperStyle}
-                  onClose={() => setOpen(false)}
-                  titleContent={"Void This Payment?"}
-                  subtitleContent={
-                     "Please indicate below the reason for voiding the payment."
-                  }
-               >
-                  <VoidInvoicePaymentInputs 
-                     closeModal={() => setOpen(false)} 
-                     invoicePaymentId={_id} 
-                  />
-               </BillingModalWrapper>
-            }
+         <InvoicePaymentModals
+            invoicePaymentDetails={invoicePaymentDetails}
+            activeStep={activeStep}
+            handleActiveStep={setActiveStep}
+            invoicePaymentId={_id}
+            closeEditingModal={() => setEditingModalIsOpen(false)}
+            closeVoidingModal={() => setVoidingModalIsOpen(false)}
+            closeAddingModal={() => setAddingModalIsOpen(false)}
+            editingModalIsOpen={editingModalIsOpen}
+            voidingModalIsOpen={voidingModalIsOpen}
+            addingModalIsOpen={addingModalIsOpen}
          />
       </>
    );

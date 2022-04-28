@@ -12,8 +12,6 @@ import {
    useWidth,
 } from "@eachbase/utils";
 
-const styles = { display: "flex", alignItems: "center" };
-
 function getClaimPaymentData(givenData = "", isOpen, givenWidth) {
    const firstSize = isOpen ? 2040 : 1940;
    const firstLimit = isOpen ? 14 : 16;
@@ -77,12 +75,8 @@ export const ClaimPaymentTBody = ({ claimPayments = [] }) => {
                   onClick={() => history.push(`/claimPayment/${claimPayment._id}`)}
                >
                   <div className={classes.tdStyle}>{claimPaymentId}</div>
-                  <div className={classes.tdStyle} style={styles}>
-                     {funder}
-                  </div>
-                  <div className={classes.tdStyle} style={styles}>
-                     {client}
-                  </div>
+                  <div className={classes.tdStyle}>{funder}</div>
+                  <div className={classes.tdStyle}>{client}</div>
                   <div className={classes.tdStyle}>{totalBilled}</div>
                   <div className={classes.tdStyle}>{totalCollected}</div>
                   <div className={classes.tdStyle}>{status}</div>

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import {
-    addSignToValueFromStart,
+   addSignToValueFromStart,
    DrawerContext,
    getFullName,
    getLimitedVal,
@@ -20,7 +20,7 @@ function getClaimData(givenData = "", isOpen, givenWidth) {
    const secondSize = isOpen ? 1680 : 1640;
    const secondLimit = isOpen ? 12 : 14;
 
-   const thirdSize = isOpen ? 1350 : 1345;
+   const thirdSize = isOpen ? 1365 : 1345;
    const thirdLimit = isOpen ? 8 : 10;
 
    const initialLimit = isOpen ? 21 : 23;
@@ -68,9 +68,15 @@ export const ClaimPaymentClaimTBody = ({ claim }) => {
    const datePeriod = getTableData(`${early} - ${latest}`);
    const funder = getFullName(funderFirstName, funderLastName, getTableData);
    const client = getFullName(clientFirstName, clientLastName, getTableData);
-   const totalCharged = getTableData(addSignToValueFromStart(getValueByFixedNumber(claim.totalCharge)));
-   const totalPaid = getTableData(addSignToValueFromStart(getValueByFixedNumber(claim.amountPaid)));
-   const remaining = getTableData(addSignToValueFromStart(getValueByFixedNumber(claim.remaining)));
+   const totalCharged = getTableData(
+      addSignToValueFromStart(getValueByFixedNumber(claim.totalCharge))
+   );
+   const totalPaid = getTableData(
+      addSignToValueFromStart(getValueByFixedNumber(claim.amountPaid))
+   );
+   const remaining = getTableData(
+      addSignToValueFromStart(getValueByFixedNumber(claim.remaining))
+   );
    const arrowArea = <img src={Images.dropdownArrowBlue} alt="" />;
 
    return (

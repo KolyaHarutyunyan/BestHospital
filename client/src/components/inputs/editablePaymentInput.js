@@ -2,7 +2,11 @@ import React, { useRef, useState, useEffect } from "react";
 import { inputsStyle } from "./styles";
 import { Images } from "@eachbase/utils";
 
-export const EditablePaymentInput = ({ triggerInputValue, triggerEditBool }) => {
+export const EditablePaymentInput = ({
+   inputClassName,
+   triggerInputValue,
+   triggerEditBool,
+}) => {
    const classes = inputsStyle();
 
    const paymentInputRef = useRef(null);
@@ -10,7 +14,9 @@ export const EditablePaymentInput = ({ triggerInputValue, triggerEditBool }) => 
    const [editPmt, setEditPmt] = useState(false);
    const [enteredPayment, setEnteredPayment] = useState("");
 
-   const inputBoxStyle = `${classes.editableInputBoxStyle} ${editPmt ? "active" : ""}`;
+   const inputBoxStyle = `${classes.editableInputBoxStyle} ${inputClassName} ${
+      editPmt ? "active" : ""
+   }`;
 
    useEffect(() => {
       editPmt && paymentInputRef.current.focus();

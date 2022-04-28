@@ -13,8 +13,6 @@ import {
    useWidth,
 } from "@eachbase/utils";
 
-const styles = { display: "flex", alignItems: "center" };
-
 function getInvoicePaymentData(givenData = "", isOpen, givenWidth) {
    const firstSize = isOpen ? 2040 : 1940;
    const firstLimit = isOpen ? 14 : 16;
@@ -63,14 +61,16 @@ export const InvoicePaymentTBody = ({ invoicePayments = [] }) => {
                addSignToValueFromStart(getValueByFixedNumber(invoicePayment.totalBilled))
             );
             const totalCollected = getTableData(
-               addSignToValueFromStart(getValueByFixedNumber(invoicePayment.totalCollected))
+               addSignToValueFromStart(
+                  getValueByFixedNumber(invoicePayment.totalCollected)
+               )
             );
             const status = showDashIfEmpty(manageStatus(invoicePayment.status));
             const paymentReference = getTableHeader(
-                invoicePayment.paymentRef || "www.testlink.com",
-                getTableData(invoicePayment.paymentRef || "www.testlink.com"),
-                "",
-                false
+               invoicePayment.paymentRef || "www.testlink.com",
+               getTableData(invoicePayment.paymentRef || "www.testlink.com"),
+               "",
+               false
             );
 
             return (
@@ -80,22 +80,22 @@ export const InvoicePaymentTBody = ({ invoicePayments = [] }) => {
                   onClick={() => history.push(`/invoicePayment/${invoicePayment._id}`)}
                >
                   <div className={classes.tdStyle}>{invoicePaymentId}</div>
-                  <div className={classes.tdStyle} style={styles}>
-                     {client}
-                  </div>
+                  <div className={classes.tdStyle}>{client}</div>
                   <div className={classes.tdStyle}>{totalBilled}</div>
                   <div className={classes.tdStyle}>{totalCollected}</div>
                   <div className={classes.tdStyle}>{status}</div>
                   <div className={classes.tdStyle}>
-                    <a  
+                     <a
                         className={classes.paymentRefStyle}
-                        href={`https://${invoicePayment.paymentRef || "www.testlink.com"}`}
+                        href={`https://${
+                           invoicePayment.paymentRef || "www.testlink.com"
+                        }`}
                         target="_blank"
                         rel="noreferrer noopener"
                         onClick={(event) => event.stopPropagation()}
-                    >
+                     >
                         {paymentReference}
-                    </a>  
+                     </a>
                   </div>
                </div>
             );

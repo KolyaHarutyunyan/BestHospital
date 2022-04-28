@@ -13,8 +13,6 @@ import {
    useWidth,
 } from "@eachbase/utils";
 
-const styles = { display: "flex", alignItems: "center" };
-
 function getInvoiceData(givenData = "", isOpen, givenWidth) {
    const firstSize = isOpen ? 1850 : 1730;
    const firstLimit = isOpen ? 18 : 20;
@@ -57,10 +55,10 @@ export const InvoiceTBody = ({ invoices = [] }) => {
          {invoices.map((invoice, index) => {
             const early = handleCreatedAtDate(invoice?.dateRange?.early, 10, "/");
             const latest = handleCreatedAtDate(invoice?.dateRange?.latest, 10, "/");
-
-            const serviceDates = getTableData(`${early} - ${latest}`);
             const clientFirstName = invoice?.client?.firstName;
             const clientLastName = invoice?.client?.lastName;
+
+            const serviceDates = getTableData(`${early} - ${latest}`);
             const client = getFullName(clientFirstName, clientLastName, getTableData);
             const totalHours = getTableData(invoice.totalHours);
             const totalAmount = getTableData(
@@ -78,9 +76,7 @@ export const InvoiceTBody = ({ invoices = [] }) => {
                   onClick={() => history.push(`/invoice/${invoice._id}`)}
                >
                   <div className={classes.tdStyle}>{serviceDates}</div>
-                  <div className={classes.tdStyle} style={styles}>
-                     {client}
-                  </div>
+                  <div className={classes.tdStyle}>{client}</div>
                   <div className={classes.tdStyle}>{totalHours}</div>
                   <div className={classes.tdStyle}>{totalAmount}</div>
                   <div className={classes.tdStyle}>{invoiceDate}</div>

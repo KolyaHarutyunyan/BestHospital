@@ -10,8 +10,6 @@ import {
    useWidth,
 } from "@eachbase/utils";
 
-const styles = { display: "flex", alignItems: "center" };
-
 function getClaimData(givenData = "", givenWidth) {
    const firstSize = 1940;
    const firstLimit = 16;
@@ -80,12 +78,8 @@ export const ClaimModalTBody = ({ claims = [], triggerId }) => {
                   <div className={classes.tbodyRowStyle}>
                      <div className={classes.tdStyle}>{claimId}</div>
                      <div className={classes.tdStyle}>{datePeriod}</div>
-                     <div className={classes.tdStyle} style={styles}>
-                        {funder}
-                     </div>
-                     <div className={classes.tdStyle} style={styles}>
-                        {client}
-                     </div>
+                     <div className={classes.tdStyle}>{funder}</div>
+                     <div className={classes.tdStyle}>{client}</div>
                      <div className={classes.tdStyle}>{totalCharged}</div>
                      <div className={classes.tdStyle}>{totalPaid}</div>
                      <div className={classes.tdStyle}>{remaining}</div>

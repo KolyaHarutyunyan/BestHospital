@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { ClaimReceivableModalTBody, ClaimReceivableModalTHead } from "./core";
 import { claimReceivableTHeadTBodyStyle } from "./styles";
 
-export const ClaimReceivableModalTable = ({ claimReceivables = [], triggerBool }) => {
+export const ClaimReceivableModalTable = ({
+   claimReceivables = [],
+   triggerBool,
+   triggerReceivables,
+}) => {
    const classes = claimReceivableTHeadTBodyStyle();
 
    const [receivables, setReceivables] = useState(claimReceivables);
@@ -25,6 +29,10 @@ export const ClaimReceivableModalTable = ({ claimReceivables = [], triggerBool }
    useEffect(() => {
       triggerBool && triggerBool(receivablesAreFilled);
    }, [receivablesAreFilled]);
+
+   useEffect(() => {
+      triggerReceivables && triggerReceivables(receivables);
+   }, [receivables]);
 
    return (
       <div className={classes.receivableContainerStyle}>

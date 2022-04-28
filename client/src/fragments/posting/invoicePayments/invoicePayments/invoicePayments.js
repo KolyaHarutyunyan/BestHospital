@@ -21,6 +21,7 @@ export const InvoicePaymentsFragment = ({
    page,
    handleGetPage,
    invoicePaymentsLoader,
+   clientsNames,
 }) => {
    const classes = invoicePaymentsStyle();
 
@@ -56,7 +57,7 @@ export const InvoicePaymentsFragment = ({
          ""
       );
 
-   const clientsNames = invoicePayments.map(
+   const invoiceClientsNames = invoicePayments.map(
       (invoicePayment) => invoicePayment?.client?.firstName
    );
 
@@ -89,7 +90,7 @@ export const InvoicePaymentsFragment = ({
          <div className={classes.addButton}>
             <BillFiltersSelectors
                filterIsFor={"invoicePayment"}
-               clientsNames={clientsNames}
+               clientsNames={invoiceClientsNames}
                passClientHandler={(selClient) => setSelectedClient(selClient)}
                selectedClient={selectedClient}
                statuses={enumValues.POSTING_PAYMENT_TYPES}

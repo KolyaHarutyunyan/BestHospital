@@ -1,49 +1,30 @@
 import { makeStyles } from "@material-ui/core";
-import { Colors, Shadow } from "@eachbase/utils";
+import { Colors } from "@eachbase/utils";
 
-export const claimReceivableTableStyle = makeStyles(() => ({
-   claimRecTableStyle: {
-      width: "100%",
-      padding: "24px",
-      boxShadow: Shadow.modalShadow,
-      borderRadius: "0 0 8px 8px",
-      "@media(max-width: 1280px)": { padding: "16px 8px" },
-   },
-   claimRecContainerStyle: { width: "100%" },
-   claimRecTitleStyle: {
-      fontSize: "16px",
-      fontWeight: 600,
-      color: Colors.TextSecondary,
-      "@media(max-width: 1280px)": { paddingLeft: "6px" },
-   },
-   claimReceivableContainerStyle: {
-      width: "100%",
-      marginTop: "25px",
-   },
-
-   // *Claim Modal Inputs Styles**
+export const addInvoiceModalInputsCoreStyle = makeStyles(() => ({
+   // *Invoice Modal Inputs Styles**
    filtersBoxStyle: { textAlign: "left" },
    paginationBoxStyle: { marginTop: "16px" },
    loaderContainerStyle: {
-      minHeight: "500px",
+      minHeight: "200px",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
    },
-   claimDetailsContainerStyle: {
-      maxWidth: "1448px",
-      "@media(max-width: 1680px)": { maxWidth: "1152px" },
+   invoiceDetailsContainerStyle: {
+      maxWidth: "807px",
+      "@media(max-width: 1680px)": { maxWidth: "791px" },
       textAlign: "left",
       width: "100%",
    },
-   claimDetailsStyle: {
+   invoiceDetailsStyle: {
       width: "100%",
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
       marginBottom: "24px",
    },
-   claimDetailsFirstPartStyle: {
+   invoiceDetailsFirstPartStyle: {
       width: "100%",
       backgroundColor: Colors.BackgroundWhite,
       borderRadius: "8px",
@@ -52,17 +33,17 @@ export const claimReceivableTableStyle = makeStyles(() => ({
       padding: "16px",
       "@media(max-width: 1280px)": { padding: "8px" },
    },
-   claimOutlineStyle: {
+   invoiceOutlineStyle: {
       display: "flex",
       alignItems: "center",
       marginBottom: "8px",
    },
-   claimIdTextBoxStyle: {
+   invoiceIdTextBoxStyle: {
       fontSize: "16px",
       fontWeight: 600,
       color: Colors.TextSecondary,
    },
-   claimDetailsListStyle: {
+   invoiceDetailsListStyle: {
       width: "100%",
       display: "flex",
       flexWrap: "wrap",
@@ -88,8 +69,8 @@ export const claimReceivableTableStyle = makeStyles(() => ({
          },
       },
    },
-   claimDetailsSecondPartStyle: { width: "100%" },
-   claimDetailsTitleBoxStyle: {
+   invoiceDetailsSecondPartStyle: { width: "100%" },
+   invoiceDetailsTitleBoxStyle: {
       fontSize: "18px",
       fontWeight: 700,
       color: Colors.TextSecondary,

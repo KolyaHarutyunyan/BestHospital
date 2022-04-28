@@ -40,24 +40,19 @@ export const ClaimReceivableModalTBody = ({ receivable, passReceivable }) => {
    }
 
    const [edit, setEdit] = useState(false);
-   const [allowedAMT, setAllowedAMT] = useState("");
-   const [deductible, setDeductible] = useState("");
-   const [copay, setCopay] = useState("");
-   const [coINS, setCoINS] = useState("");
-   const [paidAMT, setPaidAMT] = useState("");
+   const [inputs, setInputs] = useState({});
 
    const receivInputsAreFilled =
-      isNotEmpty(allowedAMT) &&
-      isNotEmpty(deductible) &&
-      isNotEmpty(copay) &&
-      isNotEmpty(coINS) &&
-      isNotEmpty(paidAMT);
+      isNotEmpty(inputs.allowedAMT) &&
+      isNotEmpty(inputs.deductible) &&
+      isNotEmpty(inputs.copay) &&
+      isNotEmpty(inputs.coINS) &&
+      isNotEmpty(inputs.paidAMT);
 
    useEffect(() => {
-      if (receivInputsAreFilled) {
-         passReceivable && passReceivable({ ...receivable, filled: true });
-      }
-   }, [receivInputsAreFilled]);
+      passReceivable &&
+         passReceivable({ ...receivable, filled: receivInputsAreFilled, ...inputs });
+   }, [receivInputsAreFilled, inputs]);
 
    const serviceStart = handleCreatedAtDate(receivable.dateOfService?.start, 10, "/");
    const serviceEnd = handleCreatedAtDate(receivable.dateOfService?.end, 10, "/");
@@ -79,23 +74,23 @@ export const ClaimReceivableModalTBody = ({ receivable, passReceivable }) => {
             <div className={classes.tdStyle}>{cptCodeAndModif}</div>
             <div className={classes.tdStyle}>{totalUnits}</div>
             <EditablePaymentInput
-               triggerInputValue={(allowedAMT) => setAllowedAMT(allowedAMT)}
+               triggerInputValue={(allowedAMT) => setInputs({ ...inputs, allowedAMT })}
                triggerEditBool={(editBool) => setEdit(editBool)}
             />
             <EditablePaymentInput
-               triggerInputValue={(deductible) => setDeductible(deductible)}
+               triggerInputValue={(deductible) => setInputs({ ...inputs, deductible })}
                triggerEditBool={(editBool) => setEdit(editBool)}
             />
             <EditablePaymentInput
-               triggerInputValue={(copay) => setCopay(copay)}
+               triggerInputValue={(copay) => setInputs({ ...inputs, copay })}
                triggerEditBool={(editBool) => setEdit(editBool)}
             />
             <EditablePaymentInput
-               triggerInputValue={(coINS) => setCoINS(coINS)}
+               triggerInputValue={(coINS) => setInputs({ ...inputs, coINS })}
                triggerEditBool={(editBool) => setEdit(editBool)}
             />
             <EditablePaymentInput
-               triggerInputValue={(paidAMT) => setPaidAMT(paidAMT)}
+               triggerInputValue={(paidAMT) => setInputs({ ...inputs, paidAMT })}
                triggerEditBool={(editBool) => setEdit(editBool)}
             />
             <div className={classes.tdStyle}>{action}</div>

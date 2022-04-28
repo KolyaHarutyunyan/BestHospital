@@ -6,6 +6,8 @@ export const claimPaymentDetailsCoreStyle = makeStyles(() => ({
       width: "100%",
       marginTop: "16px",
    },
+
+   // *Claim Payment Modals Styles**
    editClaimPaymentWrapperStyle: {
       "& > div:first-of-type": {
          backgroundColor: Colors.BackgroundWater,
@@ -31,4 +33,5 @@ export const claimPaymentDetailsCoreStyle = makeStyles(() => ({
       "& > div:first-of-type": { paddingBottom: "0px" },
       "& > div:last-of-type": { paddingTop: "24px" },
    },
+   // *end**
 }));
