@@ -10,6 +10,7 @@ export const invoiceModalTHeadTBodyStyle = makeStyles(() => ({
    paymentContainerStyle: {
       width: "100%",
       marginTop: "16px",
+      minHeight: "89px",
    },
    // *end**
 }));

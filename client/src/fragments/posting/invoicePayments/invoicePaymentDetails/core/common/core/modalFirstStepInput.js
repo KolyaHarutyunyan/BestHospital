@@ -54,33 +54,35 @@ export const ModalFirstStepInput = ({
                filteredDate={filteredDate}
             />
          </div>
-         {!!invoicesWithFilters.length ? (
-            <div className={classes.tableAndPaginationBoxStyle}>
-               <div className={classes.tableBoxStyle}>
-                  {!!invoicesLoader && pageIsChanging ? (
-                     <div className={classes.loaderContainerStyle}>
-                        <Loader circleSize={50} />
-                     </div>
-                  ) : (
-                     <InvoiceModalTable
-                        invoices={invoicesWithFilters}
-                        triggerId={triggerId}
+         <div className={classes.invoiceTableBoxStyle}>
+            {!!invoicesWithFilters.length ? (
+               <div className={classes.tableAndPaginationBoxStyle}>
+                  <div className={classes.tableBoxStyle}>
+                     {!!invoicesLoader && pageIsChanging ? (
+                        <div className={classes.loaderContainerStyle}>
+                           <Loader circleSize={50} />
+                        </div>
+                     ) : (
+                        <InvoiceModalTable
+                           invoices={invoicesWithFilters}
+                           triggerId={triggerId}
+                        />
+                     )}
+                  </div>
+                  <div className={classes.paginationBoxStyle}>
+                     <Pagination
+                        onChange={(event, number) => changePage(number)}
+                        page={page}
+                        count={Math.ceil(invoicesQty / 10)}
+                        color={"primary"}
+                        size={"small"}
                      />
-                  )}
+                  </div>
                </div>
-               <div className={classes.paginationBoxStyle}>
-                  <Pagination
-                     onChange={(event, number) => changePage(number)}
-                     page={page}
-                     count={Math.ceil(invoicesQty / 10)}
-                     color={"primary"}
-                     size={"small"}
-                  />
-               </div>
-            </div>
-         ) : (
-            <NoItemText text={"No Invoices Yet"} />
-         )}
+            ) : (
+               <NoItemText text={"No Invoices Yet"} />
+            )}
+         </div>
       </div>
    );
 };

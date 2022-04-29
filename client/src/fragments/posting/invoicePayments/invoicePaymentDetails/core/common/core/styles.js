@@ -76,5 +76,6 @@ export const addInvoiceModalInputsCoreStyle = makeStyles(() => ({
       color: Colors.TextSecondary,
       textTransform: "capitalize",
    },
+   invoiceTableBoxStyle: { minHeight: "315px" },
    // *end**
 }));

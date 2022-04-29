@@ -57,30 +57,35 @@ export const ModalFirstStepInput = ({
                filteredDateTo={filteredDateTo}
             />
          </div>
-         {!!claimsWithFilters.length ? (
-            <div className={classes.tableAndPaginationBoxStyle}>
-               <div className={classes.tableBoxStyle}>
-                  {!!claimsLoader && pageIsChanging ? (
-                     <div className={classes.loaderContainerStyle}>
-                        <Loader circleSize={50} />
-                     </div>
-                  ) : (
-                     <ClaimModalTable claims={claimsWithFilters} triggerId={triggerId} />
-                  )}
+         <div className={classes.claimTableBoxStyle}>
+            {!!claimsWithFilters.length ? (
+               <div className={classes.tableAndPaginationBoxStyle}>
+                  <div className={classes.tableBoxStyle}>
+                     {!!claimsLoader && pageIsChanging ? (
+                        <div className={classes.loaderContainerStyle}>
+                           <Loader circleSize={50} />
+                        </div>
+                     ) : (
+                        <ClaimModalTable
+                           claims={claimsWithFilters}
+                           triggerId={triggerId}
+                        />
+                     )}
+                  </div>
+                  <div className={classes.paginationBoxStyle}>
+                     <Pagination
+                        onChange={(event, number) => changePage(number)}
+                        page={page}
+                        count={Math.ceil(claimsQty / 10)}
+                        color={"primary"}
+                        size={"small"}
+                     />
+                  </div>
                </div>
-               <div className={classes.paginationBoxStyle}>
-                  <Pagination
-                     onChange={(event, number) => changePage(number)}
-                     page={page}
-                     count={Math.ceil(claimsQty / 10)}
-                     color={"primary"}
-                     size={"small"}
-                  />
-               </div>
-            </div>
-         ) : (
-            <NoItemText text={"No Claims Yet"} />
-         )}
+            ) : (
+               <NoItemText text={"No Claims Yet"} />
+            )}
+         </div>
       </div>
    );
 };
