@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import {
    DrawerContext,
-   getLimitedVal,
+   getDataForTable,
    handleCreatedAtDate,
    Images,
    manageStatus,
@@ -10,30 +10,6 @@ import {
 } from "@eachbase/utils";
 import { tableTheadTbodyStyle } from "./styles";
 import { ReceivableBillTable } from "./core";
-
-function getReceivData(givenData = "", isOpen, givenWidth) {
-   const firstSize = isOpen ? 1850 : 1730;
-   const firstLimit = isOpen ? 18 : 20;
-
-   const secondSize = isOpen ? 1680 : 1640;
-   const secondLimit = isOpen ? 12 : 14;
-
-   const thirdSize = isOpen ? 1350 : 1345;
-   const thirdLimit = isOpen ? 8 : 10;
-
-   const initialLimit = isOpen ? 21 : 23;
-
-   const tableData =
-      givenWidth <= thirdSize
-         ? getLimitedVal(givenData, thirdLimit)
-         : givenWidth > thirdSize && givenWidth <= secondSize
-         ? getLimitedVal(givenData, secondLimit)
-         : givenWidth > secondSize && givenWidth <= firstSize
-         ? getLimitedVal(givenData, firstLimit)
-         : getLimitedVal(givenData, initialLimit);
-
-   return tableData;
-}
 
 export const ClaimReceivableTBody = ({ receivable }) => {
    const classes = tableTheadTbodyStyle();
@@ -52,7 +28,7 @@ export const ClaimReceivableTBody = ({ receivable }) => {
    const { open } = useContext(DrawerContext);
 
    function getTableData(data) {
-      return showDashIfEmpty(getReceivData(data, open, width));
+      return showDashIfEmpty(getDataForTable(data, open, width));
    }
 
    const serviceStart = handleCreatedAtDate(receivable.dateOfService?.start, 10, "/");

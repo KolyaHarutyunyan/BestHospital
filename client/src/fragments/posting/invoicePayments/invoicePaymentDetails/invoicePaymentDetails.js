@@ -1,30 +1,12 @@
 import React, { useContext, useState } from "react";
 import { invoicePaymentDetailsStyle } from "./styles";
-import { AddButton, DownloadLink, NoItemText } from "@eachbase/components";
-import {
-   addSignToValueFromStart,
-   DrawerContext,
-   getLimitedVal,
-   getValueByFixedNumber,
-   Images,
-   makeCapitalize,
-   manageStatus,
-} from "@eachbase/utils";
+import { AddButton, NoItemText } from "@eachbase/components";
+import { DrawerContext, getLimitedVal, Images } from "@eachbase/utils";
 import { InvoicePaymentInvoiceTable, InvoicePaymentModals } from "./core";
+import { getInvoicePaymentDetails } from "./constants";
 
 export const InvoicePaymentDetailsFragment = ({ invoicePaymentDetails }) => {
    const classes = invoicePaymentDetailsStyle();
-
-   const {
-      _id,
-      client,
-      status,
-      paymentReference,
-      totalBilled,
-      totalCollected,
-      paymentType,
-      invoices,
-   } = invoicePaymentDetails || {};
 
    const { open } = useContext(DrawerContext);
 
@@ -33,54 +15,9 @@ export const InvoicePaymentDetailsFragment = ({ invoicePaymentDetails }) => {
    const [addingModalIsOpen, setAddingModalIsOpen] = useState(false);
    const [activeStep, setActiveStep] = useState("first");
 
-   const INVOICE_PAYMENT_DETAILS = [
-      {
-         detailText: "Client:",
-         detail: makeCapitalize(`${client?.firstName} ${client?.lastName}`),
-      },
-      {
-         detailText: "Status:",
-         detail: manageStatus(status),
-      },
-      {
-         detailText: "Payment Reference:",
-         detail: (
-            <a
-               className={classes.paymentRefStyle}
-               href={`https://${paymentReference || "www.testlink.com"}`}
-               target="_blank"
-               rel="noreferrer noopener"
-               onClick={(event) => event.stopPropagation()}
-            >
-               {paymentReference || "www.testlink.com"}
-            </a>
-         ),
-      },
-      {
-         detailText: "Total Billed:",
-         detail: addSignToValueFromStart(getValueByFixedNumber(totalBilled)),
-      },
-      {
-         detailText: "Total Collected:",
-         detail: addSignToValueFromStart(getValueByFixedNumber(totalCollected)),
-      },
-      {
-         detailText: "EOB:",
-         detail: !!"EOB.pdf" ? (
-            <DownloadLink
-               linkHref={"EOB.pdf"}
-               linkInnerText={"Download"}
-               linkDownload={true}
-            />
-         ) : null,
-      },
-      {
-         detailText: "Payment Type:",
-         detail: manageStatus(paymentType),
-      },
-   ];
+   const { _id, invoices } = invoicePaymentDetails || {};
 
-   const filteredDetails = INVOICE_PAYMENT_DETAILS.filter(
+   const filteredDetails = getInvoicePaymentDetails(invoicePaymentDetails).filter(
       (invoicePmtDtl) => !!invoicePmtDtl.detail
    );
 

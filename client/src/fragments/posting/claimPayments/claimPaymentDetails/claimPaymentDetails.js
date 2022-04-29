@@ -1,30 +1,12 @@
 import React, { useContext, useState } from "react";
 import { claimPaymentDetailsStyle } from "./styles";
-import { AddButton, DownloadLink, NoItemText } from "@eachbase/components";
-import {
-   addSignToValueFromStart,
-   DrawerContext,
-   getLimitedVal,
-   getValueByFixedNumber,
-   handleCreatedAtDate,
-   Images,
-   makeCapitalize,
-   manageStatus,
-} from "@eachbase/utils";
+import { AddButton, NoItemText } from "@eachbase/components";
+import { DrawerContext, getLimitedVal, Images } from "@eachbase/utils";
 import { ClaimPaymentClaimTable, ClaimPaymentModals } from "./core";
+import { getClaimPaymentDetails } from "./constants";
 
 export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
    const classes = claimPaymentDetailsStyle();
-
-   const {
-      _id,
-      funder,
-      paymentDate,
-      paymentReference,
-      paymentType,
-      paymentAmount,
-      claims,
-   } = claimPaymentDetails || {};
 
    const { open } = useContext(DrawerContext);
 
@@ -33,50 +15,9 @@ export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
    const [addingModalIsOpen, setAddingModalIsOpen] = useState(false);
    const [activeStep, setActiveStep] = useState("first");
 
-   const CLAIM_PAYMENT_DETAILS = [
-      {
-         detailText: "Funding Source:",
-         detail: makeCapitalize(`${funder?.firstName} ${funder?.lastName}`),
-      },
-      {
-         detailText: "Payment Date:",
-         detail: handleCreatedAtDate(paymentDate, 10, "/"),
-      },
-      {
-         detailText: "Payment Reference:",
-         detail: (
-            <a
-               className={classes.paymentRefStyle}
-               href={`https://${paymentReference || "www.testlink.com"}`}
-               target="_blank"
-               rel="noreferrer noopener"
-               onClick={(event) => event.stopPropagation()}
-            >
-               {paymentReference || "www.testlink.com"}
-            </a>
-         ),
-      },
-      {
-         detailText: "Payment Type:",
-         detail: manageStatus(paymentType),
-      },
-      {
-         detailText: "Payment Amount:",
-         detail: addSignToValueFromStart(getValueByFixedNumber(paymentAmount)),
-      },
-      {
-         detailText: "EOB:",
-         detail: !!"EOB.pdf" ? (
-            <DownloadLink
-               linkHref={"EOB.pdf"}
-               linkInnerText={"Download"}
-               linkDownload={true}
-            />
-         ) : null,
-      },
-   ];
+   const { _id, claims } = claimPaymentDetails || {};
 
-   const filteredDetails = CLAIM_PAYMENT_DETAILS.filter(
+   const filteredDetails = getClaimPaymentDetails(claimPaymentDetails).filter(
       (claimPmtDtl) => !!claimPmtDtl.detail
    );
 

@@ -1,16 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { addInvoiceModalInputsCoreStyle } from "./styles";
-import { DownloadLink } from "@eachbase/components";
-import {
-   addSignToValueFromStart,
-   DrawerContext,
-   getLimitedVal,
-   getValueByFixedNumber,
-   handleCreatedAtDate,
-   makeCapitalize,
-   manageStatus,
-} from "@eachbase/utils";
+import { DrawerContext, getLimitedVal } from "@eachbase/utils";
 import { InvoicePaymentModalTable } from "./common";
+import { getInvoiceDetailsForInvoicePmt } from "./constants";
 
 export const ModalLastStepInput = ({
    invoices = [],
@@ -21,9 +13,6 @@ export const ModalLastStepInput = ({
    const classes = addInvoiceModalInputsCoreStyle();
 
    const selectedInvoice = invoices.find((invoice) => invoice._id === selectedInvoiceId);
-
-   const { _id, dateRange, totalAmount, pdfDocument, client, status, totalTime } =
-      selectedInvoice || {};
 
    const { open: drawerOpen } = useContext(DrawerContext);
 
@@ -37,44 +26,9 @@ export const ModalLastStepInput = ({
       triggerFilledInvoice && triggerFilledInvoice(filledInvoice);
    }, [filledInvoice]);
 
-   const early = handleCreatedAtDate(dateRange?.early, 10, "/");
-   const latest = handleCreatedAtDate(dateRange?.latest, 10, "/");
-
-   const INVOICE_DETAILS = [
-      {
-         detailText: "Date Range:",
-         detail: `${early} - ${latest}`,
-      },
-      {
-         detailText: "Client:",
-         detail: makeCapitalize(`${client?.firstName} ${client?.lastName}`),
-      },
-      {
-         detailText: "PDF Document:",
-         detail:
-            !!pdfDocument || !!"file_pdf.pdf" ? (
-               <DownloadLink
-                  linkHref={pdfDocument || "file_pdf.pdf"}
-                  linkInnerText={"Download"}
-                  linkDownload={true}
-               />
-            ) : null,
-      },
-      {
-         detailText: "Total Time:",
-         detail: totalTime === 0 ? totalTime + "" : totalTime,
-      },
-      {
-         detailText: "Status",
-         detail: manageStatus(status),
-      },
-      {
-         detailText: "Total Amount:",
-         detail: addSignToValueFromStart(getValueByFixedNumber(totalAmount)),
-      },
-   ];
-
-   const filteredDetails = INVOICE_DETAILS.filter((invoiceDtl) => !!invoiceDtl.detail);
+   const filteredDetails = getInvoiceDetailsForInvoicePmt(selectedInvoice).filter(
+      (invoiceDtl) => !!invoiceDtl.detail
+   );
 
    return (
       <>
@@ -87,7 +41,7 @@ export const ModalLastStepInput = ({
             <div className={classes.invoiceDetailsFirstPartStyle}>
                <div className={classes.invoiceOutlineStyle}>
                   <span className={classes.invoiceIdTextBoxStyle}>
-                     ID: {getLimitedVal(_id, 5)}
+                     ID: {getLimitedVal(selectedInvoice?._id, 5)}
                   </span>
                </div>
                {!!filteredDetails.length && (

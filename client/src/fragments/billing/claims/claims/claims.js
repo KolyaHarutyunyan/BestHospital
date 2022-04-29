@@ -7,11 +7,12 @@ import {
    PaginationItem,
    BillFiltersSelectors,
 } from "@eachbase/components";
-import { enumValues, handleCreatedAtDate, PaginationContext } from "@eachbase/utils";
+import { enumValues, PaginationContext } from "@eachbase/utils";
 import { claimActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import { ClaimTable } from "./core";
 import { useHistory } from "react-router";
+import { getFilteredClaims } from "./constants";
 
 export const ClaimsFragment = ({
    claims = [],
@@ -37,40 +38,14 @@ export const ClaimsFragment = ({
    const clientsNames = claims.map((claim) => claim?.client?.firstName);
    const payorsNames = claims.map((claim) => claim?.funder?.firstName);
 
-   const claimsWithFilters =
-      selectedPayor === "All" &&
-      selectedClient === "All" &&
-      filteredDateFrom === "" &&
-      filteredDateTo === "" &&
-      selectedStatus === "All"
-         ? claims
-         : selectedPayor !== "All"
-         ? claims.filter(
-              (claim) =>
-                 claim?.funder?.firstName?.toLowerCase() === selectedPayor.toLowerCase()
-           )
-         : selectedClient !== "All"
-         ? claims.filter(
-              (claim) =>
-                 claim?.client?.firstName?.toLowerCase() === selectedClient.toLowerCase()
-           )
-         : filteredDateFrom !== ""
-         ? claims.filter(
-              (claim) =>
-                 handleCreatedAtDate(claim?.dateRange?.early, 10) ===
-                 handleCreatedAtDate(filteredDateFrom, 10)
-           )
-         : filteredDateTo !== ""
-         ? claims.filter(
-              (claim) =>
-                 handleCreatedAtDate(claim?.dateRange?.latest, 10) ===
-                 handleCreatedAtDate(filteredDateTo, 10)
-           )
-         : selectedStatus !== "All"
-         ? claims.filter(
-              (claim) => claim?.status.toLowerCase() === selectedStatus.toLowerCase()
-           )
-         : [];
+   const claimsWithFilters = getFilteredClaims(
+      claims,
+      selectedPayor,
+      selectedClient,
+      filteredDateFrom,
+      filteredDateTo,
+      selectedStatus
+   );
 
    const changePage = (number) => {
       if (page === number) return;

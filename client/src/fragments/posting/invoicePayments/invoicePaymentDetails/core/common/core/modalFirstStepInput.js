@@ -1,11 +1,12 @@
 import React, { useContext, useState } from "react";
 import { addInvoiceModalInputsCoreStyle } from "./styles";
 import { Loader, NoItemText, BillFiltersSelectors } from "@eachbase/components";
-import { handleCreatedAtDate, PaginationContext } from "@eachbase/utils";
+import { PaginationContext } from "@eachbase/utils";
 import { invoiceActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import Pagination from "@material-ui/lab/Pagination";
 import { InvoiceModalTable } from "./common";
+import { getFilteredInvoicesForInvoicePmt } from "./constants";
 
 export const ModalFirstStepInput = ({
    invoices = [],
@@ -25,28 +26,12 @@ export const ModalFirstStepInput = ({
    const [filteredDateTo, setFilteredDateTo] = useState("");
    const [filteredDate, setFilteredDate] = useState("");
 
-   const invoicesWithFilters =
-      filteredDateFrom === "" && filteredDateTo === "" && filteredDate === ""
-         ? invoices
-         : filteredDateFrom !== ""
-         ? invoices.filter(
-              (invoice) =>
-                 handleCreatedAtDate(invoice?.dateRange?.early, 10) ===
-                 handleCreatedAtDate(filteredDateFrom, 10)
-           )
-         : filteredDateTo !== ""
-         ? invoices.filter(
-              (invoice) =>
-                 handleCreatedAtDate(invoice?.dateRange?.latest, 10) ===
-                 handleCreatedAtDate(filteredDateTo, 10)
-           )
-         : filteredDate !== ""
-         ? invoices.filter(
-              (invoice) =>
-                 handleCreatedAtDate(invoice?.invoiceDate, 10) ===
-                 handleCreatedAtDate(filteredDate, 10)
-           )
-         : [];
+   const invoicesWithFilters = getFilteredInvoicesForInvoicePmt(
+      invoices,
+      filteredDateFrom,
+      filteredDateTo,
+      filteredDate
+   );
 
    const changePage = (number) => {
       if (page === number) return;

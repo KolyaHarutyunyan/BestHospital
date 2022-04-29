@@ -14,6 +14,7 @@ import { enumValues, PaginationContext } from "@eachbase/utils";
 import { claimPaymentActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import { ClaimPaymentInputs, ClaimPaymentTable } from "./core";
+import { getFilteredClaimPayments } from "./constants";
 
 export const ClaimPaymentsFragment = ({
    claimPayments = [],
@@ -65,27 +66,12 @@ export const ClaimPaymentsFragment = ({
       (claimPayment) => claimPayment?.client?.firstName
    );
 
-   const claimPaymentsWithFilters =
-      selectedPayor === "All" && selectedClient === "All" && selectedStatus === "All"
-         ? claimPayments
-         : selectedPayor !== "All"
-         ? claimPayments.filter(
-              (claimPayment) =>
-                 claimPayment?.funder?.firstName?.toLowerCase() ===
-                 selectedPayor.toLowerCase()
-           )
-         : selectedClient !== "All"
-         ? claimPayments.filter(
-              (claimPayment) =>
-                 claimPayment?.client?.firstName?.toLowerCase() ===
-                 selectedClient.toLowerCase()
-           )
-         : selectedStatus !== "All"
-         ? claimPayments.filter(
-              (claimPayment) =>
-                 claimPayment?.status.toLowerCase() === selectedStatus.toLowerCase()
-           )
-         : [];
+   const claimPaymentsWithFilters = getFilteredClaimPayments(
+      claimPayments,
+      selectedPayor,
+      selectedClient,
+      selectedStatus
+   );
 
    const changePage = (number) => {
       if (page === number) return;

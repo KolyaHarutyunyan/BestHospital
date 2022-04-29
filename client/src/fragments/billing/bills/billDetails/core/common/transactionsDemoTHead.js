@@ -1,48 +1,49 @@
-import React from "react";
-import { TableCell } from "@material-ui/core";
-import { TableHeadComponent, SearchAndFilter } from "@eachbase/components";
+import React, { useContext } from "react";
 import { tableTheadTbodyStyle } from "./styles";
-import { getTextDependsOnWidth, useWidth } from "@eachbase/utils";
+import {
+   DrawerContext,
+   getTableHeader,
+   getTextDependsOnWidth,
+   useWidth,
+} from "@eachbase/utils";
 
 export const TransactionsDemoTHead = () => {
    const classes = tableTheadTbodyStyle();
 
    const width = useWidth();
 
+   const { open } = useContext(DrawerContext);
+
+   function getBillTransactionTitle(givenTitle = "", ...rest) {
+      const size = open ? 1855 : 1700;
+      const limit = open ? 6 : 9;
+
+      return getTableHeader(
+         givenTitle,
+         getTextDependsOnWidth(width, size, givenTitle, limit),
+         ...rest
+      );
+   }
+
+   const billTransactionId = getBillTransactionTitle("ID", "", false);
+   const date = getBillTransactionTitle("Date", "latestEarliest", true, true);
+   const creator = getBillTransactionTitle("Creator", "", true, true);
+   const type = getBillTransactionTitle("Type", "arrow", true, true);
+   const amount = getBillTransactionTitle("Amount", "", false);
+   const paymentRefNumber = getBillTransactionTitle("Payment Ref. Number", "", false);
+   const note = getBillTransactionTitle("Note", "", false);
+   const action = getBillTransactionTitle("Action", "", false);
+
    return (
-      <TableHeadComponent theadClassName={classes.tableTheadStyle}>
-         <TableCell>
-            <SearchAndFilter title={"ID"} custom={false} iconsAreLight />
-         </TableCell>
-         <TableCell>
-            <SearchAndFilter
-               title={"Date"}
-               type={"latestEarliest"}
-               iconsAreLight
-            />
-         </TableCell>
-         <TableCell>
-            <SearchAndFilter title={"Creator"} iconsAreLight />
-         </TableCell>
-         <TableCell>
-            <SearchAndFilter title={"Type"} type={"arrow"} iconsAreLight />
-         </TableCell>
-         <TableCell>
-            <SearchAndFilter title={"Amount"} custom={false} iconsAreLight />
-         </TableCell>
-         <TableCell>
-            <SearchAndFilter
-               title={getTextDependsOnWidth(width, 1440, "Payment Ref. Number")}
-               custom={false}
-               iconsAreLight
-            />
-         </TableCell>
-         <TableCell>
-            <SearchAndFilter title={"Note"} custom={false} iconsAreLight />
-         </TableCell>
-         <TableCell>
-            <SearchAndFilter title={"Action"} custom={false} iconsAreLight />
-         </TableCell>
-      </TableHeadComponent>
+      <div className={classes.tableTheadStyle}>
+         <div className={classes.thStyle}>{billTransactionId}</div>
+         <div className={classes.thStyle}>{date}</div>
+         <div className={classes.thStyle}>{creator}</div>
+         <div className={classes.thStyle}>{type}</div>
+         <div className={classes.thStyle}>{amount}</div>
+         <div className={classes.thStyle}>{paymentRefNumber}</div>
+         <div className={classes.thStyle}>{note}</div>
+         <div className={classes.thStyle}>{action}</div>
+      </div>
    );
 };

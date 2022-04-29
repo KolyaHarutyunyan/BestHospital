@@ -4,38 +4,14 @@ import { useHistory } from "react-router-dom";
 import {
    addSignToValueFromStart,
    DrawerContext,
+   getDataForTable,
    getFullName,
-   getLimitedVal,
    getTableHeader,
    getValueByFixedNumber,
    manageStatus,
    showDashIfEmpty,
    useWidth,
 } from "@eachbase/utils";
-
-function getInvoicePaymentData(givenData = "", isOpen, givenWidth) {
-   const firstSize = isOpen ? 2040 : 1940;
-   const firstLimit = isOpen ? 14 : 16;
-
-   const secondSize = isOpen ? 1680 : 1640;
-   const secondLimit = isOpen ? 12 : 14;
-
-   const thirdSize = isOpen ? 1350 : 1345;
-   const thirdLimit = isOpen ? 8 : 10;
-
-   const initialLimit = isOpen ? 21 : 23;
-
-   const tableData =
-      givenWidth <= thirdSize
-         ? getLimitedVal(givenData, thirdLimit)
-         : givenWidth > thirdSize && givenWidth <= secondSize
-         ? getLimitedVal(givenData, secondLimit)
-         : givenWidth > secondSize && givenWidth <= firstSize
-         ? getLimitedVal(givenData, firstLimit)
-         : getLimitedVal(givenData, initialLimit);
-
-   return tableData;
-}
 
 export const InvoicePaymentTBody = ({ invoicePayments = [] }) => {
    const classes = invoicePaymentTHeadTBodyStyle();
@@ -47,7 +23,7 @@ export const InvoicePaymentTBody = ({ invoicePayments = [] }) => {
    const { open } = useContext(DrawerContext);
 
    function getTableData(data) {
-      return showDashIfEmpty(getInvoicePaymentData(data, open, width));
+      return showDashIfEmpty(getDataForTable(data, open, width));
    }
 
    return (

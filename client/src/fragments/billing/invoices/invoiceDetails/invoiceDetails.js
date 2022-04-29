@@ -1,79 +1,20 @@
 import React, { useContext } from "react";
 import { invoiceDetailsStyle } from "./styles";
-import { DownloadLink, NoItemText } from "@eachbase/components";
-import {
-   addSignToValueFromStart,
-   DrawerContext,
-   getLimitedVal,
-   getValueByFixedNumber,
-   handleCreatedAtDate,
-   makeCapitalize,
-   manageStatus,
-} from "@eachbase/utils";
+import { NoItemText } from "@eachbase/components";
+import { DrawerContext, getLimitedVal } from "@eachbase/utils";
 import { InvoiceReceivableTable } from "./core";
+import { getInvoiceDetails } from "./constants";
 
 export const InvoiceDetailsFragment = ({ invoiceDetails }) => {
    const classes = invoiceDetailsStyle();
 
-   const {
-      _id,
-      dateRange,
-      totalAmount,
-      pdfDocument,
-      client,
-      dueDate,
-      status,
-      totalTime,
-      receivables,
-   } = invoiceDetails || {};
+   const { _id, receivables } = invoiceDetails || {};
 
    const { open: drawerOpen } = useContext(DrawerContext);
 
-   const early = handleCreatedAtDate(dateRange?.early, 10, "/");
-   const latest = handleCreatedAtDate(dateRange?.latest, 10, "/");
-
-   const start = handleCreatedAtDate(dueDate?.start, 10, "/");
-   const end = handleCreatedAtDate(dueDate?.end, 10, "/");
-
-   const INVOICE_DETAILS = [
-      {
-         detailText: "Date Range:",
-         detail: `${early} - ${latest}`,
-      },
-      {
-         detailText: "Invoice Total:",
-         detail: addSignToValueFromStart(getValueByFixedNumber(totalAmount)),
-      },
-      {
-         detailText: "PDF Document:",
-         detail:
-            !!pdfDocument || !!"file_pdf.pdf" ? (
-               <DownloadLink
-                  linkHref={pdfDocument || "file_pdf.pdf"}
-                  linkInnerText={"Download"}
-                  linkDownload={true}
-               />
-            ) : null,
-      },
-      {
-         detailText: "Client:",
-         detail: makeCapitalize(`${client?.firstName} ${client?.lastName}`),
-      },
-      {
-         detailText: "Due Date:",
-         detail: `${start} - ${end}`,
-      },
-      {
-         detailText: "Status",
-         detail: manageStatus(status),
-      },
-      {
-         detailText: "Total Time:",
-         detail: totalTime === 0 ? totalTime + "" : totalTime,
-      },
-   ];
-
-   const filteredDetails = INVOICE_DETAILS.filter((invoiceDtl) => !!invoiceDtl.detail);
+   const filteredDetails = getInvoiceDetails(invoiceDetails).filter(
+      (invoiceDtl) => !!invoiceDtl.detail
+   );
 
    return (
       <>

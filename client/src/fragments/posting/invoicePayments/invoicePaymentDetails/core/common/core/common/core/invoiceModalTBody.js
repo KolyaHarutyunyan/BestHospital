@@ -3,36 +3,12 @@ import { invoiceModalTHeadTBodyStyle } from "./styles";
 import {
    addSignToValueFromStart,
    getFullName,
-   getLimitedVal,
+   getModalDataForTable,
    getValueByFixedNumber,
    handleCreatedAtDate,
    showDashIfEmpty,
    useWidth,
 } from "@eachbase/utils";
-
-function getInvoiceData(givenData = "", givenWidth) {
-   const firstSize = 1940;
-   const firstLimit = 16;
-
-   const secondSize = 1640;
-   const secondLimit = 14;
-
-   const thirdSize = 1345;
-   const thirdLimit = 10;
-
-   const initialLimit = 23;
-
-   const tableData =
-      givenWidth <= thirdSize
-         ? getLimitedVal(givenData, thirdLimit)
-         : givenWidth > thirdSize && givenWidth <= secondSize
-         ? getLimitedVal(givenData, secondLimit)
-         : givenWidth > secondSize && givenWidth <= firstSize
-         ? getLimitedVal(givenData, firstLimit)
-         : getLimitedVal(givenData, initialLimit);
-
-   return tableData;
-}
 
 export const InvoiceModalTBody = ({ invoices = [], triggerId }) => {
    const classes = invoiceModalTHeadTBodyStyle();
@@ -40,7 +16,7 @@ export const InvoiceModalTBody = ({ invoices = [], triggerId }) => {
    const width = useWidth();
 
    function getTableData(data) {
-      return showDashIfEmpty(getInvoiceData(data, width));
+      return showDashIfEmpty(getModalDataForTable(data, width));
    }
 
    return (

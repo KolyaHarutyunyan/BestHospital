@@ -51,7 +51,12 @@ export {
 export { ErrorText } from "./errorTexts";
 export { CountryList } from "./jsons";
 export { languages } from "./languages";
-export { list } from "./constants";
+export {
+   list,
+   getDataForTable,
+   getGeneratingDataForTable,
+   getModalDataForTable,
+} from "./constants";
 export {
    DrawerContext,
    DrawerContextProvider,

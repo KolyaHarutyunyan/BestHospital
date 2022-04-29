@@ -15,10 +15,10 @@ export const BillTHeadWithoutScroll = () => {
 
    const { open } = useContext(DrawerContext);
 
-   const size = open ? 1830 : 1680;
-   const limit = open ? 3 : 4;
-
    function getBillTitle(givenTitle = "", ...rest) {
+      const size = open ? 1830 : 1680;
+      const limit = open ? 3 : 4;
+
       return getTableHeader(
          givenTitle,
          getTextDependsOnWidth(width, size, givenTitle, limit),

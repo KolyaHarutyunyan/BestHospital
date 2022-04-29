@@ -1,94 +1,22 @@
 import React, { useContext, useState } from "react";
 import { claimDetailsStyle } from "./styles";
-import {
-   BillingModalWrapper,
-   DownloadLink,
-   NoItemText,
-   SimpleModal,
-} from "@eachbase/components";
-import {
-   addSignToValueFromStart,
-   DrawerContext,
-   getLimitedVal,
-   getValueByFixedNumber,
-   handleCreatedAtDate,
-   Images,
-   makeCapitalize,
-} from "@eachbase/utils";
+import { BillingModalWrapper, NoItemText, SimpleModal } from "@eachbase/components";
+import { DrawerContext, getLimitedVal, Images } from "@eachbase/utils";
 import { ClaimReceivableTable, CloseClaimInputs } from "./core";
+import { getClaimDetails } from "./constants";
 
 export const ClaimDetailsFragment = ({ claimDetails }) => {
    const classes = claimDetailsStyle();
-
-   const {
-      _id,
-      createdDate,
-      submittedDate,
-      dateRange,
-      staff,
-      funder,
-      client,
-      totalCharge,
-      ammountPaid,
-      paymentRef,
-      receivable,
-      status,
-   } = claimDetails || {};
 
    const { open: drawerOpen } = useContext(DrawerContext);
 
    const [open, setOpen] = useState(false);
 
-   const early = handleCreatedAtDate(dateRange?.early, 10, "/");
-   const latest = handleCreatedAtDate(dateRange?.latest, 10, "/");
+   const { _id, receivable, status } = claimDetails || {};
 
-   const CLAIM_DETAILS = [
-      {
-         detailText: "Created Date:",
-         detail: handleCreatedAtDate(createdDate, 10, "/"),
-      },
-      {
-         detailText: "Date of Range:",
-         detail: `${early} - ${latest}`,
-      },
-      { detailText: "Staff:", detail: makeCapitalize(staff?.firstName) },
-      {
-         detailText: "1500 Form:",
-         detail: !!"file_pdf.pdf" ? (
-            <DownloadLink
-               linkHref={"file_pdf.pdf"}
-               linkInnerText={"Download"}
-               linkDownload={true}
-            />
-         ) : null,
-      },
-      {
-         detailText: "Client:",
-         detail: makeCapitalize(client?.firstName),
-      },
-      {
-         detailText: "Founding Source:",
-         detail: makeCapitalize(funder?.firstName),
-      },
-      {
-         detailText: "Total Charges:",
-         detail: addSignToValueFromStart(getValueByFixedNumber(totalCharge)),
-      },
-      {
-         detailText: "Amount Paid:",
-         detail: addSignToValueFromStart(getValueByFixedNumber(ammountPaid)),
-      },
-      {
-         detailText: "Submitted Date:",
-         detail: handleCreatedAtDate(submittedDate, 10, "/"),
-      },
-      {
-         detailText: "Payment Reference",
-         detail: paymentRef,
-      },
-   ];
-
-   const filteredDetails = CLAIM_DETAILS.filter((claimDtl) => !!claimDtl.detail);
+   const filteredDetails = getClaimDetails(claimDetails).filter(
+      (claimDtl) => !!claimDtl.detail
+   );
 
    return (
       <>

@@ -4,7 +4,7 @@ import {
    CheckupContext,
    DrawerContext,
    getFullName,
-   getLimitedVal,
+   getGeneratingDataForTable,
    getValueByFixedNumber,
    handleCreatedAtDate,
    showDashIfEmpty,
@@ -12,25 +12,6 @@ import {
 } from "@eachbase/utils";
 import { notClaimedBillTHeadTBodyStyle } from "./styles";
 import { CheckBoxInput, DownloadLink } from "@eachbase/components";
-
-function getNotClaimedBillData(givenData = "", isOpen, givenWidth) {
-   const firstSize = isOpen ? 1850 : 1825;
-   const firstLimit = isOpen ? 12 : 14;
-
-   const secondSize = isOpen ? 1450 : 1500;
-   const secondLimit = isOpen ? 8 : 10;
-
-   const initialLimit = isOpen ? 16 : 18;
-
-   const tableData =
-      givenWidth <= secondSize
-         ? getLimitedVal(givenData, secondLimit)
-         : givenWidth > secondSize && givenWidth <= firstSize
-         ? getLimitedVal(givenData, firstLimit)
-         : getLimitedVal(givenData, initialLimit);
-
-   return tableData;
-}
 
 export const NotClaimedBillTBody = ({ notClaimedBill, triggerBill }) => {
    const classes = notClaimedBillTHeadTBodyStyle();
@@ -45,7 +26,7 @@ export const NotClaimedBillTBody = ({ notClaimedBill, triggerBill }) => {
    }`;
 
    function getTableData(data) {
-      return showDashIfEmpty(getNotClaimedBillData(data, open, width));
+      return showDashIfEmpty(getGeneratingDataForTable(data, open, width));
    }
 
    function handleInputCheckup(event) {

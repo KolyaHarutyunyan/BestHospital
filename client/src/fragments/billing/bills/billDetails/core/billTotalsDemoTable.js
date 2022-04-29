@@ -1,12 +1,14 @@
 import React from "react";
-import { Table } from "@material-ui/core";
+import { billTransactionInputsStyle } from "./styles";
 import { BillTotalsDemoTBody, BillTotalsDemoTHead } from "./common";
 
 export const BillTotalsDemoTable = ({ billTotals }) => {
+   const classes = billTransactionInputsStyle();
+
    return (
-      <Table style={{ borderSpacing: "0 4px", borderCollapse: "separate" }}>
+      <div className={classes.billTotalContainerStyle}>
          <BillTotalsDemoTHead />
          <BillTotalsDemoTBody billTotals={billTotals} />
-      </Table>
+      </div>
    );
 };

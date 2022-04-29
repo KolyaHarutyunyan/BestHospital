@@ -8,21 +8,12 @@ import {
    NoItemText,
    BillFiltersSelectors,
 } from "@eachbase/components";
-import {
-   CheckupContext,
-   FindLoad,
-   handleCreatedAtDate,
-   PaginationContext,
-} from "@eachbase/utils";
+import { CheckupContext, FindLoad, PaginationContext } from "@eachbase/utils";
 import { billActions, claimActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import Pagination from "@material-ui/lab/Pagination";
 import { useHistory } from "react-router";
-
-function mapBills(billList = [], boolean) {
-   if (!Array.isArray(billList)) return;
-   return billList.map((bill) => ({ ...bill, isChecked: boolean }));
-}
+import { getFilteredNotClaimedBills, mapBills } from "./constants";
 
 export const GenerateClaimFragment = ({
    notClaimedBills = [],
@@ -68,26 +59,12 @@ export const GenerateClaimFragment = ({
    const payorsNames = bills.map((bill) => bill?.funder?.firstName);
    const clientsNames = bills.map((bill) => bill?.client?.firstName);
 
-   const notClaimedBillsWithFilters =
-      selectedPayor === "All" && selectedClient === "All" && filteredServiceDate === ""
-         ? bills
-         : selectedPayor !== "All"
-         ? bills.filter(
-              (bill) =>
-                 bill?.funder?.firstName?.toLowerCase() === selectedPayor.toLowerCase()
-           )
-         : selectedClient !== "All"
-         ? bills.filter(
-              (bill) =>
-                 bill?.client?.firstName?.toLowerCase() === selectedClient.toLowerCase()
-           )
-         : filteredServiceDate !== ""
-         ? bills.filter(
-              (bill) =>
-                 handleCreatedAtDate(bill?.dateOfService, 10) ===
-                 handleCreatedAtDate(filteredServiceDate, 10)
-           )
-         : [];
+   const notClaimedBillsWithFilters = getFilteredNotClaimedBills(
+      bills,
+      selectedPayor,
+      selectedClient,
+      filteredServiceDate
+   );
 
    function changePage(number) {
       if (page === number) return;

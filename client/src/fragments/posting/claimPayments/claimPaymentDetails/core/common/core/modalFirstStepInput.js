@@ -1,11 +1,12 @@
 import React, { useContext, useState } from "react";
 import { claimReceivableTableStyle } from "./styles";
 import { Loader, NoItemText, BillFiltersSelectors } from "@eachbase/components";
-import { handleCreatedAtDate, PaginationContext } from "@eachbase/utils";
+import { PaginationContext } from "@eachbase/utils";
 import { claimActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import Pagination from "@material-ui/lab/Pagination";
 import { ClaimModalTable } from "./common";
+import { getFilteredClaimsForClaimPmt } from "./constants";
 
 export const ModalFirstStepInput = ({
    claims = [],
@@ -27,27 +28,12 @@ export const ModalFirstStepInput = ({
 
    const clientsNames = claims.map((claim) => claim?.client?.firstName);
 
-   const claimsWithFilters =
-      selectedClient === "All" && filteredDateFrom === "" && filteredDateTo === ""
-         ? claims
-         : selectedClient !== "All"
-         ? claims.filter(
-              (claim) =>
-                 claim?.client?.firstName?.toLowerCase() === selectedClient.toLowerCase()
-           )
-         : filteredDateFrom !== ""
-         ? claims.filter(
-              (claim) =>
-                 handleCreatedAtDate(claim?.dateRange?.early, 10) ===
-                 handleCreatedAtDate(filteredDateFrom, 10)
-           )
-         : filteredDateTo !== ""
-         ? claims.filter(
-              (claim) =>
-                 handleCreatedAtDate(claim?.dateRange?.latest, 10) ===
-                 handleCreatedAtDate(filteredDateTo, 10)
-           )
-         : [];
+   const claimsWithFilters = getFilteredClaimsForClaimPmt(
+      claims,
+      selectedClient,
+      filteredDateFrom,
+      filteredDateTo
+   );
 
    const changePage = (number) => {
       if (page === number) return;

@@ -7,21 +7,12 @@ import {
    NoItemText,
    BillFiltersSelectors,
 } from "@eachbase/components";
-import {
-   CheckupContext,
-   FindLoad,
-   handleCreatedAtDate,
-   PaginationContext,
-} from "@eachbase/utils";
+import { CheckupContext, FindLoad, PaginationContext } from "@eachbase/utils";
 import { billActions, invoiceActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import Pagination from "@material-ui/lab/Pagination";
 import { useHistory } from "react-router";
-
-function mapBills(billList = [], boolean) {
-   if (!Array.isArray(billList)) return;
-   return billList.map((bill) => ({ ...bill, isChecked: boolean }));
-}
+import { getFilteredNotInvoicedBills, mapBills } from "./constants";
 
 export const GenerateInvoiceFragment = ({
    notInvoicedBills = [],
@@ -64,21 +55,11 @@ export const GenerateInvoiceFragment = ({
 
    const clientsNames = bills.map((bill) => bill?.client?.firstName);
 
-   const notInvoicedBillsWithFilters =
-      selectedClient === "All" && filteredServiceDate === ""
-         ? bills
-         : selectedClient !== "All"
-         ? bills.filter(
-              (bill) =>
-                 bill?.client?.firstName?.toLowerCase() === selectedClient.toLowerCase()
-           )
-         : filteredServiceDate !== ""
-         ? bills.filter(
-              (bill) =>
-                 handleCreatedAtDate(bill?.dateOfService, 10) ===
-                 handleCreatedAtDate(filteredServiceDate, 10)
-           )
-         : [];
+   const notInvoicedBillsWithFilters = getFilteredNotInvoicedBills(
+      bills,
+      selectedClient,
+      filteredServiceDate
+   );
 
    function changePage(number) {
       if (page === number) return;
