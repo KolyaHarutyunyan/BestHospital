@@ -4,8 +4,15 @@ import { invoicePaymentsCoreStyle } from "./styles";
 import { makeEnum, FindLoad, isNotEmpty } from "@eachbase/utils";
 import { useDispatch } from "react-redux";
 import { FirstStepInputs, LastStepInputs } from "./common";
+import { invoicePaymentActions } from "@eachbase/store";
 
-export const InvoicePaymentInputs = ({ activeStep, handleStep, closeModal, client = [] }) => {
+export const InvoicePaymentInputs = ({
+   info,
+   activeStep,
+   handleStep,
+   closeModal,
+   client = [],
+}) => {
    const classes = invoicePaymentsCoreStyle();
 
    useEffect(() => handleStep("first"), []);
@@ -14,13 +21,13 @@ export const InvoicePaymentInputs = ({ activeStep, handleStep, closeModal, clien
 
    const loader = FindLoad("CREATE_INVOICE_PAYMENT");
 
-   const [inputs, setInputs] = useState({});
+   const [inputs, setInputs] = useState(!!info ? { ...info } : {});
    const [error, setError] = useState("");
 
    const isFirst = activeStep === "first";
    const isLast = activeStep === "last";
 
-   const createButnText = isFirst ? "Next" : isLast ? "Create" : "";
+   const createButnText = isFirst ? "Next" : isLast ? (!!info ? "Save" : "Create") : "";
 
    const handleChange = (e) => {
       setInputs((prevState) => ({
@@ -31,26 +38,37 @@ export const InvoicePaymentInputs = ({ activeStep, handleStep, closeModal, clien
    };
 
    const handleNext = () => {
-      const firstStepDataIsValid = 
-         isNotEmpty(inputs.paymentDate) &&
-         isNotEmpty(inputs.amount) &&
-         isNotEmpty(inputs.paymentType) && 
-         isNotEmpty(inputs.checkNumber) &&
-         isNotEmpty(inputs.client);
+      const firstStepDataIsValid = !!info
+         ? isNotEmpty(inputs.paymentDate) &&
+           isNotEmpty(inputs.paymentType) &&
+           isNotEmpty(inputs.checkNumber)
+         : isNotEmpty(inputs.amount) &&
+           isNotEmpty(inputs.client) &&
+           isNotEmpty(inputs.paymentDate) &&
+           isNotEmpty(inputs.paymentType) &&
+           isNotEmpty(inputs.checkNumber);
 
       if (firstStepDataIsValid) {
          handleStep("last");
       } else {
-         const errorText = !isNotEmpty(inputs.paymentDate)
-            ? "paymentDate"
+         const errorText = !!info
+            ? !isNotEmpty(inputs.paymentDate)
+               ? "paymentDate"
+               : !isNotEmpty(inputs.paymentType)
+               ? "paymentType"
+               : !isNotEmpty(inputs.checkNumber)
+               ? "checkNumber"
+               : ""
             : !isNotEmpty(inputs.amount)
             ? "amount"
+            : !isNotEmpty(inputs.client)
+            ? "client"
+            : !isNotEmpty(inputs.paymentDate)
+            ? "paymentDate"
             : !isNotEmpty(inputs.paymentType)
             ? "paymentType"
             : !isNotEmpty(inputs.checkNumber)
             ? "checkNumber"
-            : !isNotEmpty(inputs.client)
-            ? "client"
             : "";
 
          setError(errorText);
@@ -58,40 +76,30 @@ export const InvoicePaymentInputs = ({ activeStep, handleStep, closeModal, clien
    };
 
    const handleSubmit = () => {
-      const lastStepDataIsValid = true;
+      const invoicePaymentData = {
+         amount: inputs.amount,
+         client: inputs.client,
+         paymentDate: inputs.paymentDate,
+         paymentType: makeEnum(inputs.paymentType),
+         checkNumber: inputs.checkNumber,
+         file: "",
+      };
 
-      if (lastStepDataIsValid) {
-         const invoicePaymentData = {
-            paymentDate: inputs.paymentDate,
-            amount: inputs.amount,
-            paymentType: makeEnum(inputs.paymentType),
-            checkNumber: inputs.checkNumber,
-            client: inputs.client,
-            file: ""
-         };
-
-         console.log(invoicePaymentData, "  data");
-         // dispatch(.....);
-      } else {
-         const errorText = "";
-
-         setError(errorText);
-      }
+      dispatch(invoicePaymentActions.createInvoicePayment(invoicePaymentData));
    };
 
    return (
       <div>
          {isFirst && (
-            <FirstStepInputs 
-               inputs={inputs} 
+            <FirstStepInputs
+               inputs={inputs}
                error={error}
                handleChange={handleChange}
-               client={client} 
+               client={client}
+               hasInfo={!!info}
             />
          )}
-         {isLast && (
-            <LastStepInputs invoicePaymentId={"????"} />
-         )}
+         {isLast && <LastStepInputs invoicePaymentId={"????"} />}
          <CreateChancel
             butnClassName={classes.createOrCancelButnStyle}
             loader={!!loader.length}

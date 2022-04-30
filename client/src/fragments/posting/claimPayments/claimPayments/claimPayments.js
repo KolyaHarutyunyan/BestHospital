@@ -8,11 +8,13 @@ import {
    BillFiltersSelectors,
    SimpleModal,
    BillingModalWrapper,
+   TwoStepsContainer,
 } from "@eachbase/components";
 import { enumValues, PaginationContext } from "@eachbase/utils";
-import { claimActions } from "@eachbase/store";
+import { claimPaymentActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
-import { ClaimPaymentInputs, ClaimPaymentTable, StepsContainer } from "./core";
+import { ClaimPaymentInputs, ClaimPaymentTable } from "./core";
+import { getFilteredClaimPayments } from "./constants";
 
 export const ClaimPaymentsFragment = ({
    claimPayments = [],
@@ -20,6 +22,7 @@ export const ClaimPaymentsFragment = ({
    page,
    handleGetPage,
    claimPaymentsLoader,
+   fundersNames,
 }) => {
    const classes = claimPaymentsStyle();
 
@@ -33,23 +36,28 @@ export const ClaimPaymentsFragment = ({
    const [open, setOpen] = useState(false);
    const [activeStep, setActiveStep] = useState("first");
 
-   const titleContent = activeStep === "first" 
-      ? "Create a Payment" 
-      : activeStep === "last" 
-      ? "Add Payment Document" 
-      : "";
+   const titleContent =
+      activeStep === "first"
+         ? "Create a Payment"
+         : activeStep === "last"
+         ? "Add Payment Document"
+         : "";
 
-   const subtitleContent = activeStep === "first" ? (
-      <>To create a payment , please fulfill the below fields.</>
-   ) : activeStep === "last" ? (
-      <>
-         Please fulfill the file type to upload a payment document. 
-         <em className={classes.breakRowStyle} />
-         <em className={classes.warningStyle}>*</em> 
-         Only <em className={classes.highlightedTextStyle}> PDF, PNG, CSV </em> {"&"} 
-         <em className={classes.highlightedTextStyle}> JPEG </em> formats are supported. 
-      </>
-   ) : "";
+   const subtitleContent =
+      activeStep === "first" ? (
+         <>To create a payment , please fulfill the below fields.</>
+      ) : activeStep === "last" ? (
+         <>
+            Please fulfill the file type to upload a payment document.
+            <em className={classes.breakRowStyle} />
+            <em className={classes.warningStyle}>*</em>
+            Only <em className={classes.highlightedTextStyle}> PDF, PNG, CSV </em> {"&"}
+            <em className={classes.highlightedTextStyle}> JPEG </em> formats are
+            supported.
+         </>
+      ) : (
+         ""
+      );
 
    const payorsNames = claimPayments.map(
       (claimPayment) => claimPayment?.funder?.firstName
@@ -58,41 +66,26 @@ export const ClaimPaymentsFragment = ({
       (claimPayment) => claimPayment?.client?.firstName
    );
 
-   const claimPaymentsWithFilters =
-      selectedPayor === "All" && selectedClient === "All" && selectedStatus === "All"
-         ? claimPayments
-         : selectedPayor !== "All"
-         ? claimPayments.filter(
-              (claimPayment) =>
-                 claimPayment?.funder?.firstName?.toLowerCase() ===
-                 selectedPayor.toLowerCase()
-           )
-         : selectedClient !== "All"
-         ? claimPayments.filter(
-              (claimPayment) =>
-                 claimPayment?.client?.firstName?.toLowerCase() ===
-                 selectedClient.toLowerCase()
-           )
-         : selectedStatus !== "All"
-         ? claimPayments.filter(
-              (claimPayment) =>
-                 claimPayment?.status.toLowerCase() === selectedStatus.toLowerCase()
-           )
-         : [];
+   const claimPaymentsWithFilters = getFilteredClaimPayments(
+      claimPayments,
+      selectedPayor,
+      selectedClient,
+      selectedStatus
+   );
 
    const changePage = (number) => {
       if (page === number) return;
       handlePageChange(true);
       let start = number > 1 ? number - 1 + "0" : 0;
-      dispatch(claimActions.getClaims({ limit: 10, skip: start }));
+      dispatch(claimPaymentActions.getClaimPayments({ limit: 10, skip: start }));
       handleGetPage(number);
-   }; 
+   };
 
    return (
       <div>
          <div className={classes.addButton}>
             <BillFiltersSelectors
-               filterIsForClaimPayment={true}
+               filterIsFor={"claimPayment"}
                payorsNames={payorsNames}
                passPayorHandler={(selPayor) => setSelectedPayor(selPayor)}
                selectedPayor={selectedPayor}
@@ -140,13 +133,13 @@ export const ClaimPaymentsFragment = ({
                   onClose={() => setOpen(false)}
                   titleContent={titleContent}
                   subtitleContent={subtitleContent}
-                  content={<StepsContainer activeStep={activeStep} />}
+                  content={<TwoStepsContainer activeStep={activeStep} />}
                >
-                  <ClaimPaymentInputs 
+                  <ClaimPaymentInputs
                      activeStep={activeStep}
-                     handleStep={setActiveStep} 
+                     handleStep={setActiveStep}
                      closeModal={() => setOpen(false)}
-                     fundingSource={payorsNames} 
+                     fundingSource={fundersNames}
                   />
                </BillingModalWrapper>
             }

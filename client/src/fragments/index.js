@@ -17,8 +17,6 @@ export {
    InvoicesFragment,
    InvoiceDetailsFragment,
    GenerateInvoiceFragment,
-   Postings,
-   PostingDetails,
 } from "./billing";
 export {
    ClaimPaymentsFragment,

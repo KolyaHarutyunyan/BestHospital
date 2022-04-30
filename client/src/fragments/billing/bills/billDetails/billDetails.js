@@ -7,14 +7,7 @@ import {
    NoItemText,
    SimpleModal,
 } from "@eachbase/components";
-import {
-   DrawerContext,
-   getLimitedVal,
-   handleCreatedAtDate,
-   Images,
-   makeCapitalize,
-   PaginationContext,
-} from "@eachbase/utils";
+import { DrawerContext, getLimitedVal, Images, PaginationContext } from "@eachbase/utils";
 import {
    BillTransactionInputs,
    TransactionsDemoTable,
@@ -24,6 +17,7 @@ import {
 import Pagination from "@material-ui/lab/Pagination";
 import { useDispatch } from "react-redux";
 import { billActions } from "@eachbase/store";
+import { getBillDetails, getBillTotals } from "./constants";
 
 export const BillDetailsFragment = ({
    billDetails,
@@ -39,18 +33,9 @@ export const BillDetailsFragment = ({
    const { open: drawerOpen } = useContext(DrawerContext);
    const { handlePageChange, pageIsChanging } = useContext(PaginationContext);
 
+   const [open, setOpen] = useState(false);
+
    const {
-      authService,
-      billedAmount,
-      client,
-      payor,
-      clientPaid,
-      clientResp,
-      dateOfService,
-      payerPaid,
-      payerTotal,
-      totalHours,
-      totalUnits,
       _id,
       claimStatus,
       invoiceStatus,
@@ -58,42 +43,14 @@ export const BillDetailsFragment = ({
       transaction: billTransactions,
    } = billDetails || {};
 
-   const BILL_TOTALS = {
-      billedRate: billedAmount,
-      totalAmount: clientPaid + payerPaid,
-      payorBalance: payerTotal,
-      clientBalance: clientResp,
-      totalBalance: clientResp + payerTotal,
-   };
+   const filteredDetails = getBillDetails(billDetails).filter(
+      (billDtl) => !!billDtl.detail
+   );
 
-   const [open, setOpen] = useState(false);
-
-   const BILL_DETAILS = [
-      {
-         detailText: "DoS:",
-         detail: handleCreatedAtDate(dateOfService, 10, "/"),
-      },
-      { detailText: "Payor:", detail: payor ? makeCapitalize(payor) : "" },
-      { detailText: "Client:", detail: makeCapitalize(client?.firstName) },
-      {
-         detailText: "Service:",
-         detail: getLimitedVal(authService?.authorizationId, 13),
-      },
-      {
-         detailText: "Hrs:",
-         detail: totalHours === 0 ? totalHours + "" : totalHours,
-      },
-      {
-         detailText: "Units:",
-         detail: totalUnits === 0 ? totalUnits + "" : totalUnits,
-      },
-   ];
-
-   const filteredDetails = BILL_DETAILS.filter((billDtl) => !!billDtl.detail);
+   const billTotals = getBillTotals(billDetails);
 
    const changePage = (event, value) => {
       if (page === value) return;
-
       handlePageChange(true);
       let start = value > 1 ? value - 1 + "0" : 0;
       dispatch(billActions.getBillById(_id, { limit: 10, skip: start }));
@@ -175,7 +132,7 @@ export const BillDetailsFragment = ({
                <div className={classes.billDetailsTitleBoxStyle}>
                   <h2 className={classes.billDetailsTitleStyle}>Bill Totals</h2>
                </div>
-               <BillTotalsDemoTable billTotals={BILL_TOTALS} />
+               <BillTotalsDemoTable billTotals={billTotals} />
             </div>
          </div>
          <SimpleModal

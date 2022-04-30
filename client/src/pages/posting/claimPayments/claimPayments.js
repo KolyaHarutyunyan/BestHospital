@@ -1,7 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ClaimPaymentsFragment } from "@eachbase/fragments";
 import { useDispatch, useSelector } from "react-redux";
-import { httpRequestsOnSuccessActions, postingActions } from "@eachbase/store";
+import {
+   httpRequestsOnSuccessActions,
+   claimPaymentActions,
+   fundingSourceActions,
+} from "@eachbase/store";
 import { Loader } from "@eachbase/components";
 import { dummyData, FindLoad, FindSuccess, PaginationContext } from "@eachbase/utils";
 
@@ -12,7 +16,9 @@ export const ClaimPayments = () => {
 
    const { pageIsChanging, handlePageChange } = useContext(PaginationContext);
 
-   // const claimPaymentsData = useSelector((state) => state.....);
+   // const claimPaymentsData = useSelector((state) => state.claimPayment.claimPayments);
+   const { funders } = useSelector((state) => state.fundingSource.fundingSourceList);
+   const fundersNames = funders?.map((funder) => funder.name);
 
    // temporary
    const claimPaymentsData = dummyData.CLAIM_PAYMENTS;
@@ -24,7 +30,8 @@ export const ClaimPayments = () => {
    const success = FindSuccess("GET_CLAIM_PAYMENTS");
 
    useEffect(() => {
-      dispatch(postingActions.getPostings());
+      dispatch(claimPaymentActions.getClaimPayments());
+      dispatch(fundingSourceActions.getFundingSource());
    }, []);
 
    useEffect(() => {
@@ -44,6 +51,7 @@ export const ClaimPayments = () => {
          page={page}
          handleGetPage={setPage}
          claimPaymentsLoader={loader}
+         fundersNames={fundersNames}
       />
    );
 };

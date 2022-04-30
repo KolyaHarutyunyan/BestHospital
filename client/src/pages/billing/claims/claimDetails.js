@@ -3,7 +3,6 @@ import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { FindLoad } from "@eachbase/utils";
 import { CustomBreadcrumbs, Loader } from "@eachbase/components";
-import { GET_CLAIM_BY_ID_SUCCESS } from "@eachbase/store/billing/claim/claim.type";
 import { claimActions } from "@eachbase/store";
 import { ClaimDetailsFragment } from "@eachbase/fragments";
 
@@ -20,7 +19,7 @@ export const ClaimDetails = () => {
       dispatch(claimActions.getClaimById(params.id));
       return () => {
          dispatch({
-            type: GET_CLAIM_BY_ID_SUCCESS,
+            type: "GET_CLAIM_BY_ID_SUCCESS",
             payload: { claimById: null },
          });
       };

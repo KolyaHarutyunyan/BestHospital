@@ -4,23 +4,30 @@ import { claimPaymentsCoreStyle } from "./styles";
 import { makeEnum, FindLoad, isNotEmpty } from "@eachbase/utils";
 import { useDispatch } from "react-redux";
 import { FirstStepInputs, LastStepInputs } from "./common";
+import { claimPaymentActions } from "@eachbase/store";
 
-export const ClaimPaymentInputs = ({ activeStep, handleStep, closeModal, fundingSource=[] }) => {
+export const ClaimPaymentInputs = ({
+   info,
+   activeStep,
+   handleStep,
+   closeModal,
+   fundingSource = [],
+}) => {
    const classes = claimPaymentsCoreStyle();
 
-   useEffect(() => handleStep("first"), []);
+   useEffect(() => handleStep && handleStep("first"), []);
 
    const dispatch = useDispatch();
 
    const loader = FindLoad("CREATE_CLAIM_PAYMENT");
 
-   const [inputs, setInputs] = useState({});
+   const [inputs, setInputs] = useState(!!info ? { ...info } : {});
    const [error, setError] = useState("");
 
    const isFirst = activeStep === "first";
    const isLast = activeStep === "last";
 
-   const createButnText = isFirst ? "Next" : isLast ? "Create" : "";
+   const createButnText = isFirst ? "Next" : isLast ? (!!info ? "Save" : "Create") : "";
 
    const handleChange = (e) => {
       setInputs((prevState) => ({
@@ -31,26 +38,37 @@ export const ClaimPaymentInputs = ({ activeStep, handleStep, closeModal, funding
    };
 
    const handleNext = () => {
-      const firstStepDataIsValid = 
-         isNotEmpty(inputs.paymentDate) &&
-         isNotEmpty(inputs.amount) &&
-         isNotEmpty(inputs.paymentType) && 
-         isNotEmpty(inputs.checkNumber) &&
-         isNotEmpty(inputs.fundingSource);
+      const firstStepDataIsValid = !!info
+         ? isNotEmpty(inputs.paymentDate) &&
+           isNotEmpty(inputs.paymentType) &&
+           isNotEmpty(inputs.checkNumber)
+         : isNotEmpty(inputs.amount) &&
+           isNotEmpty(inputs.fundingSource) &&
+           isNotEmpty(inputs.paymentDate) &&
+           isNotEmpty(inputs.paymentType) &&
+           isNotEmpty(inputs.checkNumber);
 
       if (firstStepDataIsValid) {
-         handleStep("last");
+         handleStep && handleStep("last");
       } else {
-         const errorText = !isNotEmpty(inputs.paymentDate)
-            ? "paymentDate"
+         const errorText = !!info
+            ? !isNotEmpty(inputs.paymentDate)
+               ? "paymentDate"
+               : !isNotEmpty(inputs.paymentType)
+               ? "paymentType"
+               : !isNotEmpty(inputs.checkNumber)
+               ? "checkNumber"
+               : ""
             : !isNotEmpty(inputs.amount)
             ? "amount"
+            : !isNotEmpty(inputs.fundingSource)
+            ? "fundingSource"
+            : !isNotEmpty(inputs.paymentDate)
+            ? "paymentDate"
             : !isNotEmpty(inputs.paymentType)
             ? "paymentType"
             : !isNotEmpty(inputs.checkNumber)
             ? "checkNumber"
-            : !isNotEmpty(inputs.fundingSource)
-            ? "fundingSource"
             : "";
 
          setError(errorText);
@@ -58,40 +76,30 @@ export const ClaimPaymentInputs = ({ activeStep, handleStep, closeModal, funding
    };
 
    const handleSubmit = () => {
-      const lastStepDataIsValid = true;
+      const claimPaymentData = {
+         amount: inputs.amount,
+         fundingSource: inputs.fundingSource,
+         paymentDate: inputs.paymentDate,
+         paymentType: makeEnum(inputs.paymentType),
+         checkNumber: inputs.checkNumber,
+         file: "",
+      };
 
-      if (lastStepDataIsValid) {
-         const claimPaymentData = {
-            paymentDate: inputs.paymentDate,
-            amount: inputs.amount,
-            paymentType: makeEnum(inputs.paymentType),
-            checkNumber: inputs.checkNumber,
-            fundingSource: inputs.fundingSource,
-            file: ""
-         };
-
-         console.log(claimPaymentData, "  data");
-         // dispatch(.....);
-      } else {
-         const errorText = "";
-
-         setError(errorText);
-      }
+      dispatch(claimPaymentActions.createClaimPayment(claimPaymentData));
    };
 
    return (
       <div>
          {isFirst && (
-            <FirstStepInputs 
-               inputs={inputs} 
+            <FirstStepInputs
+               inputs={inputs}
                error={error}
                handleChange={handleChange}
-               fundingSource={fundingSource} 
+               fundingSource={fundingSource}
+               hasInfo={!!info}
             />
          )}
-         {isLast && (
-            <LastStepInputs claimPaymentId={"????"} />
-         )}
+         {isLast && <LastStepInputs claimPaymentId={"????"} />}
          <CreateChancel
             butnClassName={classes.createOrCancelButnStyle}
             loader={!!loader.length}

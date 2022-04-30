@@ -415,4 +415,39 @@ export const inputsStyle = makeStyles(() => ({
       borderRadius: "24px",
       background: "red",
    },
+
+   // *Editable Payment Input Styles**
+   editableInputBoxStyle: {
+      maxWidth: "195px",
+      width: "100%",
+      height: "100%",
+      padding: "9px 16px",
+      "@media(max-width: 1280px)": { padding: "9px 8px" },
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      fontSize: "14px",
+      fontWeight: 400,
+      color: Colors.TextSecondary,
+      borderBottom: "2px solid transparent",
+      "&.active": {
+         borderBottom: "2px solid #347AF0",
+         backgroundColor: Colors.BackgroundWhite,
+      },
+   },
+   editableInputStyle: {
+      width: "100%",
+      border: "none",
+      outline: "none",
+      fontSize: "14px",
+      fontWeight: 400,
+      color: Colors.TextSecondary,
+      backgroundColor: "inherit",
+   },
+   editIconStyle: {
+      width: "18px",
+      height: "18px",
+      cursor: "pointer",
+   },
+   // *end**
 }));

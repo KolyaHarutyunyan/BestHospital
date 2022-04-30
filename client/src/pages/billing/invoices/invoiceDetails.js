@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { dummyData, FindLoad } from "@eachbase/utils";
 import { CustomBreadcrumbs, Loader } from "@eachbase/components";
 import { invoiceActions } from "@eachbase/store";
-import { GET_INVOICE_BY_ID_SUCCESS } from "@eachbase/store/billing/invoice/invoice.type";
 import { InvoiceDetailsFragment } from "@eachbase/fragments";
 
 export const InvoiceDetails = () => {
@@ -24,7 +23,7 @@ export const InvoiceDetails = () => {
       dispatch(invoiceActions.getInvoiceById(params.id));
       return () => {
          dispatch({
-            type: GET_INVOICE_BY_ID_SUCCESS,
+            type: "GET_INVOICE_BY_ID_SUCCESS",
             payload: { invoiceById: null },
          });
       };

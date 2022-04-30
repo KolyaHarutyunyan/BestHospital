@@ -96,7 +96,10 @@ export const ValidationInput = ({
                }}
             />
             {errorFalse ? null : (
-               <ErrMessage style={ errorStyle ? errorStyle : { marginBottom: "12px" }} text={typeError} />
+               <ErrMessage
+                  style={errorStyle ? errorStyle : { marginBottom: "12px" }}
+                  text={typeError}
+               />
             )}
          </div>
       </Fragment>

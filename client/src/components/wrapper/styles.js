@@ -115,6 +115,7 @@ export const wrapperStyle = makeStyles(() => ({
       fontWeight: 400,
       color: Colors.TextSecondary,
       lineHeight: "24px",
+      marginBottom: "24px",
    },
    //**end */
 

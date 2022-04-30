@@ -8,11 +8,12 @@ import {
    BillFiltersSelectors,
    SimpleModal,
    BillingModalWrapper,
+   TwoStepsContainer,
 } from "@eachbase/components";
 import { enumValues, PaginationContext } from "@eachbase/utils";
 import { invoicePaymentActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
-import { InvoicePaymentInputs, InvoicePaymentTable, StepsContainer } from "./core";
+import { InvoicePaymentInputs, InvoicePaymentTable } from "./core";
 
 export const InvoicePaymentsFragment = ({
    invoicePayments = [],
@@ -20,6 +21,7 @@ export const InvoicePaymentsFragment = ({
    page,
    handleGetPage,
    invoicePaymentsLoader,
+   clientsNames,
 }) => {
    const classes = invoicePaymentsStyle();
 
@@ -32,25 +34,30 @@ export const InvoicePaymentsFragment = ({
    const [open, setOpen] = useState(false);
    const [activeStep, setActiveStep] = useState("first");
 
-   const titleContent = activeStep === "first" 
-      ? "Create a Payment" 
-      : activeStep === "last" 
-      ? "Add Payment Document" 
-      : "";
+   const titleContent =
+      activeStep === "first"
+         ? "Create a Payment"
+         : activeStep === "last"
+         ? "Add Payment Document"
+         : "";
 
-   const subtitleContent = activeStep === "first" ? (
-      <>To create a payment , please fulfill the below fields.</>
-   ) : activeStep === "last" ? (
-      <>
-         Please fulfill the file type to upload a payment document. 
-         <em className={classes.breakRowStyle} />
-         <em className={classes.warningStyle}>*</em> 
-         Only <em className={classes.highlightedTextStyle}> PDF, PNG, CSV </em> {"&"} 
-         <em className={classes.highlightedTextStyle}> JPEG </em> formats are supported. 
-      </>
-   ) : "";
+   const subtitleContent =
+      activeStep === "first" ? (
+         <>To create a payment , please fulfill the below fields.</>
+      ) : activeStep === "last" ? (
+         <>
+            Please fulfill the file type to upload a payment document.
+            <em className={classes.breakRowStyle} />
+            <em className={classes.warningStyle}>*</em>
+            Only <em className={classes.highlightedTextStyle}> PDF, PNG, CSV </em> {"&"}
+            <em className={classes.highlightedTextStyle}> JPEG </em> formats are
+            supported.
+         </>
+      ) : (
+         ""
+      );
 
-   const clientsNames = invoicePayments.map(
+   const invoiceClientsNames = invoicePayments.map(
       (invoicePayment) => invoicePayment?.client?.firstName
    );
 
@@ -74,16 +81,16 @@ export const InvoicePaymentsFragment = ({
       if (page === number) return;
       handlePageChange(true);
       let start = number > 1 ? number - 1 + "0" : 0;
-      // dispatch(invoicePaymentActions.getinvoices({ limit: 10, skip: start }));
+      dispatch(invoicePaymentActions.getInvoicePayments({ limit: 10, skip: start }));
       handleGetPage(number);
-   }; 
+   };
 
    return (
       <div>
          <div className={classes.addButton}>
             <BillFiltersSelectors
-               filterIsForInvoicePayment={true}
-               clientsNames={clientsNames}
+               filterIsFor={"invoicePayment"}
+               clientsNames={invoiceClientsNames}
                passClientHandler={(selClient) => setSelectedClient(selClient)}
                selectedClient={selectedClient}
                statuses={enumValues.POSTING_PAYMENT_TYPES}
@@ -127,13 +134,13 @@ export const InvoicePaymentsFragment = ({
                   onClose={() => setOpen(false)}
                   titleContent={titleContent}
                   subtitleContent={subtitleContent}
-                  content={<StepsContainer activeStep={activeStep} />}
+                  content={<TwoStepsContainer activeStep={activeStep} />}
                >
-                  <InvoicePaymentInputs 
+                  <InvoicePaymentInputs
                      activeStep={activeStep}
-                     handleStep={setActiveStep} 
+                     handleStep={setActiveStep}
                      closeModal={() => setOpen(false)}
-                     client={clientsNames} 
+                     client={clientsNames}
                   />
                </BillingModalWrapper>
             }

@@ -1,101 +1,46 @@
 import React, { useContext, useState } from "react";
 import { claimPaymentDetailsStyle } from "./styles";
-import {
-   AddButton,
-   BillingModalWrapper,
-   DownloadLink,
-   NoItemText,
-   SimpleModal,
-} from "@eachbase/components";
-import {
-   addSignToValueFromStart,
-   DrawerContext,
-   getLimitedVal,
-   getValueByFixedNumber,
-   handleCreatedAtDate,
-   Images,
-   makeCapitalize,
-   manageStatus,
-} from "@eachbase/utils";
-import { ClaimPaymentClaimTable, VoidClaimPaymentInputs } from "./core";
+import { AddButton, NoItemText } from "@eachbase/components";
+import { DrawerContext, getLimitedVal, Images } from "@eachbase/utils";
+import { ClaimPaymentClaimTable, ClaimPaymentModals } from "./core";
+import { getClaimPaymentDetails } from "./constants";
 
 export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
    const classes = claimPaymentDetailsStyle();
 
-   const {
-      _id,
-      funder,
-      paymentDate,
-      paymentReference,
-      paymentType,
-      paymentAmount,
-      claims,
-   } = claimPaymentDetails || {};
+   const { open } = useContext(DrawerContext);
 
-   const { open: drawerOpen } = useContext(DrawerContext);
+   const [editingModalIsOpen, setEditingModalIsOpen] = useState(false);
+   const [voidingModalIsOpen, setVoidingModalIsOpen] = useState(false);
+   const [addingModalIsOpen, setAddingModalIsOpen] = useState(false);
+   const [activeStep, setActiveStep] = useState("first");
 
-   const [open, setOpen] = useState(false);
+   const { _id, claims } = claimPaymentDetails || {};
 
-   const CLAIM_PAYMENT_DETAILS = [
-      {
-         detailText: "Funding Source:",
-         detail: makeCapitalize(`${funder?.firstName} ${funder?.lastName}`),
-      },
-      {
-         detailText: "Payment Date:",
-         detail: handleCreatedAtDate(paymentDate, 10, "/"),
-      },
-      {
-         detailText: "Payment Reference:",
-         detail: (
-            <a
-               className={classes.paymentRefStyle}
-               href={`https://${paymentReference || "www.testlink.com"}`}
-               target="_blank"
-               rel="noreferrer noopener"
-               onClick={(event) => event.stopPropagation()}
-            >
-               {paymentReference || "www.testlink.com"}
-            </a>
-         ),
-      },
-      { 
-         detailText: "Payment Type:", 
-         detail: manageStatus(paymentType) 
-      },
-      {
-         detailText: "Payment Amount:",
-         detail: addSignToValueFromStart(getValueByFixedNumber(paymentAmount)),
-      },
-      {
-         detailText: "EOB:",
-         detail: !!"EOB.pdf" ? (
-            <DownloadLink
-               linkHref={"EOB.pdf"}
-               linkInnerText={"Download"}
-               linkDownload={true}
-            />
-         ) : null,
-      },
-   ];
-
-   const filteredDetails = CLAIM_PAYMENT_DETAILS.filter((claimPmtDtl) => !!claimPmtDtl.detail);
+   const filteredDetails = getClaimPaymentDetails(claimPaymentDetails).filter(
+      (claimPmtDtl) => !!claimPmtDtl.detail
+   );
 
    return (
       <>
          <div className={classes.claimPaymentDetailsContainerStyle}>
             <div className={classes.claimPaymentDetailsStyle}>
                <div className={classes.claimPaymentDetailsTitleBoxStyle}>
-                  <h2 className={classes.claimPaymentDetailsTitleStyle}>Payment Details</h2>
+                  <h2 className={classes.claimPaymentDetailsTitleStyle}>
+                     Payment Details
+                  </h2>
                </div>
                <div className={classes.editAndVoidClaimBoxStyle}>
-                  <div className={classes.editIconStyle} onClick={() => {}}>
+                  <div
+                     className={classes.editIconStyle}
+                     onClick={() => setEditingModalIsOpen(true)}
+                  >
                      <img src={Images.edit} alt="" />
                   </div>
                   <button
                      className={classes.voidClaimPaymentButnStyle}
                      type="button"
-                     onClick={() => setOpen(true)}
+                     onClick={() => setVoidingModalIsOpen(true)}
                   >
                      Void
                   </button>
@@ -110,7 +55,7 @@ export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
                {!!filteredDetails.length && (
                   <ol className={classes.claimPaymentDetailsListStyle}>
                      {filteredDetails.map((item, index) => (
-                        <li key={index} className={drawerOpen ? "narrow" : ""}>
+                        <li key={index} className={open ? "narrow" : ""}>
                            <span>
                               {item.detailText} <em> {item.detail} </em>
                            </span>
@@ -124,7 +69,7 @@ export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
                   <h2 className={classes.claimPaymentDetailsTitleStyle}>Claims</h2>
                   <AddButton
                      text={"Add Claim"}
-                     handleClick={() => {}}
+                     handleClick={() => setAddingModalIsOpen(true)}
                   />
                </div>
                {!!claims?.length ? (
@@ -136,24 +81,17 @@ export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
                )}
             </div>
          </div>
-         <SimpleModal
-            openDefault={open}
-            handleOpenClose={() => setOpen((prevState) => !prevState)}
-            content={
-               <BillingModalWrapper
-                  wrapperStylesName={classes.voidClaimPaymentWrapperStyle}
-                  onClose={() => setOpen(false)}
-                  titleContent={"Void This Payment?"}
-                  subtitleContent={
-                     "Please indicate below the reason for voiding the payment."
-                  }
-               >
-                  <VoidClaimPaymentInputs 
-                     closeModal={() => setOpen(false)} 
-                     claimPaymentId={_id} 
-                  />
-               </BillingModalWrapper>
-            }
+         <ClaimPaymentModals
+            claimPaymentDetails={claimPaymentDetails}
+            activeStep={activeStep}
+            handleActiveStep={setActiveStep}
+            claimPaymentId={_id}
+            closeEditingModal={() => setEditingModalIsOpen(false)}
+            closeVoidingModal={() => setVoidingModalIsOpen(false)}
+            closeAddingModal={() => setAddingModalIsOpen(false)}
+            editingModalIsOpen={editingModalIsOpen}
+            voidingModalIsOpen={voidingModalIsOpen}
+            addingModalIsOpen={addingModalIsOpen}
          />
       </>
    );

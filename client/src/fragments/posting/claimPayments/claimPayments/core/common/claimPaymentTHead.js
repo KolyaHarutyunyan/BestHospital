@@ -15,10 +15,10 @@ export const ClaimPaymentTHead = () => {
 
    const { open } = useContext(DrawerContext);
 
-   const size = open ? 1880 : 1680;
-   const limit = open ? 7 : 9;
-
    function getClaimPaymentTitle(givenTitle = "", ...rest) {
+      const size = open ? 1880 : 1680;
+      const limit = open ? 7 : 9;
+
       return getTableHeader(
          givenTitle,
          getTextDependsOnWidth(width, size, givenTitle, limit),

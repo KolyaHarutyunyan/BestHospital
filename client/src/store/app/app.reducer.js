@@ -17,12 +17,8 @@ import { availabilityScheduleReducer } from "../availabilitySchedule";
 import { uploadReducer } from "../upload";
 import { mileageReducer } from "../mileage";
 import { appointmentReducer } from "../appointment";
-import {
-   billReducer,
-   claimReducer,
-   invoiceReducer,
-   postingReducer,
-} from "../billing";
+import { billReducer, claimReducer, invoiceReducer } from "../billing";
+import { claimPaymentReducer, invoicePaymentReducer } from "../posting";
 
 const initialState = {
    isLoading: false,
@@ -56,7 +52,8 @@ export const appReducer = combineReducers({
    bill: billReducer,
    claim: claimReducer,
    invoice: invoiceReducer,
-   posting: postingReducer,
+   claimPayment: claimPaymentReducer,
+   invoicePayment: invoicePaymentReducer,
 
    httpOnLoad: httpRequestsOnLoadReducer,
    httpOnSuccess: httpRequestsOnSuccessReducer,

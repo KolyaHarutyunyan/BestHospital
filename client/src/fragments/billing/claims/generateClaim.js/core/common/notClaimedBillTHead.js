@@ -48,7 +48,7 @@ export const NotClaimedBillTHead = ({ uncheckAllBills }) => {
    return (
       <div className={classes.tableTheadStyle}>
          <SimpleTooltip title={"Select"} placement={"top-start"}>
-            <div className={classes.thStyle}>
+            <div className={`${classes.thStyle} checkbox-th`}>
                <CheckBoxInput
                   inputId={"notClaimedBills"}
                   inputClassName={classes.billCheckboxStyle}
