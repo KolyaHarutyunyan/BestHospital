@@ -19,35 +19,38 @@ export const InvoiceReceivableTBody = ({ receivable }) => {
    const { open } = useContext(DrawerContext);
 
    function getTableData(data) {
-      const size = open ? 1855 : 1700;
+      const size = open ? 2270 : 2120;
       const limit = open ? 8 : 10;
 
       return showDashIfEmpty(getTextDependsOnWidth(width, size, data, limit));
    }
 
-   const staffFirstName = receivable.staffMember?.firstName;
-   const staffLastName = receivable.staffMember?.lastName;
+   const start = handleCreatedAtDate(receivable?.dateOfService?.start, 10, "/");
+   const end = handleCreatedAtDate(receivable?.dateOfService?.end, 10, "/");
+   const staffFirstName = receivable?.staff?.firstName;
+   const staffLastName = receivable?.staff?.lastName;
+
    const staff = getFullName(staffFirstName, staffLastName, getTableData);
-   const serviceDate = getTableData(receivable.dateOfService);
-   const serviceCode = getTableData(receivable.serviceCode);
+   const serviceDate = getTableData(`${start} - ${end}`);
+   const serviceCode = getTableData(receivable?.serviceCode);
    const startTime = getTableData(
-      handleCreatedAtDate(receivable.timeOfService?.startTime, 10, "/")
+      handleCreatedAtDate(receivable?.timeOfService?.startTime, 10, "/")
    );
    const endTime = getTableData(
-      handleCreatedAtDate(receivable.timeOfService?.endTime, 10, "/")
+      handleCreatedAtDate(receivable?.timeOfService?.endTime, 10, "/")
    );
-   const hours = getTableData(receivable.hours);
+   const hours = getTableData(receivable?.hours);
    const totalAmount = getTableData(
-      addSignToValueFromStart(getValueByFixedNumber(receivable.totalAmount))
+      addSignToValueFromStart(getValueByFixedNumber(receivable?.amountTotal))
    );
    const copay = getTableData(
-      addSignToValueFromStart(getValueByFixedNumber(receivable.copay))
+      addSignToValueFromStart(getValueByFixedNumber(receivable?.copay))
    );
    const priorPaid = getTableData(
-      addSignToValueFromStart(getValueByFixedNumber(receivable.priorPaid))
+      addSignToValueFromStart(getValueByFixedNumber(receivable?.priorPaid))
    );
    const currentBalance = getTableData(
-      addSignToValueFromStart(getValueByFixedNumber(receivable.currentBalance))
+      addSignToValueFromStart(getValueByFixedNumber(receivable?.currentBalance))
    );
 
    return (

@@ -39,16 +39,18 @@ export const BillTBodyWithScroll = ({ bills = [] }) => {
                addSignToValueFromStart(getValueByFixedNumber(bill.billedRate))
             );
             const totalAmount = getDisplayOf(
-               addSignToValueFromStart(getValueByFixedNumber(bill.totalAmount))
+               addSignToValueFromStart(getValueByFixedNumber(bill.billedAmount))
             );
             const payorBalance = getDisplayOf(
-               addSignToValueFromStart(getValueByFixedNumber(bill.payerTotal))
+               addSignToValueFromStart(
+                  getValueByFixedNumber(bill.payerTotal - bill.payerPaid)
+               )
             );
             const clientBalance = getDisplayOf(
                addSignToValueFromStart(getValueByFixedNumber(bill.clientResp))
             );
             const totalBalance = getDisplayOf(
-               addSignToValueFromStart(getValueByFixedNumber(bill.billedAmount))
+               addSignToValueFromStart(getValueByFixedNumber(bill.balance))
             );
             const claimStatus = getDisplayOf(manageStatus(bill.claimStatus));
             const invoiceStatus = getDisplayOf(manageStatus(bill.invoiceStatus));

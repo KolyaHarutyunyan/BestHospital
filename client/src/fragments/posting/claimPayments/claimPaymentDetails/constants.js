@@ -17,7 +17,7 @@ export function getClaimPaymentDetails(claimPayment) {
    const claimPaymentDetails = [
       {
          detailText: "Funding Source:",
-         detail: makeCapitalize(`${funder?.firstName} ${funder?.lastName}`),
+         detail: !!funder && makeCapitalize(`${funder?.firstName} ${funder?.lastName}`),
       },
       {
          detailText: "Payment Date:",

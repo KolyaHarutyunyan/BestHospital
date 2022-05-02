@@ -18,12 +18,14 @@ export function getFilteredClaims(
          : selFunder !== "All"
          ? claims.filter(
               (claim) =>
-                 claim?.funder?.firstName?.toLowerCase() === selFunder.toLowerCase()
+                 `${claim?.funder?.firstName} ${claim?.funder?.lastName}`.toLowerCase() ===
+                 selFunder.toLowerCase()
            )
          : selClient !== "All"
          ? claims.filter(
               (claim) =>
-                 claim?.client?.firstName?.toLowerCase() === selClient.toLowerCase()
+                 `${claim?.client?.firstName} ${claim?.client?.lastName}`.toLowerCase() ===
+                 selClient.toLowerCase()
            )
          : selDateFrom !== ""
          ? claims.filter(

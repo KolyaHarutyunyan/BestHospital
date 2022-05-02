@@ -6,11 +6,15 @@ export function getFilteredBills(bills = [], selFunder, selClient, selDate) {
          ? bills
          : selFunder !== "All"
          ? bills.filter(
-              (bill) => bill?.funder?.firstName?.toLowerCase() === selFunder.toLowerCase()
+              (bill) =>
+                 `${bill?.funder?.firstName} ${bill?.funder?.lastName}`.toLowerCase() ===
+                 selFunder.toLowerCase()
            )
          : selClient !== "All"
          ? bills.filter(
-              (bill) => bill?.client?.firstName?.toLowerCase() === selClient.toLowerCase()
+              (bill) =>
+                 `${bill?.client?.firstName} ${bill?.client?.lastName}`.toLowerCase() ===
+                 selClient.toLowerCase()
            )
          : selDate !== ""
          ? bills.filter(

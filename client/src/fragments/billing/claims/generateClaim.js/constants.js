@@ -11,11 +11,15 @@ export function getFilteredNotClaimedBills(
          ? notClaimedBills
          : selFunder !== "All"
          ? notClaimedBills.filter(
-              (bill) => bill?.funder?.firstName?.toLowerCase() === selFunder.toLowerCase()
+              (bill) =>
+                 `${bill?.funder?.firstName} ${bill?.funder?.lastName}`.toLowerCase() ===
+                 selFunder.toLowerCase()
            )
          : selClient !== "All"
          ? notClaimedBills.filter(
-              (bill) => bill?.client?.firstName?.toLowerCase() === selClient.toLowerCase()
+              (bill) =>
+                 `${bill?.client?.firstName} ${bill?.client?.lastName}`.toLowerCase() ===
+                 selClient.toLowerCase()
            )
          : selServiceDate !== ""
          ? notClaimedBills.filter(

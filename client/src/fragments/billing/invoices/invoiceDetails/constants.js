@@ -14,9 +14,6 @@ export function getInvoiceDetails(invoice) {
    const early = handleCreatedAtDate(dateRange?.early, 10, "/");
    const latest = handleCreatedAtDate(dateRange?.latest, 10, "/");
 
-   const start = handleCreatedAtDate(dueDate?.start, 10, "/");
-   const end = handleCreatedAtDate(dueDate?.end, 10, "/");
-
    const invoiceDetails = [
       {
          detailText: "Date Range:",
@@ -39,11 +36,11 @@ export function getInvoiceDetails(invoice) {
       },
       {
          detailText: "Client:",
-         detail: makeCapitalize(`${client?.firstName} ${client?.lastName}`),
+         detail: !!client && makeCapitalize(`${client?.firstName} ${client?.lastName}`),
       },
       {
          detailText: "Due Date:",
-         detail: `${start} - ${end}`,
+         detail: handleCreatedAtDate(dueDate, 10, "/"),
       },
       {
          detailText: "Status",

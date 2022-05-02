@@ -13,7 +13,8 @@ export function getFilteredClaimsForClaimPmt(claims, selClient, selDateFrom, sel
          : selClient !== "All"
          ? claims.filter(
               (claim) =>
-                 claim?.client?.firstName?.toLowerCase() === selClient.toLowerCase()
+                 `${claim?.client?.firstName} ${claim?.client?.lastName}`.toLowerCase() ===
+                 selClient.toLowerCase()
            )
          : selDateFrom !== ""
          ? claims.filter(
@@ -50,7 +51,7 @@ export function getClaimDetailsForClaimPmt(claim) {
       },
       {
          detailText: "Staff:",
-         detail: makeCapitalize(`${staff?.firstName} ${staff?.lastName}`),
+         detail: !!staff && makeCapitalize(`${staff?.firstName} ${staff?.lastName}`),
       },
       {
          detailText: "1500 Form:",
@@ -64,11 +65,11 @@ export function getClaimDetailsForClaimPmt(claim) {
       },
       {
          detailText: "Client:",
-         detail: makeCapitalize(`${client?.firstName} ${client?.lastName}`),
+         detail: !!client && makeCapitalize(`${client?.firstName} ${client?.lastName}`),
       },
       {
          detailText: "Founding Source:",
-         detail: makeCapitalize(`${funder?.firstName} ${funder?.lastName}`),
+         detail: !!funder && makeCapitalize(`${funder?.firstName} ${funder?.lastName}`),
       },
       {
          detailText: "Total Charges:",

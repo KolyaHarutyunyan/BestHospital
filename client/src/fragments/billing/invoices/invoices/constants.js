@@ -18,7 +18,8 @@ export function getFilteredInvoices(
          : selClient !== "All"
          ? invoices.filter(
               (invoice) =>
-                 invoice?.client?.firstName?.toLowerCase() === selClient.toLowerCase()
+                 `${invoice?.client?.firstName} ${invoice?.client?.lastName}`.toLowerCase() ===
+                 selClient.toLowerCase()
            )
          : selDateFrom !== ""
          ? invoices.filter(

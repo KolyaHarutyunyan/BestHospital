@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { dropdownsStyle } from "./styles";
-import { ActiveInactiveStatus } from "@eachbase/utils";
+import { ActiveInactiveStatus, getLimitedVal, useWidth } from "@eachbase/utils";
 
 export const UserInputsDropdown = ({
    label,
@@ -10,13 +10,18 @@ export const UserInputsDropdown = ({
    dropdownTitle,
    dropdownClassName,
 }) => {
-   const [dropdownIsShown, setDropdownIsShown] = useState(false);
    const classes = dropdownsStyle();
+
    const itemClassName = ActiveInactiveStatus(selected);
-   const chooseOptionHandler = (option) => {
+
+   const width = useWidth();
+
+   const [dropdownIsShown, setDropdownIsShown] = useState(false);
+
+   function chooseOptionHandler(option) {
       onPass(option);
       setDropdownIsShown(false);
-   };
+   }
 
    return (
       <>
@@ -44,6 +49,10 @@ export const UserInputsDropdown = ({
                   <ul className="dropdown-options">
                      {dropdownOptions.map((option, index) => {
                         const itemClassName = ActiveInactiveStatus(option);
+
+                        const optionDisplay =
+                           width <= 1720 ? getLimitedVal(option, 13) : option;
+
                         return (
                            <li
                               key={index}
@@ -55,7 +64,7 @@ export const UserInputsDropdown = ({
                                     option === selected ? "selected-title" : ""
                                  }`}
                               >
-                                 {option}
+                                 {optionDisplay}
                               </span>
                            </li>
                         );

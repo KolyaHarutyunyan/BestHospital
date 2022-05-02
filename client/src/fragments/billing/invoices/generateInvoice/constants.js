@@ -10,7 +10,9 @@ export function getFilteredNotInvoicedBills(
          ? notInvoicedBills
          : selClient !== "All"
          ? notInvoicedBills.filter(
-              (bill) => bill?.client?.firstName?.toLowerCase() === selClient.toLowerCase()
+              (bill) =>
+                 `${bill?.client?.firstName} ${bill?.client?.lastName}`.toLowerCase() ===
+                 selClient.toLowerCase()
            )
          : selServiceDate !== ""
          ? notInvoicedBills.filter(

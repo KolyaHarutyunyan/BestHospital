@@ -31,7 +31,10 @@ export function getClaimDetails(claim) {
          detailText: "Date of Range:",
          detail: `${early} - ${latest}`,
       },
-      { detailText: "Staff:", detail: makeCapitalize(staff?.firstName) },
+      {
+         detailText: "Staff:",
+         detail: !!staff && makeCapitalize(`${staff?.firstName} ${staff?.lastName}`),
+      },
       {
          detailText: "1500 Form:",
          detail: !!"file_pdf.pdf" ? (
@@ -44,11 +47,11 @@ export function getClaimDetails(claim) {
       },
       {
          detailText: "Client:",
-         detail: makeCapitalize(client?.firstName),
+         detail: !!client && makeCapitalize(`${client?.firstName} ${client?.lastName}`),
       },
       {
          detailText: "Founding Source:",
-         detail: makeCapitalize(funder?.firstName),
+         detail: !!funder && makeCapitalize(`${funder?.firstName} ${funder?.lastName}`),
       },
       {
          detailText: "Total Charges:",

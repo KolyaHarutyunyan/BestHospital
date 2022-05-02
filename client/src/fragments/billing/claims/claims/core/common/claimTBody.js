@@ -30,21 +30,22 @@ export const ClaimTBody = ({ claims = [] }) => {
    return (
       <div className={classes.tbodyContainerStyle}>
          {claims.map((claim, index) => {
-            const claimId = getTableData(claim._id);
             const early = handleCreatedAtDate(claim?.dateRange?.early, 10, "/");
             const latest = handleCreatedAtDate(claim?.dateRange?.latest, 10, "/");
-            const datePeriod = getTableData(`${early} - ${latest}`);
             const funderFirstName = claim?.funder?.firstName;
             const funderLastName = claim?.funder?.lastName;
-            const funder = getFullName(funderFirstName, funderLastName, getTableData);
             const clientFirstName = claim?.client?.firstName;
             const clientLastName = claim?.client?.firstName;
+
+            const claimId = getTableData(claim._id);
+            const datePeriod = getTableData(`${early} - ${latest}`);
+            const funder = getFullName(funderFirstName, funderLastName, getTableData);
             const client = getFullName(clientFirstName, clientLastName, getTableData);
             const totalCharged = getTableData(
                addSignToValueFromStart(getValueByFixedNumber(claim.totalCharge))
             );
             const totalPaid = getTableData(
-               addSignToValueFromStart(getValueByFixedNumber(claim.amountPaid))
+               addSignToValueFromStart(getValueByFixedNumber(claim.ammountPaid))
             );
             const remaining = getTableData(
                addSignToValueFromStart(getValueByFixedNumber(claim.remaining))

@@ -14,6 +14,7 @@ import { enumValues, PaginationContext } from "@eachbase/utils";
 import { invoicePaymentActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import { InvoicePaymentInputs, InvoicePaymentTable } from "./core";
+import { getFilteredInvoicePayments } from "./constants";
 
 export const InvoicePaymentsFragment = ({
    invoicePayments = [],
@@ -58,24 +59,15 @@ export const InvoicePaymentsFragment = ({
       );
 
    const invoiceClientsNames = invoicePayments.map(
-      (invoicePayment) => invoicePayment?.client?.firstName
+      (invoicePayment) =>
+         `${invoicePayment?.client?.firstName} ${invoicePayment?.client?.lastName}`
    );
 
-   const invoicePaymentsWithFilters =
-      selectedClient === "All" && selectedStatus === "All"
-         ? invoicePayments
-         : selectedClient !== "All"
-         ? invoicePayments.filter(
-              (invoicePayment) =>
-                 invoicePayment?.client?.firstName?.toLowerCase() ===
-                 selectedClient.toLowerCase()
-           )
-         : selectedStatus !== "All"
-         ? invoicePayments.filter(
-              (invoicePayment) =>
-                 invoicePayment?.status.toLowerCase() === selectedStatus.toLowerCase()
-           )
-         : [];
+   const invoicePaymentsWithFilters = getFilteredInvoicePayments(
+      invoicePayments,
+      selectedClient,
+      selectedStatus
+   );
 
    const changePage = (number) => {
       if (page === number) return;

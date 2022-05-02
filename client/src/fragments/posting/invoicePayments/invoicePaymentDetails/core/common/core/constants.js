@@ -53,7 +53,7 @@ export function getInvoiceDetailsForInvoicePmt(invoice) {
       },
       {
          detailText: "Client:",
-         detail: makeCapitalize(`${client?.firstName} ${client?.lastName}`),
+         detail: !!client && makeCapitalize(`${client?.firstName} ${client?.lastName}`),
       },
       {
          detailText: "PDF Document:",

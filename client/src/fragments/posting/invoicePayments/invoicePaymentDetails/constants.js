@@ -16,7 +16,7 @@ export function getInvoicePaymentDetails(invoicePayment) {
    const invoicePaymentDetails = [
       {
          detailText: "Client:",
-         detail: makeCapitalize(`${client?.firstName} ${client?.lastName}`),
+         detail: !!client && makeCapitalize(`${client?.firstName} ${client?.lastName}`),
       },
       {
          detailText: "Status:",

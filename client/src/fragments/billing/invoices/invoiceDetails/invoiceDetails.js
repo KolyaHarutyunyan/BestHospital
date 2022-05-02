@@ -8,7 +8,7 @@ import { getInvoiceDetails } from "./constants";
 export const InvoiceDetailsFragment = ({ invoiceDetails }) => {
    const classes = invoiceDetailsStyle();
 
-   const { _id, receivables } = invoiceDetails || {};
+   const { _id, receivable } = invoiceDetails || {};
 
    const { open: drawerOpen } = useContext(DrawerContext);
 
@@ -46,9 +46,9 @@ export const InvoiceDetailsFragment = ({ invoiceDetails }) => {
                <div className={classes.invoiceDetailsTitleBoxStyle}>
                   <h2 className={classes.invoiceDetailsTitleStyle}>Receivables</h2>
                </div>
-               {!!receivables?.length ? (
+               {!!receivable?.length ? (
                   <div className={classes.receivablesTableBoxStyle}>
-                     <InvoiceReceivableTable invoiceReceivables={receivables} />
+                     <InvoiceReceivableTable invoiceReceivables={receivable} />
                   </div>
                ) : (
                   <NoItemText text={"No Receivables Yet"} />

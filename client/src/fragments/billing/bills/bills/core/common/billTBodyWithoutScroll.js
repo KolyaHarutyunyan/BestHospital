@@ -25,15 +25,16 @@ export const BillTBodyWithoutScroll = ({ bills = [] }) => {
    return (
       <div className={classes.tbodyContainerStyle}>
          {bills.map((bill, index) => {
+            const payorFirstName = bill.payor?.firstName;
+            const payorLastName = bill.payor?.lastName;
+            const clientFirstName = bill.client?.firstName;
+            const clientLastName = bill.client?.lastName;
+
             const billId = getDisplayOf(bill._id);
             const dateOfService = getDisplayOf(
                handleCreatedAtDate(bill.dateOfService, 10, "/")
             );
-            const payorFirstName = bill.payor?.firstName;
-            const payorLastName = bill.payor?.lastName;
             const payor = getFullName(payorFirstName, payorLastName, getDisplayOf);
-            const clientFirstName = bill.client?.firstName;
-            const clientLastName = bill.client?.lastName;
             const client = getFullName(clientFirstName, clientLastName, getDisplayOf);
             const service = getDisplayOf(bill.authService?.authorizationId);
 
