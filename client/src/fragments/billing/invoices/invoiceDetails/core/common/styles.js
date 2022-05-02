@@ -6,14 +6,13 @@ export const invoiceReceivableTHeadTBodyStyle = makeStyles(() => ({
       display: "flex",
       justifyContent: "space-between",
       backgroundColor: `${Colors.BackgroundBlue}`,
-      padding: "9px 16px",
       borderRadius: "8px",
-      "@media(max-width: 1280px)": { padding: "9px 8px" },
    },
    thStyle: {
       maxWidth: "195px",
       width: "100%",
-      "&:not(:last-of-type)": { marginRight: "32px" },
+      padding: "9px 16px",
+      "@media(max-width: 1280px)": { padding: "9px 8px" },
       "& span": { color: `${Colors.BackgroundWhite}` },
    },
    tbodyContainerStyle: {
@@ -24,10 +23,8 @@ export const invoiceReceivableTHeadTBodyStyle = makeStyles(() => ({
    tbodyRowStyle: {
       display: "flex",
       justifyContent: "space-between",
-      padding: "9px 16px",
       borderRadius: "8px",
       backgroundColor: Colors.BackgroundWater,
-      "@media(max-width: 1280px)": { padding: "9px 8px" },
    },
    tdStyle: {
       display: "flex",
@@ -37,6 +34,7 @@ export const invoiceReceivableTHeadTBodyStyle = makeStyles(() => ({
       fontSize: "14px",
       fontWeight: 400,
       color: Colors.TextSecondary,
-      "&:not(:last-of-type)": { marginRight: "32px" },
+      padding: "9px 16px",
+      "@media(max-width: 1280px)": { padding: "9px 8px" },
    },
 }));

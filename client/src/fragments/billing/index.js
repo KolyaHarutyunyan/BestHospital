@@ -5,4 +5,3 @@ export {
    InvoiceDetailsFragment,
    GenerateInvoiceFragment,
 } from "./invoices";
-export { Postings, PostingDetails } from "./postings";

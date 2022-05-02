@@ -1,48 +1,27 @@
 import React from "react";
 import { tableTheadTbodyStyle } from "./styles";
-import { SearchAndFilter, TableHeadComponent } from "@eachbase/components";
-import { TableCell } from "@material-ui/core";
+import { SearchAndFilter } from "@eachbase/components";
 
 export const BillTotalsDemoTHead = () => {
    const classes = tableTheadTbodyStyle();
 
+   function getBillTotalTitle(givenTitle = "") {
+      return <SearchAndFilter title={givenTitle} custom={false} />;
+   }
+
+   const billedRate = getBillTotalTitle("Billed Rate");
+   const totalAmount = getBillTotalTitle("Total Amount");
+   const payorBalance = getBillTotalTitle("Payor Balance");
+   const clientBalance = getBillTotalTitle("Client Balance");
+   const totalBalance = getBillTotalTitle("Total Balance");
+
    return (
-      <TableHeadComponent theadClassName={classes.tableTheadStyle}>
-         <TableCell>
-            <SearchAndFilter
-               title={"Billed Rate"}
-               custom={false}
-               iconsAreLight
-            />
-         </TableCell>
-         <TableCell>
-            <SearchAndFilter
-               title={"Total Amount"}
-               custom={false}
-               iconsAreLight
-            />
-         </TableCell>
-         <TableCell>
-            <SearchAndFilter
-               title={"Payor Balance"}
-               custom={false}
-               iconsAreLight
-            />
-         </TableCell>
-         <TableCell>
-            <SearchAndFilter
-               title={"Client Balance"}
-               custom={false}
-               iconsAreLight
-            />
-         </TableCell>
-         <TableCell>
-            <SearchAndFilter
-               title={"Total Balance"}
-               custom={false}
-               iconsAreLight
-            />
-         </TableCell>
-      </TableHeadComponent>
+      <div className={classes.tableTheadStyle}>
+         <div className={classes.thStyle}>{billedRate}</div>
+         <div className={classes.thStyle}>{totalAmount}</div>
+         <div className={classes.thStyle}>{payorBalance}</div>
+         <div className={classes.thStyle}>{clientBalance}</div>
+         <div className={classes.thStyle}>{totalBalance}</div>
+      </div>
    );
 };

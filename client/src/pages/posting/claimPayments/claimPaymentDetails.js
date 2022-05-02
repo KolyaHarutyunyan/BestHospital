@@ -4,8 +4,7 @@ import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { dummyData, FindLoad } from "@eachbase/utils";
 import { CustomBreadcrumbs, Loader } from "@eachbase/components";
-import { postingActions } from "@eachbase/store";
-import { GET_POSTING_BY_ID_SUCCESS } from "@eachbase/store/billing/posting/posting.type";
+import { claimPaymentActions } from "@eachbase/store";
 
 export const ClaimPaymentDetails = () => {
    const params = useParams();
@@ -15,16 +14,18 @@ export const ClaimPaymentDetails = () => {
    // const claimPaymentById = useSelector((state) => state.claimPayment.claimPaymentById);
 
    // temporary
-   const claimPaymentById = dummyData.CLAIM_PAYMENTS.find((claimPmt) => claimPmt._id === params.id);
+   const claimPaymentById = dummyData.CLAIM_PAYMENTS.find(
+      (claimPmt) => claimPmt._id === params.id
+   );
    // end
 
    const loader = FindLoad("GET_CLAIM_PAYMENT_BY_ID");
- 
+
    useEffect(() => {
-      dispatch(postingActions.getPostingById(params.id));
+      dispatch(claimPaymentActions.getClaimPaymentById(params.id));
       return () => {
          dispatch({
-            type: GET_POSTING_BY_ID_SUCCESS,
+            type: "GET_CLAIM_PAYMENT_BY_ID_SUCCESS",
             payload: { claimPaymentById: null },
          });
       };
@@ -45,4 +46,3 @@ export const ClaimPaymentDetails = () => {
       </>
    );
 };
-

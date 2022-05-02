@@ -34,4 +34,12 @@ export const billTransactionInputsStyle = makeStyles(() => ({
    transactionVoidingWrapperStyle: {
       "& > button": { backgroundColor: Colors.BackgroundWater },
    },
+   billTotalContainerStyle: {
+      width: "100%",
+      marginTop: "16px",
+   },
+   transactionDemoContainerStyle: {
+      width: "100%",
+      marginTop: "16px",
+   },
 }));

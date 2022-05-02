@@ -13,3 +13,4 @@ export { SelectStatusInput } from "./selectStatusInput";
 export { SearchInput } from "./searchInput";
 export { CheckBoxInput } from "./checkBoxInput";
 export { UserTextArea } from "./userTextArea";
+export { EditablePaymentInput } from "./editablePaymentInput";

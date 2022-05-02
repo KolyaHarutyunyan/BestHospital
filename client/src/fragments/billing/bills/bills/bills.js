@@ -7,9 +7,10 @@ import {
    PaginationItem,
    BillFiltersSelectors,
 } from "@eachbase/components";
-import { DrawerContext, handleCreatedAtDate, PaginationContext } from "@eachbase/utils";
+import { DrawerContext, PaginationContext } from "@eachbase/utils";
 import { billActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
+import { getFilteredBills } from "./constants";
 
 export const BillsFragment = ({
    bills = [],
@@ -34,26 +35,12 @@ export const BillsFragment = ({
    const clientsNames = bills.map((bill) => bill?.client?.firstName);
    const payorsNames = bills.map((bill) => bill?.funder?.firstName);
 
-   const billsWithFilters =
-      selectedPayor === "All" && selectedClient === "All" && filteredDate === ""
-         ? bills
-         : selectedPayor !== "All"
-         ? bills.filter(
-              (bill) =>
-                 bill?.funder?.firstName?.toLowerCase() === selectedPayor.toLowerCase()
-           )
-         : selectedClient !== "All"
-         ? bills.filter(
-              (bill) =>
-                 bill?.client?.firstName?.toLowerCase() === selectedClient.toLowerCase()
-           )
-         : filteredDate !== ""
-         ? bills.filter(
-              (bill) =>
-                 handleCreatedAtDate(bill?.dateOfService, 10) ===
-                 handleCreatedAtDate(filteredDate, 10)
-           )
-         : [];
+   const billsWithFilters = getFilteredBills(
+      bills,
+      selectedPayor,
+      selectedClient,
+      filteredDate
+   );
 
    const changePage = (number) => {
       if (page === number) return;
@@ -66,7 +53,7 @@ export const BillsFragment = ({
    return (
       <div>
          <BillFiltersSelectors
-            filterIsForBill={true}
+            filterIsFor={"bill"}
             clientsNames={clientsNames}
             payorsNames={payorsNames}
             passPayorHandler={(selPayor) => setSelectedPayor(selPayor)}

@@ -5,7 +5,6 @@ import {
    addSignToValueFromStart,
    DrawerContext,
    getFullName,
-   getLimitedVal,
    getTableHeader,
    getValueByFixedNumber,
    handleCreatedAtDate,
@@ -13,32 +12,7 @@ import {
    showDashIfEmpty,
    useWidth,
 } from "@eachbase/utils";
-
-const styles = { display: "flex", alignItems: "center" };
-
-function getClaimData(givenData = "", isOpen, givenWidth) {
-   const firstSize = isOpen ? 2040 : 1940;
-   const firstLimit = isOpen ? 14 : 16;
-
-   const secondSize = isOpen ? 1680 : 1640;
-   const secondLimit = isOpen ? 12 : 14;
-
-   const thirdSize = isOpen ? 1350 : 1345;
-   const thirdLimit = isOpen ? 8 : 10;
-
-   const initialLimit = isOpen ? 21 : 23;
-
-   const tableData =
-      givenWidth <= thirdSize
-         ? getLimitedVal(givenData, thirdLimit)
-         : givenWidth > thirdSize && givenWidth <= secondSize
-         ? getLimitedVal(givenData, secondLimit)
-         : givenWidth > secondSize && givenWidth <= firstSize
-         ? getLimitedVal(givenData, firstLimit)
-         : getLimitedVal(givenData, initialLimit);
-
-   return tableData;
-}
+import { getClaimData } from "./constants";
 
 export const ClaimTBody = ({ claims = [] }) => {
    const classes = claimTHeadTBodyStyle();
@@ -91,12 +65,8 @@ export const ClaimTBody = ({ claims = [] }) => {
                >
                   <div className={classes.tdStyle}>{claimId}</div>
                   <div className={classes.tdStyle}>{datePeriod}</div>
-                  <div className={classes.tdStyle} style={styles}>
-                     {funder}
-                  </div>
-                  <div className={classes.tdStyle} style={styles}>
-                     {client}
-                  </div>
+                  <div className={classes.tdStyle}>{funder}</div>
+                  <div className={classes.tdStyle}>{client}</div>
                   <div className={classes.tdStyle}>{totalCharged}</div>
                   <div className={classes.tdStyle}>{totalPaid}</div>
                   <div className={classes.tdStyle}>{remaining}</div>

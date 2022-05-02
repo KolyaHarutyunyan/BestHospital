@@ -7,11 +7,12 @@ import {
    PaginationItem,
    BillFiltersSelectors,
 } from "@eachbase/components";
-import { enumValues, handleCreatedAtDate, PaginationContext } from "@eachbase/utils";
+import { enumValues, PaginationContext } from "@eachbase/utils";
 import { invoiceActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import { InvoiceTable } from "./core";
 import { useHistory } from "react-router";
+import { getFilteredInvoices } from "./constants";
 
 export const InvoicesFragment = ({
    invoices = [],
@@ -36,41 +37,14 @@ export const InvoicesFragment = ({
 
    const clientsNames = invoices.map((invoice) => invoice?.client?.firstName);
 
-   const invoicesWithFilters =
-      selectedClient === "All" &&
-      filteredDateFrom === "" &&
-      filteredDateTo === "" &&
-      selectedStatus === "All"
-         ? invoices
-         : selectedClient !== "All"
-         ? invoices.filter(
-              (invoice) =>
-                 invoice?.client?.firstName?.toLowerCase() ===
-                 selectedClient.toLowerCase()
-           )
-         : filteredDateFrom !== ""
-         ? invoices.filter(
-              (invoice) =>
-                 handleCreatedAtDate(invoice?.dateRange?.early, 10) ===
-                 handleCreatedAtDate(filteredDateFrom, 10)
-           )
-         : filteredDateTo !== ""
-         ? invoices.filter(
-              (invoice) =>
-                 handleCreatedAtDate(invoice?.dateRange?.latest, 10) ===
-                 handleCreatedAtDate(filteredDateTo, 10)
-           )
-         : selectedStatus !== "All"
-         ? invoices.filter(
-              (invoice) => invoice?.status.toLowerCase() === selectedStatus.toLowerCase()
-           )
-         : filteredInvoiceDate !== ""
-         ? invoices.filter(
-              (invoice) =>
-                 handleCreatedAtDate(invoice?.invoiceDate, 10) ===
-                 handleCreatedAtDate(filteredInvoiceDate, 10)
-           )
-         : [];
+   const invoicesWithFilters = getFilteredInvoices(
+      invoices,
+      selectedClient,
+      filteredDateFrom,
+      filteredDateTo,
+      selectedStatus,
+      filteredInvoiceDate
+   );
 
    const changePage = (number) => {
       if (page === number) return;
@@ -84,7 +58,7 @@ export const InvoicesFragment = ({
       <div>
          <div className={classes.addButton}>
             <BillFiltersSelectors
-               filterIsForInvoice={true}
+               filterIsFor={"invoice"}
                clientsNames={clientsNames}
                passClientHandler={(selClient) => setSelectedClient(selClient)}
                selectedClient={selectedClient}

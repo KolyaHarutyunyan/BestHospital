@@ -3,7 +3,7 @@ import { UserTextArea, CreateChancel } from "@eachbase/components";
 import { ErrorText, FindLoad, FindSuccess, isNotEmpty } from "@eachbase/utils";
 import { invoicePaymentDetailsCoreStyle } from "./styles";
 import { useDispatch } from "react-redux";
-import { httpRequestsOnSuccessActions } from "@eachbase/store";
+import { httpRequestsOnSuccessActions, invoicePaymentActions } from "@eachbase/store";
 
 export const VoidInvoicePaymentInputs = ({ closeModal, invoicePaymentId }) => {
    const classes = invoicePaymentDetailsCoreStyle();
@@ -30,7 +30,13 @@ export const VoidInvoicePaymentInputs = ({ closeModal, invoicePaymentId }) => {
 
    function handleSubmit() {
       if (isNotEmpty(voidingComment)) {
-        //  dispatch(....);
+         dispatch(
+            invoicePaymentActions.editInvoicePaymentStatus(
+               invoicePaymentId,
+               "VOIDED",
+               voidingComment
+            )
+         );
       } else {
          setError("voidingComment");
       }
@@ -60,4 +66,3 @@ export const VoidInvoicePaymentInputs = ({ closeModal, invoicePaymentId }) => {
       </div>
    );
 };
-

@@ -24,16 +24,20 @@ export const BillFiltersSelectors = ({
    statuses = [],
    passStatusHandler,
    selectedStatus,
-   filterIsForBill,
-   filterIsForNotClaimedBill,
-   filterIsForNotInvoicedBill,
-   filterIsForClaim,
-   filterIsForInvoice,
-   filterIsForClaimPayment,
-   filterIsForInvoicePayment,
+   filterIsFor,
 }) => {
    const classes = selectorsStyle();
-   
+
+   const filterIsForBill = filterIsFor === "bill";
+   const filterIsForNotClaimedBill = filterIsFor === "notClaimedBill";
+   const filterIsForNotInvoicedBill = filterIsFor === "notInvoicedBill";
+   const filterIsForClaim = filterIsFor === "claim";
+   const filterIsForInvoice = filterIsFor === "invoice";
+   const filterIsForClaimPayment = filterIsFor === "claimPayment";
+   const filterIsForInvoicePayment = filterIsFor === "invoicePayment";
+   const filterIsForClaimInModal = filterIsFor === "claimInModal";
+   const filterIsForInvoiceInModal = filterIsFor === "invoiceInModal";
+
    const smallSizeStyle = filterIsForClaim || filterIsForInvoice ? "smallSize" : "";
 
    function addStyle(initialStyle = "") {
@@ -43,19 +47,39 @@ export const BillFiltersSelectors = ({
    const dateInputLabel =
       filterIsForNotClaimedBill || filterIsForNotInvoicedBill
          ? "Service"
-         : filterIsForInvoice
+         : filterIsForInvoice || filterIsForInvoiceInModal
          ? "Invoice"
          : "Submitted";
 
-   const shouldRenderFundingSourceInput = !filterIsForInvoice && !filterIsForNotInvoicedBill &&    !filterIsForInvoicePayment;
+   const shouldRenderFundingSourceInput =
+      !filterIsForInvoice &&
+      !filterIsForNotInvoicedBill &&
+      !filterIsForInvoicePayment &&
+      !filterIsForClaimInModal &&
+      !filterIsForInvoiceInModal;
 
-   const shouldRenderDateRangeAndOrStatusInputs = filterIsForClaim || filterIsForInvoice ||   filterIsForClaimPayment || filterIsForInvoicePayment;
+   const shouldRenderClientInput = !filterIsForInvoiceInModal;
 
-   const shouldRenderDateRangeInputs = !filterIsForClaimPayment && !filterIsForInvoicePayment;
+   const shouldRenderDateRangeAndOrStatusInputs =
+      filterIsForClaim ||
+      filterIsForInvoice ||
+      filterIsForClaimPayment ||
+      filterIsForInvoicePayment ||
+      filterIsForClaimInModal ||
+      filterIsForInvoiceInModal;
 
-   const shouldRenderDateInput = filterIsForBill || filterIsForNotClaimedBill || filterIsForInvoice ||
-   filterIsForNotInvoicedBill;
-   
+   const shouldRenderDateRangeInputs =
+      !filterIsForClaimPayment && !filterIsForInvoicePayment;
+
+   const shouldRenderStatusInput = !filterIsForClaimInModal && !filterIsForInvoiceInModal;
+
+   const shouldRenderDateInput =
+      filterIsForBill ||
+      filterIsForNotClaimedBill ||
+      filterIsForInvoice ||
+      filterIsForNotInvoicedBill ||
+      filterIsForInvoiceInModal;
+
    return (
       <div style={styles}>
          {shouldRenderFundingSourceInput && (
@@ -67,13 +91,15 @@ export const BillFiltersSelectors = ({
                dropdownClassName={addStyle(classes.filterDropStyle)}
             />
          )}
-         <UserInputsDropdown
-            label={"Client"}
-            dropdownOptions={addAllTextToTheList(clientsNames)}
-            onPass={passClientHandler}
-            selected={selectedClient}
-            dropdownClassName={addStyle(classes.filterDropStyle)}
-         />
+         {shouldRenderClientInput && (
+            <UserInputsDropdown
+               label={"Client"}
+               dropdownOptions={addAllTextToTheList(clientsNames)}
+               onPass={passClientHandler}
+               selected={selectedClient}
+               dropdownClassName={addStyle(classes.filterDropStyle)}
+            />
+         )}
          {shouldRenderDateRangeAndOrStatusInputs && (
             <div style={styles}>
                {shouldRenderDateRangeInputs && (
@@ -101,13 +127,15 @@ export const BillFiltersSelectors = ({
                      />
                   </div>
                )}
-               <UserInputsDropdown
-                  label={"Status"}
-                  dropdownOptions={addAllTextToTheList(statuses)}
-                  onPass={passStatusHandler}
-                  selected={selectedStatus}
-                  dropdownClassName={addStyle(classes.filterDropStyle)}
-               />
+               {shouldRenderStatusInput && (
+                  <UserInputsDropdown
+                     label={"Status"}
+                     dropdownOptions={addAllTextToTheList(statuses)}
+                     onPass={passStatusHandler}
+                     selected={selectedStatus}
+                     dropdownClassName={addStyle(classes.filterDropStyle)}
+                  />
+               )}
             </div>
          )}
          {shouldRenderDateInput && (

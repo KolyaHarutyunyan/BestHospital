@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
 import {
-    addSignToValueFromStart,
+   addSignToValueFromStart,
    DrawerContext,
+   getDataForTable,
    getFullName,
-   getLimitedVal,
    getValueByFixedNumber,
    handleCreatedAtDate,
    Images,
@@ -12,30 +12,6 @@ import {
 } from "@eachbase/utils";
 import { tableTheadTbodyStyle } from "./styles";
 import { ClaimReceivableTable } from "./core";
-
-function getClaimData(givenData = "", isOpen, givenWidth) {
-   const firstSize = isOpen ? 1850 : 1730;
-   const firstLimit = isOpen ? 18 : 20;
-
-   const secondSize = isOpen ? 1680 : 1640;
-   const secondLimit = isOpen ? 12 : 14;
-
-   const thirdSize = isOpen ? 1350 : 1345;
-   const thirdLimit = isOpen ? 8 : 10;
-
-   const initialLimit = isOpen ? 21 : 23;
-
-   const tableData =
-      givenWidth <= thirdSize
-         ? getLimitedVal(givenData, thirdLimit)
-         : givenWidth > thirdSize && givenWidth <= secondSize
-         ? getLimitedVal(givenData, secondLimit)
-         : givenWidth > secondSize && givenWidth <= firstSize
-         ? getLimitedVal(givenData, firstLimit)
-         : getLimitedVal(givenData, initialLimit);
-
-   return tableData;
-}
 
 export const ClaimPaymentClaimTBody = ({ claim }) => {
    const classes = tableTheadTbodyStyle();
@@ -54,7 +30,7 @@ export const ClaimPaymentClaimTBody = ({ claim }) => {
    const { open } = useContext(DrawerContext);
 
    function getTableData(data) {
-      return showDashIfEmpty(getClaimData(data, open, width));
+      return showDashIfEmpty(getDataForTable(data, open, width));
    }
 
    const early = handleCreatedAtDate(claim.dateRange?.early, 10, "/");
@@ -68,9 +44,15 @@ export const ClaimPaymentClaimTBody = ({ claim }) => {
    const datePeriod = getTableData(`${early} - ${latest}`);
    const funder = getFullName(funderFirstName, funderLastName, getTableData);
    const client = getFullName(clientFirstName, clientLastName, getTableData);
-   const totalCharged = getTableData(addSignToValueFromStart(getValueByFixedNumber(claim.totalCharge)));
-   const totalPaid = getTableData(addSignToValueFromStart(getValueByFixedNumber(claim.amountPaid)));
-   const remaining = getTableData(addSignToValueFromStart(getValueByFixedNumber(claim.remaining)));
+   const totalCharged = getTableData(
+      addSignToValueFromStart(getValueByFixedNumber(claim.totalCharge))
+   );
+   const totalPaid = getTableData(
+      addSignToValueFromStart(getValueByFixedNumber(claim.amountPaid))
+   );
+   const remaining = getTableData(
+      addSignToValueFromStart(getValueByFixedNumber(claim.remaining))
+   );
    const arrowArea = <img src={Images.dropdownArrowBlue} alt="" />;
 
    return (

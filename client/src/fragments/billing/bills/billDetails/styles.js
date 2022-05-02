@@ -152,5 +152,4 @@ export const billDetailsStyle = makeStyles(() => ({
       display: "flex",
       justifyContent: "flex-end",
    },
-   billDetailsThirdPartStyle: {},
 }));

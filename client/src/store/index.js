@@ -16,12 +16,8 @@ export { payrollActions } from "./payroll";
 export { noteActions } from "./notes";
 export { availabilityScheduleActions } from "./availabilitySchedule";
 export { appointmentActions } from "./appointment";
-export {
-   billActions,
-   claimActions,
-   invoiceActions,
-   postingActions,
-} from "./billing";
+export { billActions, claimActions, invoiceActions } from "./billing";
+export { claimPaymentActions, invoicePaymentActions } from "./posting";
 
 export { httpRequestsOnSuccessActions } from "./http_requests_on_success";
 export { httpRequestsOnErrorsActions } from "./http_requests_on_errors";

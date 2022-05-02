@@ -3,31 +3,44 @@ import { Colors } from "@eachbase/utils";
 
 export const tableTheadTbodyStyle = makeStyles(() => ({
    tableTheadStyle: {
-      height: "unset !important",
-      boxShadow: "unset !important",
-      "& tr": {
-         backgroundColor: `${Colors.BackgroundBlue} !important`,
-         cursor: "default",
-         "& th": {
-            padding: "9px 16px !important",
-            borderBottom: "none",
-            "& div div span": {
-               color: `${Colors.BackgroundWhite} !important`,
-            },
-         },
-      },
+      display: "flex",
+      justifyContent: "space-between",
+      backgroundColor: `${Colors.BackgroundBlue}`,
+      borderRadius: "8px",
+   },
+   thStyle: {
+      maxWidth: "195px",
+      width: "100%",
+      padding: "9px 16px",
+      "@media(max-width: 1280px)": { padding: "9px 8px" },
+      "& span": { color: `${Colors.BackgroundWhite}` },
+   },
+   tbodyContainerStyle: {
+      width: "100%",
+      borderRadius: "8px",
+      marginTop: "4px",
    },
    tbodyRowStyle: {
-      boxShadow: "unset !important",
+      display: "flex",
+      justifyContent: "space-between",
+      borderRadius: "8px",
+      backgroundColor: Colors.BackgroundWater,
       cursor: "default",
-      height: "36px !important",
-      "& td": {
-         padding: "4px 16px !important",
-         borderBottom: "none",
-         "& > div": {
-            padding: "5px 0",
-            color: Colors.TextSecondary,
-         },
+      transition: "background-color 0.2s linear !important",
+   },
+   tdStyle: {
+      display: "flex",
+      alignItems: "center",
+      maxWidth: "195px",
+      width: "100%",
+      fontSize: "14px",
+      fontWeight: 400,
+      color: Colors.TextSecondary,
+      padding: "9px 16px",
+      "@media(max-width: 1280px)": { padding: "9px 8px" },
+      "&:last-of-type": {
+         padding: "4px 16px",
+         "@media(max-width: 1280px)": { padding: "4px 8px" },
       },
    },
    voidActionStyle: {

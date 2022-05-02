@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Table } from "@material-ui/core";
 import { TransactionsDemoTBody, TransactionsDemoTHead } from "./common";
-import {
-   BillingModalWrapper,
-   CreateChancel,
-   SimpleModal,
-} from "@eachbase/components";
+import { BillingModalWrapper, CreateChancel, SimpleModal } from "@eachbase/components";
 import { billTransactionInputsStyle } from "./styles";
 import { useDispatch } from "react-redux";
 import { billActions, httpRequestsOnSuccessActions } from "@eachbase/store";
@@ -24,23 +19,26 @@ export const TransactionsDemoTable = ({ billTransactions = [], billId }) => {
 
    useEffect(() => {
       if (!!voidTransactionSuccess.length) {
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess("ABORT_BILL_TRANSACTION")
-         );
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("ABORT_BILL_TRANSACTION"));
          setOpen(false);
       }
    }, [voidTransactionSuccess]);
 
    return (
       <>
-         <Table style={{ borderSpacing: "0 4px", borderCollapse: "separate" }}>
+         <div className={classes.transactionDemoContainerStyle}>
             <TransactionsDemoTHead />
-            <TransactionsDemoTBody
-               billTransactionDetails={billTransactions}
-               openConfirmingModal={() => setOpen(true)}
-               onTrigger={(id) => setTransactionId(id)}
-            />
-         </Table>
+            <div>
+               {billTransactions.map((item, index) => (
+                  <TransactionsDemoTBody
+                     key={index}
+                     billTransaction={item}
+                     openConfirmingModal={() => setOpen(true)}
+                     onTrigger={(id) => setTransactionId(id)}
+                  />
+               ))}
+            </div>
+         </div>
          <SimpleModal
             openDefault={open}
             handleOpenClose={() => setOpen((prevState) => !prevState)}
@@ -59,12 +57,7 @@ export const TransactionsDemoTable = ({ billTransactions = [], billId }) => {
                      create={"Void"}
                      chancel={"Cancel"}
                      onCreate={() =>
-                        dispatch(
-                           billActions.abortBillTransaction(
-                              billId,
-                              transactionId
-                           )
-                        )
+                        dispatch(billActions.abortBillTransaction(billId, transactionId))
                      }
                      onClose={() => setOpen(false)}
                   />

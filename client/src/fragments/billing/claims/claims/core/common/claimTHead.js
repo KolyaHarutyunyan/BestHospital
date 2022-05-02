@@ -15,8 +15,8 @@ export const ClaimTHead = () => {
 
    const { open } = useContext(DrawerContext);
 
-   const size = open ? 1880 : 1680;
-   const limit = open ? 7 : 9;
+   const size = open ? 2150 : 1980;
+   const limit = open ? 5 : 7;
 
    function getClaimTitle(givenTitle = "", ...rest) {
       return getTableHeader(

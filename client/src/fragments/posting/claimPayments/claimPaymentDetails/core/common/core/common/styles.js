@@ -6,14 +6,13 @@ export const claimReceivableTHeadTBodyStyle = makeStyles(() => ({
       display: "flex",
       justifyContent: "space-between",
       backgroundColor: `${Colors.BackgroundWhite}`,
-      padding: "9px 16px",
       borderRadius: "8px",
-      "@media(max-width: 1280px)": { padding: "9px 8px" },
    },
    thStyle: {
       maxWidth: "195px",
       width: "100%",
-      "&:not(:last-of-type)": { marginRight: "32px" },
+      padding: "9px 16px",
+      "@media(max-width: 1280px)": { padding: "9px 8px" },
       "& span": {
          fontSize: "14px",
          fontWeight: 700,
@@ -29,10 +28,8 @@ export const claimReceivableTHeadTBodyStyle = makeStyles(() => ({
    tbodyRowStyle: {
       display: "flex",
       justifyContent: "space-between",
-      padding: "9px 16px",
       background: Backgrounds.catskillWhite,
       cursor: "default",
-      "@media(max-width: 1280px)": { padding: "9px 8px" },
    },
    tdStyle: {
       display: "flex",
@@ -42,6 +39,18 @@ export const claimReceivableTHeadTBodyStyle = makeStyles(() => ({
       fontSize: "14px",
       fontWeight: 400,
       color: Colors.TextPrimary,
-      "&:not(:last-of-type)": { marginRight: "32px" },
+      padding: "9px 16px",
+      "@media(max-width: 1280px)": { padding: "9px 8px" },
    },
+
+   // *CLaim Modal Table Styles**
+   claimModalTableStyle: {
+      width: "100%",
+      marginTop: "24px",
+   },
+   receivableContainerStyle: {
+      width: "100%",
+      marginTop: "16px",
+   },
+   // *end**
 }));
