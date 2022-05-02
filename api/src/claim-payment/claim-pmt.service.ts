@@ -206,7 +206,7 @@ export class ClaimPmtService {
     const session = await startSession();
     console.log(paymentAmount, 'payyy');
     // await this.claimService.updateReceivableAmount(claimId, receivable._id, receivable.amountTotal);
-    for (let i = 0; i < receivable.bills.length; i++) {
+    for (let i = 0; i <= receivable.bills.length; i++) {
       const lowBill: any = this.findLowBill(receivable.bills);
       console.log(lowBill, 'off');
       console.log(receivable.bills.length, 'length');
@@ -224,7 +224,7 @@ export class ClaimPmtService {
           billing: lowBill._id,
           creator: lowBill._id,
         };
-        await this.billingService.startTransaction(transactionInfo, lowBill._id, session);
+        // await this.billingService.startTransaction(transactionInfo, lowBill._id, session);
         paymentAmount -= lowBill.billedAmount;
       } else if (paymentAmount < lowBill.billedAmount) {
         console.log(lowBill.billedAmount, 'jjjj');
@@ -248,6 +248,7 @@ export class ClaimPmtService {
     //   bills.push(this.billingService.startTransaction(transactionInfo, bill._id, session));
     // });
     // await Promise.all(bills);
+    console.log(receivable.bills);
     return;
   }
   /** find low receivable amount */
