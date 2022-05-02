@@ -13,12 +13,15 @@ import { FileService } from '../files/file.service';
 import { TransactionType } from '../billing/transaction/transaction.constants';
 import { IReceivable } from '../claim/interface/receivable.interface';
 import { FundingService } from '../funding/funding.service';
+import { BillingService } from '../billing/billing.service';
+import { IBilling } from '../billing/interface';
 
 @Injectable()
 export class ClaimPmtService {
   constructor(
     private readonly sanitizer: ClaimPmtSanitizer,
     private readonly claimService: ClaimService,
+    private readonly billingService: BillingService,
     private readonly fundingService: FundingService,
     private readonly fileService: FileService,
   ) {
@@ -58,12 +61,22 @@ export class ClaimPmtService {
     claimId: string,
     dto: CreateReceivableDTO,
   ): Promise<ClaimPmtDto> {
-    const claimPmt = await this.model.findById(_id).populate('claimIds');
+    const claimPmt = await this.model
+      .findById(_id)
+      .populate('claimIds')
+      .populate({
+        path: 'claimIds',
+        populate: {
+          path: 'receivable',
+          populate: {
+            path: 'bills',
+          },
+        },
+      });
     this.checkClaimPmt(claimPmt);
     const claimIndex = this.checkClaim(claimPmt.claimIds, claimId);
     const claim: any = claimPmt.claimIds[claimIndex];
-    const receivables = this.checkReceivable(claim.receivable, dto.receivableIds);
-    // console.log(claimIndex, 'claimIndex', claim, 'claim', receivables, 'receivables');
+    const receivables: any = this.checkReceivable(claim.receivable, dto.receivableIds);
     this.createPayment(claimPmt, receivables);
     // await claimPmt.save();
     return this.sanitizer.sanitize(claimPmt);
@@ -109,12 +122,13 @@ export class ClaimPmtService {
   private async createPayment(claimPmt, receivables) {
     let paymentAmount = claimPmt.paymentAmount;
     let payed = false;
-    console.log('claimPmt', claimPmt, 'receivables', receivables);
+    console.log(paymentAmount);
     while (paymentAmount > 0) {
       if (!receivables.length) {
         if (!payed) {
           throw new HttpException('Claim have not receivables', HttpStatus.NOT_FOUND);
         }
+        return 'vjarvac e hajox';
         /** add in array and then insert db */
         // const claimPmts = new this.model({
         //   paymentType: claimPmt.paymentType,
@@ -127,6 +141,12 @@ export class ClaimPmtService {
         // return this.sanitizer.sanitize(claimPmts);
       }
       const lowReceivable: any = await this.findLowReceivable(receivables);
+      console.log(
+        paymentAmount,
+        'paymentAmount',
+        lowReceivable.amountTotal,
+        'lowReceivable.amountTotal',
+      );
       if (paymentAmount >= lowReceivable.amountTotal && lowReceivable.amountTotal !== 0) {
         const receivableBalance = await this.fullPay(
           lowReceivable,
@@ -137,7 +157,16 @@ export class ClaimPmtService {
         paymentAmount -= receivableBalance;
         payed = true;
       } else if (paymentAmount < lowReceivable.amountTotal) {
-        // this.partialPayReceivable(lowReceivable, paymentAmount, dto.user.id, invoice._id);
+        const receivableBalance = await this.partialPay(
+          lowReceivable,
+          paymentAmount,
+          // dto.user.id,
+          claimPmt._id,
+        );
+        console.log(
+          paymentAmount,
+          'paymentAmountpaymentAmountpaymentAmountpaymentAmountpaymentAmountpaymentAmountpaymentAmountpaymentAmountpaymentAmount',
+        );
         payed = true;
       }
       receivables = receivables.filter((rec) => rec._id !== lowReceivable._id);
@@ -150,23 +179,87 @@ export class ClaimPmtService {
     // userId: string,
     claimId: string,
   ): Promise<number> {
-    paymentAmount -= receivable.amountTotal;
-    const transactionInfo = {
-      type: TransactionType.PAYERPAID,
-      date: new Date(),
-      amount: receivable.amountTotal,
-      paymentRef: 'chka',
-      // creator: userId,
-    };
+    console.log('aaaahhhh');
     const session = await startSession();
-    await this.claimService.updateReceivableAmount(claimId, receivable._id, receivable.amountTotal);
-    // await this.billingService.startTransaction(transactionInfo, receivable.bills[0]._id, session);
-    return transactionInfo.amount;
+    // await this.claimService.updateReceivableAmount(claimId, receivable._id, receivable.amountTotal);
+    const bills = [];
+    for (let i = 0; i < receivable.bills.length; i++) {
+      const bill = receivable.bills[i];
+      const transactionInfo = {
+        type: TransactionType.PAYERPAID,
+        date: new Date(),
+        rate: bill.billedAmount,
+        paymentRef: 'chka',
+        billing: bill._id,
+        creator: bill._id,
+      };
+      await this.billingService.startTransaction(transactionInfo, bill._id, session);
+    }
+    // receivable.bills.map((bill) => {
+    //   bills.push(this.billingService.startTransaction(transactionInfo, bill._id, session));
+    // });
+    // await Promise.all(bills);
+    return receivable.amountTotal;
+  }
+  /** partial pay */
+  private async partialPay(receivable, paymentAmount, claimId) {
+    const session = await startSession();
+    console.log(paymentAmount, 'payyy');
+    // await this.claimService.updateReceivableAmount(claimId, receivable._id, receivable.amountTotal);
+    for (let i = 0; i < receivable.bills.length; i++) {
+      const lowBill: any = this.findLowBill(receivable.bills);
+      console.log(lowBill, 'off');
+      console.log(receivable.bills.length, 'length');
+      // console.log(low Bill, 'pppp');
+      if (!lowBill || paymentAmount === 0) {
+        return paymentAmount;
+      }
+      if (paymentAmount >= lowBill.billedAmount) {
+        console.log('(((', paymentAmount);
+        const transactionInfo = {
+          type: TransactionType.PAYERPAID,
+          date: new Date(),
+          rate: lowBill.billedAmount,
+          paymentRef: 'chka',
+          billing: lowBill._id,
+          creator: lowBill._id,
+        };
+        await this.billingService.startTransaction(transactionInfo, lowBill._id, session);
+        paymentAmount -= lowBill.billedAmount;
+      } else if (paymentAmount < lowBill.billedAmount) {
+        console.log(lowBill.billedAmount, 'jjjj');
+        const transactionInfo = {
+          type: TransactionType.PAYERPAID,
+          date: new Date(),
+          rate: paymentAmount,
+          paymentRef: 'chka',
+          billing: lowBill._id,
+          creator: lowBill._id,
+        };
+        await this.billingService.startTransaction(transactionInfo, lowBill._id, session);
+        paymentAmount = 0;
+      }
+      // console.log('prev', receivable.bills, 'prev');
+      receivable.bills = receivable.bills.filter((rec) => rec._id !== lowBill._id);
+      i = 0;
+      // console.log('next', receivable.bills, 'next');
+    }
+    // receivable.bills.map((bill) => {
+    //   bills.push(this.billingService.startTransaction(transactionInfo, bill._id, session));
+    // });
+    // await Promise.all(bills);
+    return;
   }
   /** find low receivable amount */
   async findLowReceivable(receivables): Promise<IReceivable> {
     return receivables.reduce((prev, curr) => {
       return prev.amountTotal < curr.amountTotal ? prev : curr;
+    });
+  }
+  /** find low bill amount */
+  findLowBill(bills): Promise<any> {
+    return bills.reduce((prev, curr) => {
+      return prev.billedAmount < curr.billedAmount ? prev : curr;
     });
   }
   /** if the claim-pmt is not found, throws an exception */

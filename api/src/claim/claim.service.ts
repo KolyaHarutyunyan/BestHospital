@@ -232,6 +232,7 @@ export class ClaimService {
     receivable.push({
       placeService,
       cptCode,
+      // amountTotal
       // result[i][j].payerTotal - result[i][j].payerPaid / unitZise?
       totalUnits: 0,
       totalBill: result.payerTotal - result.payerPaid,

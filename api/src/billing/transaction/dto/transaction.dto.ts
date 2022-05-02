@@ -22,7 +22,7 @@ export class TransactionDto extends DTO {
   @ApiProperty()
   @IsOptional()
   @IsString()
-  note: string;
+  note?: string;
   status?: string;
   billing: string;
   creator: string;

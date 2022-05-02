@@ -7,6 +7,7 @@ const receivable = {
   cptCode: { type: String },
   totalUnits: { type: Number },
   totalBill: { type: Number },
+  amountTotal: { type: Number },
   renderProvider: { type: Number },
   dateOfService: { start: { type: Date }, end: { type: Date } },
   status: { type: String, enum: ReceivableStatus },

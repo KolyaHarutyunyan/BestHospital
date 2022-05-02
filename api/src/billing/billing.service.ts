@@ -65,9 +65,7 @@ export class BillingService {
       let billing = await this.model.findById({ _id: billingId }).session(session);
       this.checkBilling(billing);
       dto.billing = billingId;
-      session.startTransaction();
-      const tsxId = await this.transactionService.create(dto);
-
+      // session.startTransaction();
       const rate = dto.rate;
       if (dto.type == TransactionType.PAYERPAID) {
         billing.payerPaid += rate;
@@ -80,10 +78,11 @@ export class BillingService {
         billing.payerTotal -= rate;
         billing.clientResp += rate;
       }
+      const tsxId = await this.transactionService.create(dto);
       billing.transaction.push(tsxId);
       billing = await (await billing.save()).populate('transaction').execPopulate();
-      await session.commitTransaction();
-      session.endSession();
+      // await session.commitTransaction();
+      // session.endSession();
       return this.sanitizer.sanitize(billing);
     } catch (e) {
       await session.abortTransaction();
