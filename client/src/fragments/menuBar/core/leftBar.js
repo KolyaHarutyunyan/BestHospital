@@ -64,13 +64,16 @@ export const LeftBar = ({ setLinksStyle, linkInfo }) => {
                         ? postingSections
                         : [];
 
+                  const itemIsWithAccordion =
+                     item.name === "Billing" || item.name === "Posting";
+
                   return (
                      <CustomListItem
                         key={index}
                         linkInfo={linkInfo}
                         item={item}
                         open={open}
-                        accordion={item.name === "Billing" || item.name === "Posting"}
+                        accordion={itemIsWithAccordion}
                         accordionItems={accordionItemList}
                      />
                   );

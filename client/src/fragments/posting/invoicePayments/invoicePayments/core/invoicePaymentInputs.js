@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { CreateChancel } from "@eachbase/components";
 import { invoicePaymentsCoreStyle } from "./styles";
 import { makeEnum, FindLoad, isNotEmpty } from "@eachbase/utils";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FirstStepInputs, LastStepInputs } from "./common";
 import { invoicePaymentActions } from "@eachbase/store";
 
@@ -12,6 +12,7 @@ export const InvoicePaymentInputs = ({
    handleStep,
    closeModal,
    client = [],
+   invoices = [],
 }) => {
    const classes = invoicePaymentsCoreStyle();
 
@@ -23,6 +24,11 @@ export const InvoicePaymentInputs = ({
 
    const [inputs, setInputs] = useState(!!info ? { ...info } : {});
    const [error, setError] = useState("");
+
+   const filteredInvoices = invoices.filter(
+      (invoice) => invoice.client === inputs.client
+   );
+   const uploadedFiles = useSelector((state) => state.upload.uploadedInfo);
 
    const isFirst = activeStep === "first";
    const isLast = activeStep === "last";
@@ -77,15 +83,20 @@ export const InvoicePaymentInputs = ({
 
    const handleSubmit = () => {
       const invoicePaymentData = {
-         amount: inputs.amount,
-         client: inputs.client,
+         paymentAmount: +inputs.amount,
+         payer: inputs.client,
+         invoice: filteredInvoices[0]._id,
          paymentDate: inputs.paymentDate,
          paymentType: makeEnum(inputs.paymentType),
-         checkNumber: inputs.checkNumber,
-         file: "",
+         paymentReference: inputs.checkNumber,
+         paymentDocument: uploadedFiles,
       };
 
-      dispatch(invoicePaymentActions.createInvoicePayment(invoicePaymentData));
+      if (!!info) {
+         dispatch(invoicePaymentActions.editInvoicePayment(info.id, invoicePaymentData));
+      } else {
+         dispatch(invoicePaymentActions.createInvoicePayment(invoicePaymentData));
+      }
    };
 
    return (
@@ -99,7 +110,9 @@ export const InvoicePaymentInputs = ({
                hasInfo={!!info}
             />
          )}
-         {isLast && <LastStepInputs invoicePaymentId={"????"} />}
+         {isLast && (
+            <LastStepInputs invoicePaymentId={"????"} uploadedFiles={uploadedFiles} />
+         )}
          <CreateChancel
             butnClassName={classes.createOrCancelButnStyle}
             loader={!!loader.length}

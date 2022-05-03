@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
    clientActions,
    httpRequestsOnSuccessActions,
+   invoiceActions,
    invoicePaymentActions,
 } from "@eachbase/store";
 import { Loader } from "@eachbase/components";
@@ -16,11 +17,17 @@ export const InvoicePayments = () => {
 
    const { pageIsChanging, handlePageChange } = useContext(PaginationContext);
 
-   // const invoicePaymentsData = useSelector((state) => state.invoicePayment.invoicePayments);
+   // const invoicePaymentsData = useSelector(
+   //    (state) => state.invoicePayment.invoicePayments
+   // );
    const { clients } = useSelector((state) => state.client.clientList);
-   const clientsNames = clients?.map(
-      (client) => `${client.firstName} ${client.lastName}`
-   );
+   const invoices = useSelector((state) => state.invoice.invoices);
+
+   const mappedClients = clients?.map((client) => ({
+      id: client.id,
+      name: `${client.firstName} ${client.lastName}`,
+   }));
+   const filteredInvoices = invoices.filter((invoice) => invoice.status === "SUBMITTED");
 
    // temporary
    const invoicePaymentsData = dummyData.INVOICE_PAYMENTS;
@@ -34,6 +41,7 @@ export const InvoicePayments = () => {
    useEffect(() => {
       dispatch(invoicePaymentActions.getInvoicePayments());
       dispatch(clientActions.getClients());
+      dispatch(invoiceActions.getInvoices());
    }, []);
 
    useEffect(() => {
@@ -53,7 +61,8 @@ export const InvoicePayments = () => {
          page={page}
          handleGetPage={setPage}
          invoicePaymentsLoader={loader}
-         clientsNames={clientsNames}
+         clientsNames={mappedClients}
+         invoices={invoices}
       />
    );
 };
