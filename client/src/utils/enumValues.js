@@ -21,5 +21,5 @@ export const enumValues = {
    POSTING_PAYMENT_TYPES: ["Check", "Submitted", "Cash"],
 
    /**Payment Types for claim and invoice Enums */
-   PAYMENT_TYPES: ["Check", "Cash"],
+   PAYMENT_TYPES: ["Check", "Ach", "Cash"],
 };

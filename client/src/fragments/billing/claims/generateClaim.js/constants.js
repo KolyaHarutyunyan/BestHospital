@@ -1,4 +1,6 @@
-import { handleCreatedAtDate } from "@eachbase/utils";
+import { hooksForTable } from "@eachbase/utils";
+
+const { handleCreatedAtDate } = hooksForTable;
 
 export function getFilteredNotClaimedBills(
    notClaimedBills,
@@ -24,8 +26,8 @@ export function getFilteredNotClaimedBills(
          : selServiceDate !== ""
          ? notClaimedBills.filter(
               (bill) =>
-                 handleCreatedAtDate(bill?.dateOfService, 10) ===
-                 handleCreatedAtDate(selServiceDate, 10)
+                 handleCreatedAtDate(bill?.dateOfService) ===
+                 handleCreatedAtDate(selServiceDate)
            )
          : [];
 

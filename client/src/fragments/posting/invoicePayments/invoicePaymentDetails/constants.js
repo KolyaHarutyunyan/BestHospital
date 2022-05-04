@@ -1,10 +1,5 @@
 import { DownloadLink } from "@eachbase/components";
-import {
-   addSignToValueFromStart,
-   getValueByFixedNumber,
-   makeCapitalize,
-   manageStatus,
-} from "@eachbase/utils";
+import { hooksForTable, makeCapitalize, manageStatus } from "@eachbase/utils";
 import { invoicePaymentDetailsStyle } from "./styles";
 
 export function getInvoicePaymentDetails(invoicePayment) {
@@ -12,6 +7,8 @@ export function getInvoicePaymentDetails(invoicePayment) {
 
    const { client, status, paymentReference, totalBilled, totalCollected, paymentType } =
       invoicePayment || {};
+
+   const { addSignToValueFromStart, getValueByFixedNumber } = hooksForTable;
 
    const invoicePaymentDetails = [
       {

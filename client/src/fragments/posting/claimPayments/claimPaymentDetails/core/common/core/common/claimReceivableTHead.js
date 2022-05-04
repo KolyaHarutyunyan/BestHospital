@@ -1,11 +1,6 @@
 import React, { useContext } from "react";
 import { claimReceivableTHeadTBodyStyle } from "./styles";
-import {
-   DrawerContext,
-   getTableHeader,
-   getTextDependsOnWidth,
-   useWidth,
-} from "@eachbase/utils";
+import { DrawerContext, hooksForTable, useWidth } from "@eachbase/utils";
 
 export const ClaimReceivableTHead = () => {
    const classes = claimReceivableTHeadTBodyStyle();
@@ -13,6 +8,8 @@ export const ClaimReceivableTHead = () => {
    const width = useWidth();
 
    const { open } = useContext(DrawerContext);
+
+   const { getTableHeader, getTextDependsOnWidth } = hooksForTable;
 
    function getReceivTitle(givenTitle = "", ...rest) {
       const size = open ? 1855 : 1700;
@@ -45,4 +42,3 @@ export const ClaimReceivableTHead = () => {
       </div>
    );
 };
-

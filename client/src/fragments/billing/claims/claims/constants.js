@@ -1,4 +1,6 @@
-import { handleCreatedAtDate } from "@eachbase/utils";
+import { hooksForTable } from "@eachbase/utils";
+
+const { handleCreatedAtDate } = hooksForTable;
 
 export function getFilteredClaims(
    claims = [],
@@ -30,14 +32,14 @@ export function getFilteredClaims(
          : selDateFrom !== ""
          ? claims.filter(
               (claim) =>
-                 handleCreatedAtDate(claim?.dateRange?.early, 10) ===
-                 handleCreatedAtDate(selDateFrom, 10)
+                 handleCreatedAtDate(claim?.dateRange?.early) ===
+                 handleCreatedAtDate(selDateFrom)
            )
          : selDateTo !== ""
          ? claims.filter(
               (claim) =>
-                 handleCreatedAtDate(claim?.dateRange?.latest, 10) ===
-                 handleCreatedAtDate(selDateTo, 10)
+                 handleCreatedAtDate(claim?.dateRange?.latest) ===
+                 handleCreatedAtDate(selDateTo)
            )
          : selStatus !== "All"
          ? claims.filter(

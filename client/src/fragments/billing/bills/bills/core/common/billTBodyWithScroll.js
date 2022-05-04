@@ -1,15 +1,6 @@
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
-import {
-   addSignToValueFromStart,
-   DrawerContext,
-   getTextDependsOnWidth,
-   getValueByFixedNumber,
-   manageStatus,
-   resetRadius,
-   showDashIfEmpty,
-   useWidth,
-} from "@eachbase/utils";
+import { DrawerContext, hooksForTable, manageStatus, useWidth } from "@eachbase/utils";
 import { billTHeadTBodyStyle } from "./style";
 
 export const BillTBodyWithScroll = ({ bills = [] }) => {
@@ -24,6 +15,14 @@ export const BillTBodyWithScroll = ({ bills = [] }) => {
    const history = useHistory();
 
    const width = useWidth();
+
+   const {
+      showDashIfEmpty,
+      getTextDependsOnWidth,
+      addSignToValueFromStart,
+      resetRadius,
+      getValueByFixedNumber,
+   } = hooksForTable;
 
    function getDisplayOf(givenText = "") {
       if (typeof givenText !== "string") return givenText;

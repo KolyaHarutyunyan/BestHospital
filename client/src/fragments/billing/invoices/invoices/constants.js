@@ -1,4 +1,6 @@
-import { handleCreatedAtDate } from "@eachbase/utils";
+import { hooksForTable } from "@eachbase/utils";
+
+const { handleCreatedAtDate } = hooksForTable;
 
 export function getFilteredInvoices(
    invoices,
@@ -24,14 +26,14 @@ export function getFilteredInvoices(
          : selDateFrom !== ""
          ? invoices.filter(
               (invoice) =>
-                 handleCreatedAtDate(invoice?.dateRange?.early, 10) ===
-                 handleCreatedAtDate(selDateFrom, 10)
+                 handleCreatedAtDate(invoice?.dateRange?.early) ===
+                 handleCreatedAtDate(selDateFrom)
            )
          : selDateTo !== ""
          ? invoices.filter(
               (invoice) =>
-                 handleCreatedAtDate(invoice?.dateRange?.latest, 10) ===
-                 handleCreatedAtDate(selDateTo, 10)
+                 handleCreatedAtDate(invoice?.dateRange?.latest) ===
+                 handleCreatedAtDate(selDateTo)
            )
          : selStatus !== "All"
          ? invoices.filter(
@@ -40,8 +42,8 @@ export function getFilteredInvoices(
          : selInvoiceDate !== ""
          ? invoices.filter(
               (invoice) =>
-                 handleCreatedAtDate(invoice?.invoiceDate, 10) ===
-                 handleCreatedAtDate(selInvoiceDate, 10)
+                 handleCreatedAtDate(invoice?.invoiceDate) ===
+                 handleCreatedAtDate(selInvoiceDate)
            )
          : [];
 

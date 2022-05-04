@@ -1,10 +1,12 @@
 import React from "react";
-import { manageStatus, showDashIfEmpty } from "@eachbase/utils";
+import { hooksForTable, manageStatus } from "@eachbase/utils";
 import { receivableBillTHeadTBodyStyle } from "./styles";
 import { DownloadLink } from "@eachbase/components";
 
 export const ReceivableBillTBody = ({ receivableBill }) => {
    const classes = receivableBillTHeadTBodyStyle();
+
+   const { showDashIfEmpty } = hooksForTable;
 
    const receivableBillId = showDashIfEmpty(receivableBill._id);
    const dateOfService = showDashIfEmpty(receivableBill.dateOfService);

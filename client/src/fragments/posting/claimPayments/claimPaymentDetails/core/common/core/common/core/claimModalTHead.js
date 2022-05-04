@@ -1,10 +1,12 @@
 import React from "react";
 import { SearchAndFilter } from "@eachbase/components";
-import { getLimitedVal, getTableHeader } from "@eachbase/utils";
+import { getLimitedVal, hooksForTable } from "@eachbase/utils";
 import { claimModalTHeadTBodyStyle } from "./styles";
 
 export const ClaimModalTHead = () => {
    const classes = claimModalTHeadTBodyStyle();
+
+   const { getTableHeader } = hooksForTable;
 
    function getClaimTitle(givenTitle = "", ...rest) {
       return getTableHeader(givenTitle, getLimitedVal(givenTitle, 15), ...rest);

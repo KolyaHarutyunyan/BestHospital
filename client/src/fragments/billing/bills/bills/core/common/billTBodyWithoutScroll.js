@@ -1,13 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import {
-   getFullName,
-   getTextDependsOnWidth,
-   handleCreatedAtDate,
-   resetRadius,
-   showDashIfEmpty,
-   useWidth,
-} from "@eachbase/utils";
+import { hooksForTable, useWidth } from "@eachbase/utils";
 import { billTHeadTBodyStyle } from "./style";
 
 export const BillTBodyWithoutScroll = ({ bills = [] }) => {
@@ -16,6 +9,14 @@ export const BillTBodyWithoutScroll = ({ bills = [] }) => {
    const history = useHistory();
 
    const width = useWidth();
+
+   const {
+      getFullName,
+      getTextDependsOnWidth,
+      handleCreatedAtDate,
+      resetRadius,
+      showDashIfEmpty,
+   } = hooksForTable;
 
    function getDisplayOf(givenText = "") {
       if (typeof givenText !== "string") return givenText;
@@ -31,9 +32,7 @@ export const BillTBodyWithoutScroll = ({ bills = [] }) => {
             const clientLastName = bill.client?.lastName;
 
             const billId = getDisplayOf(bill._id);
-            const dateOfService = getDisplayOf(
-               handleCreatedAtDate(bill.dateOfService, 10, "/")
-            );
+            const dateOfService = getDisplayOf(handleCreatedAtDate(bill.dateOfService));
             const payor = getFullName(payorFirstName, payorLastName, getDisplayOf);
             const client = getFullName(clientFirstName, clientLastName, getDisplayOf);
             const service = getDisplayOf(bill.authService?.authorizationId);

@@ -1,6 +1,10 @@
-export const getDynamicContent = (content, info, type) => {
+export function getDynamicContent(content, info, type) {
    const staticText =
-      content === "TITLE" ? "" : content === "SUBTITLE" ? ", please fulfill the below fields." : "";
+      content === "TITLE"
+         ? ""
+         : content === "SUBTITLE"
+         ? ", please fulfill the below fields."
+         : "";
 
    const dynamicText =
       content === "TITLE"
@@ -25,4 +29,4 @@ export const getDynamicContent = (content, info, type) => {
       default:
          return "";
    }
-};
+}

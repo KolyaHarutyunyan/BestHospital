@@ -1,13 +1,15 @@
-import { getLimitedVal, handleCreatedAtDate, makeCapitalize } from "@eachbase/utils";
+import { getLimitedVal, hooksForTable, makeCapitalize } from "@eachbase/utils";
 
 export function getBillDetails(bill) {
    const { authService, client, payor, dateOfService, totalHours, totalUnits } =
       bill || {};
 
+   const { handleCreatedAtDate } = hooksForTable;
+
    const billDetails = [
       {
          detailText: "DoS:",
-         detail: handleCreatedAtDate(dateOfService, 10, "/"),
+         detail: handleCreatedAtDate(dateOfService),
       },
       {
          detailText: "Payor:",

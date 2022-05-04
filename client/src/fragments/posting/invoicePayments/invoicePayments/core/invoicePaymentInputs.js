@@ -85,7 +85,7 @@ export const InvoicePaymentInputs = ({
       const invoicePaymentData = {
          paymentAmount: +inputs.amount,
          payer: inputs.client,
-         invoice: filteredInvoices[0]._id,
+         invoice: filteredInvoices[0]?._id,
          paymentDate: inputs.paymentDate,
          paymentType: makeEnum(inputs.paymentType),
          paymentReference: inputs.checkNumber,

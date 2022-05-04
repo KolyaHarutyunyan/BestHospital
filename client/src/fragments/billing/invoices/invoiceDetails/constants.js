@@ -1,18 +1,15 @@
 import { DownloadLink } from "@eachbase/components";
-import {
-   addSignToValueFromStart,
-   getValueByFixedNumber,
-   handleCreatedAtDate,
-   makeCapitalize,
-   manageStatus,
-} from "@eachbase/utils";
+import { hooksForTable, makeCapitalize, manageStatus } from "@eachbase/utils";
 
 export function getInvoiceDetails(invoice) {
    const { dateRange, totalAmount, pdfDocument, client, dueDate, status, totalTime } =
       invoice || {};
 
-   const early = handleCreatedAtDate(dateRange?.early, 10, "/");
-   const latest = handleCreatedAtDate(dateRange?.latest, 10, "/");
+   const { addSignToValueFromStart, getValueByFixedNumber, handleCreatedAtDate } =
+      hooksForTable;
+
+   const early = handleCreatedAtDate(dateRange?.early);
+   const latest = handleCreatedAtDate(dateRange?.latest);
 
    const invoiceDetails = [
       {
@@ -40,7 +37,7 @@ export function getInvoiceDetails(invoice) {
       },
       {
          detailText: "Due Date:",
-         detail: handleCreatedAtDate(dueDate, 10, "/"),
+         detail: handleCreatedAtDate(dueDate),
       },
       {
          detailText: "Status",

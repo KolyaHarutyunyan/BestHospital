@@ -1,9 +1,11 @@
 import React from "react";
-import { getLimitedVal, getTableHeader } from "@eachbase/utils";
+import { getLimitedVal, hooksForTable } from "@eachbase/utils";
 import { invoiceModalTHeadTBodyStyle } from "./styles";
 
 export const InvoiceModalTHead = () => {
    const classes = invoiceModalTHeadTBodyStyle();
+
+   const { getTableHeader } = hooksForTable;
 
    function getInvoiceTitle(givenTitle = "", ...rest) {
       return getTableHeader(givenTitle, getLimitedVal(givenTitle, 15), ...rest);

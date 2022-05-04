@@ -1,12 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { notClaimedBillTHeadTBodyStyle } from "./styles";
-import {
-   CheckupContext,
-   DrawerContext,
-   getTableHeader,
-   getTextDependsOnWidth,
-   useWidth,
-} from "@eachbase/utils";
+import { CheckupContext, DrawerContext, hooksForTable, useWidth } from "@eachbase/utils";
 import { CheckBoxInput, SimpleTooltip } from "@eachbase/components";
 
 export const NotClaimedBillTHead = ({ uncheckAllBills }) => {
@@ -24,6 +18,8 @@ export const NotClaimedBillTHead = ({ uncheckAllBills }) => {
 
       uncheckAllBills && uncheckAllBills();
    }, [checked]);
+
+   const { getTableHeader, getTextDependsOnWidth } = hooksForTable;
 
    function getNotClaimedBillTitle(givenTitle = "", ...rest) {
       const size = open ? 1650 : 1500;

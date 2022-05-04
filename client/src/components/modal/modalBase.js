@@ -20,7 +20,7 @@ export const SimpleModal = ({
       if (handleOpenClose) {
          handleOpenClose();
       } else {
-         setOpen(false);
+         setOpen(prevState => !prevState);
       }
    };
 

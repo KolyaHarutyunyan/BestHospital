@@ -1,12 +1,9 @@
 import React, { useContext } from "react";
 import {
-   addSignToValueFromStart,
    DrawerContext,
    getDataForTable,
-   getValueByFixedNumber,
-   handleCreatedAtDate,
+   hooksForTable,
    manageStatus,
-   showDashIfEmpty,
    useWidth,
 } from "@eachbase/utils";
 import { tableTheadTbodyStyle } from "./styles";
@@ -22,6 +19,13 @@ export const TransactionsDemoTBody = ({
 
    const { open } = useContext(DrawerContext);
 
+   const {
+      showDashIfEmpty,
+      addSignToValueFromStart,
+      getValueByFixedNumber,
+      handleCreatedAtDate,
+   } = hooksForTable;
+
    function getTableData(data) {
       return showDashIfEmpty(getDataForTable(data, open, width));
    }
@@ -29,7 +33,7 @@ export const TransactionsDemoTBody = ({
    const _isVoided = billTransaction.status === "VOID";
 
    const billTransactionId = getTableData(billTransaction._id);
-   const date = getTableData(handleCreatedAtDate(billTransaction.date, 10, "/"));
+   const date = getTableData(handleCreatedAtDate(billTransaction.date));
    const creator = getTableData(billTransaction.creator);
    const type = getTableData(manageStatus(billTransaction.type));
    const amount = getTableData(
