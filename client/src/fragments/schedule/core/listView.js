@@ -307,7 +307,7 @@ export const ListView = ({
                </div>
             </div>
          ) : (
-            <NoItemText text="No Items Yet" />
+            <NoItemText text="No Appointments Yet" />
          )}
          <SimpleModal
             handleOpenClose={handleOpenCloseModal}

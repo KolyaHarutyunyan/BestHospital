@@ -145,9 +145,11 @@ export const Break = ({
             ? ErrorText.timeError
             : "";
 
-         if (modalType === "DRIVE")
+         if (modalType === "DRIVE") {
             setError(errorText ? errorText : !inputs.miles ? "miles" : "");
-         else setError(errorText);
+         } else {
+            setError(errorText);
+         }
       }
    };
 

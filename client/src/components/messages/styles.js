@@ -77,6 +77,9 @@ export const errMessageStyle = makeStyles(() => ({
       whiteSpace: "nowrap",
       textOverflow: "ellipsis",
       maxWidth: "200px",
+      fontSize: "14px",
+      fontWeight: 600,
+      color: Colors.TextPrimary,
       "@media (min-width: 1919px)": {
          maxWidth: "250px",
       },

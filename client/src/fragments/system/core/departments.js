@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import {
-   AddButton,
-   NoItemText,
-   SlicedText,
-   ValidationInput,
-} from "@eachbase/components";
+import { AddButton, NoItemText, SlicedText, ValidationInput } from "@eachbase/components";
 import { FindLoad, FindSuccess, Images, isNotEmpty } from "@eachbase/utils";
 import { systemItemStyles } from "./styles";
 import { httpRequestsOnSuccessActions, systemActions } from "@eachbase/store";
@@ -58,11 +53,7 @@ export const Departments = ({ globalDepartments, removeItem, openModal }) => {
          setInputs({
             name: "",
          });
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess(
-               "CREATE_DEPARTMENT_GLOBAL"
-            )
-         );
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_DEPARTMENT_GLOBAL"));
       }
    }, [success]);
 
@@ -130,7 +121,7 @@ export const Departments = ({ globalDepartments, removeItem, openModal }) => {
                   );
                })
             ) : (
-               <NoItemText text="No Items Yet" />
+               <NoItemText text="No Departments Yet" />
             )}
          </div>
       </>

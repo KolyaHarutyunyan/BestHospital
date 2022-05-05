@@ -1,16 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { modalsStyle } from "@eachbase/components/modal/styles";
-import {
-   ErrorText,
-   FindLoad,
-   FindSuccess,
-   useGlobalTextStyles,
-} from "@eachbase/utils";
-import {
-   AddModalButton,
-   CloseButton,
-   CreateChancel,
-} from "@eachbase/components/buttons";
+import { ErrorText, FindLoad, FindSuccess, useGlobalTextStyles } from "@eachbase/utils";
+import { AddModalButton, CloseButton, CreateChancel } from "@eachbase/components/buttons";
 import {
    SelectInput,
    RadioButton,
@@ -56,9 +47,7 @@ export const CredentialModal = ({
 
    const [error, setError] = useState("");
    const [inputs, setInputs] = useState(
-      globalCredentialInformation
-         ? globalCredentialInformation
-         : { expirationDate: "" }
+      globalCredentialInformation ? globalCredentialInformation : { expirationDate: "" }
    );
 
    const [globalCredId, setGlobalCredId] = useState("");
@@ -99,9 +88,7 @@ export const CredentialModal = ({
          receiveData: new Date().toISOString(),
       };
       editData = {
-         credentialId: globalCredId
-            ? globalCredId
-            : globalCredentialInformation?.credId,
+         credentialId: globalCredId ? globalCredId : globalCredentialInformation?.credId,
          expirationDate:
             inputs.expirationDate && checkboxValue === "expiring"
                ? new Date(inputs.expirationDate).toISOString()
@@ -109,30 +96,35 @@ export const CredentialModal = ({
          receiveData: "",
       };
 
+      const credentialDataIsValid =
+         !!inputs.type && (checkboxValue === "expiring" ? !!inputs.expirationDate : true);
+
+      const errorText = !inputs.type
+         ? "type"
+         : !inputs.expirationDate
+         ? "expirationDate"
+         : "";
+
       switch (mType) {
          case "addCredential":
-            if (inputs.type && checkboxValue === "nonExpiring") {
-               dispatch(adminActions.createCredential(data));
-            } else if (checkboxValue === "expiring" && inputs.expirationDate) {
+            if (credentialDataIsValid) {
                dispatch(adminActions.createCredential(data));
             } else {
-               setError(
-                  !inputs.type
-                     ? "type"
-                     : !inputs.expirationDate
-                     ? "expirationDate"
-                     : "Input is not filled"
-               );
+               setError(errorText);
             }
             break;
          case "editCredential":
-            dispatch(
-               adminActions.editCredentialById(
-                  editData,
-                  globalCredentialInformation?.id,
-                  params.id
-               )
-            );
+            if (credentialDataIsValid) {
+               dispatch(
+                  adminActions.editCredentialById(
+                     editData,
+                     globalCredentialInformation?.id,
+                     params.id
+                  )
+               );
+            } else {
+               setError(errorText);
+            }
             break;
          case "credentialPreview":
             setMType("editCredential");
