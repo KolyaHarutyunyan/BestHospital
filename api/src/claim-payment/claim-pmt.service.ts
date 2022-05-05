@@ -77,8 +77,9 @@ export class ClaimPmtService {
     const claimIndex = this.checkClaim(claimPmt.claimIds, claimId);
     const claim: any = claimPmt.claimIds[claimIndex];
     const receivables: any = this.checkReceivable(claim.receivable, dto.receivableIds);
-    this.createPayment(claimPmt, receivables);
-    // await claimPmt.save();
+    await this.createPayment(claimPmt, receivables);
+    await this.claimService.setAmount(claimId, dto.receivableIds);
+    await claimPmt.save();
     return this.sanitizer.sanitize(claimPmt);
   }
   /** add document to claim-pmt */
@@ -122,12 +123,13 @@ export class ClaimPmtService {
   private async createPayment(claimPmt, receivables) {
     let paymentAmount = claimPmt.paymentAmount;
     let payed = false;
-    console.log(paymentAmount);
     while (paymentAmount > 0) {
       if (!receivables.length) {
         if (!payed) {
-          throw new HttpException('Claim have not receivables', HttpStatus.NOT_FOUND);
+          throw new HttpException('Claim have not payable receivables', HttpStatus.NOT_FOUND);
         }
+        console.log('vjarvac e hajox');
+
         return 'vjarvac e hajox';
         /** add in array and then insert db */
         // const claimPmts = new this.model({
@@ -141,12 +143,6 @@ export class ClaimPmtService {
         // return this.sanitizer.sanitize(claimPmts);
       }
       const lowReceivable: any = await this.findLowReceivable(receivables);
-      console.log(
-        paymentAmount,
-        'paymentAmount',
-        lowReceivable.amountTotal,
-        'lowReceivable.amountTotal',
-      );
       if (paymentAmount >= lowReceivable.amountTotal && lowReceivable.amountTotal !== 0) {
         const receivableBalance = await this.fullPay(
           lowReceivable,
@@ -163,10 +159,6 @@ export class ClaimPmtService {
           // dto.user.id,
           claimPmt._id,
         );
-        console.log(
-          paymentAmount,
-          'paymentAmountpaymentAmountpaymentAmountpaymentAmountpaymentAmountpaymentAmountpaymentAmountpaymentAmountpaymentAmount',
-        );
         payed = true;
       }
       receivables = receivables.filter((rec) => rec._id !== lowReceivable._id);
@@ -177,7 +169,7 @@ export class ClaimPmtService {
     receivable,
     paymentAmount,
     // userId: string,
-    claimId: string,
+    claimPmtId: string,
   ): Promise<number> {
     console.log('aaaahhhh');
     const session = await startSession();
@@ -202,20 +194,19 @@ export class ClaimPmtService {
     return receivable.amountTotal;
   }
   /** partial pay */
-  private async partialPay(receivable, paymentAmount, claimId) {
+  private async partialPay(receivable, paymentAmount, claimPmt) {
     const session = await startSession();
-    console.log(paymentAmount, 'payyy');
     // await this.claimService.updateReceivableAmount(claimId, receivable._id, receivable.amountTotal);
     for (let i = 0; i <= receivable.bills.length; i++) {
       const lowBill: any = this.findLowBill(receivable.bills);
-      console.log(lowBill, 'off');
-      console.log(receivable.bills.length, 'length');
-      // console.log(low Bill, 'pppp');
+      if (lowBill.billedAmount === 0) {
+        i = 0;
+        continue;
+      }
       if (!lowBill || paymentAmount === 0) {
         return paymentAmount;
       }
       if (paymentAmount >= lowBill.billedAmount) {
-        console.log('(((', paymentAmount);
         const transactionInfo = {
           type: TransactionType.PAYERPAID,
           date: new Date(),
@@ -224,10 +215,10 @@ export class ClaimPmtService {
           billing: lowBill._id,
           creator: lowBill._id,
         };
-        // await this.billingService.startTransaction(transactionInfo, lowBill._id, session);
+        await this.billingService.startTransaction(transactionInfo, lowBill._id, session);
+        receivable.amountTotal -= lowBill.billedAmount;
         paymentAmount -= lowBill.billedAmount;
       } else if (paymentAmount < lowBill.billedAmount) {
-        console.log(lowBill.billedAmount, 'jjjj');
         const transactionInfo = {
           type: TransactionType.PAYERPAID,
           date: new Date(),
@@ -237,12 +228,11 @@ export class ClaimPmtService {
           creator: lowBill._id,
         };
         await this.billingService.startTransaction(transactionInfo, lowBill._id, session);
+        receivable.amountTotal -= lowBill.billedAmount;
         paymentAmount = 0;
       }
-      // console.log('prev', receivable.bills, 'prev');
       receivable.bills = receivable.bills.filter((rec) => rec._id !== lowBill._id);
       i = 0;
-      // console.log('next', receivable.bills, 'next');
     }
     // receivable.bills.map((bill) => {
     //   bills.push(this.billingService.startTransaction(transactionInfo, bill._id, session));

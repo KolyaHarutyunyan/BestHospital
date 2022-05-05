@@ -241,7 +241,7 @@ export class AppointmentService {
     let count = 0;
     const dates = [];
     let x;
-    for (let d: any = startDate; d <= endDate; d.setDate(d.getDate() + dto.repeatCount)) {
+    for (let d: any = startDate; d <= endDate; d.setDate(d.getDate() + dto.repeatCount + 1)) {
       count++;
       x = new Date(d.getTime());
       dates.push(x);
@@ -285,7 +285,7 @@ export class AppointmentService {
       5: { sum: 0, date: [] },
       6: { sum: 0, date: [] },
     }; //0 is sunday and 6 is saturday
-    for (const d = startDate; d <= endDate; d.setDate(d.getDate())) {
+    for (const d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
       dayCount[d.getDay()].sum++;
       x = new Date(d.getTime());
       dayCount[d.getDay()].date.push(x);
@@ -323,7 +323,7 @@ export class AppointmentService {
     let count = 0;
     const dates = [];
     let x;
-    for (let d = start; d <= end; d.setMonth(d.getMonth())) {
+    for (let d = start; d <= end; d.setMonth(d.getMonth() + 1)) {
       if (d.getMonth() == end.getMonth() && end.getDate() < dto.repeatDayMonth) {
         break;
       }

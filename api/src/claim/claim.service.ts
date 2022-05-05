@@ -208,6 +208,23 @@ export class ClaimService {
     }
     throw new HttpException('claim was not found', HttpStatus.NOT_FOUND);
   };
+  /** change receivable amount total by receivabelId (claim-pmt) */
+  async setAmount(_id: string, receivableIds: string[]) {
+    console.log(_id, '_id_id_id_id_id_id_id_id_id_id')
+    const claim = await this.model.findById(_id).populate('receivable.bills');
+    this.checkClaim(claim);
+    let receivabelTotal = 0;
+    receivableIds.map((receivable) => {
+      const index = claim.receivable.findIndex(
+        (claimReceivable) => claimReceivable._id == receivable,
+      );
+      claim.receivable[index].bills.map((bill: any) => {
+        receivabelTotal += bill.billedAmount;
+      });
+      claim.receivable[index].amountTotal = receivabelTotal;
+    });
+    await claim.save();
+  }
   /** Private methods */
   /** group the bills */
   private groupBy(array, f) {
