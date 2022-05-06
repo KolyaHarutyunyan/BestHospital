@@ -35,20 +35,13 @@ export const Recur = ({ openCloseRecur, date }) => {
    const [error, setError] = React.useState("");
 
    function handleChange(e) {
+      e.target.name === "mode" && setOccurrence(0);
+      e.target.name === "repeatCountCheckbox" && setOccurrence(0),
+         delete inputs["repeatConsecutive"];
       setInputs((prevState) => ({
          ...prevState,
          [e.target.name]: e.target.value,
       }));
-      if (e.target.name === "mode" || e.target.name === "repeatCountCheckbox") {
-         setOccurrence(0);
-         if (e.target.name === "repeatCountCheckbox") {
-            delete inputs["repeatConsecutive"];
-         }
-      }
-      e.target.name === "repeatConsecutive" && setOccurrence(0),
-         delete inputs["repeatCount"] && delete inputs["repeatCountCheckbox"];
-      e.target.name === "repeatCount" && setOccurrence(0),
-         delete inputs["repeatConsecutive"];
    }
 
    function handleChangeDay(e) {
