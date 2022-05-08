@@ -5,15 +5,7 @@ import {
    SelectInput,
    ValidationInput,
 } from "@eachbase/components";
-import {
-   ErrorText,
-   FindError,
-   FindLoad,
-   FindSuccess,
-   getActiveDatas,
-   getDynamicContent,
-   isNotEmpty,
-} from "@eachbase/utils";
+import { ErrorText, FindError, FindLoad, FindSuccess, isNotEmpty } from "@eachbase/utils";
 import { scheduleModalsStyle } from "./styles";
 import { modalsStyle } from "@eachbase/components/modal/styles";
 import { useDispatch } from "react-redux";
@@ -26,6 +18,7 @@ import axios from "axios";
 import moment from "moment";
 import { Switch } from "@material-ui/core";
 import { inputsStyle } from "@eachbase/components/inputs/styles";
+import { getDynamicContent } from "./constants";
 
 export const Service = ({
    handleOpenClose,
@@ -63,9 +56,7 @@ export const Service = ({
    const [times, setTimes] = useState(date ? { ...date } : {});
    const [error, setError] = useState("");
    const [clientService, setClientService] = useState("");
-   const [signature, setSignature] = useState(
-      modalDate ? modalDate.require : false
-   );
+   const [signature, setSignature] = useState(modalDate ? modalDate.require : false);
 
    const success = modalDate
       ? FindSuccess("EDIT_APPOINTMENT")
@@ -83,13 +74,9 @@ export const Service = ({
       if (!success) return;
       handleOpenClose();
       if (modalDate) {
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess("EDIT_APPOINTMENT")
-         );
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_APPOINTMENT"));
       } else {
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess("CREATE_APPOINTMENT")
-         );
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_APPOINTMENT"));
       }
    }, [success]);
 
@@ -142,8 +129,7 @@ export const Service = ({
          0
       );
       setTimes((prevState) => ({ ...prevState, [e.target.name]: myToday }));
-      (e.target.name === error || error === ErrorText.timeError) &&
-         setError("");
+      (e.target.name === error || error === ErrorText.timeError) && setError("");
    };
 
    const handleSelect = (ev) => {
@@ -202,15 +188,13 @@ export const Service = ({
             staff: inputs.staff,
             placeService: inputs.placeService,
             staffPayCode: inputs.staffPayCode,
-            startDate:
-               inputs.startDate &&
-               moment(inputs.startDate).format("YYYY-MM-DD"),
+            startDate: inputs.startDate && moment(inputs.startDate).format("YYYY-MM-DD"),
             eventStatus: inputs.eventStatus ? inputs.eventStatus : "PENDING",
             startTime: times.startTime,
             endTime: times.endTime,
             status: "ACTIVE",
-            // require: "",
-            signature: signature,
+            require: signature,
+            // signature: signature,
          };
 
          if (modalDate) {
@@ -243,18 +227,14 @@ export const Service = ({
       }
    };
 
-   const titleContent = getDynamicContent(
-      "TITLE",
-      modalDate,
-      "Service Appointment"
-   );
+   const titleContent = getDynamicContent("TITLE", modalDate, "Service Appointment");
    const subtitleContent = getDynamicContent(
       "SUBTITLE",
       modalDate,
       "Service Appointment"
    );
 
-   const activeStaffPaycodes = getActiveDatas(allPaycodes);
+   const activeStaffPaycodes = allPaycodes.filter((data) => data.active);
 
    return (
       <div className={classes.serciveModall}>
@@ -287,9 +267,7 @@ export const Service = ({
                         handleSelect={handleSelect}
                         value={inputs.authorizedService}
                         list={clientService ? clientService : []}
-                        typeError={
-                           error === "authorizedService" && ErrorText.field
-                        }
+                        typeError={error === "authorizedService" && ErrorText.field}
                      />
                      <SelectInput
                         type={"id"}

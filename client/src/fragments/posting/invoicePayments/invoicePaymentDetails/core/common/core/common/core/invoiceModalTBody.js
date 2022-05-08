@@ -1,19 +1,19 @@
 import React from "react";
 import { invoiceModalTHeadTBodyStyle } from "./styles";
-import {
-   addSignToValueFromStart,
-   getFullName,
-   getModalDataForTable,
-   getValueByFixedNumber,
-   handleCreatedAtDate,
-   showDashIfEmpty,
-   useWidth,
-} from "@eachbase/utils";
+import { getModalDataForTable, hooksForTable, useWidth } from "@eachbase/utils";
 
 export const InvoiceModalTBody = ({ invoices = [], triggerId }) => {
    const classes = invoiceModalTHeadTBodyStyle();
 
    const width = useWidth();
+
+   const {
+      addSignToValueFromStart,
+      getFullName,
+      getValueByFixedNumber,
+      handleCreatedAtDate,
+      showDashIfEmpty,
+   } = hooksForTable;
 
    function getTableData(data) {
       return showDashIfEmpty(getModalDataForTable(data, width));
@@ -22,17 +22,15 @@ export const InvoiceModalTBody = ({ invoices = [], triggerId }) => {
    return (
       <div className={classes.tbodyContainerStyle}>
          {invoices.map((invoice, index) => {
-            const early = handleCreatedAtDate(invoice?.dateRange?.early, 10, "/");
-            const latest = handleCreatedAtDate(invoice?.dateRange?.latest, 10, "/");
+            const early = handleCreatedAtDate(invoice?.dateRange?.early);
+            const latest = handleCreatedAtDate(invoice?.dateRange?.latest);
             const clientFirstName = invoice?.client?.firstName;
             const clientLastName = invoice?.client?.lastName;
 
             const serviceDates = getTableData(`${early} - ${latest}`);
             const client = getFullName(clientFirstName, clientLastName, getTableData);
             const totalHours = getTableData(invoice.totalHours);
-            const invoiceDate = getTableData(
-               handleCreatedAtDate(invoice.invoiceDate, 10, "/")
-            );
+            const invoiceDate = getTableData(handleCreatedAtDate(invoice.invoiceDate));
             const totalAMT = getTableData(
                addSignToValueFromStart(getValueByFixedNumber(invoice.totalAmount))
             );

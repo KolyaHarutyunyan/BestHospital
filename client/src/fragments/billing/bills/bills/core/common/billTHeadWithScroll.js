@@ -1,18 +1,12 @@
 import React, { useContext } from "react";
-import {
-   DrawerContext,
-   getTableHeader,
-   getTextDependsOnWidth,
-   resetRadius,
-   useWidth,
-} from "@eachbase/utils";
+import { DrawerContext, hooksForTable, useWidth } from "@eachbase/utils";
 import { billTHeadTBodyStyle } from "./style";
 
 function addStyle(initialStyle) {
    return `${initialStyle} withScroll`;
 }
 
-const styles = { ...resetRadius("left"), paddingLeft: 0 };
+const styles = { ...hooksForTable.resetRadius("left"), paddingLeft: 0 };
 
 export const BillTHeadWithScroll = () => {
    const classes = billTHeadTBodyStyle();
@@ -26,6 +20,8 @@ export const BillTHeadWithScroll = () => {
    const thClassName = addStyle(classes.thStyle);
 
    const width = useWidth();
+
+   const { getTableHeader, getTextDependsOnWidth } = hooksForTable;
 
    function getBillTitle(givenTitle = "", ...rest) {
       return getTableHeader(

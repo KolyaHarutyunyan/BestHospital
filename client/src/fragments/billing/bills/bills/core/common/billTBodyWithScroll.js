@@ -1,15 +1,6 @@
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
-import {
-   addSignToValueFromStart,
-   DrawerContext,
-   getTextDependsOnWidth,
-   getValueByFixedNumber,
-   manageStatus,
-   resetRadius,
-   showDashIfEmpty,
-   useWidth,
-} from "@eachbase/utils";
+import { DrawerContext, hooksForTable, manageStatus, useWidth } from "@eachbase/utils";
 import { billTHeadTBodyStyle } from "./style";
 
 export const BillTBodyWithScroll = ({ bills = [] }) => {
@@ -25,6 +16,14 @@ export const BillTBodyWithScroll = ({ bills = [] }) => {
 
    const width = useWidth();
 
+   const {
+      showDashIfEmpty,
+      getTextDependsOnWidth,
+      addSignToValueFromStart,
+      resetRadius,
+      getValueByFixedNumber,
+   } = hooksForTable;
+
    function getDisplayOf(givenText = "") {
       if (typeof givenText !== "string") return givenText;
       return showDashIfEmpty(getTextDependsOnWidth(width, 2565, givenText, 5));
@@ -39,16 +38,18 @@ export const BillTBodyWithScroll = ({ bills = [] }) => {
                addSignToValueFromStart(getValueByFixedNumber(bill.billedRate))
             );
             const totalAmount = getDisplayOf(
-               addSignToValueFromStart(getValueByFixedNumber(bill.totalAmount))
+               addSignToValueFromStart(getValueByFixedNumber(bill.billedAmount))
             );
             const payorBalance = getDisplayOf(
-               addSignToValueFromStart(getValueByFixedNumber(bill.payerTotal))
+               addSignToValueFromStart(
+                  getValueByFixedNumber(bill.payerTotal - bill.payerPaid)
+               )
             );
             const clientBalance = getDisplayOf(
                addSignToValueFromStart(getValueByFixedNumber(bill.clientResp))
             );
             const totalBalance = getDisplayOf(
-               addSignToValueFromStart(getValueByFixedNumber(bill.billedAmount))
+               addSignToValueFromStart(getValueByFixedNumber(bill.balance))
             );
             const claimStatus = getDisplayOf(manageStatus(bill.claimStatus));
             const invoiceStatus = getDisplayOf(manageStatus(bill.invoiceStatus));

@@ -3,7 +3,7 @@ import { InvoicesFragment } from "@eachbase/fragments";
 import { useDispatch, useSelector } from "react-redux";
 import { httpRequestsOnSuccessActions, invoiceActions } from "@eachbase/store";
 import { Loader } from "@eachbase/components";
-import { dummyData, FindLoad, FindSuccess, PaginationContext } from "@eachbase/utils";
+import { FindLoad, FindSuccess, PaginationContext } from "@eachbase/utils";
 
 export const Invoices = () => {
    const dispatch = useDispatch();
@@ -12,11 +12,7 @@ export const Invoices = () => {
 
    const { pageIsChanging, handlePageChange } = useContext(PaginationContext);
 
-   // const invoicesData = useSelector((state) => state.invoice.invoices);
-
-   // temporary
-   const invoicesData = dummyData.INVOICES;
-   // end
+   const invoicesData = useSelector((state) => state.invoice.invoices);
 
    const { invoices, count } = invoicesData || {};
 

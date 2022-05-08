@@ -56,8 +56,12 @@ export const GenerateClaimFragment = ({
       );
    }
 
-   const payorsNames = bills.map((bill) => bill?.funder?.firstName);
-   const clientsNames = bills.map((bill) => bill?.client?.firstName);
+   const payorsNames = bills.map(
+      (bill) => `${bill?.funder?.firstName} ${bill?.funder?.lastName}`
+   );
+   const clientsNames = bills.map(
+      (bill) => `${bill?.client?.firstName} ${bill?.client?.lastName}`
+   );
 
    const notClaimedBillsWithFilters = getFilteredNotClaimedBills(
       bills,

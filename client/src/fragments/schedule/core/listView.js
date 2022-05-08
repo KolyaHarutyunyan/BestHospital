@@ -162,18 +162,14 @@ export const ListView = ({
                            </p>
                            <div>
                               {defItem && defItem.isRepeat === true ? (
-                                 <SimpleTooltip
-                                    title={<p>{"Recurring Event"}</p>}
-                                    placement="top-end"
-                                 >
-                                    <button
-                                       className={classes.recurEdit}
+                                 <div className={classes.recurEdit}>
+                                    <p>Recurring Event</p>{" "}
+                                    <img
+                                       src={Images.edit}
+                                       alt="icon"
                                        onClick={() => handleEdit(defItem)}
-                                    >
-                                       <p>Recurring Event</p>{" "}
-                                       <img src={Images.edit} alt="icon" />
-                                    </button>
-                                 </SimpleTooltip>
+                                    />
+                                 </div>
                               ) : (
                                  <>
                                     <SimpleTooltip
@@ -233,7 +229,7 @@ export const ListView = ({
                                        ? defItem.authorizedService.modifiers.map(
                                             (i) => i.name
                                          )
-                                       : "ss"
+                                       : ""
                                  }
                               />
                            )}
@@ -311,7 +307,7 @@ export const ListView = ({
                </div>
             </div>
          ) : (
-            <NoItemText text="No Items Yet" />
+            <NoItemText text="No Appointments Yet" />
          )}
          <SimpleModal
             handleOpenClose={handleOpenCloseModal}

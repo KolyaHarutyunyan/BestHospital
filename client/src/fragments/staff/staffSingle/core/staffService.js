@@ -52,9 +52,7 @@ export const StaffService = ({ staffGeneral, info, services }) => {
 
    const handleChange = (e) => {
       fail.length &&
-         dispatch(
-            httpRequestsOnErrorsActions.removeError("CREATE_STAFF_SERVICE")
-         );
+         dispatch(httpRequestsOnErrorsActions.removeError("CREATE_STAFF_SERVICE"));
       setInputs((prevState) => ({
          ...prevState,
          [e.target.name]: e.target.value,
@@ -150,9 +148,7 @@ export const StaffService = ({ staffGeneral, info, services }) => {
                   typeError={
                      error === "serviceType"
                         ? ErrorText.field
-                        : fail &&
-                          fail.length &&
-                          fail[0].error === "Service already exist"
+                        : fail && fail.length && fail[0].error === "Service already exist"
                         ? "Service already exist"
                         : ""
                   }
@@ -175,9 +171,7 @@ export const StaffService = ({ staffGeneral, info, services }) => {
                   info.map((item, index) => {
                      return (
                         <div className={classes.item} key={index}>
-                           <div
-                              style={{ display: "flex", alignItems: "center" }}
-                           >
+                           <div style={{ display: "flex", alignItems: "center" }}>
                               <SlicedText
                                  type={"responsive"}
                                  size={25}
@@ -198,7 +192,7 @@ export const StaffService = ({ staffGeneral, info, services }) => {
                      );
                   })
                ) : (
-                  <NoItemText text="No Items Yet" />
+                  <NoItemText text="No Services Yet" />
                )}
             </div>
          </div>

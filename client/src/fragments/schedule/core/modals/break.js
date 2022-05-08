@@ -1,21 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-   CreateChancel,
-   SelectInput,
-   ValidationInput,
-} from "@eachbase/components";
-import {
-   ErrorText,
-   FindLoad,
-   getActiveDatas,
-   getDynamicContent,
-   isNotEmpty,
-} from "@eachbase/utils";
+import { CreateChancel, SelectInput, ValidationInput } from "@eachbase/components";
+import { ErrorText, FindLoad, isNotEmpty } from "@eachbase/utils";
 import { scheduleModalsStyle } from "./styles";
 import { modalsStyle } from "@eachbase/components/modal/styles";
 import { adminActions, appointmentActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import moment from "moment";
+import { getDynamicContent } from "./constants";
 
 export const Break = ({
    handleOpenClose,
@@ -60,8 +51,7 @@ export const Break = ({
          [e.target.name]: e.target.value,
       }));
       error === e.target.name && setError("");
-      e.target.name === "staff" &&
-         dispatch(adminActions.getAllPaycodes(e.target.value));
+      e.target.name === "staff" && dispatch(adminActions.getAllPaycodes(e.target.value));
    };
 
    const handleChangeDate = (e) => {
@@ -75,8 +65,7 @@ export const Break = ({
          0
       );
       setTimes((prevState) => ({ ...prevState, [e.target.name]: myToday }));
-      (e.target.name === error || error === ErrorText.timeError) &&
-         setError("");
+      (e.target.name === error || error === ErrorText.timeError) && setError("");
    };
 
    const modalType =
@@ -101,9 +90,7 @@ export const Break = ({
          timeComparingIsValid;
 
       const modalBool =
-         modalType === "DRIVE"
-            ? dataIsValid && isNotEmpty(inputs.miles)
-            : dataIsValid;
+         modalType === "DRIVE" ? dataIsValid && isNotEmpty(inputs.miles) : dataIsValid;
 
       if (modalBool) {
          const date = {
@@ -158,9 +145,11 @@ export const Break = ({
             ? ErrorText.timeError
             : "";
 
-         if (modalType === "DRIVE")
+         if (modalType === "DRIVE") {
             setError(errorText ? errorText : !inputs.miles ? "miles" : "");
-         else setError(errorText);
+         } else {
+            setError(errorText);
+         }
       }
    };
 
@@ -171,7 +160,7 @@ export const Break = ({
    const titleContent = getDynamicContent("TITLE", modalDate, type);
    const subtitleContent = getDynamicContent("SUBTITLE", modalDate, type);
 
-   const activeStaffPaycodes = getActiveDatas(allPaycodes);
+   const activeStaffPaycodes = allPaycodes.filter((data) => data.active);
 
    return (
       <div>

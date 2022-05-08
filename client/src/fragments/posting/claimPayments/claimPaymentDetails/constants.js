@@ -1,27 +1,24 @@
 import { DownloadLink } from "@eachbase/components";
-import {
-   addSignToValueFromStart,
-   getValueByFixedNumber,
-   handleCreatedAtDate,
-   makeCapitalize,
-   manageStatus,
-} from "@eachbase/utils";
+import { hooksForTable, makeCapitalize, manageStatus } from "@eachbase/utils";
 import { claimPaymentDetailsStyle } from "./styles";
 
 export function getClaimPaymentDetails(claimPayment) {
    const { funder, paymentDate, paymentReference, paymentType, paymentAmount } =
       claimPayment || {};
 
+   const { addSignToValueFromStart, getValueByFixedNumber, handleCreatedAtDate } =
+      hooksForTable;
+
    const classes = claimPaymentDetailsStyle();
 
    const claimPaymentDetails = [
       {
          detailText: "Funding Source:",
-         detail: makeCapitalize(`${funder?.firstName} ${funder?.lastName}`),
+         detail: !!funder && makeCapitalize(`${funder?.firstName} ${funder?.lastName}`),
       },
       {
          detailText: "Payment Date:",
-         detail: handleCreatedAtDate(paymentDate, 10, "/"),
+         detail: handleCreatedAtDate(paymentDate),
       },
       {
          detailText: "Payment Reference:",

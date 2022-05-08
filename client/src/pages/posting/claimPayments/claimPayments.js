@@ -18,7 +18,7 @@ export const ClaimPayments = () => {
 
    // const claimPaymentsData = useSelector((state) => state.claimPayment.claimPayments);
    const { funders } = useSelector((state) => state.fundingSource.fundingSourceList);
-   const fundersNames = funders?.map((funder) => funder.name);
+   const mappedFunders = funders?.map((funder) => ({ id: funder.id, name: funder.name }));
 
    // temporary
    const claimPaymentsData = dummyData.CLAIM_PAYMENTS;
@@ -51,7 +51,7 @@ export const ClaimPayments = () => {
          page={page}
          handleGetPage={setPage}
          claimPaymentsLoader={loader}
-         fundersNames={fundersNames}
+         fundersNames={mappedFunders}
       />
    );
 };

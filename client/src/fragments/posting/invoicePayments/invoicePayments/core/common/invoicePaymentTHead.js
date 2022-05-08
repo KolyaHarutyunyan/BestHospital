@@ -1,11 +1,6 @@
 import React, { useContext } from "react";
 import { SearchAndFilter } from "@eachbase/components";
-import {
-   DrawerContext,
-   getTableHeader,
-   getTextDependsOnWidth,
-   useWidth,
-} from "@eachbase/utils";
+import { DrawerContext, hooksForTable, useWidth } from "@eachbase/utils";
 import { invoicePaymentTHeadTBodyStyle } from "./styles";
 
 export const InvoicePaymentTHead = () => {
@@ -15,10 +10,12 @@ export const InvoicePaymentTHead = () => {
 
    const { open } = useContext(DrawerContext);
 
-   const size = open ? 1880 : 1680;
-   const limit = open ? 7 : 9;
+   const { getTableHeader, getTextDependsOnWidth } = hooksForTable;
 
    function getInvoicePaymentTitle(givenTitle = "", ...rest) {
+      const size = open ? 1880 : 1680;
+      const limit = open ? 7 : 9;
+
       return getTableHeader(
          givenTitle,
          getTextDependsOnWidth(width, size, givenTitle, limit),
@@ -44,4 +41,3 @@ export const InvoicePaymentTHead = () => {
       </div>
    );
 };
-

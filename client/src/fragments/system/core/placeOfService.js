@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-   AddButton,
-   NoItemText,
-   SlicedText,
-   ValidationInput,
-} from "@eachbase/components";
+import { AddButton, NoItemText, SlicedText, ValidationInput } from "@eachbase/components";
 import { useDispatch } from "react-redux";
 import { FindLoad, FindSuccess, Images, isNotEmpty } from "@eachbase/utils";
 import { systemItemStyles } from "./styles";
@@ -68,9 +63,7 @@ export const PlaceOfService = ({ globalJobs, removeItem, openModal }) => {
             name: "",
             code: "",
          });
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess("CREATE_PLACE_GLOBAL")
-         );
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_PLACE_GLOBAL"));
       }
    }, [success]);
 
@@ -115,9 +108,8 @@ export const PlaceOfService = ({ globalJobs, removeItem, openModal }) => {
                            <SlicedText
                               type={"responsive"}
                               size={25}
-                              data={`${item.name} - `}
+                              data={`${item.name} - ${item.code}`}
                            />
-                           <span>{`${item.code}`}</span>
                         </div>
                         <div className={classes.icons}>
                            <img
@@ -147,7 +139,7 @@ export const PlaceOfService = ({ globalJobs, removeItem, openModal }) => {
                   );
                })
             ) : (
-               <NoItemText text="No Items Yet" />
+               <NoItemText text="No Place of Services Yet" />
             )}
          </div>
       </>

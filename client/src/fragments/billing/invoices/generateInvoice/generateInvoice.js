@@ -53,7 +53,9 @@ export const GenerateInvoiceFragment = ({
       );
    }
 
-   const clientsNames = bills.map((bill) => bill?.client?.firstName);
+   const clientsNames = bills.map(
+      (bill) => `${bill?.client?.firstName} ${bill?.client?.lastName}`
+   );
 
    const notInvoicedBillsWithFilters = getFilteredNotInvoicedBills(
       bills,

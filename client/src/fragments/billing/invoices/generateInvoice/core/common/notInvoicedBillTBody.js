@@ -1,13 +1,9 @@
 import React, { useContext } from "react";
 import {
-   addSignToValueFromStart,
    CheckupContext,
    DrawerContext,
-   getFullName,
    getGeneratingDataForTable,
-   getValueByFixedNumber,
-   handleCreatedAtDate,
-   showDashIfEmpty,
+   hooksForTable,
    useWidth,
 } from "@eachbase/utils";
 import { notInvoicedBillTHeadTBodyStyle } from "./styles";
@@ -25,6 +21,14 @@ export const NotInvoicedBillTBody = ({ notInvoicedBill, triggerBill }) => {
       notInvoicedBill.isChecked ? "checked-box" : ""
    }`;
 
+   const {
+      addSignToValueFromStart,
+      getFullName,
+      getValueByFixedNumber,
+      handleCreatedAtDate,
+      showDashIfEmpty,
+   } = hooksForTable;
+
    function getTableData(data) {
       return showDashIfEmpty(getGeneratingDataForTable(data, open, width));
    }
@@ -40,9 +44,7 @@ export const NotInvoicedBillTBody = ({ notInvoicedBill, triggerBill }) => {
    const billId = getTableData(notInvoicedBill._id);
    const serviceCode = getTableData(notInvoicedBill.authService?.serviceId);
    const placeOfService = getTableData(notInvoicedBill.placeService?.name);
-   const serviceDate = getTableData(
-      handleCreatedAtDate(notInvoicedBill.dateOfService, 10, "/")
-   );
+   const serviceDate = getTableData(handleCreatedAtDate(notInvoicedBill.dateOfService));
    const clientFirstName = notInvoicedBill.client?.firstName;
    const clientLastName = notInvoicedBill.client?.lastName;
    const client = getFullName(clientFirstName, clientLastName, getTableData);

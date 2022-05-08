@@ -1,14 +1,5 @@
 import React, { useContext } from "react";
-import {
-   addSignToValueFromStart,
-   DrawerContext,
-   getDataForTable,
-   getFullName,
-   getValueByFixedNumber,
-   handleCreatedAtDate,
-   showDashIfEmpty,
-   useWidth,
-} from "@eachbase/utils";
+import { DrawerContext, getDataForTable, hooksForTable, useWidth } from "@eachbase/utils";
 import { tableTheadTbodyStyle } from "./styles";
 
 export const InvoicePaymentInvoiceTBody = ({ invoice }) => {
@@ -18,12 +9,20 @@ export const InvoicePaymentInvoiceTBody = ({ invoice }) => {
 
    const { open } = useContext(DrawerContext);
 
+   const {
+      addSignToValueFromStart,
+      getFullName,
+      getValueByFixedNumber,
+      handleCreatedAtDate,
+      showDashIfEmpty,
+   } = hooksForTable;
+
    function getTableData(data) {
       return showDashIfEmpty(getDataForTable(data, open, width));
    }
 
-   const early = handleCreatedAtDate(invoice.dateRange?.early, 10, "/");
-   const latest = handleCreatedAtDate(invoice.dateRange?.latest, 10, "/");
+   const early = handleCreatedAtDate(invoice.dateRange?.early);
+   const latest = handleCreatedAtDate(invoice.dateRange?.latest);
    const clientFirstName = invoice.client?.firstName;
    const clientLastName = invoice.client?.lastName;
 
@@ -33,7 +32,7 @@ export const InvoicePaymentInvoiceTBody = ({ invoice }) => {
    const totalAmount = getTableData(
       addSignToValueFromStart(getValueByFixedNumber(invoice.totalAmount))
    );
-   const invoiceDate = getTableData(handleCreatedAtDate(invoice.invoiceDate, 10, "/"));
+   const invoiceDate = getTableData(handleCreatedAtDate(invoice.invoiceDate));
 
    return (
       <div className={classes.tbodyContainerStyle}>

@@ -1,10 +1,8 @@
 import { DownloadLink } from "@eachbase/components";
-import {
-   addSignToValueFromStart,
-   getValueByFixedNumber,
-   handleCreatedAtDate,
-   makeCapitalize,
-} from "@eachbase/utils";
+import { hooksForTable, makeCapitalize } from "@eachbase/utils";
+
+const { addSignToValueFromStart, getValueByFixedNumber, handleCreatedAtDate } =
+   hooksForTable;
 
 export function getFilteredClaimsForClaimPmt(claims, selClient, selDateFrom, selDateTo) {
    const filteredClaimsForClaimPmt =
@@ -13,19 +11,20 @@ export function getFilteredClaimsForClaimPmt(claims, selClient, selDateFrom, sel
          : selClient !== "All"
          ? claims.filter(
               (claim) =>
-                 claim?.client?.firstName?.toLowerCase() === selClient.toLowerCase()
+                 `${claim?.client?.firstName} ${claim?.client?.lastName}`.toLowerCase() ===
+                 selClient.toLowerCase()
            )
          : selDateFrom !== ""
          ? claims.filter(
               (claim) =>
-                 handleCreatedAtDate(claim?.dateRange?.early, 10) ===
-                 handleCreatedAtDate(selDateFrom, 10)
+                 handleCreatedAtDate(claim?.dateRange?.early) ===
+                 handleCreatedAtDate(selDateFrom)
            )
          : selDateTo !== ""
          ? claims.filter(
               (claim) =>
-                 handleCreatedAtDate(claim?.dateRange?.latest, 10) ===
-                 handleCreatedAtDate(selDateTo, 10)
+                 handleCreatedAtDate(claim?.dateRange?.latest) ===
+                 handleCreatedAtDate(selDateTo)
            )
          : [];
 
@@ -36,13 +35,13 @@ export function getClaimDetailsForClaimPmt(claim) {
    const { createdDate, submittedDate, dateRange, staff, funder, client, totalCharge } =
       claim || {};
 
-   const early = handleCreatedAtDate(dateRange?.early, 10, "/");
-   const latest = handleCreatedAtDate(dateRange?.latest, 10, "/");
+   const early = handleCreatedAtDate(dateRange?.early);
+   const latest = handleCreatedAtDate(dateRange?.latest);
 
    const claimDetailsForClaimPmt = [
       {
          detailText: "Created Date:",
-         detail: handleCreatedAtDate(createdDate, 10, "/"),
+         detail: handleCreatedAtDate(createdDate),
       },
       {
          detailText: "Date of Range:",
@@ -50,7 +49,7 @@ export function getClaimDetailsForClaimPmt(claim) {
       },
       {
          detailText: "Staff:",
-         detail: makeCapitalize(`${staff?.firstName} ${staff?.lastName}`),
+         detail: !!staff && makeCapitalize(`${staff?.firstName} ${staff?.lastName}`),
       },
       {
          detailText: "1500 Form:",
@@ -64,11 +63,11 @@ export function getClaimDetailsForClaimPmt(claim) {
       },
       {
          detailText: "Client:",
-         detail: makeCapitalize(`${client?.firstName} ${client?.lastName}`),
+         detail: !!client && makeCapitalize(`${client?.firstName} ${client?.lastName}`),
       },
       {
          detailText: "Founding Source:",
-         detail: makeCapitalize(`${funder?.firstName} ${funder?.lastName}`),
+         detail: !!funder && makeCapitalize(`${funder?.firstName} ${funder?.lastName}`),
       },
       {
          detailText: "Total Charges:",
@@ -76,7 +75,7 @@ export function getClaimDetailsForClaimPmt(claim) {
       },
       {
          detailText: "Submitted Date:",
-         detail: handleCreatedAtDate(submittedDate, 10, "/"),
+         detail: handleCreatedAtDate(submittedDate),
       },
    ];
 

@@ -1,17 +1,7 @@
 import React, { useContext } from "react";
 import { claimTHeadTBodyStyle } from "./styles";
 import { useHistory } from "react-router-dom";
-import {
-   addSignToValueFromStart,
-   DrawerContext,
-   getFullName,
-   getTableHeader,
-   getValueByFixedNumber,
-   handleCreatedAtDate,
-   manageStatus,
-   showDashIfEmpty,
-   useWidth,
-} from "@eachbase/utils";
+import { DrawerContext, hooksForTable, manageStatus, useWidth } from "@eachbase/utils";
 import { getClaimData } from "./constants";
 
 export const ClaimTBody = ({ claims = [] }) => {
@@ -23,6 +13,15 @@ export const ClaimTBody = ({ claims = [] }) => {
 
    const { open } = useContext(DrawerContext);
 
+   const {
+      addSignToValueFromStart,
+      getFullName,
+      getTableHeader,
+      getValueByFixedNumber,
+      handleCreatedAtDate,
+      showDashIfEmpty,
+   } = hooksForTable;
+
    function getTableData(data) {
       return showDashIfEmpty(getClaimData(data, open, width));
    }
@@ -30,21 +29,22 @@ export const ClaimTBody = ({ claims = [] }) => {
    return (
       <div className={classes.tbodyContainerStyle}>
          {claims.map((claim, index) => {
-            const claimId = getTableData(claim._id);
-            const early = handleCreatedAtDate(claim?.dateRange?.early, 10, "/");
-            const latest = handleCreatedAtDate(claim?.dateRange?.latest, 10, "/");
-            const datePeriod = getTableData(`${early} - ${latest}`);
+            const early = handleCreatedAtDate(claim?.dateRange?.early);
+            const latest = handleCreatedAtDate(claim?.dateRange?.latest);
             const funderFirstName = claim?.funder?.firstName;
             const funderLastName = claim?.funder?.lastName;
-            const funder = getFullName(funderFirstName, funderLastName, getTableData);
             const clientFirstName = claim?.client?.firstName;
             const clientLastName = claim?.client?.firstName;
+
+            const claimId = getTableData(claim._id);
+            const datePeriod = getTableData(`${early} - ${latest}`);
+            const funder = getFullName(funderFirstName, funderLastName, getTableData);
             const client = getFullName(clientFirstName, clientLastName, getTableData);
             const totalCharged = getTableData(
                addSignToValueFromStart(getValueByFixedNumber(claim.totalCharge))
             );
             const totalPaid = getTableData(
-               addSignToValueFromStart(getValueByFixedNumber(claim.amountPaid))
+               addSignToValueFromStart(getValueByFixedNumber(claim.ammountPaid))
             );
             const remaining = getTableData(
                addSignToValueFromStart(getValueByFixedNumber(claim.remaining))

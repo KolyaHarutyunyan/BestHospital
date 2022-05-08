@@ -11,10 +11,10 @@ export function getDataForTable(givenData = "", isOpen, givenWidth) {
    const firstSize = isOpen ? 1850 : 1730;
    const firstLimit = isOpen ? 18 : 20;
 
-   const secondSize = isOpen ? 1680 : 1640;
+   const secondSize = isOpen ? 1700 : 1640;
    const secondLimit = isOpen ? 12 : 14;
 
-   const thirdSize = isOpen ? 1350 : 1345;
+   const thirdSize = isOpen ? 1370 : 1345;
    const thirdLimit = isOpen ? 8 : 10;
 
    const initialLimit = isOpen ? 21 : 23;

@@ -1,11 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { TableCell } from "@material-ui/core";
-import {
-   adminActions,
-   fundingSourceActions,
-   systemActions,
-} from "@eachbase/store";
+import { adminActions, fundingSourceActions, systemActions } from "@eachbase/store";
 import {
    StaffGeneral,
    StaffHistory,
@@ -43,8 +39,7 @@ export const StaffItem = ({ gen }) => {
    const [openCredModal, setOpenCredModal] = useState(false);
    const [openDelModal, setOpenDelModal] = useState(false);
    const [credModalType, setCredModalType] = useState("");
-   const [globalCredentialInformation, setGlobalCredentialInformation] =
-      useState({});
+   const [globalCredentialInformation, setGlobalCredentialInformation] = useState({});
    const [noteModalData, setNoteModalData] = useState({});
 
    const [noteModalInfo, setNoteModalInfo] = useState({
@@ -65,9 +60,7 @@ export const StaffItem = ({ gen }) => {
       (state) => state.availabilitySchedule.availabilitySchedule
    );
    const employments = useSelector((state) => state.admins.employments);
-   const staffServices = useSelector(
-      (state) => state.admins.staffServices.service
-   );
+   const staffServices = useSelector((state) => state.admins.staffServices.service);
    const staffTimesheet = useSelector((state) => state.admins.timesheet);
    const services = useSelector((state) => state.system.services);
    const rolesList = useSelector((state) => state.roles.rolesList);
@@ -135,9 +128,7 @@ export const StaffItem = ({ gen }) => {
                   id: item?.id,
                   text: item?.text,
                   creatorName:
-                     item &&
-                     item.user &&
-                     `${item.user.firstName} ${item.user.lastName}`,
+                     item && item.user && `${item.user.firstName} ${item.user.lastName}`,
                })
             }
          >
@@ -209,9 +200,7 @@ export const StaffItem = ({ gen }) => {
          ),
       },
       {
-         tabComponent: (
-            <StaffAccess rolesList={rolesList} accessList={accessList} />
-         ),
+         tabComponent: <StaffAccess rolesList={rolesList} accessList={accessList} />,
       },
       {
          tabComponent: (
@@ -243,7 +232,7 @@ export const StaffItem = ({ gen }) => {
                headerTitles={headerTitles}
             />
          ) : (
-            <NoItemText text="No Items Yet" />
+            <NoItemText text="No Notes Yet" />
          ),
       },
       {
@@ -257,9 +246,7 @@ export const StaffItem = ({ gen }) => {
    };
 
    const handleDeleteNote = () => {
-      dispatch(
-         noteActions.deleteGlobalNote(noteModalData.id, params.id, "Staff")
-      );
+      dispatch(noteActions.deleteGlobalNote(noteModalData.id, params.id, "Staff"));
    };
 
    const loader = FindLoad("DELETE_GLOBAL_NOTE");
@@ -302,11 +289,7 @@ export const StaffItem = ({ gen }) => {
                />
             }
          >
-            <div
-               className={`${classes.staffSingleItem} ${
-                  drawerOpen ? "narrow" : ""
-               }`}
-            >
+            <div className={`${classes.staffSingleItem} ${drawerOpen ? "narrow" : ""}`}>
                <StaffItemHeader
                   onModel="Staff"
                   availabilityData={availabilityData}

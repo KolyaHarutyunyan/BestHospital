@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { dummyData, FindLoad } from "@eachbase/utils";
+import { FindLoad } from "@eachbase/utils";
 import { CustomBreadcrumbs, Loader } from "@eachbase/components";
 import { invoiceActions } from "@eachbase/store";
 import { InvoiceDetailsFragment } from "@eachbase/fragments";
@@ -11,11 +11,7 @@ export const InvoiceDetails = () => {
 
    const dispatch = useDispatch();
 
-   // const invoiceById = useSelector((state) => state.invoice.invoiceById);
-
-   // temporary
-   const invoiceById = dummyData.INVOICES.find((invoice) => invoice._id === params.id);
-   // end
+   const invoiceById = useSelector((state) => state.invoice.invoiceById);
 
    const loader = FindLoad("GET_INVOICE_BY_ID");
 

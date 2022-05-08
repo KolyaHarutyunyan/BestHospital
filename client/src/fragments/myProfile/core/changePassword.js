@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { myProfileFragment } from "./style";
-import {
-   PasswordValidator,
-   ErrorText,
-   Images,
-   isNotEmpty,
-} from "@eachbase/utils";
+import { PasswordValidator, ErrorText, Images, isNotEmpty } from "@eachbase/utils";
 import { Button } from "@material-ui/core";
 import { MinLoader, PasswordInput } from "@eachbase/components";
 import { authActions, httpRequestsOnSuccessActions } from "@eachbase/store";
@@ -26,8 +21,7 @@ export const ChangePassword = ({}) => {
       httpOnLoad: state.httpOnLoad,
    }));
    const successType =
-      httpOnSuccess.length &&
-      httpOnSuccess[0].type === "CHANGE_PASSWORD_REQUEST";
+      httpOnSuccess.length && httpOnSuccess[0].type === "CHANGE_PASSWORD_REQUEST";
 
    useEffect(() => {
       if (successType === true) {
@@ -94,12 +88,8 @@ export const ChangePassword = ({}) => {
 
             {showInputs ? (
                <div>
-                  <Button
-                     className={classes.saveButton}
-                     onClick={handleChangePassword}
-                  >
-                     {httpOnLoad.length &&
-                     httpOnLoad[0] === "CHANGE_PASSWORD_REQUEST" ? (
+                  <Button className={classes.saveButton} onClick={handleChangePassword}>
+                     {httpOnLoad.length && httpOnLoad[0] === "CHANGE_PASSWORD_REQUEST" ? (
                         <MinLoader />
                      ) : (
                         "Save"
@@ -141,9 +131,7 @@ export const ChangePassword = ({}) => {
                <PasswordInput
                   styles={{ marginTop: "6px" }}
                   validator={PasswordValidator}
-                  sendBoolean={(bool) =>
-                     handleCheck(bool, "newPasswordNotValid")
-                  }
+                  sendBoolean={(bool) => handleCheck(bool, "newPasswordNotValid")}
                   handleChangePassword={handleChange}
                   type={"password"}
                   name={"newPassword"}
@@ -161,9 +149,7 @@ export const ChangePassword = ({}) => {
                <PasswordInput
                   styles={{ marginTop: "6px" }}
                   validator={PasswordValidator}
-                  sendBoolean={(bool) =>
-                     handleCheck(bool, "confirmationNotValid")
-                  }
+                  sendBoolean={(bool) => handleCheck(bool, "confirmationNotValid")}
                   handleChangePassword={handleChange}
                   type={"password"}
                   name={"confirmation"}

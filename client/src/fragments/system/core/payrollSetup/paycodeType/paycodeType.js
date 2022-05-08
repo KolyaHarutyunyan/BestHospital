@@ -84,9 +84,7 @@ export const PayCodeType = ({
 
    const handleSubmit = () => {
       const dataIsValid =
-         isNotEmpty(inputs.name) &&
-         isNotEmpty(inputs.type) &&
-         isNotEmpty(inputs.code);
+         isNotEmpty(inputs.name) && isNotEmpty(inputs.type) && isNotEmpty(inputs.code);
 
       if (dataIsValid) {
          const data = {
@@ -98,9 +96,7 @@ export const PayCodeType = ({
          };
 
          if (editedData) {
-            dispatch(
-               payrollActions.editPayCodeByIdGlobal(data, editedData?.id)
-            );
+            dispatch(payrollActions.editPayCodeByIdGlobal(data, editedData?.id));
          } else {
             dispatch(payrollActions.createPayCodeGlobal(data));
             setApplyOvertime("No");
@@ -139,9 +135,7 @@ export const PayCodeType = ({
             code: "",
             type: "",
          });
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess("CREATE_PAYCODE_GLOBAL")
-         );
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_PAYCODE_GLOBAL"));
       }
    }, [success]);
 
@@ -149,9 +143,7 @@ export const PayCodeType = ({
       if (!!edit.length) {
          handleOpenClose && handleOpenClose();
          dispatch(
-            httpRequestsOnSuccessActions.removeSuccess(
-               "EDIT_PAYCODE_BY_ID_GLOBAL"
-            )
+            httpRequestsOnSuccessActions.removeSuccess("EDIT_PAYCODE_BY_ID_GLOBAL")
          );
       }
    }, [edit]);
@@ -172,8 +164,7 @@ export const PayCodeType = ({
             <>
                <h1 className={classes.modalTitle}>Add a New Paycode Type</h1>
                <p className={classes.modalSubTitle}>
-                  Please fulfill the below fields to add a Paycode Type in the
-                  system.
+                  Please fulfill the below fields to add a Paycode Type in the system.
                </p>
             </>
          )}
@@ -206,7 +197,7 @@ export const PayCodeType = ({
                handleSelect={handleChange}
                value={inputs.type}
                list={payCodeType}
-               typeError={error === "type" ? ErrorText.field : ""}
+               typeError={error === "type" ? ErrorText.selectField : ""}
             />
          ) : (
             <SelectInputPlaceholder
@@ -217,7 +208,7 @@ export const PayCodeType = ({
                handleSelect={handleChange}
                value={inputs.type}
                list={payCodeType}
-               typeError={error === "type" ? ErrorText.field : ""}
+               typeError={error === "type" ? ErrorText.selectField : ""}
             />
          )}
 

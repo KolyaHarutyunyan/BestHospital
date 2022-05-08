@@ -60,10 +60,12 @@ export const ClaimPaymentsFragment = ({
       );
 
    const payorsNames = claimPayments.map(
-      (claimPayment) => claimPayment?.funder?.firstName
+      (claimPayment) =>
+         `${claimPayment?.funder?.firstName} ${claimPayment?.funder?.lastName}`
    );
    const clientsNames = claimPayments.map(
-      (claimPayment) => claimPayment?.client?.firstName
+      (claimPayment) =>
+         `${claimPayment?.client?.firstName} ${claimPayment?.client?.lastName}`
    );
 
    const claimPaymentsWithFilters = getFilteredClaimPayments(

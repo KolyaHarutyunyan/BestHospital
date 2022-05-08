@@ -140,15 +140,13 @@ export const buttonsStyle = makeStyles(() => ({
    },
 
    addCircleStyle: {
-      width: "24px",
-      height: "24px",
       background: Backgrounds.whiteModal,
       borderRadius: "40px",
       border: "none",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      marginRight: "8px",
+      cursor: "pointer",
    },
 
    closeCircleStyle: {
@@ -167,6 +165,7 @@ export const buttonsStyle = makeStyles(() => ({
       fontSize: "14px",
       lineHeight: "19px",
       color: Colors.TextPrimary,
+      marginLeft: "8px",
    },
 
    editButtonStyle: {

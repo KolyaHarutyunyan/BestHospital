@@ -1,11 +1,13 @@
 import React from "react";
 import { claimModalTHeadTBodyStyle } from "./styles";
-import { getLimitedVal, getTableHeader, useWidth } from "@eachbase/utils";
+import { getLimitedVal, hooksForTable, useWidth } from "@eachbase/utils";
 
 export const ClaimReceivableModalTHead = () => {
    const classes = claimModalTHeadTBodyStyle();
 
    const width = useWidth();
+
+   const { getTableHeader } = hooksForTable;
 
    function getReceivTitle(givenTitle = "", ...rest) {
       const limit = width <= 1680 ? 4 : 9;

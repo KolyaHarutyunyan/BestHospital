@@ -44,6 +44,7 @@ export const BillFiltersSelectors = ({
       return `${initialStyle} ${smallSizeStyle}`;
    }
 
+   const funderLabel = filterIsForBill ? "Payor" : "Funding Source";
    const dateInputLabel =
       filterIsForNotClaimedBill || filterIsForNotInvoicedBill
          ? "Service"
@@ -84,7 +85,7 @@ export const BillFiltersSelectors = ({
       <div style={styles}>
          {shouldRenderFundingSourceInput && (
             <UserInputsDropdown
-               label={"Funding Source"}
+               label={funderLabel}
                dropdownOptions={addAllTextToTheList(payorsNames)}
                onPass={passPayorHandler}
                selected={selectedPayor}

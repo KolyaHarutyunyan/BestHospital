@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
-   handleCreatedAtDate,
+   hooksForTable,
    Images,
    isNotEmpty,
    manageStatus,
-   showDashIfEmpty,
    useWidth,
 } from "@eachbase/utils";
 import { claimModalTHeadTBodyStyle } from "./styles";
@@ -15,6 +14,8 @@ export const ClaimReceivableModalTBody = ({ receivable, passReceivable }) => {
    const classes = claimModalTHeadTBodyStyle();
 
    const width = useWidth();
+
+   const { handleCreatedAtDate, showDashIfEmpty } = hooksForTable;
 
    function getTableData(data) {
       return showDashIfEmpty(getReceivData(data, width));
@@ -35,8 +36,8 @@ export const ClaimReceivableModalTBody = ({ receivable, passReceivable }) => {
          passReceivable({ ...receivable, filled: receivInputsAreFilled, ...inputs });
    }, [receivInputsAreFilled, inputs]);
 
-   const serviceStart = handleCreatedAtDate(receivable.dateOfService?.start, 10, "/");
-   const serviceEnd = handleCreatedAtDate(receivable.dateOfService?.end, 10, "/");
+   const serviceStart = handleCreatedAtDate(receivable.dateOfService?.start);
+   const serviceEnd = handleCreatedAtDate(receivable.dateOfService?.end);
    const cptCode = !!receivable.cptCode
       ? getTableData(manageStatus(receivable.cptCode))
       : "--";

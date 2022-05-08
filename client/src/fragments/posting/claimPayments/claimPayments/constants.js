@@ -5,13 +5,13 @@ export function getFilteredClaimPayments(claimPayments, selFunder, selClient, se
          : selFunder !== "All"
          ? claimPayments.filter(
               (claimPayment) =>
-                 claimPayment?.funder?.firstName?.toLowerCase() ===
+                 `${claimPayment?.funder?.firstName} ${claimPayment?.funder?.lastName}`.toLowerCase() ===
                  selFunder.toLowerCase()
            )
          : selClient !== "All"
          ? claimPayments.filter(
               (claimPayment) =>
-                 claimPayment?.client?.firstName?.toLowerCase() ===
+                 `${claimPayment?.client?.firstName} ${claimPayment?.client?.lastName}`.toLowerCase() ===
                  selClient.toLowerCase()
            )
          : selStatus !== "All"

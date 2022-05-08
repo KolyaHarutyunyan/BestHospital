@@ -1,13 +1,6 @@
 import React, { useContext } from "react";
 import { tableTheadTbodyStyle } from "./styles";
-import {
-   addSignToValueFromStart,
-   DrawerContext,
-   getDataForTable,
-   getValueByFixedNumber,
-   showDashIfEmpty,
-   useWidth,
-} from "@eachbase/utils";
+import { DrawerContext, getDataForTable, hooksForTable, useWidth } from "@eachbase/utils";
 
 export const BillTotalsDemoTBody = ({ billTotals }) => {
    const classes = tableTheadTbodyStyle();
@@ -15,6 +8,9 @@ export const BillTotalsDemoTBody = ({ billTotals }) => {
    const width = useWidth();
 
    const { open } = useContext(DrawerContext);
+
+   const { showDashIfEmpty, addSignToValueFromStart, getValueByFixedNumber } =
+      hooksForTable;
 
    function getTableData(data) {
       return showDashIfEmpty(

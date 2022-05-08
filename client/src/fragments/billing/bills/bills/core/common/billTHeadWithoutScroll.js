@@ -1,11 +1,5 @@
 import React, { useContext } from "react";
-import {
-   DrawerContext,
-   getTableHeader,
-   getTextDependsOnWidth,
-   resetRadius,
-   useWidth,
-} from "@eachbase/utils";
+import { DrawerContext, hooksForTable, useWidth } from "@eachbase/utils";
 import { billTHeadTBodyStyle } from "./style";
 
 export const BillTHeadWithoutScroll = () => {
@@ -14,6 +8,8 @@ export const BillTHeadWithoutScroll = () => {
    const width = useWidth();
 
    const { open } = useContext(DrawerContext);
+
+   const { getTableHeader, getTextDependsOnWidth, resetRadius } = hooksForTable;
 
    function getBillTitle(givenTitle = "", ...rest) {
       const size = open ? 1830 : 1680;

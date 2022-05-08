@@ -44,10 +44,17 @@ export const StaffItemHeader = ({
    openCredModal,
    activeTab,
 }) => {
+   const { adminInfoById, adminsList, allPaycodes } = useSelector((state) => ({
+      adminInfoById: state.admins.adminInfoById,
+      adminsList: state.admins.adminsList,
+      allPaycodes: state.admins.allPaycodes,
+   }));
+
    const classes = serviceSingleStyles();
    const dispatch = useDispatch();
    const params = useParams();
-   const [switchBoolean, setSwitchBoolean] = useState(false);
+   const [switchBoolean, setSwitchBoolean] = useState(adminInfoById?.clinical || false);
+   const [switched, setSwitched] = useState(false);
    const [searchDate, setSearchDate] = useState("");
    const [isDisabled, setIsDisabled] = useState(false);
 
@@ -57,16 +64,11 @@ export const StaffItemHeader = ({
       dispatch(adminActions.getAllPaycodes(params.id));
    }, []);
 
-   const { adminInfoById, adminsList, allPaycodes } = useSelector((state) => ({
-      adminInfoById: state.admins.adminInfoById,
-      adminsList: state.admins.adminsList,
-      allPaycodes: state.admins.allPaycodes,
-   }));
-
-   let changeSwitch = (e) => {
-      dispatch(adminActions.isClinician(params.id, e.target.checked));
-      setSwitchBoolean(e.target.checked);
-   };
+   useEffect(() => {
+      if (switched) {
+         dispatch(adminActions.isClinician(params.id, switchBoolean));
+      }
+   }, [switchBoolean, switched]);
 
    const handleChange = (e) => {
       setIsDisabled(false);
@@ -75,6 +77,11 @@ export const StaffItemHeader = ({
          httpRequestsOnErrorsActions.removeError("GET_FUNDING_SOURCE_HISTORIES_BY_ID")
       );
    };
+
+   function handleSwitchChange() {
+      setSwitched(true);
+      setSwitchBoolean((prevState) => !prevState);
+   }
 
    const handleSubmit = () => {
       setIsDisabled(true);
@@ -118,7 +125,7 @@ export const StaffItemHeader = ({
                         <div>
                            <CustomizedSwitch
                               checked={switchBoolean}
-                              handleClick={changeSwitch}
+                              handleClick={handleSwitchChange}
                            />
                         </div>
                      </div>
@@ -137,7 +144,7 @@ export const StaffItemHeader = ({
                      <div>
                         <CustomizedSwitch
                            checked={switchBoolean}
-                           handleClick={changeSwitch}
+                           handleClick={handleSwitchChange}
                         />
                      </div>
                      <AddButton text="Add Employment" handleClick={handleOpenClose} />

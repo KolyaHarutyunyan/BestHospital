@@ -1,10 +1,5 @@
 import { DownloadLink } from "@eachbase/components";
-import {
-   addSignToValueFromStart,
-   getValueByFixedNumber,
-   handleCreatedAtDate,
-   makeCapitalize,
-} from "@eachbase/utils";
+import { hooksForTable, makeCapitalize } from "@eachbase/utils";
 
 export function getClaimDetails(claim) {
    const {
@@ -19,19 +14,25 @@ export function getClaimDetails(claim) {
       paymentRef,
    } = claim || {};
 
-   const early = handleCreatedAtDate(dateRange?.early, 10, "/");
-   const latest = handleCreatedAtDate(dateRange?.latest, 10, "/");
+   const { handleCreatedAtDate, addSignToValueFromStart, getValueByFixedNumber } =
+      hooksForTable;
+
+   const early = handleCreatedAtDate(dateRange?.early);
+   const latest = handleCreatedAtDate(dateRange?.latest);
 
    const claimDetails = [
       {
          detailText: "Created Date:",
-         detail: handleCreatedAtDate(createdDate, 10, "/"),
+         detail: handleCreatedAtDate(createdDate),
       },
       {
          detailText: "Date of Range:",
          detail: `${early} - ${latest}`,
       },
-      { detailText: "Staff:", detail: makeCapitalize(staff?.firstName) },
+      {
+         detailText: "Staff:",
+         detail: !!staff && makeCapitalize(`${staff?.firstName} ${staff?.lastName}`),
+      },
       {
          detailText: "1500 Form:",
          detail: !!"file_pdf.pdf" ? (
@@ -44,11 +45,11 @@ export function getClaimDetails(claim) {
       },
       {
          detailText: "Client:",
-         detail: makeCapitalize(client?.firstName),
+         detail: !!client && makeCapitalize(`${client?.firstName} ${client?.lastName}`),
       },
       {
          detailText: "Founding Source:",
-         detail: makeCapitalize(funder?.firstName),
+         detail: !!funder && makeCapitalize(`${funder?.firstName} ${funder?.lastName}`),
       },
       {
          detailText: "Total Charges:",
@@ -60,7 +61,7 @@ export function getClaimDetails(claim) {
       },
       {
          detailText: "Submitted Date:",
-         detail: handleCreatedAtDate(submittedDate, 10, "/"),
+         detail: handleCreatedAtDate(submittedDate),
       },
       {
          detailText: "Payment Reference",

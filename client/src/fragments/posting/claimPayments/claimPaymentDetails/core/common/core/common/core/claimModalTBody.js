@@ -1,19 +1,19 @@
 import React from "react";
 import { claimModalTHeadTBodyStyle } from "./styles";
-import {
-   addSignToValueFromStart,
-   getFullName,
-   getModalDataForTable,
-   getValueByFixedNumber,
-   handleCreatedAtDate,
-   showDashIfEmpty,
-   useWidth,
-} from "@eachbase/utils";
+import { getModalDataForTable, hooksForTable, useWidth } from "@eachbase/utils";
 
 export const ClaimModalTBody = ({ claims = [], triggerId }) => {
    const classes = claimModalTHeadTBodyStyle();
 
    const width = useWidth();
+
+   const {
+      addSignToValueFromStart,
+      getFullName,
+      getValueByFixedNumber,
+      handleCreatedAtDate,
+      showDashIfEmpty,
+   } = hooksForTable;
 
    function getTableData(data) {
       return showDashIfEmpty(getModalDataForTable(data, width));
@@ -22,8 +22,8 @@ export const ClaimModalTBody = ({ claims = [], triggerId }) => {
    return (
       <div className={classes.tbodyContainerStyle}>
          {claims.map((claim, index) => {
-            const early = handleCreatedAtDate(claim?.dateRange?.early, 10, "/");
-            const latest = handleCreatedAtDate(claim?.dateRange?.latest, 10, "/");
+            const early = handleCreatedAtDate(claim?.dateRange?.early);
+            const latest = handleCreatedAtDate(claim?.dateRange?.latest);
             const funderFirstName = claim?.funder?.firstName;
             const funderLastName = claim?.funder?.lastName;
             const clientFirstName = claim?.client?.firstName;

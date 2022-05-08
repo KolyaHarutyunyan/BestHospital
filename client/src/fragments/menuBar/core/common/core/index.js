@@ -1,0 +1,1 @@
+export { CustomAccordion } from "./customAccordion";

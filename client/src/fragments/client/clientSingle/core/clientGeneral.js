@@ -15,7 +15,8 @@ export const ClientGeneral = ({ data }) => {
       },
       {
          title: "Age",
-         value: data?.birthday ? today.getFullYear() - new Date(data.birthday).getFullYear() : "",
+         value:
+            data?.birthday && today.getFullYear() - new Date(data.birthday).getFullYear(),
       },
       { title: "Ethnicity", value: data?.ethnicity },
       { title: "Language", value: data?.language },

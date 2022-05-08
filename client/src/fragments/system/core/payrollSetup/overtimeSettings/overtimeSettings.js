@@ -12,11 +12,7 @@ import { useDispatch } from "react-redux";
 import { payrollActions } from "@eachbase/store/payroll";
 import { httpRequestsOnSuccessActions } from "@eachbase/store";
 
-const timeType = [
-   { name: "DAILY" },
-   { name: "WEEKLY" },
-   { name: "CONSECUTIVE" },
-];
+const timeType = [{ name: "DAILY" }, { name: "WEEKLY" }, { name: "CONSECUTIVE" }];
 
 const overtimeBtn = {
    width: "100%",
@@ -67,12 +63,7 @@ export const OvertimeSettings = ({
             multiplier: parseInt(inputs.multiplier),
          };
          if (editedData) {
-            dispatch(
-               payrollActions.editOvertimeSettingsByIdGlobal(
-                  data,
-                  editedData?.id
-               )
-            );
+            dispatch(payrollActions.editOvertimeSettingsByIdGlobal(data, editedData?.id));
          } else {
             dispatch(payrollActions.createOvertimeSettingsGlobal(data));
          }
@@ -105,9 +96,7 @@ export const OvertimeSettings = ({
             multiplier: "",
          });
          dispatch(
-            httpRequestsOnSuccessActions.removeSuccess(
-               "CREATE_OVERTIME_SETTINGS_GLOBAL"
-            )
+            httpRequestsOnSuccessActions.removeSuccess("CREATE_OVERTIME_SETTINGS_GLOBAL")
          );
       }
    }, [success]);
@@ -139,8 +128,7 @@ export const OvertimeSettings = ({
             <>
                <h1 className={classes.modalTitle}>Add an Overtime Setting</h1>
                <p className={classes.modalSubTitle}>
-                  Please fulfill the below fields to add a Paycode Type in the
-                  system.
+                  Please fulfill the below fields to add a Paycode Type in the system.
                </p>
             </>
          )}
@@ -160,7 +148,7 @@ export const OvertimeSettings = ({
                handleSelect={handleChange}
                value={inputs.type}
                list={timeType}
-               typeError={error === "type" ? ErrorText.field : ""}
+               typeError={error === "type" ? ErrorText.selectField : ""}
             />
          ) : (
             <SelectInputPlaceholder
@@ -169,7 +157,7 @@ export const OvertimeSettings = ({
                handleSelect={handleChange}
                value={inputs.type}
                list={timeType}
-               typeError={error === "type" ? ErrorText.field : ""}
+               typeError={error === "type" ? ErrorText.selectField : ""}
             />
          )}
          <ValidationInput

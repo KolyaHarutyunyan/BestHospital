@@ -2,13 +2,10 @@ import React, { useContext } from "react";
 import { claimPaymentTHeadTBodyStyle } from "./styles";
 import { useHistory } from "react-router-dom";
 import {
-   addSignToValueFromStart,
    DrawerContext,
    getDataForTable,
-   getFullName,
-   getValueByFixedNumber,
+   hooksForTable,
    manageStatus,
-   showDashIfEmpty,
    useWidth,
 } from "@eachbase/utils";
 
@@ -20,6 +17,13 @@ export const ClaimPaymentTBody = ({ claimPayments = [] }) => {
    const width = useWidth();
 
    const { open } = useContext(DrawerContext);
+
+   const {
+      addSignToValueFromStart,
+      getFullName,
+      getValueByFixedNumber,
+      showDashIfEmpty,
+   } = hooksForTable;
 
    function getTableData(data) {
       return showDashIfEmpty(getDataForTable(data, open, width));

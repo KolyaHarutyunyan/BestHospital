@@ -32,8 +32,12 @@ export const BillsFragment = ({
    const [selectedClient, setSelectedClient] = useState("All");
    const [filteredDate, setFilteredDate] = useState("");
 
-   const clientsNames = bills.map((bill) => bill?.client?.firstName);
-   const payorsNames = bills.map((bill) => bill?.funder?.firstName);
+   const clientsNames = bills.map(
+      (bill) => `${bill?.client?.firstName} ${bill?.client?.lastName}`
+   );
+   const payorsNames = bills.map(
+      (bill) => `${bill?.funder?.firstName} ${bill?.funder?.lastName}`
+   );
 
    const billsWithFilters = getFilteredBills(
       bills,

@@ -1,11 +1,8 @@
 import { DownloadLink } from "@eachbase/components";
-import {
-   addSignToValueFromStart,
-   getValueByFixedNumber,
-   handleCreatedAtDate,
-   makeCapitalize,
-   manageStatus,
-} from "@eachbase/utils";
+import { hooksForTable, makeCapitalize, manageStatus } from "@eachbase/utils";
+
+const { addSignToValueFromStart, getValueByFixedNumber, handleCreatedAtDate } =
+   hooksForTable;
 
 export function getFilteredInvoicesForInvoicePmt(
    invoices,
@@ -19,20 +16,20 @@ export function getFilteredInvoicesForInvoicePmt(
          : selDateFrom !== ""
          ? invoices.filter(
               (invoice) =>
-                 handleCreatedAtDate(invoice?.dateRange?.early, 10) ===
-                 handleCreatedAtDate(selDateFrom, 10)
+                 handleCreatedAtDate(invoice?.dateRange?.early) ===
+                 handleCreatedAtDate(selDateFrom)
            )
          : selDateTo !== ""
          ? invoices.filter(
               (invoice) =>
-                 handleCreatedAtDate(invoice?.dateRange?.latest, 10) ===
-                 handleCreatedAtDate(selDateTo, 10)
+                 handleCreatedAtDate(invoice?.dateRange?.latest) ===
+                 handleCreatedAtDate(selDateTo)
            )
          : selDate !== ""
          ? invoices.filter(
               (invoice) =>
-                 handleCreatedAtDate(invoice?.invoiceDate, 10) ===
-                 handleCreatedAtDate(selDate, 10)
+                 handleCreatedAtDate(invoice?.invoiceDate) ===
+                 handleCreatedAtDate(selDate)
            )
          : [];
 
@@ -43,8 +40,8 @@ export function getInvoiceDetailsForInvoicePmt(invoice) {
    const { dateRange, totalAmount, pdfDocument, client, status, totalTime } =
       invoice || {};
 
-   const early = handleCreatedAtDate(dateRange?.early, 10, "/");
-   const latest = handleCreatedAtDate(dateRange?.latest, 10, "/");
+   const early = handleCreatedAtDate(dateRange?.early);
+   const latest = handleCreatedAtDate(dateRange?.latest);
 
    const invoiceDetailsForInvoicePmt = [
       {
@@ -53,7 +50,7 @@ export function getInvoiceDetailsForInvoicePmt(invoice) {
       },
       {
          detailText: "Client:",
-         detail: makeCapitalize(`${client?.firstName} ${client?.lastName}`),
+         detail: !!client && makeCapitalize(`${client?.firstName} ${client?.lastName}`),
       },
       {
          detailText: "PDF Document:",

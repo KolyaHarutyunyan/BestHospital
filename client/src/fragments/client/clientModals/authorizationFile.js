@@ -15,7 +15,7 @@ export const AuthorizationFile = ({
    const classes = createClientStyle();
 
    const dispatch = useDispatch();
-   
+
    const [fileName, setFileName] = useState("");
    const [selectedFile, setSelectedFile] = useState();
    const [another, setAnother] = useState("");
@@ -41,6 +41,12 @@ export const AuthorizationFile = ({
       dispatch(uploadActions.getUpload(fileId));
    }, []);
 
+   useEffect(() => {
+      if (info) {
+         triggerFileURL && triggerFileURL(info.url);
+      }
+   }, [info]);
+
    const handleChangeFile = (event) => {
       const createInfo = {
          resource: fileId,
@@ -53,9 +59,7 @@ export const AuthorizationFile = ({
    useEffect(() => {
       if (createLoader) {
          const timer = setInterval(() => {
-            setProgress((prevProgress) =>
-               prevProgress >= 100 ? 0 : prevProgress + 10
-            );
+            setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
          }, 800);
          return () => {
             clearInterval(timer);

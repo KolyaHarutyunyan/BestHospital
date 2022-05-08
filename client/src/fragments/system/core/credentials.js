@@ -1,19 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-   AddButton,
-   NoItemText,
-   SlicedText,
-   ValidationInput,
-} from "@eachbase/components";
+import { AddButton, NoItemText, SlicedText, ValidationInput } from "@eachbase/components";
 import { systemItemStyles } from "./styles";
-import {
-   ErrorText,
-   FindLoad,
-   FindSuccess,
-   Images,
-   isNotEmpty,
-} from "@eachbase/utils";
+import { ErrorText, FindLoad, FindSuccess, Images, isNotEmpty } from "@eachbase/utils";
 import { SelectInputPlaceholder } from "@eachbase/components";
 import { systemActions } from "@eachbase/store";
 
@@ -24,11 +13,7 @@ const credentialBtn = {
    padding: 0,
 };
 
-const credentialsList = [
-   { name: "Degree" },
-   { name: "Clearance" },
-   { name: "licence" },
-];
+const credentialsList = [{ name: "Degree" }, { name: "Clearance" }, { name: "licence" }];
 
 export const Credentials = ({ removeItem, openModal, globalCredentials }) => {
    const dispatch = useDispatch();
@@ -158,9 +143,7 @@ export const Credentials = ({ removeItem, openModal, globalCredentials }) => {
                                  editCredential("editCredential", {
                                     credentialId: credentialItem._id,
                                     credentialName: credentialItem.name,
-                                    credentialType: convertType(
-                                       credentialItem.type
-                                    ),
+                                    credentialType: convertType(credentialItem.type),
                                  })
                               }
                               alt="edit"
@@ -181,7 +164,7 @@ export const Credentials = ({ removeItem, openModal, globalCredentials }) => {
                   );
                })
             ) : (
-               <NoItemText text="No Items Yet" />
+               <NoItemText text="No Credentials Yet" />
             )}
          </div>
       </>

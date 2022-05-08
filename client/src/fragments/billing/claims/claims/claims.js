@@ -35,8 +35,12 @@ export const ClaimsFragment = ({
    const [filteredDateTo, setFilteredDateTo] = useState("");
    const [selectedStatus, setSelectedStatus] = useState("All");
 
-   const clientsNames = claims.map((claim) => claim?.client?.firstName);
-   const payorsNames = claims.map((claim) => claim?.funder?.firstName);
+   const clientsNames = claims.map(
+      (claim) => `${claim?.client?.firstName} ${claim?.client?.lastName}`
+   );
+   const payorsNames = claims.map(
+      (claim) => `${claim?.funder?.firstName} ${claim?.funder?.lastName}`
+   );
 
    const claimsWithFilters = getFilteredClaims(
       claims,
@@ -60,10 +64,10 @@ export const ClaimsFragment = ({
          <div className={classes.addButton}>
             <BillFiltersSelectors
                filterIsFor={"claim"}
-               clientsNames={clientsNames}
                payorsNames={payorsNames}
                passPayorHandler={(selPayor) => setSelectedPayor(selPayor)}
                selectedPayor={selectedPayor}
+               clientsNames={clientsNames}
                passClientHandler={(selClient) => setSelectedClient(selClient)}
                selectedClient={selectedClient}
                changeDateFromInput={(ev) => setFilteredDateFrom(ev.target.value)}

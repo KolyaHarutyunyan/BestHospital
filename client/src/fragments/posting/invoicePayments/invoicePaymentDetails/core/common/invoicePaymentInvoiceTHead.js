@@ -1,11 +1,6 @@
 import React, { useContext } from "react";
 import { tableTheadTbodyStyle } from "./styles";
-import {
-   DrawerContext,
-   getTableHeader,
-   getTextDependsOnWidth,
-   useWidth,
-} from "@eachbase/utils";
+import { DrawerContext, hooksForTable, useWidth } from "@eachbase/utils";
 
 export const InvoicePaymentInvoiceTHead = () => {
    const classes = tableTheadTbodyStyle();
@@ -13,6 +8,8 @@ export const InvoicePaymentInvoiceTHead = () => {
    const width = useWidth();
 
    const { open } = useContext(DrawerContext);
+
+   const { getTableHeader, getTextDependsOnWidth } = hooksForTable;
 
    function getInvoiceTitle(givenTitle = "", ...rest) {
       const size = open ? 1855 : 1700;

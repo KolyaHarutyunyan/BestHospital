@@ -1,13 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import {
-   getFullName,
-   getTextDependsOnWidth,
-   handleCreatedAtDate,
-   resetRadius,
-   showDashIfEmpty,
-   useWidth,
-} from "@eachbase/utils";
+import { hooksForTable, useWidth } from "@eachbase/utils";
 import { billTHeadTBodyStyle } from "./style";
 
 export const BillTBodyWithoutScroll = ({ bills = [] }) => {
@@ -17,6 +10,14 @@ export const BillTBodyWithoutScroll = ({ bills = [] }) => {
 
    const width = useWidth();
 
+   const {
+      getFullName,
+      getTextDependsOnWidth,
+      handleCreatedAtDate,
+      resetRadius,
+      showDashIfEmpty,
+   } = hooksForTable;
+
    function getDisplayOf(givenText = "") {
       if (typeof givenText !== "string") return givenText;
       return showDashIfEmpty(getTextDependsOnWidth(width, 2565, givenText, 5));
@@ -25,15 +26,14 @@ export const BillTBodyWithoutScroll = ({ bills = [] }) => {
    return (
       <div className={classes.tbodyContainerStyle}>
          {bills.map((bill, index) => {
-            const billId = getDisplayOf(bill._id);
-            const dateOfService = getDisplayOf(
-               handleCreatedAtDate(bill.dateOfService, 10, "/")
-            );
             const payorFirstName = bill.payor?.firstName;
             const payorLastName = bill.payor?.lastName;
-            const payor = getFullName(payorFirstName, payorLastName, getDisplayOf);
             const clientFirstName = bill.client?.firstName;
             const clientLastName = bill.client?.lastName;
+
+            const billId = getDisplayOf(bill._id);
+            const dateOfService = getDisplayOf(handleCreatedAtDate(bill.dateOfService));
+            const payor = getFullName(payorFirstName, payorLastName, getDisplayOf);
             const client = getFullName(clientFirstName, clientLastName, getDisplayOf);
             const service = getDisplayOf(bill.authService?.authorizationId);
 

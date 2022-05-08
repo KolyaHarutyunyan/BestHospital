@@ -2,14 +2,10 @@ import React, { useContext } from "react";
 import { invoiceTHeadTBodyStyle } from "./styles";
 import { useHistory } from "react-router-dom";
 import {
-   addSignToValueFromStart,
    DrawerContext,
    getDataForTable,
-   getFullName,
-   getValueByFixedNumber,
-   handleCreatedAtDate,
+   hooksForTable,
    manageStatus,
-   showDashIfEmpty,
    useWidth,
 } from "@eachbase/utils";
 
@@ -22,6 +18,14 @@ export const InvoiceTBody = ({ invoices = [] }) => {
 
    const { open } = useContext(DrawerContext);
 
+   const {
+      addSignToValueFromStart,
+      getFullName,
+      getValueByFixedNumber,
+      handleCreatedAtDate,
+      showDashIfEmpty,
+   } = hooksForTable;
+
    function getTableData(data) {
       return showDashIfEmpty(getDataForTable(data, open, width));
    }
@@ -29,8 +33,8 @@ export const InvoiceTBody = ({ invoices = [] }) => {
    return (
       <div className={classes.tbodyContainerStyle}>
          {invoices.map((invoice, index) => {
-            const early = handleCreatedAtDate(invoice?.dateRange?.early, 10, "/");
-            const latest = handleCreatedAtDate(invoice?.dateRange?.latest, 10, "/");
+            const early = handleCreatedAtDate(invoice?.dateRange?.early);
+            const latest = handleCreatedAtDate(invoice?.dateRange?.latest);
             const clientFirstName = invoice?.client?.firstName;
             const clientLastName = invoice?.client?.lastName;
 
@@ -40,9 +44,7 @@ export const InvoiceTBody = ({ invoices = [] }) => {
             const totalAmount = getTableData(
                addSignToValueFromStart(getValueByFixedNumber(invoice.totalAmount))
             );
-            const invoiceDate = getTableData(
-               handleCreatedAtDate(invoice.invoiceDate, 10, "/")
-            );
+            const invoiceDate = getTableData(handleCreatedAtDate(invoice.invoiceDate));
             const status = getTableData(manageStatus(invoice.status));
 
             return (

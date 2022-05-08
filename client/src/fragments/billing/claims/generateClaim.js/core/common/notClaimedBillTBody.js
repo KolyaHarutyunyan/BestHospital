@@ -1,13 +1,9 @@
 import React, { useContext } from "react";
 import {
-   addSignToValueFromStart,
    CheckupContext,
    DrawerContext,
-   getFullName,
    getGeneratingDataForTable,
-   getValueByFixedNumber,
-   handleCreatedAtDate,
-   showDashIfEmpty,
+   hooksForTable,
    useWidth,
 } from "@eachbase/utils";
 import { notClaimedBillTHeadTBodyStyle } from "./styles";
@@ -25,6 +21,14 @@ export const NotClaimedBillTBody = ({ notClaimedBill, triggerBill }) => {
       notClaimedBill.isChecked ? "checked-box" : ""
    }`;
 
+   const {
+      addSignToValueFromStart,
+      getFullName,
+      getValueByFixedNumber,
+      handleCreatedAtDate,
+      showDashIfEmpty,
+   } = hooksForTable;
+
    function getTableData(data) {
       return showDashIfEmpty(getGeneratingDataForTable(data, open, width));
    }
@@ -37,9 +41,7 @@ export const NotClaimedBillTBody = ({ notClaimedBill, triggerBill }) => {
       itemsAreChecked && handleItemsCheckup(false);
    }
 
-   const dateOfService = getTableData(
-      handleCreatedAtDate(notClaimedBill.dateOfService, 10, "/")
-   );
+   const dateOfService = getTableData(handleCreatedAtDate(notClaimedBill.dateOfService));
    const placeOfService = getTableData(notClaimedBill.placeService?.name);
    const service = getTableData(notClaimedBill.authService?.serviceId);
    const funderFirstName = notClaimedBill.payer?.firstName;
