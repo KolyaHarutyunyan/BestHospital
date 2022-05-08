@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AppointmentService } from './appointment.service';
-import { AppointmentController } from './appointment.controller';
+import { ApptService } from './appt.service';
+import { ApptController } from './appt.controller';
 import { ClientModule } from '../client/client.module';
 import { StaffModule } from '../staff/staff.module';
 import { PaycodeModule } from '../employment/paycode/paycode.module';
 import { AuthorizationserviceModule } from '../client/authorizationservice/authorizationservice.module';
-import { AppointmentSanitizer } from './interceptor/appointment.interceptor';
+import { ApptSanitizer } from './intcp/appt.intcp';
 import { PlaceModule } from '../place/place.module';
 import { BillingModule } from '../billing/billing.module';
 import { EmploymentModule } from '../employment/employment.module';
@@ -20,8 +20,8 @@ import { EmploymentModule } from '../employment/employment.module';
     PlaceModule,
     BillingModule,
   ],
-  controllers: [AppointmentController],
-  providers: [AppointmentService, AppointmentSanitizer],
-  exports: [AppointmentService],
+  controllers: [ApptController],
+  providers: [ApptService, ApptSanitizer],
+  exports: [ApptService],
 })
-export class AppointmentModule {}
+export class ApptModule {}

@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as mongoose from 'mongoose';
 import { Model } from 'mongoose';
-import { FileDTO } from 'src/files/dto';
+import { FileDTO } from '../files/dto';
 import { BillingService } from '../billing/billing.service';
 import { AuthorizationserviceService } from '../client/authorizationservice/authorizationservice.service';
 import { ClientService } from '../client/client.service';
@@ -9,20 +9,16 @@ import { EmploymentService } from '../employment/employment.service';
 import { PaycodeService } from '../employment/paycode/paycode.service';
 import { PlaceService } from '../place/place.service';
 import { StaffService } from '../staff/staff.service';
-import { AppointmentStatus, AppointmentType, EventStatus } from './appointment.constants';
-import { AppointmentModel } from './appointment.model';
-import { AppointmentDto, CreateAppointmentDto, CreateRepeatDto, UpdateAppointmentDto } from './dto';
-import {
-  AppointmentQueryDTO,
-  AppointmentQuerySetEventStatusDTO,
-  AppointmentQuerySetStatusDTO,
-} from './dto/appointment.dto';
-import { AppointmentSanitizer } from './interceptor/appointment.interceptor';
-import { IAppointment } from './interface';
-import { IRepeat } from './interface/appointment.interface';
+import { ApptMode, ApptStatus, ApptType, EventStatus } from './appt.constants';
+import { ApptModel } from './appt.model';
+import { ApptDto, CreateApptDto, CreateRepeatDto, UpdateAppointmentDto } from './dto';
+import { AppointmentQueryDTO, AppointmentQuerySetEventStatusDTO } from './dto/appt.dto';
+import { ApptSanitizer } from './intcp/appt.intcp';
+import { IAppt } from './interface';
+import { IRepeat } from './interface/appt.interface';
 
 @Injectable()
-export class AppointmentService {
+export class ApptService {
   constructor(
     private readonly clientService: ClientService,
     private readonly authorizedService: AuthorizationserviceService,
@@ -31,34 +27,34 @@ export class AppointmentService {
     private readonly employmentService: EmploymentService,
     private readonly placeService: PlaceService,
     private readonly billingService: BillingService,
-    private readonly sanitizer: AppointmentSanitizer,
+    private readonly sanitizer: ApptSanitizer,
   ) {
-    this.model = AppointmentModel;
+    this.model = ApptModel;
   }
-  private model: Model<IAppointment>;
+  private model: Model<IAppt>;
 
-  // create Appointment
-  async create(dto: CreateAppointmentDto): Promise<AppointmentDto> {
+  /** create the appt */
+  async create(dto: CreateApptDto): Promise<ApptDto> {
     if (new Date(dto.startTime) > new Date(dto.endTime)) {
       throw new HttpException(`startTime can't be high then endTime`, HttpStatus.BAD_REQUEST);
     }
-    let appointment;
+    let appt;
     const [staff, staffPayCode]: any = await Promise.all([
       this.staffService.findById(dto.staff),
       this.payCodeService.findOne(dto.staffPayCode),
     ]);
     switch (dto.type) {
-      case AppointmentType.SERVICE:
-        appointment = await this.appointmentService(dto);
+      case ApptType.SERVICE:
+        appt = await this.apptService(dto);
         break;
-      case AppointmentType.DRIVE:
-        appointment = await this.appointmentDrive(dto);
+      case ApptType.DRIVE:
+        appt = await this.apptDrive(dto);
         break;
-      case AppointmentType.PAID:
-        appointment = await this.appointmentPaid(dto);
+      case ApptType.PAID:
+        appt = await this.apptPaid(dto);
         break;
-      case AppointmentType.BREAK:
-        appointment = await this.appointmentBreak(dto);
+      case ApptType.BREAK:
+        appt = await this.apptBreak(dto);
         break;
     }
     if (staff.id != staffPayCode.employmentId.staffId) {
@@ -67,69 +63,36 @@ export class AppointmentService {
     if (staffPayCode.employmentId.active != true) {
       throw new HttpException('Employment is not active', HttpStatus.BAD_REQUEST);
     }
-    await appointment.save();
-    return this.sanitizer.sanitize(appointment);
+    await appt.save();
+    return this.sanitizer.sanitize(appt);
   }
 
-  // repeat an appointments
+  /** repeat the appt */
   async repeat(dto: CreateRepeatDto, _id: string): Promise<IRepeat> {
-    const appointment = await this.model.findById(_id);
-    this.checkAppt(appointment);
-    if (appointment.isRepeat) {
-      throw new HttpException(`appointment can not repeat`, HttpStatus.BAD_REQUEST);
-    }
-    const now = new Date();
-    if (dto.startDate > dto.endDate) {
-      throw new HttpException(`startDate can not be higher than endDate`, HttpStatus.BAD_REQUEST);
-    }
-    if (new Date(dto.startDate) < now) {
-      dto.startDate = now;
-    }
-    if (new Date(dto.endDate) < now) {
-      dto.endDate = now;
-    }
-    if (dto.mode == 'DAILY') {
-      if (!dto.repeatCount && !dto.repeatConsecutive) {
-        throw new HttpException(
-          `repeatCount or(and) repeatConsecutive can not not be empty`,
-          HttpStatus.BAD_REQUEST,
-        );
-      } else if (dto.repeatCount && !dto.repeatConsecutive) {
-        return await this.repeatDaily(dto, appointment);
-      } else if (!dto.repeatCount && dto.repeatConsecutive) {
-        return await this.repeatConsecutiveDays(dto, appointment);
-      }
-    } else if (dto.mode == 'WEEKLY') {
-      if (
-        (!dto.repeatCountWeek && !dto.repeatCheckWeek) ||
-        (dto.repeatCountWeek && !dto.repeatCheckWeek) ||
-        (!dto.repeatCountWeek && dto.repeatCheckWeek)
-      ) {
-        throw new HttpException(
-          `repeatCountWeek or(and) repeatCheckWeek can not not be empty`,
-          HttpStatus.BAD_REQUEST,
-        );
-      } else if (dto.repeatCountWeek && dto.repeatCheckWeek) {
-        return await this.repeatWeekly(dto, appointment);
-      }
-    } else {
-      if (
-        (!dto.repeatDayMonth && !dto.repeatMonth) ||
-        (!dto.repeatDayMonth && dto.repeatMonth) ||
-        (dto.repeatDayMonth && !dto.repeatMonth)
-      ) {
-        throw new HttpException(
-          `repeatDayMonth or(and) repeatMonth can not not be empty`,
-          HttpStatus.BAD_REQUEST,
-        );
-      } else if (dto.repeatDayMonth && dto.repeatMonth) {
-        return await this.repeatMonthly(dto, appointment);
-      }
+    const appt = await this.model.findById(_id);
+    this.checkAppt(appt);
+    this.canRepeat(appt.isRepeat);
+    this.adjustRepeatingDates(dto.startDate, dto.endDate);
+    switch (dto.mode) {
+      case ApptMode.DAILY:
+        return await this.checkDailyMode(dto, appt, dto.repeatCount, dto.repeatConsecutive);
+      case ApptMode.WEEKLY:
+        this.checkWeeklyMode(dto.repeatCountWeek, dto.repeatCheckWeek);
+        if (dto.repeatCountWeek && dto.repeatCheckWeek) {
+          return await this.repeatWeekly(dto, appt);
+        }
+        break;
+      case ApptMode.MONTHLY:
+        this.checkMonthMode(dto.repeatDayMonth, dto.repeatMonth);
+        if (dto.repeatDayMonth && dto.repeatMonth) {
+          return await this.repeatMonthly(dto, appt);
+        }
+        break;
     }
   }
 
-  // create the service appointment
-  async appointmentService(dto: CreateAppointmentDto): Promise<AppointmentDto> {
+  /** create appt service */
+  async apptService(dto: CreateApptDto): Promise<ApptDto> {
     await this.checkClientStaffOverlap(null, dto);
     /** if appointment type is SERVICE client and authorization service are required */
     this.checkClient(dto.client);
@@ -163,7 +126,7 @@ export class AppointmentService {
     //     HttpStatus.BAD_REQUEST,
     //   );
     // }
-    const appointment = new this.model({
+    const appt = new this.model({
       client: dto.client,
       authorizedService: dto.authorizedService,
       payer: authService.authorizationId.funderId,
@@ -179,16 +142,15 @@ export class AppointmentService {
       type: dto.type,
       placeService: placeId,
     });
-    return appointment;
+    return appt;
   }
 
-  // create the drive appointment
-  async appointmentDrive(dto): Promise<AppointmentDto> {
+  /** create drive appt */
+  async apptDrive(dto): Promise<ApptDto> {
     if (!dto.miles) {
       throw new HttpException(`Miles can not not be empty`, HttpStatus.BAD_REQUEST);
     }
-    console.log(dto);
-    const appointment = new this.model({
+    const appt = new this.model({
       staff: dto.staff,
       staffPayCode: dto.staffPayCode,
       startDate: new Date(dto.startDate).setHours(23, 59),
@@ -200,12 +162,12 @@ export class AppointmentService {
       type: dto.type,
       miles: dto.miles,
     });
-    return appointment;
+    return appt;
   }
 
-  // create the paid appointment
-  async appointmentPaid(dto): Promise<AppointmentDto> {
-    const appointment = new this.model({
+  /** create paid appt */
+  async apptPaid(dto): Promise<ApptDto> {
+    const appt = new this.model({
       staff: dto.staff,
       staffPayCode: dto.staffPayCode,
       startDate: new Date(dto.startDate).setHours(23, 59),
@@ -216,12 +178,12 @@ export class AppointmentService {
       require: dto.require,
       type: dto.type,
     });
-    return appointment;
+    return appt;
   }
 
-  // create the break appointment
-  async appointmentBreak(dto): Promise<AppointmentDto> {
-    const appointment = new this.model({
+  /** create break appt */
+  async apptBreak(dto): Promise<ApptDto> {
+    const appt = new this.model({
       staff: dto.staff,
       staffPayCode: dto.staffPayCode,
       startDate: new Date(dto.startDate).setHours(23, 59),
@@ -232,13 +194,13 @@ export class AppointmentService {
       require: dto.require,
       type: dto.type,
     });
-    return appointment;
+    return appt;
   }
 
-  // repeat with interval days
-  async repeatDaily(dto: CreateRepeatDto, appointment: IAppointment): Promise<IRepeat> {
+  /* repeat with interval days */
+  async repeatDaily(dto: CreateRepeatDto, appt: IAppt): Promise<IRepeat> {
     console.log('dto.repeatCount && !dto.repeatConsecutive');
-    const appointments = [];
+    const appts = [];
     const day = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
     const startDate = new Date(dto.startDate) as unknown as number;
     const endDate = new Date(new Date(dto.endDate).setHours(23, 59, 59)) as unknown as number;
@@ -252,28 +214,28 @@ export class AppointmentService {
       dates.push(x);
     }
     for (let i = 0; i < count; i++) {
-      this.cloneDoc(appointment, dates[i], appointments);
+      this.cloneDoc(appt, dates[i], appts);
     }
-    await this.saveDb(appointments);
+    await this.saveDb(appts);
     return { occurency: count };
   }
 
   // repeat every day
-  async repeatConsecutiveDays(dto: CreateRepeatDto, appointment: IAppointment): Promise<IRepeat> {
-    const appointments = [];
+  async repeatConsecutiveDays(dto: CreateRepeatDto, appt: IAppt): Promise<IRepeat> {
+    const appts = [];
     const startDate = new Date(dto.startDate);
     const endDateDate = new Date(dto.endDate);
     const days = this.getBusinessDatesCount(startDate, endDateDate);
     for (let i = 0; i < days.count; i++) {
-      this.cloneDoc(appointment, days.dates[i], appointments);
+      this.cloneDoc(appt, days.dates[i], appts);
     }
-    await this.saveDb(appointments);
+    await this.saveDb(appts);
     return { occurency: days.count };
   }
 
   // repeat every week
-  async repeatWeekly(dto: CreateRepeatDto, appointment: IAppointment): Promise<IRepeat> {
-    const appointments = [];
+  async repeatWeekly(dto: CreateRepeatDto, appt: IAppt): Promise<IRepeat> {
+    const appts = [];
     const weeks = [];
     let totalCount = 0;
     const startDate = new Date(dto.startDate);
@@ -314,15 +276,15 @@ export class AppointmentService {
       });
     }
     for (let i = 0; i < totalCount; i++) {
-      this.cloneDoc(appointment, dates[i], appointments);
+      this.cloneDoc(appt, dates[i], appts);
     }
-    await this.saveDb(appointments);
+    await this.saveDb(appts);
     return { occurency: totalCount };
   }
 
   // repeat every month
-  async repeatMonthly(dto: CreateRepeatDto, appointment: IAppointment): Promise<IRepeat> {
-    const appointments = [];
+  async repeatMonthly(dto: CreateRepeatDto, appt: IAppt): Promise<IRepeat> {
+    const appts = [];
     const start = new Date(dto.startDate);
     const end = new Date(dto.endDate);
     let count = 0;
@@ -339,25 +301,25 @@ export class AppointmentService {
     }
 
     for (let i = 0; i < count; i++) {
-      this.cloneDoc(appointment, dates[i], appointments);
+      this.cloneDoc(appt, dates[i], appts);
     }
-    await this.saveDb(appointments);
+    await this.saveDb(appts);
     return { occurency: count };
   }
   /** render the appointment */
-  async render(_id: string): Promise<AppointmentDto> {
+  async render(_id: string): Promise<ApptDto> {
     const appt = await this.model.findById(_id).populate({
       path: 'authorizedService',
       populate: { path: 'serviceId' },
     });
     this.checkAppt(appt);
     this.checkSignature(appt.signature, appt.digitalSignature);
-    this.checkStatusAppt(appt.status as AppointmentStatus);
+    this.checkStatusAppt(appt.status as ApptStatus);
     this.checkEventStatusAppt(appt.eventStatus as EventStatus, [
       EventStatus.NOTRENDERED,
       EventStatus.PENDING,
     ]);
-    this.checkTypeAppt(appt.type as AppointmentType, [AppointmentType.SERVICE]);
+    this.checkTypeAppt(appt.type as ApptType, [ApptType.SERVICE]);
     await Promise.all([
       this.authorizedService.countCompletedUnits(
         appt.authorizedService,
@@ -370,17 +332,17 @@ export class AppointmentService {
     return this.sanitizer.sanitize(appt);
   }
   /** canclel the appointment */
-  async cancel(_id: string, reason: string): Promise<AppointmentDto> {
+  async cancel(_id: string, reason: string): Promise<ApptDto> {
     const appt = await this.model.findById(_id);
     this.checkAppt(appt);
-    this.checkStatusAppt(appt.status as AppointmentStatus);
+    this.checkStatusAppt(appt.status as ApptStatus);
     appt.eventStatus = EventStatus.CANCELLED;
     if (reason) appt.cancelReason = reason;
     await appt.save();
     return this.sanitizer.sanitize(appt);
   }
   //set Status(EventStatus)
-  async setStatus(_id: string, status: AppointmentQuerySetEventStatusDTO): Promise<AppointmentDto> {
+  async setStatus(_id: string, status: AppointmentQuerySetEventStatusDTO): Promise<ApptDto> {
     const appointment: any = await this.model.findById(_id).populate({
       path: 'authorizedService',
       populate: { path: 'serviceId' },
@@ -388,10 +350,7 @@ export class AppointmentService {
     this.checkAppt(appointment);
     if (status.status) appointment.status = status.status;
     if (status.eventStatus) {
-      if (
-        status.eventStatus == EventStatus.COMPLETED &&
-        appointment.status !== AppointmentStatus.ACTIVE
-      ) {
+      if (status.eventStatus == EventStatus.COMPLETED && appointment.status !== ApptStatus.ACTIVE) {
         throw new HttpException(`EventStatus can't be completed`, HttpStatus.BAD_REQUEST);
       }
       // if (status.eventStatus == 'RENDERED' || !appointment.signature) {
@@ -400,16 +359,10 @@ export class AppointmentService {
       //     HttpStatus.BAD_REQUEST,
       //   );
       // }
-      if (
-        status.eventStatus === EventStatus.RENDERED &&
-        appointment.type !== AppointmentType.SERVICE
-      ) {
+      if (status.eventStatus === EventStatus.RENDERED && appointment.type !== ApptType.SERVICE) {
         throw new HttpException(`can't render the appointment`, HttpStatus.BAD_REQUEST);
       }
-      if (
-        status.eventStatus === EventStatus.RENDERED &&
-        appointment.type === AppointmentType.SERVICE
-      ) {
+      if (status.eventStatus === EventStatus.RENDERED && appointment.type === ApptType.SERVICE) {
         const minutes = await this.timeDiffCalc(appointment.endTime, appointment.startTime);
         await this.authorizedService.countCompletedUnits(appointment.authorizedService, minutes);
         await this.billingService.create(appointment);
@@ -420,15 +373,15 @@ export class AppointmentService {
     return this.sanitizer.sanitize(appointment);
   }
 
-  // find all appointments
-  async findAll(filter: AppointmentQueryDTO): Promise<any> {
+  /** find all appts */
+  async findAll(filter: AppointmentQueryDTO): Promise<IAppt[]> {
     const query: any = {};
     if (filter.client) query.client = mongoose.Types.ObjectId(filter.client);
     if (filter.staff) query.staff = mongoose.Types.ObjectId(filter.staff);
     if (filter.status) query.status = filter.status;
     if (filter.eventStatus) query.eventStatus = filter.eventStatus;
     if (filter.type) query.type = filter.type;
-    const appointments = await this.model.aggregate([
+    const appts = await this.model.aggregate([
       { $match: { ...query } },
       { $lookup: { from: 'clients', localField: 'client', foreignField: '_id', as: 'client' } },
       { $lookup: { from: 'staffs', localField: 'staff', foreignField: '_id', as: 'staff' } },
@@ -440,32 +393,32 @@ export class AppointmentService {
         },
       },
     ]);
-    return appointments;
+    return appts;
   }
 
   //filter appointments by client
-  async findClients(client: string): Promise<AppointmentDto[]> {
-    const appointments = await this.model.find({ client }).populate({
+  async findClients(client: string): Promise<ApptDto[]> {
+    const appts = await this.model.find({ client }).populate({
       path: 'client',
       select: 'firstName lastName',
     });
-    this.checkAppt(appointments[0]);
-    return this.sanitizer.sanitizeMany(appointments);
+    this.checkAppt(appts[0]);
+    return this.sanitizer.sanitizeMany(appts);
   }
 
   //filter appointments by staff
-  async findStaff(staff: string): Promise<AppointmentDto[]> {
-    const appointments = await this.model.find({ staff }).populate({
+  async findStaff(staff: string): Promise<ApptDto[]> {
+    const appts = await this.model.find({ staff }).populate({
       path: 'staff',
       select: 'firstName lastName',
     });
-    this.checkAppt(appointments[0]);
-    return this.sanitizer.sanitizeMany(appointments);
+    this.checkAppt(appts[0]);
+    return this.sanitizer.sanitizeMany(appts);
   }
 
   // find appointment
-  async findOne(_id: string): Promise<any> {
-    const appointment = await this.model
+  async findOne(_id: string): Promise<IAppt> {
+    const appt = await this.model
       .findById(_id)
       .populate('client')
       .populate('authorizedService')
@@ -474,15 +427,15 @@ export class AppointmentService {
       .populate('placeService');
     const staff = [];
     const client = [];
-    staff.push(appointment.staff);
-    client.push(appointment.client);
-    this.checkAppt(appointment);
-    return appointment;
+    staff.push(appt.staff);
+    client.push(appt.client);
+    this.checkAppt(appt);
+    return appt;
     // return this.sanitizer.sanitize(appointment);
   }
 
   // update appointment
-  async update(_id: string, dto: UpdateAppointmentDto): Promise<AppointmentDto> {
+  async update(_id: string, dto: UpdateAppointmentDto): Promise<ApptDto> {
     // the first check if appointment is not complete or cancelled status
     const appointment = await this.model.findById(_id);
     this.checkAppt(appointment);
@@ -491,7 +444,7 @@ export class AppointmentService {
       await this.placeService.findOne(dto.placeService);
       appointment.placeService = dto.placeService;
     }
-    if (appointment.type == AppointmentType.SERVICE) {
+    if (appointment.type == ApptType.SERVICE) {
       /** if appountment type is SERVICE client and authorization service are required */
       this.checkClient(dto.client);
       this.checkAuthorizedService(dto.authorizedService);
@@ -520,7 +473,7 @@ export class AppointmentService {
     appointment.staff = dto.staff;
     appointment.staffPayCode = dto.staffPayCode;
     // appointment.type = dto.type;
-    if (appointment.type == AppointmentType.DRIVE && dto.miles) {
+    if (appointment.type == ApptType.DRIVE && dto.miles) {
       appointment.miles = dto.miles;
     }
     if (dto.startDate) appointment.startDate = dto.startDate;
@@ -539,37 +492,36 @@ export class AppointmentService {
 
   /** Private methods */
   /** if the appointment is not found, throws an exception */
-  private checkAppt(appt: IAppointment) {
+  private checkAppt(appt: IAppt) {
     if (!appt) {
       throw new HttpException('Appointment with this id was not found', HttpStatus.NOT_FOUND);
     }
   }
 
-  // clone appointment
-  async cloneDoc(appointment: IAppointment, date, appointments) {
+  /** clone the appt */
+  async cloneDoc(appt: IAppt, date, appts) {
     const cloneDoc = new this.model({
-      client: appointment.client,
-      authorizedService: appointment.authorizedService,
-      type: appointment.type,
+      client: appt.client,
+      authorizedService: appt.authorizedService,
+      type: appt.type,
       isRepeat: true,
-      miles: appointment.miles,
-      staff: appointment.staff,
-      staffPayCode: appointment.staffPayCode,
+      miles: appt.miles,
+      staff: appt.staff,
+      staffPayCode: appt.staffPayCode,
       startDate: new Date(date).setHours(23, 59),
-      startTime: appointment.startTime,
-      endTime: appointment.endTime,
+      startTime: appt.startTime,
+      endTime: appt.endTime,
       eventStatus: EventStatus.NOTRENDERED,
-      status: appointment.status,
-      require: appointment.require,
+      status: appt.status,
+      require: appt.require,
     });
-    appointments.push(cloneDoc);
+    appts.push(cloneDoc);
   }
 
-  // save the appointments
-  async saveDb(appointments) {
-    return await this.model.insertMany(appointments);
+  /** save the appts */
+  async saveDb(appts) {
+    return await this.model.insertMany(appts);
   }
-
   // calculate working days between two dates
   getBusinessDatesCount(startDate, endDate) {
     let count = 0;
@@ -587,7 +539,6 @@ export class AppointmentService {
     }
     return { count, dates };
   }
-
   // calculate minutes between two dates
   timeDiffCalc(dateFuture, dateNow): number {
     return (Math.abs(dateNow - dateFuture) / 36e5) * 60;
@@ -597,6 +548,12 @@ export class AppointmentService {
   private checkClient(client: string) {
     if (!client) {
       throw new HttpException('Client with this id was not found', HttpStatus.NOT_FOUND);
+    }
+  }
+  /** can appt have been repeated */
+  private canRepeat(repeat: boolean) {
+    if (repeat) {
+      throw new HttpException(`appointment can not repeat`, HttpStatus.BAD_REQUEST);
     }
   }
   /** check appointment overlapping */
@@ -628,7 +585,6 @@ export class AppointmentService {
       }
     }
   }
-
   /** check authorization service */
   private checkAuthorizedService(authorizedService: string) {
     if (!authorizedService) {
@@ -650,13 +606,13 @@ export class AppointmentService {
       throw new HttpException(`digital signature is required`, HttpStatus.BAD_REQUEST);
     }
   } /** check appt status */
-  private checkStatusAppt(appt: AppointmentStatus) {
-    if (appt !== AppointmentStatus.ACTIVE) {
+  private checkStatusAppt(appt: ApptStatus) {
+    if (appt !== ApptStatus.ACTIVE) {
       throw new HttpException(`Appointment is not active`, HttpStatus.BAD_REQUEST);
     }
   }
   /** Checks if the appt type is allowed (matches an item in allowed types). Throws if no match is found */
-  private checkTypeAppt(apptType: AppointmentType, allowedTypes: AppointmentType[]) {
+  private checkTypeAppt(apptType: ApptType, allowedTypes: ApptType[]) {
     let foundTypeMatch = false;
     for (let i = 0; i < allowedTypes.length; i++) {
       if (apptType === allowedTypes[i]) {
@@ -683,6 +639,58 @@ export class AppointmentService {
     if (!foundStatusMatch) {
       throw new HttpException(
         `You can only edit appointment that are ${allowedStatus}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  /** check dates and adjust */
+  private adjustRepeatingDates(startDate: Date, endDate: Date): void {
+    const now = new Date();
+    if (startDate > endDate) {
+      throw new HttpException(`startDate can not be higher than endDate`, HttpStatus.BAD_REQUEST);
+    }
+    if (new Date(startDate) < now) {
+      startDate = now;
+    }
+    if (new Date(endDate) < now) {
+      endDate = now;
+    }
+  }
+  /** check dates in daily mode */
+  private async checkDailyMode(dto, appointment, repeatCount, repeatConsecutive): Promise<IRepeat> {
+    if (!repeatCount && !repeatConsecutive) {
+      throw new HttpException(
+        `repeatCount or(and) repeatConsecutive can not not be empty`,
+        HttpStatus.BAD_REQUEST,
+      );
+    } else if (repeatCount && !repeatConsecutive) {
+      return await this.repeatDaily(dto, appointment);
+    } else if (!repeatCount && repeatConsecutive) {
+      return await this.repeatConsecutiveDays(dto, appointment);
+    }
+  }
+  /** check dates in weekly mode */
+  private checkWeeklyMode(repeatCountWeek, repeatCheckWeek): void {
+    if (
+      (!repeatCountWeek && !repeatCheckWeek) ||
+      (repeatCountWeek && !repeatCheckWeek) ||
+      (!repeatCountWeek && repeatCheckWeek)
+    ) {
+      throw new HttpException(
+        `repeatCountWeek or(and) repeatCheckWeek can not not be empty`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+  private checkMonthMode(repeatDayMonth, repeatMonth): void {
+    if (
+      (!repeatDayMonth && !repeatMonth) ||
+      (!repeatDayMonth && repeatMonth) ||
+      (repeatDayMonth && !repeatMonth)
+    ) {
+      throw new HttpException(
+        `repeatDayMonth or(and) repeatMonth can not not be empty`,
         HttpStatus.BAD_REQUEST,
       );
     }

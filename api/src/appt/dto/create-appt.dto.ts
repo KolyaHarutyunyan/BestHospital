@@ -9,12 +9,12 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { AppointmentStatus, AppointmentType, EventStatus } from '../appointment.constants';
+import { ApptStatus, ApptType, EventStatus } from '../appt.constants';
 
-export class CreateAppointmentDto {
-  @ApiProperty({ enum: AppointmentType })
+export class CreateApptDto {
+  @ApiProperty({ enum: ApptType })
   @IsNotEmpty()
-  @IsEnum(AppointmentType)
+  @IsEnum(ApptType)
   type: string;
   @ApiProperty()
   @IsMongoId()
@@ -55,8 +55,8 @@ export class CreateAppointmentDto {
   @ApiProperty({ enum: EventStatus })
   @IsEnum(EventStatus)
   eventStatus: EventStatus;
-  @ApiProperty({ enum: AppointmentStatus })
-  @IsEnum(AppointmentStatus)
+  @ApiProperty({ enum: ApptStatus })
+  @IsEnum(ApptStatus)
   status: string;
   @ApiProperty()
   @IsNotEmpty()

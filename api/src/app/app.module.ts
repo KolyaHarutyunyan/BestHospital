@@ -20,7 +20,7 @@ import { AvailabilityModule } from '../availability/availability.module';
 import { OvertimeModule } from '../overtime/overtime.module';
 import { TimesheetModule } from '../staff/timesheet/timesheet.module';
 import { FileModule } from '../files/file.module';
-import { AppointmentModule } from '../appointment/appointment.module';
+import { ApptModule } from '../appt/appt.module';
 import { PlaceModule } from '../place/place.module';
 import { MileageModule } from '../mileage/mileage.module';
 import { BillingModule } from '../billing/billing.module';
@@ -49,7 +49,7 @@ import { ClaimPmtModule } from '../claim-payment/claim-pmt.module';
     OvertimeModule,
     TimesheetModule,
     FileModule,
-    AppointmentModule,
+    ApptModule,
     PlaceModule,
     MileageModule,
     BillingModule,

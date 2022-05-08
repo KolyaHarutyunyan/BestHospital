@@ -13,7 +13,7 @@ import {
   IsPositive,
   Max,
 } from 'class-validator';
-import { AppointmentMode } from '../appointment.constants';
+import { ApptMode } from '../appt.constants';
 
 export class CreateRepeatDto {
   @ApiProperty()
@@ -24,8 +24,8 @@ export class CreateRepeatDto {
   @IsDateString()
   @IsNotEmpty()
   endDate: Date;
-  @ApiProperty({ enum: AppointmentMode })
-  @IsEnum(AppointmentMode)
+  @ApiProperty({ enum: ApptMode })
+  @IsEnum(ApptMode)
   @IsNotEmpty()
   mode: string;
 

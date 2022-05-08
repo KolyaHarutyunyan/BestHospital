@@ -1,13 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { AppointmentStatus, AppointmentType, EventStatus } from '../appointment.constants';
+import { ApptStatus, ApptType, EventStatus } from '../appt.constants';
 import { IsEnum, IsMongoId, IsOptional } from 'class-validator';
 import { AddressDTO } from '../../address';
 import { FileDTO } from 'src/files/dto';
 
-export class AppointmentDto {
+export class ApptDto {
   @ApiProperty()
   _id: string;
-  @ApiProperty({ enum: AppointmentType })
+  @ApiProperty({ enum: ApptType })
   type: string;
   @ApiProperty()
   client: string;
@@ -29,7 +29,7 @@ export class AppointmentDto {
   endTime: Date;
   @ApiProperty({ type: Boolean })
   require: boolean;
-  @ApiProperty({ enum: AppointmentStatus })
+  @ApiProperty({ enum: ApptStatus })
   status: string;
   @ApiProperty({ enum: EventStatus })
   eventStatus: string;
@@ -50,12 +50,12 @@ export class AppointmentQueryDTO {
   @IsEnum(EventStatus)
   @IsOptional()
   eventStatus: string;
-  @ApiProperty({ enum: AppointmentStatus, required: false })
-  @IsEnum(AppointmentStatus)
+  @ApiProperty({ enum: ApptStatus, required: false })
+  @IsEnum(ApptStatus)
   @IsOptional()
   status: string;
-  @ApiProperty({ enum: AppointmentType, required: false })
-  @IsEnum(AppointmentType)
+  @ApiProperty({ enum: ApptType, required: false })
+  @IsEnum(ApptType)
   @IsOptional()
   type: string;
   @ApiProperty({ required: false })
@@ -73,14 +73,14 @@ export class AppointmentQuerySetEventStatusDTO {
   @IsEnum(EventStatus)
   @IsOptional()
   eventStatus: string;
-  @ApiProperty({ enum: AppointmentStatus, required: false })
-  @IsEnum(AppointmentStatus)
+  @ApiProperty({ enum: ApptStatus, required: false })
+  @IsEnum(ApptStatus)
   @IsOptional()
   status: string;
 }
 
 export class AppointmentQuerySetStatusDTO {
-  @ApiProperty({ enum: AppointmentStatus, required: false })
-  @IsEnum(AppointmentStatus)
+  @ApiProperty({ enum: ApptStatus, required: false })
+  @IsEnum(ApptStatus)
   status: string;
 }

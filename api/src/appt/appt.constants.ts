@@ -1,4 +1,4 @@
-export enum AppointmentStatus {
+export enum ApptStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
 }
@@ -10,13 +10,13 @@ export enum EventStatus {
   PENDING = 'PENDING',
   CANCELLED = 'CANCELLED',
 }
-export enum AppointmentType {
+export enum ApptType {
   DRIVE = 'DRIVE',
   PAID = 'PAID',
   BREAK = 'BREAK',
   SERVICE = 'SERVICE',
 }
-export enum AppointmentMode {
+export enum ApptMode {
   DAILY = 'DAILY',
   WEEKLY = 'WEEKLY',
   MONTHLY = 'MONTHLY',

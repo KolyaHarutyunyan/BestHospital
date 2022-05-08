@@ -2,7 +2,7 @@ import { Document } from 'mongoose';
 import { FileDTO } from '../../files/dto/file.dto';
 import { IAddress } from '../../address';
 
-export interface IAppointment extends Document {
+export interface IAppt extends Document {
   _id: string;
   type: string;
   client: any;

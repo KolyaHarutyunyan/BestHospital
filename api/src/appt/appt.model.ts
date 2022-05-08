@@ -1,11 +1,11 @@
 import { model, Schema, Types } from 'mongoose';
-import { IAppointment } from './interface';
-import { EventStatus, AppointmentType, AppointmentStatus } from './appointment.constants';
+import { IAppt } from './interface';
+import { EventStatus, ApptType, ApptStatus } from './appt.constants';
 import { addressSchema } from '../address';
 import { FileSchema } from '../files/file.model';
 
-export const appointmentSchema = new Schema({
-  type: { type: String, enum: AppointmentType },
+export const apptSchema = new Schema({
+  type: { type: String, enum: ApptType },
   client: { type: Types.ObjectId, ref: 'Client', default: null },
   authorizedService: { type: Types.ObjectId, ref: 'ClientAuthorizationService', default: null },
   payer: { type: Types.ObjectId, ref: 'Funder' },
@@ -18,7 +18,7 @@ export const appointmentSchema = new Schema({
   require: { type: Boolean },
   eventStatus: { type: String, enum: EventStatus },
   cancelReason: { type: String },
-  status: { type: String, enum: AppointmentStatus },
+  status: { type: String, enum: ApptStatus },
   isRepeat: { type: Boolean, default: false },
   miles: { type: String, default: null },
   address: addressSchema,
@@ -26,4 +26,4 @@ export const appointmentSchema = new Schema({
   digitalSignature: { type: FileSchema },
 });
 
-export const AppointmentModel = model<IAppointment>('appointment', appointmentSchema);
+export const ApptModel = model<IAppt>('appt', apptSchema);
