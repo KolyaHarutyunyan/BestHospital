@@ -24,30 +24,31 @@ export class BillingService {
   /** create the billing */
   async create(dto: any): Promise<BillingDto> {
     try {
+      const totalUnits =
+        dto.endTime.getHours() - dto.startTime.getHours() / dto.authorizedService.serviceId.size;
+      const billedRate = dto.authorizedService.modifiers[0].chargeRate;
+      const billedAmount = totalUnits * billedRate;
+      const totalHours = dto.endTime.getHours() - dto.startTime.getHours();
       const billing = new this.model({
         appointment: dto._id,
-        payer: dto.funder,
+        payer: dto.payer,
         client: dto.client,
         staff: dto.staff,
         authorization: dto.authorizedService.authorizationId,
         authService: dto.authorizedService._id,
         placeService: dto.placeService,
-        totalHours: dto.endTime.getHours() - dto.startTime.getHours(),
-        totalUnits:
-          dto.endTime.getHours() - dto.startTime.getHours() / dto.authorizedService.serviceId.size,
+        totalHours,
+        totalUnits,
         dateOfService: dto.startDate,
-        billedRate: dto.authorizedService.modifiers[0].chargeRate,
-        billedAmount: 0,
-        payerTotal: 0,
-        balance: 0,
+        billedRate,
+        billedAmount,
+        payerTotal: billedAmount,
+        balance: billedAmount,
         location: dto.location,
         claimStatus: ClaimStatus.NOTCLAIMED,
         invoiceStatus: InvoiceStatus.NOTINVOICED,
         status: BillingStatus.OPEN,
       });
-      billing.billedAmount = billing.billedRate * billing.totalUnits;
-      billing.payerTotal = dto.billedAmount;
-      billing.balance = dto.billedAmount;
       if (dto.clientResp) billing.clientResp = dto.clientResp;
       await billing.save();
       return this.sanitizer.sanitize(billing);

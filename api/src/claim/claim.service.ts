@@ -97,7 +97,6 @@ export class ClaimService {
     const result = this.groupBy(bills, function (item) {
       return [item.payer, item.client];
     });
-
     /** create receivables and claims */
     for (let i = 0; i < result.length; i++) {
       for (let j = 0; j < result[i].length; ++j) {
@@ -146,7 +145,8 @@ export class ClaimService {
     let subBills = [],
       billCreatedAt = [],
       receivable = [],
-      testBill = [];
+      totalBilled = 0,
+      subBillIds = [];
 
     for (let i = 0; i < result.length; i++) {
       result[i].map((bills) => {
@@ -157,18 +157,27 @@ export class ClaimService {
     const billGroup = this.groupBy(groupBill, function (item) {
       return [item.placeService, item.authService.serviceId.cptCode];
     });
+
     for (let i = 0; i < billGroup.length; i++) {
       billGroup[i].map((bill) => {
-        testBill.push(bill._id);
+        subBillIds.push(bill._id);
         totalBillCharge.push(bill);
         billCreatedAt.push(bill.createdDate);
+        totalBilled += bill.billedAmount;
         subBills.push(bill);
       });
       const dateRange = this.minMax(billCreatedAt);
-      await this.addReceivables(receivable, billGroup[i][0], testBill, subBills, dateRange);
+      await this.addReceivables(
+        receivable,
+        billGroup[i][0],
+        subBillIds,
+        subBills,
+        totalBilled,
+        dateRange,
+      );
       receivableCreatedAt.push(new Date());
       await this.addClaim(claim, billGroup[i][0], receivable, receivableCreatedAt, subBills);
-      testBill = [];
+      subBillIds = [];
       subBills = [];
       receivable = [];
       billCreatedAt = [];
@@ -210,7 +219,6 @@ export class ClaimService {
   };
   /** change receivable amount total by receivabelId (claim-pmt) */
   async setAmount(_id: string, receivableIds: string[]) {
-    console.log(_id, '_id_id_id_id_id_id_id_id_id_id')
     const claim = await this.model.findById(_id).populate('receivable.bills');
     this.checkClaim(claim);
     let receivabelTotal = 0;
@@ -249,7 +257,7 @@ export class ClaimService {
     receivable.push({
       placeService,
       cptCode,
-      // amountTotal
+      amountTotal: result.billedAmount,
       // result[i][j].payerTotal - result[i][j].payerPaid / unitZise?
       totalUnits: 0,
       totalBill: result.payerTotal - result.payerPaid,
@@ -260,16 +268,24 @@ export class ClaimService {
   }
 
   /** add many receivables */
-  private async addReceivables(receivable, billGroup, bills, subBills, dateRange): Promise<void> {
+  private async addReceivables(
+    receivable,
+    billGroup,
+    subBillIds,
+    subBills,
+    totalBilled,
+    dateRange,
+  ): Promise<void> {
     receivable.push({
       placeService: billGroup.placeService,
       cptCode: billGroup.authService.serviceId.cptCode,
       totalUnits: 0,
+      amountTotal: totalBilled,
       // bills can have different fundingService so (payor total - payor paid / fundingService(unitSize)) which fundingService(unit size)
       totalBill: await this.countTotalBills(subBills),
       renderProvider: 50,
       dateOfService: { start: dateRange[0], end: dateRange[1] },
-      bills,
+      bills: subBillIds,
     });
   }
 

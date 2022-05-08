@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as mongoose from 'mongoose';
 import { Model } from 'mongoose';
+import { FileDTO } from 'src/files/dto';
 import { BillingService } from '../billing/billing.service';
 import { AuthorizationserviceService } from '../client/authorizationservice/authorizationservice.service';
 import { ClientService } from '../client/client.service';
@@ -11,7 +12,11 @@ import { StaffService } from '../staff/staff.service';
 import { AppointmentStatus, AppointmentType, EventStatus } from './appointment.constants';
 import { AppointmentModel } from './appointment.model';
 import { AppointmentDto, CreateAppointmentDto, CreateRepeatDto, UpdateAppointmentDto } from './dto';
-import { AppointmentQueryDTO, AppointmentQuerySetEventStatusDTO } from './dto/appointment.dto';
+import {
+  AppointmentQueryDTO,
+  AppointmentQuerySetEventStatusDTO,
+  AppointmentQuerySetStatusDTO,
+} from './dto/appointment.dto';
 import { AppointmentSanitizer } from './interceptor/appointment.interceptor';
 import { IAppointment } from './interface';
 import { IRepeat } from './interface/appointment.interface';
@@ -69,7 +74,7 @@ export class AppointmentService {
   // repeat an appointments
   async repeat(dto: CreateRepeatDto, _id: string): Promise<IRepeat> {
     const appointment = await this.model.findById(_id);
-    this.checkAppointment(appointment);
+    this.checkAppt(appointment);
     if (appointment.isRepeat) {
       throw new HttpException(`appointment can not repeat`, HttpStatus.BAD_REQUEST);
     }
@@ -339,14 +344,48 @@ export class AppointmentService {
     await this.saveDb(appointments);
     return { occurency: count };
   }
-
+  /** render the appointment */
+  async render(_id: string): Promise<AppointmentDto> {
+    const appt = await this.model.findById(_id).populate({
+      path: 'authorizedService',
+      populate: { path: 'serviceId' },
+    });
+    this.checkAppt(appt);
+    this.checkSignature(appt.signature, appt.digitalSignature);
+    this.checkStatusAppt(appt.status as AppointmentStatus);
+    this.checkEventStatusAppt(appt.eventStatus as EventStatus, [
+      EventStatus.NOTRENDERED,
+      EventStatus.PENDING,
+    ]);
+    this.checkTypeAppt(appt.type as AppointmentType, [AppointmentType.SERVICE]);
+    await Promise.all([
+      this.authorizedService.countCompletedUnits(
+        appt.authorizedService,
+        this.timeDiffCalc(appt.endTime, appt.startTime),
+      ),
+      this.billingService.create(appt),
+    ]);
+    appt.eventStatus = EventStatus.RENDERED;
+    await appt.save();
+    return this.sanitizer.sanitize(appt);
+  }
+  /** canclel the appointment */
+  async cancel(_id: string, reason: string): Promise<AppointmentDto> {
+    const appt = await this.model.findById(_id);
+    this.checkAppt(appt);
+    this.checkStatusAppt(appt.status as AppointmentStatus);
+    appt.eventStatus = EventStatus.CANCELLED;
+    if (reason) appt.cancelReason = reason;
+    await appt.save();
+    return this.sanitizer.sanitize(appt);
+  }
   //set Status(EventStatus)
   async setStatus(_id: string, status: AppointmentQuerySetEventStatusDTO): Promise<AppointmentDto> {
     const appointment: any = await this.model.findById(_id).populate({
       path: 'authorizedService',
       populate: { path: 'serviceId' },
     });
-    this.checkAppointment(appointment);
+    this.checkAppt(appointment);
     if (status.status) appointment.status = status.status;
     if (status.eventStatus) {
       if (
@@ -410,7 +449,7 @@ export class AppointmentService {
       path: 'client',
       select: 'firstName lastName',
     });
-    this.checkAppointment(appointments[0]);
+    this.checkAppt(appointments[0]);
     return this.sanitizer.sanitizeMany(appointments);
   }
 
@@ -420,7 +459,7 @@ export class AppointmentService {
       path: 'staff',
       select: 'firstName lastName',
     });
-    this.checkAppointment(appointments[0]);
+    this.checkAppt(appointments[0]);
     return this.sanitizer.sanitizeMany(appointments);
   }
 
@@ -437,7 +476,7 @@ export class AppointmentService {
     const client = [];
     staff.push(appointment.staff);
     client.push(appointment.client);
-    this.checkAppointment(appointment);
+    this.checkAppt(appointment);
     return appointment;
     // return this.sanitizer.sanitize(appointment);
   }
@@ -446,7 +485,7 @@ export class AppointmentService {
   async update(_id: string, dto: UpdateAppointmentDto): Promise<AppointmentDto> {
     // the first check if appointment is not complete or cancelled status
     const appointment = await this.model.findById(_id);
-    this.checkAppointment(appointment);
+    this.checkAppt(appointment);
     await this.checkClientStaffOverlap(_id, dto);
     if (dto.placeService) {
       await this.placeService.findOne(dto.placeService);
@@ -500,8 +539,8 @@ export class AppointmentService {
 
   /** Private methods */
   /** if the appointment is not found, throws an exception */
-  private checkAppointment(appointment: IAppointment) {
-    if (!appointment) {
+  private checkAppt(appt: IAppointment) {
+    if (!appt) {
       throw new HttpException('Appointment with this id was not found', HttpStatus.NOT_FOUND);
     }
   }
@@ -550,9 +589,8 @@ export class AppointmentService {
   }
 
   // calculate minutes between two dates
-  async timeDiffCalc(dateFuture, dateNow): Promise<number> {
-    const hours = (Math.abs(dateNow - dateFuture) / 36e5) * 60;
-    return hours;
+  timeDiffCalc(dateFuture, dateNow): number {
+    return (Math.abs(dateNow - dateFuture) / 36e5) * 60;
   }
   /** private methods */
   /** check client */
@@ -604,6 +642,49 @@ export class AppointmentService {
   private checkPlaceService(placeService: string) {
     if (!placeService) {
       throw new HttpException('PlaceService Service was not found', HttpStatus.NOT_FOUND);
+    }
+  }
+  /** check signature */
+  private checkSignature(signature: boolean, digitalSignature: FileDTO) {
+    if (signature && !digitalSignature) {
+      throw new HttpException(`digital signature is required`, HttpStatus.BAD_REQUEST);
+    }
+  } /** check appt status */
+  private checkStatusAppt(appt: AppointmentStatus) {
+    if (appt !== AppointmentStatus.ACTIVE) {
+      throw new HttpException(`Appointment is not active`, HttpStatus.BAD_REQUEST);
+    }
+  }
+  /** Checks if the appt type is allowed (matches an item in allowed types). Throws if no match is found */
+  private checkTypeAppt(apptType: AppointmentType, allowedTypes: AppointmentType[]) {
+    let foundTypeMatch = false;
+    for (let i = 0; i < allowedTypes.length; i++) {
+      if (apptType === allowedTypes[i]) {
+        foundTypeMatch = true;
+        break;
+      }
+    }
+    if (!foundTypeMatch) {
+      throw new HttpException(
+        `You can only edit appointment that are ${allowedTypes}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+  /** Checks if the appt event status is allowed (matches an item in allowed status). Throws if no match is found */
+  private checkEventStatusAppt(eventStatus: EventStatus, allowedStatus: EventStatus[]) {
+    let foundStatusMatch = false;
+    for (let i = 0; i < allowedStatus.length; i++) {
+      if (eventStatus === allowedStatus[i]) {
+        foundStatusMatch = true;
+        break;
+      }
+    }
+    if (!foundStatusMatch) {
+      throw new HttpException(
+        `You can only edit appointment that are ${allowedStatus}`,
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 }

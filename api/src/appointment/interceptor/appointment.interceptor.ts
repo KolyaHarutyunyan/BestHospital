@@ -15,6 +15,7 @@ export class AppointmentSanitizer implements ISanitize {
       staff: appointment.staff,
       staffPayCode: appointment.staffPayCode,
       eventStatus: appointment.eventStatus,
+      cancelReason: appointment.cancelReason,
       status: appointment.status,
       require: appointment.require,
       startTime: appointment.startTime,
@@ -24,6 +25,7 @@ export class AppointmentSanitizer implements ISanitize {
       address: appointment.address,
       signature: appointment.signature,
       placeService: appointment.placeService,
+      digitalSignature: appointment.digitalSignature,
     };
     return appointmentDTO;
   }

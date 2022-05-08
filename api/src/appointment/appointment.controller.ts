@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
-import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ACCESS_TOKEN } from '../authN/authN.constants';
 import { ParseObjectIdPipe, Public } from 'src/util';
 import { AppointmentService } from './appointment.service';
@@ -23,6 +23,24 @@ export class AppointmentController {
   // @ApiOkResponse({ type: AppointmentDto })
   repeat(@Body() createRepeatDto: CreateRepeatDto, @Param('id') id: string) {
     return this.appointmentService.repeat(createRepeatDto, id);
+  }
+  /** render the appointment */
+  @Patch(':id/render')
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: AppointmentDto })
+  async render(@Param('id', ParseObjectIdPipe) id: string): Promise<AppointmentDto> {
+    return await this.appointmentService.render(id);
+  }
+  /** cancel the appointment */
+  @Patch(':id/cancel')
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiQuery({ name: 'reason', required: false })
+  @ApiOkResponse({ type: AppointmentDto })
+  async cancel(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Query('reason') reason: string,
+  ): Promise<AppointmentDto> {
+    return await this.appointmentService.cancel(id, reason);
   }
   /** set status */
   @Patch(':id/setStatus')

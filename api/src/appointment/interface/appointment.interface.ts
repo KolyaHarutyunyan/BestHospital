@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+import { FileDTO } from '../../files/dto/file.dto';
 import { IAddress } from '../../address';
 
 export interface IAppointment extends Document {
@@ -15,11 +16,13 @@ export interface IAppointment extends Document {
   endTime: Date;
   require: boolean;
   eventStatus: string;
+  cancelReason: string;
   status: string;
   miles: number;
   isRepeat: boolean;
   address: IAddress;
   signature: boolean;
+  digitalSignature: FileDTO;
 }
 export interface IFilterQuery {
   client: any;

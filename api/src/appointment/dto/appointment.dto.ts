@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { AppointmentStatus, AppointmentType, EventStatus } from '../appointment.constants';
 import { IsEnum, IsMongoId, IsOptional } from 'class-validator';
 import { AddressDTO } from '../../address';
+import { FileDTO } from 'src/files/dto';
 
 export class AppointmentDto {
   @ApiProperty()
@@ -32,12 +33,16 @@ export class AppointmentDto {
   status: string;
   @ApiProperty({ enum: EventStatus })
   eventStatus: string;
+  @ApiProperty()
+  cancelReason: string;
   @ApiProperty({ required: false })
   miles?: number;
   @ApiProperty({ type: AddressDTO })
   address: AddressDTO;
   @ApiProperty({ required: false })
   signature: boolean;
+  @ApiProperty()
+  digitalSignature: FileDTO;
 }
 
 export class AppointmentQueryDTO {
@@ -71,5 +76,11 @@ export class AppointmentQuerySetEventStatusDTO {
   @ApiProperty({ enum: AppointmentStatus, required: false })
   @IsEnum(AppointmentStatus)
   @IsOptional()
+  status: string;
+}
+
+export class AppointmentQuerySetStatusDTO {
+  @ApiProperty({ enum: AppointmentStatus, required: false })
+  @IsEnum(AppointmentStatus)
   status: string;
 }
