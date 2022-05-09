@@ -1,5 +1,5 @@
 import { Document } from 'mongoose';
-import { ITransaction } from '../transaction/interface';
+import { ITxn } from '../txn/interface';
 
 export interface IBilling extends Document {
   id: string;
@@ -26,5 +26,5 @@ export interface IBilling extends Document {
   dateOfService: Date;
   createdDate: Date;
   updatedDate: Date;
-  transaction: ITransaction[];
+  transaction: ITxn[];
 }

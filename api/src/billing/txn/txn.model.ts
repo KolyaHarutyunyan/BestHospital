@@ -1,15 +1,15 @@
 import { model, Schema, Types } from 'mongoose';
-import { ITransaction } from './interface';
-import { TransactionStatus, TransactionType } from './transaction.constants';
+import { ITxn } from './interface';
+import { TxnStatus, TxnType } from './txn.constants';
 
-const TransactionSchema = new Schema({
+const TxnSchema = new Schema({
   billing: { type: Types.ObjectId, ref: 'billing' },
-  type: { type: String, enum: TransactionType },
+  type: { type: String, enum: TxnType },
   rate: { type: Number, default: 0 },
   paymentRef: { type: String },
   note: { type: String },
   date: { type: Date },
-  status: { type: String, enum: TransactionStatus },
+  status: { type: String, enum: TxnStatus },
   creator: { type: Types.ObjectId, ref: 'Staff' },
 });
 
@@ -20,4 +20,4 @@ const TransactionSchema = new Schema({
 //   );
 // });
 
-export const TransactionModel = model<ITransaction>('BillingTransaction', TransactionSchema);
+export const TxnModel = model<ITxn>('Txn', TxnSchema);

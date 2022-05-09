@@ -53,7 +53,7 @@ export class InvoiceService {
 
   /** get invoice by id */
   async findOne(_id: string): Promise<InvoiceDto> {
-    const invoice = await this.model.findById(_id);
+    const invoice = await this.model.findById(_id).populate('receivable.bills');
     this.checkInvoice(invoice);
     return this.sanitizer.sanitize(invoice);
   }
@@ -78,8 +78,9 @@ export class InvoiceService {
       });
       if (invoice.invoiceTotal == 0) {
         invoice.status = InvoiceStatus.PAID;
+      } else {
+        invoice.status = InvoiceStatus.PARTIAL;
       }
-      invoice.status = InvoiceStatus.PARTIAL;
       await invoice.save();
       return this.sanitizer.sanitize(invoice);
     } catch (e) {
@@ -178,9 +179,11 @@ export class InvoiceService {
       placeService,
       cptCode,
       hours: result.totalHours,
-      clientResp: result.clientPaid,
-      clientPaid: result.clientPaid,
       amountTotal: result.billedAmount,
+      staff: result.staff,
+      clientResp: result.clientResp,
+      clientPaid: result.clientPaid,
+      balance: result.clientResp - result.clientPaid,
       // sum of all bills? 50
       // result[i][j].payerTotal - result[i][j].payerPaid / unitZise?
       totalUnits: 0,
@@ -220,7 +223,13 @@ export class InvoiceService {
       downloadLink: '',
       receivable,
     });
-    // console.log(subBills, 'subBillllls');
+
+    console.log(
+      subBills.reduce((a, b) => {
+        return a + b.clientResp;
+      }, 0),
+      'subBillllls',
+    );
   }
 
   /** return min max date in date range */

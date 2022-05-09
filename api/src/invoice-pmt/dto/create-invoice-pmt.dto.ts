@@ -10,9 +10,9 @@ import {
   IsString,
 } from 'class-validator';
 import { UserDTO } from '../../authN';
-import { PaymentType } from '../posting.constants';
+import { PaymentType } from '../invoice-pmt.constants';
 
-export class CreatePostingDto {
+export class CreateInvPmtDto {
   @ApiProperty({ enum: PaymentType })
   @IsEnum(PaymentType)
   paymentType: string;

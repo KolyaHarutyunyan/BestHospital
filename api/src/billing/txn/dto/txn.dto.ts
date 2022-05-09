@@ -1,11 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDateString, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { DTO } from '../../../util';
-import { TransactionType } from '../transaction.constants';
+import { TxnType } from '../txn.constants';
 
-export class TransactionDto extends DTO {
-  @ApiProperty({ enum: TransactionType })
-  @IsEnum(TransactionType)
+export class TxnDto extends DTO {
+  @ApiProperty({ enum: TxnType })
+  @IsEnum(TxnType)
   type: string;
   @ApiProperty()
   @IsDateString()

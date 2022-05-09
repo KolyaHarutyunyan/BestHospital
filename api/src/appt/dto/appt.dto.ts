@@ -49,15 +49,15 @@ export class AppointmentQueryDTO {
   @ApiProperty({ enum: EventStatus, required: false })
   @IsEnum(EventStatus)
   @IsOptional()
-  eventStatus: string;
+  eventStatus: EventStatus;
   @ApiProperty({ enum: ApptStatus, required: false })
   @IsEnum(ApptStatus)
   @IsOptional()
-  status: string;
+  status: ApptStatus;
   @ApiProperty({ enum: ApptType, required: false })
   @IsEnum(ApptType)
   @IsOptional()
-  type: string;
+  type: ApptType;
   @ApiProperty({ required: false })
   @IsMongoId()
   @IsOptional()

@@ -26,7 +26,7 @@ import { MileageModule } from '../mileage/mileage.module';
 import { BillingModule } from '../billing/billing.module';
 import { ClaimModule } from '../claim/claim.module';
 import { InvoiceModule } from '../invoice/invoice.module';
-import { PostingModule } from '../posting/posting.module';
+import { InvPmtModule } from '../invoice-pmt/invoice-pmt.module';
 import { ClaimPmtModule } from '../claim-payment/claim-pmt.module';
 
 @Module({
@@ -55,7 +55,7 @@ import { ClaimPmtModule } from '../claim-payment/claim-pmt.module';
     BillingModule,
     ClaimModule,
     InvoiceModule,
-    PostingModule,
+    InvPmtModule,
     ClaimPmtModule,
   ],
   controllers: [AppController],

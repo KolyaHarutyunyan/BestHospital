@@ -1,6 +1,8 @@
 import { Document } from 'mongoose';
 import { FileDTO } from '../../files/dto/file.dto';
 import { IAddress } from '../../address';
+import * as mongoose from 'mongoose';
+import { ApptStatus, EventStatus, ApptType } from '../appt.constants';
 
 export interface IAppt extends Document {
   _id: string;
@@ -25,11 +27,11 @@ export interface IAppt extends Document {
   digitalSignature: FileDTO;
 }
 export interface IFilterQuery {
-  client: any;
-  staff: any;
-  status: string;
-  eventStatus: string;
-  type: string;
+  client?: mongoose.Types.ObjectId;
+  staff?: mongoose.Types.ObjectId;
+  status?: ApptStatus;
+  eventStatus?: EventStatus;
+  type?: ApptType;
 }
 export interface IRepeat {
   occurency: number;

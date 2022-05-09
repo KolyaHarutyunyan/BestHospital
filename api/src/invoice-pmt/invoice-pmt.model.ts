@@ -1,7 +1,7 @@
 import { model, Schema, Types } from 'mongoose';
 import { FileSchema } from '../files/file.model';
-import { IPosting } from './interface/posting.interface';
-import { PaymentType } from './posting.constants';
+import { IInvPmt } from './interface/invoice-pmt.interface';
+import { PaymentType } from './invoice-pmt.constants';
 
 const TransactionSchema = new Schema({
   date: { type: Date },
@@ -12,7 +12,7 @@ const TransactionSchema = new Schema({
   status: { type: String },
 });
 
-const PostingSchema = new Schema({
+const InvPmtSchema = new Schema({
   paymentType: { type: String, enum: PaymentType },
   paymentReference: { type: String },
   paymentAmount: { type: Number },
@@ -23,4 +23,4 @@ const PostingSchema = new Schema({
   transaction: [TransactionSchema],
 });
 
-export const PostingModel = model<IPosting>('posting', PostingSchema);
+export const InvPmtModel = model<IInvPmt>('invPmt', InvPmtSchema);

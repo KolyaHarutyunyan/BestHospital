@@ -9,7 +9,7 @@ export interface ITransaction {
   note: string;
 }
 
-export interface IPosting extends Document {
+export interface IInvPmt extends Document {
   paymentType: string;
   paymentReference: string;
   paymentAmount: number;

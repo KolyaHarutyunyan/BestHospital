@@ -10,7 +10,7 @@ import { CreateClaimPmtDto, CreateReceivableDTO } from './dto';
 import { UpdateClaimPmtDto } from './dto/update-claim-payment.dto';
 import { IClaimPmt } from './interface';
 import { FileService } from '../files/file.service';
-import { TransactionType } from '../billing/transaction/transaction.constants';
+import { TxnType } from '../billing/txn/txn.constants';
 import { IReceivable } from '../claim/interface/receivable.interface';
 import { FundingService } from '../funding/funding.service';
 import { BillingService } from '../billing/billing.service';
@@ -168,20 +168,19 @@ export class ClaimPmtService {
     claimPmtId: string,
   ): Promise<number> {
     console.log('aaaahhhh');
-    const session = await startSession();
     // await this.claimService.updateReceivableAmount(claimId, receivable._id, receivable.amountTotal);
     const bills = [];
     for (let i = 0; i < receivable.bills.length; i++) {
       const bill = receivable.bills[i];
       const transactionInfo = {
-        type: TransactionType.PAYERPAID,
+        type: TxnType.PAYERPAID,
         date: new Date(),
         rate: bill.billedAmount,
         paymentRef: 'chka',
         billing: bill._id,
         creator: bill._id,
       };
-      await this.billingService.startTransaction(transactionInfo, bill._id, session);
+      await this.billingService.startTransaction(transactionInfo, bill._id);
     }
     // receivable.bills.map((bill) => {
     //   bills.push(this.billingService.startTransaction(transactionInfo, bill._id, session));
@@ -205,27 +204,27 @@ export class ClaimPmtService {
       }
       if (paymentAmount >= lowBill.billedAmount) {
         const transactionInfo = {
-          type: TransactionType.PAYERPAID,
+          type: TxnType.PAYERPAID,
           date: new Date(),
           rate: lowBill.billedAmount,
           paymentRef: 'chka',
           billing: lowBill._id,
           creator: lowBill._id,
         };
-        await this.billingService.startTransaction(transactionInfo, lowBill._id, session);
+        await this.billingService.startTransaction(transactionInfo, lowBill._id);
         receivable.amountTotal -= lowBill.billedAmount;
         paymentAmount -= lowBill.billedAmount;
         paidedAmount += lowBill.billedAmount;
       } else if (paymentAmount < lowBill.billedAmount) {
         const transactionInfo = {
-          type: TransactionType.PAYERPAID,
+          type: TxnType.PAYERPAID,
           date: new Date(),
           rate: paymentAmount,
           paymentRef: 'chka',
           billing: lowBill._id,
           creator: lowBill._id,
         };
-        await this.billingService.startTransaction(transactionInfo, lowBill._id, session);
+        await this.billingService.startTransaction(transactionInfo, lowBill._id);
         receivable.amountTotal -= lowBill.billedAmount;
         paidedAmount += paymentAmount;
         paymentAmount = 0;

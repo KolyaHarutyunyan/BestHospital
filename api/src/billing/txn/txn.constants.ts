@@ -1,8 +1,8 @@
-export enum TransactionStatus {
+export enum TxnStatus {
   APPLIED = 'APPLIED',
   VOID = 'VOID',
 }
-export enum TransactionType {
+export enum TxnType {
   PAYERPAID = 'PAYERPAID',
   CLIENTRESP = 'CLIENTRESP',
   CLIENTPAID = 'CLIENTPAID',

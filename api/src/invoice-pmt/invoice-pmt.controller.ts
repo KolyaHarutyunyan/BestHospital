@@ -1,58 +1,58 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { PostingService } from './posting.service';
-import { CreatePostingDto, UpdatePostingDto, PostingDto } from './dto';
+import { InvPmtService } from './invoice-pmt.service';
+import { CreateInvPmtDto, UpdateInvPmtDto, InvPmtDto } from './dto';
 import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ACCESS_TOKEN } from '../authN';
 import { ParseObjectIdPipe } from 'src/util';
 
-@Controller('posting')
-@ApiTags('Posting Endpoints')
-export class PostingController {
-  constructor(private readonly postingService: PostingService) {}
+@Controller('invoice-pmt')
+@ApiTags('Invoice-pmt Endpoints')
+export class InvPmtController {
+  constructor(private readonly invPmtService: InvPmtService) {}
 
   @Post()
   @ApiHeader({ name: ACCESS_TOKEN })
-  create(@Body() createPostingDto: CreatePostingDto) {
-    return this.postingService.create(createPostingDto);
+  create(@Body() createInvDto: CreateInvPmtDto) {
+    return this.invPmtService.create(createInvDto);
   }
 
   @Get()
   @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({ type: [PostingDto] })
+  @ApiOkResponse({ type: [InvPmtDto] })
   findAll() {
-    return this.postingService.findAll();
+    return this.invPmtService.findAll();
   }
 
   @Get(':id')
   @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({ type: PostingDto })
+  @ApiOkResponse({ type: InvPmtDto })
   findOne(@Param('id', ParseObjectIdPipe) id: string) {
-    return this.postingService.findOne(id);
+    return this.invPmtService.findOne(id);
   }
 
   @Patch(':id')
   @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({ type: PostingDto })
-  update(@Param('id', ParseObjectIdPipe) id: string, @Body() updatePostingDto: UpdatePostingDto) {
-    return this.postingService.update(id, updatePostingDto);
+  @ApiOkResponse({ type: InvPmtDto })
+  update(@Param('id', ParseObjectIdPipe) id: string, @Body() updateInvPmtDto: UpdateInvPmtDto) {
+    return this.invPmtService.update(id, updateInvPmtDto);
   }
   @Patch(':id/file/add/:fileId')
   @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({ type: PostingDto })
+  @ApiOkResponse({ type: InvPmtDto })
   addDocument(
     @Param('id', ParseObjectIdPipe) id: string,
     @Param('fileId', ParseObjectIdPipe) fileId: string,
   ) {
-    return this.postingService.addDocument(id, fileId);
+    return this.invPmtService.addDocument(id, fileId);
   }
   @Patch(':id/file/delete/:fileId')
   @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({ type: PostingDto })
+  @ApiOkResponse({ type: InvPmtDto })
   deleteDocument(
     @Param('id', ParseObjectIdPipe) id: string,
     @Param('fileId', ParseObjectIdPipe) fileId: string,
   ) {
-    return this.postingService.deleteDocument(id, fileId);
+    return this.invPmtService.deleteDocument(id, fileId);
   }
   // @Delete(':id')
   // remove(@Param('id') id: string) {

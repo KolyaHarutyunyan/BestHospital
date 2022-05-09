@@ -3,10 +3,10 @@ import { BillingService } from './billing.service';
 import { BillingController } from './billing.controller';
 import { StaffModule } from '../staff/staff.module';
 import { BillingSanitizer } from './interceptor/billing.interceptor';
-import { TransactionModule } from './transaction/transaction.module';
+import { TxnModule } from './txn/txn.module';
 
 @Module({
-  imports: [StaffModule, TransactionModule, TransactionModule],
+  imports: [StaffModule, TxnModule, TxnModule],
   controllers: [BillingController],
   providers: [BillingService, BillingSanitizer],
   exports: [BillingService],

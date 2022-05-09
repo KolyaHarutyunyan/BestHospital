@@ -6,7 +6,7 @@ import { CreateBillingDto, BillingDto } from './dto';
 import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { BillingStatus, ClaimStatus, InvoiceStatus } from './billing.constants';
 import { ACCESS_TOKEN } from '../authN/authN.constants';
-import { TransactionDto } from './transaction/dto';
+import { TxnDto } from './txn/dto';
 
 @Controller('billing')
 @ApiTags('Billing Endpoints')
@@ -24,11 +24,11 @@ export class BillingController {
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: BillingDto })
   async startTransaction(
-    @Body() createTransactionDto: TransactionDto,
+    @Body() createTransactionDto: TxnDto,
     @Param('id', ParseObjectIdPipe) billingId: string,
   ) {
     const session = await startSession();
-    return this.billingService.startTransaction(createTransactionDto, billingId, session);
+    return this.billingService.startTransaction(createTransactionDto, billingId);
   }
 
   @Post(':id/abortTransaction/:tsxId')

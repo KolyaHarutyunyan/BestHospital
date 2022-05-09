@@ -3,11 +3,11 @@ import { Model } from 'mongoose';
 import { BillingModel } from './billing.model';
 import { IBilling } from './interface';
 import { BillingDto } from './dto';
-import { TransactionDto } from './transaction/dto';
+import { TxnDto } from './txn/dto';
 import { StaffService } from '../staff/staff.service';
 import { BillingSanitizer } from './interceptor/billing.interceptor';
-import { TransactionService } from './transaction/transaction.service';
-import { TransactionType } from './transaction/transaction.constants';
+import { TxnService } from './txn/txn.service';
+import { TxnType } from './txn/txn.constants';
 import { InvoiceStatus, BillingStatus, ClaimStatus } from './billing.constants';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class BillingService {
   constructor(
     private readonly sanitizer: BillingSanitizer,
     private readonly staffService: StaffService,
-    private readonly transactionService: TransactionService,
+    private readonly transactionService: TxnService,
   ) {
     this.model = BillingModel;
   }
@@ -57,25 +57,23 @@ export class BillingService {
     }
   }
   /** startTransaction */
-  async startTransaction(
-    dto: TransactionDto,
-    billingId: string,
-    session: any,
-  ): Promise<BillingDto> {
+  async startTransaction(dto: TxnDto, billingId: string): Promise<BillingDto> {
     try {
-      let billing = await this.model.findById({ _id: billingId }).session(session);
+      let billing = await this.model.findById({ _id: billingId });
       this.checkBilling(billing);
       dto.billing = billingId;
       // session.startTransaction();
       const rate = dto.rate;
-      if (dto.type == TransactionType.PAYERPAID) {
+      if (dto.type == TxnType.PAYERPAID) {
         billing.payerPaid += rate;
         billing.billedAmount -= rate;
       }
-      if (dto.type == TransactionType.CLIENTPAID) {
+      if (dto.type == TxnType.CLIENTPAID) {
         billing.clientPaid += rate;
+        billing.billedAmount -= rate;
+        billing.payerTotal -= rate;
       }
-      if (dto.type == TransactionType.CLIENTRESP) {
+      if (dto.type == TxnType.CLIENTRESP) {
         billing.payerTotal -= rate;
         billing.clientResp += rate;
       }
@@ -86,8 +84,8 @@ export class BillingService {
       // session.endSession();
       return this.sanitizer.sanitize(billing);
     } catch (e) {
-      await session.abortTransaction();
-      session.endSession();
+      // await session.abortTransaction();
+      // session.endSession();
       console.log(e);
       throw e;
     }
@@ -97,14 +95,14 @@ export class BillingService {
     let billing: any = await this.model.findById({ _id });
     this.checkBilling(billing);
     await this.transactionService.void(_id, tsxId, userId);
-    if (billing.transaction.type == TransactionType.PAYERPAID) {
+    if (billing.transaction.type == TxnType.PAYERPAID) {
       billing.payerPaid -= billing.amount;
       billing.billedAmount += billing.amount;
     }
-    if (billing.transaction.type == TransactionType.CLIENTPAID) {
+    if (billing.transaction.type == TxnType.CLIENTPAID) {
       billing.clientPaid -= billing.amount;
     }
-    if (billing.transaction.type == TransactionType.CLIENTRESP) {
+    if (billing.transaction.type == TxnType.CLIENTRESP) {
       billing.payerTotal += billing.amount;
       billing.clientResp -= billing.amount;
     }

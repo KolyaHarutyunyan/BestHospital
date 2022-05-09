@@ -6,7 +6,7 @@ import { ApptService } from './appt.service';
 import { CreateApptDto, UpdateAppointmentDto, ApptDto, CreateRepeatDto } from './dto';
 import { AppointmentQueryDTO, AppointmentQuerySetEventStatusDTO } from './dto/appt.dto';
 
-@Controller('appointment')
+@Controller('appt')
 @ApiTags('Appointment Endpoints')
 export class ApptController {
   constructor(private readonly apptService: ApptService) {}

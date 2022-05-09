@@ -24,7 +24,7 @@ const BillingSchema = new Schema({
   claimStatus: { type: String, enum: ClaimStatus, default: 'NOTCLAIMED' },
   invoiceStatus: { type: String, enum: InvoiceStatus, default: 'NOTINVOICED' },
   status: { type: String, enum: BillingStatus, default: 'OPEN' },
-  transaction: [{ type: Types.ObjectId, ref: 'BillingTransaction' }],
+  transaction: [{ type: Types.ObjectId, ref: 'Txn' }],
   createdDate: { type: Date, default: Date.now() },
   updatedDate: { type: Date, default: null },
 });

@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ITransaction } from '../interface/posting.interface';
-import { PaymentType } from '../posting.constants';
+import { ITransaction } from '../interface/invoice-pmt.interface';
+import { PaymentType } from '../invoice-pmt.constants';
 
-export class PostingDto {
+export class InvPmtDto {
   @ApiProperty()
   _id: string;
   @ApiProperty({ enum: PaymentType })

@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { ISanitize } from '../util';
-import { PostingDto } from './dto';
-import { IPosting } from './interface/posting.interface';
+import { InvPmtDto } from './dto';
+import { IInvPmt } from './interface/invoice-pmt.interface';
 
 @Injectable()
-export class PostingSanitizer implements ISanitize {
-  sanitize(posting: IPosting): PostingDto {
-    const postingDTO: PostingDto = {
+export class InvPmtSanitizer implements ISanitize {
+  sanitize(posting: IInvPmt): InvPmtDto {
+    const postingDTO: InvPmtDto = {
       _id: posting._id,
       paymentType: posting.paymentType,
       paymentReference: posting.paymentReference,
@@ -20,8 +20,8 @@ export class PostingSanitizer implements ISanitize {
     return postingDTO;
   }
 
-  sanitizeMany(postings: IPosting[]): PostingDto[] {
-    const postingDTOs: PostingDto[] = [];
+  sanitizeMany(postings: IInvPmt[]): InvPmtDto[] {
+    const postingDTOs: InvPmtDto[] = [];
     for (let i = 0; i < postings.length; i++) {
       postingDTOs.push(this.sanitize(postings[i]));
     }

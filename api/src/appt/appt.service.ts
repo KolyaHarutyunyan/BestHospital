@@ -15,7 +15,9 @@ import { ApptDto, CreateApptDto, CreateRepeatDto, UpdateAppointmentDto } from '.
 import { AppointmentQueryDTO, AppointmentQuerySetEventStatusDTO } from './dto/appt.dto';
 import { ApptSanitizer } from './intcp/appt.intcp';
 import { IAppt } from './interface';
-import { IRepeat } from './interface/appt.interface';
+import { IRepeat, IFilterQuery } from './interface/appt.interface';
+import { IAuthorization } from '../client/authorization/interface/authorization.interface';
+import { IEmployment } from '../employment';
 
 @Injectable()
 export class ApptService {
@@ -39,10 +41,11 @@ export class ApptService {
       throw new HttpException(`startTime can't be high then endTime`, HttpStatus.BAD_REQUEST);
     }
     let appt;
-    const [staff, staffPayCode]: any = await Promise.all([
+    const [staff, staffPayCode] = await Promise.all([
       this.staffService.findById(dto.staff),
       this.payCodeService.findOne(dto.staffPayCode),
     ]);
+    const employment = (<any>staffPayCode.employmentId) as IEmployment;
     switch (dto.type) {
       case ApptType.SERVICE:
         appt = await this.apptService(dto);
@@ -57,10 +60,10 @@ export class ApptService {
         appt = await this.apptBreak(dto);
         break;
     }
-    if (staff.id != staffPayCode.employmentId.staffId) {
+    if (staff.id != employment.staffId) {
       throw new HttpException('PayCode is not staff pay code', HttpStatus.BAD_REQUEST);
     }
-    if (staffPayCode.employmentId.active != true) {
+    if (employment.active != true) {
       throw new HttpException('Employment is not active', HttpStatus.BAD_REQUEST);
     }
     await appt.save();
@@ -101,12 +104,13 @@ export class ApptService {
 
     const place = await this.placeService.findOne(dto.placeService);
     const placeId = place._id as string;
-    const [client, authService]: any = await Promise.all([
+    const [client, authService] = await Promise.all([
       this.clientService.findById(dto.client),
       this.authorizedService.findById(dto.authorizedService),
     ]);
+    const auth = (<any>authService.authorizationId) as IAuthorization;
     /** check if client and authorization client are same */
-    if (client.id != authService.authorizationId.clientId) {
+    if (client.id != auth.clientId) {
       throw new HttpException(
         `Client and authorization client are different`,
         HttpStatus.BAD_REQUEST,
@@ -129,7 +133,7 @@ export class ApptService {
     const appt = new this.model({
       client: dto.client,
       authorizedService: dto.authorizedService,
-      payer: authService.authorizationId.funderId,
+      payer: auth.funderId,
       staff: dto.staff,
       staffPayCode: dto.staffPayCode,
       startDate: new Date(dto.startDate).setHours(23, 59),
@@ -375,7 +379,7 @@ export class ApptService {
 
   /** find all appts */
   async findAll(filter: AppointmentQueryDTO): Promise<IAppt[]> {
-    const query: any = {};
+    const query: IFilterQuery = {};
     if (filter.client) query.client = mongoose.Types.ObjectId(filter.client);
     if (filter.staff) query.staff = mongoose.Types.ObjectId(filter.staff);
     if (filter.status) query.status = filter.status;
@@ -448,14 +452,15 @@ export class ApptService {
       /** if appountment type is SERVICE client and authorization service are required */
       this.checkClient(dto.client);
       this.checkAuthorizedService(dto.authorizedService);
-      const [client, authService]: any = await Promise.all([
+      const [client, authService] = await Promise.all([
         this.clientService.findById(dto.client ? dto.client : appointment.client),
         this.authorizedService.findById(
           dto.authorizedService ? dto.authorizedService : appointment.authorizedService,
         ),
       ]);
+      const auth = (<any>authService.authorizationId) as IAuthorization;
       /** check if client and authorization client are same */
-      if (client.id != authService.authorizationId.clientId) {
+      if (client.id != auth.clientId) {
         throw new HttpException(
           `Client and authorization client are different`,
           HttpStatus.BAD_REQUEST,
@@ -463,13 +468,14 @@ export class ApptService {
       }
       await this.authorizedService.getByServiceId(authService.serviceId);
     }
-    const [, payCode, ,]: any = await Promise.all([
+    const [, payCode, ,] = await Promise.all([
       this.staffService.findById(dto.staff),
       this.payCodeService.findOne(dto.staffPayCode ? dto.staffPayCode : appointment.staffPayCode),
       this.payCodeService.findPayCodesByStaffId(dto.staff ? dto.staff : appointment.staff),
     ]);
+    const employment = (<any>payCode.employmentId) as IEmployment;
     /** check employment status */
-    this.employmentService.checkEmploymentActive(payCode.employmentId.active);
+    this.employmentService.checkEmploymentActive(employment.active);
     appointment.staff = dto.staff;
     appointment.staffPayCode = dto.staffPayCode;
     // appointment.type = dto.type;
