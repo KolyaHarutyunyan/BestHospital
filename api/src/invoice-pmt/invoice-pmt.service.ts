@@ -44,7 +44,7 @@ export class InvPmtService {
         if (!payed) {
           throw new HttpException('Invoice have not receivables', HttpStatus.NOT_FOUND);
         }
-        return await this.saveDb(dto, client);
+        return await this.saveDb(dto);
       }
       const lowReceivable: any = await this.findLowReceivable(receivable);
       if (paymentAmount >= lowReceivable.amountTotal && lowReceivable.amountTotal !== 0) {
@@ -68,7 +68,7 @@ export class InvPmtService {
       }
       receivable = receivable.filter((rec) => rec._id !== lowReceivable._id);
     }
-    return await this.saveDb(dto, client);
+    return await this.saveDb(dto);
   }
   /** add document to invoice-pmt */
   async addDocument(_id: string, fileId: string): Promise<InvPmtDto> {
@@ -94,7 +94,12 @@ export class InvPmtService {
     const invPmts = await this.model
       .find()
       .populate('documents')
-      .populate('invoice')
+      .populate({
+        path: 'invoice',
+        populate: {
+          path: 'client',
+        },
+      })
       .populate('payer');
     return this.sanitizer.sanitizeMany(invPmts);
   }
@@ -103,7 +108,12 @@ export class InvPmtService {
     const invPmt = await this.model
       .findById(_id)
       .populate('documents')
-      .populate('invoice')
+      .populate({
+        path: 'invoice',
+        populate: {
+          path: 'client',
+        },
+      })
       .populate('payer');
     this.checkInvPmt(invPmt);
     return this.sanitizer.sanitize(invPmt);
@@ -226,13 +236,13 @@ export class InvPmtService {
     }
   }
   /** save db */
-  private async saveDb(dto, client) {
+  private async saveDb(dto) {
     /** add in array and then insert db */
     const posting = new this.model({
       paymentType: dto.paymentType,
       paymentReference: dto.paymentReference,
       paymentAmount: dto.paymentAmount,
-      payer: client._id,
+      payer: dto.payer,
       invoice: dto.invoice,
     });
     await posting.save();
