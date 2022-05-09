@@ -223,13 +223,6 @@ export class InvoiceService {
       downloadLink: '',
       receivable,
     });
-
-    console.log(
-      subBills.reduce((a, b) => {
-        return a + b.clientResp;
-      }, 0),
-      'subBillllls',
-    );
   }
 
   /** return min max date in date range */

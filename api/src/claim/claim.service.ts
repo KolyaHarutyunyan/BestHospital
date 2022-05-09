@@ -258,6 +258,7 @@ export class ClaimService {
       placeService,
       cptCode,
       amountTotal: result.billedAmount,
+      clientResp: result.clientResp,
       // result[i][j].payerTotal - result[i][j].payerPaid / unitZise?
       totalUnits: 0,
       totalBill: result.payerTotal - result.payerPaid,
@@ -302,6 +303,7 @@ export class ClaimService {
         latest: this.minMax(receivableCreatedAt)[1],
       },
       status: ClaimStatus.PENDING,
+      paymentRef: 'chupulupu',
       receivable,
     });
   }

@@ -41,7 +41,7 @@ export class ClaimPmtService {
       fundingSource: dto.fundingSource,
       checkNumber: dto.checkNumber,
     });
-
+    if (dto.paymentDate) claimPmt.paymnetDate = dto.paymentDate;
     await claimPmt.save();
     return this.sanitizer.sanitize(claimPmt);
   }
@@ -105,12 +105,28 @@ export class ClaimPmtService {
   }
   /** find all claim-pmts */
   async findAll(): Promise<ClaimPmtDto[]> {
-    const claimPmts = await this.model.find().populate('claimIds');
+    const claimPmts = await this.model
+      .find()
+      .populate('fundingSource')
+      .populate({
+        path: 'claimIds',
+        populate: {
+          path: 'client',
+        },
+      });
     return this.sanitizer.sanitizeMany(claimPmts);
   }
   /** find claim-pmt by id */
   async findOne(_id: string): Promise<ClaimPmtDto> {
-    const claimPmt = await this.model.findById(_id).populate('claimIds');
+    const claimPmt = await this.model
+      .findById(_id)
+      .populate('fundingSource')
+      .populate({
+        path: 'claimIds',
+        populate: {
+          path: 'client',
+        },
+      });
     return this.sanitizer.sanitize(claimPmt);
   }
 
