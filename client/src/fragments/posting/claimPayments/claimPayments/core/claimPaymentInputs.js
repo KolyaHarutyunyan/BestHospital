@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { CreateChancel } from "@eachbase/components";
 import { claimPaymentsCoreStyle } from "./styles";
 import { makeEnum, FindLoad, isNotEmpty } from "@eachbase/utils";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FirstStepInputs, LastStepInputs } from "./common";
 import { claimPaymentActions } from "@eachbase/store";
 
@@ -23,6 +23,8 @@ export const ClaimPaymentInputs = ({
 
    const [inputs, setInputs] = useState(!!info ? { ...info } : {});
    const [error, setError] = useState("");
+
+   const uploadedFiles = useSelector((state) => state.upload.uploadedInfo);
 
    const isFirst = activeStep === "first";
    const isLast = activeStep === "last";
@@ -77,15 +79,19 @@ export const ClaimPaymentInputs = ({
 
    const handleSubmit = () => {
       const claimPaymentData = {
-         amount: inputs.amount,
+         paymentAmount: +inputs.amount,
          fundingSource: inputs.fundingSource,
          paymentDate: inputs.paymentDate,
          paymentType: makeEnum(inputs.paymentType),
-         checkNumber: inputs.checkNumber,
-         file: "",
+         paymentReference: inputs.checkNumber,
+         paymentDocument: uploadedFiles,
       };
 
-      dispatch(claimPaymentActions.createClaimPayment(claimPaymentData));
+      if (!!info) {
+         dispatch(claimPaymentActions.editClaimPayment(info.id, claimPaymentData));
+      } else {
+         dispatch(claimPaymentActions.createClaimPayment(claimPaymentData));
+      }
    };
 
    return (
@@ -99,7 +105,9 @@ export const ClaimPaymentInputs = ({
                hasInfo={!!info}
             />
          )}
-         {isLast && <LastStepInputs claimPaymentId={"????"} />}
+         {isLast && (
+            <LastStepInputs claimPaymentId={"????"} uploadedFiles={uploadedFiles} />
+         )}
          <CreateChancel
             butnClassName={classes.createOrCancelButnStyle}
             loader={!!loader.length}

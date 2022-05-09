@@ -1,18 +1,23 @@
-import { getLimitedVal, handleCreatedAtDate, makeCapitalize } from "@eachbase/utils";
+import { getLimitedVal, hooksForTable, makeCapitalize } from "@eachbase/utils";
 
 export function getBillDetails(bill) {
    const { authService, client, payor, dateOfService, totalHours, totalUnits } =
       bill || {};
 
+   const { handleCreatedAtDate } = hooksForTable;
+
    const billDetails = [
       {
          detailText: "DoS:",
-         detail: handleCreatedAtDate(dateOfService, 10, "/"),
+         detail: handleCreatedAtDate(dateOfService),
       },
-      { detailText: "Payor:", detail: payor ? makeCapitalize(payor) : "" },
+      {
+         detailText: "Payor:",
+         detail: !!payor && makeCapitalize(`${payor?.firstName} ${payor?.lastName}`),
+      },
       {
          detailText: "Client:",
-         detail: makeCapitalize(`${client?.firstName} ${client?.lastName}`),
+         detail: !!client && makeCapitalize(`${client?.firstName} ${client?.lastName}`),
       },
       {
          detailText: "Service:",
@@ -32,13 +37,13 @@ export function getBillDetails(bill) {
 }
 
 export function getBillTotals(bill) {
-   const { billedAmount, clientPaid, clientResp, payerPaid, payerTotal } = bill || {};
+   const { billedAmount, balance, payerPaid, payerTotal } = bill || {};
 
    return {
-      billedRate: billedAmount,
-      totalAmount: clientPaid + payerPaid,
-      payorBalance: payerTotal,
-      clientBalance: clientResp,
-      totalBalance: clientResp + payerTotal,
+      billedRate: 0,
+      totalAmount: billedAmount,
+      payorBalance: payerTotal - payerPaid,
+      clientBalance: 0,
+      totalBalance: balance || 0,
    };
 }

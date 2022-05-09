@@ -183,6 +183,9 @@ export const inputsStyle = makeStyles(() => ({
       overflow: "unset!important",
       msOverflowStyle: "none",
       scrollbarWidth: "none",
+      fontSize: "14px",
+      lineHeight: "19px",
+      color: Colors.TextSecondary,
       "&::-webkit-scrollbar": { display: "none" },
       "&.error": { borderColor: Colors.ThemeRed },
 

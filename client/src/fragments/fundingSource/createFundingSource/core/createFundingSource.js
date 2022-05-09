@@ -46,9 +46,7 @@ export const CreateFundingSource = ({ handleClose, info }) => {
       : FindError("CREATE_FUNDING_SOURCE");
 
    const phoneErrorMsg = getPhoneErrorText(inputs.phoneNumber);
-   const emailErrorMsg = !EmailValidator.test(inputs.email)
-      ? ErrorText.emailValid
-      : "";
+   const emailErrorMsg = !EmailValidator.test(inputs.email) ? ErrorText.emailValid : "";
 
    const phoneErrorText =
       error === "phoneNumber"
@@ -100,8 +98,7 @@ export const CreateFundingSource = ({ handleClose, info }) => {
          inputs.phoneNumber.trim().length >= 10 &&
          !/[a-zA-Z]/g.test(inputs.phoneNumber);
 
-      const emailIsValid =
-         isNotEmpty(inputs.email) && EmailValidator.test(inputs.email);
+      const emailIsValid = isNotEmpty(inputs.email) && EmailValidator.test(inputs.email);
 
       const dataIsValid =
          isNotEmpty(inputs.name) &&
@@ -172,13 +169,9 @@ export const CreateFundingSource = ({ handleClose, info }) => {
    useEffect(() => {
       if (!success) return;
       if (info) {
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess("EDIT_FUNDING_SOURCE")
-         );
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_FUNDING_SOURCE"));
       } else {
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess("CREATE_FUNDING_SOURCE")
-         );
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_FUNDING_SOURCE"));
       }
       handleClose();
    }, [success]);
@@ -252,9 +245,7 @@ export const CreateFundingSource = ({ handleClose, info }) => {
                </div>
                <div className={classes.createFoundingSourceBodyBox}>
                   <AddressInput
-                     errorBoolean={
-                        error === "enteredAddress" ? ErrorText.field : ""
-                     }
+                     errorBoolean={error === "enteredAddress" ? ErrorText.field : ""}
                      info={info && info.address ? info : ""}
                      handleSelectValue={handleAddressChange}
                      onTrigger={setFullAddress}

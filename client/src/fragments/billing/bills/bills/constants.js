@@ -1,4 +1,6 @@
-import { handleCreatedAtDate } from "@eachbase/utils";
+import { hooksForTable } from "@eachbase/utils";
+
+const { handleCreatedAtDate } = hooksForTable;
 
 export function getFilteredBills(bills = [], selFunder, selClient, selDate) {
    const filteredBills =
@@ -6,17 +8,20 @@ export function getFilteredBills(bills = [], selFunder, selClient, selDate) {
          ? bills
          : selFunder !== "All"
          ? bills.filter(
-              (bill) => bill?.funder?.firstName?.toLowerCase() === selFunder.toLowerCase()
+              (bill) =>
+                 `${bill?.funder?.firstName} ${bill?.funder?.lastName}`.toLowerCase() ===
+                 selFunder.toLowerCase()
            )
          : selClient !== "All"
          ? bills.filter(
-              (bill) => bill?.client?.firstName?.toLowerCase() === selClient.toLowerCase()
+              (bill) =>
+                 `${bill?.client?.firstName} ${bill?.client?.lastName}`.toLowerCase() ===
+                 selClient.toLowerCase()
            )
          : selDate !== ""
          ? bills.filter(
               (bill) =>
-                 handleCreatedAtDate(bill?.dateOfService, 10) ===
-                 handleCreatedAtDate(selDate, 10)
+                 handleCreatedAtDate(bill?.dateOfService) === handleCreatedAtDate(selDate)
            )
          : [];
 

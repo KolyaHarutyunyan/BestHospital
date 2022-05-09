@@ -36,9 +36,9 @@ export const AuthHeader = ({
                ) : (
                   <p className={classes.AuthHeaderTopLeftText}>
                      {info?.startDate &&
-                        `${moment(info?.startDate).format(
-                           "DD/MM/YYYY"
-                        )} - ${moment(info?.endDate).format("DD/MM/YYYY")}`}
+                        `${moment(info?.startDate).format("DD/MM/YYYY")} - ${moment(
+                           info?.endDate
+                        ).format("DD/MM/YYYY")}`}
                   </p>
                )}
 
@@ -126,9 +126,7 @@ export const AuthHeader = ({
                   {empoloyment ? "Supervisor:" : "Funding Source:"}{" "}
                </p>
                <p className={classes.AuthHeaderBottomBoxText}>
-                  {empoloyment
-                     ? info?.supervisor?.firstName
-                     : info?.funderId?.name}
+                  {empoloyment ? info?.supervisor?.firstName : info?.funderId?.name}
                </p>
             </div>
             <div className={classes.AuthHeaderBottomBox}>
@@ -136,9 +134,7 @@ export const AuthHeader = ({
                   {empoloyment ? "Department:" : "Status:"}
                </p>
                <p className={classes.AuthHeaderBottomBoxText}>
-                  {empoloyment
-                     ? info?.departmentId?.name
-                     : makeCapitalize(info?.status)}
+                  {empoloyment ? info?.departmentId?.name : makeCapitalize(info?.status)}
                </p>
             </div>
             <div className={classes.AuthHeaderBottomBox}>

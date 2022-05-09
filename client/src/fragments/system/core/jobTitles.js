@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-   AddButton,
-   NoItemText,
-   SlicedText,
-   ValidationInput,
-} from "@eachbase/components";
+import { AddButton, NoItemText, SlicedText, ValidationInput } from "@eachbase/components";
 import { useDispatch } from "react-redux";
 import { FindLoad, FindSuccess, Images, isNotEmpty } from "@eachbase/utils";
 import { systemItemStyles } from "./styles";
@@ -58,9 +53,7 @@ export const JobTitles = ({ globalJobs, removeItem, openModal }) => {
          setInputs({
             name: "",
          });
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess("CREATE_JOB_GLOBAL")
-         );
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_JOB_GLOBAL"));
       }
    }, [success]);
 
@@ -125,7 +118,7 @@ export const JobTitles = ({ globalJobs, removeItem, openModal }) => {
                   );
                })
             ) : (
-               <NoItemText text="No Items Yet" />
+               <NoItemText text="No Job Titles Yet" />
             )}
          </div>
       </>

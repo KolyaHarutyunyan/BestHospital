@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import {
-   Paper,
-   Table,
-   TableBody,
-   TableCell,
-   TableContainer,
-} from "@material-ui/core";
+import { Paper, Table, TableBody, TableCell, TableContainer } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import {
    TableHeadComponent,
@@ -19,8 +13,11 @@ import {
 import {
    FindLoad,
    FindSuccess,
+   getLimitedVal,
+   hooksForTable,
    Images,
    useGlobalStyles,
+   useWidth,
 } from "@eachbase/utils";
 import moment from "moment";
 import { noteActions } from "@eachbase/store/notes";
@@ -47,6 +44,10 @@ export const Notes = ({
          },
       },
    }));
+
+   const width = useWidth();
+
+   const { getTableHeader, getTextDependsOnWidth } = hooksForTable;
 
    const dispatch = useDispatch();
    const params = useParams();
@@ -89,17 +90,19 @@ export const Notes = ({
                   <TableHeadComponent>
                      {headerTitles &&
                         headerTitles.map((headerItem, index) => {
+                           const theadTitle = getTableHeader(
+                              headerItem.title,
+                              getTextDependsOnWidth(width, 1591, headerItem.title, 3),
+                              "",
+                              headerItem.sortable
+                           );
+
                            return (
                               <TableCell
                                  key={index}
-                                 className={
-                                    defaultStyle ? null : classes.thWidth
-                                 }
+                                 className={defaultStyle ? null : classes.thWidth}
                               >
-                                 <SearchAndFilter
-                                    title={headerItem.title}
-                                    custom={headerItem.sortable}
-                                 />
+                                 {theadTitle}
                               </TableCell>
                            );
                         })}
@@ -122,14 +125,10 @@ export const Notes = ({
                   className={globalStyle.previewModal}
                   style={{ right: noteModalInfo.right }}
                >
-                  <h2 className={globalStyle.subject}>
-                     {noteModalInfo.subject}
-                  </h2>
+                  <h2 className={globalStyle.subject}>{noteModalInfo.subject}</h2>
                   <span>{noteModalInfo.creatorName}</span>
                   <div className={globalStyle.dateContainer}>
-                     <p>
-                        {moment(noteModalInfo?.created).format("DD/MM/YYYY")}
-                     </p>
+                     <p>{moment(noteModalInfo?.created).format("DD/MM/YYYY")}</p>
                      <div>
                         <div className={globalStyle.icons}>
                            <img

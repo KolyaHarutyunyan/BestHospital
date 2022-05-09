@@ -1,11 +1,6 @@
 import React, { useContext } from "react";
 import { SearchAndFilter } from "@eachbase/components";
-import {
-   DrawerContext,
-   getTableHeader,
-   getTextDependsOnWidth,
-   useWidth,
-} from "@eachbase/utils";
+import { DrawerContext, hooksForTable, useWidth } from "@eachbase/utils";
 import { claimTHeadTBodyStyle } from "./styles";
 
 export const ClaimTHead = () => {
@@ -15,10 +10,12 @@ export const ClaimTHead = () => {
 
    const { open } = useContext(DrawerContext);
 
-   const size = open ? 2150 : 1980;
-   const limit = open ? 5 : 7;
+   const { getTableHeader, getTextDependsOnWidth } = hooksForTable;
 
    function getClaimTitle(givenTitle = "", ...rest) {
+      const size = open ? 2150 : 1980;
+      const limit = open ? 5 : 7;
+
       return getTableHeader(
          givenTitle,
          getTextDependsOnWidth(width, size, givenTitle, limit),

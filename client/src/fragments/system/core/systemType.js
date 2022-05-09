@@ -145,9 +145,7 @@ export const ServiceType = ({ globalServices, removeItem, openModal }) => {
             displayCode: "",
             category: "",
          });
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess("CREATE_SERVICE_GLOBAL")
-         );
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_SERVICE_GLOBAL"));
       }
    }, [success]);
 
@@ -200,7 +198,7 @@ export const ServiceType = ({ globalServices, removeItem, openModal }) => {
                headerTitles={headerTitles}
             />
          ) : (
-            <NoItemText text="No Items Yet" />
+            <NoItemText text="No Service Types Yet" />
          )}
       </>
    );

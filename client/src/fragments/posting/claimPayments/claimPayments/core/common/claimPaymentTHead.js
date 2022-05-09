@@ -1,11 +1,6 @@
 import React, { useContext } from "react";
 import { SearchAndFilter } from "@eachbase/components";
-import {
-   DrawerContext,
-   getTableHeader,
-   getTextDependsOnWidth,
-   useWidth,
-} from "@eachbase/utils";
+import { DrawerContext, hooksForTable, useWidth } from "@eachbase/utils";
 import { claimPaymentTHeadTBodyStyle } from "./styles";
 
 export const ClaimPaymentTHead = () => {
@@ -14,6 +9,8 @@ export const ClaimPaymentTHead = () => {
    const width = useWidth();
 
    const { open } = useContext(DrawerContext);
+
+   const { getTableHeader, getTextDependsOnWidth } = hooksForTable;
 
    function getClaimPaymentTitle(givenTitle = "", ...rest) {
       const size = open ? 1880 : 1680;

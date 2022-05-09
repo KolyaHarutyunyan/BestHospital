@@ -211,24 +211,6 @@ export const serviceSingleStyles = makeStyles(() => ({
       color: Colors.TextSecondary,
       fontWeight: "bold",
    },
-   switcherActive: {
-      width: "50%",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      borderRadius: 8,
-      color: "#fff",
-      background: Colors.ThemeBlue,
-      transition: ".5s",
-   },
-   switcherProcessed: {
-      width: "50%",
-      borderRadius: 8,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      transition: ".5s",
-   },
 
    clinicalWrapper: {
       display: "flex",
@@ -298,5 +280,42 @@ export const serviceSingleStyles = makeStyles(() => ({
       "&:hover .MuiOutlinedInput-notchedOutline": {
          borderColor: Colors.BackgroundBlue,
       },
+   },
+
+   switcher: {
+      maxWidth: "209px",
+      width: "100%",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      backgroundColor: Colors.BackgroundWhite,
+      boxShadow: Shadow.noteModalShadow,
+      borderRadius: "8px",
+      "& > p": {
+         padding: "7px 24px",
+         cursor: "pointer",
+         borderRadius: "8px",
+         fontSize: "",
+         fontWeight: 600,
+      },
+   },
+   switcherActive: {
+      width: "50%",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: 8,
+      background: Colors.ThemeBlue,
+      transition: ".5s",
+      color: Colors.TextWhite,
+   },
+   switcherProcessed: {
+      width: "50%",
+      borderRadius: 8,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      transition: ".5s",
+      color: Colors.TextPrimary,
    },
 }));

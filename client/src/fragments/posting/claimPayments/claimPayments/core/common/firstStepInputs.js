@@ -32,7 +32,8 @@ export const FirstStepInputs = ({
             label={"Funding Source*"}
             handleSelect={handleChange}
             value={inputs.fundingSource}
-            language={fundingSource}
+            list={fundingSource}
+            type={"id"}
             typeError={error === "fundingSource" && ErrorText.selectField}
             disabled={hasInfo}
          />
@@ -54,7 +55,7 @@ export const FirstStepInputs = ({
                label={"Payment Type*"}
                handleSelect={handleChange}
                value={inputs.paymentType}
-               language={enumValues.POSTING_PAYMENT_TYPES}
+               language={enumValues.PAYMENT_TYPES}
                typeError={error === "paymentType" && ErrorText.field}
             />
             <ValidationInput

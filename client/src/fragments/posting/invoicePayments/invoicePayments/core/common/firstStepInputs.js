@@ -21,12 +21,14 @@ export const FirstStepInputs = ({ inputs, error, handleChange, client, hasInfo }
             typeError={error === "amount" && ErrorText.field}
             disabled={hasInfo}
          />
+         {/* User */}
          <SelectInput
             name={"client"}
             label={"Client*"}
             handleSelect={handleChange}
             value={inputs.client}
-            language={client}
+            list={client}
+            type={"id"}
             typeError={error === "client" && ErrorText.selectField}
             disabled={hasInfo}
          />
@@ -48,7 +50,7 @@ export const FirstStepInputs = ({ inputs, error, handleChange, client, hasInfo }
                label={"Payment Type*"}
                handleSelect={handleChange}
                value={inputs.paymentType}
-               language={enumValues.POSTING_PAYMENT_TYPES}
+               language={enumValues.PAYMENT_TYPES}
                typeError={error === "paymentType" && ErrorText.field}
             />
             <ValidationInput

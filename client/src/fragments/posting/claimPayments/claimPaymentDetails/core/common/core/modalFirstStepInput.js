@@ -26,7 +26,9 @@ export const ModalFirstStepInput = ({
    const [filteredDateFrom, setFilteredDateFrom] = useState("");
    const [filteredDateTo, setFilteredDateTo] = useState("");
 
-   const clientsNames = claims.map((claim) => claim?.client?.firstName);
+   const clientsNames = claims.map(
+      (claim) => `${claim?.client?.firstName} ${claim?.client?.lastName}`
+   );
 
    const claimsWithFilters = getFilteredClaimsForClaimPmt(
       claims,

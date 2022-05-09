@@ -1,10 +1,5 @@
 import React from "react";
-import {
-   FormControl,
-   FormControlLabel,
-   Radio,
-   RadioGroup,
-} from "@material-ui/core";
+import { FormControl, FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
 import { modePatternsStyle } from "./style";
 import { inputsStyle } from "@eachbase/components/inputs/styles";
 
@@ -25,8 +20,7 @@ export const DailyPattern = ({
       checked: inputsClasses.checked,
    };
 
-   const isDisabled =
-      inputs.startDate && inputs.endDate ? false : !countIsChecked;
+   const isDisabled = inputs.startDate && inputs.endDate ? false : !countIsChecked;
 
    return (
       <div>
@@ -44,12 +38,7 @@ export const DailyPattern = ({
                      className={inputsClasses.radioInputLabel}
                      value="repeatCountCheckbox"
                      label="Recur every"
-                     control={
-                        <Radio
-                           checked={countIsChecked}
-                           classes={radioClasses}
-                        />
-                     }
+                     control={<Radio checked={countIsChecked} classes={radioClasses} />}
                   />
                   <input
                      type={"number"}
@@ -67,9 +56,7 @@ export const DailyPattern = ({
                   className={inputsClasses.radioInputLabel}
                   value="repeatConsecutive"
                   label="Recur every weekday"
-                  control={
-                     <Radio checked={consecIsChecked} classes={radioClasses} />
-                  }
+                  control={<Radio checked={consecIsChecked} classes={radioClasses} />}
                />
             </RadioGroup>
          </FormControl>

@@ -1,4 +1,6 @@
-import { handleCreatedAtDate } from "@eachbase/utils";
+import { hooksForTable } from "@eachbase/utils";
+
+const { handleCreatedAtDate } = hooksForTable;
 
 export function getFilteredNotClaimedBills(
    notClaimedBills,
@@ -11,17 +13,21 @@ export function getFilteredNotClaimedBills(
          ? notClaimedBills
          : selFunder !== "All"
          ? notClaimedBills.filter(
-              (bill) => bill?.funder?.firstName?.toLowerCase() === selFunder.toLowerCase()
+              (bill) =>
+                 `${bill?.funder?.firstName} ${bill?.funder?.lastName}`.toLowerCase() ===
+                 selFunder.toLowerCase()
            )
          : selClient !== "All"
          ? notClaimedBills.filter(
-              (bill) => bill?.client?.firstName?.toLowerCase() === selClient.toLowerCase()
+              (bill) =>
+                 `${bill?.client?.firstName} ${bill?.client?.lastName}`.toLowerCase() ===
+                 selClient.toLowerCase()
            )
          : selServiceDate !== ""
          ? notClaimedBills.filter(
               (bill) =>
-                 handleCreatedAtDate(bill?.dateOfService, 10) ===
-                 handleCreatedAtDate(selServiceDate, 10)
+                 handleCreatedAtDate(bill?.dateOfService) ===
+                 handleCreatedAtDate(selServiceDate)
            )
          : [];
 

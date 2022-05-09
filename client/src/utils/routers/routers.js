@@ -32,11 +32,11 @@ export const superAdminRouters = [
    {
       name: "Billing",
       icon: "Billing",
-      path: "/bills",
+      path: "/billing",
    },
    {
       name: "Posting",
       icon: "Posting",
-      path: "/postings",
+      path: "/posting",
    },
 ];

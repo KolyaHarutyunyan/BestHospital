@@ -2,9 +2,8 @@ import React, { useContext } from "react";
 import {
    DrawerContext,
    getDataForTable,
-   handleCreatedAtDate,
+   hooksForTable,
    manageStatus,
-   showDashIfEmpty,
    useWidth,
 } from "@eachbase/utils";
 import { claimReceivableTHeadTBodyStyle } from "./styles";
@@ -16,12 +15,14 @@ export const ClaimReceivableTBody = ({ receivable }) => {
 
    const { open } = useContext(DrawerContext);
 
+   const { handleCreatedAtDate, showDashIfEmpty } = hooksForTable;
+
    function getTableData(data) {
       return showDashIfEmpty(getDataForTable(data, open, width));
    }
 
-   const serviceStart = handleCreatedAtDate(receivable.dateOfService?.start, 10, "/");
-   const serviceEnd = handleCreatedAtDate(receivable.dateOfService?.end, 10, "/");
+   const serviceStart = handleCreatedAtDate(receivable.dateOfService?.start);
+   const serviceEnd = handleCreatedAtDate(receivable.dateOfService?.end);
    const cptCode = getTableData(manageStatus(receivable.cptCode));
    const modifier = getTableData(receivable.modifier);
 
