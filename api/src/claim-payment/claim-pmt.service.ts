@@ -133,7 +133,6 @@ export class ClaimPmtService {
   update(id: string, updateClaimPmtDto: UpdateClaimPmtDto) {
     return `This action updates a #${id} claimPayment`;
   }
-
   remove(id: number) {
     return `This action removes a #${id} claimPayment`;
   }
@@ -302,3 +301,23 @@ export class ClaimPmtService {
     return populateReceivable;
   }
 }
+
+/**
+ * claimId: claimId,
+ * receivables: [{
+ * receivableId: receivableId
+ * allowedAMT: 100,
+ * deductible: 50,
+ * copay: 70,
+ * coINS: 20,
+ * paidAMT: 100
+ * },
+ * {
+ * receivableId: receivableId
+ * allowedAMT: 150,
+ * deductible: 60,
+ * copay: 80,
+ * coINS: 30,
+ * paidAMT: 150
+ * }]
+ */
