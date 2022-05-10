@@ -56,9 +56,7 @@ export const GenerateClaimFragment = ({
       );
    }
 
-   const payorsNames = bills.map(
-      (bill) => `${bill?.funder?.firstName} ${bill?.funder?.lastName}`
-   );
+   const payorsNames = bills.map((bill) => bill?.payer?.name);
    const clientsNames = bills.map(
       (bill) => `${bill?.client?.firstName} ${bill?.client?.lastName}`
    );

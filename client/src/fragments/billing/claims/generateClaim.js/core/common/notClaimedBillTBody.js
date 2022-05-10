@@ -41,14 +41,13 @@ export const NotClaimedBillTBody = ({ notClaimedBill, triggerBill }) => {
       itemsAreChecked && handleItemsCheckup(false);
    }
 
+   const clientFirstName = notClaimedBill.client?.firstName;
+   const clientLastName = notClaimedBill.client?.lastName;
+
    const dateOfService = getTableData(handleCreatedAtDate(notClaimedBill.dateOfService));
    const placeOfService = getTableData(notClaimedBill.placeService?.name);
    const service = getTableData(notClaimedBill.authService?.serviceId);
-   const funderFirstName = notClaimedBill.payer?.firstName;
-   const funderLastName = notClaimedBill.payer?.lastName;
-   const funder = getFullName(funderFirstName, funderLastName, getTableData);
-   const clientFirstName = notClaimedBill.client?.firstName;
-   const clientLastName = notClaimedBill.client?.lastName;
+   const payor = getTableData(notClaimedBill.payer?.name);
    const client = getFullName(clientFirstName, clientLastName, getTableData);
    const units = getTableData(getValueByFixedNumber(notClaimedBill.totalUnits, 0));
    const claimAmount = getTableData(
@@ -70,7 +69,7 @@ export const NotClaimedBillTBody = ({ notClaimedBill, triggerBill }) => {
             <div className={classes.tdStyle}>{dateOfService}</div>
             <div className={classes.tdStyle}>{placeOfService}</div>
             <div className={classes.tdStyle}>{service}</div>
-            <div className={classes.tdStyle}>{funder}</div>
+            <div className={classes.tdStyle}>{payor}</div>
             <div className={classes.tdStyle}>{client}</div>
             <div className={classes.tdStyle}>{units}</div>
             <div className={classes.tdStyle}>{claimAmount}</div>

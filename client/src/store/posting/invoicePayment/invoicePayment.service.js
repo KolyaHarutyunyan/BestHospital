@@ -1,19 +1,23 @@
 import axios from "axios";
 
 export const invoicePaymentService = {
-   getInvoicePaymentsService: () => axios.get("/posting"),
+   getInvoicePaymentsService: () => axios.get("/invoicePayment", { auth: true }),
 
-   getInvoicePaymentByIdService: (id) => axios.get(`/posting/${id}`),
+   getInvoicePaymentByIdService: (id) =>
+      axios.get(`/invoicePayment/${id}`, { auth: true }),
 
-   createInvoicePaymentService: (body) => axios.post("/posting", body, { auth: true }),
+   createInvoicePaymentService: (body) =>
+      axios.post("/invoicePayment", body, { auth: true }),
 
-   editInvoicePaymentService: (id, body) => axios.patch(`/posting/${id}`, body),
+   editInvoicePaymentService: (id, body) =>
+      axios.patch(`/invoicePayment/${id}`, body, { auth: true }),
 
-   deleteInvoicePaymentService: (id) => axios.delete(`/posting/${id}`),
+   deleteInvoicePaymentService: (id) =>
+      axios.delete(`/invoicePayment/${id}`, { auth: true }),
 
    editInvoicePaymentStatusService: (id, status, details) =>
       axios.patch(
-         `/posting/${id}/setStatus?status=${status}?details=${details}`,
+         `/invoicePayment/${id}/setStatus?status=${status}?details=${details}`,
          {},
          { auth: true }
       ),

@@ -1,7 +1,7 @@
 import { getLimitedVal, hooksForTable, makeCapitalize } from "@eachbase/utils";
 
 export function getBillDetails(bill) {
-   const { authService, client, payor, dateOfService, totalHours, totalUnits } =
+   const { authService, client, payer, dateOfService, totalHours, totalUnits } =
       bill || {};
 
    const { handleCreatedAtDate } = hooksForTable;
@@ -13,7 +13,7 @@ export function getBillDetails(bill) {
       },
       {
          detailText: "Payor:",
-         detail: !!payor && makeCapitalize(`${payor?.firstName} ${payor?.lastName}`),
+         detail: !!payer && makeCapitalize(payer?.name),
       },
       {
          detailText: "Client:",

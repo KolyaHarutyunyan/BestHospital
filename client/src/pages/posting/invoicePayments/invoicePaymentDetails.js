@@ -11,7 +11,9 @@ export const InvoicePaymentDetails = () => {
 
    const dispatch = useDispatch();
 
-   // const invoicePaymentById = useSelector((state) => state.invoicePayment.invoicePaymentById);
+   // const invoicePaymentById = useSelector(
+   //    (state) => state.invoicePayment.invoicePaymentById
+   // );
 
    // temporary
    const invoicePaymentById = dummyData.INVOICE_PAYMENTS.find(
