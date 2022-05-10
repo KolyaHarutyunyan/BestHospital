@@ -23,12 +23,20 @@ export class ClaimService {
   private model: Model<IClaim>;
   private mongooseUtil: MongooseUtil;
 
-  /** create the claim */
-  // async create(dto: CreateClaimDto): Promise<ClaimDto> {
-  //   const claim = new this.model({});
-  //   await claim.save();
-  //   return this.sanitizer.sanitize(claim);
-  // }
+  /** set amountTotal to the receivable (claim-pmt) */
+  async setAmountRec(_id: string, receivableId: string, amount: number): Promise<ClaimDto> {
+    const claim = await this.model.findById(_id);
+    this.checkClaim(claim);
+    const index = claim.receivable.findIndex(
+      (receivable) => receivable._id.toString() == receivableId.toString(),
+    );
+    if (index === -1) {
+      throw new HttpException('Receivable was not found', HttpStatus.NOT_FOUND);
+    }
+    claim.receivable[index].amountTotal = amount;
+    await claim.save();
+    return this.sanitizer.sanitize(claim);
+  }
   /** update amountTotal (claim-pmt) */
   async updateReceivableAmount(
     _id: string,
@@ -73,7 +81,7 @@ export class ClaimService {
 
   /** find claim by id] (claim-pmt) */
   async findOne(_id: string): Promise<ClaimDto> {
-    const claim = await this.model.findById(_id);
+    const claim = await this.model.findById(_id).populate('receivable.bills');
     this.checkClaim(claim);
     return this.sanitizer.sanitize(claim);
   }

@@ -29,15 +29,14 @@ export class ClaimPmtController {
     return this.claimPmtService.addClaim(id, claimId);
   }
   /** add receivable */
-  @Patch(':id/claim/:claimId/receivable')
+  @Patch(':id/payment')
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: ClaimPmtDto })
   addReceivable(
     @Param('id', ParseObjectIdPipe) id: string,
-    @Param('claimId', ParseObjectIdPipe) claimId: string,
     @Body() createReceivableDTO: CreateReceivableDTO,
   ) {
-    return this.claimPmtService.addReceivable(id, claimId, createReceivableDTO);
+    return this.claimPmtService.payment(id, createReceivableDTO);
   }
 
   /** get all claim-pmts */

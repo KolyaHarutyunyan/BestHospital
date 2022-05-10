@@ -37,6 +37,8 @@ export class BillingDto {
   @ApiProperty()
   balance: number;
   @ApiProperty()
+  clientBalance: number;
+  @ApiProperty()
   location: string;
   @ApiProperty()
   claimStatus: string;

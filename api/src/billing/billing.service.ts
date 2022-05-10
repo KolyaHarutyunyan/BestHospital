@@ -44,6 +44,7 @@ export class BillingService {
         billedAmount,
         payerTotal: billedAmount,
         balance: billedAmount,
+        clientBalance: 0,
         location: dto.location,
         claimStatus: ClaimStatus.NOTCLAIMED,
         invoiceStatus: InvoiceStatus.NOTINVOICED,
@@ -89,6 +90,14 @@ export class BillingService {
       console.log(e);
       throw e;
     }
+  }
+  /** set client balance */
+  async setClientBalance(_id: string, clientBalance: number): Promise<BillingDto> {
+    const billing = await this.model.findById(_id);
+    this.checkBilling(billing);
+    billing.clientBalance += clientBalance;
+    await billing.save();
+    return this.sanitizer.sanitize(billing);
   }
   /** abort the transaction */
   async abortTransaction(_id: string, tsxId: string, userId: string): Promise<BillingDto> {

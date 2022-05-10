@@ -24,6 +24,7 @@ export class BillingSanitizer implements ISanitize {
       clientResp: billing.clientResp,
       clientPaid: billing.clientPaid,
       balance: billing.balance,
+      clientBalance: billing.clientBalance,
       claimStatus: billing.claimStatus,
       invoiceStatus: billing.invoiceStatus,
       status: billing.status,

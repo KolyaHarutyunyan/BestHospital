@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsDateString,
   IsEnum,
@@ -8,6 +9,7 @@ import {
   IsOptional,
   IsPositive,
   IsString,
+  ValidateNested,
 } from 'class-validator';
 import { UserDTO } from '../../authN';
 import { PaymentType } from '../claim-pmt.contants';
@@ -35,17 +37,39 @@ export class CreateClaimPmtDto {
   checkNumber: string;
   user?: UserDTO;
 }
-export class CreateReceivableDTO {
+class ReceivableDTO {
   @ApiProperty()
-  receivableIds: string[];
+  @IsNotEmpty()
+  @IsMongoId()
+  receivableId: string;
   @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
   allowedAMT: number;
   @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
   deductible: number;
   @ApiProperty()
-  compay: number;
+  @IsNotEmpty()
+  @IsNumber()
+  copay: number;
   @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
   coINS: number;
   @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
   paidAMT: number;
+}
+export class CreateReceivableDTO {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsMongoId()
+  claimId: string;
+  @ApiProperty({ type: [ReceivableDTO] })
+  @ValidateNested({ each: true })
+  @Type(() => ReceivableDTO)
+  receivables: ReceivableDTO[];
 }

@@ -21,6 +21,7 @@ const BillingSchema = new Schema({
   clientResp: { type: Number, default: 0 },
   clientPaid: { type: Number, default: 0 },
   balance: { type: Number },
+  clientBalance: { type: Number },
   location: { typ: String },
   claimStatus: { type: String, enum: ClaimStatus, default: 'NOTCLAIMED' },
   invoiceStatus: { type: String, enum: InvoiceStatus, default: 'NOTINVOICED' },

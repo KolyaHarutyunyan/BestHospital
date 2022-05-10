@@ -18,6 +18,7 @@ export interface IBilling extends Document {
   payerPaid: number;
   clientResp: number;
   clientPaid: number;
+  clientBalance: number;
   balance: number;
   location: string;
   claimStatus: string;
