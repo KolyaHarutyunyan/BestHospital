@@ -5,26 +5,26 @@ import { IInvPmt } from './interface/invoice-pmt.interface';
 
 @Injectable()
 export class InvPmtSanitizer implements ISanitize {
-  sanitize(posting: IInvPmt): InvPmtDto {
+  sanitize(invPmt: IInvPmt): InvPmtDto {
     const postingDTO: InvPmtDto = {
-      _id: posting._id,
-      paymentType: posting.paymentType,
-      paymentReference: posting.paymentReference,
-      paymentAmount: posting.paymentAmount,
-      payer: posting.payer,
-      invoice: posting.invoice,
-      paymentDate: posting.paymentDate,
-      transaction: posting.transaction,
-      documents: posting.documents,
+      _id: invPmt._id,
+      paymentType: invPmt.paymentType,
+      paymentRef: invPmt.paymentRef,
+      paymentAmount: invPmt.paymentAmount,
+      invoices: invPmt.invoices,
+      paymentDate: invPmt.paymentDate,
+      eob: invPmt.eob,
+      client: invPmt.client,
+      checkNumber: invPmt.checkNumber,
     };
     return postingDTO;
   }
 
-  sanitizeMany(postings: IInvPmt[]): InvPmtDto[] {
-    const postingDTOs: InvPmtDto[] = [];
-    for (let i = 0; i < postings.length; i++) {
-      postingDTOs.push(this.sanitize(postings[i]));
+  sanitizeMany(invPmts: IInvPmt[]): InvPmtDto[] {
+    const invPmtDTOs: InvPmtDto[] = [];
+    for (let i = 0; i < invPmts.length; i++) {
+      invPmtDTOs.push(this.sanitize(invPmts[i]));
     }
-    return postingDTOs;
+    return invPmtDTOs;
   }
 }

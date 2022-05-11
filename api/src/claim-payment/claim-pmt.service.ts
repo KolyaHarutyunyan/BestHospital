@@ -41,27 +41,31 @@ export class ClaimPmtService {
       fundingSource: dto.fundingSource,
       checkNumber: dto.checkNumber,
     });
-    if (dto.paymentDate) claimPmt.paymnetDate = dto.paymentDate;
+    if (dto.paymentDate) claimPmt.paymentDate = dto.paymentDate;
     await claimPmt.save();
     return this.sanitizer.sanitize(claimPmt);
   }
-  /** add claim to the claim-pmt */
-  async addClaim(_id: string, claimId: string): Promise<ClaimPmtDto> {
-    const [claimPmt, claim] = await Promise.all([
-      this.model.findById(_id),
-      this.claimService.findOne(claimId),
-    ]);
+  /** update claim payment */
+  async update(_id: string, dto: UpdateClaimPmtDto): Promise<ClaimPmtDto> {
+    const claimPmt = await this.model.findById(_id);
     this.checkClaimPmt(claimPmt);
-    claimPmt.claimIds.push(claimId);
+    if (dto.paymentDate) claimPmt.paymentDate = dto.paymentDate;
+    if (dto.paymentType) claimPmt.paymentType = dto.paymentType;
+    if (dto.checkNumber) claimPmt.checkNumber = dto.checkNumber;
     await claimPmt.save();
     return this.sanitizer.sanitize(claimPmt);
   }
   /** create payment */
   async payment(_id: string, dto: CreateReceivableDTO): Promise<ClaimPmtDto> {
+    let sumPaid = 0;
+    dto.receivables.map((receivable) => (sumPaid += receivable.paidAMT));
     const [claimPmt, claim] = await Promise.all([
       this.model.findById(_id),
       this.claimService.findOne(dto.claimId),
     ]);
+    if (claimPmt.paymentAmount < sumPaid) {
+      throw new HttpException('amount more than expected', HttpStatus.BAD_REQUEST);
+    }
     this.checkClaimPmt(claimPmt);
 
     for (let i = 0; i < dto.receivables.length; i++) {
@@ -82,7 +86,7 @@ export class ClaimPmtService {
       };
       const countBalance = receivable.coINS + receivable.copay + receivable.deductible;
       const clientBalance = countBalance / data.receivable.bills.length;
-      const amountPaided = await this.createPayment(data, clientBalance);
+      const amountPaided = await this.createPayment(data, clientBalance, dto.user.id);
       /** update receivable total amount */
       const updateRecAmount = await this.claimService.setAmountRec(
         claim._id,
@@ -168,15 +172,12 @@ export class ClaimPmtService {
     return this.sanitizer.sanitize(claimPmt);
   }
 
-  update(id: string, updateClaimPmtDto: UpdateClaimPmtDto) {
-    return `This action updates a #${id} claimPayment`;
-  }
   remove(id: number) {
     return `This action removes a #${id} claimPayment`;
   }
   /** Private methods */
   /** create payment */
-  private async createPayment(data, clientBalance: number) {
+  private async createPayment(data, clientBalance: number, userId: string) {
     const receivable = data.receivable;
     let bills = data.receivable.bills;
 
@@ -190,11 +191,12 @@ export class ClaimPmtService {
           lowBill.billedAmount,
           clientBalance,
           lowBill._id,
+          userId,
         );
         receivable.amountTotal -= billedAmount;
         data.paidAMT -= billedAmount;
       } else if (data.paidAMT < lowBill.billedAmount) {
-        await this.partialBillPay(data.paidAMT, clientBalance, lowBill._id);
+        await this.partialBillPay(data.paidAMT, clientBalance, lowBill._id, userId);
         receivable.amountTotal -= data.paidAMT;
         data.paidAMT = 0;
       }
@@ -206,6 +208,7 @@ export class ClaimPmtService {
     billedAmount: number,
     clientBalance: number,
     billingId: string,
+    userId: string,
   ): Promise<number> {
     const transactionInfo = {
       type: TxnType.PAYERPAID,
@@ -213,7 +216,7 @@ export class ClaimPmtService {
       rate: billedAmount,
       paymentRef: 'chka',
       billing: billingId,
-      creator: billingId,
+      creator: userId,
     };
     await Promise.all([
       this.billingService.startTransaction(transactionInfo, billingId),
@@ -226,6 +229,7 @@ export class ClaimPmtService {
     paidAMT: number,
     clientBalance: number,
     billingId: string,
+    userId: string,
   ): Promise<void> {
     const transactionInfo = {
       type: TxnType.PAYERPAID,
@@ -233,7 +237,7 @@ export class ClaimPmtService {
       rate: paidAMT,
       paymentRef: 'chka',
       billing: billingId,
-      creator: billingId,
+      creator: userId,
     };
     await Promise.all([
       this.billingService.startTransaction(transactionInfo, billingId),

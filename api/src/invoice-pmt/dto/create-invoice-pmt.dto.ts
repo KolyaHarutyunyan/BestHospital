@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsDateString,
   IsEnum,
@@ -8,7 +9,9 @@ import {
   IsOptional,
   IsPositive,
   IsString,
+  ValidateNested,
 } from 'class-validator';
+import { DTO } from '../../util';
 import { UserDTO } from '../../authN';
 import { PaymentType } from '../invoice-pmt.constants';
 
@@ -17,26 +20,45 @@ export class CreateInvPmtDto {
   @IsEnum(PaymentType)
   paymentType: string;
   @ApiProperty()
-  @IsString()
+  @IsMongoId()
   @IsNotEmpty()
-  paymentReference: string;
+  client: string;
   @ApiProperty()
   @IsNumber()
   @IsPositive()
   @IsNotEmpty()
   paymentAmount: number;
   @ApiProperty()
-  @IsMongoId()
-  payer: string;
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsMongoId()
-  invoice: string;
-  @ApiProperty()
   @IsOptional()
   @IsDateString()
   paymentDate: Date;
-  // @ApiProperty()
-  // client: string;
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  checkNumber: string;
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsMongoId()
+  eob: string;
   user?: UserDTO;
+}
+class ReceivableDTO {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsMongoId()
+  receivableId: string;
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  paidAMT: number;
+}
+export class CreateReceivableDTO extends DTO {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsMongoId()
+  invoiceId: string;
+  @ApiProperty({ type: [ReceivableDTO] })
+  @ValidateNested({ each: true })
+  @Type(() => ReceivableDTO)
+  receivables: ReceivableDTO[];
 }

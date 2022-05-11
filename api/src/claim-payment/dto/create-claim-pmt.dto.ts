@@ -11,6 +11,7 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
+import { DTO } from '../../util';
 import { UserDTO } from '../../authN';
 import { PaymentType } from '../claim-pmt.contants';
 
@@ -35,7 +36,6 @@ export class CreateClaimPmtDto {
   @IsString()
   @IsNotEmpty()
   checkNumber: string;
-  user?: UserDTO;
 }
 class ReceivableDTO {
   @ApiProperty()
@@ -63,7 +63,7 @@ class ReceivableDTO {
   @IsNumber()
   paidAMT: number;
 }
-export class CreateReceivableDTO {
+export class CreateReceivableDTO extends DTO {
   @ApiProperty()
   @IsNotEmpty()
   @IsMongoId()

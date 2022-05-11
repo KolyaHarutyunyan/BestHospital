@@ -8,7 +8,7 @@ export class ClaimPmtDto {
   @ApiProperty()
   paymentType: string;
   @ApiProperty()
-  paymnetDate: Date;
+  paymentDate: Date;
   @ApiProperty()
   checkNumber: string;
   @ApiProperty()

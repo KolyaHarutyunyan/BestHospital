@@ -18,18 +18,8 @@ export class ClaimPmtController {
   create(@Body() createClaimPmtDto: CreateClaimPmtDto) {
     return this.claimPmtService.create(createClaimPmtDto);
   }
-  /** add claim */
-  @Patch(':id/claim/:claimId')
-  @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({ type: ClaimPmtDto })
-  addClaim(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Param('claimId', ParseObjectIdPipe) claimId: string,
-  ) {
-    return this.claimPmtService.addClaim(id, claimId);
-  }
   /** add receivable */
-  @Patch(':id/payment')
+  @Post(':id/payment')
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: ClaimPmtDto })
   addReceivable(
@@ -55,7 +45,9 @@ export class ClaimPmtController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateClaimPmtDto: UpdateClaimPmtDto) {
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: ClaimPmtDto })
+  update(@Param('id', ParseObjectIdPipe) id: string, @Body() updateClaimPmtDto: UpdateClaimPmtDto) {
     return this.claimPmtService.update(id, updateClaimPmtDto);
   }
 

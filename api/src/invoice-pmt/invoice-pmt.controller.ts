@@ -1,21 +1,31 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { InvPmtService } from './invoice-pmt.service';
-import { CreateInvPmtDto, UpdateInvPmtDto, InvPmtDto } from './dto';
+import { CreateInvPmtDto, UpdateInvPmtDto, InvPmtDto, CreateReceivableDTO } from './dto';
 import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ACCESS_TOKEN } from '../authN';
-import { ParseObjectIdPipe } from 'src/util';
+import { ParseObjectIdPipe } from '../util';
 
 @Controller('invoice-pmt')
 @ApiTags('Invoice-pmt Endpoints')
 export class InvPmtController {
   constructor(private readonly invPmtService: InvPmtService) {}
-
+  /** create payment */
   @Post()
   @ApiHeader({ name: ACCESS_TOKEN })
-  create(@Body() createInvDto: CreateInvPmtDto) {
-    return this.invPmtService.create(createInvDto);
+  @ApiOkResponse({ type: InvPmtDto })
+  create(@Body() createInvPmtDto: CreateInvPmtDto) {
+    return this.invPmtService.create(createInvPmtDto);
   }
-
+  /** add receivable */
+  @Post(':id/payment')
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: InvPmtDto })
+  addReceivable(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Body() createReceivableDTO: CreateReceivableDTO,
+  ) {
+    return this.invPmtService.payment(id, createReceivableDTO);
+  }
   @Get()
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: [InvPmtDto] })

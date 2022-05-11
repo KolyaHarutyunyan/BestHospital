@@ -10,7 +10,7 @@ export class ClaimPmtSanitizer implements ISanitize {
       _id: claimPmt._id,
       paymentAmount: claimPmt.paymentAmount,
       paymentType: claimPmt.paymentType,
-      paymnetDate: claimPmt.paymnetDate,
+      paymentDate: claimPmt.paymentDate,
       checkNumber: claimPmt.checkNumber,
       fundingSource: claimPmt.fundingSource,
       claimIds: claimPmt.claimIds,

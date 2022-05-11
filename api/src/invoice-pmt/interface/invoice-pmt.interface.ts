@@ -1,21 +1,13 @@
 import { Document } from 'mongoose';
 
-export interface ITransaction {
-  type: string;
-  date: Date;
-  amount: number;
-  paymentRef: string;
-  creator: string;
-  note: string;
-}
-
 export interface IInvPmt extends Document {
   paymentType: string;
-  paymentReference: string;
+  paymentRef: string;
   paymentAmount: number;
-  payer: string;
-  invoice: string;
+  paymnetDate: Date;
+  invoices: string[];
   paymentDate: Date;
-  transaction: ITransaction[];
-  documents: string[];
+  checkNumber: string;
+  eob: string;
+  client: string;
 }

@@ -3,24 +3,14 @@ import { FileSchema } from '../files/file.model';
 import { IInvPmt } from './interface/invoice-pmt.interface';
 import { PaymentType } from './invoice-pmt.constants';
 
-const TransactionSchema = new Schema({
-  date: { type: Date },
-  amount: { type: Number },
-  paymentRef: { type: String },
-  creator: { type: Types.ObjectId, ref: 'Staff' },
-  note: { type: String },
-  status: { type: String },
-});
-
 const InvPmtSchema = new Schema({
   paymentType: { type: String, enum: PaymentType },
   paymentReference: { type: String },
   paymentAmount: { type: Number },
   paymentDate: { type: Date, default: Date.now() },
-  payer: { type: Types.ObjectId, ref: 'Client' },
-  invoice: { type: Types.ObjectId, ref: 'invoice' },
-  documents: [{ type: Types.ObjectId, ref: 'file' }],
-  transaction: [TransactionSchema],
+  client: { type: Types.ObjectId, ref: 'Client' },
+  invoices: [{ type: Types.ObjectId, ref: 'invoice' }],
+  eob: { type: Types.ObjectId, ref: 'file' },
 });
 
 export const InvPmtModel = model<IInvPmt>('invPmt', InvPmtSchema);

@@ -35,7 +35,20 @@ export class InvoiceService {
     return invoices;
     // return this.sanitizer.sanitizeMany(claims);
   }
-
+  /** set amountTotal to the receivable (invoice-pmt) */
+  async setAmountRec(_id: string, receivableId: string, amount: number): Promise<InvoiceDto> {
+    const invoice = await this.model.findById(_id);
+    this.checkInvoice(invoice);
+    const index = invoice.receivable.findIndex(
+      (receivable) => receivable._id.toString() == receivableId.toString(),
+    );
+    if (index === -1) {
+      throw new HttpException('Receivable was not found', HttpStatus.NOT_FOUND);
+    }
+    invoice.receivable[index].amountTotal = amount;
+    await invoice.save();
+    return this.sanitizer.sanitize(invoice);
+  }
   /** get all invoices */
   async findAll(): Promise<InvoiceDto[]> {
     const invoices = await this.model.find();

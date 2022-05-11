@@ -9,7 +9,7 @@ export class UpdateInvPmtDto {
   @ApiProperty()
   @IsString()
   @IsOptional()
-  paymentReference: string;
+  paymentRef: string;
   @ApiProperty()
   @IsOptional()
   @IsDateString()
