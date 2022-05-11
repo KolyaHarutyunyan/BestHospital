@@ -4,7 +4,7 @@ import { ParseObjectIdPipe } from '../util';
 import { ACCESS_TOKEN } from '../authN/authN.constants';
 import { ClaimPmtService } from './claim-pmt.service';
 import { ClaimPmtDto } from './dto/claim-pmt.dto.';
-import { CreateClaimPmtDto, CreateReceivableDTO } from './dto/create-claim-pmt.dto';
+import { CreateClaimPmtDto, CreateClaimReceivableDTO } from './dto/create-claim-pmt.dto';
 import { UpdateClaimPmtDto } from './dto/update-claim-payment.dto';
 
 @Controller('claim-pmt')
@@ -24,7 +24,7 @@ export class ClaimPmtController {
   @ApiOkResponse({ type: ClaimPmtDto })
   addReceivable(
     @Param('id', ParseObjectIdPipe) id: string,
-    @Body() createReceivableDTO: CreateReceivableDTO,
+    @Body() createReceivableDTO: CreateClaimReceivableDTO,
   ) {
     return this.claimPmtService.payment(id, createReceivableDTO);
   }

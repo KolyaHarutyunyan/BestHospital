@@ -37,7 +37,7 @@ export class CreateClaimPmtDto {
   @IsNotEmpty()
   checkNumber: string;
 }
-class ReceivableDTO {
+class ClaimReceivableDTO {
   @ApiProperty()
   @IsNotEmpty()
   @IsMongoId()
@@ -63,13 +63,13 @@ class ReceivableDTO {
   @IsNumber()
   paidAMT: number;
 }
-export class CreateReceivableDTO extends DTO {
+export class CreateClaimReceivableDTO extends DTO {
   @ApiProperty()
   @IsNotEmpty()
   @IsMongoId()
   claimId: string;
-  @ApiProperty({ type: [ReceivableDTO] })
+  @ApiProperty({ type: [ClaimReceivableDTO] })
   @ValidateNested({ each: true })
-  @Type(() => ReceivableDTO)
-  receivables: ReceivableDTO[];
+  @Type(() => ClaimReceivableDTO)
+  receivables: ClaimReceivableDTO[];
 }

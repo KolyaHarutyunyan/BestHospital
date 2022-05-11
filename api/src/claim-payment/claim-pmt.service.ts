@@ -6,7 +6,7 @@ import { MongooseUtil } from '../util/mongoose.util';
 import { PaymentType } from './claim-pmt.contants';
 import { ClaimPmtModel } from './claim-pmt.model';
 import { ClaimPmtSanitizer } from './claim-pmt.sanitizer';
-import { CreateClaimPmtDto, CreateReceivableDTO } from './dto';
+import { CreateClaimPmtDto, CreateClaimReceivableDTO } from './dto';
 import { UpdateClaimPmtDto } from './dto/update-claim-payment.dto';
 import { IClaimPmt } from './interface';
 import { FileService } from '../files/file.service';
@@ -56,9 +56,10 @@ export class ClaimPmtService {
     return this.sanitizer.sanitize(claimPmt);
   }
   /** create payment */
-  async payment(_id: string, dto: CreateReceivableDTO): Promise<ClaimPmtDto> {
+  async payment(_id: string, dto: CreateClaimReceivableDTO): Promise<ClaimPmtDto> {
     let sumPaid = 0;
     dto.receivables.map((receivable) => (sumPaid += receivable.paidAMT));
+    console.log(sumPaid);
     const [claimPmt, claim] = await Promise.all([
       this.model.findById(_id),
       this.claimService.findOne(dto.claimId),
