@@ -77,6 +77,8 @@ export class InvPmtService {
       );
     }
     invPmt.invoices.push(dto.invoiceId);
+    invPmt.paymentAmount -= sumPaid;
+
     await invPmt.save();
     return this.sanitizer.sanitize(invPmt);
   }

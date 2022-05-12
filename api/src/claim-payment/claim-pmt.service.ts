@@ -59,7 +59,6 @@ export class ClaimPmtService {
   async payment(_id: string, dto: CreateClaimReceivableDTO): Promise<ClaimPmtDto> {
     let sumPaid = 0;
     dto.receivables.map((receivable) => (sumPaid += receivable.paidAMT));
-    console.log(sumPaid);
     const [claimPmt, claim] = await Promise.all([
       this.model.findById(_id),
       this.claimService.findOne(dto.claimId),
@@ -85,8 +84,8 @@ export class ClaimPmtService {
         coINS: receivable.coINS,
         paidAMT: receivable.paidAMT,
       };
-      const countBalance = receivable.coINS + receivable.copay + receivable.deductible;
-      const clientBalance = countBalance / data.receivable.bills.length;
+      let countBalance = receivable.coINS + receivable.copay + receivable.deductible;
+      const clientBalance = countBalance == 0 ? 0 : countBalance / data.receivable.bills.length;
       const amountPaided = await this.createPayment(data, clientBalance, dto.user.id);
       /** update receivable total amount */
       const updateRecAmount = await this.claimService.setAmountRec(
@@ -96,6 +95,7 @@ export class ClaimPmtService {
       );
     }
     claimPmt.claimIds.push(dto.claimId);
+    claimPmt.paymentAmount -= sumPaid;
     await claimPmt.save();
     return this.sanitizer.sanitize(claimPmt);
     /** save the claim for saveing receivableS amountTotal */
@@ -169,6 +169,18 @@ export class ClaimPmtService {
         populate: {
           path: 'client',
         },
+      })
+      .populate({
+        path: 'claimIds',
+        populate: {
+          path: 'funder',
+        },
+      })
+      .populate({
+        path: 'claimIds',
+        populate: {
+          path: 'receivable.bills',
+        },
       });
     return this.sanitizer.sanitize(claimPmt);
   }
@@ -184,7 +196,7 @@ export class ClaimPmtService {
 
     while (data.paidAMT > 0) {
       const lowBill = this.findLowBill(bills);
-      if (lowBill.billedAmount === 0 || !lowBill) {
+      if (lowBill.billedAmount === 0) {
         return;
       }
       if (data.paidAMT >= lowBill.billedAmount) {
@@ -202,6 +214,9 @@ export class ClaimPmtService {
         data.paidAMT = 0;
       }
       bills = bills.filter((rec) => rec._id !== lowBill._id);
+      if (bills.length === 0) {
+        return;
+      }
     }
   }
   /** full billing pay */
@@ -211,6 +226,7 @@ export class ClaimPmtService {
     billingId: string,
     userId: string,
   ): Promise<number> {
+    console.log(clientBalance, 'clientBalanceclientBalanceclientBalance');
     const transactionInfo = {
       type: TxnType.PAYERPAID,
       date: new Date(),

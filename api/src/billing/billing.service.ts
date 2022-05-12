@@ -96,6 +96,7 @@ export class BillingService {
     const billing = await this.model.findById(_id);
     this.checkBilling(billing);
     billing.clientBalance += clientBalance;
+
     await billing.save();
     return this.sanitizer.sanitize(billing);
   }
