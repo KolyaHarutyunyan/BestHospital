@@ -11,14 +11,14 @@ export const InvoicePaymentDetails = () => {
 
    const dispatch = useDispatch();
 
-   // const invoicePaymentById = useSelector(
-   //    (state) => state.invoicePayment.invoicePaymentById
-   // );
+   const invoicePaymentById = useSelector(
+      (state) => state.invoicePayment.invoicePaymentById
+   );
 
    // temporary
-   const invoicePaymentById = dummyData.INVOICE_PAYMENTS.find(
-      (invoicePmt) => invoicePmt._id === params.id
-   );
+   // const invoicePaymentById = dummyData.INVOICE_PAYMENTS.find(
+   //    (invoicePmt) => invoicePmt._id === params.id
+   // );
    // end
 
    const loader = FindLoad("GET_INVOICE_PAYMENT_BY_ID");

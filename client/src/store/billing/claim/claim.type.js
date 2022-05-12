@@ -9,5 +9,5 @@ export const GET_CLAIM_BY_ID_SUCCESS = "GET_CLAIM_BY_ID_SUCCESS";
 /**generate Claim */
 export const GENERATE_CLAIM = "GENERATE_CLAIM";
 
-/**edit Claim Status */
-export const EDIT_CLAIM_STATUS = "EDIT_CLAIM_STATUS";
+/**close Claim */
+export const CLOSE_CLAIM = "CLOSE_CLAIM";

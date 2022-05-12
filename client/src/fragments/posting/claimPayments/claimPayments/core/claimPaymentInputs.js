@@ -1,27 +1,59 @@
 import React, { useState, useEffect } from "react";
 import { CreateChancel } from "@eachbase/components";
 import { claimPaymentsCoreStyle } from "./styles";
-import { makeEnum, FindLoad, isNotEmpty } from "@eachbase/utils";
+import {
+   makeEnum,
+   FindLoad,
+   isNotEmpty,
+   FindSuccess,
+   makeCapitalize,
+} from "@eachbase/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { FirstStepInputs, LastStepInputs } from "./common";
-import { claimPaymentActions } from "@eachbase/store";
+import {
+   claimPaymentActions,
+   fundingSourceActions,
+   httpRequestsOnSuccessActions,
+} from "@eachbase/store";
+import moment from "moment";
 
-export const ClaimPaymentInputs = ({
-   info,
-   activeStep,
-   handleStep,
-   closeModal,
-   fundingSource = [],
-}) => {
+export const ClaimPaymentInputs = ({ info, activeStep, handleStep, closeModal }) => {
    const classes = claimPaymentsCoreStyle();
-
-   useEffect(() => handleStep && handleStep("first"), []);
 
    const dispatch = useDispatch();
 
-   const loader = FindLoad("CREATE_CLAIM_PAYMENT");
+   const { funders } = useSelector((state) => state.fundingSource.fundingSourceList);
+   const mappedFunders = funders?.map((funder) => ({ id: funder.id, name: funder.name }));
 
-   const [inputs, setInputs] = useState(!!info ? { ...info } : {});
+   useEffect(() => {
+      handleStep && handleStep("first");
+      dispatch(fundingSourceActions.getFundingSource());
+   }, []);
+
+   const loader = !!info
+      ? FindLoad("EDIT_CLAIM_PAYMENT")
+      : FindLoad("CREATE_CLAIM_PAYMENT");
+   const success = !!info
+      ? FindSuccess("EDIT_CLAIM_PAYMENT")
+      : FindSuccess("CREATE_CLAIM_PAYMENT");
+
+   useEffect(() => {
+      if (!!success.length) {
+         closeModal();
+         dispatch(httpRequestsOnSuccessActions.removeSuccess(success[0].type));
+      }
+   }, [success]);
+
+   const [inputs, setInputs] = useState(
+      !!info
+         ? {
+              ...info,
+              fundingSource: info.fundingSource?.name,
+              paymentDate: moment(info.paymentDate).format("YYYY-MM-DD"),
+              paymentType: makeCapitalize(info.paymentType),
+           }
+         : {}
+   );
    const [error, setError] = useState("");
 
    const uploadedFiles = useSelector((state) => state.upload.uploadedInfo);
@@ -44,7 +76,7 @@ export const ClaimPaymentInputs = ({
          ? isNotEmpty(inputs.paymentDate) &&
            isNotEmpty(inputs.paymentType) &&
            isNotEmpty(inputs.checkNumber)
-         : isNotEmpty(inputs.amount) &&
+         : isNotEmpty(inputs.paymentAmount) &&
            isNotEmpty(inputs.fundingSource) &&
            isNotEmpty(inputs.paymentDate) &&
            isNotEmpty(inputs.paymentType) &&
@@ -61,8 +93,8 @@ export const ClaimPaymentInputs = ({
                : !isNotEmpty(inputs.checkNumber)
                ? "checkNumber"
                : ""
-            : !isNotEmpty(inputs.amount)
-            ? "amount"
+            : !isNotEmpty(inputs.paymentAmount)
+            ? "paymentAmount"
             : !isNotEmpty(inputs.fundingSource)
             ? "fundingSource"
             : !isNotEmpty(inputs.paymentDate)
@@ -79,16 +111,16 @@ export const ClaimPaymentInputs = ({
 
    const handleSubmit = () => {
       const claimPaymentData = {
-         paymentAmount: +inputs.amount,
+         paymentAmount: +inputs.paymentAmount,
          fundingSource: inputs.fundingSource,
          paymentDate: inputs.paymentDate,
          paymentType: makeEnum(inputs.paymentType),
-         paymentReference: inputs.checkNumber,
-         paymentDocument: uploadedFiles,
+         checkNumber: inputs.checkNumber,
+         paymentReference: uploadedFiles,
       };
 
       if (!!info) {
-         dispatch(claimPaymentActions.editClaimPayment(info.id, claimPaymentData));
+         dispatch(claimPaymentActions.editClaimPayment(info._id, claimPaymentData));
       } else {
          dispatch(claimPaymentActions.createClaimPayment(claimPaymentData));
       }
@@ -101,7 +133,7 @@ export const ClaimPaymentInputs = ({
                inputs={inputs}
                error={error}
                handleChange={handleChange}
-               fundingSource={fundingSource}
+               mappedFunders={mappedFunders}
                hasInfo={!!info}
             />
          )}

@@ -1,4 +1,5 @@
 import {
+   ADD_CLAIM_IN_CLAIM_PAYMENT,
    CREATE_CLAIM_PAYMENT,
    DELETE_CLAIM_PAYMENT,
    EDIT_CLAIM_PAYMENT,
@@ -45,5 +46,12 @@ export const editClaimPaymentStatus = (id, status, details) => {
    return {
       type: EDIT_CLAIM_PAYMENT_STATUS,
       payload: { id, status, details },
+   };
+};
+
+export const addClaimInClaimPayment = (id, body) => {
+   return {
+      type: ADD_CLAIM_IN_CLAIM_PAYMENT,
+      payload: { id, body },
    };
 };

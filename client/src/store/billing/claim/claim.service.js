@@ -8,10 +8,6 @@ export const claimService = {
    generateClaimService: (group, body) =>
       axios.post(`/claim/generate?group=${group}`, body, { auth: true }),
 
-   editClaimStatusService: (id, status, details) =>
-      axios.patch(
-         `/claim/${id}/setStatus?status=${status}?details=${details}`,
-         {},
-         { auth: true }
-      ),
+   closeClaimService: (id, details) =>
+      axios.post(`/claim/${id}/close?details=${details}`, {}, { auth: true }),
 };

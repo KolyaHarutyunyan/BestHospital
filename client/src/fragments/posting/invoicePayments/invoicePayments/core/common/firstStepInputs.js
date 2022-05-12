@@ -6,28 +6,33 @@ const smallInputStyles = { width: "215px", marginBottom: "-12px" };
 const inputStyles = { width: "446px", marginBottom: "-12px" };
 const errorStyles = { marginTop: "12px" };
 
-export const FirstStepInputs = ({ inputs, error, handleChange, client, hasInfo }) => {
+export const FirstStepInputs = ({
+   inputs,
+   error,
+   handleChange,
+   mappedClients,
+   hasInfo,
+}) => {
    return (
       <div>
          <ValidationInput
             styles={inputStyles}
             errorStyle={errorStyles}
             variant={"outlined"}
-            name={"amount"}
+            name={"paymentAmount"}
             type={"number"}
             label={"Amount*"}
             onChange={handleChange}
-            value={inputs.amount}
-            typeError={error === "amount" && ErrorText.field}
+            value={inputs.paymentAmount}
+            typeError={error === "paymentAmount" && ErrorText.field}
             disabled={hasInfo}
          />
-         {/* User */}
          <SelectInput
             name={"client"}
             label={"Client*"}
             handleSelect={handleChange}
             value={inputs.client}
-            list={client}
+            list={mappedClients}
             type={"id"}
             typeError={error === "client" && ErrorText.selectField}
             disabled={hasInfo}

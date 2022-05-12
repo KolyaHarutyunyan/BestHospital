@@ -1,4 +1,5 @@
 import {
+   ADD_INVOICE_IN_INVOICE_PAYMENT,
    CREATE_INVOICE_PAYMENT,
    DELETE_INVOICE_PAYMENT,
    EDIT_INVOICE_PAYMENT,
@@ -45,5 +46,12 @@ export const editInvoicePaymentStatus = (id, status, details) => {
    return {
       type: EDIT_INVOICE_PAYMENT_STATUS,
       payload: { id, status, details },
+   };
+};
+
+export const addInvoiceInInvoicePayment = (id, body) => {
+   return {
+      type: ADD_INVOICE_IN_INVOICE_PAYMENT,
+      payload: { id, body },
    };
 };

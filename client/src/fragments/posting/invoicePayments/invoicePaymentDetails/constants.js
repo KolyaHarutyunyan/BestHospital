@@ -1,10 +1,7 @@
 import { DownloadLink } from "@eachbase/components";
 import { hooksForTable, makeCapitalize, manageStatus } from "@eachbase/utils";
-import { invoicePaymentDetailsStyle } from "./styles";
 
 export function getInvoicePaymentDetails(invoicePayment) {
-   const classes = invoicePaymentDetailsStyle();
-
    const { client, status, paymentReference, totalBilled, totalCollected, paymentType } =
       invoicePayment || {};
 
@@ -21,17 +18,7 @@ export function getInvoicePaymentDetails(invoicePayment) {
       },
       {
          detailText: "Payment Reference:",
-         detail: (
-            <a
-               className={classes.paymentRefStyle}
-               href={`https://${paymentReference || "www.testlink.com"}`}
-               target="_blank"
-               rel="noreferrer noopener"
-               onClick={(event) => event.stopPropagation()}
-            >
-               {paymentReference || "www.testlink.com"}
-            </a>
-         ),
+         detail: paymentReference,
       },
       {
          detailText: "Total Billed:",

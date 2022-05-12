@@ -10,17 +10,22 @@ import {
    invoicePaymentActions,
 } from "@eachbase/store";
 
-export const AddInvoiceModalInputs = ({ activeStep, handleStep, closeModal }) => {
+export const AddInvoiceModalInputs = ({
+   activeStep,
+   handleStep,
+   closeModal,
+   invoicePaymentId,
+}) => {
    const classes = tableTheadTbodyStyle();
 
    useEffect(() => handleStep && handleStep("first"), []);
 
    const dispatch = useDispatch();
 
-   const addInvoiceLoader = FindLoad("ADD_INVOICE");
-   const addInvoiceSuccess = FindSuccess("ADD_INVOICE");
-   const loader = FindLoad("GET_INVOICES");
-   const success = FindSuccess("GET_INVOICES");
+   const addInvoiceInInvoicePmtLoader = FindLoad("ADD_INVOICE_IN_INVOICE_PAYMENT");
+   const addInvoiceInInvoicePmtSuccess = FindSuccess("ADD_INVOICE_IN_INVOICE_PAYMENT");
+   const getInvoicesLoader = FindLoad("GET_INVOICES");
+   const getInvoicesSuccess = FindSuccess("GET_INVOICES");
 
    const isFirst = activeStep === "first";
    const isLast = activeStep === "last";
@@ -37,40 +42,54 @@ export const AddInvoiceModalInputs = ({ activeStep, handleStep, closeModal }) =>
 
    const [selectedInvoiceId, setSelectedInvoiceId] = useState("");
    const [page, setPage] = useState(1);
-   const [invoicePmtIsFilled, setInvoicePmtIsFilled] = useState(false);
-   const [invoice, setInvoice] = useState({});
+   const [receivablesAreFilled, setReceivablesAreFilled] = useState(false);
+   const [filledReceivables, setFilledReceivables] = useState([]);
 
    useEffect(() => {
       dispatch(invoiceActions.getInvoices());
    }, []);
 
    useEffect(() => {
-      if (!!success.length) {
+      if (!!getInvoicesSuccess.length) {
          if (!pageIsChanging) setPage(1);
          handlePageChange(false);
          dispatch(httpRequestsOnSuccessActions.removeSuccess("GET_INVOICES"));
       }
-   }, [success]);
+   }, [getInvoicesSuccess]);
 
    useEffect(() => {
-      if (!!addInvoiceSuccess.length) {
+      if (!!addInvoiceInInvoicePmtSuccess.length) {
          closeModal();
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("ADD_INVOICE"));
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess("ADD_INVOICE_IN_INVOICE_PAYMENT")
+         );
       }
-   }, [addInvoiceSuccess]);
+   }, [addInvoiceInInvoicePmtSuccess]);
 
    function handleNext() {
       handleStep && handleStep("last");
    }
 
    function handleSubmit() {
-      // dispatch(invoicePaymentActions.addInvoice(invoice))
+      const invoiceDataInInvoicePmt = {
+         invoiceId: selectedInvoiceId,
+         receivables: filledReceivables.map((receivable) => ({
+            receivableId: receivable._id,
+            paidAMT: +receivable.paidAMT,
+         })),
+      };
+      dispatch(
+         invoicePaymentActions.addInvoiceInInvoicePayment(
+            invoicePaymentId,
+            invoiceDataInInvoicePmt
+         )
+      );
    }
 
    return (
       <div>
          {isFirst &&
-            (!!loader && !pageIsChanging ? (
+            (!!getInvoicesLoader && !pageIsChanging ? (
                <div className={classes.loaderContainerStyle}>
                   <Loader circleSize={50} />
                </div>
@@ -80,7 +99,7 @@ export const AddInvoiceModalInputs = ({ activeStep, handleStep, closeModal }) =>
                   invoicesQty={count}
                   page={page}
                   handleGetPage={setPage}
-                  invoicesLoader={loader}
+                  invoicesLoader={getInvoicesLoader}
                   triggerId={(claimId) => setSelectedInvoiceId(claimId)}
                />
             ))}
@@ -88,19 +107,19 @@ export const AddInvoiceModalInputs = ({ activeStep, handleStep, closeModal }) =>
             <ModalLastStepInput
                invoices={invoicesData}
                selectedInvoiceId={selectedInvoiceId}
-               triggerBool={(filled) => setInvoicePmtIsFilled(filled)}
-               triggerFilledInvoice={(filledInvoice) => setInvoice(filledInvoice)}
+               triggerBool={(filled) => setReceivablesAreFilled(filled)}
+               triggerReceivables={(receivables) => setFilledReceivables(receivables)}
             />
          )}
          <div className={classes.paginationAndActionsBoxStyle}>
             <CreateChancel
                classes={butnStyle}
-               loader={!!addInvoiceLoader.length}
+               loader={!!addInvoiceInInvoicePmtLoader.length}
                create={butnText}
                chancel={"Cancel"}
                onCreate={isLast ? handleSubmit : handleNext}
                onClose={closeModal}
-               disabled={isLast ? !invoicePmtIsFilled : !selectedInvoiceId}
+               disabled={isLast ? !receivablesAreFilled : !selectedInvoiceId}
             />
          </div>
       </div>

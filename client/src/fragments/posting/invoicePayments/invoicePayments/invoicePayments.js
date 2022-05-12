@@ -22,8 +22,6 @@ export const InvoicePaymentsFragment = ({
    page,
    handleGetPage,
    invoicePaymentsLoader,
-   clientsNames,
-   invoices,
 }) => {
    const classes = invoicePaymentsStyle();
 
@@ -133,8 +131,6 @@ export const InvoicePaymentsFragment = ({
                      activeStep={activeStep}
                      handleStep={setActiveStep}
                      closeModal={() => setOpen(false)}
-                     client={clientsNames}
-                     invoices={invoices}
                   />
                </BillingModalWrapper>
             }

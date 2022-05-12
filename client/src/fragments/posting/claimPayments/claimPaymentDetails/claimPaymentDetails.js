@@ -15,7 +15,7 @@ export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
    const [addingModalIsOpen, setAddingModalIsOpen] = useState(false);
    const [activeStep, setActiveStep] = useState("first");
 
-   const { _id, claims } = claimPaymentDetails || {};
+   const { _id, claimIds: claims } = claimPaymentDetails || {};
 
    const filteredDetails = getClaimPaymentDetails(claimPaymentDetails).filter(
       (claimPmtDtl) => !!claimPmtDtl.detail

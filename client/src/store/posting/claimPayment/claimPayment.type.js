@@ -17,3 +17,6 @@ export const DELETE_CLAIM_PAYMENT = "DELETE_CLAIM_PAYMENT";
 
 /**edit Claim Payment Status */
 export const EDIT_CLAIM_PAYMENT_STATUS = "EDIT_CLAIM_PAYMENT_STATUS";
+
+/**add Claim in Claim Payment */
+export const ADD_CLAIM_IN_CLAIM_PAYMENT = "ADD_CLAIM_IN_CLAIM_PAYMENT";

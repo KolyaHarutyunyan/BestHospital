@@ -10,17 +10,22 @@ import {
    httpRequestsOnSuccessActions,
 } from "@eachbase/store";
 
-export const AddClaimModalInputs = ({ activeStep, handleStep, closeModal }) => {
+export const AddClaimModalInputs = ({
+   activeStep,
+   handleStep,
+   closeModal,
+   claimPaymentId,
+}) => {
    const classes = tableTheadTbodyStyle();
 
    useEffect(() => handleStep && handleStep("first"), []);
 
    const dispatch = useDispatch();
 
-   const addClaimLoader = FindLoad("ADD_CLAIM");
-   const addClaimSuccess = FindSuccess("ADD_CLAIM");
-   const loader = FindLoad("GET_CLAIMS");
-   const success = FindSuccess("GET_CLAIMS");
+   const addClaimInClaimPmtLoader = FindLoad("ADD_CLAIM_IN_CLAIM_PAYMENT");
+   const addClaimInClaimPmtSuccess = FindSuccess("ADD_CLAIM_IN_CLAIM_PAYMENT");
+   const getClaimsLoader = FindLoad("GET_CLAIMS");
+   const getClaimsSuccess = FindSuccess("GET_CLAIMS");
 
    const isFirst = activeStep === "first";
    const isLast = activeStep === "last";
@@ -45,32 +50,47 @@ export const AddClaimModalInputs = ({ activeStep, handleStep, closeModal }) => {
    }, []);
 
    useEffect(() => {
-      if (!!success.length) {
+      if (!!getClaimsSuccess.length) {
          if (!pageIsChanging) setPage(1);
          handlePageChange(false);
          dispatch(httpRequestsOnSuccessActions.removeSuccess("GET_CLAIMS"));
       }
-   }, [success]);
+   }, [getClaimsSuccess]);
 
    useEffect(() => {
-      if (!!addClaimSuccess.length) {
+      if (!!addClaimInClaimPmtSuccess.length) {
          closeModal();
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("ADD_CLAIM"));
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess("ADD_CLAIM_IN_CLAIM_PAYMENT")
+         );
       }
-   }, [addClaimSuccess]);
+   }, [addClaimInClaimPmtSuccess]);
 
    function handleNext() {
       handleStep && handleStep("last");
    }
 
    function handleSubmit() {
-      // dispatch(claimPaymentActions.addClaim(filledReceivables))
+      const claimDataInClaimPmt = {
+         claimId: selectedClaimId,
+         receivables: filledReceivables.map((receivable) => ({
+            receivableId: receivable._id,
+            allowedAMT: +receivable.allowedAMT,
+            deductible: +receivable.deductible,
+            copay: +receivable.copay,
+            coINS: +receivable.coINS,
+            paidAMT: +receivable.paidAMT,
+         })),
+      };
+      dispatch(
+         claimPaymentActions.addClaimInClaimPayment(claimPaymentId, claimDataInClaimPmt)
+      );
    }
 
    return (
       <div>
          {isFirst &&
-            (!!loader && !pageIsChanging ? (
+            (!!getClaimsLoader && !pageIsChanging ? (
                <div className={classes.loaderContainerStyle}>
                   <Loader circleSize={50} />
                </div>
@@ -80,7 +100,7 @@ export const AddClaimModalInputs = ({ activeStep, handleStep, closeModal }) => {
                   claimsQty={count}
                   page={page}
                   handleGetPage={setPage}
-                  claimsLoader={loader}
+                  claimsLoader={getClaimsLoader}
                   triggerId={(claimId) => setSelectedClaimId(claimId)}
                />
             ))}
@@ -95,7 +115,7 @@ export const AddClaimModalInputs = ({ activeStep, handleStep, closeModal }) => {
          <div className={classes.paginationAndActionsBoxStyle}>
             <CreateChancel
                classes={butnStyle}
-               loader={!!addClaimLoader.length}
+               loader={!!addClaimInClaimPmtLoader.length}
                create={butnText}
                chancel={"Cancel"}
                onCreate={isLast ? handleSubmit : handleNext}

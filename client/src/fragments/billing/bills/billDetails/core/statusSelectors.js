@@ -135,7 +135,7 @@ export const StatusSelectors = ({ billId, claim = "", invoice = "", bill = "" })
             <UserInputsDropdown
                dropdownClassName={"statusSelectForBill"}
                label={"Invoice Status"}
-               dropdownOptions={enumValues.INVOICE_STATUSES}
+               dropdownOptions={enumValues.BILLING_INVOICE_STATUSES}
                onPass={(selected) =>
                   handleStatus(
                      selected,

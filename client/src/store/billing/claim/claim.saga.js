@@ -6,7 +6,7 @@ import {
 } from "@eachbase/store";
 import { claimService } from "./claim.service";
 import {
-   EDIT_CLAIM_STATUS,
+   CLOSE_CLAIM,
    GENERATE_CLAIM,
    GET_CLAIMS,
    GET_CLAIMS_SUCCESS,
@@ -70,19 +70,19 @@ function* generateClaim(action) {
    }
 }
 
-function* editClaimStatus(action) {
+function* closeClaim(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    try {
       yield call(
-         claimService.editClaimStatusService,
+         claimService.closeClaimService,
          action.payload.id,
-         action.payload.status,
          action.payload.details
       );
-      yield put({
-         type: GET_CLAIM_BY_ID,
-      });
+      window.location.replace(`/claim/${action.payload.id}`);
+      // yield put({
+      //    type: GET_CLAIM_BY_ID,
+      // });                                 // esi xi chi ashxatum ?
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (error) {
@@ -95,5 +95,5 @@ export const watchClaim = function* watchClaimSaga() {
    yield takeLatest(GET_CLAIMS, getClaims);
    yield takeLatest(GET_CLAIM_BY_ID, getClaimById);
    yield takeLatest(GENERATE_CLAIM, generateClaim);
-   yield takeLatest(EDIT_CLAIM_STATUS, editClaimStatus);
+   yield takeLatest(CLOSE_CLAIM, closeClaim);
 };

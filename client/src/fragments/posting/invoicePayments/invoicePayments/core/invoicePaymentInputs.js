@@ -1,33 +1,72 @@
 import React, { useState, useEffect } from "react";
 import { CreateChancel } from "@eachbase/components";
 import { invoicePaymentsCoreStyle } from "./styles";
-import { makeEnum, FindLoad, isNotEmpty } from "@eachbase/utils";
+import {
+   makeEnum,
+   FindLoad,
+   isNotEmpty,
+   FindSuccess,
+   makeCapitalize,
+} from "@eachbase/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { FirstStepInputs, LastStepInputs } from "./common";
-import { invoicePaymentActions } from "@eachbase/store";
+import {
+   clientActions,
+   httpRequestsOnSuccessActions,
+   invoiceActions,
+   invoicePaymentActions,
+} from "@eachbase/store";
+import moment from "moment";
 
-export const InvoicePaymentInputs = ({
-   info,
-   activeStep,
-   handleStep,
-   closeModal,
-   client = [],
-   invoices = [],
-}) => {
+export const InvoicePaymentInputs = ({ info, activeStep, handleStep, closeModal }) => {
    const classes = invoicePaymentsCoreStyle();
-
-   useEffect(() => handleStep("first"), []);
 
    const dispatch = useDispatch();
 
-   const loader = FindLoad("CREATE_INVOICE_PAYMENT");
+   const { clients } = useSelector((state) => state.client.clientList);
+   const invoices = useSelector((state) => state.invoice.invoices);
 
-   const [inputs, setInputs] = useState(!!info ? { ...info } : {});
+   const mappedClients = clients?.map((client) => ({
+      id: client.id,
+      name: `${client.firstName} ${client.lastName}`,
+   }));
+
+   useEffect(() => {
+      handleStep && handleStep("first");
+      dispatch(clientActions.getClients());
+      dispatch(invoiceActions.getInvoices());
+   }, []);
+
+   const loader = !!info
+      ? FindLoad("EDIT_INVOICE_PAYMENT")
+      : FindLoad("CREATE_INVOICE_PAYMENT");
+   const success = !!info
+      ? FindSuccess("EDIT_INVOICE_PAYMENT")
+      : FindSuccess("CREATE_INVOICE_PAYMENT");
+
+   useEffect(() => {
+      if (!!success.length) {
+         closeModal();
+         dispatch(httpRequestsOnSuccessActions.removeSuccess(success[0].type));
+      }
+   }, [success]);
+
+   const [inputs, setInputs] = useState(
+      !!info
+         ? {
+              ...info,
+              client: `${info.client?.firstName} ${info.client?.lastName}`,
+              paymentDate: moment(info.paymentDate).format("YYYY-MM-DD"),
+              paymentType: makeCapitalize(info.paymentType),
+           }
+         : {}
+   );
    const [error, setError] = useState("");
 
    const filteredInvoices = invoices.filter(
-      (invoice) => invoice.client === inputs.client
+      (invoice) => invoice.status === "SUBMITTED" && invoice.client === inputs.client
    );
+
    const uploadedFiles = useSelector((state) => state.upload.uploadedInfo);
 
    const isFirst = activeStep === "first";
@@ -48,7 +87,7 @@ export const InvoicePaymentInputs = ({
          ? isNotEmpty(inputs.paymentDate) &&
            isNotEmpty(inputs.paymentType) &&
            isNotEmpty(inputs.checkNumber)
-         : isNotEmpty(inputs.amount) &&
+         : isNotEmpty(inputs.paymentAmount) &&
            isNotEmpty(inputs.client) &&
            isNotEmpty(inputs.paymentDate) &&
            isNotEmpty(inputs.paymentType) &&
@@ -65,8 +104,8 @@ export const InvoicePaymentInputs = ({
                : !isNotEmpty(inputs.checkNumber)
                ? "checkNumber"
                : ""
-            : !isNotEmpty(inputs.amount)
-            ? "amount"
+            : !isNotEmpty(inputs.paymentAmount)
+            ? "paymentAmount"
             : !isNotEmpty(inputs.client)
             ? "client"
             : !isNotEmpty(inputs.paymentDate)
@@ -83,13 +122,13 @@ export const InvoicePaymentInputs = ({
 
    const handleSubmit = () => {
       const invoicePaymentData = {
-         paymentAmount: +inputs.amount,
-         payer: inputs.client,
+         paymentAmount: +inputs.paymentAmount,
+         client: inputs.client,
          invoice: filteredInvoices[0]?._id,
          paymentDate: inputs.paymentDate,
          paymentType: makeEnum(inputs.paymentType),
-         paymentReference: inputs.checkNumber,
-         paymentDocument: uploadedFiles,
+         checkNumber: inputs.checkNumber,
+         eob: "626f6a935899ac54a264f56f", // temporary id for file
       };
 
       if (!!info) {
@@ -106,7 +145,7 @@ export const InvoicePaymentInputs = ({
                inputs={inputs}
                error={error}
                handleChange={handleChange}
-               client={client}
+               mappedClients={mappedClients}
                hasInfo={!!info}
             />
          )}

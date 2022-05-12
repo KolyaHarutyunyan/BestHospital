@@ -12,11 +12,13 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
 
    const [open, setOpen] = useState(false);
 
-   const { _id, receivable, status } = claimDetails || {};
+   const { _id, receivable, status, details } = claimDetails || {};
 
    const filteredDetails = getClaimDetails(claimDetails).filter(
       (claimDtl) => !!claimDtl.detail
    );
+
+   const closedClaimDesc = `This Claim has been deleted for ${details}`;
 
    return (
       <>
@@ -54,11 +56,7 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
             {status === "CLOSED" && (
                <div className={classes.claimInfoBoxStyle}>
                   <img src={Images.claimInfo} alt="" />
-                  <p className={classes.claimInfoStyle}>
-                     This Claim has been deleted for Lorem Lorem Ipsum is simply dummy
-                     text of the printing and typesetting industry. Lorem Ipsum has been
-                     the industry’s standard dummy text ever since the 150.
-                  </p>
+                  <p className={classes.claimInfoStyle}>{closedClaimDesc}</p>
                </div>
             )}
             <div className={classes.claimDetailsSecondPartStyle}>
