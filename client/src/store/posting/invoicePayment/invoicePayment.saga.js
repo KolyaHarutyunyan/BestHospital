@@ -21,7 +21,10 @@ function* getInvoicePayments(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    try {
-      const res = yield call(invoicePaymentService.getInvoicePaymentsService);
+      const res = yield call(
+         invoicePaymentService.getInvoicePaymentsService,
+         action?.payload?.data
+      );
       yield put({
          type: GET_INVOICE_PAYMENTS_SUCCESS,
          payload: { invoicePayments: res.data },
@@ -32,6 +35,7 @@ function* getInvoicePayments(action) {
       yield put({
          type: GET_INVOICE_PAYMENTS_SUCCESS,
          payload: { invoicePayments: [] },
+         // payload: {invoicePayments: { invoicePayments: [], count: 0 } },
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type));
@@ -64,7 +68,6 @@ function* createInvoicePayment(action) {
    try {
       yield call(invoicePaymentService.createInvoicePaymentService, action.payload.body);
       window.location.replace("/invoicePayments");
-
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (error) {
@@ -84,6 +87,7 @@ function* editInvoicePayment(action) {
       );
       yield put({
          type: GET_INVOICE_PAYMENT_BY_ID,
+         payload: { id: action.payload.id },
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
@@ -100,6 +104,7 @@ function* deleteInvoicePayment(action) {
       yield call(invoicePaymentService.deleteInvoicePaymentService, action.payload.id);
       yield put({
          type: GET_INVOICE_PAYMENT_BY_ID,
+         payload: { id: action.payload.id },
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
@@ -121,6 +126,7 @@ function* editInvoicePaymentStatus(action) {
       );
       yield put({
          type: GET_INVOICE_PAYMENT_BY_ID,
+         payload: { id: action.payload.id },
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
@@ -139,8 +145,10 @@ function* addInvoiceInInvoicePayment(action) {
          action.payload.id,
          action.payload.body
       );
-      window.location.replace(`/invoicePayment/${action.payload.id}`);
-
+      yield put({
+         type: GET_INVOICE_PAYMENT_BY_ID,
+         payload: { id: action.payload.id },
+      });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (error) {

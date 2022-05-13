@@ -8,9 +8,10 @@ import {
    GET_INVOICE_PAYMENT_BY_ID,
 } from "./invoicePayment.type";
 
-export const getInvoicePayments = () => {
+export const getInvoicePayments = (data) => {
    return {
       type: GET_INVOICE_PAYMENTS,
+      payload: { data },
    };
 };
 

@@ -1,7 +1,14 @@
 import axios from "axios";
 
 export const invoicePaymentService = {
-   getInvoicePaymentsService: () => axios.get("/invoice-pmt", { auth: true }),
+   getInvoicePaymentsService: (data) => {
+      if (data) {
+         return axios.get(`/invoice-pmt/?limit=${data.limit}&&skip=${data.skip}`, {
+            auth: true,
+         });
+      }
+      return axios.get("/invoice-pmt", { auth: true });
+   },
 
    getInvoicePaymentByIdService: (id) => axios.get(`/invoice-pmt/${id}`, { auth: true }),
 

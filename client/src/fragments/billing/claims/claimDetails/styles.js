@@ -17,7 +17,7 @@ export const claimDetailsStyle = makeStyles(() => ({
       alignItems: "center",
       marginBottom: "24px",
    },
-   closeClaimButnStyle: {
+   closeButnStyle: {
       border: "none",
       outline: "none",
       width: "126px",
@@ -27,6 +27,11 @@ export const claimDetailsStyle = makeStyles(() => ({
       fontSize: "14px",
       fontWeight: 600,
       color: Colors.BackgroundWhite,
+      "&.closed": {
+         backgroundColor: Colors.BackgroundWater,
+         color: Colors.ThemeRed,
+         cursor: "default",
+      },
    },
    claimDetailsFirstPartStyle: {
       width: "100%",

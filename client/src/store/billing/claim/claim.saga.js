@@ -18,7 +18,7 @@ function* getClaims(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    try {
-      const res = yield call(claimService.getClaimsService);
+      const res = yield call(claimService.getClaimsService, action?.payload?.data);
       yield put({
          type: GET_CLAIMS_SUCCESS,
          payload: { claims: res.data },
@@ -29,6 +29,7 @@ function* getClaims(action) {
       yield put({
          type: GET_CLAIMS_SUCCESS,
          payload: { claims: [] },
+         // payload: { claims: { claims: [], count: 0 } },
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type));
@@ -79,10 +80,10 @@ function* closeClaim(action) {
          action.payload.id,
          action.payload.details
       );
-      window.location.replace(`/claim/${action.payload.id}`);
-      // yield put({
-      //    type: GET_CLAIM_BY_ID,
-      // });                                 // esi xi chi ashxatum ?
+      yield put({
+         type: GET_CLAIM_BY_ID,
+         payload: { id: action.payload.id },
+      });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (error) {

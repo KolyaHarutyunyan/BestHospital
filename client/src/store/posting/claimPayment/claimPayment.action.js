@@ -8,9 +8,10 @@ import {
    GET_CLAIM_PAYMENT_BY_ID,
 } from "./claimPayment.type";
 
-export const getClaimPayments = () => {
+export const getClaimPayments = (data) => {
    return {
       type: GET_CLAIM_PAYMENTS,
+      payload: { data },
    };
 };
 

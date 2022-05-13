@@ -1,8 +1,9 @@
 import { CLOSE_CLAIM, GENERATE_CLAIM, GET_CLAIMS, GET_CLAIM_BY_ID } from "./claim.type";
 
-export const getClaims = () => {
+export const getClaims = (data) => {
    return {
       type: GET_CLAIMS,
+      payload: { data },
    };
 };
 

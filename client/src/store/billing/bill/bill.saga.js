@@ -22,16 +22,11 @@ function* getBills(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    try {
-      const res = yield call(
-         billService.getBillsService,
-         action?.payload?.data
-      );
-
+      const res = yield call(billService.getBillsService, action?.payload?.data);
       yield put({
          type: GET_BILLS_SUCCESS,
          payload: { bills: res.data },
       });
-
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (error) {
@@ -39,7 +34,6 @@ function* getBills(action) {
          type: GET_BILLS_SUCCESS,
          payload: { bills: { bills: [], count: 0 } },
       });
-
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type));
    }
@@ -54,12 +48,10 @@ function* getBillById(action) {
          action.payload.id,
          action.payload?.data
       );
-
       yield put({
          type: GET_BILL_BY_ID_SUCCESS,
          payload: { billById: res.data },
       });
-
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (error) {
@@ -90,12 +82,10 @@ function* editBillStatus(action) {
          action.payload.id,
          action.payload.status
       );
-
       yield put({
          type: GET_BILL_BY_ID,
          payload: { id: action.payload.id },
       });
-
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (error) {
@@ -113,12 +103,10 @@ function* editBillClaimStatus(action) {
          action.payload.id,
          action.payload.status
       );
-
       yield put({
          type: GET_BILL_BY_ID,
          payload: { id: action.payload.id },
       });
-
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (error) {
@@ -136,12 +124,10 @@ function* editBillInvoiceStatus(action) {
          action.payload.id,
          action.payload.status
       );
-
       yield put({
          type: GET_BILL_BY_ID,
          payload: { id: action.payload.id },
       });
-
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (error) {
@@ -159,12 +145,10 @@ function* addBillTransaction(action) {
          action.payload.id,
          action.payload.body
       );
-
       yield put({
          type: GET_BILL_BY_ID,
          payload: { id: action.payload.id },
       });
-
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (error) {
@@ -182,12 +166,10 @@ function* abortBillTransaction(action) {
          action.payload.id,
          action.payload.tsxId
       );
-
       yield put({
          type: GET_BILL_BY_ID,
          payload: { id: action.payload.id },
       });
-
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (error) {

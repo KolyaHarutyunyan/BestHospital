@@ -1,7 +1,13 @@
 import React, { useContext, useState } from "react";
 import { claimPaymentDetailsStyle } from "./styles";
 import { AddButton, NoItemText } from "@eachbase/components";
-import { DrawerContext, getLimitedVal, Images } from "@eachbase/utils";
+import {
+   DrawerContext,
+   getLimitedVal,
+   hooksForTable,
+   Images,
+   useWidth,
+} from "@eachbase/utils";
 import { ClaimPaymentClaimTable, ClaimPaymentModals } from "./core";
 import { getClaimPaymentDetails } from "./constants";
 
@@ -20,6 +26,14 @@ export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
    const filteredDetails = getClaimPaymentDetails(claimPaymentDetails).filter(
       (claimPmtDtl) => !!claimPmtDtl.detail
    );
+
+   const width = useWidth();
+
+   const { getTextDependsOnWidth } = hooksForTable;
+
+   function getDetailDisplay(detail) {
+      return getTextDependsOnWidth(width, 1480, detail, 14);
+   }
 
    return (
       <>
@@ -57,7 +71,7 @@ export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
                      {filteredDetails.map((item, index) => (
                         <li key={index} className={open ? "narrow" : ""}>
                            <span>
-                              {item.detailText} <em> {item.detail} </em>
+                              {item.detailText} <em> {getDetailDisplay(item.detail)} </em>
                            </span>
                         </li>
                      ))}

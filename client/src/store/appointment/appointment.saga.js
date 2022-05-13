@@ -144,10 +144,7 @@ function* deleteAppointmentSaga(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    try {
-      yield call(
-         appointmentService.deleteAppointmentService,
-         action.payload.id
-      );
+      yield call(appointmentService.deleteAppointmentService, action.payload.id);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       // yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({ type: GET_APPOINTMENT });
@@ -166,7 +163,8 @@ function* setAppointmentStatusSaga(action) {
       yield call(
          appointmentService.setAppointmentStatusService,
          action.payload.id,
-         action.payload.info
+         action.payload.statusName,
+         action.payload.reason
       );
 
       // const res = yield call(appointmentService.getAppointmentService);

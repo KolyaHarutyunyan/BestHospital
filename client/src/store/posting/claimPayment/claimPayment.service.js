@@ -1,7 +1,14 @@
 import axios from "axios";
 
 export const claimPaymentService = {
-   getClaimPaymentsService: () => axios.get("/claim-pmt", { auth: true }),
+   getClaimPaymentsService: (data) => {
+      if (data) {
+         return axios.get(`/claim-pmt/?limit=${data.limit}&&skip=${data.skip}`, {
+            auth: true,
+         });
+      }
+      return axios.get("/claim-pmt", { auth: true });
+   },
 
    getClaimPaymentByIdService: (id) => axios.get(`/claim-pmt/${id}`, { auth: true }),
 

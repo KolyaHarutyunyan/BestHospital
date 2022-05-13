@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { invoiceDetailsStyle } from "./styles";
 import { NoItemText } from "@eachbase/components";
-import { DrawerContext, getLimitedVal } from "@eachbase/utils";
+import { DrawerContext, getLimitedVal, hooksForTable, useWidth } from "@eachbase/utils";
 import { InvoiceReceivableTable } from "./core";
 import { getInvoiceDetails } from "./constants";
 
@@ -15,6 +15,14 @@ export const InvoiceDetailsFragment = ({ invoiceDetails }) => {
    const filteredDetails = getInvoiceDetails(invoiceDetails).filter(
       (invoiceDtl) => !!invoiceDtl.detail
    );
+
+   const width = useWidth();
+
+   const { getTextDependsOnWidth } = hooksForTable;
+
+   function getDetailDisplay(detail) {
+      return getTextDependsOnWidth(width, 1480, detail, 14);
+   }
 
    return (
       <>
@@ -35,7 +43,7 @@ export const InvoiceDetailsFragment = ({ invoiceDetails }) => {
                      {filteredDetails.map((item, index) => (
                         <li key={index} className={drawerOpen ? "narrow" : ""}>
                            <span>
-                              {item.detailText} <em> {item.detail} </em>
+                              {item.detailText} <em> {getDetailDisplay(item.detail)} </em>
                            </span>
                         </li>
                      ))}
