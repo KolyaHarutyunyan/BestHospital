@@ -13,9 +13,7 @@ export function getFilteredNotClaimedBills(
          ? notClaimedBills
          : selFunder !== "All"
          ? notClaimedBills.filter(
-              (bill) =>
-                 `${bill?.funder?.firstName} ${bill?.funder?.lastName}`.toLowerCase() ===
-                 selFunder.toLowerCase()
+              (bill) => bill?.payer?.name.toLowerCase() === selFunder.toLowerCase()
            )
          : selClient !== "All"
          ? notClaimedBills.filter(

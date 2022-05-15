@@ -10,13 +10,13 @@ export const CloseClaimInputs = ({ closeModal, claimId }) => {
 
    const dispatch = useDispatch();
 
-   const closingClaimLoader = FindLoad("EDIT_CLAIM_STATUS");
-   const closingClaimSuccess = FindSuccess("EDIT_CLAIM_STATUS");
+   const closingClaimLoader = FindLoad("CLOSE_CLAIM");
+   const closingClaimSuccess = FindSuccess("CLOSE_CLAIM");
 
    useEffect(() => {
       if (!!closingClaimSuccess.length) {
          closeModal();
-         httpRequestsOnSuccessActions.removeSuccess("EDIT_CLAIM_STATUS");
+         httpRequestsOnSuccessActions.removeSuccess("CLOSE_CLAIM");
       }
    }, [closingClaimSuccess]);
 
@@ -30,9 +30,7 @@ export const CloseClaimInputs = ({ closeModal, claimId }) => {
 
    function handleSubmit() {
       if (isNotEmpty(closingComment)) {
-         dispatch(
-            claimActions.editClaimStatus(claimId, "CLOSED", closingComment)
-         );
+         dispatch(claimActions.closeClaim(claimId, closingComment));
       } else {
          setError("closingComment");
       }

@@ -3,21 +3,22 @@ import { Images, isNotEmpty } from "@eachbase/utils";
 import { invoiceModalTHeadTBodyStyle } from "./styles";
 import { EditablePaymentInput } from "@eachbase/components";
 
-export const InvoicePaymentModalTBody = ({ triggerBool, triggerInputValue }) => {
+export const InvoicePaymentModalTBody = ({ receivable, passReceivable }) => {
    const classes = invoiceModalTHeadTBodyStyle();
 
    const [edit, setEdit] = useState(false);
-   const [paidAmount, setPaidAmount] = useState("");
+   const [paidAMT, setPaidAMT] = useState("");
 
-   const inputIsFilled = isNotEmpty(paidAmount);
-
-   useEffect(() => {
-      triggerBool && triggerBool(inputIsFilled);
-   }, [inputIsFilled]);
+   const inputIsFilled = isNotEmpty(paidAMT);
 
    useEffect(() => {
-      triggerInputValue && triggerInputValue(paidAmount);
-   }, [paidAmount]);
+      passReceivable &&
+         passReceivable({
+            ...receivable,
+            filled: inputIsFilled,
+            paidAMT,
+         });
+   }, [inputIsFilled, paidAMT]);
 
    const actionImageUrl = inputIsFilled ? Images.successGreen : Images.success;
 
@@ -28,7 +29,7 @@ export const InvoicePaymentModalTBody = ({ triggerBool, triggerInputValue }) => 
          <div className={`${classes.tbodyRowStyle} ${edit ? "active" : ""}`}>
             <EditablePaymentInput
                inputClassName={classes.paidAmountInputStyle}
-               triggerInputValue={(paidAmount) => setPaidAmount(paidAmount)}
+               triggerInputValue={(paidAMT) => setPaidAMT(paidAMT)}
                triggerEditBool={(editBool) => setEdit(editBool)}
             />
             <div className={classes.actionBoxStyle}>{action}</div>

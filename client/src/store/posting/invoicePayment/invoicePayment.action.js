@@ -1,4 +1,5 @@
 import {
+   ADD_INVOICE_IN_INVOICE_PAYMENT,
    CREATE_INVOICE_PAYMENT,
    DELETE_INVOICE_PAYMENT,
    EDIT_INVOICE_PAYMENT,
@@ -7,9 +8,10 @@ import {
    GET_INVOICE_PAYMENT_BY_ID,
 } from "./invoicePayment.type";
 
-export const getInvoicePayments = () => {
+export const getInvoicePayments = (data) => {
    return {
       type: GET_INVOICE_PAYMENTS,
+      payload: { data },
    };
 };
 
@@ -45,5 +47,12 @@ export const editInvoicePaymentStatus = (id, status, details) => {
    return {
       type: EDIT_INVOICE_PAYMENT_STATUS,
       payload: { id, status, details },
+   };
+};
+
+export const addInvoiceInInvoicePayment = (id, body) => {
+   return {
+      type: ADD_INVOICE_IN_INVOICE_PAYMENT,
+      payload: { id, body },
    };
 };

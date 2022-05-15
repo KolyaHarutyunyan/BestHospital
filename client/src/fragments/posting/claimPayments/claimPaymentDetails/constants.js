@@ -3,7 +3,7 @@ import { hooksForTable, makeCapitalize, manageStatus } from "@eachbase/utils";
 import { claimPaymentDetailsStyle } from "./styles";
 
 export function getClaimPaymentDetails(claimPayment) {
-   const { funder, paymentDate, paymentReference, paymentType, paymentAmount } =
+   const { fundingSource, paymentDate, paymentReference, paymentType, paymentAmount } =
       claimPayment || {};
 
    const { addSignToValueFromStart, getValueByFixedNumber, handleCreatedAtDate } =
@@ -14,7 +14,7 @@ export function getClaimPaymentDetails(claimPayment) {
    const claimPaymentDetails = [
       {
          detailText: "Funding Source:",
-         detail: !!funder && makeCapitalize(`${funder?.firstName} ${funder?.lastName}`),
+         detail: !!fundingSource && makeCapitalize(fundingSource?.name),
       },
       {
          detailText: "Payment Date:",

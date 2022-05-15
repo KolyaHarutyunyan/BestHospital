@@ -22,7 +22,6 @@ export const ClaimPaymentsFragment = ({
    page,
    handleGetPage,
    claimPaymentsLoader,
-   fundersNames,
 }) => {
    const classes = claimPaymentsStyle();
 
@@ -60,8 +59,7 @@ export const ClaimPaymentsFragment = ({
       );
 
    const payorsNames = claimPayments.map(
-      (claimPayment) =>
-         `${claimPayment?.funder?.firstName} ${claimPayment?.funder?.lastName}`
+      (claimPayment) => claimPayment?.fundingSource?.name
    );
    const clientsNames = claimPayments.map(
       (claimPayment) =>
@@ -141,7 +139,6 @@ export const ClaimPaymentsFragment = ({
                      activeStep={activeStep}
                      handleStep={setActiveStep}
                      closeModal={() => setOpen(false)}
-                     fundingSource={fundersNames}
                   />
                </BillingModalWrapper>
             }

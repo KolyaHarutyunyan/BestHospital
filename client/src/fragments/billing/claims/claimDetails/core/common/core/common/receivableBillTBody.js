@@ -6,10 +6,12 @@ import { DownloadLink } from "@eachbase/components";
 export const ReceivableBillTBody = ({ receivableBill }) => {
    const classes = receivableBillTHeadTBodyStyle();
 
-   const { showDashIfEmpty } = hooksForTable;
+   const { showDashIfEmpty, handleCreatedAtDate } = hooksForTable;
 
    const receivableBillId = showDashIfEmpty(receivableBill._id);
-   const dateOfService = showDashIfEmpty(receivableBill.dateOfService);
+   const dateOfService = showDashIfEmpty(
+      handleCreatedAtDate(receivableBill.dateOfService)
+   );
    const timeOfService = showDashIfEmpty(manageStatus(receivableBill.timeOfService));
    const units = showDashIfEmpty(receivableBill.units);
    const signature = receivableBill.signature;

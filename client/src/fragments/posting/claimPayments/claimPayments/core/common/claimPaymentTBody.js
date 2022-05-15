@@ -32,12 +32,11 @@ export const ClaimPaymentTBody = ({ claimPayments = [] }) => {
    return (
       <div className={classes.tbodyContainerStyle}>
          {claimPayments.map((claimPayment, index) => {
-            const claimPaymentId = getTableData(claimPayment._id);
-            const funderFirstName = claimPayment?.funder?.firstName;
-            const funderLastName = claimPayment?.funder?.lastName;
-            const funder = getFullName(funderFirstName, funderLastName, getTableData);
             const clientFirstName = claimPayment?.client?.firstName;
             const clientLastName = claimPayment?.client?.firstName;
+
+            const claimPaymentId = getTableData(claimPayment._id);
+            const funder = getTableData(claimPayment?.fundingSource?.name);
             const client = getFullName(clientFirstName, clientLastName, getTableData);
             const totalBilled = getTableData(
                addSignToValueFromStart(getValueByFixedNumber(claimPayment.totalBilled))

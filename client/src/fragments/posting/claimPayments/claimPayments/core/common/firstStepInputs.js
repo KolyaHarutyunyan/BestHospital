@@ -1,6 +1,6 @@
 import React from "react";
 import { SelectInput, ValidationInput } from "@eachbase/components";
-import { enumValues, ErrorText } from "@eachbase/utils";
+import { enumValues, ErrorText, makeCapitalize } from "@eachbase/utils";
 
 const smallInputStyles = { width: "215px", marginBottom: "-12px" };
 const inputStyles = { width: "446px", marginBottom: "-12px" };
@@ -10,7 +10,7 @@ export const FirstStepInputs = ({
    inputs,
    error,
    handleChange,
-   fundingSource,
+   mappedFunders,
    hasInfo,
 }) => {
    return (
@@ -19,12 +19,12 @@ export const FirstStepInputs = ({
             styles={inputStyles}
             errorStyle={errorStyles}
             variant={"outlined"}
-            name={"amount"}
+            name={"paymentAmount"}
             type={"number"}
             label={"Amount*"}
             onChange={handleChange}
-            value={inputs.amount}
-            typeError={error === "amount" && ErrorText.field}
+            value={inputs.paymentAmount}
+            typeError={error === "paymentAmount" && ErrorText.field}
             disabled={hasInfo}
          />
          <SelectInput
@@ -32,7 +32,7 @@ export const FirstStepInputs = ({
             label={"Funding Source*"}
             handleSelect={handleChange}
             value={inputs.fundingSource}
-            list={fundingSource}
+            list={mappedFunders}
             type={"id"}
             typeError={error === "fundingSource" && ErrorText.selectField}
             disabled={hasInfo}

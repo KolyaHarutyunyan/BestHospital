@@ -35,9 +35,7 @@ export const BillsFragment = ({
    const clientsNames = bills.map(
       (bill) => `${bill?.client?.firstName} ${bill?.client?.lastName}`
    );
-   const payorsNames = bills.map(
-      (bill) => `${bill?.funder?.firstName} ${bill?.funder?.lastName}`
-   );
+   const payorsNames = bills.map((bill) => bill?.payer?.name);
 
    const billsWithFilters = getFilteredBills(
       bills,

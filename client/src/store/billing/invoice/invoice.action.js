@@ -6,9 +6,10 @@ import {
    GET_INVOICE_BY_ID,
 } from "./invoice.type";
 
-export const getInvoices = () => {
+export const getInvoices = (data) => {
    return {
       type: GET_INVOICES,
+      payload: { data },
    };
 };
 

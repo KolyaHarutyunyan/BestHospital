@@ -1,7 +1,13 @@
 import React, { useContext, useState } from "react";
 import { claimDetailsStyle } from "./styles";
 import { BillingModalWrapper, NoItemText, SimpleModal } from "@eachbase/components";
-import { DrawerContext, getLimitedVal, Images } from "@eachbase/utils";
+import {
+   DrawerContext,
+   getLimitedVal,
+   hooksForTable,
+   Images,
+   useWidth,
+} from "@eachbase/utils";
 import { ClaimReceivableTable, CloseClaimInputs } from "./core";
 import { getClaimDetails } from "./constants";
 
@@ -12,11 +18,24 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
 
    const [open, setOpen] = useState(false);
 
-   const { _id, receivable, status } = claimDetails || {};
+   const { _id, receivable, status, details } = claimDetails || {};
 
    const filteredDetails = getClaimDetails(claimDetails).filter(
       (claimDtl) => !!claimDtl.detail
    );
+
+   const claimIsClosed = status === "CLOSED";
+   const closedClaimDesc = `This Claim has been deleted for ${details}`;
+   const closeButnStyle = `${classes.closeButnStyle} ${claimIsClosed ? "closed" : ""}`;
+   const closeButnText = claimIsClosed ? "Closed" : "Close Claim";
+
+   const width = useWidth();
+
+   const { getTextDependsOnWidth } = hooksForTable;
+
+   function getDetailDisplay(detail) {
+      return getTextDependsOnWidth(width, 1480, detail, 14);
+   }
 
    return (
       <>
@@ -26,11 +45,12 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
                   <h2 className={classes.claimDetailsTitleStyle}>Claim Details</h2>
                </div>
                <button
-                  className={classes.closeClaimButnStyle}
+                  className={closeButnStyle}
                   type="button"
                   onClick={() => setOpen(true)}
+                  disabled={claimIsClosed}
                >
-                  Close Claim
+                  {closeButnText}
                </button>
             </div>
             <div className={classes.claimDetailsFirstPartStyle}>
@@ -44,21 +64,17 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
                      {filteredDetails.map((item, index) => (
                         <li key={index} className={drawerOpen ? "narrow" : ""}>
                            <span>
-                              {item.detailText} <em> {item.detail} </em>
+                              {item.detailText} <em> {getDetailDisplay(item.detail)} </em>
                            </span>
                         </li>
                      ))}
                   </ol>
                )}
             </div>
-            {status === "CLOSED" && (
+            {claimIsClosed && (
                <div className={classes.claimInfoBoxStyle}>
                   <img src={Images.claimInfo} alt="" />
-                  <p className={classes.claimInfoStyle}>
-                     This Claim has been deleted for Lorem Lorem Ipsum is simply dummy
-                     text of the printing and typesetting industry. Lorem Ipsum has been
-                     the industry’s standard dummy text ever since the 150.
-                  </p>
+                  <p className={classes.claimInfoStyle}>{closedClaimDesc}</p>
                </div>
             )}
             <div className={classes.claimDetailsSecondPartStyle}>
