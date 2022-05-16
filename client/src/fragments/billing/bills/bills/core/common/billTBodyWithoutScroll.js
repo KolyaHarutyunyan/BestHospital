@@ -1,6 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { hooksForTable, useWidth } from "@eachbase/utils";
+import { getLimitedVal, hooksForTable } from "@eachbase/utils";
 import { billTHeadTBodyStyle } from "./style";
 
 export const BillTBodyWithoutScroll = ({ bills = [] }) => {
@@ -8,19 +8,11 @@ export const BillTBodyWithoutScroll = ({ bills = [] }) => {
 
    const history = useHistory();
 
-   const width = useWidth();
-
-   const {
-      getFullName,
-      getTextDependsOnWidth,
-      handleCreatedAtDate,
-      resetRadius,
-      showDashIfEmpty,
-   } = hooksForTable;
+   const { getFullName, handleCreatedAtDate, resetRadius, showDashIfEmpty } =
+      hooksForTable;
 
    function getDisplayOf(givenText = "") {
-      if (typeof givenText !== "string") return givenText;
-      return showDashIfEmpty(getTextDependsOnWidth(width, 2565, givenText, 5));
+      return showDashIfEmpty(getLimitedVal(givenText, 7));
    }
 
    return (

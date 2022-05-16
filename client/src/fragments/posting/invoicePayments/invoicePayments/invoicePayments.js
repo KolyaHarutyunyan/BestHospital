@@ -22,6 +22,7 @@ export const InvoicePaymentsFragment = ({
    page,
    handleGetPage,
    invoicePaymentsLoader,
+   mappedClients,
 }) => {
    const classes = invoicePaymentsStyle();
 
@@ -84,7 +85,7 @@ export const InvoicePaymentsFragment = ({
                clientsNames={invoiceClientsNames}
                passClientHandler={(selClient) => setSelectedClient(selClient)}
                selectedClient={selectedClient}
-               statuses={enumValues.POSTING_PAYMENT_TYPES}
+               statuses={enumValues.PAYMENT_STATUSES}
                passStatusHandler={(selStatus) => setSelectedStatus(selStatus)}
                selectedStatus={selectedStatus}
             />
@@ -131,6 +132,7 @@ export const InvoicePaymentsFragment = ({
                      activeStep={activeStep}
                      handleStep={setActiveStep}
                      closeModal={() => setOpen(false)}
+                     mappedClients={mappedClients}
                   />
                </BillingModalWrapper>
             }

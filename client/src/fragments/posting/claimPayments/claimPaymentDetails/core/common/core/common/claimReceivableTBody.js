@@ -1,12 +1,7 @@
 import React, { useContext } from "react";
-import {
-   DrawerContext,
-   getDataForTable,
-   hooksForTable,
-   manageStatus,
-   useWidth,
-} from "@eachbase/utils";
+import { DrawerContext, hooksForTable, manageStatus, useWidth } from "@eachbase/utils";
 import { claimReceivableTHeadTBodyStyle } from "./styles";
+import { getClaimReceivableData } from "./constants";
 
 export const ClaimReceivableTBody = ({ receivable }) => {
    const classes = claimReceivableTHeadTBodyStyle();
@@ -18,7 +13,7 @@ export const ClaimReceivableTBody = ({ receivable }) => {
    const { handleCreatedAtDate, showDashIfEmpty } = hooksForTable;
 
    function getTableData(data) {
-      return showDashIfEmpty(getDataForTable(data, open, width));
+      return showDashIfEmpty(getClaimReceivableData(data, open, width));
    }
 
    const serviceStart = handleCreatedAtDate(receivable.dateOfService?.start);
@@ -32,8 +27,9 @@ export const ClaimReceivableTBody = ({ receivable }) => {
    const placeOfService = getTableData(receivable.placeService);
    const cptCodeAndModif = `${cptCode} - ${modifier}`;
    const totalUnits = getTableData(receivable.totalUnits);
-   const allowedUnits = getTableData(receivable.allowedUnits);
+   const allowedAmount = getTableData(receivable.allowedAmount);
    const totalBilled = getTableData(receivable.totalBill);
+   const paidAmount = getTableData(receivable.paidAmount);
    const clientResp = getTableData(receivable.clientResp);
 
    return (
@@ -43,8 +39,9 @@ export const ClaimReceivableTBody = ({ receivable }) => {
             <div className={classes.tdStyle}>{placeOfService}</div>
             <div className={classes.tdStyle}>{cptCodeAndModif}</div>
             <div className={classes.tdStyle}>{totalUnits}</div>
-            <div className={classes.tdStyle}>{allowedUnits}</div>
+            <div className={classes.tdStyle}>{allowedAmount}</div>
             <div className={classes.tdStyle}>{totalBilled}</div>
+            <div className={classes.tdStyle}>{paidAmount}</div>
             <div className={classes.tdStyle}>{clientResp}</div>
          </div>
       </div>

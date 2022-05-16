@@ -10,24 +10,22 @@ import {
 } from "@eachbase/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { FirstStepInputs, LastStepInputs } from "./common";
-import {
-   claimPaymentActions,
-   fundingSourceActions,
-   httpRequestsOnSuccessActions,
-} from "@eachbase/store";
+import { claimPaymentActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 import moment from "moment";
 
-export const ClaimPaymentInputs = ({ info, activeStep, handleStep, closeModal }) => {
+export const ClaimPaymentInputs = ({
+   info,
+   activeStep,
+   handleStep,
+   closeModal,
+   mappedFunders,
+}) => {
    const classes = claimPaymentsCoreStyle();
 
    const dispatch = useDispatch();
 
-   const { funders } = useSelector((state) => state.fundingSource.fundingSourceList);
-   const mappedFunders = funders?.map((funder) => ({ id: funder.id, name: funder.name }));
-
    useEffect(() => {
       handleStep && handleStep("first");
-      dispatch(fundingSourceActions.getFundingSource());
    }, []);
 
    const loader = !!info

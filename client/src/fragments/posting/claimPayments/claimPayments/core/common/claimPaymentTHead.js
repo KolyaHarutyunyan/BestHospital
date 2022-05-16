@@ -25,9 +25,8 @@ export const ClaimPaymentTHead = () => {
 
    const claimPaymentId = <SearchAndFilter title={"ID"} custom={false} />;
    const funder = getClaimPaymentTitle("Funding Source");
-   const client = <SearchAndFilter title={"Client"} />;
-   const totalBilled = getClaimPaymentTitle("Total Billed", "", false);
-   const totalCollected = getClaimPaymentTitle("Total Collected", "", false);
+   const totalPaid = getClaimPaymentTitle("Total Paid", "", false);
+   const totalUsed = getClaimPaymentTitle("Total Used", "", false);
    const status = <SearchAndFilter title={"Status"} type={"arrow"} />;
    const paymentReference = getClaimPaymentTitle("Payment Reference", "", false);
 
@@ -35,9 +34,8 @@ export const ClaimPaymentTHead = () => {
       <div className={classes.tableTheadStyle}>
          <div className={classes.thStyle}>{claimPaymentId}</div>
          <div className={classes.thStyle}>{funder}</div>
-         <div className={classes.thStyle}>{client}</div>
-         <div className={classes.thStyle}>{totalBilled}</div>
-         <div className={classes.thStyle}>{totalCollected}</div>
+         <div className={classes.thStyle}>{totalPaid}</div>
+         <div className={classes.thStyle}>{totalUsed}</div>
          <div className={classes.thStyle}>{status}</div>
          <div className={classes.thStyle}>{paymentReference}</div>
       </div>

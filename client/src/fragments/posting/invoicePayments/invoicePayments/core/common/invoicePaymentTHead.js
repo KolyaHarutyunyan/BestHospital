@@ -25,8 +25,8 @@ export const InvoicePaymentTHead = () => {
 
    const invoicePaymentId = <SearchAndFilter title={"ID"} custom={false} />;
    const client = <SearchAndFilter title={"Client"} />;
-   const totalBilled = getInvoicePaymentTitle("Total Billed", "", false);
-   const totalCollected = getInvoicePaymentTitle("Total Collected", "", false);
+   const totalAmount = getInvoicePaymentTitle("Total Amount", "", false);
+   const totalUsed = getInvoicePaymentTitle("Total Used", "", false);
    const status = <SearchAndFilter title={"Status"} type={"arrow"} />;
    const paymentReference = getInvoicePaymentTitle("Payment Reference", "", false);
 
@@ -34,8 +34,8 @@ export const InvoicePaymentTHead = () => {
       <div className={classes.tableTheadStyle}>
          <div className={classes.thStyle}>{invoicePaymentId}</div>
          <div className={classes.thStyle}>{client}</div>
-         <div className={classes.thStyle}>{totalBilled}</div>
-         <div className={classes.thStyle}>{totalCollected}</div>
+         <div className={classes.thStyle}>{totalAmount}</div>
+         <div className={classes.thStyle}>{totalUsed}</div>
          <div className={classes.thStyle}>{status}</div>
          <div className={classes.thStyle}>{paymentReference}</div>
       </div>

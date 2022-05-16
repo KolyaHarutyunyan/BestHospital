@@ -46,14 +46,16 @@ export const ClaimPaymentClaimTBody = ({ claim }) => {
    const datePeriod = getTableData(`${early} - ${latest}`);
    const funder = getTableData(claim.funder?.name);
    const client = getFullName(clientFirstName, clientLastName, getTableData);
-   const totalCharged = getTableData(
+   const totalBilled = getTableData(
       addSignToValueFromStart(getValueByFixedNumber(claim.totalCharge))
    );
    const totalPaid = getTableData(
       addSignToValueFromStart(getValueByFixedNumber(claim.amountPaid))
    );
    const remaining = getTableData(
-      addSignToValueFromStart(getValueByFixedNumber(claim.remaining))
+      addSignToValueFromStart(
+         getValueByFixedNumber(claim.totalCharge - claim.ammountPaid || 0)
+      )
    );
    const arrowArea = <img src={Images.dropdownArrowBlue} alt="" />;
 
@@ -64,7 +66,7 @@ export const ClaimPaymentClaimTBody = ({ claim }) => {
             <div className={classes.tdStyle}>{datePeriod}</div>
             <div className={classes.tdStyle}>{funder}</div>
             <div className={classes.tdStyle}>{client}</div>
-            <div className={classes.tdStyle}>{totalCharged}</div>
+            <div className={classes.tdStyle}>{totalBilled}</div>
             <div className={classes.tdStyle}>{totalPaid}</div>
             <div className={classes.tdStyle}>{remaining}</div>
             <div className={tdClassName}>{arrowArea}</div>
