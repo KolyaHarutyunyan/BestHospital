@@ -45,6 +45,10 @@ export class InvoiceService {
     if (index === -1) {
       throw new HttpException('Receivable was not found', HttpStatus.NOT_FOUND);
     }
+    invoice.ammountPaid +=
+      amount == 0
+        ? invoice.receivable[index].amountTotal
+        : invoice.receivable[index].amountTotal - amount;
     invoice.receivable[index].amountTotal = amount;
     await invoice.save();
     return this.sanitizer.sanitize(invoice);
@@ -216,6 +220,8 @@ export class InvoiceService {
     receivableCreatedAt,
     subBills,
   ): Promise<void> {
+    let totalBilled = 0;
+    receivable.map((rec) => (totalBilled += rec.amountTotal));
     invoice.push({
       client: result.client,
       staff: result.staff,
@@ -232,6 +238,7 @@ export class InvoiceService {
       totalTime: subBills.reduce((a, b) => {
         return a + b.totalHours;
       }, 0),
+      totalBilled,
       dueDate: '2021-12-28T07:02:16.250Z',
       downloadLink: '',
       receivable,

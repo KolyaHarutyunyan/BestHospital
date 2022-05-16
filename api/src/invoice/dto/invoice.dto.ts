@@ -45,6 +45,10 @@ export class InvoiceDto {
   @ApiProperty()
   totalTime: number;
   @ApiProperty()
+  ammountPaid: number;
+  @ApiProperty()
+  totalBilled: number;
+  @ApiProperty()
   dueDate: Date;
   @ApiProperty()
   downloadLink: string;

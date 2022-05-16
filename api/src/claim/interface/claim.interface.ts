@@ -7,6 +7,7 @@ export interface IClaim extends Document {
   staff: string;
   funder: string;
   totalCharge: number;
+  totalBilled: number;
   ammountPaid: number;
   submittedDate: Date;
   paymentRef: string;

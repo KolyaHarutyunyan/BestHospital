@@ -13,6 +13,8 @@ export class ClaimDto {
   @ApiProperty()
   totalCharge: number;
   @ApiProperty()
+  totalBilled: number;
+  @ApiProperty()
   ammountPaid: number;
   @ApiProperty()
   submittedDate: Date;

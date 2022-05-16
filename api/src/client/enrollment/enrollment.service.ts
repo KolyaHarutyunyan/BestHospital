@@ -121,15 +121,15 @@ export class EnrollmentService {
     }
   }
   //remove the enrollment
-  async remove(_id: string): Promise<string> {
-    const enrollment = await this.model.findById({ _id });
-    this.checkEnrollment(enrollment);
-    if (enrollment.primary) {
-      throw new HttpException('Can not delete the primary enrollment', HttpStatus.NOT_FOUND);
-    }
-    await enrollment.remove();
-    return enrollment._id;
-  }
+  // async remove(_id: string): Promise<string> {
+  //   const enrollment = await this.model.findById({ _id });
+  //   this.checkEnrollment(enrollment);
+  //   if (enrollment.primary) {
+  //     throw new HttpException('Can not delete the primary enrollment', HttpStatus.NOT_FOUND);
+  //   }
+  //   await enrollment.remove();
+  //   return enrollment._id;
+  // }
 
   /** Private methods */
   /** if the client is not found, throws an exception */

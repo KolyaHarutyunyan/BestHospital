@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { ClaimPmtStatus } from '../claim-pmt.contants';
 
 export class ClaimPmtDto {
   @ApiProperty()
@@ -14,7 +15,13 @@ export class ClaimPmtDto {
   @ApiProperty()
   fundingSource: string;
   @ApiProperty()
+  totalUsed: number;
+  @ApiProperty()
+  totalBilled: number;
+  @ApiProperty()
   claimIds: string[];
+  @ApiProperty()
+  status: ClaimPmtStatus;
   @ApiProperty()
   documents: string[];
 }

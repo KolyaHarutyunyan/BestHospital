@@ -1,6 +1,6 @@
 import { model, Schema, Types } from 'mongoose';
 import { FileSchema } from '../files/file.model';
-import { PaymentType } from './claim-pmt.contants';
+import { ClaimPmtStatus, PaymentType } from './claim-pmt.contants';
 import { IClaimPmt } from './interface';
 
 const ClaimPmtSchema = new Schema({
@@ -10,6 +10,9 @@ const ClaimPmtSchema = new Schema({
   checkNumber: { type: String },
   fundingSource: { type: Types.ObjectId, ref: 'Funder' },
   claimIds: [{ type: Types.ObjectId, ref: 'claim' }],
+  totalBilled: { type: Number, default: 0 },
+  totalUsed: { type: Number, default: 0 },
+  status: { type: String, enum: [ClaimPmtStatus], default: ClaimPmtStatus.OPEN },
   documents: [{ type: Types.ObjectId, ref: 'file' }],
   // eob: FileSchema,
   // deductible: { type: Number },

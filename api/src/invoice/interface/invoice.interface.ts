@@ -1,4 +1,4 @@
-import { InvoiceStatus } from "../invoice.constants";
+import { InvoiceStatus } from '../invoice.constants';
 
 interface IDateRange extends Document {
   early: Date;
@@ -27,6 +27,8 @@ export interface IInvoice extends Document {
   client: string;
   dateRange: IDateRange;
   invoiceTotal: number;
+  ammountPaid: number;
+  totalBilled: number;
   totalTime: number;
   dueDate: Date;
   downloadLink: string;

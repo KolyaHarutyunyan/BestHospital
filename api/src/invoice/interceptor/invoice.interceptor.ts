@@ -11,6 +11,8 @@ export class InvoiceSanitizer implements ISanitize {
       client: invoice.client,
       dateRange: invoice.dateRange,
       invoiceTotal: invoice.invoiceTotal,
+      ammountPaid: invoice.ammountPaid,
+      totalBilled: invoice.totalBilled,
       totalTime: invoice.totalTime,
       dueDate: invoice.dueDate,
       downloadLink: invoice.downloadLink,

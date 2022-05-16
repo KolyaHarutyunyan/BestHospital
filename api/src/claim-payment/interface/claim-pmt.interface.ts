@@ -1,4 +1,4 @@
-import { PaymentType } from '../claim-pmt.contants';
+import { ClaimPmtStatus, PaymentType } from '../claim-pmt.contants';
 
 export interface IClaimPmt extends Document {
   _id: string;
@@ -7,6 +7,9 @@ export interface IClaimPmt extends Document {
   paymentDate: Date;
   checkNumber: string;
   fundingSource: string;
+  totalBilled: number;
+  totalUsed: number;
   claimIds: string[];
+  status: ClaimPmtStatus;
   documents: string[];
 }

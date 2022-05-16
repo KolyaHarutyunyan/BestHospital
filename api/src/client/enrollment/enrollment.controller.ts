@@ -41,9 +41,9 @@ export class EnrollmentController {
   }
 
   //delete the enrollment
-  @Delete(':id')
-  @ApiHeader({ name: ACCESS_TOKEN })
-  remove(@Param('id', ParseObjectIdPipe) id: string) {
-    return this.enrollmentService.remove(id);
-  }
+  // @Delete(':id')
+  // @ApiHeader({ name: ACCESS_TOKEN })
+  // remove(@Param('id', ParseObjectIdPipe) id: string) {
+  //   return this.enrollmentService.remove(id);
+  // }
 }

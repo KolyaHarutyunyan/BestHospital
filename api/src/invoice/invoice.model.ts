@@ -21,6 +21,8 @@ const InvoiceSchema = new Schema({
   client: { type: Types.ObjectId, ref: 'Client' },
   dateRange: { early: { type: Date }, latest: { type: Date } },
   invoiceTotal: { type: Number },
+  ammountPaid: { type: Number, default: 0 },
+  totalBilled: { type: Number, default: 0 },
   totalTime: { type: Number },
   dueDate: { type: Date },
   downloadLink: { type: String },

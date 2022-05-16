@@ -33,7 +33,12 @@ export class ClaimService {
     if (index === -1) {
       throw new HttpException('Receivable was not found', HttpStatus.NOT_FOUND);
     }
+    claim.ammountPaid +=
+      amount == 0
+        ? claim.receivable[index].amountTotal
+        : claim.receivable[index].amountTotal - amount;
     claim.receivable[index].amountTotal = amount;
+    console.log(amount, 'amount');
     await claim.save();
     return this.sanitizer.sanitize(claim);
   }
@@ -300,12 +305,15 @@ export class ClaimService {
 
   /** add claim */
   private async addClaim(claim, result, receivable, receivableCreatedAt, subBills): Promise<void> {
+    let totalBilled = 0;
+    receivable.map((rec) => (totalBilled += rec.amountTotal));
     claim.push({
       client: result.client,
       staff: result.staff,
       funder: result.payer,
       ammountPaid: 0,
       totalCharge: await this.countTotalCharge(subBills),
+      totalBilled,
       dateRange: {
         early: this.minMax(receivableCreatedAt)[0],
         latest: this.minMax(receivableCreatedAt)[1],

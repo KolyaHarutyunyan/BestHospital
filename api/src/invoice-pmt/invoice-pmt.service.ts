@@ -12,6 +12,7 @@ import { MongooseUtil } from '../util/mongoose.util';
 import { CreateInvPmtDto, UpdateInvPmtDto, InvPmtDto } from './dto';
 import { CreateReceivableDTO } from './dto/create-invoice-pmt.dto';
 import { IInvPmt } from './interface/invoice-pmt.interface';
+import { InvPmtStatus } from './invoice-pmt.constants';
 import { InvPmtModel } from './invoice-pmt.model';
 import { InvPmtSanitizer } from './invoice-pmt.sanitizer';
 
@@ -46,6 +47,8 @@ export class InvPmtService {
   /** create payment */
   async payment(_id: string, dto: CreateReceivableDTO) {
     let sumPaid = 0;
+    let recAmount = 0;
+    let amountPaided = 0;
     dto.receivables.map((receivable) => (sumPaid += receivable.paidAMT));
     const [invPmt, invoice] = await Promise.all([
       this.model.findById(_id),
@@ -58,9 +61,10 @@ export class InvPmtService {
 
     for (let i = 0; i < dto.receivables.length; i++) {
       const receivable = dto.receivables[i];
-      const index = invoice.receivable.findIndex(
-        (rec) => rec._id.toString() == receivable.receivableId.toString(),
-      );
+      const index = invoice.receivable.findIndex((rec) => {
+        recAmount += rec.amountTotal;
+        return rec._id.toString() == receivable.receivableId.toString();
+      });
       if (index === -1) {
         throw new HttpException('Receivable was not found', HttpStatus.NOT_FOUND);
       }
@@ -68,7 +72,9 @@ export class InvPmtService {
         receivable: invoice.receivable[index],
         paidAMT: receivable.paidAMT,
       };
-      const amountPaided = await this.createPayment(data, dto.user.id);
+      const billedAmount = await this.createPayment(data, dto.user.id);
+      amountPaided += billedAmount;
+
       /** update receivable total amount */
       const updateRecAmount = await this.invoiceService.setAmountRec(
         invoice._id,
@@ -77,7 +83,10 @@ export class InvPmtService {
       );
     }
     invPmt.invoices.push(dto.invoiceId);
+    invPmt.totalBilled = recAmount;
+    invPmt.totalUsed += amountPaided;
     invPmt.paymentAmount -= sumPaid;
+    if (invPmt.paymentAmount == 0) invPmt.status == InvPmtStatus.CLOSE;
 
     await invPmt.save();
     return this.sanitizer.sanitize(invPmt);
@@ -149,7 +158,7 @@ export class InvPmtService {
       .find()
       .populate('documents')
       .populate({
-        path: 'invoice',
+        path: 'invoices',
         populate: {
           path: 'client',
         },
@@ -272,23 +281,27 @@ export class InvPmtService {
   private async createPayment(data, userId) {
     const receivable = data.receivable;
     let bills = data.receivable.bills;
+    let paidAmount = 0;
 
     while (data.paidAMT > 0) {
       const lowBill = this.findLowBill(bills);
       if (lowBill.billedAmount === 0 || !lowBill) {
-        return;
+        return paidAmount;
       }
       if (data.paidAMT >= lowBill.billedAmount) {
         const billedAmount = await this.fullBillPay(lowBill.billedAmount, lowBill._id, userId);
         receivable.amountTotal -= billedAmount;
+        paidAmount += billedAmount;
         data.paidAMT -= billedAmount;
       } else if (data.paidAMT < lowBill.billedAmount) {
-        await this.partialBillPay(data.paidAMT, lowBill._id, userId);
+        const billedAmount = await this.partialBillPay(data.paidAMT, lowBill._id, userId);
         receivable.amountTotal -= data.paidAMT;
+        paidAmount += billedAmount;
         data.paidAMT = 0;
       }
       bills = bills.filter((rec) => rec._id !== lowBill._id);
     }
+    return paidAmount;
   }
   /** full billing pay */
   private async fullBillPay(
@@ -308,7 +321,11 @@ export class InvPmtService {
     return billedAmount;
   }
   /** partial billing pay */
-  private async partialBillPay(paidAMT: number, billingId: string, userId: string): Promise<void> {
+  private async partialBillPay(
+    paidAMT: number,
+    billingId: string,
+    userId: string,
+  ): Promise<number> {
     const transactionInfo = {
       type: TxnType.CLIENTPAID,
       date: new Date(),
@@ -317,6 +334,7 @@ export class InvPmtService {
       billing: billingId,
       creator: userId,
     };
+    return paidAMT;
     await Promise.all([this.billingService.startTransaction(transactionInfo, billingId)]);
   }
   /** if the invPmt is not found, throws an exception */

@@ -3,3 +3,8 @@ export enum PaymentType {
   ACH = 'ACH',
   CASH = 'CASH',
 }
+export enum ClaimPmtStatus {
+  OPEN = 'OPEN',
+  CLOSE = 'CLOSE',
+  VOID = 'VOID',
+}

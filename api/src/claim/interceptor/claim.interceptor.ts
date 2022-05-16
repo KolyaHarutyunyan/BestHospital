@@ -12,6 +12,7 @@ export class ClaimSanitizer implements ISanitize {
       staff: claim.staff,
       funder: claim.funder,
       totalCharge: claim.totalCharge,
+      totalBilled: claim.totalBilled,
       ammountPaid: claim.ammountPaid,
       submittedDate: claim.submittedDate,
       paymentRef: claim.paymentRef,

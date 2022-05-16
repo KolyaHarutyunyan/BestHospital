@@ -20,6 +20,7 @@ export const ClaimSchema = new Schema({
   staff: { type: Types.ObjectId, ref: 'Staff' },
   funder: { type: Types.ObjectId, ref: 'Funder' },
   totalCharge: { type: Number },
+  totalBilled: { type: Number, default: 0 },
   ammountPaid: { type: Number, default: 0 },
   submittedDate: { type: Date },
   paymentRef: { type: String },

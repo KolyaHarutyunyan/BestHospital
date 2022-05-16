@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { InvPmtStatus } from '../invoice-pmt.constants';
 
 export class InvPmtDto {
   @ApiProperty()
@@ -13,6 +14,12 @@ export class InvPmtDto {
   paymentDate: Date;
   @ApiProperty()
   checkNumber: string;
+  @ApiProperty()
+  totalBilled: number;
+  @ApiProperty()
+  totalUsed: number;
+  @ApiProperty()
+  status: InvPmtStatus;
   @ApiProperty()
   client: string;
   @ApiProperty()

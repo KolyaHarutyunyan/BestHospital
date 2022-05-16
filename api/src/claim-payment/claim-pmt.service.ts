@@ -3,7 +3,7 @@ import { Model, startSession } from 'mongoose';
 import { ClaimPmtDto } from './dto/claim-pmt.dto.';
 import { ClaimService } from '../claim/claim.service';
 import { MongooseUtil } from '../util/mongoose.util';
-import { PaymentType } from './claim-pmt.contants';
+import { ClaimPmtStatus, PaymentType } from './claim-pmt.contants';
 import { ClaimPmtModel } from './claim-pmt.model';
 import { ClaimPmtSanitizer } from './claim-pmt.sanitizer';
 import { CreateClaimPmtDto, CreateClaimReceivableDTO } from './dto';
@@ -58,6 +58,8 @@ export class ClaimPmtService {
   /** create payment */
   async payment(_id: string, dto: CreateClaimReceivableDTO): Promise<ClaimPmtDto> {
     let sumPaid = 0;
+    let recAmount = 0;
+    let amountPaided = 0;
     dto.receivables.map((receivable) => (sumPaid += receivable.paidAMT));
     const [claimPmt, claim] = await Promise.all([
       this.model.findById(_id),
@@ -70,9 +72,10 @@ export class ClaimPmtService {
 
     for (let i = 0; i < dto.receivables.length; i++) {
       const receivable = dto.receivables[i];
-      const index = claim.receivable.findIndex(
-        (rec) => rec._id.toString() == receivable.receivableId.toString(),
-      );
+      const index = claim.receivable.findIndex((rec) => {
+        recAmount += rec.amountTotal;
+        return rec._id.toString() == receivable.receivableId.toString();
+      });
       if (index === -1) {
         throw new HttpException('Receivable was not found', HttpStatus.NOT_FOUND);
       }
@@ -86,7 +89,9 @@ export class ClaimPmtService {
       };
       let countBalance = receivable.coINS + receivable.copay + receivable.deductible;
       const clientBalance = countBalance == 0 ? 0 : countBalance / data.receivable.bills.length;
-      const amountPaided = await this.createPayment(data, clientBalance, dto.user.id);
+      let billedAmount = await this.createPayment(data, clientBalance, dto.user.id);
+
+      amountPaided += billedAmount;
       /** update receivable total amount */
       const updateRecAmount = await this.claimService.setAmountRec(
         claim._id,
@@ -95,37 +100,12 @@ export class ClaimPmtService {
       );
     }
     claimPmt.claimIds.push(dto.claimId);
+    claimPmt.totalBilled = recAmount;
+    claimPmt.totalUsed += amountPaided;
     claimPmt.paymentAmount -= sumPaid;
+    if (claimPmt.paymentAmount == 0) claimPmt.status == ClaimPmtStatus.CLOSE;
     await claimPmt.save();
     return this.sanitizer.sanitize(claimPmt);
-    /** save the claim for saveing receivableS amountTotal */
-    // await claim.save();
-
-    // const receivables: any = this.checkReceivable(claim.receivable, reseivableIds);
-    // await this.claimService.addClientBalance(claim._id, claimReceivables);
-    // const amountPaided = await this.createPayment(dto.receivables, receivables);
-
-    // const claimPmt = await this.model
-    //   .findById(_id)
-    //   .populate('claimIds')
-    //   .populate({
-    //     path: 'claimIds',
-    //     populate: {
-    //       path: 'receivable',
-    //       populate: {
-    //         path: 'bills',
-    //       },
-    //     },
-    //   });
-    // this.checkClaimPmt(claimPmt);
-    // const claimIndex = this.checkClaim(claimPmt.claimIds, claimId);
-    // const claim: any = claimPmt.claimIds[claimIndex];
-    // const receivables: any = this.checkReceivable(claim.receivable, dto.receivableIds);
-    // const amountPaided = await this.createPayment(claimPmt, receivables);
-    // await this.claimService.setAmount(claimId, dto.receivableIds);
-    // claimPmt.paymentAmount = amountPaided;
-    // await claimPmt.save();
-    // return this.sanitizer.sanitize(claimPmt);
   }
   /** add document to claim-pmt */
   async addDocument(_id: string, fileId: string): Promise<ClaimPmtDto> {
@@ -151,12 +131,20 @@ export class ClaimPmtService {
     const claimPmts = await this.model
       .find()
       .populate('fundingSource')
-      .populate({
-        path: 'claimIds',
-        populate: {
-          path: 'client',
+      .populate([
+        {
+          path: 'claimIds',
+          populate: {
+            path: 'client',
+          },
         },
-      });
+        {
+          path: 'claimIds',
+          populate: {
+            path: 'funder',
+          },
+        },
+      ]);
     return this.sanitizer.sanitizeMany(claimPmts);
   }
   /** find claim-pmt by id */
@@ -190,14 +178,14 @@ export class ClaimPmtService {
   }
   /** Private methods */
   /** create payment */
-  private async createPayment(data, clientBalance: number, userId: string) {
+  private async createPayment(data, clientBalance: number, userId: string): Promise<number> {
     const receivable = data.receivable;
     let bills = data.receivable.bills;
-
+    let paidAmount = 0;
     while (data.paidAMT > 0) {
       const lowBill = this.findLowBill(bills);
       if (lowBill.billedAmount === 0) {
-        return;
+        return paidAmount;
       }
       if (data.paidAMT >= lowBill.billedAmount) {
         const billedAmount = await this.fullBillPay(
@@ -208,16 +196,24 @@ export class ClaimPmtService {
         );
         receivable.amountTotal -= billedAmount;
         data.paidAMT -= billedAmount;
+        paidAmount += billedAmount;
       } else if (data.paidAMT < lowBill.billedAmount) {
-        await this.partialBillPay(data.paidAMT, clientBalance, lowBill._id, userId);
+        const billedAmount = await this.partialBillPay(
+          data.paidAMT,
+          clientBalance,
+          lowBill._id,
+          userId,
+        );
         receivable.amountTotal -= data.paidAMT;
         data.paidAMT = 0;
+        paidAmount += billedAmount;
       }
       bills = bills.filter((rec) => rec._id !== lowBill._id);
       if (bills.length === 0) {
-        return;
+        return paidAmount;
       }
     }
+    return paidAmount;
   }
   /** full billing pay */
   private async fullBillPay(
@@ -226,7 +222,6 @@ export class ClaimPmtService {
     billingId: string,
     userId: string,
   ): Promise<number> {
-    console.log(clientBalance, 'clientBalanceclientBalanceclientBalance');
     const transactionInfo = {
       type: TxnType.PAYERPAID,
       date: new Date(),
@@ -247,7 +242,7 @@ export class ClaimPmtService {
     clientBalance: number,
     billingId: string,
     userId: string,
-  ): Promise<void> {
+  ): Promise<number> {
     const transactionInfo = {
       type: TxnType.PAYERPAID,
       date: new Date(),
@@ -260,45 +255,9 @@ export class ClaimPmtService {
       this.billingService.startTransaction(transactionInfo, billingId),
       this.billingService.setClientBalance(billingId, clientBalance),
     ]);
+    return paidAMT;
   }
-  // private async createPayment(claimPmt, receivables) {
-  //   let paymentAmount = claimPmt.paymentAmount;
-  //   console.log(paymentAmount, 'paymentAmount1');
 
-  //   let payed = false;
-  //   let paidAmount = 0;
-  //   while (paymentAmount > 0) {
-  //     if (!receivables.length) {
-  //       if (!payed) {
-  //         throw new HttpException('Claim have not payable receivables', HttpStatus.NOT_FOUND);
-  //       }
-  //       return paymentAmount;
-  //     }
-  //     const lowReceivable: any = await this.findLowReceivable(receivables);
-  //     if (paymentAmount >= lowReceivable.amountTotal && lowReceivable.amountTotal !== 0) {
-  //       const receivableBalance = await this.fullPay(
-  //         lowReceivable,
-  //         paymentAmount,
-  //         // dto.user.id,
-  //         claimPmt._id,
-  //       );
-  //       paymentAmount -= receivableBalance;
-  //       paidAmount += paymentAmount;
-  //       payed = true;
-  //     } else if (paymentAmount < lowReceivable.amountTotal) {
-  //       const receivableBalance = await this.partialPay(
-  //         lowReceivable,
-  //         paymentAmount,
-  //         // dto.user.id,
-  //         claimPmt._id,
-  //       );
-  //       paymentAmount -= receivableBalance;
-  //       payed = true;
-  //     }
-  //     receivables = receivables.filter((rec) => rec._id !== lowReceivable._id);
-  //   }
-  //   return paymentAmount;
-  // }
   /** full pay */
   private async fullPay(
     receivable,
