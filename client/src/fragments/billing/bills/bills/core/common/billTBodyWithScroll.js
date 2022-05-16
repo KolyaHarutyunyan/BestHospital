@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { DrawerContext, hooksForTable, manageStatus, useWidth } from "@eachbase/utils";
 import { billTHeadTBodyStyle } from "./style";
+import { getBillWithScrollData } from "./constants";
 
 export const BillTBodyWithScroll = ({ bills = [] }) => {
    const classes = billTHeadTBodyStyle();
@@ -18,15 +19,14 @@ export const BillTBodyWithScroll = ({ bills = [] }) => {
 
    const {
       showDashIfEmpty,
-      getTextDependsOnWidth,
       addSignToValueFromStart,
       resetRadius,
       getValueByFixedNumber,
    } = hooksForTable;
 
-   function getDisplayOf(givenText = "") {
-      if (typeof givenText !== "string") return givenText;
-      return showDashIfEmpty(getTextDependsOnWidth(width, 2565, givenText, 5));
+   function getDisplayOf(data = "") {
+      if (typeof data !== "string") return data;
+      return showDashIfEmpty(getBillWithScrollData(data, open, width));
    }
 
    return (

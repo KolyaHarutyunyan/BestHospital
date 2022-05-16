@@ -23,7 +23,7 @@ export const UserInputsDropdown = ({
    const [dropdownIsShown, setDropdownIsShown] = useState(false);
 
    function chooseOptionHandler(option) {
-      onPass(option);
+      onPass && onPass(option);
       setDropdownIsShown(false);
    }
 

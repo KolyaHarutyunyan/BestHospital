@@ -22,6 +22,7 @@ export const ClaimPaymentsFragment = ({
    page,
    handleGetPage,
    claimPaymentsLoader,
+   mappedFunders,
 }) => {
    const classes = claimPaymentsStyle();
 
@@ -30,7 +31,6 @@ export const ClaimPaymentsFragment = ({
    const { handlePageChange } = useContext(PaginationContext);
 
    const [selectedPayor, setSelectedPayor] = useState("All");
-   const [selectedClient, setSelectedClient] = useState("All");
    const [selectedStatus, setSelectedStatus] = useState("All");
    const [open, setOpen] = useState(false);
    const [activeStep, setActiveStep] = useState("first");
@@ -61,15 +61,10 @@ export const ClaimPaymentsFragment = ({
    const payorsNames = claimPayments.map(
       (claimPayment) => claimPayment?.fundingSource?.name
    );
-   const clientsNames = claimPayments.map(
-      (claimPayment) =>
-         `${claimPayment?.client?.firstName} ${claimPayment?.client?.lastName}`
-   );
 
    const claimPaymentsWithFilters = getFilteredClaimPayments(
       claimPayments,
       selectedPayor,
-      selectedClient,
       selectedStatus
    );
 
@@ -89,10 +84,7 @@ export const ClaimPaymentsFragment = ({
                payorsNames={payorsNames}
                passPayorHandler={(selPayor) => setSelectedPayor(selPayor)}
                selectedPayor={selectedPayor}
-               clientsNames={clientsNames}
-               passClientHandler={(selClient) => setSelectedClient(selClient)}
-               selectedClient={selectedClient}
-               statuses={enumValues.POSTING_PAYMENT_TYPES}
+               statuses={enumValues.PAYMENT_STATUSES}
                passStatusHandler={(selStatus) => setSelectedStatus(selStatus)}
                selectedStatus={selectedStatus}
             />
@@ -139,6 +131,7 @@ export const ClaimPaymentsFragment = ({
                      activeStep={activeStep}
                      handleStep={setActiveStep}
                      closeModal={() => setOpen(false)}
+                     mappedFunders={mappedFunders}
                   />
                </BillingModalWrapper>
             }

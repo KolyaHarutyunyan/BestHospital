@@ -41,8 +41,8 @@ export function getBillTotals(bill) {
 
    return {
       billedRate: 0,
-      totalAmount: billedAmount,
-      payorBalance: payerTotal - payerPaid,
+      totalAmount: billedAmount || 0,
+      payorBalance: payerTotal - payerPaid || 0,
       clientBalance: 0,
       totalBalance: balance || 0,
    };

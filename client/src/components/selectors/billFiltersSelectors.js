@@ -67,7 +67,7 @@ export const BillFiltersSelectors = ({
       !filterIsForClaimInModal &&
       !filterIsForInvoiceInModal;
 
-   const shouldRenderClientInput = !filterIsForInvoiceInModal;
+   const shouldRenderClientInput = !filterIsForInvoiceInModal && !filterIsForClaimPayment;
 
    const shouldRenderDateRangeAndOrStatusInputs =
       filterIsForClaim ||

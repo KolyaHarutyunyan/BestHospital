@@ -37,13 +37,11 @@ export const InvoicePaymentTBody = ({ invoicePayments = [] }) => {
             const clientFirstName = invoicePayment?.client?.firstName;
             const clientLastName = invoicePayment?.client?.firstName;
             const client = getFullName(clientFirstName, clientLastName, getTableData);
-            const totalBilled = getTableData(
-               addSignToValueFromStart(getValueByFixedNumber(invoicePayment.totalBilled))
+            const totalAmount = getTableData(
+               addSignToValueFromStart(getValueByFixedNumber(invoicePayment.totalAmount))
             );
-            const totalCollected = getTableData(
-               addSignToValueFromStart(
-                  getValueByFixedNumber(invoicePayment.totalCollected)
-               )
+            const totalUsed = getTableData(
+               addSignToValueFromStart(getValueByFixedNumber(invoicePayment.totalUsed))
             );
             const status = showDashIfEmpty(manageStatus(invoicePayment.status));
             const paymentReference = getTableHeader(
@@ -61,8 +59,8 @@ export const InvoicePaymentTBody = ({ invoicePayments = [] }) => {
                >
                   <div className={classes.tdStyle}>{invoicePaymentId}</div>
                   <div className={classes.tdStyle}>{client}</div>
-                  <div className={classes.tdStyle}>{totalBilled}</div>
-                  <div className={classes.tdStyle}>{totalCollected}</div>
+                  <div className={classes.tdStyle}>{totalAmount}</div>
+                  <div className={classes.tdStyle}>{totalUsed}</div>
                   <div className={classes.tdStyle}>{status}</div>
                   <div className={classes.tdStyle}>
                      <a

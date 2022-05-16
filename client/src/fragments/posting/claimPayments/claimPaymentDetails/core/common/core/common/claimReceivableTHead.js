@@ -26,8 +26,9 @@ export const ClaimReceivableTHead = () => {
    const placeOfService = getReceivTitle("Place of Service", "", false);
    const cptCodeAndModif = getReceivTitle("CPT Code (Modifier)", "", false);
    const totalUnits = getReceivTitle("Total Units", "", false);
-   const allowedUnits = getReceivTitle("Allowed Units", "", false);
+   const allowedAmount = getReceivTitle("Allowed Amount", "", false);
    const totalBilled = getReceivTitle("Total Billed", "", false);
+   const paidAmount = getReceivTitle("Paid Amount", "", false);
    const clientResp = getReceivTitle("Client Responsibility", "", false);
 
    return (
@@ -36,8 +37,9 @@ export const ClaimReceivableTHead = () => {
          <div className={classes.thStyle}>{placeOfService}</div>
          <div className={classes.thStyle}>{cptCodeAndModif}</div>
          <div className={classes.thStyle}>{totalUnits}</div>
-         <div className={classes.thStyle}>{allowedUnits}</div>
+         <div className={classes.thStyle}>{allowedAmount}</div>
          <div className={classes.thStyle}>{totalBilled}</div>
+         <div className={classes.thStyle}>{paidAmount}</div>
          <div className={classes.thStyle}>{clientResp}</div>
       </div>
    );

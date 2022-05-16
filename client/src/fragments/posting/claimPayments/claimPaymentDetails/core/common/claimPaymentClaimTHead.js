@@ -26,7 +26,7 @@ export const ClaimPaymentClaimTHead = () => {
    const datePeriod = getClaimTitle("Date Period", "latestEarliest", true, true);
    const funder = getClaimTitle("Funding Source", "", true, true);
    const client = getClaimTitle("Client", "", true, true);
-   const totalCharged = getClaimTitle("Total Charged", "", false);
+   const totalBilled = getClaimTitle("Total Billed", "", false);
    const totalPaid = getClaimTitle("Total Paid", "", false);
    const remaining = getClaimTitle("Remaining", "", false);
    const arrowArea = getClaimTitle("", "", false);
@@ -37,7 +37,7 @@ export const ClaimPaymentClaimTHead = () => {
          <div className={classes.thStyle}>{datePeriod}</div>
          <div className={classes.thStyle}>{funder}</div>
          <div className={classes.thStyle}>{client}</div>
-         <div className={classes.thStyle}>{totalCharged}</div>
+         <div className={classes.thStyle}>{totalBilled}</div>
          <div className={classes.thStyle}>{totalPaid}</div>
          <div className={classes.thStyle}>{remaining}</div>
          <div className={classes.thStyle}>{arrowArea}</div>
