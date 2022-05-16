@@ -37,7 +37,7 @@ export function getFilteredInvoices(
            )
          : selStatus !== "All"
          ? invoices.filter(
-              (invoice) => invoice?.status.toLowerCase() === selStatus.toLowerCase()
+              (invoice) => invoice?.status?.toLowerCase() === selStatus.toLowerCase()
            )
          : selInvoiceDate !== ""
          ? invoices.filter(

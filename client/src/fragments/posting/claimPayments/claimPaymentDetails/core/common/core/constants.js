@@ -67,7 +67,7 @@ export function getClaimDetailsForClaimPmt(claim) {
       },
       {
          detailText: "Founding Source:",
-         detail: !!funder && makeCapitalize(`${funder?.firstName} ${funder?.lastName}`),
+         detail: !!funder && makeCapitalize(funder?.name),
       },
       {
          detailText: "Total Charges:",

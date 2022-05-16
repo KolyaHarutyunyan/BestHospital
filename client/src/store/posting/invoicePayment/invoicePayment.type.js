@@ -17,3 +17,6 @@ export const DELETE_INVOICE_PAYMENT = "DELETE_INVOICE_PAYMENT";
 
 /**edit Invoice Payment Status */
 export const EDIT_INVOICE_PAYMENT_STATUS = "EDIT_INVOICE_PAYMENT_STATUS";
+
+/**add Invoice in Invoice Payment */
+export const ADD_INVOICE_IN_INVOICE_PAYMENT = "ADD_INVOICE_IN_INVOICE_PAYMENT";

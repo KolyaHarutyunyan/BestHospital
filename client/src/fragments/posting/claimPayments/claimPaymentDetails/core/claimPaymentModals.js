@@ -95,6 +95,7 @@ export const ClaimPaymentModals = ({
                      activeStep={activeStep}
                      handleStep={handleActiveStep}
                      closeModal={closeAddingModal}
+                     claimPaymentId={claimPaymentId}
                   />
                </BillingModalWrapper>
             }

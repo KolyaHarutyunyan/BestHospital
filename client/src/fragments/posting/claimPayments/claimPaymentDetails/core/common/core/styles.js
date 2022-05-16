@@ -95,6 +95,5 @@ export const claimReceivableTableStyle = makeStyles(() => ({
       color: Colors.TextSecondary,
       textTransform: "capitalize",
    },
-   claimTableBoxStyle: { minHeight: "495px" },
    // *end**
 }));

@@ -5,6 +5,7 @@ import {
    editClaimPayment,
    deleteClaimPayment,
    editClaimPaymentStatus,
+   addClaimInClaimPayment,
 } from "./claimPayment.action.js";
 
 export { claimPaymentReducer } from "./claimPayment.reducer";
@@ -17,4 +18,5 @@ export const claimPaymentActions = {
    editClaimPayment,
    deleteClaimPayment,
    editClaimPaymentStatus,
+   addClaimInClaimPayment,
 };

@@ -47,6 +47,7 @@ export const claimReceivableTHeadTBodyStyle = makeStyles(() => ({
    claimModalTableStyle: {
       width: "100%",
       marginTop: "24px",
+      minHeight: "495px",
    },
    receivableContainerStyle: {
       width: "100%",

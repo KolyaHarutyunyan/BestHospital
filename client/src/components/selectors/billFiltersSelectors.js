@@ -6,6 +6,10 @@ function addAllTextToTheList(list = []) {
    return !!list[0]?.length ? ["All", ...list] : ["All"];
 }
 
+function getUniqueElements(list = []) {
+   return list.filter((el, i, arr) => arr.indexOf(el) === i);
+}
+
 const styles = { display: "flex" };
 
 export const BillFiltersSelectors = ({
@@ -27,6 +31,10 @@ export const BillFiltersSelectors = ({
    filterIsFor,
 }) => {
    const classes = selectorsStyle();
+
+   const uniqueClients = getUniqueElements(clientsNames);
+   const uniquePayors = getUniqueElements(payorsNames);
+   const uniqueStatuses = getUniqueElements(statuses);
 
    const filterIsForBill = filterIsFor === "bill";
    const filterIsForNotClaimedBill = filterIsFor === "notClaimedBill";
@@ -86,7 +94,7 @@ export const BillFiltersSelectors = ({
          {shouldRenderFundingSourceInput && (
             <UserInputsDropdown
                label={funderLabel}
-               dropdownOptions={addAllTextToTheList(payorsNames)}
+               dropdownOptions={addAllTextToTheList(uniquePayors)}
                onPass={passPayorHandler}
                selected={selectedPayor}
                dropdownClassName={addStyle(classes.filterDropStyle)}
@@ -95,7 +103,7 @@ export const BillFiltersSelectors = ({
          {shouldRenderClientInput && (
             <UserInputsDropdown
                label={"Client"}
-               dropdownOptions={addAllTextToTheList(clientsNames)}
+               dropdownOptions={addAllTextToTheList(uniqueClients)}
                onPass={passClientHandler}
                selected={selectedClient}
                dropdownClassName={addStyle(classes.filterDropStyle)}
@@ -131,7 +139,7 @@ export const BillFiltersSelectors = ({
                {shouldRenderStatusInput && (
                   <UserInputsDropdown
                      label={"Status"}
-                     dropdownOptions={addAllTextToTheList(statuses)}
+                     dropdownOptions={addAllTextToTheList(uniqueStatuses)}
                      onPass={passStatusHandler}
                      selected={selectedStatus}
                      dropdownClassName={addStyle(classes.filterDropStyle)}

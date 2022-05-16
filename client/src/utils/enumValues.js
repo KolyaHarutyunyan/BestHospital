@@ -10,12 +10,13 @@ export const enumValues = {
       "Partial Paid",
    ],
    BILLING_CLAIM_STATUSES: ["Claimed", "Not Claimed", "Complete"],
+   BILLING_INVOICE_STATUSES: ["Invoiced", "Not Invoiced", "Complete"],
 
    /**Claim Enums */
    CLAIM_STATUSES: ["Pending", "Closed", "Submitted", "Posted"],
 
    /**Invoice Enums */
-   INVOICE_STATUSES: ["Invoiced", "Not Invoiced", "Complete"],
+   INVOICE_STATUSES: ["Pending", "Closed", "Submitted", "Posted"],
 
    /**Posting (Payment Type) Enums */
    POSTING_PAYMENT_TYPES: ["Check", "Submitted", "Cash"],

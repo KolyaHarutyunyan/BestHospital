@@ -96,6 +96,7 @@ export const InvoicePaymentModals = ({
                      activeStep={activeStep}
                      handleStep={handleActiveStep}
                      closeModal={closeAddingModal}
+                     invoicePaymentId={invoicePaymentId}
                   />
                </BillingModalWrapper>
             }

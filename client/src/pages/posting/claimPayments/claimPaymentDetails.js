@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { ClaimPaymentDetailsFragment } from "@eachbase/fragments";
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { dummyData, FindLoad } from "@eachbase/utils";
+import { FindLoad } from "@eachbase/utils";
 import { CustomBreadcrumbs, Loader } from "@eachbase/components";
 import { claimPaymentActions } from "@eachbase/store";
 
@@ -11,13 +11,7 @@ export const ClaimPaymentDetails = () => {
 
    const dispatch = useDispatch();
 
-   // const claimPaymentById = useSelector((state) => state.claimPayment.claimPaymentById);
-
-   // temporary
-   const claimPaymentById = dummyData.CLAIM_PAYMENTS.find(
-      (claimPmt) => claimPmt._id === params.id
-   );
-   // end
+   const claimPaymentById = useSelector((state) => state.claimPayment.claimPaymentById);
 
    const loader = FindLoad("GET_CLAIM_PAYMENT_BY_ID");
 

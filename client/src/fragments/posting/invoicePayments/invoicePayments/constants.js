@@ -11,7 +11,7 @@ export function getFilteredInvoicePayments(invoicePayments, selClient, selStatus
          : selStatus !== "All"
          ? invoicePayments.filter(
               (invoicePayment) =>
-                 invoicePayment?.status.toLowerCase() === selStatus.toLowerCase()
+                 invoicePayment?.status?.toLowerCase() === selStatus.toLowerCase()
            )
          : [];
 

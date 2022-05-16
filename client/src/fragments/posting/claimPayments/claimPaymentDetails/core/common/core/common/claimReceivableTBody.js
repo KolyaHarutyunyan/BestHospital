@@ -23,8 +23,10 @@ export const ClaimReceivableTBody = ({ receivable }) => {
 
    const serviceStart = handleCreatedAtDate(receivable.dateOfService?.start);
    const serviceEnd = handleCreatedAtDate(receivable.dateOfService?.end);
-   const cptCode = getTableData(manageStatus(receivable.cptCode));
-   const modifier = getTableData(receivable.modifier);
+   const cptCode = !!receivable.cptCode
+      ? getTableData(manageStatus(receivable.cptCode))
+      : "---";
+   const modifier = !!receivable.modifier ? getTableData(receivable.modifier) : "---";
 
    const dateOfService = getTableData(`${serviceStart} - ${serviceEnd}`);
    const placeOfService = getTableData(receivable.placeService);

@@ -33,15 +33,19 @@ export const ClaimReceivableModalTBody = ({ receivable, passReceivable }) => {
 
    useEffect(() => {
       passReceivable &&
-         passReceivable({ ...receivable, filled: receivInputsAreFilled, ...inputs });
+         passReceivable({
+            ...receivable,
+            filled: receivInputsAreFilled,
+            ...inputs,
+         });
    }, [receivInputsAreFilled, inputs]);
 
    const serviceStart = handleCreatedAtDate(receivable.dateOfService?.start);
    const serviceEnd = handleCreatedAtDate(receivable.dateOfService?.end);
    const cptCode = !!receivable.cptCode
       ? getTableData(manageStatus(receivable.cptCode))
-      : "--";
-   const modifier = !!receivable.modifier ? getTableData(receivable.modifier) : "--";
+      : "---";
+   const modifier = !!receivable.modifier ? getTableData(receivable.modifier) : "---";
    const actionImageUrl = receivInputsAreFilled ? Images.successGreen : Images.success;
 
    const dateOfService = getTableData(`${serviceStart} - ${serviceEnd}`);

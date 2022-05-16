@@ -39,14 +39,12 @@ export const ClaimPaymentClaimTBody = ({ claim }) => {
 
    const early = handleCreatedAtDate(claim.dateRange?.early);
    const latest = handleCreatedAtDate(claim.dateRange?.latest);
-   const funderFirstName = claim.funder?.firstName;
-   const funderLastName = claim.funder?.lastName;
    const clientFirstName = claim.client?.firstName;
    const clientLastName = claim.client?.lastName;
 
    const claimId = getTableData(claim._id);
    const datePeriod = getTableData(`${early} - ${latest}`);
-   const funder = getFullName(funderFirstName, funderLastName, getTableData);
+   const funder = getTableData(claim.funder?.name);
    const client = getFullName(clientFirstName, clientLastName, getTableData);
    const totalCharged = getTableData(
       addSignToValueFromStart(getValueByFixedNumber(claim.totalCharge))
@@ -71,7 +69,7 @@ export const ClaimPaymentClaimTBody = ({ claim }) => {
             <div className={classes.tdStyle}>{remaining}</div>
             <div className={tdClassName}>{arrowArea}</div>
          </div>
-         {isShown && <ClaimReceivableTable claimReceivables={claim.receivables} />}
+         {isShown && <ClaimReceivableTable claimReceivables={claim.receivable} />}
       </div>
    );
 };

@@ -8,9 +8,7 @@ export function getFilteredBills(bills = [], selFunder, selClient, selDate) {
          ? bills
          : selFunder !== "All"
          ? bills.filter(
-              (bill) =>
-                 `${bill?.funder?.firstName} ${bill?.funder?.lastName}`.toLowerCase() ===
-                 selFunder.toLowerCase()
+              (bill) => bill?.payer?.name.toLowerCase() === selFunder.toLowerCase()
            )
          : selClient !== "All"
          ? bills.filter(

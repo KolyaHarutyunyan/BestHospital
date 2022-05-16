@@ -67,6 +67,8 @@ export const ListView = ({
       setStusType(appointmentById.eventStatus);
    }, [appointmentById]);
 
+   useEffect(() => {}, []);
+
    const dispatch = useDispatch();
 
    const loader = FindLoad("GET_APPOINTMENT_BY_ID");
@@ -77,14 +79,15 @@ export const ListView = ({
    };
 
    const handleChange = (e) => {
-      setStusType(e.target.value);
-
-      const info = {
-         eventStatus: e.target.value,
-         status: defItem.status,
-      };
-
-      dispatch(appointmentActions.setAppointmentStatus(defItem._id, info));
+      if (stusType === e.target.value) return;
+      // setStusType(e.target.value);
+      const statusName =
+         e.target.value === "RENDERED"
+            ? "render"
+            : e.target.value === "CANCELLED"
+            ? "cancel"
+            : "";
+      dispatch(appointmentActions.setAppointmentStatus(defItem._id, statusName, ""));
    };
 
    const list = getStatusList(defItem?.type);

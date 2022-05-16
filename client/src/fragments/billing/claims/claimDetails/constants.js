@@ -1,5 +1,6 @@
 import { DownloadLink } from "@eachbase/components";
 import { hooksForTable, makeCapitalize } from "@eachbase/utils";
+import { claimTHeadTBodyStyle } from "../claims/core/common/styles";
 
 export function getClaimDetails(claim) {
    const {
@@ -16,6 +17,8 @@ export function getClaimDetails(claim) {
 
    const { handleCreatedAtDate, addSignToValueFromStart, getValueByFixedNumber } =
       hooksForTable;
+
+   const classes = claimTHeadTBodyStyle();
 
    const early = handleCreatedAtDate(dateRange?.early);
    const latest = handleCreatedAtDate(dateRange?.latest);
@@ -49,7 +52,7 @@ export function getClaimDetails(claim) {
       },
       {
          detailText: "Founding Source:",
-         detail: !!funder && makeCapitalize(`${funder?.firstName} ${funder?.lastName}`),
+         detail: !!funder && makeCapitalize(funder?.name),
       },
       {
          detailText: "Total Charges:",
@@ -65,7 +68,16 @@ export function getClaimDetails(claim) {
       },
       {
          detailText: "Payment Reference",
-         detail: paymentRef,
+         detail: (
+            <a
+               className={classes.paymentRefStyle}
+               href={`https://${paymentRef || "www.testlink.com"}`}
+               target="_blank"
+               rel="noreferrer noopener"
+            >
+               {paymentRef}
+            </a>
+         ),
       },
    ];
 

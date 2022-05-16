@@ -38,7 +38,7 @@ export const AuthorizationFile = ({
    }, [success.length]);
 
    useEffect(() => {
-      dispatch(uploadActions.getUpload(fileId));
+      // dispatch(uploadActions.getUpload(fileId));
    }, []);
 
    useEffect(() => {
@@ -53,7 +53,7 @@ export const AuthorizationFile = ({
          type: fileName,
       };
       setSelectedFile(event.target.files[0]);
-      dispatch(uploadActions.createUpload(event.target.files[0], createInfo));
+      // dispatch(uploadActions.createUpload(event.target.files[0], createInfo));
    };
 
    useEffect(() => {
@@ -68,7 +68,7 @@ export const AuthorizationFile = ({
    }, [createLoader.length]);
 
    const deleteItem = (id) => {
-      dispatch(uploadActions.delUpload(id, fileId));
+      // dispatch(uploadActions.delUpload(id, fileId));
    };
 
    const handleChangeFileName = (e, id, item) => {
@@ -95,7 +95,7 @@ export const AuthorizationFile = ({
             size: info.size,
             name: info.name,
          };
-         dispatch(uploadActions.editUpload(date, anotherId, fileId));
+         // dispatch(uploadActions.editUpload(date, anotherId, fileId));
       }
    };
 

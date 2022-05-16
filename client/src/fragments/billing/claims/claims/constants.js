@@ -43,7 +43,7 @@ export function getFilteredClaims(
            )
          : selStatus !== "All"
          ? claims.filter(
-              (claim) => claim?.status.toLowerCase() === selStatus.toLowerCase()
+              (claim) => claim?.status?.toLowerCase() === selStatus.toLowerCase()
            )
          : [];
 

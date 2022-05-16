@@ -7,7 +7,14 @@ import {
    NoItemText,
    SimpleModal,
 } from "@eachbase/components";
-import { DrawerContext, getLimitedVal, Images, PaginationContext } from "@eachbase/utils";
+import {
+   DrawerContext,
+   getLimitedVal,
+   hooksForTable,
+   Images,
+   PaginationContext,
+   useWidth,
+} from "@eachbase/utils";
 import {
    BillTransactionInputs,
    TransactionsDemoTable,
@@ -57,6 +64,14 @@ export const BillDetailsFragment = ({
       handleGetPage(value);
    };
 
+   const width = useWidth();
+
+   const { getTextDependsOnWidth } = hooksForTable;
+
+   function getDetailDisplay(detail) {
+      return getTextDependsOnWidth(width, 1480, detail, 14);
+   }
+
    return (
       <>
          <div className={classes.billDetailsContainerStyle}>
@@ -82,7 +97,7 @@ export const BillDetailsFragment = ({
                      {filteredDetails.map((item, index) => (
                         <li key={index} className={drawerOpen ? "narrow" : ""}>
                            <span>
-                              {item.detailText} <em> {item.detail} </em>
+                              {item.detailText} <em> {getDetailDisplay(item.detail)} </em>
                            </span>
                         </li>
                      ))}

@@ -16,12 +16,20 @@ export const UserInputsDropdown = ({
 
    const width = useWidth();
 
+   function getDisplayOf(givenValue, limit) {
+      return width <= 1720 ? getLimitedVal(givenValue, limit) : givenValue;
+   }
+
    const [dropdownIsShown, setDropdownIsShown] = useState(false);
 
    function chooseOptionHandler(option) {
       onPass(option);
       setDropdownIsShown(false);
    }
+
+   const sectionDisplay = !!selected
+      ? getDisplayOf(selected, 10)
+      : getDisplayOf(dropdownTitle, 10);
 
    return (
       <>
@@ -41,7 +49,7 @@ export const UserInputsDropdown = ({
                   <h6
                      className={`dropdown-selected ${classes.optionStyle} ${itemClassName}`}
                   >
-                     {selected ? selected : dropdownTitle}
+                     {sectionDisplay}
                   </h6>
                   <i className={`${dropdownIsShown ? "active" : ""}`} />
                </div>
@@ -50,8 +58,7 @@ export const UserInputsDropdown = ({
                      {dropdownOptions.map((option, index) => {
                         const itemClassName = ActiveInactiveStatus(option);
 
-                        const optionDisplay =
-                           width <= 1720 ? getLimitedVal(option, 13) : option;
+                        const optionDisplay = getDisplayOf(option, 13);
 
                         return (
                            <li
