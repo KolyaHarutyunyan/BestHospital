@@ -1,4 +1,4 @@
 export class EventImageDTO {
-    imageUrl: string;
-    thumbnailUrl: string;
-  }
+  imageUrl: string;
+  thumbnailUrl: string;
+}

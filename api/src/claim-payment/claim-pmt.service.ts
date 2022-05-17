@@ -3,10 +3,10 @@ import { Model, startSession } from 'mongoose';
 import { ClaimPmtDto } from './dto/claim-pmt.dto.';
 import { ClaimService } from '../claim/claim.service';
 import { MongooseUtil } from '../util/mongoose.util';
-import { ClaimPmtStatus, PaymentType } from './claim-pmt.contants';
+import { ClaimPmtStatus, DocumentStatus, PaymentType } from './claim-pmt.contants';
 import { ClaimPmtModel } from './claim-pmt.model';
 import { ClaimPmtSanitizer } from './claim-pmt.sanitizer';
-import { CreateClaimPmtDto, CreateClaimReceivableDTO } from './dto';
+import { CreateClaimPmtDto, CreateClaimReceivableDTO, CreateDocDTO } from './dto';
 import { UpdateClaimPmtDto } from './dto/update-claim-payment.dto';
 import { IClaimPmt } from './interface';
 import { FileService } from '../files/file.service';
@@ -111,16 +111,17 @@ export class ClaimPmtService {
     return this.sanitizer.sanitize(claimPmt);
   }
   /** add document to claim-pmt */
-  async addDocument(_id: string, fileId: string): Promise<ClaimPmtDto> {
-    const [claimPmt, file] = await Promise.all([
+  async addDocument(_id: string, dto: CreateDocDTO): Promise<ClaimPmtDto> {
+    const [claimPmt, file]: any = await Promise.all([
       this.model.findById(_id),
-      this.fileService.getOne(fileId),
+      this.fileService.getOne(dto.file.id),
     ]);
     this.checkClaimPmt(claimPmt);
-    claimPmt.documents.push(fileId);
+    claimPmt.documents.push(dto.file);
     await claimPmt.save();
     return this.sanitizer.sanitize(claimPmt);
   }
+
   /** delete document in the claim-pmt */
   async deleteDocument(_id: string, fileId: string): Promise<ClaimPmtDto> {
     const claimPmt = await this.model.findById(_id);
@@ -130,7 +131,9 @@ export class ClaimPmtService {
     return this.sanitizer.sanitize(claimPmt);
   }
   /** find all claim-pmts */
-  async findAll(): Promise<IClaimPmtCount> {
+  async findAll(skip: number, limit: number): Promise<IClaimPmtCount> {
+    skip ? skip : (skip = 0);
+    limit ? limit : (limit = 10);
     const [claimPmts, count] = await Promise.all([
       this.model
         .find()
@@ -148,7 +151,9 @@ export class ClaimPmtService {
               path: 'funder',
             },
           },
-        ]),
+        ])
+        .skip(skip)
+        .limit(limit),
       this.model.countDocuments(),
     ]);
     const sanClaimPmt = this.sanitizer.sanitizeMany(claimPmts);

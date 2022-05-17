@@ -1,19 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum } from 'class-validator';
+import { IsMongoId, IsOptional, IsUrl } from 'class-validator';
 
 export class FileDTO {
   @ApiProperty()
+  @IsMongoId()
   id: string;
   @ApiProperty()
-  resource: string;
-  @ApiProperty()
-  type: string;
-  @ApiProperty()
+  @IsUrl()
   url: string;
+  @ApiProperty({ required: false })
+  @IsUrl()
+  @IsOptional()
+  thumbUrl?: string;
   @ApiProperty()
-  mimetype: string;
-  @ApiProperty()
-  size: number;
-  @ApiProperty()
+  @IsOptional()
   name: string;
 }

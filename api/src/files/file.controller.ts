@@ -8,10 +8,13 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
+  Req,
+  Query,
+  UploadedFiles,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { ParseObjectIdPipe } from '../util';
+import { IRequest, ParseObjectIdPipe } from '../util';
 import { FileService } from './file.service';
 import { CreateImageDTO, FileDTO, EditImageDTO } from './dto';
 import { ACCESS_TOKEN } from '../authN/authN.constants';
@@ -21,23 +24,36 @@ import { ACCESS_TOKEN } from '../authN/authN.constants';
 export class FileController {
   constructor(private readonly imagesService: FileService) {}
 
+  // @Post('upload')
+  // @ApiHeader({ name: ACCESS_TOKEN })
+  // @UseInterceptors(FileInterceptor('file'))
+  // async uploadImage(@UploadedFile() file) {
+  //   const fileURLs = await this.imagesService.saveImage(file);
+  //   // createRestaurantDTO.logoUrl = fileURLs ? fileURLs.imageUrl : null;
+  //   return fileURLs;
+  // }
+
   @Post('upload')
+  @UseInterceptors(FileInterceptor('files'))
   @ApiHeader({ name: ACCESS_TOKEN })
-  @UseInterceptors(FileInterceptor('file'))
-  async uploadImage(@UploadedFile() file) {
-    const fileURLs = await this.imagesService.saveImage(file);
-    // createRestaurantDTO.logoUrl = fileURLs ? fileURLs.imageUrl : null;
-    return fileURLs;
+  async uploadImage(
+    @Query('includeThumbnail') includeThumbnail: boolean,
+    @UploadedFile() file,
+    @Req() req: IRequest,
+  ): Promise<FileDTO> {
+    const uploadedFile = await this.imagesService.create(req.user.id, file, includeThumbnail);
+    return uploadedFile;
   }
-
-  @Post()
-  @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({ type: FileDTO })
-  async create(@Body() createDTO: CreateImageDTO): Promise<FileDTO> {
-    const image = await this.imagesService.create(createDTO);
-    return image;
+  @Post('uploadMany')
+  @UseInterceptors(FilesInterceptor('files'))
+  async uploadImages(
+    @Query('includeThumbnail') includeThumbnail: boolean,
+    @UploadedFiles() files,
+    @Req() req: IRequest,
+  ) {
+    const uploadedFiles = await this.imagesService.createMany(req.user.id, files, includeThumbnail);
+    return uploadedFiles;
   }
-
   @Get(':resource')
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: [FileDTO] })
@@ -47,17 +63,17 @@ export class FileController {
   }
 
   /** Edit a File profile */
-  @Patch(':id')
-  @ApiHeader({ name: ACCESS_TOKEN })
-  // @ApiBody({ type: EditFactoringDTO })
-  @ApiOkResponse({ type: FileDTO })
-  async edit(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Body() editDTO: EditImageDTO,
-  ): Promise<FileDTO> {
-    const file = await this.imagesService.edit(id, editDTO);
-    return file;
-  }
+  // @Patch(':id')
+  // @ApiHeader({ name: ACCESS_TOKEN })
+  // // @ApiBody({ type: EditFactoringDTO })
+  // @ApiOkResponse({ type: FileDTO })
+  // async edit(
+  //   @Param('id', ParseObjectIdPipe) id: string,
+  //   @Body() editDTO: EditImageDTO,
+  // ): Promise<FileDTO> {
+  //   const file = await this.imagesService.edit(id, editDTO);
+  //   return file;
+  // }
 
   @Delete(':id')
   // @ApiOkResponse({type: FileDTO})

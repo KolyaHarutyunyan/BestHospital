@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { FileDTO } from '../../files/dto';
 import { ClaimPmtStatus } from '../claim-pmt.contants';
 
 export class ClaimPmtDto {

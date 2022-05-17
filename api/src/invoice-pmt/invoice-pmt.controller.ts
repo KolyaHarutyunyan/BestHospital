@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { InvPmtService } from './invoice-pmt.service';
 import { CreateInvPmtDto, UpdateInvPmtDto, InvPmtDto, CreateReceivableDTO } from './dto';
-import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ACCESS_TOKEN } from '../authN';
 import { ParseObjectIdPipe } from '../util';
 
@@ -27,10 +27,22 @@ export class InvPmtController {
     return this.invPmtService.payment(id, createReceivableDTO);
   }
   @Get()
+  @ApiQuery({
+    name: 'skip',
+    description: 'where',
+    required: false,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'how',
+    required: false,
+    type: Number,
+  })
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: [InvPmtDto] })
-  findAll() {
-    return this.invPmtService.findAll();
+  findAll(@Query('skip') skip: number, @Query('limit') limit: number) {
+    return this.invPmtService.findAll(skip, limit);
   }
 
   @Get(':id')

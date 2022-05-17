@@ -12,8 +12,8 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { DTO } from '../../util';
-import { UserDTO } from '../../authN';
 import { PaymentType } from '../claim-pmt.contants';
+import { FileDTO } from '../../files/dto/file.dto';
 
 export class CreateClaimPmtDto {
   @ApiProperty({ enum: PaymentType })
@@ -36,6 +36,8 @@ export class CreateClaimPmtDto {
   @IsString()
   @IsNotEmpty()
   checkNumber: string;
+  @ApiProperty({ type: FileDTO })
+  file: FileDTO;
 }
 class ClaimReceivableDTO {
   @ApiProperty()
@@ -72,4 +74,8 @@ export class CreateClaimReceivableDTO extends DTO {
   @ValidateNested({ each: true })
   @Type(() => ClaimReceivableDTO)
   receivables: ClaimReceivableDTO[];
+}
+export class CreateDocDTO extends DTO {
+  @ApiProperty({ type: FileDTO })
+  file: FileDTO;
 }

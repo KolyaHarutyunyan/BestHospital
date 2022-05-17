@@ -7,13 +7,10 @@ import { IFile } from '../interface';
 export class FileSanitizer implements ISanitize {
   sanitize(file: IFile): FileDTO {
     const sanitizedOffice: FileDTO = {
-      id: file.id,
-      type: file.type,
-      mimetype: file.mimetype,
-      size: file.size,
+      id: file._id,
       url: file.url,
+      thumbUrl: file.thumbUrl,
       name: file.name,
-      resource: file.resource,
     };
     return sanitizedOffice;
   }

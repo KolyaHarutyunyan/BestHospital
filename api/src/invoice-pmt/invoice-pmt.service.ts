@@ -153,7 +153,9 @@ export class InvPmtService {
     return this.sanitizer.sanitize(invPmt);
   }
   /** get all posting */
-  async findAll(): Promise<IInvPmtCount> {
+  async findAll(skip: number, limit: number): Promise<IInvPmtCount> {
+    skip ? skip : (skip = 0);
+    limit ? limit : (limit = 10);
     const [invPmts, count] = await Promise.all([
       this.model
         .find()
@@ -164,7 +166,9 @@ export class InvPmtService {
             path: 'client',
           },
         })
-        .populate('client'),
+        .populate('client')
+        .skip(skip)
+        .limit(limit),
       this.model.countDocuments(),
     ]);
     const sanInvPmt = this.sanitizer.sanitizeMany(invPmts);

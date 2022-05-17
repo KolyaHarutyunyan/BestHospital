@@ -29,19 +29,33 @@ export class FileService {
     return { url: url, mimetype: file.mimetype, size: file.size, name: file.originalname };
   };
 
-  create = async (dto: CreateImageDTO): Promise<FileDTO> => {
+  /** upload a new file to S3 and create the record of that file in mongodb */
+  create = async (uploaderId: string, fileData: any, thumb?: boolean): Promise<FileDTO> => {
+    if (!fileData) return null;
+    let files;
+    if (thumb) {
+      const thumbnail = await this.createThumbnail(fileData);
+      files = await Promise.all([
+        this.storage.storeImage(fileData),
+        this.storage.storeImage(thumbnail),
+      ]);
+    } else {
+      files = [await this.storage.storeImage(fileData)];
+    }
     const file = new this.model({
-      type: dto.type,
-      url: dto.url,
-      mimetype: dto.mimetype,
-      size: dto.size,
-      name: dto.name,
-      resource: dto.resource,
+      url: files[0],
+      uploader: uploaderId,
+      name: fileData.originalname,
+      thumbUrl: files[1] ? files[1] : undefined,
     });
-
     await file.save();
     return this.sanitizer.sanitize(file);
   };
+  /** Saves multiple images for the event */
+  createMany = async (uploader: string, files: any[], thumb?: boolean) => {
+    return await Promise.all(files.map((file) => this.create(uploader, file, thumb)));
+  };
+
   /** get all files */
   get = async (resource: string): Promise<FileDTO[]> => {
     const files = await this.model.find({ resource });
@@ -54,17 +68,17 @@ export class FileService {
     this.checkFile(file);
     return this.sanitizer.sanitize(file);
   };
-  edit = async (_id: string, dto: EditImageDTO): Promise<FileDTO> => {
-    const file = await this.model.findById(_id);
-    this.checkFile(file);
-    if (dto.type) file.type = dto.type;
-    if (dto.mimetype) file.mimetype = dto.mimetype;
-    if (dto.size) file.size = dto.size;
-    if (dto.name) file.name = dto.name;
-    if (dto.url) file.url = dto.url;
-    await file.save();
-    return this.sanitizer.sanitize(file);
-  };
+  // edit = async (_id: string, dto: EditImageDTO): Promise<FileDTO> => {
+  //   const file = await this.model.findById(_id);
+  //   this.checkFile(file);
+  //   if (dto.type) file.type = dto.type;
+  //   if (dto.mimetype) file.mimetype = dto.mimetype;
+  //   if (dto.size) file.size = dto.size;
+  //   if (dto.name) file.name = dto.name;
+  //   if (dto.url) file.url = dto.url;
+  //   await file.save();
+  //   return this.sanitizer.sanitize(file);
+  // };
   /** if the file is attached, it saves the file for the event and returns the image object */
   saveEventImage = async (file): Promise<EventImageDTO> => {
     if (!file) {
@@ -112,5 +126,17 @@ export class FileService {
     if (!file) {
       throw new HttpException('file with was not found', HttpStatus.NOT_FOUND);
     }
+  }
+  /** Takes a file and creates a 200 x 200 pixel thumbnail version of it */
+  private async createThumbnail(file) {
+    if (!file) return undefined;
+    const thumbnailBuffer = await sharp(file.buffer)
+      .resize({ width: 200, height: 200, fit: 'cover' })
+      .toBuffer();
+    return {
+      originalname: 'thumbnail_' + file.originalname,
+      mimetype: file.mimetype,
+      buffer: thumbnailBuffer,
+    };
   }
 }

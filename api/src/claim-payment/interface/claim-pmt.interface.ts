@@ -1,4 +1,5 @@
-import { ClaimPmtStatus, PaymentType } from '../claim-pmt.contants';
+import { FileDTO } from '../../files/dto';
+import { ClaimPmtStatus, DocumentStatus, PaymentType } from '../claim-pmt.contants';
 import { ClaimPmtDto } from '../dto';
 
 export interface IClaimPmt extends Document {
@@ -17,4 +18,7 @@ export interface IClaimPmt extends Document {
 export interface IClaimPmtCount {
   claimPmt: ClaimPmtDto[];
   count: number;
+}
+export interface IClaimPmtDoc extends Document {
+  file: FileDTO;
 }

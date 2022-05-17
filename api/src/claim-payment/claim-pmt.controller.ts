@@ -1,5 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ParseObjectIdPipe } from '../util';
 import { ACCESS_TOKEN } from '../authN/authN.constants';
 import { ClaimPmtService } from './claim-pmt.service';
@@ -31,10 +31,22 @@ export class ClaimPmtController {
 
   /** get all claim-pmts */
   @Get()
+  @ApiQuery({
+    name: 'skip',
+    description: 'where',
+    required: false,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'how',
+    required: false,
+    type: Number,
+  })
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: [ClaimPmtDto] })
-  findAll() {
-    return this.claimPmtService.findAll();
+  findAll(@Query('skip') skip: number, @Query('limit') limit: number) {
+    return this.claimPmtService.findAll(skip, limit);
   }
   /** get claim-pmt by id */
   @Get(':id')
