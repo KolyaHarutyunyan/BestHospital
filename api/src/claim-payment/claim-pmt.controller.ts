@@ -1,10 +1,14 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { ParseObjectIdPipe } from '../util';
+import { ParseObjectIdPipe, Public } from '../util';
 import { ACCESS_TOKEN } from '../authN/authN.constants';
 import { ClaimPmtService } from './claim-pmt.service';
 import { ClaimPmtDto } from './dto/claim-pmt.dto.';
-import { CreateClaimPmtDto, CreateClaimReceivableDTO } from './dto/create-claim-pmt.dto';
+import {
+  CreateClaimPmtDto,
+  CreateClaimReceivableDTO,
+  CreateDocDTO,
+} from './dto/create-claim-pmt.dto';
 import { UpdateClaimPmtDto } from './dto/update-claim-payment.dto';
 
 @Controller('claim-pmt')
@@ -17,6 +21,26 @@ export class ClaimPmtController {
   @ApiOkResponse({ type: ClaimPmtDto })
   create(@Body() createClaimPmtDto: CreateClaimPmtDto) {
     return this.claimPmtService.create(createClaimPmtDto);
+  }
+  /** add document*/
+  @Post(':id/documents')
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: ClaimPmtDto })
+  async addDocument(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Body() dto: CreateDocDTO,
+  ): Promise<ClaimPmtDto> {
+    return await this.claimPmtService.addDocument(id, dto);
+  }
+  /** delete document*/
+  @Delete(':id/documents/:docId')
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: ClaimPmtDto })
+  async deleteDocument(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Param('docId', ParseObjectIdPipe) docId: string,
+  ): Promise<ClaimPmtDto> {
+    return await this.claimPmtService.deleteDocument(id, docId);
   }
   /** add receivable */
   @Post(':id/payment')

@@ -112,7 +112,7 @@ export class ClaimPmtService {
   }
   /** add document to claim-pmt */
   async addDocument(_id: string, dto: CreateDocDTO): Promise<ClaimPmtDto> {
-    const [claimPmt, file]: any = await Promise.all([
+    const [claimPmt]: any = await Promise.all([
       this.model.findById(_id),
       this.fileService.getOne(dto.file.id),
     ]);
@@ -368,7 +368,7 @@ export class ClaimPmtService {
   }
   /** Removes a file from the list if the file exists */
   private removeFromList(list: any[], element: any) {
-    const index = list.findIndex((id) => id == element);
+    const index = list.findIndex((file) => file.id.toString() == element.toString());
     if (index !== -1) {
       list.splice(index, 1);
     } else {

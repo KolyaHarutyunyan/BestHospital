@@ -36,8 +36,6 @@ export class CreateClaimPmtDto {
   @IsString()
   @IsNotEmpty()
   checkNumber: string;
-  @ApiProperty({ type: FileDTO })
-  file: FileDTO;
 }
 class ClaimReceivableDTO {
   @ApiProperty()
