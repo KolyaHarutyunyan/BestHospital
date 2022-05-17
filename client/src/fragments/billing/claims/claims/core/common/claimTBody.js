@@ -47,7 +47,9 @@ export const ClaimTBody = ({ claims = [] }) => {
                addSignToValueFromStart(getValueByFixedNumber(claim.ammountPaid))
             );
             const remaining = getTableData(
-               addSignToValueFromStart(getValueByFixedNumber(claim.remaining))
+               addSignToValueFromStart(
+                  getValueByFixedNumber(claim.totalBilled - claim.ammountPaid)
+               )
             );
             const status = showDashIfEmpty(manageStatus(claim.status));
             const paymentReference = getTableHeader(

@@ -21,11 +21,15 @@ export const InvoicePaymentDetailsFragment = ({ invoicePaymentDetails }) => {
    const [addingModalIsOpen, setAddingModalIsOpen] = useState(false);
    const [activeStep, setActiveStep] = useState("first");
 
-   const { _id, invoices } = invoicePaymentDetails || {};
+   const { _id, invoices, status } = invoicePaymentDetails || {};
 
    const filteredDetails = getInvoicePaymentDetails(invoicePaymentDetails).filter(
       (invoicePmtDtl) => !!invoicePmtDtl.detail
    );
+
+   const invoicePmtIsVoided = status === "VOIDED";
+   const voidButnStyle = `${classes.voidButnStyle} ${invoicePmtIsVoided ? "voided" : ""}`;
+   const voidButnText = invoicePmtIsVoided ? "Voided" : "Void";
 
    const width = useWidth();
 
@@ -52,11 +56,12 @@ export const InvoicePaymentDetailsFragment = ({ invoicePaymentDetails }) => {
                      <img src={Images.edit} alt="" />
                   </div>
                   <button
-                     className={classes.voidinvoicePaymentButnStyle}
+                     className={voidButnStyle}
                      type="button"
                      onClick={() => setVoidingModalIsOpen(true)}
+                     disabled={invoicePmtIsVoided}
                   >
-                     Void
+                     {voidButnText}
                   </button>
                </div>
             </div>

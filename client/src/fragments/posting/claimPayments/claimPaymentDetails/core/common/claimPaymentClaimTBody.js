@@ -47,14 +47,14 @@ export const ClaimPaymentClaimTBody = ({ claim }) => {
    const funder = getTableData(claim.funder?.name);
    const client = getFullName(clientFirstName, clientLastName, getTableData);
    const totalBilled = getTableData(
-      addSignToValueFromStart(getValueByFixedNumber(claim.totalCharge))
+      addSignToValueFromStart(getValueByFixedNumber(claim.totalBilled))
    );
    const totalPaid = getTableData(
       addSignToValueFromStart(getValueByFixedNumber(claim.amountPaid))
    );
    const remaining = getTableData(
       addSignToValueFromStart(
-         getValueByFixedNumber(claim.totalCharge - claim.ammountPaid || 0)
+         getValueByFixedNumber(claim.totalBilled - claim.ammountPaid || 0)
       )
    );
    const arrowArea = <img src={Images.dropdownArrowBlue} alt="" />;

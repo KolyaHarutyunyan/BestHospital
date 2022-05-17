@@ -13,7 +13,7 @@ export const ReceivableBillTBody = ({ receivableBill }) => {
       handleCreatedAtDate(receivableBill.dateOfService)
    );
    const timeOfService = showDashIfEmpty(manageStatus(receivableBill.timeOfService));
-   const units = showDashIfEmpty(receivableBill.units);
+   const units = showDashIfEmpty(receivableBill.totalUnits);
    const signature = receivableBill.signature;
 
    return (

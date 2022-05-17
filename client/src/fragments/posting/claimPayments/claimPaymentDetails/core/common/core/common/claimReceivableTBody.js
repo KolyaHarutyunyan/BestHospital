@@ -27,9 +27,9 @@ export const ClaimReceivableTBody = ({ receivable }) => {
    const placeOfService = getTableData(receivable.placeService);
    const cptCodeAndModif = `${cptCode} - ${modifier}`;
    const totalUnits = getTableData(receivable.totalUnits);
-   const allowedAmount = getTableData(receivable.allowedAmount);
+   const allowedAmount = getTableData(receivable.allowedAMT);
    const totalBilled = getTableData(receivable.totalBill);
-   const paidAmount = getTableData(receivable.paidAmount);
+   const paidAmount = getTableData(receivable.paidAMT);
    const clientResp = getTableData(receivable.clientResp);
 
    return (

@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core";
 export const billTableStyle = makeStyles(() => ({
    billTableWithoutScrollStyle: {
       maxWidth: "850px",
-      "&.narrow": { maxWidth: "650px" },
+      "&.narrow": { maxWidth: "750px" },
       "@media(max-width: 1565px)": {
          maxWidth: "700px",
          "&.narrow": { maxWidth: "600px" },

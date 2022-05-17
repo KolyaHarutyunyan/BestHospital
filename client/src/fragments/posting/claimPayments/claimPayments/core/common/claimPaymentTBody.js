@@ -18,8 +18,12 @@ export const ClaimPaymentTBody = ({ claimPayments = [] }) => {
 
    const { open } = useContext(DrawerContext);
 
-   const { addSignToValueFromStart, getValueByFixedNumber, showDashIfEmpty } =
-      hooksForTable;
+   const {
+      // getTableHeader,
+      addSignToValueFromStart,
+      getValueByFixedNumber,
+      showDashIfEmpty,
+   } = hooksForTable;
 
    function getTableData(data) {
       return showDashIfEmpty(getDataForTable(data, open, width));
@@ -31,13 +35,19 @@ export const ClaimPaymentTBody = ({ claimPayments = [] }) => {
             const claimPaymentId = getTableData(claimPayment._id);
             const funder = getTableData(claimPayment?.fundingSource?.name);
             const totalPaid = getTableData(
-               addSignToValueFromStart(getValueByFixedNumber(claimPayment.totalPaid))
+               addSignToValueFromStart(getValueByFixedNumber(claimPayment.totalBilled))
             );
             const totalUsed = getTableData(
                addSignToValueFromStart(getValueByFixedNumber(claimPayment.totalUsed))
             );
             const status = showDashIfEmpty(manageStatus(claimPayment.status));
-            const paymentReference = getTableData(claimPayment.paymentRef);
+            const paymentReference = getTableData(claimPayment.checkNumber);
+            // const paymentReference = getTableHeader(
+            //    invoicePayment.paymentRef || "www.testlink.com",
+            //    getTableData(invoicePayment.paymentRef || "www.testlink.com"),
+            //    "",
+            //    false
+            // );
 
             return (
                <div
@@ -51,6 +61,19 @@ export const ClaimPaymentTBody = ({ claimPayments = [] }) => {
                   <div className={classes.tdStyle}>{totalUsed}</div>
                   <div className={classes.tdStyle}>{status}</div>
                   <div className={classes.tdStyle}>{paymentReference}</div>
+                  {/* <div className={classes.tdStyle}>
+                     <a
+                        className={classes.paymentRefStyle}
+                        href={`https://${
+                           invoicePayment.paymentRef || "www.testlink.com"
+                        }`}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        onClick={(event) => event.stopPropagation()}
+                     >
+                        {paymentReference}
+                     </a>
+                  </div> */}
                </div>
             );
          })}

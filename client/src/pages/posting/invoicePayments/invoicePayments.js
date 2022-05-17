@@ -21,7 +21,7 @@ export const InvoicePayments = () => {
    );
    const { clients } = useSelector((state) => state.client.clientList);
 
-   const { invoicePayments, count } = invoicePaymentsData || {};
+   const { invPmt: invoicePayments, count } = invoicePaymentsData || {};
    const mappedClients = clients?.map((client) => ({
       id: client.id,
       name: `${client.firstName} ${client.lastName}`,
@@ -47,7 +47,7 @@ export const InvoicePayments = () => {
 
    return (
       <InvoicePaymentsFragment
-         invoicePayments={invoicePaymentsData}
+         invoicePayments={invoicePayments}
          invoicePaymentsQty={count}
          page={page}
          handleGetPage={setPage}

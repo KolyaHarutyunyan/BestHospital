@@ -2,7 +2,7 @@ import { DownloadLink } from "@eachbase/components";
 import { hooksForTable, makeCapitalize, manageStatus } from "@eachbase/utils";
 
 export function getInvoiceDetails(invoice) {
-   const { dateRange, totalAmount, pdfDocument, client, dueDate, status, totalTime } =
+   const { dateRange, invoiceTotal, pdfDocument, client, dueDate, status, totalTime } =
       invoice || {};
 
    const { addSignToValueFromStart, getValueByFixedNumber, handleCreatedAtDate } =
@@ -18,7 +18,7 @@ export function getInvoiceDetails(invoice) {
       },
       {
          detailText: "Invoice Total:",
-         detail: addSignToValueFromStart(getValueByFixedNumber(totalAmount)),
+         detail: addSignToValueFromStart(getValueByFixedNumber(invoiceTotal)),
       },
       {
          detailText: "PDF Document:",

@@ -1,9 +1,12 @@
 import { DownloadLink } from "@eachbase/components";
 import { hooksForTable, makeCapitalize, manageStatus } from "@eachbase/utils";
+// import { invoicePaymentDetailsStyle } from "./styles";
 
 export function getInvoicePaymentDetails(invoicePayment) {
-   const { client, status, paymentReference, totalBilled, totalCollected, paymentType } =
+   const { client, status, checkNumber, totalBilled, totalUsed, paymentType } =
       invoicePayment || {};
+
+   // const classes = invoicePaymentDetailsStyle();
 
    const { addSignToValueFromStart, getValueByFixedNumber } = hooksForTable;
 
@@ -18,15 +21,26 @@ export function getInvoicePaymentDetails(invoicePayment) {
       },
       {
          detailText: "Payment Reference:",
-         detail: paymentReference,
+         detail: checkNumber,
+         // detail: (
+         //    <a
+         //       className={classes.paymentRefStyle}
+         //       href={`https://${paymentReference || "www.testlink.com"}`}
+         //       target="_blank"
+         //       rel="noreferrer noopener"
+         //       onClick={(event) => event.stopPropagation()}
+         //    >
+         //       {paymentReference || "www.testlink.com"}
+         //    </a>
+         // ),
       },
       {
-         detailText: "Total Billed:",
+         detailText: "Total Amount:",
          detail: addSignToValueFromStart(getValueByFixedNumber(totalBilled)),
       },
       {
-         detailText: "Total Collected:",
-         detail: addSignToValueFromStart(getValueByFixedNumber(totalCollected)),
+         detailText: "Total Used:",
+         detail: addSignToValueFromStart(getValueByFixedNumber(totalUsed)),
       },
       {
          detailText: "EOB:",
