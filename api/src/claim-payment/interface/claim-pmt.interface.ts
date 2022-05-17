@@ -1,4 +1,5 @@
 import { ClaimPmtStatus, PaymentType } from '../claim-pmt.contants';
+import { ClaimPmtDto } from '../dto';
 
 export interface IClaimPmt extends Document {
   _id: string;
@@ -12,4 +13,8 @@ export interface IClaimPmt extends Document {
   claimIds: string[];
   status: ClaimPmtStatus;
   documents: string[];
+}
+export interface IClaimPmtCount {
+  claimPmt: ClaimPmtDto[];
+  count: number;
 }

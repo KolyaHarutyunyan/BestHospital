@@ -16,6 +16,7 @@ import { FundingService } from '../funding/funding.service';
 import { BillingService } from '../billing/billing.service';
 import { IBilling } from '../billing/interface';
 import { BillingDto } from '../billing/dto';
+import { IClaimPmtCount } from './interface/claim-pmt.interface';
 
 @Injectable()
 export class ClaimPmtService {
@@ -129,25 +130,29 @@ export class ClaimPmtService {
     return this.sanitizer.sanitize(claimPmt);
   }
   /** find all claim-pmts */
-  async findAll(): Promise<ClaimPmtDto[]> {
-    const claimPmts = await this.model
-      .find()
-      .populate('fundingSource')
-      .populate([
-        {
-          path: 'claimIds',
-          populate: {
-            path: 'client',
+  async findAll(): Promise<IClaimPmtCount> {
+    const [claimPmts, count] = await Promise.all([
+      this.model
+        .find()
+        .populate('fundingSource')
+        .populate([
+          {
+            path: 'claimIds',
+            populate: {
+              path: 'client',
+            },
           },
-        },
-        {
-          path: 'claimIds',
-          populate: {
-            path: 'funder',
+          {
+            path: 'claimIds',
+            populate: {
+              path: 'funder',
+            },
           },
-        },
-      ]);
-    return this.sanitizer.sanitizeMany(claimPmts);
+        ]),
+      this.model.countDocuments(),
+    ]);
+    const sanClaimPmt = this.sanitizer.sanitizeMany(claimPmts);
+    return { claimPmt: sanClaimPmt, count };
   }
   /** find claim-pmt by id */
   async findOne(_id: string): Promise<ClaimPmtDto> {

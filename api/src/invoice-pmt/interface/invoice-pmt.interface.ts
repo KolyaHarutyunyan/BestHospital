@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+import { InvPmtDto } from '../dto';
 import { InvPmtStatus } from '../invoice-pmt.constants';
 
 export interface IInvPmt extends Document {
@@ -14,4 +15,9 @@ export interface IInvPmt extends Document {
   eob: string;
   client: string;
   createdAt: Date;
+}
+
+export interface IInvPmtCount {
+  invPmt: InvPmtDto[];
+  count: number;
 }

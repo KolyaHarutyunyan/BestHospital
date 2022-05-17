@@ -11,7 +11,7 @@ import { InvoiceService } from '../invoice/invoice.service';
 import { MongooseUtil } from '../util/mongoose.util';
 import { CreateInvPmtDto, UpdateInvPmtDto, InvPmtDto } from './dto';
 import { CreateReceivableDTO } from './dto/create-invoice-pmt.dto';
-import { IInvPmt } from './interface/invoice-pmt.interface';
+import { IInvPmt, IInvPmtCount } from './interface/invoice-pmt.interface';
 import { InvPmtStatus } from './invoice-pmt.constants';
 import { InvPmtModel } from './invoice-pmt.model';
 import { InvPmtSanitizer } from './invoice-pmt.sanitizer';
@@ -153,18 +153,22 @@ export class InvPmtService {
     return this.sanitizer.sanitize(invPmt);
   }
   /** get all posting */
-  async findAll(): Promise<InvPmtDto[]> {
-    const invPmts = await this.model
-      .find()
-      .populate('documents')
-      .populate({
-        path: 'invoices',
-        populate: {
-          path: 'client',
-        },
-      })
-      .populate('client');
-    return this.sanitizer.sanitizeMany(invPmts);
+  async findAll(): Promise<IInvPmtCount> {
+    const [invPmts, count] = await Promise.all([
+      this.model
+        .find()
+        .populate('documents')
+        .populate({
+          path: 'invoices',
+          populate: {
+            path: 'client',
+          },
+        })
+        .populate('client'),
+      this.model.countDocuments(),
+    ]);
+    const sanInvPmt = this.sanitizer.sanitizeMany(invPmts);
+    return { invPmt: sanInvPmt, count };
   }
   /** get one posting */
   async findOne(_id: string): Promise<InvPmtDto> {
