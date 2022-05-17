@@ -221,7 +221,11 @@ export class InvoiceService {
     subBills,
   ): Promise<void> {
     let totalBilled = 0;
-    receivable.map((rec) => (totalBilled += rec.amountTotal));
+    let totalHours = 0;
+    receivable.map((rec) => {
+      totalBilled += rec.amountTotal;
+      totalHours += rec.hours;
+    });
     invoice.push({
       client: result.client,
       staff: result.staff,
@@ -235,9 +239,7 @@ export class InvoiceService {
       invoiceTotal: subBills.reduce((a, b) => {
         return a + b.clientResp;
       }, 0),
-      totalTime: subBills.reduce((a, b) => {
-        return a + b.totalHours;
-      }, 0),
+      totalHours,
       totalBilled,
       dueDate: '2021-12-28T07:02:16.250Z',
       downloadLink: '',

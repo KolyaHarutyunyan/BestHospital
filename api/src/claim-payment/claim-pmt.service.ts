@@ -81,7 +81,7 @@ export class ClaimPmtService {
       }
       const data = {
         receivable: claim.receivable[index],
-        allowedAM: receivable.allowedAMT,
+        allowedAMT: receivable.allowedAMT,
         deductible: receivable.deductible,
         copay: receivable.copay,
         coINS: receivable.coINS,
@@ -97,6 +97,8 @@ export class ClaimPmtService {
         claim._id,
         data.receivable._id,
         data.receivable.amountTotal,
+        data.allowedAMT,
+        data.paidAMT,
       );
     }
     claimPmt.claimIds.push(dto.claimId);

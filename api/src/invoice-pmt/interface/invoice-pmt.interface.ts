@@ -3,7 +3,6 @@ import { InvPmtStatus } from '../invoice-pmt.constants';
 
 export interface IInvPmt extends Document {
   paymentType: string;
-  paymentRef: string;
   paymentAmount: number;
   paymnetDate: Date;
   invoices: string[];
@@ -14,4 +13,5 @@ export interface IInvPmt extends Document {
   status: InvPmtStatus;
   eob: string;
   client: string;
+  createdAt: Date;
 }

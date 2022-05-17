@@ -9,6 +9,7 @@ export interface IClaim extends Document {
   totalCharge: number;
   totalBilled: number;
   ammountPaid: number;
+  clientResp: number;
   submittedDate: Date;
   paymentRef: string;
   link: string;

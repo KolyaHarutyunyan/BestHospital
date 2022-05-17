@@ -24,7 +24,13 @@ export class ClaimService {
   private mongooseUtil: MongooseUtil;
 
   /** set amountTotal to the receivable (claim-pmt) */
-  async setAmountRec(_id: string, receivableId: string, amount: number): Promise<ClaimDto> {
+  async setAmountRec(
+    _id: string,
+    receivableId: string,
+    amount: number,
+    allowedAMT: number,
+    paidAMT: number,
+  ): Promise<ClaimDto> {
     const claim = await this.model.findById(_id);
     this.checkClaim(claim);
     const index = claim.receivable.findIndex(
@@ -38,6 +44,9 @@ export class ClaimService {
         ? claim.receivable[index].amountTotal
         : claim.receivable[index].amountTotal - amount;
     claim.receivable[index].amountTotal = amount;
+    claim.receivable[index].allowedAMT = allowedAMT;
+    claim.receivable[index].paidAMT = paidAMT;
+
     console.log(amount, 'amount');
     await claim.save();
     return this.sanitizer.sanitize(claim);
@@ -290,9 +299,12 @@ export class ClaimService {
     totalBilled,
     dateRange,
   ): Promise<void> {
+    let clientResp = 0;
+    subBills.map((bill) => (clientResp += bill.clientResp));
     receivable.push({
       placeService: billGroup.placeService,
       cptCode: billGroup.authService.serviceId.cptCode,
+      clientResp,
       totalUnits: 0,
       amountTotal: totalBilled,
       // bills can have different fundingService so (payor total - payor paid / fundingService(unitSize)) which fundingService(unit size)

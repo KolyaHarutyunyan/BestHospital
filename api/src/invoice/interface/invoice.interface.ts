@@ -29,7 +29,7 @@ export interface IInvoice extends Document {
   invoiceTotal: number;
   ammountPaid: number;
   totalBilled: number;
-  totalTime: number;
+  totalHours: number;
   dueDate: Date;
   downloadLink: string;
   status: InvoiceStatus;

@@ -43,7 +43,7 @@ export class InvoiceDto {
   @ApiProperty()
   invoiceTotal: number;
   @ApiProperty()
-  totalTime: number;
+  totalHours: number;
   @ApiProperty()
   ammountPaid: number;
   @ApiProperty()

@@ -9,7 +9,6 @@ export class InvPmtSanitizer implements ISanitize {
     const postingDTO: InvPmtDto = {
       _id: invPmt._id,
       paymentType: invPmt.paymentType,
-      paymentRef: invPmt.paymentRef,
       paymentAmount: invPmt.paymentAmount,
       invoices: invPmt.invoices,
       paymentDate: invPmt.paymentDate,
@@ -19,6 +18,7 @@ export class InvPmtSanitizer implements ISanitize {
       status: invPmt.status,
       client: invPmt.client,
       checkNumber: invPmt.checkNumber,
+      createdAt: invPmt.createdAt,
     };
     return postingDTO;
   }

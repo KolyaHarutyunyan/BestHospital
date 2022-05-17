@@ -13,7 +13,7 @@ export class InvoiceSanitizer implements ISanitize {
       invoiceTotal: invoice.invoiceTotal,
       ammountPaid: invoice.ammountPaid,
       totalBilled: invoice.totalBilled,
-      totalTime: invoice.totalTime,
+      totalHours: invoice.totalHours,
       dueDate: invoice.dueDate,
       downloadLink: invoice.downloadLink,
       status: invoice.status,

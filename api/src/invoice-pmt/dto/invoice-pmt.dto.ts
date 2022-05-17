@@ -9,8 +9,6 @@ export class InvPmtDto {
   @ApiProperty()
   paymentType: string;
   @ApiProperty()
-  paymentRef: string;
-  @ApiProperty()
   paymentDate: Date;
   @ApiProperty()
   checkNumber: string;
@@ -26,4 +24,6 @@ export class InvPmtDto {
   invoices: string[];
   @ApiProperty()
   eob: string;
+  @ApiProperty()
+  createdAt: Date;
 }

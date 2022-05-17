@@ -17,18 +17,21 @@ const receivable = {
   bills: [{ type: Types.ObjectId, ref: 'billing' }],
 };
 
-const InvoiceSchema = new Schema({
-  client: { type: Types.ObjectId, ref: 'Client' },
-  dateRange: { early: { type: Date }, latest: { type: Date } },
-  invoiceTotal: { type: Number },
-  ammountPaid: { type: Number, default: 0 },
-  totalBilled: { type: Number, default: 0 },
-  totalTime: { type: Number },
-  dueDate: { type: Date },
-  downloadLink: { type: String },
-  status: { type: String, enum: InvoiceStatus },
-  receivable: [receivable],
-});
+const InvoiceSchema = new Schema(
+  {
+    client: { type: Types.ObjectId, ref: 'Client' },
+    dateRange: { early: { type: Date }, latest: { type: Date } },
+    invoiceTotal: { type: Number },
+    ammountPaid: { type: Number, default: 0 },
+    totalBilled: { type: Number, default: 0 },
+    totalHours: { type: Number, default: 0 },
+    dueDate: { type: Date },
+    downloadLink: { type: String },
+    status: { type: String, enum: InvoiceStatus },
+    receivable: [receivable],
+  },
+  { timestamps: true },
+);
 
 export const InvoiceModel = model<IInvoice>('invoice', InvoiceSchema);
 

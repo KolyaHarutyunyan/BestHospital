@@ -163,7 +163,7 @@ export class InvPmtService {
           path: 'client',
         },
       })
-      .populate('payer');
+      .populate('client');
     return this.sanitizer.sanitizeMany(invPmts);
   }
   /** get one posting */
@@ -172,12 +172,12 @@ export class InvPmtService {
       .findById(_id)
       .populate('documents')
       .populate({
-        path: 'invoice',
+        path: 'invoices',
         populate: {
           path: 'client',
         },
       })
-      .populate('payer');
+      .populate('client');
     this.checkInvPmt(invPmt);
     return this.sanitizer.sanitize(invPmt);
   }
@@ -187,7 +187,7 @@ export class InvPmtService {
     this.checkInvPmt(invPmt);
     if (dto.paymentType) invPmt.paymentType = dto.paymentType;
     // When the payment type is edited, payment reference should be updated as well
-    if (dto.paymentRef) invPmt.paymentRef = dto.paymentRef;
+    if (dto.checkNumber) invPmt.checkNumber = dto.checkNumber;
     if (dto.paymentDate) invPmt.paymentDate = dto.paymentDate;
     await invPmt.save();
     return this.sanitizer.sanitize(invPmt);

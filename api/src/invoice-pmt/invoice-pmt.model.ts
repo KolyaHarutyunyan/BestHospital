@@ -5,7 +5,7 @@ import { InvPmtStatus, PaymentType } from './invoice-pmt.constants';
 
 const InvPmtSchema = new Schema({
   paymentType: { type: String, enum: PaymentType },
-  paymentReference: { type: String },
+  checkNumber: { type: String },
   paymentAmount: { type: Number },
   totalBilled: { type: Number, default: 0 },
   totalUsed: { type: Number, default: 0 },
