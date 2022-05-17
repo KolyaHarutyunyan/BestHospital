@@ -18,12 +18,8 @@ export const ClaimPaymentTBody = ({ claimPayments = [] }) => {
 
    const { open } = useContext(DrawerContext);
 
-   const {
-      addSignToValueFromStart,
-      getFullName,
-      getValueByFixedNumber,
-      showDashIfEmpty,
-   } = hooksForTable;
+   const { addSignToValueFromStart, getValueByFixedNumber, showDashIfEmpty } =
+      hooksForTable;
 
    function getTableData(data) {
       return showDashIfEmpty(getDataForTable(data, open, width));
@@ -32,17 +28,13 @@ export const ClaimPaymentTBody = ({ claimPayments = [] }) => {
    return (
       <div className={classes.tbodyContainerStyle}>
          {claimPayments.map((claimPayment, index) => {
-            const clientFirstName = claimPayment?.client?.firstName;
-            const clientLastName = claimPayment?.client?.firstName;
-
             const claimPaymentId = getTableData(claimPayment._id);
             const funder = getTableData(claimPayment?.fundingSource?.name);
-            const client = getFullName(clientFirstName, clientLastName, getTableData);
-            const totalBilled = getTableData(
-               addSignToValueFromStart(getValueByFixedNumber(claimPayment.totalBilled))
+            const totalPaid = getTableData(
+               addSignToValueFromStart(getValueByFixedNumber(claimPayment.totalPaid))
             );
-            const totalCollected = getTableData(
-               addSignToValueFromStart(getValueByFixedNumber(claimPayment.totalCollected))
+            const totalUsed = getTableData(
+               addSignToValueFromStart(getValueByFixedNumber(claimPayment.totalUsed))
             );
             const status = showDashIfEmpty(manageStatus(claimPayment.status));
             const paymentReference = getTableData(claimPayment.paymentRef);
@@ -55,9 +47,8 @@ export const ClaimPaymentTBody = ({ claimPayments = [] }) => {
                >
                   <div className={classes.tdStyle}>{claimPaymentId}</div>
                   <div className={classes.tdStyle}>{funder}</div>
-                  <div className={classes.tdStyle}>{client}</div>
-                  <div className={classes.tdStyle}>{totalBilled}</div>
-                  <div className={classes.tdStyle}>{totalCollected}</div>
+                  <div className={classes.tdStyle}>{totalPaid}</div>
+                  <div className={classes.tdStyle}>{totalUsed}</div>
                   <div className={classes.tdStyle}>{status}</div>
                   <div className={classes.tdStyle}>{paymentReference}</div>
                </div>

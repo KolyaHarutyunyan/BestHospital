@@ -19,8 +19,8 @@ export const enumValues = {
    INVOICE_STATUSES: ["Pending", "Closed", "Submitted", "Posted"],
 
    /**Posting (Payment Type) Enums */
-   POSTING_PAYMENT_TYPES: ["Check", "Submitted", "Cash"],
+   PAYMENT_STATUSES: ["Open", "Closed", "Voided"],
 
    /**Payment Types for claim and invoice Enums */
-   PAYMENT_TYPES: ["Check", "Ach", "Cash"],
+   PAYMENT_TYPES: ["Check", "Ach"],
 };

@@ -10,31 +10,22 @@ import {
 } from "@eachbase/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { FirstStepInputs, LastStepInputs } from "./common";
-import {
-   clientActions,
-   httpRequestsOnSuccessActions,
-   invoiceActions,
-   invoicePaymentActions,
-} from "@eachbase/store";
+import { httpRequestsOnSuccessActions, invoicePaymentActions } from "@eachbase/store";
 import moment from "moment";
 
-export const InvoicePaymentInputs = ({ info, activeStep, handleStep, closeModal }) => {
+export const InvoicePaymentInputs = ({
+   info,
+   activeStep,
+   handleStep,
+   closeModal,
+   mappedClients,
+}) => {
    const classes = invoicePaymentsCoreStyle();
 
    const dispatch = useDispatch();
 
-   const { clients } = useSelector((state) => state.client.clientList);
-   const invoices = useSelector((state) => state.invoice.invoices);
-
-   const mappedClients = clients?.map((client) => ({
-      id: client.id,
-      name: `${client.firstName} ${client.lastName}`,
-   }));
-
    useEffect(() => {
       handleStep && handleStep("first");
-      dispatch(clientActions.getClients());
-      dispatch(invoiceActions.getInvoices());
    }, []);
 
    const loader = !!info
@@ -62,10 +53,6 @@ export const InvoicePaymentInputs = ({ info, activeStep, handleStep, closeModal 
          : {}
    );
    const [error, setError] = useState("");
-
-   const filteredInvoices = invoices.filter(
-      (invoice) => invoice.status === "SUBMITTED" && invoice.client === inputs.client
-   );
 
    const uploadedFiles = useSelector((state) => state.upload.uploadedInfo);
 
@@ -124,7 +111,6 @@ export const InvoicePaymentInputs = ({ info, activeStep, handleStep, closeModal 
       const invoicePaymentData = {
          paymentAmount: +inputs.paymentAmount,
          client: inputs.client,
-         invoice: filteredInvoices[0]?._id,
          paymentDate: inputs.paymentDate,
          paymentType: makeEnum(inputs.paymentType),
          checkNumber: inputs.checkNumber,
