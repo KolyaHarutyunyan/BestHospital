@@ -3,8 +3,8 @@ import { createClientStyle } from "../index";
 import { ImagesFileUploader } from "./core";
 import { FindLoad, FindSuccess } from "@eachbase/utils";
 import { AddModalButton } from "@eachbase/components";
-import { useDispatch } from "react-redux";
-import { uploadActions } from "@eachbase/store";
+// import { useDispatch } from "react-redux";
+// import { uploadActions } from "@eachbase/store";
 
 export const AuthorizationFile = ({
    fileIsForPayment = false,
@@ -14,7 +14,7 @@ export const AuthorizationFile = ({
 }) => {
    const classes = createClientStyle();
 
-   const dispatch = useDispatch();
+   // const dispatch = useDispatch();
 
    const [fileName, setFileName] = useState("");
    const [selectedFile, setSelectedFile] = useState();

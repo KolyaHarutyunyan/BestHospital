@@ -1,15 +1,15 @@
 import { DownloadLink } from "@eachbase/components";
 import { hooksForTable, makeCapitalize, manageStatus } from "@eachbase/utils";
-import { claimPaymentDetailsStyle } from "./styles";
+// import { claimPaymentDetailsStyle } from "./styles";
 
 export function getClaimPaymentDetails(claimPayment) {
-   const { fundingSource, paymentDate, paymentReference, paymentType, paymentAmount } =
+   const { fundingSource, paymentDate, checkNumber, paymentType, paymentAmount } =
       claimPayment || {};
 
    const { addSignToValueFromStart, getValueByFixedNumber, handleCreatedAtDate } =
       hooksForTable;
 
-   const classes = claimPaymentDetailsStyle();
+   // const classes = claimPaymentDetailsStyle();
 
    const claimPaymentDetails = [
       {
@@ -22,17 +22,18 @@ export function getClaimPaymentDetails(claimPayment) {
       },
       {
          detailText: "Payment Reference:",
-         detail: (
-            <a
-               className={classes.paymentRefStyle}
-               href={`https://${paymentReference || "www.testlink.com"}`}
-               target="_blank"
-               rel="noreferrer noopener"
-               onClick={(event) => event.stopPropagation()}
-            >
-               {paymentReference || "www.testlink.com"}
-            </a>
-         ),
+         detail: checkNumber,
+         // detail: (
+         //    <a
+         //       className={classes.paymentRefStyle}
+         //       href={`https://${paymentReference || "www.testlink.com"}`}
+         //       target="_blank"
+         //       rel="noreferrer noopener"
+         //       onClick={(event) => event.stopPropagation()}
+         //    >
+         //       {paymentReference || "www.testlink.com"}
+         //    </a>
+         // ),
       },
       {
          detailText: "Payment Type:",

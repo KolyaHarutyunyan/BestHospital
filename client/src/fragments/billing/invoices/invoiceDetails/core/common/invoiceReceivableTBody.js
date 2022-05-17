@@ -48,7 +48,7 @@ export const InvoiceReceivableTBody = ({ receivable }) => {
       addSignToValueFromStart(getValueByFixedNumber(receivable?.priorPaid))
    );
    const currentBalance = getTableData(
-      addSignToValueFromStart(getValueByFixedNumber(receivable?.currentBalance))
+      addSignToValueFromStart(getValueByFixedNumber(receivable?.balance))
    );
 
    return (

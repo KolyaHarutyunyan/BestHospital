@@ -19,7 +19,7 @@ export const ClaimPayments = () => {
    const claimPaymentsData = useSelector((state) => state.claimPayment.claimPayments);
    const { funders } = useSelector((state) => state.fundingSource.fundingSourceList);
 
-   const { claimPayments, count } = claimPaymentsData || {};
+   const { claimPmt: claimPayments, count } = claimPaymentsData || {};
    const mappedFunders = funders?.map((funder) => ({ id: funder.id, name: funder.name }));
 
    const loader = FindLoad("GET_CLAIM_PAYMENTS");
@@ -42,7 +42,7 @@ export const ClaimPayments = () => {
 
    return (
       <ClaimPaymentsFragment
-         claimPayments={claimPaymentsData}
+         claimPayments={claimPayments}
          claimPaymentsQty={count}
          page={page}
          handleGetPage={setPage}

@@ -30,9 +30,9 @@ export const InvoicePaymentInvoiceTBody = ({ invoice }) => {
    const client = getFullName(clientFirstName, clientLastName, getTableData);
    const totalHours = getTableData(invoice.totalHours);
    const totalAmount = getTableData(
-      addSignToValueFromStart(getValueByFixedNumber(invoice.totalAmount))
+      addSignToValueFromStart(getValueByFixedNumber(invoice.totalBilled))
    );
-   const invoiceDate = getTableData(handleCreatedAtDate(invoice.invoiceDate));
+   const invoiceDate = getTableData(handleCreatedAtDate(invoice.createdAt));
 
    return (
       <div className={classes.tbodyContainerStyle}>
