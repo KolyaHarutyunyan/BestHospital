@@ -24,5 +24,5 @@ export class ClaimPmtDto {
   @ApiProperty()
   status: ClaimPmtStatus;
   @ApiProperty()
-  documents: string[];
+  documents: FileDTO[];
 }

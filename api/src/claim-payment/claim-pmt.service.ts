@@ -42,6 +42,9 @@ export class ClaimPmtService {
       fundingSource: dto.fundingSource,
       checkNumber: dto.checkNumber,
     });
+    if (dto.documents.length) {
+      dto.documents.map((doc) => claimPmt.documents.push(doc));
+    }
     if (dto.paymentDate) claimPmt.paymentDate = dto.paymentDate;
     await claimPmt.save();
     return this.sanitizer.sanitize(claimPmt);

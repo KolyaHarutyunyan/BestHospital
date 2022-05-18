@@ -13,7 +13,7 @@ export interface IClaimPmt extends Document {
   totalUsed: number;
   claimIds: string[];
   status: ClaimPmtStatus;
-  documents: string[];
+  documents: FileDTO[];
 }
 export interface IClaimPmtCount {
   claimPmt: ClaimPmtDto[];
