@@ -11,10 +11,6 @@ import {
 
 export class CreatePaycodeDTO {
   @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  name: string;
-  @ApiProperty()
   @IsMongoId()
   @IsNotEmpty()
   employmentId: string;

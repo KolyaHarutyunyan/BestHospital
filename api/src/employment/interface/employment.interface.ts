@@ -11,5 +11,5 @@ export interface IEmployment extends Document {
   supervisor: string;
   active: boolean;
   startDate: Date;
-  endDate: any;
+  endDate: Date;
 }

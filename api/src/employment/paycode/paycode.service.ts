@@ -25,7 +25,6 @@ export class PaycodeService {
     const paycode = new this.model({
       employmentId: employment.id,
       payCodeTypeId: payCodeType.id,
-      name: dto.name,
       rate: dto.rate,
       active: dto.active,
       startDate: dto.startDate,
@@ -33,7 +32,7 @@ export class PaycodeService {
     if (!dto.active && !dto.endDate) {
       throw new HttpException('endDate required field', HttpStatus.BAD_REQUEST);
     }
-    if (dto.endDate && !dto.active) paycode.endDate = dto.endDate;
+    if (dto.endDate) paycode.endDate = dto.endDate;
     if (dto.startDate > dto.endDate) {
       throw new HttpException('startDate can not be higher than endDate', HttpStatus.BAD_REQUEST);
     }
@@ -106,9 +105,6 @@ export class PaycodeService {
         await this.employmentService.findOne(dto.employmentId);
         payCode.employmentId = dto.employmentId;
       }
-      if (dto.name) {
-        payCode.name = dto.name;
-      }
       if (dto.rate) payCode.rate = dto.rate;
       if (!dto.active && !dto.endDate) {
         throw new HttpException('endDate required field', HttpStatus.BAD_REQUEST);
@@ -124,7 +120,6 @@ export class PaycodeService {
       throw e;
     }
   }
-
   // remove(id: string) {
   //   return `This action removes a #${id} paycode`;
   // }

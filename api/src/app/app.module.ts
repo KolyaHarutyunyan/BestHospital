@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { StaffModule } from '../staff';
 import { AuthNModule } from 'src/authN';
 import { AuthZModule } from 'src/authZ';
@@ -28,6 +28,7 @@ import { ClaimModule } from '../claim/claim.module';
 import { InvoiceModule } from '../invoice/invoice.module';
 import { InvPmtModule } from '../invoice-pmt/invoice-pmt.module';
 import { ClaimPmtModule } from '../claim-payment/claim-pmt.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { ClaimPmtModule } from '../claim-payment/claim-pmt.module';
     InvoiceModule,
     InvPmtModule,
     ClaimPmtModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService, DatabaseConnection],

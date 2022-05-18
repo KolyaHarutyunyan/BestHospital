@@ -2,7 +2,6 @@ import { model, Schema, Types } from 'mongoose';
 import { IPayCode } from './interface';
 
 const PayCodeSchema = new Schema({
-  name: { type: String },
   employmentId: { type: Types.ObjectId, ref: 'Employment' },
   payCodeTypeId: { type: Types.ObjectId, ref: 'PayCodeType' },
   rate: { type: Number },

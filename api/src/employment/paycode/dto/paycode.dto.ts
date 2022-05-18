@@ -4,8 +4,6 @@ import { PayCodeTypeDTO } from '../../../paycodetype/dto';
 
 export class PayCodeDTO {
   @ApiProperty()
-  name: string;
-  @ApiProperty()
   id: string;
   @ApiProperty()
   @IsMongoId()

@@ -10,10 +10,6 @@ import {
 
 export class UpdatePayCodeDTO {
   @ApiProperty()
-  @IsString()
-  @IsOptional()
-  name: string;
-  @ApiProperty()
   @IsMongoId()
   @IsOptional()
   employmentId: string;

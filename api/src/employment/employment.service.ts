@@ -30,49 +30,19 @@ export class EmploymentService {
         schedule: dto.schedule,
         termination: dto.termination,
         startDate: dto.startDate,
+        endDate: dto.endDate ? dto.endDate : null,
         title: dto.title,
       });
-      const date = new Date().getTime();
-      const employments: any = await this.model.findOne({
-        startDate: { $gte: new Date(new Date(dto.startDate).setHours(0, 0, 0)) },
-      });
-      console.log(employments, 'aaa');
-      if (employments && employments.length != []) {
-        if (new Date(employments.startDate) >= new Date(dto.startDate)) {
-          throw new HttpException('Overlapping', HttpStatus.BAD_REQUEST);
-        } else if (
-          (new Date(employments.startDate) <= new Date(dto.startDate) &&
-            new Date(employments.endDate) >= new Date(dto.startDate)) ||
-          !employments.endDate
-        ) {
-          console.log('stex em');
-          employments.endDate = dto.startDate;
-          await employments.save();
-          // return;
-        }
-        console.log(employments.endDate);
+      const [lessDateEmp] = await Promise.all([
+        this.findEndlessEmployment(),
+        this.checkOverlap(null, dto),
+        this.staffService.findById(dto.supervisor),
+      ]);
+      if (lessDateEmp) {
+        lessDateEmp.endDate = dto.startDate;
+        await lessDateEmp.save();
       }
-      // if (dto.endDate) {
-      //   if (new Date(dto.startDate) > new Date(dto.endDate)) {
-      //     throw new HttpException(`startDate can't be high then endDate`, HttpStatus.BAD_REQUEST);
-      //   }
-      //   const endDate = new Date(dto.endDate).getTime();
-      //   if (endDate >= date) {
-      //     const activeEmployment = await this.model.findOne({ active: true, staffId: staff.id });
-      //     if (activeEmployment) {
-      //       activeEmployment.active = false;
-      //       activeEmployment.endDate = new Date(
-      //         new Date(dto.startDate).setDate(new Date(dto.startDate).getDate() - 1),
-      //       );
-      //       await activeEmployment.save();
-      //     }
-      //     employment.active = true;
-      //   }
-      //   employment.endDate = dto.endDate;
-      // }
-      await this.staffService.findById(dto.supervisor);
       employment.supervisor = dto.supervisor;
-
       if (dto.departmentId) {
         await this.departmentService.findOne(dto.departmentId);
         employment.departmentId = dto.departmentId;
@@ -188,6 +158,10 @@ export class EmploymentService {
       throw new HttpException('employment is not active', HttpStatus.BAD_REQUEST);
     }
   }
+  /** check if employment date is today than set active (app-module) */
+  setEmploymentActive() {
+    console.log('ok');
+  }
   /** Private methods */
   /** if the employment is not valid, throws an exception */
   private checkEmployment(employment: IEmployment) {
@@ -201,5 +175,28 @@ export class EmploymentService {
     if (isNaN(date.getTime())) {
       throw new HttpException('Date with this format was not found', HttpStatus.NOT_FOUND);
     }
+  }
+  /** check appointment overlapping */
+  private async checkOverlap(_id: string = null, dto: any) {
+    console.log(dto.startDate, 'dto.startDate', dto.endDate, 'dto.endDate');
+    const query: any = {
+      endDate: { $gt: new Date(dto.startDate) },
+    };
+    dto.endDate ? (query.startDate = { $lt: new Date(dto.endDate) }) : null;
+
+    const overlapping = await this.model.find(query);
+    if (overlapping[0]) {
+      if (_id) {
+        if (overlapping[0]._id.toString() !== _id.toString()) {
+          throw new HttpException(`employment overlapping`, HttpStatus.BAD_REQUEST);
+        }
+      } else {
+        throw new HttpException(`employment overlapping`, HttpStatus.BAD_REQUEST);
+      }
+    }
+  }
+  /** find endless employment */
+  private async findEndlessEmployment() {
+    return await this.model.findOne({ endDate: null });
   }
 }
