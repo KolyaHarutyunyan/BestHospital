@@ -34,8 +34,7 @@ function* getClaimPayments(action) {
    } catch (error) {
       yield put({
          type: GET_CLAIM_PAYMENTS_SUCCESS,
-         payload: { claimPayments: [] },
-         // payload: { claimPayments: { claimPayments: [], count: 0 } },
+         payload: { claimPayments: { claimPmt: [], count: 0 } },
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type));

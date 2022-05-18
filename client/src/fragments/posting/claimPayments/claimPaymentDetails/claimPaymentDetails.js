@@ -21,11 +21,15 @@ export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
    const [addingModalIsOpen, setAddingModalIsOpen] = useState(false);
    const [activeStep, setActiveStep] = useState("first");
 
-   const { _id, claimIds: claims } = claimPaymentDetails || {};
+   const { _id, claimIds: claims, status } = claimPaymentDetails || {};
 
    const filteredDetails = getClaimPaymentDetails(claimPaymentDetails).filter(
       (claimPmtDtl) => !!claimPmtDtl.detail
    );
+
+   const claimPmtIsVoided = status === "VOIDED";
+   const voidButnStyle = `${classes.voidButnStyle} ${claimPmtIsVoided ? "voided" : ""}`;
+   const voidButnText = claimPmtIsVoided ? "Voided" : "Void";
 
    const width = useWidth();
 
@@ -52,11 +56,12 @@ export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
                      <img src={Images.edit} alt="" />
                   </div>
                   <button
-                     className={classes.voidClaimPaymentButnStyle}
+                     className={voidButnStyle}
                      type="button"
                      onClick={() => setVoidingModalIsOpen(true)}
+                     disabled={claimPmtIsVoided}
                   >
-                     Void
+                     {voidButnText}
                   </button>
                </div>
             </div>

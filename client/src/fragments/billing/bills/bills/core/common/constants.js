@@ -4,7 +4,7 @@ export function getBillWithScrollData(givenData = "", isOpen, givenWidth) {
    const firstSize = isOpen ? 2310 : 2465;
    const firstLimit = isOpen ? 7 : 10;
 
-   const secondSize = isOpen ? 1910 : 1940;
+   const secondSize = isOpen ? 1925 : 1940;
    const secondLimit = isOpen ? 5 : 8;
 
    const thirdSize = isOpen ? 1570 : 1565;

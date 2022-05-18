@@ -46,7 +46,7 @@ export const BillTBodyWithScroll = ({ bills = [] }) => {
                )
             );
             const clientBalance = getDisplayOf(
-               addSignToValueFromStart(getValueByFixedNumber(bill.clientResp))
+               addSignToValueFromStart(getValueByFixedNumber(bill.clientBalance))
             );
             const totalBalance = getDisplayOf(
                addSignToValueFromStart(getValueByFixedNumber(bill.balance))

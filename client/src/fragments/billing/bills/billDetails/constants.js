@@ -37,13 +37,14 @@ export function getBillDetails(bill) {
 }
 
 export function getBillTotals(bill) {
-   const { billedAmount, balance, payerPaid, payerTotal } = bill || {};
+   const { billedRate, billedAmount, clientBalance, balance, payerPaid, payerTotal } =
+      bill || {};
 
    return {
-      billedRate: 0,
-      totalAmount: billedAmount || 0,
-      payorBalance: payerTotal - payerPaid || 0,
-      clientBalance: 0,
-      totalBalance: balance || 0,
+      billedRate: billedRate?.toString() || "---",
+      totalAmount: billedAmount?.toString() || "---",
+      payorBalance: (payerTotal - payerPaid)?.toString() || "---",
+      clientBalance: clientBalance?.toString() || "---",
+      totalBalance: balance?.toString() || "---",
    };
 }

@@ -34,8 +34,7 @@ function* getInvoicePayments(action) {
    } catch (error) {
       yield put({
          type: GET_INVOICE_PAYMENTS_SUCCESS,
-         payload: { invoicePayments: [] },
-         // payload: {invoicePayments: { invoicePayments: [], count: 0 } },
+         payload: { invoicePayments: { invPmt: [], count: 0 } },
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type));

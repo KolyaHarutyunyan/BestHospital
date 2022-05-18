@@ -19,7 +19,7 @@ export const InvoicePaymentTBody = ({ invoicePayments = [] }) => {
    const { open } = useContext(DrawerContext);
 
    const {
-      getTableHeader,
+      // getTableHeader,
       addSignToValueFromStart,
       getValueByFixedNumber,
       getFullName,
@@ -33,23 +33,25 @@ export const InvoicePaymentTBody = ({ invoicePayments = [] }) => {
    return (
       <div className={classes.tbodyContainerStyle}>
          {invoicePayments.map((invoicePayment, index) => {
-            const invoicePaymentId = getTableData(invoicePayment._id);
             const clientFirstName = invoicePayment?.client?.firstName;
             const clientLastName = invoicePayment?.client?.firstName;
+
+            const invoicePaymentId = getTableData(invoicePayment._id);
             const client = getFullName(clientFirstName, clientLastName, getTableData);
             const totalAmount = getTableData(
-               addSignToValueFromStart(getValueByFixedNumber(invoicePayment.totalAmount))
+               addSignToValueFromStart(getValueByFixedNumber(invoicePayment.totalBilled))
             );
             const totalUsed = getTableData(
                addSignToValueFromStart(getValueByFixedNumber(invoicePayment.totalUsed))
             );
             const status = showDashIfEmpty(manageStatus(invoicePayment.status));
-            const paymentReference = getTableHeader(
-               invoicePayment.paymentRef || "www.testlink.com",
-               getTableData(invoicePayment.paymentRef || "www.testlink.com"),
-               "",
-               false
-            );
+            const paymentReference = showDashIfEmpty(invoicePayment.checkNumber);
+            // const paymentReference = getTableHeader(
+            //    invoicePayment.paymentRef || "www.testlink.com",
+            //    getTableData(invoicePayment.paymentRef || "www.testlink.com"),
+            //    "",
+            //    false
+            // );
 
             return (
                <div
@@ -62,7 +64,8 @@ export const InvoicePaymentTBody = ({ invoicePayments = [] }) => {
                   <div className={classes.tdStyle}>{totalAmount}</div>
                   <div className={classes.tdStyle}>{totalUsed}</div>
                   <div className={classes.tdStyle}>{status}</div>
-                  <div className={classes.tdStyle}>
+                  <div className={classes.tdStyle}>{paymentReference}</div>
+                  {/* <div className={classes.tdStyle}>
                      <a
                         className={classes.paymentRefStyle}
                         href={`https://${
@@ -74,7 +77,7 @@ export const InvoicePaymentTBody = ({ invoicePayments = [] }) => {
                      >
                         {paymentReference}
                      </a>
-                  </div>
+                  </div> */}
                </div>
             );
          })}

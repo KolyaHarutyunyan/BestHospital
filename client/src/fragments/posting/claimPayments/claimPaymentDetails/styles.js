@@ -25,7 +25,7 @@ export const claimPaymentDetailsStyle = makeStyles(() => ({
       marginRight: "16px",
       cursor: "pointer",
    },
-   voidClaimPaymentButnStyle: {
+   voidButnStyle: {
       border: "none",
       outline: "none",
       width: "78px",
@@ -35,6 +35,11 @@ export const claimPaymentDetailsStyle = makeStyles(() => ({
       fontSize: "14px",
       fontWeight: 600,
       color: Colors.BackgroundWhite,
+      "&.voided": {
+         backgroundColor: Colors.BackgroundWater,
+         color: Colors.ThemeRed,
+         cursor: "default",
+      },
    },
    claimPaymentDetailsFirstPartStyle: {
       width: "100%",
