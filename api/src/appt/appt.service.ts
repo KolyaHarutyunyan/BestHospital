@@ -139,7 +139,7 @@ export class ApptService {
       startDate: new Date(dto.startDate).setHours(23, 59),
       startTime: dto.startTime,
       endTime: dto.endTime,
-      eventStatus: dto.eventStatus,
+      eventStatus: EventStatus.NOTRENDERED,
       status: dto.status,
       require: dto.require,
       signature: dto.signature,
@@ -160,7 +160,7 @@ export class ApptService {
       startDate: new Date(dto.startDate).setHours(23, 59),
       startTime: dto.startTime,
       endTime: dto.endTime,
-      eventStatus: dto.eventStatus,
+      eventStatus: EventStatus.PENDING,
       status: dto.status,
       require: dto.require,
       type: dto.type,
@@ -177,7 +177,7 @@ export class ApptService {
       startDate: new Date(dto.startDate).setHours(23, 59),
       startTime: dto.startTime,
       endTime: dto.endTime,
-      eventStatus: dto.eventStatus,
+      eventStatus: EventStatus.PENDING,
       status: dto.status,
       require: dto.require,
       type: dto.type,
@@ -193,7 +193,7 @@ export class ApptService {
       startDate: new Date(dto.startDate).setHours(23, 59),
       startTime: dto.startTime,
       endTime: dto.endTime,
-      eventStatus: dto.eventStatus,
+      eventStatus: EventStatus.PENDING,
       status: dto.status,
       require: dto.require,
       type: dto.type,
@@ -319,10 +319,7 @@ export class ApptService {
     this.checkAppt(appt);
     this.checkSignature(appt.signature, appt.digitalSignature);
     this.checkStatusAppt(appt.status as ApptStatus);
-    this.checkEventStatusAppt(appt.eventStatus as EventStatus, [
-      EventStatus.NOTRENDERED,
-      EventStatus.PENDING,
-    ]);
+    this.checkEventStatusAppt(appt.eventStatus as EventStatus, [EventStatus.NOTRENDERED]);
     this.checkTypeAppt(appt.type as ApptType, [ApptType.SERVICE]);
     await Promise.all([
       this.authorizedService.countCompletedUnits(
@@ -344,37 +341,6 @@ export class ApptService {
     if (reason) appt.cancelReason = reason;
     await appt.save();
     return this.sanitizer.sanitize(appt);
-  }
-  //set Status(EventStatus)
-  async setStatus(_id: string, status: AppointmentQuerySetEventStatusDTO): Promise<ApptDto> {
-    const appointment: any = await this.model.findById(_id).populate({
-      path: 'authorizedService',
-      populate: { path: 'serviceId' },
-    });
-    this.checkAppt(appointment);
-    if (status.status) appointment.status = status.status;
-    if (status.eventStatus) {
-      if (status.eventStatus == EventStatus.COMPLETED && appointment.status !== ApptStatus.ACTIVE) {
-        throw new HttpException(`EventStatus can't be completed`, HttpStatus.BAD_REQUEST);
-      }
-      // if (status.eventStatus == 'RENDERED' || !appointment.signature) {
-      //   throw new HttpException(
-      //     `EventStatus can't be completed without signature`,
-      //     HttpStatus.BAD_REQUEST,
-      //   );
-      // }
-      if (status.eventStatus === EventStatus.RENDERED && appointment.type !== ApptType.SERVICE) {
-        throw new HttpException(`can't render the appointment`, HttpStatus.BAD_REQUEST);
-      }
-      if (status.eventStatus === EventStatus.RENDERED && appointment.type === ApptType.SERVICE) {
-        const minutes = await this.timeDiffCalc(appointment.endTime, appointment.startTime);
-        await this.authorizedService.countCompletedUnits(appointment.authorizedService, minutes);
-        await this.billingService.create(appointment);
-      }
-      appointment.eventStatus = status.eventStatus;
-    }
-    await appointment.save();
-    return this.sanitizer.sanitize(appointment);
   }
 
   /** find all appts */
@@ -444,30 +410,19 @@ export class ApptService {
     const appointment = await this.model.findById(_id);
     this.checkAppt(appointment);
     await this.checkClientStaffOverlap(_id, dto);
+    if (appointment.type === ApptType.SERVICE) {
+      await this.updateService(
+        dto.client,
+        dto.authorizedService,
+        appointment.client,
+        appointment.authorizedService,
+      );
+    }
     if (dto.placeService) {
       await this.placeService.findOne(dto.placeService);
       appointment.placeService = dto.placeService;
     }
-    if (appointment.type == ApptType.SERVICE) {
-      /** if appountment type is SERVICE client and authorization service are required */
-      this.checkClient(dto.client);
-      this.checkAuthorizedService(dto.authorizedService);
-      const [client, authService] = await Promise.all([
-        this.clientService.findById(dto.client ? dto.client : appointment.client),
-        this.authorizedService.findById(
-          dto.authorizedService ? dto.authorizedService : appointment.authorizedService,
-        ),
-      ]);
-      const auth = (<any>authService.authorizationId) as IAuthorization;
-      /** check if client and authorization client are same */
-      if (client.id != auth.clientId) {
-        throw new HttpException(
-          `Client and authorization client are different`,
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-      await this.authorizedService.getByServiceId(authService.serviceId);
-    }
+
     const [, payCode, ,] = await Promise.all([
       this.staffService.findById(dto.staff),
       this.payCodeService.findOne(dto.staffPayCode ? dto.staffPayCode : appointment.staffPayCode),
@@ -489,6 +444,30 @@ export class ApptService {
     if (dto.signature) appointment.signature = dto.signature;
     await appointment.save();
     return this.sanitizer.sanitize(appointment);
+  }
+  /** update service appt */
+  async updateService(
+    apptClient: string,
+    apptAuthService: string,
+    dtoClient: string,
+    dtoAuthService: string,
+  ): Promise<void> {
+    /** if appountment type is SERVICE client and authorization service are required */
+    this.checkClient(dtoClient);
+    this.checkAuthorizedService(dtoAuthService);
+    const [client, authService] = await Promise.all([
+      this.clientService.findById(dtoClient ? dtoClient : apptClient),
+      this.authorizedService.findById(dtoAuthService ? dtoAuthService : apptAuthService),
+    ]);
+    const auth = (<any>authService.authorizationId) as IAuthorization;
+    /** check if client and authorization client are same */
+    if (client.id != auth.clientId) {
+      throw new HttpException(
+        `Client and authorization client are different`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    await this.authorizedService.getByServiceId(authService.serviceId);
   }
 
   // remove appointment

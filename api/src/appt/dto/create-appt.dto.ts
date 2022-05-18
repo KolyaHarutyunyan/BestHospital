@@ -52,9 +52,6 @@ export class CreateApptDto {
   @IsDateString()
   @IsNotEmpty()
   endTime: Date;
-  @ApiProperty({ enum: EventStatus })
-  @IsEnum(EventStatus)
-  eventStatus: EventStatus;
   @ApiProperty({ enum: ApptStatus })
   @IsEnum(ApptStatus)
   status: string;

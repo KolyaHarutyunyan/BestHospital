@@ -42,18 +42,7 @@ export class ApptController {
   ): Promise<ApptDto> {
     return await this.apptService.cancel(id, reason);
   }
-  /** set status */
-  @Patch(':id/setStatus')
-  @Public()
-  @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({ type: ApptDto })
-  async setStatus(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Query() status: AppointmentQuerySetEventStatusDTO,
-  ): Promise<ApptDto> {
-    const staff = await this.apptService.setStatus(id, status);
-    return staff;
-  }
+
   @Get()
   @ApiHeader({ name: ACCESS_TOKEN })
   findAll(@Query() filter: AppointmentQueryDTO) {
