@@ -19,6 +19,7 @@ export const ClaimPaymentModals = ({
    editingModalIsOpen,
    voidingModalIsOpen,
    addingModalIsOpen,
+   mappedFunders,
 }) => {
    const classes = claimPaymentDetailsCoreStyle();
 
@@ -52,6 +53,7 @@ export const ClaimPaymentModals = ({
                      activeStep={activeStep}
                      handleStep={handleActiveStep}
                      closeModal={closeEditingModal}
+                     mappedFunders={mappedFunders}
                   />
                </BillingModalWrapper>
             }

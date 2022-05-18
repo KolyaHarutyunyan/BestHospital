@@ -7,8 +7,9 @@ import {
    isNotEmpty,
    FindSuccess,
    makeCapitalize,
+   ImgUploader,
 } from "@eachbase/utils";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { FirstStepInputs, LastStepInputs } from "./common";
 import { httpRequestsOnSuccessActions, invoicePaymentActions } from "@eachbase/store";
 import moment from "moment";
@@ -37,7 +38,7 @@ export const InvoicePaymentInputs = ({
 
    useEffect(() => {
       if (!!success.length) {
-         closeModal();
+         closeModal && closeModal();
          dispatch(httpRequestsOnSuccessActions.removeSuccess(success[0].type));
       }
    }, [success]);
@@ -53,8 +54,8 @@ export const InvoicePaymentInputs = ({
          : {}
    );
    const [error, setError] = useState("");
-
-   const uploadedFiles = useSelector((state) => state.upload.uploadedInfo);
+   const [chosenImages, setChosenImages] = useState([]);
+   const [loaderUpload, setLoaderUpload] = useState(false);
 
    const isFirst = activeStep === "first";
    const isLast = activeStep === "last";
@@ -81,7 +82,7 @@ export const InvoicePaymentInputs = ({
            isNotEmpty(inputs.checkNumber);
 
       if (firstStepDataIsValid) {
-         handleStep("last");
+         handleStep && handleStep("last");
       } else {
          const errorText = !!info
             ? !isNotEmpty(inputs.paymentDate)
@@ -108,19 +109,44 @@ export const InvoicePaymentInputs = ({
    };
 
    const handleSubmit = () => {
-      const invoicePaymentData = {
+      const invoicePmtData = {
          paymentAmount: +inputs.paymentAmount,
          client: inputs.client,
          paymentDate: inputs.paymentDate,
          paymentType: makeEnum(inputs.paymentType),
          checkNumber: inputs.checkNumber,
-         eob: "626f6a935899ac54a264f56f", // temporary id for file
       };
 
-      if (!!info) {
-         dispatch(invoicePaymentActions.editInvoicePayment(info.id, invoicePaymentData));
+      if (!!chosenImages.length) {
+         setLoaderUpload(true);
+
+         ImgUploader(chosenImages, true).then((uploadedImages) => {
+            setLoaderUpload(false);
+
+            const invoicePmtDataWithDocs = {
+               ...invoicePmtData,
+               documents: uploadedImages,
+            };
+
+            if (!!info) {
+               dispatch(
+                  invoicePaymentActions.editInvoicePayment(
+                     info.id,
+                     invoicePmtDataWithDocs
+                  )
+               );
+            } else {
+               dispatch(
+                  invoicePaymentActions.createInvoicePayment(invoicePmtDataWithDocs)
+               );
+            }
+         });
       } else {
-         dispatch(invoicePaymentActions.createInvoicePayment(invoicePaymentData));
+         if (!!info) {
+            dispatch(invoicePaymentActions.editInvoicePayment(info.id, invoicePmtData));
+         } else {
+            dispatch(invoicePaymentActions.createInvoicePayment(invoicePmtData));
+         }
       }
    };
 
@@ -136,11 +162,11 @@ export const InvoicePaymentInputs = ({
             />
          )}
          {isLast && (
-            <LastStepInputs invoicePaymentId={"????"} uploadedFiles={uploadedFiles} />
+            <LastStepInputs handleImagesPass={(images) => setChosenImages(images)} />
          )}
          <CreateChancel
             butnClassName={classes.createOrCancelButnStyle}
-            loader={!!loader.length}
+            loader={loaderUpload || !!loader.length}
             create={createButnText}
             chancel={"Cancel"}
             onCreate={isLast ? handleSubmit : handleNext}

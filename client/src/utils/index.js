@@ -37,6 +37,7 @@ export {
    makeCapitalize,
    useWidth,
    hooksForTable,
+   ImgUploader,
 } from "./hooks";
 export { ErrorText } from "./errorTexts";
 export { CountryList } from "./jsons";

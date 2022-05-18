@@ -167,11 +167,6 @@ export const ListView = ({
                               {defItem && defItem.isRepeat === true ? (
                                  <div className={classes.recurEdit}>
                                     <p>Recurring Event</p>{" "}
-                                    <img
-                                       src={Images.edit}
-                                       alt="icon"
-                                       onClick={() => handleEdit(defItem)}
-                                    />
                                  </div>
                               ) : (
                                  <>

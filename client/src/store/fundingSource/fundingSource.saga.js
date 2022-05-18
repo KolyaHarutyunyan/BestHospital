@@ -26,7 +26,8 @@ import {
    EDIT_ACTIVE_OR_INACTIVE,
    EDIT_FUNDING_SOURCE_SERVICE_MODIFIER,
    GET_FUNDING_SOURCE_SERVICE_MODIFIERS_CLIENT,
-   SET_STATUS, GET_FUNDING_SOURCE_SERVICE_BY_ID_NO_LOAD,
+   SET_STATUS,
+   GET_FUNDING_SOURCE_SERVICE_BY_ID_NO_LOAD,
 } from "./fundingSource.types";
 import { httpRequestsOnErrorsActions } from "../http_requests_on_errors";
 import { httpRequestsOnLoadActions } from "../http_requests_on_load";
@@ -106,7 +107,10 @@ function* getFundingSourceById(action) {
 
 function* getFundingSourceServicesById(action) {
    try {
-      const res = yield call(authService.getFoundingSourceServiceByIdService, action.payload);
+      const res = yield call(
+         authService.getFoundingSourceServiceByIdService,
+         action.payload
+      );
 
       yield put({
          type: GET_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
@@ -117,7 +121,10 @@ function* getFundingSourceServicesById(action) {
 
 function* getFundingSourceServicesByIdNoLoad(action) {
    try {
-      const res = yield call(authService.getFoundingSourceServiceByIdService, action.payload);
+      const res = yield call(
+         authService.getFoundingSourceServiceByIdService,
+         action.payload
+      );
 
       yield put({
          type: GET_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
@@ -131,8 +138,11 @@ function* createFundingSourceServicesById(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
-
-      const res = yield call(authService.createFoundingSourceServiceByIdService, action.payload.id, action.payload.body);
+      const res = yield call(
+         authService.createFoundingSourceServiceByIdService,
+         action.payload.id,
+         action.payload.body
+      );
 
       // yield put({
       //    type: GET_FUNDING_SOURCE,
@@ -155,19 +165,15 @@ function* createFundingSourceServicesById(action) {
       //    payload: date.data,
       // });
 
-
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
 
       // const date = yield call(authService.getFoundingSourceServiceByIdService, action.payload.id);
       //
-      // console.log(action.payload,'action.payloadaction.payloadaction.payloadaction.payload')
       // yield put({
       //     type: GET_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
       //     payload: date.data,
       // });
-
-
 
       const body = {
          modifiers: action.payload.modifier,
@@ -212,7 +218,10 @@ function* editFundingSourceServices(action) {
          payload: { body: body, id: action.payload.id, fsId: res.data.funderId },
       });
 
-      const date = yield call(authService.getFoundingSourceServiceByIdService, action.payload.fsId);
+      const date = yield call(
+         authService.getFoundingSourceServiceByIdService,
+         action.payload.fsId
+      );
       yield put({
          type: GET_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
          payload: date.data,
@@ -226,7 +235,10 @@ function* editFundingSourceServices(action) {
 
 function* createFundingSourceServicesModifier({ payload }) {
    try {
-      const res = yield call(authService.createFoundingSourceServiceModifierService, payload.body);
+      const res = yield call(
+         authService.createFoundingSourceServiceModifierService,
+         payload.body
+      );
    } catch (error) {}
 }
 
@@ -312,7 +324,9 @@ function* getFundingSourceHistoriesById(action) {
             payload: [],
          });
       } else {
-         yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
+         yield put(
+            httpRequestsOnErrorsActions.appendError(action.type, error.data.message)
+         );
       }
    }
 }
@@ -367,15 +381,27 @@ export const watchFundingSource = function* watchFundingSourceSaga() {
    yield takeLatest(GET_FUNDING_SOURCE, getFundingSource);
    yield takeLatest(GET_FUNDING_SOURCE_BY_ID, getFundingSourceById);
    yield takeLatest(GET_FUNDING_SOURCE_SERVICE_BY_ID, getFundingSourceServicesById);
-   yield takeLatest(GET_FUNDING_SOURCE_SERVICE_BY_ID_NO_LOAD, getFundingSourceServicesByIdNoLoad);
+   yield takeLatest(
+      GET_FUNDING_SOURCE_SERVICE_BY_ID_NO_LOAD,
+      getFundingSourceServicesByIdNoLoad
+   );
    yield takeLatest(CREATE_FUNDING_SOURCE_SERVICE_BY_ID, createFundingSourceServicesById);
    yield takeLatest(EDIT_FUNDING_SOURCE_SERVICE, editFundingSourceServices);
-   yield takeLatest(CREATE_FUNDING_SOURCE_SERVICE_MODIFIER, createFundingSourceServicesModifier);
-   yield takeLatest(GET_FUNDING_SOURCE_SERVICE_MODIFIERS, getFundingSourceServicesModifier);
+   yield takeLatest(
+      CREATE_FUNDING_SOURCE_SERVICE_MODIFIER,
+      createFundingSourceServicesModifier
+   );
+   yield takeLatest(
+      GET_FUNDING_SOURCE_SERVICE_MODIFIERS,
+      getFundingSourceServicesModifier
+   );
    yield takeLatest(GET_FUNDING_SOURCE_HISTORIES_BY_ID, getFundingSourceHistoriesById);
    // yield takeLatest(GET_FUNDING_SOURCE_SERV, getFundingSourceServ);
    // yield takeLatest(EDIT_ACTIVE_OR_INACTIVE, editActiveOrInactive);
-   yield takeLatest(EDIT_FUNDING_SOURCE_SERVICE_MODIFIER, editFundingSourceServicesModifier);
+   yield takeLatest(
+      EDIT_FUNDING_SOURCE_SERVICE_MODIFIER,
+      editFundingSourceServicesModifier
+   );
    yield takeLatest(
       GET_FUNDING_SOURCE_SERVICE_MODIFIERS_CLIENT,
       getFundingSourceServicesModifierClient

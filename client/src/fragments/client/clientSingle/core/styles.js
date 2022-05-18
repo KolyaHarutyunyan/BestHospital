@@ -219,6 +219,13 @@ export const serviceSingleStyles = makeStyles(() => ({
       fontSize: "14px",
       color: "#4B5C68",
    },
+
+   authorizationFileWrapper: {
+      width: 480,
+      background: Colors.BackgroundWhite,
+      borderRadius: "8px",
+      padding: 40,
+   },
 }));
 
 export const editButtonStyle = {

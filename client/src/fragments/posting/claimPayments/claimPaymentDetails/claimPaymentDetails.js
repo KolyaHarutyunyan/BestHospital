@@ -11,7 +11,7 @@ import {
 import { ClaimPaymentClaimTable, ClaimPaymentModals } from "./core";
 import { getClaimPaymentDetails } from "./constants";
 
-export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
+export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails, mappedFunders }) => {
    const classes = claimPaymentDetailsStyle();
 
    const { open } = useContext(DrawerContext);
@@ -111,6 +111,7 @@ export const ClaimPaymentDetailsFragment = ({ claimPaymentDetails }) => {
             editingModalIsOpen={editingModalIsOpen}
             voidingModalIsOpen={voidingModalIsOpen}
             addingModalIsOpen={addingModalIsOpen}
+            mappedFunders={mappedFunders}
          />
       </>
    );

@@ -20,6 +20,7 @@ export const InvoicePaymentModals = ({
    editingModalIsOpen,
    voidingModalIsOpen,
    addingModalIsOpen,
+   mappedClients,
 }) => {
    const classes = invoicePaymentDetailsCoreStyle();
 
@@ -53,6 +54,7 @@ export const InvoicePaymentModals = ({
                      activeStep={activeStep}
                      handleStep={handleActiveStep}
                      closeModal={closeEditingModal}
+                     mappedClients={mappedClients}
                   />
                </BillingModalWrapper>
             }
