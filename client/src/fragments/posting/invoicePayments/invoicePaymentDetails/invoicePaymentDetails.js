@@ -11,7 +11,10 @@ import {
 import { InvoicePaymentInvoiceTable, InvoicePaymentModals } from "./core";
 import { getInvoicePaymentDetails } from "./constants";
 
-export const InvoicePaymentDetailsFragment = ({ invoicePaymentDetails }) => {
+export const InvoicePaymentDetailsFragment = ({
+   invoicePaymentDetails,
+   mappedClients,
+}) => {
    const classes = invoicePaymentDetailsStyle();
 
    const { open } = useContext(DrawerContext);
@@ -111,6 +114,7 @@ export const InvoicePaymentDetailsFragment = ({ invoicePaymentDetails }) => {
             editingModalIsOpen={editingModalIsOpen}
             voidingModalIsOpen={voidingModalIsOpen}
             addingModalIsOpen={addingModalIsOpen}
+            mappedClients={mappedClients}
          />
       </>
    );

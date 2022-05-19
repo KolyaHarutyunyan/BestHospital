@@ -10,7 +10,7 @@ export const FirstStepInputs = ({
    inputs,
    error,
    handleChange,
-   mappedClients,
+   mappedClients = [],
    hasInfo,
 }) => {
    return (
@@ -32,6 +32,7 @@ export const FirstStepInputs = ({
             label={"Client*"}
             handleSelect={handleChange}
             value={inputs.client}
+            language={null}
             list={mappedClients}
             type={"id"}
             typeError={error === "client" && ErrorText.selectField}

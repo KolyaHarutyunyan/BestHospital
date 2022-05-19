@@ -1,38 +1,60 @@
 import { hooksForTable } from "@eachbase/utils";
 
-const { handleCreatedAtDate } = hooksForTable;
-
 export function getFilteredNotClaimedBills(
-   notClaimedBills,
+   notClaimedBills = [],
    selFunder,
    selClient,
-   selServiceDate
+   selDate
 ) {
-   const filteredNotClaimedBills =
-      selFunder === "All" && selClient === "All" && selServiceDate === ""
-         ? notClaimedBills
-         : selFunder !== "All"
-         ? notClaimedBills.filter(
-              (bill) => bill?.payer?.name.toLowerCase() === selFunder.toLowerCase()
-           )
-         : selClient !== "All"
-         ? notClaimedBills.filter(
-              (bill) =>
-                 `${bill?.client?.firstName} ${bill?.client?.lastName}`.toLowerCase() ===
-                 selClient.toLowerCase()
-           )
-         : selServiceDate !== ""
-         ? notClaimedBills.filter(
-              (bill) =>
-                 handleCreatedAtDate(bill?.dateOfService) ===
-                 handleCreatedAtDate(selServiceDate)
-           )
-         : [];
+   const { handleCreatedAtDate } = hooksForTable;
+   const makeLowC = (value = "") => value?.toLowerCase();
 
-   return filteredNotClaimedBills;
+   return notClaimedBills.filter((notClaimedBill) => {
+      const funderName = notClaimedBill?.payer?.name;
+      const clientName = `${notClaimedBill?.client?.firstName} ${notClaimedBill?.client?.lastName}`;
+      const serviceDate = notClaimedBill?.dateOfService;
+
+      if (selFunder === "All" && selClient === "All" && selDate === "") return true;
+
+      if (selFunder !== "All" && selClient === "All" && selDate === "")
+         return makeLowC(funderName) === makeLowC(selFunder);
+
+      if (selFunder === "All" && selClient !== "All" && selDate === "")
+         return makeLowC(clientName) === makeLowC(selClient);
+
+      if (selFunder === "All" && selClient === "All" && selDate !== "")
+         return handleCreatedAtDate(serviceDate) === handleCreatedAtDate(selDate);
+
+      if (selFunder !== "All" && selClient !== "All" && selDate === "")
+         return (
+            makeLowC(funderName) === makeLowC(selFunder) &&
+            makeLowC(clientName) === makeLowC(selClient)
+         );
+
+      if (selFunder !== "All" && selClient === "All" && selDate !== "")
+         return (
+            makeLowC(funderName) === makeLowC(selFunder) &&
+            handleCreatedAtDate(serviceDate) === handleCreatedAtDate(selDate)
+         );
+
+      if (selFunder === "All" && selClient !== "All" && selDate !== "")
+         return (
+            makeLowC(clientName) === makeLowC(selClient) &&
+            handleCreatedAtDate(serviceDate) === handleCreatedAtDate(selDate)
+         );
+
+      if (selFunder !== "All" && selClient !== "All" && selDate !== "")
+         return (
+            makeLowC(funderName) === makeLowC(selFunder) &&
+            makeLowC(clientName) === makeLowC(selClient) &&
+            handleCreatedAtDate(serviceDate) === handleCreatedAtDate(selDate)
+         );
+
+      return false;
+   });
 }
 
 export function mapBills(billList = [], boolean) {
    if (!Array.isArray(billList)) return;
-   return billList.map((bill) => ({ ...bill, isChecked: boolean }));
+   return billList.map((notClaimedBill) => ({ ...notClaimedBill, isChecked: boolean }));
 }

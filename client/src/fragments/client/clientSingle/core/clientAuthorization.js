@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
+   AddModalButton,
    Card,
    DeleteElement,
    Loader,
@@ -11,13 +12,12 @@ import {
    TableBodyComponent,
 } from "@eachbase/components";
 import { serviceSingleStyles } from "./styles";
-import { Colors, FindLoad, Images } from "@eachbase/utils";
+import { Colors, FindLoad, FindSuccess, Images, ImgUploader } from "@eachbase/utils";
 import { CircularProgress, TableCell } from "@material-ui/core";
 import {
    clientActions,
    httpRequestsOnErrorsActions,
    httpRequestsOnSuccessActions,
-   uploadActions,
 } from "@eachbase/store";
 import {
    AddAuthorization,
@@ -25,136 +25,75 @@ import {
    AddAuthorizationService,
 } from "../../clientModals";
 import { AuthHeader } from "@eachbase/components/headers/auth/authHeader";
+import { headerTitles } from "./constants";
 
-export const ClientAuthorization = ({
-   info,
-   setAuthActive,
-   setAuthItemIndex,
-}) => {
+export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) => {
    const classes = serviceSingleStyles();
+
+   const params = useParams();
+
    const dispatch = useDispatch();
+
    const [delEdit, setDelEdit] = useState(null);
    const [delEdit2, setDelEdit2] = useState(null);
    const [toggleModal, setToggleModal] = useState(false);
    const [toggleModal2, setToggleModal2] = useState(false);
    const [toggleModal3, setToggleModal3] = useState(false);
-
-   const [createEditFile, setCreateEditFile] = useState(false);
-
+   const [modalIsOpen, setModalIsOpen] = useState(false);
    const [authIndex, setAuthIndex] = useState(0);
    const [serviceIndex, setServiceIndex] = useState(null);
-   const services = useSelector(
-      (state) => state.client.clientsAuthorizationsServices
-   );
+   const services = useSelector((state) => state.client.clientsAuthorizationsServices);
+   const [chosenImages, setChosenImages] = useState([]);
+   const [loaderUpload, setLoaderUpload] = useState(false);
 
-   const [authenticationsId, setAuthentications] = useState("");
-
-   const params = useParams();
-   
-   const { httpOnSuccess, httpOnLoad } = useSelector((state) => ({
-      httpOnSuccess: state.httpOnSuccess,
-      httpOnError: state.httpOnError,
-      httpOnLoad: state.httpOnLoad,
-   }));
-
-   const success =
-      httpOnSuccess.length &&
-      httpOnSuccess[0].type === "DELETE_CLIENT_AUTHORIZATION";
-   const successDelServ =
-      httpOnSuccess.length &&
-      httpOnSuccess[0].type === "DELETE_CLIENT_AUTHORIZATION_SERV";
+   const success = FindSuccess("DELETE_CLIENT_AUTHORIZATION");
+   const successDelServ = FindSuccess("DELETE_CLIENT_AUTHORIZATION_SERV");
    const loader = FindLoad("GET_CLIENT_AUTHORIZATION_SERV");
-
-   const handleClose = () => {
-      setCreateEditFile(!createEditFile);
-   };
+   const delAuthLoader = FindLoad("DELETE_CLIENT_AUTHORIZATION");
 
    useEffect(() => {
       if (info) {
-         dispatch(
-            clientActions.getClientsAuthorizationsServ(info[authIndex].id)
-         );
+         dispatch(clientActions.getClientsAuthorizationsServ(info[authIndex].id));
       }
    }, [authIndex]);
 
    useEffect(() => {
-      if (success) {
+      if (!!success.length) {
          setToggleModal(!toggleModal);
          dispatch(
-            httpRequestsOnSuccessActions.removeSuccess(
-               "DELETE_CLIENT_AUTHORIZATION"
-            )
+            httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT_AUTHORIZATION")
          );
-         dispatch(
-            httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION")
-         );
+         dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION"));
       }
    }, [success]);
 
    useEffect(() => {
-      if (successDelServ) {
+      if (!!successDelServ.length) {
          setToggleModal3(!toggleModal3);
          dispatch(
-            httpRequestsOnSuccessActions.removeSuccess(
-               "DELETE_CLIENT_AUTHORIZATION_SERV"
-            )
+            httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT_AUTHORIZATION_SERV")
          );
          dispatch(
-            httpRequestsOnErrorsActions.removeError(
-               "GET_CLIENT_AUTHORIZATION_SERV"
-            )
+            httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION_SERV")
          );
       }
    }, [successDelServ]);
 
-   const headerTitles = [
-      {
-         title: "Service Code",
-         sortable: false,
-      },
-      {
-         title: "Modifiers",
-         sortable: false,
-      },
-      {
-         title: "Total Units",
-         sortable: false,
-      },
-      {
-         title: "Completed Units",
-         sortable: false,
-      },
-      {
-         title: "Available Units",
-         sortable: false,
-      },
-      {
-         title: "Percent Utilization",
-         sortable: false,
-      },
-      {
-         title: "Action",
-         sortable: false,
-      },
-   ];
-
-   let deleteAuthorization = () => {
-      dispatch(
-         clientActions.deleteClientsAuthorization(info[authIndex].id, params.id)
-      );
+   function deleteAuthorization() {
+      dispatch(clientActions.deleteClientsAuthorization(info[authIndex].id, params.id));
       setAuthIndex(0);
-   };
+   }
 
-   let deleteAuthorizationServ = () => {
+   function deleteAuthorizationServ() {
       dispatch(
          clientActions.deleteClientsAuthorizationServ(
             services[serviceIndex].id,
             info[authIndex].id
          )
       );
-   };
+   }
 
-   let clientAuthorizationServiceItem = (item, index) => {
+   function clientAuthorizationServiceItem(item, index) {
       return (
          <TableBodyComponent
             key={index}
@@ -171,11 +110,7 @@ export const ClientAuthorization = ({
                {item.modifiers && item.modifiers.length > 0 ? (
                   <span>
                      {" "}
-                     {`${
-                        item &&
-                        item.modifiers &&
-                        item.modifiers.map((i) => i.name)
-                     }, `}
+                     {`${item && item.modifiers && item.modifiers.map((i) => i.name)}, `}
                   </span>
                ) : (
                   item && item.modifiers && item.modifiers[0].name
@@ -218,13 +153,27 @@ export const ClientAuthorization = ({
             </TableCell>
          </TableBodyComponent>
       );
-   };
+   }
 
-   const getId = (id) => {
-      setAuthentications(id);
-   };
+   function handleSubmit() {
+      if (!!chosenImages.length) {
+         setLoaderUpload(true);
 
-   const uploadedFiles = useSelector((state) => state.upload.uploadedInfo);
+         ImgUploader(chosenImages, true).then((uploadedImages) => {
+            setLoaderUpload(false);
+
+            dispatch(
+               clientActions.addFilesToClientAuth(
+                  info[authIndex].clientId,
+                  info[authIndex].id,
+                  uploadedImages
+               )
+            );
+         });
+      } else {
+         setModalIsOpen(false);
+      }
+   }
 
    return (
       <div className={classes.staffGeneralWrapper}>
@@ -240,7 +189,7 @@ export const ClientAuthorization = ({
                   />
                ) : (
                   <DeleteElement
-                     loader={httpOnLoad.length > 0}
+                     loader={!!delAuthLoader.length}
                      info={`Delete ${info[authIndex].authId}`}
                      handleClose={() => setToggleModal(!toggleModal)}
                      handleDel={deleteAuthorization}
@@ -272,7 +221,7 @@ export const ClientAuthorization = ({
                   />
                ) : (
                   <DeleteElement
-                     loader={httpOnLoad.length > 0}
+                     loader={!!delAuthLoader.length}
                      info={`Delete ${
                         services && services[serviceIndex]?.serviceId?.name
                      }`}
@@ -283,14 +232,20 @@ export const ClientAuthorization = ({
             }
          />
          <SimpleModal
-            handleOpenClose={() => setCreateEditFile(!createEditFile)}
-            openDefault={createEditFile}
+            handleOpenClose={() => setModalIsOpen(!modalIsOpen)}
+            openDefault={modalIsOpen}
             content={
-               <AuthorizationFile
-                  handleClose={handleClose}
-                  fileId={authenticationsId}
-                  uploadedFiles={uploadedFiles}
-               />
+               <div className={classes.authorizationFileWrapper}>
+                  <AuthorizationFile
+                     handleImagesPass={(images) => setChosenImages(images)}
+                  />
+                  <AddModalButton
+                     buttonClassName={classes.addAuthFilesButnStyle}
+                     handleClick={handleSubmit}
+                     loader={loaderUpload}
+                     text="Done"
+                  />
+               </div>
             }
          />
          <Card
@@ -308,9 +263,8 @@ export const ClientAuthorization = ({
          <div className={classes.clearBoth} />
          <div className={classes.notesWrap}>
             <AuthHeader
-               getId={getId}
-               createEditFile={createEditFile}
-               setCreateEditFile={setCreateEditFile}
+               modalIsOpen={modalIsOpen}
+               openModal={() => setModalIsOpen(true)}
                setDelEdit={setDelEdit}
                info={info[authIndex]}
                setToggleModal={setToggleModal}

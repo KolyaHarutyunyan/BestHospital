@@ -31,14 +31,12 @@ export const ClaimTBody = ({ claims = [] }) => {
          {claims.map((claim, index) => {
             const early = handleCreatedAtDate(claim?.dateRange?.early);
             const latest = handleCreatedAtDate(claim?.dateRange?.latest);
-            const funderFirstName = claim?.funder?.firstName;
-            const funderLastName = claim?.funder?.lastName;
-            const clientFirstName = claim?.client?.firstName;
-            const clientLastName = claim?.client?.firstName;
+            const clientFirstName = claim.client?.firstName;
+            const clientLastName = claim.client?.firstName;
 
             const claimId = getTableData(claim._id);
             const datePeriod = getTableData(`${early} - ${latest}`);
-            const funder = getFullName(funderFirstName, funderLastName, getTableData);
+            const funder = getTableData(claim.funder?.name);
             const client = getFullName(clientFirstName, clientLastName, getTableData);
             const totalCharged = getTableData(
                addSignToValueFromStart(getValueByFixedNumber(claim.totalCharge))

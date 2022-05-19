@@ -22,3 +22,4 @@ export { getMenuTitle } from "./getMenuTitle";
 export { makeCapitalize } from "./makeCapitalize";
 export { useWidth } from "./useWidth";
 export { hooksForTable } from "./hooksForTable";
+export { ImgUploader } from "./uploadImages";

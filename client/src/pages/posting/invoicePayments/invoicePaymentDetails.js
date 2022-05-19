@@ -4,7 +4,7 @@ import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { FindLoad } from "@eachbase/utils";
 import { CustomBreadcrumbs, Loader } from "@eachbase/components";
-import { invoicePaymentActions } from "@eachbase/store";
+import { clientActions, invoicePaymentActions } from "@eachbase/store";
 
 export const InvoicePaymentDetails = () => {
    const params = useParams();
@@ -14,11 +14,18 @@ export const InvoicePaymentDetails = () => {
    const invoicePaymentById = useSelector(
       (state) => state.invoicePayment.invoicePaymentById
    );
+   const { clients } = useSelector((state) => state.client.clientList);
+
+   const mappedClients = clients?.map((client) => ({
+      id: client.id,
+      name: `${client.firstName} ${client.lastName}`,
+   }));
 
    const loader = FindLoad("GET_INVOICE_PAYMENT_BY_ID");
 
    useEffect(() => {
       dispatch(invoicePaymentActions.getInvoicePaymentById(params.id));
+      dispatch(clientActions.getClients());
       return () => {
          dispatch({
             type: "GET_INVOICE_PAYMENT_BY_ID_SUCCESS",
@@ -38,7 +45,10 @@ export const InvoicePaymentDetails = () => {
                parentLink={"/invoicePayments"}
             />
          </div>
-         <InvoicePaymentDetailsFragment invoicePaymentDetails={invoicePaymentById} />
+         <InvoicePaymentDetailsFragment
+            invoicePaymentDetails={invoicePaymentById}
+            mappedClients={mappedClients}
+         />
       </>
    );
 };

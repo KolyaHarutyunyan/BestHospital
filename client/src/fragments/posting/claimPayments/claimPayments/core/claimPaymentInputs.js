@@ -7,8 +7,9 @@ import {
    isNotEmpty,
    FindSuccess,
    makeCapitalize,
+   ImgUploader,
 } from "@eachbase/utils";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { FirstStepInputs, LastStepInputs } from "./common";
 import { claimPaymentActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 import moment from "moment";
@@ -37,7 +38,7 @@ export const ClaimPaymentInputs = ({
 
    useEffect(() => {
       if (!!success.length) {
-         closeModal();
+         closeModal && closeModal();
          dispatch(httpRequestsOnSuccessActions.removeSuccess(success[0].type));
       }
    }, [success]);
@@ -46,15 +47,15 @@ export const ClaimPaymentInputs = ({
       !!info
          ? {
               ...info,
-              fundingSource: info.fundingSource?.name,
+              fundingSource: info.fundingSource?._id,
               paymentDate: moment(info.paymentDate).format("YYYY-MM-DD"),
               paymentType: makeCapitalize(info.paymentType),
            }
          : {}
    );
    const [error, setError] = useState("");
-
-   const uploadedFiles = useSelector((state) => state.upload.uploadedInfo);
+   const [chosenImages, setChosenImages] = useState([]);
+   const [loaderUpload, setLoaderUpload] = useState(false);
 
    const isFirst = activeStep === "first";
    const isLast = activeStep === "last";
@@ -108,19 +109,39 @@ export const ClaimPaymentInputs = ({
    };
 
    const handleSubmit = () => {
-      const claimPaymentData = {
+      const claimPmtData = {
          paymentAmount: +inputs.paymentAmount,
          fundingSource: inputs.fundingSource,
          paymentDate: inputs.paymentDate,
          paymentType: makeEnum(inputs.paymentType),
          checkNumber: inputs.checkNumber,
-         paymentReference: uploadedFiles,
       };
 
-      if (!!info) {
-         dispatch(claimPaymentActions.editClaimPayment(info._id, claimPaymentData));
+      if (!!chosenImages.length) {
+         setLoaderUpload(true);
+
+         ImgUploader(chosenImages, true).then((uploadedImages) => {
+            setLoaderUpload(false);
+
+            const claimPmtDataWithDocs = {
+               ...claimPmtData,
+               documents: uploadedImages,
+            };
+
+            if (!!info) {
+               dispatch(
+                  claimPaymentActions.editClaimPayment(info._id, claimPmtDataWithDocs)
+               );
+            } else {
+               dispatch(claimPaymentActions.createClaimPayment(claimPmtDataWithDocs));
+            }
+         });
       } else {
-         dispatch(claimPaymentActions.createClaimPayment(claimPaymentData));
+         if (!!info) {
+            dispatch(claimPaymentActions.editClaimPayment(info._id, claimPmtData));
+         } else {
+            dispatch(claimPaymentActions.createClaimPayment(claimPmtData));
+         }
       }
    };
 
@@ -136,11 +157,11 @@ export const ClaimPaymentInputs = ({
             />
          )}
          {isLast && (
-            <LastStepInputs claimPaymentId={"????"} uploadedFiles={uploadedFiles} />
+            <LastStepInputs handleImagesPass={(images) => setChosenImages(images)} />
          )}
          <CreateChancel
             butnClassName={classes.createOrCancelButnStyle}
-            loader={!!loader.length}
+            loader={loaderUpload || !!loader.length}
             create={createButnText}
             chancel={"Cancel"}
             onCreate={isLast ? handleSubmit : handleNext}

@@ -14,7 +14,6 @@ import { httpRequestsOnLoadReducer } from "../http_requests_on_load";
 import { httpRequestsOnSuccessReducer } from "../http_requests_on_success";
 import { httpRequestsOnErrorsReducer } from "../http_requests_on_errors";
 import { availabilityScheduleReducer } from "../availabilitySchedule";
-import { uploadReducer } from "../upload";
 import { mileageReducer } from "../mileage";
 import { appointmentReducer } from "../appointment";
 import { billReducer, claimReducer, invoiceReducer } from "../billing";
@@ -46,7 +45,6 @@ export const appReducer = combineReducers({
    note: noteReducer,
    payroll: payrollReducer,
    availabilitySchedule: availabilityScheduleReducer,
-   upload: uploadReducer,
    mileage: mileageReducer,
    appointment: appointmentReducer,
    bill: billReducer,

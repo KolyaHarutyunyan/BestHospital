@@ -10,7 +10,6 @@ export { fundingSourceActions } from "./fundingSource";
 export { clientActions } from "./client";
 export { agentActions } from "./agents";
 export { systemActions } from "./system";
-export { uploadActions } from "./upload";
 export { mileagesActions } from "./mileage";
 export { payrollActions } from "./payroll";
 export { noteActions } from "./notes";

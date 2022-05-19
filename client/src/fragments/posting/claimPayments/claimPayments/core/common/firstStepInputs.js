@@ -10,7 +10,7 @@ export const FirstStepInputs = ({
    inputs,
    error,
    handleChange,
-   mappedFunders,
+   mappedFunders = [],
    hasInfo,
 }) => {
    return (
@@ -32,6 +32,7 @@ export const FirstStepInputs = ({
             label={"Funding Source*"}
             handleSelect={handleChange}
             value={inputs.fundingSource}
+            language={null}
             list={mappedFunders}
             type={"id"}
             typeError={error === "fundingSource" && ErrorText.selectField}

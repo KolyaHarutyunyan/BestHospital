@@ -5,9 +5,7 @@ import moment from "moment";
 import { SlicedText } from "../../messages";
 
 export const AuthHeader = ({
-   getId,
-   setCreateEditFile,
-   createEditFile,
+   openModal,
    info,
    setToggleModal,
    toggleModal,
@@ -28,7 +26,7 @@ export const AuthHeader = ({
                   <p className={classes.AuthHeaderTopLeftText}>
                      {info?.startDate &&
                         `${moment(info?.startDate).format("DD/MM/YYYY")} - ${
-                           info?.endDate === "Precent"
+                           info?.endDate === null
                               ? "Present"
                               : moment(info?.endDate).format("DD/MM/YYYY")
                         }`}
@@ -61,13 +59,7 @@ export const AuthHeader = ({
                className={classes.AuthHeaderTopRight}
                style={{ display: "flex", alignItems: "center" }}
             >
-               <p
-                  style={{ cursor: "pointer", marginRight: 10 }}
-                  onClick={() => {
-                     setCreateEditFile(!createEditFile);
-                     getId(info.id);
-                  }}
-               >
+               <p style={{ cursor: "pointer", marginRight: 10 }} onClick={openModal}>
                   {!empoloyment && (
                      <img
                         alt="file"
