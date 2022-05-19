@@ -9,7 +9,9 @@ import { BillingSanitizer } from './interceptor/billing.interceptor';
 import { TxnService } from './txn/txn.service';
 import { TxnType } from './txn/txn.constants';
 import { InvoiceStatus, BillingStatus, ClaimStatus } from './billing.constants';
-
+import { IAppt } from '../appt/interface';
+import { IService } from '../funding/interface/service.interface';
+import { IAuthorizationService } from '../client/authorizationservice/interface';
 @Injectable()
 export class BillingService {
   constructor(
@@ -22,20 +24,22 @@ export class BillingService {
   private model: Model<IBilling>;
 
   /** create the billing */
-  async create(dto: any): Promise<BillingDto> {
+  async create(dto: IAppt): Promise<BillingDto> {
     try {
-      const totalUnits =
-        dto.endTime.getHours() - dto.startTime.getHours() / dto.authorizedService.serviceId.size;
-      const billedRate = dto.authorizedService.modifiers[0].chargeRate;
+      const authorizedService = (<any>dto.authorizedService) as IAuthorizationService;
+      const service = authorizedService.serviceId as IService;
+      const timeDiff = new Date(dto.endTime).valueOf() - new Date(dto.startTime).valueOf();
+      const totalUnits = timeDiff / 1000 / 60 / service.size;
+      const billedRate = authorizedService.modifiers[0].chargeRate;
       const billedAmount = totalUnits * billedRate;
-      const totalHours = dto.endTime.getHours() - dto.startTime.getHours();
+      const totalHours = timeDiff / 1000 / 60 / 60;
       const billing = new this.model({
         appointment: dto._id,
-        payer: dto.payer,
+        payer: dto.funder,
         client: dto.client,
         staff: dto.staff,
-        authorization: dto.authorizedService.authorizationId,
-        authService: dto.authorizedService._id,
+        authorization: authorizedService.authorizationId,
+        authService: authorizedService._id,
         placeService: dto.placeService,
         totalHours,
         totalUnits,
@@ -43,14 +47,14 @@ export class BillingService {
         billedRate,
         billedAmount,
         payerTotal: billedAmount,
-        balance: billedAmount,
         clientBalance: 0,
-        location: dto.location,
+        // location: dto.location,
         claimStatus: ClaimStatus.NOTCLAIMED,
         invoiceStatus: InvoiceStatus.NOTINVOICED,
         status: BillingStatus.OPEN,
       });
-      if (dto.clientResp) billing.clientResp = dto.clientResp;
+      billing.payerBalance = billing.payerTotal - billing.payerPaid - billing.clientBalance;
+      // if (dto.clientResp) billing.clientResp = dto.clientResp;
       await billing.save();
       return this.sanitizer.sanitize(billing);
     } catch (e) {
@@ -122,6 +126,7 @@ export class BillingService {
 
   /** set status claimed */
   async billClaim(ids: string[]): Promise<void> {
+    console.log('ok', ids);
     const bills = await this.model.update(
       { _id: { $in: ids } },
       { $set: { claimStatus: ClaimStatus.CLAIMED } },
@@ -161,7 +166,7 @@ export class BillingService {
       .populate('authorization');
     if (isClaimed) {
       billings.map((bill) => {
-        if (bill.claimStatus == 'CLAIMED') {
+        if (bill.claimStatus == ClaimStatus.CLAIMED) {
           throw new HttpException('Billing has already been used', HttpStatus.NOT_FOUND);
         }
       });

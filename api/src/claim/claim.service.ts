@@ -9,7 +9,9 @@ import { ClaimDto, GenerateClaimDto } from './dto';
 import { ClaimSanitizer } from './interceptor/claim.interceptor';
 import { IClaim } from './interface';
 import { IBilling } from '../billing/interface';
-
+import { IAuthorizationService } from '../client/authorizationservice/interface';
+import { IService } from '../funding/interface';
+import { IReceivable } from './interface/receivable.interface';
 @Injectable()
 export class ClaimService {
   constructor(
@@ -79,11 +81,14 @@ export class ClaimService {
   }
   /**generate claims */
   async generateClaims(dto: GenerateClaimDto, group: MergeClaims): Promise<ClaimDto[]> {
-    const bills: any = await this.billingService.findByIds(dto.bills, true);
+    const bills = await this.billingService.findByIds(dto.bills, true);
     if (!bills.length || bills.length < dto.bills.length) {
       throw new HttpException('Bills with this ids was not found', HttpStatus.NOT_FOUND);
     }
-    const claims = group === 'OFF' ? await this.singleBill(bills) : await this.groupBills(bills);
+    const claims =
+      group === 'OFF'
+        ? await this.singleBill(bills as IBilling[])
+        : await this.groupBills(bills as IBilling[]);
     return this.sanitizer.sanitizeMany(claims);
   }
 
@@ -109,8 +114,9 @@ export class ClaimService {
   // }
 
   /** create claim with receivables with bills */
-  async singleBill(bills: string[]): Promise<IClaim[]> {
+  async singleBill(bills: IBilling[]): Promise<IClaim[]> {
     const claim = [];
+    const billIds = [];
     let subBills = [],
       receivableCreatedAt = [],
       receivable = [];
@@ -119,15 +125,20 @@ export class ClaimService {
     const result = this.groupBy(bills, function (item) {
       return [item.payer, item.client];
     });
+
     /** create receivables and claims */
     for (let i = 0; i < result.length; i++) {
       for (let j = 0; j < result[i].length; ++j) {
+        const authorizedService = (<any>result[i][0].authService) as IAuthorizationService;
+        const service = (<any>authorizedService.serviceId) as IService;
+
         subBills.push(result[i][j]);
+        billIds.push(result[i][j]._id);
         await this.addReceivable(
           receivable,
           result[i][j],
           result[i][0].placeService,
-          result[i][0].authService.serviceId.cptCode,
+          service.cptCode,
         );
         receivableCreatedAt.push(new Date());
 
@@ -145,20 +156,18 @@ export class ClaimService {
       receivable = [];
       receivableCreatedAt = [];
     }
-
-    /** set bill claimStatus to CLAIMED */
-    await this.model.insertMany(claim);
-    // await this.billingService.billClaim(bills);
+    await Promise.all([this.model.insertMany(claim), this.billingService.billClaim(billIds)]);
     return claim;
   }
 
   /** create claim with receivables with grouping bills */
-  async groupBills(bills: any): Promise<IClaim[]> {
+  async groupBills(bills: IBilling[]): Promise<IClaim[]> {
     /** group the bills with client and placeService */
     const result = this.groupBy(bills, function (item) {
       return [item.payer, item.client];
     });
     const claim = [],
+      billIds = [],
       bill = [],
       groupBill = [],
       totalBillCharge = [],
@@ -177,11 +186,11 @@ export class ClaimService {
       });
     }
     const billGroup = this.groupBy(groupBill, function (item) {
-      return [item.placeService, item.authService.serviceId.cptCode];
+      return [item.placeService, item.authService._id];
     });
-
     for (let i = 0; i < billGroup.length; i++) {
       billGroup[i].map((bill) => {
+        billIds.push(bill._id);
         subBillIds.push(bill._id);
         totalBillCharge.push(bill);
         billCreatedAt.push(bill.createdDate);
@@ -205,8 +214,7 @@ export class ClaimService {
       billCreatedAt = [];
     }
     /** set bill claimStatus to CLAIMED */
-    await this.model.insertMany(claim);
-    // await this.billingService.billClaim(bills);
+    await Promise.all([this.model.insertMany(claim), this.billingService.billClaim(billIds)]);
     return claim;
     // date of service, cpt code + modifier, place of service
     //  Client Funder appointment startDate
@@ -257,7 +265,7 @@ export class ClaimService {
   }
   /** Private methods */
   /** group the bills */
-  private groupBy(array, f) {
+  private groupBy(array, f): IBilling[][] {
     const groups = {};
     array.forEach(function (o) {
       const group = JSON.stringify(f(o));
@@ -274,7 +282,7 @@ export class ClaimService {
     receivable,
     result,
     placeService: string,
-    cptCode: number,
+    cptCode: string,
   ): Promise<void> {
     receivable.push({
       placeService,

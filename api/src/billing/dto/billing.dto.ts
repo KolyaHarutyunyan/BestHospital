@@ -1,4 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { AuthorizationDTO } from '../../client/authorization/dto/authorization.dto';
+import { AuthorizationServiceDTO } from '../../client/authorizationservice/dto/authorizationService.dto';
 import { ITxn } from '../txn/interface';
 
 export class BillingDto {
@@ -7,15 +9,17 @@ export class BillingDto {
   @ApiProperty()
   appointment: string;
   @ApiProperty()
+  payerBalance: number;
+  @ApiProperty()
   payer: string;
   @ApiProperty()
   client: string;
   @ApiProperty()
   staff: string;
   @ApiProperty()
-  authorization: string;
+  authorization: AuthorizationDTO | string;
   @ApiProperty()
-  authService: string;
+  authService: AuthorizationServiceDTO | string;
   @ApiProperty()
   placeService: string;
   @ApiProperty()
@@ -26,6 +30,8 @@ export class BillingDto {
   dateOfService: Date;
   @ApiProperty()
   billedAmount: number;
+  @ApiProperty()
+  billedRate: number;
   @ApiProperty()
   payerTotal: number;
   @ApiProperty()

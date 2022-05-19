@@ -323,7 +323,7 @@ export class ApptService {
     this.checkTypeAppt(appt.type as ApptType, [ApptType.SERVICE]);
     await Promise.all([
       this.authorizedService.countCompletedUnits(
-        appt.authorizedService,
+        appt.authorizedService as string,
         this.timeDiffCalc(appt.endTime, appt.startTime),
       ),
       this.billingService.create(appt),
@@ -415,7 +415,7 @@ export class ApptService {
         dto.client,
         dto.authorizedService,
         appointment.client,
-        appointment.authorizedService,
+        appointment.authorizedService as string,
       );
     }
     if (dto.placeService) {
@@ -467,7 +467,7 @@ export class ApptService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    await this.authorizedService.getByServiceId(authService.serviceId);
+    await this.authorizedService.getByServiceId(authService.serviceId as string);
   }
 
   // remove appointment

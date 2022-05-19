@@ -13,12 +13,12 @@ import { TxnDto } from './txn/dto';
 export class BillingController {
   constructor(private readonly billingService: BillingService) {}
 
-  @Post()
-  @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({ type: BillingDto })
-  async create(@Body() createBillingDto: CreateBillingDto): Promise<BillingDto> {
-    return this.billingService.create(createBillingDto);
-  }
+  // @Post()
+  // @ApiHeader({ name: ACCESS_TOKEN })
+  // @ApiOkResponse({ type: BillingDto })
+  // async create(@Body() createBillingDto: CreateBillingDto): Promise<BillingDto> {
+  //   return this.billingService.create(createBillingDto);
+  // }
 
   @Post('/addTransaction/:id')
   @ApiHeader({ name: ACCESS_TOKEN })

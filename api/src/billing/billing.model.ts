@@ -17,6 +17,7 @@ const BillingSchema = new Schema({
   billedAmount: { type: Number, default: 0 },
   payerTotal: { type: Number, default: 0 },
   payerPaid: { type: Number, default: 0 },
+  payerBalance: { type: Number },
   //payerBalance payerTotal - payerPaid
   clientResp: { type: Number, default: 0 },
   clientPaid: { type: Number, default: 0 },

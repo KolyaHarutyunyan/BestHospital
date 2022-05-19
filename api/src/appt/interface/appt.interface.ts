@@ -3,13 +3,14 @@ import { FileDTO } from '../../files/dto/file.dto';
 import { IAddress } from '../../address';
 import * as mongoose from 'mongoose';
 import { ApptStatus, EventStatus, ApptType } from '../appt.constants';
+import { IAuthorizationService } from '../../client/authorizationservice/interface';
 
 export interface IAppt extends Document {
   _id: string;
   type: string;
   client: any;
   funder: string;
-  authorizedService: string;
+  authorizedService: IAuthorizationService | string;
   staff: string;
   placeService: string;
   staffPayCode: string;

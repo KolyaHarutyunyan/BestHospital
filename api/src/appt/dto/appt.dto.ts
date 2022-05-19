@@ -2,7 +2,10 @@ import { ApiProperty } from '@nestjs/swagger';
 import { ApptStatus, ApptType, EventStatus } from '../appt.constants';
 import { IsEnum, IsMongoId, IsOptional } from 'class-validator';
 import { AddressDTO } from '../../address';
-import { FileDTO } from 'src/files/dto';
+import { FileDTO } from '../../files/dto';
+import { AuthorizationServiceDTO } from '../../client/authorizationservice/dto';
+
+// authorizedService: IAuthorizationService | string;
 
 export class ApptDto {
   @ApiProperty()
@@ -14,7 +17,7 @@ export class ApptDto {
   @ApiProperty()
   funder: string;
   @ApiProperty()
-  authorizedService: string;
+  authorizedService: AuthorizationServiceDTO | string;
   @ApiProperty()
   staff: string;
   @ApiProperty()
@@ -44,7 +47,6 @@ export class ApptDto {
   @ApiProperty()
   digitalSignature: FileDTO;
 }
-
 export class AppointmentQueryDTO {
   @ApiProperty({ enum: EventStatus, required: false })
   @IsEnum(EventStatus)

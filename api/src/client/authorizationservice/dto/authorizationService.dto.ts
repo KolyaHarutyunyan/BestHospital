@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { ServiceDTO } from '../../../funding/dto/service.dto';
 
 export class AuthorizationServiceDTO {
   @ApiProperty()
@@ -6,7 +7,7 @@ export class AuthorizationServiceDTO {
   @ApiProperty()
   authorizationId: string;
   @ApiProperty()
-  serviceId: string;
+  serviceId: ServiceDTO | string;
   @ApiProperty()
   total: number;
   @ApiProperty()
