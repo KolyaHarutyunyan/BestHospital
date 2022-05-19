@@ -5,35 +5,54 @@ const { addSignToValueFromStart, getValueByFixedNumber, handleCreatedAtDate } =
    hooksForTable;
 
 export function getFilteredInvoicesForInvoicePmt(
-   invoices,
+   invoicesForInvoicePmt = [],
    selDateFrom,
    selDateTo,
    selDate
 ) {
-   const filteredInvoicesForInvoicePmt =
-      selDateFrom === "" && selDateTo === "" && selDate === ""
-         ? invoices
-         : selDateFrom !== ""
-         ? invoices.filter(
-              (invoice) =>
-                 handleCreatedAtDate(invoice?.dateRange?.early) ===
-                 handleCreatedAtDate(selDateFrom)
-           )
-         : selDateTo !== ""
-         ? invoices.filter(
-              (invoice) =>
-                 handleCreatedAtDate(invoice?.dateRange?.latest) ===
-                 handleCreatedAtDate(selDateTo)
-           )
-         : selDate !== ""
-         ? invoices.filter(
-              (invoice) =>
-                 handleCreatedAtDate(invoice?.invoiceDate) ===
-                 handleCreatedAtDate(selDate)
-           )
-         : [];
+   return invoicesForInvoicePmt.filter((invoiceForInvoicePmt) => {
+      const dateRangeFrom = invoiceForInvoicePmt?.dateRange?.early;
+      const invoiceDate = invoiceForInvoicePmt?.invoiceDate;
+      const dateRangeTo = invoiceForInvoicePmt?.dateRange?.latest;
 
-   return filteredInvoicesForInvoicePmt;
+      if (selDateFrom === "" && selDate === "" && selDateTo === "") return true;
+
+      if (selDateFrom !== "" && selDate === "" && selDateTo === "")
+         return handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom);
+
+      if (selDateFrom === "" && selDate !== "" && selDateTo === "")
+         return handleCreatedAtDate(invoiceDate) === handleCreatedAtDate(selDate);
+
+      if (selDateFrom === "" && selDate === "" && selDateTo !== "")
+         return handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo);
+
+      if (selDateFrom !== "" && selDate !== "" && selDateTo === "")
+         return (
+            handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom) &&
+            handleCreatedAtDate(invoiceDate) === handleCreatedAtDate(selDate)
+         );
+
+      if (selDateFrom !== "" && selDate === "" && selDateTo !== "")
+         return (
+            handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom) &&
+            handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo)
+         );
+
+      if (selDateFrom === "" && selDate !== "" && selDateTo !== "")
+         return (
+            handleCreatedAtDate(invoiceDate) === handleCreatedAtDate(selDate) &&
+            handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo)
+         );
+
+      if (selDateFrom !== "" && selDate !== "" && selDateTo !== "")
+         return (
+            handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom) &&
+            handleCreatedAtDate(invoiceDate) === handleCreatedAtDate(selDate) &&
+            handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo)
+         );
+
+      return false;
+   });
 }
 
 export function getInvoiceDetailsForInvoicePmt(invoice) {

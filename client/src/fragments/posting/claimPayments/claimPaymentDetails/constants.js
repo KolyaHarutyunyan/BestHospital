@@ -3,8 +3,14 @@ import { hooksForTable, makeCapitalize, manageStatus } from "@eachbase/utils";
 // import { claimPaymentDetailsStyle } from "./styles";
 
 export function getClaimPaymentDetails(claimPayment) {
-   const { fundingSource, paymentDate, checkNumber, paymentType, paymentAmount } =
-      claimPayment || {};
+   const {
+      fundingSource,
+      paymentDate,
+      checkNumber,
+      paymentType,
+      paymentAmount,
+      documents,
+   } = claimPayment || {};
 
    const { addSignToValueFromStart, getValueByFixedNumber, handleCreatedAtDate } =
       hooksForTable;
@@ -45,13 +51,14 @@ export function getClaimPaymentDetails(claimPayment) {
       },
       {
          detailText: "EOB:",
-         detail: !!"EOB.pdf" ? (
-            <DownloadLink
-               linkHref={"EOB.pdf"}
-               linkInnerText={"Download"}
-               linkDownload={true}
-            />
-         ) : null,
+         detail:
+            !!documents && !!documents[0]?.url ? (
+               <DownloadLink
+                  linkHref={documents[0]?.url}
+                  linkInnerText={"Download"}
+                  linkDownload={true}
+               />
+            ) : null,
       },
    ];
 

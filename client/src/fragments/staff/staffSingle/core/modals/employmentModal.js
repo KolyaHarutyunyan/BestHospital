@@ -33,36 +33,28 @@ export const EmploymentModal = ({ handleClose, info }) => {
               startDate: moment(info?.startDate).format("YYYY-MM-DD"),
               endDate: moment(info.endDate).format("YYYY-MM-DD"),
               employmentType:
-                 info?.schedule === 0
-                    ? _partTime
-                    : info?.schedule === 1
-                    ? _fullTime
-                    : "",
+                 info?.schedule === 0 ? _partTime : info?.schedule === 1 ? _fullTime : "",
            }
          : {}
    );
 
-   const [checked, setChecked] = useState(
-      info ? info.endDate === "Precent" : true
-   );
+   const [checked, setChecked] = useState(info ? info.endDate === "Precent" : true);
 
    const params = useParams();
 
    const dispatch = useDispatch();
 
    const departments = useSelector((state) => state.system.departments);
-   const staffList = useSelector(
-      (state) => state.admins.adminsAllList.staff
-   )?.filter((item) => item.id !== params.id && item);
+   const staffList = useSelector((state) => state.admins.adminsAllList.staff)?.filter(
+      (item) => item.id !== params.id && item
+   );
 
    const classes = createClientStyle();
 
    const success = info
       ? FindSuccess("EDIT_EMPLOYMENT")
       : FindSuccess("CREATE_EMPLOYMENT");
-   const loader = info
-      ? FindLoad("EDIT_EMPLOYMENT")
-      : FindLoad("CREATE_EMPLOYMENT");
+   const loader = info ? FindLoad("EDIT_EMPLOYMENT") : FindLoad("CREATE_EMPLOYMENT");
 
    useEffect(() => {
       dispatch(systemActions.getDepartments());
@@ -72,18 +64,12 @@ export const EmploymentModal = ({ handleClose, info }) => {
    useEffect(() => {
       if (!success) return;
       handleClose();
-      dispatch(
-         httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION")
-      );
+      dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION"));
 
       if (info) {
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess("EDIT_EMPLOYMENT")
-         );
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_EMPLOYMENT"));
       } else {
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess("CREATE_EMPLOYMENT")
-         );
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_EMPLOYMENT"));
       }
    }, [success]);
 
@@ -98,15 +84,13 @@ export const EmploymentModal = ({ handleClose, info }) => {
          ...prevState,
          [e.target.name]: e.target.value === 0 ? "0" : e.target.value,
       }));
-      (error === e.target.name || error === ErrorText.dateError) &&
-         setError("");
+      (error === e.target.name || error === ErrorText.dateError) && setError("");
    };
 
    const handleCreate = () => {
       const dateComparingIsValid =
          !!inputs.endDate &&
-         new Date(inputs.startDate).getTime() <
-            new Date(inputs.endDate).getTime();
+         new Date(inputs.startDate).getTime() < new Date(inputs.endDate).getTime();
 
       const employmentDataIsValid =
          isNotEmpty(inputs.title) &&
@@ -219,20 +203,12 @@ export const EmploymentModal = ({ handleClose, info }) => {
                      handleSelect={handleChange}
                      value={inputs.employmentType}
                      list={_list}
-                     typeError={
-                        error === "employmentType" ? ErrorText.field : ""
-                     }
+                     typeError={error === "employmentType" ? ErrorText.field : ""}
                   />
 
                   <div className={classes.curentlyCheckbox}>
-                     <Checkbox
-                        checked={checked}
-                        onClick={onCheck}
-                        color="primary"
-                     />
-                     <p className={classes.curently}>
-                        Currently works in this role
-                     </p>
+                     <Checkbox checked={checked} onClick={onCheck} color="primary" />
+                     <p className={classes.curently}>Currently works in this role</p>
                   </div>
                   <div style={{ display: "flex" }}>
                      <ValidationInput
@@ -244,9 +220,10 @@ export const EmploymentModal = ({ handleClose, info }) => {
                            // : moment(new Date()).format("YYYY-MM-DD")
                         }
                         type={"date"}
-                        label={"Start Date*"}
+                        label={"Start Da"}
                         name="startDate"
                         typeError={error === "startDate" ? ErrorText.field : ""}
+                        max="2022-11-10"
                      />
                      <div style={{ width: 16 }} />
                      <ValidationInput

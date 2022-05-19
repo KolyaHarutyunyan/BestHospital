@@ -1,19 +1,24 @@
-export function getFilteredInvoicePayments(invoicePayments, selClient, selStatus) {
-   const filteredInvoicePayments =
-      selClient === "All" && selStatus === "All"
-         ? invoicePayments
-         : selClient !== "All"
-         ? invoicePayments.filter(
-              (invoicePayment) =>
-                 `${invoicePayment?.client?.firstName} ${invoicePayment?.client?.lastName}`.toLowerCase() ===
-                 selClient.toLowerCase()
-           )
-         : selStatus !== "All"
-         ? invoicePayments.filter(
-              (invoicePayment) =>
-                 invoicePayment?.status?.toLowerCase() === selStatus.toLowerCase()
-           )
-         : [];
+export function getFilteredInvoicePayments(invoicePmts = [], selFunder, selStatus) {
+   const makeLowC = (value = "") => value?.toLowerCase();
 
-   return filteredInvoicePayments;
+   return invoicePmts.filter((invoicePmt) => {
+      const clientName = `${invoicePmt?.client?.firstName} ${invoicePmt?.client?.lastName}`;
+      const status = invoicePmt?.status;
+
+      if (selFunder === "All" && selStatus === "All") return true;
+
+      if (selFunder !== "All" && selStatus === "All")
+         return makeLowC(clientName) === makeLowC(selFunder);
+
+      if (selFunder === "All" && selStatus !== "All")
+         return makeLowC(status) === makeLowC(selStatus);
+
+      if (selFunder !== "All" && selStatus !== "All")
+         return (
+            makeLowC(clientName) === makeLowC(selFunder) &&
+            makeLowC(status) === makeLowC(selStatus)
+         );
+
+      return false;
+   });
 }

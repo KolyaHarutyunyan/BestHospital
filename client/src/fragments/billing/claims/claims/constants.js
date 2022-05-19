@@ -1,7 +1,5 @@
 import { hooksForTable } from "@eachbase/utils";
 
-const { handleCreatedAtDate } = hooksForTable;
-
 export function getFilteredClaims(
    claims = [],
    selFunder,
@@ -10,42 +8,406 @@ export function getFilteredClaims(
    selDateTo,
    selStatus
 ) {
-   const filteredClaims =
-      selFunder === "All" &&
-      selClient === "All" &&
-      selDateFrom === "" &&
-      selDateTo === "" &&
-      selStatus === "All"
-         ? claims
-         : selFunder !== "All"
-         ? claims.filter(
-              (claim) =>
-                 `${claim?.funder?.firstName} ${claim?.funder?.lastName}`.toLowerCase() ===
-                 selFunder.toLowerCase()
-           )
-         : selClient !== "All"
-         ? claims.filter(
-              (claim) =>
-                 `${claim?.client?.firstName} ${claim?.client?.lastName}`.toLowerCase() ===
-                 selClient.toLowerCase()
-           )
-         : selDateFrom !== ""
-         ? claims.filter(
-              (claim) =>
-                 handleCreatedAtDate(claim?.dateRange?.early) ===
-                 handleCreatedAtDate(selDateFrom)
-           )
-         : selDateTo !== ""
-         ? claims.filter(
-              (claim) =>
-                 handleCreatedAtDate(claim?.dateRange?.latest) ===
-                 handleCreatedAtDate(selDateTo)
-           )
-         : selStatus !== "All"
-         ? claims.filter(
-              (claim) => claim?.status?.toLowerCase() === selStatus.toLowerCase()
-           )
-         : [];
+   const { handleCreatedAtDate } = hooksForTable;
+   const makeLowC = (value = "") => value?.toLowerCase();
 
-   return filteredClaims;
+   return claims.filter((claim) => {
+      const funderName = claim?.payer?.name;
+      const clientName = `${claim?.client?.firstName} ${claim?.client?.lastName}`;
+      const dateRangeFrom = claim?.dateRange?.early;
+      const dateRangeTo = claim?.dateRange?.latest;
+      const status = claim?.status;
+
+      if (
+         selFunder === "All" &&
+         selClient === "All" &&
+         selDateFrom === "" &&
+         selDateTo === "" &&
+         selStatus === "All"
+      )
+         return true;
+
+      if (
+         selFunder !== "All" &&
+         selClient === "All" &&
+         selDateFrom === "" &&
+         selDateTo === "" &&
+         selStatus === "All"
+      )
+         return makeLowC(funderName) === makeLowC(selFunder);
+
+      if (
+         selFunder === "All" &&
+         selClient !== "All" &&
+         selDateFrom === "" &&
+         selDateTo === "" &&
+         selStatus === "All"
+      )
+         return makeLowC(clientName) === makeLowC(selClient);
+
+      if (
+         selFunder === "All" &&
+         selClient === "All" &&
+         selDateFrom !== "" &&
+         selDateTo === "" &&
+         selStatus === "All"
+      )
+         return handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom);
+
+      if (
+         selFunder === "All" &&
+         selClient === "All" &&
+         selDateFrom === "" &&
+         selDateTo !== "" &&
+         selStatus === "All"
+      )
+         return handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo);
+
+      if (
+         selFunder === "All" &&
+         selClient === "All" &&
+         selDateFrom === "" &&
+         selDateTo === "" &&
+         selStatus !== "All"
+      )
+         return makeLowC(status) === makeLowC(selStatus);
+
+      if (
+         selFunder !== "All" &&
+         selClient !== "All" &&
+         selDateFrom === "" &&
+         selDateTo === "" &&
+         selStatus === "All"
+      )
+         return (
+            makeLowC(funderName) === makeLowC(selFunder) &&
+            makeLowC(clientName) === makeLowC(selClient)
+         );
+
+      if (
+         selFunder !== "All" &&
+         selClient === "All" &&
+         selDateFrom !== "" &&
+         selDateTo === "" &&
+         selStatus === "All"
+      )
+         return (
+            makeLowC(funderName) === makeLowC(selFunder) &&
+            handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom)
+         );
+
+      if (
+         selFunder !== "All" &&
+         selClient === "All" &&
+         selDateFrom === "" &&
+         selDateTo !== "" &&
+         selStatus === "All"
+      )
+         return (
+            makeLowC(funderName) === makeLowC(selFunder) &&
+            handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo)
+         );
+
+      if (
+         selFunder !== "All" &&
+         selClient === "All" &&
+         selDateFrom === "" &&
+         selDateTo === "" &&
+         selStatus !== "All"
+      )
+         return (
+            makeLowC(funderName) === makeLowC(selFunder) &&
+            makeLowC(status) === makeLowC(selStatus)
+         );
+
+      if (
+         selFunder === "All" &&
+         selClient !== "All" &&
+         selDateFrom !== "" &&
+         selDateTo === "" &&
+         selStatus === "All"
+      )
+         return (
+            makeLowC(clientName) === makeLowC(selClient) &&
+            handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom)
+         );
+
+      if (
+         selFunder === "All" &&
+         selClient !== "All" &&
+         selDateFrom === "" &&
+         selDateTo !== "" &&
+         selStatus === "All"
+      )
+         return (
+            makeLowC(clientName) === makeLowC(selClient) &&
+            handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo)
+         );
+
+      if (
+         selFunder === "All" &&
+         selClient !== "All" &&
+         selDateFrom === "" &&
+         selDateTo === "" &&
+         selStatus !== "All"
+      )
+         return (
+            makeLowC(clientName) === makeLowC(selClient) &&
+            makeLowC(status) === makeLowC(selStatus)
+         );
+
+      if (
+         selFunder === "All" &&
+         selClient === "All" &&
+         selDateFrom !== "" &&
+         selDateTo !== "" &&
+         selStatus === "All"
+      )
+         return (
+            handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom) &&
+            handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo)
+         );
+
+      if (
+         selFunder === "All" &&
+         selClient === "All" &&
+         selDateFrom !== "" &&
+         selDateTo === "" &&
+         selStatus !== "All"
+      )
+         return (
+            handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom) &&
+            makeLowC(status) === makeLowC(selStatus)
+         );
+
+      if (
+         selFunder === "All" &&
+         selClient === "All" &&
+         selDateFrom === "" &&
+         selDateTo !== "" &&
+         selStatus !== "All"
+      )
+         return (
+            handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo) &&
+            makeLowC(status) === makeLowC(selStatus)
+         );
+
+      if (
+         selFunder !== "All" &&
+         selClient !== "All" &&
+         selDateFrom !== "" &&
+         selDateTo === "" &&
+         selStatus === "All"
+      )
+         return (
+            makeLowC(funderName) === makeLowC(selFunder) &&
+            makeLowC(clientName) === makeLowC(selClient) &&
+            handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom)
+         );
+
+      if (
+         selFunder !== "All" &&
+         selClient !== "All" &&
+         selDateFrom === "" &&
+         selDateTo !== "" &&
+         selStatus === "All"
+      )
+         return (
+            makeLowC(funderName) === makeLowC(selFunder) &&
+            makeLowC(clientName) === makeLowC(selClient) &&
+            handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo)
+         );
+
+      if (
+         selFunder !== "All" &&
+         selClient !== "All" &&
+         selDateFrom === "" &&
+         selDateTo === "" &&
+         selStatus !== "All"
+      )
+         return (
+            makeLowC(funderName) === makeLowC(selFunder) &&
+            makeLowC(clientName) === makeLowC(selClient) &&
+            makeLowC(status) === makeLowC(selStatus)
+         );
+
+      if (
+         selFunder !== "All" &&
+         selClient === "All" &&
+         selDateFrom !== "" &&
+         selDateTo !== "" &&
+         selStatus === "All"
+      )
+         return (
+            makeLowC(funderName) === makeLowC(selFunder) &&
+            handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom) &&
+            handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo)
+         );
+
+      if (
+         selFunder !== "All" &&
+         selClient === "All" &&
+         selDateFrom !== "" &&
+         selDateTo === "" &&
+         selStatus !== "All"
+      )
+         return (
+            makeLowC(funderName) === makeLowC(selFunder) &&
+            handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom) &&
+            makeLowC(status) === makeLowC(selStatus)
+         );
+
+      if (
+         selFunder !== "All" &&
+         selClient === "All" &&
+         selDateFrom === "" &&
+         selDateTo !== "" &&
+         selStatus !== "All"
+      )
+         return (
+            makeLowC(funderName) === makeLowC(selFunder) &&
+            handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo) &&
+            makeLowC(status) === makeLowC(selStatus)
+         );
+
+      if (
+         selFunder === "All" &&
+         selClient !== "All" &&
+         selDateFrom !== "" &&
+         selDateTo !== "" &&
+         selStatus === "All"
+      )
+         return (
+            makeLowC(clientName) === makeLowC(selClient) &&
+            handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom) &&
+            handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo)
+         );
+
+      if (
+         selFunder === "All" &&
+         selClient !== "All" &&
+         selDateFrom !== "" &&
+         selDateTo === "" &&
+         selStatus !== "All"
+      )
+         return (
+            makeLowC(clientName) === makeLowC(selClient) &&
+            handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom) &&
+            makeLowC(status) === makeLowC(selStatus)
+         );
+
+      if (
+         selFunder === "All" &&
+         selClient !== "All" &&
+         selDateFrom === "" &&
+         selDateTo !== "" &&
+         selStatus !== "All"
+      )
+         return (
+            makeLowC(clientName) === makeLowC(selClient) &&
+            handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo) &&
+            makeLowC(status) === makeLowC(selStatus)
+         );
+
+      if (
+         selFunder === "All" &&
+         selClient === "All" &&
+         selDateFrom !== "" &&
+         selDateTo !== "" &&
+         selStatus !== "All"
+      )
+         return (
+            makeLowC(clientName) === makeLowC(selClient) &&
+            handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom) &&
+            handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo) &&
+            makeLowC(status) === makeLowC(selStatus)
+         );
+
+      if (
+         selFunder !== "All" &&
+         selClient !== "All" &&
+         selDateFrom !== "" &&
+         selDateTo !== "" &&
+         selStatus === "All"
+      )
+         return (
+            makeLowC(funderName) === makeLowC(selFunder) &&
+            makeLowC(clientName) === makeLowC(selClient) &&
+            handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom) &&
+            handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo)
+         );
+
+      if (
+         selFunder !== "All" &&
+         selClient === "All" &&
+         selDateFrom !== "" &&
+         selDateTo !== "" &&
+         selStatus !== "All"
+      )
+         return (
+            makeLowC(funderName) === makeLowC(selFunder) &&
+            handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom) &&
+            handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo) &&
+            makeLowC(status) === makeLowC(selStatus)
+         );
+
+      if (
+         selFunder !== "All" &&
+         selClient !== "All" &&
+         selDateFrom === "" &&
+         selDateTo !== "" &&
+         selStatus !== "All"
+      )
+         return (
+            makeLowC(funderName) === makeLowC(selFunder) &&
+            makeLowC(clientName) === makeLowC(selClient) &&
+            handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo) &&
+            makeLowC(status) === makeLowC(selStatus)
+         );
+
+      if (
+         selFunder !== "All" &&
+         selClient !== "All" &&
+         selDateFrom !== "" &&
+         selDateTo === "" &&
+         selStatus !== "All"
+      )
+         return (
+            makeLowC(funderName) === makeLowC(selFunder) &&
+            makeLowC(clientName) === makeLowC(selClient) &&
+            handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom) &&
+            makeLowC(status) === makeLowC(selStatus)
+         );
+
+      if (
+         selFunder === "All" &&
+         selClient !== "All" &&
+         selDateFrom !== "" &&
+         selDateTo !== "" &&
+         selStatus !== "All"
+      )
+         return (
+            makeLowC(clientName) === makeLowC(selClient) &&
+            handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom) &&
+            handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo) &&
+            makeLowC(status) === makeLowC(selStatus)
+         );
+
+      if (
+         selFunder !== "All" &&
+         selClient !== "All" &&
+         selDateFrom !== "" &&
+         selDateTo !== "" &&
+         selStatus !== "All"
+      )
+         return (
+            makeLowC(funderName) === makeLowC(selFunder) &&
+            makeLowC(clientName) === makeLowC(selClient) &&
+            handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom) &&
+            handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo) &&
+            makeLowC(status) === makeLowC(selStatus)
+         );
+
+      return false;
+   });
 }

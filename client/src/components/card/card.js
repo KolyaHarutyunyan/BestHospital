@@ -16,6 +16,7 @@ export const Card = ({
    employment,
 }) => {
    const classes = cardStyle();
+
    return (
       <div className={classes.card} style={width && { width: width, maxWidth: 563 }}>
          {showHeader && (
@@ -27,24 +28,22 @@ export const Card = ({
             />
          )}
          <div className={classes.cardBody}>
-            {cardInfo
-               .filter((info) => !!info.value)
-               .map((item, index) => {
-                  return (
-                     <CardItem
-                        employment={employment}
-                        active={active}
-                        click={click}
-                        auth={auth}
-                        key={index}
-                        index={index}
-                        title={item.title}
-                        value={item.value}
-                        authId={item?.authId}
-                        width={width}
-                     />
-                  );
-               })}
+            {cardInfo.map((item, index) => {
+               return (
+                  <CardItem
+                     employment={employment}
+                     active={active}
+                     click={click}
+                     auth={auth}
+                     key={index}
+                     index={index}
+                     title={item.title}
+                     value={item.value}
+                     authId={item?.authId}
+                     width={width}
+                  />
+               );
+            })}
          </div>
       </div>
    );

@@ -1,30 +1,29 @@
 import { hooksForTable } from "@eachbase/utils";
 
-const { handleCreatedAtDate } = hooksForTable;
+export function getFilteredNotInvoicedBills(notInvoicedBills = [], selClient, selDate) {
+   const { handleCreatedAtDate } = hooksForTable;
+   const makeLowC = (value = "") => value?.toLowerCase();
 
-export function getFilteredNotInvoicedBills(
-   notInvoicedBills = [],
-   selClient,
-   selServiceDate
-) {
-   const filteredNotInvoicedBills =
-      selClient === "All" && selServiceDate === ""
-         ? notInvoicedBills
-         : selClient !== "All"
-         ? notInvoicedBills.filter(
-              (bill) =>
-                 `${bill?.client?.firstName} ${bill?.client?.lastName}`.toLowerCase() ===
-                 selClient.toLowerCase()
-           )
-         : selServiceDate !== ""
-         ? notInvoicedBills.filter(
-              (bill) =>
-                 handleCreatedAtDate(bill?.dateOfService) ===
-                 handleCreatedAtDate(selServiceDate)
-           )
-         : [];
+   return notInvoicedBills.filter((notInvoicedBill) => {
+      const clientName = `${notInvoicedBill?.client?.firstName} ${notInvoicedBill?.client?.lastName}`;
+      const serviceDate = notInvoicedBill?.dateOfService;
 
-   return filteredNotInvoicedBills;
+      if (selClient === "All" && selDate === "") return true;
+
+      if (selClient !== "All" && selDate === "")
+         return makeLowC(clientName) === makeLowC(selClient);
+
+      if (selClient === "All" && selDate !== "")
+         return handleCreatedAtDate(serviceDate) === handleCreatedAtDate(selDate);
+
+      if (selClient !== "All" && selDate !== "")
+         return (
+            makeLowC(clientName) === makeLowC(selClient) &&
+            handleCreatedAtDate(serviceDate) === handleCreatedAtDate(selDate)
+         );
+
+      return false;
+   });
 }
 
 export function mapBills(billList = [], boolean) {

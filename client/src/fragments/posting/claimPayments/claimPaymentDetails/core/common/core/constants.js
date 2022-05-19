@@ -4,35 +4,61 @@ import { hooksForTable, makeCapitalize } from "@eachbase/utils";
 const { addSignToValueFromStart, getValueByFixedNumber, handleCreatedAtDate } =
    hooksForTable;
 
-export function getFilteredClaimsForClaimPmt(claims, selClient, selDateFrom, selDateTo) {
-   const filteredClaimsForClaimPmt =
-      selClient === "All" && selDateFrom === "" && selDateTo === ""
-         ? claims
-         : selClient !== "All"
-         ? claims.filter(
-              (claim) =>
-                 `${claim?.client?.firstName} ${claim?.client?.lastName}`.toLowerCase() ===
-                 selClient.toLowerCase()
-           )
-         : selDateFrom !== ""
-         ? claims.filter(
-              (claim) =>
-                 handleCreatedAtDate(claim?.dateRange?.early) ===
-                 handleCreatedAtDate(selDateFrom)
-           )
-         : selDateTo !== ""
-         ? claims.filter(
-              (claim) =>
-                 handleCreatedAtDate(claim?.dateRange?.latest) ===
-                 handleCreatedAtDate(selDateTo)
-           )
-         : [];
+export function getFilteredClaimsForClaimPmt(
+   claimsForClaimPmt = [],
+   selClient,
+   selDateFrom,
+   selDateTo
+) {
+   const makeLowC = (value = "") => value?.toLowerCase();
 
-   return filteredClaimsForClaimPmt;
+   return claimsForClaimPmt.filter((claimForClaimPmt) => {
+      const dateRangeFrom = claimForClaimPmt?.dateRange?.early;
+      const clientName = `${claimForClaimPmt?.client?.firstName} ${claimForClaimPmt?.client?.lastName}`;
+      const dateRangeTo = claimForClaimPmt?.dateRange?.latest;
+
+      if (selDateFrom === "" && selClient === "All" && selDateTo === "") return true;
+
+      if (selDateFrom !== "" && selClient === "All" && selDateTo === "")
+         return handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom);
+
+      if (selDateFrom === "" && selClient !== "All" && selDateTo === "")
+         return makeLowC(clientName) === makeLowC(selClient);
+
+      if (selDateFrom === "" && selClient === "All" && selDateTo !== "")
+         return handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo);
+
+      if (selDateFrom !== "" && selClient !== "All" && selDateTo === "")
+         return (
+            handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom) &&
+            makeLowC(clientName) === makeLowC(selClient)
+         );
+
+      if (selDateFrom !== "" && selClient === "All" && selDateTo !== "")
+         return (
+            handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom) &&
+            handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo)
+         );
+
+      if (selDateFrom === "" && selClient !== "All" && selDateTo !== "")
+         return (
+            makeLowC(clientName) === makeLowC(selClient) &&
+            handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo)
+         );
+
+      if (selDateFrom !== "" && selClient !== "All" && selDateTo !== "")
+         return (
+            handleCreatedAtDate(dateRangeFrom) === handleCreatedAtDate(selDateFrom) &&
+            makeLowC(clientName) === makeLowC(selClient) &&
+            handleCreatedAtDate(dateRangeTo) === handleCreatedAtDate(selDateTo)
+         );
+
+      return false;
+   });
 }
 
 export function getClaimDetailsForClaimPmt(claim) {
-   const { createdDate, submittedDate, dateRange, staff, funder, client, totalCharge } =
+   const { createdDate, dateRangeTo, dateRange, staff, funder, client, totalCharge } =
       claim || {};
 
    const early = handleCreatedAtDate(dateRange?.early);
@@ -75,7 +101,7 @@ export function getClaimDetailsForClaimPmt(claim) {
       },
       {
          detailText: "Submitted Date:",
-         detail: handleCreatedAtDate(submittedDate),
+         detail: handleCreatedAtDate(dateRangeTo),
       },
    ];
 

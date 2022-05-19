@@ -35,11 +35,9 @@ export const ClaimsFragment = ({
    const [filteredDateTo, setFilteredDateTo] = useState("");
    const [selectedStatus, setSelectedStatus] = useState("All");
 
+   const payorsNames = claims.map((claim) => claim?.funder?.name);
    const clientsNames = claims.map(
       (claim) => `${claim?.client?.firstName} ${claim?.client?.lastName}`
-   );
-   const payorsNames = claims.map(
-      (claim) => `${claim?.funder?.firstName} ${claim?.funder?.lastName}`
    );
 
    const claimsWithFilters = getFilteredClaims(

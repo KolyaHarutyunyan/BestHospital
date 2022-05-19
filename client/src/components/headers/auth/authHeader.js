@@ -26,7 +26,7 @@ export const AuthHeader = ({
                   <p className={classes.AuthHeaderTopLeftText}>
                      {info?.startDate &&
                         `${moment(info?.startDate).format("DD/MM/YYYY")} - ${
-                           info?.endDate === "Precent"
+                           info?.endDate === null
                               ? "Present"
                               : moment(info?.endDate).format("DD/MM/YYYY")
                         }`}

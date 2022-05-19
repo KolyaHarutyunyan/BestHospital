@@ -42,9 +42,11 @@ export const StaffEmployment = ({ info }) => {
       httpOnLoad: state.httpOnLoad,
    }));
 
-   const success = httpOnSuccess.length && httpOnSuccess[0].type === "DELETE_CLIENT_AUTHORIZATION";
+   const success =
+      httpOnSuccess.length && httpOnSuccess[0].type === "DELETE_CLIENT_AUTHORIZATION";
    const successDelServ =
-      httpOnSuccess.length && httpOnSuccess[0].type === "DELETE_CLIENT_AUTHORIZATION_SERV";
+      httpOnSuccess.length &&
+      httpOnSuccess[0].type === "DELETE_CLIENT_AUTHORIZATION_SERV";
 
    useEffect(() => {
       dispatch(adminActions.getPayCode(info[authIndex]?.id));
@@ -57,7 +59,9 @@ export const StaffEmployment = ({ info }) => {
    useEffect(() => {
       if (success) {
          setToggleModal(!toggleModal);
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT_AUTHORIZATION"));
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT_AUTHORIZATION")
+         );
          dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION"));
       }
    }, [success]);
@@ -65,8 +69,12 @@ export const StaffEmployment = ({ info }) => {
    useEffect(() => {
       if (successDelServ) {
          setToggleModal3(!toggleModal3);
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT_AUTHORIZATION_SERV"));
-         dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION_SERV"));
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT_AUTHORIZATION_SERV")
+         );
+         dispatch(
+            httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION_SERV")
+         );
       }
    }, [successDelServ]);
 
@@ -116,14 +124,16 @@ export const StaffEmployment = ({ info }) => {
             }}
          >
             <TableCell>
-               <p className={classes.tableName}>{item.name}</p>
+               <p className={classes.tableName}>{item.payCodeTypeId.name}</p>
             </TableCell>
             <TableCell> {item.payCodeTypeId.code} </TableCell>
             <TableCell> {item.payCodeTypeId.type} </TableCell>
             <TableCell>{item.rate} </TableCell>
             <TableCell>{moment(item.startDate).format("DD/MM/YYYY")} </TableCell>
             <TableCell>
-               {item.endDate === "Precent" ? "Not Set" : moment(item.endDate).format("DD/MM/YYYY")}{" "}
+               {item.endDate === "Precent"
+                  ? "Not Set"
+                  : moment(item.endDate).format("DD/MM/YYYY")}{" "}
             </TableCell>
             <TableCell>{Number(item.active)} </TableCell>
          </TableBodyComponent>
@@ -189,7 +199,7 @@ export const StaffEmployment = ({ info }) => {
          <div className={classes.clearBoth} />
          <div className={classes.notesWrap}>
             <AuthHeader
-                type={'staff'}
+               type={"staff"}
                empoloyment={true}
                setDelEdit={setDelEdit}
                info={info[authIndex]}
