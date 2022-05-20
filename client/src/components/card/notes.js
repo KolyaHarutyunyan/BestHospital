@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Paper, Table, TableBody, TableCell, TableContainer } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import {
    TableHeadComponent,
-   SearchAndFilter,
    CloseButton,
    SimpleModal,
    AddNotes,
@@ -12,8 +11,6 @@ import {
 } from "@eachbase/components";
 import {
    FindLoad,
-   FindSuccess,
-   getLimitedVal,
    hooksForTable,
    Images,
    useGlobalStyles,

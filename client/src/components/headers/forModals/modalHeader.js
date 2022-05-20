@@ -24,7 +24,9 @@ export const ModalHeader = ({
          </div>
          <p className={globalStyle.modalTitle}>{title}</p>
          {text && <p className={classes.modalText}>{text}</p>}
-         {steps && <ModalsTabs secondStepInfo={secondStepInfo} steps={steps} setStep={setStep} />}
+         {steps && (
+            <ModalsTabs secondStepInfo={secondStepInfo} steps={steps} setStep={setStep} />
+         )}
          {headerBottom && <ModalHeaderBottom />}
       </div>
    );

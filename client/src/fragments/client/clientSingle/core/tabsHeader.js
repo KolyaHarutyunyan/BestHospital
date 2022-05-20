@@ -24,20 +24,14 @@ const filterBtn = {
    height: 36,
 };
 
-export const TabsHeader = ({
-   activeTab,
-   data,
-   authActive,
-   availabilityData,
-}) => {
+export const TabsHeader = ({ activeTab, data, authActive, availabilityData }) => {
    const classes = serviceSingleStyles();
    const dispatch = useDispatch();
    const [open, setOpen] = useState();
    const [searchDate, setSearchDate] = useState("");
    const [isDisabled, setIsDisabled] = useState(false);
 
-   const clientHistoryLoader = !!FindLoad("GET_FUNDING_SOURCE_HISTORIES_BY_ID")
-      .length;
+   const clientHistoryLoader = !!FindLoad("GET_FUNDING_SOURCE_HISTORIES_BY_ID").length;
 
    const handleOpenClose = () => {
       setOpen(!open);
@@ -62,11 +56,7 @@ export const TabsHeader = ({
       <div>
          <ul className={classes.tabsWrapper}>
             <li style={{ display: "flex", alignItems: "center" }}>
-               <img
-                  src={Images.userProfile}
-                  alt="avatar"
-                  className={classes.avatar}
-               />
+               <img src={Images.userProfile} alt="avatar" className={classes.avatar} />
                <div className={classes.nameContent}>
                   <h1 className={classes.name}>
                      {data ? `${data?.firstName} ${data?.lastName}` : ""}
@@ -102,15 +92,12 @@ export const TabsHeader = ({
                      text="Edit"
                   />
                ) : activeTab === 4 ? (
-                  <AddButton
-                     text="Available Hours"
-                     handleClick={handleOpenClose}
-                  />
+                  <AddButton text="Available Hours" handleClick={handleOpenClose} />
                ) : activeTab !== 6 && activeTab !== 4 ? (
                   <AddButton
                      text={
                         authActive
-                           ? "Add Authorization Service"
+                           ? "Add Authorized Service"
                            : activeTab === 1
                            ? "Add Contact"
                            : activeTab === 2
