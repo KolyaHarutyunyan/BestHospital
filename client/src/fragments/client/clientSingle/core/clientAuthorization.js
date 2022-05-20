@@ -285,7 +285,7 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
                      onClick={() => setToggleModal2(!toggleModal2)}
                      className={classes.authorizationServicesText}
                   >
-                     Add Authorization Service
+                     Add Authorized Service
                   </p>
                </div>
             </div>

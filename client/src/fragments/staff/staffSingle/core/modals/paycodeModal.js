@@ -68,7 +68,10 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
          ...prevState,
          [e.target.name]: e.target.value,
       }));
-      (error === e.target.name || error === ErrorText.dateError) && setError("");
+      (error === e.target.name ||
+         error === ErrorText.dateError ||
+         error === ErrorText.startDateError) &&
+         setError("");
    };
 
    const onCheck = (e) => {
@@ -78,14 +81,18 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
    };
 
    const handleCreate = () => {
+      const startDateIsValid =
+         new Date(inputs.startDate).getTime() < new Date(new Date()).getTime();
+
       const dateComparingIsValid =
          !!inputs.endDate &&
          new Date(inputs.startDate).getTime() < new Date(inputs.endDate).getTime();
 
       const payCodeDataIsValid =
-         !!inputs.rate && !!inputs.payCodeTypeId && !!inputs.startDate && checked
-            ? "Precent"
-            : dateComparingIsValid;
+         !!inputs.rate &&
+         !!inputs.payCodeTypeId &&
+         !!inputs.startDate &&
+         (checked ? startDateIsValid : dateComparingIsValid);
 
       if (payCodeDataIsValid) {
          const data = {
@@ -110,6 +117,8 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
                ? "rate"
                : !inputs.startDate
                ? "startDate"
+               : !startDateIsValid
+               ? ErrorText.startDateError
                : !inputs.endDate
                ? "endDate"
                : !dateComparingIsValid
@@ -175,7 +184,13 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
                         type={"date"}
                         label={"Start Date*"}
                         name="startDate"
-                        typeError={error === "startDate" && ErrorText.field}
+                        typeError={
+                           error === "startDate"
+                              ? ErrorText.field
+                              : error === ErrorText.startDateError
+                              ? ErrorText.startDateError
+                              : ""
+                        }
                      />
                      <div style={{ width: 16 }} />
                      <ValidationInput

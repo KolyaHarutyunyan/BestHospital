@@ -25,7 +25,7 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
               ...info,
               startDate: moment(info.startDate).format("YYYY-MM-DD"),
               endDate: moment(info.endDate).format("YYYY-MM-DD"),
-              payCode: info.payCode.payCodeTypeId,
+              payCode: info.payCode,
            }
          : {
               description: "",
@@ -35,9 +35,7 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
            }
    );
 
-   const [checked, setChecked] = useState(
-      info ? (info.endDate ? false : true) : true
-   );
+   const [checked, setChecked] = useState(info ? (info.endDate ? false : true) : true);
    const [payCode, setPayCode] = useState(info ? info.payCode : null);
 
    const dispatch = useDispatch();
@@ -52,12 +50,8 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
       dispatch(adminActions.getAllPaycodes(params.id));
    }, []);
 
-   const success = info
-      ? FindSuccess("EDIT_TIMESHEET")
-      : FindSuccess("CREATE_TIMESHEET");
-   const loader = info
-      ? FindLoad("EDIT_TIMESHEET")
-      : FindLoad("CREATE_TIMESHEET");
+   const success = info ? FindSuccess("EDIT_TIMESHEET") : FindSuccess("CREATE_TIMESHEET");
+   const loader = info ? FindLoad("EDIT_TIMESHEET") : FindLoad("CREATE_TIMESHEET");
 
    useEffect(() => {
       if (!success) return;
@@ -65,25 +59,26 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
       if (info) {
          dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_TIMESHEET"));
       } else {
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess("CREATE_TIMESHEET")
-         );
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_TIMESHEET"));
       }
    }, [success]);
 
+   const paycodes = allPaycodes.map((item) => ({
+      ...item,
+      name: item?.payCodeTypeId?.name,
+   }));
+
    const handleChange = (e) => {
       if (e.target.name === "payCode") {
-         setPayCode(
-            allPaycodes.find(
-               (item) => item.payCodeTypeId.name === e.target.value
-            )
-         );
+         setPayCode(paycodes.find((item) => item.name === e.target.value));
       }
       setInputs((prevState) => ({
          ...prevState,
          [e.target.name]: e.target.value,
       }));
-      (error === e.target.name || error === ErrorText.dateError) &&
+      (error === e.target.name ||
+         error === ErrorText.dateError ||
+         error === ErrorText.startDateError) &&
          setError("");
    };
 
@@ -94,15 +89,18 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
    };
 
    const handleCreate = () => {
+      const startDateIsValid =
+         new Date(inputs.startDate).getTime() < new Date(new Date()).getTime();
+
       const dateComparingIsValid =
          !!inputs.endDate &&
-         new Date(inputs.startDate).getTime() <
-            new Date(inputs.endDate).getTime();
+         new Date(inputs.startDate).getTime() < new Date(inputs.endDate).getTime();
 
       const timeSheetDataIsValid =
          !!inputs.description && !!inputs.hours && !!inputs.startDate && checked
-            ? "Present"
+            ? startDateIsValid
             : dateComparingIsValid;
+
       if (timeSheetDataIsValid) {
          const data = {
             staffId: params.id,
@@ -114,7 +112,7 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
          };
          const editDate = {
             staffId: params.id,
-            payCode: payCode?._id,
+            payCode: payCode?.id,
             description: inputs.description,
             hours: parseInt(inputs.hours),
             startDate: inputs.startDate,
@@ -127,9 +125,7 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
          };
 
          if (info) {
-            dispatch(
-               adminActions.editTimesheet(editDate, inputs.id, params.id)
-            );
+            dispatch(adminActions.editTimesheet(editDate, inputs.id, params.id));
          } else {
             dispatch(adminActions.createTimesheet(data));
          }
@@ -142,6 +138,8 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
             ? "hours"
             : !inputs.startDate
             ? "startDate"
+            : !startDateIsValid
+            ? ErrorText.startDateError
             : !inputs.endDate
             ? "endDate"
             : !dateComparingIsValid
@@ -157,9 +155,7 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
          <ModalHeader
             handleClose={handleClose}
             title={info ? "Edit Timesheet" : "Add a New Timesheet"}
-            text={
-               !info && "Please fulfill the below fields to add a timesheet."
-            }
+            text={!info && "Please fulfill the below fields to add a timesheet."}
          />
          <div className={classes.createFoundingSourceBody}>
             <div className={classes.clientModalBlock}>
@@ -170,7 +166,7 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
                      label={"Paycode*"}
                      handleSelect={handleChange}
                      value={payCode ? payCode.name : ""}
-                     list={allPaycodes ? allPaycodes : []}
+                     list={paycodes}
                      typeError={error === "payCode" ? ErrorText.field : ""}
                   />
                   <div className={classes.displayCodeBlock}>
@@ -180,10 +176,7 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
                            {payCode ? payCode.payCodeTypeId.code : " N/A"}
                         </p>
                      </div>
-                     <div
-                        className={classes_v2.paycodeBox}
-                        style={{ marginBottom: 0 }}
-                     >
+                     <div className={classes_v2.paycodeBox} style={{ marginBottom: 0 }}>
                         <p className={classes_v2.paycodeBoxTitle}>Type:</p>
                         <p className={classes_v2.paycodeBoxText}>
                            {payCode ? payCode.payCodeTypeId.type : "N/A"}
@@ -229,7 +222,13 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
                         type={"date"}
                         label={"Start Date*"}
                         name="startDate"
-                        typeError={error === "startDate" && ErrorText.field}
+                        typeError={
+                           error === "startDate"
+                              ? ErrorText.field
+                              : error === ErrorText.startDateError
+                              ? ErrorText.startDateError
+                              : ""
+                        }
                      />
                      <div style={{ width: 16 }} />
                      <ValidationInput

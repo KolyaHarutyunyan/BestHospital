@@ -17,7 +17,6 @@ export const ValidationInput = ({
    Length,
    disabled,
    value,
-   max,
    type,
    onChange,
    name,
@@ -78,7 +77,6 @@ export const ValidationInput = ({
                placeholder={placeholder}
                type={type}
                value={value ? value : ""}
-               max={max}
                InputLabelProps={{
                   shrink: type === "date" ? true : !!value,
                }}

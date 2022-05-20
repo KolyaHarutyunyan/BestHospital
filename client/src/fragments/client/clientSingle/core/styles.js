@@ -119,7 +119,7 @@ export const serviceSingleStyles = makeStyles(() => ({
    },
    tableName: {
       textOverflow: "ellipsis",
-      width: 100,
+      width: 150,
       overflow: "hidden",
    },
    sircule: {

@@ -40,9 +40,7 @@ export const Service = ({
          ? {
               ...modalDate,
               client: modalDate.client?._id,
-              authorizedService: modalDate.authorizedService
-                 ? modalDate.authorizedService?._id
-                 : "",
+              authorizedService: modalDate.authorizedService?._id,
               staff: modalDate.staff?._id,
               placeService: modalDate.placeService?._id,
               staffPayCode: modalDate.staffPayCode?._id,
@@ -55,7 +53,7 @@ export const Service = ({
    );
    const [times, setTimes] = useState(date ? { ...date } : {});
    const [error, setError] = useState("");
-   const [clientService, setClientService] = useState("");
+   const [clientService, setClientService] = useState([]);
    const [signature, setSignature] = useState(modalDate ? modalDate.require : false);
 
    const success = modalDate
@@ -79,7 +77,6 @@ export const Service = ({
          dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_APPOINTMENT"));
       }
    }, [success]);
-
    const [editLoader, setEditLoader] = useState(false);
    useEffect(() => {
       if (modalDate) {
@@ -233,8 +230,12 @@ export const Service = ({
       modalDate,
       "Service Appointment"
    );
-
-   const activeStaffPaycodes = allPaycodes.filter((data) => data.active);
+   const activeStaffPaycodes = allPaycodes
+      .filter((data) => data.active)
+      .map((staffPaycode) => ({
+         ...staffPaycode,
+         name: staffPaycode.payCodeTypeId.name,
+      }));
 
    return (
       <div className={classes.serciveModall}>
@@ -266,7 +267,7 @@ export const Service = ({
                         label={"Authorized Service*"}
                         handleSelect={handleSelect}
                         value={inputs.authorizedService}
-                        list={clientService ? clientService : []}
+                        list={clientService}
                         typeError={error === "authorizedService" && ErrorText.field}
                      />
                      <SelectInput
@@ -363,8 +364,8 @@ export const Service = ({
                         handleSelect={handleChange}
                         value={
                            modalDate
-                              ? inputs.staffPayCode._id
-                                 ? inputs.staffPayCode._id
+                              ? inputs.staffPayCode?._id
+                                 ? inputs.staffPayCode?._id
                                  : inputs.staffPayCode
                               : inputs.staffPayCode
                         }

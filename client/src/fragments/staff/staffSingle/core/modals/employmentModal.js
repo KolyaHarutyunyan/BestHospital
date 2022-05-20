@@ -38,7 +38,7 @@ export const EmploymentModal = ({ handleClose, info }) => {
          : {}
    );
 
-   const [checked, setChecked] = useState(info ? info.endDate === "Precent" : true);
+   const [checked, setChecked] = useState(info ? info.endDate === null : true);
 
    const params = useParams();
 
@@ -84,10 +84,16 @@ export const EmploymentModal = ({ handleClose, info }) => {
          ...prevState,
          [e.target.name]: e.target.value === 0 ? "0" : e.target.value,
       }));
-      (error === e.target.name || error === ErrorText.dateError) && setError("");
+      (error === e.target.name ||
+         error === ErrorText.dateError ||
+         error === ErrorText.startDateError) &&
+         setError("");
    };
 
    const handleCreate = () => {
+      const startDateIsValid =
+         new Date(inputs.startDate).getTime() < new Date(new Date()).getTime();
+
       const dateComparingIsValid =
          !!inputs.endDate &&
          new Date(inputs.startDate).getTime() < new Date(inputs.endDate).getTime();
@@ -98,7 +104,7 @@ export const EmploymentModal = ({ handleClose, info }) => {
          isNotEmpty(inputs.supervisor) &&
          isNotEmpty(inputs.employmentType) &&
          !!inputs.startDate &&
-         (checked ? "Present" : dateComparingIsValid);
+         (checked ? startDateIsValid : dateComparingIsValid);
 
       if (employmentDataIsValid) {
          let depId;
@@ -152,6 +158,8 @@ export const EmploymentModal = ({ handleClose, info }) => {
             ? "employmentType"
             : !inputs.startDate
             ? "startDate"
+            : !startDateIsValid
+            ? ErrorText.startDateError
             : !inputs.endDate
             ? "endDate"
             : !dateComparingIsValid
@@ -214,16 +222,17 @@ export const EmploymentModal = ({ handleClose, info }) => {
                      <ValidationInput
                         variant={"outlined"}
                         onChange={handleChange}
-                        value={
-                           inputs.startDate
-                           // ? moment(inputs.startDate).format("YYYY-MM-DD")
-                           // : moment(new Date()).format("YYYY-MM-DD")
-                        }
+                        value={inputs.startDate}
                         type={"date"}
-                        label={"Start Da"}
+                        label={"Start Date*"}
                         name="startDate"
-                        typeError={error === "startDate" ? ErrorText.field : ""}
-                        max="2022-11-10"
+                        typeError={
+                           error === "startDate"
+                              ? ErrorText.field
+                              : error === ErrorText.startDateError
+                              ? ErrorText.startDateError
+                              : ""
+                        }
                      />
                      <div style={{ width: 16 }} />
                      <ValidationInput

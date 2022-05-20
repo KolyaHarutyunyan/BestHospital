@@ -14,7 +14,7 @@ import {
 } from "@eachbase/components";
 import { EmploymentModal, PaycodeModal } from "./modals";
 import { AuthHeader } from "@eachbase/components/headers/auth/authHeader";
-import { Colors, FindLoad, Images } from "@eachbase/utils";
+import { Colors, FindLoad, getLimitedVal, Images } from "@eachbase/utils";
 import {
    adminActions,
    clientActions,
@@ -124,7 +124,9 @@ export const StaffEmployment = ({ info }) => {
             }}
          >
             <TableCell>
-               <p className={classes.tableName}>{item.payCodeTypeId.name}</p>
+               <p className={classes.tableName}>
+                  {getLimitedVal(item.payCodeTypeId.name, 18)}
+               </p>
             </TableCell>
             <TableCell> {item.payCodeTypeId.code} </TableCell>
             <TableCell> {item.payCodeTypeId.type} </TableCell>
