@@ -4,6 +4,7 @@ import { ParseObjectIdPipe } from '../util';
 import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { EmploymentDto, CreateEmploymentDto, UpdateEmploymentDto } from './dto';
 import { ACCESS_TOKEN } from '../authN/authN.constants';
+import { Cron } from '@nestjs/schedule';
 
 @Controller('employment')
 @ApiTags('Employment Endpoints')
@@ -39,4 +40,8 @@ export class EmploymentController {
   ) {
     return await this.employmentService.update(id, updateEmploymentDto);
   }
+  // @Cron('0 1 * * *')
+  // async activeEmploymentCheck() {
+  //   return await this.employmentService.setEmploymentActive();
+  // }
 }

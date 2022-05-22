@@ -3,7 +3,6 @@ import { DatabaseConnection } from './app.database';
 import * as fs from 'fs';
 import * as puppeteer from 'puppeteer';
 import * as path from 'path';
-import { Cron } from '@nestjs/schedule';
 import { EmploymentService } from '../employment/employment.service';
 
 @Injectable()
@@ -39,10 +38,7 @@ export class AppService {
     await browser.close();
     return buffer;
   }
-  @Cron('0 1 * * *')
-  async activeEmploymentCheck() {
-    // await this.employmentService.setEmploymentActive();
-  }
+
   async dropDatabase() {
     await this.databaseConnection.dropDatabase();
   }

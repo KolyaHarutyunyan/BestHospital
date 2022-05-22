@@ -113,6 +113,7 @@ export class TimesheetService {
       timesheet.description = dto.description;
       timesheet.hours = dto.hours;
       timesheet.startDate = dto.startDate;
+      timesheet.payCode = dto.payCode;
       dto.endDate ? (timesheet.endDate = dto.endDate) : (timesheet.endDate = null);
       return await timesheet.save();
       // return this.sanitizer.sanitizeMany(timesheet);

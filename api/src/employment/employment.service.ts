@@ -158,8 +158,17 @@ export class EmploymentService {
       throw new HttpException('employment is not active', HttpStatus.BAD_REQUEST);
     }
   }
-  /** check if employment date is today than set active (app-module) */
-  setEmploymentActive() {
+  /** check if employment date is today than set active */
+  async setEmploymentActive() {
+  const day = new Date().getDate();
+  const month = new Date().getMonth();
+  const year = new Date().getFullYear();
+   const employments = await this.model.find();
+   employments.map(empl =>{
+     if(new Date(empl.startDate).getDate() === day && new Date(empl.startDate).getMonth() === month && new Date(empl.startDate).getFullYear() === year){
+
+     }
+   }) 
     console.log('ok');
   }
   /** Private methods */
