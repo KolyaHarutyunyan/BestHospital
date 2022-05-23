@@ -10,6 +10,8 @@ import {
   IsString,
 } from 'class-validator';
 import { ApptStatus, ApptType, EventStatus } from '../appt.constants';
+import { FileDTO } from '../../files/dto/file.dto';
+import { DTO } from '../../util';
 
 export class CreateApptDto {
   @ApiProperty({ enum: ApptType })
@@ -67,4 +69,8 @@ export class CreateApptDto {
   @IsOptional()
   @IsBoolean()
   signature: boolean;
+}
+export class CreateDocDTO extends DTO {
+  @ApiProperty({ type: FileDTO })
+  file: FileDTO;
 }

@@ -9,6 +9,7 @@ import { ApptSanitizer } from './intcp/appt.intcp';
 import { PlaceModule } from '../place/place.module';
 import { BillingModule } from '../billing/billing.module';
 import { EmploymentModule } from '../employment/employment.module';
+import { FileModule } from '../files/file.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { EmploymentModule } from '../employment/employment.module';
     AuthorizationserviceModule,
     PlaceModule,
     BillingModule,
+    FileModule
   ],
   controllers: [ApptController],
   providers: [ApptService, ApptSanitizer],

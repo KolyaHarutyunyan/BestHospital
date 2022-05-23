@@ -1,23 +1,24 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as mongoose from 'mongoose';
 import { Model } from 'mongoose';
-import { FileDTO } from '../files/dto';
+import { FileService } from '../files/file.service';
 import { BillingService } from '../billing/billing.service';
+import { IAuthorization } from '../client/authorization/interface/authorization.interface';
 import { AuthorizationserviceService } from '../client/authorizationservice/authorizationservice.service';
 import { ClientService } from '../client/client.service';
+import { IEmployment } from '../employment';
 import { EmploymentService } from '../employment/employment.service';
 import { PaycodeService } from '../employment/paycode/paycode.service';
+import { FileDTO } from '../files/dto';
 import { PlaceService } from '../place/place.service';
 import { StaffService } from '../staff/staff.service';
 import { ApptMode, ApptStatus, ApptType, EventStatus } from './appt.constants';
 import { ApptModel } from './appt.model';
-import { ApptDto, CreateApptDto, CreateRepeatDto, UpdateAppointmentDto } from './dto';
-import { AppointmentQueryDTO, AppointmentQuerySetEventStatusDTO } from './dto/appt.dto';
+import { ApptDto, CreateApptDto, CreateDocDTO, CreateRepeatDto, UpdateAppointmentDto } from './dto';
+import { AppointmentQueryDTO } from './dto/appt.dto';
 import { ApptSanitizer } from './intcp/appt.intcp';
 import { IAppt } from './interface';
-import { IRepeat, IFilterQuery } from './interface/appt.interface';
-import { IAuthorization } from '../client/authorization/interface/authorization.interface';
-import { IEmployment } from '../employment';
+import { IFilterQuery, IRepeat } from './interface/appt.interface';
 
 @Injectable()
 export class ApptService {
@@ -29,6 +30,7 @@ export class ApptService {
     private readonly employmentService: EmploymentService,
     private readonly placeService: PlaceService,
     private readonly billingService: BillingService,
+    private readonly fileService: FileService,
     private readonly sanitizer: ApptSanitizer,
   ) {
     this.model = ApptModel;
@@ -69,7 +71,20 @@ export class ApptService {
     await appt.save();
     return this.sanitizer.sanitize(appt);
   }
-
+  /** add document to appt */
+  async addDocument(_id: string, dto: CreateDocDTO): Promise<ApptDto> {
+    const [appt] = await Promise.all([
+      this.model.findById(_id),
+      this.fileService.getOne(dto.file.id),
+    ]);
+    this.checkAppt(appt);
+    if (appt.digitalSignature) {
+      await this.fileService.deleteImages(appt.digitalSignature.id);
+    }
+    appt.digitalSignature = dto.file;
+    await appt.save();
+    return this.sanitizer.sanitize(appt);
+  }
   /** repeat the appt */
   async repeat(dto: CreateRepeatDto, _id: string): Promise<IRepeat> {
     const appt = await this.model.findById(_id);
@@ -212,7 +227,7 @@ export class ApptService {
     let count = 0;
     const dates = [];
     let x;
-    for (let d: any = startDate; d <= endDate; d.setDate(d.getDate() + dto.repeatCount + 1)) {
+    for (let d: any = startDate; d <= endDate; d.setDate(d.getDate() + dto.repeatCount)) {
       count++;
       x = new Date(d.getTime());
       dates.push(x);
@@ -332,6 +347,17 @@ export class ApptService {
     await appt.save();
     return this.sanitizer.sanitize(appt);
   }
+  /** complete the appointment */
+  async complete(_id: string): Promise<ApptDto> {
+    const appt = await this.model.findById(_id);
+    this.checkAppt(appt);
+    this.checkStatusAppt(appt.status as ApptStatus);
+    this.checkEventStatusAppt(appt.eventStatus as EventStatus, [EventStatus.PENDING]);
+    this.checkTypeAppt(appt.type as ApptType, [ApptType.BREAK, ApptType.DRIVE, ApptType.PAID]);
+    appt.eventStatus = EventStatus.COMPLETED;
+    await appt.save();
+    return this.sanitizer.sanitize(appt);
+  }
   /** canclel the appointment */
   async cancel(_id: string, reason: string): Promise<ApptDto> {
     const appt = await this.model.findById(_id);
@@ -422,13 +448,15 @@ export class ApptService {
       await this.placeService.findOne(dto.placeService);
       appointment.placeService = dto.placeService;
     }
-
-    const [, payCode, ,] = await Promise.all([
+    const [, payCode] = await Promise.all([
       this.staffService.findById(dto.staff),
       this.payCodeService.findOne(dto.staffPayCode ? dto.staffPayCode : appointment.staffPayCode),
-      this.payCodeService.findPayCodesByStaffId(dto.staff ? dto.staff : appointment.staff),
     ]);
+    // this.payCodeService.findPayCodesByStaffId(dto.staff ? dto.staff : appointment.staff),
     const employment = (<any>payCode.employmentId) as IEmployment;
+    if (employment.staffId.toString() !== dto.staff.toString()) {
+      throw new HttpException(`Pay code is not corresponding to staff`, HttpStatus.BAD_REQUEST);
+    }
     /** check employment status */
     this.employmentService.checkEmploymentActive(employment.active);
     appointment.staff = dto.staff;
@@ -560,7 +588,7 @@ export class ApptService {
     if (overlappingStaff[0] || overlappingClient[0]) {
       if (_id) {
         if (
-          overlappingStaff[0]._id.toString() !== _id.toString() &&
+          overlappingStaff[0] && overlappingStaff[0]._id.toString() !== _id.toString() || overlappingClient[0] &&
           overlappingClient[0]._id.toString() !== _id.toString()
         ) {
           throw new HttpException(`appointment overlapping`, HttpStatus.BAD_REQUEST);
@@ -643,7 +671,7 @@ export class ApptService {
     }
   }
   /** check dates in daily mode */
-  private async checkDailyMode(dto, appointment, repeatCount, repeatConsecutive): Promise<IRepeat> {
+  private async checkDailyMode(dto: CreateRepeatDto, appointment: IAppt, repeatCount: number, repeatConsecutive: boolean): Promise<IRepeat> {
     if (!repeatCount && !repeatConsecutive) {
       throw new HttpException(
         `repeatCount or(and) repeatConsecutive can not not be empty`,
@@ -656,7 +684,7 @@ export class ApptService {
     }
   }
   /** check dates in weekly mode */
-  private checkWeeklyMode(repeatCountWeek, repeatCheckWeek): void {
+  private checkWeeklyMode(repeatCountWeek: number, repeatCheckWeek: Array<number>): void {
     if (
       (!repeatCountWeek && !repeatCheckWeek) ||
       (repeatCountWeek && !repeatCheckWeek) ||

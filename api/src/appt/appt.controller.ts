@@ -3,13 +3,13 @@ import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ACCESS_TOKEN } from '../authN/authN.constants';
 import { ParseObjectIdPipe, Public } from 'src/util';
 import { ApptService } from './appt.service';
-import { CreateApptDto, UpdateAppointmentDto, ApptDto, CreateRepeatDto } from './dto';
+import { CreateApptDto, UpdateAppointmentDto, ApptDto, CreateRepeatDto, CreateDocDTO } from './dto';
 import { AppointmentQueryDTO, AppointmentQuerySetEventStatusDTO } from './dto/appt.dto';
 
 @Controller('appt')
 @ApiTags('Appointment Endpoints')
 export class ApptController {
-  constructor(private readonly apptService: ApptService) {}
+  constructor(private readonly apptService: ApptService) { }
 
   @Post()
   @Public()
@@ -17,6 +17,16 @@ export class ApptController {
   @ApiOkResponse({ type: ApptDto })
   create(@Body() createAppointmentDto: CreateApptDto) {
     return this.apptService.create(createAppointmentDto);
+  }
+  /** add document*/
+  @Post(':id/documents')
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: ApptDto })
+  async addDocument(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Body() dto: CreateDocDTO,
+  ): Promise<ApptDto> {
+    return await this.apptService.addDocument(id, dto);
   }
   @Post('repeat/:id')
   @ApiHeader({ name: ACCESS_TOKEN })
@@ -30,6 +40,15 @@ export class ApptController {
   @ApiOkResponse({ type: ApptDto })
   async render(@Param('id', ParseObjectIdPipe) id: string): Promise<ApptDto> {
     return await this.apptService.render(id);
+  }
+  /** complete the appointment */
+  @Patch(':id/complete')
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: ApptDto })
+  async complete(
+    @Param('id', ParseObjectIdPipe) id: string,
+  ): Promise<ApptDto> {
+    return await this.apptService.complete(id);
   }
   /** cancel the appointment */
   @Patch(':id/cancel')

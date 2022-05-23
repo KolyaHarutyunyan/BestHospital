@@ -35,7 +35,7 @@ export class EmploymentService {
       });
       const [lessDateEmp] = await Promise.all([
         this.findEndlessEmployment(),
-        this.checkOverlap(null, dto),
+        this.checkOverlap(null, dto.startDate, dto.endDate),
         this.staffService.findById(dto.supervisor),
       ]);
       if (lessDateEmp) {
@@ -160,15 +160,15 @@ export class EmploymentService {
   }
   /** check if employment date is today than set active */
   async setEmploymentActive() {
-  const day = new Date().getDate();
-  const month = new Date().getMonth();
-  const year = new Date().getFullYear();
-   const employments = await this.model.find();
-   employments.map(empl =>{
-     if(new Date(empl.startDate).getDate() === day && new Date(empl.startDate).getMonth() === month && new Date(empl.startDate).getFullYear() === year){
+    const day = new Date().getDate();
+    const month = new Date().getMonth();
+    const year = new Date().getFullYear();
+    const employments = await this.model.find();
+    employments.map(empl => {
+      if (new Date(empl.startDate).getDate() === day && new Date(empl.startDate).getMonth() === month && new Date(empl.startDate).getFullYear() === year) {
 
-     }
-   }) 
+      }
+    })
     console.log('ok');
   }
   /** Private methods */
@@ -186,12 +186,15 @@ export class EmploymentService {
     }
   }
   /** check appointment overlapping */
-  private async checkOverlap(_id: string = null, dto: any) {
-    console.log(dto.startDate, 'dto.startDate', dto.endDate, 'dto.endDate');
+  private async checkOverlap(_id: string = null, startDate: Date, endDate: Date) {
+    console.log(startDate, 'dto.startDate', endDate, 'dto.endDate');
+    var start = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
+    // var startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
     const query: any = {
-      endDate: { $gt: new Date(dto.startDate) },
+      endDate: { $gt: new Date(startDate) },
     };
-    dto.endDate ? (query.startDate = { $lt: new Date(dto.endDate) }) : null;
+    
+    endDate ? (query.startDate = { $lt: new Date(endDate) }) : null;
 
     const overlapping = await this.model.find(query);
     if (overlapping[0]) {
