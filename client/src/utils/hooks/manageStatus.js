@@ -38,6 +38,14 @@ export const manageStatus = (status) => {
          return "Open";
       case "CLOSE":
          return "Close";
+      case "RENDERED":
+         return "Rendered";
+      case "NOTRENDERED":
+         return "Not Rendered";
+      case "CANCELLED":
+         return "Cancelled";
+      case "COMPLETED":
+         return "Completed";
 
       default:
          return status;

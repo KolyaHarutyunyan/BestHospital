@@ -2,11 +2,7 @@ import React, { useEffect, useState } from "react";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { NavigateBefore, NavigateNext } from "@material-ui/icons";
 import { scheduleStyle } from "./styles";
-import {
-   AddModalButton,
-   ButtonsTab,
-   ValidationInput,
-} from "@eachbase/components";
+import { AddModalButton, ButtonsTab, ValidationInput } from "@eachbase/components";
 import { InputBase, InputLabel, NativeSelect, styled } from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import { useDispatch } from "react-redux";
@@ -147,7 +143,6 @@ export const Filters = ({
                   name="filterDate"
                />
                <AddModalButton
-                  disabled={!filterDate.length}
                   handleClick={handleFilter}
                   text="Search"
                   btnStyles={filterBtn}

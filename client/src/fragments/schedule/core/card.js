@@ -2,21 +2,13 @@ import React from "react";
 import { scheduleStyle } from "./styles";
 import moment from "moment";
 import { SlicedText } from "@eachbase/components";
+import { getBorderColorAndText, getCurrentText } from "./constants";
 
 export const Card = ({ openModal, info, style }) => {
    const classes = scheduleStyle();
-   const border =
-      info.eventStatus === "RENDERED"
-         ? "#6FD231"
-         : info.eventStatus === "CANCELLED"
-         ? "#A3B2BD"
-         : info.eventStatus === "PENDING"
-         ? "#347AF080"
-         : info.eventStatus === "COMPLETED"
-         ? "#347AF0"
-         : info.eventStatus === "NOTRENDERED"
-         ? "#6FD23180"
-         : "";
+
+   const { color: borderColor, text } = getBorderColorAndText(info?.eventStatus);
+   const { cardText } = getCurrentText(info?.type);
 
    return (
       <div className={classes.hoverClass}>
@@ -25,10 +17,10 @@ export const Card = ({ openModal, info, style }) => {
             style={
                style
                   ? {
-                       borderRight: `8px solid ${border}`,
+                       borderRight: `8px solid ${borderColor}`,
                        background: "#EBF2FD80 0% 0% no-repeat padding-box",
                     }
-                  : { borderRight: `8px solid ${border}` }
+                  : { borderRight: `8px solid ${borderColor}` }
             }
             className={classes.cardItemWrapper}
          >
@@ -58,30 +50,8 @@ export const Card = ({ openModal, info, style }) => {
                      }
                   />
                </p>
-               <p style={{ width: "55px " }}>
-                  {info && info.type === "DRIVE"
-                     ? "Drive"
-                     : info.type === "PAID"
-                     ? "Paid"
-                     : info.type === "BREAK"
-                     ? "Break"
-                     : info.type === "SERVICE"
-                     ? "Service"
-                     : ""}
-               </p>
-               <p style={{ width: "105px" }}>
-                  {info.eventStatus && info.eventStatus === "RENDERED"
-                     ? "Rendered"
-                     : info.eventStatus === "CANCELLED"
-                     ? "Cancelled"
-                     : info.eventStatus === "PENDING"
-                     ? "Pending"
-                     : info.eventStatus === "COMPLETED"
-                     ? "Completed"
-                     : info.eventStatus === "NOTRENDERED"
-                     ? "Not Rendered"
-                     : ""}
-               </p>
+               <p style={{ width: "55px " }}>{cardText}</p>
+               <p style={{ width: "105px" }}>{text}</p>
             </div>
          </div>
       </div>

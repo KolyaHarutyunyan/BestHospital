@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { Colors } from "@eachbase/utils";
+import { Backgrounds, Colors, Images, Shadow } from "@eachbase/utils";
 
 export const scheduleStyle = makeStyles(() => ({
    wrapper: {
@@ -74,7 +74,7 @@ export const scheduleStyle = makeStyles(() => ({
    },
 
    cardWrapper: {
-      background: "#FFFFFF 0% 0% no-repeat padding-box",
+      background: Backgrounds.whiteModal,
       boxShadow: "0px 0px 6px #347AF04D",
       borderRadius: "8px",
       margin: "3px 16px 16px 5px ",
@@ -135,8 +135,9 @@ export const scheduleStyle = makeStyles(() => ({
    },
 
    infoWrapper: {
-      background: "#FFFFFF 0% 0% no-repeat padding-box",
-      boxShadow: "0px 0px 6px #347AF04D",
+      position: "relative",
+      background: Backgrounds.whiteModal,
+      boxShadow: Shadow.blueButton,
       borderRadius: "8px",
       width: "75%",
       padding: "32px",
@@ -170,7 +171,6 @@ export const scheduleStyle = makeStyles(() => ({
       "& > p": {
          fontSize: "14px",
          color: Colors.ThemeBlue,
-         marginRight: "16px",
       },
       "& > img": { cursor: "pointer" },
    },
@@ -202,31 +202,7 @@ export const scheduleStyle = makeStyles(() => ({
    },
 
    itemsWrap: {
-      margin: "32px 0",
-   },
-
-   infoFooter: {},
-   infoFooterTitle: {
-      fontSize: "14px",
-      fontWeight: "600",
-      color: Colors.TextSecondary,
-      marginBottom: "8px",
-   },
-
-   switch: {
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      "& div": {
-         display: "flex",
-         alignItems: "center",
-      },
-      "& p": {
-         fontSize: "14px",
-         fontWeight: "600",
-         color: Colors.TextSecondary,
-         marginRight: "10px",
-      },
+      margin: "32px 0 18px",
    },
 
    link: {
@@ -244,8 +220,8 @@ export const scheduleStyle = makeStyles(() => ({
       "& div": {
          width: "36px",
          height: "36px",
-         background: "#347AF0 0% 0% no-repeat padding-box",
-         boxShadow: "0px 0px 6px #347AF04D",
+         background: Backgrounds.blue,
+         boxShadow: Shadow.blueButton,
          borderRadius: "20px",
          color: "white",
          display: "flex",
@@ -260,4 +236,78 @@ export const scheduleStyle = makeStyles(() => ({
          color: "#347AF0",
       },
    },
+   signatureActionsBoxStyle: {
+      width: "100%",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "flex-start",
+   },
+   signatureBoxStyle: {
+      display: "flex",
+      alignItems: "center",
+      marginTop: "4px",
+   },
+   signatureTextStyle: {
+      fontSize: "14px",
+      fontWeight: 600,
+      color: Colors.TextSecondary,
+      marginRight: "16px",
+   },
+   openModalButnStyle: {
+      display: "flex",
+      alignItems: "center",
+      border: "none",
+      outline: "none",
+      backgroundColor: "inherit",
+      fontSize: "14px",
+      fontWeight: 600,
+      color: Colors.BackgroundBlue,
+      "&::after": {
+         content: "''",
+         width: "24px",
+         height: "24px",
+         backgroundImage: `url(${Images.forwardBlue})`,
+         backgroundRepeat: "no-repeat",
+         backgroundSize: "contain",
+         marginLeft: "16px",
+      },
+   },
+   downloadSignatureStyle: {
+      fontSize: "12px",
+      fontWeight: 600,
+      "& img": { width: "18px", height: "18px" },
+      marginTop: "18px",
+      marginRight: "16px",
+   },
+   statusActionsBoxStyle: {
+      position: "absolute",
+      bottom: "32px",
+      right: "32px",
+      width: "100%",
+      display: "flex",
+      justifyContent: "flex-end",
+      alignItems: "center",
+      "& > div:last-of-type": { marginLeft: "16px" },
+   },
+   changeStatusButnStyle: { padding: "7px 24px" },
+   dateAndStatusBoxStyle: {
+      width: "100%",
+      display: "flex",
+      alignItems: "center",
+   },
+   eventStatusStyle: {
+      fontSize: "14px",
+      fontWeight: 700,
+      marginLeft: "16px",
+   },
+   recurAndEditBoxStyle: {
+      display: "flex",
+      justifyContent: "flex-end",
+      alignItems: "center",
+   },
+   editButnStyle: {
+      marginRight: "0px !important",
+      marginLeft: "20px",
+   },
+   recurButnStyle: { marginRight: "0px !important" },
 }));

@@ -192,6 +192,7 @@ function* appointmentRepeatSaga(action) {
          action.payload.id,
          action.payload.body
       );
+      yield put({ type: GET_APPOINTMENT });
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
    } catch (error) {

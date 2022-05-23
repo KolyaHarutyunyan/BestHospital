@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
-import { ValidationInput, SelectInput, CreateChancel, ModalHeader } from "@eachbase/components";
+import {
+   ValidationInput,
+   SelectInput,
+   CreateChancel,
+   ModalHeader,
+} from "@eachbase/components";
 import { createClientStyle } from "./styles";
 import { ErrorText, FindLoad, FindSuccess } from "@eachbase/utils";
 import {
@@ -21,11 +26,13 @@ export const AddEnrollment = ({ handleClose, info }) => {
               funding: info.funderId.name,
               startDate: info?.startDate && moment(info?.startDate).format("YYYY-MM-DD"),
               terminationDate:
-                 info?.terminationDate && moment(info?.terminationDate).format("YYYY-MM-DD"),
+                 info?.terminationDate &&
+                 moment(info?.terminationDate).format("YYYY-MM-DD"),
            }
          : {}
    );
 
+   const [isPrimaryEnrol, setIsPrimaryEnrol] = useState(false);
    const [checked, setChecked] = useState(info ? info.terminationDate === null : true);
    const classes = createClientStyle();
    const params = useParams();
@@ -36,7 +43,9 @@ export const AddEnrollment = ({ handleClose, info }) => {
    const success = info
       ? FindSuccess("EDIT_CLIENT_ENROLLMENT")
       : FindSuccess("CREATE_CLIENT_ENROLLMENT");
-   const loader = info ? FindLoad("EDIT_CLIENT_ENROLLMENT") : FindLoad("CREATE_CLIENT_ENROLLMENT");
+   const loader = info
+      ? FindLoad("EDIT_CLIENT_ENROLLMENT")
+      : FindLoad("CREATE_CLIENT_ENROLLMENT");
 
    useEffect(() => {
       if (!success) return;
@@ -56,14 +65,15 @@ export const AddEnrollment = ({ handleClose, info }) => {
 
    const onCheck = (e) => {
       setChecked(e.target.checked);
-      inputs["terminationDate"] = null;
-      (error === "terminationDate" || error === ErrorText.dateError) && setError("");
+      // inputs["terminationDate"] = null;
+      // (error === "terminationDate" || error === ErrorText.dateError) && setError("");
    };
 
    const handleCreate = () => {
       const dateComparingIsValid =
          inputs.terminationDate &&
-         new Date(inputs.startDate).getTime() < new Date(inputs.terminationDate).getTime();
+         new Date(inputs.startDate).getTime() <
+            new Date(inputs.terminationDate).getTime();
 
       const enrollmentDataIsValid =
          inputs.funding && inputs.startDate && checked ? "Present" : dateComparingIsValid;
@@ -83,7 +93,9 @@ export const AddEnrollment = ({ handleClose, info }) => {
          };
 
          if (info) {
-            dispatch(clientActions.editClientEnrollment(data, params.id, funderId, info.id));
+            dispatch(
+               clientActions.editClientEnrollment(data, params.id, funderId, info.id)
+            );
          } else {
             dispatch(clientActions.createClientEnrollment(data, params.id, funderId));
          }
@@ -107,7 +119,9 @@ export const AddEnrollment = ({ handleClose, info }) => {
          <ModalHeader
             handleClose={handleClose}
             title={info ? "Edit an Enrollment" : "Add an Enrollment"}
-            text={"To add a new enrollment in the system, please fulfill the below fields."}
+            text={
+               "To add a new enrollment in the system, please fulfill the below fields."
+            }
          />
          <div className={classes.createFoundingSourceBody}>
             <div className={classes.clientModalBlock}>
@@ -130,10 +144,17 @@ export const AddEnrollment = ({ handleClose, info }) => {
                      name="startDate"
                      typeError={error === "startDate" && ErrorText.field}
                   />
-
+                  <div className={classes.curentlyCheckbox}>
+                     <Checkbox
+                        checked={isPrimaryEnrol}
+                        onClick={() => setIsPrimaryEnrol((prevState) => !prevState)}
+                        color="primary"
+                     />
+                     <p className={classes.curently}>Set as primary enrollment</p>
+                  </div>
                   <div className={classes.curentlyCheckbox}>
                      <Checkbox checked={checked} onClick={onCheck} color="primary" />
-                     <p className={classes.curently}>Set as primary enrollment</p>
+                     <p className={classes.curently}>Terminate</p>
                   </div>
 
                   <ValidationInput

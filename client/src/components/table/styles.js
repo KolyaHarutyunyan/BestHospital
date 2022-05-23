@@ -52,7 +52,7 @@ export const tableStyle = makeStyles(() => ({
       },
       height: "50px",
       "& .makeStyles-membersTableWrapper-26 .MuiTableContainer-root": {
-         background: "#FFFFFF 0% 0% no-repeat padding-box",
+         background: Backgrounds.whiteModal,
          boxShadow: "0px 8px 12px #0052E01A",
       },
       "& .MuiTableCell-sizeSmall": {

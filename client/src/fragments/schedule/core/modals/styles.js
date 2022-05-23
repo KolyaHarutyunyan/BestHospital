@@ -1,11 +1,11 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { Colors } from "@eachbase/utils";
+import { Backgrounds, Colors } from "@eachbase/utils";
 
 export const scheduleModalsStyle = makeStyles(() => ({
    modalWrapper: {
       width: "480px",
       height: "auto",
-      background: "#FFFFFF 0% 0% no-repeat padding-box",
+      background: Backgrounds.whiteModal,
       borderRadius: "8px",
    },
    subTitle: {
@@ -15,7 +15,7 @@ export const scheduleModalsStyle = makeStyles(() => ({
    typesWrapper: { marginTop: "40px" },
    typesItem: {
       height: "48px",
-      background: "#347AF0 0% 0% no-repeat padding-box",
+      background: Backgrounds.blue,
       borderRadius: "4px",
       display: "flex",
       justifyContent: "space-between",
@@ -111,7 +111,7 @@ export const scheduleModalsStyle = makeStyles(() => ({
    infoModalBody: { marginTop: "32px" },
    recurBody: { marginTop: "40px" },
    dayWeekMounth: {
-      background: "#FFFFFF 0% 0% no-repeat padding-box",
+      background: Backgrounds.whiteModal,
       boxShadow: "0px 0px 6px #347AF03D",
       borderRadius: "4px",
       padding: "16px",
