@@ -16,20 +16,20 @@ export class ClaimDto {
   totalBilled: number;
   @ApiProperty()
   ammountPaid: number;
-  @ApiProperty()
-  submittedDate: Date;
+  // @ApiProperty()
+  // submittedDate: Date;
   @ApiProperty()
   paymentRef: string;
-  @ApiProperty()
-  link: string;
+  // @ApiProperty()
+  // link: string;
   @ApiProperty()
   status: string;
+  // @ApiProperty()
+  // details: string;
   @ApiProperty()
-  details: string;
-  @ApiProperty()
-  dateRange: Date;
-  @ApiProperty()
-  createdDate: Date;
+  dateRange: { early: Date, latest: Date };
+  // @ApiProperty()
+  // createdDate: Date;
   @ApiProperty()
   receivable: IReceivable[];
 }

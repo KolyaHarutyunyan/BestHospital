@@ -432,46 +432,44 @@ export class ApptService {
 
   // update appointment
   async update(_id: string, dto: UpdateAppointmentDto): Promise<ApptDto> {
-    // the first check if appointment is not complete or cancelled status
-    const appointment = await this.model.findById(_id);
-    this.checkAppt(appointment);
+    const appt = await this.model.findById(_id);
+    this.checkAppt(appt);
+    this.checkEventStatusAppt(appt.eventStatus as EventStatus, [EventStatus.PENDING, EventStatus.NOTRENDERED]);
     await this.checkClientStaffOverlap(_id, dto);
-    if (appointment.type === ApptType.SERVICE) {
+    if (appt.type === ApptType.SERVICE) {
       await this.updateService(
         dto.client,
         dto.authorizedService,
-        appointment.client,
-        appointment.authorizedService as string,
+        appt.client,
+        appt.authorizedService as string,
       );
     }
     if (dto.placeService) {
       await this.placeService.findOne(dto.placeService);
-      appointment.placeService = dto.placeService;
+      appt.placeService = dto.placeService;
     }
     const [, payCode] = await Promise.all([
       this.staffService.findById(dto.staff),
-      this.payCodeService.findOne(dto.staffPayCode ? dto.staffPayCode : appointment.staffPayCode),
+      this.payCodeService.findOne(dto.staffPayCode ? dto.staffPayCode : appt.staffPayCode),
     ]);
-    // this.payCodeService.findPayCodesByStaffId(dto.staff ? dto.staff : appointment.staff),
     const employment = (<any>payCode.employmentId) as IEmployment;
     if (employment.staffId.toString() !== dto.staff.toString()) {
       throw new HttpException(`Pay code is not corresponding to staff`, HttpStatus.BAD_REQUEST);
     }
     /** check employment status */
     this.employmentService.checkEmploymentActive(employment.active);
-    appointment.staff = dto.staff;
-    appointment.staffPayCode = dto.staffPayCode;
-    // appointment.type = dto.type;
-    if (appointment.type == ApptType.DRIVE && dto.miles) {
-      appointment.miles = dto.miles;
+    appt.staff = dto.staff;
+    appt.staffPayCode = dto.staffPayCode;
+    if (appt.type == ApptType.DRIVE && dto.miles) {
+      appt.miles = dto.miles;
     }
-    if (dto.startDate) appointment.startDate = dto.startDate;
-    if (dto.startTime) appointment.startTime = dto.startTime;
-    if (dto.endTime) appointment.endTime = dto.endTime;
-    if (dto.require) appointment.require = dto.require;
-    if (dto.signature) appointment.signature = dto.signature;
-    await appointment.save();
-    return this.sanitizer.sanitize(appointment);
+    if (dto.startDate) appt.startDate = dto.startDate;
+    if (dto.startTime) appt.startTime = dto.startTime;
+    if (dto.endTime) appt.endTime = dto.endTime;
+    if (dto.require) appt.require = dto.require;
+    if (dto.signature) appt.signature = dto.signature;
+    await appt.save();
+    return this.sanitizer.sanitize(appt);
   }
   /** update service appt */
   async updateService(

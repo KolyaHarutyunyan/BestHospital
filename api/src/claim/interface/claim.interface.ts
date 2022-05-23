@@ -9,12 +9,12 @@ export interface IClaim extends Document {
   totalCharge: number;
   totalBilled: number;
   ammountPaid: number;
-  clientResp: number;
-  submittedDate: Date;
+  // clientResp: number;
+  // submittedDate: Date;
   paymentRef: string;
-  link: string;
-  dateRange: Date;
-  createdDate: Date;
-  details: string;
+  // link: string;
+  dateRange: { early: Date; latest: Date };
+  // createdDate: Date;
+  // details: string;
   receivable: IReceivable[];
 }

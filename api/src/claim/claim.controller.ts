@@ -56,20 +56,4 @@ export class ClaimController {
   //   return this.claimService.remove(+id);
   // }
 
-  /** Set claim status */
-  @Patch(':id/setStatus')
-  @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiQuery({ name: 'status', enum: ClaimStatus })
-  @ApiQuery({ name: 'details', required: false })
-  @ApiOkResponse({ type: ClaimDto })
-  async setStatus(
-    @Param('id', ParseObjectIdPipe) claimId: string,
-    @Request() req: IRequest,
-    @Query('status') status: ClaimStatus,
-    @Query('details') details: string,
-  ) {
-    const userId: string = req.body.user.id;
-    const billing = await this.claimService.setStatus(claimId, status, userId, details);
-    return billing;
-  }
 }

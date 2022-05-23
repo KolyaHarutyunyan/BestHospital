@@ -33,6 +33,7 @@ export const ClaimSchema = new Schema({
   createdDate: { type: Date, default: Date.now() },
   details: { type: String },
   receivable: [receivable],
-});
+},
+  { timestamps: true });
 // remaining
 export const ClaimModel = model<IClaim>('claim', ClaimSchema);

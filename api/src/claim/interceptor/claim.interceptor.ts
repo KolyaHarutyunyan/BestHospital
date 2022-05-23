@@ -14,14 +14,14 @@ export class ClaimSanitizer implements ISanitize {
       totalCharge: claim.totalCharge,
       totalBilled: claim.totalBilled,
       ammountPaid: claim.ammountPaid,
-      submittedDate: claim.submittedDate,
+      // submittedDate: claim.submittedDate,
       paymentRef: claim.paymentRef,
-      link: claim.link,
+      // link: claim.link,
       dateRange: claim.dateRange,
       status: claim.status,
-      createdDate: claim.createdDate,
+      // createdDate: claim.createdDate,
       receivable: claim.receivable,
-      details: claim.details,
+      // details: claim.details,
     };
     return claimDTO;
   }

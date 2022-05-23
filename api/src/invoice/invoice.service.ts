@@ -7,6 +7,9 @@ import { InvoiceSanitizer } from './interceptor';
 import { IInvoice } from './interface';
 import { InvoiceStatus } from './invoice.constants';
 import { InvoiceModel } from './invoice.model';
+import { IBilling } from '../billing/interface';
+import { IAuthorizationService } from '../client/authorizationservice/interface';
+import { IService } from '../funding/interface';
 
 @Injectable()
 export class InvoiceService {
@@ -125,8 +128,9 @@ export class InvoiceService {
   }
   /** Private methods */
   /** create invoice with receivables with bills */
-  async groupBills(bills: string[]): Promise<any> {
+  async groupBills(bills: string[]): Promise<IInvoice[]> {
     let invoice = [],
+      billIds = [],
       receivable = [],
       receivableCreatedAt = [],
       subBills = [];
@@ -139,12 +143,15 @@ export class InvoiceService {
     /** create receivables and invoices */
     for (let i = 0; i < result.length; i++) {
       for (let j = 0; j < result[i].length; ++j) {
+        const authorizedService = (<any>result[i][0].authService) as IAuthorizationService;
+        const service = (<any>authorizedService.serviceId) as IService;
+        billIds.push(result[i][j]._id);
         subBills.push(result[i][j]);
         this.addReceivable(
           receivable,
           result[i][j],
           result[i][0].placeService,
-          result[i][0].authService.serviceId.cptCode,
+          service.cptCode,
         );
         receivableCreatedAt.push(new Date());
 
@@ -163,13 +170,12 @@ export class InvoiceService {
       receivableCreatedAt = [];
     }
     /** set bill claimStatus to CLAIMED */
-    await this.model.insertMany(invoice);
-    // await this.billingService.billClaim(bills);
+    await Promise.all([this.model.insertMany(invoice), this.billingService.billClaim(billIds)]);
     return invoice;
   }
 
   /** group the bills */
-  private groupBy(array, f) {
+  private groupBy(array, f): IBilling[][] {
     const groups = {};
     array.forEach(function (o) {
       const group = JSON.stringify(f(o));
@@ -187,7 +193,7 @@ export class InvoiceService {
     receivable,
     result,
     placeService: string,
-    cptCode: number,
+    cptCode: string,
   ): Promise<void> {
     // Description - includes the appointment service name, time and staff name
     // balance - [ copay - prior paid ]
