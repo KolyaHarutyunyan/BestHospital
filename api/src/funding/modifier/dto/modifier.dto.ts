@@ -3,7 +3,7 @@ import { TypeStatus } from '../../funding.constants';
 
 export class ModifyDTO {
   @ApiProperty()
-  _id: string;
+  _id?: string;
   @ApiProperty()
   name: string;
   @ApiProperty({ enum: TypeStatus })

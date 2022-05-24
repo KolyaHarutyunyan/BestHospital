@@ -11,7 +11,8 @@ import { UpdateFundingDto } from './dto/edit.dto';
 import { FundingModel } from './funding.model';
 import { FundingSanitizer } from './interceptor';
 import { IFunder, IService } from './interface';
-import { UpdateModifiersDto } from './modifier/dto';
+import { ModifyDTO, UpdateModifiersDto } from './modifier/dto';
+import { IModify } from './modifier/interface';
 import { ServiceModel } from './service.model';
 
 @Injectable()
@@ -73,13 +74,15 @@ export class FundingService {
         min: dto.min,
         max: dto.max,
       });
-      await service.save();
-      await this.historyService.create({
-        resource: _id,
-        onModel: 'Funder',
-        title: serviceLog.createServiceTitle,
-        user: userId,
-      });
+      await Promise.all([
+        service.save(),
+        this.historyService.create({
+          resource: _id,
+          onModel: 'Funder',
+          title: serviceLog.createServiceTitle,
+          user: userId,
+        })
+      ])
       // return this.sanitizer.sanitize(service)
       return service;
     } catch (e) {
@@ -252,20 +255,28 @@ export class FundingService {
   };
 
   /** save modifiers */
-  async saveModifiers(_id: string, modifiers: any): Promise<ServiceDTO> {
-    const fundingService = await this.serviceModel.findOne({ _id });
-    this.checkFundingService(fundingService);
+  async saveModifiers(_id: string, serviceId: string, modifiers: ModifyDTO[]): Promise<ServiceDTO> {
+    const [funder, service] = await Promise.all([
+      this.model.findById({ _id }),
+      this.serviceModel.findOne({ _id: serviceId })
+    ]);
+    this.checkFunder(funder)
+    this.checkFundingService(service);
     modifiers.map((modifier) => {
-      fundingService.modifiers.push(modifier);
+      service.modifiers.push(modifier);
     });
-    return await fundingService.save();
+    return await service.save();
   }
 
   /** update modifiers */
-  async updateModifiers(_id: string, dto: UpdateModifiersDto): Promise<ServiceDTO> {
-    const fundingService = await this.serviceModel.findById({ _id });
-    this.checkFundingService(fundingService);
-    const dbModifier: any = fundingService.modifiers;
+  async updateModifiers(_id: string, serviceId: string, dto: UpdateModifiersDto): Promise<ServiceDTO> {
+    const [funder, service] = await Promise.all([
+      this.model.findById({ _id }),
+      this.serviceModel.findOne({ _id: serviceId })
+    ]);
+    this.checkFunder(funder)
+    this.checkFundingService(service);
+    const dbModifier = service.modifiers as IModify[];
     for (let i = 0; i < dbModifier.length; i++) {
       for (let j = 0; j < dto.modifiers.length; j++) {
         if (dto.modifiers[j]._id == dbModifier[i]._id) {
@@ -276,8 +287,7 @@ export class FundingService {
         }
       }
     }
-    // handmade :)
-    return await fundingService.save();
+    return await service.save();
   }
 
   /** delete modifiers */

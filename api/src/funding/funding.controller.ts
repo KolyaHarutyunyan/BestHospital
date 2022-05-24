@@ -1,23 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { FundingService } from './funding.service';
-
-import {
-  CreateFundingDTO,
-  FundingDTO,
-  UpdateFundingDto,
-  ServiceDTO,
-  UpdateServiceDto,
-  CreateServiceDTO,
-  FundingQueryDTO,
-} from './dto';
-import { ParseObjectIdPipe } from '../util';
 import { CreateTerminationDto } from 'src/termination/dto/create-termination.dto';
+import { ParseObjectIdPipe } from '../util';
+import {
+  CreateFundingDTO, CreateServiceDTO, FundingDTO, FundingQueryDTO, ServiceDTO, UpdateFundingDto, UpdateServiceDto
+} from './dto';
+import { FundingService } from './funding.service';
+import { CreateModifiersDTO, UpdateModifiersDto } from './modifier/dto';
+
 
 @Controller('funding')
 @ApiTags('Funding Endpoints')
 export class FundingController {
-  constructor(private readonly fundingService: FundingService) {}
+  constructor(private readonly fundingService: FundingService) { }
 
   /** Create a new funder */
   @Post()
@@ -42,7 +37,20 @@ export class FundingController {
     );
     return service;
   }
-
+  @Post(":id/modifiers")
+  @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
+  @ApiOkResponse({ type: ServiceDTO })
+  async createModifier(@Param('id', ParseObjectIdPipe) id: string, @Body() dto: CreateModifiersDTO): Promise<ServiceDTO> {
+    const modifier = await this.fundingService.saveModifiers(id, dto.serviceId, dto.modifiers);
+    return modifier;
+  }
+  @Patch(":id/:serviceId/modifiers")
+  @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
+  @ApiOkResponse({ type: ServiceDTO })
+  async updateModifiers(@Param('id', ParseObjectIdPipe) id: string, @Param('serviceId', ParseObjectIdPipe) serviceId: string, @Body() dto: UpdateModifiersDto): Promise<ServiceDTO> {
+    const modifier = await this.fundingService.updateModifiers(id, serviceId, dto);
+    return modifier;
+  }
   /** Get all funders */
   @Get()
   @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })

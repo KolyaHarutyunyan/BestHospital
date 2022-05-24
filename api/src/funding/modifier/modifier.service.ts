@@ -12,16 +12,6 @@ export class ModifierService {
   }
   private mongooseUtil: MongooseUtil;
 
-  /** create the modifier */
-  async create(dto: CreateModifiersDTO): Promise<ServiceDTO> {
-    try {
-      return await this.fundingService.saveModifiers(dto.serviceId, dto.modifiers);
-    } catch (e) {
-      this.mongooseUtil.checkDuplicateKey(e, 'Modifier already exists');
-      throw e;
-    }
-  }
-
   /** find modifier by service id */
   async findByServiceId(fundingServiceId: string): Promise<ServiceDTO> {
     const modifiers = await this.fundingService.findService(fundingServiceId);
@@ -29,15 +19,6 @@ export class ModifierService {
     // return this.sanitizer.sanitizeMany(modifiers);
   }
 
-  /** Update the modifier */
-  async update(fundingServiceId: string, dto: UpdateModifiersDto): Promise<ServiceDTO> {
-    try {
-      return await this.fundingService.updateModifiers(fundingServiceId, dto);
-    } catch (e) {
-      this.mongooseUtil.checkDuplicateKey(e, 'Modifier already exists');
-      throw e;
-    }
-  }
 
   /** Delete the modifiers */
   async delete(fundingServiceId: string, ids: string[]): Promise<any> {
