@@ -35,8 +35,6 @@ export const Break = ({
    const [times, setTimes] = useState(date ? { ...date } : {});
    const [error, setError] = useState({});
 
-   console.log(modalDate, " modalDate");
-
    const handleCloseModal = () => {
       handleOpenClose && handleOpenClose();
       setInputs("");
