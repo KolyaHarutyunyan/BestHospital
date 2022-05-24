@@ -7,6 +7,7 @@ export const modePatternsStyle = makeStyles(() => ({
       border: "1px solid #347AF0",
       borderRadius: "4px",
       padding: "0 5px",
+      "&:disabled": { borderColor: "#A3B2BD" },
    },
    days: {
       fontSize: "16px",

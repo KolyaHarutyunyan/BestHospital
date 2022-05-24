@@ -26,14 +26,14 @@ function* getInvoices(action) {
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-   } catch (error) {
+   } catch (err) {
       yield put({
          type: GET_INVOICES_SUCCESS,
          payload: { invoices: [] },
          // payload: { invoices: { invoices: [], count: 0 } },
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -48,9 +48,9 @@ function* getInvoiceById(action) {
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-   } catch (error) {
+   } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -62,9 +62,9 @@ function* generateInvoice(action) {
       window.location.replace("/invoices");
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-   } catch (error) {
+   } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -83,9 +83,9 @@ function* editInvoice(action) {
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-   } catch (error) {
+   } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -100,9 +100,9 @@ function* deleteInvoice(action) {
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-   } catch (error) {
+   } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 

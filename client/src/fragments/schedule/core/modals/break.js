@@ -18,9 +18,11 @@ export const Break = ({
    day,
    createModalDate,
 }) => {
-   const dispatch = useDispatch();
    const classes = scheduleModalsStyle();
    const global = modalsStyle();
+
+   const dispatch = useDispatch();
+
    const [inputs, setInputs] = useState(
       modalDate
          ? { ...modalDate }
@@ -32,6 +34,8 @@ export const Break = ({
    );
    const [times, setTimes] = useState(date ? { ...date } : {});
    const [error, setError] = useState({});
+
+   console.log(modalDate, " modalDate");
 
    const handleCloseModal = () => {
       handleOpenClose && handleOpenClose();

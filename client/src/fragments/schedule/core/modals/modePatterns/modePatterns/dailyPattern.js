@@ -12,15 +12,16 @@ export const DailyPattern = ({
    const classes = modePatternsStyle();
    const inputsClasses = inputsStyle();
 
-   const countIsChecked = inputs.repeatCountCheckbox === "repeatCountCheckbox";
-   const consecIsChecked = inputs.repeatConsecutive === "repeatConsecutive";
+   const datesAreNotMentioned = !inputs.startDate || !inputs.endDate;
+   const countIsChecked =
+      !datesAreNotMentioned && inputs.repeatCountCheckbox === "repeatCountCheckbox";
+   const consecIsChecked =
+      !datesAreNotMentioned && inputs.repeatConsecutive === "repeatConsecutive";
 
    const radioClasses = {
       root: inputsClasses.radio,
       checked: inputsClasses.checked,
    };
-
-   const isDisabled = inputs.startDate && inputs.endDate ? false : !countIsChecked;
 
    return (
       <div>
@@ -39,11 +40,12 @@ export const DailyPattern = ({
                      value="repeatCountCheckbox"
                      label="Recur every"
                      control={<Radio checked={countIsChecked} classes={radioClasses} />}
+                     disabled={datesAreNotMentioned}
                   />
                   <input
                      type={"number"}
                      value={inputs.repeatCount || ""}
-                     disabled={isDisabled}
+                     disabled={datesAreNotMentioned || !countIsChecked}
                      name={"repeatCount"}
                      onChange={handleChangeDay}
                      className={classes.smallInput}
@@ -57,6 +59,7 @@ export const DailyPattern = ({
                   value="repeatConsecutive"
                   label="Recur every weekday"
                   control={<Radio checked={consecIsChecked} classes={radioClasses} />}
+                  disabled={datesAreNotMentioned}
                />
             </RadioGroup>
          </FormControl>

@@ -61,7 +61,7 @@ function* getClients(action) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -78,7 +78,7 @@ function* createClient(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -95,7 +95,7 @@ function* deleteClient(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -113,7 +113,7 @@ function* editClient(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -134,7 +134,7 @@ function* getClientById(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -146,7 +146,7 @@ function* getClientContacts(action) {
          payload: res.data,
       });
    } catch (err) {
-      // yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -163,7 +163,7 @@ function* createClientContact(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -180,7 +180,7 @@ function* editClientContact(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -197,7 +197,7 @@ function* deleteClientContact(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -209,7 +209,9 @@ function* getClientEnrollment(action) {
          type: GET_CLIENT_ENROLLMENT_SUCCESS,
          payload: res.data,
       });
-   } catch (err) {}
+   } catch (err) {
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+   }
 }
 
 function* createClientEnrollment(action) {
@@ -226,7 +228,7 @@ function* createClientEnrollment(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -245,7 +247,7 @@ function* editClientEnrollment(action) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -263,7 +265,7 @@ function* deleteClientEnrollment(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -278,6 +280,7 @@ function* getClientsAuthorizations(action) {
          payload: res.data,
       });
    } catch (err) {
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
       yield put({
          type: GET_CLIENT_AUTHORIZATION_ERROR,
       });
@@ -297,7 +300,7 @@ function* createClientsAuthorizations(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -314,7 +317,7 @@ function* editClientAuthorizations(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -331,7 +334,7 @@ function* deleteClientAuthorizations(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -347,7 +350,9 @@ function* getClientsAuthorizationFile(action) {
          type: GET_CLIENT_AUTHORIZATION_FILE_SUCCESS,
          payload: res.data,
       });
-   } catch (err) {}
+   } catch (err) {
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+   }
 }
 
 function* createClientsAuthorizationFile(action) {
@@ -363,7 +368,7 @@ function* createClientsAuthorizationFile(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -380,7 +385,7 @@ function* editClientAuthorizationFile(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -397,7 +402,7 @@ function* deleteClientAuthorizationFile(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -414,6 +419,7 @@ function* getClientsAuthorizationsServ(action) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
       yield put({
          type: GET_CLIENT_AUTHORIZATION_SERV_ERROR,
       });
@@ -433,7 +439,7 @@ function* createClientsAuthorizationsServ(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -443,7 +449,9 @@ function* getClientsAuthorizationsModCheck(action) {
          authService.getClientAuthorizationServCheckModService,
          action
       );
-   } catch (err) {}
+   } catch (err) {
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+   }
 }
 
 function* editClientAuthorizationsServ(action) {
@@ -459,7 +467,7 @@ function* editClientAuthorizationsServ(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -477,7 +485,7 @@ function* deleteClientAuthorizationsServ(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -495,9 +503,9 @@ function* getClientHistories(action) {
          payload: res.data,
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-   } catch (error) {
+   } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -516,9 +524,9 @@ function* addFilesToClientAuth(action) {
          payload: { id: action.payload.clientId },
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-   } catch (error) {
+   } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 

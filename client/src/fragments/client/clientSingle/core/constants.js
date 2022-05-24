@@ -28,3 +28,21 @@ export const headerTitles = [
       sortable: false,
    },
 ];
+
+export const clientEnrollmentHeaderTitles = [
+   { title: "Primary", sortable: false },
+   { title: "Funding Source", sortable: true },
+   { title: "Client ID", sortable: false },
+   { title: "Start Date", sortable: true },
+   { title: "Terminated...", sortable: true },
+   { title: "Action", sortable: false },
+];
+
+export function getGeneralInfo(info) {
+   return [
+      { title: "First Name", value: info?.firstName },
+      { title: "Middle Name", value: info?.middleName },
+      { title: "Last Name", value: info?.lastName },
+      { title: "Code", value: info?.code },
+   ];
+}

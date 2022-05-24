@@ -1,8 +1,6 @@
 import axios from "axios";
 
-const local = localStorage.getItem("Reset")
-   ? localStorage.getItem("Reset")
-   : "";
+const local = localStorage.getItem("Reset") ? localStorage.getItem("Reset") : "";
 
 export const initAxiosInterceptors = () => {
    // if(!local) {

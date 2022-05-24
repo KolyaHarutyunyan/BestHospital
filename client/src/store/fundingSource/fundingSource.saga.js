@@ -47,7 +47,7 @@ function* createFundingSource(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -68,7 +68,7 @@ function* editFundingSource(action) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -87,7 +87,7 @@ function* getFundingSource(action) {
       yield put(httpRequestsOnErrorsActions.removeError(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.removeError(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -100,8 +100,9 @@ function* getFundingSourceById(action) {
          payload: res.data,
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-   } catch (error) {
+   } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -116,7 +117,9 @@ function* getFundingSourceServicesById(action) {
          type: GET_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
          payload: res.data,
       });
-   } catch (error) {}
+   } catch (err) {
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+   }
 }
 
 function* getFundingSourceServicesByIdNoLoad(action) {
@@ -130,7 +133,9 @@ function* getFundingSourceServicesByIdNoLoad(action) {
          type: GET_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
          payload: res.data,
       });
-   } catch (error) {}
+   } catch (err) {
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+   }
 }
 
 function* createFundingSourceServicesById(action) {
@@ -187,8 +192,8 @@ function* createFundingSourceServicesById(action) {
       }
 
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-   } catch (error) {
-      yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   } catch (err) {
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    }
@@ -226,8 +231,8 @@ function* editFundingSourceServices(action) {
          type: GET_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
          payload: date.data,
       });
-   } catch (error) {
-      yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   } catch (err) {
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    }
@@ -239,7 +244,9 @@ function* createFundingSourceServicesModifier({ payload }) {
          authService.createFoundingSourceServiceModifierService,
          payload.body
       );
-   } catch (error) {}
+   } catch (err) {
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+   }
 }
 
 function* editFundingSourceServicesModifier({ payload }) {
@@ -253,7 +260,9 @@ function* editFundingSourceServicesModifier({ payload }) {
          type: GET_FUNDING_SOURCE_SERVICE_BY_ID,
          payload: payload.fsId,
       });
-   } catch (error) {}
+   } catch (err) {
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+   }
 }
 
 function* getFundingSourceServicesModifier(action) {
@@ -268,7 +277,7 @@ function* getFundingSourceServicesModifier(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.removeError(action.type));
-   } catch (error) {
+   } catch (err) {
       yield put({
          type: GET_FUNDING_SOURCE_SERVICE_MODIFIERS_ERR,
          payload: error,
@@ -279,7 +288,7 @@ function* getFundingSourceServicesModifier(action) {
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.removeError(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -293,11 +302,12 @@ function* getFundingSourceServicesModifierClient(action) {
          type: GET_FUNDING_SOURCE_SERVICE_MODIFIERS_SUCCESS,
          payload: res.data,
       });
-   } catch (error) {
+   } catch (err) {
       yield put({
          type: GET_FUNDING_SOURCE_SERVICE_MODIFIERS_ERR,
          payload: error,
       });
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -316,7 +326,7 @@ function* getFundingSourceHistoriesById(action) {
          type: GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS,
          payload: res.data,
       });
-   } catch (error) {
+   } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       if (!action.payload.searchDate) {
          yield put({
@@ -325,7 +335,7 @@ function* getFundingSourceHistoriesById(action) {
          });
       } else {
          yield put(
-            httpRequestsOnErrorsActions.appendError(action.type, error.data.message)
+            httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message)
          );
       }
    }
@@ -342,9 +352,9 @@ function* getFundingSourceHistoriesById(action) {
 //         });
 //         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
 //         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-//     } catch (error) {
+//     } catch (err) {
 //         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-//         yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data.message));
+//         yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
 //     }
 // }
 
@@ -369,9 +379,9 @@ function* setStatus(action) {
          type: action.payload.type,
          payload: res.data,
       });
-   } catch (error) {
+   } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, error.data));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 

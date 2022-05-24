@@ -29,13 +29,13 @@ function* getBills(action) {
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-   } catch (error) {
+   } catch (err) {
       yield put({
          type: GET_BILLS_SUCCESS,
          payload: { bills: { bills: [], count: 0 } },
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -54,9 +54,9 @@ function* getBillById(action) {
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-   } catch (error) {
+   } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -67,9 +67,9 @@ function* createBill(action) {
       yield call(billService.createBillService, action.payload.body);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-   } catch (error) {
+   } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -88,9 +88,9 @@ function* editBillStatus(action) {
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-   } catch (error) {
+   } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -109,9 +109,9 @@ function* editBillClaimStatus(action) {
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-   } catch (error) {
+   } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -130,9 +130,9 @@ function* editBillInvoiceStatus(action) {
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-   } catch (error) {
+   } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -151,9 +151,9 @@ function* addBillTransaction(action) {
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-   } catch (error) {
+   } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -172,9 +172,9 @@ function* abortBillTransaction(action) {
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-   } catch (error) {
+   } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 

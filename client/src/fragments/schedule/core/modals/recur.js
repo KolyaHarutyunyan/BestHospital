@@ -4,7 +4,7 @@ import { modalsStyle } from "@eachbase/components/modal/styles";
 import { scheduleModalsStyle } from "./styles";
 import { appointmentActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
-import { FindLoad } from "@eachbase/utils";
+import { ErrorText, FindLoad } from "@eachbase/utils";
 import { DailyPattern, MonthlyPattern, WeeklyPattern } from "./modePatterns/modePatterns";
 import { RecurEventDates } from "./common/recurEventDates";
 import { Mode } from "./common/mode";
@@ -42,6 +42,7 @@ export const Recur = ({ openCloseRecur, date }) => {
          ...prevState,
          [e.target.name]: e.target.value,
       }));
+      if (error === ErrorText.globalError || error === ErrorText.dateError) setError("");
    }
 
    function handleChangeDay(e) {
@@ -49,17 +50,17 @@ export const Recur = ({ openCloseRecur, date }) => {
          ...prevState,
          [e.target.name]: e.target.value,
       }));
+
       const startDate = new Date(inputs.startDate);
       const endDate = new Date(new Date(inputs.endDate).setHours(23, 59, 59));
       let count = 0;
       let dates = [],
          x;
-      for (
-         let d = startDate;
-         d <= endDate;
-         d.setDate(d.getDate() + +e.target.value + 1)
-      ) {
-         count++;
+      const enteredDateCount = +e.target.value;
+
+      for (let d = startDate; d <= endDate; d.setDate(d.getDate() + enteredDateCount)) {
+         if (enteredDateCount !== 0) count++;
+         if (enteredDateCount === 0) break;
          x = new Date(d.getTime());
          dates.push(x);
       }
@@ -245,16 +246,21 @@ export const Recur = ({ openCloseRecur, date }) => {
          ? inputs.repeatConsecutive
          : "";
 
+      const dateComparingIsValid =
+         new Date(inputs.startDate).getTime() < new Date(inputs.endDate).getTime();
+
       const typeBool =
          inputs.mode === "DAILY"
-            ? !!inputs.startDate && !!inputs.endDate && !!repeat
+            ? !!inputs.startDate && !!inputs.endDate && dateComparingIsValid && !!repeat
             : inputs.mode === "WEEKLY"
             ? !!inputs.startDate &&
               !!inputs.endDate &&
+              dateComparingIsValid &&
               !!inputs.repeatCountWeek &&
               !!state.length
             : !!inputs.startDate &&
               !!inputs.endDate &&
+              dateComparingIsValid &&
               !!inputs.repeatDayMonth &&
               !!inputs.repeatMonth;
 
@@ -302,7 +308,11 @@ export const Recur = ({ openCloseRecur, date }) => {
       if (typeBool) {
          dispatch(appointmentActions.appointmentRepeat(date._id, obj));
       } else {
-         setError("Inputs are not field");
+         setError(
+            !!inputs.startDate && !!inputs.endDate && !dateComparingIsValid
+               ? ErrorText.dateError
+               : ErrorText.globalError
+         );
       }
    }
 

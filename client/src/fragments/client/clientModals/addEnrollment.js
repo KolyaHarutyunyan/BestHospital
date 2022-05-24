@@ -18,6 +18,14 @@ import {
 import { Checkbox } from "@material-ui/core";
 
 export const AddEnrollment = ({ handleClose, info }) => {
+   const classes = createClientStyle();
+
+   const params = useParams();
+
+   let fSelect = useSelector((state) => state.fundingSource.fSelect.funders);
+
+   const dispatch = useDispatch();
+
    const [error, setError] = useState("");
    const [inputs, setInputs] = useState(
       info
@@ -31,14 +39,10 @@ export const AddEnrollment = ({ handleClose, info }) => {
            }
          : {}
    );
-
-   const [isPrimaryEnrol, setIsPrimaryEnrol] = useState(false);
-   const [checked, setChecked] = useState(info ? info.terminationDate === null : true);
-   const classes = createClientStyle();
-   const params = useParams();
-   const dispatch = useDispatch();
-
-   let fSelect = useSelector((state) => state.fundingSource.fSelect.funders);
+   const [isPrimaryEnrol, setIsPrimaryEnrol] = useState(info ? !!info.primary : false);
+   const [hasTerminationDate, setHasTerminationDate] = useState(
+      info ? !!info.terminationDate : false
+   );
 
    const success = info
       ? FindSuccess("EDIT_CLIENT_ENROLLMENT")
@@ -48,35 +52,48 @@ export const AddEnrollment = ({ handleClose, info }) => {
       : FindLoad("CREATE_CLIENT_ENROLLMENT");
 
    useEffect(() => {
-      if (!success) return;
-      handleClose();
-      dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_ENROLLMENT"));
-      if (info) {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_CLIENT_ENROLLMENT"));
-      } else {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_CLIENT_ENROLLMENT"));
+      if (success.length) {
+         handleClose();
+         dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_ENROLLMENT"));
+         if (info) {
+            dispatch(
+               httpRequestsOnSuccessActions.removeSuccess("EDIT_CLIENT_ENROLLMENT")
+            );
+         } else {
+            dispatch(
+               httpRequestsOnSuccessActions.removeSuccess("CREATE_CLIENT_ENROLLMENT")
+            );
+         }
       }
    }, [success]);
 
-   const handleChange = (e) => {
+   function handleChange(e) {
       setInputs((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
       (error === e.target.name || error === ErrorText.dateError) && setError("");
-   };
+   }
 
-   const onCheck = (e) => {
-      setChecked(e.target.checked);
-      // inputs["terminationDate"] = null;
-      // (error === "terminationDate" || error === ErrorText.dateError) && setError("");
-   };
+   function handlePrimaryEnrolChane(e) {
+      setIsPrimaryEnrol(e.target.checked);
+   }
 
-   const handleCreate = () => {
+   function handleTerminationChange(e) {
+      if (!e.target.checked) {
+         inputs["terminationDate"] = null;
+      }
+      setHasTerminationDate(e.target.checked);
+      (error === "terminationDate" || error === ErrorText.dateError) && setError("");
+   }
+
+   function handleCreate() {
       const dateComparingIsValid =
-         inputs.terminationDate &&
+         !!inputs.terminationDate &&
          new Date(inputs.startDate).getTime() <
             new Date(inputs.terminationDate).getTime();
 
       const enrollmentDataIsValid =
-         inputs.funding && inputs.startDate && checked ? "Present" : dateComparingIsValid;
+         !!inputs.funding &&
+         !!inputs.startDate &&
+         (hasTerminationDate ? dateComparingIsValid : true);
 
       if (enrollmentDataIsValid) {
          let funderId;
@@ -87,9 +104,9 @@ export const AddEnrollment = ({ handleClose, info }) => {
          });
 
          const data = {
-            primary: info ? info.primary : true,
+            primary: isPrimaryEnrol,
             startDate: inputs.startDate,
-            terminationDate: inputs.terminationDate ? inputs.terminationDate : null,
+            terminationDate: inputs.terminationDate || null,
          };
 
          if (info) {
@@ -112,7 +129,7 @@ export const AddEnrollment = ({ handleClose, info }) => {
                : "Input is not field"
          );
       }
-   };
+   }
 
    return (
       <div className={classes.createFoundingSource}>
@@ -147,22 +164,25 @@ export const AddEnrollment = ({ handleClose, info }) => {
                   <div className={classes.curentlyCheckbox}>
                      <Checkbox
                         checked={isPrimaryEnrol}
-                        onClick={() => setIsPrimaryEnrol((prevState) => !prevState)}
+                        onClick={handlePrimaryEnrolChane}
                         color="primary"
                      />
                      <p className={classes.curently}>Set as primary enrollment</p>
                   </div>
                   <div className={classes.curentlyCheckbox}>
-                     <Checkbox checked={checked} onClick={onCheck} color="primary" />
+                     <Checkbox
+                        checked={hasTerminationDate}
+                        onClick={handleTerminationChange}
+                        color="primary"
+                     />
                      <p className={classes.curently}>Terminate</p>
                   </div>
-
                   <ValidationInput
                      variant={"outlined"}
-                     disabled={checked}
+                     disabled={!hasTerminationDate}
                      onChange={handleChange}
-                     value={checked ? "Present" : inputs.terminationDate}
-                     type={checked ? "text" : "date"}
+                     value={inputs.terminationDate}
+                     type={"date"}
                      label={"Terminated Date"}
                      name="terminationDate"
                      typeError={
@@ -173,16 +193,6 @@ export const AddEnrollment = ({ handleClose, info }) => {
                            : ""
                      }
                   />
-
-                  {/*<ValidationInput*/}
-                  {/*    variant={"outlined"}*/}
-                  {/*    onChange={handleChange}*/}
-                  {/*    value={inputs.terminationDate}*/}
-                  {/*    type={"date"}*/}
-                  {/*    label={"Terminated Date"}*/}
-                  {/*    name='terminationDate'*/}
-                  {/*    typeError={error === 'terminationDate' && ErrorText.field}*/}
-                  {/*/>*/}
                </div>
             </div>
             <div className={classes.clientModalBlock}>

@@ -59,7 +59,7 @@ export const scheduleModalsStyle = makeStyles(() => ({
       flexDirection: "column",
       width: "100%",
    },
-   signature: {
+   signatureStyle: {
       display: "flex",
       alignItems: "center",
       justifyContent: "flex-end",

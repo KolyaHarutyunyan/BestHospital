@@ -34,7 +34,7 @@ function* createRole(action) {
    } catch (err) {
       // yield put(httpRequestsOnErrorsActions.removeError(action.type));
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err.data.message));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -45,7 +45,9 @@ function* getRole(action) {
          type: GET_ROLE_SUCCESS,
          payload: res.data.reverse(),
       });
-   } catch (err) {}
+   } catch (err) {
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+   }
 }
 
 function* deleteRole(action) {
@@ -59,7 +61,7 @@ function* deleteRole(action) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
-      yield put(httpRequestsOnErrorsActions.removeError(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
    }
 }
@@ -71,7 +73,9 @@ function* getRoleById(action) {
          type: GET_ROLE_BY_ID_SUCCESS,
          payload: res.data,
       });
-   } catch (err) {}
+   } catch (err) {
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+   }
 }
 
 function* addRolePermission(action) {
@@ -83,8 +87,8 @@ function* addRolePermission(action) {
       yield put(roleActions.getRoleById(action.payload.body.roleId));
       // yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
-      // yield put(httpRequestsOnErrorsActions.removeError(action.type));
       // yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 function* deleteRolePermission(action) {
@@ -92,12 +96,15 @@ function* deleteRolePermission(action) {
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    try {
-      const res = yield call(authService.deleteRolePermissionService, action.payload.data);
+      const res = yield call(
+         authService.deleteRolePermissionService,
+         action.payload.data
+      );
       yield put(roleActions.getRoleById(action.payload.data.roleId));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
    } catch (err) {
-      yield put(httpRequestsOnErrorsActions.removeError(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
       yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    }
 }
