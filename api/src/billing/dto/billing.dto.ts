@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { AuthorizationDTO } from '../../client/authorization/dto/authorization.dto';
 import { AuthorizationServiceDTO } from '../../client/authorizationservice/dto/authorizationService.dto';
-import { ITxn } from '../txn/interface';
+import { ITxn } from '../../txn/interface';
 
 export class BillingDto {
   @ApiProperty()

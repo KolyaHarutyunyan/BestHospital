@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDateString, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
-import { DTO } from '../../../util';
+import { DTO } from '../../util';
 import { TxnType } from '../txn.constants';
 
 export class TxnDto extends DTO {

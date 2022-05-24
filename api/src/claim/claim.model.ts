@@ -18,22 +18,24 @@ const receivable = {
   bills: [{ type: Types.ObjectId, ref: 'billing' }],
 };
 
-export const ClaimSchema = new Schema({
-  client: { type: Types.ObjectId, ref: 'Client' },
-  staff: { type: Types.ObjectId, ref: 'Staff' },
-  funder: { type: Types.ObjectId, ref: 'Funder' },
-  totalCharge: { type: Number },
-  totalBilled: { type: Number, default: 0 },
-  ammountPaid: { type: Number, default: 0 },
-  submittedDate: { type: Date },
-  paymentRef: { type: String },
-  link: { type: String },
-  dateRange: { early: { type: Date }, latest: { type: Date } },
-  status: { type: String, enum: ClaimStatus },
-  createdDate: { type: Date, default: Date.now() },
-  details: { type: String },
-  receivable: [receivable],
-},
-  { timestamps: true });
+export const ClaimSchema = new Schema(
+  {
+    client: { type: Types.ObjectId, ref: 'Client' },
+    staff: { type: Types.ObjectId, ref: 'Staff' },
+    funder: { type: Types.ObjectId, ref: 'Funder' },
+    totalCharge: { type: Number },
+    totalBilled: { type: Number, default: 0 },
+    ammountPaid: { type: Number, default: 0 },
+    submittedDate: { type: Date },
+    paymentRef: { type: String },
+    link: { type: String },
+    dateRange: { early: { type: Date }, latest: { type: Date } },
+    status: { type: String, enum: ClaimStatus },
+    createdDate: { type: Date, default: Date.now() },
+    details: { type: String },
+    receivable: [receivable],
+  },
+  { timestamps: true },
+);
 // remaining
 export const ClaimModel = model<IClaim>('claim', ClaimSchema);

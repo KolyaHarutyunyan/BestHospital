@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { ITxn } from './interface';
 import { TxnModel } from './txn.model';
-import { MongooseUtil } from '../../util';
+import { MongooseUtil } from '../util';
 import { TxnStatus } from './txn.constants';
 import { TxnDto } from './dto';
 

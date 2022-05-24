@@ -6,7 +6,7 @@ import { CreateBillingDto, BillingDto } from './dto';
 import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { BillingStatus, ClaimStatus, InvoiceStatus } from './billing.constants';
 import { ACCESS_TOKEN } from '../authN/authN.constants';
-import { TxnDto } from './txn/dto';
+import { TxnDto } from '../txn/dto';
 
 @Controller('billing')
 @ApiTags('Billing Endpoints')
@@ -97,20 +97,6 @@ export class BillingController {
   //   return this.billingService.remove(+id);
   // }
 
-  /** Set billing status */
-  @Patch(':id/setStatus')
-  @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({ type: BillingDto })
-  @ApiQuery({ name: 'status', enum: BillingStatus })
-  async setStatus(
-    @Param('id', ParseObjectIdPipe) billingId: string,
-    @Request() req: IRequest,
-    @Query('status') status: BillingStatus,
-  ) {
-    const userId: string = req.body.user.id;
-    const billing = await this.billingService.setStatus(billingId, status, userId);
-    return billing;
-  }
   /** set claim status */
   @Patch(':id/claimStatus')
   @ApiHeader({ name: ACCESS_TOKEN })

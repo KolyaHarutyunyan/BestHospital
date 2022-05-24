@@ -219,7 +219,6 @@ export class ClaimService {
     //  Client Funder appointment startDate
   }
 
-
   /** close the claim */
   closeClaim = async (_id: string, details: string): Promise<string> => {
     const claim = await this.model.updateOne(
@@ -297,7 +296,13 @@ export class ClaimService {
   }
 
   /** add claim */
-  private async addClaim(claim, result: IBilling, receivable: IReceivable[], receivableCreatedAt: Date[], subBills: IBilling[]): Promise<void> {
+  private async addClaim(
+    claim,
+    result: IBilling,
+    receivable: IReceivable[],
+    receivableCreatedAt: Date[],
+    subBills: IBilling[],
+  ): Promise<void> {
     let totalBilled = 0;
     receivable.map((rec) => (totalBilled += rec.amountTotal));
     claim.push({

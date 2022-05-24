@@ -434,7 +434,10 @@ export class ApptService {
   async update(_id: string, dto: UpdateAppointmentDto): Promise<ApptDto> {
     const appt = await this.model.findById(_id);
     this.checkAppt(appt);
-    this.checkEventStatusAppt(appt.eventStatus as EventStatus, [EventStatus.PENDING, EventStatus.NOTRENDERED]);
+    this.checkEventStatusAppt(appt.eventStatus as EventStatus, [
+      EventStatus.PENDING,
+      EventStatus.NOTRENDERED,
+    ]);
     await this.checkClientStaffOverlap(_id, dto);
     if (appt.type === ApptType.SERVICE) {
       await this.updateService(
@@ -586,8 +589,8 @@ export class ApptService {
     if (overlappingStaff[0] || overlappingClient[0]) {
       if (_id) {
         if (
-          overlappingStaff[0] && overlappingStaff[0]._id.toString() !== _id.toString() || overlappingClient[0] &&
-          overlappingClient[0]._id.toString() !== _id.toString()
+          (overlappingStaff[0] && overlappingStaff[0]._id.toString() !== _id.toString()) ||
+          (overlappingClient[0] && overlappingClient[0]._id.toString() !== _id.toString())
         ) {
           throw new HttpException(`appointment overlapping`, HttpStatus.BAD_REQUEST);
         }
@@ -669,7 +672,12 @@ export class ApptService {
     }
   }
   /** check dates in daily mode */
-  private async checkDailyMode(dto: CreateRepeatDto, appointment: IAppt, repeatCount: number, repeatConsecutive: boolean): Promise<IRepeat> {
+  private async checkDailyMode(
+    dto: CreateRepeatDto,
+    appointment: IAppt,
+    repeatCount: number,
+    repeatConsecutive: boolean,
+  ): Promise<IRepeat> {
     if (!repeatCount && !repeatConsecutive) {
       throw new HttpException(
         `repeatCount or(and) repeatConsecutive can not not be empty`,

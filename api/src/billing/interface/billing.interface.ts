@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
 import { IAuthorizationService } from '../../client/authorizationservice/interface/authorizationService.interface';
 import { IAuthorization } from '../../client/authorization/interface/authorization.interface';
-import { ITxn } from '../txn/interface';
+import { ITxn } from '../../txn/interface';
 
 export interface IBilling extends Document {
   _id: string;

@@ -3,11 +3,11 @@ import { Model } from 'mongoose';
 import { BillingModel } from './billing.model';
 import { IBilling } from './interface';
 import { BillingDto } from './dto';
-import { TxnDto } from './txn/dto';
+import { TxnDto } from '../txn/dto';
 import { StaffService } from '../staff/staff.service';
 import { BillingSanitizer } from './interceptor/billing.interceptor';
-import { TxnService } from './txn/txn.service';
-import { TxnType } from './txn/txn.constants';
+import { TxnService } from '../txn/txn.service';
+import { TxnType } from '../txn/txn.constants';
 import { InvoiceStatus, BillingStatus, ClaimStatus } from './billing.constants';
 import { IAppt } from '../appt/interface';
 import { IService } from '../funding/interface/service.interface';
@@ -198,18 +198,6 @@ export class BillingService {
     const sanitizeBill = this.sanitizer.sanitize(billing);
     return { bills: sanitizeBill, count: billingCount.transaction.length };
   }
-
-  /** Set billing status */
-  setStatus = async (_id: string, status: string, userId: string) => {
-    // can automatically
-    const [, billing] = await Promise.all([
-      this.staffService.findById(userId),
-      this.model.findById({ _id }),
-    ]);
-    billing.status = status;
-    this.checkBilling(billing);
-    return await billing.save();
-  };
 
   /** set claim status in billing */
   async setClaimStatus(_id: string, claimStatus: string): Promise<BillingDto> {

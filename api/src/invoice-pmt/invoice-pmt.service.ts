@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model, startSession } from 'mongoose';
 import { BillingDto } from 'src/billing/dto/billing.dto';
 import { BillingService } from '../billing/billing.service';
-import { TxnType } from '../billing/txn/txn.constants';
+import { TxnType } from '../txn/txn.constants';
 import { ClientService } from '../client/client.service';
 import { FileService } from '../files/file.service';
 import { IReceivable } from '../invoice/interface/invoice.interface';

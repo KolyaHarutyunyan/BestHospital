@@ -14,3 +14,8 @@ export enum MergeClaims {
 export enum ReceivableStatus {
   CLOSE = 'CLOSE',
 }
+//  export enum ClaimStatus {
+//   PENDING = 'PENDING',
+//   SUBMITTED = 'SUBMITTED',
+//   POSTED = 'POSTED',
+// }

@@ -164,11 +164,14 @@ export class EmploymentService {
     const month = new Date().getMonth();
     const year = new Date().getFullYear();
     const employments = await this.model.find();
-    employments.map(empl => {
-      if (new Date(empl.startDate).getDate() === day && new Date(empl.startDate).getMonth() === month && new Date(empl.startDate).getFullYear() === year) {
-
+    employments.map((empl) => {
+      if (
+        new Date(empl.startDate).getDate() === day &&
+        new Date(empl.startDate).getMonth() === month &&
+        new Date(empl.startDate).getFullYear() === year
+      ) {
       }
-    })
+    });
     console.log('ok');
   }
   /** Private methods */
@@ -188,12 +191,12 @@ export class EmploymentService {
   /** check appointment overlapping */
   private async checkOverlap(_id: string = null, startDate: Date, endDate: Date) {
     console.log(startDate, 'dto.startDate', endDate, 'dto.endDate');
-    var start = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
+    var start = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
     // var startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
     const query: any = {
       endDate: { $gt: new Date(startDate) },
     };
-    
+
     endDate ? (query.startDate = { $lt: new Date(endDate) }) : null;
 
     const overlapping = await this.model.find(query);

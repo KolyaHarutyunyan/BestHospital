@@ -10,7 +10,7 @@ import { CreateClaimPmtDto, CreateClaimReceivableDTO, CreateDocDTO } from './dto
 import { UpdateClaimPmtDto } from './dto/update-claim-payment.dto';
 import { IClaimPmt } from './interface';
 import { FileService } from '../files/file.service';
-import { TxnType } from '../billing/txn/txn.constants';
+import { TxnType } from '../txn/txn.constants';
 import { IReceivable } from '../claim/interface/receivable.interface';
 import { FundingService } from '../funding/funding.service';
 import { BillingService } from '../billing/billing.service';
@@ -273,84 +273,6 @@ export class ClaimPmtService {
     return paidAMT;
   }
 
-  /** full pay */
-  private async fullPay(
-    receivable,
-    paymentAmount,
-    // userId: string,
-    claimPmtId: string,
-  ): Promise<number> {
-    console.log('aaaahhhh');
-    // await this.claimService.updateReceivableAmount(claimId, receivable._id, receivable.amountTotal);
-    const bills = [];
-    for (let i = 0; i < receivable.bills.length; i++) {
-      const bill = receivable.bills[i];
-      const transactionInfo = {
-        type: TxnType.PAYERPAID,
-        date: new Date(),
-        rate: bill.billedAmount,
-        paymentRef: 'chka',
-        billing: bill._id,
-        creator: bill._id,
-      };
-      await this.billingService.startTransaction(transactionInfo, bill._id);
-    }
-    // receivable.bills.map((bill) => {
-    //   bills.push(this.billingService.startTransaction(transactionInfo, bill._id, session));
-    // });
-    // await Promise.all(bills);
-    return receivable.amountTotal;
-  }
-  /** partial pay */
-  private async partialPay(receivable, paymentAmount, claimPmt) {
-    const session = await startSession();
-    let paidedAmount = 0;
-    // await this.claimService.updateReceivableAmount(claimId, receivable._id, receivable.amountTotal);
-    for (let i = 0; i <= receivable.bills.length; i++) {
-      const lowBill: any = this.findLowBill(receivable.bills);
-      if (lowBill.billedAmount === 0) {
-        i = 0;
-        continue;
-      }
-      if (!lowBill || paymentAmount === 0) {
-        return paymentAmount;
-      }
-      if (paymentAmount >= lowBill.billedAmount) {
-        const transactionInfo = {
-          type: TxnType.PAYERPAID,
-          date: new Date(),
-          rate: lowBill.billedAmount,
-          paymentRef: 'chka',
-          billing: lowBill._id,
-          creator: lowBill._id,
-        };
-        await this.billingService.startTransaction(transactionInfo, lowBill._id);
-        receivable.amountTotal -= lowBill.billedAmount;
-        paymentAmount -= lowBill.billedAmount;
-        paidedAmount += lowBill.billedAmount;
-      } else if (paymentAmount < lowBill.billedAmount) {
-        const transactionInfo = {
-          type: TxnType.PAYERPAID,
-          date: new Date(),
-          rate: paymentAmount,
-          paymentRef: 'chka',
-          billing: lowBill._id,
-          creator: lowBill._id,
-        };
-        await this.billingService.startTransaction(transactionInfo, lowBill._id);
-        receivable.amountTotal -= lowBill.billedAmount;
-        paidedAmount += paymentAmount;
-        paymentAmount = 0;
-      }
-      receivable.bills = receivable.bills.filter((rec) => rec._id !== lowBill._id);
-      i = 0;
-    }
-    // receivable.bills.map((bill) => {
-    //   bills.push(this.billingService.startTransaction(transactionInfo, bill._id, session));
-    // });
-    // await Promise.all(bills);
-    return paidedAmount;
-  }
   /** find low receivable amount */
   async findLowReceivable(receivables): Promise<IReceivable> {
     return receivables.reduce((prev, curr) => {
