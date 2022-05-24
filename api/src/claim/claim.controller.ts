@@ -26,13 +26,13 @@ export class ClaimController {
   generateClaims(@Body() generateClaims: GenerateClaimDto, @Query('group') group: MergeClaims) {
     return this.claimService.generateClaims(generateClaims, group);
   }
-  @Post(':id/close')
-  @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiQuery({ name: 'details', required: false })
-  @ApiOkResponse({ type: [ClaimDto] })
-  closeClaim(@Param('id', ParseObjectIdPipe) id: string, @Query('details') details: string) {
-    return this.claimService.closeClaim(id, details);
-  }
+  // @Post(':id/close')
+  // @ApiHeader({ name: ACCESS_TOKEN })
+  // @ApiQuery({ name: 'details', required: false })
+  // @ApiOkResponse({ type: [ClaimDto] })
+  // closeClaim(@Param('id', ParseObjectIdPipe) id: string, @Query('details') details: string) {
+  //   return this.claimService.closeClaim(id, details);
+  // }
 
   @Get()
   @ApiHeader({ name: ACCESS_TOKEN })

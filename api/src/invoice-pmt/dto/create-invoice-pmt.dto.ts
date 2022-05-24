@@ -14,6 +14,7 @@ import {
 import { DTO } from '../../util';
 import { UserDTO } from '../../authN';
 import { PaymentType } from '../invoice-pmt.constants';
+import { FileDTO } from '../../files/dto';
 
 export class CreateInvPmtDto {
   @ApiProperty({ enum: PaymentType })
@@ -36,10 +37,8 @@ export class CreateInvPmtDto {
   @IsString()
   @IsNotEmpty()
   checkNumber: string;
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsMongoId()
-  eob: string;
+  @ApiProperty({ type: [FileDTO] })
+  documents: FileDTO[];
   user?: UserDTO;
 }
 class ReceivableDTO {
@@ -61,4 +60,8 @@ export class CreateReceivableDTO extends DTO {
   @ValidateNested({ each: true })
   @Type(() => ReceivableDTO)
   receivables: ReceivableDTO[];
+}
+export class CreateDocDTO extends DTO {
+  @ApiProperty({ type: FileDTO })
+  file: FileDTO;
 }

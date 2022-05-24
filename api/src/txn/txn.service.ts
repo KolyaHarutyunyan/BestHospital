@@ -5,10 +5,11 @@ import { TxnModel } from './txn.model';
 import { MongooseUtil } from '../util';
 import { TxnStatus } from './txn.constants';
 import { TxnDto } from './dto';
+import { TxnSanitizer } from './txn.sanitizer';
 
 @Injectable()
 export class TxnService {
-  constructor() {
+  constructor(private readonly sanitizer: TxnSanitizer) {
     this.model = TxnModel;
   }
   private model: Model<ITxn>;
@@ -38,7 +39,20 @@ export class TxnService {
     this.checkTsx(transaction);
     return transaction;
   }
-
+  /** get transactions by billingId */
+  async getByBilling(billingId: string, skip: number, limit: number): Promise<any> {
+    skip ? skip : (skip = 0);
+    limit ? limit : (limit = 10);
+    const transaction = await this.model.find({ billing: billingId }).skip(skip).limit(limit);
+    const transactionCount = await this.model.find({ billing: billingId });
+    return { data: transaction, count: transactionCount.length };
+  }
+  /** get transactions by billingId */
+  async getById(_id: string): Promise<TxnDto> {
+    const txn = await this.model.findById({ _id });
+    this.checkTsx(txn);
+    return this.sanitizer.sanitize(txn);
+  }
   /** Private Methods */
   private checkTsx(tsx: ITxn) {
     if (!tsx) {

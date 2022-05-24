@@ -48,6 +48,7 @@ export class BillingService {
         billedAmount,
         payerTotal: billedAmount,
         clientBalance: 0,
+        payerPaid: 0,
         // location: dto.location,
         claimStatus: ClaimStatus.NOTCLAIMED,
         invoiceStatus: InvoiceStatus.NOTINVOICED,
@@ -83,7 +84,6 @@ export class BillingService {
         billing.clientResp += rate;
       }
       const tsxId = await this.transactionService.create(dto);
-      billing.transaction.push(tsxId);
       billing = await (await billing.save()).populate('transaction').execPopulate();
       // await session.commitTransaction();
       // session.endSession();
@@ -96,10 +96,10 @@ export class BillingService {
     }
   }
   /** set client balance */
-  async setClientBalance(_id: string, clientBalance: number): Promise<BillingDto> {
+  async setClientBalance(_id: string, clientResp: number): Promise<BillingDto> {
     const billing = await this.model.findById(_id);
     this.checkBilling(billing);
-    billing.clientBalance += clientBalance;
+    billing.clientResp += clientResp;
 
     await billing.save();
     return this.sanitizer.sanitize(billing);
@@ -166,8 +166,15 @@ export class BillingService {
       .populate('authorization');
     if (isClaimed) {
       billings.map((bill) => {
-        if (bill.claimStatus == ClaimStatus.CLAIMED) {
-          throw new HttpException('Billing has already been used', HttpStatus.NOT_FOUND);
+        if (
+          bill.claimStatus == ClaimStatus.CLAIMED ||
+          bill.status == BillingStatus.CLOSE ||
+          bill.payerBalance == 0
+        ) {
+          throw new HttpException(
+            'Billing has already been used or closed or payerBalance equal 0',
+            HttpStatus.NOT_FOUND,
+          );
         }
       });
     }
@@ -175,28 +182,15 @@ export class BillingService {
   }
 
   /** find bill by id */
-  async findOne(_id: string, skip: number, limit: number): Promise<any> {
-    skip ? skip : (skip = 0);
-    limit ? limit : (limit = 10);
+  async findOne(_id: string): Promise<BillingDto> {
     const billing = await this.model
       .findById(_id)
       .populate('authService')
       .populate('client')
       .populate('payer')
-      .populate('placeService')
-      .populate([
-        {
-          path: 'transaction',
-          options: {
-            skip,
-            limit,
-          },
-        },
-      ]);
+      .populate('placeService');
     this.checkBilling(billing);
-    const billingCount = await this.model.findById(_id);
-    const sanitizeBill = this.sanitizer.sanitize(billing);
-    return { bills: sanitizeBill, count: billingCount.transaction.length };
+    return this.sanitizer.sanitize(billing);
   }
 
   /** set claim status in billing */
@@ -227,5 +221,13 @@ export class BillingService {
     if (!billing) {
       throw new HttpException('Billing with this id was not found', HttpStatus.NOT_FOUND);
     }
+  }
+  /** close bill */
+  async close(_id: string): Promise<BillingDto> {
+    const billing = await this.model.findById(_id);
+    this.checkBilling(billing);
+    billing.status = BillingStatus.CLOSE;
+    await billing.save();
+    return this.sanitizer.sanitize(billing);
   }
 }

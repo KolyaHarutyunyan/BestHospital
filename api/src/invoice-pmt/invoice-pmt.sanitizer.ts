@@ -14,7 +14,7 @@ export class InvPmtSanitizer implements ISanitize {
       paymentDate: invPmt.paymentDate,
       totalBilled: invPmt.totalBilled,
       totalUsed: invPmt.totalUsed,
-      eob: invPmt.eob,
+      documents: invPmt.documents,
       status: invPmt.status,
       client: invPmt.client,
       checkNumber: invPmt.checkNumber,

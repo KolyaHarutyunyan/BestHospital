@@ -6,7 +6,7 @@ import { BillingSanitizer } from './interceptor/billing.interceptor';
 import { TxnModule } from '../txn/txn.module';
 
 @Module({
-  imports: [StaffModule, TxnModule, TxnModule],
+  imports: [StaffModule, TxnModule],
   controllers: [BillingController],
   providers: [BillingService, BillingSanitizer],
   exports: [BillingService],

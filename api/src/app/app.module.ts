@@ -29,6 +29,7 @@ import { InvoiceModule } from '../invoice/invoice.module';
 import { InvPmtModule } from '../invoice-pmt/invoice-pmt.module';
 import { ClaimPmtModule } from '../claim-payment/claim-pmt.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { TxnModule } from '../txn/txn.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     InvoiceModule,
     InvPmtModule,
     ClaimPmtModule,
+    TxnModule,
     ScheduleModule.forRoot(),
   ],
   controllers: [AppController],

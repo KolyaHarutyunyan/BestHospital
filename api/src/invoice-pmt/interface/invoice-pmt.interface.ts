@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+import { FileDTO } from '../../files/dto';
 import { InvPmtDto } from '../dto';
 import { InvPmtStatus } from '../invoice-pmt.constants';
 
@@ -12,8 +13,8 @@ export interface IInvPmt extends Document {
   totalBilled: number;
   totalUsed: number;
   status: InvPmtStatus;
-  eob: string;
   client: string;
+  documents: FileDTO[];
   createdAt: Date;
 }
 

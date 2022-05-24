@@ -49,8 +49,7 @@ export class ClaimService {
     claim.receivable[index].amountTotal = amount;
     claim.receivable[index].allowedAMT = allowedAMT;
     claim.receivable[index].paidAMT = paidAMT;
-
-    console.log(amount, 'amount');
+    claim.status = ClaimStatus.POSTED;
     await claim.save();
     return this.sanitizer.sanitize(claim);
   }
@@ -70,10 +69,10 @@ export class ClaimService {
       //     receivable.amountTotal = receivable.amountTotal - amount;
       //   }
       // });
-      if (claim.totalCharge == 0) {
-        claim.status = ClaimStatus.PAID;
-      }
-      claim.status = ClaimStatus.PARTIAL;
+      // if (claim.totalCharge == 0) {
+      //   claim.status = ClaimStatus.POSTED;
+      // }
+      claim.status = ClaimStatus.POSTED;
       await claim.save();
       return this.sanitizer.sanitize(claim);
     } catch (e) {
@@ -220,16 +219,16 @@ export class ClaimService {
   }
 
   /** close the claim */
-  closeClaim = async (_id: string, details: string): Promise<string> => {
-    const claim = await this.model.updateOne(
-      { _id },
-      { $set: { status: ClaimStatus.CLOSED, details } },
-    );
-    if (claim.nModified) {
-      return _id;
-    }
-    throw new HttpException('claim was not found', HttpStatus.NOT_FOUND);
-  };
+  // closeClaim = async (_id: string, details: string): Promise<string> => {
+  //   const claim = await this.model.updateOne(
+  //     { _id },
+  //     { $set: { status: ClaimStatus.CLOSED, details } },
+  //   );
+  //   if (claim.nModified) {
+  //     return _id;
+  //   }
+  //   throw new HttpException('claim was not found', HttpStatus.NOT_FOUND);
+  // };
   /** change receivable amount total by receivabelId (claim-pmt) */
   async setAmount(_id: string, receivableIds: string[]) {
     const claim = await this.model.findById(_id).populate('receivable.bills');
@@ -321,6 +320,15 @@ export class ClaimService {
       receivable,
     });
   }
+  /** posted the claim (DEVELOP) */
+  async posted(_id: string): Promise<ClaimDto> {
+    const claim = await this.model.findById(_id);
+    this.checkClaim(claim);
+    this.checkStatusClaim(claim.status as ClaimStatus, [ClaimStatus.SUBMITTED]);
+    claim.status = ClaimStatus.POSTED;
+    await claim.save();
+    return this.sanitizer.sanitize(claim);
+  }
   /** Private methods */
   /** group the bills */
   private groupBy(array, f): IBilling[][] {
@@ -366,6 +374,22 @@ export class ClaimService {
   private checkClaim(claim: IClaim) {
     if (!claim) {
       throw new HttpException('Claim with this id was not found', HttpStatus.NOT_FOUND);
+    }
+  }
+  /** Checks if the claim status is allowed (matches an item in allowed status). Throws if no match is found */
+  private checkStatusClaim(status: ClaimStatus, allowedStatus: ClaimStatus[]) {
+    let foundStatusMatch = false;
+    for (let i = 0; i < allowedStatus.length; i++) {
+      if (status === allowedStatus[i]) {
+        foundStatusMatch = true;
+        break;
+      }
+    }
+    if (!foundStatusMatch) {
+      throw new HttpException(
+        `You can only edit claim that are ${allowedStatus}`,
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 }

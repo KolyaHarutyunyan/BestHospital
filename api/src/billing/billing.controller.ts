@@ -67,24 +67,8 @@ export class BillingController {
   @Get(':id')
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: BillingDto })
-  @ApiQuery({
-    name: 'skip',
-    description: 'where',
-    required: false,
-    type: Number,
-  })
-  @ApiQuery({
-    name: 'limit',
-    description: 'how',
-    required: false,
-    type: Number,
-  })
-  async findOne(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Query('limit') limit: number,
-    @Query('skip') skip: number,
-  ) {
-    return await this.billingService.findOne(id, skip, limit);
+  async findOne(@Param('id', ParseObjectIdPipe) id: string) {
+    return await this.billingService.findOne(id);
   }
 
   // @Patch(':id')
@@ -118,5 +102,12 @@ export class BillingController {
     @Param('id', ParseObjectIdPipe) id: string,
   ) {
     return await this.billingService.setInvoiceStatus(id, invoiceStatus);
+  }
+  /** set billing status */
+  @Patch(':id/close')
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: [BillingDto] })
+  async close(@Param('id', ParseObjectIdPipe) id: string) {
+    return await this.billingService.close(id);
   }
 }

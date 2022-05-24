@@ -31,6 +31,7 @@ export class CreateRepeatDto {
 
   @ApiProperty()
   @IsNumber()
+  @IsPositive()
   @IsOptional()
   repeatCount: number;
   @ApiProperty()
@@ -41,6 +42,7 @@ export class CreateRepeatDto {
   @ApiProperty()
   @IsOptional()
   @IsNumber()
+  @IsPositive()
   repeatCountWeek: number;
   @ApiProperty()
   @Type(() => Number)

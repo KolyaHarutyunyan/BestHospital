@@ -9,7 +9,7 @@ import { IReceivable } from '../invoice/interface/invoice.interface';
 import { InvoiceStatus } from '../invoice/invoice.constants';
 import { InvoiceService } from '../invoice/invoice.service';
 import { MongooseUtil } from '../util/mongoose.util';
-import { CreateInvPmtDto, UpdateInvPmtDto, InvPmtDto } from './dto';
+import { CreateInvPmtDto, UpdateInvPmtDto, InvPmtDto, CreateDocDTO } from './dto';
 import { CreateReceivableDTO } from './dto/create-invoice-pmt.dto';
 import { IInvPmt, IInvPmtCount } from './interface/invoice-pmt.interface';
 import { InvPmtStatus } from './invoice-pmt.constants';
@@ -38,8 +38,10 @@ export class InvPmtService {
       paymentType: dto.paymentType,
       client: dto.client,
       checkNumber: dto.checkNumber,
-      eob: dto.eob,
     });
+    if (dto.documents.length) {
+      dto.documents.map((doc) => invPmt.documents.push(doc));
+    }
     if (dto.paymentDate) invPmt.paymnetDate = dto.paymentDate;
     await invPmt.save();
     return this.sanitizer.sanitize(invPmt);
@@ -91,64 +93,23 @@ export class InvPmtService {
     await invPmt.save();
     return this.sanitizer.sanitize(invPmt);
   }
-  /** create invoice payment */
-  // async create(dto: CreateReceivableDTO) {
-  //   const [invoice, client] = await Promise.all([
-  //     this.invoiceService.findOne(dto.invoice),
-  //     this.clientService.findById(dto.client),
-  //   ]);
-  //   this.invoiceService.checkStatusInvoice(invoice.status, [InvoiceStatus.SUBMITTED]);
-  //   let paymentAmount = dto.paymentAmount;
-  //   let receivable = invoice.receivable;
-  //   let payed = false;
-  //   while (paymentAmount > 0) {
-  //     if (!receivable.length) {
-  //       if (!payed) {
-  //         throw new HttpException('Invoice have not receivables', HttpStatus.NOT_FOUND);
-  //       }
-  //       return await this.saveDb(dto);
-  //     }
-  //     const lowReceivable: any = await this.findLowReceivable(receivable);
-  //     if (paymentAmount >= lowReceivable.amountTotal && lowReceivable.amountTotal !== 0) {
-  //       const receivableBalance = await this.fullPayReceivable(
-  //         lowReceivable,
-  //         paymentAmount,
-  //         dto.user.id,
-  //         invoice._id,
-  //       );
-  //       paymentAmount -= receivableBalance;
-  //       payed = true;
-  //     } else if (paymentAmount < lowReceivable.amountTotal) {
-  //       const paidedAmount = await this.partialPayReceivable(
-  //         lowReceivable,
-  //         paymentAmount,
-  //         dto.user.id,
-  //         invoice._id,
-  //       );
-  //       paymentAmount -= paidedAmount;
-  //       payed = true;
-  //     }
-  //     receivable = receivable.filter((rec) => rec._id !== lowReceivable._id);
-  //   }
-  //   return await this.saveDb(dto);
-  // }
-  /** add document to invoice-pmt */
-  async addDocument(_id: string, fileId: string): Promise<InvPmtDto> {
-    const [invPmt, file] = await Promise.all([
+  /** add document */
+  async addDocument(_id: string, dto: CreateDocDTO): Promise<InvPmtDto> {
+    const [invPmt]: any = await Promise.all([
       this.model.findById(_id),
-      this.fileService.getOne(fileId),
+      this.fileService.getOne(dto.file.id),
     ]);
     this.checkInvPmt(invPmt);
-    invPmt.eob = fileId;
+    invPmt.documents.push(dto.file);
     await invPmt.save();
     return this.sanitizer.sanitize(invPmt);
   }
-  /** delete document in the posting */
+
+  /** delete document in the in-pmt */
   async deleteDocument(_id: string, fileId: string): Promise<InvPmtDto> {
     const invPmt = await this.model.findById(_id);
     this.checkInvPmt(invPmt);
-    invPmt.eob = undefined;
-    // this.removeFromList(invPmt.documents, fileId);
+    this.removeFromList(invPmt.documents, fileId);
     await invPmt.save();
     return this.sanitizer.sanitize(invPmt);
   }
@@ -342,8 +303,8 @@ export class InvPmtService {
       billing: billingId,
       creator: userId,
     };
-    return paidAMT;
     await Promise.all([this.billingService.startTransaction(transactionInfo, billingId)]);
+    return paidAMT;
   }
   /** if the invPmt is not found, throws an exception */
   private checkInvPmt(invPmt: IInvPmt) {

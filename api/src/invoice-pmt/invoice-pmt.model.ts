@@ -13,7 +13,7 @@ const InvPmtSchema = new Schema({
   status: { type: String, enum: [InvPmtStatus], default: InvPmtStatus.OPEN },
   client: { type: Types.ObjectId, ref: 'Client' },
   invoices: [{ type: Types.ObjectId, ref: 'invoice' }],
-  eob: { type: Types.ObjectId, ref: 'file' },
+  documents: [FileSchema],
 });
 
 export const InvPmtModel = model<IInvPmt>('invPmt', InvPmtSchema);

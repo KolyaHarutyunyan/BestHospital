@@ -4,6 +4,8 @@ import { DTO } from '../../util';
 import { TxnType } from '../txn.constants';
 
 export class TxnDto extends DTO {
+  @ApiProperty()
+  _id?: string;
   @ApiProperty({ enum: TxnType })
   @IsEnum(TxnType)
   type: string;

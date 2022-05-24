@@ -1,7 +1,6 @@
 import { Document } from 'mongoose';
 import { IAuthorizationService } from '../../client/authorizationservice/interface/authorizationService.interface';
 import { IAuthorization } from '../../client/authorization/interface/authorization.interface';
-import { ITxn } from '../../txn/interface';
 
 export interface IBilling extends Document {
   _id: string;
@@ -30,5 +29,4 @@ export interface IBilling extends Document {
   dateOfService: Date;
   createdDate: Date;
   updatedDate: Date;
-  transaction: ITxn[];
 }

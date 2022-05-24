@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { FileDTO } from '../../files/dto';
 import { InvPmtStatus } from '../invoice-pmt.constants';
 
 export class InvPmtDto {
@@ -23,7 +24,7 @@ export class InvPmtDto {
   @ApiProperty()
   invoices: string[];
   @ApiProperty()
-  eob: string;
+  documents: FileDTO[];
   @ApiProperty()
   createdAt: Date;
 }

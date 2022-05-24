@@ -91,9 +91,9 @@ export class ClaimPmtService {
         coINS: receivable.coINS,
         paidAMT: receivable.paidAMT,
       };
-      let countBalance = receivable.coINS + receivable.copay + receivable.deductible;
-      const clientBalance = countBalance == 0 ? 0 : countBalance / data.receivable.bills.length;
-      let billedAmount = await this.createPayment(data, clientBalance, dto.user.id);
+      const countBalance = receivable.coINS + receivable.copay + receivable.deductible;
+      const clientResp = countBalance == 0 ? 0 : countBalance / data.receivable.bills.length;
+      const billedAmount = await this.createPayment(data, clientResp, dto.user.id);
 
       amountPaided += billedAmount;
       /** update receivable total amount */
@@ -193,7 +193,7 @@ export class ClaimPmtService {
   }
   /** Private methods */
   /** create payment */
-  private async createPayment(data, clientBalance: number, userId: string): Promise<number> {
+  private async createPayment(data, clientResp: number, userId: string): Promise<number> {
     const receivable = data.receivable;
     let bills = data.receivable.bills;
     let paidAmount = 0;
@@ -205,7 +205,7 @@ export class ClaimPmtService {
       if (data.paidAMT >= lowBill.billedAmount) {
         const billedAmount = await this.fullBillPay(
           lowBill.billedAmount,
-          clientBalance,
+          clientResp,
           lowBill._id,
           userId,
         );
@@ -215,7 +215,7 @@ export class ClaimPmtService {
       } else if (data.paidAMT < lowBill.billedAmount) {
         const billedAmount = await this.partialBillPay(
           data.paidAMT,
-          clientBalance,
+          clientResp,
           lowBill._id,
           userId,
         );
@@ -233,7 +233,7 @@ export class ClaimPmtService {
   /** full billing pay */
   private async fullBillPay(
     billedAmount: number,
-    clientBalance: number,
+    clientResp: number,
     billingId: string,
     userId: string,
   ): Promise<number> {
@@ -247,14 +247,14 @@ export class ClaimPmtService {
     };
     await Promise.all([
       this.billingService.startTransaction(transactionInfo, billingId),
-      this.billingService.setClientBalance(billingId, clientBalance),
+      this.billingService.setClientBalance(billingId, clientResp),
     ]);
     return billedAmount;
   }
   /** partial billing pay */
   private async partialBillPay(
     paidAMT: number,
-    clientBalance: number,
+    clientResp: number,
     billingId: string,
     userId: string,
   ): Promise<number> {
@@ -268,7 +268,7 @@ export class ClaimPmtService {
     };
     await Promise.all([
       this.billingService.startTransaction(transactionInfo, billingId),
-      this.billingService.setClientBalance(billingId, clientBalance),
+      this.billingService.setClientBalance(billingId, clientResp),
     ]);
     return paidAMT;
   }
