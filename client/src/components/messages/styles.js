@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { Colors } from "../../utils";
+import { Colors, Backgrounds } from "@eachbase/utils";
 
 export const errMessageStyle = makeStyles(() => ({
    errMessageCenterPosition: {
@@ -26,7 +26,7 @@ export const errMessageStyle = makeStyles(() => ({
    DoneMessage: {
       width: "420px",
       height: "62px",
-      background: "#FFFFFF 0% 0% no-repeat padding-box",
+      background: Backgrounds.whiteModal,
       boxShadow: "0px 0px 12px #0052E01F",
       borderRadius: "6px",
       display: "flex",

@@ -1,12 +1,16 @@
 import { ListView, scheduleStyle } from "./core";
 import { Selectable } from "./core/calendar";
 import React, { useEffect, useState } from "react";
-import {Loader, SimpleModal} from "@eachbase/components";
+import { Loader, SimpleModal } from "@eachbase/components";
 import { CreateEvent } from "./core/modals/createEvent";
 import { Recur } from "./core/modals";
 import { useDispatch, useSelector } from "react-redux";
 import { FindLoad, FindSuccess } from "@eachbase/utils";
-import { adminActions, appointmentActions, httpRequestsOnSuccessActions } from "@eachbase/store";
+import {
+   adminActions,
+   appointmentActions,
+   httpRequestsOnSuccessActions,
+} from "@eachbase/store";
 
 export const ScheduleFragment = ({}) => {
    const classes = scheduleStyle();
@@ -110,84 +114,84 @@ export const ScheduleFragment = ({}) => {
    appointments.forEach((appointment) => {
       filteredAppointments.push(appointment.data[0]);
    });
-   const loader = FindLoad('GET_APPOINTMENT')
+   const loader = FindLoad("GET_APPOINTMENT");
    return (
       <div className={classes.wrapper}>
-         {loader.length ?
-             <Loader/>
-             :
-             <>
-         {type === "calendar" ? (
-            <Selectable
-               handleSendDate={handleSendDate}
-               appointmentById={appointmentById}
-               adminsList={adminsList}
-               clientList={clientList}
-               appointments={filteredAppointments}
-               handleOpen={handleOpen}
-               openCloseRecur={openCloseRecur}
-               handleOpenClose={handleOpenClose}
-               handleChangeScreenView={(e) => changeScreen(e)}
-            />
+         {loader.length ? (
+            <Loader />
          ) : (
-            <ListView
-               handleSendDate={handleSendDate}
-               appointmentById={appointmentById}
-               clientList={clientList}
-               adminsList={adminsList}
-               handleEdit={handleEdit}
-               openCloseRecur={openCloseRecur}
-               handleOpen={handleOpen}
-               changeScreen={changeScreen}
-               appointments={appointments}
-            />
-         )}
+            <>
+               {type === "calendar" ? (
+                  <Selectable
+                     handleSendDate={handleSendDate}
+                     appointmentById={appointmentById}
+                     adminsList={adminsList}
+                     clientList={clientList}
+                     appointments={filteredAppointments}
+                     handleOpen={handleOpen}
+                     openCloseRecur={openCloseRecur}
+                     handleOpenClose={handleOpenClose}
+                     handleChangeScreenView={(e) => changeScreen(e)}
+                  />
+               ) : (
+                  <ListView
+                     handleSendDate={handleSendDate}
+                     appointmentById={appointmentById}
+                     clientList={clientList}
+                     adminsList={adminsList}
+                     handleEdit={handleEdit}
+                     openCloseRecur={openCloseRecur}
+                     handleOpen={handleOpen}
+                     changeScreen={changeScreen}
+                     appointments={appointments}
+                  />
+               )}
 
-         <SimpleModal
-            handleOpenClose={handleOpenClose}
-            openDefault={open}
-            content={
-               <CreateEvent
-                  createModalType={
-                     createModalType?.type === "BREAK"
-                        ? "Break"
-                        : createModalType?.type === "DRIVE"
-                        ? "Drive"
-                        : createModalType?.type === "PAID"
-                        ? "Paid"
-                        : createModalType?.type === "SERVICE"
-                        ? "Service"
-                        : ""
-                  }
-                  createModalDate={createModalType}
-                  screen={
-                     modalDate.type === "BREAK"
-                        ? "Break"
-                        : modalDate.type === "DRIVE"
-                        ? "Drive"
-                        : modalDate.type === "PAID"
-                        ? "Paid"
-                        : modalDate.type === "SERVICE"
-                        ? "Service"
-                        : ""
-                  }
-                  allPaycodes={allPaycodes}
-                  places={places}
-                  clientList={clientList && clientList.clients}
-                  staffList={adminsList && adminsList.staff}
-                  date={date}
-                  modalDate={modalDate}
+               <SimpleModal
                   handleOpenClose={handleOpenClose}
+                  openDefault={open}
+                  content={
+                     <CreateEvent
+                        createModalType={
+                           createModalType?.type === "BREAK"
+                              ? "Break"
+                              : createModalType?.type === "DRIVE"
+                              ? "Drive"
+                              : createModalType?.type === "PAID"
+                              ? "Paid"
+                              : createModalType?.type === "SERVICE"
+                              ? "Service"
+                              : ""
+                        }
+                        createModalDate={createModalType}
+                        screen={
+                           modalDate.type === "BREAK"
+                              ? "Break"
+                              : modalDate.type === "DRIVE"
+                              ? "Drive"
+                              : modalDate.type === "PAID"
+                              ? "Paid"
+                              : modalDate.type === "SERVICE"
+                              ? "Service"
+                              : ""
+                        }
+                        allPaycodes={allPaycodes}
+                        places={places}
+                        clientList={clientList && clientList.clients}
+                        staffList={adminsList && adminsList.staff}
+                        date={date}
+                        modalDate={modalDate}
+                        handleOpenClose={handleOpenClose}
+                     />
+                  }
                />
-            }
-         />
-         <SimpleModal
-            handleOpenClose={openCloseRecur}
-            openDefault={openRecur}
-            content={<Recur date={recurDate} openCloseRecur={openCloseRecur} />}
-         />
-             </>
-         }
+               <SimpleModal
+                  handleOpenClose={openCloseRecur}
+                  openDefault={openRecur}
+                  content={<Recur date={recurDate} openCloseRecur={openCloseRecur} />}
+               />
+            </>
+         )}
       </div>
    );
 };

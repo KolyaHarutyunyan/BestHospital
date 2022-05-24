@@ -26,7 +26,7 @@ export const managementFragments = makeStyles(() => ({
       height: "100%",
       width: "99%",
       margin: "4px 4px 0 4px",
-      background: "#FFFFFF 0% 0% no-repeat padding-box",
+      background: Backgrounds.whiteModal,
       boxShadow: "0px 0px 6px #8A8A8A3D",
       borderRadius: "8px",
    },
@@ -95,7 +95,7 @@ export const managementFragments = makeStyles(() => ({
 
    tableBodyBottom: {
       cursor: "pointer",
-      background: "#FFFFFF 0% 0% no-repeat padding-box",
+      background: Backgrounds.whiteModal,
       borderRadius: "8px",
       boxShadow: "0px 0px 6px #8A8A8A3D",
       "& :hover": {

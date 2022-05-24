@@ -11,37 +11,23 @@ import {
    GET_APPOINTMENT_FILTERED,
    GET_APPOINTMENT_SUCCESS,
    SET_APPOINTMENT_STATUS,
-   SET_APPOINTMENT_STATUS_SUCCESS,
 } from "./appointment.type";
 import { httpRequestsOnErrorsActions } from "../http_requests_on_errors";
 import { httpRequestsOnLoadActions } from "../http_requests_on_load";
 import { httpRequestsOnSuccessActions } from "../http_requests_on_success";
-import { getAppointment } from "./appointment.action";
-import { appointmentActions } from "./index";
 
 /** Create, Edit Appointment */
 function* createAppointmentSaga(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    try {
-      const res = yield call(
-         appointmentService.createAppointmentService,
-         action.payload.body
-      );
-
+      yield call(appointmentService.createAppointmentService, action.payload.body);
       yield put({ type: GET_APPOINTMENT });
-
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-
-      // const res = yield call(appointmentService.getAppointmentService, );
-      // yield put({
-      //     type: GET_APPOINTMENT_SUCCESS,
-      //     payload: res.data,
-      // });
-   } catch (error) {
+   } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -54,23 +40,12 @@ function* editAppointmentSaga(action) {
          action.payload.body,
          action.payload.id
       );
-
-      // const res = yield call(appointmentService.getAppointmentService, );
-      //
-      // yield put({
-      //     type: GET_APPOINTMENT_SUCCESS,
-      //     payload: res.data,
-      // });
-
       yield put({ type: GET_APPOINTMENT });
-
-      // appointmentActions.getAppointment()
-
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-   } catch (error) {
+   } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 /** end */
@@ -87,17 +62,18 @@ function* getAppointmentSaga(action) {
          payload: res.data,
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-   } catch (error) {
+   } catch (err) {
       yield put({
          type: GET_APPOINTMENT_SUCCESS,
          payload: [],
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
 function* getAppointmentFilterSaga(action) {
-   // yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    try {
       const res = yield call(
          appointmentService.getAppointmentFilterService,
@@ -107,13 +83,14 @@ function* getAppointmentFilterSaga(action) {
          type: GET_APPOINTMENT_SUCCESS,
          payload: res.data,
       });
-      // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-   } catch (error) {
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+   } catch (err) {
       yield put({
          type: GET_APPOINTMENT_SUCCESS,
          payload: [],
       });
-      // yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
@@ -129,8 +106,9 @@ function* getAppointmentByIdSaga(action) {
          payload: res.data,
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-   } catch (error) {
+   } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
       // yield put({
       //     type: GET_GLOBAL_NOTES_SUCCESS,
       //     payload: [],
@@ -148,9 +126,9 @@ function* deleteAppointmentSaga(action) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       // yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({ type: GET_APPOINTMENT });
-   } catch (error) {
+   } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 /** end */
@@ -176,9 +154,9 @@ function* setAppointmentStatusSaga(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
 
       // yield put({ type: SET_APPOINTMENT_STATUS_SUCCESS, payload: res.data });
-   } catch (error) {
+   } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      // yield put(httpRequestsOnErrorsActions.appendError(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 /** end */
@@ -192,10 +170,12 @@ function* appointmentRepeatSaga(action) {
          action.payload.id,
          action.payload.body
       );
+      yield put({ type: GET_APPOINTMENT });
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-   } catch (error) {
+   } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 /** end */

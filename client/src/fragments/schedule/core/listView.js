@@ -2,34 +2,26 @@ import React, { useEffect, useState } from "react";
 import { Card } from "./card";
 import { Filters } from "./filters";
 import { scheduleStyle } from "./styles";
-import { FindLoad, Images } from "@eachbase/utils";
+import { FindLoad, Images, manageStatus } from "@eachbase/utils";
 import { Items } from "./items";
 import {
    SimpleTooltip,
    Loader,
    NoItemText,
-   SelectInput,
    SimpleModal,
    CustomizedSwitch,
+   DownloadLink,
+   AddModalButton,
 } from "@eachbase/components";
-import { Link } from "react-router-dom";
 import { InfoModal } from "./modals";
 import { appointmentActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import moment from "moment";
-
-const getStatusList = (itemType = "") => {
-   if (typeof itemType !== "string") return [];
-
-   const status = itemType === "SERVICE" ? "Rendered" : "Completed";
-
-   return [
-      { name: status, id: status.toUpperCase(), value: status.toUpperCase() },
-      { name: "Not Rendered", id: "NOTRENDERED", value: "NOTRENDERED" },
-      { name: "Pending", id: "PENDING", value: "PENDING" },
-      { name: "Cancelled", id: "CANCELLED", value: "CANCELLED" },
-   ];
-};
+import {
+   getBorderColorAndText,
+   getCurrentText,
+   getServiceAppmtDetails,
+} from "./constants";
 
 export const ListView = ({
    changeScreen,
@@ -47,7 +39,6 @@ export const ListView = ({
    const [date, setDate] = useState(0);
    const [item, setItem] = useState(appointmentById ? appointmentById : "");
    const defItem = item.length === 0 ? "" : item;
-   const [stusType, setStusType] = useState(defItem ? defItem.eventStatus : "");
    const [switcher, setSwitcher] = useState(defItem ? defItem.require : false);
 
    useEffect(() => {
@@ -64,10 +55,7 @@ export const ListView = ({
 
    useEffect(() => {
       setItem(appointmentById);
-      setStusType(appointmentById.eventStatus);
    }, [appointmentById]);
-
-   useEffect(() => {}, []);
 
    const dispatch = useDispatch();
 
@@ -78,23 +66,16 @@ export const ListView = ({
       dispatch(appointmentActions.getAppointmentById(info._id));
    };
 
-   const handleChange = (e) => {
-      if (stusType === e.target.value) return;
-      // setStusType(e.target.value);
-      const statusName =
-         e.target.value === "RENDERED"
-            ? "render"
-            : e.target.value === "CANCELLED"
-            ? "cancel"
-            : "";
-      dispatch(appointmentActions.setAppointmentStatus(defItem._id, statusName, ""));
-   };
+   const { color: statusColor } = getBorderColorAndText(defItem?.eventStatus);
+   const { detailText } = getCurrentText(defItem?.type);
 
-   const list = getStatusList(defItem?.type);
+   const _isServiceAppmt = defItem?.type === "SERVICE";
+   const _isNotRendered = defItem?.eventStatus === "NOTRENDERED";
+   const _isPending = defItem?.eventStatus === "PENDING";
+   const _hasBeenRecurred = defItem?.isRepeat === true;
 
-   const handleChangeService = () => {
-      setSwitcher(!switcher);
-
+   function handleChangeService() {
+      setSwitcher((prevState) => !prevState);
       const data = {
          type: "SERVICE",
          client: defItem?.client?._id,
@@ -109,9 +90,25 @@ export const ListView = ({
          status: "ACTIVE",
          require: !switcher,
       };
-
       dispatch(appointmentActions.editAppointment(data, defItem?._id));
-   };
+   }
+
+   function changeStatusToRendered() {
+      dispatch(appointmentActions.setAppointmentStatus(defItem._id, "render", ""));
+   }
+
+   function changeStatusToCancelled() {
+      dispatch(appointmentActions.setAppointmentStatus(defItem._id, "cancel", ""));
+   }
+
+   function changeStatusToCompleted() {
+      dispatch(appointmentActions.setAppointmentStatus(defItem._id, "complete", ""));
+   }
+
+   const serviceAppmtDetails = getServiceAppmtDetails(defItem);
+   const sortedAppmts = appointments?.sort(
+      (a, b) => new Date(a._id).getTime() - new Date(b._id).getTime()
+   );
 
    return (
       <div>
@@ -120,31 +117,31 @@ export const ListView = ({
             adminsList={adminsList}
             clientList={clientList}
             handleOpen={handleOpen}
-            goToNext={() => setDate(date + 7)}
-            goToBack={() => setDate(date - 7)}
+            goToNext={() => setDate((currDate) => currDate + 7)}
+            goToBack={() => setDate((currDate) => currDate - 7)}
             handleChangeScreenView={(e) => changeScreen(e)}
+            label={date}
          />
-         {appointments.length ? (
+         {!!sortedAppmts.length ? (
             <div className={classes.listWrapper}>
                <div className={classes.wrapp}>
-                  {appointments.length
-                     ? appointments.map((i, j) => (
-                          <div key={j} className={classes.cardWrapper}>
-                             <p className={classes.cardTitle}>
-                                {moment(i._id).format("dddd, MMM D YYYY")}
-                             </p>
-                             {i.data.length &&
-                                i.data.map((k, index) => (
-                                   <Card
-                                      style={defItem && defItem._id === k._id}
-                                      openModal={(info) => handleOpenCloseModal(info)}
-                                      info={k}
-                                      key={index}
-                                   />
-                                ))}
-                          </div>
-                       ))
-                     : ""}
+                  {!!sortedAppmts.length &&
+                     sortedAppmts.map((i, j) => (
+                        <div key={j} className={classes.cardWrapper}>
+                           <p className={classes.cardTitle}>
+                              {moment(i._id).format("dddd, MMM D YYYY")}
+                           </p>
+                           {i.data.length &&
+                              i.data.map((k, index) => (
+                                 <Card
+                                    style={defItem && defItem._id === k._id}
+                                    openModal={(info) => handleOpenCloseModal(info)}
+                                    info={k}
+                                    key={index}
+                                 />
+                              ))}
+                        </div>
+                     ))}
                </div>
                <div className={classes.infoWrapper}>
                   {loader.length || statusLoader.length ? (
@@ -152,151 +149,112 @@ export const ListView = ({
                   ) : (
                      <>
                         <div className={classes.titleWrapper}>
-                           <p>
-                              {defItem && defItem.type === "DRIVE"
-                                 ? "Drive Time"
-                                 : defItem && defItem.type === "SERVICE"
-                                 ? "Service Appointment"
-                                 : defItem && defItem.type === "BREAK"
-                                 ? "Break"
-                                 : defItem && defItem.type === "PAID"
-                                 ? "Paid Time Off"
-                                 : ""}
-                           </p>
-                           <div>
-                              {defItem && defItem.isRepeat === true ? (
+                           <p>{detailText}</p>
+                           <div className={classes.recurAndEditBoxStyle}>
+                              {_hasBeenRecurred ? (
                                  <div className={classes.recurEdit}>
-                                    <p>Recurring Event</p>{" "}
+                                    <p>Recurring Event</p>
                                  </div>
                               ) : (
-                                 <>
-                                    <SimpleTooltip
-                                       title={<p>{"Recur Event"}</p>}
-                                       placement="top-end"
+                                 <SimpleTooltip
+                                    title={<p>{"Recur Event"}</p>}
+                                    placement="top-end"
+                                 >
+                                    <button
+                                       className={classes.recurButnStyle}
+                                       onClick={() => openCloseRecur(defItem)}
                                     >
-                                       <button onClick={() => openCloseRecur(defItem)}>
-                                          <img src={Images.recurrance} alt="icon" />
-                                       </button>
-                                    </SimpleTooltip>
-                                    <SimpleTooltip
-                                       title={<p>{"Edit"}</p>}
-                                       placement="top-end"
-                                    >
-                                       <button onClick={() => handleEdit(defItem)}>
-                                          <img src={Images.edit} alt="icon" />
-                                       </button>
-                                    </SimpleTooltip>
-                                 </>
+                                       <img src={Images.recurrance} alt="icon" />
+                                    </button>
+                                 </SimpleTooltip>
+                              )}
+                              {(_isNotRendered || _isPending) && (
+                                 <button
+                                    className={classes.editButnStyle}
+                                    onClick={() => handleEdit(defItem)}
+                                 >
+                                    <img src={Images.edit} alt="icon" />
+                                 </button>
                               )}
                            </div>
                         </div>
-                        <p className={classes.infoDate}>
+                        <div className={classes.infoDate}>
                            {defItem && (
-                              <span>
-                                 {moment(defItem.startDate).format("MMM DD, YYYY")}
-                                 <span style={{ marginLeft: "16px" }}>
-                                    {`${moment(defItem.startTime).format(
-                                       "hh:mm A"
-                                    )} - ${moment(defItem.endTime).format("hh:mm A")}`}
+                              <div className={classes.dateAndStatusBoxStyle}>
+                                 <span>
+                                    {moment(defItem.startDate).format("MMM DD, YYYY")}
+                                    <span style={{ marginLeft: "16px" }}>
+                                       {`${moment(defItem.startTime).format(
+                                          "hh:mm A"
+                                       )} - ${moment(defItem.endTime).format("hh:mm A")}`}
+                                    </span>
                                  </span>
-                              </span>
-                           )}
-                        </p>
-                        <div className={classes.itemsWrap}>
-                           {defItem && defItem.client && (
-                              <Items
-                                 text={"Client:"}
-                                 subText={
-                                    defItem &&
-                                    defItem.client &&
-                                    `${defItem.client.firstName} ${defItem.client.lastName}`
-                                 }
-                              />
-                           )}
-                           {defItem && defItem.authorized && (
-                              <Items
-                                 text={"Authorized Service:"}
-                                 subText={"PT (HA, HC, HN)"}
-                              />
-                           )}
-                           {defItem && defItem.authorizedService && (
-                              <Items
-                                 text={"Authorized Service:"}
-                                 subText={
-                                    defItem.authorizedService.modifiers
-                                       ? defItem.authorizedService.modifiers.map(
-                                            (i) => i.name
-                                         )
-                                       : ""
-                                 }
-                              />
-                           )}
-                           {defItem && defItem.staff && (
-                              <Items
-                                 text={"Staff Member:"}
-                                 subText={
-                                    defItem &&
-                                    defItem.staff &&
-                                    `${defItem.staff.firstName} ${defItem.staff.lastName}`
-                                 }
-                              />
-                           )}
-                           {defItem && defItem.staffPayCode && (
-                              <Items
-                                 text={"Staff Paycode:"}
-                                 subText={defItem.staffPayCode.name}
-                              />
-                           )}
-                           {defItem && defItem.miles && (
-                              <Items text={"Miles:"} subText={defItem.miles} />
-                           )}
-                           {defItem && defItem.client && (
-                              <Items
-                                 text={"Client Address:"}
-                                 subText={"1100 East Broadway #302 Glendale, CA 91205"}
-                              />
-                           )}
-                           {defItem && defItem.placeService && (
-                              <Items
-                                 text={"Place of Service:"}
-                                 subText={
-                                    defItem.placeService.name && defItem.placeService.name
-                                 }
-                              />
+                                 <p
+                                    style={{ color: statusColor }}
+                                    className={classes.eventStatusStyle}
+                                 >
+                                    {manageStatus(defItem?.eventStatus)}
+                                 </p>
+                              </div>
                            )}
                         </div>
+                        <div className={classes.itemsWrap}>
+                           {serviceAppmtDetails.map((item, index) => (
+                              <Items
+                                 key={index}
+                                 text={item.detailText}
+                                 subText={item.detail}
+                              />
+                           ))}
+                        </div>
                         <div className={classes.infoFooter}>
-                           <p className={classes.infoFooterTitle}>Event Status</p>
-                           <SelectInput
-                              name={"rendered"}
-                              handleSelect={handleChange}
-                              value={stusType}
-                              list={list}
-                              type={"id"}
-                           />
-                           {defItem.type === "SERVICE" && (
-                              <div className={classes.switch}>
-                                 <div>
-                                    <Link
-                                       to="*"
-                                       onClick={(e) => e.preventDefault()}
-                                       className={classes.link}
+                           {_isServiceAppmt && (
+                              <div>
+                                 <div className={classes.signatureActionsBoxStyle}>
+                                    <div>
+                                       {_isNotRendered && (
+                                          <div className={classes.signatureBoxStyle}>
+                                             <p className={classes.signatureTextStyle}>
+                                                Require Signature
+                                             </p>
+                                             <CustomizedSwitch
+                                                checked={switcher}
+                                                handleClick={handleChangeService}
+                                             />
+                                          </div>
+                                       )}
+                                       <DownloadLink
+                                          linkClassName={classes.downloadSignatureStyle}
+                                          linkHref={"Signature.csv"}
+                                          linkInnerText={"Signature.csv"}
+                                          linkDownload={true}
+                                       />
+                                    </div>
+                                    <button
+                                       type="button"
+                                       className={classes.openModalButnStyle}
                                     >
-                                       Signature.csv
-                                    </Link>
-                                    <img
-                                       className={classes.download}
-                                       src={Images.download}
-                                       alt="icon"
-                                    />
+                                       Upload Signature
+                                    </button>
                                  </div>
-                                 <div>
-                                    <p>Require Signature</p>
-                                    <CustomizedSwitch
-                                       checked={switcher}
-                                       handleClick={handleChangeService}
-                                    />
-                                 </div>
+                              </div>
+                           )}
+                           {(_isNotRendered || _isPending) && (
+                              <div className={classes.statusActionsBoxStyle}>
+                                 <AddModalButton
+                                    buttonClassName={classes.changeStatusButnStyle}
+                                    handleClick={() =>
+                                       _isServiceAppmt
+                                          ? changeStatusToRendered()
+                                          : changeStatusToCompleted()
+                                    }
+                                    text={_isServiceAppmt ? "Render" : "Complete"}
+                                 />
+                                 <AddModalButton
+                                    buttonClassName={classes.changeStatusButnStyle}
+                                    handleClick={changeStatusToCancelled}
+                                    text="Cancel"
+                                 />
                               </div>
                            )}
                         </div>

@@ -13,12 +13,10 @@ const WEEKDAYS = [
    { weekdayValue: "Sat" },
 ];
 
-export const WeeklyPattern = ({
-   inputs,
-   handleChangeWeek,
-   handleChangeWeeks,
-}) => {
+export const WeeklyPattern = ({ inputs, handleChangeWeek, handleChangeWeeks }) => {
    const classes = modePatternsStyle();
+
+   const datesAreNotMentioned = !inputs.startDate || !inputs.endDate;
 
    return (
       <div>
@@ -30,6 +28,7 @@ export const WeeklyPattern = ({
                name={"repeatCountWeek"}
                onChange={handleChangeWeek}
                className={classes.smallInput}
+               disabled={datesAreNotMentioned}
             />
             <span className={classes.days}>week(s)</span>
          </div>
@@ -45,6 +44,7 @@ export const WeeklyPattern = ({
                   control={<Checkbox />}
                   name={makeCapitalize(weekday.weekdayValue)}
                   label={makeCapitalize(weekday.weekdayValue)}
+                  disabled={datesAreNotMentioned}
                />
             ))}
          </FormGroup>

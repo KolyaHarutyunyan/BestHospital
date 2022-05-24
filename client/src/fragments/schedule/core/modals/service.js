@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import {
    adminActions,
    appointmentActions,
+   httpRequestsOnErrorsActions,
    httpRequestsOnSuccessActions,
 } from "@eachbase/store";
 import axios from "axios";
@@ -31,10 +32,12 @@ export const Service = ({
    day,
    createModalDate,
 }) => {
-   const dispatch = useDispatch();
    const classes = scheduleModalsStyle();
    const global = modalsStyle();
    const inputClasses = inputsStyle();
+
+   const dispatch = useDispatch();
+
    const [inputs, setInputs] = useState(
       modalDate
          ? {
@@ -55,6 +58,7 @@ export const Service = ({
    const [error, setError] = useState("");
    const [clientService, setClientService] = useState([]);
    const [signature, setSignature] = useState(modalDate ? modalDate.require : false);
+   const [editLoader, setEditLoader] = useState(false);
 
    const success = modalDate
       ? FindSuccess("EDIT_APPOINTMENT")
@@ -62,22 +66,29 @@ export const Service = ({
    const loader = modalDate
       ? FindLoad("EDIT_APPOINTMENT")
       : FindLoad("CREATE_APPOINTMENT");
-
-   // ** waiting for back error message to continue with backError variable ...**
    const backError = modalDate
       ? FindError("EDIT_APPOINTMENT")
       : FindError("CREATE_APPOINTMENT");
 
+   const appmtIsOverlapping = backError[0]?.error === "appointment overlapping";
+
    useEffect(() => {
-      if (!success) return;
-      handleOpenClose();
-      if (modalDate) {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_APPOINTMENT"));
-      } else {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_APPOINTMENT"));
+      if (appmtIsOverlapping) {
+         setError(ErrorText.overlappingError);
+      }
+   }, [appmtIsOverlapping]);
+
+   useEffect(() => {
+      if (!!success.length) {
+         handleOpenClose();
+         if (modalDate) {
+            dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_APPOINTMENT"));
+         } else {
+            dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_APPOINTMENT"));
+         }
       }
    }, [success]);
-   const [editLoader, setEditLoader] = useState(false);
+
    useEffect(() => {
       if (modalDate) {
          setEditLoader(true);
@@ -112,7 +123,9 @@ export const Service = ({
          ...prevState,
          [e.target.name]: e.target.value,
       }));
-      error === e.target.name && setError("");
+      if (error === e.target.name) {
+         setError("");
+      }
    };
 
    const handleChangeDate = (e) => {
@@ -126,7 +139,16 @@ export const Service = ({
          0
       );
       setTimes((prevState) => ({ ...prevState, [e.target.name]: myToday }));
-      (e.target.name === error || error === ErrorText.timeError) && setError("");
+      if (
+         error === e.target.name ||
+         error === ErrorText.timeError ||
+         error === ErrorText.overlappingError
+      ) {
+         setError("");
+      }
+      if (!!backError.length) {
+         dispatch(httpRequestsOnErrorsActions.removeError(backError.type));
+      }
    };
 
    const handleSelect = (ev) => {
@@ -191,7 +213,6 @@ export const Service = ({
             endTime: times.endTime,
             status: "ACTIVE",
             require: signature,
-            // signature: signature,
          };
 
          if (modalDate) {
@@ -326,7 +347,13 @@ export const Service = ({
                            label={"Start Time*"}
                            name="startTime"
                            style={classes.startTime}
-                           typeError={error === "startTime" && ErrorText.field}
+                           typeError={
+                              error === "startTime"
+                                 ? ErrorText.field
+                                 : error === ErrorText.overlappingError
+                                 ? ErrorText.overlappingError
+                                 : ""
+                           }
                         />
                         <ValidationInput
                            variant={"outlined"}
@@ -372,7 +399,7 @@ export const Service = ({
                         list={activeStaffPaycodes}
                         typeError={error === "staffPayCode" && ErrorText.field}
                      />
-                     <div className={classes.signature}>
+                     <div className={classes.signatureStyle}>
                         <p>Require Signature</p>
                         <Switch
                            onClick={handleChangeSignature}

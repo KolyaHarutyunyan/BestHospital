@@ -26,9 +26,7 @@ function* createMileage({ payload, type }) {
       yield put(httpRequestsOnErrorsActions.removeError(type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(type));
-      yield put(
-         httpRequestsOnErrorsActions.appendError(type, err.data.message)
-      );
+      yield put(httpRequestsOnErrorsActions.appendError(type, err?.data?.message));
    }
 }
 
@@ -45,9 +43,7 @@ function* editMileage({ payload, type }) {
       yield put(httpRequestsOnErrorsActions.removeError(type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(type));
-      yield put(
-         httpRequestsOnErrorsActions.appendError(type, err.data.message)
-      );
+      yield put(httpRequestsOnErrorsActions.appendError(type, err?.data?.message));
    }
 }
 
@@ -69,7 +65,7 @@ function* getMileages({ type }) {
       yield put(httpRequestsOnErrorsActions.removeError(type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(type));
-      yield put(httpRequestsOnErrorsActions.removeError(type));
+      yield put(httpRequestsOnErrorsActions.appendError(type, err?.data?.message));
    }
 }
 
@@ -89,7 +85,7 @@ function* deleteMileages(action) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
    } catch (err) {
       yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
-      yield put(httpRequestsOnErrorsActions.removeError(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 

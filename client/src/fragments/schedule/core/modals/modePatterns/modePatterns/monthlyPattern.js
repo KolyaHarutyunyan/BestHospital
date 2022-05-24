@@ -1,12 +1,10 @@
 import React from "react";
 import { modePatternsStyle } from "./style";
 
-export const MonthlyPattern = ({
-   inputs,
-   handleChangeMounthDay,
-   handleChangeMounth,
-}) => {
+export const MonthlyPattern = ({ inputs, handleChangeMounthDay, handleChangeMounth }) => {
    const classes = modePatternsStyle();
+
+   const datesAreNotMentioned = !inputs.startDate || !inputs.endDate;
 
    return (
       <div>
@@ -18,6 +16,7 @@ export const MonthlyPattern = ({
                name={"repeatDayMonth"}
                onChange={handleChangeMounthDay}
                className={classes.smallInput}
+               disabled={datesAreNotMentioned}
             />
             <span className={classes.days}>of every</span>
             <input
@@ -26,6 +25,7 @@ export const MonthlyPattern = ({
                name={"repeatMonth"}
                onChange={handleChangeMounth}
                className={classes.smallInput}
+               disabled={datesAreNotMentioned}
             />
             <span className={classes.days}>month(s)</span>
          </div>

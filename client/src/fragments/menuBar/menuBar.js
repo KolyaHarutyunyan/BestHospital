@@ -23,8 +23,9 @@ export const MenuBar = ({}) => {
 
    const success = httpOnSuccess.length && httpOnSuccess[0].type;
    const error = httpOnError.length && httpOnError[0].type;
+   const errorMessage = httpOnError.length && httpOnError[0].error;
    const toastSuccess = ToastSuccess(success);
-   const toastFail = ToastFail(error);
+   const toastFail = ToastFail(error, errorMessage);
 
    const { saveLink } = useSelector((state) => ({
       saveLink: state.auth.saveLink,
@@ -62,11 +63,7 @@ export const MenuBar = ({}) => {
       <div className={classes.root}>
          <TopBar />
 
-         <LeftBar
-            theme={theme}
-            setLinksStyle={setLinksStyle}
-            linkInfo={linkInfo}
-         />
+         <LeftBar theme={theme} setLinksStyle={setLinksStyle} linkInfo={linkInfo} />
          <main className={classes.content}>
             <Router />
          </main>

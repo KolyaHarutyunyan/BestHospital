@@ -12,6 +12,7 @@ export const SelectInput = ({
    handleSelect,
    style,
    value = "",
+   extraInfo = "",
    list = [],
    handleChangeCountryCode,
    typeError,
@@ -88,7 +89,12 @@ export const SelectInput = ({
                           >
                              {type === "service"
                                 ? option.serviceId.name
-                                : option.firstName || option.name}
+                                : option.firstName || option.name}{" "}
+                             {!!option.modifiers &&
+                                !!option.modifiers.length &&
+                                `(${option.modifiers
+                                   .map((modifier) => modifier.name)
+                                   .join(", ")})`}
                           </option>
                        ))}
                </Select>
