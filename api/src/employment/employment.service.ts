@@ -190,15 +190,27 @@ export class EmploymentService {
   }
   /** check appointment overlapping */
   private async checkOverlap(_id: string = null, startDate: Date, endDate: Date) {
-    console.log(startDate, 'dto.startDate', endDate, 'dto.endDate');
-    var start = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+    // console.log(startDate, 'dto.startDate', endDate, 'dto.endDate');
+    // var start = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
     // var startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
     const query: any = {
       endDate: { $gt: new Date(startDate) },
     };
 
-    endDate ? (query.startDate = { $lt: new Date(endDate) }) : null;
-
+    if(!endDate) {
+      query.$or = [
+        {endDate: null},
+        {endDate: {$gt: startDate}}
+      ]
+    }else{
+      query.$or = [
+        {endDate: null, starDate: {$lt: endDate} }, 
+        { 
+          endDate: { $lt: endDate },
+          startDate: { $gt: startDate },
+        }
+      ]
+    }
     const overlapping = await this.model.find(query);
     if (overlapping[0]) {
       if (_id) {
