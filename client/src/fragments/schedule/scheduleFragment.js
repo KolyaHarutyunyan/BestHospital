@@ -11,6 +11,7 @@ import {
    appointmentActions,
    httpRequestsOnSuccessActions,
 } from "@eachbase/store";
+import { getDisplayFromType } from "./constants";
 
 export const ScheduleFragment = ({}) => {
    const classes = scheduleStyle();
@@ -114,7 +115,12 @@ export const ScheduleFragment = ({}) => {
    appointments.forEach((appointment) => {
       filteredAppointments.push(appointment.data[0]);
    });
+
    const loader = FindLoad("GET_APPOINTMENT");
+
+   const modalType = getDisplayFromType(createModalType?.type);
+   const screen = getDisplayFromType(modalDate?.type);
+
    return (
       <div className={classes.wrapper}>
          {loader.length ? (
@@ -132,6 +138,7 @@ export const ScheduleFragment = ({}) => {
                      openCloseRecur={openCloseRecur}
                      handleOpenClose={handleOpenClose}
                      handleChangeScreenView={(e) => changeScreen(e)}
+                     handleEdit={handleEdit}
                   />
                ) : (
                   <ListView
@@ -152,29 +159,9 @@ export const ScheduleFragment = ({}) => {
                   openDefault={open}
                   content={
                      <CreateEvent
-                        createModalType={
-                           createModalType?.type === "BREAK"
-                              ? "Break"
-                              : createModalType?.type === "DRIVE"
-                              ? "Drive"
-                              : createModalType?.type === "PAID"
-                              ? "Paid"
-                              : createModalType?.type === "SERVICE"
-                              ? "Service"
-                              : ""
-                        }
+                        createModalType={modalType}
                         createModalDate={createModalType}
-                        screen={
-                           modalDate.type === "BREAK"
-                              ? "Break"
-                              : modalDate.type === "DRIVE"
-                              ? "Drive"
-                              : modalDate.type === "PAID"
-                              ? "Paid"
-                              : modalDate.type === "SERVICE"
-                              ? "Service"
-                              : ""
-                        }
+                        screen={screen}
                         allPaycodes={allPaycodes}
                         places={places}
                         clientList={clientList && clientList.clients}
