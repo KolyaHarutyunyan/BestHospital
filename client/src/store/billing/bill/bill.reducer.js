@@ -18,6 +18,7 @@ export const billReducer = (state = initialState, action) => {
             ...state,
             billById: action.payload.billById,
          };
+
       default:
          return state;
    }

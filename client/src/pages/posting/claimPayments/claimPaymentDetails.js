@@ -12,7 +12,7 @@ export const ClaimPaymentDetails = () => {
    const dispatch = useDispatch();
 
    const claimPaymentById = useSelector((state) => state.claimPayment.claimPaymentById);
-   const { funders } = useSelector((state) => state.fundingSource.fundingSourceList);
+   const { funders } = useSelector((state) => state.fundingSource.fundingSources);
 
    const mappedFunders = funders?.map((funder) => ({ id: funder.id, name: funder.name }));
 

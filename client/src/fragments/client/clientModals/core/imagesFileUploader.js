@@ -1,8 +1,9 @@
 import React from "react";
 import { fileUploadersStyle } from "./styles";
-import { ValidationInput } from "@eachbase/components";
+import { DownloadLink, ValidationInput } from "@eachbase/components";
 import { getLimitedVal, Images, isNotEmpty } from "@eachbase/utils";
 import { checkFileType } from "./constants";
+import ReactFileReader from "react-file-reader";
 
 export const ImagesFileUploader = ({
    uploadedFiles = [],
@@ -30,27 +31,21 @@ export const ImagesFileUploader = ({
                placeholder={"File Type*"}
                errorFalse={error}
             />
-            <div>
-               <input
-                  disabled={!isNotEmpty(fileName)}
-                  onChange={handleChangeFile}
-                  type="file"
-                  id="BtnBrowseHidden"
-                  name="files"
-                  style={{ display: "none" }}
-               />
-               <label htmlFor="BtnBrowseHidden" id="LblBrowse">
-                  <div className={uploadButnStyle}>
-                     <span>Upload a file</span>
-                  </div>
-               </label>
-            </div>
+            <ReactFileReader
+               disabled={!isNotEmpty(fileName)}
+               handleFiles={handleChangeFile}
+            >
+               <label className={uploadButnStyle}>Upload a file</label>
+            </ReactFileReader>
          </div>
+         <p className={classes.errorStyle}>{error}</p>
          <p className={classes.authorizationFileSubTitle}>uploaded files</p>
          <div className={!uploadedFiles ? classes.centered : classes.normal}>
             <div className={!uploadedFiles.length ? classes.centered : classes.normal}>
                {uploadedFiles.length ? (
                   uploadedFiles.map((item, index) => {
+                     const _imageURL = URL.createObjectURL(item);
+
                      return (
                         <div key={index} className={classes.fileRow}>
                            <div className={classes.imageContainer}>
@@ -70,6 +65,7 @@ export const ImagesFileUploader = ({
                                  {getLimitedVal(item.name, 30)}
                               </p>
                            </div>
+                           <DownloadLink linkHref={_imageURL} linkDownload={true} />
                         </div>
                      );
                   })

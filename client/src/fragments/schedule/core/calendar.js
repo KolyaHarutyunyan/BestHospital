@@ -3,12 +3,11 @@ import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
-import { scheduleStyle } from "./styles";
 import { SimpleModal } from "@eachbase/components";
 import { Filters } from "./filters";
-import { InfoModal } from "./modals";
 import { useDispatch } from "react-redux";
 import { appointmentActions } from "@eachbase/store";
+import { ScheduleDetailsCard } from "./common";
 
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 
@@ -21,6 +20,8 @@ export const Selectable = ({
    clientList,
    handleOpen,
    handleSendDate,
+   handleEdit,
+   appointmentById,
 }) => {
    const dispatch = useDispatch();
 
@@ -88,8 +89,6 @@ export const Selectable = ({
 
    const localizer = momentLocalizer(moment);
 
-   const classes = scheduleStyle();
-
    const CustomToolbar = (toolbar) => {
       const goToBack = () => {
          if (toolbar.view === "day") {
@@ -150,15 +149,14 @@ export const Selectable = ({
             onSelectEvent={(i) => handleOpenCloseModal(i)}
             onSelectSlot={handleSelect}
          />
-
          <SimpleModal
             handleOpenClose={handleOpenCloseModal}
             openDefault={open}
             content={
-               <InfoModal
+               <ScheduleDetailsCard
                   openCloseRecur={openCloseRecur}
-                  info={info}
-                  handleOpenClose={handleOpenCloseModal}
+                  handleEdit={handleEdit}
+                  appointmentById={appointmentById}
                />
             }
          />
