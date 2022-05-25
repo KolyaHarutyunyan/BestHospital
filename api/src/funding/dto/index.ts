@@ -1,8 +1,13 @@
-export { CreateFundingDTO } from './create.dto';
-export { FundingDTO, FundingQueryDTO } from './founder.dto';
-export { UpdateFundingDto } from './edit.dto';
-
-// services
-export { CreateServiceDTO } from './create.service.dto';
-export { ServiceDTO } from './service.dto';
-export { UpdateServiceDto } from './edit.service.dto';
+export {
+  CreateFundingDTO,
+  CreateServiceDTO,
+  CreateModifierDto,
+  CreateModifiersDTO,
+} from './create.dto';
+export { FundingDTO, FundingQueryDTO, ServiceDTO, ModifyDTO } from './founder.dto';
+export {
+  UpdateFundingDto,
+  UpdateModifierDto,
+  UpdateModifiersDto,
+  UpdateServiceDto,
+} from './edit.dto';

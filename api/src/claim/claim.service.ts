@@ -9,7 +9,7 @@ import { ClaimDto, GenerateClaimDto } from './dto';
 import { ClaimSanitizer } from './interceptor/claim.interceptor';
 import { IClaim } from './interface';
 import { IBilling } from '../billing/interface';
-import { IAuthorizationService } from '../client/authorizationservice/interface';
+import { IAuthService } from '../client/auth-service/interface';
 import { IService } from '../funding/interface';
 import { IReceivable } from './interface/receivable.interface';
 import { IClaimPmtCount } from 'src/claim-payment/interface/claim-pmt.interface';
@@ -129,7 +129,7 @@ export class ClaimService {
     /** create receivables and claims */
     for (let i = 0; i < result.length; i++) {
       for (let j = 0; j < result[i].length; ++j) {
-        const authorizedService = (<any>result[i][0].authService) as IAuthorizationService;
+        const authorizedService = (<any>result[i][0].authService) as IAuthService;
         const service = (<any>authorizedService.serviceId) as IService;
 
         subBills.push(result[i][j]);
@@ -276,7 +276,7 @@ export class ClaimService {
     totalBilled: number,
     dateRange: Date[],
   ): Promise<void> {
-    const authorizedService = (<any>billGroup.authService) as IAuthorizationService;
+    const authorizedService = (<any>billGroup.authService) as IAuthService;
     const service = (<any>authorizedService.serviceId) as IService;
     let clientResp = 0;
     subBills.map((bill) => (clientResp += bill.clientResp));

@@ -10,8 +10,8 @@ import { CredentialModule } from '../credential';
 import { ServiceModule } from '../service';
 import { AddressSanitizer } from '../address';
 import { EnrollmentModule } from './enrollment/enrollment.module';
-import { AuthorizationModule } from './authorization/authorization.module';
-import { AuthorizationserviceModule } from './authorizationservice/authorizationservice.module';
+import { AuthorizationModule } from './auth/auth.module';
+import { AuthorizationserviceModule } from './auth-service/auth-service.module';
 import { ContactModule } from './contact/contact.module';
 
 @Module({

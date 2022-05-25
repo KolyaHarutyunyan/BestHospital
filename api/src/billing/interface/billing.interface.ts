@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
-import { IAuthorizationService } from '../../client/authorizationservice/interface/authorizationService.interface';
-import { IAuthorization } from '../../client/authorization/interface/authorization.interface';
+import { IAuthService } from '../../client/auth-service/interface/auth-service.interface';
+import { IAuth } from '../../client/auth/interface/auth.interface';
 
 export interface IBilling extends Document {
   _id: string;
@@ -8,8 +8,8 @@ export interface IBilling extends Document {
   payer: string;
   client: string;
   staff: string;
-  authorization: IAuthorization | string;
-  authService: IAuthorizationService | string;
+  authorization: IAuth | string;
+  authService: IAuthService | string;
   placeService: string;
   totalHours: number;
   totalUnits: number;

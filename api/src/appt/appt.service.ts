@@ -3,8 +3,8 @@ import * as mongoose from 'mongoose';
 import { Model } from 'mongoose';
 import { FileService } from '../files/file.service';
 import { BillingService } from '../billing/billing.service';
-import { IAuthorization } from '../client/authorization/interface/authorization.interface';
-import { AuthorizationserviceService } from '../client/authorizationservice/authorizationservice.service';
+import { IAuth } from '../client/auth/interface/auth.interface';
+import { AuthService } from '../client/auth-service/auth-service.service';
 import { ClientService } from '../client/client.service';
 import { IEmployment } from '../employment';
 import { EmploymentService } from '../employment/employment.service';
@@ -24,7 +24,7 @@ import { IFilterQuery, IRepeat } from './interface/appt.interface';
 export class ApptService {
   constructor(
     private readonly clientService: ClientService,
-    private readonly authorizedService: AuthorizationserviceService,
+    private readonly authorizedService: AuthService,
     private readonly staffService: StaffService,
     private readonly payCodeService: PaycodeService,
     private readonly employmentService: EmploymentService,
@@ -123,7 +123,7 @@ export class ApptService {
       this.clientService.findById(dto.client),
       this.authorizedService.findById(dto.authorizedService),
     ]);
-    const auth = (<any>authService.authorizationId) as IAuthorization;
+    const auth = (<any>authService.authorizationId) as IAuth;
     /** check if client and authorization client are same */
     if (client.id != auth.clientId) {
       throw new HttpException(
@@ -488,7 +488,7 @@ export class ApptService {
       this.clientService.findById(dtoClient ? dtoClient : apptClient),
       this.authorizedService.findById(dtoAuthService ? dtoAuthService : apptAuthService),
     ]);
-    const auth = (<any>authService.authorizationId) as IAuthorization;
+    const auth = (<any>authService.authorizationId) as IAuth;
     /** check if client and authorization client are same */
     if (client.id != auth.clientId) {
       throw new HttpException(

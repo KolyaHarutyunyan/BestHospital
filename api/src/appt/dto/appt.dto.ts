@@ -3,7 +3,7 @@ import { ApptStatus, ApptType, EventStatus } from '../appt.constants';
 import { IsEnum, IsMongoId, IsOptional } from 'class-validator';
 import { AddressDTO } from '../../address';
 import { FileDTO } from '../../files/dto';
-import { AuthorizationServiceDTO } from '../../client/authorizationservice/dto';
+import { AuthServiceDTO } from '../../client/auth-service/dto';
 
 // authorizedService: IAuthorizationService | string;
 
@@ -17,7 +17,7 @@ export class ApptDto {
   @ApiProperty()
   funder: string;
   @ApiProperty()
-  authorizedService: AuthorizationServiceDTO | string;
+  authorizedService: AuthServiceDTO | string;
   @ApiProperty()
   staff: string;
   @ApiProperty()

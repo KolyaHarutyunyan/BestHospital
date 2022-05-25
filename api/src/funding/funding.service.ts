@@ -1,37 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
-import { AddressService } from '../address/address.service';
-import { HistoryService, serviceLog } from '../history';
-import { ServiceService } from '../service';
+import { serviceLog } from '../history/history.constants';
 import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
-import { MongooseUtil } from '../util';
-import { CreateServiceDTO, FundingDTO, ServiceDTO, UpdateServiceDto } from './dto';
+import { FundingDTO } from './dto';
 import { CreateFundingDTO } from './dto/create.dto';
 import { UpdateFundingDto } from './dto/edit.dto';
-import { FundingModel } from './funding.model';
-import { FundingSanitizer } from './interceptor';
-import { IFunder, IService } from './interface';
-import { ModifyDTO, UpdateModifiersDto } from './modifier/dto';
-import { IModify } from './modifier/interface';
-import { ServiceModel } from './service.model';
+import { BaseService } from './services/base.service';
 
 @Injectable()
-export class FundingService {
-  constructor(
-    private readonly addressService: AddressService,
-    private readonly service: ServiceService,
-    private readonly historyService: HistoryService,
-    private readonly sanitizer: FundingSanitizer,
-  ) {
-    this.model = FundingModel;
-    this.serviceModel = ServiceModel;
-    this.mongooseUtil = new MongooseUtil();
-  }
-  private model: Model<IFunder>;
-  private serviceModel: Model<IService>;
-
-  private mongooseUtil: MongooseUtil;
-
+export class FundingService extends BaseService {
   /** Create a new funder */
   async create(dto: CreateFundingDTO, userId: string): Promise<FundingDTO> {
     try {
@@ -58,39 +34,6 @@ export class FundingService {
     }
   }
 
-  /** Create a new service */
-  async createService(dto: CreateServiceDTO, _id: string, userId: string): Promise<ServiceDTO> {
-    try {
-      const funder = await this.model.findById({ _id });
-      this.checkFunder(funder);
-      const globService = await this.service.findOne(dto.serviceId);
-      const service = new this.serviceModel({
-        funderId: _id,
-        serviceId: globService.id,
-        name: dto.name,
-        rate: dto.rate,
-        cptCode: dto.cptCode,
-        size: dto.size,
-        min: dto.min,
-        max: dto.max,
-      });
-      await Promise.all([
-        service.save(),
-        this.historyService.create({
-          resource: _id,
-          onModel: 'Funder',
-          title: serviceLog.createServiceTitle,
-          user: userId,
-        })
-      ])
-      // return this.sanitizer.sanitize(service)
-      return service;
-    } catch (e) {
-      this.mongooseUtil.checkDuplicateKey(e, 'Service already exists');
-      throw e;
-    }
-  }
-
   /** returns all funders */
   async findAll(skip: number, limit: number, status: string): Promise<any> {
     if (!status) {
@@ -104,44 +47,6 @@ export class FundingService {
     return { funders: sanFun, count };
   }
 
-  /** returns all services */
-  async findAllServices(_id: string): Promise<ServiceDTO[]> {
-    try {
-      const funder = await this.model.findById({ _id });
-      this.checkFunder(funder);
-      const services = await this.serviceModel.find({ funderId: _id });
-      this.checkFundingService(services[0]);
-      // return this.sanitizer.sanitizeMany(services);
-      return services;
-    } catch (e) {
-      throw e;
-    }
-  }
-  /** returns service by id */
-  async findService(_id: string): Promise<any> {
-    try {
-      const services = await this.serviceModel.findById({ _id });
-      this.checkFundingService(services);
-      return services;
-    } catch (e) {
-      throw e;
-    }
-  }
-  /** returns all services for client*/
-  async findAllServiceForClient(_id: string, fundingServiceId: string): Promise<ServiceDTO[]> {
-    try {
-      const funder = await this.model.findOne({ _id });
-      this.checkFunder(funder);
-      const services = await this.serviceModel
-        .find({ funderId: _id, _id: fundingServiceId })
-        .populate('modifiers');
-      // return this.sanitizer.sanitizeMany(services);
-      return services;
-    } catch (e) {
-      throw e;
-    }
-  }
-
   /** Get Funder By Id */
   async findById(_id: string): Promise<FundingDTO> {
     const funder = await this.model.findById({ _id });
@@ -149,13 +54,6 @@ export class FundingService {
     return this.sanitizer.sanitize(funder);
   }
 
-  /** Get Funder Service By Id */
-  async findOneService(_id: string): Promise<any> {
-    const fundingService = await this.serviceModel.findOne({ _id }).populate('modifiers');
-    this.checkFundingService(fundingService);
-    return fundingService;
-    // return this.sanitizer.sanitize(funder);
-  }
   /** Get Funder By Name */
   async findByName(name: string): Promise<FundingDTO> {
     const funder = await this.model.findOne({ name });
@@ -189,41 +87,6 @@ export class FundingService {
     }
   }
 
-  /** Update the service */
-  async updateService(
-    serviceId: string,
-    dto: UpdateServiceDto,
-    userId: string,
-  ): Promise<ServiceDTO> {
-    try {
-      const service = await this.serviceModel.findOne({ _id: serviceId });
-      this.checkFundingService(service);
-      const funder = await this.model.findOne({ _id: service.funderId });
-      this.checkFunder(funder);
-      if (dto.name) service.name = dto.name;
-      if (dto.rate) service.rate = dto.rate;
-      if (dto.cptCode) service.cptCode = dto.cptCode;
-      if (dto.size) service.size = dto.size;
-      if (dto.min) service.min = dto.min;
-      if (dto.max) service.max = dto.max;
-      if (dto.globServiceId) {
-        service.serviceId = dto.globServiceId;
-      }
-      await service.save();
-      await this.historyService.create({
-        resource: funder._id,
-        onModel: 'Funder',
-        title: serviceLog.updateServiceTitle,
-        user: userId,
-      });
-      return service;
-      // return this.sanitizer.sanitize(service);
-    } catch (e) {
-      this.mongooseUtil.checkDuplicateKey(e, 'Service already exists');
-      throw e;
-    }
-  }
-
   /** Delete the funder */
   async remove(_id: string): Promise<FundingDTO> {
     const funder = await this.model.findByIdAndDelete({ _id });
@@ -253,70 +116,4 @@ export class FundingService {
     await funder.save();
     return this.sanitizer.sanitize(funder);
   };
-
-  /** save modifiers */
-  async saveModifiers(_id: string, serviceId: string, modifiers: ModifyDTO[]): Promise<ServiceDTO> {
-    const [funder, service] = await Promise.all([
-      this.model.findById({ _id }),
-      this.serviceModel.findOne({ _id: serviceId })
-    ]);
-    this.checkFunder(funder)
-    this.checkFundingService(service);
-    modifiers.map((modifier) => {
-      service.modifiers.push(modifier);
-    });
-    return await service.save();
-  }
-
-  /** update modifiers */
-  async updateModifiers(_id: string, serviceId: string, dto: UpdateModifiersDto): Promise<ServiceDTO> {
-    const [funder, service] = await Promise.all([
-      this.model.findById({ _id }),
-      this.serviceModel.findOne({ _id: serviceId })
-    ]);
-    this.checkFunder(funder)
-    this.checkFundingService(service);
-    const dbModifier = service.modifiers as IModify[];
-    for (let i = 0; i < dbModifier.length; i++) {
-      for (let j = 0; j < dto.modifiers.length; j++) {
-        if (dto.modifiers[j]._id == dbModifier[i]._id) {
-          dbModifier[i].credentialId = dto.modifiers[j].credentialId;
-          dbModifier[i].chargeRate = dto.modifiers[j].chargeRate;
-          dbModifier[i].name = dto.modifiers[j].name;
-          dbModifier[i].type = dto.modifiers[j].type;
-        }
-      }
-    }
-    return await service.save();
-  }
-
-  /** delete modifiers */
-  async deleteModifiers(_id: string, ids: string[]): Promise<ServiceDTO> {
-    const fundingService = await this.serviceModel.findById({ _id });
-    this.checkFundingService(fundingService);
-    fundingService.modifiers.map((dbModifier) => {
-      ids.map((dtoModifier) => {
-        if (dtoModifier == dbModifier._id) {
-          dbModifier.status = false;
-        }
-      });
-    });
-    return await fundingService.save();
-    // return await fundingService.save();
-  }
-
-  /** Private methods */
-  /** if the funder is not found, throws an exception */
-  private checkFunder(funder: IFunder) {
-    if (!funder) {
-      throw new HttpException('Funder with this id was not found', HttpStatus.NOT_FOUND);
-    }
-  }
-
-  /** if the fundingService is not found, throws an exception */
-  private checkFundingService(funder: IService) {
-    if (!funder) {
-      throw new HttpException('Funding Service with this id was not found', HttpStatus.NOT_FOUND);
-    }
-  }
 }

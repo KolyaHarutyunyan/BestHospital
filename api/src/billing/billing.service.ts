@@ -10,8 +10,8 @@ import { TxnService } from '../txn/txn.service';
 import { TxnType } from '../txn/txn.constants';
 import { InvoiceStatus, BillingStatus, ClaimStatus } from './billing.constants';
 import { IAppt } from '../appt/interface';
-import { IService } from '../funding/interface/service.interface';
-import { IAuthorizationService } from '../client/authorizationservice/interface';
+import { IService } from '../funding/interface';
+import { IAuthService } from '../client/auth-service/interface';
 @Injectable()
 export class BillingService {
   constructor(
@@ -26,7 +26,7 @@ export class BillingService {
   /** create the billing */
   async create(dto: IAppt): Promise<BillingDto> {
     try {
-      const authorizedService = (<any>dto.authorizedService) as IAuthorizationService;
+      const authorizedService = (<any>dto.authorizedService) as IAuthService;
       const service = authorizedService.serviceId as IService;
       const timeDiff = new Date(dto.endTime).valueOf() - new Date(dto.startTime).valueOf();
       const totalUnits = timeDiff / 1000 / 60 / service.size;

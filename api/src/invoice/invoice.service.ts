@@ -8,7 +8,7 @@ import { IInvoice } from './interface';
 import { InvoiceStatus } from './invoice.constants';
 import { InvoiceModel } from './invoice.model';
 import { IBilling } from '../billing/interface';
-import { IAuthorizationService } from '../client/authorizationservice/interface';
+import { IAuthService } from '../client/auth-service/interface';
 import { IService } from '../funding/interface';
 
 @Injectable()
@@ -143,16 +143,11 @@ export class InvoiceService {
     /** create receivables and invoices */
     for (let i = 0; i < result.length; i++) {
       for (let j = 0; j < result[i].length; ++j) {
-        const authorizedService = (<any>result[i][0].authService) as IAuthorizationService;
+        const authorizedService = (<any>result[i][0].authService) as IAuthService;
         const service = (<any>authorizedService.serviceId) as IService;
         billIds.push(result[i][j]._id);
         subBills.push(result[i][j]);
-        this.addReceivable(
-          receivable,
-          result[i][j],
-          result[i][0].placeService,
-          service.cptCode,
-        );
+        this.addReceivable(receivable, result[i][j], result[i][0].placeService, service.cptCode);
         receivableCreatedAt.push(new Date());
 
         if (j !== 0 && j === 5) {

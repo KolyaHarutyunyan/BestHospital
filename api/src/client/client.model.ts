@@ -2,8 +2,8 @@ import { model, Schema, Types } from 'mongoose';
 import { ClientStatus } from './client.constants';
 import { IClient } from './interface';
 import { ClientContactModel } from './contact/contact.model';
-import { ClientAuthorizationModel } from './authorization/authorization.model';
-import { ClientAuthorizationServiceModel } from './authorizationservice/authorizationService.model';
+import { ClientAuthorizationModel } from './auth/auth.model';
+import { ClientAuthServiceModel } from './auth-service/auth-service.model';
 import { ClientEnrollmentModel } from './enrollment/enrollment.model';
 
 export const TerminationSchema = {
@@ -32,7 +32,7 @@ const ClientSchema = new Schema({
 ClientSchema.pre('remove', async function (next) {
   const clientAuthor = await ClientAuthorizationModel.find({ clientId: this._id });
   for (const authorization of clientAuthor) {
-    await ClientAuthorizationServiceModel.deleteMany({ authorizationId: authorization._id });
+    await ClientAuthServiceModel.deleteMany({ authorizationId: authorization._id });
   }
   await Promise.all([
     ClientContactModel.deleteMany({ clientId: this._id }),

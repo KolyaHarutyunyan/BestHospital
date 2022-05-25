@@ -1,7 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsEnum, IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsBoolean,
+  IsEmail,
+  IsEnum,
+  IsMongoId,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { UserDTO } from '../../authN/dto/user.dto';
-import { FundingStatus } from '../funding.constants';
+import { FundingStatus, TypeStatus } from '../funding.constants';
 
 export class CreateFundingDTO {
   @ApiProperty()
@@ -33,4 +45,65 @@ export class CreateFundingDTO {
   @IsEnum(FundingStatus)
   status: number;
   user: UserDTO;
+}
+export class CreateServiceDTO {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsMongoId()
+  serviceId: string;
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  rate: number;
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  cptCode: string;
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  size: number;
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  min: number;
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  max: number;
+  user: UserDTO;
+}
+export class CreateModifierDto {
+  @ApiProperty()
+  @IsOptional()
+  @IsMongoId()
+  credentialId: string;
+  @ApiProperty()
+  @IsNumber()
+  chargeRate: number;
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  name: string;
+  @ApiProperty({ enum: TypeStatus })
+  @IsEnum(TypeStatus)
+  type: number;
+  @ApiProperty()
+  @IsBoolean()
+  @IsOptional()
+  status: boolean;
+}
+export class CreateModifiersDTO {
+  @ApiProperty({ type: [CreateModifierDto] })
+  @ValidateNested({ each: true })
+  @Type(() => CreateModifierDto)
+  modifiers: CreateModifierDto[];
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsMongoId()
+  serviceId: string;
 }
