@@ -9,39 +9,54 @@ export const AuthorizationFile = ({ fileIsForPayment = false, handleImagesPass }
    const [images, setImages] = useState([]);
    const [error, setError] = useState("");
 
+   const uniqueImages = [...new Map(images.map((image) => [image.name, image])).values()];
+
    useEffect(() => {
-      handleImagesPass && handleImagesPass(images);
+      handleImagesPass && handleImagesPass(uniqueImages);
    }, [images]);
 
    function handleFileTypeChange(e) {
       setFileType(e.target.value);
+      !!error && setError("");
    }
 
-   function handleFileChange(e) {
-      for (let item of e.target.files) {
-         if (item && item.size > 2097152) {
-            setError(true);
-         } else {
-            setError("");
-            setImages([...images, new File([item], item.name)]);
+   function handleFileChange(imageList) {
+      !!error && setError("");
+      !!fileType && setFileType("");
+
+      for (let item of imageList) {
+         const _fileSizeIsLarge = item?.size > 2097152;
+         const _fileTypeIsAllowed =
+            item?.type === "application/pdf" ||
+            item?.type === "image/png" ||
+            item?.type === "text/csv" ||
+            item?.type === "image/jpeg";
+
+         if (_fileSizeIsLarge) {
+            setError("Please, choose a file with smaller size!");
+            return;
          }
+         if (!_fileTypeIsAllowed) {
+            setError("Only PDF , PNG , CSV & JPEG formats are supported");
+            return;
+         }
+         setImages([...images, item]);
       }
-      setFileType("");
    }
 
    function handleFileDelete(fileType) {
-      setImages(images.filter((image) => image.name !== fileType));
+      setImages(uniqueImages.filter((image) => image.name !== fileType));
    }
 
    if (fileIsForPayment) {
       return (
          <ImagesFileUploader
-            uploadedFiles={images}
+            uploadedFiles={uniqueImages}
             handleChange={handleFileTypeChange}
             handleChangeFile={handleFileChange}
             deleteItem={handleFileDelete}
             fileName={fileType}
-            error={true}
+            error={error}
          />
       );
    }
@@ -59,12 +74,12 @@ export const AuthorizationFile = ({ fileIsForPayment = false, handleImagesPass }
             </p>
          </div>
          <ImagesFileUploader
-            uploadedFiles={images}
+            uploadedFiles={uniqueImages}
             handleChange={handleFileTypeChange}
             handleChangeFile={handleFileChange}
             deleteItem={handleFileDelete}
             fileName={fileType}
-            error={true}
+            error={error}
          />
       </>
    );

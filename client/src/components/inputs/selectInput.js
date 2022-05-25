@@ -12,7 +12,6 @@ export const SelectInput = ({
    handleSelect,
    style,
    value = "",
-   extraInfo = "",
    list = [],
    handleChangeCountryCode,
    typeError,
