@@ -23,7 +23,6 @@ export class FundingSanitizer implements ISanitize {
     };
     return funderDTO;
   }
-
   sanitizeMany(funders: IFunder[]): FundingDTO[] {
     const funderDTOs: FundingDTO[] = [];
     for (let i = 0; i < funders.length; i++) {

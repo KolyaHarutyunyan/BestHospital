@@ -4,6 +4,7 @@ import { CreateTerminationDto } from '../termination/dto/create-termination.dto'
 import { FundingDTO } from './dto';
 import { CreateFundingDTO } from './dto/create.dto';
 import { UpdateFundingDto } from './dto/edit.dto';
+import { IFunderCount } from './interface';
 import { BaseService } from './services/base.service';
 
 @Injectable()
@@ -20,14 +21,16 @@ export class FundingService extends BaseService {
         contact: dto.contact,
         address: await this.addressService.getAddress(dto.address),
       });
-      await funder.save();
-      await this.historyService.create({
-        resource: funder._id,
-        onModel: 'Funder',
-        title: serviceLog.createFundingSource,
-        user: userId,
-      });
-      return this.sanitizer.sanitize(funder);
+      const [funderSave] = await Promise.all([
+        funder.save(),
+        this.historyService.create({
+          resource: funder._id,
+          onModel: 'Funder',
+          title: serviceLog.createFundingSource,
+          user: userId,
+        }),
+      ]);
+      return this.sanitizer.sanitize(funderSave);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Funder already exists');
       throw e;
@@ -39,11 +42,11 @@ export class FundingService extends BaseService {
     if (!status) {
       status = 'ACTIVE';
     }
-    const [funders, count] = await Promise.all([
+    const [funder, count] = await Promise.all([
       this.model.find({ status }).sort({ _id: -1 }).skip(skip).limit(limit),
       this.model.countDocuments({ status }),
     ]);
-    const sanFun = this.sanitizer.sanitizeMany(funders);
+    const sanFun = this.sanitizer.sanitizeMany(funder);
     return { funders: sanFun, count };
   }
 

@@ -45,7 +45,7 @@ export class ModifierService extends BaseService {
     return await service.save();
   }
 
-  //   /** delete modifiers */
+  /** delete modifiers */
   async deleteModifiers(_id: string, serviceId: string, ids: string[]): Promise<ServiceDTO> {
     const [funder, service] = await Promise.all([
       this.model.findById({ _id }),
@@ -61,6 +61,5 @@ export class ModifierService extends BaseService {
       });
     });
     return await service.save();
-    // return await fundingService.save();
   }
 }

@@ -4,6 +4,7 @@ import { CreateTerminationDto } from 'src/termination/dto/create-termination.dto
 import { ParseObjectIdPipe } from '../util';
 import { CreateFundingDTO, FundingDTO, FundingQueryDTO, UpdateFundingDto } from './dto';
 import { FundingService } from './funding.service';
+import { IFunderCount } from './interface';
 
 @Controller('funding')
 @ApiTags('Funding Endpoints')
@@ -43,7 +44,7 @@ export class FundingController {
     @Query('skip') skip: number,
     @Query('limit') limit: number,
     @Query('status') status: string,
-  ): Promise<FundingDTO[]> {
+  ): Promise<IFunderCount> {
     return await this.fundingService.findAll(skip, limit, status);
   }
 

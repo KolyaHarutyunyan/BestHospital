@@ -4,10 +4,7 @@ import { ITermination } from '../../termination/interface';
 import { AddressDTO } from '../../address';
 import { FundingStatus, TypeStatus } from '../funding.constants';
 import { CreateModifierDto } from '.';
-
 export class FundingDTO {
-  @ApiProperty()
-  adminId?: string;
   @ApiProperty()
   id: string;
   @ApiProperty()

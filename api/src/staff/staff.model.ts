@@ -28,12 +28,12 @@ const StaffSchema = new Schema({
   birthday: { type: Date },
   residency: { type: String },
   ssn: { type: Number },
-  status: { type: String, enum: StaffStatus, default: 'ACTIVE' },
+  status: { type: String, enum: StaffStatus, default: StaffStatus.ACTIVE },
+  clinical: { type: Boolean },
   createdDate: { type: Date, default: Date.now },
   license: LicenseSchema,
   termination: TerminationSchema,
   address: addressSchema,
-  clinical: { type: Boolean },
 });
 
 export const StaffModel = model<IStaff>('Staff', StaffSchema);

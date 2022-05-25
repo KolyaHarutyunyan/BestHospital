@@ -51,15 +51,14 @@ export class StaffService {
         await Promise.all([
           user.save(),
           this.authnService.create(user._id, user.email, UserType.ADMIN),
+          this.historyService.create({
+            resource: user._id,
+            onModel: HistoryStatus.STAFF,
+            title: serviceLog.createStaff,
+            user: user._id,
+          }),
         ])
       )[0];
-
-      await this.historyService.create({
-        resource: user._id,
-        onModel: HistoryStatus.STAFF,
-        title: serviceLog.createStaff,
-        user: user._id,
-      });
       return this.sanitizer.sanitize(user);
     } catch (e) {
       console.log(e);
@@ -79,7 +78,6 @@ export class StaffService {
       }
       staff.service.push(service.id);
       staff = await (await staff.save()).populate('service').execPopulate();
-
       return this.sanitizer.sanitize(staff);
     } catch (e) {
       console.log(e);
@@ -195,7 +193,11 @@ export class StaffService {
   };
 
   /** Set Status of a staff Inactive*/
-  setStatus = async (_id: string, status: any, dto: CreateTerminationDto): Promise<StaffDTO> => {
+  setStatus = async (
+    _id: string,
+    status: StaffStatus,
+    dto: CreateTerminationDto,
+  ): Promise<StaffDTO> => {
     const staff = await this.model.findById({ _id });
     this.checkStaff(staff);
     if (status != StaffStatus.ACTIVE && !dto.date) {
@@ -209,7 +211,6 @@ export class StaffService {
       staff.termination.reason = dto.reason;
     }
     staff.status = status;
-
     await staff.save();
     return this.sanitizer.sanitize(staff);
   };

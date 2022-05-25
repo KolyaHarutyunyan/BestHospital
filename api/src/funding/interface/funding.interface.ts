@@ -3,8 +3,7 @@ import { ITermination } from '../../termination/interface';
 import { IAddress } from '../../address';
 import { CreateModifierDto } from '../dto';
 
-export interface IFunder extends Document {
-  adminId?: string;
+export interface IFunder {
   id: string;
   name: string;
   email: string;
@@ -16,7 +15,10 @@ export interface IFunder extends Document {
   status: string;
   termination: ITermination;
 }
-
+export interface IFunderCount {
+  funders: IFunder[];
+  count: number;
+}
 export interface IService extends Document {
   id: string;
   funderId: string;

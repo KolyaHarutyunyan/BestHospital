@@ -91,22 +91,12 @@ export class StaffController {
   async setStatus(
     @Param('id', ParseObjectIdPipe) staffId: string,
     @Body() dto: CreateTerminationDto,
-    @Query() status: StaffQueryDTO,
+    @Query('status') status: StaffStatus,
   ): Promise<StaffDTO> {
     console.log(status);
-    const staff = await this.staffService.setStatus(staffId, status.status, dto);
+    const staff = await this.staffService.setStatus(staffId, status, dto);
     return staff;
   }
-
-  /** Activated a staff */
-  // @Patch(':id/activate')
-  // @Public()
-  // @ApiOkResponse({ type: StaffDTO })
-  // async activate(@Param('id', ParseObjectIdPipe) staffId: string): Promise<StaffDTO> {
-  //   const staff = await this.staffService.setStatusActive(staffId, 1);
-  //   return staff;
-  // }
-
   /** IsClinical a staff */
   @Patch(':id/:isClinical')
   @ApiHeader({ name: ACCESS_TOKEN })

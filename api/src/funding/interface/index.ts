@@ -1,1 +1,1 @@
-export { IFunder, IService, IModifier } from './funding.interface';
+export { IFunder, IFunderCount, IService, IModifier } from './funding.interface';
