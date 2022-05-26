@@ -12,40 +12,15 @@ import { TableCell } from "@material-ui/core";
 import { fundingSourceSingleStyles } from "./styles";
 import { FundingSourceServiceAdd } from "./modals";
 import { fundingSourceActions } from "@eachbase/store";
+import { getHeaderTitlesForService } from "./constants";
 
-const headerTitles = [
-   {
-      title: "Service",
-      sortable: true,
-   },
-   {
-      title: "CPT Code",
-      sortable: false,
-   },
-   {
-      title: "Unit Size",
-      sortable: false,
-   },
-   {
-      title: "Min Unit",
-      sortable: false,
-   },
-   {
-      title: "Max Unit",
-      sortable: false,
-   },
-   {
-      title: "Action",
-      sortable: false,
-   },
-];
 export const FundingSourceSingleServices = ({ data }) => {
    const [toggleModal, setToggleModal] = useState(false);
    const [index, setIndex] = useState(null);
    const [delEdit, setDelEdit] = useState(null);
    const [serviceIndex, setServiceIndex] = useState(0);
    const [accept, setAccept] = useState(false);
-   const [modif, setModif] = useState("");
+   const [serviceModifiers, setServiceModifiers] = useState("");
 
    const classes = fundingSourceSingleStyles();
    const dispatch = useDispatch();
@@ -53,24 +28,24 @@ export const FundingSourceSingleServices = ({ data }) => {
 
    const { open } = useContext(DrawerContext);
 
+   const headerTitles = getHeaderTitlesForService();
+
    let onEdit = (index) => {
       setIndex(index);
       setDelEdit("edit");
       setAccept(true);
       setToggleModal(!toggleModal);
-      setModif(data[index]);
+      setServiceModifiers(data[index]);
    };
 
    let onRow = (item, index) => {
       setServiceIndex(index);
-      setModif(item.modifiers);
+      setServiceModifiers(item.modifiers);
    };
 
    let deleteService = () => {
       dispatch(
-         fundingSourceActions.deleteFoundingSourceServiceById(
-            data[serviceIndex]._id
-         )
+         fundingSourceActions.deleteFoundingSourceServiceById(data[serviceIndex]._id)
       );
    };
 
@@ -117,16 +92,14 @@ export const FundingSourceSingleServices = ({ data }) => {
                   />
                ) : (
                   <FundingSourceServiceAdd
-                     modifiersID={modif}
+                     modifiers={serviceModifiers}
                      info={data ? data[index] : {}}
                      handleClose={() => setToggleModal(!toggleModal)}
                   />
                )
             }
          />
-         <div
-            className={`${classes.fundindServiceItems} ${open ? "narrow" : ""}`}
-         >
+         <div className={`${classes.fundindServiceItems} ${open ? "narrow" : ""}`}>
             <Notes
                restHeight={"360px"}
                data={data}
@@ -139,6 +112,7 @@ export const FundingSourceSingleServices = ({ data }) => {
             globalCredentials={globalCredentials}
             data={data ? data[serviceIndex].modifiers : ""}
             title={data && data[serviceIndex]?.name}
+            currentService={data ? data[serviceIndex] : {}}
          />
       </div>
    );

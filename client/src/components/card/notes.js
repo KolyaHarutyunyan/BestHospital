@@ -89,7 +89,7 @@ export const Notes = ({
                         headerTitles.map((headerItem, index) => {
                            const theadTitle = getTableHeader(
                               headerItem.title,
-                              getTextDependsOnWidth(width, 1591, headerItem.title, 3),
+                              getTextDependsOnWidth(width, 1591, headerItem.title, 10),
                               "",
                               headerItem.sortable
                            );

@@ -19,6 +19,9 @@ import {
    GET_FUNDING_SOURCE_SERVICE_MODIFIERS_CLIENT,
    SET_STATUS,
    GET_FUNDING_SOURCE_SERVICE_BY_ID_NO_LOAD,
+   CREATE_FUNDING_MODIFIER,
+   EDIT_FUNDING_MODIFIER,
+   DELETE_FUNDING_MODIFIER,
 } from "./fundingSource.types";
 
 export const createFundingSource = (body) => {
@@ -63,26 +66,17 @@ export const getFoundingSourceServiceByIdNoLoad = (id) => {
    };
 };
 
-export const createFoundingSourceServiceById = (id, body, modifier) => {
+export const createFoundingSourceServiceById = (id, body) => {
    return {
       type: CREATE_FUNDING_SOURCE_SERVICE_BY_ID,
-      payload: {
-         id,
-         body,
-         modifier,
-      },
+      payload: { id, body },
    };
 };
 
-export const editFoundingSourceServiceById = (id, body, modifier, fsId) => {
+export const editFoundingSourceServiceById = (id, body) => {
    return {
       type: EDIT_FUNDING_SOURCE_SERVICE,
-      payload: {
-         id,
-         body,
-         modifier,
-         fsId,
-      },
+      payload: { id, body },
    };
 };
 
@@ -143,7 +137,7 @@ export const getFundingSourceServ = () => {
 export const getFundingSourceServById = (id) => {
    return {
       type: GET_FUNDING_SOURCE_SERV_BY_ID,
-      payload: id,
+      payload: { id },
    };
 };
 
@@ -172,5 +166,26 @@ export const setStatus = (id, path, status, body, type) => {
    return {
       type: SET_STATUS,
       payload: { id, path, status, body, type },
+   };
+};
+
+export const createFundingModifier = (fundingId, body) => {
+   return {
+      type: CREATE_FUNDING_MODIFIER,
+      payload: { fundingId, body },
+   };
+};
+
+export const editFundingModifier = (fundingId, serviceId, body) => {
+   return {
+      type: EDIT_FUNDING_MODIFIER,
+      payload: { fundingId, serviceId, body },
+   };
+};
+
+export const deleteFundingModifier = (fundingId, serviceId) => {
+   return {
+      type: DELETE_FUNDING_MODIFIER,
+      payload: { fundingId, serviceId },
    };
 };

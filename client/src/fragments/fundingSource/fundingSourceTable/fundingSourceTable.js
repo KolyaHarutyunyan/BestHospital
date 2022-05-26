@@ -11,8 +11,8 @@ export const FundingSourceTable = ({ status, handleGetPage }) => {
    const [page, setPage] = useState(1);
    const dispatch = useDispatch();
 
-   const { fundingSources } = useSelector((state) => ({
-      fundingSources: state.fundingSource.fundingSources,
+   const { fundingSourceList } = useSelector((state) => ({
+      fundingSourceList: state.fundingSource.fundingSourceList,
    }));
 
    const loader = FindLoad("GET_FUNDING_SOURCE");
@@ -35,12 +35,12 @@ export const FundingSourceTable = ({ status, handleGetPage }) => {
    return (
       <div className={globalStyle.tableWrapper}>
          <Paper className={globalStyle.tableBack}>
-            {!!fundingSources?.funders?.length ? (
+            {!!fundingSourceList?.funders?.length ? (
                <>
                   <TableContainer
                      style={{
                         height: `calc(100vh - ${
-                           fundingSources?.funders?.length ? "250px" : "150px"
+                           fundingSourceList?.funders?.length ? "250px" : "150px"
                         } )`,
                      }}
                      className={globalStyle.tableContainer}
@@ -57,8 +57,8 @@ export const FundingSourceTable = ({ status, handleGetPage }) => {
                            <Loader />
                         ) : (
                            <TableBody>
-                              {fundingSources?.funders &&
-                                 fundingSources.funders.map((item, i) => (
+                              {fundingSourceList?.funders &&
+                                 fundingSourceList.funders.map((item, i) => (
                                     <FundingSourceTableBody data={item} key={i} />
                                  ))}
                            </TableBody>
@@ -66,15 +66,15 @@ export const FundingSourceTable = ({ status, handleGetPage }) => {
                      </Table>
                   </TableContainer>
                   <PaginationItem
-                     listLength={fundingSources?.funders?.length}
+                     listLength={fundingSourceList?.funders?.length}
                      page={page}
                      handleReturn={(number) => changePage(number)}
-                     count={fundingSources?.count}
-                     entries={fundingSources?.funders?.length}
+                     count={fundingSourceList?.count}
+                     entries={fundingSourceList?.funders?.length}
                   />
                </>
             ) : (
-               <NoItemText text={"No Funding source yet"} />
+               <NoItemText text={"No Funding Source Yet"} />
             )}
          </Paper>
       </div>

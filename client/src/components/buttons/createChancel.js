@@ -12,6 +12,7 @@ export const CreateChancel = ({
    disabled,
    loader,
    butnClassName,
+   createButnMargin,
 }) => {
    return (
       <div
@@ -29,7 +30,7 @@ export const CreateChancel = ({
                textTransform: "capitalize",
                width: buttonWidth,
                height: "48px",
-               backgroundColor: Colors.ThemeGray,
+               backgroundColor: Colors.BackgroundWater,
                borderRadius: "8px",
                fontSize: "16px",
                fontWeight: "600",
@@ -45,22 +46,17 @@ export const CreateChancel = ({
                textTransform: "capitalize",
                width: buttonWidth,
                height: "48px",
-               backgroundColor: disabled
-                  ? "rgba(52,122,240,.5)"
-                  : Colors.BackgroundBlue,
+               backgroundColor: disabled ? "rgba(52,122,240,.5)" : Colors.BackgroundBlue,
                borderRadius: "8px",
                fontSize: "16px",
                fontWeight: "600",
                color: Colors.TextWhite,
+               marginLeft: createButnMargin || "0px",
             }}
             onClick={onCreate}
             disabled={disabled}
          >
-            {loader ? (
-               <MinLoader margin={"0"} color={Colors.TextWhite} />
-            ) : (
-               create
-            )}
+            {loader ? <MinLoader margin={"0"} color={Colors.TextWhite} /> : create}
          </Button>
       </div>
    );

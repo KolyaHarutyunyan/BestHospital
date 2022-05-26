@@ -9,18 +9,14 @@ export const errMessageStyle = makeStyles(() => ({
       margin: "3px 0 5px",
    },
 
-   errMessageLeftPosition: {
-      display: "flex",
-      width: "100%",
-      padding: "4px 0 4px 16px",
-      minHeight: "20px",
-   },
-
    errMessageStyleText: {
       fontSize: "12px",
       fontWeight: "600",
       color: "#F07379",
-      // position:'absolute'
+      display: "block",
+      width: "100%",
+      padding: "4px 16px",
+      minHeight: "20px",
    },
 
    DoneMessage: {

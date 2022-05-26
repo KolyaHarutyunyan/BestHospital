@@ -11,6 +11,7 @@ export {
    EditSaveButtons,
    SendButton,
    DownloadLink,
+   AddButtonLight,
 } from "./buttons";
 export { Title } from "./titles";
 export { ErrMessage, SlicedText, NoYet } from "./messages";

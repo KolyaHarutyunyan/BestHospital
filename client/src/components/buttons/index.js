@@ -10,3 +10,4 @@ export { EditButton } from "./editButton";
 export { EditSaveButtons } from "./editSaveButtons";
 export { SendButton } from "./sendButton";
 export { DownloadLink } from "./downloadLink";
+export { AddButtonLight } from "./addButtonLight";
