@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { ModifyDTO } from '../../funding/dto';
-import { FundingService } from '../../funding/services/service';
+import { Service } from '../../funding/services/service';
 import { MongooseUtil } from '../../util';
 import { ClientAuthorizationModel } from '../auth/auth.model';
 import { IAuth } from '../auth/interface';
@@ -14,7 +14,7 @@ import { IAuthService } from './interface';
 export class AuthService {
   constructor(
     private readonly sanitizer: AuthServiceSanitizer,
-    private readonly fundingService: FundingService,
+    private readonly fundingService: Service,
   ) {
     this.model = ClientAuthServiceModel;
     this.authModel = ClientAuthorizationModel;

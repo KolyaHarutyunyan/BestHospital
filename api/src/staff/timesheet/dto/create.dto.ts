@@ -8,6 +8,7 @@ import {
   IsPositive,
   IsString,
 } from 'class-validator';
+import { TimesheetStatus } from '../timesheet.constants';
 
 export class CreateTimesheetDTO {
   @ApiProperty()
@@ -36,4 +37,6 @@ export class CreateTimesheetDTO {
   @IsOptional()
   endDate: Date;
   totalAmount?: number;
+  // @ApiProperty()
+  // status: TimesheetStatus;
 }

@@ -4,13 +4,13 @@ import { ServiceDTO } from '../dto';
 import { ACCESS_TOKEN } from '../../authN';
 import { ParseObjectIdPipe } from '../../util';
 import { CreateServiceDTO, UpdateServiceDto } from '../dto';
-import { FundingService } from '../services/service';
+import { Service } from '../services/service';
 
 @Controller('funding')
 @ApiHeader({ name: ACCESS_TOKEN })
 @ApiTags('Funding Service Endpoints')
-export class FundingServiceController {
-  constructor(private readonly fundingService: FundingService) {}
+export class ServiceController {
+  constructor(private readonly fundingService: Service) {}
   /** Create a new service */
   @Post(':id/service')
   @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
@@ -28,14 +28,12 @@ export class FundingServiceController {
   }
   /** Get all services */
   @Get(':id/service')
-  @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
   @ApiOkResponse({ type: [ServiceDTO] })
   async findAllServices(@Param('id', ParseObjectIdPipe) id: string): Promise<ServiceDTO[]> {
     return await this.fundingService.findAllServices(id);
   }
   /** Get service by Id */
   @Get('service/:serviceId')
-  @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
   @ApiOkResponse({ type: [ServiceDTO] })
   async findService(
     @Param('serviceId', ParseObjectIdPipe) serviceId: string,
@@ -44,7 +42,6 @@ export class FundingServiceController {
   }
   /** Edit the Service */
   @Patch('/service/:serviceId')
-  @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
   @ApiOkResponse({ type: ServiceDTO })
   async updateService(
     @Param('serviceId', ParseObjectIdPipe) serviceId: string,

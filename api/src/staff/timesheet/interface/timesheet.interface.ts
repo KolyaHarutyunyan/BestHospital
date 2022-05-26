@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+import { TimesheetStatus } from '../timesheet.constants';
 import { IPaytableItem } from './paytable.interface';
 
 export interface ITimeSheet extends Document {
@@ -14,4 +15,5 @@ export interface ITimeSheet extends Document {
   regularHours: number;
   regularPay: number;
   overtimes: IPaytableItem[];
+  status: TimesheetStatus;
 }

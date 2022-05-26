@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IPaytableItem } from '../interface/paytable.interface';
+import { TimesheetStatus } from '../timesheet.constants';
 
 export class TimeSheetDTO {
   @ApiProperty()
@@ -28,4 +29,6 @@ export class TimeSheetDTO {
   regularHours: number;
   @ApiProperty()
   regularPay: number;
+  @ApiProperty()
+  status: TimesheetStatus;
 }

@@ -4,7 +4,7 @@ import { CreateServiceDTO, UpdateServiceDto, ServiceDTO } from '../dto';
 import { BaseService } from './base.service';
 
 @Injectable()
-export class FundingService extends BaseService {
+export class Service extends BaseService {
   /** Create a new service */
   async createService(dto: CreateServiceDTO, _id: string, userId: string): Promise<ServiceDTO> {
     try {

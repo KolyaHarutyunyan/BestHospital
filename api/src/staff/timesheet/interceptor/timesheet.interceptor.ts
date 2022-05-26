@@ -20,6 +20,7 @@ export class TimeSheetSanitizer implements ISanitize {
       overtimes: timesheet.overtimes,
       regularHours: timesheet.regularHours,
       regularPay: timesheet.regularPay,
+      status: timesheet.status,
     };
     return timesheetDTO;
   }
