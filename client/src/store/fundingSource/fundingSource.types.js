@@ -73,3 +73,12 @@ export const EDIT_ACTIVE_OR_INACTIVE = "EDIT_ACTIVE_OR_INACTIVE";
 
 /** Edit State */
 export const SET_STATUS = "SET_STATUS";
+
+/**Create fundingModifier */
+export const CREATE_FUNDING_MODIFIER = "CREATE_FUNDING_MODIFIER";
+
+/**Edit fundingModifier */
+export const EDIT_FUNDING_MODIFIER = "EDIT_FUNDING_MODIFIER";
+
+/**Delete fundingModifier */
+export const DELETE_FUNDING_MODIFIER = "DELETE_FUNDING_MODIFIER";

@@ -33,7 +33,9 @@ export const createFoundingSourceStyle = makeStyles(() => ({
    },
    createFoundingSourceBodyBlock: {
       display: "flex",
-      "& > div:not(:first-of-type), & > div > button:not(:first-of-type)": { marginLeft: "40px" },
+      "& > div:not(:first-of-type), & > div > button:not(:first-of-type)": {
+         marginLeft: "40px",
+      },
    },
    createFoundingSourceBodyBox: {
       width: 400,
@@ -79,7 +81,8 @@ export const createFoundingSourceStyle = makeStyles(() => ({
    createFundingSourceHeaderBottomPosition: {
       position: "relative",
       width: 64,
-      background: Colors.BackgroundPrimary,
+      background: "inherit",
+      marginRight: "75px",
    },
 }));
 

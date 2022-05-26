@@ -54,7 +54,7 @@ export const fundingSourceReducer = (state = initialState, action) => {
       case CREATE_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS:
          return {
             ...state,
-            fundingSourceServices: [action.payload, ...state.fundingSourceServices],
+            fundingSourceServices: action.payload,
          };
 
       case GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS:

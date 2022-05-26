@@ -117,6 +117,7 @@ import success from "@eachbase/images/icons/success.svg";
 import successGreen from "@eachbase/images/icons/successGreen.svg";
 import editPmt from "@eachbase/images/icons/editPmt.svg";
 import forwardBlue from "@eachbase/images/icons/forwardBlue.svg";
+import addLightIcon from "@eachbase/images/icons/addLightIcon.svg";
 
 export const Images = {
    doctors: doctors,
@@ -236,4 +237,5 @@ export const Images = {
    successGreen,
    editPmt,
    forwardBlue,
+   addLightIcon,
 };

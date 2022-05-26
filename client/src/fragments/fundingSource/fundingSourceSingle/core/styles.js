@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { Colors } from "@eachbase/utils";
+import { Colors, Images } from "@eachbase/utils";
 
 export const fundingSourceSingleStyles = makeStyles(() => ({
    inputTextField: {
@@ -48,6 +48,8 @@ export const fundingSourceSingleStyles = makeStyles(() => ({
       maxWidth: "710px",
       width: "100%",
       "&.narrow": { maxWidth: "450px" },
+      height: "541px",
+      overflowY: "auto",
       padding: 24,
       borderRadius: 8,
       border: "1px solid #347AF080",
@@ -57,10 +59,6 @@ export const fundingSourceSingleStyles = makeStyles(() => ({
       fontSize: 24,
       color: Colors.TextPrimary,
       fontWeight: "bold",
-
-      width: 400,
-      height: 33,
-      overflow: "hidden",
       textOverflow: "ellipsis",
       whiteSpace: "nowrap",
    },
@@ -91,7 +89,7 @@ export const fundingSourceSingleStyles = makeStyles(() => ({
       marginTop: 50,
    },
    fundindServiceItems: {
-      marginTop: -32,
+      marginTop: -25,
       width: "100%",
       "@media(max-width: 1280px)": {
          maxWidth: "600px",
@@ -139,6 +137,21 @@ export const fundingSourceSingleStyles = makeStyles(() => ({
          color: Colors.TextLightGray,
          fontWeight: "bold",
          marginTop: "50px",
+      },
+   },
+   modifierTitleBoxStyle: {
+      width: "100%",
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+   },
+   modifierActionsStyle: {
+      display: "flex",
+      alignItems: "center",
+      "& > div": {
+         display: "flex",
+         alignItems: "center",
+         "&:last-of-type": { marginLeft: "16px" },
       },
    },
 }));
