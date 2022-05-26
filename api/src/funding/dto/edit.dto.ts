@@ -83,10 +83,6 @@ export class UpdateModifierDto {
   @IsMongoId()
   credentialId: string;
   @ApiProperty()
-  @IsNumber()
-  @IsNotEmpty()
-  chargeRate: number;
-  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   name: string;
