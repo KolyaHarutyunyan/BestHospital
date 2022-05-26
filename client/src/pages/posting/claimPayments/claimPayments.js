@@ -17,7 +17,7 @@ export const ClaimPayments = () => {
    const { pageIsChanging, handlePageChange } = useContext(PaginationContext);
 
    const claimPaymentsData = useSelector((state) => state.claimPayment.claimPayments);
-   const { funders } = useSelector((state) => state.fundingSource.fundingSourceList);
+   const { funders } = useSelector((state) => state.fundingSource.fundingSources);
 
    const { claimPmt: claimPayments, count } = claimPaymentsData || {};
    const mappedFunders = funders?.map((funder) => ({ id: funder.id, name: funder.name }));

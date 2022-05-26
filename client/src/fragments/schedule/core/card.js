@@ -30,7 +30,7 @@ export const Card = ({ openModal, info, style }) => {
                ).format("hh:mm A")}`}</p>
                <p>
                   <SlicedText
-                     size={10}
+                     size={15}
                      type={"name"}
                      data={
                         info && info.staff
@@ -41,7 +41,7 @@ export const Card = ({ openModal, info, style }) => {
                </p>
                <p>
                   <SlicedText
-                     size={10}
+                     size={15}
                      type={"name"}
                      data={
                         info && info.client.length

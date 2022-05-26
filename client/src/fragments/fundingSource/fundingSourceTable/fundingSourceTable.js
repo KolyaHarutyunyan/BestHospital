@@ -11,8 +11,8 @@ export const FundingSourceTable = ({ status, handleGetPage }) => {
    const [page, setPage] = useState(1);
    const dispatch = useDispatch();
 
-   const { fundingSourceList } = useSelector((state) => ({
-      fundingSourceList: state.fundingSource.fundingSourceList,
+   const { fundingSources } = useSelector((state) => ({
+      fundingSources: state.fundingSource.fundingSources,
    }));
 
    const loader = FindLoad("GET_FUNDING_SOURCE");
@@ -35,14 +35,12 @@ export const FundingSourceTable = ({ status, handleGetPage }) => {
    return (
       <div className={globalStyle.tableWrapper}>
          <Paper className={globalStyle.tableBack}>
-            {!!fundingSourceList?.funders?.length ? (
+            {!!fundingSources?.funders?.length ? (
                <>
                   <TableContainer
                      style={{
                         height: `calc(100vh - ${
-                           fundingSourceList?.funders?.length
-                              ? "250px"
-                              : "150px"
+                           fundingSources?.funders?.length ? "250px" : "150px"
                         } )`,
                      }}
                      className={globalStyle.tableContainer}
@@ -59,23 +57,20 @@ export const FundingSourceTable = ({ status, handleGetPage }) => {
                            <Loader />
                         ) : (
                            <TableBody>
-                              {fundingSourceList?.funders &&
-                                 fundingSourceList.funders.map((item, i) => (
-                                    <FundingSourceTableBody
-                                       data={item}
-                                       key={i}
-                                    />
+                              {fundingSources?.funders &&
+                                 fundingSources.funders.map((item, i) => (
+                                    <FundingSourceTableBody data={item} key={i} />
                                  ))}
                            </TableBody>
                         )}
                      </Table>
                   </TableContainer>
                   <PaginationItem
-                     listLength={fundingSourceList?.funders?.length}
+                     listLength={fundingSources?.funders?.length}
                      page={page}
                      handleReturn={(number) => changePage(number)}
-                     count={fundingSourceList?.count}
-                     entries={fundingSourceList?.funders?.length}
+                     count={fundingSources?.count}
+                     entries={fundingSources?.funders?.length}
                   />
                </>
             ) : (
