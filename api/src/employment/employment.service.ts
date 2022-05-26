@@ -197,19 +197,16 @@ export class EmploymentService {
       endDate: { $gt: new Date(startDate) },
     };
 
-    if(!endDate) {
+    if (!endDate) {
+      query.$or = [{ endDate: null }, { endDate: { $gt: startDate } }];
+    } else {
       query.$or = [
-        {endDate: null},
-        {endDate: {$gt: startDate}}
-      ]
-    }else{
-      query.$or = [
-        {endDate: null, starDate: {$lt: endDate} }, 
-        { 
+        { endDate: null, starDate: { $lt: endDate } },
+        {
           endDate: { $lt: endDate },
           startDate: { $gt: startDate },
-        }
-      ]
+        },
+      ];
     }
     const overlapping = await this.model.find(query);
     if (overlapping[0]) {

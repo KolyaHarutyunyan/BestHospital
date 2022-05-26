@@ -107,4 +107,13 @@ export class Service extends BaseService {
       throw e;
     }
   }
+  /** delete the service */
+  async deleteService(_id: string, serviceId: string): Promise<string> {
+    const [service] = await Promise.all([
+      this.serviceModel.findByIdAndDelete({ _id: serviceId }),
+      this.model.findById(_id),
+    ]);
+    this.checkFundingService(service);
+    return service._id;
+  }
 }

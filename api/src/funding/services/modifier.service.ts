@@ -36,7 +36,6 @@ export class ModifierService extends BaseService {
       for (let j = 0; j < dto.modifiers.length; j++) {
         if (dto.modifiers[j]._id == dbModifier[i]._id) {
           dbModifier[i].credentialId = dto.modifiers[j].credentialId;
-          dbModifier[i].chargeRate = dto.modifiers[j].chargeRate;
           dbModifier[i].name = dto.modifiers[j].name;
           dbModifier[i].type = dto.modifiers[j].type;
         }

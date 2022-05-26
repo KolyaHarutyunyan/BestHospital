@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ServiceDTO } from '../dto';
 import { ACCESS_TOKEN } from '../../authN';
@@ -53,5 +53,15 @@ export class ServiceController {
       updateServiceDto.user.id,
     );
     return service;
+  }
+  /** Delete the service */
+  @Delete(':id/service/:serviceId')
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: String })
+  async remove(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Param('serviceId', ParseObjectIdPipe) serviceId: string,
+  ): Promise<string> {
+    return await this.fundingService.deleteService(id, serviceId);
   }
 }
