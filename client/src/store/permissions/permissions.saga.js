@@ -8,26 +8,33 @@ import {
 } from "./permissions.types";
 import { httpRequestsOnErrorsActions } from "../http_requests_on_errors";
 import { httpRequestsOnLoadActions } from "../http_requests_on_load";
+import { httpRequestsOnSuccessActions } from "..";
 
 function* createPermission(action) {
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.createPermissionService, action.payload.body);
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
-function* getPermissions({ action, type }) {
+function* getPermissions({ type }) {
    yield put(httpRequestsOnErrorsActions.removeError(type));
    yield put(httpRequestsOnLoadActions.appendLoading(type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(type));
    try {
       const res = yield call(authService.getPermissionsService);
-      yield put(httpRequestsOnLoadActions.removeLoading(type));
-      yield put(httpRequestsOnErrorsActions.removeError(type));
       yield put({
          type: GET_PERMISSIONS_SUCCESS,
          payload: res.data,
       });
+      yield put(httpRequestsOnLoadActions.removeLoading(type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(type));
       yield put(httpRequestsOnErrorsActions.appendError(type, err?.data?.message));
@@ -35,9 +42,15 @@ function* getPermissions({ action, type }) {
 }
 
 function* deletePermission(action) {
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.deletePermission, action.payload);
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }

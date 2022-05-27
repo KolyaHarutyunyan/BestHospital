@@ -30,7 +30,7 @@ export const FundingSourceSingle = () => {
 
    return (
       <>
-         {loader.length ? (
+         {!!loader.length ? (
             <div style={{ height: "85vh" }}>
                <Loader />
             </div>

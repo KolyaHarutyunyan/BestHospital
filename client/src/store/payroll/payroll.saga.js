@@ -20,6 +20,8 @@ import { httpRequestsOnErrorsActions } from "../http_requests_on_errors";
 
 function* createPayCodeGlobal(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(payrollService.createPayCodeGlobalService, action.payload.body);
       yield put({
@@ -33,20 +35,28 @@ function* createPayCodeGlobal(action) {
    }
 }
 
-function* getPayCodeGlobal() {
+function* getPayCodeGlobal(action) {
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(payrollService.getPayCodeGlobalService);
       yield put({
          type: GET_PAYCODE_GLOBAL_SUCCESS,
          payload: res.data.reverse(),
       });
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
 function* editPayCodeById(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(
          payrollService.editPayCodeByIdGlobalService,
@@ -66,6 +76,8 @@ function* editPayCodeById(action) {
 
 function* deletePayCodeByIdGlobal(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(payrollService.deletePayCodeByIdService, action.payload.id);
       yield put({
@@ -81,6 +93,8 @@ function* deletePayCodeByIdGlobal(action) {
 
 function* createOvertimeSettingsGlobal(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(payrollService.createOvertimeSettingsGlobalService, action.payload.body);
       yield put({
@@ -94,20 +108,28 @@ function* createOvertimeSettingsGlobal(action) {
    }
 }
 
-function* getOvertimeSettingsGlobal() {
+function* getOvertimeSettingsGlobal(action) {
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(payrollService.getOvertimeSettingsGlobalService);
       yield put({
          type: GET_OVERTIME_SETTINGS_GLOBAL_SUCCESS,
          payload: res.data.reverse(),
       });
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
 function* editOvertimeSettingsById(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(
          payrollService.editOvertimeSettingsByIdGlobalService,
@@ -127,6 +149,8 @@ function* editOvertimeSettingsById(action) {
 
 function* deleteOvertimeSettingsByIdGlobal(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(payrollService.deleteOvertimeSettingsByIdService, action.payload.id);
       yield put({

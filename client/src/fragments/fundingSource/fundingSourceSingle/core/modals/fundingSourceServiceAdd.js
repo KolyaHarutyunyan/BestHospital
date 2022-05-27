@@ -34,13 +34,6 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
       ? FindLoad("EDIT_FUNDING_SOURCE_SERVICE")
       : FindLoad("CREATE_FUNDING_SOURCE_SERVICE_BY_ID");
 
-   const handleChange = (e) => {
-      setInputs(
-         (prevState) => ({ ...prevState, [e.target.name]: e.target.value }),
-         error === e.target.name && setError("")
-      );
-   };
-
    useEffect(() => {
       if (success) {
          handleClose();
@@ -77,7 +70,14 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
          });
    }, [inputs]);
 
-   const handleCreate = () => {
+   function handleChange(e) {
+      setInputs(
+         (prevState) => ({ ...prevState, [e.target.name]: e.target.value }),
+         error === e.target.name && setError("")
+      );
+   }
+
+   function handleCreate() {
       const serviceDataIsValid =
          isNotEmpty(inputs.name) &&
          isNotEmpty(inputs.cptCode) &&
@@ -115,7 +115,7 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
             : "";
          setError(serviceDataErrorText);
       }
-   };
+   }
 
    return (
       <div className={classes.createFoundingSource}>

@@ -17,6 +17,7 @@ import {
 function* getClaims(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(claimService.getClaimsService, action?.payload?.data);
       yield put({
@@ -39,6 +40,7 @@ function* getClaims(action) {
 function* getClaimById(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(claimService.getClaimByIdService, action.payload.id);
       yield put({
@@ -56,6 +58,7 @@ function* getClaimById(action) {
 function* generateClaim(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(
          claimService.generateClaimService,
@@ -74,6 +77,7 @@ function* generateClaim(action) {
 function* closeClaim(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(
          claimService.closeClaimService,

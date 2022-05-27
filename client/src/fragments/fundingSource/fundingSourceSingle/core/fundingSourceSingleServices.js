@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
    DeleteElement,
@@ -29,6 +29,10 @@ export const FundingSourceSingleServices = ({ data }) => {
    const { open } = useContext(DrawerContext);
 
    const headerTitles = getHeaderTitlesForService();
+
+   useEffect(() => {
+      setServiceIndex(data.indexOf(data[serviceIndex]));
+   }, []);
 
    let onEdit = (index) => {
       setIndex(index);

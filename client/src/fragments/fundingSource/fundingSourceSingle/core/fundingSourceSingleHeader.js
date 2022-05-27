@@ -11,10 +11,7 @@ import {
 } from "@eachbase/components";
 import { FundingSourceServiceAdd } from "./modals";
 import { CreateFundingSource } from "../../createFundingSource";
-import {
-   fundingSourceActions,
-   httpRequestsOnSuccessActions,
-} from "@eachbase/store";
+import { fundingSourceActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 
 const filterBtn = {
    width: 93,
@@ -24,24 +21,17 @@ const filterBtn = {
 export const FundingSourceSingleHeader = ({ activeTab, title }) => {
    const [open, setOpen] = useState(false);
    const dispatch = useDispatch();
-   const prevData = useSelector(
-      (state) => state.fundingSource.fundingSourceItem
-   );
+   const prevData = useSelector((state) => state.fundingSource.fundingSourceItem);
    const classes = fundingSourceSingleStyles();
 
    const { httpOnSuccess } = useSelector((state) => ({
       httpOnSuccess: state.httpOnSuccess,
    }));
 
-   const handleOpenClose = () => {
-      setOpen(!open);
-   };
-
    const [searchDate, setSearchDate] = useState("");
    const [isDisabled, setIsDisabled] = useState(false);
 
-   const fsHistoryLoader = !!FindLoad("GET_FUNDING_SOURCE_HISTORIES_BY_ID")
-      .length;
+   const fsHistoryLoader = !!FindLoad("GET_FUNDING_SOURCE_HISTORIES_BY_ID").length;
 
    const handleChangeFile = (e) => {
       setIsDisabled(false);
@@ -86,23 +76,23 @@ export const FundingSourceSingleHeader = ({ activeTab, title }) => {
          <div style={{ display: "flex" }}>
             <SimpleModal
                openDefault={open}
-               handleOpenClose={handleOpenClose}
+               handleOpenClose={() => setOpen(false)}
                content={
                   activeTab === 0 ? (
                      <CreateFundingSource
-                        handleClose={handleOpenClose}
+                        handleClose={() => setOpen(false)}
                         info={prevData}
                      />
                   ) : activeTab === 1 ? (
-                     <FundingSourceServiceAdd handleClose={handleOpenClose} />
+                     <FundingSourceServiceAdd handleClose={() => setOpen(false)} />
                   ) : activeTab === 2 ? (
-                     <AddNotes model="Funder" handleClose={handleOpenClose} />
+                     <AddNotes model="Funder" handleClose={() => setOpen(false)} />
                   ) : null
                }
             />
             {activeTab === 0 ? (
                <AddModalButton
-                  handleClick={handleOpenClose}
+                  handleClick={() => setOpen(true)}
                   text="Edit"
                   btnStyles={editButtonStyle}
                />
@@ -132,13 +122,12 @@ export const FundingSourceSingleHeader = ({ activeTab, title }) => {
             ) : (
                <AddButton
                   text={
-                     activeTab === 1
-                        ? "Add Service"
-                        : activeTab === 2
-                        ? "Add Note"
-                        : ""
+                     activeTab === 1 ? "Add Service" : activeTab === 2 ? "Add Note" : ""
                   }
-                  handleClick={handleOpenClose}
+                  handleClick={() => {
+                     setOpen(true);
+                     alert("o");
+                  }}
                />
             )}
          </div>
