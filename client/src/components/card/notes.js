@@ -57,11 +57,11 @@ export const Notes = ({
 
    const handleOpenClose = (data) => {
       setNoteModalInfoEdit(data);
-      setOpen(!open);
+      setOpen((prevState) => !prevState);
    };
    const handleOpenCloseDel = (data) => {
       setDeletedData(data);
-      setOpenDelModal(!openDelModal);
+      setOpenDelModal((prevState) => !prevState);
    };
 
    const handleDelete = () => {

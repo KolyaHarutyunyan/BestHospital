@@ -62,14 +62,9 @@ export const EmploymentModal = ({ handleClose, info }) => {
    }, []);
 
    useEffect(() => {
-      if (!success) return;
-      handleClose();
-      dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION"));
-
-      if (info) {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_EMPLOYMENT"));
-      } else {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_EMPLOYMENT"));
+      if (!!success.length) {
+         handleClose();
+         dispatch(httpRequestsOnSuccessActions.removeSuccess(success[0].type));
       }
    }, [success]);
 
@@ -137,9 +132,6 @@ export const EmploymentModal = ({ handleClose, info }) => {
                   : inputs.employmentType === _fullTime
                   ? 1
                   : "",
-            // termination: {
-            //    date: inputs.endDate ? inputs.endDate : null,
-            // },
          };
 
          if (info) {

@@ -145,43 +145,43 @@ export const StaffEmployment = ({ info }) => {
    return (
       <div className={classes.staffGeneralWrapper}>
          <SimpleModal
-            handleOpenClose={() => setToggleModal(!toggleModal)}
+            handleOpenClose={() => setToggleModal((prevState) => !prevState)}
             openDefault={toggleModal}
             content={
                delEdit ? (
                   <EmploymentModal
                      fundingId={info[authIndex]?.funderId?._id}
                      info={info[authIndex]}
-                     handleClose={() => setToggleModal(!toggleModal)}
+                     handleClose={() => setToggleModal((prevState) => !prevState)}
                   />
                ) : (
                   <DeleteElement
                      loader={httpOnLoad.length > 0}
-                     handleClose={() => setToggleModal(!toggleModal)}
+                     handleClose={() => setToggleModal((prevState) => !prevState)}
                      handleDel={deleteAuthorization}
                   />
                )
             }
          />
          <SimpleModal
-            handleOpenClose={() => setToggleModal2(!toggleModal2)}
+            handleOpenClose={() => setToggleModal2((prevState) => !prevState)}
             openDefault={toggleModal2}
             content={
                <PaycodeModal
                   employmentId={info[authIndex]?.id}
                   authId={info[authIndex]?.id}
-                  handleClose={() => setToggleModal2(!toggleModal2)}
+                  handleClose={() => setToggleModal2((prevState) => !prevState)}
                />
             }
          />
          <SimpleModal
-            handleOpenClose={() => setToggleModal3(!toggleModal3)}
+            handleOpenClose={() => setToggleModal3((prevState) => !prevState)}
             openDefault={toggleModal3}
             content={
                <PaycodeModal
                   info={payCodes && payCodes[paycodeIndex]}
                   employmentId={info[authIndex]?.id}
-                  handleClose={() => setToggleModal3(!toggleModal3)}
+                  handleClose={() => setToggleModal3((prevState) => !prevState)}
                />
             }
          />
@@ -215,10 +215,10 @@ export const StaffEmployment = ({ info }) => {
                      src={Images.addHours}
                      alt=""
                      className={classes.iconStyle}
-                     onClick={() => setToggleModal2(!toggleModal2)}
+                     onClick={() => setToggleModal2((prevState) => !prevState)}
                   />
                   <p
-                     onClick={() => setToggleModal2(!toggleModal2)}
+                     onClick={() => setToggleModal2((prevState) => !prevState)}
                      className={classes.authorizationServicesText}
                   >
                      Add Paycode

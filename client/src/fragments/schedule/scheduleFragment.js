@@ -52,11 +52,11 @@ export const ScheduleFragment = ({}) => {
       if (date) {
          setDate(date);
       }
-      setOpen(!open);
+      setOpen((prevState) => !prevState);
    };
 
    const openCloseRecur = (date) => {
-      setOpenRecur(!openRecur);
+      setOpenRecur((prevState) => !prevState);
       setRecurDate(date);
    };
 

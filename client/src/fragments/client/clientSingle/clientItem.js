@@ -68,11 +68,11 @@ export const ClientItem = () => {
 
    const handleOpenClose = (status) => {
       setStatusType(status);
-      setOpen(!open);
+      setOpen((prevState) => !prevState);
    };
 
    const handleOpenCloseModal = () => {
-      setOpenModal(!openModal);
+      setOpenModal((prevState) => !prevState);
    };
 
    const tabsLabels = [
@@ -149,7 +149,7 @@ export const ClientItem = () => {
             selectStatus={true}
             status={data?.status}
             id={params.id}
-            handleOpen={handleOpenClose}
+            handleOpen={() => setOpen(true)}
             path={"client"}
             type={"GET_CLIENT_BY_ID_SUCCESS"}
             parent="Clients"

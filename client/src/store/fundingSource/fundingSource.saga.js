@@ -180,6 +180,10 @@ function* createFundingSourceServiceById(action) {
          action.payload.id,
          action.payload.body
       );
+      yield put({
+         type: GET_FUNDING_SOURCE_SERVICE_BY_ID,
+         payload: action.payload.id,
+      });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
@@ -303,7 +307,6 @@ function* getFundingSourceHistoriesById(action) {
          action.payload.onModal,
          action.payload.searchDate
       );
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put({
          type: GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS,
          payload: res.data,

@@ -69,7 +69,7 @@ export const StaffItem = ({ gen }) => {
 
    const handleOpenClose = (status) => {
       setStatusType(status);
-      setOpen(!open);
+      setOpen((prevState) => !prevState);
    };
 
    const tabsLabels = [
@@ -156,7 +156,7 @@ export const StaffItem = ({ gen }) => {
 
    const handleOpenCloseNote = (data) => {
       // setNoteModalTypeInfo(data)
-      setOpenModal(!openModal);
+      setOpenModal((prevState) => !prevState);
       setNoteModalInfo({
          right: "-1000px",
          created: "",
@@ -242,7 +242,7 @@ export const StaffItem = ({ gen }) => {
 
    const handleOpenCloseDel = (data) => {
       setNoteModalData(data);
-      setOpenDelModal(!openDelModal);
+      setOpenDelModal((prevState) => !prevState);
    };
 
    const handleDeleteNote = () => {

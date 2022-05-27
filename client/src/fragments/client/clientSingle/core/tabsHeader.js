@@ -34,7 +34,7 @@ export const TabsHeader = ({ activeTab, data, authActive, availabilityData }) =>
    const clientHistoryLoader = !!FindLoad("GET_FUNDING_SOURCE_HISTORIES_BY_ID").length;
 
    const handleOpenClose = () => {
-      setOpen(!open);
+      setOpen((prevState) => !prevState);
    };
 
    const handleChangeDate = (e) => {

@@ -30,7 +30,7 @@ export const UserInfo = ({}) => {
    // )
 
    const handleOpenClose = () => {
-      setOpen(!open);
+      setOpen((prevState) => !prevState);
    };
 
    const userInfo = JSON.parse(localStorage.getItem("poloUserInfo"));

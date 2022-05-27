@@ -12,15 +12,14 @@ export const SimpleModal = ({
 }) => {
    const [open, setOpen] = React.useState(false);
 
-   const handleOpen = () => {
-      setOpen(true);
-   };
-
+   console.log(openDefault, "render count");
    const handleOpenOrClose = () => {
       if (handleOpenClose) {
          handleOpenClose();
+         console.log(1);
       } else {
-         setOpen(prevState => !prevState);
+         setOpen(true);
+         console.log(0);
       }
    };
 
@@ -28,9 +27,7 @@ export const SimpleModal = ({
 
    return (
       <div>
-         {addButton && (
-            <AddButton text={addButton} handleClick={handleOpenOrClose} />
-         )}
+         {addButton && <AddButton text={addButton} handleClick={handleOpenOrClose} />}
 
          <Modal
             open={openDefault ? openDefault : open}

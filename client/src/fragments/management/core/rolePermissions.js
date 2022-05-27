@@ -26,7 +26,7 @@ export const RolePermissions = ({ permissionsList }) => {
    }));
 
    const handleOpenClose = (item) => {
-      setOpen(!open);
+      setOpen((prevState) => !prevState);
       sePermission(item?.id);
       setTitle(item?.title);
    };
@@ -89,7 +89,10 @@ export const RolePermissions = ({ permissionsList }) => {
                {role && role.title ? (
                   <div>
                      {show === false ? (
-                        <AddCircle handleCLic={() => setShowInput(true)} text={"Add Permissions"} />
+                        <AddCircle
+                           handleCLic={() => setShowInput(true)}
+                           text={"Add Permissions"}
+                        />
                      ) : (
                         <CloseButton handleCLic={() => setShowInput(false)} />
                      )}

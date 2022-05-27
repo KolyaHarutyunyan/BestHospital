@@ -9,11 +9,7 @@ import {
 } from "@eachbase/components";
 import { foundingSourceModalStyle } from "./styles";
 import { ErrorText, FindLoad, FindSuccess, isNotEmpty } from "@eachbase/utils";
-import {
-   fundingSourceActions,
-   httpRequestsOnErrorsActions,
-   httpRequestsOnSuccessActions,
-} from "@eachbase/store";
+import { fundingSourceActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 
 export const FundingSourceServiceAdd = ({ handleClose, info }) => {
    const systemServices = useSelector((state) => state.system.services);
@@ -35,30 +31,24 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
       : FindLoad("CREATE_FUNDING_SOURCE_SERVICE_BY_ID");
 
    useEffect(() => {
-      if (success) {
+      if (!!success.length) {
          handleClose();
          dispatch(
             httpRequestsOnSuccessActions.removeSuccess("EDIT_FUNDING_SOURCE_SERVICE")
          );
-         dispatch(httpRequestsOnErrorsActions.removeError("EDIT_FUNDING_SOURCE_SERVICE"));
       }
-      if (successCreate) {
-         setTimeout(() => {
-            dispatch(fundingSourceActions.getFoundingSourceServiceByIdNoLoad(params.id));
-            dispatch(
-               httpRequestsOnSuccessActions.removeSuccess(
-                  "CREATE_FUNDING_SOURCE_SERVICE_BY_ID"
-               )
-            );
-            dispatch(
-               httpRequestsOnErrorsActions.removeError(
-                  "CREATE_FUNDING_SOURCE_SERVICE_BY_ID"
-               )
-            );
-            handleClose();
-         }, 1000);
+   }, [success]);
+
+   useEffect(() => {
+      if (!!successCreate.length) {
+         handleClose();
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess(
+               "CREATE_FUNDING_SOURCE_SERVICE_BY_ID"
+            )
+         );
       }
-   }, [success, successCreate]);
+   }, [successCreate]);
 
    useEffect(() => {
       systemServices &&

@@ -42,7 +42,7 @@ export const FundingSourceItem = ({}) => {
 
    function handleOpenClose(status) {
       setStatusType(status);
-      setOpen(!open);
+      setOpen((prevState) => !prevState);
    }
 
    const tabsContent = [

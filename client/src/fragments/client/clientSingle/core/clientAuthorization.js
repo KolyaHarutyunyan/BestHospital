@@ -178,45 +178,45 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
    return (
       <div className={classes.staffGeneralWrapper}>
          <SimpleModal
-            handleOpenClose={() => setToggleModal(!toggleModal)}
+            handleOpenClose={() => setToggleModal((prevState) => !prevState)}
             openDefault={toggleModal}
             content={
                delEdit ? (
                   <AddAuthorization
                      fundingId={info[authIndex]?.funderId?._id}
                      info={info[authIndex]}
-                     handleClose={() => setToggleModal(!toggleModal)}
+                     handleClose={() => setToggleModal((prevState) => !prevState)}
                   />
                ) : (
                   <DeleteElement
                      loader={!!delAuthLoader.length}
                      info={`Delete ${info[authIndex].authId}`}
-                     handleClose={() => setToggleModal(!toggleModal)}
+                     handleClose={() => setToggleModal((prevState) => !prevState)}
                      handleDel={deleteAuthorization}
                   />
                )
             }
          />
          <SimpleModal
-            handleOpenClose={() => setToggleModal2(!toggleModal2)}
+            handleOpenClose={() => setToggleModal2((prevState) => !prevState)}
             openDefault={toggleModal2}
             content={
                <AddAuthorizationService
                   authId={info[authIndex]?.id}
-                  handleClose={() => setToggleModal2(!toggleModal2)}
+                  handleClose={() => setToggleModal2((prevState) => !prevState)}
                   fundingId={info[authIndex].funderId?._id}
                />
             }
          />
          <SimpleModal
-            handleOpenClose={() => setToggleModal3(!toggleModal3)}
+            handleOpenClose={() => setToggleModal3((prevState) => !prevState)}
             openDefault={toggleModal3}
             content={
                delEdit2 ? (
                   <AddAuthorizationService
                      info={services && services[serviceIndex]}
                      authId={info[authIndex].id}
-                     handleClose={() => setToggleModal3(!toggleModal3)}
+                     handleClose={() => setToggleModal3((prevState) => !prevState)}
                      fundingId={info[authIndex].funderId?._id}
                   />
                ) : (
@@ -225,14 +225,14 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
                      info={`Delete ${
                         services && services[serviceIndex]?.serviceId?.name
                      }`}
-                     handleClose={() => setToggleModal3(!toggleModal3)}
+                     handleClose={() => setToggleModal3((prevState) => !prevState)}
                      handleDel={deleteAuthorizationServ}
                   />
                )
             }
          />
          <SimpleModal
-            handleOpenClose={() => setModalIsOpen(!modalIsOpen)}
+            handleOpenClose={() => setModalIsOpen((prevState) => !prevState)}
             openDefault={modalIsOpen}
             content={
                <div className={classes.authorizationFileWrapper}>
@@ -279,10 +279,10 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
                      src={Images.addHours}
                      alt=""
                      className={classes.iconStyle}
-                     onClick={() => setToggleModal2(!toggleModal2)}
+                     onClick={() => setToggleModal2((prevState) => !prevState)}
                   />
                   <p
-                     onClick={() => setToggleModal2(!toggleModal2)}
+                     onClick={() => setToggleModal2((prevState) => !prevState)}
                      className={classes.authorizationServicesText}
                   >
                      Add Authorized Service

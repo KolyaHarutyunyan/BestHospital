@@ -94,7 +94,7 @@ export const ClientEnrollment = ({ data, info }) => {
                      className={classes.iconStyle}
                      onClick={(e) => {
                         e.stopPropagation();
-                        setToggleModal(!toggleModal);
+                        setToggleModal((prevState) => !prevState);
                         setIndex(index);
                      }}
                   />
@@ -109,12 +109,12 @@ export const ClientEnrollment = ({ data, info }) => {
    return (
       <div className={classes.staffGeneralWrapper}>
          <SimpleModal
-            handleOpenClose={() => setToggleModal(!toggleModal)}
+            handleOpenClose={() => setToggleModal((prevState) => !prevState)}
             openDefault={toggleModal}
             content={
                <AddEnrollment
                   info={info[indexItem]}
-                  handleClose={() => setToggleModal(!toggleModal)}
+                  handleClose={() => setToggleModal((prevState) => !prevState)}
                />
             }
          />

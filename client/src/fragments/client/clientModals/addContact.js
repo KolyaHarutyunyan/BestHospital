@@ -56,17 +56,9 @@ export const AddContact = ({ handleClose, info }) => {
       : FindError("CREATE_CLIENT_CONTACT");
 
    useEffect(() => {
-      if (!success) return;
-      handleClose();
-      dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_CONTACTS"));
-      if (info) {
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess("EDIT_CLIENT_CONTACT")
-         );
-      } else {
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess("CREATE_CLIENT_CONTACT")
-         );
+      if (!!success.length) {
+         handleClose();
+         dispatch(httpRequestsOnSuccessActions.removeSuccess(success[0].type));
       }
    }, [success]);
 
@@ -145,9 +137,7 @@ export const AddContact = ({ handleClose, info }) => {
             if (!info) {
                dispatch(clientActions.createClientContact(data, params.id));
             } else if (info) {
-               dispatch(
-                  clientActions.editClientContact(data, info.id, params.id)
-               );
+               dispatch(clientActions.editClientContact(data, info.id, params.id));
             }
          } else {
             setError(!enteredAddress ? "enteredAddress" : "Input is not field");
@@ -203,9 +193,7 @@ export const AddContact = ({ handleClose, info }) => {
                         type={"text"}
                         label={"Relationship*"}
                         name="relationship"
-                        typeError={
-                           error === "relationship" ? ErrorText.field : ""
-                        }
+                        typeError={error === "relationship" ? ErrorText.field : ""}
                      />
                   </div>
                ) : (
@@ -214,9 +202,7 @@ export const AddContact = ({ handleClose, info }) => {
                         flex={true}
                         handleSelectValue={handleAddressChange}
                         info={info && info.address ? info : ""}
-                        errorBoolean={
-                           error === "enteredAddress" ? ErrorText.field : ""
-                        }
+                        errorBoolean={error === "enteredAddress" ? ErrorText.field : ""}
                         onTrigger={setFullAddress}
                         enteredValue={enteredAddress}
                      />

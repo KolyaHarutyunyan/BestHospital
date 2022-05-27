@@ -12,6 +12,7 @@ import { TableCell } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import { noteActions } from "@eachbase/store/notes";
 import { getHeaderTitlesForNote } from "./constants";
+import { httpRequestsOnSuccessActions } from "@eachbase/store";
 
 export const FundingSourceSingleNotes = ({ data }) => {
    const params = useParams();
@@ -70,7 +71,7 @@ export const FundingSourceSingleNotes = ({ data }) => {
 
    const handleOpenCloseDel = (data) => {
       setNoteModalData(data);
-      setOpenDelModal(!openDelModal);
+      setOpenDelModal((prevState) => !prevState);
    };
 
    const openNoteModal = (data) => {
@@ -99,11 +100,12 @@ export const FundingSourceSingleNotes = ({ data }) => {
    };
 
    useEffect(() => {
-      if (deleteSuccess) {
+      if (!!deleteSuccess.length) {
          setOpenDelModal(false);
          closeNoteModal();
+         dispatch(httpRequestsOnSuccessActions.removeSuccess(deleteSuccess[0].type));
       }
-   }, [deleteSuccess.length]);
+   }, [deleteSuccess]);
 
    return (
       <>

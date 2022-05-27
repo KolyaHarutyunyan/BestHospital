@@ -26,7 +26,7 @@ export const ClientContact = ({ data, setContactId, handleOpenClose, info }) => 
    const params = useParams();
 
    let openCloseModal = () => {
-      setOpenClose(!openClose);
+      setOpenClose((prevState) => !prevState);
    };
 
    const { httpOnSuccess, httpOnError, httpOnLoad } = useSelector((state) => ({
@@ -35,7 +35,8 @@ export const ClientContact = ({ data, setContactId, handleOpenClose, info }) => 
       httpOnLoad: state.httpOnLoad,
    }));
 
-   const success = httpOnSuccess.length && httpOnSuccess[0].type === "DELETE_CLIENT_CONTACT";
+   const success =
+      httpOnSuccess.length && httpOnSuccess[0].type === "DELETE_CLIENT_CONTACT";
    const errorText = httpOnError.length && httpOnError[0].error;
 
    useEffect(() => {

@@ -30,7 +30,7 @@ export const Role = ({ key, roleInfo = [] }) => {
 
    const handleOpenClose = (item) => {
       setTitle(item?.title);
-      setOpen(!open);
+      setOpen((prevState) => !prevState);
       setRole(item?.id);
    };
 

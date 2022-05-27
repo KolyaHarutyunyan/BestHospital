@@ -15,7 +15,7 @@ export const Management = ({}) => {
    }));
 
    const handleOpenClose = () => {
-      setOpen(!open);
+      setOpen((prevState) => !prevState);
    };
    return (
       <div>
