@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useSelector } from "react-redux";
 import { Notes, SimpleModal, TableBodyComponent } from "@eachbase/components";
 import { FundingSourceSinglePTModifiers } from "./fundingSourceSinglePTModifiers";
@@ -9,34 +9,29 @@ import { FundingSourceServiceAdd } from "./modals";
 import { getHeaderTitlesForService } from "./constants";
 
 export const FundingSourceSingleServices = ({ data }) => {
-   const [toggleModal, setToggleModal] = useState(false);
-   const [index, setIndex] = useState(null);
-   const [serviceIndex, setServiceIndex] = useState(0);
-   const [accept, setAccept] = useState(false);
-   const [serviceModifiers, setServiceModifiers] = useState("");
-
    const classes = fundingSourceSingleStyles();
-   const globalCredentials = useSelector((state) => state.system.credentials);
 
    const { open } = useContext(DrawerContext);
 
+   const globalCredentials = useSelector((state) => state.system.credentials);
+
+   const [toggleModal, setToggleModal] = useState(false);
+   const [index, setIndex] = useState(null);
+   const [serviceIndex, setServiceIndex] = useState(0);
+   const [serviceModifiers, setServiceModifiers] = useState("");
+
    const headerTitles = getHeaderTitlesForService();
 
-   useEffect(() => {
-      setServiceIndex(data.indexOf(data[serviceIndex]));
-   }, []);
-
-   let onEdit = (index) => {
+   function onEdit(index) {
       setIndex(index);
-      setAccept(true);
-      setToggleModal(!toggleModal);
       setServiceModifiers(data[index]);
-   };
+      setToggleModal((prevState) => !prevState);
+   }
 
-   let onRow = (item, index) => {
+   function onRow(item, index) {
       setServiceIndex(index);
       setServiceModifiers(item.modifiers);
-   };
+   }
 
    function serviceItemHandler(item, index) {
       return (
@@ -53,14 +48,12 @@ export const FundingSourceSingleServices = ({ data }) => {
             <TableCell> {item.min} </TableCell>
             <TableCell> {item.max} </TableCell>
             <TableCell>
-               <>
-                  <img
-                     src={Images.edit}
-                     alt="edit"
-                     className={classes.iconCursor}
-                     onClick={() => onEdit(index)}
-                  />
-               </>
+               <img
+                  src={Images.edit}
+                  alt="edit"
+                  className={classes.iconCursor}
+                  onClick={() => onEdit(index)}
+               />
             </TableCell>
          </TableBodyComponent>
       );

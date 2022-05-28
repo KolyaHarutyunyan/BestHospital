@@ -16,16 +16,18 @@ import { modalsStyle } from "@eachbase/components/modal/styles";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { noteActions } from "@eachbase/store/notes";
+import { httpRequestsOnSuccessActions } from "@eachbase/store";
 
 export const AddNotes = ({
-   closeModal,
    model,
    noteModalTypeInfo,
    handleClose,
 }) => {
-   const dispatch = useDispatch();
    const classes = modalsStyle();
    const globalText = useGlobalTextStyles();
+
+   const dispatch = useDispatch();
+
    const params = useParams();
 
    const [error, setError] = useState("");
@@ -81,23 +83,15 @@ export const AddNotes = ({
       }
    };
 
-   const loader = FindLoad("CREATE_GLOBAL_NOTE");
-   const success = FindSuccess("CREATE_GLOBAL_NOTE");
-
-   const editLoad = FindLoad("EDIT_GLOBAL_NOTE");
-   const editSuccess = FindSuccess("EDIT_GLOBAL_NOTE");
+   const loader = !!noteModalTypeInfo ? FindLoad("EDIT_GLOBAL_NOTE") : FindLoad("CREATE_GLOBAL_NOTE");
+   const success = !!noteModalTypeInfo ? FindSuccess("EDIT_GLOBAL_NOTE") : FindSuccess("CREATE_GLOBAL_NOTE");
 
    useEffect(() => {
-      if (success) {
+      if (!!success.length) {
          handleClose();
+         dispatch(httpRequestsOnSuccessActions.removeSuccess(success[0].type));
       }
-   }, [success.length]);
-
-   useEffect(() => {
-      if (editSuccess) {
-         closeModal && closeModal();
-      }
-   }, [editSuccess.length]);
+   }, [success]);
 
    return (
       <div className={classes.inactiveModalBody}>
@@ -131,7 +125,7 @@ export const AddNotes = ({
             typeError={error === "text" ? ErrorText.field : ""}
          />
          <AddModalButton
-            loader={!!loader.length || !!editLoad.length}
+            loader={!!loader.length}
             handleClick={handleSubmit}
             text={noteModalTypeInfo ? "Edit" : "Add"}
          />

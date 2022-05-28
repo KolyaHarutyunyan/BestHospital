@@ -59,22 +59,18 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
 
    useEffect(() => {
       if (!!success.length) {
-         setToggleModal(!toggleModal);
+         setToggleModal((prevState) => !prevState);
          dispatch(
             httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT_AUTHORIZATION")
          );
-         dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION"));
       }
    }, [success]);
 
    useEffect(() => {
       if (!!successDelServ.length) {
-         setToggleModal3(!toggleModal3);
+         setToggleModal3((prevState) => !prevState);
          dispatch(
             httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT_AUTHORIZATION_SERV")
-         );
-         dispatch(
-            httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION_SERV")
          );
       }
    }, [successDelServ]);

@@ -144,6 +144,7 @@ export const FundingSourceSinglePTModifiers = ({
                   <DeleteElement
                      info={modifier?.name}
                      text="Are you sure you want to change the status of this modifier?"
+                     innerText={"Change"}
                      loader={!!loader.length}
                      handleDel={() =>
                         dispatch(

@@ -91,6 +91,8 @@ export const fundingSourceSingleStyles = makeStyles(() => ({
    fundindServiceItems: {
       marginTop: -25,
       width: "100%",
+      height: "541px",
+      overflowY: "auto",
       "@media(max-width: 1280px)": {
          maxWidth: "600px",
          "&.narrow": { maxWidth: "450px" },

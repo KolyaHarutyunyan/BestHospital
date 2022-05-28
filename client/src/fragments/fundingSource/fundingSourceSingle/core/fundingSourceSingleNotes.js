@@ -103,7 +103,7 @@ export const FundingSourceSingleNotes = ({ data }) => {
       if (!!deleteSuccess.length) {
          setOpenDelModal(false);
          closeNoteModal();
-         dispatch(httpRequestsOnSuccessActions.removeSuccess(deleteSuccess[0].type));
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("DELETE_GLOBAL_NOTE"));
       }
    }, [deleteSuccess]);
 

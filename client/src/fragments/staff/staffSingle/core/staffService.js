@@ -20,7 +20,7 @@ import {
    isNotEmpty,
 } from "@eachbase/utils";
 import { SelectInputPlaceholder } from "@eachbase/components";
-import { adminActions, httpRequestsOnErrorsActions } from "@eachbase/store";
+import { adminActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 import { systemItemStyles } from "@eachbase/fragments/system/core";
 import { serviceSingleStyles } from "./styles";
 
@@ -39,14 +39,16 @@ export const StaffService = ({ staffGeneral, info, services }) => {
    const [error, setError] = useState("");
    const [index, setIndex] = useState(0);
    const [toggleModal, setToggleModal] = useState(false);
+
    const success = FindSuccess("DELETE_STAFF_SERVICE");
    const fail = FindError("CREATE_STAFF_SERVICE");
    const loadDel = FindLoad("DELETE_STAFF_SERVICE");
    const loadCreate = FindLoad("CREATE_STAFF_SERVICE");
 
    useEffect(() => {
-      if (success) {
+      if (!!success.length) {
          setToggleModal(false);
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("DELETE_STAFF_SERVICE"));
       }
    }, [success.length]);
 

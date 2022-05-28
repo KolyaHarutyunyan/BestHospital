@@ -211,12 +211,12 @@ export const SystemItemAddService = ({
 
    useEffect(() => {
       if (success) {
+         handleClose();
          dispatch(
             httpRequestsOnSuccessActions.removeSuccess(
                httpOnSuccess.length && httpOnSuccess[0].type
             )
          );
-         handleClose();
       }
    }, [success]);
 

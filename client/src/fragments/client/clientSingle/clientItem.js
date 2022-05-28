@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import {
    SimpleTabs,
-   Notes,
    TableWrapperGeneralInfo,
    InactiveModal,
    SimpleModal,
    NoItemText,
    Loader,
 } from "@eachbase/components";
-import { httpRequestsOnSuccessActions } from "@eachbase/store";
 import {
    ClientGeneral,
    ClientContact,
@@ -25,26 +23,28 @@ import { clientItemStyles } from "./styles";
 import { FindLoad } from "@eachbase/utils";
 import { useParams } from "react-router-dom";
 
+const tabsLabels = [
+   { label: "General" },
+   { label: "Contacts" },
+   { label: "Enrollments" },
+   { label: "Authorization" },
+   { label: "Availability" },
+   { label: "Notes" },
+   { label: "History" },
+];
+
 export const ClientItem = () => {
-   const dispatch = useDispatch();
+   const classes = clientItemStyles();
+
    const params = useParams();
+
    const [open, setOpen] = useState(false);
    const [activeTab, setActiveTab] = useState(0);
    const [contactId, setContactId] = useState(null);
    const [openModal, setOpenModal] = useState(false);
    const [authItemIndex, setAuthItemIndex] = useState(null);
    const [authActive, setAuthActive] = useState(false);
-   const classes = clientItemStyles();
-
-   const { httpOnSuccess } = useSelector((state) => ({
-      httpOnSuccess: state.httpOnSuccess,
-   }));
-
-   const success = httpOnSuccess.length && httpOnSuccess[0].type === "GET_CLIENT_BY_ID";
-
-   useEffect(() => {
-      dispatch(httpRequestsOnSuccessActions.removeSuccess("GET_CLIENT_BY_ID"));
-   }, [success]);
+   const [statusType, setStatusType] = useState("");
 
    const data = useSelector((state) => state.client.clientItemInfo);
    // const authItemData = useSelector(state => state.client.clientsAuthorizations[authItemIndex])
@@ -64,26 +64,14 @@ export const ClientItem = () => {
       (state) => state.availabilitySchedule.availabilitySchedule
    );
 
-   const [statusType, setStatusType] = useState("");
-
-   const handleOpenClose = (status) => {
+   function handleOpenClose(status) {
       setStatusType(status);
       setOpen((prevState) => !prevState);
-   };
+   }
 
-   const handleOpenCloseModal = () => {
+   function handleOpenCloseModal() {
       setOpenModal((prevState) => !prevState);
-   };
-
-   const tabsLabels = [
-      { label: "General" },
-      { label: "Contacts" },
-      { label: "Enrollments" },
-      { label: "Authorization" },
-      { label: "Availability" },
-      { label: "Notes" },
-      { label: "History" },
-   ];
+   }
 
    const load = FindLoad("GET_CLIENT_BY_ID");
 

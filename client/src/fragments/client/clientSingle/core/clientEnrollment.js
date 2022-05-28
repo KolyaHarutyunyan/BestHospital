@@ -15,7 +15,6 @@ import { useDispatch } from "react-redux";
 import { AddEnrollment } from "../../clientModals";
 import {
    clientActions,
-   httpRequestsOnErrorsActions,
    httpRequestsOnSuccessActions,
 } from "@eachbase/store";
 import { clientEnrollmentHeaderTitles, getGeneralInfo } from "./constants";
@@ -35,10 +34,8 @@ export const ClientEnrollment = ({ data, info }) => {
 
    useEffect(() => {
       if (!!success.length) {
-         setToggleModal(!toggleModal);
+         setToggleModal((prevState) => !prevState);
          dispatch(httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT_ENROLLMENT"));
-         dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_ENROLLMENT"));
-         dispatch(httpRequestsOnErrorsActions.removeError("DELETE_CLIENT_ENROLLMENT"));
       }
    }, [success]);
 

@@ -10,7 +10,7 @@ import {
 import { FindLoad, FindSuccess, Images } from "@eachbase/utils";
 import moment from "moment";
 import { useDispatch } from "react-redux";
-import { adminActions } from "@eachbase/store";
+import { adminActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 import { useParams } from "react-router-dom";
 
 export const StaffCredentials = ({ credentialData, openModal }) => {
@@ -45,8 +45,9 @@ export const StaffCredentials = ({ credentialData, openModal }) => {
    const success = FindSuccess("DELETE_CREDENTIAL_BY_ID");
 
    useEffect(() => {
-      if (success) {
+      if (!!success.length) {
          handleClose();
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("DELETE_CREDENTIAL_BY_ID"));
       }
    }, [success]);
 

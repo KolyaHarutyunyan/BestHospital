@@ -67,13 +67,13 @@ export const SystemItemHeader = ({
          : httpOnLoad[0] === "DELETE_PLACE_BY_ID_GLOBAL";
 
    useEffect(() => {
+      handleDeletedOpenClose();
       if (success) {
          dispatch(
             httpRequestsOnSuccessActions.removeSuccess(
                httpOnSuccess.length && httpOnSuccess[0].type
             )
          );
-         handleDeletedOpenClose();
       }
    }, [success]);
 

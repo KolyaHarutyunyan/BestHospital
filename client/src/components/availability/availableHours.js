@@ -4,28 +4,29 @@ import { AvailableHourseBox } from "../../fragments/client/clientSingle/core/ava
 import { FindLoad } from "@eachbase/utils";
 import { Loader } from "../loader";
 
+const shortDayNames = (name) => {
+   switch (name) {
+      case "monday":
+         return "Mon";
+      case "tuesday":
+         return "tue";
+      case "wednesday":
+         return "wed";
+      case "thursday":
+         return "thu";
+      case "friday":
+         return "fri";
+      case "saturday":
+         return "sat";
+      case "sunday":
+         return "sun";
+   }
+};
+
 export const AvailableHours = ({ availabilityData, marginLeft }) => {
    const classes = availabilityStyles();
-   const load = FindLoad("GET_AVAILABILITY_SCHEDULE_GLOBAL");
 
-   const shortDayNames = (name) => {
-      switch (name) {
-         case "monday":
-            return "Mon";
-         case "tuesday":
-            return "tue";
-         case "wednesday":
-            return "wed";
-         case "thursday":
-            return "thu";
-         case "friday":
-            return "fri";
-         case "saturday":
-            return "sat";
-         case "sunday":
-            return "sun";
-      }
-   };
+   const load = FindLoad("GET_AVAILABILITY_SCHEDULE_GLOBAL");
 
    return (
       <div

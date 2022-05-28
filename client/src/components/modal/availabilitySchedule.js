@@ -8,6 +8,7 @@ import { Checkbox } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import { availabilityScheduleActions } from "@eachbase/store/availabilitySchedule";
 import { useParams } from "react-router-dom";
+import { httpRequestsOnSuccessActions } from "@eachbase/store";
 
 const inputStyle = {
    widths: "111px",
@@ -86,8 +87,9 @@ export const AvailabilitySchedule = ({ availabilityData, onModel, handleClose })
    const success = FindSuccess("CREATE_AVAILABILITY_SCHEDULE_GLOBAL");
 
    useEffect(() => {
-      if (success) {
+      if (!!success.length) {
          handleClose();
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_AVAILABILITY_SCHEDULE_GLOBAL"));
       }
    }, [success]);
 

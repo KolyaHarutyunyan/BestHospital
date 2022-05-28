@@ -12,14 +12,11 @@ export const SimpleModal = ({
 }) => {
    const [open, setOpen] = React.useState(false);
 
-   console.log(openDefault, "render count");
    const handleOpenOrClose = () => {
       if (handleOpenClose) {
          handleOpenClose();
-         console.log(1);
       } else {
-         setOpen(true);
-         console.log(0);
+         setOpen((prevState) => !prevState);
       }
    };
 
