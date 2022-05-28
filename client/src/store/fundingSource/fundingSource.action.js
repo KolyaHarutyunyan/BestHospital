@@ -183,9 +183,9 @@ export const editFundingModifier = (fundingId, serviceId, body) => {
    };
 };
 
-export const deleteFundingModifier = (fundingId, serviceId) => {
+export const deleteFundingModifier = (fundingId, serviceId, modifiersIds) => {
    return {
       type: DELETE_FUNDING_MODIFIER,
-      payload: { fundingId, serviceId },
+      payload: { fundingId, serviceId, modifiersIds },
    };
 };

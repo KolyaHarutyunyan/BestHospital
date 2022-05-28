@@ -25,7 +25,7 @@ export const FundingSourceModifiersAdd = ({
    const dispatch = useDispatch();
 
    const [error, setError] = useState("");
-   const [inputs, setInputs] = useState(!!info ? { ...info } : {});
+   const [inputs, setInputs] = useState(!!info ? { ...info, type: info.type + "" } : {});
 
    const success = !!info
       ? FindSuccess("EDIT_FUNDING_MODIFIER")
@@ -43,14 +43,14 @@ export const FundingSourceModifiersAdd = ({
 
    const modifierTypes = getModifierTypes();
 
-   const handleChange = (e) => {
+   function handleChange(e) {
       setInputs(
          (prevState) => ({ ...prevState, [e.target.name]: e.target.value }),
          error === e.target.name && setError("")
       );
-   };
+   }
 
-   const handleCreate = () => {
+   function handleCreate() {
       const modifierDataIsValid =
          isNotEmpty(inputs.name) &&
          isNotEmpty(inputs.chargeRate) &&
@@ -104,7 +104,7 @@ export const FundingSourceModifiersAdd = ({
             : "";
          setError(errorText);
       }
-   };
+   }
 
    return (
       <div>
@@ -130,6 +130,7 @@ export const FundingSourceModifiersAdd = ({
                label={"Charge Rate*"}
                name={"chargeRate"}
                typeError={error === "chargeRate" && ErrorText.field}
+               disabled={!!info}
             />
             <SelectInput
                name={"credentialId"}
@@ -144,7 +145,7 @@ export const FundingSourceModifiersAdd = ({
                name={"type"}
                label={"Type*"}
                handleSelect={handleChange}
-               value={inputs.type?.toString()}
+               value={inputs.type}
                language={modifierTypes}
                typeError={error === "type" ? ErrorText.field : ""}
             />

@@ -9,30 +9,20 @@ import {
    ModalHeader,
 } from "@eachbase/components";
 import { createClientStyle } from "./styles";
-import {
-   ErrorText,
-   FindLoad,
-   FindSuccess,
-   isNotEmpty,
-   languages,
-} from "@eachbase/utils";
+import { ErrorText, FindLoad, FindSuccess, isNotEmpty, languages } from "@eachbase/utils";
 import { clientActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 
 export const CreateClient = ({ handleClose, info }) => {
    let params = useParams();
    const [error, setError] = useState("");
    const [inputs, setInputs] = useState(
-      info
-         ? { ...info, birthday: moment(info?.birthday).format("YYYY-MM-DD") }
-         : {}
+      info ? { ...info, birthday: moment(info?.birthday).format("YYYY-MM-DD") } : {}
    );
    const [step, setStep] = useState("first");
    const classes = createClientStyle();
    const dispatch = useDispatch();
 
-   const success = info
-      ? FindSuccess("EDIT_CLIENT")
-      : FindSuccess("CREATE_CLIENT");
+   const success = info ? FindSuccess("EDIT_CLIENT") : FindSuccess("CREATE_CLIENT");
    const loader = info ? FindLoad("EDIT_CLIENT") : FindLoad("CREATE_CLIENT");
 
    const handleChange = (e) =>
@@ -42,12 +32,9 @@ export const CreateClient = ({ handleClose, info }) => {
       );
 
    useEffect(() => {
-      if (!success) return;
-      handleClose();
-      if (info) {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_CLIENT"));
-      } else {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_CLIENT"));
+      if (!!success.length) {
+         handleClose();
+         dispatch(httpRequestsOnSuccessActions.removeSuccess(success[0].type));
       }
    }, [success]);
 
@@ -145,9 +132,7 @@ export const CreateClient = ({ handleClose, info }) => {
                         type={"text"}
                         label={"Middle Name"}
                         name="middleName"
-                        typeError={
-                           error === "middleName" ? ErrorText.field : ""
-                        }
+                        typeError={error === "middleName" ? ErrorText.field : ""}
                      />
                      <ValidationInput
                         variant={"outlined"}
@@ -212,9 +197,7 @@ export const CreateClient = ({ handleClose, info }) => {
                         handleSelect={handleChange}
                         value={inputs.familyLanguage}
                         language={languages}
-                        typeError={
-                           error === "familyLanguage" ? ErrorText.field : ""
-                        }
+                        typeError={error === "familyLanguage" ? ErrorText.field : ""}
                      />
                   </div>
                )}

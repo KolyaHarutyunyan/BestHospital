@@ -33,7 +33,7 @@ function* logIn({ payload, type }) {
          payload: res.data,
       });
       yield put(httpRequestsOnLoadActions.removeLoading(type));
-      yield put(httpRequestsOnErrorsActions.removeError(type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(type));
    } catch (err) {
       yield put(httpRequestsOnErrorsActions.appendError(type, err?.data?.message));
       yield put(httpRequestsOnLoadActions.removeLoading(type));
@@ -42,6 +42,8 @@ function* logIn({ payload, type }) {
 
 function* logOut(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.logOut);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
@@ -49,6 +51,8 @@ function* logOut(action) {
       localStorage.removeItem("wellUserInfo");
       localStorage.removeItem("userType");
       window.location.replace("/login");
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -72,7 +76,6 @@ function* getLink({ payload, type }) {
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(type));
       yield put(httpRequestsOnErrorsActions.appendError(type, err?.data?.message));
-      yield put(httpRequestsOnSuccessActions.removeSuccess(type));
    }
 }
 
@@ -87,6 +90,8 @@ function* resetPassword(action) {
          localStorage.setItem("permissions", res.data.permissions);
          localStorage.setItem("userType", res.data.userType);
          window.location.replace("/");
+         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       } else {
          const res = yield call(authService.confirmAccount, action.payload.passwords);
          localStorage.setItem("access-token", res.data.token);
@@ -103,7 +108,6 @@ function* resetPassword(action) {
       });
    } catch (err) {
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
-      yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
    }
 }
@@ -117,7 +121,6 @@ function* changePassword(action) {
       localStorage.setItem("access-token", res.data.accessToken);
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.removeError(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -125,18 +128,32 @@ function* changePassword(action) {
 }
 
 function* getMuAuthn(action) {
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.muAuthnService);
       // localStorage.setItem('poloUserInfo', JSON.stringify(res.data.email) );
       // localStorage.setItem('permissions', JSON.stringify(res.data.roles) );
-   } catch (err) {}
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+   } catch (err) {
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+   }
 }
 
 function* getMuProfile(action) {
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.myProfileService, action.payload.type);
       localStorage.setItem("wellUserInfo", JSON.stringify(res.data));
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
@@ -144,6 +161,8 @@ function* getMuProfile(action) {
 /** Access service */
 function* getAccessService(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.getAccessService, action.payload.userId);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
@@ -151,6 +170,8 @@ function* getAccessService(action) {
          type: GET_ACCESS_SUCCESS,
          payload: res.data,
       });
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -159,18 +180,20 @@ function* getAccessService(action) {
 
 function* assignAccess(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(
          authService.addAccessService,
          action.payload.userId,
          action.payload.roleId
       );
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_ACCESS,
          payload: { userId: action.payload.userId },
       });
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -179,6 +202,8 @@ function* assignAccess(action) {
 
 function* removeAccess(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(
          authService.removeAccessService,

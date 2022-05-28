@@ -1,13 +1,12 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import { httpRequestsOnErrorsActions } from "..";
+import {
+   httpRequestsOnErrorsActions,
+   httpRequestsOnLoadActions,
+   httpRequestsOnSuccessActions,
+} from "..";
 import { authService } from "./agent.service";
 import {
-   CREATE_ADMIN,
    CREATE_AGENT,
-   GET_ADMIN_BY_ID,
-   GET_ADMIN_BY_ID_SUCCESS,
-   GET_ADMINS,
-   GET_ADMINS_SUCCESS,
    GET_AGENT_BY_ID,
    GET_AGENT_BY_ID_SUCCESS,
    GET_AGENTS,
@@ -15,34 +14,52 @@ import {
 } from "./agent.types";
 
 function* createAgent(action) {
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(authService.createAgentService, action.payload.body);
       yield put({ type: GET_AGENTS });
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
 function* getAgents(action) {
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.getAgentsService, action.payload);
       yield put({
          type: GET_AGENTS_SUCCESS,
          payload: res.data.reverse(),
       });
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
 function* getAgentById(action) {
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.getAgentByIdService, action.payload);
       yield put({
          type: GET_AGENT_BY_ID_SUCCESS,
          payload: res.data,
       });
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }

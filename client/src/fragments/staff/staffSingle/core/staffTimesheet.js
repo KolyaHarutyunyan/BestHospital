@@ -72,12 +72,12 @@ export const StaffTimesheet = ({ info }) => {
    const [item, setItem] = useState("");
 
    const handleOpenClose = () => {
-      setOpenModal(!openModal);
+      setOpenModal((prevState) => !prevState);
       setItem("");
    };
 
    const handleEditClose = (item) => {
-      setOpenModal(!openModal);
+      setOpenModal((prevState) => !prevState);
       setItem(item);
    };
 
@@ -116,9 +116,7 @@ export const StaffTimesheet = ({ info }) => {
             <TableCell>
                <p style={{ width: 50, overflow: "hidden" }}>{item?.id}</p>
             </TableCell>
-            <TableCell>
-               {moment(item?.startDate).format("DD/MM/YYYY")}
-            </TableCell>
+            <TableCell>{moment(item?.startDate).format("DD/MM/YYYY")}</TableCell>
             <TableCell>
                {info
                   ? item.endDate === null
@@ -152,9 +150,7 @@ export const StaffTimesheet = ({ info }) => {
                   ? item.amount / item.hours
                   : timesheetById?.payCode?.rate
             }`}</TableCell>
-            <TableCell>
-               {item.regularHours ? item.regularHours : item?.hours}
-            </TableCell>
+            <TableCell>{item.regularHours ? item.regularHours : item?.hours}</TableCell>
             <TableCell>
                {item.description ? `$${item.totalAmount}` : `$${item?.amount}`}
             </TableCell>
@@ -182,9 +178,7 @@ export const StaffTimesheet = ({ info }) => {
          <div className={classes.switcher}>
             <p
                className={
-                  active === "active"
-                     ? classes.switcherActive
-                     : classes.switcherProcessed
+                  active === "active" ? classes.switcherActive : classes.switcherProcessed
                }
                onClick={() => setActive("active")}
             >
@@ -221,8 +215,7 @@ export const StaffTimesheet = ({ info }) => {
                            type={"name"}
                            data={
                               timesheetById
-                                 ? timesheetById.payCode &&
-                                   timesheetById.payCode.name
+                                 ? timesheetById.payCode && timesheetById.payCode.name
                                  : ""
                            }
                         />
@@ -295,9 +288,7 @@ export const StaffTimesheet = ({ info }) => {
                         <p>
                            Total Amount:{" "}
                            <span className={classes.amount}>
-                              {timesheetById
-                                 ? `$${timesheetById.totalAmount}`
-                                 : ""}
+                              {timesheetById ? `$${timesheetById.totalAmount}` : ""}
                            </span>
                         </p>
                      </div>

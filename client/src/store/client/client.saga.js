@@ -52,6 +52,7 @@ import { GET_AVAILABILITY_SCHEDULE_GLOBAL } from "../availabilitySchedule/availa
 function* getClients(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.getClientsService, action.payload);
       yield put({
@@ -59,6 +60,7 @@ function* getClients(action) {
          payload: res.data,
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -68,6 +70,7 @@ function* getClients(action) {
 function* createClient(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.createClientService, action);
       yield put({
@@ -85,6 +88,7 @@ function* createClient(action) {
 function* deleteClient(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.deleteClientService, action);
       yield put({
@@ -102,6 +106,7 @@ function* deleteClient(action) {
 function* editClient(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.editClientService, action);
 
@@ -120,6 +125,7 @@ function* editClient(action) {
 function* getClientById(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.getClientByIdService, action);
       yield put({
@@ -139,13 +145,19 @@ function* getClientById(action) {
 }
 
 function* getClientContacts(action) {
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.getClientContactsService, action);
       yield put({
          type: GET_CLIENT_CONTACTS_SUCCESS,
          payload: res.data,
       });
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
@@ -153,6 +165,7 @@ function* getClientContacts(action) {
 function* createClientContact(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.createClientContactService, action);
       yield put({
@@ -170,6 +183,7 @@ function* createClientContact(action) {
 function* editClientContact(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.editClientContactService, action);
       yield put({
@@ -187,6 +201,7 @@ function* editClientContact(action) {
 function* deleteClientContact(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.deleteClientContactService, action);
       yield put({
@@ -202,6 +217,9 @@ function* deleteClientContact(action) {
 }
 
 function* getClientEnrollment(action) {
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.getClientEnrollmentService, action);
 
@@ -209,7 +227,10 @@ function* getClientEnrollment(action) {
          type: GET_CLIENT_ENROLLMENT_SUCCESS,
          payload: res.data,
       });
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
@@ -217,6 +238,7 @@ function* getClientEnrollment(action) {
 function* createClientEnrollment(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.createClientEnrollmentService, action);
 
@@ -235,6 +257,7 @@ function* createClientEnrollment(action) {
 function* editClientEnrollment(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.editClientEnrollmentService, action);
 
@@ -254,6 +277,7 @@ function* editClientEnrollment(action) {
 function* deleteClientEnrollment(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.deleteClientEnrollmentService, action);
 
@@ -270,6 +294,9 @@ function* deleteClientEnrollment(action) {
 }
 
 function* getClientsAuthorizations(action) {
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(
          authService.getClientAuthorizationService,
@@ -279,17 +306,21 @@ function* getClientsAuthorizations(action) {
          type: GET_CLIENT_AUTHORIZATION_SUCCESS,
          payload: res.data,
       });
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
       yield put({
          type: GET_CLIENT_AUTHORIZATION_ERROR,
       });
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
 function* createClientsAuthorizations(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.createClientAuthorizationService, action);
       yield put({
@@ -307,6 +338,7 @@ function* createClientsAuthorizations(action) {
 function* editClientAuthorizations(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.editClientAuthorizationService, action);
       yield put({
@@ -324,6 +356,7 @@ function* editClientAuthorizations(action) {
 function* deleteClientAuthorizations(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.deleteClientAuthorizationService, action);
       yield put({
@@ -341,6 +374,9 @@ function* deleteClientAuthorizations(action) {
 // authorization file
 
 function* getClientsAuthorizationFile(action) {
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(
          authService.getClientAuthorizationFileService,
@@ -350,7 +386,10 @@ function* getClientsAuthorizationFile(action) {
          type: GET_CLIENT_AUTHORIZATION_FILE_SUCCESS,
          payload: res.data,
       });
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
@@ -358,6 +397,7 @@ function* getClientsAuthorizationFile(action) {
 function* createClientsAuthorizationFile(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.createClientAuthorizationFileService, action);
       yield put({
@@ -375,6 +415,7 @@ function* createClientsAuthorizationFile(action) {
 function* editClientAuthorizationFile(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.editClientAuthorizationFileService, action);
       yield put({
@@ -392,6 +433,7 @@ function* editClientAuthorizationFile(action) {
 function* deleteClientAuthorizationFile(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.deleteClientAuthorizationFileService, action);
       yield put({
@@ -410,6 +452,8 @@ function* deleteClientAuthorizationFile(action) {
 
 function* getClientsAuthorizationsServ(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.getClientAuthorizationServService, action);
       yield put({
@@ -417,18 +461,20 @@ function* getClientsAuthorizationsServ(action) {
          payload: res.data,
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
       yield put({
          type: GET_CLIENT_AUTHORIZATION_SERV_ERROR,
       });
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
 
 function* createClientsAuthorizationsServ(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.createClientAuthorizationServService, action);
       yield put({
@@ -444,12 +490,15 @@ function* createClientsAuthorizationsServ(action) {
 }
 
 function* getClientsAuthorizationsModCheck(action) {
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
-      const res = yield call(
-         authService.getClientAuthorizationServCheckModService,
-         action
-      );
+      yield call(authService.getClientAuthorizationServCheckModService, action);
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
 }
@@ -457,6 +506,7 @@ function* getClientsAuthorizationsModCheck(action) {
 function* editClientAuthorizationsServ(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.editClientAuthorizationServService, action);
       yield put({
@@ -474,6 +524,7 @@ function* editClientAuthorizationsServ(action) {
 function* deleteClientAuthorizationsServ(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.deleteClientAuthorizationServService, action);
 
@@ -492,6 +543,7 @@ function* deleteClientAuthorizationsServ(action) {
 function* getClientHistories(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(
          authService.getClientHistoriesService,
@@ -503,6 +555,7 @@ function* getClientHistories(action) {
          payload: res.data,
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -512,6 +565,7 @@ function* getClientHistories(action) {
 function* addFilesToClientAuth(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(
          authService.addFilesToClientAuthService,
@@ -524,6 +578,7 @@ function* addFilesToClientAuth(action) {
          payload: { id: action.payload.clientId },
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fundingSourceSingleStyles, editButtonStyle } from "./styles";
-import { FindLoad, Images } from "@eachbase/utils";
+import { FindLoad, FindSuccess, Images } from "@eachbase/utils";
 import {
    AddButton,
    AddModalButton,
@@ -11,10 +11,7 @@ import {
 } from "@eachbase/components";
 import { FundingSourceServiceAdd } from "./modals";
 import { CreateFundingSource } from "../../createFundingSource";
-import {
-   fundingSourceActions,
-   httpRequestsOnSuccessActions,
-} from "@eachbase/store";
+import { fundingSourceActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 
 const filterBtn = {
    width: 93,
@@ -22,26 +19,33 @@ const filterBtn = {
 };
 
 export const FundingSourceSingleHeader = ({ activeTab, title }) => {
-   const [open, setOpen] = useState(false);
-   const dispatch = useDispatch();
-   const prevData = useSelector(
-      (state) => state.fundingSource.fundingSourceItem
-   );
    const classes = fundingSourceSingleStyles();
 
-   const { httpOnSuccess } = useSelector((state) => ({
-      httpOnSuccess: state.httpOnSuccess,
-   }));
+   const dispatch = useDispatch();
 
-   const handleOpenClose = () => {
-      setOpen(!open);
-   };
+   const prevData = useSelector((state) => state.fundingSource.fundingSourceItem);
 
+   const [open, setOpen] = useState(false);
    const [searchDate, setSearchDate] = useState("");
    const [isDisabled, setIsDisabled] = useState(false);
 
-   const fsHistoryLoader = !!FindLoad("GET_FUNDING_SOURCE_HISTORIES_BY_ID")
-      .length;
+   const fsHistoryLoader = !!FindLoad("GET_FUNDING_SOURCE_HISTORIES_BY_ID").length;
+   const success = FindSuccess("GET_FUNDING_SOURCE_HISTORIES_BY_ID");
+
+   useEffect(() => {
+      if (!!success.length) {
+         setOpen(false);
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess(
+               "GET_FUNDING_SOURCE_HISTORIES_BY_ID"
+            )
+         );
+      }
+   }, [success]);
+
+   function handleOpenClose() {
+      setOpen((prevState) => !prevState);
+   }
 
    const handleChangeFile = (e) => {
       setIsDisabled(false);
@@ -57,21 +61,6 @@ export const FundingSourceSingleHeader = ({ activeTab, title }) => {
          )
       );
    };
-
-   const successServ =
-      httpOnSuccess.length &&
-      httpOnSuccess[0].type === "CREATE_FUNDING_SOURCE_SERVICE_BY_ID";
-
-   useEffect(() => {
-      if (successServ) {
-         setOpen(false);
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess(
-               "CREATE_FUNDING_SOURCE_SERVICE_BY_ID"
-            )
-         );
-      }
-   }, [successServ]);
 
    return (
       <div className={classes.fundingSourceSingleHeaderWrapStyles}>
@@ -89,10 +78,7 @@ export const FundingSourceSingleHeader = ({ activeTab, title }) => {
                handleOpenClose={handleOpenClose}
                content={
                   activeTab === 0 ? (
-                     <CreateFundingSource
-                        handleClose={handleOpenClose}
-                        info={prevData}
-                     />
+                     <CreateFundingSource handleClose={handleOpenClose} info={prevData} />
                   ) : activeTab === 1 ? (
                      <FundingSourceServiceAdd handleClose={handleOpenClose} />
                   ) : activeTab === 2 ? (
@@ -132,11 +118,7 @@ export const FundingSourceSingleHeader = ({ activeTab, title }) => {
             ) : (
                <AddButton
                   text={
-                     activeTab === 1
-                        ? "Add Service"
-                        : activeTab === 2
-                        ? "Add Note"
-                        : ""
+                     activeTab === 1 ? "Add Service" : activeTab === 2 ? "Add Note" : ""
                   }
                   handleClick={handleOpenClose}
                />

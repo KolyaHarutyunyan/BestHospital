@@ -20,6 +20,7 @@ import { httpRequestsOnSuccessActions } from "../http_requests_on_success";
 function* createAppointmentSaga(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(appointmentService.createAppointmentService, action.payload.body);
       yield put({ type: GET_APPOINTMENT });
@@ -34,6 +35,7 @@ function* createAppointmentSaga(action) {
 function* editAppointmentSaga(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(
          appointmentService.editAppointmentService,
@@ -52,9 +54,9 @@ function* editAppointmentSaga(action) {
 
 /** Get Appointment */
 function* getAppointmentSaga(action) {
-   if (action.payload === "load") {
-      yield put(httpRequestsOnLoadActions.appendLoading(action.type));
-   }
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(appointmentService.getAppointmentService);
       yield put({
@@ -62,6 +64,7 @@ function* getAppointmentSaga(action) {
          payload: res.data,
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put({
          type: GET_APPOINTMENT_SUCCESS,
@@ -74,6 +77,8 @@ function* getAppointmentSaga(action) {
 
 function* getAppointmentFilterSaga(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(
          appointmentService.getAppointmentFilterService,
@@ -84,6 +89,7 @@ function* getAppointmentFilterSaga(action) {
          payload: res.data,
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put({
          type: GET_APPOINTMENT_SUCCESS,
@@ -96,6 +102,8 @@ function* getAppointmentFilterSaga(action) {
 
 function* getAppointmentByIdSaga(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(
          appointmentService.getAppointmentByIdService,
@@ -106,6 +114,7 @@ function* getAppointmentByIdSaga(action) {
          payload: res.data,
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -121,11 +130,12 @@ function* getAppointmentByIdSaga(action) {
 function* deleteAppointmentSaga(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(appointmentService.deleteAppointmentService, action.payload.id);
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      // yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({ type: GET_APPOINTMENT });
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -135,8 +145,9 @@ function* deleteAppointmentSaga(action) {
 
 /** Appointment Status */
 function* setAppointmentStatusSaga(action) {
-   // yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(
          appointmentService.setAppointmentStatusService,
@@ -164,6 +175,8 @@ function* setAppointmentStatusSaga(action) {
 /** Appointment Repeat */
 function* appointmentRepeatSaga(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(
          appointmentService.appointmentRepeatService,

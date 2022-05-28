@@ -14,7 +14,7 @@
 //     const [open, setOpen] = useState()
 //
 //     const handleOpenClose = () => {
-//         setOpen(!open)
+//         setOpen(prevState) => !prevState)
 //     }
 //
 //     return (

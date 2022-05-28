@@ -39,7 +39,7 @@ export const Role = ({
 
    const handleOpenCloseDel = () => {
       setItem("");
-      setOpen(!open);
+      setOpen((prevState) => !prevState);
    };
 
    const handleOpen = (item, j) => {
@@ -50,9 +50,7 @@ export const Role = ({
 
    const addPermissions = (item) => {
       if (item.length) {
-         dispatch(
-            authActions.assignAccess(params.id, item[item.length - 1].id)
-         );
+         dispatch(authActions.assignAccess(params.id, item[item.length - 1].id));
       }
    };
 

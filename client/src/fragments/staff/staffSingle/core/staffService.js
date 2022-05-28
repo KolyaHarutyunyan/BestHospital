@@ -103,14 +103,14 @@ export const StaffService = ({ staffGeneral, info, services }) => {
    return (
       <div className={classes2.staffGeneralWrapper}>
          <SimpleModal
-            handleOpenClose={() => setToggleModal(!toggleModal)}
+            handleOpenClose={() => setToggleModal((prevState) => !prevState)}
             openDefault={toggleModal}
             content={
                <DeleteElement
                   loader={!!loadDel.length}
                   info={`${info && info[index]?.name}`}
                   text={`delete Service`}
-                  handleClose={() => setToggleModal(!toggleModal)}
+                  handleClose={() => setToggleModal((prevState) => !prevState)}
                   handleDel={deleteService}
                />
             }
@@ -183,7 +183,7 @@ export const StaffService = ({ staffGeneral, info, services }) => {
                                  src={Images.remove}
                                  alt="delete"
                                  onClick={() => {
-                                    setToggleModal(!toggleModal);
+                                    setToggleModal((prevState) => !prevState);
                                     setIndex(index);
                                  }}
                               />

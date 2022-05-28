@@ -18,6 +18,7 @@ import {
 function* getInvoices(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(invoiceService.getInvoicesService, action?.payload?.data);
       yield put({
@@ -40,6 +41,7 @@ function* getInvoices(action) {
 function* getInvoiceById(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(invoiceService.getInvoiceByIdService, action.payload.id);
       yield put({
@@ -57,6 +59,7 @@ function* getInvoiceById(action) {
 function* generateInvoice(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(invoiceService.generateInvoiceService, action.payload.body);
       window.location.replace("/invoices");
@@ -71,6 +74,7 @@ function* generateInvoice(action) {
 function* editInvoice(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(
          invoiceService.editInvoiceService,
@@ -92,6 +96,7 @@ function* editInvoice(action) {
 function* deleteInvoice(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(invoiceService.deleteInvoiceService, action.payload.id);
       yield put({
