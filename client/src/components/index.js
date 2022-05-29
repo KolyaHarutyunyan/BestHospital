@@ -70,3 +70,4 @@ export { AvailableHours } from "./availability";
 export { UserInputsDropdown, CheckBoxDropdown } from "./dropdowns";
 export { BillFiltersSelectors } from "./selectors";
 export { TwoStepsContainer } from "./containers";
+export { ImagesFileUploader } from "./uploader";

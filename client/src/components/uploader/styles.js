@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core";
-import { Colors, Shadow, Backgrounds } from "@eachbase/utils";
+import { Colors, Shadow, Backgrounds, Images } from "@eachbase/utils";
 
 export const fileUploadersStyle = makeStyles(() => ({
    fileTypeInput: {
@@ -50,10 +50,10 @@ export const fileUploadersStyle = makeStyles(() => ({
       alignItems: "center",
       justifyContent: "center",
       flexDirection: "column",
-      height: 290,
    },
    normal: {
-      height: 290,
+      maxHeight: "290px",
+      height: "100%",
       overflowY: "scroll",
       msOverflowStyle: "none",
       scrollbarWidth: "none",
@@ -61,37 +61,6 @@ export const fileUploadersStyle = makeStyles(() => ({
       "&::-webkit-scrollbar": {
          display: "none",
       },
-   },
-   fileRow: {
-      display: "flex",
-      alignItems: "flex-end",
-      padding: "16px 2px",
-      borderBottom: `1px solid ${Colors.BackgroundBlue}`,
-   },
-   imageContainer: {
-      width: 60,
-      height: 73,
-      borderRadius: 4,
-      boxShadow: Shadow.changeShadow,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      marginRight: 24,
-      flex: "0 0 60px",
-      position: "relative",
-   },
-   fileName: {
-      fontSize: 12,
-      color: Colors.TextSecondary,
-      paddingBottom: 12,
-      lineHeight: 1,
-      fontWeight: 600,
-   },
-   fileInput: {
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "space-between",
-      width: "100%",
    },
    fileNameInput: {
       width: "100%",
@@ -124,17 +93,6 @@ export const fileUploadersStyle = makeStyles(() => ({
       flex: "0 0 32px",
       marginLeft: 16,
    },
-   fileSize: {
-      fontSize: 10,
-      color: Colors.TextLightGray,
-      textAlign: "center",
-   },
-   removeIcon: {
-      position: "absolute",
-      top: -5,
-      right: -5,
-      cursor: "pointer",
-   },
    iconText: {
       display: "flex",
       flexDirection: "column",
@@ -161,5 +119,23 @@ export const fileUploadersStyle = makeStyles(() => ({
       fontSize: "14px",
       fontWeight: 600,
       color: Colors.ThemeRed,
+   },
+   uploadOneFileStyle: {
+      display: "flex",
+      alignItems: "center",
+      fontSize: "14px",
+      fontWeight: 600,
+      color: Colors.BackgroundBlue,
+      cursor: "pointer",
+      "&::before": {
+         content: "''",
+         width: "24px",
+         height: "24px",
+         backgroundImage: `url(${Images.download})`,
+         backgroundRepeat: "no-repeat",
+         backgroundSize: "contain",
+         backgroundPosition: "center",
+         marginRight: "8px",
+      },
    },
 }));

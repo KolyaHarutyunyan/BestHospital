@@ -212,7 +212,13 @@ export const buttonsStyle = makeStyles(() => ({
       color: "#347AF0",
       display: "inline-flex",
       alignItems: "center",
-      "& img": { marginLeft: "8px" },
+      width: "24px",
+      heigth: "24px",
+      "& img": { 
+         width: "100%",
+         objectFit: "contain", 
+         marginLeft: "8px", 
+      },
    },
    // ** end **
 
