@@ -226,6 +226,34 @@ export const serviceSingleStyles = makeStyles(() => ({
       borderRadius: "8px",
       padding: 40,
    },
+   authorizationFileHeader: {
+      textAlign: "center",
+      paddingBottom: 30,
+      "& h1": {
+         fontSize: 32,
+         color: Colors.TextSecondary,
+         fontWeight: "bold",
+      },
+      "& h2": {
+         fontSize: 16,
+         color: Colors.TextSecondary,
+         fontWeight: "regular",
+         padding: "16px 0",
+      },
+      "& p": {
+         fontSize: 16,
+         color: Colors.TextSecondary,
+         fontWeight: "regular",
+      },
+      "& span": {
+         fontSize: 16,
+         color: Colors.BackgroundBlue,
+         fontWeight: "bold",
+      },
+   },
+    starIcon: {
+      color: `${Colors.ThemeRed}!important`,
+   },
 }));
 
 export const editButtonStyle = {

@@ -16,7 +16,6 @@ import { EmploymentModal, TimesheetModal } from "./modals";
 import {
    adminActions,
    fundingSourceActions,
-   httpRequestsOnErrorsActions,
 } from "@eachbase/store";
 import { useParams } from "react-router-dom";
 
@@ -51,8 +50,11 @@ export const StaffItemHeader = ({
    }));
 
    const classes = serviceSingleStyles();
+
    const dispatch = useDispatch();
+
    const params = useParams();
+   
    const [switchBoolean, setSwitchBoolean] = useState(adminInfoById?.clinical || false);
    const [switched, setSwitched] = useState(false);
    const [searchDate, setSearchDate] = useState("");
@@ -68,22 +70,19 @@ export const StaffItemHeader = ({
       if (switched) {
          dispatch(adminActions.isClinician(params.id, switchBoolean));
       }
-   }, [switchBoolean, switched]);
+   }, [switched]);
 
-   const handleChange = (e) => {
+   function handleChange(e) {
       setIsDisabled(false);
-      setSearchDate(e.target.value);
-      dispatch(
-         httpRequestsOnErrorsActions.removeError("GET_FUNDING_SOURCE_HISTORIES_BY_ID")
-      );
-   };
+      setSearchDate(e.target.value); 
+   }
 
    function handleSwitchChange() {
       setSwitched(true);
       setSwitchBoolean((prevState) => !prevState);
    }
 
-   const handleSubmit = () => {
+   function handleSubmit() {
       setIsDisabled(true);
       dispatch(
          fundingSourceActions.getFundingSourceHistoriesById(
@@ -91,7 +90,7 @@ export const StaffItemHeader = ({
             searchDate && new Date(searchDate).toISOString()
          )
       );
-   };
+   }
 
    return (
       <div>
@@ -175,8 +174,7 @@ export const StaffItemHeader = ({
          </ul>
          <SimpleModal
             openDefault={activeTab === 3 ? openCredModal : openModal}
-            handleOpenClose={
-               activeTab === 3 ? () => openCloseCredModal() : handleOpenClose
+            handleOpenClose={() => activeTab === 3 ? openCloseCredModal() : handleOpenClose()
             }
             content={
                activeTab === 0 ? (

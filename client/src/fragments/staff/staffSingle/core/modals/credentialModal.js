@@ -9,7 +9,7 @@ import {
    SelectInputPlaceholder,
 } from "@eachbase/components";
 import { useDispatch } from "react-redux";
-import { adminActions } from "@eachbase/store";
+import { adminActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 
@@ -43,11 +43,11 @@ export const CredentialModal = ({
    const globalText = useGlobalTextStyles();
 
    const [mType, setMType] = useState(credModalType);
-   const [checkboxValue, setCheckboxValue] = useState("nonExpiring");
+   const [checkboxValue, setCheckboxValue] = useState(!!globalCredentialInformation?.expirationDate ? "expiring" : "nonExpiring");
 
    const [error, setError] = useState("");
    const [inputs, setInputs] = useState(
-      globalCredentialInformation ? globalCredentialInformation : { expirationDate: "" }
+      !!globalCredentialInformation ? { ...globalCredentialInformation } : { expirationDate: "" }
    );
 
    const [globalCredId, setGlobalCredId] = useState("");
@@ -147,24 +147,18 @@ export const CredentialModal = ({
    };
 
    useEffect(() => {
-      if (success) {
+      if (!!success.length) {
          handleClose();
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_CREDENTIAL"));
       }
-   }, [success.length]);
+   }, [success]);
 
    useEffect(() => {
-      if (edit) {
-         handleClose() && handleClose();
+      if (!!edit.length) {
+         handleClose();
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_CREDENTIAL_BY_ID"));
       }
-   }, [edit.length]);
-
-   useEffect(() => {
-      if (globalCredentialInformation?.expirationDate) {
-         setCheckboxValue("expiring");
-      } else {
-         setCheckboxValue("nonExpiring");
-      }
-   }, [globalCredentialInformation]);
+   }, [edit]);
 
    return (
       <div className={classes.inactiveModalBody}>

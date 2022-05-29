@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -9,13 +9,35 @@ import {
    SimpleModal,
    TableBodyComponent,
 } from "@eachbase/components";
-import { Images } from "@eachbase/utils";
+import { FindLoad, FindSuccess, Images } from "@eachbase/utils";
 import { TableCell } from "@material-ui/core";
 import { noteActions } from "@eachbase/store/notes";
+import { httpRequestsOnSuccessActions } from "@eachbase/store";
+
+const headerTitles = [
+   {
+      title: "Date",
+      sortable: true,
+   },
+   {
+      title: "Creator Name",
+      sortable: true,
+   },
+   {
+      title: "Subject",
+      sortable: false,
+   },
+   {
+      title: "Action",
+      sortable: false,
+   },
+];
 
 export const ClientNotes = ({ data }) => {
    const params = useParams();
+
    const dispatch = useDispatch();
+
    const [noteModalData, setNoteModalData] = useState({});
    const [openDelModal, setOpenDelModal] = useState(false);
    const [noteModalInfo, setNoteModalInfo] = useState({
@@ -23,25 +45,6 @@ export const ClientNotes = ({ data }) => {
       created: "",
       subject: "",
    });
-
-   const headerTitles = [
-      {
-         title: "Date",
-         sortable: true,
-      },
-      {
-         title: "Creator Name",
-         sortable: true,
-      },
-      {
-         title: "Subject",
-         sortable: false,
-      },
-      {
-         title: "Action",
-         sortable: false,
-      },
-   ];
 
    let notesItem = (item, index) => {
       return (
@@ -107,9 +110,18 @@ export const ClientNotes = ({ data }) => {
 
    const handleDeleteNote = () => {
       dispatch(noteActions.deleteGlobalNote(noteModalData.id, params.id, "Client"));
-      setOpenDelModal(false);
-      closeNoteModal();
    };
+
+   const deleteSuccess = FindSuccess("DELETE_GLOBAL_NOTE");
+   const loader = FindLoad("DELETE_GLOBAL_NOTE");
+
+   useEffect(() => {
+      if (!!deleteSuccess.length) {
+         setOpenDelModal(false);
+         closeNoteModal();
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("DELETE_GLOBAL_NOTE"));
+      }
+   }, [deleteSuccess]);
 
    return (
       <>
@@ -136,6 +148,7 @@ export const ClientNotes = ({ data }) => {
                   info={noteModalData?.deletedName}
                   handleDel={handleDeleteNote}
                   handleClose={handleOpenCloseDel}
+                  loader={!!loader.length}
                />
             }
          />

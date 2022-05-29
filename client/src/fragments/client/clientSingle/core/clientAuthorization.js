@@ -5,6 +5,7 @@ import {
    AddModalButton,
    Card,
    DeleteElement,
+   ImagesFileUploader,
    Loader,
    NoItemText,
    Notes,
@@ -59,22 +60,18 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
 
    useEffect(() => {
       if (!!success.length) {
-         setToggleModal(!toggleModal);
+         setToggleModal((prevState) => !prevState);
          dispatch(
             httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT_AUTHORIZATION")
          );
-         dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION"));
       }
    }, [success]);
 
    useEffect(() => {
       if (!!successDelServ.length) {
-         setToggleModal3(!toggleModal3);
+         setToggleModal3((prevState) => !prevState);
          dispatch(
             httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT_AUTHORIZATION_SERV")
-         );
-         dispatch(
-            httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION_SERV")
          );
       }
    }, [successDelServ]);
@@ -236,7 +233,18 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
             openDefault={modalIsOpen}
             content={
                <div className={classes.authorizationFileWrapper}>
-                  <AuthorizationFile
+                  <div className={classes.authorizationFileHeader}>
+                     <h1>Uploaded files</h1>
+                     <h2>Please fulfill the file type to upload a file.</h2>
+                     <p>
+                        <span className={classes.starIcon}>*</span>
+                        Only
+                        <span> PDF , PNG , CSV </span> &<span> JPEG </span>
+                        formats are supported
+                     </p>
+                  </div>
+                  <ImagesFileUploader 
+                     changeNameAfterFileUpload={true}
                      handleImagesPass={(images) => setChosenImages(images)}
                   />
                   <AddModalButton

@@ -12,17 +12,13 @@ import { ErrorText, FindLoad, FindSuccess, isNotEmpty } from "@eachbase/utils";
 import { fundingSourceActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 
 export const FundingSourceServiceAdd = ({ handleClose, info }) => {
-   const systemServices = useSelector((state) => state.system.services);
-
-   const [error, setError] = useState("");
-   const [inputs, setInputs] = useState(info ? { ...info } : {});
-   const [sysServiceItem, setSysServiceItem] = useState(null);
+   const classes = foundingSourceModalStyle();
 
    const params = useParams();
 
-   let dispatch = useDispatch();
+   const dispatch = useDispatch();
 
-   const classes = foundingSourceModalStyle();
+   const systemServices = useSelector((state) => state.system.services);
 
    const success = FindSuccess("EDIT_FUNDING_SOURCE_SERVICE");
    const successCreate = FindSuccess("CREATE_FUNDING_SOURCE_SERVICE_BY_ID");
@@ -50,15 +46,10 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
       }
    }, [successCreate]);
 
-   useEffect(() => {
-      systemServices &&
-         systemServices.length > 0 &&
-         systemServices.forEach((item, index) => {
-            if (inputs.name === item.name) {
-               setSysServiceItem(item);
-            }
-         });
-   }, [inputs]);
+   const [error, setError] = useState("");
+   const [inputs, setInputs] = useState(info ? { ...info, name: info.serviceId } : {});
+
+   const sysServiceItem = systemServices.find(service => service.id === inputs?.name);
 
    function handleChange(e) {
       setInputs(
@@ -76,8 +67,8 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
          isNotEmpty(inputs.max);
       if (serviceDataIsValid) {
          const data = {
-            name: inputs.name,
-            serviceId: sysServiceItem?.id,
+            name: sysServiceItem?.name,
+            serviceId: inputs.name,
             rate: 0,
             cptCode: inputs.cptCode,
             size: +inputs.size,
@@ -118,11 +109,12 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
             <div className={classes.modifierServiceBoxStyle}>
                <SelectInput
                   name={"name"}
+                  type={"id"}
                   label={"Service*"}
                   handleSelect={handleChange}
                   value={inputs.name}
                   typeError={error === "name" ? ErrorText.field : ""}
-                  list={systemServices ? systemServices : []}
+                  list={systemServices}
                />
                <div className={classes.displayCodeBlock}>
                   <p className={classes.displayCodeBlockText}>

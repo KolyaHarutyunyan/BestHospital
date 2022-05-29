@@ -5,8 +5,9 @@ import { AccessManagement, AddRoleModal } from "@eachbase/fragments";
 import { useSelector } from "react-redux";
 
 export const Management = ({}) => {
-   const [open, setOpen] = useState(false);
    const classes = managementStyle();
+
+   const [open, setOpen] = useState(false);
 
    const { permissionsList, rolesList, role } = useSelector((state) => ({
       permissionsList: state.permissions.permissionsList,
@@ -17,20 +18,17 @@ export const Management = ({}) => {
    const handleOpenClose = () => {
       setOpen((prevState) => !prevState);
    };
+
    return (
       <div>
          <div className={classes.managementStyle}>
-            <div />
-
-            <AddButton handleClick={handleOpenClose} text={"Add Role"} />
-         </div>
-
+            <AddButton text={"Add Role"} handleClick={handleOpenClose} />
+         </div> 
          <AccessManagement
             rolesList={rolesList}
             permissionsList={permissionsList}
             role={role}
          />
-
          <SimpleModal
             handleOpenClose={handleOpenClose}
             openDefault={open}

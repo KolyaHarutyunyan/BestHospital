@@ -21,21 +21,20 @@ const Placeholder = ({children}) => {
 };
 
 export const SelectInputPlaceholder = ({
-                                           className,
-                                           loader,
-                                           name,
-                                           handleSelect,
-                                           style,
-                                           value,
-                                           list,
-                                           typeError,
-                                           type,
-                                           language,
-                                           styles,
-                                           placeholder,
+    className,
+    loader,
+    name,
+    handleSelect,
+    style,
+    value,
+    list,
+    typeError,
+    type,
+    language,
+    styles,
+    placeholder,
     status
-                                       }) => {
-
+}) => {
     const [current, setCurrent] = React.useState('');
     const dispatch = useDispatch()
     const classes = inputsStyle();
@@ -52,12 +51,11 @@ export const SelectInputPlaceholder = ({
     const success = httpOnSuccess.length && httpOnSuccess.filter((i) => i.type === status)
 
     useEffect(() => {
-        if (success) {
-            dispatch(httpRequestsOnSuccessActions.removeSuccess(status))
-            setCurrent('')
+        if (!!success.length) {
+            setCurrent('');
+            dispatch(httpRequestsOnSuccessActions.removeSuccess(success[0].type));
         }
-    }, [success.length])
-
+    }, [success]);
 
     return (
         <>

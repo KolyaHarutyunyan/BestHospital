@@ -63,8 +63,9 @@ export const ScheduleFragment = ({}) => {
    const successRecur = FindSuccess("APPOINTMENT_REPEAT");
 
    useEffect(() => {
-      if (successRecur.length) {
-         setOpenRecur(!openRecur);
+      if (!!successRecur.length) {
+         setOpenRecur(false);
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("APPOINTMENT_REPEAT"));
       }
    }, [successRecur]);
 
@@ -73,29 +74,28 @@ export const ScheduleFragment = ({}) => {
       // dispatch(appointmentActions.getAppointmentById(item._id))
       setModalDate(item);
 
-      setOpen(!open);
+      setOpen(prevState => !prevState);
    };
 
    const success = FindSuccess("CREATE_APPOINTMENT");
    const editSuccess = FindSuccess("EDIT_APPOINTMENT");
 
    useEffect(() => {
-      if (success.length) {
+      if (!!success.length) {
+         setOpen(false);
          dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_APPOINTMENT"));
-         setOpen(!open);
       }
    }, [success]);
 
    useEffect(() => {
-      if (editSuccess.length) {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_APPOINTMENT"));
-         // dispatch(appointmentActions.getAppointment())
+      if (!!editSuccess.length) {
          setOpen(false);
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_APPOINTMENT"));
       }
    }, [editSuccess]);
 
    const handleOpen = () => {
-      setOpen(!open);
+      setOpen(prevState => !prevState);
       setModalDate("");
       setDate("");
    };

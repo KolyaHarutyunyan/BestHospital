@@ -3,15 +3,17 @@ import { DeleteElement, TableWrapper } from "@eachbase/components";
 import { ClientTable, CreateClient } from "@eachbase/fragments";
 import { useDispatch } from "react-redux";
 import { clientsStyle } from "./styles";
-import { clientActions } from "@eachbase/store";
+import { clientActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 import { FindLoad, FindSuccess } from "@eachbase/utils";
 
 export const Client = ({}) => {
    let classes = clientsStyle();
+
+   const dispatch = useDispatch();
+
    const [open, setOpen] = useState(false);
    const [deleteClient, setDeleteClient] = useState("");
    const [page, setPage] = useState(1);
-   const dispatch = useDispatch();
    const [status, setStatus] = useState("ACTIVE");
 
    useEffect(() => {
@@ -28,16 +30,16 @@ export const Client = ({}) => {
       setOpen((prevState) => !prevState);
    };
 
-   const removeClient = () => dispatch(clientActions.deleteClient(deleteClient.id));
    const loader = FindLoad("DELETE_CLIENT");
    const getLoader = FindLoad("GET_CLIENTS");
    const success = FindSuccess("DELETE_CLIENT");
 
    useEffect(() => {
-      if (success) {
+      if (!!success.length) {
          handleOpenClose();
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT"));
       }
-   }, [success.length]);
+   }, [success]);
 
    return (
       <>
@@ -56,7 +58,7 @@ export const Client = ({}) => {
                deleteClient ? (
                   <DeleteElement
                      loader={!!loader.length}
-                     handleDel={removeClient}
+                     handleDel={() => dispatch(clientActions.deleteClient(deleteClient.id))}
                      className={classes}
                      text={"Delete Client"}
                      info={deleteClient.firstName}

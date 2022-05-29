@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Paper, Table, TableBody, TableCell, TableContainer } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -11,6 +11,7 @@ import {
 } from "@eachbase/components";
 import {
    FindLoad,
+   FindSuccess,
    hooksForTable,
    Images,
    useGlobalStyles,
@@ -19,6 +20,7 @@ import {
 import moment from "moment";
 import { noteActions } from "@eachbase/store/notes";
 import { useParams } from "react-router-dom";
+import { httpRequestsOnSuccessActions } from "@eachbase/store";
 
 export const Notes = ({
    restHeight,
@@ -68,7 +70,16 @@ export const Notes = ({
       dispatch(noteActions.deleteGlobalNote(deletedData.id, params.id, model));
    };
 
+   const deleteSuccess = FindSuccess("DELETE_GLOBAL_NOTE");
    const loader = FindLoad("DELETE_GLOBAL_NOTE");
+
+   useEffect(() => {
+      if (!!deleteSuccess.length) {
+         setOpenDelModal(false);
+         closeModal();
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("DELETE_GLOBAL_NOTE"));
+      }
+   }, [deleteSuccess]);
 
    return (
       <>
@@ -163,7 +174,6 @@ export const Notes = ({
                   handleOpenClose={handleOpenClose}
                   content={
                      <AddNotes
-                        closeModal={closeModal}
                         model={model}
                         noteModalTypeInfo={noteModalInfoEdit}
                         handleClose={handleOpenClose}

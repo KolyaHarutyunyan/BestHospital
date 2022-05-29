@@ -1,13 +1,16 @@
 import React from "react";
-import { AuthorizationFile } from "../../../../../client";
 import { claimPaymentTHeadTBodyStyle } from "./styles";
+import { ImagesFileUploader } from "@eachbase/components";
 
 export const LastStepInputs = ({ handleImagesPass }) => {
    const classes = claimPaymentTHeadTBodyStyle();
 
    return (
       <div className={classes.lastStepBoxStyle}>
-         <AuthorizationFile fileIsForPayment={true} handleImagesPass={handleImagesPass} />
+         <ImagesFileUploader 
+            changeNameAfterFileUpload={true}
+            handleImagesPass={handleImagesPass} 
+         />
       </div>
    );
 };

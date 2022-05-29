@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fundingSourceSingleStyles, editButtonStyle } from "./styles";
-import { FindLoad, FindSuccess, Images } from "@eachbase/utils";
+import { FindLoad, Images } from "@eachbase/utils";
 import {
    AddButton,
    AddModalButton,
@@ -11,7 +11,7 @@ import {
 } from "@eachbase/components";
 import { FundingSourceServiceAdd } from "./modals";
 import { CreateFundingSource } from "../../createFundingSource";
-import { fundingSourceActions, httpRequestsOnSuccessActions } from "@eachbase/store";
+import { fundingSourceActions } from "@eachbase/store";
 
 const filterBtn = {
    width: 93,
@@ -30,29 +30,17 @@ export const FundingSourceSingleHeader = ({ activeTab, title }) => {
    const [isDisabled, setIsDisabled] = useState(false);
 
    const fsHistoryLoader = !!FindLoad("GET_FUNDING_SOURCE_HISTORIES_BY_ID").length;
-   const success = FindSuccess("GET_FUNDING_SOURCE_HISTORIES_BY_ID");
-
-   useEffect(() => {
-      if (!!success.length) {
-         setOpen(false);
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess(
-               "GET_FUNDING_SOURCE_HISTORIES_BY_ID"
-            )
-         );
-      }
-   }, [success]);
 
    function handleOpenClose() {
       setOpen((prevState) => !prevState);
    }
 
-   const handleChangeFile = (e) => {
+   function handleChangeFile(e) {
       setIsDisabled(false);
       setSearchDate(e.target.value);
-   };
+   }
 
-   const handleSubmit = () => {
+   function handleSubmit() {
       setIsDisabled(true);
       dispatch(
          fundingSourceActions.getFundingSourceHistoriesById(
@@ -60,7 +48,7 @@ export const FundingSourceSingleHeader = ({ activeTab, title }) => {
             searchDate && new Date(searchDate).toISOString()
          )
       );
-   };
+   }
 
    return (
       <div className={classes.fundingSourceSingleHeaderWrapStyles}>

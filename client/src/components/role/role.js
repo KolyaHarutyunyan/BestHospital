@@ -34,7 +34,7 @@ export const Role = ({
 
    const getRoleItemId = (item) => {
       setItem(item);
-      setOpen(!open);
+      setOpen((prevState) => !prevState);
    };
 
    const handleOpenCloseDel = () => {
@@ -62,7 +62,7 @@ export const Role = ({
       if (!!success.length) {
          setItem("");
          setIndex(0);
-         setOpen(!open);
+         setOpen(false);
          handleRemoveSelected && handleRemoveSelected();
          dispatch(httpRequestsOnSuccessActions.removeSuccess("REMOVE_ACCESS"));
       }

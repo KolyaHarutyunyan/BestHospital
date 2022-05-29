@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
    Card,
    DeleteElement,
@@ -10,40 +10,61 @@ import {
    TableBodyComponent,
 } from "@eachbase/components";
 import { serviceSingleStyles } from "./styles";
-import { Colors, Images } from "@eachbase/utils";
+import { Colors, FindLoad, FindSuccess, Images } from "@eachbase/utils";
 import { TableCell } from "@material-ui/core";
 import {
    clientActions,
-   httpRequestsOnErrorsActions,
    httpRequestsOnSuccessActions,
 } from "@eachbase/store";
 
+const headerTitles = [
+   {
+      title: "First Na...",
+      sortable: true,
+   },
+   {
+      title: "Last Name",
+      sortable: true,
+   },
+   {
+      title: "Relationship",
+      sortable: false,
+   },
+   {
+      title: "Address",
+      sortable: true,
+   },
+   {
+      title: "Phone Num...",
+      sortable: false,
+   },
+   {
+      title: "Action",
+      sortable: false,
+   },
+];
+
 export const ClientContact = ({ data, setContactId, handleOpenClose, info }) => {
    const classes = serviceSingleStyles();
+
    const dispatch = useDispatch();
+
    const [openClose, setOpenClose] = useState(false);
    const [index, setIndex] = useState(null);
+
    const params = useParams();
 
-   let openCloseModal = () => {
+   function openCloseModal() {
       setOpenClose((prevState) => !prevState);
-   };
+   }
 
-   const { httpOnSuccess, httpOnError, httpOnLoad } = useSelector((state) => ({
-      httpOnSuccess: state.httpOnSuccess,
-      httpOnError: state.httpOnError,
-      httpOnLoad: state.httpOnLoad,
-   }));
-
-   const success =
-      httpOnSuccess.length && httpOnSuccess[0].type === "DELETE_CLIENT_CONTACT";
-   const errorText = httpOnError.length && httpOnError[0].error;
+   const success = FindSuccess("DELETE_CLIENT_CONTACT");
+   const loader = FindLoad("DELETE_CLIENT_CONTACT");
 
    useEffect(() => {
-      if (success) {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT_CONTACT"));
-         dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_CONTACTS"));
+      if (!!success.length) {
          openCloseModal();
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT_CONTACT"));
       }
    }, [success]);
 
@@ -54,37 +75,9 @@ export const ClientContact = ({ data, setContactId, handleOpenClose, info }) => 
       { title: "Code", value: data?.code },
    ];
 
-   const headerTitles = [
-      {
-         title: "First Na...",
-         sortable: true,
-      },
-      {
-         title: "Last Name",
-         sortable: true,
-      },
-      {
-         title: "Relationship",
-         sortable: false,
-      },
-      {
-         title: "Address",
-         sortable: true,
-      },
-      {
-         title: "Phone Num...",
-         sortable: false,
-      },
-      {
-         title: "Action",
-         sortable: false,
-      },
-   ];
-
-   let deleteContact = () => {
+   function deleteContact() {
       dispatch(clientActions.deleteClientContact(info[index].id, params.id));
-      dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_CONTACTS"));
-   };
+   }
 
    let clientContactItem = (item, index) => {
       return (
@@ -127,7 +120,7 @@ export const ClientContact = ({ data, setContactId, handleOpenClose, info }) => 
          <SimpleModal
             content={
                <DeleteElement
-                  loader={httpOnLoad.length > 0}
+                  loader={!!loader.length}
                   handleDel={deleteContact}
                   text={"Delete Contact"}
                   info={index !== null && info[index]?.firstName}
@@ -147,17 +140,13 @@ export const ClientContact = ({ data, setContactId, handleOpenClose, info }) => 
          />
          <div className={classes.clearBoth} />
          <div className={classes.notesWrap}>
-            {errorText !== "Client contact with this id was not found" ? (
-               <Notes
-                  restHeight={"360px"}
-                  data={info}
-                  items={clientContactItem}
-                  headerTitles={headerTitles}
-                  defaultStyle={true}
-               />
-            ) : (
-               <NoItemText text={"No Contacts Yet"} />
-            )}
+            <Notes
+               restHeight={"360px"}
+               data={info}
+               items={clientContactItem}
+               headerTitles={headerTitles}
+               defaultStyle={true}
+            />
          </div>
       </div>
    );

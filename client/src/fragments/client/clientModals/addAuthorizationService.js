@@ -9,11 +9,10 @@ import {
    MinLoader,
 } from "@eachbase/components";
 import { createClientStyle } from "./styles";
-import { Colors, ErrorText } from "@eachbase/utils";
+import { Colors, ErrorText, FindLoad, FindSuccess } from "@eachbase/utils";
 import {
    clientActions,
    fundingSourceActions,
-   httpRequestsOnErrorsActions,
    httpRequestsOnSuccessActions,
 } from "@eachbase/store";
 import axios from "axios";
@@ -38,36 +37,19 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
       });
    }, []);
 
-   const { httpOnSuccess, httpOnLoad } = useSelector((state) => ({
-      httpOnSuccess: state.httpOnSuccess,
-      httpOnLoad: state.httpOnLoad,
-   }));
-
-   const success =
-      httpOnSuccess.length && httpOnSuccess[0].type === "EDIT_CLIENT_AUTHORIZATION_SERV";
-   const successCreate =
-      httpOnSuccess.length &&
-      httpOnSuccess[0].type === "CREATE_CLIENT_AUTHORIZATION_SERV";
+   const success = !!info ? FindSuccess("EDIT_CLIENT_AUTHORIZATION_SERV") : FindSuccess("CREATE_CLIENT_AUTHORIZATION_SERV");
+   const load = !!info ? FindLoad("EDIT_CLIENT_AUTHORIZATION_SERV") : FindLoad("CREATE_CLIENT_AUTHORIZATION_SERV");
 
    useEffect(() => {
-      if (success) {
+      if (!!success.length) {
          handleClose();
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess("EDIT_CLIENT_AUTHORIZATION_SERV")
-         );
-         dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION"));
+         dispatch(httpRequestsOnSuccessActions.removeSuccess(success[0].type));
       }
-      if (successCreate) {
-         handleClose();
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess("CREATE_CLIENT_AUTHORIZATION_SERV")
-         );
-         dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION"));
-      }
-   }, [success, successCreate]);
+   }, [success]);
 
    const [modif, setModif] = useState("");
    const [loader, setLoader] = useState(false);
+
    const handleChange = (e) => {
       if (e.target.name === "modifiers") {
          setLoader(true);
@@ -120,7 +102,7 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
             total: +inputs.total,
             modifiers: modifiersPost,
          };
-         if (info) {
+         if (!!info) {
             dispatch(
                clientActions.editClientsAuthorizationsServ(
                   {
@@ -276,8 +258,8 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
             </div>
             <div className={classes.clientModalBlock}>
                <CreateChancel
-                  loader={httpOnLoad.length > 0}
-                  create={info ? "Save" : "Add"}
+                  loader={!!load.length}
+                  create={!!info ? "Save" : "Add"}
                   chancel={"Cancel"}
                   onCreate={handleCreate}
                   onClose={handleClose}
