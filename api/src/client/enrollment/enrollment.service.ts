@@ -97,7 +97,8 @@ export class EnrollmentService {
       await this.fundingService.findById(funderId);
       enrollment.funderId = funderId;
       if (dto.startDate) enrollment.startDate = dto.startDate;
-      if (dto.terminationDate) enrollment.terminationDate = dto.terminationDate;
+      if (dto.terminationDate || dto.terminationDate == null)
+        enrollment.terminationDate = dto.terminationDate;
       if (dto.primary) {
         const findEnrollment = await this.model.findOne({ clientId, primary: true });
         if (findEnrollment !== null && enrollment.id != findEnrollment.id) {
