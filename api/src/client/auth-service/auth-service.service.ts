@@ -118,14 +118,13 @@ export class AuthService {
   async availableModifiers(authId: string, fundingService: any): Promise<any> {
     const dbModifiers = [],
       available = [];
-    const authServices = await this.model.find({ authId });
+    const authServices = await this.model.find({ authorizationId: authId });
     // this.checkAuthorizationService(authServices[0]);
     authServices.map((authService) => {
       authService.modifiers.map((modifier) => {
         dbModifiers.push(modifier);
       });
     });
-
     if (dbModifiers.length) {
       fundingService.modifiers.map((modifier) => {
         if (
@@ -136,8 +135,9 @@ export class AuthService {
           available.push(modifier);
         }
       });
+      return available;
     }
-    return available;
+    return fundingService.modifiers;
   }
 
   // find all authorization services
