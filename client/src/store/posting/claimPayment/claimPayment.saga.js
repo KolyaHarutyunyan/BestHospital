@@ -20,6 +20,7 @@ import {
 function* getClaimPayments(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(
          claimPaymentService.getClaimPaymentsService,
@@ -44,6 +45,7 @@ function* getClaimPayments(action) {
 function* getClaimPaymentById(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(
          claimPaymentService.getClaimPaymentByIdService,
@@ -64,6 +66,7 @@ function* getClaimPaymentById(action) {
 function* createClaimPayment(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(claimPaymentService.createClaimPaymentService, action.payload.body);
       yield put({ type: GET_CLAIM_PAYMENTS });
@@ -78,6 +81,7 @@ function* createClaimPayment(action) {
 function* editClaimPayment(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(
          claimPaymentService.editClaimPaymentService,
@@ -99,6 +103,7 @@ function* editClaimPayment(action) {
 function* deleteClaimPayment(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(claimPaymentService.deleteClaimPaymentService, action.payload.id);
       yield put({
@@ -116,6 +121,7 @@ function* deleteClaimPayment(action) {
 function* editClaimPaymentStatus(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(
          claimPaymentService.editClaimPaymentStatusService,
@@ -138,6 +144,7 @@ function* editClaimPaymentStatus(action) {
 function* addClaimInClaimPayment(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(
          claimPaymentService.addClaimInClaimPaymentService,

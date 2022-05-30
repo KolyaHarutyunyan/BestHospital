@@ -15,7 +15,6 @@ import { useDispatch } from "react-redux";
 import { AddEnrollment } from "../../clientModals";
 import {
    clientActions,
-   httpRequestsOnErrorsActions,
    httpRequestsOnSuccessActions,
 } from "@eachbase/store";
 import { clientEnrollmentHeaderTitles, getGeneralInfo } from "./constants";
@@ -35,10 +34,8 @@ export const ClientEnrollment = ({ data, info }) => {
 
    useEffect(() => {
       if (!!success.length) {
-         setToggleModal(!toggleModal);
+         setToggleModal((prevState) => !prevState);
          dispatch(httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT_ENROLLMENT"));
-         dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_ENROLLMENT"));
-         dispatch(httpRequestsOnErrorsActions.removeError("DELETE_CLIENT_ENROLLMENT"));
       }
    }, [success]);
 
@@ -94,7 +91,7 @@ export const ClientEnrollment = ({ data, info }) => {
                      className={classes.iconStyle}
                      onClick={(e) => {
                         e.stopPropagation();
-                        setToggleModal(!toggleModal);
+                        setToggleModal((prevState) => !prevState);
                         setIndex(index);
                      }}
                   />
@@ -109,12 +106,12 @@ export const ClientEnrollment = ({ data, info }) => {
    return (
       <div className={classes.staffGeneralWrapper}>
          <SimpleModal
-            handleOpenClose={() => setToggleModal(!toggleModal)}
+            handleOpenClose={() => setToggleModal((prevState) => !prevState)}
             openDefault={toggleModal}
             content={
                <AddEnrollment
                   info={info[indexItem]}
-                  handleClose={() => setToggleModal(!toggleModal)}
+                  handleClose={() => setToggleModal((prevState) => !prevState)}
                />
             }
          />

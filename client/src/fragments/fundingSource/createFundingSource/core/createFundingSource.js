@@ -24,6 +24,10 @@ import {
 import { FindError } from "@eachbase/utils";
 
 export const CreateFundingSource = ({ handleClose, info }) => {
+   const classes = createFoundingSourceStyle();
+
+   const dispatch = useDispatch();
+
    const [error, setError] = useState("");
    const [inputs, setInputs] = useState(info ? { ...info } : {});
    const [fullAddress, setFullAddress] = useState(
@@ -32,8 +36,6 @@ export const CreateFundingSource = ({ handleClose, info }) => {
    const [enteredAddress, setEnteredAddress] = useState(
       info && info.address ? info.address.formattedAddress : ""
    );
-   const classes = createFoundingSourceStyle();
-   const dispatch = useDispatch();
 
    const success = info
       ? FindSuccess("EDIT_FUNDING_SOURCE")
@@ -167,13 +169,10 @@ export const CreateFundingSource = ({ handleClose, info }) => {
    };
 
    useEffect(() => {
-      if (!success) return;
-      if (info) {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_FUNDING_SOURCE"));
-      } else {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_FUNDING_SOURCE"));
+      if (!!success.length) {
+         dispatch(httpRequestsOnSuccessActions.removeSuccess(success[0].type));
+         handleClose();
       }
-      handleClose();
    }, [success]);
 
    return (

@@ -1,81 +1,82 @@
-import React, {useEffect, useState} from "react";
-import {DeleteElement, TableWrapper} from "@eachbase/components";
-import {ClientTable, CreateClient} from "@eachbase/fragments";
-import {useDispatch} from "react-redux";
-import {clientsStyle} from './styles'
-import {clientActions} from "@eachbase/store";
-import {FindLoad, FindSuccess} from "@eachbase/utils";
+import React, { useEffect, useState } from "react";
+import { DeleteElement, TableWrapper } from "@eachbase/components";
+import { ClientTable, CreateClient } from "@eachbase/fragments";
+import { useDispatch } from "react-redux";
+import { clientsStyle } from "./styles";
+import { clientActions, httpRequestsOnSuccessActions } from "@eachbase/store";
+import { FindLoad, FindSuccess } from "@eachbase/utils";
 
 export const Client = ({}) => {
-    let classes = clientsStyle()
-    const [open, setOpen] = useState(false)
-    const [deleteClient, setDeleteClient] = useState('')
-    const [page, setPage] = useState(1)
-    const dispatch = useDispatch()
-    const [status, setStatus] = useState('ACTIVE')
+   let classes = clientsStyle();
 
-    useEffect(() => {
-        dispatch(clientActions.getClients({status: status, start: 0, end: 10}))
-    }, []);
+   const dispatch = useDispatch();
 
-    const handleActiveOrInactive = (status) => {
-        setStatus(status)
-        dispatch(clientActions.getClients({status: status, start: 0, end: 10}))
-    }
+   const [open, setOpen] = useState(false);
+   const [deleteClient, setDeleteClient] = useState("");
+   const [page, setPage] = useState(1);
+   const [status, setStatus] = useState("ACTIVE");
 
-    const handleOpenClose = () => {
-        setDeleteClient(null)
-        setOpen(!open)
-    }
+   useEffect(() => {
+      dispatch(clientActions.getClients({ status: status, start: 0, end: 10 }));
+   }, []);
 
-    const removeClient = () => dispatch(clientActions.deleteClient(deleteClient.id))
-    const loader = FindLoad('DELETE_CLIENT')
-    const getLoader = FindLoad('GET_CLIENTS')
-    const success = FindSuccess('DELETE_CLIENT')
+   const handleActiveOrInactive = (status) => {
+      setStatus(status);
+      dispatch(clientActions.getClients({ status: status, start: 0, end: 10 }));
+   };
 
-    useEffect(() => {
-        if (success) {
-            handleOpenClose()
-        }
-    }, [success.length])
+   const handleOpenClose = () => {
+      setDeleteClient(null);
+      setOpen((prevState) => !prevState);
+   };
 
-    return (
-        <>
+   const loader = FindLoad("DELETE_CLIENT");
+   const getLoader = FindLoad("GET_CLIENTS");
+   const success = FindSuccess("DELETE_CLIENT");
 
-            <TableWrapper
-                loader={!!getLoader.length}
-                handleType={handleActiveOrInactive}
-                firstButton={"Active"}
-                secondButton={"Inactive"}
-                addButton={"Add Client"}
-                buttonsTab={true}
-                buttonsTabAddButton={true}
-                addButtonText={'Add Client'}
-                handleOpenClose={handleOpenClose}
-                openCloseInfo={open}
-                body={deleteClient ?
-                    <DeleteElement
-                        loader={!!loader.length}
-                        handleDel={removeClient}
-                        className={classes}
-                        text={'Delete Client'}
-                        info={deleteClient.firstName}
-                        handleClose={handleOpenClose}
-                    />
-                    :
-                    <CreateClient
-                        title={'Add Client'}
-                        handleClose={handleOpenClose}
-                    />
-                }
-            >
-                <ClientTable status={status}
-                             handleGetPage={setPage}
-                             setDeleteClient={setDeleteClient}
-                             setOpen={setOpen}
-                             handleClose={handleOpenClose}
-                />
-            </TableWrapper>
-        </>
-    );
-}
+   useEffect(() => {
+      if (!!success.length) {
+         handleOpenClose();
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT"));
+      }
+   }, [success]);
+
+   return (
+      <>
+         <TableWrapper
+            loader={!!getLoader.length}
+            handleType={handleActiveOrInactive}
+            firstButton={"Active"}
+            secondButton={"Inactive"}
+            addButton={"Add Client"}
+            buttonsTab={true}
+            buttonsTabAddButton={true}
+            addButtonText={"Add Client"}
+            handleOpenClose={handleOpenClose}
+            openCloseInfo={open}
+            body={
+               deleteClient ? (
+                  <DeleteElement
+                     loader={!!loader.length}
+                     handleDel={() => dispatch(clientActions.deleteClient(deleteClient.id))}
+                     className={classes}
+                     text={"Delete Client"}
+                     info={deleteClient.firstName}
+                     handleClose={handleOpenClose}
+                  />
+               ) : (
+                  <CreateClient title={"Add Client"} handleClose={handleOpenClose} />
+               )
+            }
+         >
+            <ClientTable
+               status={status}
+               handleGetPage={setPage}
+               setDeleteClient={setDeleteClient}
+               setOpen={setOpen}
+               handleClose={handleOpenClose}
+            />
+         </TableWrapper>
+      </>
+   );
+};

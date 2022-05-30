@@ -11,6 +11,7 @@ export {
    EditSaveButtons,
    SendButton,
    DownloadLink,
+   AddButtonLight,
 } from "./buttons";
 export { Title } from "./titles";
 export { ErrMessage, SlicedText, NoYet } from "./messages";
@@ -69,3 +70,4 @@ export { AvailableHours } from "./availability";
 export { UserInputsDropdown, CheckBoxDropdown } from "./dropdowns";
 export { BillFiltersSelectors } from "./selectors";
 export { TwoStepsContainer } from "./containers";
+export { ImagesFileUploader } from "./uploader";

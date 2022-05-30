@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { TableCell } from "@material-ui/core";
-import { adminActions, fundingSourceActions, systemActions } from "@eachbase/store";
+import { adminActions, fundingSourceActions, httpRequestsOnSuccessActions, systemActions } from "@eachbase/store";
 import {
    StaffGeneral,
    StaffHistory,
@@ -30,10 +30,33 @@ import { noteActions } from "@eachbase/store/notes";
 import moment from "moment";
 import { StaffService } from "./core/staffService";
 
+const tabsLabels = [
+   { label: "General" },
+   { label: "Employment" },
+   { label: "Timesheet" },
+   { label: "Credentials & Clearances" },
+   { label: "Access" },
+   { label: "Availability" },
+   { label: "Services" },
+   { label: "Notes" },
+   { label: "History" },
+];
+const headerTitles = [
+   { title: "Date", sortable: true },
+   { title: "Creator Name", sortable: true },
+   { title: "Subject", sortable: false },
+   { title: "Action", sortable: false },
+];
+
 export const StaffItem = ({ gen }) => {
-   const dispatch = useDispatch();
-   const params = useParams();
    const classes = staffStyle();
+
+   const dispatch = useDispatch();
+
+   const params = useParams();
+
+   const { open: drawerOpen } = useContext(DrawerContext);
+
    const [open, setOpen] = useState(false);
    const [activeTab, setActiveTab] = useState(0);
    const [openCredModal, setOpenCredModal] = useState(false);
@@ -41,7 +64,6 @@ export const StaffItem = ({ gen }) => {
    const [credModalType, setCredModalType] = useState("");
    const [globalCredentialInformation, setGlobalCredentialInformation] = useState({});
    const [noteModalData, setNoteModalData] = useState({});
-
    const [noteModalInfo, setNoteModalInfo] = useState({
       right: "-1000px",
       created: "",
@@ -49,6 +71,8 @@ export const StaffItem = ({ gen }) => {
    });
    const [noteModalTypeInfo, setNoteModalTypeInfo] = useState();
    const [openModal, setOpenModal] = useState();
+   const [statusType, setStatusType] = useState("");
+
    const staffGeneral = useSelector((state) => state.admins.adminInfoById);
    const credentialData = useSelector((state) => state.admins.credential);
    const globalCredentials = useSelector((state) => state.system.credentials);
@@ -65,39 +89,19 @@ export const StaffItem = ({ gen }) => {
    const services = useSelector((state) => state.system.services);
    const rolesList = useSelector((state) => state.roles.rolesList);
    const accessList = useSelector((state) => state.auth.accessList);
-   const [statusType, setStatusType] = useState("");
 
-   const handleOpenClose = (status) => {
+   function handleOpenClose(status) {
       setStatusType(status);
-      setOpen(!open);
-   };
+      setOpen((prevState) => !prevState);
+   }
 
-   const tabsLabels = [
-      { label: "General" },
-      { label: "Employment" },
-      { label: "Timesheet" },
-      { label: "Credentials & Clearances" },
-      { label: "Access" },
-      { label: "Availability" },
-      { label: "Services" },
-      { label: "Notes" },
-      { label: "History" },
-   ];
-
-   const headerTitles = [
-      { title: "Date", sortable: true },
-      { title: "Creator Name", sortable: true },
-      { title: "Subject", sortable: false },
-      { title: "Action", sortable: false },
-   ];
-
-   const openCloseCredModal = (modalType, globalCredentialInfo) => {
-      setOpenCredModal(!openCredModal);
+   function openCloseCredModal(modalType, globalCredentialInfo) {
+      setOpenCredModal((prevState) => !prevState);
       setCredModalType(modalType);
       setGlobalCredentialInformation(globalCredentialInfo);
-   };
+   }
 
-   const openNoteModal = (data) => {
+   function openNoteModal(data) {
       setNoteModalInfo({
          right: "38px",
          created: data?.created,
@@ -106,18 +110,18 @@ export const StaffItem = ({ gen }) => {
          text: data?.text,
          creatorName: data?.creatorName,
       });
-   };
+   }
 
-   const closeNoteModal = () => {
+   function closeNoteModal() {
       setNoteModalInfo({
          right: "-1000px",
          created: "",
          subject: "",
          id: "",
       });
-   };
+   }
 
-   const notesItem = (item, index) => {
+   function notesItemHandler(item, index) {
       return (
          <TableBodyComponent
             key={index}
@@ -152,24 +156,24 @@ export const StaffItem = ({ gen }) => {
             </TableCell>
          </TableBodyComponent>
       );
-   };
+   }
 
-   const handleOpenCloseNote = (data) => {
-      // setNoteModalTypeInfo(data)
-      setOpenModal(!openModal);
+   function handleOpenCloseNote(data) {
+      // setNoteModalTypeInfo(data);
+      setOpenModal((prevState) => !prevState);
       setNoteModalInfo({
          right: "-1000px",
          created: "",
          subject: "",
          id: "",
       });
-   };
+   }
 
    const loaderItems = FindLoad("GET_ADMIN_BY_ID");
 
    const tabsContent = [
       {
-         tabComponent: loaderItems.length ? (
+         tabComponent: !!loaderItems.length ? (
             <Loader />
          ) : (
             <StaffGeneral staffGeneral={staffGeneral} />
@@ -228,7 +232,7 @@ export const StaffItem = ({ gen }) => {
                showModal={true}
                pagination={true}
                data={globalNotes}
-               items={notesItem}
+               items={notesItemHandler}
                headerTitles={headerTitles}
             />
          ) : (
@@ -242,7 +246,7 @@ export const StaffItem = ({ gen }) => {
 
    const handleOpenCloseDel = (data) => {
       setNoteModalData(data);
-      setOpenDelModal(!openDelModal);
+      setOpenDelModal((prevState) => !prevState);
    };
 
    const handleDeleteNote = () => {
@@ -253,13 +257,12 @@ export const StaffItem = ({ gen }) => {
    const success = FindSuccess("DELETE_GLOBAL_NOTE");
 
    useEffect(() => {
-      if (success) {
+      if (!!success.length) {
          setOpenDelModal(false);
          closeNoteModal();
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("DELETE_GLOBAL_NOTE"));
       }
-   }, [success.length]);
-
-   const { open: drawerOpen } = useContext(DrawerContext);
+   }, [success]);
 
    return (
       <>

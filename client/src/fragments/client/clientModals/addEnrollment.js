@@ -52,18 +52,9 @@ export const AddEnrollment = ({ handleClose, info }) => {
       : FindLoad("CREATE_CLIENT_ENROLLMENT");
 
    useEffect(() => {
-      if (success.length) {
+      if (!!success.length) {
          handleClose();
-         dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_ENROLLMENT"));
-         if (info) {
-            dispatch(
-               httpRequestsOnSuccessActions.removeSuccess("EDIT_CLIENT_ENROLLMENT")
-            );
-         } else {
-            dispatch(
-               httpRequestsOnSuccessActions.removeSuccess("CREATE_CLIENT_ENROLLMENT")
-            );
-         }
+         dispatch(httpRequestsOnSuccessActions.removeSuccess(success[0].type));
       }
    }, [success]);
 

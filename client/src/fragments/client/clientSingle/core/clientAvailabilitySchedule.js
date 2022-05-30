@@ -5,13 +5,14 @@ import {Colors, Images} from "@eachbase/utils";
 import {AvailableHours} from "@eachbase/components/availability";
 
 export const ClientAvailabilitySchedule = ({availabilityData, data}) => {
-    const classes = serviceSingleStyles()
+    const classes = serviceSingleStyles();
+
     const generalInfo = [
         {title: 'First Name', value: data?.firstName},
         {title: 'Middle Name', value: data?.middleName},
         {title: 'Last Name', value: data?.lastName},
         {title: 'Code', value: data?.code},
-    ]
+    ];
 
     return (
         <div className={classes.staffGeneralWrapper}>

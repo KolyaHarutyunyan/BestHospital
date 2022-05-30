@@ -57,7 +57,7 @@ export const PayCodeTable = ({ globalPayCodes }) => {
 
    const handleOpenClose = (data) => {
       setEditedData(data);
-      setEditModalOpenClose(!editModalOpenClose);
+      setEditModalOpenClose((prevState) => !prevState);
    };
 
    const handleOpenCloseDelete = (data) => {
@@ -76,9 +76,7 @@ export const PayCodeTable = ({ globalPayCodes }) => {
       if (!!success.length) {
          setOpen(false);
          dispatch(
-            httpRequestsOnSuccessActions.removeSuccess(
-               "DELETE_PAYCODE_BY_ID_GLOBAL"
-            )
+            httpRequestsOnSuccessActions.removeSuccess("DELETE_PAYCODE_BY_ID_GLOBAL")
          );
       }
    }, [success]);

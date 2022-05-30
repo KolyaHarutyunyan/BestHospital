@@ -14,15 +14,45 @@ import {
 } from "@eachbase/components";
 import { EmploymentModal, PaycodeModal } from "./modals";
 import { AuthHeader } from "@eachbase/components/headers/auth/authHeader";
-import { Colors, FindLoad, getLimitedVal, Images } from "@eachbase/utils";
+import { Colors, FindLoad, FindSuccess, getLimitedVal, Images } from "@eachbase/utils";
 import {
    adminActions,
    clientActions,
-   httpRequestsOnErrorsActions,
    httpRequestsOnSuccessActions,
    payrollActions,
 } from "@eachbase/store";
 import { serviceSingleStyles } from "@eachbase/fragments/client/clientSingle/core";
+
+const headerTitles = [
+   {
+      title: "Name",
+      sortable: false,
+   },
+   {
+      title: "Code",
+      sortable: false,
+   },
+   {
+      title: "Type",
+      sortable: false,
+   },
+   {
+      title: "Rate",
+      sortable: false,
+   },
+   {
+      title: "Start Date",
+      sortable: true,
+   },
+   {
+      title: "End Date",
+      sortable: true,
+   },
+   {
+      title: "Status",
+      sortable: false,
+   },
+];
 
 export const StaffEmployment = ({ info }) => {
    const classes = serviceSingleStyles();
@@ -36,17 +66,10 @@ export const StaffEmployment = ({ info }) => {
    const payCodes = useSelector((state) => state.admins.payCodes);
    const params = useParams();
 
-   const { httpOnSuccess, httpOnError, httpOnLoad } = useSelector((state) => ({
-      httpOnSuccess: state.httpOnSuccess,
-      httpOnError: state.httpOnError,
-      httpOnLoad: state.httpOnLoad,
-   }));
-
-   const success =
-      httpOnSuccess.length && httpOnSuccess[0].type === "DELETE_CLIENT_AUTHORIZATION";
-   const successDelServ =
-      httpOnSuccess.length &&
-      httpOnSuccess[0].type === "DELETE_CLIENT_AUTHORIZATION_SERV";
+   const success = FindSuccess("DELETE_CLIENT_AUTHORIZATION");
+   const successDelServ = FindSuccess("DELETE_CLIENT_AUTHORIZATION_SERV");
+   const loaderDel = FindLoad("DELETE_CLIENT_AUTHORIZATION_SERV");
+   const loader = FindLoad("GET_PAY_CODE");
 
    useEffect(() => {
       dispatch(adminActions.getPayCode(info[authIndex]?.id));
@@ -57,62 +80,27 @@ export const StaffEmployment = ({ info }) => {
    }, []);
 
    useEffect(() => {
-      if (success) {
-         setToggleModal(!toggleModal);
+      if (!!success.length) {
+         setToggleModal(false);
          dispatch(
             httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT_AUTHORIZATION")
          );
-         dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION"));
       }
    }, [success]);
 
    useEffect(() => {
-      if (successDelServ) {
-         setToggleModal3(!toggleModal3);
+      if (!!successDelServ.length) {
+         setToggleModal3(false);
          dispatch(
             httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT_AUTHORIZATION_SERV")
-         );
-         dispatch(
-            httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION_SERV")
          );
       }
    }, [successDelServ]);
 
-   const headerTitles = [
-      {
-         title: "Name",
-         sortable: false,
-      },
-      {
-         title: "Code",
-         sortable: false,
-      },
-      {
-         title: "Type",
-         sortable: false,
-      },
-      {
-         title: "Rate",
-         sortable: false,
-      },
-      {
-         title: "Start Date",
-         sortable: true,
-      },
-      {
-         title: "End Date",
-         sortable: true,
-      },
-      {
-         title: "Status",
-         sortable: false,
-      },
-   ];
    let deleteAuthorization = () => {
       dispatch(clientActions.deleteClientsAuthorization(info[authIndex].id, params.id));
       // setAuthIndex(0)
    };
-   const loader = FindLoad("GET_PAY_CODE");
 
    let payCodeItem = (item, index) => {
       return (
@@ -120,7 +108,7 @@ export const StaffEmployment = ({ info }) => {
             key={index}
             handleOpenInfo={() => {
                setPaycodeIndex(index);
-               setToggleModal3(!toggleModal3);
+               setToggleModal3(prevState => !prevState);
             }}
          >
             <TableCell>
@@ -145,43 +133,43 @@ export const StaffEmployment = ({ info }) => {
    return (
       <div className={classes.staffGeneralWrapper}>
          <SimpleModal
-            handleOpenClose={() => setToggleModal(!toggleModal)}
+            handleOpenClose={() => setToggleModal((prevState) => !prevState)}
             openDefault={toggleModal}
             content={
                delEdit ? (
                   <EmploymentModal
                      fundingId={info[authIndex]?.funderId?._id}
                      info={info[authIndex]}
-                     handleClose={() => setToggleModal(!toggleModal)}
+                     handleClose={() => setToggleModal((prevState) => !prevState)}
                   />
                ) : (
                   <DeleteElement
-                     loader={httpOnLoad.length > 0}
-                     handleClose={() => setToggleModal(!toggleModal)}
+                     loader={!!loaderDel.length}
+                     handleClose={() => setToggleModal((prevState) => !prevState)}
                      handleDel={deleteAuthorization}
                   />
                )
             }
          />
          <SimpleModal
-            handleOpenClose={() => setToggleModal2(!toggleModal2)}
+            handleOpenClose={() => setToggleModal2((prevState) => !prevState)}
             openDefault={toggleModal2}
             content={
                <PaycodeModal
                   employmentId={info[authIndex]?.id}
                   authId={info[authIndex]?.id}
-                  handleClose={() => setToggleModal2(!toggleModal2)}
+                  handleClose={() => setToggleModal2((prevState) => !prevState)}
                />
             }
          />
          <SimpleModal
-            handleOpenClose={() => setToggleModal3(!toggleModal3)}
+            handleOpenClose={() => setToggleModal3((prevState) => !prevState)}
             openDefault={toggleModal3}
             content={
                <PaycodeModal
                   info={payCodes && payCodes[paycodeIndex]}
                   employmentId={info[authIndex]?.id}
-                  handleClose={() => setToggleModal3(!toggleModal3)}
+                  handleClose={() => setToggleModal3((prevState) => !prevState)}
                />
             }
          />
@@ -215,10 +203,10 @@ export const StaffEmployment = ({ info }) => {
                      src={Images.addHours}
                      alt=""
                      className={classes.iconStyle}
-                     onClick={() => setToggleModal2(!toggleModal2)}
+                     onClick={() => setToggleModal2((prevState) => !prevState)}
                   />
                   <p
-                     onClick={() => setToggleModal2(!toggleModal2)}
+                     onClick={() => setToggleModal2((prevState) => !prevState)}
                      className={classes.authorizationServicesText}
                   >
                      Add Paycode

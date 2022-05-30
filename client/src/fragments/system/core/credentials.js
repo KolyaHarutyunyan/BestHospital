@@ -4,7 +4,7 @@ import { AddButton, NoItemText, SlicedText, ValidationInput } from "@eachbase/co
 import { systemItemStyles } from "./styles";
 import { ErrorText, FindLoad, FindSuccess, Images, isNotEmpty } from "@eachbase/utils";
 import { SelectInputPlaceholder } from "@eachbase/components";
-import { systemActions } from "@eachbase/store";
+import { httpRequestsOnSuccessActions, systemActions } from "@eachbase/store";
 
 const credentialBtn = {
    maxWidth: "174px",
@@ -81,13 +81,14 @@ export const Credentials = ({ removeItem, openModal, globalCredentials }) => {
    const success = FindSuccess("CREATE_CREDENTIAL_GLOBAL");
 
    useEffect(() => {
-      if (success) {
+      if (!!success.length) {
          setInputs({
             name: "",
             type: "",
          });
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_CREDENTIAL_GLOBAL"));
       }
-   }, [success.length]);
+   }, [success]);
 
    return (
       <>

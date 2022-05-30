@@ -19,8 +19,6 @@ export const authService = {
 
    getFoundingSourceByIdService: (id) => axios.get(`/funding/${id}`, { auth: true }),
 
-   getFoundingS: (id) => axios.get(`/funding/service/${id}`, { auth: true }),
-
    getFoundingSourceServiceByIdService: (id) =>
       axios.get(`/funding/${id}/service`, { auth: true }),
 
@@ -30,14 +28,6 @@ export const authService = {
    editFoundingSourceServiceService: (id, body) =>
       axios.patch(`/funding/service/${id}`, body, { auth: true }),
 
-   createFoundingSourceServiceModifierService: (body) =>
-      axios.post(`/modifier`, body, { auth: true }),
-
-   editFoundingSourceServiceModifierService: (id, body) =>
-      axios.patch(`/modifier/${id}`, body, { auth: true }),
-
-   // getFoundingSourceServiceModifierService: (id) => axios.get(`/modifier/${id}`, {auth:true}),
-
    getFundingSourceHistoriesByIdService: (onModal, searchDate) => {
       if (searchDate) {
          return axios.get(`/history/${onModal}?start=${searchDate}`, { auth: true });
@@ -46,8 +36,17 @@ export const authService = {
       }
    },
 
-   // editActiveOrInactiveService: (id, path, status , body) => axios.patch(`/${path}/${id}/${status}`, body),
-
    setStatusService: (id, path, status, body) =>
       axios.patch(`/${path}/${id}/setStatus?status=${status}`, body, { auth: true }),
+
+   createFundingModifierService: (fundingId, body) =>
+      axios.post(`/funding/${fundingId}/modifiers`, body, { auth: true }),
+
+   editFundingModifierService: (fundingId, serviceId, body) =>
+      axios.patch(`/funding/${fundingId}/${serviceId}/modifiers`, body, { auth: true }),
+
+   deleteFundingModifierService: (fundingId, serviceId, modifiersIds) =>
+      axios.delete(`/funding/${fundingId}/${serviceId}/modifiers?ids=${modifiersIds}`, {
+         auth: true,
+      }),
 };

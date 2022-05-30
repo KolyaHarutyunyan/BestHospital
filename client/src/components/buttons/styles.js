@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { Backgrounds, Colors, Shadow } from "@eachbase/utils";
+import { Backgrounds, Colors, Images, Shadow } from "@eachbase/utils";
 
 export const buttonsStyle = makeStyles(() => ({
    buttonsTab: {
@@ -152,7 +152,7 @@ export const buttonsStyle = makeStyles(() => ({
    closeCircleStyle: {
       width: "24px",
       height: "24px",
-      backgroundColor: Colors.BackgroundWater,
+      backgroundColor: Backgrounds.darkGrey,
       borderRadius: "40px",
       border: "none",
       display: "flex",
@@ -212,7 +212,37 @@ export const buttonsStyle = makeStyles(() => ({
       color: "#347AF0",
       display: "inline-flex",
       alignItems: "center",
-      "& img": { marginLeft: "8px" },
+      width: "24px",
+      heigth: "24px",
+      "& img": { 
+         width: "100%",
+         objectFit: "contain", 
+         marginLeft: "8px", 
+      },
+   },
+   // ** end **
+
+   // ** light button styles **
+   lightButnStyle: {
+      border: "none",
+      outline: "none",
+      backgroundColor: "inherit",
+      display: "flex",
+      alignItems: "center",
+      fontSize: "14px",
+      fontWeight: 400,
+      color: Colors.BackgroundBlue,
+      textTransform: "capitalize",
+      "&::before": {
+         content: "''",
+         width: "24px",
+         height: "24px",
+         backgroundImage: `url(${Images.addLightIcon})`,
+         backgroundRepeat: "no-repeat",
+         backgroundSize: "contain",
+         backgroundPosition: "center",
+         marginRight: "8px",
+      },
    },
    // ** end **
 }));

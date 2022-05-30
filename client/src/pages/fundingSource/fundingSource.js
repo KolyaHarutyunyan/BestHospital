@@ -22,7 +22,7 @@ export const FundingSource = () => {
    }, []);
 
    const handleOpenClose = () => {
-      setOpen(!open);
+      setOpen((prevState) => !prevState);
    };
 
    const handleActiveOrInactive = (status) => {
@@ -43,12 +43,11 @@ export const FundingSource = () => {
          handleType={handleActiveOrInactive}
          firstButton={"Active"}
          secondButton={"Inactive"}
-         addButton={"Add Funding Source"}
          buttonsTab={true}
          buttonsTabAddButton={true}
          addButtonText={"Add Funding Source"}
-         handleOpenClose={handleOpenClose}
          openCloseInfo={open}
+         handleOpenClose={handleOpenClose}
          body={<CreateFundingSource handleClose={handleOpenClose} />}
       >
          <FundingSourceTable handleGetPage={setPage} status={status} />

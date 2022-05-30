@@ -21,6 +21,7 @@ import {
 function* getBills(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(billService.getBillsService, action?.payload?.data);
       yield put({
@@ -42,6 +43,7 @@ function* getBills(action) {
 function* getBillById(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(
          billService.getBillByIdService,
@@ -63,6 +65,7 @@ function* getBillById(action) {
 function* createBill(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(billService.createBillService, action.payload.body);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
@@ -76,6 +79,7 @@ function* createBill(action) {
 function* editBillStatus(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(
          billService.editBillStatusService,
@@ -97,6 +101,7 @@ function* editBillStatus(action) {
 function* editBillClaimStatus(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(
          billService.editBillClaimStatusService,
@@ -118,6 +123,7 @@ function* editBillClaimStatus(action) {
 function* editBillInvoiceStatus(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(
          billService.editBillInvoiceStatusService,
@@ -139,6 +145,7 @@ function* editBillInvoiceStatus(action) {
 function* addBillTransaction(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(
          billService.addBillTransactionService,
@@ -160,6 +167,7 @@ function* addBillTransaction(action) {
 function* abortBillTransaction(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(
          billService.abortBillTransactionService,

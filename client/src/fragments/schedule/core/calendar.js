@@ -44,7 +44,7 @@ export const Selectable = ({
    }));
 
    const handleOpenCloseModal = (date) => {
-      setOpen(!open);
+      setOpen((prevState) => !prevState);
       setInfo(date);
       if (date) {
          dispatch(appointmentActions.getAppointmentById(date.id));

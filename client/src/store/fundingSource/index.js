@@ -1,48 +1,34 @@
 import {
-    createFundingSource,
-    getFundingSource,
-    getFundingSourceById,
-    getFoundingSourceServiceById,
-    createFoundingSourceServiceById,
-    getFundingSourceHistoriesById,
-    getFundingSourceServ,
-    createFundingSourceServ,
-    getFundingSourceServById,
-    createFoundingSourceServiceModifier,
-    editFundingSource,
-    editFoundingSourceServiceById,
-    getActiveOrInactive,
-    deleteFoundingSourceServiceById,
-    getFoundingSourceServiceModifiers,
-    editActiveOrInactive,
-    editFoundingSourceModifier,
-    getFoundingSourceServiceModifiersForClient, changeState, setStatus, getFoundingSourceServiceByIdNoLoad
+   createFundingSource,
+   getFundingSource,
+   getFundingSourceById,
+   getFoundingSourceServiceById,
+   createFoundingSourceServiceById,
+   getFundingSourceHistoriesById,
+   editFundingSource,
+   editFoundingSourceServiceById,
+   deleteFoundingSourceServiceById,
+   setStatus,
+   createFundingModifier,
+   editFundingModifier,
+   deleteFundingModifier,
 } from "./fundingSource.action";
 
-export {fundingSourceReducer} from './fundingSource.reducer';
-export {watchFundingSource} from './fundingSource.saga';
+export { fundingSourceReducer } from "./fundingSource.reducer";
+export { watchFundingSource } from "./fundingSource.saga";
 
 export const fundingSourceActions = {
-    createFundingSource,
-    getFundingSource,
-    getFundingSourceById,
-    getFoundingSourceServiceById,
-    getFoundingSourceServiceByIdNoLoad,
-    createFoundingSourceServiceById,
-    editFoundingSourceServiceById,
-    getFundingSourceHistoriesById,
-    getFundingSourceServ,
-    getFundingSourceServById,
-    createFundingSourceServ,
-    createFoundingSourceServiceModifier,
-    getFoundingSourceServiceModifiers,
-    editFundingSource,
-    deleteFoundingSourceServiceById,
-    getActiveOrInactive,
-    editActiveOrInactive,
-    editFoundingSourceModifier,
-    getFoundingSourceServiceModifiersForClient,
-    setStatus
-
-}
-
+   createFundingSource,
+   getFundingSource,
+   getFundingSourceById,
+   getFoundingSourceServiceById,
+   createFoundingSourceServiceById,
+   editFoundingSourceServiceById,
+   getFundingSourceHistoriesById,
+   editFundingSource,
+   deleteFoundingSourceServiceById,
+   setStatus,
+   createFundingModifier,
+   editFundingModifier,
+   deleteFundingModifier,
+};

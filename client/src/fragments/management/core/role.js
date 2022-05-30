@@ -11,7 +11,7 @@ import {
    PaginationItem,
 } from "@eachbase/components";
 import { FindLoad, FindSuccess, Images } from "@eachbase/utils";
-import { roleActions } from "@eachbase/store";
+import { httpRequestsOnSuccessActions, roleActions } from "@eachbase/store";
 import { useDispatch, useSelector } from "react-redux";
 import { SlicedText } from "@eachbase/components";
 
@@ -30,7 +30,7 @@ export const Role = ({ key, roleInfo = [] }) => {
 
    const handleOpenClose = (item) => {
       setTitle(item?.title);
-      setOpen(!open);
+      setOpen((prevState) => !prevState);
       setRole(item?.id);
    };
 
@@ -56,11 +56,11 @@ export const Role = ({ key, roleInfo = [] }) => {
    const success = FindSuccess("DELETE_ROLE");
 
    useEffect(() => {
-      if (success.length) {
-         setOpen(!open);
+      if (!!success.length) {
+         setOpen(false);
          setRole("id");
          setActiveRole("");
-         dispatch(roleActions.removeRole());
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("DELETE_ROLE"));
       }
    }, [success]);
 

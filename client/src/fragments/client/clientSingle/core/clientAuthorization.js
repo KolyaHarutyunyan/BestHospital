@@ -5,6 +5,7 @@ import {
    AddModalButton,
    Card,
    DeleteElement,
+   ImagesFileUploader,
    Loader,
    NoItemText,
    Notes,
@@ -59,22 +60,18 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
 
    useEffect(() => {
       if (!!success.length) {
-         setToggleModal(!toggleModal);
+         setToggleModal((prevState) => !prevState);
          dispatch(
             httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT_AUTHORIZATION")
          );
-         dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION"));
       }
    }, [success]);
 
    useEffect(() => {
       if (!!successDelServ.length) {
-         setToggleModal3(!toggleModal3);
+         setToggleModal3((prevState) => !prevState);
          dispatch(
             httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT_AUTHORIZATION_SERV")
-         );
-         dispatch(
-            httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION_SERV")
          );
       }
    }, [successDelServ]);
@@ -178,45 +175,45 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
    return (
       <div className={classes.staffGeneralWrapper}>
          <SimpleModal
-            handleOpenClose={() => setToggleModal(!toggleModal)}
+            handleOpenClose={() => setToggleModal((prevState) => !prevState)}
             openDefault={toggleModal}
             content={
                delEdit ? (
                   <AddAuthorization
                      fundingId={info[authIndex]?.funderId?._id}
                      info={info[authIndex]}
-                     handleClose={() => setToggleModal(!toggleModal)}
+                     handleClose={() => setToggleModal((prevState) => !prevState)}
                   />
                ) : (
                   <DeleteElement
                      loader={!!delAuthLoader.length}
                      info={`Delete ${info[authIndex].authId}`}
-                     handleClose={() => setToggleModal(!toggleModal)}
+                     handleClose={() => setToggleModal((prevState) => !prevState)}
                      handleDel={deleteAuthorization}
                   />
                )
             }
          />
          <SimpleModal
-            handleOpenClose={() => setToggleModal2(!toggleModal2)}
+            handleOpenClose={() => setToggleModal2((prevState) => !prevState)}
             openDefault={toggleModal2}
             content={
                <AddAuthorizationService
                   authId={info[authIndex]?.id}
-                  handleClose={() => setToggleModal2(!toggleModal2)}
+                  handleClose={() => setToggleModal2((prevState) => !prevState)}
                   fundingId={info[authIndex].funderId?._id}
                />
             }
          />
          <SimpleModal
-            handleOpenClose={() => setToggleModal3(!toggleModal3)}
+            handleOpenClose={() => setToggleModal3((prevState) => !prevState)}
             openDefault={toggleModal3}
             content={
                delEdit2 ? (
                   <AddAuthorizationService
                      info={services && services[serviceIndex]}
                      authId={info[authIndex].id}
-                     handleClose={() => setToggleModal3(!toggleModal3)}
+                     handleClose={() => setToggleModal3((prevState) => !prevState)}
                      fundingId={info[authIndex].funderId?._id}
                   />
                ) : (
@@ -225,18 +222,29 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
                      info={`Delete ${
                         services && services[serviceIndex]?.serviceId?.name
                      }`}
-                     handleClose={() => setToggleModal3(!toggleModal3)}
+                     handleClose={() => setToggleModal3((prevState) => !prevState)}
                      handleDel={deleteAuthorizationServ}
                   />
                )
             }
          />
          <SimpleModal
-            handleOpenClose={() => setModalIsOpen(!modalIsOpen)}
+            handleOpenClose={() => setModalIsOpen((prevState) => !prevState)}
             openDefault={modalIsOpen}
             content={
                <div className={classes.authorizationFileWrapper}>
-                  <AuthorizationFile
+                  <div className={classes.authorizationFileHeader}>
+                     <h1>Uploaded files</h1>
+                     <h2>Please fulfill the file type to upload a file.</h2>
+                     <p>
+                        <span className={classes.starIcon}>*</span>
+                        Only
+                        <span> PDF , PNG , CSV </span> &<span> JPEG </span>
+                        formats are supported
+                     </p>
+                  </div>
+                  <ImagesFileUploader 
+                     changeNameAfterFileUpload={true}
                      handleImagesPass={(images) => setChosenImages(images)}
                   />
                   <AddModalButton
@@ -279,10 +287,10 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
                      src={Images.addHours}
                      alt=""
                      className={classes.iconStyle}
-                     onClick={() => setToggleModal2(!toggleModal2)}
+                     onClick={() => setToggleModal2((prevState) => !prevState)}
                   />
                   <p
-                     onClick={() => setToggleModal2(!toggleModal2)}
+                     onClick={() => setToggleModal2((prevState) => !prevState)}
                      className={classes.authorizationServicesText}
                   >
                      Add Authorized Service

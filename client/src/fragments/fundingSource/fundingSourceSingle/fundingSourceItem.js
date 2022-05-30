@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import {
    SimpleTabs,
-   Notes,
    TableWrapperGeneralInfo,
    InactiveModal,
-   Loader,
    NoItemText,
 } from "@eachbase/components";
 import {
@@ -16,11 +14,20 @@ import {
    FundingSourceSingleHistories,
 } from "./core";
 import { fundingSourceItemStyle } from "./styles";
-import { FindLoad } from "@eachbase/utils";
 import { useParams } from "react-router-dom";
+
+const tabsLabels = [
+   { label: "General Information" },
+   { label: "Services" },
+   { label: "Notes" },
+   { label: "History" },
+];
 
 export const FundingSourceItem = ({}) => {
    const classes = fundingSourceItemStyle();
+
+   const params = useParams();
+
    const data = useSelector((state) => state.fundingSource.fundingSourceItem);
    const servicesData = useSelector((state) => state.fundingSource.fundingSourceServices);
    const historiesData = useSelector(
@@ -28,30 +35,19 @@ export const FundingSourceItem = ({}) => {
    );
    const globalNotes = useSelector((state) => state.note.notes);
    const globalServices = useSelector((state) => state.system.services);
+
    const [open, setOpen] = useState(false);
    const [activeTab, setActiveTab] = useState(0);
-
-   const tabsLabels = [
-      { label: "General Information" },
-      { label: "Services" },
-      { label: "Notes" },
-      { label: "History" },
-   ];
-
-   const loader = FindLoad("GET_FUNDING_SOURCE_HISTORIES_BY_ID");
    const [statusType, setStatusType] = useState("");
 
-   const handleOpenClose = (status) => {
+   function handleOpenClose(status) {
       setStatusType(status);
-      setOpen(!open);
-   };
+      setOpen((prevState) => !prevState);
+   }
 
    const tabsContent = [
       {
-         tabComponent: (
-            // loader.length ? <Loader/> :
-            <FundingSourceSingleGeneral data={data} />
-         ),
+         tabComponent: <FundingSourceSingleGeneral data={data} />,
       },
       {
          tabComponent: servicesData.length ? (
@@ -79,7 +75,6 @@ export const FundingSourceItem = ({}) => {
       },
    ];
 
-   const params = useParams();
    return (
       <>
          <TableWrapperGeneralInfo

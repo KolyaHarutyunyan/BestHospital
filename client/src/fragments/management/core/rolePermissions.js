@@ -11,7 +11,7 @@ import {
    NoInfoYet,
 } from "@eachbase/components";
 import { useDispatch, useSelector } from "react-redux";
-import { roleActions } from "@eachbase/store";
+import { httpRequestsOnSuccessActions, roleActions } from "@eachbase/store";
 
 export const RolePermissions = ({ permissionsList }) => {
    const [show, setShowInput] = useState(false);
@@ -26,7 +26,7 @@ export const RolePermissions = ({ permissionsList }) => {
    }));
 
    const handleOpenClose = (item) => {
-      setOpen(!open);
+      setOpen((prevState) => !prevState);
       sePermission(item?.id);
       setTitle(item?.title);
    };
@@ -63,10 +63,11 @@ export const RolePermissions = ({ permissionsList }) => {
    const success = FindSuccess("DELETE_ROLE_PERMISSION");
 
    useEffect(() => {
-      if (success.length) {
-         setOpen(!open);
+      if (!!success.length) {
+         setOpen(false);
          sePermission("");
          setTitle("");
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("DELETE_ROLE_PERMISSION"));
       }
    }, [success]);
 
@@ -89,7 +90,10 @@ export const RolePermissions = ({ permissionsList }) => {
                {role && role.title ? (
                   <div>
                      {show === false ? (
-                        <AddCircle handleCLic={() => setShowInput(true)} text={"Add Permissions"} />
+                        <AddCircle
+                           handleCLic={() => setShowInput(true)}
+                           text={"Add Permissions"}
+                        />
                      ) : (
                         <CloseButton handleCLic={() => setShowInput(false)} />
                      )}

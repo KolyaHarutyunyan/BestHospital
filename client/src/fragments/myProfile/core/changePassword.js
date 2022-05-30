@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { myProfileFragment } from "./style";
-import { PasswordValidator, ErrorText, Images, isNotEmpty } from "@eachbase/utils";
+import { PasswordValidator, ErrorText, Images, isNotEmpty, FindSuccess, FindLoad } from "@eachbase/utils";
 import { Button } from "@material-ui/core";
 import { MinLoader, PasswordInput } from "@eachbase/components";
 import { authActions, httpRequestsOnSuccessActions } from "@eachbase/store";
@@ -16,22 +16,15 @@ export const ChangePassword = ({}) => {
       confirmation: "",
    });
 
-   const { httpOnSuccess, httpOnLoad } = useSelector((state) => ({
-      httpOnSuccess: state.httpOnSuccess,
-      httpOnLoad: state.httpOnLoad,
-   }));
-   const successType =
-      httpOnSuccess.length && httpOnSuccess[0].type === "CHANGE_PASSWORD_REQUEST";
+   const successType = FindSuccess("CHANGE_PASSWORD_REQUEST");
+   const loader = FindLoad("CHANGE_PASSWORD_REQUEST");
 
    useEffect(() => {
-      if (successType === true) {
-         httpOnSuccess.length &&
+      if (!!successType.length) {
+         setShowInputs(false);
             dispatch(
-               httpRequestsOnSuccessActions.removeSuccess(
-                  httpOnSuccess.length && httpOnSuccess[0].type
-               )
-            ),
-            setShowInputs(false);
+               httpRequestsOnSuccessActions.removeSuccess("CHANGE_PASSWORD_REQUEST")
+            );
       }
    }, [successType]);
 
@@ -89,7 +82,7 @@ export const ChangePassword = ({}) => {
             {showInputs ? (
                <div>
                   <Button className={classes.saveButton} onClick={handleChangePassword}>
-                     {httpOnLoad.length && httpOnLoad[0] === "CHANGE_PASSWORD_REQUEST" ? (
+                     {!!loader.length ? (
                         <MinLoader />
                      ) : (
                         "Save"

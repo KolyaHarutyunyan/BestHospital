@@ -43,6 +43,7 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
    const classes = createClientStyle();
 
    const classes_v2 = staffModalsStyle();
+
    const globalPayCodes = useSelector((state) => state.payroll.PayCodes);
 
    useEffect(() => {
@@ -54,12 +55,9 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
    const loader = info ? FindLoad("EDIT_TIMESHEET") : FindLoad("CREATE_TIMESHEET");
 
    useEffect(() => {
-      if (!success) return;
-      handleClose();
-      if (info) {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_TIMESHEET"));
-      } else {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_TIMESHEET"));
+      if (!!success.length) {
+         handleClose();
+         dispatch(httpRequestsOnSuccessActions.removeSuccess(success[0].type));
       }
    }, [success]);
 

@@ -4,6 +4,7 @@ import { fundingSourceSingleStyles } from "./styles";
 
 export const FundingSourceSingleGeneral = ({ data }) => {
    const classes = fundingSourceSingleStyles();
+
    return (
       <React.Fragment>
          <div className={classes.fundingSourceSingleGeneralStyles}>

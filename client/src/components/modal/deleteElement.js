@@ -5,7 +5,7 @@ import { Colors, useGlobalTextStyles } from "@eachbase/utils";
 import { modalsStyle } from "./styles";
 import { MinLoader } from "../loader";
 
-export const DeleteElement = ({ text, info, handleDel, handleClose, loader }) => {
+export const DeleteElement = ({ text, info, handleDel, handleClose, loader, innerText = "" }) => {
    const classes = modalsStyle();
    const globalText = useGlobalTextStyles();
    return (
@@ -53,7 +53,7 @@ export const DeleteElement = ({ text, info, handleDel, handleClose, loader }) =>
                   }}
                   onClick={handleDel}
                >
-                  {loader === true ? <MinLoader margin={"0"} color={Colors.TextWhite} /> : "Delete"}
+                  {loader === true ? <MinLoader margin={"0"} color={Colors.TextWhite} /> : innerText || "Delete"}
                </Button>
             </div>
          </div>

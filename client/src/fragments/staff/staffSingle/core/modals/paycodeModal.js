@@ -49,14 +49,9 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
    const loader = info ? FindLoad("EDIT_PAY_CODE") : FindLoad("CREATE_PAY_CODE");
 
    useEffect(() => {
-      if (!success) return;
-      handleClose();
-      if (info) {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_PAY_CODE"));
-         dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION"));
-      } else {
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_PAY_CODE"));
-         dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION"));
+      if (!!success.length) {
+         handleClose();
+         dispatch(httpRequestsOnSuccessActions.removeSuccess(success[0].type));
       }
    }, [success]);
 

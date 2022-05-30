@@ -1,51 +1,58 @@
-import React, {useEffect, useState} from "react";
-import {TableWrapper} from "@eachbase/components";
-import {CreateStaff, StaffTable,} from "@eachbase/fragments";
-import {adminActions, systemActions} from "@eachbase/store";
-import {useDispatch, useSelector} from "react-redux";
-import {FindLoad} from "@eachbase/utils";
+import React, { useEffect, useState } from "react";
+import { TableWrapper } from "@eachbase/components";
+import { CreateStaff, StaffTable } from "@eachbase/fragments";
+import { adminActions, systemActions } from "@eachbase/store";
+import { useDispatch, useSelector } from "react-redux";
+import { FindLoad } from "@eachbase/utils";
 
 export const Staff = () => {
-    const dispatch = useDispatch()
-    const [open, setOpen] = useState(false)
-    const [page, setPage] = useState(1)
-    const [status,setStatus] = useState('ACTIVE')
-    const loader = FindLoad('GET_ADMINS')
-    const { adminsList } = useSelector((state) => ({
-        adminsList: state.admins.adminsList,
-    }));
-    const globalDepartments = useSelector(state => state.system.departments)
+   const dispatch = useDispatch();
+   const [open, setOpen] = useState(false);
+   const [page, setPage] = useState(1);
+   const [status, setStatus] = useState("ACTIVE");
+   const loader = FindLoad("GET_ADMINS");
+   const { adminsList } = useSelector((state) => ({
+      adminsList: state.admins.adminsList,
+   }));
+   const globalDepartments = useSelector((state) => state.system.departments);
 
-    useEffect(() => {
-        dispatch(adminActions.getAdmins({ status : status, start : 0, end : 20 }))
-        dispatch(systemActions.getDepartments())
-    }, []);
+   useEffect(() => {
+      dispatch(adminActions.getAdmins({ status: status, start: 0, end: 20 }));
+      dispatch(systemActions.getDepartments());
+   }, []);
 
-    const handleOpenClose = () => {
-        setOpen(!open)
-    }
+   const handleOpenClose = () => {
+      setOpen((prevState) => !prevState);
+   };
 
-    const handleActiveOrInactive = (status) => {
-        setStatus(status)
-        dispatch(adminActions.getAdmins({status: status, start: 0, end: 10}))
-    }
+   const handleActiveOrInactive = (status) => {
+      setStatus(status);
+      dispatch(adminActions.getAdmins({ status: status, start: 0, end: 10 }));
+   };
 
-    return (
-        <>
-            <TableWrapper
-                loader={!!loader.length}
-                handleType={handleActiveOrInactive}
-                firstButton={"Active"}
-                secondButton={"Inactive"}
-                buttonsTab={true}
-                buttonsTabAddButton={true}
-                addButtonText={'Add Staff Member'}
-                openCloseInfo={open}
-                handleOpenClose={handleOpenClose}
-                body={<CreateStaff globalDepartments={globalDepartments} adminsList={adminsList && adminsList.staff} resetData={true} handleClose={handleOpenClose}/>}
-            >
-                <StaffTable handleGetPage={setPage}  status ={status} />
-            </TableWrapper>
-        </>
-    );
-}
+   return (
+      <>
+         <TableWrapper
+            loader={!!loader.length}
+            handleType={handleActiveOrInactive}
+            firstButton={"Active"}
+            secondButton={"Inactive"}
+            buttonsTab={true}
+            buttonsTabAddButton={true}
+            addButtonText={"Add Staff Member"}
+            openCloseInfo={open}
+            handleOpenClose={handleOpenClose}
+            body={
+               <CreateStaff
+                  globalDepartments={globalDepartments}
+                  adminsList={adminsList && adminsList.staff}
+                  resetData={true}
+                  handleClose={handleOpenClose}
+               />
+            }
+         >
+            <StaffTable handleGetPage={setPage} status={status} />
+         </TableWrapper>
+      </>
+   );
+};
