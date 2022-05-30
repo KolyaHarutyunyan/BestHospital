@@ -143,7 +143,7 @@ export class AuthService {
   // find all authorization services
   async findAll(authId: string): Promise<AuthServiceDTO[]> {
     try {
-      const authService = await this.model.find({ authId }).populate('serviceId');
+      const authService = await this.model.find({ authorizationId: authId }).populate('serviceId');
       return this.sanitizer.sanitizeMany(authService);
     } catch (e) {
       throw e;
