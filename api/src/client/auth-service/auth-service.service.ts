@@ -136,9 +136,8 @@ export class AuthService {
           available.push(modifier);
         }
       });
-      return available;
     }
-    return fundingService.modifiers;
+    return available;
   }
 
   // find all authorization services
