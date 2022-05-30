@@ -9,7 +9,7 @@ import { AppointmentQueryDTO, AppointmentQuerySetEventStatusDTO } from './dto/ap
 @Controller('appt')
 @ApiTags('Appointment Endpoints')
 export class ApptController {
-  constructor(private readonly apptService: ApptService) { }
+  constructor(private readonly apptService: ApptService) {}
 
   @Post()
   @Public()
@@ -45,9 +45,7 @@ export class ApptController {
   @Patch(':id/complete')
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: ApptDto })
-  async complete(
-    @Param('id', ParseObjectIdPipe) id: string,
-  ): Promise<ApptDto> {
+  async complete(@Param('id', ParseObjectIdPipe) id: string): Promise<ApptDto> {
     return await this.apptService.complete(id);
   }
   /** cancel the appointment */

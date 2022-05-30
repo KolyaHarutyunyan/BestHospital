@@ -440,12 +440,14 @@ export class ApptService {
     ]);
     await this.checkClientStaffOverlap(_id, dto);
     if (appt.type === ApptType.SERVICE) {
-      await this.updateService(
-        dto.client,
-        dto.authorizedService,
+      const service = await this.updateService(
         appt.client,
         appt.authorizedService as string,
+        dto.client,
+        dto.authorizedService,
       );
+      appt.client = service.clientId;
+      appt.authorizedService = service.authId;
     }
     if (dto.placeService) {
       await this.placeService.findOne(dto.placeService);
@@ -456,6 +458,9 @@ export class ApptService {
       this.payCodeService.findOne(dto.staffPayCode ? dto.staffPayCode : appt.staffPayCode),
     ]);
     const employment = (<any>payCode.employmentId) as IEmployment;
+    if (!employment) {
+      throw new HttpException(`Paycode have not employment`, HttpStatus.BAD_REQUEST);
+    }
     if (employment.staffId.toString() !== dto.staff.toString()) {
       throw new HttpException(`Pay code is not corresponding to staff`, HttpStatus.BAD_REQUEST);
     }
@@ -480,7 +485,7 @@ export class ApptService {
     apptAuthService: string,
     dtoClient: string,
     dtoAuthService: string,
-  ): Promise<void> {
+  ): Promise<any> {
     /** if appountment type is SERVICE client and authorization service are required */
     this.checkClient(dtoClient);
     this.checkAuthorizedService(dtoAuthService);
@@ -497,6 +502,7 @@ export class ApptService {
       );
     }
     await this.authorizedService.getByServiceId(authService.serviceId as string);
+    return { clientId: client.id, authId: authService.id };
   }
 
   // remove appointment

@@ -2,7 +2,7 @@ import { model, Schema, Types } from 'mongoose';
 import { IAuthService } from './interface';
 
 const AuthServiceSchema = new Schema({
-  authorizationId: { type: Types.ObjectId, ref: 'ClientAuthorization' },
+  authorizationId: { type: Types.ObjectId, ref: 'ClientAuth' },
   serviceId: { type: Types.ObjectId, ref: 'FundingService' },
   modifiers: [{ type: Object }],
   total: { type: Number },
