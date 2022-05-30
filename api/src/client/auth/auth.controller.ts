@@ -21,7 +21,7 @@ export class AuthController {
     return this.authorizationService.create(clientId, funderId, dto);
   }
 
-  @Get(':client/:clientId')
+  @Get('client/:clientId')
   @ApiOkResponse({ type: AuthDTO })
   @Public()
   findAll(@Param('clientId', ParseObjectIdPipe) clientId: string) {
