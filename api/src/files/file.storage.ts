@@ -25,7 +25,7 @@ export class FileStorage {
   //adding new files to the S3
   storeImage = async (file, folder?: string): Promise<string> => {
     let key = folder ? folder + '/' + file.originalname : file.originalname;
-    key = key + Date.now().toString();
+    // key = key + Date.now().toString();
     const params: PutObjectCommandInput = {
       Bucket: IMAGE_BUCKET,
       Key: key,

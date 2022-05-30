@@ -7,7 +7,7 @@ import { FileSchema } from '../files/file.model';
 export const apptSchema = new Schema({
   type: { type: String, enum: ApptType },
   client: { type: Types.ObjectId, ref: 'Client', default: null },
-  authorizedService: { type: Types.ObjectId, ref: 'ClientAuthorizationService', default: null },
+  authorizedService: { type: Types.ObjectId, ref: 'ClientAuthService', default: null },
   payer: { type: Types.ObjectId, ref: 'Funder' },
   placeService: { type: Types.ObjectId, ref: 'Place' },
   staff: { type: Types.ObjectId, ref: 'Staff' },
