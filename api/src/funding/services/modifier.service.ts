@@ -45,13 +45,14 @@ export class ModifierService extends BaseService {
   }
 
   /** delete modifiers */
-  async deleteModifiers(_id: string, serviceId: string, ids: string[]): Promise<ServiceDTO> {
+  async deleteModifiers(_id: string, serviceId: string, ids: any): Promise<ServiceDTO> {
     const [funder, service] = await Promise.all([
       this.model.findById({ _id }),
       this.serviceModel.findOne({ _id: serviceId }),
     ]);
     this.checkFunder(funder);
     this.checkFundingService(service);
+    typeof ids === 'string' ? (ids = ids.split(' ')) : null;
     service.modifiers.map((dbModifier) => {
       ids.map((dtoModifier) => {
         if (dtoModifier == dbModifier._id) {
