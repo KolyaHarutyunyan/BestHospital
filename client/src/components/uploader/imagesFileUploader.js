@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { fileUploadersStyle } from "./styles";
 import { ValidationInput } from "@eachbase/components";
-import { UploadedFileCard } from "./core"; 
+import { UploadedFileCard } from "./core";
 import { Images, isNotEmpty } from "@eachbase/utils";
 import ReactFileReader from "react-file-reader";
 
-export const ImagesFileUploader = ({ 
-   handleImagesPass, 
-   changeNameAfterFileUpload, 
+export const ImagesFileUploader = ({
+   handleImagesPass,
+   changeNameAfterFileUpload,
    uploadOnlyOneFile,
 }) => {
    const classes = fileUploadersStyle();
@@ -24,7 +24,7 @@ export const ImagesFileUploader = ({
    }, [images]);
 
    useEffect(() => {
-      if(isNotEmpty(enteredFileName)) {
+      if (isNotEmpty(enteredFileName)) {
          setFileName(enteredFileName);
       }
    }, [enteredFileName]);
@@ -63,7 +63,7 @@ export const ImagesFileUploader = ({
          }
       }
 
-      if(uploadOnlyOneFile) {
+      if (uploadOnlyOneFile) {
          setImages(Array.from(imageList));
       } else {
          setImages((prevState) => prevState.concat(Array.from(imageList)));
@@ -108,26 +108,25 @@ export const ImagesFileUploader = ({
                <p className={classes.authorizationFileSubTitle}>uploaded files</p>
             </div>
          )}
-         <div className={!uniqueImages.length ? classes.centered : classes.normal}>
-            <div className={!uniqueImages.length ? classes.centered : classes.normal}>
+         <div className={`${classes.normal} ${uploadOnlyOneFile ? "singleFile" : ""}`}>
+            <div className={`${classes.normal} ${uploadOnlyOneFile ? "singleFile" : ""}`}>
                {!!uniqueImages.length ? (
                   uniqueImages.map((item, index) => (
                      <UploadedFileCard
-                        key={index} 
+                        key={index}
                         file={item}
-                        deleteFile={handleFileDelete} 
+                        deleteFile={handleFileDelete}
                         uploadOnlyOneFile={uploadOnlyOneFile}
                         changeNameAfterFileUpload={changeNameAfterFileUpload}
                         fileName={fileName}
                         passCurrentFileName={handleFileNamePass}
-                     />))
-               ) : (
-                  uploadOnlyOneFile ? null : (
-                     <div className={classes.iconText}>
-                        <img src={Images.fileIcon} alt="" />
-                        <p>No Files yet</p>
-                     </div>
-                  )
+                     />
+                  ))
+               ) : uploadOnlyOneFile ? null : (
+                  <div className={classes.iconText}>
+                     <img src={Images.fileIcon} alt="" />
+                     <p className={classes.noFilesYetTextStyle}>No Files yet</p>
+                  </div>
                )}
             </div>
          </div>

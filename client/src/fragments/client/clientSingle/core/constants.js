@@ -44,5 +44,5 @@ export function getGeneralInfo(info) {
       { title: "Middle Name", value: info?.middleName },
       { title: "Last Name", value: info?.lastName },
       { title: "Code", value: info?.code },
-   ];
+   ].filter((item) => !!item.value);
 }

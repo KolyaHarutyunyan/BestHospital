@@ -7,7 +7,7 @@ import {
    PaginationItem,
    BillFiltersSelectors,
    SimpleModal,
-   BillingModalWrapper,
+   ModalContentWrapper,
    TwoStepsContainer,
 } from "@eachbase/components";
 import { enumValues, PaginationContext } from "@eachbase/utils";
@@ -120,7 +120,7 @@ export const ClaimPaymentsFragment = ({
             openDefault={open}
             handleOpenClose={() => setOpen((prevState) => !prevState)}
             content={
-               <BillingModalWrapper
+               <ModalContentWrapper
                   wrapperStylesName={classes.claimPaymentWrapperStyle}
                   onClose={() => setOpen(false)}
                   titleContent={titleContent}
@@ -133,7 +133,7 @@ export const ClaimPaymentsFragment = ({
                      closeModal={() => setOpen(false)}
                      mappedFunders={mappedFunders}
                   />
-               </BillingModalWrapper>
+               </ModalContentWrapper>
             }
          />
       </div>

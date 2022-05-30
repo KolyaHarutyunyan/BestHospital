@@ -77,17 +77,16 @@ function* editCredentialById(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
-      const res = yield call(
+      yield call(
          systemService.editCredentialByIdGlobalService,
          action.payload.id,
          action.payload.body
       );
-
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_CREDENTIAL_GLOBAL,
       });
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));

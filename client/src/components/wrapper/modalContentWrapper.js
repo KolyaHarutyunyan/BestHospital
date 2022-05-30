@@ -2,7 +2,7 @@ import React from "react";
 import { CloseButton } from "@eachbase/components";
 import { wrapperStyle } from "./styles";
 
-export const BillingModalWrapper = ({
+export const ModalContentWrapper = ({
    onClose,
    titleContent,
    subtitleContent,

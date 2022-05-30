@@ -37,8 +37,12 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
       });
    }, []);
 
-   const success = !!info ? FindSuccess("EDIT_CLIENT_AUTHORIZATION_SERV") : FindSuccess("CREATE_CLIENT_AUTHORIZATION_SERV");
-   const load = !!info ? FindLoad("EDIT_CLIENT_AUTHORIZATION_SERV") : FindLoad("CREATE_CLIENT_AUTHORIZATION_SERV");
+   const success = !!info
+      ? FindSuccess("EDIT_CLIENT_AUTHORIZATION_SERV")
+      : FindSuccess("CREATE_CLIENT_AUTHORIZATION_SERV");
+   const load = !!info
+      ? FindLoad("EDIT_CLIENT_AUTHORIZATION_SERV")
+      : FindLoad("CREATE_CLIENT_AUTHORIZATION_SERV");
 
    useEffect(() => {
       if (!!success.length) {
@@ -57,7 +61,7 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
          let id = fSelect.find((item) => item.name === e.target.value);
          axios
             .post(
-               `/authorizationservice/authorization/${authId}/fundingService/${
+               `/authservice/auth/${authId}/fundingService/${
                   id && id._id
                }/checkModifiers`,
                null,

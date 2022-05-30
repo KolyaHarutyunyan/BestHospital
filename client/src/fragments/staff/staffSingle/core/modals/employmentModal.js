@@ -8,7 +8,7 @@ import {
    CreateChancel,
    ModalHeader,
 } from "@eachbase/components";
-import { ErrorText, FindLoad, FindSuccess, isNotEmpty } from "@eachbase/utils";
+import { ErrorText, FindError, FindLoad, FindSuccess, isNotEmpty } from "@eachbase/utils";
 import {
    adminActions,
    httpRequestsOnErrorsActions,
@@ -55,6 +55,15 @@ export const EmploymentModal = ({ handleClose, info }) => {
       ? FindSuccess("EDIT_EMPLOYMENT")
       : FindSuccess("CREATE_EMPLOYMENT");
    const loader = info ? FindLoad("EDIT_EMPLOYMENT") : FindLoad("CREATE_EMPLOYMENT");
+   const backError = info ? FindError("EDIT_EMPLOYMENT") : FindError("CREATE_EMPLOYMENT");
+
+   const employmentIsOverlapping = backError[1]?.error === "employment overlapping";
+
+   useEffect(() => {
+      if (employmentIsOverlapping) {
+         setError(ErrorText.overlappingError("Employments"));
+      }
+   }, [employmentIsOverlapping]);
 
    useEffect(() => {
       dispatch(systemActions.getDepartments());
@@ -79,10 +88,17 @@ export const EmploymentModal = ({ handleClose, info }) => {
          ...prevState,
          [e.target.name]: e.target.value === 0 ? "0" : e.target.value,
       }));
-      (error === e.target.name ||
+      if (
+         error === e.target.name ||
          error === ErrorText.dateError ||
-         error === ErrorText.startDateError) &&
+         error === ErrorText.startDateError ||
+         error === ErrorText.overlappingError("Employments")
+      ) {
          setError("");
+      }
+      if (!!backError.length) {
+         dispatch(httpRequestsOnErrorsActions.removeError(backError.type));
+      }
    };
 
    const handleCreate = () => {
@@ -223,6 +239,8 @@ export const EmploymentModal = ({ handleClose, info }) => {
                               ? ErrorText.field
                               : error === ErrorText.startDateError
                               ? ErrorText.startDateError
+                              : error === ErrorText.overlappingError("Employments")
+                              ? ErrorText.overlappingError("Employments")
                               : ""
                         }
                      />
