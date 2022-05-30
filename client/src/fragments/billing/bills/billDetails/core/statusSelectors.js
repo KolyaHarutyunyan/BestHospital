@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
-   BillingModalWrapper,
+   ModalContentWrapper,
    CreateChancel,
    SimpleModal,
    UserInputsDropdown,
@@ -160,7 +160,7 @@ export const StatusSelectors = ({ billId, claim = "", invoice = "", bill = "" })
             openDefault={claimStatusModal || invoiceStatusModal || billStatusModal}
             handleOpenClose={handleOpenClose}
             content={
-               <BillingModalWrapper
+               <ModalContentWrapper
                   wrapperStylesName={classes.statusSelectorsWrapperStyle}
                   onClose={handleOpenClose}
                   titleContent={modalTitleContent}
@@ -174,7 +174,7 @@ export const StatusSelectors = ({ billId, claim = "", invoice = "", bill = "" })
                      onCreate={handleNewStatusSelect}
                      onClose={handleOpenClose}
                   />
-               </BillingModalWrapper>
+               </ModalContentWrapper>
             }
          />
       </>

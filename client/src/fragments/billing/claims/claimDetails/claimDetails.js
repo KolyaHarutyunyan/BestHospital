@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { claimDetailsStyle } from "./styles";
-import { BillingModalWrapper, NoItemText, SimpleModal } from "@eachbase/components";
+import { ModalContentWrapper, NoItemText, SimpleModal } from "@eachbase/components";
 import {
    DrawerContext,
    getLimitedVal,
@@ -94,7 +94,7 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
             openDefault={open}
             handleOpenClose={() => setOpen((prevState) => !prevState)}
             content={
-               <BillingModalWrapper
+               <ModalContentWrapper
                   wrapperStylesName={classes.closeClaimWrapperStyle}
                   onClose={() => setOpen(false)}
                   titleContent={"Close This Claim?"}
@@ -103,7 +103,7 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
                   }
                >
                   <CloseClaimInputs closeModal={() => setOpen(false)} claimId={_id} />
-               </BillingModalWrapper>
+               </ModalContentWrapper>
             }
          />
       </>

@@ -463,9 +463,6 @@ function* getClientsAuthorizationsServ(action) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
-      yield put({
-         type: GET_CLIENT_AUTHORIZATION_SERV_ERROR,
-      });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
@@ -476,7 +473,7 @@ function* createClientsAuthorizationsServ(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
-      const res = yield call(authService.createClientAuthorizationServService, action);
+      yield call(authService.createClientAuthorizationServService, action);
       yield put({
          type: GET_CLIENT_AUTHORIZATION_SERV,
          payload: { id: action.payload.id },

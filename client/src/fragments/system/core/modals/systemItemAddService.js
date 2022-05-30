@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { modalsStyle } from "@eachbase/components/modal/styles";
-import { ErrorText, isNotEmpty, useGlobalTextStyles } from "@eachbase/utils";
+import {
+   ErrorText,
+   FindLoad,
+   FindSuccess,
+   isNotEmpty,
+   useGlobalTextStyles,
+} from "@eachbase/utils";
 import { CloseButton, CreateChancel } from "@eachbase/components/buttons";
 import { SelectInput, ValidationInput } from "@eachbase/components/inputs";
 import { httpRequestsOnSuccessActions, systemActions } from "@eachbase/store";
 import { useDispatch, useSelector } from "react-redux";
 
-const credentialsList = [
-   { name: "Degree" },
-   { name: "Clearance" },
-   { name: "licence" },
-];
+const credentialsList = [{ name: "Degree" }, { name: "Clearance" }, { name: "licence" }];
 
-export const SystemItemAddService = ({
-   modalInformation,
-   modalType,
-   handleClose,
-}) => {
+export const SystemItemAddService = ({ modalInformation, modalType, handleClose }) => {
    const dispatch = useDispatch();
    const [mType] = useState(modalType);
    const [mInformation] = useState(modalInformation);
@@ -81,10 +79,7 @@ export const SystemItemAddService = ({
 
             if (serviceDataIsValid) {
                dispatch(
-                  systemActions.editServiceByIdGlobal(
-                     serviceData,
-                     mInformation.id
-                  )
+                  systemActions.editServiceByIdGlobal(serviceData, mInformation.id)
                );
             } else {
                const serviceDataErrorText = !isNotEmpty(inputs.name)
@@ -101,8 +96,7 @@ export const SystemItemAddService = ({
 
          case "editCredential":
             const credentialDataIsValid =
-               isNotEmpty(inputs.credentialType) &&
-               isNotEmpty(inputs.credentialName);
+               isNotEmpty(inputs.credentialType) && isNotEmpty(inputs.credentialName);
 
             if (credentialDataIsValid) {
                dispatch(
@@ -112,9 +106,7 @@ export const SystemItemAddService = ({
                   )
                );
             } else {
-               const credentialDataErrorText = !isNotEmpty(
-                  inputs.credentialType
-               )
+               const credentialDataErrorText = !isNotEmpty(inputs.credentialType)
                   ? "credentialType"
                   : !isNotEmpty(inputs.credentialName)
                   ? "credentialName"
@@ -126,9 +118,7 @@ export const SystemItemAddService = ({
 
          case "editJobTitles":
             if (isNotEmpty(inputs.jobTitle)) {
-               dispatch(
-                  systemActions.editJobByIdGlobal(jobData, mInformation.jobId)
-               );
+               dispatch(systemActions.editJobByIdGlobal(jobData, mInformation.jobId));
             } else {
                setError(!isNotEmpty(inputs.jobTitle) ? "jobTitle" : "");
             }
@@ -136,12 +126,7 @@ export const SystemItemAddService = ({
 
          case "editPlaceTitles":
             if (isNotEmpty(inputs.name) && isNotEmpty(inputs.code)) {
-               dispatch(
-                  systemActions.editPlaceByIdGlobal(
-                     placeData,
-                     mInformation.jobId
-                  )
-               );
+               dispatch(systemActions.editPlaceByIdGlobal(placeData, mInformation.jobId));
             } else {
                setError(
                   !isNotEmpty(inputs.name)
@@ -162,9 +147,7 @@ export const SystemItemAddService = ({
                   )
                );
             } else {
-               setError(
-                  !isNotEmpty(inputs.departmentName) ? "departmentName" : ""
-               );
+               setError(!isNotEmpty(inputs.departmentName) ? "departmentName" : "");
             }
       }
    };
@@ -177,46 +160,24 @@ export const SystemItemAddService = ({
       error === e.target.name && setError("");
    };
 
-   const { httpOnLoad, httpOnSuccess } = useSelector((state) => ({
-      httpOnSuccess: state.httpOnSuccess,
-      httpOnLoad: state.httpOnLoad,
-   }));
+   const serviceType =
+      mType === "editService"
+         ? "EDIT_SERVICE_BY_ID_GLOBAL"
+         : mType === "editCredential"
+         ? "EDIT_CREDENTIAL_BY_ID_GLOBAL"
+         : mType === "editJobTitles"
+         ? "EDIT_JOB_BY_ID_GLOBAL"
+         : mType === "editPlaceTitles"
+         ? "EDIT_PLACE_BY_ID_GLOBAL"
+         : "EDIT_DEPARTMENT_BY_ID_GLOBAL";
 
-   const success =
-      httpOnSuccess.length &&
-      httpOnSuccess[0].type === "EDIT_CREDENTIAL_BY_ID_GLOBAL"
-         ? true
-         : httpOnSuccess.length &&
-           httpOnSuccess[0].type === "EDIT_JOB_BY_ID_GLOBAL"
-         ? true
-         : httpOnSuccess.length &&
-           httpOnSuccess[0].type === "EDIT_DEPARTMENT_BY_ID_GLOBAL"
-         ? true
-         : httpOnSuccess.length &&
-           httpOnSuccess[0].type === "EDIT_SERVICE_BY_ID_GLOBAL"
-         ? true
-         : httpOnSuccess.length &&
-           httpOnSuccess[0].type === "EDIT_PLACE_BY_ID_GLOBAL";
-
-   const loader =
-      httpOnLoad.length && httpOnLoad[0] === "EDIT_CREDENTIAL_BY_ID_GLOBAL"
-         ? true
-         : httpOnLoad.length && httpOnLoad[0] === "EDIT_JOB_BY_ID_GLOBAL"
-         ? true
-         : httpOnLoad.length && httpOnLoad[0] === "EDIT_SERVICE_BY_ID_GLOBAL"
-         ? true
-         : httpOnLoad.length && httpOnLoad[0] === "EDIT_DEPARTMENT_BY_ID_GLOBAL"
-         ? true
-         : httpOnLoad.length && httpOnLoad[0] === "EDIT_PLACE_BY_ID_GLOBAL";
+   const success = FindSuccess(serviceType);
+   const loader = FindLoad(serviceType);
 
    useEffect(() => {
-      if (success) {
+      if (!!success.length) {
          handleClose();
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess(
-               httpOnSuccess.length && httpOnSuccess[0].type
-            )
-         );
+         dispatch(httpRequestsOnSuccessActions.removeSuccess(success[0].type));
       }
    }, [success]);
 
@@ -322,7 +283,7 @@ export const SystemItemAddService = ({
          )}
          <>
             <CreateChancel
-               loader={loader}
+               loader={!!loader.length}
                buttonWidth="192px"
                create="Save"
                chancel="Cancel"

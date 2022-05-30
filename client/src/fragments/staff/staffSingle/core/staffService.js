@@ -20,7 +20,11 @@ import {
    isNotEmpty,
 } from "@eachbase/utils";
 import { SelectInputPlaceholder } from "@eachbase/components";
-import { adminActions, httpRequestsOnErrorsActions, httpRequestsOnSuccessActions } from "@eachbase/store";
+import {
+   adminActions,
+   httpRequestsOnErrorsActions,
+   httpRequestsOnSuccessActions,
+} from "@eachbase/store";
 import { systemItemStyles } from "@eachbase/fragments/system/core";
 import { serviceSingleStyles } from "./styles";
 
@@ -88,7 +92,7 @@ export const StaffService = ({ staffGeneral, info, services }) => {
       { title: "Secondary Email", value: staffGeneral?.secondaryEmail },
       { title: "Primary Phone Number", value: staffGeneral?.phone },
       { title: "Secondary Phone Number", value: staffGeneral?.secondaryPhone },
-   ];
+   ].filter((item) => !!item.value);
 
    const filteredList =
       services &&

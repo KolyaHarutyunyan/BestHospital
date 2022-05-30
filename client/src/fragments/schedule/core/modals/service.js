@@ -74,7 +74,7 @@ export const Service = ({
 
    useEffect(() => {
       if (appmtIsOverlapping) {
-         setError(ErrorText.overlappingError);
+         setError(ErrorText.overlappingError("Appointments"));
       }
    }, [appmtIsOverlapping]);
 
@@ -93,18 +93,15 @@ export const Service = ({
       if (modalDate) {
          setEditLoader(true);
          axios
-            .get(`/authorization/client/${modalDate.client._id}`, {
+            .get(`/auth/client/${modalDate.client._id}`, {
                auth: true,
             })
             .then((res) =>
                res.data.length
                   ? axios
-                       .get(
-                          `/authorizationservice/authorization/${
-                             res.data[res.data.length - 1].id
-                          }`,
-                          { auth: true }
-                       )
+                       .get(`/authservice/auth/${res.data[res.data.length - 1].id}`, {
+                          auth: true,
+                       })
                        .then((date) => {
                           setClientService(date.data);
                           setEditLoader(false);
@@ -142,7 +139,7 @@ export const Service = ({
       if (
          error === e.target.name ||
          error === ErrorText.timeError ||
-         error === ErrorText.overlappingError
+         error === ErrorText.overlappingError("Appointments")
       ) {
          setError("");
       }
@@ -164,16 +161,13 @@ export const Service = ({
 
    const handleGetClientServ = (id) => {
       axios
-         .get(`/authorization/client/${id}`, { auth: true })
+         .get(`/auth/client/${id}`, { auth: true })
          .then((res) =>
             res.data.length
                ? axios
-                    .get(
-                       `/authorizationservice/authorization/${
-                          res.data[res.data.length - 1].id
-                       }`,
-                       { auth: true }
-                    )
+                    .get(`/authservice/auth/${res.data[res.data.length - 1].id}`, {
+                       auth: true,
+                    })
                     .then((date) => setClientService(date.data))
                : ""
          )
@@ -350,8 +344,8 @@ export const Service = ({
                            typeError={
                               error === "startTime"
                                  ? ErrorText.field
-                                 : error === ErrorText.overlappingError
-                                 ? ErrorText.overlappingError
+                                 : error === ErrorText.overlappingError("Appointments")
+                                 ? ErrorText.overlappingError("Appointments")
                                  : ""
                            }
                         />

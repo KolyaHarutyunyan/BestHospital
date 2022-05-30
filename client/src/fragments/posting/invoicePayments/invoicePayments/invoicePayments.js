@@ -7,7 +7,7 @@ import {
    PaginationItem,
    BillFiltersSelectors,
    SimpleModal,
-   BillingModalWrapper,
+   ModalContentWrapper,
    TwoStepsContainer,
 } from "@eachbase/components";
 import { enumValues, PaginationContext } from "@eachbase/utils";
@@ -121,7 +121,7 @@ export const InvoicePaymentsFragment = ({
             openDefault={open}
             handleOpenClose={() => setOpen((prevState) => !prevState)}
             content={
-               <BillingModalWrapper
+               <ModalContentWrapper
                   wrapperStylesName={classes.invoicePaymentWrapperStyle}
                   onClose={() => setOpen(false)}
                   titleContent={titleContent}
@@ -134,7 +134,7 @@ export const InvoicePaymentsFragment = ({
                      closeModal={() => setOpen(false)}
                      mappedClients={mappedClients}
                   />
-               </BillingModalWrapper>
+               </ModalContentWrapper>
             }
          />
       </div>

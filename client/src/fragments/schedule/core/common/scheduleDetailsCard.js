@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { scheduleCommonStyle } from "./styles";
-import { FindLoad, Images, manageStatus } from "@eachbase/utils";
+import { FindLoad, Images, ImgUploader, manageStatus } from "@eachbase/utils";
 import { Items } from "../items";
 import {
    SimpleTooltip,
@@ -8,6 +8,9 @@ import {
    CustomizedSwitch,
    DownloadLink,
    AddModalButton,
+   SimpleModal,
+   ModalContentWrapper,
+   ImagesFileUploader,
 } from "@eachbase/components";
 import { appointmentActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
@@ -24,6 +27,9 @@ export const ScheduleDetailsCard = ({ openCloseRecur, handleEdit, appointmentByI
    const [item, setItem] = useState(appointmentById ? appointmentById : "");
    const defItem = item.length === 0 ? "" : item;
    const [switcher, setSwitcher] = useState(defItem ? defItem.require : false);
+   const [modalIsOpen, setModalIsOpen] = useState(false);
+   const [chosenImages, setChosenImages] = useState([]);
+   const [loaderUpload, setLoaderUpload] = useState(false);
 
    useEffect(() => {
       setItem(appointmentById);
@@ -73,6 +79,17 @@ export const ScheduleDetailsCard = ({ openCloseRecur, handleEdit, appointmentByI
       dispatch(appointmentActions.setAppointmentStatus(defItem._id, "complete", ""));
    }
 
+   function handleSignatureSend() {
+      setLoaderUpload(true);
+
+      ImgUploader(chosenImages, false).then((uploadedImages) => {
+         setLoaderUpload(false);
+
+         console.log(uploadedImages, "uploaded signature");
+         // dispatch(appointmentActions.appendSignatureToAppmt(defItem._id, uploadedImages));
+      });
+   }
+
    const serviceAppmtDetails = getServiceAppmtDetails(defItem);
 
    if (loader.length || statusLoader.length) {
@@ -84,104 +101,141 @@ export const ScheduleDetailsCard = ({ openCloseRecur, handleEdit, appointmentByI
    }
 
    return (
-      <div className={classes.infoWrapper}>
-         <div className={classes.titleWrapper}>
-            <p>{detailText}</p>
-            <div className={classes.recurAndEditBoxStyle}>
-               {_hasBeenRecurred ? (
-                  <div className={classes.recurEdit}>
-                     <p>Recurring Event</p>
-                  </div>
-               ) : (
-                  <SimpleTooltip title={<p>{"Recur Event"}</p>} placement="top-end">
+      <>
+         <div className={classes.infoWrapper}>
+            <div className={classes.titleWrapper}>
+               <p>{detailText}</p>
+               <div className={classes.recurAndEditBoxStyle}>
+                  {_hasBeenRecurred ? (
+                     <div className={classes.recurEdit}>
+                        <p>Recurring Event</p>
+                     </div>
+                  ) : (
+                     <SimpleTooltip title={<p>{"Recur Event"}</p>} placement="top-end">
+                        <button
+                           className={classes.recurButnStyle}
+                           onClick={() => openCloseRecur(defItem)}
+                        >
+                           <img src={Images.recurrance} alt="icon" />
+                        </button>
+                     </SimpleTooltip>
+                  )}
+                  {(_isNotRendered || _isPending) && (
                      <button
-                        className={classes.recurButnStyle}
-                        onClick={() => openCloseRecur(defItem)}
+                        className={classes.editButnStyle}
+                        onClick={() => handleEdit(defItem)}
                      >
-                        <img src={Images.recurrance} alt="icon" />
+                        <img src={Images.edit} alt="icon" />
                      </button>
-                  </SimpleTooltip>
+                  )}
+               </div>
+            </div>
+            <div className={classes.infoDate}>
+               {defItem && (
+                  <div className={classes.dateAndStatusBoxStyle}>
+                     <span>
+                        {moment(defItem.startDate).format("MMM DD, YYYY")}
+                        <span style={{ marginLeft: "16px" }}>
+                           {`${moment(defItem.startTime).format("hh:mm A")} - ${moment(
+                              defItem.endTime
+                           ).format("hh:mm A")}`}
+                        </span>
+                     </span>
+                     <p
+                        style={{ color: statusColor }}
+                        className={classes.eventStatusStyle}
+                     >
+                        {manageStatus(defItem?.eventStatus)}
+                     </p>
+                  </div>
+               )}
+            </div>
+            <div className={classes.itemsWrap}>
+               {serviceAppmtDetails.map((item, index) => (
+                  <Items key={index} text={item.detailText} subText={item.detail} />
+               ))}
+            </div>
+            <div className={classes.infoFooter}>
+               {_isServiceAppmt && (
+                  <div>
+                     <div className={classes.signatureActionsBoxStyle}>
+                        <div>
+                           {_isNotRendered && (
+                              <div className={classes.signatureBoxStyle}>
+                                 <p className={classes.signatureTextStyle}>
+                                    Require Signature
+                                 </p>
+                                 <CustomizedSwitch
+                                    checked={switcher}
+                                    handleClick={handleChangeService}
+                                 />
+                              </div>
+                           )}
+                           <DownloadLink
+                              linkClassName={classes.downloadSignatureStyle}
+                              linkHref={"Signature.csv"}
+                              linkInnerText={"Signature.csv"}
+                              linkDownload={true}
+                           />
+                        </div>
+                        <button
+                           type="button"
+                           className={classes.openModalButnStyle}
+                           onClick={() => setModalIsOpen(true)}
+                        >
+                           Upload Signature
+                        </button>
+                     </div>
+                  </div>
                )}
                {(_isNotRendered || _isPending) && (
-                  <button
-                     className={classes.editButnStyle}
-                     onClick={() => handleEdit(defItem)}
-                  >
-                     <img src={Images.edit} alt="icon" />
-                  </button>
+                  <div className={classes.statusActionsBoxStyle}>
+                     <AddModalButton
+                        buttonClassName={classes.changeStatusButnStyle}
+                        handleClick={() =>
+                           _isServiceAppmt
+                              ? changeStatusToRendered()
+                              : changeStatusToCompleted()
+                        }
+                        text={_isServiceAppmt ? "Render" : "Complete"}
+                     />
+                     {!!chosenImages.length && (
+                        <AddModalButton
+                           buttonClassName={classes.changeStatusButnStyle}
+                           handleClick={changeStatusToCancelled}
+                           text="Cancel"
+                        />
+                     )}
+                  </div>
                )}
             </div>
          </div>
-         <div className={classes.infoDate}>
-            {defItem && (
-               <div className={classes.dateAndStatusBoxStyle}>
-                  <span>
-                     {moment(defItem.startDate).format("MMM DD, YYYY")}
-                     <span style={{ marginLeft: "16px" }}>
-                        {`${moment(defItem.startTime).format("hh:mm A")} - ${moment(
-                           defItem.endTime
-                        ).format("hh:mm A")}`}
-                     </span>
-                  </span>
-                  <p style={{ color: statusColor }} className={classes.eventStatusStyle}>
-                     {manageStatus(defItem?.eventStatus)}
-                  </p>
-               </div>
-            )}
-         </div>
-         <div className={classes.itemsWrap}>
-            {serviceAppmtDetails.map((item, index) => (
-               <Items key={index} text={item.detailText} subText={item.detail} />
-            ))}
-         </div>
-         <div className={classes.infoFooter}>
-            {_isServiceAppmt && (
-               <div>
-                  <div className={classes.signatureActionsBoxStyle}>
-                     <div>
-                        {_isNotRendered && (
-                           <div className={classes.signatureBoxStyle}>
-                              <p className={classes.signatureTextStyle}>
-                                 Require Signature
-                              </p>
-                              <CustomizedSwitch
-                                 checked={switcher}
-                                 handleClick={handleChangeService}
-                              />
-                           </div>
-                        )}
-                        <DownloadLink
-                           linkClassName={classes.downloadSignatureStyle}
-                           linkHref={"Signature.csv"}
-                           linkInnerText={"Signature.csv"}
-                           linkDownload={true}
-                        />
-                     </div>
-                     <button type="button" className={classes.openModalButnStyle}>
-                        Upload Signature
-                     </button>
-                  </div>
-               </div>
-            )}
-            {(_isNotRendered || _isPending) && (
-               <div className={classes.statusActionsBoxStyle}>
-                  <AddModalButton
-                     buttonClassName={classes.changeStatusButnStyle}
-                     handleClick={() =>
-                        _isServiceAppmt
-                           ? changeStatusToRendered()
-                           : changeStatusToCompleted()
-                     }
-                     text={_isServiceAppmt ? "Render" : "Complete"}
-                  />
-                  <AddModalButton
-                     buttonClassName={classes.changeStatusButnStyle}
-                     handleClick={changeStatusToCancelled}
-                     text="Cancel"
-                  />
-               </div>
-            )}
-         </div>
-      </div>
+         <SimpleModal
+            handleOpenClose={() => setModalIsOpen((prevState) => !prevState)}
+            openDefault={modalIsOpen}
+            content={
+               <ModalContentWrapper
+                  onClose={() => setModalIsOpen(false)}
+                  titleContent={"Upload Signature"}
+                  subtitleContent={
+                     "To complete a Service Appointment, please upload a signature."
+                  }
+               >
+                  <>
+                     <ImagesFileUploader
+                        uploadOnlyOneFile={true}
+                        handleImagesPass={(images) => setChosenImages(images)}
+                     />
+                     <AddModalButton
+                        buttonClassName={classes.addAuthFilesButnStyle}
+                        handleClick={handleSignatureSend}
+                        loader={loaderUpload}
+                        text="Done"
+                     />
+                  </>
+               </ModalContentWrapper>
+            }
+         />
+      </>
    );
 };

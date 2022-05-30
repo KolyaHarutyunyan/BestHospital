@@ -14,7 +14,7 @@ export const StaffAvailability = ({ onModel, availabilityData, staffGeneral }) =
       { title: "Secondary Email", value: staffGeneral?.secondaryEmail },
       { title: "Primary Phone Number", value: staffGeneral?.phone },
       { title: "Secondary Phone Number", value: staffGeneral?.secondaryPhone },
-   ];
+   ].filter((item) => !!item.value);
 
    return (
       <div className={classes.staffGeneralWrapper}>

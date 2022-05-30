@@ -1,6 +1,6 @@
 import React from "react";
 import {
-   BillingModalWrapper,
+   ModalContentWrapper,
    SimpleModal,
    TwoStepsContainer,
 } from "@eachbase/components";
@@ -41,7 +41,7 @@ export const ClaimPaymentModals = ({
             openDefault={editingModalIsOpen}
             handleOpenClose={closeEditingModal}
             content={
-               <BillingModalWrapper
+               <ModalContentWrapper
                   wrapperStylesName={classes.editClaimPaymentWrapperStyle}
                   onClose={closeEditingModal}
                   titleContent={"Edit Payment"}
@@ -55,14 +55,14 @@ export const ClaimPaymentModals = ({
                      closeModal={closeEditingModal}
                      mappedFunders={mappedFunders}
                   />
-               </BillingModalWrapper>
+               </ModalContentWrapper>
             }
          />
          <SimpleModal
             openDefault={voidingModalIsOpen}
             handleOpenClose={closeVoidingModal}
             content={
-               <BillingModalWrapper
+               <ModalContentWrapper
                   wrapperStylesName={classes.voidClaimPaymentWrapperStyle}
                   onClose={closeVoidingModal}
                   titleContent={"Void This Payment?"}
@@ -74,14 +74,14 @@ export const ClaimPaymentModals = ({
                      closeModal={closeVoidingModal}
                      claimPaymentId={claimPaymentId}
                   />
-               </BillingModalWrapper>
+               </ModalContentWrapper>
             }
          />
          <SimpleModal
             openDefault={addingModalIsOpen}
             handleOpenClose={closeAddingModal}
             content={
-               <BillingModalWrapper
+               <ModalContentWrapper
                   wrapperStylesName={classes.addClaimPaymentWrapperStyle}
                   onClose={closeAddingModal}
                   titleContent={"Add Claim to Payment"}
@@ -99,7 +99,7 @@ export const ClaimPaymentModals = ({
                      closeModal={closeAddingModal}
                      claimPaymentId={claimPaymentId}
                   />
-               </BillingModalWrapper>
+               </ModalContentWrapper>
             }
          />
       </>

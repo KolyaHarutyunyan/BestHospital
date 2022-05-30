@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { TransactionsDemoTBody, TransactionsDemoTHead } from "./common";
-import { BillingModalWrapper, CreateChancel, SimpleModal } from "@eachbase/components";
+import { ModalContentWrapper, CreateChancel, SimpleModal } from "@eachbase/components";
 import { billTransactionInputsStyle } from "./styles";
 import { useDispatch } from "react-redux";
 import { billActions, httpRequestsOnSuccessActions } from "@eachbase/store";
@@ -43,7 +43,7 @@ export const TransactionsDemoTable = ({ billTransactions = [], billId }) => {
             openDefault={open}
             handleOpenClose={() => setOpen((prevState) => !prevState)}
             content={
-               <BillingModalWrapper
+               <ModalContentWrapper
                   wrapperStylesName={classes.transactionVoidingWrapperStyle}
                   onClose={() => setOpen(false)}
                   titleContent={"Void This Transaction?"}
@@ -61,7 +61,7 @@ export const TransactionsDemoTable = ({ billTransactions = [], billId }) => {
                      }
                      onClose={() => setOpen(false)}
                   />
-               </BillingModalWrapper>
+               </ModalContentWrapper>
             }
          />
       </>

@@ -7,5 +7,5 @@ export const ErrorText = {
    dateError: "End Date must be greater than Start Date",
    timeError: "End Time must be greater than Start Time",
    startDateError: "Start Date cannot be chosen for the future, if you currently work!",
-   overlappingError: "Appointments cannot overlap!",
+   overlappingError: (value = "") => `${value} cannot overlap, please change the date!`,
 };
