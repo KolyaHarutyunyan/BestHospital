@@ -21,12 +21,21 @@ export const appointmentService = {
    /** end */
 
    /** Appointment Status */
-   setAppointmentStatusService: (id, statusName, reason) =>
-      axios.patch(`/appt/${id}/${statusName}?reason=${reason}`, null, { auth: true }),
+   setAppointmentStatusService: (id, statusName, reason) => {
+      if (statusName === "cancel") {
+         return axios.patch(`/appt/${id}/${statusName}?reason=${reason}`, null, {
+            auth: true,
+         });
+      }
+      return axios.patch(`/appt/${id}/${statusName}`, null, { auth: true });
+   },
    /** end */
 
    /** Appointment Repeat */
    appointmentRepeatService: (id, body) =>
       axios.post(`/appt/repeat/${id}`, body, { auth: true }),
    /** end */
+
+   appendSignatureToAppmtService: (id, signature) =>
+      axios.post(`/appt/${id}/documents`, signature, { auth: true }),
 };

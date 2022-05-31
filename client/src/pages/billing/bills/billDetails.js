@@ -52,7 +52,7 @@ export const BillDetails = () => {
             />
          </div>
          <BillDetailsFragment
-            billDetails={billById}
+            billDetails={billByIdData}
             transactionQty={count}
             page={page}
             handleGetPage={setPage}

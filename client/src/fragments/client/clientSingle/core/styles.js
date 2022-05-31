@@ -219,40 +219,16 @@ export const serviceSingleStyles = makeStyles(() => ({
       fontSize: "14px",
       color: "#4B5C68",
    },
-
-   authorizationFileWrapper: {
-      width: 480,
-      background: Colors.BackgroundWhite,
-      borderRadius: "8px",
-      padding: 40,
+   contentStyle: {
+      fontSize: 16,
+      color: Colors.TextSecondary,
+      fontWeight: "regular",
    },
-   authorizationFileHeader: {
-      textAlign: "center",
-      paddingBottom: 30,
-      "& h1": {
-         fontSize: 32,
-         color: Colors.TextSecondary,
-         fontWeight: "bold",
-      },
-      "& h2": {
-         fontSize: 16,
-         color: Colors.TextSecondary,
-         fontWeight: "regular",
-         padding: "16px 0",
-      },
-      "& p": {
-         fontSize: 16,
-         color: Colors.TextSecondary,
-         fontWeight: "regular",
-      },
-      "& span": {
-         fontSize: 16,
-         color: Colors.BackgroundBlue,
-         fontWeight: "bold",
-      },
-   },
-   starIcon: {
-      color: `${Colors.ThemeRed}!important`,
+   contentIconStyle: {
+      fontSize: 16,
+      color: Colors.BackgroundBlue,
+      fontWeight: "bold",
+      "&.starIcon": { color: `${Colors.ThemeRed}!important` },
    },
    addAuthFilesButnStyle: { marginTop: "16px" },
 }));

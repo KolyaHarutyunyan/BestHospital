@@ -146,15 +146,15 @@ function* editFundingSourceService(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
-      yield call(
+      const res = yield call(
          authService.editFoundingSourceServiceService,
          action.payload.id,
          action.payload.body
       );
-      // yield put({
-      //    type: GET_FUNDING_SOURCE_SERVICE_BY_ID,
-      //    payload: action.payload.id,
-      // });
+      yield put({
+         type: GET_FUNDING_SOURCE_SERVICE_BY_ID,
+         payload: res.data?.funderId,
+      });
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
    } catch (err) {

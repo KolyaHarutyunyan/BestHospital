@@ -1,5 +1,6 @@
 import {
    ADD_CLAIM_IN_CLAIM_PAYMENT,
+   APPEND_FILES_TO_CLAIM_PAYMENT,
    CREATE_CLAIM_PAYMENT,
    DELETE_CLAIM_PAYMENT,
    EDIT_CLAIM_PAYMENT,
@@ -53,6 +54,13 @@ export const editClaimPaymentStatus = (id, status, details) => {
 export const addClaimInClaimPayment = (id, body) => {
    return {
       type: ADD_CLAIM_IN_CLAIM_PAYMENT,
+      payload: { id, body },
+   };
+};
+
+export const appendFilesToClaimPayment = (id, body) => {
+   return {
+      type: APPEND_FILES_TO_CLAIM_PAYMENT,
       payload: { id, body },
    };
 };

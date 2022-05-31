@@ -1,4 +1,5 @@
 import {
+   APPEND_SIGNATURE_TO_APPMT,
    APPOINTMENT_REPEAT,
    CREATE_APPOINTMENT,
    DELETE_APPOINTMENT,
@@ -95,3 +96,10 @@ export const appointmentRepeat = (id, body) => {
 };
 
 /** end */
+
+export const appendSignatureToAppmt = (id, signature) => {
+   return {
+      type: APPEND_SIGNATURE_TO_APPMT,
+      payload: { id, signature },
+   };
+};

@@ -42,7 +42,7 @@ export const ClaimPaymentModals = ({
             handleOpenClose={closeEditingModal}
             content={
                <ModalContentWrapper
-                  wrapperStylesName={classes.editClaimPaymentWrapperStyle}
+                  wrapperClassName={classes.editClaimPaymentWrapperStyle}
                   onClose={closeEditingModal}
                   titleContent={"Edit Payment"}
                   subtitleContent={editingClaimSubtitleContent}
@@ -63,7 +63,7 @@ export const ClaimPaymentModals = ({
             handleOpenClose={closeVoidingModal}
             content={
                <ModalContentWrapper
-                  wrapperStylesName={classes.voidClaimPaymentWrapperStyle}
+                  wrapperClassName={classes.voidClaimPaymentWrapperStyle}
                   onClose={closeVoidingModal}
                   titleContent={"Void This Payment?"}
                   subtitleContent={
@@ -82,7 +82,7 @@ export const ClaimPaymentModals = ({
             handleOpenClose={closeAddingModal}
             content={
                <ModalContentWrapper
-                  wrapperStylesName={classes.addClaimPaymentWrapperStyle}
+                  wrapperClassName={classes.addClaimPaymentWrapperStyle}
                   onClose={closeAddingModal}
                   titleContent={"Add Claim to Payment"}
                   content={

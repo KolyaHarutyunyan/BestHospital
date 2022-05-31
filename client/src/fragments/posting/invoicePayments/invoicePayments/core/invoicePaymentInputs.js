@@ -35,13 +35,24 @@ export const InvoicePaymentInputs = ({
    const success = !!info
       ? FindSuccess("EDIT_INVOICE_PAYMENT")
       : FindSuccess("CREATE_INVOICE_PAYMENT");
+   const sendFilesSuccess = FindSuccess("APPEND_FILES_TO_INVOICE_PAYMENT");
+   const sendFilesLoader = FindLoad("APPEND_FILES_TO_INVOICE_PAYMENT");
 
    useEffect(() => {
       if (!!success.length) {
-         closeModal && closeModal();
+         handleStep && handleStep("last");
          dispatch(httpRequestsOnSuccessActions.removeSuccess(success[0].type));
       }
    }, [success]);
+
+   useEffect(() => {
+      if (!!sendFilesSuccess.length) {
+         closeModal && closeModal();
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess("APPEND_FILES_TO_INVOICE_PAYMENT")
+         );
+      }
+   }, [sendFilesSuccess]);
 
    const [inputs, setInputs] = useState(
       !!info
@@ -55,6 +66,7 @@ export const InvoicePaymentInputs = ({
    );
    const [error, setError] = useState("");
    const [chosenImages, setChosenImages] = useState([]);
+   const [enteredFileName, setEnteredFileName] = useState("");
    const [loaderUpload, setLoaderUpload] = useState(false);
 
    const isFirst = activeStep === "first";
@@ -82,7 +94,18 @@ export const InvoicePaymentInputs = ({
            isNotEmpty(inputs.checkNumber);
 
       if (firstStepDataIsValid) {
-         handleStep && handleStep("last");
+         const invoicePmtData = {
+            paymentAmount: +inputs.paymentAmount,
+            client: inputs.client,
+            paymentDate: inputs.paymentDate,
+            paymentType: makeEnum(inputs.paymentType),
+            checkNumber: inputs.checkNumber,
+         };
+         if (!!info) {
+            dispatch(invoicePaymentActions.editInvoicePayment(info.id, invoicePmtData));
+         } else {
+            dispatch(invoicePaymentActions.createInvoicePayment(invoicePmtData));
+         }
       } else {
          const errorText = !!info
             ? !isNotEmpty(inputs.paymentDate)
@@ -103,50 +126,34 @@ export const InvoicePaymentInputs = ({
             : !isNotEmpty(inputs.checkNumber)
             ? "checkNumber"
             : "";
-
          setError(errorText);
       }
    };
 
    const handleSubmit = () => {
-      const invoicePmtData = {
-         paymentAmount: +inputs.paymentAmount,
-         client: inputs.client,
-         paymentDate: inputs.paymentDate,
-         paymentType: makeEnum(inputs.paymentType),
-         checkNumber: inputs.checkNumber,
-      };
-
       if (!!chosenImages.length) {
          setLoaderUpload(true);
 
          ImgUploader(chosenImages, true).then((uploadedImages) => {
             setLoaderUpload(false);
 
-            const invoicePmtDataWithDocs = {
-               ...invoicePmtData,
-               documents: uploadedImages,
-            };
+            const invoicePmtId = localStorage.getItem("invoicePmtId");
 
-            if (!!info) {
+            for (let i = 0; i < uploadedImages.length; i++) {
+               const filesData = {
+                  file: uploadedImages[i],
+                  name: enteredFileName,
+               };
                dispatch(
-                  invoicePaymentActions.editInvoicePayment(
-                     info.id,
-                     invoicePmtDataWithDocs
+                  invoicePaymentActions.appendFilesToInvoicePayment(
+                     invoicePmtId,
+                     filesData
                   )
-               );
-            } else {
-               dispatch(
-                  invoicePaymentActions.createInvoicePayment(invoicePmtDataWithDocs)
                );
             }
          });
       } else {
-         if (!!info) {
-            dispatch(invoicePaymentActions.editInvoicePayment(info.id, invoicePmtData));
-         } else {
-            dispatch(invoicePaymentActions.createInvoicePayment(invoicePmtData));
-         }
+         closeModal && closeModal();
       }
    };
 
@@ -162,11 +169,14 @@ export const InvoicePaymentInputs = ({
             />
          )}
          {isLast && (
-            <LastStepInputs handleImagesPass={(images) => setChosenImages(images)} />
+            <LastStepInputs
+               handleImagesPass={(images) => setChosenImages(images)}
+               handleFileNamePass={(fileName) => setEnteredFileName(fileName)}
+            />
          )}
          <CreateChancel
             butnClassName={classes.createOrCancelButnStyle}
-            loader={loaderUpload || !!loader.length}
+            loader={loaderUpload || !!loader.length || !!sendFilesLoader.length}
             create={createButnText}
             chancel={"Cancel"}
             onCreate={isLast ? handleSubmit : handleNext}

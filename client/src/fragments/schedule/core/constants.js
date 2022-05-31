@@ -33,8 +33,15 @@ export function getCurrentText(type) {
 }
 
 export function getServiceAppmtDetails(serviceAppmt) {
-   const { client, authorizedService, staff, staffPayCode, miles, placeService } =
-      serviceAppmt || {};
+   const {
+      client,
+      authorizedService,
+      staff,
+      staffPayCode,
+      miles,
+      address,
+      placeService,
+   } = serviceAppmt || {};
 
    const serviceAppmtDetails = [
       {
@@ -59,7 +66,7 @@ export function getServiceAppmtDetails(serviceAppmt) {
       },
       {
          detailText: "Client Address:",
-         detail: "1100 East Broadway #302 Glendale, CA 91205",
+         detail: address?.formattedAddress,
       },
       {
          detailText: "Place of Service:",
