@@ -95,7 +95,7 @@ export const ClaimDetailsFragment = ({ claimDetails }) => {
             handleOpenClose={() => setOpen((prevState) => !prevState)}
             content={
                <ModalContentWrapper
-                  wrapperStylesName={classes.closeClaimWrapperStyle}
+                  wrapperClassName={classes.closeClaimWrapperStyle}
                   onClose={() => setOpen(false)}
                   titleContent={"Close This Claim?"}
                   subtitleContent={

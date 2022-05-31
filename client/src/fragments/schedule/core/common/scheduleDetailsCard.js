@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { scheduleCommonStyle } from "./styles";
-import { FindLoad, Images, ImgUploader, manageStatus } from "@eachbase/utils";
+import {
+   FindLoad,
+   FindSuccess,
+   Images,
+   ImgUploader,
+   manageStatus,
+} from "@eachbase/utils";
 import { Items } from "../items";
 import {
    SimpleTooltip,
@@ -12,7 +18,7 @@ import {
    ModalContentWrapper,
    ImagesFileUploader,
 } from "@eachbase/components";
-import { appointmentActions } from "@eachbase/store";
+import { appointmentActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import moment from "moment";
 import {
@@ -26,7 +32,7 @@ export const ScheduleDetailsCard = ({ openCloseRecur, handleEdit, appointmentByI
 
    const [item, setItem] = useState(appointmentById ? appointmentById : "");
    const defItem = item.length === 0 ? "" : item;
-   const [switcher, setSwitcher] = useState(defItem ? defItem.require : false);
+   const [isRequired, setIsRequired] = useState(defItem ? defItem.signature : false);
    const [modalIsOpen, setModalIsOpen] = useState(false);
    const [chosenImages, setChosenImages] = useState([]);
    const [loaderUpload, setLoaderUpload] = useState(false);
@@ -39,6 +45,17 @@ export const ScheduleDetailsCard = ({ openCloseRecur, handleEdit, appointmentByI
 
    const loader = FindLoad("GET_APPOINTMENT_BY_ID");
    const statusLoader = FindLoad("SET_APPOINTMENT_STATUS");
+   const appendSignatureSuccess = FindSuccess("APPEND_SIGNATURE_TO_APPMT");
+   const appendSignatureLoader = FindLoad("APPEND_SIGNATURE_TO_APPMT");
+
+   useEffect(() => {
+      if (!!appendSignatureSuccess.length) {
+         setModalIsOpen(false);
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess("APPEND_SIGNATURE_TO_APPMT")
+         );
+      }
+   }, [appendSignatureSuccess]);
 
    const { color: statusColor } = getBorderColorAndText(defItem?.eventStatus);
    const { detailText } = getCurrentText(defItem?.type);
@@ -48,8 +65,7 @@ export const ScheduleDetailsCard = ({ openCloseRecur, handleEdit, appointmentByI
    const _isPending = defItem?.eventStatus === "PENDING";
    const _hasBeenRecurred = defItem?.isRepeat === true;
 
-   function handleChangeService() {
-      setSwitcher((prevState) => !prevState);
+   useEffect(() => {
       const data = {
          type: "SERVICE",
          client: defItem?.client?._id,
@@ -62,37 +78,49 @@ export const ScheduleDetailsCard = ({ openCloseRecur, handleEdit, appointmentByI
          startTime: defItem?.startTime,
          endTime: defItem?.endTime,
          status: "ACTIVE",
-         require: !switcher,
+         require: isRequired,
+         signature: isRequired,
       };
       dispatch(appointmentActions.editAppointment(data, defItem?._id));
-   }
+   }, [isRequired]);
 
-   function changeStatusToRendered() {
-      dispatch(appointmentActions.setAppointmentStatus(defItem._id, "render", ""));
+   function handleChangeService() {
+      setIsRequired((prevState) => !prevState);
    }
 
    function changeStatusToCancelled() {
       dispatch(appointmentActions.setAppointmentStatus(defItem._id, "cancel", ""));
    }
 
-   function changeStatusToCompleted() {
-      dispatch(appointmentActions.setAppointmentStatus(defItem._id, "complete", ""));
+   function handleStatusChange() {
+      if (_isServiceAppmt) {
+         if (isRequired) {
+            setModalIsOpen(true);
+         } else {
+            dispatch(appointmentActions.setAppointmentStatus(defItem._id, "render", ""));
+         }
+      } else {
+         dispatch(appointmentActions.setAppointmentStatus(defItem._id, "complete", ""));
+      }
    }
 
    function handleSignatureSend() {
       setLoaderUpload(true);
 
-      ImgUploader(chosenImages, false).then((uploadedImages) => {
+      ImgUploader(chosenImages, false).then((uploadedSignature) => {
          setLoaderUpload(false);
 
-         console.log(uploadedImages, "uploaded signature");
-         // dispatch(appointmentActions.appendSignatureToAppmt(defItem._id, uploadedImages));
+         dispatch(
+            appointmentActions.appendSignatureToAppmt(defItem._id, {
+               file: uploadedSignature,
+            })
+         );
       });
    }
 
    const serviceAppmtDetails = getServiceAppmtDetails(defItem);
 
-   if (loader.length || statusLoader.length) {
+   if (!!loader.length || !!statusLoader.length) {
       return (
          <div className={classes.infoWrapper}>
             <Loader circleSize={50} />
@@ -166,17 +194,19 @@ export const ScheduleDetailsCard = ({ openCloseRecur, handleEdit, appointmentByI
                                     Require Signature
                                  </p>
                                  <CustomizedSwitch
-                                    checked={switcher}
+                                    checked={isRequired}
                                     handleClick={handleChangeService}
                                  />
                               </div>
                            )}
-                           <DownloadLink
-                              linkClassName={classes.downloadSignatureStyle}
-                              linkHref={"Signature.csv"}
-                              linkInnerText={"Signature.csv"}
-                              linkDownload={true}
-                           />
+                           {defItem?.digitalSignature && (
+                              <DownloadLink
+                                 linkClassName={classes.downloadSignatureStyle}
+                                 linkHref={defItem?.digitalSignature?.url}
+                                 linkInnerText={"Signature.csv"}
+                                 linkDownload={true}
+                              />
+                           )}
                         </div>
                         <button
                            type="button"
@@ -192,20 +222,14 @@ export const ScheduleDetailsCard = ({ openCloseRecur, handleEdit, appointmentByI
                   <div className={classes.statusActionsBoxStyle}>
                      <AddModalButton
                         buttonClassName={classes.changeStatusButnStyle}
-                        handleClick={() =>
-                           _isServiceAppmt
-                              ? changeStatusToRendered()
-                              : changeStatusToCompleted()
-                        }
+                        handleClick={handleStatusChange}
                         text={_isServiceAppmt ? "Render" : "Complete"}
                      />
-                     {!!chosenImages.length && (
-                        <AddModalButton
-                           buttonClassName={classes.changeStatusButnStyle}
-                           handleClick={changeStatusToCancelled}
-                           text="Cancel"
-                        />
-                     )}
+                     <AddModalButton
+                        buttonClassName={classes.changeStatusButnStyle}
+                        handleClick={changeStatusToCancelled}
+                        text="Cancel"
+                     />
                   </div>
                )}
             </div>
@@ -215,6 +239,7 @@ export const ScheduleDetailsCard = ({ openCloseRecur, handleEdit, appointmentByI
             openDefault={modalIsOpen}
             content={
                <ModalContentWrapper
+                  wrapperClassName={classes.signatureModalWrapperStyle}
                   onClose={() => setModalIsOpen(false)}
                   titleContent={"Upload Signature"}
                   subtitleContent={
@@ -226,12 +251,14 @@ export const ScheduleDetailsCard = ({ openCloseRecur, handleEdit, appointmentByI
                         uploadOnlyOneFile={true}
                         handleImagesPass={(images) => setChosenImages(images)}
                      />
-                     <AddModalButton
-                        buttonClassName={classes.addAuthFilesButnStyle}
-                        handleClick={handleSignatureSend}
-                        loader={loaderUpload}
-                        text="Done"
-                     />
+                     {!!chosenImages.length && (
+                        <AddModalButton
+                           buttonClassName={classes.addAuthFilesButnStyle}
+                           handleClick={handleSignatureSend}
+                           loader={loaderUpload || !!appendSignatureLoader.length}
+                           text="Done"
+                        />
+                     )}
                   </>
                </ModalContentWrapper>
             }

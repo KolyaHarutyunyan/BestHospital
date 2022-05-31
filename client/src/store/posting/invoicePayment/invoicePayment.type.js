@@ -20,3 +20,6 @@ export const EDIT_INVOICE_PAYMENT_STATUS = "EDIT_INVOICE_PAYMENT_STATUS";
 
 /**add Invoice in Invoice Payment */
 export const ADD_INVOICE_IN_INVOICE_PAYMENT = "ADD_INVOICE_IN_INVOICE_PAYMENT";
+
+/**append Files to Invoice Payment */
+export const APPEND_FILES_TO_INVOICE_PAYMENT = "APPEND_FILES_TO_INVOICE_PAYMENT";

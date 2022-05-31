@@ -161,7 +161,7 @@ export const StatusSelectors = ({ billId, claim = "", invoice = "", bill = "" })
             handleOpenClose={handleOpenClose}
             content={
                <ModalContentWrapper
-                  wrapperStylesName={classes.statusSelectorsWrapperStyle}
+                  wrapperClassName={classes.statusSelectorsWrapperStyle}
                   onClose={handleOpenClose}
                   titleContent={modalTitleContent}
                   subtitleContent={modalSubtitleContent}

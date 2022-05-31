@@ -52,9 +52,9 @@ export function getClaimPaymentDetails(claimPayment) {
       {
          detailText: "EOB:",
          detail:
-            !!documents && !!documents[0]?.url ? (
+            !!documents && !!documents[0]?.file?.url ? (
                <DownloadLink
-                  linkHref={documents[0]?.url}
+                  linkHref={documents[0]?.file?.url}
                   linkInnerText={"Download"}
                   linkDownload={true}
                />

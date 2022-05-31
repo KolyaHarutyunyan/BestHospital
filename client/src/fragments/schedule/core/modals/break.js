@@ -25,7 +25,7 @@ export const Break = ({
 
    const [inputs, setInputs] = useState(
       modalDate
-         ? { ...modalDate }
+         ? { ...modalDate, staffPayCode: modalDate.staffPayCode?._id }
          : day
          ? { ...day, ...createModalDate }
          : createModalDate
@@ -162,7 +162,12 @@ export const Break = ({
    const titleContent = getDynamicContent("TITLE", modalDate, type);
    const subtitleContent = getDynamicContent("SUBTITLE", modalDate, type);
 
-   const activeStaffPaycodes = allPaycodes.filter((data) => data.active);
+   const activeStaffPaycodes = allPaycodes
+      .filter((staffPaycode) => staffPaycode.active)
+      .map((staffPaycode) => ({
+         ...staffPaycode,
+         name: staffPaycode.payCodeTypeId.name,
+      }));
 
    return (
       <div>

@@ -3,7 +3,7 @@ import { hooksForTable, makeCapitalize, manageStatus } from "@eachbase/utils";
 // import { invoicePaymentDetailsStyle } from "./styles";
 
 export function getInvoicePaymentDetails(invoicePayment) {
-   const { client, status, checkNumber, totalBilled, totalUsed, paymentType } =
+   const { client, status, checkNumber, totalBilled, totalUsed, paymentType, documents } =
       invoicePayment || {};
 
    // const classes = invoicePaymentDetailsStyle();
@@ -44,13 +44,14 @@ export function getInvoicePaymentDetails(invoicePayment) {
       },
       {
          detailText: "EOB:",
-         detail: !!"EOB.pdf" ? (
-            <DownloadLink
-               linkHref={"EOB.pdf"}
-               linkInnerText={"Download"}
-               linkDownload={true}
-            />
-         ) : null,
+         detail:
+            !!documents && !!documents[0]?.file?.url ? (
+               <DownloadLink
+                  linkHref={documents[0]?.file?.url}
+                  linkInnerText={"Download"}
+                  linkDownload={true}
+               />
+            ) : null,
       },
       {
          detailText: "Payment Type:",

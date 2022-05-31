@@ -222,9 +222,9 @@ export const getClientHistories = (id, onModal) => {
    };
 };
 
-export const addFilesToClientAuth = (clientId, authId, files) => {
+export const addFilesToClientAuth = (authId, files) => {
    return {
       type: ADD_FILES_TO_CLIENT_AUTH,
-      payload: { clientId, authId, files },
+      payload: { authId, files },
    };
 };

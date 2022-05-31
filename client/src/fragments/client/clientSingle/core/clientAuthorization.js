@@ -7,6 +7,7 @@ import {
    DeleteElement,
    ImagesFileUploader,
    Loader,
+   ModalContentWrapper,
    NoItemText,
    Notes,
    SimpleModal,
@@ -15,16 +16,8 @@ import {
 import { serviceSingleStyles } from "./styles";
 import { Colors, FindLoad, FindSuccess, Images, ImgUploader } from "@eachbase/utils";
 import { CircularProgress, TableCell } from "@material-ui/core";
-import {
-   clientActions,
-   httpRequestsOnErrorsActions,
-   httpRequestsOnSuccessActions,
-} from "@eachbase/store";
-import {
-   AddAuthorization,
-   AuthorizationFile,
-   AddAuthorizationService,
-} from "../../clientModals";
+import { clientActions, httpRequestsOnSuccessActions } from "@eachbase/store";
+import { AddAuthorization, AddAuthorizationService } from "../../clientModals";
 import { AuthHeader } from "@eachbase/components/headers/auth/authHeader";
 import { headerTitles } from "./constants";
 
@@ -46,6 +39,7 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
    const [authIndex, setAuthIndex] = useState(0);
    const [serviceIndex, setServiceIndex] = useState(null);
    const [chosenImages, setChosenImages] = useState([]);
+   const [enteredFileName, setEnteredFileName] = useState("");
    const [loaderUpload, setLoaderUpload] = useState(false);
 
    const success = FindSuccess("DELETE_CLIENT_AUTHORIZATION");
@@ -53,6 +47,8 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
    const loader = FindLoad("GET_CLIENT_AUTHORIZATION_SERV");
    const delAuthLoader = FindLoad("DELETE_CLIENT_AUTHORIZATION");
    const delAuthServLoader = FindLoad("DELETE_CLIENT_AUTHORIZATION_SERV");
+   const sendFilesSuccess = FindSuccess("ADD_FILES_TO_CLIENT_AUTH");
+   const sendFilesLoader = FindLoad("ADD_FILES_TO_CLIENT_AUTH");
 
    useEffect(() => {
       if (info) {
@@ -77,6 +73,13 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
          );
       }
    }, [successDelServ]);
+
+   useEffect(() => {
+      if (!!sendFilesSuccess.length) {
+         setModalIsOpen(false);
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("ADD_FILES_TO_CLIENT_AUTH"));
+      }
+   }, [sendFilesSuccess]);
 
    function deleteAuthorization() {
       dispatch(clientActions.deleteClientsAuthorization(info[authIndex].id, params.id));
@@ -154,20 +157,22 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
       );
    }
 
-   function handleSubmit() {
+   function handleAuthFilesSend() {
       if (!!chosenImages.length) {
          setLoaderUpload(true);
 
          ImgUploader(chosenImages, true).then((uploadedImages) => {
             setLoaderUpload(false);
 
-            dispatch(
-               clientActions.addFilesToClientAuth(
-                  info[authIndex].clientId,
-                  info[authIndex].id,
-                  uploadedImages
-               )
-            );
+            for (let i = 0; i < uploadedImages.length; i++) {
+               const filesData = {
+                  file: uploadedImages[i],
+                  name: enteredFileName,
+               };
+               dispatch(
+                  clientActions.addFilesToClientAuth(info[authIndex].id, filesData)
+               );
+            }
          });
       } else {
          setModalIsOpen(false);
@@ -234,28 +239,35 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
             handleOpenClose={() => setModalIsOpen((prevState) => !prevState)}
             openDefault={modalIsOpen}
             content={
-               <div className={classes.authorizationFileWrapper}>
-                  <div className={classes.authorizationFileHeader}>
-                     <h1>Uploaded files</h1>
-                     <h2>Please fulfill the file type to upload a file.</h2>
-                     <p>
-                        <span className={classes.starIcon}>*</span>
+               <ModalContentWrapper
+                  onClose={() => setModalIsOpen(false)}
+                  titleContent={"Uploaded files"}
+                  subtitleContent={"Please fulfill the file type to upload a file."}
+                  content={
+                     <p className={classes.contentStyle}>
+                        <span className={`${classes.contentIconStyle} starIcon`}>*</span>
                         Only
-                        <span> PDF , PNG , CSV </span> &<span> JPEG </span>
+                        <span className={classes.contentIconStyle}>
+                           {" "}
+                           PDF , PNG , CSV{" "}
+                        </span>{" "}
+                        &<span> JPEG </span>
                         formats are supported
                      </p>
-                  </div>
+                  }
+               >
                   <ImagesFileUploader
                      changeNameAfterFileUpload={true}
                      handleImagesPass={(images) => setChosenImages(images)}
+                     handleFileNamePass={(fileName) => setEnteredFileName(fileName)}
                   />
                   <AddModalButton
                      buttonClassName={classes.addAuthFilesButnStyle}
-                     handleClick={handleSubmit}
-                     loader={loaderUpload}
+                     handleClick={handleAuthFilesSend}
+                     loader={loaderUpload || !!sendFilesLoader.length}
                      text="Done"
                   />
-               </div>
+               </ModalContentWrapper>
             }
          />
          <Card

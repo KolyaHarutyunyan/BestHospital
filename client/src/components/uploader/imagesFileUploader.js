@@ -7,10 +7,15 @@ import ReactFileReader from "react-file-reader";
 
 export const ImagesFileUploader = ({
    handleImagesPass,
+   handleFileNamePass,
    changeNameAfterFileUpload,
    uploadOnlyOneFile,
 }) => {
    const classes = fileUploadersStyle();
+
+   const fileCardContainerStyle = `${classes.fileCardContainerStyle} ${
+      uploadOnlyOneFile ? "singleFile" : ""
+   }`;
 
    const [enteredFileName, setEnteredFileName] = useState("");
    const [fileName, setFileName] = useState("");
@@ -22,6 +27,10 @@ export const ImagesFileUploader = ({
    useEffect(() => {
       handleImagesPass && handleImagesPass(uniqueImages);
    }, [images]);
+
+   useEffect(() => {
+      handleFileNamePass && handleFileNamePass(fileName);
+   }, [fileName]);
 
    useEffect(() => {
       if (isNotEmpty(enteredFileName)) {
@@ -36,10 +45,6 @@ export const ImagesFileUploader = ({
    function handleFileNameChange(e) {
       setEnteredFileName(e.target.value);
       !!error && setError("");
-   }
-
-   function handleFileNamePass(currentFileName) {
-      setFileName(currentFileName);
    }
 
    function handleFileChange(imageList) {
@@ -108,27 +113,27 @@ export const ImagesFileUploader = ({
                <p className={classes.authorizationFileSubTitle}>uploaded files</p>
             </div>
          )}
-         <div className={`${classes.normal} ${uploadOnlyOneFile ? "singleFile" : ""}`}>
-            <div className={`${classes.normal} ${uploadOnlyOneFile ? "singleFile" : ""}`}>
-               {!!uniqueImages.length ? (
-                  uniqueImages.map((item, index) => (
-                     <UploadedFileCard
-                        key={index}
-                        file={item}
-                        deleteFile={handleFileDelete}
-                        uploadOnlyOneFile={uploadOnlyOneFile}
-                        changeNameAfterFileUpload={changeNameAfterFileUpload}
-                        fileName={fileName}
-                        passCurrentFileName={handleFileNamePass}
-                     />
-                  ))
-               ) : uploadOnlyOneFile ? null : (
-                  <div className={classes.iconText}>
-                     <img src={Images.fileIcon} alt="" />
-                     <p className={classes.noFilesYetTextStyle}>No Files yet</p>
-                  </div>
-               )}
-            </div>
+         <div className={fileCardContainerStyle}>
+            {!!uniqueImages.length ? (
+               uniqueImages.map((item, index) => (
+                  <UploadedFileCard
+                     key={index}
+                     file={item}
+                     deleteFile={handleFileDelete}
+                     uploadOnlyOneFile={uploadOnlyOneFile}
+                     changeNameAfterFileUpload={changeNameAfterFileUpload}
+                     fileName={fileName}
+                     passCurrentFileName={(currentFileName) =>
+                        setFileName(currentFileName)
+                     }
+                  />
+               ))
+            ) : uploadOnlyOneFile ? null : (
+               <div className={classes.iconText}>
+                  <img src={Images.fileIcon} alt="" />
+                  <p className={classes.noFilesYetTextStyle}>No Files yet</p>
+               </div>
+            )}
          </div>
       </div>
    );

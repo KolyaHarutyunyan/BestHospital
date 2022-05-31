@@ -7,6 +7,7 @@ import {
 import { claimPaymentService } from "./claimPayment.service";
 import {
    ADD_CLAIM_IN_CLAIM_PAYMENT,
+   APPEND_FILES_TO_CLAIM_PAYMENT,
    CREATE_CLAIM_PAYMENT,
    DELETE_CLAIM_PAYMENT,
    EDIT_CLAIM_PAYMENT,
@@ -68,11 +69,16 @@ function* createClaimPayment(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
-      yield call(claimPaymentService.createClaimPaymentService, action.payload.body);
-      yield put({ type: GET_CLAIM_PAYMENTS });
+      const res = yield call(
+         claimPaymentService.createClaimPaymentService,
+         action.payload.body
+      );
+      const _claimPmtId = res.data._id;
+      localStorage.setItem("claimPmtId", _claimPmtId);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
+      localStorage.removeItem("claimPmtId");
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
@@ -163,6 +169,27 @@ function* addClaimInClaimPayment(action) {
    }
 }
 
+function* appendFilesToClaimPayment(action) {
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
+   try {
+      yield call(
+         claimPaymentService.appendFilesToClaimPaymentService,
+         action.payload.id,
+         action.payload.body
+      );
+      localStorage.removeItem("claimPmtId");
+      yield put({ type: GET_CLAIM_PAYMENTS });
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+   } catch (err) {
+      localStorage.removeItem("claimPmtId");
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+   }
+}
+
 export const watchClaimPayment = function* watchClaimPaymentSaga() {
    yield takeLatest(GET_CLAIM_PAYMENTS, getClaimPayments);
    yield takeLatest(GET_CLAIM_PAYMENT_BY_ID, getClaimPaymentById);
@@ -171,4 +198,5 @@ export const watchClaimPayment = function* watchClaimPaymentSaga() {
    yield takeLatest(DELETE_CLAIM_PAYMENT, deleteClaimPayment);
    yield takeLatest(EDIT_CLAIM_PAYMENT_STATUS, editClaimPaymentStatus);
    yield takeLatest(ADD_CLAIM_IN_CLAIM_PAYMENT, addClaimInClaimPayment);
+   yield takeLatest(APPEND_FILES_TO_CLAIM_PAYMENT, appendFilesToClaimPayment);
 };

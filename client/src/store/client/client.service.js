@@ -114,8 +114,8 @@ export const authService = {
    getClientHistoriesService: (id, onModal) =>
       axios.get(`/history/${id}/${onModal}`, { auth: true }),
 
-   addFilesToClientAuthService: (clientId, authId, files) =>
-      axios.post(`/client/${clientId}/auth/${authId}/documents`, files, {
+   addFilesToClientAuthService: (authId, files) =>
+      axios.post(`/auth/${authId}/documents`, files, {
          auth: true,
       }),
 };

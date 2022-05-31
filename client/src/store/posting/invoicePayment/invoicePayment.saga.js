@@ -7,6 +7,7 @@ import {
 import { invoicePaymentService } from "./invoicePayment.service";
 import {
    ADD_INVOICE_IN_INVOICE_PAYMENT,
+   APPEND_FILES_TO_INVOICE_PAYMENT,
    CREATE_INVOICE_PAYMENT,
    DELETE_INVOICE_PAYMENT,
    EDIT_INVOICE_PAYMENT,
@@ -68,11 +69,16 @@ function* createInvoicePayment(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
-      yield call(invoicePaymentService.createInvoicePaymentService, action.payload.body);
-      yield put({ type: GET_INVOICE_PAYMENTS });
+      const res = yield call(
+         invoicePaymentService.createInvoicePaymentService,
+         action.payload.body
+      );
+      const _invoicePmtId = res.data._id;
+      localStorage.setItem("invoicePmtId", _invoicePmtId);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
+      localStorage.removeItem("invoicePmtId");
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
    }
@@ -163,6 +169,27 @@ function* addInvoiceInInvoicePayment(action) {
    }
 }
 
+function* appendFilesToInvoicePayment(action) {
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
+   try {
+      yield call(
+         invoicePaymentService.appendFilesToInvoicePaymentService,
+         action.payload.id,
+         action.payload.body
+      );
+      localStorage.removeItem("invoicePmtId");
+      yield put({ type: GET_INVOICE_PAYMENTS });
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+   } catch (err) {
+      localStorage.removeItem("invoicePmtId");
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+   }
+}
+
 export const watchInvoicePayment = function* watchInvoicePaymentSaga() {
    yield takeLatest(GET_INVOICE_PAYMENTS, getInvoicePayments);
    yield takeLatest(GET_INVOICE_PAYMENT_BY_ID, getInvoicePaymentById);
@@ -171,4 +198,5 @@ export const watchInvoicePayment = function* watchInvoicePaymentSaga() {
    yield takeLatest(DELETE_INVOICE_PAYMENT, deleteInvoicePayment);
    yield takeLatest(EDIT_INVOICE_PAYMENT_STATUS, editInvoicePaymentStatus);
    yield takeLatest(ADD_INVOICE_IN_INVOICE_PAYMENT, addInvoiceInInvoicePayment);
+   yield takeLatest(APPEND_FILES_TO_INVOICE_PAYMENT, appendFilesToInvoicePayment);
 };

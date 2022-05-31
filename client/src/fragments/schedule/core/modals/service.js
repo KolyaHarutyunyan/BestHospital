@@ -159,7 +159,7 @@ export const Service = ({
       setError("");
    };
 
-   const handleGetClientServ = (id) => {
+   function handleGetClientServ(id) {
       axios
          .get(`/auth/client/${id}`, { auth: true })
          .then((res) =>
@@ -172,7 +172,7 @@ export const Service = ({
                : ""
          )
          .catch(() => setClientService(""));
-   };
+   }
 
    const handleChangeSignature = () => {
       setSignature((prevState) => !prevState);
@@ -245,6 +245,7 @@ export const Service = ({
       modalDate,
       "Service Appointment"
    );
+
    const activeStaffPaycodes = allPaycodes
       .filter((data) => data.active)
       .map((staffPaycode) => ({
@@ -282,7 +283,7 @@ export const Service = ({
                         label={"Authorized Service*"}
                         handleSelect={handleSelect}
                         value={inputs.authorizedService}
-                        list={clientService}
+                        list={clientService ? clientService : []}
                         typeError={error === "authorizedService" && ErrorText.field}
                      />
                      <SelectInput

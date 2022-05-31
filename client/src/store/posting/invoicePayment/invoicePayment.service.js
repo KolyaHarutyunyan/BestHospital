@@ -30,4 +30,7 @@ export const invoicePaymentService = {
 
    addInvoiceInInvoicePaymentService: (id, body) =>
       axios.post(`/invoice-pmt/${id}/payment`, body, { auth: true }),
+
+   appendFilesToInvoicePaymentService: (id, body) =>
+      axios.post(`/invoice-pmt/${id}/documents`, body, { auth: true }),
 };

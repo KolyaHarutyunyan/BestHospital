@@ -28,4 +28,7 @@ export const claimPaymentService = {
 
    addClaimInClaimPaymentService: (id, body) =>
       axios.post(`/claim-pmt/${id}/payment`, body, { auth: true }),
+
+   appendFilesToClaimPaymentService: (id, body) =>
+      axios.post(`/claim-pmt/${id}/documents`, body, { auth: true }),
 };

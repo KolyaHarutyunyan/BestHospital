@@ -121,4 +121,13 @@ export const scheduleCommonStyle = makeStyles(() => ({
       "& > div:last-of-type": { marginLeft: "16px" },
    },
    changeStatusButnStyle: { padding: "7px 24px" },
+   signatureModalWrapperStyle: {
+      "& > button": { backgroundColor: Colors.BackgroundWater },
+      "& > div:first-of-type": {
+         textAlign: "left",
+         "& > p": { marginBottom: "0px" },
+      },
+      "& > div:last-of-type": { paddingTop: "0px" },
+   },
+   addAuthFilesButnStyle: { marginTop: "32px" },
 }));

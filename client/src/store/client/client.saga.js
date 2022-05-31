@@ -564,15 +564,14 @@ function* addFilesToClientAuth(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
-      yield call(
+      const res = yield call(
          authService.addFilesToClientAuthService,
-         action.payload.clientId,
          action.payload.authId,
          action.payload.files
       );
       yield put({
          type: GET_CLIENT_BY_ID,
-         payload: { id: action.payload.clientId },
+         payload: { id: res.data?.clientId },
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
