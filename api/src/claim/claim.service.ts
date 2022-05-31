@@ -89,7 +89,6 @@ export class ClaimService {
       group === 'OFF'
         ? await this.singleBill(bills as IBilling[])
         : await this.groupBills(bills as IBilling[]);
-    console.log(claims);
     return this.sanitizer.sanitizeMany(claims);
   }
 
