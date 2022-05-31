@@ -17,6 +17,7 @@ import { BillingService } from '../billing/billing.service';
 import { IBilling } from '../billing/interface';
 import { BillingDto } from '../billing/dto';
 import { IClaimPmtCount, IClaimPmtDoc } from './interface/claim-pmt.interface';
+import { ITxn } from 'src/txn/interface';
 
 @Injectable()
 export class ClaimPmtService {
@@ -42,9 +43,6 @@ export class ClaimPmtService {
       fundingSource: dto.fundingSource,
       checkNumber: dto.checkNumber,
     });
-    if (dto.documents.length) {
-      dto.documents.map((doc) => claimPmt.documents.push(doc));
-    }
     if (dto.paymentDate) claimPmt.paymentDate = dto.paymentDate;
     await claimPmt.save();
     return this.sanitizer.sanitize(claimPmt);
@@ -64,6 +62,7 @@ export class ClaimPmtService {
     let sumPaid = 0;
     let recAmount = 0;
     let amountPaided = 0;
+    let txn = [];
     dto.receivables.map((receivable) => (sumPaid += receivable.paidAMT));
     const [claimPmt, claim] = await Promise.all([
       this.model.findById(_id),
@@ -93,8 +92,8 @@ export class ClaimPmtService {
       };
       const countBalance = receivable.coINS + receivable.copay + receivable.deductible;
       const clientResp = countBalance == 0 ? 0 : countBalance / data.receivable.bills.length;
-      const billedAmount = await this.createPayment(data, clientResp, dto.user.id);
-
+      const billedAmount = await this.createPayment(data, clientResp, dto.user.id, txn);
+      console.log(txn, 'txnnnnnnn');
       amountPaided += billedAmount;
       /** update receivable total amount */
       const updateRecAmount = await this.claimService.setAmountRec(
@@ -198,7 +197,7 @@ export class ClaimPmtService {
   }
   /** Private methods */
   /** create payment */
-  private async createPayment(data, clientResp: number, userId: string): Promise<number> {
+  private async createPayment(data, clientResp: number, userId: string, txn): Promise<number> {
     const receivable = data.receivable;
     let bills = data.receivable.bills;
     let paidAmount = 0;
@@ -213,6 +212,7 @@ export class ClaimPmtService {
           clientResp,
           lowBill._id,
           userId,
+          txn,
         );
         receivable.amountTotal -= billedAmount;
         data.paidAMT -= billedAmount;
@@ -223,6 +223,7 @@ export class ClaimPmtService {
           clientResp,
           lowBill._id,
           userId,
+          txn,
         );
         receivable.amountTotal -= data.paidAMT;
         data.paidAMT = 0;
@@ -241,6 +242,7 @@ export class ClaimPmtService {
     clientResp: number,
     billingId: string,
     userId: string,
+    txn: ITxn[],
   ): Promise<number> {
     const transactionInfo = {
       type: TxnType.PAYERPAID,
@@ -262,6 +264,7 @@ export class ClaimPmtService {
     clientResp: number,
     billingId: string,
     userId: string,
+    txn: ITxn[],
   ): Promise<number> {
     const transactionInfo = {
       type: TxnType.PAYERPAID,
@@ -271,6 +274,7 @@ export class ClaimPmtService {
       billing: billingId,
       creator: userId,
     };
+    txn.push(transactionInfo);
     await Promise.all([
       this.billingService.startTransaction(transactionInfo, billingId),
       this.billingService.setClientBalance(billingId, clientResp),

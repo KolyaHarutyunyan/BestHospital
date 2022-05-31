@@ -37,8 +37,6 @@ export class CreateInvPmtDto {
   @IsString()
   @IsNotEmpty()
   checkNumber: string;
-  @ApiProperty({ type: [FileDTO] })
-  documents: FileDTO[];
   user?: UserDTO;
 }
 class ReceivableDTO {

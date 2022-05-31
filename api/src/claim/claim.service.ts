@@ -89,6 +89,7 @@ export class ClaimService {
       group === 'OFF'
         ? await this.singleBill(bills as IBilling[])
         : await this.groupBills(bills as IBilling[]);
+    console.log(claims);
     return this.sanitizer.sanitizeMany(claims);
   }
 
@@ -125,7 +126,6 @@ export class ClaimService {
     const result = this.groupBy(bills, function (item) {
       return [item.payer, item.client];
     });
-
     /** create receivables and claims */
     for (let i = 0; i < result.length; i++) {
       for (let j = 0; j < result[i].length; ++j) {

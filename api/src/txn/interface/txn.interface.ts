@@ -1,13 +1,13 @@
 import { TxnStatus, TxnType } from '../txn.constants';
 
 export interface ITxn {
-  _id: string;
+  _id?: string;
   billing: string;
   type: TxnType;
   rate: number;
   date: Date;
-  status: TxnStatus;
+  status?: TxnStatus;
   paymentRef: string;
-  note: string;
+  note?: string;
   creator: string;
 }

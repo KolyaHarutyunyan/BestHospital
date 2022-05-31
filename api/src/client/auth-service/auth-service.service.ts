@@ -224,6 +224,7 @@ export class AuthService {
   async countCompletedUnits(_id: string, minutes: number) {
     const authService: any = await this.model.findById(_id).populate('serviceId');
     this.checkAuthService(authService);
+    console.log(authService);
     const size = authService.serviceId.size;
     const completedUnits = minutes / size;
 

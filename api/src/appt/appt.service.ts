@@ -475,7 +475,7 @@ export class ApptService {
     if (dto.startTime) appt.startTime = dto.startTime;
     if (dto.endTime) appt.endTime = dto.endTime;
     if (dto.require) appt.require = dto.require;
-    if (dto.signature) appt.signature = dto.signature;
+    if (dto.signature || dto.signature === false) appt.signature = dto.signature;
     await appt.save();
     return this.sanitizer.sanitize(appt);
   }

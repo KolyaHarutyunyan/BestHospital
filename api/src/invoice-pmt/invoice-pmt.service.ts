@@ -39,9 +39,6 @@ export class InvPmtService {
       client: dto.client,
       checkNumber: dto.checkNumber,
     });
-    if (dto.documents.length) {
-      dto.documents.map((doc) => invPmt.documents.push(doc));
-    }
     if (dto.paymentDate) invPmt.paymnetDate = dto.paymentDate;
     await invPmt.save();
     return this.sanitizer.sanitize(invPmt);
