@@ -1,8 +1,13 @@
 import { model, Schema, Types } from 'mongoose';
 import { IAuth } from './interface';
 import { ClientAuthServiceModel } from '../auth-service/auth-service.model';
-import { AuthorizationStatus } from './auth.constants';
-
+import { AuthorizationStatus, DocumentStatus } from './auth.constants';
+import { FileSchema } from '../../files/file.model';
+const authDocSchema = new Schema({
+  name: { type: String },
+  file: FileSchema,
+  status: { type: String, enum: [DocumentStatus] },
+});
 const AuthSchema = new Schema({
   clientId: { type: Types.ObjectId, ref: 'Client' },
   authId: { type: String },
@@ -12,6 +17,7 @@ const AuthSchema = new Schema({
   status: { type: String, enum: [AuthorizationStatus] },
   createdDate: { type: Date, default: Date.now() },
   updatedDate: { type: Date, default: null },
+  documents: [authDocSchema],
   location: { type: String }, // adrressSchema
 });
 

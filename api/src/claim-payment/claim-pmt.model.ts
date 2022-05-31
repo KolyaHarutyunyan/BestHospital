@@ -1,8 +1,13 @@
 import { model, Schema, Types } from 'mongoose';
 import { FileSchema } from '../files/file.model';
-import { ClaimPmtStatus, PaymentType } from './claim-pmt.contants';
+import { ClaimPmtStatus, DocumentStatus, PaymentType } from './claim-pmt.contants';
 import { IClaimPmt } from './interface';
 
+const claimPmtDocSchema = new Schema({
+  name: { type: String },
+  file: FileSchema,
+  status: { type: String, enum: [DocumentStatus] },
+});
 const ClaimPmtSchema = new Schema({
   paymentDate: { type: Date, default: Date.now() },
   paymentAmount: { type: Number },
@@ -13,7 +18,7 @@ const ClaimPmtSchema = new Schema({
   totalBilled: { type: Number, default: 0 },
   totalUsed: { type: Number, default: 0 },
   status: { type: String, enum: [ClaimPmtStatus], default: ClaimPmtStatus.OPEN },
-  documents: [FileSchema],
+  documents: [claimPmtDocSchema],
   // deductible: { type: Number },
   // copay: { type: Number },
   // coinsurance: { type: Number },

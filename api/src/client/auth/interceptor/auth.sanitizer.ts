@@ -16,6 +16,7 @@ export class AuthSanitizer implements ISanitize {
       startDate: auth.startDate,
       endDate: auth.endDate,
       status: auth.status,
+      documents: auth.documents,
       location: auth.location,
     };
     return authDTO;

@@ -4,3 +4,8 @@ export enum AuthorizationStatus {
   HOLD = 'HOLD',
   TERMINATE = 'TERMINATE',
 }
+
+export enum DocumentStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+}

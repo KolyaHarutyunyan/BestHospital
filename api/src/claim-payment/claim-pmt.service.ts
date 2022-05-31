@@ -16,7 +16,7 @@ import { FundingService } from '../funding/funding.service';
 import { BillingService } from '../billing/billing.service';
 import { IBilling } from '../billing/interface';
 import { BillingDto } from '../billing/dto';
-import { IClaimPmtCount } from './interface/claim-pmt.interface';
+import { IClaimPmtCount, IClaimPmtDoc } from './interface/claim-pmt.interface';
 
 @Injectable()
 export class ClaimPmtService {
@@ -115,12 +115,17 @@ export class ClaimPmtService {
   }
   /** add document to claim-pmt */
   async addDocument(_id: string, dto: CreateDocDTO): Promise<ClaimPmtDto> {
+    const document: IClaimPmtDoc = {
+      name: dto.name ? dto.name : '',
+      status: DocumentStatus.ACTIVE,
+      file: dto.file,
+    } as IClaimPmtDoc;
     const [claimPmt]: any = await Promise.all([
       this.model.findById(_id),
       this.fileService.getOne(dto.file.id),
     ]);
     this.checkClaimPmt(claimPmt);
-    claimPmt.documents.push(dto.file);
+    claimPmt.documents.push(document);
     await claimPmt.save();
     return this.sanitizer.sanitize(claimPmt);
   }

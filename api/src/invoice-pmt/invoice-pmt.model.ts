@@ -1,8 +1,12 @@
 import { model, Schema, Types } from 'mongoose';
 import { FileSchema } from '../files/file.model';
 import { IInvPmt } from './interface/invoice-pmt.interface';
-import { InvPmtStatus, PaymentType } from './invoice-pmt.constants';
-
+import { DocumentStatus, InvPmtStatus, PaymentType } from './invoice-pmt.constants';
+const InvPmtDocSchema = new Schema({
+  name: { type: String },
+  file: FileSchema,
+  status: { type: String, enum: [DocumentStatus] },
+});
 const InvPmtSchema = new Schema({
   paymentType: { type: String, enum: PaymentType },
   checkNumber: { type: String },
@@ -13,7 +17,7 @@ const InvPmtSchema = new Schema({
   status: { type: String, enum: [InvPmtStatus], default: InvPmtStatus.OPEN },
   client: { type: Types.ObjectId, ref: 'Client' },
   invoices: [{ type: Types.ObjectId, ref: 'invoice' }],
-  documents: [FileSchema],
+  documents: [InvPmtDocSchema],
 });
 
 export const InvPmtModel = model<IInvPmt>('invPmt', InvPmtSchema);

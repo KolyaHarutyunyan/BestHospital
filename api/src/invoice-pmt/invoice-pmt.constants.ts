@@ -8,3 +8,7 @@ export enum InvPmtStatus {
   CLOSE = 'CLOSE',
   VOID = 'VOID',
 }
+export enum DocumentStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+}

@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { AuthDTO, CreateAuthDTO, UpdateAuthDTO } from './dto';
 import { IClient } from '../interface';
-import { IAuth } from './interface';
+import { IAuth, IAuthDoc } from './interface';
 import { MongooseUtil } from '../../util';
 import { Model } from 'mongoose';
 import { AuthSanitizer } from './interceptor/auth.sanitizer';
@@ -9,12 +9,16 @@ import { ClientAuthorizationModel } from './auth.model';
 import { ClientModel } from '../client.model';
 import { EnrollmentService } from '../enrollment';
 import { AuthService } from '../auth-service/auth-service.service';
+import { CreateDocDTO } from './dto/create.dto';
+import { DocumentStatus } from './auth.constants';
+import { FileService } from '../../files/file.service';
 
 @Injectable()
 export class AuthorizationService {
   constructor(
     private readonly enrollmentService: EnrollmentService,
     private readonly authService: AuthService,
+    private readonly fileService: FileService,
     private readonly sanitizer: AuthSanitizer,
   ) {
     this.model = ClientAuthorizationModel;
@@ -51,7 +55,31 @@ export class AuthorizationService {
       throw e;
     }
   };
+  /** add document */
+  async addDocument(_id: string, dto: CreateDocDTO): Promise<AuthDTO> {
+    const document: IAuthDoc = {
+      name: dto.name ? dto.name : '',
+      status: DocumentStatus.ACTIVE,
+      file: dto.file,
+    } as IAuthDoc;
+    const [auth]: any = await Promise.all([
+      this.model.findById(_id),
+      this.fileService.getOne(dto.file.id),
+    ]);
+    this.checkAuth(auth);
+    auth.documents.push(document);
+    await auth.save();
+    return this.sanitizer.sanitize(auth);
+  }
 
+  /** delete document in the auth */
+  async deleteDocument(_id: string, fileId: string): Promise<AuthDTO> {
+    const auth = await this.model.findById(_id);
+    this.checkAuth(auth);
+    this.removeFromList(auth.documents, fileId);
+    await auth.save();
+    return this.sanitizer.sanitize(auth);
+  }
   // update the authorization
   async update(_id: string, dto: UpdateAuthDTO): Promise<AuthDTO> {
     try {
@@ -101,6 +129,15 @@ export class AuthorizationService {
   private checkAuth(auth: IAuth) {
     if (!auth) {
       throw new HttpException('Authorization with this id was not found', HttpStatus.NOT_FOUND);
+    }
+  }
+  /** Removes a file from the list if the file exists */
+  private removeFromList(list: any[], element: any) {
+    const index = list.findIndex((id) => id == element);
+    if (index !== -1) {
+      list.splice(index, 1);
+    } else {
+      throw new HttpException('Was not found in list', HttpStatus.NOT_FOUND);
     }
   }
 }

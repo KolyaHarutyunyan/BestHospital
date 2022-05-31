@@ -1,1 +1,1 @@
-export { IClaimPmt } from './claim-pmt.interface';
+export { IClaimPmt, IClaimPmtDoc } from './claim-pmt.interface';

@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { FileDTO } from '../../../files/dto';
 import { AuthorizationStatus } from '../auth.constants';
 
 export class AuthDTO {
@@ -18,4 +19,6 @@ export class AuthDTO {
   location: string;
   @ApiProperty({ enum: AuthorizationStatus })
   status: string;
+  @ApiProperty()
+  documents: FileDTO[];
 }

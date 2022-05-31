@@ -64,4 +64,8 @@ export class CreateReceivableDTO extends DTO {
 export class CreateDocDTO extends DTO {
   @ApiProperty({ type: FileDTO })
   file: FileDTO;
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  name: string;
 }

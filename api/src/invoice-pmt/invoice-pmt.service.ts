@@ -11,8 +11,8 @@ import { InvoiceService } from '../invoice/invoice.service';
 import { MongooseUtil } from '../util/mongoose.util';
 import { CreateInvPmtDto, UpdateInvPmtDto, InvPmtDto, CreateDocDTO } from './dto';
 import { CreateReceivableDTO } from './dto/create-invoice-pmt.dto';
-import { IInvPmt, IInvPmtCount } from './interface/invoice-pmt.interface';
-import { InvPmtStatus } from './invoice-pmt.constants';
+import { IInvPmt, IInvPmtCount, IInvPmtDoc } from './interface/invoice-pmt.interface';
+import { DocumentStatus, InvPmtStatus } from './invoice-pmt.constants';
 import { InvPmtModel } from './invoice-pmt.model';
 import { InvPmtSanitizer } from './invoice-pmt.sanitizer';
 
@@ -95,12 +95,17 @@ export class InvPmtService {
   }
   /** add document */
   async addDocument(_id: string, dto: CreateDocDTO): Promise<InvPmtDto> {
+    const document: IInvPmtDoc = {
+      name: dto.name ? dto.name : '',
+      status: DocumentStatus.ACTIVE,
+      file: dto.file,
+    } as IInvPmtDoc;
     const [invPmt]: any = await Promise.all([
       this.model.findById(_id),
       this.fileService.getOne(dto.file.id),
     ]);
     this.checkInvPmt(invPmt);
-    invPmt.documents.push(dto.file);
+    invPmt.documents.push(document);
     await invPmt.save();
     return this.sanitizer.sanitize(invPmt);
   }

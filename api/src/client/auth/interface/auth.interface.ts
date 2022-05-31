@@ -1,4 +1,6 @@
 import { Document } from 'mongoose';
+import { FileDTO } from '../../../files/dto';
+import { DocumentStatus } from '../auth.constants';
 
 export interface IAuth extends Document {
   id: string;
@@ -9,4 +11,10 @@ export interface IAuth extends Document {
   endDate: Date;
   location: string;
   status: string;
+  documents: FileDTO[];
+}
+export interface IAuthDoc extends Document {
+  name: string;
+  status: DocumentStatus;
+  file: FileDTO;
 }

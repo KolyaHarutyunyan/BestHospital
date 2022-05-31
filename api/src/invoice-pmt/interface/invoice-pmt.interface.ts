@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
 import { FileDTO } from '../../files/dto';
 import { InvPmtDto } from '../dto';
-import { InvPmtStatus } from '../invoice-pmt.constants';
+import { DocumentStatus, InvPmtStatus } from '../invoice-pmt.constants';
 
 export interface IInvPmt extends Document {
   paymentType: string;
@@ -21,4 +21,9 @@ export interface IInvPmt extends Document {
 export interface IInvPmtCount {
   invPmt: InvPmtDto[];
   count: number;
+}
+export interface IInvPmtDoc extends Document {
+  name: string;
+  status: DocumentStatus;
+  file: FileDTO;
 }

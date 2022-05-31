@@ -22,3 +22,8 @@ export interface IClaimPmtCount {
 export interface IClaimPmtDoc extends Document {
   file: FileDTO;
 }
+export interface IClaimPmtDoc extends Document {
+  name: string;
+  status: DocumentStatus;
+  file: FileDTO;
+}

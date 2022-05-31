@@ -1,1 +1,1 @@
-export { IAuth } from './auth.interface';
+export { IAuth, IAuthDoc } from './auth.interface';
