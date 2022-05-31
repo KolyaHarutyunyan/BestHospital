@@ -1,6 +1,6 @@
 import React from "react";
 import {
-   BillingModalWrapper,
+   ModalContentWrapper,
    SimpleModal,
    TwoStepsContainer,
 } from "@eachbase/components";
@@ -42,7 +42,7 @@ export const InvoicePaymentModals = ({
             openDefault={editingModalIsOpen}
             handleOpenClose={closeEditingModal}
             content={
-               <BillingModalWrapper
+               <ModalContentWrapper
                   wrapperStylesName={classes.editClaimPaymentWrapperStyle}
                   onClose={closeEditingModal}
                   titleContent={"Edit Payment"}
@@ -56,14 +56,14 @@ export const InvoicePaymentModals = ({
                      closeModal={closeEditingModal}
                      mappedClients={mappedClients}
                   />
-               </BillingModalWrapper>
+               </ModalContentWrapper>
             }
          />
          <SimpleModal
             openDefault={voidingModalIsOpen}
             handleOpenClose={closeVoidingModal}
             content={
-               <BillingModalWrapper
+               <ModalContentWrapper
                   wrapperStylesName={classes.voidClaimPaymentWrapperStyle}
                   onClose={closeVoidingModal}
                   titleContent={"Void This Payment?"}
@@ -75,14 +75,14 @@ export const InvoicePaymentModals = ({
                      closeModal={closeVoidingModal}
                      invoicePaymentId={invoicePaymentId}
                   />
-               </BillingModalWrapper>
+               </ModalContentWrapper>
             }
          />
          <SimpleModal
             openDefault={addingModalIsOpen}
             handleOpenClose={closeAddingModal}
             content={
-               <BillingModalWrapper
+               <ModalContentWrapper
                   wrapperStylesName={classes.addClaimPaymentWrapperStyle}
                   onClose={closeAddingModal}
                   titleContent={"Add Invoice to Payment"}
@@ -100,7 +100,7 @@ export const InvoicePaymentModals = ({
                      closeModal={closeAddingModal}
                      invoicePaymentId={invoicePaymentId}
                   />
-               </BillingModalWrapper>
+               </ModalContentWrapper>
             }
          />
       </>

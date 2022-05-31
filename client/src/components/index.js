@@ -44,8 +44,8 @@ export {
    InfoWrapper,
    CreateWrapperHead,
    Management,
-   BillingModalWrapper,
    CheckedItemsQtyInfoWrapper,
+   ModalContentWrapper,
 } from "./wrapper";
 export {
    SimpleModal,

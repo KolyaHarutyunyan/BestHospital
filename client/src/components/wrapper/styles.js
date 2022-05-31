@@ -91,7 +91,7 @@ export const wrapperStyle = makeStyles(() => ({
          position: "absolute",
          top: 8,
          right: 8,
-         backgroundColor: "#A3B2BD80",
+         backgroundColor: Backgrounds.darkGrey,
       },
       "& > div": {
          width: "100%",

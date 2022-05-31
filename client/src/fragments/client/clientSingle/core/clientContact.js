@@ -10,12 +10,9 @@ import {
    TableBodyComponent,
 } from "@eachbase/components";
 import { serviceSingleStyles } from "./styles";
-import { Colors, FindLoad, FindSuccess, Images } from "@eachbase/utils";
+import { Colors, FindLoad, FindSuccess, getLimitedVal, Images } from "@eachbase/utils";
 import { TableCell } from "@material-ui/core";
-import {
-   clientActions,
-   httpRequestsOnSuccessActions,
-} from "@eachbase/store";
+import { clientActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 
 const headerTitles = [
    {
@@ -73,13 +70,13 @@ export const ClientContact = ({ data, setContactId, handleOpenClose, info }) => 
       { title: "Middle Name", value: data?.middleName },
       { title: "Last Name", value: data?.lastName },
       { title: "Code", value: data?.code },
-   ];
+   ].filter((item) => !!item.value);
 
    function deleteContact() {
       dispatch(clientActions.deleteClientContact(info[index].id, params.id));
    }
 
-   let clientContactItem = (item, index) => {
+   function clientContactItem(item, index) {
       return (
          <TableBodyComponent key={index}>
             <TableCell>
@@ -87,7 +84,7 @@ export const ClientContact = ({ data, setContactId, handleOpenClose, info }) => 
             </TableCell>
             <TableCell> {item?.lastName} </TableCell>
             <TableCell> {item?.relationship} </TableCell>
-            <TableCell> {item?.phoneNumber} </TableCell>
+            <TableCell> {getLimitedVal(item?.address?.formattedAddress, 22)} </TableCell>
             <TableCell> {item?.phoneNumber} </TableCell>
             <TableCell>
                <>
@@ -113,7 +110,7 @@ export const ClientContact = ({ data, setContactId, handleOpenClose, info }) => 
             </TableCell>
          </TableBodyComponent>
       );
-   };
+   }
 
    return (
       <div className={classes.staffGeneralWrapper}>

@@ -30,7 +30,7 @@ export const ClientGeneral = ({ data }) => {
       { title: "Middle Name", value: data?.middleName },
       { title: "Last Name", value: data?.lastName },
       { title: "Code", value: data?.code },
-   ];
+   ].filter((item) => !!item.value);
 
    return (
       <div className={classes.staffGeneralWrapper}>

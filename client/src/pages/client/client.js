@@ -48,7 +48,6 @@ export const Client = ({}) => {
             handleType={handleActiveOrInactive}
             firstButton={"Active"}
             secondButton={"Inactive"}
-            addButton={"Add Client"}
             buttonsTab={true}
             buttonsTabAddButton={true}
             addButtonText={"Add Client"}
@@ -58,7 +57,9 @@ export const Client = ({}) => {
                deleteClient ? (
                   <DeleteElement
                      loader={!!loader.length}
-                     handleDel={() => dispatch(clientActions.deleteClient(deleteClient.id))}
+                     handleDel={() =>
+                        dispatch(clientActions.deleteClient(deleteClient.id))
+                     }
                      className={classes}
                      text={"Delete Client"}
                      info={deleteClient.firstName}

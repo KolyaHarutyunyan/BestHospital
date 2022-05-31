@@ -35,6 +35,8 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
 
    const dispatch = useDispatch();
 
+   const services = useSelector((state) => state.client.clientsAuthorizationsServices);
+
    const [delEdit, setDelEdit] = useState(null);
    const [delEdit2, setDelEdit2] = useState(null);
    const [toggleModal, setToggleModal] = useState(false);
@@ -43,7 +45,6 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
    const [modalIsOpen, setModalIsOpen] = useState(false);
    const [authIndex, setAuthIndex] = useState(0);
    const [serviceIndex, setServiceIndex] = useState(null);
-   const services = useSelector((state) => state.client.clientsAuthorizationsServices);
    const [chosenImages, setChosenImages] = useState([]);
    const [loaderUpload, setLoaderUpload] = useState(false);
 
@@ -51,16 +52,17 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
    const successDelServ = FindSuccess("DELETE_CLIENT_AUTHORIZATION_SERV");
    const loader = FindLoad("GET_CLIENT_AUTHORIZATION_SERV");
    const delAuthLoader = FindLoad("DELETE_CLIENT_AUTHORIZATION");
+   const delAuthServLoader = FindLoad("DELETE_CLIENT_AUTHORIZATION_SERV");
 
    useEffect(() => {
       if (info) {
          dispatch(clientActions.getClientsAuthorizationsServ(info[authIndex].id));
       }
-   }, [authIndex]);
+   }, [info, authIndex]);
 
    useEffect(() => {
       if (!!success.length) {
-         setToggleModal((prevState) => !prevState);
+         setToggleModal(false);
          dispatch(
             httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT_AUTHORIZATION")
          );
@@ -69,7 +71,7 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
 
    useEffect(() => {
       if (!!successDelServ.length) {
-         setToggleModal3((prevState) => !prevState);
+         setToggleModal3(false);
          dispatch(
             httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT_AUTHORIZATION_SERV")
          );
@@ -218,7 +220,7 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
                   />
                ) : (
                   <DeleteElement
-                     loader={!!delAuthLoader.length}
+                     loader={!!delAuthServLoader.length}
                      info={`Delete ${
                         services && services[serviceIndex]?.serviceId?.name
                      }`}
@@ -243,7 +245,7 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
                         formats are supported
                      </p>
                   </div>
-                  <ImagesFileUploader 
+                  <ImagesFileUploader
                      changeNameAfterFileUpload={true}
                      handleImagesPass={(images) => setChosenImages(images)}
                   />
