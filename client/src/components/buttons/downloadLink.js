@@ -16,7 +16,7 @@ export const DownloadLink = ({
       <a
          className={downloadLinkClassName}
          href={linkHref}
-         download={linkDownload}
+         download={true}
          onClick={(event) => !linkDownload && event.preventDefault()}
       >
          {linkInnerText}

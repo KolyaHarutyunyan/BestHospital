@@ -8,14 +8,14 @@ export const ModalContentWrapper = ({
    subtitleContent,
    content,
    children,
-   wrapperStylesName,
+   wrapperClassName,
 }) => {
    const classes = wrapperStyle();
 
-   const wrapperClassName = `${classes.wrapperContainerStyle} ${wrapperStylesName}`;
+   const modalContentWrapperStyle = `${classes.wrapperContainerStyle} ${wrapperClassName}`;
 
    return (
-      <div className={wrapperClassName}>
+      <div className={modalContentWrapperStyle}>
          <CloseButton handleCLic={onClose} />
          <div>
             <h2 className={classes.wrapperTitleStyle}>{titleContent}</h2>

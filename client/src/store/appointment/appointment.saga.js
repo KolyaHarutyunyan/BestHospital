@@ -1,6 +1,7 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import { appointmentService } from "./appointment.service";
 import {
+   APPEND_SIGNATURE_TO_APPMT,
    APPOINTMENT_REPEAT,
    CREATE_APPOINTMENT,
    DELETE_APPOINTMENT,
@@ -42,7 +43,10 @@ function* editAppointmentSaga(action) {
          action.payload.body,
          action.payload.id
       );
-      yield put({ type: GET_APPOINTMENT });
+      yield put({
+         type: GET_APPOINTMENT_BY_ID,
+         payload: { id: action.payload.id },
+      });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
@@ -155,16 +159,12 @@ function* setAppointmentStatusSaga(action) {
          action.payload.statusName,
          action.payload.reason
       );
-
-      // const res = yield call(appointmentService.getAppointmentService);
       yield put({
-         type: GET_APPOINTMENT,
-         // payload: res.data,
+         type: GET_APPOINTMENT_BY_ID,
+         payload: { id: action.payload.id },
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-
-      // yield put({ type: SET_APPOINTMENT_STATUS_SUCCESS, payload: res.data });
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -193,6 +193,28 @@ function* appointmentRepeatSaga(action) {
 }
 /** end */
 
+function* appendSignatureToAppmt(action) {
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
+   try {
+      yield call(
+         appointmentService.appendSignatureToAppmtService,
+         action.payload.id,
+         action.payload.signature
+      );
+      yield put({
+         type: GET_APPOINTMENT_BY_ID,
+         payload: { id: action.payload.id },
+      });
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+   } catch (err) {
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+   }
+}
+
 export const watchAppointments = function* watchAppointmentsSaga() {
    /** Create, Edit Appointment */
    yield takeLatest(CREATE_APPOINTMENT, createAppointmentSaga);
@@ -216,4 +238,6 @@ export const watchAppointments = function* watchAppointmentsSaga() {
    /** Appointment Repeat */
    yield takeLatest(APPOINTMENT_REPEAT, appointmentRepeatSaga);
    /** end */
+
+   yield takeLatest(APPEND_SIGNATURE_TO_APPMT, appendSignatureToAppmt);
 };

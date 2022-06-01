@@ -27,15 +27,9 @@ export const ListView = ({
 
    useEffect(() => {
       if (appointments) {
-         if (appointments && appointments[0]) {
-            dispatch(
-               appointmentActions.getAppointmentById(
-                  appointments[0] && appointments[0].data[0]._id
-               )
-            );
-         }
+         dispatch(appointmentActions.getAppointmentById(appointments[0]?.data[0]?._id));
       }
-   }, [appointments]);
+   }, []);
 
    useEffect(() => {
       setItem(appointmentById);

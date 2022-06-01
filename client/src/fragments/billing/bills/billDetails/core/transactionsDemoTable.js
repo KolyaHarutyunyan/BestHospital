@@ -44,7 +44,7 @@ export const TransactionsDemoTable = ({ billTransactions = [], billId }) => {
             handleOpenClose={() => setOpen((prevState) => !prevState)}
             content={
                <ModalContentWrapper
-                  wrapperStylesName={classes.transactionVoidingWrapperStyle}
+                  wrapperClassName={classes.transactionVoidingWrapperStyle}
                   onClose={() => setOpen(false)}
                   titleContent={"Void This Transaction?"}
                   subtitleContent={

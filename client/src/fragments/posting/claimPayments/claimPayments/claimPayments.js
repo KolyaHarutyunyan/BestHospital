@@ -121,7 +121,7 @@ export const ClaimPaymentsFragment = ({
             handleOpenClose={() => setOpen((prevState) => !prevState)}
             content={
                <ModalContentWrapper
-                  wrapperStylesName={classes.claimPaymentWrapperStyle}
+                  wrapperClassName={classes.claimPaymentWrapperStyle}
                   onClose={() => setOpen(false)}
                   titleContent={titleContent}
                   subtitleContent={subtitleContent}

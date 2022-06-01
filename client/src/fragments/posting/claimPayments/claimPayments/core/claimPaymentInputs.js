@@ -35,13 +35,24 @@ export const ClaimPaymentInputs = ({
    const success = !!info
       ? FindSuccess("EDIT_CLAIM_PAYMENT")
       : FindSuccess("CREATE_CLAIM_PAYMENT");
+   const sendFilesSuccess = FindSuccess("APPEND_FILES_TO_CLAIM_PAYMENT");
+   const sendFilesLoader = FindLoad("APPEND_FILES_TO_CLAIM_PAYMENT");
 
    useEffect(() => {
       if (!!success.length) {
-         closeModal && closeModal();
+         handleStep && handleStep("last");
          dispatch(httpRequestsOnSuccessActions.removeSuccess(success[0].type));
       }
    }, [success]);
+
+   useEffect(() => {
+      if (!!sendFilesSuccess.length) {
+         closeModal && closeModal();
+         dispatch(
+            httpRequestsOnSuccessActions.removeSuccess("APPEND_FILES_TO_CLAIM_PAYMENT")
+         );
+      }
+   }, [sendFilesSuccess]);
 
    const [inputs, setInputs] = useState(
       !!info
@@ -55,6 +66,7 @@ export const ClaimPaymentInputs = ({
    );
    const [error, setError] = useState("");
    const [chosenImages, setChosenImages] = useState([]);
+   const [enteredFileName, setEnteredFileName] = useState("");
    const [loaderUpload, setLoaderUpload] = useState(false);
 
    const isFirst = activeStep === "first";
@@ -82,7 +94,19 @@ export const ClaimPaymentInputs = ({
            isNotEmpty(inputs.checkNumber);
 
       if (firstStepDataIsValid) {
-         handleStep && handleStep("last");
+         const claimPmtData = {
+            paymentAmount: +inputs.paymentAmount,
+            fundingSource: inputs.fundingSource,
+            paymentDate: inputs.paymentDate,
+            paymentType: makeEnum(inputs.paymentType),
+            checkNumber: inputs.checkNumber,
+         };
+
+         if (!!info) {
+            dispatch(claimPaymentActions.editClaimPayment(info._id, claimPmtData));
+         } else {
+            dispatch(claimPaymentActions.createClaimPayment(claimPmtData));
+         }
       } else {
          const errorText = !!info
             ? !isNotEmpty(inputs.paymentDate)
@@ -103,45 +127,31 @@ export const ClaimPaymentInputs = ({
             : !isNotEmpty(inputs.checkNumber)
             ? "checkNumber"
             : "";
-
          setError(errorText);
       }
    };
 
    const handleSubmit = () => {
-      const claimPmtData = {
-         paymentAmount: +inputs.paymentAmount,
-         fundingSource: inputs.fundingSource,
-         paymentDate: inputs.paymentDate,
-         paymentType: makeEnum(inputs.paymentType),
-         checkNumber: inputs.checkNumber,
-      };
-
       if (!!chosenImages.length) {
          setLoaderUpload(true);
 
          ImgUploader(chosenImages, true).then((uploadedImages) => {
             setLoaderUpload(false);
 
-            const claimPmtDataWithDocs = {
-               ...claimPmtData,
-               documents: uploadedImages,
-            };
+            const claimPmtId = localStorage.getItem("claimPmtId");
 
-            if (!!info) {
+            for (let i = 0; i < uploadedImages.length; i++) {
+               const filesData = {
+                  file: uploadedImages[i],
+                  name: enteredFileName,
+               };
                dispatch(
-                  claimPaymentActions.editClaimPayment(info._id, claimPmtDataWithDocs)
+                  claimPaymentActions.appendFilesToClaimPayment(claimPmtId, filesData)
                );
-            } else {
-               dispatch(claimPaymentActions.createClaimPayment(claimPmtDataWithDocs));
             }
          });
       } else {
-         if (!!info) {
-            dispatch(claimPaymentActions.editClaimPayment(info._id, claimPmtData));
-         } else {
-            dispatch(claimPaymentActions.createClaimPayment(claimPmtData));
-         }
+         closeModal && closeModal();
       }
    };
 
@@ -157,11 +167,14 @@ export const ClaimPaymentInputs = ({
             />
          )}
          {isLast && (
-            <LastStepInputs handleImagesPass={(images) => setChosenImages(images)} />
+            <LastStepInputs
+               handleImagesPass={(images) => setChosenImages(images)}
+               handleFileNamePass={(fileName) => setEnteredFileName(fileName)}
+            />
          )}
          <CreateChancel
             butnClassName={classes.createOrCancelButnStyle}
-            loader={loaderUpload || !!loader.length}
+            loader={loaderUpload || !!loader.length || !!sendFilesLoader.length}
             create={createButnText}
             chancel={"Cancel"}
             onCreate={isLast ? handleSubmit : handleNext}

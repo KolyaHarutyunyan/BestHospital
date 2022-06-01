@@ -20,3 +20,6 @@ export const EDIT_CLAIM_PAYMENT_STATUS = "EDIT_CLAIM_PAYMENT_STATUS";
 
 /**add Claim in Claim Payment */
 export const ADD_CLAIM_IN_CLAIM_PAYMENT = "ADD_CLAIM_IN_CLAIM_PAYMENT";
+
+/**append Files to Claim Payment */
+export const APPEND_FILES_TO_CLAIM_PAYMENT = "APPEND_FILES_TO_CLAIM_PAYMENT";

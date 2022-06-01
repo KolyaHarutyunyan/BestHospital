@@ -6,6 +6,7 @@ import {
    deleteInvoicePayment,
    editInvoicePaymentStatus,
    addInvoiceInInvoicePayment,
+   appendFilesToInvoicePayment,
 } from "./invoicePayment.action.js";
 
 export { invoicePaymentReducer } from "./invoicePayment.reducer";
@@ -19,4 +20,5 @@ export const invoicePaymentActions = {
    deleteInvoicePayment,
    editInvoicePaymentStatus,
    addInvoiceInInvoicePayment,
+   appendFilesToInvoicePayment,
 };

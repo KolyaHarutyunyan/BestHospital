@@ -4,93 +4,98 @@ import { getLimitedVal, Images, isNotEmpty } from "@eachbase/utils";
 import { imagesFileUploaderCoreStyle } from "./styles";
 import { DownloadLink } from "@eachbase/components";
 
-export const UploadedFileCard = ({ 
-    file, 
-    deleteFile, 
-    uploadOnlyOneFile,
-    changeNameAfterFileUpload, 
-    fileName,
-    passCurrentFileName, 
+export const UploadedFileCard = ({
+   file,
+   deleteFile,
+   uploadOnlyOneFile,
+   changeNameAfterFileUpload,
+   fileName,
+   passCurrentFileName,
 }) => {
-    const classes = imagesFileUploaderCoreStyle();
-    const downloadLinkStyle = `${classes.downloadLinkStyle} ${uploadOnlyOneFile ? "linkPosition" : ""}`;
+   const classes = imagesFileUploaderCoreStyle();
 
-    const _imageURL = URL.createObjectURL(file);
+   const fileNameDetailsStyle = `${classes.fileNameDetailsStyle} ${
+      uploadOnlyOneFile ? "singleFile" : ""
+   }`;
+   const downloadLinkStyle = `${classes.downloadLinkStyle} ${
+      uploadOnlyOneFile ? "linkPosition" : ""
+   }`;
 
-    const [change, setChange] = useState(false);
-    const [wasChanged, setWasChanged] = useState(false);
-    const [currentFileName, setCurrentFileName] = useState(fileName);
+   const _imageURL = URL.createObjectURL(file);
 
-    const fileNameInputRef = useRef(null);
+   const [change, setChange] = useState(false);
+   const [wasChanged, setWasChanged] = useState(false);
+   const [currentFileName, setCurrentFileName] = useState(fileName);
 
-    useEffect(() => {
-        if(change) {
-            fileNameInputRef.current.focus();
-        } else {
-            if(wasChanged) {
-                passCurrentFileName(currentFileName);
-            }
-        }
-    }, [change, wasChanged]);
+   const fileNameInputRef = useRef(null);
 
-    function changeFileNameHandler(e) {
-        setCurrentFileName(e.target.value);
-        setWasChanged(true);
-    }
+   useEffect(() => {
+      if (change) {
+         fileNameInputRef.current.focus();
+      } else {
+         if (wasChanged) {
+            passCurrentFileName(currentFileName);
+         }
+      }
+   }, [change, wasChanged]);
 
-    function blurFileNameHandler() {
-        if(!isNotEmpty(currentFileName)) {
-            setCurrentFileName(fileName);
-        }
-        setChange(false);
-    }
+   function changeFileNameHandler(e) {
+      setCurrentFileName(e.target.value);
+      setWasChanged(true);
+   }
 
-    return (
-        <div className={classes.fileRow}>
-            <div className={classes.fileDetailsBoxStyle}>
-                <div className={classes.imageContainer}>
-                    <div>
-                        {checkFileType(file.type)}
-                        <p className={classes.fileSize}>{file.size}</p>
-                        <img
-                            onClick={() => deleteFile(file.name)}
-                            src={Images.removeIcon}
-                            alt="removeIcon"
-                            className={classes.removeIcon}
-                        />
-                    </div>
-                </div>
-                <div className={classes.fileNameDetailsStyle}>
-                    <p className={classes.fileName}>
-                        {getLimitedVal(file.name, 30)}
-                    </p>
-                    {changeNameAfterFileUpload && (
-                        <div className={classes.fileNameInputBoxStyle}>
-                            {change ? (
-                                <input 
-                                    ref={fileNameInputRef}
-                                    type="text" 
-                                    className={classes.fileNameInputStyle}
-                                    value={currentFileName}
-                                    onChange={changeFileNameHandler} 
-                                    onBlur={blurFileNameHandler} 
-                                />
-                            ) : (
-                                <p
-                                    className={classes.fileNameStyle}
-                                    onClick={() => setChange(true)}>
-                                        {currentFileName}
-                                </p>
-                            )}
-                        </div>
-                    )}
-                </div>
+   function blurFileNameHandler() {
+      if (!isNotEmpty(currentFileName)) {
+         setCurrentFileName(fileName);
+      }
+      setChange(false);
+   }
+
+   return (
+      <div className={classes.fileRow}>
+         <div className={classes.fileDetailsBoxStyle}>
+            <div className={classes.imageContainer}>
+               <div>
+                  {checkFileType(file.type)}
+                  <p className={classes.fileSize}>{file.size}</p>
+                  <img
+                     onClick={() => deleteFile(file.name)}
+                     src={Images.removeIcon}
+                     alt="removeIcon"
+                     className={classes.removeIcon}
+                  />
+               </div>
             </div>
-            <DownloadLink
-                linkClassName={downloadLinkStyle} 
-                linkHref={_imageURL} 
-                linkDownload={true} 
-            />
-        </div>
-    );
-}
+            <div className={fileNameDetailsStyle}>
+               <p className={classes.fileName}>{getLimitedVal(file.name, 30)}</p>
+               {changeNameAfterFileUpload && (
+                  <div className={classes.fileNameInputBoxStyle}>
+                     {change ? (
+                        <input
+                           ref={fileNameInputRef}
+                           type="text"
+                           className={classes.fileNameInputStyle}
+                           value={currentFileName}
+                           onChange={changeFileNameHandler}
+                           onBlur={blurFileNameHandler}
+                        />
+                     ) : (
+                        <p
+                           className={classes.fileNameStyle}
+                           onClick={() => setChange(true)}
+                        >
+                           {currentFileName}
+                        </p>
+                     )}
+                  </div>
+               )}
+            </div>
+         </div>
+         <DownloadLink
+            linkClassName={downloadLinkStyle}
+            linkHref={_imageURL}
+            linkDownload={true}
+         />
+      </div>
+   );
+};

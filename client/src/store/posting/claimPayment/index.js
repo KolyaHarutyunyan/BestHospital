@@ -6,6 +6,7 @@ import {
    deleteClaimPayment,
    editClaimPaymentStatus,
    addClaimInClaimPayment,
+   appendFilesToClaimPayment,
 } from "./claimPayment.action.js";
 
 export { claimPaymentReducer } from "./claimPayment.reducer";
@@ -19,4 +20,5 @@ export const claimPaymentActions = {
    deleteClaimPayment,
    editClaimPaymentStatus,
    addClaimInClaimPayment,
+   appendFilesToClaimPayment,
 };

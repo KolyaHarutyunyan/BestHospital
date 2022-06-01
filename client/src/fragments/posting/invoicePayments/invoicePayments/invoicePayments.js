@@ -122,7 +122,7 @@ export const InvoicePaymentsFragment = ({
             handleOpenClose={() => setOpen((prevState) => !prevState)}
             content={
                <ModalContentWrapper
-                  wrapperStylesName={classes.invoicePaymentWrapperStyle}
+                  wrapperClassName={classes.invoicePaymentWrapperStyle}
                   onClose={() => setOpen(false)}
                   titleContent={titleContent}
                   subtitleContent={subtitleContent}

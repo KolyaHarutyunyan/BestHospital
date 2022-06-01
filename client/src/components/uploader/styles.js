@@ -45,7 +45,7 @@ export const fileUploadersStyle = makeStyles(() => ({
       textTransform: "capitalize",
       textAlign: "left",
    },
-   normal: {
+   fileCardContainerStyle: {
       height: "290px",
       "&.singleFile": {
          maxHeight: "290px",
