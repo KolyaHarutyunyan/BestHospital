@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
+   AddButtonLight,
    AddModalButton,
    Card,
    DeleteElement,
@@ -133,13 +134,17 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
 
             <TableCell>
                <>
-                  {/*<img src={Images.edit} alt="edit" className={classes.iconStyle}*/}
-                  {/*     onClick={(e) => {*/}
-                  {/*         e.stopPropagation()*/}
-                  {/*         setDelEdit2(true)*/}
-                  {/*         setServiceIndex(index)*/}
-                  {/*         setToggleModal3(!toggleModal3)*/}
-                  {/*     }}/>*/}
+                  <img
+                     src={Images.edit}
+                     alt="edit"
+                     className={classes.iconStyle}
+                     onClick={(e) => {
+                        e.stopPropagation();
+                        setDelEdit2(true);
+                        setToggleModal3(true);
+                        setServiceIndex(index);
+                     }}
+                  />
                   <img
                      src={Images.remove}
                      alt="delete"
@@ -147,8 +152,8 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
                      onClick={(e) => {
                         e.stopPropagation();
                         setDelEdit2(false);
+                        setToggleModal3(true);
                         setServiceIndex(index);
-                        setToggleModal3(!toggleModal3);
                      }}
                   />
                </>
@@ -189,13 +194,13 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
                   <AddAuthorization
                      fundingId={info[authIndex]?.funderId?._id}
                      info={info[authIndex]}
-                     handleClose={() => setToggleModal((prevState) => !prevState)}
+                     handleClose={() => setToggleModal(false)}
                   />
                ) : (
                   <DeleteElement
                      loader={!!delAuthLoader.length}
                      info={`Delete ${info[authIndex].authId}`}
-                     handleClose={() => setToggleModal((prevState) => !prevState)}
+                     handleClose={() => setToggleModal(false)}
                      handleDel={deleteAuthorization}
                   />
                )
@@ -207,7 +212,7 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
             content={
                <AddAuthorizationService
                   authId={info[authIndex]?.id}
-                  handleClose={() => setToggleModal2((prevState) => !prevState)}
+                  handleClose={() => setToggleModal2(false)}
                   fundingId={info[authIndex].funderId?._id}
                />
             }
@@ -220,7 +225,7 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
                   <AddAuthorizationService
                      info={services && services[serviceIndex]}
                      authId={info[authIndex].id}
-                     handleClose={() => setToggleModal3((prevState) => !prevState)}
+                     handleClose={() => setToggleModal3(false)}
                      fundingId={info[authIndex].funderId?._id}
                   />
                ) : (
@@ -229,7 +234,7 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
                      info={`Delete ${
                         services && services[serviceIndex]?.serviceId?.name
                      }`}
-                     handleClose={() => setToggleModal3((prevState) => !prevState)}
+                     handleClose={() => setToggleModal3(false)}
                      handleDel={deleteAuthorizationServ}
                   />
                )
@@ -296,20 +301,11 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
                <p className={classes.authorizationServicesTitle}>
                   Authorization Services
                </p>
-               <div className={classes.authorizationServicesRight}>
-                  <img
-                     src={Images.addHours}
-                     alt=""
-                     className={classes.iconStyle}
-                     onClick={() => setToggleModal2((prevState) => !prevState)}
-                  />
-                  <p
-                     onClick={() => setToggleModal2((prevState) => !prevState)}
-                     className={classes.authorizationServicesText}
-                  >
-                     Add Authorized Service
-                  </p>
-               </div>
+               <AddButtonLight
+                  addButnLightClassName={classes.addAuthServiceButnStyle}
+                  addButnLightInnerText={"Add Authorized Service"}
+                  onAddButnLightClick={() => setToggleModal2(true)}
+               />
             </div>
             {!!loader.length ? (
                <Loader />

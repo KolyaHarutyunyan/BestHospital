@@ -20,7 +20,7 @@ import axios from "axios";
 export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }) => {
    const [error, setError] = useState("");
    const [inputs, setInputs] = useState(
-      info ? { ...info, modifiers: info.serviceId.name } : { total: "" }
+      info ? { ...info, modifiers: info.serviceId._id } : { total: "" }
    );
    const [modCheck, setModCheck] = useState([]);
    const dispatch = useDispatch();
@@ -51,14 +51,16 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
       }
    }, [success]);
 
-   const [modif, setModif] = useState("");
+   const [modif, setModif] = useState(!!info ? info.modifiers : []);
    const [loader, setLoader] = useState(false);
+
+   const activeModifiers = modif.filter((modifier) => modifier.status === true);
 
    const handleChange = (e) => {
       if (e.target.name === "modifiers") {
          setLoader(true);
          setModCheck([]);
-         let id = fSelect.find((item) => item.name === e.target.value);
+         let id = fSelect.find((item) => item._id === e.target.value);
          axios
             .post(
                `/authservice/auth/${authId}/fundingService/${
@@ -88,7 +90,7 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
    const handleCreate = () => {
       let modifiersPost = [];
       modCheck.forEach((item) => {
-         return modif.forEach((item2, index2) => {
+         return activeModifiers.forEach((item2, index2) => {
             if (item === index2) {
                modifiersPost.push(item2?._id);
             }
@@ -96,7 +98,7 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
       });
       let funderId;
       fSelect.forEach((item) => {
-         if (inputs.modifiers === item.name) {
+         if (inputs.modifiers === item._id) {
             funderId = item._id;
          }
       });
@@ -168,10 +170,11 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
                   <p className={classes.inputInfo}>Service</p>
                   <SelectInput
                      name={"modifiers"}
+                     type={"id"}
                      label={"Service Code*"}
                      handleSelect={handleChange}
                      value={inputs.modifiers}
-                     list={fSelect ? fSelect : ""}
+                     list={fSelect ? fSelect : []}
                      typeError={error === "modifiers" ? ErrorText.field : ""}
                   />
                   <div
@@ -184,55 +187,38 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
                   >
                      <p className={classes.displayCodeBlockText}>Available Modfiers </p>
                      <div className={classes.availableModfiers}>
-                        {info ? (
+                        {/* {info ? (
                            info.modifiers &&
                            info.modifiers.length > 0 &&
                            info.modifiers.map((item, index) => {
                               return (
-                                 <div
-                                    key={index}
-                                    className={classes.availableModfier}
-                                    style={{
-                                       background: "#347AF080",
-                                       color: "#fff",
-                                       border: "none",
-                                       cursor: "default",
-                                    }}
-                                 >
+                                 <div key={index} className={classes.modifiersStyle}>
                                     <p
-                                       style={{
-                                          width: 19,
-                                          height: 20,
-                                          overflow: "hidden",
-                                       }}
+                                       className={classes.modifierNamesStyle}
+                                       onClick={() => onModifier(index)}
                                     >
                                        {item.name}
                                     </p>
                                  </div>
                               );
                            })
-                        ) : modif && modif.length > 0 ? (
-                           modif.map((item, index) => {
+                        ) : */}
+                        {activeModifiers && activeModifiers.length > 0 ? (
+                           activeModifiers.map((item, index) => {
                               return (
                                  <p
                                     key={index}
-                                    className={classes.availableModfier}
+                                    className={`${classes.availableModfier} ${
+                                       modCheck.includes(index) ? "checked" : ""
+                                    }`}
                                     onClick={() => onModifier(index)}
-                                    style={
-                                       modCheck.includes(index)
-                                          ? {
-                                               background: "#347AF0",
-                                               color: "#fff",
-                                            }
-                                          : {}
-                                    }
                                  >
                                     {item.name}
                                  </p>
                               );
                            })
                         ) : loader === true ? (
-                           <div style={{ height: "20px" }}>
+                           <div className={classes.loaderBoxStyle}>
                               <MinLoader margin={"0"} color={Colors.ThemeBlue} />
                            </div>
                         ) : (

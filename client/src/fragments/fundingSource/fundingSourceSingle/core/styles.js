@@ -150,11 +150,6 @@ export const fundingSourceSingleStyles = makeStyles(() => ({
    modifierActionsStyle: {
       display: "flex",
       alignItems: "center",
-      "& > div": {
-         display: "flex",
-         alignItems: "center",
-         "&:last-of-type": { marginLeft: "16px" },
-      },
    },
 }));
 
