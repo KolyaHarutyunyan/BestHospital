@@ -1,5 +1,6 @@
 import { HttpStatus, Injectable, HttpException } from '@nestjs/common';
-import { Model, startSession } from 'mongoose';
+import { Model } from 'mongoose';
+import * as mongoose from 'mongoose';
 import { ClaimPmtDto } from './dto/claim-pmt.dto.';
 import { ClaimService } from '../claim/claim.service';
 import { MongooseUtil } from '../util/mongoose.util';
@@ -59,58 +60,65 @@ export class ClaimPmtService {
   }
   /** create payment */
   async payment(_id: string, dto: CreateClaimReceivableDTO): Promise<ClaimPmtDto> {
-    let sumPaid = 0;
-    let recAmount = 0;
-    let amountPaided = 0;
-    let txn = [];
-    dto.receivables.map((receivable) => (sumPaid += receivable.paidAMT));
-    const [claimPmt, claim] = await Promise.all([
-      this.model.findById(_id),
-      this.claimService.findOne(dto.claimId),
-    ]);
-    if (claimPmt.paymentAmount < sumPaid) {
-      throw new HttpException('amount more than expected', HttpStatus.BAD_REQUEST);
-    }
-    this.checkClaimPmt(claimPmt);
-
-    for (let i = 0; i < dto.receivables.length; i++) {
-      const receivable = dto.receivables[i];
-      const index = claim.receivable.findIndex((rec) => {
-        recAmount += rec.amountTotal;
-        return rec._id.toString() == receivable.receivableId.toString();
-      });
-      if (index === -1) {
-        throw new HttpException('Receivable was not found', HttpStatus.NOT_FOUND);
+    const session = await mongoose.startSession();
+    try {
+      let sumPaid = 0;
+      let recAmount = 0;
+      let amountPaided = 0;
+      let txn = [];
+      dto.receivables.map((receivable) => (sumPaid += receivable.paidAMT));
+      const [claimPmt, claim] = await Promise.all([
+        this.model.findById(_id),
+        this.claimService.findOne(dto.claimId),
+      ]);
+      if (claimPmt.paymentAmount < sumPaid) {
+        throw new HttpException('amount more than expected', HttpStatus.BAD_REQUEST);
       }
-      const data = {
-        receivable: claim.receivable[index],
-        allowedAMT: receivable.allowedAMT,
-        deductible: receivable.deductible,
-        copay: receivable.copay,
-        coINS: receivable.coINS,
-        paidAMT: receivable.paidAMT,
-      };
-      const countBalance = receivable.coINS + receivable.copay + receivable.deductible;
-      const clientResp = countBalance == 0 ? 0 : countBalance / data.receivable.bills.length;
-      const billedAmount = await this.createPayment(data, clientResp, dto.user.id, txn);
-      console.log(txn, 'txnnnnnnn');
-      amountPaided += billedAmount;
-      /** update receivable total amount */
-      const updateRecAmount = await this.claimService.setAmountRec(
-        claim._id,
-        data.receivable._id,
-        data.receivable.amountTotal,
-        data.allowedAMT,
-        data.paidAMT,
-      );
+      this.checkClaimPmt(claimPmt);
+
+      for (let i = 0; i < dto.receivables.length; i++) {
+        const receivable = dto.receivables[i];
+        const index = claim.receivable.findIndex((rec) => {
+          recAmount += rec.amountTotal;
+          return rec._id.toString() == receivable.receivableId.toString();
+        });
+        if (index === -1) {
+          throw new HttpException('Receivable was not found', HttpStatus.NOT_FOUND);
+        }
+        const data = {
+          receivable: claim.receivable[index],
+          allowedAMT: receivable.allowedAMT,
+          deductible: receivable.deductible,
+          copay: receivable.copay,
+          coINS: receivable.coINS,
+          paidAMT: receivable.paidAMT,
+        };
+        const countBalance = receivable.coINS + receivable.copay + receivable.deductible;
+        const clientResp = countBalance == 0 ? 0 : countBalance / data.receivable.bills.length;
+        session.startTransaction();
+        const billedAmount = await this.createPayment(data, clientResp, dto.user.id, txn);
+        amountPaided += billedAmount;
+        /** update receivable total amount */
+        const updateRecAmount = await this.claimService.setAmountRec(
+          claim._id,
+          data.receivable._id,
+          data.receivable.amountTotal,
+          data.allowedAMT,
+          data.paidAMT,
+        );
+      }
+      claimPmt.claimIds.push(dto.claimId);
+      claimPmt.totalBilled = recAmount;
+      claimPmt.totalUsed += amountPaided;
+      claimPmt.paymentAmount -= sumPaid;
+      if (claimPmt.paymentAmount == 0) claimPmt.status == ClaimPmtStatus.CLOSE;
+      await claimPmt.save();
+      session.commitTransaction();
+      return this.sanitizer.sanitize(claimPmt);
+    } catch (e) {
+      console.log(e, 'error');
+      await session.abortTransaction();
     }
-    claimPmt.claimIds.push(dto.claimId);
-    claimPmt.totalBilled = recAmount;
-    claimPmt.totalUsed += amountPaided;
-    claimPmt.paymentAmount -= sumPaid;
-    if (claimPmt.paymentAmount == 0) claimPmt.status == ClaimPmtStatus.CLOSE;
-    await claimPmt.save();
-    return this.sanitizer.sanitize(claimPmt);
   }
   /** add document to claim-pmt */
   async addDocument(_id: string, dto: CreateDocDTO): Promise<ClaimPmtDto> {

@@ -54,14 +54,4 @@ export class ServiceController {
     );
     return service;
   }
-  /** Delete the service */
-  @Delete(':id/service/:serviceId')
-  @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({ type: String })
-  async remove(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Param('serviceId', ParseObjectIdPipe) serviceId: string,
-  ): Promise<string> {
-    return await this.fundingService.deleteService(id, serviceId);
-  }
 }

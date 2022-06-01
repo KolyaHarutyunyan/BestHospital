@@ -33,15 +33,10 @@ export class EmploymentService {
         endDate: dto.endDate ? dto.endDate : null,
         title: dto.title,
       });
-      const [lessDateEmp] = await Promise.all([
-        this.findEndlessEmployment(),
+      await Promise.all([
         this.checkOverlap(null, dto.startDate, dto.endDate),
         this.staffService.findById(dto.supervisor),
       ]);
-      if (lessDateEmp) {
-        lessDateEmp.endDate = dto.startDate;
-        await lessDateEmp.save();
-      }
       employment.supervisor = dto.supervisor;
       if (dto.departmentId) {
         await this.departmentService.findOne(dto.departmentId);
@@ -190,37 +185,26 @@ export class EmploymentService {
   }
   /** check appointment overlapping */
   private async checkOverlap(_id: string = null, startDate: Date, endDate: Date) {
-    // console.log(startDate, 'dto.startDate', endDate, 'dto.endDate');
-    // var start = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
-    // var startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-    const query: any = {
-      endDate: { $gt: new Date(startDate) },
-    };
-
-    if (!endDate) {
-      query.$or = [{ endDate: null }, { endDate: { $gt: startDate } }];
-    } else {
-      query.$or = [
-        { endDate: null, starDate: { $lt: endDate } },
-        {
-          endDate: { $lt: endDate },
-          startDate: { $gt: startDate },
-        },
-      ];
-    }
-    const overlapping = await this.model.find(query);
-    if (overlapping[0]) {
-      if (_id) {
-        if (overlapping[0]._id.toString() !== _id.toString()) {
+    const overlapping = await this.model.find();
+    for (let i = 0; i < overlapping.length; i++) {
+      if (new Date(startDate) < new Date(overlapping[i].startDate) && !endDate) {
+        throw new HttpException(`employment overlapping`, HttpStatus.BAD_REQUEST);
+      } else if (new Date(startDate) < new Date(overlapping[i].startDate) && endDate) {
+        if (new Date(endDate) >= new Date(overlapping[i].startDate)) {
           throw new HttpException(`employment overlapping`, HttpStatus.BAD_REQUEST);
         }
-      } else {
-        throw new HttpException(`employment overlapping`, HttpStatus.BAD_REQUEST);
+      } else if (new Date(startDate) > new Date(overlapping[i].startDate)) {
+        if (overlapping[i].endDate && new Date(overlapping[i].endDate) >= new Date(startDate)) {
+          overlapping[i].endDate = new Date(
+            new Date(startDate).setDate(new Date(startDate).getDate() - 1),
+          );
+        } else if (!overlapping[i].endDate && !endDate) {
+          overlapping[i].endDate = new Date(
+            new Date(startDate).setDate(new Date(startDate).getDate() - 1),
+          );
+        }
+        await overlapping[i].save();
       }
     }
-  }
-  /** find endless employment */
-  private async findEndlessEmployment() {
-    return await this.model.findOne({ endDate: null });
   }
 }
