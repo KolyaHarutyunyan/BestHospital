@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
    AddButtonLight,
-   DeleteElement,
    NoItemText,
    Notes,
    SimpleModal,
    TableBodyComponent,
 } from "@eachbase/components";
 import { fundingSourceSingleStyles } from "./styles";
-import { TableCell } from "@material-ui/core";
+import { Switch, TableCell } from "@material-ui/core";
 import {
    DrawerContext,
    FindLoad,
@@ -58,24 +57,16 @@ export const FundingSourceSinglePTModifiers = ({
 
    const [modalIsOpen, setModalIsOpen] = useState(false);
    const [modifier, setModifier] = useState();
-   const [modalContentLabel, setModalContentLabel] = useState("");
+   const [modifierStatus, setModifierStatus] = useState(false);
 
    function handleModifierCreate() {
       setModalIsOpen(true);
       setModifier();
-      setModalContentLabel("CREATE");
    }
 
    function handleModifierEdit(modifier) {
       setModalIsOpen(true);
       setModifier(modifier);
-      setModalContentLabel("EDIT");
-   }
-
-   function handleModifierRemove(modifier) {
-      setModalIsOpen(true);
-      setModifier(modifier);
-      setModalContentLabel("REMOVE");
    }
 
    function modifiersItemHandler(item, index) {
@@ -96,9 +87,16 @@ export const FundingSourceSinglePTModifiers = ({
                   <div onClick={() => handleModifierEdit(item)}>
                      <img src={Images.edit} alt="edit" />
                   </div>
-                  <div onClick={() => handleModifierRemove(item)}>
-                     <img src={Images.remove} alt="edit" />
-                  </div>
+               </div>
+            </TableCell>
+            <TableCell>
+               <div className={classes.modifierActionsStyle}>
+                  <Switch
+                     onClick={() => setModifierStatus((prevState) => !prevState)}
+                     checked={modifierStatus}
+                     name="require"
+                     color="primary"
+                  />
                </div>
             </TableCell>
          </TableBodyComponent>
@@ -133,33 +131,22 @@ export const FundingSourceSinglePTModifiers = ({
             openDefault={modalIsOpen}
             handleOpenClose={() => setModalIsOpen(false)}
             content={
-               modalContentLabel === "CREATE" || modalContentLabel === "EDIT" ? (
-                  <FundingSourceModifiersAdd
-                     info={modifier}
-                     currentService={currentService}
-                     credentials={globalCredentials}
-                     handleClose={() => setModalIsOpen(false)}
-                  />
-               ) : modalContentLabel === "REMOVE" ? (
-                  <DeleteElement
-                     info={modifier?.name}
-                     text="Are you sure you want to change the status of this modifier?"
-                     innerText={"Change"}
-                     loader={!!loader.length}
-                     handleDel={() =>
-                        dispatch(
-                           fundingSourceActions.deleteFundingModifier(
-                              params.id,
-                              currentService?._id,
-                              [modifier?._id]
-                           )
-                        )
-                     }
-                     handleClose={() => setModalIsOpen(false)}
-                  />
-               ) : null
+               <FundingSourceModifiersAdd
+                  info={modifier}
+                  currentService={currentService}
+                  credentials={globalCredentials}
+                  handleClose={() => setModalIsOpen(false)}
+               />
             }
          />
       </>
    );
 };
+
+// dispatch(
+//    fundingSourceActions.deleteFundingModifier(
+//       params.id,
+//       currentService?._id,
+//       [modifier?._id]
+//    )
+// )

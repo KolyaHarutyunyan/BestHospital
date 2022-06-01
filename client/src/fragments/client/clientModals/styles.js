@@ -63,12 +63,36 @@ export const createClientStyle = makeStyles(() => ({
       marginTop: 8,
       flexWrap: "wrap",
    },
+   modifiersStyle: {
+      margin: "4px",
+      borderRadius: 14,
+      padding: "4px 16px",
+      background: "#347AF080",
+      color: "#fff",
+      border: "none",
+      cursor: "default",
+   },
+   modifierNamesStyle: {
+      width: 19,
+      height: 20,
+      overflow: "hidden",
+   },
    availableModfier: {
       margin: "4px",
       border: "1px solid #4B5C6880",
       borderRadius: 14,
       padding: "4px 16px",
       cursor: "pointer",
+      "&.checked": {
+         background: "#347AF0",
+         color: "#fff",
+      },
+   },
+   loaderBoxStyle: {
+      height: "16px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
    },
    displayCode: {
       color: "#4B5C68B3",

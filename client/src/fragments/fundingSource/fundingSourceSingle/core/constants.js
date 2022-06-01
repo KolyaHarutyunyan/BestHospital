@@ -20,6 +20,10 @@ export function getHeaderTitlesForModifier() {
          title: "Action",
          sortable: false,
       },
+      {
+         title: "Status",
+         sortable: false,
+      },
    ];
 }
 
