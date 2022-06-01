@@ -43,22 +43,33 @@ export class ModifierService extends BaseService {
     }
     return await service.save();
   }
-
-  /** delete modifiers */
-  async deleteModifiers(_id: string, serviceId: string, ids: any): Promise<ServiceDTO> {
+  /** set modifier to active */
+  async active(_id: string, serviceId: string, modifierId: string): Promise<ServiceDTO> {
     const [funder, service] = await Promise.all([
       this.model.findById({ _id }),
       this.serviceModel.findOne({ _id: serviceId }),
     ]);
     this.checkFunder(funder);
     this.checkFundingService(service);
-    typeof ids === 'string' ? (ids = ids.split(' ')) : null;
-    service.modifiers.map((dbModifier) => {
-      ids.map((dtoModifier) => {
-        if (dtoModifier == dbModifier._id) {
-          dbModifier.status = false;
-        }
-      });
+    service.modifiers.map((modifier) => {
+      if (modifier._id.toString() === modifierId.toString()) {
+        modifier.status = true;
+      }
+    });
+    return await service.save();
+  }
+  /** set modifier inactive*/
+  async inactive(_id: string, serviceId: string, modifierId: string): Promise<ServiceDTO> {
+    const [funder, service] = await Promise.all([
+      this.model.findById({ _id }),
+      this.serviceModel.findOne({ _id: serviceId }),
+    ]);
+    this.checkFunder(funder);
+    this.checkFundingService(service);
+    service.modifiers.map((modifier) => {
+      if (modifier._id.toString() === modifierId.toString()) {
+        modifier.status = false;
+      }
     });
     return await service.save();
   }
