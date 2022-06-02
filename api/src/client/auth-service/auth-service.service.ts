@@ -204,6 +204,7 @@ export class AuthService {
         authService.total = dto.total;
       }
       authService.modifiers = compareByFundingService || [];
+      authService.serviceId = dto.fundingServiceId;
       await authService.save();
       return this.sanitizer.sanitize(authService);
     } catch (e) {
@@ -212,7 +213,7 @@ export class AuthService {
     }
   }
 
-  // remove the authorization service
+  /** remove the authorization service */
   async remove(_id: string): Promise<string> {
     try {
       const authService = await this.model.findByIdAndDelete({ _id });
