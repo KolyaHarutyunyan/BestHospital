@@ -28,7 +28,7 @@ export const TabsHeader = ({ activeTab, data, authActive, availabilityData }) =>
    const classes = serviceSingleStyles();
 
    const dispatch = useDispatch();
-   
+
    const [open, setOpen] = useState();
    const [searchDate, setSearchDate] = useState("");
    const [isDisabled, setIsDisabled] = useState(false);
