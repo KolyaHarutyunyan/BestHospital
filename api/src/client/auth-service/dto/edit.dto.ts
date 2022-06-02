@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsMongoId, IsNumber, IsOptional } from 'class-validator';
+import { IsArray, IsMongoId, IsNumber, IsOptional } from 'class-validator';
 
 export class UpdateAuthServiceDTO {
   @ApiProperty()
@@ -12,4 +12,7 @@ export class UpdateAuthServiceDTO {
   @ApiProperty()
   @IsMongoId()
   fundingServiceId: string;
+  @ApiProperty()
+  @IsArray()
+  modifiers: Array<string>;
 }

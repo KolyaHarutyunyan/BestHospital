@@ -100,7 +100,7 @@ export class AuthService {
   async compareModifiersByFundingService(dto, findService, modifiers): Promise<ModifyDTO> {
     findService.modifiers.map((serviceModifier) => {
       dto.modifiers.map((dtoModifier) => {
-        if (serviceModifier._id == dtoModifier) {
+        if (serviceModifier._id == dtoModifier && serviceModifier.status) {
           modifiers.push(serviceModifier);
         }
       });
@@ -130,7 +130,8 @@ export class AuthService {
         if (
           dbModifiers.findIndex(
             (innerModifier) => innerModifier._id.toString() === modifier._id.toString(),
-          ) === -1
+          ) === -1 &&
+          modifier.status
         ) {
           available.push(modifier);
         }
@@ -174,23 +175,35 @@ export class AuthService {
   // update authorization service
   async update(_id: string, dto: UpdateAuthServiceDTO): Promise<AuthServiceDTO> {
     try {
-      const authService = await this.model.findById({
-        _id,
-        authorizationId: dto.authorizationId,
-      });
+      const [authService, auth, service] = await Promise.all([
+        this.model.findById({
+          _id,
+          authorizationId: dto.authorizationId,
+        }),
+        this.authModel.findOne({ _id: dto.authorizationId }),
+        this.fundingService.findService(dto.fundingServiceId),
+      ]);
       this.checkAuthService(authService);
-      const auth = await this.authModel.findOne({ _id: dto.authorizationId });
       this.checkAuth(auth);
-      const fundingService: any = await this.fundingService.findAllServiceForClient(
-        auth.funderId,
-        dto.fundingServiceId,
-      );
+      const modifiers = [];
+      const brokenModifiers = [];
+      const [fundingService, compareByFundingService] = await Promise.all([
+        this.fundingService.findAllServiceForClient(auth.funderId, dto.fundingServiceId),
+        this.compareModifiersByFundingService(dto, service, modifiers),
+        this.compareModifiersByAuthService(
+          dto.authorizationId,
+          dto.fundingServiceId,
+          dto,
+          brokenModifiers,
+        ),
+      ]);
       if (!fundingService.length) {
         throw new HttpException('Invalid fundingServiceId', HttpStatus.NOT_FOUND);
       }
       if (dto.total) {
         authService.total = dto.total;
       }
+      authService.modifiers = compareByFundingService || [];
       await authService.save();
       return this.sanitizer.sanitize(authService);
     } catch (e) {
