@@ -51,6 +51,7 @@ export const createClientStyle = makeStyles(() => ({
       padding: "24px 16px",
       margin: "16px 0",
       boxShadow: "0px 0px 6px #347AF03D",
+      "&.error": { border: `1px solid ${Colors.ThemeRed}` },
    },
    displayCodeBlockText: {
       color: Colors.TextPrimary,
@@ -84,8 +85,12 @@ export const createClientStyle = makeStyles(() => ({
       padding: "4px 16px",
       cursor: "pointer",
       "&.checked": {
-         background: "#347AF0",
+         backgroundColor: "#347AF0",
          color: "#fff",
+      },
+      "&.chosen": {
+         backgroundColor: "#347AF080",
+         cursor: "default",
       },
    },
    loaderBoxStyle: {

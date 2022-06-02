@@ -44,18 +44,16 @@ export const fundingSourceSingleStyles = makeStyles(() => ({
       height: 32,
       marginLeft: 8,
    },
-   fundingSourceSinglePTModifiersStyles: {
-      maxWidth: "710px",
+   modifierBoxStyle: {
+      maxWidth: "777px",
       width: "100%",
-      "&.narrow": { maxWidth: "450px" },
       height: "541px",
-      overflowY: "auto",
       padding: 24,
       borderRadius: 8,
       border: "1px solid #347AF080",
       marginLeft: 16,
    },
-   fundingSourceSinglePTModifiersTitleStyles: {
+   modifierTitleStyle: {
       fontSize: 24,
       color: Colors.TextPrimary,
       fontWeight: "bold",

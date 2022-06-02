@@ -45,8 +45,12 @@ export const authService = {
    editFundingModifierService: (fundingId, serviceId, body) =>
       axios.patch(`/funding/${fundingId}/${serviceId}/modifiers`, body, { auth: true }),
 
-   deleteFundingModifierService: (fundingId, serviceId, modifiersIds) =>
-      axios.delete(`/funding/${fundingId}/${serviceId}/modifiers?ids=${modifiersIds}`, {
-         auth: true,
-      }),
+   changeFundingModifierStatusService: (fundingId, serviceId, modifierId, status) =>
+      axios.patch(
+         `/funding/${fundingId}/${serviceId}/modifier/${modifierId}/${status}`,
+         null,
+         {
+            auth: true,
+         }
+      ),
 };

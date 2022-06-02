@@ -16,6 +16,8 @@ import {
    GET_BILLS_SUCCESS,
    GET_BILL_BY_ID,
    GET_BILL_BY_ID_SUCCESS,
+   GET_BILL_TRANSACTION,
+   GET_BILL_TRANSACTION_SUCCESS,
 } from "./bill.type";
 
 function* getBills(action) {
@@ -45,11 +47,7 @@ function* getBillById(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
-      const res = yield call(
-         billService.getBillByIdService,
-         action.payload.id,
-         action.payload?.data
-      );
+      const res = yield call(billService.getBillByIdService, action.payload.id);
       yield put({
          type: GET_BILL_BY_ID_SUCCESS,
          payload: { billById: res.data },
@@ -186,6 +184,32 @@ function* abortBillTransaction(action) {
    }
 }
 
+function* getBillTransaction(action) {
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
+   try {
+      const res = yield call(
+         billService.getBillTransactionService,
+         action.payload.billingId,
+         action.payload?.data
+      );
+      yield put({
+         type: GET_BILL_TRANSACTION_SUCCESS,
+         payload: { transactions: res.data },
+      });
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+   } catch (err) {
+      yield put({
+         type: GET_BILL_TRANSACTION_SUCCESS,
+         payload: { transactions: { transactions: [], count: 0 } },
+      });
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+   }
+}
+
 export const watchBill = function* watchBillSaga() {
    yield takeLatest(GET_BILLS, getBills);
    yield takeLatest(GET_BILL_BY_ID, getBillById);
@@ -195,4 +219,5 @@ export const watchBill = function* watchBillSaga() {
    yield takeLatest(EDIT_BILL_INVOICE_STATUS, editBillInvoiceStatus);
    yield takeLatest(ADD_BILL_TRANSACTION, addBillTransaction);
    yield takeLatest(ABORT_BILL_TRANSACTION, abortBillTransaction);
+   yield takeLatest(GET_BILL_TRANSACTION, getBillTransaction);
 };

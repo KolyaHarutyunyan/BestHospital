@@ -1,32 +1,3 @@
-export function getHeaderTitlesForModifier() {
-   return [
-      {
-         title: "Modifier",
-         sortable: false,
-      },
-      {
-         title: "Credential",
-         sortable: false,
-      },
-      {
-         title: "Charge Rate",
-         sortable: false,
-      },
-      {
-         title: "Type",
-         sortable: false,
-      },
-      {
-         title: "Action",
-         sortable: false,
-      },
-      {
-         title: "Status",
-         sortable: false,
-      },
-   ];
-}
-
 export function getHeaderTitlesForService() {
    return [
       {

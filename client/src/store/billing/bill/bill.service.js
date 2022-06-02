@@ -10,31 +10,15 @@ export const billService = {
       return axios.get("/billing", { auth: true });
    },
 
-   getBillByIdService: (id, data) => {
-      if (data) {
-         return axios.get(
-            `/billing/${id}/?limit=${data.limit}&&skip=${data.skip}`,
-            { auth: true }
-         );
-      }
-      return axios.get(`/billing/${id}`, { auth: true });
-   },
+   getBillByIdService: (id) => axios.get(`/billing/${id}`, { auth: true }),
 
    createBillService: (body) => axios.post("/billing", body, { auth: true }),
 
    editBillStatusService: (id, status) =>
-      axios.patch(
-         `/billing/${id}/setStatus?status=${status}`,
-         {},
-         { auth: true }
-      ),
+      axios.patch(`/billing/${id}/setStatus?status=${status}`, {}, { auth: true }),
 
    editBillClaimStatusService: (id, status) =>
-      axios.patch(
-         `/billing/${id}/claimStatus?claimStatus=${status}`,
-         {},
-         { auth: true }
-      ),
+      axios.patch(`/billing/${id}/claimStatus?claimStatus=${status}`, {}, { auth: true }),
 
    editBillInvoiceStatusService: (id, status) =>
       axios.patch(
@@ -47,9 +31,14 @@ export const billService = {
       axios.post(`/billing/addTransaction/${id}`, body, { auth: true }),
 
    abortBillTransactionService: (id, tsxId) =>
-      axios.post(
-         `/billing/${id}/abortTransaction/${tsxId}`,
-         {},
-         { auth: true }
-      ),
+      axios.post(`/billing/${id}/abortTransaction/${tsxId}`, {}, { auth: true }),
+
+   getBillTransactionService: (billingId, data) => {
+      if (data) {
+         return axios.get(`/txn/${billingId}/?limit=${data.limit}&&skip=${data.skip}`, {
+            auth: true,
+         });
+      }
+      return axios.get(`/txn/${billingId}`, { auth: true });
+   },
 };
