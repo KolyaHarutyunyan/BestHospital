@@ -2,14 +2,17 @@ import React, { useEffect, useState } from "react";
 import { fileUploadersStyle } from "./styles";
 import { ValidationInput } from "@eachbase/components";
 import { UploadedFileCard } from "./core";
-import { Images, isNotEmpty } from "@eachbase/utils";
+import { Images, ImgUploader, isNotEmpty } from "@eachbase/utils";
 import ReactFileReader from "react-file-reader";
 
 export const ImagesFileUploader = ({
+   uploadedFiles,
    handleImagesPass,
+   handleFilePass,
    handleFileNamePass,
    changeNameAfterFileUpload,
    uploadOnlyOneFile,
+   uploadImmediately,
 }) => {
    const classes = fileUploadersStyle();
 
@@ -19,8 +22,9 @@ export const ImagesFileUploader = ({
 
    const [enteredFileName, setEnteredFileName] = useState("");
    const [fileName, setFileName] = useState("");
-   const [images, setImages] = useState([]);
+   const [images, setImages] = useState(uploadedFiles || []);
    const [error, setError] = useState("");
+   const [loaderUpload, setLoaderUpload] = useState(false);
 
    const uniqueImages = [...new Map(images.map((image) => [image.name, image])).values()];
 
@@ -68,12 +72,20 @@ export const ImagesFileUploader = ({
          }
       }
 
-      if (uploadOnlyOneFile) {
-         setImages(Array.from(imageList));
+      if (uploadImmediately) {
+         setLoaderUpload(true);
+         ImgUploader(Array.from(imageList), false).then((uploadedFile) => {
+            setLoaderUpload(false);
+            setImages((prevState) => prevState.concat(uploadedFile));
+            handleFilePass(uploadedFile[0]);
+         });
       } else {
-         setImages((prevState) => prevState.concat(Array.from(imageList)));
+         if (uploadOnlyOneFile) {
+            setImages(Array.from(imageList));
+         } else {
+            setImages((prevState) => prevState.concat(Array.from(imageList)));
+         }
       }
-
       !!enteredFileName && setEnteredFileName("");
    }
 
@@ -126,6 +138,7 @@ export const ImagesFileUploader = ({
                      passCurrentFileName={(currentFileName) =>
                         setFileName(currentFileName)
                      }
+                     uploadLoading={loaderUpload}
                   />
                ))
             ) : uploadOnlyOneFile ? null : (

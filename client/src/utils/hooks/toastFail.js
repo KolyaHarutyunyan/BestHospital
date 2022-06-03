@@ -69,6 +69,12 @@ export const ToastFail = (fail, errorMessage) => {
          ? "Something went wrong"
          : fail === "CREATE_STAFF_SERVICE"
          ? "Something went wrong"
+         : fail === "CHANGE_FUNDING_MODIFIER_STATUS"
+         ? "Something went wrong"
+         : fail === "CREATE_FUNDING_MODIFIER"
+         ? "Something went wrong"
+         : fail === "EDIT_FUNDING_MODIFIER"
+         ? "Something went wrong"
          : false;
    }
 };

@@ -20,19 +20,22 @@ export const ModifierTBody = ({ modifier, currentService, globalCredentials = []
    const dispatch = useDispatch();
 
    const [modifierStatusIsActive, setModifierStatusIsActive] = useState(modifier?.status);
+   const [statusWasChanged, setStatusWasChanged] = useState(false);
    const [modalIsOpen, setModalIsOpen] = useState(false);
 
    useEffect(() => {
-      const _modifierStatus = modifierStatusIsActive ? "active" : "inactive";
-      dispatch(
-         fundingSourceActions.changeFundingModifierStatus(
-            params.id,
-            currentService?._id,
-            modifier?._id,
-            _modifierStatus
-         )
-      );
-   }, [modifierStatusIsActive]);
+      if (statusWasChanged) {
+         const _modifierStatus = modifierStatusIsActive ? "active" : "inactive";
+         dispatch(
+            fundingSourceActions.changeFundingModifierStatus(
+               params.id,
+               currentService?._id,
+               modifier?._id,
+               _modifierStatus
+            )
+         );
+      }
+   }, [modifierStatusIsActive, statusWasChanged]);
 
    const modifierName = getModifierData(modifier?.name);
    const credentialName = getModifierData(
@@ -60,7 +63,10 @@ export const ModifierTBody = ({ modifier, currentService, globalCredentials = []
             <div className={classes.tdStyle}>
                <CustomizedSwitch
                   checked={modifierStatusIsActive}
-                  handleClick={() => setModifierStatusIsActive((prevState) => !prevState)}
+                  handleClick={() => {
+                     setModifierStatusIsActive((prevState) => !prevState);
+                     setStatusWasChanged(true);
+                  }}
                />
             </div>
          </div>

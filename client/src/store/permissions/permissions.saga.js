@@ -29,12 +29,12 @@ function* getPermissions({ type }) {
    yield put(httpRequestsOnSuccessActions.removeSuccess(type));
    try {
       const res = yield call(authService.getPermissionsService);
+      yield put(httpRequestsOnLoadActions.removeLoading(type));
+      // yield put(httpRequestsOnSuccessActions.appendSuccess(type));
       yield put({
          type: GET_PERMISSIONS_SUCCESS,
          payload: res.data,
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(type));
       yield put(httpRequestsOnErrorsActions.appendError(type, err?.data?.message));

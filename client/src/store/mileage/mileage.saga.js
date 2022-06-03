@@ -19,11 +19,9 @@ function* createMileage({ payload, type }) {
    yield put(httpRequestsOnSuccessActions.removeSuccess(type));
    try {
       yield call(authService.createMileageService, payload.body);
-      yield put({
-         type: GET_MILEAGES,
-      });
-      yield put(httpRequestsOnSuccessActions.appendSuccess(type));
       yield put(httpRequestsOnLoadActions.removeLoading(type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(type));
+      yield put({ type: GET_MILEAGES });
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(type));
       yield put(httpRequestsOnErrorsActions.appendError(type, err?.data?.message));
@@ -36,11 +34,9 @@ function* editMileage({ payload, type }) {
    yield put(httpRequestsOnSuccessActions.removeSuccess(type));
    try {
       yield call(authService.editMileageService, payload.id, payload.body);
-      yield put({
-         type: GET_MILEAGES,
-      });
-      yield put(httpRequestsOnSuccessActions.appendSuccess(type));
       yield put(httpRequestsOnLoadActions.removeLoading(type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(type));
+      yield put({ type: GET_MILEAGES });
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(type));
       yield put(httpRequestsOnErrorsActions.appendError(type, err?.data?.message));
@@ -57,12 +53,12 @@ function* getMileages({ type }) {
    yield put(httpRequestsOnSuccessActions.removeSuccess(type));
    try {
       const res = yield call(authService.getMileagesService);
+      yield put(httpRequestsOnLoadActions.removeLoading(type));
+      // yield put(httpRequestsOnSuccessActions.appendSuccess(type));
       yield put({
          type: GET_MILEAGES_SUCCESS,
          payload: res.data,
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(type));
       yield put(httpRequestsOnErrorsActions.appendError(type, err?.data?.message));
@@ -79,11 +75,11 @@ function* deleteMileages(action) {
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(authService.deleteMileageService, action.payload.id);
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_MILEAGES,
       });
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
    } catch (err) {
       yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
