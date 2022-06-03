@@ -1,8 +1,8 @@
-/**Get Billings */
+/**get Billings */
 export const GET_BILLS = "GET_BILLS";
 export const GET_BILLS_SUCCESS = "GET_BILLS_SUCCESS";
 
-/**Get Billing by Id */
+/**get Billing by Id */
 export const GET_BILL_BY_ID = "GET_BILL_BY_ID";
 export const GET_BILL_BY_ID_SUCCESS = "GET_BILL_BY_ID_SUCCESS";
 
@@ -19,3 +19,7 @@ export const ADD_BILL_TRANSACTION = "ADD_BILL_TRANSACTION";
 
 /**abort Billing Transaction */
 export const ABORT_BILL_TRANSACTION = "ABORT_BILL_TRANSACTION";
+
+/**get Billing Transaction */
+export const GET_BILL_TRANSACTION = "GET_BILL_TRANSACTION";
+export const GET_BILL_TRANSACTION_SUCCESS = "GET_BILL_TRANSACTION_SUCCESS";

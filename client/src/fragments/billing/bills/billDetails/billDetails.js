@@ -28,6 +28,7 @@ import { getBillDetails, getBillTotals } from "./constants";
 
 export const BillDetailsFragment = ({
    billDetails,
+   billTransactions,
    transactionQty,
    page,
    handleGetPage,
@@ -42,13 +43,7 @@ export const BillDetailsFragment = ({
 
    const [open, setOpen] = useState(false);
 
-   const {
-      _id,
-      claimStatus,
-      invoiceStatus,
-      status,
-      transaction: billTransactions,
-   } = billDetails || {};
+   const { _id, claimStatus, invoiceStatus, status } = billDetails || {};
 
    const filteredDetails = getBillDetails(billDetails).filter(
       (billDtl) => !!billDtl.detail
@@ -60,7 +55,7 @@ export const BillDetailsFragment = ({
       if (page === value) return;
       handlePageChange(true);
       let start = value > 1 ? value - 1 + "0" : 0;
-      dispatch(billActions.getBillById(_id, { limit: 10, skip: start }));
+      dispatch(billActions.getBillTransaction(_id, { limit: 10, skip: start }));
       handleGetPage(value);
    };
 

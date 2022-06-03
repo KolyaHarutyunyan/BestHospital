@@ -1,8 +1,13 @@
-import { GET_BILLS_SUCCESS, GET_BILL_BY_ID_SUCCESS } from "./bill.type";
+import {
+   GET_BILLS_SUCCESS,
+   GET_BILL_BY_ID_SUCCESS,
+   GET_BILL_TRANSACTION_SUCCESS,
+} from "./bill.type";
 
 const initialState = {
    bills: [],
    billById: {},
+   transactions: [],
 };
 
 export const billReducer = (state = initialState, action) => {
@@ -17,6 +22,12 @@ export const billReducer = (state = initialState, action) => {
          return {
             ...state,
             billById: action.payload.billById,
+         };
+
+      case GET_BILL_TRANSACTION_SUCCESS:
+         return {
+            ...state,
+            transactions: action.payload.transactions,
          };
 
       default:

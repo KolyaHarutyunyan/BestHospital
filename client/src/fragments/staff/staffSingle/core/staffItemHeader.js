@@ -13,10 +13,7 @@ import { FindLoad, Images } from "@eachbase/utils";
 import { CreateStaff, CredentialModal } from "@eachbase/fragments";
 import { useDispatch, useSelector } from "react-redux";
 import { EmploymentModal, TimesheetModal } from "./modals";
-import {
-   adminActions,
-   fundingSourceActions,
-} from "@eachbase/store";
+import { adminActions, fundingSourceActions } from "@eachbase/store";
 import { useParams } from "react-router-dom";
 
 const editButtonStyle = {
@@ -54,7 +51,7 @@ export const StaffItemHeader = ({
    const dispatch = useDispatch();
 
    const params = useParams();
-   
+
    const [switchBoolean, setSwitchBoolean] = useState(adminInfoById?.clinical || false);
    const [switched, setSwitched] = useState(false);
    const [searchDate, setSearchDate] = useState("");
@@ -74,7 +71,7 @@ export const StaffItemHeader = ({
 
    function handleChange(e) {
       setIsDisabled(false);
-      setSearchDate(e.target.value); 
+      setSearchDate(e.target.value);
    }
 
    function handleSwitchChange() {
@@ -174,7 +171,8 @@ export const StaffItemHeader = ({
          </ul>
          <SimpleModal
             openDefault={activeTab === 3 ? openCredModal : openModal}
-            handleOpenClose={() => activeTab === 3 ? openCloseCredModal() : handleOpenClose()
+            handleOpenClose={() =>
+               activeTab === 3 ? openCloseCredModal() : handleOpenClose()
             }
             content={
                activeTab === 0 ? (

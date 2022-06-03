@@ -11,7 +11,7 @@ import {
    SET_STATUS,
    CREATE_FUNDING_MODIFIER,
    EDIT_FUNDING_MODIFIER,
-   DELETE_FUNDING_MODIFIER,
+   CHANGE_FUNDING_MODIFIER_STATUS,
 } from "./fundingSource.types";
 
 export const createFundingSource = (body) => {
@@ -22,7 +22,7 @@ export const createFundingSource = (body) => {
 };
 
 export const editFundingSource = (id, body) => {
-   return { 
+   return {
       type: EDIT_FUNDING_SOURCE,
       payload: { id, body },
    };
@@ -98,9 +98,9 @@ export const editFundingModifier = (fundingId, serviceId, body) => {
    };
 };
 
-export const deleteFundingModifier = (fundingId, serviceId, modifiersIds) => {
+export const changeFundingModifierStatus = (fundingId, serviceId, modifierId, status) => {
    return {
-      type: DELETE_FUNDING_MODIFIER,
-      payload: { fundingId, serviceId, modifiersIds },
+      type: CHANGE_FUNDING_MODIFIER_STATUS,
+      payload: { fundingId, serviceId, modifierId, status },
    };
 };

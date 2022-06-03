@@ -17,6 +17,7 @@ import {
    CREATE_FUNDING_MODIFIER,
    EDIT_FUNDING_MODIFIER,
    DELETE_FUNDING_MODIFIER,
+   CHANGE_FUNDING_MODIFIER_STATUS,
 } from "./fundingSource.types";
 import { httpRequestsOnErrorsActions } from "../http_requests_on_errors";
 import { httpRequestsOnLoadActions } from "../http_requests_on_load";
@@ -262,16 +263,17 @@ function* editFundingModifier(action) {
    }
 }
 
-function* deleteFundingModifier(action) {
+function* changeFundingModifierStatus(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(
-         authService.deleteFundingModifierService,
+         authService.changeFundingModifierStatusService,
          action.payload.fundingId,
          action.payload.serviceId,
-         action.payload.modifiersIds
+         action.payload.modifierId,
+         action.payload.status
       );
       yield put({
          type: GET_FUNDING_SOURCE_SERVICE_BY_ID,
@@ -297,5 +299,5 @@ export const watchFundingSource = function* watchFundingSourceSaga() {
    yield takeLatest(SET_STATUS, setStatus);
    yield takeLatest(CREATE_FUNDING_MODIFIER, createFundingModifier);
    yield takeLatest(EDIT_FUNDING_MODIFIER, editFundingModifier);
-   yield takeLatest(DELETE_FUNDING_MODIFIER, deleteFundingModifier);
+   yield takeLatest(CHANGE_FUNDING_MODIFIER_STATUS, changeFundingModifierStatus);
 };

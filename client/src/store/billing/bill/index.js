@@ -7,6 +7,7 @@ import {
    editBillInvoiceStatus,
    addBillTransaction,
    abortBillTransaction,
+   getBillTransaction,
 } from "./bill.action";
 
 export { billReducer } from "./bill.reducer";
@@ -21,4 +22,5 @@ export const billActions = {
    editBillInvoiceStatus,
    addBillTransaction,
    abortBillTransaction,
+   getBillTransaction,
 };
