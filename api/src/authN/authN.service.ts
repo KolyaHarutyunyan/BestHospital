@@ -17,6 +17,7 @@ import { RoleDTO, RoleService } from '../authZ/role';
 import { MongooseUtil } from '../util';
 import { AuthZService } from 'src/authZ';
 import { access } from './authN.access';
+import { CreateAuthDTO } from './dto';
 
 @Injectable()
 export class AuthNService {
@@ -46,7 +47,6 @@ export class AuthNService {
         userType: type,
       }).save();
       const regToken = await this.generateToken(auth, JWT_SECRET_REGISTER);
-      console.log(regToken);
       this.mailerService.sendInviteMail(auth.email, regToken);
       return;
     } catch (e) {
@@ -55,29 +55,24 @@ export class AuthNService {
     }
   };
 
-  create_test = async (
-    id: string,
-    email: string,
-    password: string,
-    type: UserType,
-  ): Promise<MailStatus> => {
+  /** Create a test auth account */
+  async create_test(dto: CreateAuthDTO): Promise<string> {
     try {
-      await new this.model({
-        _id: id,
-        email: email,
+      const auth = await new this.model({
+        email: dto.email,
         roles: [],
         status: RegistrationStatus.ACTIVE,
         session: false,
-        userType: type,
-        password: password,
+        userType: UserType.ADMIN,
+        password: dto.password,
       }).save();
-      // const regToken = await this.generateToken(auth, JWT_SECRET_REGISTER);
-      return;
+      const regToken = await this.generateToken(auth, JWT_SECRET_REGISTER);
+      return regToken;
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'User already exists');
       throw e;
     }
-  };
+  }
 
   /** Sends a new invitation email to the user */
   resendInvite = async (userId: string) => {

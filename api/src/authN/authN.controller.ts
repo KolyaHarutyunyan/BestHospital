@@ -11,6 +11,7 @@ import {
   AuthDTO,
   AuthResponseDTO,
   UserDTO,
+  CreateAuthDTO,
 } from './dto';
 import { ResetPassGuard, RegistrationGuard } from './guards';
 // import { AuthZGuard, PermissionList } from '../authZ';
@@ -30,6 +31,15 @@ export class AuthNController {
   @UseGuards(new RegistrationGuard())
   async completeRegistration(@Body() resetPassDTO: ResetPassDTO): Promise<AuthDTO> {
     const auth: AuthDTO = await this.authNService.completeRegistration(resetPassDTO);
+    return auth;
+  }
+
+  /** Create an test user  */
+  @Post('admins')
+  @Public()
+  @ApiBody({ type: CreateAuthDTO })
+  async createAdmin(@Body() dto: CreateAuthDTO): Promise<string> {
+    const auth = await this.authNService.create_test(dto);
     return auth;
   }
 

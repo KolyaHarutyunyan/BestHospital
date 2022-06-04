@@ -12,7 +12,7 @@ export enum RegistrationStatus {
 }
 
 export enum UserType {
-  AGENT = 'AGENT',
+  STAFF = 'STAFF',
   ADMIN = 'ADMIN',
 }
 
