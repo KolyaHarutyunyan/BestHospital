@@ -57,7 +57,7 @@ export const Service = ({
    const [times, setTimes] = useState(date ? { ...date } : {});
    const [error, setError] = useState("");
    const [clientService, setClientService] = useState([]);
-   const [signature, setSignature] = useState(modalDate ? modalDate.require : false);
+   const [signature, setSignature] = useState(modalDate ? modalDate.signature : false);
    const [editLoader, setEditLoader] = useState(false);
 
    const success = modalDate
@@ -160,6 +160,7 @@ export const Service = ({
    };
 
    function handleGetClientServ(id) {
+      setClientService("");
       axios
          .get(`/auth/client/${id}`, { auth: true })
          .then((res) =>
@@ -174,16 +175,11 @@ export const Service = ({
          .catch(() => setClientService(""));
    }
 
-   const handleChangeSignature = () => {
-      setSignature((prevState) => !prevState);
-   };
-
    const handleCreate = () => {
       const timeComparingIsValid =
          !!times.startTime &&
          !!times.endTime &&
          Date.parse(times.startTime) < Date.parse(times.endTime);
-
       const serviceAppointmentDataIsVlid =
          isNotEmpty(inputs.client) &&
          isNotEmpty(inputs.authorizedService) &&
@@ -192,7 +188,6 @@ export const Service = ({
          !!inputs.startDate &&
          timeComparingIsValid &&
          isNotEmpty(inputs.staffPayCode);
-
       if (serviceAppointmentDataIsVlid) {
          const data = {
             type: "SERVICE",
@@ -207,8 +202,8 @@ export const Service = ({
             endTime: times.endTime,
             status: "ACTIVE",
             require: signature,
+            signature: signature,
          };
-
          if (modalDate) {
             dispatch(appointmentActions.editAppointment(data, inputs._id));
          } else {
@@ -234,7 +229,6 @@ export const Service = ({
             : !isNotEmpty(inputs.staffPayCode)
             ? "staffPayCode"
             : "";
-
          setError(dataErrorText);
       }
    };
@@ -397,7 +391,7 @@ export const Service = ({
                      <div className={classes.signatureStyle}>
                         <p>Require Signature</p>
                         <Switch
-                           onClick={handleChangeSignature}
+                           onClick={() => setSignature((prevState) => !prevState)}
                            className={inputClasses.switcher}
                            checked={signature}
                            name="require"

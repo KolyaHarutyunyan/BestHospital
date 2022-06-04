@@ -11,7 +11,7 @@ import {
    setStatus,
    createFundingModifier,
    editFundingModifier,
-   deleteFundingModifier,
+   changeFundingModifierStatus,
 } from "./fundingSource.action";
 
 export { fundingSourceReducer } from "./fundingSource.reducer";
@@ -30,5 +30,5 @@ export const fundingSourceActions = {
    setStatus,
    createFundingModifier,
    editFundingModifier,
-   deleteFundingModifier,
+   changeFundingModifierStatus,
 };

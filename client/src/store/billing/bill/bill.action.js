@@ -7,6 +7,7 @@ import {
    GET_BILLS,
    EDIT_BILL_CLAIM_STATUS,
    EDIT_BILL_INVOICE_STATUS,
+   GET_BILL_TRANSACTION,
 } from "./bill.type";
 
 export const getBills = (data) => {
@@ -16,10 +17,10 @@ export const getBills = (data) => {
    };
 };
 
-export const getBillById = (id, data) => {
+export const getBillById = (id) => {
    return {
       type: GET_BILL_BY_ID,
-      payload: { id, data },
+      payload: { id },
    };
 };
 
@@ -62,5 +63,12 @@ export const abortBillTransaction = (id, tsxId) => {
    return {
       type: ABORT_BILL_TRANSACTION,
       payload: { id, tsxId },
+   };
+};
+
+export const getBillTransaction = (billingId, data) => {
+   return {
+      type: GET_BILL_TRANSACTION,
+      payload: { billingId, data },
    };
 };

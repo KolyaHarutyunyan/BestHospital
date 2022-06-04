@@ -15,8 +15,9 @@ export const BillDetails = () => {
 
    const dispatch = useDispatch();
 
-   const billByIdData = useSelector((state) => state.bill.billById);
-   const { bills: billById, count } = billByIdData || {};
+   const billById = useSelector((state) => state.bill.billById);
+   const transactionData = useSelector((state) => state.bill.transactions);
+   const { data: transactions, count } = transactionData || {};
 
    const loader = FindLoad("GET_BILL_BY_ID");
    const success = FindSuccess("GET_BILL_BY_ID");
@@ -31,7 +32,7 @@ export const BillDetails = () => {
 
    useEffect(() => {
       dispatch(billActions.getBillById(params.id));
-
+      dispatch(billActions.getBillTransaction(params.id));
       return () => {
          dispatch({
             type: "GET_BILL_BY_ID_SUCCESS",
@@ -52,7 +53,8 @@ export const BillDetails = () => {
             />
          </div>
          <BillDetailsFragment
-            billDetails={billByIdData}
+            billDetails={billById}
+            billTransactions={transactions}
             transactionQty={count}
             page={page}
             handleGetPage={setPage}

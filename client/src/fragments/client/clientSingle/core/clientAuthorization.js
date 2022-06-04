@@ -24,7 +24,7 @@ import { headerTitles } from "./constants";
 
 export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) => {
    const classes = serviceSingleStyles();
-
+   console.log(info, " info");
    const params = useParams();
 
    const dispatch = useDispatch();
@@ -42,6 +42,8 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
    const [chosenImages, setChosenImages] = useState([]);
    const [enteredFileName, setEnteredFileName] = useState("");
    const [loaderUpload, setLoaderUpload] = useState(false);
+
+   const [chosenFile, setChosenFile] = useState();
 
    const success = FindSuccess("DELETE_CLIENT_AUTHORIZATION");
    const successDelServ = FindSuccess("DELETE_CLIENT_AUTHORIZATION_SERV");
@@ -162,27 +164,39 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
       );
    }
 
-   function handleAuthFilesSend() {
-      if (!!chosenImages.length) {
-         setLoaderUpload(true);
+   // function handleAuthFilesSend() {
+   //    if (!!chosenImages.length) {
+   //       setLoaderUpload(true);
 
-         ImgUploader(chosenImages, true).then((uploadedImages) => {
-            setLoaderUpload(false);
+   //       ImgUploader(chosenImages, true).then((uploadedImages) => {
+   //          setLoaderUpload(false);
 
-            for (let i = 0; i < uploadedImages.length; i++) {
-               const filesData = {
-                  file: uploadedImages[i],
-                  name: enteredFileName,
-               };
-               dispatch(
-                  clientActions.addFilesToClientAuth(info[authIndex].id, filesData)
-               );
-            }
-         });
-      } else {
-         setModalIsOpen(false);
+   //          for (let i = 0; i < uploadedImages.length; i++) {
+   //             const filesData = {
+   //                file: uploadedImages[i],
+   //                name: enteredFileName,
+   //             };
+   //             dispatch(
+   //                clientActions.addFilesToClientAuth(info[authIndex].id, filesData)
+   //             );
+   //          }
+   //       });
+   //    } else {
+   //       setModalIsOpen(false);
+   //    }
+   // }
+
+   useEffect(() => {
+      if (!!chosenFile) {
+         const fileData = {
+            file: chosenFile,
+            name: enteredFileName,
+         };
+         dispatch(clientActions.addFilesToClientAuth(info[authIndex].id, fileData));
       }
-   }
+   }, [chosenFile]);
+
+   const _uploadedFiles = info[authIndex]?.documents?.map((document) => document.file);
 
    return (
       <div className={classes.staffGeneralWrapper}>
@@ -262,16 +276,23 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
                   }
                >
                   <ImagesFileUploader
+                     uploadedFiles={_uploadedFiles}
+                     changeNameAfterFileUpload={true}
+                     uploadImmediately={true}
+                     handleFilePass={(file) => setChosenFile(file)}
+                     handleFileNamePass={(fileName) => setEnteredFileName(fileName)}
+                  />
+                  {/* <ImagesFileUploader
                      changeNameAfterFileUpload={true}
                      handleImagesPass={(images) => setChosenImages(images)}
                      handleFileNamePass={(fileName) => setEnteredFileName(fileName)}
-                  />
-                  <AddModalButton
+                  /> */}
+                  {/* <AddModalButton
                      buttonClassName={classes.addAuthFilesButnStyle}
                      handleClick={handleAuthFilesSend}
                      loader={loaderUpload || !!sendFilesLoader.length}
                      text="Done"
-                  />
+                  /> */}
                </ModalContentWrapper>
             }
          />

@@ -78,7 +78,7 @@ export const ScheduleDetailsCard = ({ openCloseRecur, handleEdit, appointmentByI
          startTime: defItem?.startTime,
          endTime: defItem?.endTime,
          status: "ACTIVE",
-         require: isRequired,
+         require: true,
          signature: isRequired,
       };
       dispatch(appointmentActions.editAppointment(data, defItem?._id));

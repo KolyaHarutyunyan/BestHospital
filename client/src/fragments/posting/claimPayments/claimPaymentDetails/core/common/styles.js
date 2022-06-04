@@ -53,7 +53,6 @@ export const tableTheadTbodyStyle = makeStyles(() => ({
       padding: "9px 16px",
       "@media(max-width: 1280px)": { padding: "9px 8px" },
    },
-
    commentTextAreaStyle: {
       "& textarea": {
          maxWidth: "406px",

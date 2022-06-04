@@ -4,7 +4,11 @@ import { Router } from "@eachbase/root/router";
 import { useDispatch, useSelector } from "react-redux";
 import { TopBar, LeftBar } from "./core";
 import { navBarStyles } from "./core/style";
-import { authActions, httpRequestsOnSuccessActions } from "@eachbase/store";
+import {
+   authActions,
+   httpRequestsOnErrorsActions,
+   httpRequestsOnSuccessActions,
+} from "@eachbase/store";
 import { Toast } from "@eachbase/components";
 import { ToastSuccess, ToastFail } from "@eachbase/utils";
 
@@ -26,7 +30,6 @@ export const MenuBar = ({}) => {
    const errorMessage = httpOnError.length && httpOnError[0].error;
    const toastSuccess = ToastSuccess(success);
    const toastFail = ToastFail(error, errorMessage);
-
    const { saveLink } = useSelector((state) => ({
       saveLink: state.auth.saveLink,
    }));
@@ -37,14 +40,14 @@ export const MenuBar = ({}) => {
    );
 
    useEffect(() => {
-      if (toastSuccess) {
+      if (!!toastSuccess) {
          dispatch(httpRequestsOnSuccessActions.removeSuccess(success));
       }
    }, [toastSuccess]);
 
    useEffect(() => {
-      if (toastFail) {
-         // dispatch(httpRequestsOnErrorsActions.removeError( error ))
+      if (!!toastFail) {
+         dispatch(httpRequestsOnErrorsActions.removeError(error));
       }
    }, [toastFail]);
 

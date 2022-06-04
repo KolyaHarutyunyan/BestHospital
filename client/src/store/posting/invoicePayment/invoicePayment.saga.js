@@ -21,18 +21,16 @@ import {
 function* getInvoicePayments(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
-   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(
          invoicePaymentService.getInvoicePaymentsService,
          action?.payload?.data
       );
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put({
          type: GET_INVOICE_PAYMENTS_SUCCESS,
          payload: { invoicePayments: res.data },
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put({
          type: GET_INVOICE_PAYMENTS_SUCCESS,
@@ -46,18 +44,16 @@ function* getInvoicePayments(action) {
 function* getInvoicePaymentById(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
-   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(
          invoicePaymentService.getInvoicePaymentByIdService,
          action.payload.id
       );
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put({
          type: GET_INVOICE_PAYMENT_BY_ID_SUCCESS,
          payload: { invoicePaymentById: res.data },
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -73,10 +69,10 @@ function* createInvoicePayment(action) {
          invoicePaymentService.createInvoicePaymentService,
          action.payload.body
       );
-      const _invoicePmtId = res.data._id;
-      localStorage.setItem("invoicePmtId", _invoicePmtId);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+      const _invoicePmtId = res.data._id;
+      localStorage.setItem("invoicePmtId", _invoicePmtId);
    } catch (err) {
       localStorage.removeItem("invoicePmtId");
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
@@ -94,12 +90,12 @@ function* editInvoicePayment(action) {
          action.payload.id,
          action.payload.body
       );
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_INVOICE_PAYMENT_BY_ID,
          payload: { id: action.payload.id },
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -112,12 +108,12 @@ function* deleteInvoicePayment(action) {
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(invoicePaymentService.deleteInvoicePaymentService, action.payload.id);
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_INVOICE_PAYMENT_BY_ID,
          payload: { id: action.payload.id },
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -135,12 +131,12 @@ function* editInvoicePaymentStatus(action) {
          action.payload.status,
          action.payload.details
       );
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_INVOICE_PAYMENT_BY_ID,
          payload: { id: action.payload.id },
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -157,12 +153,12 @@ function* addInvoiceInInvoicePayment(action) {
          action.payload.id,
          action.payload.body
       );
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_INVOICE_PAYMENT_BY_ID,
          payload: { id: action.payload.id },
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -179,10 +175,10 @@ function* appendFilesToInvoicePayment(action) {
          action.payload.id,
          action.payload.body
       );
-      localStorage.removeItem("invoicePmtId");
-      yield put({ type: GET_INVOICE_PAYMENTS });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+      localStorage.removeItem("invoicePmtId");
+      yield put({ type: GET_INVOICE_PAYMENTS });
    } catch (err) {
       localStorage.removeItem("invoicePmtId");
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
