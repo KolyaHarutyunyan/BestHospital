@@ -56,7 +56,7 @@ export class AuthNService {
   };
 
   /** Create a test auth account */
-  async create_test(dto: CreateAuthDTO): Promise<string> {
+  async create_test(dto: CreateAuthNDTO): Promise<string> {
     try {
       const auth = await new this.model({
         email: dto.email,

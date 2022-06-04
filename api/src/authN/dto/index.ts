@@ -8,4 +8,4 @@ export { AuthResponseDTO } from './authResponse.dto';
 export { UserDTO } from './user.dto';
 export { SessionDTO } from './session.dto';
 export { SettingsDTO } from './settings.dto';
-export { CreateAuthDTO } from './create.dto';
+export { CreateAuthNDTO } from './create.dto';
