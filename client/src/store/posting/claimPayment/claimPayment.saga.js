@@ -21,18 +21,16 @@ import {
 function* getClaimPayments(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
-   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(
          claimPaymentService.getClaimPaymentsService,
          action?.payload?.data
       );
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put({
          type: GET_CLAIM_PAYMENTS_SUCCESS,
          payload: { claimPayments: res.data },
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put({
          type: GET_CLAIM_PAYMENTS_SUCCESS,
@@ -46,18 +44,16 @@ function* getClaimPayments(action) {
 function* getClaimPaymentById(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
-   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(
          claimPaymentService.getClaimPaymentByIdService,
          action.payload.id
       );
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put({
          type: GET_CLAIM_PAYMENT_BY_ID_SUCCESS,
          payload: { claimPaymentById: res.data },
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -73,10 +69,10 @@ function* createClaimPayment(action) {
          claimPaymentService.createClaimPaymentService,
          action.payload.body
       );
-      const _claimPmtId = res.data._id;
-      localStorage.setItem("claimPmtId", _claimPmtId);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+      const _claimPmtId = res.data._id;
+      localStorage.setItem("claimPmtId", _claimPmtId);
    } catch (err) {
       localStorage.removeItem("claimPmtId");
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
@@ -94,12 +90,12 @@ function* editClaimPayment(action) {
          action.payload.id,
          action.payload.body
       );
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_CLAIM_PAYMENT_BY_ID,
          payload: { id: action.payload.id },
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -112,12 +108,12 @@ function* deleteClaimPayment(action) {
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(claimPaymentService.deleteClaimPaymentService, action.payload.id);
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_CLAIM_PAYMENT_BY_ID,
          payload: { id: action.payload.id },
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -135,12 +131,12 @@ function* editClaimPaymentStatus(action) {
          action.payload.status,
          action.payload.details
       );
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_CLAIM_PAYMENT_BY_ID,
          payload: { id: action.payload.id },
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -157,12 +153,12 @@ function* addClaimInClaimPayment(action) {
          action.payload.id,
          action.payload.body
       );
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_CLAIM_PAYMENT_BY_ID,
          payload: { id: action.payload.id },
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -179,10 +175,10 @@ function* appendFilesToClaimPayment(action) {
          action.payload.id,
          action.payload.body
       );
-      localStorage.removeItem("claimPmtId");
-      yield put({ type: GET_CLAIM_PAYMENTS });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+      localStorage.removeItem("claimPmtId");
+      yield put({ type: GET_CLAIM_PAYMENTS });
    } catch (err) {
       localStorage.removeItem("claimPmtId");
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));

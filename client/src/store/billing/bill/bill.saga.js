@@ -23,15 +23,13 @@ import {
 function* getBills(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
-   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(billService.getBillsService, action?.payload?.data);
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put({
          type: GET_BILLS_SUCCESS,
          payload: { bills: res.data },
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put({
          type: GET_BILLS_SUCCESS,
@@ -45,15 +43,13 @@ function* getBills(action) {
 function* getBillById(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
-   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(billService.getBillByIdService, action.payload.id);
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put({
          type: GET_BILL_BY_ID_SUCCESS,
          payload: { billById: res.data },
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -84,12 +80,12 @@ function* editBillStatus(action) {
          action.payload.id,
          action.payload.status
       );
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_BILL_BY_ID,
          payload: { id: action.payload.id },
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -106,12 +102,12 @@ function* editBillClaimStatus(action) {
          action.payload.id,
          action.payload.status
       );
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_BILL_BY_ID,
          payload: { id: action.payload.id },
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -128,12 +124,12 @@ function* editBillInvoiceStatus(action) {
          action.payload.id,
          action.payload.status
       );
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_BILL_BY_ID,
          payload: { id: action.payload.id },
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -150,12 +146,12 @@ function* addBillTransaction(action) {
          action.payload.id,
          action.payload.body
       );
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_BILL_BY_ID,
          payload: { id: action.payload.id },
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -172,12 +168,12 @@ function* abortBillTransaction(action) {
          action.payload.id,
          action.payload.tsxId
       );
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_BILL_BY_ID,
          payload: { id: action.payload.id },
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -187,19 +183,17 @@ function* abortBillTransaction(action) {
 function* getBillTransaction(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
-   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(
          billService.getBillTransactionService,
          action.payload.billingId,
          action.payload?.data
       );
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put({
          type: GET_BILL_TRANSACTION_SUCCESS,
          payload: { transactions: res.data },
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put({
          type: GET_BILL_TRANSACTION_SUCCESS,

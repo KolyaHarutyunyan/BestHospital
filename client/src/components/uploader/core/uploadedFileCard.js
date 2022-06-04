@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { checkFileType } from "./constants";
 import { getLimitedVal, Images, isNotEmpty } from "@eachbase/utils";
 import { imagesFileUploaderCoreStyle } from "./styles";
-import { DownloadLink } from "@eachbase/components";
+import { DownloadLink, Loader } from "@eachbase/components";
 
 export const UploadedFileCard = ({
    file,
@@ -11,6 +11,7 @@ export const UploadedFileCard = ({
    changeNameAfterFileUpload,
    fileName,
    passCurrentFileName,
+   uploadLoding,
 }) => {
    const classes = imagesFileUploaderCoreStyle();
 
@@ -21,8 +22,8 @@ export const UploadedFileCard = ({
       uploadOnlyOneFile ? "linkPosition" : ""
    }`;
 
-   const _imageURL = URL.createObjectURL(file);
-
+   const _imageURL = file?.url || URL.createObjectURL(file);
+   console.log(file);
    const [change, setChange] = useState(false);
    const [wasChanged, setWasChanged] = useState(false);
    const [currentFileName, setCurrentFileName] = useState(fileName);
@@ -91,11 +92,15 @@ export const UploadedFileCard = ({
                )}
             </div>
          </div>
-         <DownloadLink
-            linkClassName={downloadLinkStyle}
-            linkHref={_imageURL}
-            linkDownload={true}
-         />
+         {uploadLoding ? (
+            <Loader circleSize={20} />
+         ) : (
+            <DownloadLink
+               linkClassName={downloadLinkStyle}
+               linkHref={_imageURL}
+               linkDownload={true}
+            />
+         )}
       </div>
    );
 };

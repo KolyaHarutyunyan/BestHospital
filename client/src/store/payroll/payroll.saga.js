@@ -24,11 +24,11 @@ function* createPayCodeGlobal(action) {
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(payrollService.createPayCodeGlobalService, action.payload.body);
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_PAYCODE_GLOBAL,
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -38,15 +38,13 @@ function* createPayCodeGlobal(action) {
 function* getPayCodeGlobal(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
-   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(payrollService.getPayCodeGlobalService);
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put({
          type: GET_PAYCODE_GLOBAL_SUCCESS,
          payload: res.data.reverse(),
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -63,11 +61,11 @@ function* editPayCodeById(action) {
          action.payload.id,
          action.payload.body
       );
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_PAYCODE_GLOBAL,
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -80,11 +78,11 @@ function* deletePayCodeByIdGlobal(action) {
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(payrollService.deletePayCodeByIdService, action.payload.id);
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_PAYCODE_GLOBAL,
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -97,11 +95,11 @@ function* createOvertimeSettingsGlobal(action) {
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(payrollService.createOvertimeSettingsGlobalService, action.payload.body);
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_OVERTIME_SETTINGS_GLOBAL,
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -111,15 +109,13 @@ function* createOvertimeSettingsGlobal(action) {
 function* getOvertimeSettingsGlobal(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
-   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(payrollService.getOvertimeSettingsGlobalService);
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put({
          type: GET_OVERTIME_SETTINGS_GLOBAL_SUCCESS,
          payload: res.data.reverse(),
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -136,11 +132,11 @@ function* editOvertimeSettingsById(action) {
          action.payload.id,
          action.payload.body
       );
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_OVERTIME_SETTINGS_GLOBAL,
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -153,11 +149,11 @@ function* deleteOvertimeSettingsByIdGlobal(action) {
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(payrollService.deleteOvertimeSettingsByIdService, action.payload.id);
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_OVERTIME_SETTINGS_GLOBAL,
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));

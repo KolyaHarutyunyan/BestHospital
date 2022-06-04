@@ -25,6 +25,8 @@ function* logIn({ payload, type }) {
    yield put(httpRequestsOnSuccessActions.removeSuccess(type));
    try {
       const res = yield call(authService.signIn, payload);
+      yield put(httpRequestsOnLoadActions.removeLoading(type));
+      // yield put(httpRequestsOnSuccessActions.appendSuccess(type));
       localStorage.setItem("userType", res.data.userType);
       localStorage.setItem("access-token", res.data.token);
       window.location.replace("/");
@@ -32,8 +34,6 @@ function* logIn({ payload, type }) {
          type: LOG_IN_SUCCESS,
          payload: res.data,
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(type));
    } catch (err) {
       yield put(httpRequestsOnErrorsActions.appendError(type, err?.data?.message));
       yield put(httpRequestsOnLoadActions.removeLoading(type));
@@ -47,12 +47,11 @@ function* logOut(action) {
    try {
       const res = yield call(authService.logOut);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       localStorage.removeItem("access-token");
       localStorage.removeItem("wellUserInfo");
       localStorage.removeItem("userType");
       window.location.replace("/login");
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -81,26 +80,24 @@ function* getLink({ payload, type }) {
 
 function* resetPassword(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
-   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    try {
       if (action.payload.passwords.type === "reset") {
          const res = yield call(authService.resetPass, action.payload.passwords);
+         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
          localStorage.setItem("access-token", res.data.token);
          localStorage.setItem("permissions", res.data.permissions);
          localStorage.setItem("userType", res.data.userType);
          window.location.replace("/");
-         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-         yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       } else {
          const res = yield call(authService.confirmAccount, action.payload.passwords);
+         yield put(httpRequestsOnLoadActions.removeLoading(action.type));
          localStorage.setItem("access-token", res.data.token);
          localStorage.setItem("permissions", res.data.permissions);
          localStorage.setItem("userType", res.data.userType);
          window.location.replace("/");
       }
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       localStorage.removeItem("Reset");
       yield put({
          type: RESET_PASSWORD_SUCCESS,
@@ -118,9 +115,9 @@ function* changePassword(action) {
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.changePasswordService, action.payload.data);
-      localStorage.setItem("access-token", res.data.accessToken);
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+      localStorage.setItem("access-token", res.data.accessToken);
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -130,13 +127,11 @@ function* changePassword(action) {
 function* getMuAuthn(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
-   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.muAuthnService);
       // localStorage.setItem('poloUserInfo', JSON.stringify(res.data.email) );
       // localStorage.setItem('permissions', JSON.stringify(res.data.roles) );
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -146,12 +141,10 @@ function* getMuAuthn(action) {
 function* getMuProfile(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
-   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.myProfileService, action.payload.type);
-      localStorage.setItem("wellUserInfo", JSON.stringify(res.data));
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+      localStorage.setItem("wellUserInfo", JSON.stringify(res.data));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -162,7 +155,6 @@ function* getMuProfile(action) {
 function* getAccessService(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
-   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.getAccessService, action.payload.userId);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
@@ -170,8 +162,6 @@ function* getAccessService(action) {
          type: GET_ACCESS_SUCCESS,
          payload: res.data,
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -188,12 +178,12 @@ function* assignAccess(action) {
          action.payload.userId,
          action.payload.roleId
       );
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_ACCESS,
          payload: { userId: action.payload.userId },
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -210,12 +200,12 @@ function* removeAccess(action) {
          action.payload.userId,
          action.payload.roleId
       );
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_ACCESS,
          payload: { userId: action.payload.userId },
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));

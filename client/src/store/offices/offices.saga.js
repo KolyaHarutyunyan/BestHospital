@@ -20,9 +20,9 @@ function* createOffice(action) {
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(authService.createOfficeService, action.payload.body);
-      window.location.replace("/fundingSource");
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+      window.location.replace("/fundingSource");
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -35,9 +35,9 @@ function* editOffice(action) {
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       yield call(authService.editOfficeService, action.payload.body);
-      window.location.replace("/fundingSource");
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+      window.location.replace("/fundingSource");
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -50,12 +50,12 @@ function* getOffice({ type }) {
    yield put(httpRequestsOnSuccessActions.removeSuccess(type));
    try {
       const res = yield call(authService.getOfficesService);
+      yield put(httpRequestsOnLoadActions.removeLoading(type));
+      // yield put(httpRequestsOnSuccessActions.appendSuccess(type));
       yield put({
          type: GET_OFFICES_SUCCESS,
          payload: res.data,
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(type));
       yield put(httpRequestsOnErrorsActions.appendError(type, err?.data?.message));
@@ -65,15 +65,13 @@ function* getOffice({ type }) {
 function* getOfficeById(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
-   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.getOfficeByIdService, action.payload.id);
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put({
          type: GET_OFFICE_BY_ID_SUCCESS,
          payload: res.data,
       });
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
