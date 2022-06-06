@@ -1,4 +1,5 @@
 import axios from "axios";
+import {API_BASE} from '@eachbase/store'
 
 const local = localStorage.getItem("Reset") ? localStorage.getItem("Reset") : "";
 
@@ -6,7 +7,7 @@ export const initAxiosInterceptors = () => {
    // if(!local) {
    axios.interceptors.request.use((config) => {
       // config.url = `http://localhost:8200/api${config.url}`;
-      config.url = `https://wellnessdaisy.eachbase.com/api${config.url}`;
+      config.url = `${API_BASE}${config.url}`;
       if (config.auth) {
          const token = localStorage.getItem("access-token");
          if (!token) {
