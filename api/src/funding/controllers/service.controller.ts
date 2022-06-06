@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ServiceDTO } from '../dto';
 import { ACCESS_TOKEN } from '../../authN';
@@ -13,17 +13,12 @@ export class ServiceController {
   constructor(private readonly fundingService: Service) {}
   /** Create a new service */
   @Post(':id/service')
-  @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
   @ApiOkResponse({ type: ServiceDTO })
   async createService(
     @Param('id', ParseObjectIdPipe) id: string,
     @Body() createServiceDTO: CreateServiceDTO,
   ): Promise<ServiceDTO> {
-    const service = await this.fundingService.createService(
-      createServiceDTO,
-      id,
-      createServiceDTO.user.id,
-    );
+    const service = await this.fundingService.createService(createServiceDTO, id);
     return service;
   }
   /** Get all services */
@@ -47,11 +42,7 @@ export class ServiceController {
     @Param('serviceId', ParseObjectIdPipe) serviceId: string,
     @Body() updateServiceDto: UpdateServiceDto,
   ): Promise<ServiceDTO> {
-    const service = await this.fundingService.updateService(
-      serviceId,
-      updateServiceDto,
-      updateServiceDto.user.id,
-    );
+    const service = await this.fundingService.updateService(serviceId, updateServiceDto);
     return service;
   }
 }

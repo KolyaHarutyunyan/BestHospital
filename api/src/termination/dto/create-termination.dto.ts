@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDateString, IsOptional, IsString } from 'class-validator';
+import { DTO } from '../../util';
 
-export class CreateTerminationDto {
+export class CreateTerminationDto extends DTO {
   @ApiProperty()
   @IsOptional()
   @IsDateString()

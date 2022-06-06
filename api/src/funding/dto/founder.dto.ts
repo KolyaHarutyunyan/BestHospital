@@ -51,6 +51,10 @@ export class ServiceDTO {
   @ApiProperty()
   max: number;
   @ApiProperty()
+  credentialIds: string[];
+  @ApiProperty()
+  chargeRate: number;
+  @ApiProperty()
   modifiers?: Array<CreateModifierDto>;
 }
 

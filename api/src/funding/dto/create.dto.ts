@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
+  ArrayMinSize,
+  IsArray,
   IsBoolean,
   IsEmail,
   IsEnum,
@@ -10,12 +12,19 @@ import {
   IsOptional,
   IsPhoneNumber,
   IsString,
+  Length,
+  Min,
   ValidateNested,
 } from 'class-validator';
-import { UserDTO } from '../../authN/dto/user.dto';
+import { DTO } from '../../util';
 import { FundingStatus, TypeStatus } from '../funding.constants';
-
-export class CreateFundingDTO {
+class FundingIds {
+  @ApiProperty()
+  @IsMongoId()
+  @IsNotEmpty()
+  id: string;
+}
+export class CreateFundingDTO extends DTO {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
@@ -44,9 +53,8 @@ export class CreateFundingDTO {
   @ApiProperty({ enum: FundingStatus })
   @IsEnum(FundingStatus)
   status: number;
-  user: UserDTO;
 }
-export class CreateServiceDTO {
+export class CreateServiceDTO extends DTO {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
@@ -75,7 +83,17 @@ export class CreateServiceDTO {
   @IsNotEmpty()
   @IsNumber()
   max: number;
-  user: UserDTO;
+  @ApiProperty({ type: [FundingIds] })
+  @IsArray()
+  @ArrayMinSize(1)
+  @ValidateNested({ each: true })
+  @Type(() => FundingIds)
+  @IsOptional()
+  credentialIds: FundingIds[];
+  @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
+  chargeRate: number;
 }
 export class CreateModifierDto {
   @ApiProperty()
@@ -84,9 +102,11 @@ export class CreateModifierDto {
   credentialId: string;
   @ApiProperty()
   @IsNumber()
+  @Min(1)
   chargeRate: number;
   @ApiProperty()
   @IsString()
+  @Length(1, 5)
   @IsOptional()
   name: string;
   @ApiProperty({ enum: TypeStatus })

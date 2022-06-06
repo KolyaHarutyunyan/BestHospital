@@ -8,8 +8,7 @@ import { ICredential } from './interface';
 
 @Injectable()
 export class CredentialService {
-  constructor(private readonly sanitizer: CredentialSanitizer,
-  ) {
+  constructor(private readonly sanitizer: CredentialSanitizer) {
     this.model = CredentialModel;
     this.mongooseUtil = new MongooseUtil();
   }

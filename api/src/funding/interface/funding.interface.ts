@@ -30,6 +30,8 @@ export interface IService extends Document {
   size: number;
   min: number;
   max: number;
+  chargeRate: number;
+  credentialIds: string[];
 }
 
 export interface IModifier extends Document {

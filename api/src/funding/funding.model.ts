@@ -17,7 +17,7 @@ const FundingSchema = new Schema({
   contact: { type: String, required: true },
   website: { type: String, required: true },
   termination: TerminationSchema,
-  status: { type: String, enum: FundingStatus, default: 'ACTIVE' },
+  status: { type: String, enum: FundingStatus, default: FundingStatus.ACTIVE },
 });
 
 export const FundingModel = model<IFunder>('Funder', FundingSchema);

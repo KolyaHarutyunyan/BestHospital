@@ -1,11 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { UserType } from '../authN';
 import { serviceLog } from '../history/history.constants';
 import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
 import { FundingDTO } from './dto';
 import { CreateFundingDTO } from './dto/create.dto';
 import { UpdateFundingDto } from './dto/edit.dto';
 import { FundingStatus } from './funding.constants';
-import { IFunderCount } from './interface';
 import { BaseService } from './services/base.service';
 
 @Injectable()
@@ -13,6 +13,7 @@ export class FundingService extends BaseService {
   /** Create a new funder */
   async create(dto: CreateFundingDTO, userId: string): Promise<FundingDTO> {
     try {
+      this.checkUser(dto.user.type as UserType, [UserType.ADMIN]);
       const funder = new this.model({
         name: dto.name,
         email: dto.email,
@@ -65,6 +66,7 @@ export class FundingService extends BaseService {
   /** Update the funder */
   async update(_id: string, dto: UpdateFundingDto, userId: string): Promise<FundingDTO> {
     try {
+      this.checkUser(dto.user.type as UserType, [UserType.ADMIN]);
       const funder = await this.model.findOne({ _id });
       this.checkFunder(funder);
       if (dto.email) funder.email = dto.email;
@@ -98,6 +100,7 @@ export class FundingService extends BaseService {
   }
   /** activate the funder */
   async active(_id: string, dto: CreateTerminationDto): Promise<FundingDTO> {
+    this.checkUser(dto.user.type as UserType, [UserType.ADMIN]);
     const funder = await this.model.findById({ _id });
     this.checkFunder(funder);
     dto.date ? (funder.termination.date = dto.date) : undefined;
@@ -108,6 +111,8 @@ export class FundingService extends BaseService {
   }
   /** inActivate the funder */
   async inActive(_id: string, dto: CreateTerminationDto): Promise<FundingDTO> {
+    // its services cannot be used in new appointments
+    this.checkUser(dto.user.type as UserType, [UserType.ADMIN]);
     if (!dto.date) {
       throw new HttpException(
         'If status is not active, then date is required field',

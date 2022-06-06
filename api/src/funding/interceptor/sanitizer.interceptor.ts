@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ISanitize } from '../../util';
 import { IFunder } from '..';
-import { FundingDTO } from '../dto';
+import { FundingDTO, ServiceDTO } from '../dto';
 import { AddressSanitizer } from '../../address';
+import { IService } from '../interface';
 
 @Injectable()
 export class FundingSanitizer implements ISanitize {
@@ -29,5 +30,30 @@ export class FundingSanitizer implements ISanitize {
       funderDTOs.push(this.sanitize(funders[i]));
     }
     return funderDTOs;
+  }
+
+  serviceSanitize(service: IService): ServiceDTO {
+    const serviceDTO: ServiceDTO = {
+      id: service.id,
+      funderId: service.funderId,
+      serviceId: service.serviceId,
+      modifiers: service.modifiers,
+      name: service.name,
+      rate: service.rate,
+      cptCode: service.cptCode,
+      size: service.size,
+      min: service.min,
+      max: service.max,
+      chargeRate: service.chargeRate,
+      credentialIds: service.credentialIds,
+    };
+    return serviceDTO;
+  }
+  serviceSanitizeMany(services: IService[]): ServiceDTO[] {
+    const serviceDTOs: ServiceDTO[] = [];
+    for (let i = 0; i < services.length; i++) {
+      serviceDTOs.push(this.serviceSanitize(services[i]));
+    }
+    return serviceDTOs;
   }
 }

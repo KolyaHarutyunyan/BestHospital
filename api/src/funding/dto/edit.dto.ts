@@ -9,13 +9,15 @@ import {
   IsOptional,
   IsPhoneNumber,
   IsString,
+  Min,
   ValidateNested,
 } from 'class-validator';
-import { UserDTO } from 'src/authN';
+import { UserDTO } from '../../authN';
+import { DTO } from '../../util';
 import { AddressDTO } from '../../address';
 import { FundingStatus, TypeStatus } from '../funding.constants';
 
-export class UpdateFundingDto {
+export class UpdateFundingDto extends DTO {
   @ApiProperty()
   @IsString()
   @IsOptional()
@@ -46,9 +48,8 @@ export class UpdateFundingDto {
   @ApiProperty({ enum: FundingStatus })
   @IsEnum(FundingStatus)
   status: number;
-  user: UserDTO;
 }
-export class UpdateServiceDto {
+export class UpdateServiceDto extends DTO {
   @ApiProperty()
   globServiceId: string;
   @ApiProperty()
@@ -75,9 +76,17 @@ export class UpdateServiceDto {
   @IsNotEmpty()
   @IsNumber()
   max: number;
-  user: UserDTO;
+  @ApiProperty()
+  @IsNumber()
+  @IsNotEmpty()
+  chargeRate: number;
 }
 export class UpdateModifierDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  @Min(1)
+  chargeRate: number;
   @ApiProperty()
   @IsNotEmpty()
   @IsMongoId()

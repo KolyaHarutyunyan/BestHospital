@@ -10,9 +10,10 @@ import { ModifierController } from './controllers/modifier.controller';
 import { ModifierService } from './services/modifier.service';
 import { ServiceController } from './controllers/service.controller';
 import { Service } from './services/service';
+import { CredentialModule } from '../credential';
 
 @Module({
-  imports: [AuthNModule, AddressModule, ServiceModule, HistoryModule],
+  imports: [AuthNModule, AddressModule, ServiceModule, HistoryModule, CredentialModule],
   controllers: [FundingController, ModifierController, ServiceController],
   providers: [FundingService, ModifierService, Service, FundingSanitizer],
   exports: [FundingService, ModifierService, Service],

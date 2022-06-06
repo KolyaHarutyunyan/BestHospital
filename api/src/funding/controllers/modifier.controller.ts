@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ServiceDTO } from '../dto';
 import { ACCESS_TOKEN } from '../../authN';

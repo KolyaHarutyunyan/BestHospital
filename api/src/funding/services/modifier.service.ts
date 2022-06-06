@@ -7,16 +7,21 @@ import { BaseService } from './base.service';
 export class ModifierService extends BaseService {
   /** save modifiers */
   async saveModifiers(_id: string, serviceId: string, modifiers: ModifyDTO[]): Promise<ServiceDTO> {
-    const [funder, service] = await Promise.all([
-      this.model.findById({ _id }),
-      this.serviceModel.findOne({ _id: serviceId }),
-    ]);
-    this.checkFunder(funder);
-    this.checkFundingService(service);
-    modifiers.map((modifier) => {
-      service.modifiers.push(modifier);
-    });
-    return await service.save();
+    try {
+      const [funder, service] = await Promise.all([
+        this.model.findById({ _id }),
+        this.serviceModel.findOne({ _id: serviceId }),
+      ]);
+      this.checkFunder(funder);
+      this.checkFundingService(service);
+      modifiers.map((modifier) => {
+        service.modifiers.push(modifier);
+      });
+      return await service.save();
+    } catch (e) {
+      this.mongooseUtil.checkDuplicateKey(e, 'Service already exists');
+      throw e;
+    }
   }
 
   /** update modifiers */
@@ -36,6 +41,7 @@ export class ModifierService extends BaseService {
       for (let j = 0; j < dto.modifiers.length; j++) {
         if (dto.modifiers[j]._id == dbModifier[i]._id) {
           dbModifier[i].credentialId = dto.modifiers[j].credentialId;
+          dbModifier[i].chargeRate = dto.modifiers[j].chargeRate;
           dbModifier[i].name = dto.modifiers[j].name;
           dbModifier[i].type = dto.modifiers[j].type;
         }
@@ -60,6 +66,7 @@ export class ModifierService extends BaseService {
   }
   /** set modifier inactive*/
   async inactive(_id: string, serviceId: string, modifierId: string): Promise<ServiceDTO> {
+    // Inactive modifiers cannot be used in new authorizations
     const [funder, service] = await Promise.all([
       this.model.findById({ _id }),
       this.serviceModel.findOne({ _id: serviceId }),

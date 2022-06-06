@@ -8,12 +8,16 @@ import { ServiceModel } from '../service.model';
 import { MongooseUtil } from '../../util';
 import { FundingSanitizer } from '../interceptor';
 import { AddressService } from '../../address';
+import { AuthNService, UserType } from '../../authN';
+import { CredentialService } from '../../credential';
 
 @Injectable()
 export class BaseService {
   constructor(
     protected readonly historyService: HistoryService,
+    protected readonly authNService: AuthNService,
     protected readonly service: ServiceService,
+    protected readonly credentialService: CredentialService,
     protected readonly addressService: AddressService,
     protected readonly sanitizer: FundingSanitizer,
   ) {
@@ -37,5 +41,9 @@ export class BaseService {
     if (!funder) {
       throw new HttpException('Funding Service with this id was not found', HttpStatus.NOT_FOUND);
     }
+  }
+  /** check if user an administrator */
+  protected checkUser(userType: UserType, allowedTypes: UserType[]) {
+    this.authNService.checkAdmin(userType as UserType, allowedTypes);
   }
 }

@@ -236,7 +236,19 @@ export class AuthNService {
     this.checkAuth(auth);
     return auth.sessions.find((e) => e === token);
   };
-
+  /** check user */
+  checkAdmin(userType: UserType, allowedTypes: UserType[]) {
+    let foundTypeMatch = false;
+    for (let i = 0; i < allowedTypes.length; i++) {
+      if (userType === allowedTypes[i]) {
+        foundTypeMatch = true;
+        break;
+      }
+    }
+    if (!foundTypeMatch) {
+      throw new HttpException(`Not enough privileges`, HttpStatus.FORBIDDEN);
+    }
+  }
   /** Private methods */
   /** Checks if the user can register or not */
   private canRegister(auth: IAuth) {
