@@ -17,7 +17,7 @@ import { RoleDTO, RoleService } from '../authZ/role';
 import { MongooseUtil } from '../util';
 import { AuthZService } from 'src/authZ';
 import { access } from './authN.access';
-import { CreateAuthDTO } from './dto';
+import { CreateAuthNDTO } from './dto';
 
 @Injectable()
 export class AuthNService {
