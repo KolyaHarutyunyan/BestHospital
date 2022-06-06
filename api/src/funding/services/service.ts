@@ -26,6 +26,7 @@ export class Service extends BaseService {
         chargeRate: dto.chargeRate,
       });
       if (dto.credentialIds) {
+        // single credential
         const ids = [];
         dto.credentialIds.map((credential) => {
           service.credentialIds.push(credential.id);

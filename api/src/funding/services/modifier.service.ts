@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { ModifyDTO, ServiceDTO, UpdateModifiersDto } from '../dto';
 import { IModifier } from '../interface';
-import { ModifyDTO, UpdateModifiersDto, ServiceDTO } from '../dto';
 import { BaseService } from './base.service';
 
 @Injectable()
@@ -17,7 +17,8 @@ export class ModifierService extends BaseService {
       modifiers.map((modifier) => {
         service.modifiers.push(modifier);
       });
-      return await service.save();
+      await service.save();
+      return this.sanitizer.serviceSanitize(service);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Service already exists');
       throw e;
@@ -47,7 +48,8 @@ export class ModifierService extends BaseService {
         }
       }
     }
-    return await service.save();
+    await service.save();
+    return this.sanitizer.serviceSanitize(service);
   }
   /** set modifier to active */
   async active(_id: string, serviceId: string, modifierId: string): Promise<ServiceDTO> {
@@ -62,7 +64,8 @@ export class ModifierService extends BaseService {
         modifier.status = true;
       }
     });
-    return await service.save();
+    await service.save();
+    return this.sanitizer.serviceSanitize(service);
   }
   /** set modifier inactive*/
   async inactive(_id: string, serviceId: string, modifierId: string): Promise<ServiceDTO> {
@@ -78,6 +81,7 @@ export class ModifierService extends BaseService {
         modifier.status = false;
       }
     });
-    return await service.save();
+    await service.save();
+    return this.sanitizer.serviceSanitize(service);
   }
 }
