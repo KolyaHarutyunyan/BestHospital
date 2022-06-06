@@ -4,6 +4,7 @@ import { CreateTerminationDto } from '../termination/dto/create-termination.dto'
 import { FundingDTO } from './dto';
 import { CreateFundingDTO } from './dto/create.dto';
 import { UpdateFundingDto } from './dto/edit.dto';
+import { FundingStatus } from './funding.constants';
 import { IFunderCount } from './interface';
 import { BaseService } from './services/base.service';
 
@@ -39,12 +40,9 @@ export class FundingService extends BaseService {
 
   /** returns all funders */
   async findAll(skip: number, limit: number, status: string): Promise<any> {
-    if (!status) {
-      status = 'ACTIVE';
-    }
     const [funder, count] = await Promise.all([
       this.model.find({ status }).sort({ _id: -1 }).skip(skip).limit(limit),
-      this.model.countDocuments({ status }),
+      this.model.countDocuments({ status: status ? status : FundingStatus.ACTIVE }),
     ]);
     const sanFun = this.sanitizer.sanitizeMany(funder);
     return { funders: sanFun, count };
@@ -76,13 +74,15 @@ export class FundingService extends BaseService {
       if (dto.website) funder.website = dto.website;
       if (dto.contact) funder.contact = dto.contact;
       if (dto.address) funder.address = await this.addressService.getAddress(dto.address);
-      await funder.save();
-      await this.historyService.create({
-        resource: _id,
-        onModel: 'Funder',
-        title: serviceLog.updateFundingSource,
-        user: userId,
-      });
+      await Promise.all([
+        funder.save(),
+        this.historyService.create({
+          resource: _id,
+          onModel: 'Funder',
+          title: serviceLog.updateFundingSource,
+          user: userId,
+        }),
+      ]);
       return this.sanitizer.sanitize(funder);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Funder already exists');
@@ -91,32 +91,35 @@ export class FundingService extends BaseService {
   }
 
   /** Delete the funder */
-  async remove(_id: string): Promise<FundingDTO> {
+  async remove(_id: string): Promise<string> {
     const funder = await this.model.findByIdAndDelete({ _id });
     this.checkFunder(funder);
     return funder._id;
   }
-
-  /** Set Status of a Funder Inactive*/
-  setStatus = async (
-    _id: string,
-    status: string,
-    dto: CreateTerminationDto,
-  ): Promise<FundingDTO> => {
+  /** activate the funder */
+  async active(_id: string, dto: CreateTerminationDto): Promise<FundingDTO> {
     const funder = await this.model.findById({ _id });
     this.checkFunder(funder);
-    if (status != 'ACTIVE' && !dto.date) {
+    dto.date ? (funder.termination.date = dto.date) : undefined;
+    dto.reason ? (funder.termination.reason = dto.reason) : undefined;
+    funder.status = FundingStatus.ACTIVE;
+    await funder.save();
+    return this.sanitizer.sanitize(funder);
+  }
+  /** inActivate the funder */
+  async inActive(_id: string, dto: CreateTerminationDto): Promise<FundingDTO> {
+    if (!dto.date) {
       throw new HttpException(
         'If status is not active, then date is required field',
         HttpStatus.BAD_REQUEST,
       );
     }
-    funder.termination.date = dto.date;
-    funder.status = status;
-    if (dto.reason) {
-      funder.termination.reason = dto.reason;
-    }
+    const funder = await this.model.findById({ _id });
+    this.checkFunder(funder);
+    dto.date ? (funder.termination.date = dto.date) : undefined;
+    dto.reason ? (funder.termination.reason = dto.reason) : undefined;
+    funder.status = FundingStatus.INACTIVE;
     await funder.save();
     return this.sanitizer.sanitize(funder);
-  };
+  }
 }

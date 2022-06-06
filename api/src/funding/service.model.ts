@@ -6,6 +6,7 @@ export const modifier = {
   chargeRate: { type: Number },
   credentialId: { type: Types.ObjectId, ref: 'Credential' },
   name: { type: String },
+  // name@ unique
   type: { type: Number, enum: TypeStatus },
   status: { type: Boolean, default: true },
 };

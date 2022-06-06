@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ACCESS_TOKEN } from '../authN';
 import { CreateTerminationDto } from 'src/termination/dto/create-termination.dto';
 import { ParseObjectIdPipe } from '../util';
 import { CreateFundingDTO, FundingDTO, FundingQueryDTO, UpdateFundingDto } from './dto';
@@ -8,19 +9,18 @@ import { IFunderCount } from './interface';
 
 @Controller('funding')
 @ApiTags('Funding Endpoints')
+@ApiHeader({ name: ACCESS_TOKEN })
 export class FundingController {
   constructor(private readonly fundingService: FundingService) {}
 
   /** Create a new funder */
   @Post()
-  @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
   @ApiOkResponse({ type: FundingDTO })
   async create(@Body() createFundingDTO: CreateFundingDTO): Promise<FundingDTO> {
     return await this.fundingService.create(createFundingDTO, createFundingDTO.user.id);
   }
   /** Get all funders */
   @Get()
-  @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
   @ApiOkResponse({ type: [FundingDTO] })
   @ApiQuery({
     name: 'skip',
@@ -50,7 +50,6 @@ export class FundingController {
 
   /** Get Funder By Id */
   @Get(':id')
-  @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
   @ApiOkResponse({ type: FundingDTO })
   async findById(@Param('id', ParseObjectIdPipe) id: string): Promise<FundingDTO> {
     return await this.fundingService.findById(id);
@@ -58,7 +57,6 @@ export class FundingController {
 
   /** Edit the Funder */
   @Patch(':id')
-  @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
   @ApiOkResponse({ type: FundingDTO })
   async update(
     @Param('id', ParseObjectIdPipe) id: string,
@@ -70,21 +68,26 @@ export class FundingController {
 
   /** Delete the funder */
   @Delete(':id')
-  @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
-  @ApiOkResponse({ type: FundingDTO })
-  async remove(@Param('id', ParseObjectIdPipe) id: string): Promise<FundingDTO> {
+  @ApiOkResponse({ type: String })
+  async remove(@Param('id', ParseObjectIdPipe) id: string): Promise<string> {
     return await this.fundingService.remove(id);
   }
-  /** Inactivate a funder */
-  @Patch(':id/setStatus')
-  @ApiHeader({ name: 'Access-Token', description: 'Access-Token' })
+  @Patch(':id/active')
   @ApiOkResponse({ type: FundingDTO })
-  async setStatus(
+  async active(
     @Param('id', ParseObjectIdPipe) funderId: string,
     @Body() dto: CreateTerminationDto,
-    @Query() status: FundingQueryDTO,
   ): Promise<FundingDTO> {
-    const funder = await this.fundingService.setStatus(funderId, status.status, dto);
+    const funder = await this.fundingService.active(funderId, dto);
+    return funder;
+  }
+  @Patch(':id/inActive')
+  @ApiOkResponse({ type: FundingDTO })
+  async inActive(
+    @Param('id', ParseObjectIdPipe) funderId: string,
+    @Body() dto: CreateTerminationDto,
+  ): Promise<FundingDTO> {
+    const funder = await this.fundingService.inActive(funderId, dto);
     return funder;
   }
 }
