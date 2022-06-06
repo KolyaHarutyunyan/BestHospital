@@ -8,4 +8,6 @@ export const ErrorText = {
    timeError: "End Time must be greater than Start Time",
    startDateError: "Start Date cannot be chosen for the future, if you currently work!",
    overlappingError: (value = "") => `${value} cannot overlap, please change the date!`,
+   phoneError: "Phone number must be a valid phone number",
+   emailError: "User already exists",
 };

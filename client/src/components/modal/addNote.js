@@ -18,11 +18,7 @@ import { useDispatch } from "react-redux";
 import { noteActions } from "@eachbase/store/notes";
 import { httpRequestsOnSuccessActions } from "@eachbase/store";
 
-export const AddNotes = ({
-   model,
-   noteModalTypeInfo,
-   handleClose,
-}) => {
+export const AddNotes = ({ model, noteModalTypeInfo, handleClose }) => {
    const classes = modalsStyle();
    const globalText = useGlobalTextStyles();
 
@@ -44,8 +40,7 @@ export const AddNotes = ({
    };
 
    const handleSubmit = () => {
-      const noteDataIsValid =
-         isNotEmpty(inputs.subject) && isNotEmpty(inputs.text);
+      const noteDataIsValid = isNotEmpty(inputs.subject) && isNotEmpty(inputs.text);
 
       if (noteDataIsValid) {
          if (noteModalTypeInfo) {
@@ -83,8 +78,12 @@ export const AddNotes = ({
       }
    };
 
-   const loader = !!noteModalTypeInfo ? FindLoad("EDIT_GLOBAL_NOTE") : FindLoad("CREATE_GLOBAL_NOTE");
-   const success = !!noteModalTypeInfo ? FindSuccess("EDIT_GLOBAL_NOTE") : FindSuccess("CREATE_GLOBAL_NOTE");
+   const loader = !!noteModalTypeInfo
+      ? FindLoad("EDIT_GLOBAL_NOTE")
+      : FindLoad("CREATE_GLOBAL_NOTE");
+   const success = !!noteModalTypeInfo
+      ? FindSuccess("EDIT_GLOBAL_NOTE")
+      : FindSuccess("CREATE_GLOBAL_NOTE");
 
    useEffect(() => {
       if (!!success.length) {
@@ -96,9 +95,7 @@ export const AddNotes = ({
    return (
       <div className={classes.inactiveModalBody}>
          <h1 className={`${globalText.modalTitle}`}>
-            {noteModalTypeInfo?.modalType === "editNote"
-               ? "Edit Note"
-               : "Add a New Note"}
+            {noteModalTypeInfo?.modalType === "editNote" ? "Edit Note" : "Add a New Note"}
          </h1>
          <div className={classes.positionedButton}>
             <CloseButton handleCLic={handleClose} />

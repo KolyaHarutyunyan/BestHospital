@@ -81,21 +81,7 @@ export const fundingSourceSingleStyles = makeStyles(() => ({
       overflow: "hidden",
       height: 19,
    },
-   fundindService: {
-      display: "flex",
-      justifyContent: "space-between",
-      marginTop: 50,
-   },
-   fundindServiceItems: {
-      marginTop: -25,
-      width: "100%",
-      height: "541px",
-      overflowY: "auto",
-      "@media(max-width: 1280px)": {
-         maxWidth: "600px",
-         "&.narrow": { maxWidth: "450px" },
-      },
-   },
+   fundindServiceItems: { width: "100%" },
    searchContainer: {
       display: "flex",
       alignItems: "center",

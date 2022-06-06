@@ -32,7 +32,7 @@ function* createFundingSource(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_FUNDING_SOURCE,
-         payload: { status: "ACTIVE", start: 0, end: 10 },
+         payload: { data: { status: "ACTIVE", start: 0, end: 10 } },
       });
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));

@@ -49,7 +49,7 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
    const [error, setError] = useState("");
    const [inputs, setInputs] = useState(info ? { ...info, name: info.serviceId } : {});
 
-   const sysServiceItem = systemServices.find(service => service.id === inputs?.name);
+   const sysServiceItem = systemServices.find((service) => service.id === inputs?.name);
 
    function handleChange(e) {
       setInputs(
@@ -76,7 +76,7 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
             max: +inputs.max,
          };
          if (!!info) {
-            dispatch(fundingSourceActions.editFoundingSourceServiceById(info?._id, data));
+            dispatch(fundingSourceActions.editFoundingSourceServiceById(info?.id, data));
          } else {
             dispatch(
                fundingSourceActions.createFoundingSourceServiceById(params.id, data)
@@ -113,7 +113,7 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
                   label={"Service*"}
                   handleSelect={handleChange}
                   value={inputs.name}
-                  typeError={error === "name" ? ErrorText.field : ""}
+                  typeError={error === "name" ? ErrorText.selectField : ""}
                   list={systemServices}
                />
                <div className={classes.displayCodeBlock}>

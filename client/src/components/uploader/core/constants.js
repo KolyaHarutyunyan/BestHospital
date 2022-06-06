@@ -14,3 +14,13 @@ export const checkFileType = (uploadedFileType) => {
          return null;
    }
 };
+
+export const checkImmediatelyUploadedFileType = (fileName) => {
+   return fileName.endsWith(".jpeg") ? (
+      <img src={Images.jpegIcon} alt="jpeg" />
+   ) : fileName.endsWith(".png") ? (
+      <img src={Images.pngIcon} alt="png" />
+   ) : fileName.endsWith(".csv") ? (
+      <img src={Images.csvIcon} alt="csv" />
+   ) : null;
+};

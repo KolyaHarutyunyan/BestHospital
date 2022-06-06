@@ -24,7 +24,7 @@ import { headerTitles } from "./constants";
 
 export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) => {
    const classes = serviceSingleStyles();
-   console.log(info, " info");
+
    const params = useParams();
 
    const dispatch = useDispatch();
@@ -79,7 +79,7 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
 
    useEffect(() => {
       if (!!sendFilesSuccess.length) {
-         setModalIsOpen(false);
+         setModalIsOpen(true);
          dispatch(httpRequestsOnSuccessActions.removeSuccess("ADD_FILES_TO_CLIENT_AUTH"));
       }
    }, [sendFilesSuccess]);
@@ -196,7 +196,10 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
       }
    }, [chosenFile]);
 
-   const _uploadedFiles = info[authIndex]?.documents?.map((document) => document.file);
+   const _uploadedFiles = info[authIndex]?.documents?.map((document) => ({
+      ...document.file,
+      fileName: document.name,
+   }));
 
    return (
       <div className={classes.staffGeneralWrapper}>
@@ -266,11 +269,8 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
                      <p className={classes.contentStyle}>
                         <span className={`${classes.contentIconStyle} starIcon`}>*</span>
                         Only
-                        <span className={classes.contentIconStyle}>
-                           {" "}
-                           PDF , PNG , CSV{" "}
-                        </span>{" "}
-                        &<span> JPEG </span>
+                        <span className={classes.contentIconStyle}>PDF , PNG , CSV</span>&
+                        <span> JPEG </span>
                         formats are supported
                      </p>
                   }
@@ -281,8 +281,17 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
                      uploadImmediately={true}
                      handleFilePass={(file) => setChosenFile(file)}
                      handleFileNamePass={(fileName) => setEnteredFileName(fileName)}
+                     handleFileRemove={(fileId) =>
+                        dispatch(
+                           clientActions.removeFilesFromClientAuth(
+                              info[authIndex].id,
+                              fileId
+                           )
+                        )
+                     }
+                     fileLoader={!!sendFilesLoader.length}
                   />
-                  {/* <ImagesFileUploader
+                  {/* <ImagesFileUploader   
                      changeNameAfterFileUpload={true}
                      handleImagesPass={(images) => setChosenImages(images)}
                      handleFileNamePass={(fileName) => setEnteredFileName(fileName)}

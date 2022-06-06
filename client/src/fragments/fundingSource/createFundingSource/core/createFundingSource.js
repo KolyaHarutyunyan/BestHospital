@@ -22,6 +22,7 @@ import {
    httpRequestsOnSuccessActions,
 } from "@eachbase/store";
 import { FindError } from "@eachbase/utils";
+import { getPhoneError, getEmailError } from "../constant";
 
 export const CreateFundingSource = ({ handleClose, info }) => {
    const classes = createFoundingSourceStyle();
@@ -47,26 +48,18 @@ export const CreateFundingSource = ({ handleClose, info }) => {
       ? FindError("EDIT_FUNDING_SOURCE")
       : FindError("CREATE_FUNDING_SOURCE");
 
+   useEffect(() => {
+      return () => {
+         dispatch(httpRequestsOnErrorsActions.removeError("CREATE_FUNDING_SOURCE"));
+         dispatch(httpRequestsOnErrorsActions.removeError("EDIT_FUNDING_SOURCE"));
+      };
+   }, []);
+
    const phoneErrorMsg = getPhoneErrorText(inputs.phoneNumber);
    const emailErrorMsg = !EmailValidator.test(inputs.email) ? ErrorText.emailValid : "";
 
-   const phoneErrorText =
-      error === "phoneNumber"
-         ? ErrorText.field
-         : error === phoneErrorMsg
-         ? phoneErrorMsg
-         : backError.length &&
-           backError[0].error[0] === "phoneNumber must be a valid phone number"
-         ? "Phone number must be a valid phone number"
-         : "";
-   const emailErrorText =
-      error === "email"
-         ? ErrorText.field
-         : error === emailErrorMsg
-         ? emailErrorMsg
-         : backError.length && backError[0].error === "User already exists"
-         ? "User already exists"
-         : "";
+   const phoneErrorText = getPhoneError(error, backError, phoneErrorMsg);
+   const emailErrorText = getEmailError(error, backError, emailErrorMsg);
 
    const handleCheck = (bool) => {
       if (bool === true) {

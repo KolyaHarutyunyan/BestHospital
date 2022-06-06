@@ -27,6 +27,7 @@ import {
    CREATE_CLIENT_AUTHORIZATION_FILE,
    GET_CLIENT_AUTHORIZATION_FILE,
    ADD_FILES_TO_CLIENT_AUTH,
+   REMOVE_FILES_FROM_CLIENT_AUTH,
 } from "./client.types";
 
 export const getClients = (data) => {
@@ -226,5 +227,12 @@ export const addFilesToClientAuth = (authId, files) => {
    return {
       type: ADD_FILES_TO_CLIENT_AUTH,
       payload: { authId, files },
+   };
+};
+
+export const removeFilesFromClientAuth = (authId, docId) => {
+   return {
+      type: REMOVE_FILES_FROM_CLIENT_AUTH,
+      payload: { authId, docId },
    };
 };
