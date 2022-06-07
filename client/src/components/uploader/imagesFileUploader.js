@@ -4,15 +4,18 @@ import { ValidationInput } from "@eachbase/components";
 import { UploadedFileCard } from "./core";
 import { Images, ImgUploader, isNotEmpty } from "@eachbase/utils";
 import ReactFileReader from "react-file-reader";
+import { Loader } from "../loader";
 
 export const ImagesFileUploader = ({
-   uploadedFiles,
+   uploadedFiles = [],
    handleImagesPass,
    handleFilePass,
    handleFileNamePass,
+   handleFileRemove,
    changeNameAfterFileUpload,
    uploadOnlyOneFile,
    uploadImmediately,
+   fileLoader,
 }) => {
    const classes = fileUploadersStyle();
 
@@ -22,7 +25,7 @@ export const ImagesFileUploader = ({
 
    const [enteredFileName, setEnteredFileName] = useState("");
    const [fileName, setFileName] = useState("");
-   const [images, setImages] = useState(uploadedFiles || []);
+   const [images, setImages] = useState(uploadImmediately ? uploadedFiles : []);
    const [error, setError] = useState("");
    const [loaderUpload, setLoaderUpload] = useState(false);
 
@@ -67,7 +70,7 @@ export const ImagesFileUploader = ({
             return;
          }
          if (!_fileTypeIsAllowed) {
-            setError("Only PDF , PNG , CSV & JPEG formats are supported");
+            setError("Only PDF , PNG , CSV & JPEG formats are supported!");
             return;
          }
       }
@@ -76,21 +79,32 @@ export const ImagesFileUploader = ({
          setLoaderUpload(true);
          ImgUploader(Array.from(imageList), false).then((uploadedFile) => {
             setLoaderUpload(false);
+            const _fileExists = uniqueImages.includes(uploadedFile?.name);
+
+            if (_fileExists) {
+               setError("This file exists!");
+               return;
+            }
             setImages((prevState) => prevState.concat(uploadedFile));
-            handleFilePass(uploadedFile[0]);
+            handleFilePass(uploadedFile);
          });
+         !!enteredFileName && setEnteredFileName("");
       } else {
          if (uploadOnlyOneFile) {
             setImages(Array.from(imageList));
          } else {
             setImages((prevState) => prevState.concat(Array.from(imageList)));
          }
+         !!enteredFileName && setEnteredFileName("");
       }
-      !!enteredFileName && setEnteredFileName("");
    }
 
-   function handleFileDelete(fileName) {
-      setImages(uniqueImages.filter((image) => image.name !== fileName));
+   function handleFileDelete(file) {
+      if (uploadImmediately) {
+         handleFileRemove && handleFileRemove(file.id);
+      } else {
+         setImages(uniqueImages.filter((image) => image.name !== file.name));
+      }
    }
 
    return (
@@ -127,20 +141,24 @@ export const ImagesFileUploader = ({
          )}
          <div className={fileCardContainerStyle}>
             {!!uniqueImages.length ? (
-               uniqueImages.map((item, index) => (
-                  <UploadedFileCard
-                     key={index}
-                     file={item}
-                     deleteFile={handleFileDelete}
-                     uploadOnlyOneFile={uploadOnlyOneFile}
-                     changeNameAfterFileUpload={changeNameAfterFileUpload}
-                     fileName={fileName}
-                     passCurrentFileName={(currentFileName) =>
-                        setFileName(currentFileName)
-                     }
-                     uploadLoading={loaderUpload}
-                  />
-               ))
+               uniqueImages
+                  .reverse()
+                  .map((item, index) => (
+                     <UploadedFileCard
+                        key={index}
+                        file={item}
+                        deleteFile={handleFileDelete}
+                        handleFilePass={handleFilePass}
+                        uploadOnlyOneFile={uploadOnlyOneFile}
+                        changeNameAfterFileUpload={changeNameAfterFileUpload}
+                        fileName={fileName}
+                        passCurrentFileName={(currentFileName) =>
+                           setFileName(currentFileName)
+                        }
+                        uploadLoading={loaderUpload || fileLoader}
+                        uploadImmediately={uploadImmediately}
+                     />
+                  ))
             ) : uploadOnlyOneFile ? null : (
                <div className={classes.iconText}>
                   <img src={Images.fileIcon} alt="" />

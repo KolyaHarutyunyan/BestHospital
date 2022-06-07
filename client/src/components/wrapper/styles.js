@@ -82,7 +82,7 @@ export const wrapperStyle = makeStyles(() => ({
       },
    },
 
-   //**Billing Modal Wrapper Styles */
+   //**Modal Content Wrapper Styles */
    wrapperContainerStyle: {
       position: "relative",
       borderRadius: "8px",

@@ -118,4 +118,9 @@ export const authService = {
       axios.post(`/auth/${authId}/documents`, files, {
          auth: true,
       }),
+
+   removeFilesFromClientAuthService: (authId, docId) =>
+      axios.delete(`/auth/${authId}/documents/${docId}`, {
+         auth: true,
+      }),
 };

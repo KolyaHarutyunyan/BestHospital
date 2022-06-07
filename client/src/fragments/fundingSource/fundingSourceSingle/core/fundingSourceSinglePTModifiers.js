@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import { AddButtonLight, NoItemText, SimpleModal } from "@eachbase/components";
+import {
+   AddButtonLight,
+   CloseButton,
+   NoItemText,
+   SimpleModal,
+} from "@eachbase/components";
 import { fundingSourceSingleStyles } from "./styles";
-import { getLimitedVal, useWidth } from "@eachbase/utils";
 import { FundingSourceModifiersAdd } from "./modals";
 import { ModifierTable } from "./common";
 
@@ -10,22 +14,18 @@ export const FundingSourceSinglePTModifiers = ({
    title,
    globalCredentials = [],
    currentService,
+   onClose,
 }) => {
    const classes = fundingSourceSingleStyles();
-
-   const width = useWidth();
-
-   const titleDisplay = getLimitedVal(title, width < 1450 ? 9 : 20);
 
    const [modalIsOpen, setModalIsOpen] = useState(false);
 
    return (
       <>
          <div className={classes.modifierBoxStyle}>
+            <CloseButton handleCLic={onClose} />
             <div className={classes.modifierTitleBoxStyle}>
-               <p className={classes.modifierTitleStyle}>
-                  {`${titleDisplay} Charge Table`}
-               </p>
+               <p className={classes.modifierTitleStyle}>{`${title} Charge Table`}</p>
                <AddButtonLight
                   onAddButnLightClick={() => setModalIsOpen(true)}
                   addButnLightInnerText={"add modifier"}

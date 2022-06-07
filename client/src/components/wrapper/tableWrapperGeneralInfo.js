@@ -36,7 +36,7 @@ export const TableWrapperGeneralInfo = ({
       const upperCasedStatus = ActiveInactiveStatus(selected);
 
       if (upperCasedStatus === "ACTIVE") {
-         dispatch(fundingSourceActions.setStatus(id, path, upperCasedStatus, null, type));
+         dispatch(fundingSourceActions.setStatus(id, path, "active", null, type));
       } else {
          handleOpen(upperCasedStatus);
       }

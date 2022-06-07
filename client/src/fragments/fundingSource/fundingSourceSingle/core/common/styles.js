@@ -8,4 +8,9 @@ export const fundingSourceCommonStyle = makeStyles(() => ({
       marginTop: "24px",
       paddingBottom: "24px",
    },
+   serviceTableStyle: {
+      width: "100%",
+      marginTop: "24px",
+      paddingBottom: "24px",
+   },
 }));

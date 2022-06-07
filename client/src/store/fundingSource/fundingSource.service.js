@@ -36,14 +36,16 @@ export const authService = {
       }
    },
 
-   setStatusService: (id, path, status, body) =>
-      axios.patch(`/${path}/${id}/setStatus?status=${status}`, body, { auth: true }),
+   changeFundingSourceStatusService: (id, path, status, body) =>
+      axios.patch(`/${path}/${id}/${status}`, body, { auth: true }),
 
    createFundingModifierService: (fundingId, body) =>
       axios.post(`/funding/${fundingId}/modifiers`, body, { auth: true }),
 
-   editFundingModifierService: (fundingId, serviceId, body) =>
-      axios.patch(`/funding/${fundingId}/${serviceId}/modifiers`, body, { auth: true }),
+   editFundingModifierService: (fundingId, serviceId, modifierId, body) =>
+      axios.patch(`/funding/${fundingId}/${serviceId}/modifiers/${modifierId}`, body, {
+         auth: true,
+      }),
 
    changeFundingModifierStatusService: (fundingId, serviceId, modifierId, status) =>
       axios.patch(
