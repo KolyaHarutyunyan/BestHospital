@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ModifyDTO, ServiceDTO, UpdateModifiersDto } from '../dto';
 import { IModifier } from '../interface';
 import { BaseService } from './base.service';
@@ -6,7 +6,7 @@ import { BaseService } from './base.service';
 @Injectable()
 export class ModifierService extends BaseService {
   /** save modifiers */
-  async saveModifiers(_id: string, serviceId: string, modifiers: ModifyDTO[]): Promise<ServiceDTO> {
+  async saveModifiers(_id: string, serviceId: string, modifier: ModifyDTO): Promise<ServiceDTO> {
     try {
       const [funder, service] = await Promise.all([
         this.model.findById({ _id }),
@@ -14,9 +14,12 @@ export class ModifierService extends BaseService {
       ]);
       this.checkFunder(funder);
       this.checkFundingService(service);
-      modifiers.map((modifier) => {
-        service.modifiers.push(modifier);
+      service.modifiers.map((dbModifier) => {
+        if (dbModifier.name == modifier.name) {
+          throw new HttpException('Modifier already exists', HttpStatus.BAD_REQUEST);
+        }
       });
+      service.modifiers.push(modifier);
       await service.save();
       return this.sanitizer.serviceSanitize(service);
     } catch (e) {
@@ -29,6 +32,7 @@ export class ModifierService extends BaseService {
   async updateModifiers(
     _id: string,
     serviceId: string,
+    modifierId: string,
     dto: UpdateModifiersDto,
   ): Promise<ServiceDTO> {
     const [funder, service] = await Promise.all([
@@ -38,14 +42,17 @@ export class ModifierService extends BaseService {
     this.checkFunder(funder);
     this.checkFundingService(service);
     const dbModifier = service.modifiers as IModifier[];
+    dbModifier.map((modifier) => {
+      if (modifier.name == dto.modifiers.name) {
+        throw new HttpException('Modifier already exists', HttpStatus.BAD_REQUEST);
+      }
+    });
     for (let i = 0; i < dbModifier.length; i++) {
-      for (let j = 0; j < dto.modifiers.length; j++) {
-        if (dto.modifiers[j]._id == dbModifier[i]._id) {
-          dbModifier[i].credentialId = dto.modifiers[j].credentialId;
-          dbModifier[i].chargeRate = dto.modifiers[j].chargeRate;
-          dbModifier[i].name = dto.modifiers[j].name;
-          dbModifier[i].type = dto.modifiers[j].type;
-        }
+      if (dbModifier[i]._id.toString() === modifierId.toString()) {
+        dbModifier[i].credentialId = dto.modifiers.credentialId;
+        dbModifier[i].chargeRate = dto.modifiers.chargeRate;
+        dbModifier[i].name = dto.modifiers.name;
+        dbModifier[i].type = dto.modifiers.type;
       }
     }
     await service.save();

@@ -96,7 +96,6 @@ export class CreateModifierDto {
   @ApiProperty()
   @IsString()
   @Length(1, 5)
-  @IsOptional()
   name: string;
   @ApiProperty({ enum: TypeStatus })
   @IsEnum(TypeStatus)
@@ -106,11 +105,9 @@ export class CreateModifierDto {
   @IsOptional()
   status: boolean;
 }
-export class CreateModifiersDTO {
-  @ApiProperty({ type: [CreateModifierDto] })
-  @ValidateNested({ each: true })
-  @Type(() => CreateModifierDto)
-  modifiers: CreateModifierDto[];
+export class CreateModifierDTO {
+  @ApiProperty({ type: CreateModifierDto })
+  modifier: CreateModifierDto;
   @ApiProperty()
   @IsNotEmpty()
   @IsMongoId()

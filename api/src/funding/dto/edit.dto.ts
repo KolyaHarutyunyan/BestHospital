@@ -100,15 +100,10 @@ export class UpdateModifierDto {
   name: string;
   @ApiProperty({ enum: TypeStatus })
   @IsEnum(TypeStatus)
-  type: number;
-  @ApiProperty()
-  @IsMongoId()
   @IsNotEmpty()
-  _id: string;
+  type: number;
 }
 export class UpdateModifiersDto {
-  @ApiProperty({ type: [UpdateModifierDto] })
-  @ValidateNested({ each: true })
-  @Type(() => UpdateModifierDto)
-  modifiers: UpdateModifierDto[];
+  @ApiProperty()
+  modifiers: UpdateModifierDto;
 }

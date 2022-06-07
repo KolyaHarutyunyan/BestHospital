@@ -2,7 +2,7 @@ export {
   CreateFundingDTO,
   CreateServiceDTO,
   CreateModifierDto,
-  CreateModifiersDTO,
+  CreateModifierDTO,
 } from './create.dto';
 export { FundingDTO, FundingQueryDTO, ServiceDTO, ModifyDTO } from './founder.dto';
 export {
