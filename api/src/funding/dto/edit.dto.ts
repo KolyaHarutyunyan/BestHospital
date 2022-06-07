@@ -80,6 +80,9 @@ export class UpdateServiceDto extends DTO {
   @IsNumber()
   @IsNotEmpty()
   chargeRate: number;
+  @ApiProperty()
+  @IsOptional()
+  credentialId: string;
 }
 export class UpdateModifierDto {
   @ApiProperty()

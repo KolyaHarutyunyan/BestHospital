@@ -20,7 +20,7 @@ export const serviceSchema = new Schema({
   min: { type: Number },
   max: { type: Number },
   chargeRate: { type: Number },
-  credentialIds: [{ type: Types.ObjectId, ref: 'Credential' }],
+  credentialId: { type: Types.ObjectId, ref: 'Credential' },
   modifiers: [modifier],
 });
 

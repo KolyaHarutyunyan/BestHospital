@@ -45,7 +45,7 @@ export class FundingSanitizer implements ISanitize {
       min: service.min,
       max: service.max,
       chargeRate: service.chargeRate,
-      credentialIds: service.credentialIds,
+      credentialId: service.credentialId,
     };
     return serviceDTO;
   }

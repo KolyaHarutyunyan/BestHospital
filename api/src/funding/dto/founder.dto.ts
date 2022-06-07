@@ -51,7 +51,7 @@ export class ServiceDTO {
   @ApiProperty()
   max: number;
   @ApiProperty()
-  credentialIds: string[];
+  credentialId: string;
   @ApiProperty()
   chargeRate: number;
   @ApiProperty()

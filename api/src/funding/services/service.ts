@@ -25,17 +25,9 @@ export class Service extends BaseService {
         max: dto.max,
         chargeRate: dto.chargeRate,
       });
-      if (dto.credentialIds) {
-        // single credential
-        const ids = [];
-        dto.credentialIds.map((credential) => {
-          service.credentialIds.push(credential.id);
-          return ids.push(credential.id);
-        });
-        const credentials = await this.credentialService.findAllByIds(ids);
-        if (ids.length > credentials.length) {
-          throw new HttpException('some credentials were not found', HttpStatus.NOT_FOUND);
-        }
+      if (dto.credentialId) {
+        await this.credentialService.findOne(dto.credentialId);
+        service.credentialId = dto.credentialId;
       }
       await Promise.all([
         service.save(),
@@ -103,6 +95,10 @@ export class Service extends BaseService {
       if (dto.max) service.max = dto.max;
       if (dto.globServiceId) service.serviceId = dto.globServiceId;
       if (dto.chargeRate) service.chargeRate = dto.chargeRate;
+      if (dto.credentialId) {
+        await this.credentialService.findOne(dto.credentialId);
+        service.credentialId = dto.credentialId;
+      }
       await Promise.all([
         service.save(),
         this.historyService.create({

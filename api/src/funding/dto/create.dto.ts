@@ -18,12 +18,6 @@ import {
 } from 'class-validator';
 import { DTO } from '../../util';
 import { FundingStatus, TypeStatus } from '../funding.constants';
-class FundingIds {
-  @ApiProperty()
-  @IsMongoId()
-  @IsNotEmpty()
-  id: string;
-}
 export class CreateFundingDTO extends DTO {
   @ApiProperty()
   @IsNotEmpty()
@@ -83,13 +77,9 @@ export class CreateServiceDTO extends DTO {
   @IsNotEmpty()
   @IsNumber()
   max: number;
-  @ApiProperty({ type: [FundingIds] })
-  @IsArray()
-  @ArrayMinSize(1)
-  @ValidateNested({ each: true })
-  @Type(() => FundingIds)
+  @ApiProperty()
   @IsOptional()
-  credentialIds: FundingIds[];
+  credentialId: string;
   @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
