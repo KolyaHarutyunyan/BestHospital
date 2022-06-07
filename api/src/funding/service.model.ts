@@ -5,7 +5,7 @@ import { IService } from './interface';
 export const modifier = new Schema({
   chargeRate: { type: Number },
   credentialId: { type: Types.ObjectId, ref: 'Credential' },
-  name: { type: String, unique: true, index: true },
+  name: { type: String },
   type: { type: Number, enum: TypeStatus },
   status: { type: Boolean, default: true },
 });
