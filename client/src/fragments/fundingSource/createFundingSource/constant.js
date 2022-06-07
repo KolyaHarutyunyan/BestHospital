@@ -1,4 +1,4 @@
-import { ErrorText } from "@eachbase/utils";
+import { ErrorText, isNotEmpty } from "@eachbase/utils";
 
 export const getPhoneError = (error, backError, phoneErrorMsg) => {
    if (error === "phoneNumber") {
@@ -21,4 +21,12 @@ export const getEmailError = (error, backError, emailErrorMsg) => {
    } else if (error === emailErrorMsg) {
       return emailErrorMsg;
    }
+};
+
+export const checkWebsite = (website = "") => {
+   if (!isNotEmpty(website)) return;
+
+   const HTTP_KEYWORD = "http://";
+
+   return website.startsWith(HTTP_KEYWORD) ? website : `${HTTP_KEYWORD}${website}`;
 };

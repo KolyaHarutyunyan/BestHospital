@@ -12,10 +12,7 @@ import { modalsStyle } from "./styles";
 import { AddModalButton, CloseButton } from "../buttons";
 import { ValidationInput, Textarea } from "../inputs";
 import { useDispatch, useSelector } from "react-redux";
-import {
-   fundingSourceActions,
-   httpRequestsOnSuccessActions,
-} from "@eachbase/store";
+import { fundingSourceActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 
 export const InactiveModal = ({ handleOpenClose, info, name, statusType }) => {
    const classes = modalsStyle();
@@ -33,9 +30,7 @@ export const InactiveModal = ({ handleOpenClose, info, name, statusType }) => {
 
    const inactivateButtonStyle = {
       backgroundColor:
-         activeOrInactive === "activate"
-            ? Colors.BackgroundBlue
-            : Colors.ThemeRed,
+         activeOrInactive === "activate" ? Colors.BackgroundBlue : Colors.ThemeRed,
    };
 
    const handleChange = (e) =>
@@ -56,15 +51,14 @@ export const InactiveModal = ({ handleOpenClose, info, name, statusType }) => {
             date: inputs.date,
             reason: inputs.reason,
          };
-
+         const status =
+            statusType === "ACTIVE"
+               ? "active"
+               : statusType === "INACTIVE"
+               ? "inActive"
+               : "";
          dispatch(
-            fundingSourceActions.setStatus(
-               params.id,
-               info.path,
-               statusType,
-               data,
-               info.type
-            )
+            fundingSourceActions.setStatus(params.id, info.path, status, data, info.type)
          );
       } else {
          const dataErrorText = !isNotEmpty(inputs.date)

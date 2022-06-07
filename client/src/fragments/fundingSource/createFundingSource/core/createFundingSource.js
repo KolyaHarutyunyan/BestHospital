@@ -9,6 +9,7 @@ import {
 } from "@eachbase/components";
 import { createFoundingSourceStyle } from "./styles";
 import {
+   DomainNameValidator,
    EmailValidator,
    ErrorText,
    FindLoad,
@@ -22,7 +23,7 @@ import {
    httpRequestsOnSuccessActions,
 } from "@eachbase/store";
 import { FindError } from "@eachbase/utils";
-import { getPhoneError, getEmailError } from "../constant";
+import { getPhoneError, getEmailError, checkWebsite } from "../constant";
 
 export const CreateFundingSource = ({ handleClose, info }) => {
    const classes = createFoundingSourceStyle();
@@ -78,6 +79,7 @@ export const CreateFundingSource = ({ handleClose, info }) => {
          error === evt.target.name ||
          error === phoneErrorMsg ||
          error === emailErrorMsg ||
+         error === ErrorText.websiteError ||
          (backError && backError.length)
       ) {
          setError("");
@@ -94,16 +96,18 @@ export const CreateFundingSource = ({ handleClose, info }) => {
          !/[a-zA-Z]/g.test(inputs.phoneNumber);
 
       const emailIsValid = isNotEmpty(inputs.email) && EmailValidator.test(inputs.email);
+      const websiteIsValid = isNotEmpty(inputs.website)
+         ? DomainNameValidator.test(inputs.website)
+         : true;
 
       const dataIsValid =
          isNotEmpty(inputs.name) &&
          phoneIsValid &&
          emailIsValid &&
          isNotEmpty(inputs.type) &&
-         isNotEmpty(inputs.contact) &&
-         isNotEmpty(inputs.website) &&
          isNotEmpty(enteredAddress) &&
-         isNotEmpty(fullAddress);
+         isNotEmpty(fullAddress) &&
+         websiteIsValid;
 
       if (dataIsValid) {
          const data = {
@@ -112,7 +116,7 @@ export const CreateFundingSource = ({ handleClose, info }) => {
             phoneNumber: inputs.phoneNumber,
             type: inputs.type,
             contact: inputs.contact,
-            website: inputs.website,
+            website: checkWebsite(inputs.website),
             address: fullAddress,
             status: "ACTIVE",
          };
@@ -135,12 +139,10 @@ export const CreateFundingSource = ({ handleClose, info }) => {
             ? phoneErrorMsg
             : !isNotEmpty(inputs.type)
             ? "type"
-            : !isNotEmpty(inputs.contact)
-            ? "contact"
-            : !isNotEmpty(inputs.website)
-            ? "website"
             : !isNotEmpty(enteredAddress)
             ? "enteredAddress"
+            : !websiteIsValid
+            ? ErrorText.websiteError
             : "";
 
          setError(errorText);
@@ -221,18 +223,19 @@ export const CreateFundingSource = ({ handleClose, info }) => {
                      value={inputs.contact}
                      variant={"outlined"}
                      type={"text"}
-                     label={"Contact Person*"}
+                     label={"Contact Person"}
                      name={"contact"}
-                     typeError={error === "contact" && ErrorText.field}
                   />
                   <ValidationInput
                      onChange={handleChange}
                      value={inputs.website}
                      variant={"outlined"}
                      type={"text"}
-                     label={"Website*"}
+                     label={"Website"}
                      name={"website"}
-                     typeError={error === "website" && ErrorText.field}
+                     typeError={
+                        error === ErrorText.websiteError ? ErrorText.websiteError : ""
+                     }
                   />
                </div>
                <div className={classes.createFoundingSourceBodyBox}>

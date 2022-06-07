@@ -10,4 +10,7 @@ export const ErrorText = {
    overlappingError: (value = "") => `${value} cannot overlap, please change the date!`,
    phoneError: "Phone number must be a valid phone number",
    emailError: "User already exists",
+   equalityError: (min, max) => `${min} must be smaller than ${max}`,
+   websiteError: "invalid website",
+   existenceError: (value = "") => `${value} already exists`,
 };

@@ -13,10 +13,10 @@ import {
    GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS,
    EDIT_FUNDING_SOURCE,
    EDIT_FUNDING_SOURCE_SERVICE,
-   SET_STATUS,
    CREATE_FUNDING_MODIFIER,
    EDIT_FUNDING_MODIFIER,
    CHANGE_FUNDING_MODIFIER_STATUS,
+   SET_STATUS,
 } from "./fundingSource.types";
 import { httpRequestsOnErrorsActions } from "../http_requests_on_errors";
 import { httpRequestsOnLoadActions } from "../http_requests_on_load";
@@ -183,14 +183,14 @@ function* getFundingSourceHistoriesById(action) {
    }
 }
 
-function* setStatus(action) {
+function* changeFundingSourceStatus(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const body = action.payload.body ? action.payload.body : "";
       const res = yield call(
-         authService.setStatusService,
+         authService.changeFundingSourceStatusService,
          action.payload.id,
          action.payload.path,
          action.payload.status,
@@ -239,6 +239,7 @@ function* editFundingModifier(action) {
          authService.editFundingModifierService,
          action.payload.fundingId,
          action.payload.serviceId,
+         action.payload.modifierId,
          action.payload.body
       );
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
@@ -286,7 +287,7 @@ export const watchFundingSource = function* watchFundingSourceSaga() {
    yield takeLatest(CREATE_FUNDING_SOURCE_SERVICE_BY_ID, createFundingSourceServiceById);
    yield takeLatest(EDIT_FUNDING_SOURCE_SERVICE, editFundingSourceService);
    yield takeLatest(GET_FUNDING_SOURCE_HISTORIES_BY_ID, getFundingSourceHistoriesById);
-   yield takeLatest(SET_STATUS, setStatus);
+   yield takeLatest(SET_STATUS, changeFundingSourceStatus);
    yield takeLatest(CREATE_FUNDING_MODIFIER, createFundingModifier);
    yield takeLatest(EDIT_FUNDING_MODIFIER, editFundingModifier);
    yield takeLatest(CHANGE_FUNDING_MODIFIER_STATUS, changeFundingModifierStatus);

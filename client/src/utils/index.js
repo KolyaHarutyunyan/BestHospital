@@ -10,7 +10,7 @@ export {
    globalModals,
 } from "./globalStylesUi";
 export { Images } from "./images";
-export { EmailValidator, PasswordValidator } from "./validation";
+export { EmailValidator, PasswordValidator, DomainNameValidator } from "./validations";
 export { superAdminRouters } from "./routers";
 export {
    RoleHooks,

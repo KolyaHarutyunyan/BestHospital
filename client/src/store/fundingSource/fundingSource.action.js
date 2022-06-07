@@ -91,10 +91,10 @@ export const createFundingModifier = (fundingId, body) => {
    };
 };
 
-export const editFundingModifier = (fundingId, serviceId, body) => {
+export const editFundingModifier = (fundingId, serviceId, modifierId, body) => {
    return {
       type: EDIT_FUNDING_MODIFIER,
-      payload: { fundingId, serviceId, body },
+      payload: { fundingId, serviceId, modifierId, body },
    };
 };
 
