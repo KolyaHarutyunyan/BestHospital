@@ -9,6 +9,7 @@ import {
   IsOptional,
   IsPhoneNumber,
   IsString,
+  IsUrl,
   Min,
   ValidateNested,
 } from 'class-validator';
@@ -35,7 +36,7 @@ export class UpdateFundingDto extends DTO {
   email: string;
   @ApiProperty()
   @IsOptional()
-  @IsString()
+  @IsUrl()
   website: string;
   @ApiProperty()
   @IsNotEmpty()

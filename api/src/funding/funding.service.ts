@@ -18,10 +18,10 @@ export class FundingService extends BaseService {
         email: dto.email,
         phoneNumber: dto.phoneNumber,
         type: dto.type,
-        website: dto.website,
-        contact: dto.contact,
         address: await this.addressService.getAddress(dto.address),
       });
+      if (dto.website) funder.website = dto.website;
+      if (dto.contact) funder.contact = dto.contact;
       const [funderSave] = await Promise.all([
         funder.save(),
         this.historyService.create({

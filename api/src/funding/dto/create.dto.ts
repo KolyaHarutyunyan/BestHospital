@@ -10,6 +10,7 @@ import {
   IsOptional,
   IsPhoneNumber,
   IsString,
+  IsUrl,
   Length,
   Min,
   ValidateNested,
@@ -26,15 +27,15 @@ export class CreateFundingDTO extends DTO {
   @IsString()
   type: string;
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   contact: string;
   @ApiProperty()
   @IsEmail()
   email: string;
   @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
+  @IsOptional()
+  @IsUrl()
   website: string;
   @ApiProperty()
   @IsNotEmpty()
@@ -82,6 +83,7 @@ export class CreateServiceDTO extends DTO {
   @IsNumber()
   @IsNotEmpty()
   chargeRate: number;
+  // min@ maxic chi karox gerazancel
 }
 export class CreateModifierDto {
   @ApiProperty()
