@@ -49,7 +49,7 @@ export class Service extends BaseService {
     try {
       const funder = await this.model.findById({ _id });
       this.checkFunder(funder);
-      const services = await this.serviceModel.find({ funderId: _id }).populate('credentialIds');
+      const services = await this.serviceModel.find({ funderId: _id }).populate('credentialId');
       return this.sanitizer.serviceSanitizeMany(services);
     } catch (e) {
       throw e;
@@ -58,7 +58,7 @@ export class Service extends BaseService {
   /** returns service by id */
   async findService(_id: string): Promise<any> {
     try {
-      const service = await this.serviceModel.findById({ _id }).populate('credentialIds');
+      const service = await this.serviceModel.findById({ _id }).populate('credentialId');
       this.checkFundingService(service);
       return this.sanitizer.serviceSanitize(service);
     } catch (e) {
@@ -73,7 +73,7 @@ export class Service extends BaseService {
       const services = await this.serviceModel
         .find({ funderId: _id, _id: fundingServiceId })
         .populate('modifiers')
-        .populate('credentialIds');
+        .populate('credentialId');
       return this.sanitizer.serviceSanitizeMany(services);
     } catch (e) {
       throw e;
