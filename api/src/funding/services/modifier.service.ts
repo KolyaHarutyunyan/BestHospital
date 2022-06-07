@@ -43,7 +43,10 @@ export class ModifierService extends BaseService {
     this.checkFundingService(service);
     const dbModifier = service.modifiers as IModifier[];
     dbModifier.map((modifier) => {
-      if (modifier.name == dto.modifiers.name) {
+      if (
+        modifier.name == dto.modifiers.name &&
+        modifier._id.toString() !== modifierId.toString()
+      ) {
         throw new HttpException('Modifier already exists', HttpStatus.BAD_REQUEST);
       }
     });
