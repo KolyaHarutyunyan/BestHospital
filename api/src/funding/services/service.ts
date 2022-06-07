@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { serviceLog } from '../../history/history.constants';
 import { CreateServiceDTO, UpdateServiceDto, ServiceDTO } from '../dto';
 import { BaseService } from './base.service';
@@ -8,6 +8,9 @@ export class Service extends BaseService {
   /** Create a new service */
   async createService(dto: CreateServiceDTO, _id: string): Promise<ServiceDTO> {
     try {
+      if (dto.min > dto.max) {
+        throw new HttpException('min can not be greater than max', HttpStatus.BAD_REQUEST);
+      }
       const funder = await this.model.findById({ _id });
       this.checkFunder(funder);
       const globService = await this.service.findOne(dto.serviceId);

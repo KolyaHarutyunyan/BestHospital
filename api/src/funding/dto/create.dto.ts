@@ -83,7 +83,6 @@ export class CreateServiceDTO extends DTO {
   @IsNumber()
   @IsNotEmpty()
   chargeRate: number;
-  // min@ maxic chi karox gerazancel
 }
 export class CreateModifierDto {
   @ApiProperty()
