@@ -1,9 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDateString, IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { DTO } from '../../util';
 import { UserDTO } from '../../authN';
 import { ClientStatus } from '../client.constants';
 
-export class CreateClientDTO {
+export class CreateClientDTO extends DTO {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()

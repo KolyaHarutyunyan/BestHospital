@@ -1,1 +1,1 @@
-export { IClient } from './client.interface';
+export { IClient, IClientCount } from './client.interface';

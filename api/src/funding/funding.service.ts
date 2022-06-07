@@ -6,6 +6,7 @@ import { FundingDTO } from './dto';
 import { CreateFundingDTO } from './dto/create.dto';
 import { UpdateFundingDto } from './dto/edit.dto';
 import { FundingStatus } from './funding.constants';
+import { IFunderCount } from './interface';
 import { BaseService } from './services/base.service';
 
 @Injectable()
@@ -22,7 +23,7 @@ export class FundingService extends BaseService {
       });
       if (dto.website) funder.website = dto.website;
       if (dto.contact) funder.contact = dto.contact;
-      const [funderSave] = await Promise.all([
+      await Promise.all([
         funder.save(),
         this.historyService.create({
           resource: funder._id,
@@ -31,7 +32,7 @@ export class FundingService extends BaseService {
           user: userId,
         }),
       ]);
-      return this.sanitizer.sanitize(funderSave);
+      return this.sanitizer.sanitize(funder);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Funder already exists');
       throw e;
@@ -39,7 +40,7 @@ export class FundingService extends BaseService {
   }
 
   /** returns all funders */
-  async findAll(skip: number, limit: number, status: string): Promise<any> {
+  async findAll(skip: number, limit: number, status: string): Promise<IFunderCount> {
     const [funder, count] = await Promise.all([
       this.model.find({ status }).sort({ _id: -1 }).skip(skip).limit(limit),
       this.model.countDocuments({ status: status ? status : FundingStatus.ACTIVE }),

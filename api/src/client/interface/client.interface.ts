@@ -1,5 +1,6 @@
 import { Document } from 'mongoose';
 import { ITermination } from '../../termination/interface';
+import { ClientDTO } from '../dto';
 
 export interface IClient extends Document {
   id: string;
@@ -15,4 +16,8 @@ export interface IClient extends Document {
   birthday: Date;
   termination: ITermination;
   enrollment: string;
+}
+export interface IClientCount {
+  clients: ClientDTO[];
+  count: number;
 }

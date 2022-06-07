@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
 import { ITermination } from '../../termination/interface';
 import { IAddress } from '../../address';
-import { CreateModifierDto } from '../dto';
+import { CreateModifierDto, FundingDTO } from '../dto';
 
 export interface IFunder {
   id: string;
@@ -16,7 +16,7 @@ export interface IFunder {
   termination: ITermination;
 }
 export interface IFunderCount {
-  funders: IFunder[];
+  funders: FundingDTO[];
   count: number;
 }
 export interface IService extends Document {

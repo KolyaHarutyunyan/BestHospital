@@ -4,7 +4,7 @@ import { MongooseUtil } from '../util';
 import { Model } from 'mongoose';
 import { ClientModel } from './client.model';
 import { ClientSanitizer } from './interceptor';
-import { IClient } from './interface';
+import { IClient, IClientCount } from './interface';
 import { HistoryService, serviceLog } from '../history';
 import { ClientDTO } from './dto';
 import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
@@ -23,7 +23,7 @@ export class ClientService {
   private mongooseUtil: MongooseUtil;
 
   /** Create a new client */
-  create = async (dto: CreateClientDTO, userId: string): Promise<ClientDTO> => {
+  create = async (dto: CreateClientDTO): Promise<ClientDTO> => {
     try {
       const client = new this.model({
         firstName: dto.firstName,
@@ -37,13 +37,15 @@ export class ClientService {
         status: dto.status,
         birthday: dto.birthday,
       });
-      await client.save();
-      await this.historyService.create({
-        resource: client._id,
-        onModel: 'Client',
-        title: serviceLog.createClient,
-        user: userId,
-      });
+      await Promise.all([
+        client.save(),
+        this.historyService.create({
+          resource: client._id,
+          onModel: 'Client',
+          title: serviceLog.createClient,
+          user: dto.user.id,
+        }),
+      ]);
       return this.sanitizer.sanitize(client);
     } catch (e) {
       console.log(e);
@@ -53,19 +55,16 @@ export class ClientService {
   };
 
   /** returns all clients */
-  async findAll(skip: number, limit: number, status: string): Promise<any> {
+  async findAll(skip: number, limit: number, status: string): Promise<IClientCount> {
     try {
-      if (!status) {
-        status = 'ACTIVE';
-      }
       const [clients, count] = await Promise.all([
         this.model
-          .find({ status })
+          .find({ status: status ? status : ClientStatus.ACTIVE })
           .populate({ path: 'enrollment', select: 'name' })
           .sort({ _id: 1 })
           .skip(skip)
           .limit(limit),
-        this.model.countDocuments({ status }),
+        this.model.countDocuments({ status: status ? status : ClientStatus.ACTIVE }),
       ]);
       const sanClient = this.sanitizer.sanitizeMany(clients);
       return { clients: sanClient, count };
@@ -96,17 +95,16 @@ export class ClientService {
       if (dto.language) client.language = dto.language;
       if (dto.familyLanguage) client.familyLanguage = dto.familyLanguage;
       if (dto.gender) client.gender = dto.gender;
-      if (dto.birthday) {
-        client.birthday = dto.birthday;
-      }
-
-      await client.save();
-      await this.historyService.create({
-        resource: client._id,
-        onModel: 'Client',
-        title: serviceLog.updateClient,
-        user: userId,
-      });
+      if (dto.birthday) client.birthday = dto.birthday;
+      await Promise.all([
+        client.save(),
+        this.historyService.create({
+          resource: client._id,
+          onModel: 'Client',
+          title: serviceLog.updateClient,
+          user: userId,
+        }),
+      ]);
       return this.sanitizer.sanitize(client);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Client already exists');
@@ -121,29 +119,32 @@ export class ClientService {
     await client.remove();
     return client._id;
   }
-
-  /** Set Status of a Funder Inactive*/
-  setStatus = async (
-    _id: string,
-    status: string,
-    dto: CreateTerminationDto,
-  ): Promise<ClientDTO> => {
+  /** activate the funder */
+  async active(_id: string, dto: CreateTerminationDto): Promise<ClientDTO> {
     const client = await this.model.findById({ _id });
     this.checkClient(client);
-    if (status != ClientStatus.ACTIVE && !dto.date) {
+    dto.date ? (client.termination.date = dto.date) : undefined;
+    dto.reason ? (client.termination.reason = dto.reason) : undefined;
+    client.status = ClientStatus.ACTIVE;
+    await client.save();
+    return this.sanitizer.sanitize(client);
+  }
+  /** inActivate the funder */
+  async inActive(_id: string, dto: CreateTerminationDto): Promise<ClientDTO> {
+    if (!dto.date) {
       throw new HttpException(
         'If status is not active, then date is required field',
         HttpStatus.BAD_REQUEST,
       );
     }
-    client.termination.date = dto.date;
-    client.status = status;
-    if (dto.reason) {
-      client.termination.reason = dto.reason;
-    }
+    const client = await this.model.findById({ _id });
+    this.checkClient(client);
+    dto.date ? (client.termination.date = dto.date) : undefined;
+    dto.reason ? (client.termination.reason = dto.reason) : undefined;
+    client.status = ClientStatus.INACTIVE;
     await client.save();
     return this.sanitizer.sanitize(client);
-  };
+  }
 
   /** Private methods */
   /** if the date is not valid, throws an exception */

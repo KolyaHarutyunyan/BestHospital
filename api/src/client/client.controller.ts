@@ -15,7 +15,7 @@ export class ClientController {
   @Post()
   @ApiHeader({ name: ACCESS_TOKEN })
   create(@Body() createClientDto: CreateClientDTO) {
-    return this.clientService.create(createClientDto, createClientDto.user.id);
+    return this.clientService.create(createClientDto);
   }
   /**Get All Clients */
   @Get()
@@ -65,18 +65,20 @@ export class ClientController {
   remove(@Param('id', ParseObjectIdPipe) id: string) {
     return this.clientService.remove(id);
   }
-
-  /** Inactivate a client */
-  @Patch(':id/setStatus')
-  @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiQuery({ name: 'status', enum: ClientStatus })
+  @Patch(':id/active')
   @ApiOkResponse({ type: ClientDTO })
-  async setStatus(
-    @Param('id', ParseObjectIdPipe) clientId: string,
+  async active(
+    @Param('id', ParseObjectIdPipe) id: string,
     @Body() dto: CreateTerminationDto,
-    @Query() status: ClientQueryDTO,
   ): Promise<ClientDTO> {
-    const staff = await this.clientService.setStatus(clientId, status.status, dto);
-    return staff;
+    return await this.clientService.active(id, dto);
+  }
+  @Patch(':id/inActive')
+  @ApiOkResponse({ type: ClientDTO })
+  async inActive(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Body() dto: CreateTerminationDto,
+  ): Promise<ClientDTO> {
+    return await this.clientService.inActive(id, dto);
   }
 }
