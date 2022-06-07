@@ -10,7 +10,6 @@ export class Service extends BaseService {
   /** Create a new service */
   async createService(dto: CreateServiceDTO, _id: string): Promise<ServiceDTO> {
     try {
-      this.checkUser(dto.user.type as UserType, [UserType.ADMIN]);
       const funder = await this.model.findById({ _id });
       this.checkFunder(funder);
       const globService = await this.service.findOne(dto.serviceId);
@@ -82,7 +81,6 @@ export class Service extends BaseService {
   /** Update the service */
   async updateService(serviceId: string, dto: UpdateServiceDto): Promise<ServiceDTO> {
     try {
-      this.checkUser(dto.user.type as UserType, [UserType.ADMIN]);
       const service = await this.serviceModel.findOne({ _id: serviceId });
       this.checkFundingService(service);
       const funder = await this.model.findOne({ _id: service.funderId });

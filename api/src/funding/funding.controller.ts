@@ -65,13 +65,6 @@ export class FundingController {
     const funder = await this.fundingService.update(id, updateFundingDto, updateFundingDto.user.id);
     return funder;
   }
-
-  /** Delete the funder */
-  @Delete(':id')
-  @ApiOkResponse({ type: String })
-  async remove(@Param('id', ParseObjectIdPipe) id: string): Promise<string> {
-    return await this.fundingService.remove(id);
-  }
   @Patch(':id/active')
   @ApiOkResponse({ type: FundingDTO })
   async active(
