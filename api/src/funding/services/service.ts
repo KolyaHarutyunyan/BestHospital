@@ -1,9 +1,7 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { UserType } from '../../authN';
+import { Injectable } from '@nestjs/common';
 import { serviceLog } from '../../history/history.constants';
 import { CreateServiceDTO, UpdateServiceDto, ServiceDTO } from '../dto';
 import { BaseService } from './base.service';
-import { CredentialService } from '../../credential';
 
 @Injectable()
 export class Service extends BaseService {

@@ -12,7 +12,6 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
-import { UserDTO } from '../../authN';
 import { DTO } from '../../util';
 import { AddressDTO } from '../../address';
 import { FundingStatus, TypeStatus } from '../funding.constants';
