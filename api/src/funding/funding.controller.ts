@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ACCESS_TOKEN } from '../authN';
-import { CreateTerminationDto } from 'src/termination/dto/create-termination.dto';
 import { ParseObjectIdPipe } from '../util';
 import { CreateFundingDTO, FundingDTO, FundingQueryDTO, UpdateFundingDto } from './dto';
 import { FundingService } from './funding.service';

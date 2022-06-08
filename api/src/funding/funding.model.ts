@@ -12,7 +12,7 @@ const FundingSchema = new Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   phoneNumber: { type: String, required: true },
-  type: { type: String, enum: [FundingType] },
+  type: { type: String, enum: FundingType },
   address: addressSchema,
   contact: { type: String },
   website: { type: String },

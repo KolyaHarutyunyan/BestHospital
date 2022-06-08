@@ -14,7 +14,7 @@ export enum TypeStatus {
   DIRECT = 'DIRECT',
 }
 export enum FundingType {
-  PRIVATE = 'INDIRECT',
-  PUBLIC = 'DIRECT',
+  PRIVATE = 'PRIVATE',
+  PUBLIC = 'PUBLIC',
   SCHOOL = 'SCHOOL',
 }

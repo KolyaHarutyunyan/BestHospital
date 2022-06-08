@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
 import {
   IsEmail,
   IsEnum,
@@ -11,7 +10,6 @@ import {
   IsString,
   IsUrl,
   Min,
-  ValidateNested,
 } from 'class-validator';
 import { DTO } from '../../util';
 import { AddressDTO } from '../../address';

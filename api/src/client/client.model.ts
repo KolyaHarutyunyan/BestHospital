@@ -21,7 +21,7 @@ const ClientSchema = new Schema({
   familyLanguage: { type: String },
   gender: { type: String },
   birthday: { type: Date },
-  status: { type: String, enum: ClientStatus, default: 'ACTIVE' },
+  status: { type: String, enum: ClientStatus, default: ClientStatus.ACTIVE },
   enrollment: { type: Types.ObjectId, ref: 'Funder' },
   termination: TerminationSchema,
   createdDate: { type: Date, default: Date.now() },
