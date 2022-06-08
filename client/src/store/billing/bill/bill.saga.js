@@ -36,7 +36,11 @@ function* getBills(action) {
          payload: { bills: { bills: [], count: 0 } },
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+      if (err?.data?.message === "Internal server error") {
+         yield put(
+            httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message)
+         );
+      }
    }
 }
 
@@ -52,7 +56,11 @@ function* getBillById(action) {
       });
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+      if (err?.data?.message === "Internal server error") {
+         yield put(
+            httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message)
+         );
+      }
    }
 }
 
@@ -200,7 +208,11 @@ function* getBillTransaction(action) {
          payload: { transactions: { transactions: [], count: 0 } },
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+      if (err?.data?.message === "Internal server error") {
+         yield put(
+            httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message)
+         );
+      }
    }
 }
 

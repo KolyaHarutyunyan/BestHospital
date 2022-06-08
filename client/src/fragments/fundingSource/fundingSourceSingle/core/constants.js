@@ -21,8 +21,6 @@ export function getHeaderTitlesForNote() {
    ];
 }
 
-export const modifierTypes = ["Direct", "Indirect"];
-
 export const getModifierNameErrorText = (error, backError) => {
    if (error === "name") {
       return ErrorText.field;

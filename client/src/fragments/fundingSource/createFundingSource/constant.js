@@ -30,5 +30,3 @@ export const checkWebsite = (website = "") => {
 
    return website.startsWith(HTTP_KEYWORD) ? website : `${HTTP_KEYWORD}${website}`;
 };
-
-export const fundingSourceTypes = ["Private Insurance", "Public Insurance", "School"];

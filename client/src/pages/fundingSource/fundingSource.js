@@ -41,6 +41,15 @@ export const FundingSource = () => {
    const loader = FindLoad("GET_FUNDING_SOURCE");
    const success = FindSuccess("GET_FUNDING_SOURCE");
 
+   useEffect(
+      () => () => {
+         if (pageIsChanging) {
+            handlePageChange(false);
+         }
+      },
+      [pageIsChanging]
+   );
+
    useEffect(() => {
       if (!!success.length) {
          if (!pageIsChanging) setPage(1);

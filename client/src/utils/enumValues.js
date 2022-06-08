@@ -1,4 +1,7 @@
 export const enumValues = {
+   FUNDING_SOURCE_TYPES: ["Private Insurance", "Public Insurance", "School"],
+   FUNDING_MODIFIER_TYPES: ["Direct", "Indirect"],
+
    STATUSES: ["Active", "Inactive", "On Hold", "Terminated"],
 
    /**Billing Enums */

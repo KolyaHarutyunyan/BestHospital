@@ -75,7 +75,11 @@ function* getFundingSource(action) {
       });
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+      if (err?.data?.message === "Internal server error") {
+         yield put(
+            httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message)
+         );
+      }
    }
 }
 
@@ -91,7 +95,11 @@ function* getFundingSourceById(action) {
       });
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+      if (err?.data?.message === "Internal server error") {
+         yield put(
+            httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message)
+         );
+      }
    }
 }
 
@@ -110,7 +118,11 @@ function* getFundingSourceServicesById(action) {
       });
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+      if (err?.data?.message === "Internal server error") {
+         yield put(
+            httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message)
+         );
+      }
    }
 }
 
@@ -180,7 +192,11 @@ function* getFundingSourceHistoriesById(action) {
          });
       }
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+      if (err?.data?.message === "Internal server error") {
+         yield put(
+            httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message)
+         );
+      }
    }
 }
 

@@ -47,18 +47,18 @@ function* editOffice(action) {
 function* getOffice({ type }) {
    yield put(httpRequestsOnErrorsActions.removeError(type));
    yield put(httpRequestsOnLoadActions.appendLoading(type));
-   yield put(httpRequestsOnSuccessActions.removeSuccess(type));
    try {
       const res = yield call(authService.getOfficesService);
       yield put(httpRequestsOnLoadActions.removeLoading(type));
-      // yield put(httpRequestsOnSuccessActions.appendSuccess(type));
       yield put({
          type: GET_OFFICES_SUCCESS,
          payload: res.data,
       });
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(type));
-      yield put(httpRequestsOnErrorsActions.appendError(type, err?.data?.message));
+      if (err?.data?.message === "Internal server error") {
+         yield put(httpRequestsOnErrorsActions.appendError(type, err?.data?.message));
+      }
    }
 }
 
@@ -74,7 +74,11 @@ function* getOfficeById(action) {
       });
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+      if (err?.data?.message === "Internal server error") {
+         yield put(
+            httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message)
+         );
+      }
    }
 }
 

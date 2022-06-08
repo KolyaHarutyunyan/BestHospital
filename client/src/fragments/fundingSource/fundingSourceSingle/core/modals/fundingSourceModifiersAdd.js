@@ -7,6 +7,7 @@ import {
 } from "@eachbase/components";
 import { foundingSourceModalStyle } from "./styles";
 import {
+   enumValues,
    ErrorText,
    FindError,
    FindLoad,
@@ -21,7 +22,7 @@ import {
    httpRequestsOnSuccessActions,
 } from "@eachbase/store";
 import { useParams } from "react-router";
-import { getModifierNameErrorText, modifierTypes } from "../constants";
+import { getModifierNameErrorText } from "../constants";
 
 export const FundingSourceModifiersAdd = ({
    info,
@@ -168,7 +169,7 @@ export const FundingSourceModifiersAdd = ({
                label={"Type*"}
                handleSelect={handleChange}
                value={inputs.type}
-               language={modifierTypes}
+               language={enumValues.FUNDING_MODIFIER_TYPES}
                typeError={error === "type" ? ErrorText.selectField : ""}
             />
             <div className={classes.foundingSourceModalsBodyBlock}>

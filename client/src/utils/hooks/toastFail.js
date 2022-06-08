@@ -1,7 +1,4 @@
 export const ToastFail = (fail, errorMessage) => {
-   if (errorMessage) {
-      return errorMessage === "Internal server error" ? "ooops!! statusCode 500" : false;
-   }
    if (fail) {
       return fail === "CREATE_PAYCODE_GLOBAL"
          ? "Something went wrong"
@@ -75,6 +72,11 @@ export const ToastFail = (fail, errorMessage) => {
          ? "Something went wrong"
          : fail === "EDIT_FUNDING_MODIFIER"
          ? "Something went wrong"
+         : fail === "CREATE_ROLE"
+         ? "Something went wrong"
          : false;
+   }
+   if (errorMessage) {
+      return errorMessage === "Internal server error" ? "ooops!! statusCode 500" : false;
    }
 };

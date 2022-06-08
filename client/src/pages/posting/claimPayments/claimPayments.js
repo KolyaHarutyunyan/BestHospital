@@ -30,6 +30,15 @@ export const ClaimPayments = () => {
       dispatch(fundingSourceActions.getFundingSource());
    }, []);
 
+   useEffect(
+      () => () => {
+         if (pageIsChanging) {
+            handlePageChange(false);
+         }
+      },
+      [pageIsChanging]
+   );
+
    useEffect(() => {
       if (!!success.length) {
          if (!pageIsChanging) setPage(1);

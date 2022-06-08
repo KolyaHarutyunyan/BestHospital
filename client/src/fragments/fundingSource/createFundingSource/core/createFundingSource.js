@@ -11,6 +11,7 @@ import { createFoundingSourceStyle } from "./styles";
 import {
    DomainNameValidator,
    EmailValidator,
+   enumValues,
    ErrorText,
    FindLoad,
    FindSuccess,
@@ -25,12 +26,7 @@ import {
    httpRequestsOnSuccessActions,
 } from "@eachbase/store";
 import { FindError } from "@eachbase/utils";
-import {
-   getPhoneError,
-   getEmailError,
-   checkWebsite,
-   fundingSourceTypes,
-} from "../constant";
+import { getPhoneError, getEmailError, checkWebsite } from "../constant";
 
 export const CreateFundingSource = ({ handleClose, info }) => {
    const classes = createFoundingSourceStyle();
@@ -222,7 +218,7 @@ export const CreateFundingSource = ({ handleClose, info }) => {
                      label={"Type*"}
                      handleSelect={handleChange}
                      value={inputs.type}
-                     language={fundingSourceTypes}
+                     language={enumValues.FUNDING_SOURCE_TYPES}
                      typeError={error === "type" ? ErrorText.field : ""}
                   />
                   <ValidationInput

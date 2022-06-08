@@ -21,9 +21,11 @@ import { httpRequestsOnSuccessActions } from "../http_requests_on_success";
 function* createRole(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.createRoleService, action.payload.body);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: CREATE_ROLE_SUCCESS,
          payload: res.data,
@@ -38,15 +40,23 @@ function* getRole(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    try {
-      const res = yield call(authService.getRoleService, action.payload);
+      const res = yield call(authService.getRoleService, action.payload?.data);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put({
          type: GET_ROLE_SUCCESS,
-         payload: res.data.reverse(),
+         payload: res.data,
       });
    } catch (err) {
+      yield put({
+         type: GET_ROLE_SUCCESS,
+         payload: { roles: [], count: 0 },
+      });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+      if (err?.data?.message === "Internal server error") {
+         yield put(
+            httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message)
+         );
+      }
    }
 }
 
@@ -77,7 +87,11 @@ function* getRoleById(action) {
       });
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+      if (err?.data?.message === "Internal server error") {
+         yield put(
+            httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message)
+         );
+      }
    }
 }
 
