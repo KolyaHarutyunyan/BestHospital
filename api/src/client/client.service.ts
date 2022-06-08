@@ -119,33 +119,58 @@ export class ClientService {
     await client.remove();
     return client._id;
   }
-  /** activate the funder */
-  async active(_id: string, dto: CreateTerminationDto): Promise<ClientDTO> {
+  /** activate the client */
+  async active(_id: string): Promise<ClientDTO> {
     const client = await this.model.findById({ _id });
     this.checkClient(client);
-    dto.date ? (client.termination.date = dto.date) : undefined;
-    dto.reason ? (client.termination.reason = dto.reason) : undefined;
+    client.termination.date ? (client.termination.date = undefined) : undefined;
+    client.termination.reason ? (client.termination.reason = undefined) : undefined;
     client.status = ClientStatus.ACTIVE;
     await client.save();
     return this.sanitizer.sanitize(client);
   }
-  /** inActivate the funder */
-  async inActive(_id: string, dto: CreateTerminationDto): Promise<ClientDTO> {
+  /** inActivate the client */
+  async inActive(_id: string): Promise<ClientDTO> {
+    const client = await this.model.findById({ _id });
+    this.checkClient(client);
+    client.termination.date ? (client.termination.date = undefined) : undefined;
+    client.termination.reason ? (client.termination.reason = undefined) : undefined;
+    client.status = ClientStatus.INACTIVE;
+    await client.save();
+    return this.sanitizer.sanitize(client);
+  }
+  /** hold the client */
+  async hold(_id: string, dto: CreateTerminationDto): Promise<ClientDTO> {
     if (!dto.date) {
       throw new HttpException(
-        'If status is not active, then date is required field',
+        'If status is hold, then date is required field',
         HttpStatus.BAD_REQUEST,
       );
     }
     const client = await this.model.findById({ _id });
     this.checkClient(client);
-    dto.date ? (client.termination.date = dto.date) : undefined;
-    dto.reason ? (client.termination.reason = dto.reason) : undefined;
-    client.status = ClientStatus.INACTIVE;
+    client.termination.reason = dto.reason;
+    client.termination.date = dto.date;
+    client.status = ClientStatus.HOLD;
     await client.save();
     return this.sanitizer.sanitize(client);
   }
-
+  /** terminate the client */
+  async terminate(_id: string, dto: CreateTerminationDto): Promise<ClientDTO> {
+    if (!dto.date) {
+      throw new HttpException(
+        'If status is hold, then date is required field',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const client = await this.model.findById({ _id });
+    this.checkClient(client);
+    client.termination.date = dto.date;
+    client.termination.reason = dto.reason;
+    client.status = ClientStatus.TERMINATE;
+    await client.save();
+    return this.sanitizer.sanitize(client);
+  }
   /** Private methods */
   /** if the date is not valid, throws an exception */
   private checkTime(date: Date) {

@@ -67,18 +67,28 @@ export class ClientController {
   }
   @Patch(':id/active')
   @ApiOkResponse({ type: ClientDTO })
-  async active(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Body() dto: CreateTerminationDto,
-  ): Promise<ClientDTO> {
-    return await this.clientService.active(id, dto);
+  async active(@Param('id', ParseObjectIdPipe) id: string): Promise<ClientDTO> {
+    return await this.clientService.active(id);
   }
   @Patch(':id/inActive')
   @ApiOkResponse({ type: ClientDTO })
-  async inActive(
+  async inActive(@Param('id', ParseObjectIdPipe) id: string): Promise<ClientDTO> {
+    return await this.clientService.inActive(id);
+  }
+  @Patch(':id/hold')
+  @ApiOkResponse({ type: ClientDTO })
+  async hold(
     @Param('id', ParseObjectIdPipe) id: string,
     @Body() dto: CreateTerminationDto,
   ): Promise<ClientDTO> {
-    return await this.clientService.inActive(id, dto);
+    return await this.clientService.hold(id, dto);
+  }
+  @Patch(':id/terminate')
+  @ApiOkResponse({ type: ClientDTO })
+  async terminate(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Body() dto: CreateTerminationDto,
+  ): Promise<ClientDTO> {
+    return await this.clientService.terminate(id, dto);
   }
 }
