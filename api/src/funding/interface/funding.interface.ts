@@ -40,6 +40,6 @@ export interface IModifier extends Document {
   chargeRate: number;
   credentialId: string;
   name: string;
-  type: number;
+  type: string;
   status: boolean;
 }

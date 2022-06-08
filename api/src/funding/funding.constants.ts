@@ -1,8 +1,6 @@
 export enum FundingStatus {
   INACTIVE = 'INACTIVE',
   ACTIVE = 'ACTIVE',
-  HOLD = 'HOLD',
-  TERMINATE = 'TERMINATE',
 }
 
 export const ModifierStatus = {
@@ -11,7 +9,12 @@ export const ModifierStatus = {
   HC: 2,
 };
 
-export const TypeStatus = {
-  INDIRECT: 0,
-  DIRECT: 1,
-};
+export enum TypeStatus {
+  INDIRECT = 'INDIRECT',
+  DIRECT = 'DIRECT',
+}
+export enum FundingType {
+  PRIVATE = 'INDIRECT',
+  PUBLIC = 'DIRECT',
+  SCHOOL = 'SCHOOL',
+}

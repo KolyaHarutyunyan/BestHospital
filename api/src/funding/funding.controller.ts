@@ -67,20 +67,14 @@ export class FundingController {
   }
   @Patch(':id/active')
   @ApiOkResponse({ type: FundingDTO })
-  async active(
-    @Param('id', ParseObjectIdPipe) funderId: string,
-    @Body() dto: CreateTerminationDto,
-  ): Promise<FundingDTO> {
-    const funder = await this.fundingService.active(funderId, dto);
+  async active(@Param('id', ParseObjectIdPipe) funderId: string): Promise<FundingDTO> {
+    const funder = await this.fundingService.active(funderId);
     return funder;
   }
   @Patch(':id/inActive')
   @ApiOkResponse({ type: FundingDTO })
-  async inActive(
-    @Param('id', ParseObjectIdPipe) funderId: string,
-    @Body() dto: CreateTerminationDto,
-  ): Promise<FundingDTO> {
-    const funder = await this.fundingService.inActive(funderId, dto);
+  async inActive(@Param('id', ParseObjectIdPipe) funderId: string): Promise<FundingDTO> {
+    const funder = await this.fundingService.inActive(funderId);
     return funder;
   }
 }

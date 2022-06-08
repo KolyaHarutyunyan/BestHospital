@@ -13,18 +13,16 @@ import {
   IsUrl,
   Length,
   Min,
-  ValidateNested,
 } from 'class-validator';
 import { DTO } from '../../util';
-import { FundingStatus, TypeStatus } from '../funding.constants';
+import { FundingStatus, FundingType, TypeStatus } from '../funding.constants';
 export class CreateFundingDTO extends DTO {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
   name: string;
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
+  @ApiProperty({ enum: FundingType })
+  @IsEnum(FundingType)
   type: string;
   @ApiProperty()
   @IsOptional()
@@ -99,7 +97,7 @@ export class CreateModifierDto {
   name: string;
   @ApiProperty({ enum: TypeStatus })
   @IsEnum(TypeStatus)
-  type: number;
+  type: string;
   @ApiProperty()
   @IsBoolean()
   @IsOptional()

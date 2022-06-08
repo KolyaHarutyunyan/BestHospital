@@ -15,15 +15,15 @@ import {
 } from 'class-validator';
 import { DTO } from '../../util';
 import { AddressDTO } from '../../address';
-import { FundingStatus, TypeStatus } from '../funding.constants';
+import { FundingStatus, FundingType, TypeStatus } from '../funding.constants';
 
 export class UpdateFundingDto extends DTO {
   @ApiProperty()
   @IsString()
   @IsOptional()
   name: string;
-  @ApiProperty()
-  @IsString()
+  @ApiProperty({ enum: FundingType })
+  @IsEnum(FundingType)
   @IsOptional()
   type: string;
   @ApiProperty()
@@ -101,7 +101,7 @@ export class UpdateModifierDto {
   @ApiProperty({ enum: TypeStatus })
   @IsEnum(TypeStatus)
   @IsNotEmpty()
-  type: number;
+  type: string;
 }
 export class UpdateModifiersDto {
   @ApiProperty()

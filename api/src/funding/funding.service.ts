@@ -93,28 +93,18 @@ export class FundingService extends BaseService {
   }
 
   /** activate the funder */
-  async active(_id: string, dto: CreateTerminationDto): Promise<FundingDTO> {
+  async active(_id: string): Promise<FundingDTO> {
     const funder = await this.model.findById({ _id });
     this.checkFunder(funder);
-    dto.date ? (funder.termination.date = dto.date) : undefined;
-    dto.reason ? (funder.termination.reason = dto.reason) : undefined;
     funder.status = FundingStatus.ACTIVE;
     await funder.save();
     return this.sanitizer.sanitize(funder);
   }
   /** inActivate the funder */
-  async inActive(_id: string, dto: CreateTerminationDto): Promise<FundingDTO> {
+  async inActive(_id: string): Promise<FundingDTO> {
     // its services cannot be used in new appointments
-    if (!dto.date) {
-      throw new HttpException(
-        'If status is not active, then date is required field',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
     const funder = await this.model.findById({ _id });
     this.checkFunder(funder);
-    dto.date ? (funder.termination.date = dto.date) : undefined;
-    dto.reason ? (funder.termination.reason = dto.reason) : undefined;
     funder.status = FundingStatus.INACTIVE;
     await funder.save();
     return this.sanitizer.sanitize(funder);

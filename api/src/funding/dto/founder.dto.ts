@@ -2,14 +2,14 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum } from 'class-validator';
 import { ITermination } from '../../termination/interface';
 import { AddressDTO } from '../../address';
-import { FundingStatus, TypeStatus } from '../funding.constants';
+import { FundingStatus, FundingType, TypeStatus } from '../funding.constants';
 import { CreateModifierDto } from '.';
 export class FundingDTO {
   @ApiProperty()
   id: string;
   @ApiProperty()
   name: string;
-  @ApiProperty()
+  @ApiProperty({ enum: FundingType })
   type: string;
   @ApiProperty()
   contact: string;
@@ -64,7 +64,7 @@ export class ModifyDTO {
   @ApiProperty()
   name: string;
   @ApiProperty({ enum: TypeStatus })
-  type: number;
+  type: string;
   @ApiProperty()
   chargeRate: number;
   @ApiProperty()
