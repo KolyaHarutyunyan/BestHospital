@@ -22,6 +22,15 @@ export const BillDetails = () => {
    const loader = FindLoad("GET_BILL_BY_ID");
    const success = FindSuccess("GET_BILL_BY_ID");
 
+   useEffect(
+      () => () => {
+         if (pageIsChanging) {
+            handlePageChange(false);
+         }
+      },
+      [pageIsChanging]
+   );
+
    useEffect(() => {
       if (!!success.length) {
          if (!pageIsChanging) setPage(1);

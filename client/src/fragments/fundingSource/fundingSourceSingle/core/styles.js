@@ -62,6 +62,7 @@ export const fundingSourceSingleStyles = makeStyles(() => ({
       fontWeight: "bold",
       textOverflow: "ellipsis",
       whiteSpace: "nowrap",
+      textTransform: "capitalize",
    },
    fundingSourceSingleGeneralStyles: {
       display: "flex",

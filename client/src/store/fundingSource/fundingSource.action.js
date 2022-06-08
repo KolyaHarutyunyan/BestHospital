@@ -12,6 +12,7 @@ import {
    CREATE_FUNDING_MODIFIER,
    EDIT_FUNDING_MODIFIER,
    CHANGE_FUNDING_MODIFIER_STATUS,
+   CHANGE_FUNDING_SOURCE_STATUS,
 } from "./fundingSource.types";
 
 export const createFundingSource = (body) => {
@@ -102,5 +103,12 @@ export const changeFundingModifierStatus = (fundingId, serviceId, modifierId, st
    return {
       type: CHANGE_FUNDING_MODIFIER_STATUS,
       payload: { fundingId, serviceId, modifierId, status },
+   };
+};
+
+export const changeFundingSourceStatus = (id, status) => {
+   return {
+      type: CHANGE_FUNDING_SOURCE_STATUS,
+      payload: { id, status },
    };
 };

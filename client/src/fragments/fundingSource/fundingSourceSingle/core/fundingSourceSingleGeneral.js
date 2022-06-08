@@ -1,6 +1,7 @@
 import React from "react";
 import { Card } from "@eachbase/components";
 import { fundingSourceSingleStyles } from "./styles";
+import { manageType } from "@eachbase/utils";
 
 export const FundingSourceSingleGeneral = ({ data }) => {
    const classes = fundingSourceSingleStyles();
@@ -18,7 +19,7 @@ export const FundingSourceSingleGeneral = ({ data }) => {
             />
             <Card
                cardInfo={[
-                  { title: "Type", value: data?.type },
+                  { title: "Type", value: manageType(data?.type) },
                   { title: "Contact Person", value: data?.contact },
                   { title: "Website", value: data?.website },
                ].filter((item) => !!item.value)}

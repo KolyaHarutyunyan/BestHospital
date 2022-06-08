@@ -49,6 +49,15 @@ export const AddInvoiceModalInputs = ({
       dispatch(invoiceActions.getInvoices());
    }, []);
 
+   useEffect(
+      () => () => {
+         if (pageIsChanging) {
+            handlePageChange(false);
+         }
+      },
+      [pageIsChanging]
+   );
+
    useEffect(() => {
       if (!!getInvoicesSuccess.length) {
          if (!pageIsChanging) setPage(1);

@@ -27,12 +27,17 @@ export const TableWrapper = ({
       handleType && handleType(ActiveInactiveStatus(selected));
    };
 
+   const currentStatuses =
+      addButtonText === "Add Funding Source"
+         ? enumValues.STATUSES.slice(0, 2)
+         : enumValues.STATUSES;
+
    return (
       <div>
          {buttonsTab && (
             <div className={classes.buttonsTabStyle}>
                <UserInputsDropdown
-                  dropdownOptions={enumValues.STATUSES}
+                  dropdownOptions={currentStatuses}
                   onPass={handleSelection}
                   selected={selectedStatus}
                />

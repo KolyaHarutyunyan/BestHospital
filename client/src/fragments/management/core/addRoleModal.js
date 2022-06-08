@@ -19,9 +19,11 @@ import {
 } from "@eachbase/utils";
 import { useDispatch } from "react-redux";
 import {
+   httpRequestsOnErrorsActions,
    httpRequestsOnSuccessActions,
    roleActions,
 } from "@eachbase/store";
+import { getRoleNameErrorText } from "./constants";
 
 export const AddRoleModal = ({ handleClose, permissionsList }) => {
    const classes = managementFragments();
@@ -37,6 +39,9 @@ export const AddRoleModal = ({ handleClose, permissionsList }) => {
 
    const success = FindSuccess("CREATE_ROLE");
    const loader = FindLoad("CREATE_ROLE");
+   const backError = FindError("CREATE_ROLE");
+
+   const roleNameErrorText = getRoleNameErrorText(error, backError);
 
    useEffect(() => {
       if (!!success.length) {
@@ -45,19 +50,34 @@ export const AddRoleModal = ({ handleClose, permissionsList }) => {
       }
    }, [success]);
 
+   useEffect(() => {
+      return () => {
+         dispatch(httpRequestsOnErrorsActions.removeError("CREATE_ROLE"));
+      };
+   }, []);
+
    function handleChange(ev) {
       setRoleName(ev.target.value);
-      if (error === "role") setError("");
+      if (error === "role" || (backError && backError.length)) setError("");
+      if (backError && backError.length) {
+         dispatch(httpRequestsOnErrorsActions.removeError(backError[0].type));
+      }
    }
 
    function changePermissions(ev) {
       setPermissions(ev);
-      if (error === "permissions") setError("");
+      if (error === "permissions" || (backError && backError.length)) setError("");
+      if (backError && backError.length) {
+         dispatch(httpRequestsOnErrorsActions.removeError(backError[0].type));
+      }
    }
 
    function changeDescription(ev) {
       setDescription(getValTillTenDig(ev.target.value, 100));
-      if (error === "description") setError("");
+      if (error === "description" || (backError && backError.length)) setError("");
+      if (backError && backError.length) {
+         dispatch(httpRequestsOnErrorsActions.removeError(backError[0].type));
+      }
    }
 
    function addRole() {
@@ -84,7 +104,7 @@ export const AddRoleModal = ({ handleClose, permissionsList }) => {
             : "";
          setError(errorText);
       }
-   };
+   }
 
    return (
       <div className={globalModalsClasses.smallModalWrapper}>
@@ -94,19 +114,21 @@ export const AddRoleModal = ({ handleClose, permissionsList }) => {
          <div className={globalModalsClasses.modalWrapperContent}>
             <p className={globalText.modalTitle}>Want to Add Role?</p>
             <p className={globalText.modalText}>
-               To add new role in the system, please set the name and assign
-               permissions to that role.
+               To add new role in the system, please set the name and assign permissions
+               to that role.
             </p>
-            <ValidationInput
-               onChange={handleChange}
-               typeError={error === "role" ? ErrorText.field : "" }
-               style={classes.input}
-               value={roleName}
-               variant={"outlined"}
-               name={"outlined"}
-               label={"Set Role Name*"}
-               type={"text"}
-            />
+            <div style={{ marginBottom: "8px" }}>
+               <ValidationInput
+                  onChange={handleChange}
+                  typeError={roleNameErrorText}
+                  style={classes.input}
+                  value={roleName}
+                  variant={"outlined"}
+                  name={"outlined"}
+                  label={"Set Role Name*"}
+                  type={"text"}
+               />
+            </div>
             <CheckboxesTags
                typeError={error === "permissions" ? ErrorText.selectField : ""}
                handleChange={changePermissions}

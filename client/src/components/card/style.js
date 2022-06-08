@@ -83,12 +83,19 @@ export const cardStyle = makeStyles(() => ({
       "& span:last-child": {
          fontSize: "14px",
          color: Colors.TextMiddleGray,
-         paddingLeft: "8px",
+         marginLeft: "8px",
          lineHeight: "36px",
          maxWidth: "50%",
          whiteSpace: "nowrap",
          overflow: "hidden",
          textOverflow: "ellipsis",
+      },
+      "& a": {
+         fontSize: "14px",
+         fontWeight: 400,
+         color: Colors.BackgroundBlue,
+         marginLeft: "8px",
+         textDecoration: "none",
       },
    },
    historyCardStyle: {

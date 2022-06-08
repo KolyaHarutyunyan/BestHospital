@@ -65,7 +65,9 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
    }
 
    function handleCreate() {
-      const unitsAreValid = inputs.min < inputs.max;
+      const unitsAreValid = +inputs.min < +inputs.max;
+      const unitsArePositive = +inputs.min >= 0 && +inputs.max >= 0;
+
       const serviceDataIsValid =
          isNotEmpty(inputs.name) &&
          isNotEmpty(inputs.cptCode) &&
@@ -73,6 +75,7 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
          isNotEmpty(inputs.min) &&
          isNotEmpty(inputs.max) &&
          unitsAreValid &&
+         unitsArePositive &&
          isNotEmpty(inputs.chargeRate) &&
          isNotEmpty(inputs.credential);
       if (serviceDataIsValid) {
@@ -107,6 +110,8 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
             ? "max"
             : !unitsAreValid
             ? ErrorText.equalityError("Min Unit", "Max Unit")
+            : !unitsArePositive
+            ? "positive"
             : !isNotEmpty(inputs.chargeRate)
             ? "chargeRate"
             : !isNotEmpty(inputs.credential)
@@ -132,8 +137,8 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
                      label={"Service*"}
                      handleSelect={handleChange}
                      value={inputs.name}
-                     typeError={error === "name" ? ErrorText.selectField : ""}
                      list={systemServices}
+                     typeError={error === "name" ? ErrorText.selectField : ""}
                   />
                   <div className={classes.displayCodeBlock}>
                      <p className={classes.displayCodeBlockText}>
@@ -193,6 +198,8 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
                               ? ErrorText.field
                               : error === ErrorText.equalityError("Min Unit", "Max Unit")
                               ? ErrorText.equalityError("Min Unit", "Max Unit")
+                              : error === "positive"
+                              ? "positive"
                               : ""
                         }
                         styles={{ width: "192px" }}

@@ -1,1 +1,6 @@
-export { EmailValidator, PasswordValidator, DomainNameValidator } from "./validations";
+export {
+   EmailValidator,
+   PasswordValidator,
+   DomainNameValidator,
+   URLValidator,
+} from "./validations";
