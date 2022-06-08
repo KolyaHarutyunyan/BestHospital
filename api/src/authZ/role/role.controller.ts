@@ -1,11 +1,19 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AuthNGuard } from '../../authN';
 import { Public } from '../../util/decorators';
 import { RoleService } from './role.service';
 import { CreateRoleDTO, RoleDTO, RolePermissionsDTO, RoleUpdateDTO } from './dto';
-import { AuthZGuard } from '../guards';
 import { summaries } from './role.constants';
+import { IRoleCount } from './interface';
 
 @Controller('authz/roles')
 @ApiTags('Authorization - Roles')
@@ -17,9 +25,11 @@ export class RoleController {
   @Get()
   @ApiOkResponse({ type: [RoleDTO] })
   @Public()
-  async getAllRoles(): Promise<RoleDTO[]> {
-    const roles = await this.roleService.getRoles();
-    return roles;
+  async getAllRoles(
+    @Query('skip') skip: number,
+    @Query('limit') limit: number,
+  ): Promise<IRoleCount> {
+    return await this.roleService.getRoles(skip, limit);
   }
 
   /** Get A single role with its ID */

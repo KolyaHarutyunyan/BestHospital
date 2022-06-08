@@ -1,1 +1,1 @@
-export { IRole } from './role.interface';
+export { IRole, IRoleCount } from './role.interface';

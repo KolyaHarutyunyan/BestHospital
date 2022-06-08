@@ -3,7 +3,7 @@ import { Model, Types } from 'mongoose';
 import { RoleSanitizer } from './interceptors';
 import { RoleModel } from './role.model';
 import { CreateRoleDTO, CreateRoleOptions, RoleDTO } from './dto';
-import { IRole } from './interface';
+import { IRole, IRoleCount } from './interface';
 import { IPermission } from '../permission';
 import { RoleUpdateDTO } from './dto';
 import { MongooseUtil } from '../../util';
@@ -21,9 +21,13 @@ export class RoleService {
   private mongooseUtil: MongooseUtil;
   /** Service API */
   /** Get All roles from the system */
-  async getRoles(): Promise<RoleDTO[]> {
-    const roles = await this.roleModel.find().populate('permissions');
-    return this.sanitizer.sanitizeMany(roles);
+  async getRoles(skip: number, limit: number): Promise<IRoleCount> {
+    const [roles, count] = await Promise.all([
+      this.roleModel.find().sort({ _id: -1 }).skip(skip).limit(limit).populate('permissions'),
+      this.roleModel.countDocuments(),
+    ]);
+    const sanRoles = this.sanitizer.sanitizeMany(roles);
+    return { roles: sanRoles, count };
   }
 
   /** Get a single role with permissions */
