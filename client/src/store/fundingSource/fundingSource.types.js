@@ -31,7 +31,7 @@ export const GET_FUNDING_SOURCE_HISTORIES_BY_ID = "GET_FUNDING_SOURCE_HISTORIES_
 export const GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS =
    "GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS";
 
-/** Edit State */
+/**Change fundingSource status */
 export const SET_STATUS = "SET_STATUS";
 
 /**Create fundingModifier */
@@ -40,5 +40,5 @@ export const CREATE_FUNDING_MODIFIER = "CREATE_FUNDING_MODIFIER";
 /**Edit fundingModifier */
 export const EDIT_FUNDING_MODIFIER = "EDIT_FUNDING_MODIFIER";
 
-/**Make fundingModifier Active */
+/**Change fundingModifier status */
 export const CHANGE_FUNDING_MODIFIER_STATUS = "CHANGE_FUNDING_MODIFIER_STATUS";

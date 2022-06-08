@@ -39,9 +39,11 @@ function* getGlobalNotes(action) {
 function* creteGlobalNote(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(noteService.createGlobalNoteService, action.payload.body);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: CREATE_GLOBAL_NOTES_SUCCESS,
          payload: res.data,

@@ -29,6 +29,7 @@ import {
    deleteClientAuthorizationFile,
    //end
    addFilesToClientAuth,
+   removeFilesFromClientAuth,
 } from "./client.action";
 
 export { clientReducer } from "./client.reducer";
@@ -68,4 +69,5 @@ export const clientActions = {
 
    // end
    addFilesToClientAuth,
+   removeFilesFromClientAuth,
 };

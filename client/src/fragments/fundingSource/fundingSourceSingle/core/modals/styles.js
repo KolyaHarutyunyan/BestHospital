@@ -31,7 +31,12 @@ export const foundingSourceModalStyle = makeStyles(() => ({
    },
    displayCodeBlock: {
       width: "100%",
-      padding: "31px 16px",
+      height: "120px",
+      padding: "0px 16px",
+      margin: "-4px 0px 16px",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
       background: Colors.BackgroundWater,
    },
    displayCodeBlockText: {
@@ -48,8 +53,6 @@ export const foundingSourceModalStyle = makeStyles(() => ({
       marginTop: 16,
    },
    iconsCursor: { cursor: "pointer" },
-   modifierInputsBoxStyle: { marginTop: "32px" },
-   modifierServiceBoxStyle: { marginTop: "16px" },
    foundingSourceModalsBodyBlock: {
       width: "100%",
       display: "flex",
@@ -61,6 +64,16 @@ export const foundingSourceModalStyle = makeStyles(() => ({
       "@media(max-width: 1280px)": { padding: "32px" },
       borderRadius: "0px 0px 8px 8px",
       backgroundColor: Colors.BackgroundWhite,
+   },
+   serviceInputsContainerStyle: {
+      width: "100%",
+      display: "flex",
+      marginTop: "16px",
+   },
+   leftInputsBoxStyle: { width: "400px" },
+   rightInputsBoxStyle: {
+      width: "400px",
+      marginLeft: "40px",
    },
 }));
 

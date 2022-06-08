@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { Colors, Images } from "@eachbase/utils";
+import { Colors } from "@eachbase/utils";
 
 export const fundingSourceSingleStyles = makeStyles(() => ({
    inputTextField: {
@@ -45,13 +45,16 @@ export const fundingSourceSingleStyles = makeStyles(() => ({
       marginLeft: 8,
    },
    modifierBoxStyle: {
-      maxWidth: "777px",
       width: "100%",
-      height: "541px",
-      padding: 24,
-      borderRadius: 8,
-      border: "1px solid #347AF080",
-      marginLeft: 16,
+      height: "100%",
+      padding: "48px 24px 24px 24px",
+      position: "relative",
+      "& > button": {
+         backgroundColor: Colors.BackgroundWater,
+         position: "absolute",
+         top: "8px",
+         right: "8px",
+      },
    },
    modifierTitleStyle: {
       fontSize: 24,
@@ -80,21 +83,6 @@ export const fundingSourceSingleStyles = makeStyles(() => ({
       textOverflow: "ellipsis",
       overflow: "hidden",
       height: 19,
-   },
-   fundindService: {
-      display: "flex",
-      justifyContent: "space-between",
-      marginTop: 50,
-   },
-   fundindServiceItems: {
-      marginTop: -25,
-      width: "100%",
-      height: "541px",
-      overflowY: "auto",
-      "@media(max-width: 1280px)": {
-         maxWidth: "600px",
-         "&.narrow": { maxWidth: "450px" },
-      },
    },
    searchContainer: {
       display: "flex",

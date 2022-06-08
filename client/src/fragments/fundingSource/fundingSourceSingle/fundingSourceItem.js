@@ -9,12 +9,12 @@ import {
 import {
    FundingSourceSingleGeneral,
    FundingSourceSingleHeader,
-   FundingSourceSingleServices,
    FundingSourceSingleNotes,
    FundingSourceSingleHistories,
 } from "./core";
 import { fundingSourceItemStyle } from "./styles";
 import { useParams } from "react-router-dom";
+import { ServiceTable } from "./core/common";
 
 const tabsLabels = [
    { label: "General Information" },
@@ -35,6 +35,7 @@ export const FundingSourceItem = ({}) => {
    );
    const globalNotes = useSelector((state) => state.note.notes);
    const globalServices = useSelector((state) => state.system.services);
+   const globalCredentials = useSelector((state) => state.system.credentials);
 
    const [open, setOpen] = useState(false);
    const [activeTab, setActiveTab] = useState(0);
@@ -51,10 +52,13 @@ export const FundingSourceItem = ({}) => {
       },
       {
          tabComponent: servicesData.length ? (
-            <FundingSourceSingleServices
-               data={servicesData}
-               globalServices={globalServices}
-            />
+            <div className={classes.fundindServiceItems}>
+               <ServiceTable
+                  services={servicesData}
+                  globalServices={globalServices}
+                  globalCredentials={globalCredentials}
+               />
+            </div>
          ) : (
             <NoItemText text="No Services Yet" />
          ),

@@ -19,6 +19,7 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
    const dispatch = useDispatch();
 
    const systemServices = useSelector((state) => state.system.services);
+   const systemCredentials = useSelector((state) => state.system.credentials);
 
    const success = FindSuccess("EDIT_FUNDING_SOURCE_SERVICE");
    const successCreate = FindSuccess("CREATE_FUNDING_SOURCE_SERVICE_BY_ID");
@@ -47,24 +48,33 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
    }, [successCreate]);
 
    const [error, setError] = useState("");
-   const [inputs, setInputs] = useState(info ? { ...info, name: info.serviceId } : {});
+   const [inputs, setInputs] = useState(
+      info ? { ...info, name: info.serviceId, credential: info.credentialId?._id } : {}
+   );
 
-   const sysServiceItem = systemServices.find(service => service.id === inputs?.name);
+   const sysServiceItem = systemServices.find((service) => service.id === inputs?.name);
 
    function handleChange(e) {
-      setInputs(
-         (prevState) => ({ ...prevState, [e.target.name]: e.target.value }),
-         error === e.target.name && setError("")
-      );
+      setInputs((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
+      if (
+         error === e.target.name ||
+         error === ErrorText.equalityError("Min Unit", "Max Unit")
+      ) {
+         setError("");
+      }
    }
 
    function handleCreate() {
+      const unitsAreValid = inputs.min < inputs.max;
       const serviceDataIsValid =
          isNotEmpty(inputs.name) &&
          isNotEmpty(inputs.cptCode) &&
          isNotEmpty(inputs.size) &&
          isNotEmpty(inputs.min) &&
-         isNotEmpty(inputs.max);
+         isNotEmpty(inputs.max) &&
+         unitsAreValid &&
+         isNotEmpty(inputs.chargeRate) &&
+         isNotEmpty(inputs.credential);
       if (serviceDataIsValid) {
          const data = {
             name: sysServiceItem?.name,
@@ -74,9 +84,11 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
             size: +inputs.size,
             min: +inputs.min,
             max: +inputs.max,
+            chargeRate: +inputs.chargeRate,
+            credentialId: inputs.credential,
          };
          if (!!info) {
-            dispatch(fundingSourceActions.editFoundingSourceServiceById(info?._id, data));
+            dispatch(fundingSourceActions.editFoundingSourceServiceById(info?.id, data));
          } else {
             dispatch(
                fundingSourceActions.createFoundingSourceServiceById(params.id, data)
@@ -93,6 +105,12 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
             ? "min"
             : !isNotEmpty(inputs.max)
             ? "max"
+            : !unitsAreValid
+            ? ErrorText.equalityError("Min Unit", "Max Unit")
+            : !isNotEmpty(inputs.chargeRate)
+            ? "chargeRate"
+            : !isNotEmpty(inputs.credential)
+            ? "credential"
             : "";
          setError(serviceDataErrorText);
       }
@@ -106,78 +124,107 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
          />
          <div className={classes.createFoundingSourceBody}>
             <p className={classes.fundingSourceModalsTitle}>Service</p>
-            <div className={classes.modifierServiceBoxStyle}>
-               <SelectInput
-                  name={"name"}
-                  type={"id"}
-                  label={"Service*"}
-                  handleSelect={handleChange}
-                  value={inputs.name}
-                  typeError={error === "name" ? ErrorText.field : ""}
-                  list={systemServices}
-               />
-               <div className={classes.displayCodeBlock}>
-                  <p className={classes.displayCodeBlockText}>
-                     Display Code:{" "}
-                     <span className={classes.displayCode}>
-                        {sysServiceItem !== null &&
-                        sysServiceItem?.displayCode !== "displayCode" &&
-                        inputs?.name !== ""
-                           ? sysServiceItem?.displayCode
-                           : "N/A"}
-                     </span>
-                  </p>
-                  <p className={classes.displayCodeBlockText} style={{ marginTop: 16 }}>
-                     Category:{" "}
-                     <span className={classes.displayCode}>
-                        {sysServiceItem !== null &&
-                        sysServiceItem?.category !== "category" &&
-                        inputs?.name !== ""
-                           ? sysServiceItem?.category
-                           : "N/A"}
-                     </span>
-                  </p>
-               </div>
-            </div>
-            <div className={classes.modifierInputsBoxStyle}>
-               <ValidationInput
-                  onChange={handleChange}
-                  value={inputs.cptCode}
-                  variant={"outlined"}
-                  type={"text"}
-                  label={"CPT Code*"}
-                  name={"cptCode"}
-                  typeError={error === "cptCode" && ErrorText.field}
-               />
-               <ValidationInput
-                  onChange={handleChange}
-                  value={inputs.size}
-                  variant={"outlined"}
-                  type={"number"}
-                  label={"Unit Size*"}
-                  name={"size"}
-                  typeError={error === "size" && ErrorText.field}
-               />
-               <div className={classes.foundingSourceModalsBodyBlock}>
-                  <ValidationInput
-                     onChange={handleChange}
-                     value={inputs.min}
-                     variant={"outlined"}
-                     type={"number"}
-                     label={"Min Unit*"}
-                     name={"min"}
-                     typeError={error === "min" && ErrorText.field}
-                     styles={{ width: "192px" }}
+            <div className={classes.serviceInputsContainerStyle}>
+               <div className={classes.leftInputsBoxStyle}>
+                  <SelectInput
+                     name={"name"}
+                     type={"id"}
+                     label={"Service*"}
+                     handleSelect={handleChange}
+                     value={inputs.name}
+                     typeError={error === "name" ? ErrorText.selectField : ""}
+                     list={systemServices}
                   />
+                  <div className={classes.displayCodeBlock}>
+                     <p className={classes.displayCodeBlockText}>
+                        Display Code:{" "}
+                        <span className={classes.displayCode}>
+                           {sysServiceItem !== null &&
+                           sysServiceItem?.displayCode !== "displayCode" &&
+                           inputs?.name !== ""
+                              ? sysServiceItem?.displayCode
+                              : "N/A"}
+                        </span>
+                     </p>
+                     <p
+                        className={classes.displayCodeBlockText}
+                        style={{ marginTop: 16 }}
+                     >
+                        Category:{" "}
+                        <span className={classes.displayCode}>
+                           {sysServiceItem !== null &&
+                           sysServiceItem?.category !== "category" &&
+                           inputs?.name !== ""
+                              ? sysServiceItem?.category
+                              : "N/A"}
+                        </span>
+                     </p>
+                  </div>
                   <ValidationInput
                      onChange={handleChange}
-                     value={inputs.max}
+                     value={inputs.cptCode}
+                     variant={"outlined"}
+                     type={"text"}
+                     label={"CPT Code*"}
+                     name={"cptCode"}
+                     typeError={error === "cptCode" ? ErrorText.field : ""}
+                  />
+               </div>
+               <div className={classes.rightInputsBoxStyle}>
+                  <ValidationInput
+                     onChange={handleChange}
+                     value={inputs.size}
                      variant={"outlined"}
                      type={"number"}
-                     label={"Max Unit*"}
-                     name={"max"}
-                     typeError={error === "max" && ErrorText.field}
-                     styles={{ width: "192px", marginLeft: 10 }}
+                     label={"Unit Size*"}
+                     name={"size"}
+                     typeError={error === "size" ? ErrorText.field : ""}
+                  />
+                  <div className={classes.foundingSourceModalsBodyBlock}>
+                     <ValidationInput
+                        onChange={handleChange}
+                        value={inputs.min}
+                        variant={"outlined"}
+                        type={"number"}
+                        label={"Min Unit*"}
+                        name={"min"}
+                        typeError={
+                           error === "min"
+                              ? ErrorText.field
+                              : error === ErrorText.equalityError("Min Unit", "Max Unit")
+                              ? ErrorText.equalityError("Min Unit", "Max Unit")
+                              : ""
+                        }
+                        styles={{ width: "192px" }}
+                     />
+                     <ValidationInput
+                        onChange={handleChange}
+                        value={inputs.max}
+                        variant={"outlined"}
+                        type={"number"}
+                        label={"Max Unit*"}
+                        name={"max"}
+                        typeError={error === "max" ? ErrorText.field : ""}
+                        styles={{ width: "192px", marginLeft: "16px" }}
+                     />
+                  </div>
+                  <ValidationInput
+                     onChange={handleChange}
+                     value={inputs.chargeRate}
+                     variant={"outlined"}
+                     type={"number"}
+                     label={"Charge Rate*"}
+                     name={"chargeRate"}
+                     typeError={error === "chargeRate" ? ErrorText.field : ""}
+                  />
+                  <SelectInput
+                     name={"credential"}
+                     type={"id"}
+                     label={"Select the credential*"}
+                     handleSelect={handleChange}
+                     value={inputs.credential}
+                     typeError={error === "credential" ? ErrorText.selectField : ""}
+                     list={systemCredentials}
                   />
                </div>
             </div>
@@ -188,8 +235,7 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
                   chancel={"Cancel"}
                   onCreate={handleCreate}
                   onClose={handleClose}
-                  buttonWidth={"192px"}
-                  createButnMargin={"16px"}
+                  buttonWidth={"400px"}
                />
             </div>
          </div>

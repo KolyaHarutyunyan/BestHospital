@@ -98,12 +98,8 @@ export const buttonsStyle = makeStyles(() => ({
       lineHeight: "19px",
       color: Colors.TextWhite,
       textTransform: "capitalize",
-      "&:hover": {
-         background: Backgrounds.blueHover,
-      },
-      "& img": {
-         marginRight: "8px",
-      },
+      "&:hover": { background: Backgrounds.blueHover },
+      "& img": { marginRight: "8px" },
       "& span": {
          fontSize: "14px",
          color: "white",
@@ -214,10 +210,10 @@ export const buttonsStyle = makeStyles(() => ({
       alignItems: "center",
       width: "24px",
       heigth: "24px",
-      "& img": { 
+      "& img": {
          width: "100%",
-         objectFit: "contain", 
-         marginLeft: "8px", 
+         objectFit: "contain",
+         marginLeft: "8px",
       },
    },
    // ** end **

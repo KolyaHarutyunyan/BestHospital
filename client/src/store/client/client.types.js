@@ -96,8 +96,11 @@ export const DELETE_CLIENT_AUTHORIZATION_FILE_SUCCESS =
 export const GET_CLIENT_HISTORIES = "GET_CLIENT_HISTORIES";
 export const GET_CLIENT_HISTORIES_SUCCESS = "GET_CLIENT_HISTORIES_SUCCESS";
 
-/**get  Auth Service Mo Check */
+/**get Auth Service Mo Check */
 export const GET_CLIENT_AUTHORIZATION_MOD_CHECK = "GET_CLIENT_AUTHORIZATION_MOD_CHECK";
 
-/**add  Files to Client Auth */
+/**add Files to Client Auth */
 export const ADD_FILES_TO_CLIENT_AUTH = "ADD_FILES_TO_CLIENT_AUTH";
+
+/**remove Files from Client Auth */
+export const REMOVE_FILES_FROM_CLIENT_AUTH = "REMOVE_FILES_FROM_CLIENT_AUTH";

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { checkFileType } from "./constants";
+import { checkFileType, checkImmediatelyUploadedFileType } from "./constants";
 import { getLimitedVal, Images, isNotEmpty } from "@eachbase/utils";
 import { imagesFileUploaderCoreStyle } from "./styles";
 import { DownloadLink, Loader } from "@eachbase/components";
@@ -7,11 +7,13 @@ import { DownloadLink, Loader } from "@eachbase/components";
 export const UploadedFileCard = ({
    file,
    deleteFile,
+   handleFilePass,
    uploadOnlyOneFile,
    changeNameAfterFileUpload,
    fileName,
    passCurrentFileName,
    uploadLoding,
+   uploadImmediately,
 }) => {
    const classes = imagesFileUploaderCoreStyle();
 
@@ -23,10 +25,16 @@ export const UploadedFileCard = ({
    }`;
 
    const _imageURL = file?.url || URL.createObjectURL(file);
-   console.log(file);
+
+   const typeDisplay = uploadImmediately
+      ? checkImmediatelyUploadedFileType(file?.name)
+      : checkFileType(file?.type);
+
    const [change, setChange] = useState(false);
    const [wasChanged, setWasChanged] = useState(false);
-   const [currentFileName, setCurrentFileName] = useState(fileName);
+   const [currentFileName, setCurrentFileName] = useState(
+      uploadImmediately ? file?.fileName : fileName
+   );
 
    const fileNameInputRef = useRef(null);
 
@@ -35,6 +43,9 @@ export const UploadedFileCard = ({
          fileNameInputRef.current.focus();
       } else {
          if (wasChanged) {
+            if (uploadImmediately) {
+               handleFilePass(file);
+            }
             passCurrentFileName(currentFileName);
          }
       }
@@ -52,15 +63,19 @@ export const UploadedFileCard = ({
       setChange(false);
    }
 
+   if (uploadLoding) {
+      return <Loader circleSize={30} />;
+   }
+
    return (
       <div className={classes.fileRow}>
          <div className={classes.fileDetailsBoxStyle}>
             <div className={classes.imageContainer}>
                <div>
-                  {checkFileType(file.type)}
+                  {typeDisplay}
                   <p className={classes.fileSize}>{file.size}</p>
                   <img
-                     onClick={() => deleteFile(file.name)}
+                     onClick={() => deleteFile(file)}
                      src={Images.removeIcon}
                      alt="removeIcon"
                      className={classes.removeIcon}
@@ -92,15 +107,15 @@ export const UploadedFileCard = ({
                )}
             </div>
          </div>
-         {uploadLoding ? (
+         {/* {uploadLoding ? (
             <Loader circleSize={20} />
-         ) : (
-            <DownloadLink
-               linkClassName={downloadLinkStyle}
-               linkHref={_imageURL}
-               linkDownload={true}
-            />
-         )}
+         ) : ( */}
+         <DownloadLink
+            linkClassName={downloadLinkStyle}
+            linkHref={_imageURL}
+            linkDownload={true}
+         />
+         {/* )} */}
       </div>
    );
 };

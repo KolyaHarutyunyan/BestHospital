@@ -6,11 +6,15 @@ import {
    ModalHeader,
 } from "@eachbase/components";
 import { foundingSourceModalStyle } from "./styles";
-import { ErrorText, FindLoad, FindSuccess, isNotEmpty } from "@eachbase/utils";
+import { ErrorText, FindError, FindLoad, FindSuccess, isNotEmpty } from "@eachbase/utils";
 import { useDispatch } from "react-redux";
-import { fundingSourceActions, httpRequestsOnSuccessActions } from "@eachbase/store";
+import {
+   fundingSourceActions,
+   httpRequestsOnErrorsActions,
+   httpRequestsOnSuccessActions,
+} from "@eachbase/store";
 import { useParams } from "react-router";
-import { getModifierTypes } from "../constants";
+import { getModifierNameErrorText, getModifierTypes } from "../constants";
 
 export const FundingSourceModifiersAdd = ({
    info,
@@ -33,6 +37,11 @@ export const FundingSourceModifiersAdd = ({
    const loader = !!info
       ? FindLoad("EDIT_FUNDING_MODIFIER")
       : FindLoad("CREATE_FUNDING_MODIFIER");
+   const backError = !!info
+      ? FindError("EDIT_FUNDING_MODIFIER")
+      : FindError("CREATE_FUNDING_MODIFIER");
+
+   const modifierNameErrorText = getModifierNameErrorText(error, backError);
 
    useEffect(() => {
       if (!!success.length) {
@@ -41,13 +50,23 @@ export const FundingSourceModifiersAdd = ({
       }
    }, [success]);
 
+   useEffect(() => {
+      return () => {
+         dispatch(httpRequestsOnErrorsActions.removeError("CREATE_FUNDING_MODIFIER"));
+         dispatch(httpRequestsOnErrorsActions.removeError("EDIT_FUNDING_MODIFIER"));
+      };
+   }, []);
+
    const modifierTypes = getModifierTypes();
 
    function handleChange(e) {
-      setInputs(
-         (prevState) => ({ ...prevState, [e.target.name]: e.target.value }),
-         error === e.target.name && setError("")
-      );
+      setInputs((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
+      if (error === e.target.name || (backError && backError.length)) {
+         setError("");
+      }
+      if (backError && backError.length) {
+         dispatch(httpRequestsOnErrorsActions.removeError(backError[0].type));
+      }
    }
 
    function handleCreate() {
@@ -59,34 +78,31 @@ export const FundingSourceModifiersAdd = ({
       if (modifierDataIsValid) {
          if (!!info) {
             const modifierDataEdit = {
-               modifiers: [
-                  {
-                     credentialId: inputs.credentialId,
-                     chargeRate: +inputs.chargeRate,
-                     name: inputs.name,
-                     type: +inputs.type,
-                     _id: info._id,
-                  },
-               ],
+               modifiers: {
+                  credentialId: inputs.credentialId,
+                  chargeRate: +inputs.chargeRate,
+                  name: inputs.name,
+                  type: +inputs.type,
+               },
             };
             dispatch(
                fundingSourceActions.editFundingModifier(
                   params.id,
-                  currentService?._id,
+                  currentService?.id,
+                  info._id,
                   modifierDataEdit
                )
             );
          } else {
             const modifierDataCreate = {
-               modifiers: [
-                  {
-                     credentialId: inputs.credentialId,
-                     chargeRate: +inputs.chargeRate,
-                     name: inputs.name,
-                     type: +inputs.type,
-                  },
-               ],
-               serviceId: currentService?._id,
+               modifier: {
+                  credentialId: inputs.credentialId,
+                  chargeRate: +inputs.chargeRate,
+                  name: inputs.name,
+                  type: +inputs.type,
+                  status: true,
+               },
+               serviceId: currentService?.id,
             };
             dispatch(
                fundingSourceActions.createFundingModifier(params.id, modifierDataCreate)
@@ -120,7 +136,7 @@ export const FundingSourceModifiersAdd = ({
                type={"text"}
                label={"Modifier Name*"}
                name={"name"}
-               typeError={error === "name" && ErrorText.field}
+               typeError={modifierNameErrorText}
             />
             <ValidationInput
                onChange={handleChange}
@@ -130,7 +146,6 @@ export const FundingSourceModifiersAdd = ({
                label={"Charge Rate*"}
                name={"chargeRate"}
                typeError={error === "chargeRate" && ErrorText.field}
-               disabled={!!info}
             />
             <SelectInput
                name={"credentialId"}
@@ -139,7 +154,7 @@ export const FundingSourceModifiersAdd = ({
                handleSelect={handleChange}
                value={inputs.credentialId}
                list={credentials}
-               typeError={error === "credentialId" ? ErrorText.field : ""}
+               typeError={error === "credentialId" ? ErrorText.selectField : ""}
             />
             <SelectInput
                name={"type"}
@@ -147,7 +162,7 @@ export const FundingSourceModifiersAdd = ({
                handleSelect={handleChange}
                value={inputs.type}
                language={modifierTypes}
-               typeError={error === "type" ? ErrorText.field : ""}
+               typeError={error === "type" ? ErrorText.selectField : ""}
             />
             <div className={classes.foundingSourceModalsBodyBlock}>
                <CreateChancel

@@ -1,7 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { TableCell } from "@material-ui/core";
-import { adminActions, fundingSourceActions, httpRequestsOnSuccessActions, systemActions } from "@eachbase/store";
+import {
+   adminActions,
+   fundingSourceActions,
+   httpRequestsOnSuccessActions,
+   systemActions,
+} from "@eachbase/store";
 import {
    StaffGeneral,
    StaffHistory,
@@ -160,7 +165,7 @@ export const StaffItem = ({ gen }) => {
 
    function handleOpenCloseNote(data) {
       // setNoteModalTypeInfo(data);
-      setOpenModal((prevState) => !prevState);
+      setOpenModal(false);
       setNoteModalInfo({
          right: "-1000px",
          created: "",

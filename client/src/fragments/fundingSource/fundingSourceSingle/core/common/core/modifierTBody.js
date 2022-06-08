@@ -29,7 +29,7 @@ export const ModifierTBody = ({ modifier, currentService, globalCredentials = []
          dispatch(
             fundingSourceActions.changeFundingModifierStatus(
                params.id,
-               currentService?._id,
+               currentService?.id,
                modifier?._id,
                _modifierStatus
             )
