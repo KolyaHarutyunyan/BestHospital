@@ -30,21 +30,35 @@ export const TableWrapperGeneralInfo = ({
    const dispatch = useDispatch();
    const [selectedStatus, setSelectedStatus] = useState("");
 
+   const _isForFundingSource =
+      path === "funding" && type === "GET_FUNDING_SOURCE_BY_ID_SUCCESS";
+
    const handleSelectionChange = (selected) => {
       if (selectedStatus === selected) return;
 
-      const upperCasedStatus = ActiveInactiveStatus(selected);
+      if (_isForFundingSource) {
+         const status =
+            selected === "Active" ? "active" : selected === "Inactive" ? "inActive" : "";
 
-      if (upperCasedStatus === "ACTIVE") {
-         dispatch(fundingSourceActions.setStatus(id, path, "active", null, type));
+         dispatch(fundingSourceActions.changeFundingSourceStatus(id, status));
       } else {
-         handleOpen(upperCasedStatus);
+         const upperCasedStatus = ActiveInactiveStatus(selected);
+
+         if (upperCasedStatus === "ACTIVE") {
+            dispatch(fundingSourceActions.setStatus(id, path, "active", null, type));
+         } else {
+            handleOpen(upperCasedStatus);
+         }
       }
    };
 
    useEffect(() => {
       setSelectedStatus(ActiveInactiveStatusReverse(status));
    }, [status]);
+
+   const currentStatuses = _isForFundingSource
+      ? enumValues.STATUSES.slice(0, 2)
+      : enumValues.STATUSES;
 
    return (
       <React.Fragment>
@@ -60,7 +74,7 @@ export const TableWrapperGeneralInfo = ({
             <div>
                {selectStatus && (
                   <UserInputsDropdown
-                     dropdownOptions={enumValues.STATUSES}
+                     dropdownOptions={currentStatuses}
                      onPass={handleSelectionChange}
                      selected={selectedStatus}
                   />

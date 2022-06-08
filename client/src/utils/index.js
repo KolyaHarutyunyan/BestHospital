@@ -10,7 +10,12 @@ export {
    globalModals,
 } from "./globalStylesUi";
 export { Images } from "./images";
-export { EmailValidator, PasswordValidator, DomainNameValidator } from "./validations";
+export {
+   EmailValidator,
+   PasswordValidator,
+   DomainNameValidator,
+   URLValidator,
+} from "./validations";
 export { superAdminRouters } from "./routers";
 export {
    RoleHooks,
@@ -38,6 +43,7 @@ export {
    useWidth,
    hooksForTable,
    ImgUploader,
+   manageType,
 } from "./hooks";
 export { ErrorText } from "./errorTexts";
 export { CountryList } from "./jsons";

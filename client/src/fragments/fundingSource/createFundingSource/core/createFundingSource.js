@@ -16,6 +16,8 @@ import {
    FindSuccess,
    getPhoneErrorText,
    isNotEmpty,
+   manageType,
+   URLValidator,
 } from "@eachbase/utils";
 import {
    fundingSourceActions,
@@ -23,7 +25,12 @@ import {
    httpRequestsOnSuccessActions,
 } from "@eachbase/store";
 import { FindError } from "@eachbase/utils";
-import { getPhoneError, getEmailError, checkWebsite } from "../constant";
+import {
+   getPhoneError,
+   getEmailError,
+   checkWebsite,
+   fundingSourceTypes,
+} from "../constant";
 
 export const CreateFundingSource = ({ handleClose, info }) => {
    const classes = createFoundingSourceStyle();
@@ -31,7 +38,9 @@ export const CreateFundingSource = ({ handleClose, info }) => {
    const dispatch = useDispatch();
 
    const [error, setError] = useState("");
-   const [inputs, setInputs] = useState(info ? { ...info } : {});
+   const [inputs, setInputs] = useState(
+      info ? { ...info, type: manageType(info.type) } : {}
+   );
    const [fullAddress, setFullAddress] = useState(
       info && info.address ? info.address.formattedAddress : ""
    );
@@ -97,7 +106,7 @@ export const CreateFundingSource = ({ handleClose, info }) => {
 
       const emailIsValid = isNotEmpty(inputs.email) && EmailValidator.test(inputs.email);
       const websiteIsValid = isNotEmpty(inputs.website)
-         ? DomainNameValidator.test(inputs.website)
+         ? URLValidator.test(checkWebsite(inputs.website))
          : true;
 
       const dataIsValid =
@@ -114,7 +123,7 @@ export const CreateFundingSource = ({ handleClose, info }) => {
             name: inputs.name,
             email: inputs.email,
             phoneNumber: inputs.phoneNumber,
-            type: inputs.type,
+            type: manageType(inputs.type),
             contact: inputs.contact,
             website: checkWebsite(inputs.website),
             address: fullAddress,
@@ -148,8 +157,6 @@ export const CreateFundingSource = ({ handleClose, info }) => {
          setError(errorText);
       }
    };
-
-   const list = [{ name: "first" }, { name: "second" }];
 
    const handleAddressChange = (selectedAddress) => {
       setEnteredAddress(selectedAddress);
@@ -215,7 +222,7 @@ export const CreateFundingSource = ({ handleClose, info }) => {
                      label={"Type*"}
                      handleSelect={handleChange}
                      value={inputs.type}
-                     list={list}
+                     language={fundingSourceTypes}
                      typeError={error === "type" ? ErrorText.field : ""}
                   />
                   <ValidationInput

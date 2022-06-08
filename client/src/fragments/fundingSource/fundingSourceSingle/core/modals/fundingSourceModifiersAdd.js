@@ -6,7 +6,14 @@ import {
    ModalHeader,
 } from "@eachbase/components";
 import { foundingSourceModalStyle } from "./styles";
-import { ErrorText, FindError, FindLoad, FindSuccess, isNotEmpty } from "@eachbase/utils";
+import {
+   ErrorText,
+   FindError,
+   FindLoad,
+   FindSuccess,
+   isNotEmpty,
+   manageType,
+} from "@eachbase/utils";
 import { useDispatch } from "react-redux";
 import {
    fundingSourceActions,
@@ -14,7 +21,7 @@ import {
    httpRequestsOnSuccessActions,
 } from "@eachbase/store";
 import { useParams } from "react-router";
-import { getModifierNameErrorText, getModifierTypes } from "../constants";
+import { getModifierNameErrorText, modifierTypes } from "../constants";
 
 export const FundingSourceModifiersAdd = ({
    info,
@@ -29,7 +36,9 @@ export const FundingSourceModifiersAdd = ({
    const dispatch = useDispatch();
 
    const [error, setError] = useState("");
-   const [inputs, setInputs] = useState(!!info ? { ...info, type: info.type + "" } : {});
+   const [inputs, setInputs] = useState(
+      !!info ? { ...info, type: manageType(info.type) } : {}
+   );
 
    const success = !!info
       ? FindSuccess("EDIT_FUNDING_MODIFIER")
@@ -56,8 +65,6 @@ export const FundingSourceModifiersAdd = ({
          dispatch(httpRequestsOnErrorsActions.removeError("EDIT_FUNDING_MODIFIER"));
       };
    }, []);
-
-   const modifierTypes = getModifierTypes();
 
    function handleChange(e) {
       setInputs((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
@@ -99,7 +106,7 @@ export const FundingSourceModifiersAdd = ({
                   credentialId: inputs.credentialId,
                   chargeRate: +inputs.chargeRate,
                   name: inputs.name,
-                  type: +inputs.type,
+                  type: manageType(inputs.type),
                   status: true,
                },
                serviceId: currentService?.id,

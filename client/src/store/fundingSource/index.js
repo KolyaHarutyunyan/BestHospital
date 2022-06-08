@@ -12,6 +12,7 @@ import {
    createFundingModifier,
    editFundingModifier,
    changeFundingModifierStatus,
+   changeFundingSourceStatus,
 } from "./fundingSource.action";
 
 export { fundingSourceReducer } from "./fundingSource.reducer";
@@ -31,4 +32,5 @@ export const fundingSourceActions = {
    createFundingModifier,
    editFundingModifier,
    changeFundingModifierStatus,
+   changeFundingSourceStatus,
 };

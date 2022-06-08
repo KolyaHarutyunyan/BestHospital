@@ -55,4 +55,7 @@ export const authService = {
             auth: true,
          }
       ),
+
+   setStatusService: (id, status) =>
+      axios.patch(`/funding/${id}/${status}`, null, { auth: true }),
 };

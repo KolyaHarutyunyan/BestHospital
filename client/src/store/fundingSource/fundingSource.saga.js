@@ -17,6 +17,7 @@ import {
    EDIT_FUNDING_MODIFIER,
    CHANGE_FUNDING_MODIFIER_STATUS,
    SET_STATUS,
+   CHANGE_FUNDING_SOURCE_STATUS,
 } from "./fundingSource.types";
 import { httpRequestsOnErrorsActions } from "../http_requests_on_errors";
 import { httpRequestsOnLoadActions } from "../http_requests_on_load";
@@ -278,6 +279,28 @@ function* changeFundingModifierStatus(action) {
    }
 }
 
+function* setStatus(action) {
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
+   try {
+      const res = yield call(
+         authService.setStatusService,
+         action.payload.id,
+         action.payload.status
+      );
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+      yield put({
+         type: GET_FUNDING_SOURCE_BY_ID_SUCCESS,
+         payload: res.data,
+      });
+   } catch (err) {
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+   }
+}
+
 export const watchFundingSource = function* watchFundingSourceSaga() {
    yield takeLatest(CREATE_FUNDING_SOURCE, createFundingSource);
    yield takeLatest(EDIT_FUNDING_SOURCE, editFundingSource);
@@ -291,4 +314,5 @@ export const watchFundingSource = function* watchFundingSourceSaga() {
    yield takeLatest(CREATE_FUNDING_MODIFIER, createFundingModifier);
    yield takeLatest(EDIT_FUNDING_MODIFIER, editFundingModifier);
    yield takeLatest(CHANGE_FUNDING_MODIFIER_STATUS, changeFundingModifierStatus);
+   yield takeLatest(CHANGE_FUNDING_SOURCE_STATUS, setStatus);
 };
