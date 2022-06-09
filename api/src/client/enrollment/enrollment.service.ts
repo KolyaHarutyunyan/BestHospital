@@ -46,7 +46,6 @@ export class EnrollmentService {
         funderId,
         primary: dto.primary,
         startDate: dto.startDate,
-        terminationDate: dto.terminationDate,
       });
       await enrollment.save();
       if (enrollment.primary) {
@@ -97,8 +96,6 @@ export class EnrollmentService {
       await this.fundingService.findById(funderId);
       enrollment.funderId = funderId;
       if (dto.startDate) enrollment.startDate = dto.startDate;
-      if (dto.terminationDate || dto.terminationDate == null)
-        enrollment.terminationDate = dto.terminationDate;
       if (dto.primary) {
         const findEnrollment = await this.model.findOne({ clientId, primary: true });
         if (findEnrollment !== null && enrollment.id != findEnrollment.id) {
@@ -120,6 +117,13 @@ export class EnrollmentService {
       this.mongooseUtil.checkDuplicateKey(e, 'Client already exists');
       throw e;
     }
+  }
+  /** terminate enrollment */
+  async terminate(_id: string): Promise<EnrollmentDTO> {
+    const enrollment = await this.model.findById({ _id });
+    this.checkEnrollment(enrollment);
+    enrollment.terminationDate = new Date(Date.now());
+    return this.sanitizer.sanitize(enrollment);
   }
   //remove the enrollment
   // async remove(_id: string): Promise<string> {

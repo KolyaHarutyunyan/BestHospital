@@ -10,8 +10,4 @@ export class CreateEnrollmentDTO {
   @IsNotEmpty()
   @IsDateString()
   startDate: Date;
-  @ApiProperty()
-  @IsOptional()
-  @IsDateString()
-  terminationDate: Date;
 }
