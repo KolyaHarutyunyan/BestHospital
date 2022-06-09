@@ -24,7 +24,11 @@ function* getAvailabilitySchedule(action) {
       });
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+      if (err?.data?.message === "Internal server error") {
+         yield put(
+            httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message)
+         );
+      }
       yield put({
          type: GET_AVAILABILITY_SCHEDULE_GLOBAL_SUCCESS,
          payload: [],

@@ -1,27 +1,37 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Paper, Table, TableBody, TableContainer } from "@material-ui/core";
 import { FundingSourceTableBody, FundingSourceTableHead } from "./core";
-import { FindLoad, useGlobalStyles } from "@eachbase/utils";
+import { PaginationContext, useGlobalStyles } from "@eachbase/utils";
 import { Loader, NoItemText, PaginationItem } from "@eachbase/components";
 import { fundingSourceActions } from "@eachbase/store";
 
-export const FundingSourceTable = ({ status, handleGetPage }) => {
+const loaderContainerStyle = {
+   minHeight: "695px",
+   display: "flex",
+   justifyContent: "center",
+   alignItems: "center",
+};
+
+export const FundingSourceTable = ({
+   status,
+   handleGetPage,
+   fundingSourceLoader,
+   page,
+}) => {
    const globalStyle = useGlobalStyles();
-   const [page, setPage] = useState(1);
    const dispatch = useDispatch();
 
    const { fundingSourceList } = useSelector((state) => ({
       fundingSourceList: state.fundingSource.fundingSourceList,
    }));
 
-   const loader = FindLoad("GET_FUNDING_SOURCE");
+   const { handlePageChange, pageIsChanging } = useContext(PaginationContext);
 
    const changePage = (number) => {
       if (page === number) return;
-
+      handlePageChange(true);
       let start = number > 1 ? number - 1 + "0" : 0;
-      setPage(number);
       dispatch(
          fundingSourceActions.getFundingSource({
             status: status,
@@ -29,42 +39,45 @@ export const FundingSourceTable = ({ status, handleGetPage }) => {
             end: 10,
          })
       );
-      handleGetPage(start);
+      handleGetPage(number);
    };
 
    return (
       <div className={globalStyle.tableWrapper}>
          <Paper className={globalStyle.tableBack}>
             {!!fundingSourceList?.funders?.length ? (
-               <>
-                  <TableContainer
-                     style={{
-                        height: `calc(100vh - ${
-                           fundingSourceList?.funders?.length ? "250px" : "150px"
-                        } )`,
-                     }}
-                     className={globalStyle.tableContainer}
-                     component={Paper}
-                  >
-                     <Table
-                        stickyHeader
-                        className={globalStyle.table}
-                        size="small"
-                        aria-label="a dense table"
+               <div>
+                  {!!fundingSourceLoader && pageIsChanging ? (
+                     <div style={loaderContainerStyle}>
+                        <Loader circleSize={50} />
+                     </div>
+                  ) : (
+                     <TableContainer
+                        style={{
+                           height: `calc(100vh - ${
+                              fundingSourceList?.funders?.length ? "250px" : "150px"
+                           } )`,
+                        }}
+                        className={globalStyle.tableContainer}
+                        component={Paper}
                      >
-                        <FundingSourceTableHead />
-                        {loader.length ? (
-                           <Loader />
-                        ) : (
+                        <Table
+                           stickyHeader
+                           className={globalStyle.table}
+                           size="small"
+                           aria-label="a dense table"
+                        >
+                           <FundingSourceTableHead />
+
                            <TableBody>
                               {fundingSourceList?.funders &&
                                  fundingSourceList.funders.map((item, i) => (
                                     <FundingSourceTableBody data={item} key={i} />
                                  ))}
                            </TableBody>
-                        )}
-                     </Table>
-                  </TableContainer>
+                        </Table>
+                     </TableContainer>
+                  )}
                   <PaginationItem
                      listLength={fundingSourceList?.funders?.length}
                      page={page}
@@ -72,7 +85,7 @@ export const FundingSourceTable = ({ status, handleGetPage }) => {
                      count={fundingSourceList?.count}
                      entries={fundingSourceList?.funders?.length}
                   />
-               </>
+               </div>
             ) : (
                <NoItemText text={"No Funding Source Yet"} />
             )}

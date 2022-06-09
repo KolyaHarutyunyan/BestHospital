@@ -25,7 +25,7 @@ export const FundingSourceSinglePTModifiers = ({
          <div className={classes.modifierBoxStyle}>
             <CloseButton handleCLic={onClose} />
             <div className={classes.modifierTitleBoxStyle}>
-               <p className={classes.modifierTitleStyle}>{`${title} Charge Table`}</p>
+               <p className={classes.modifierTitleStyle}>{`${title} Modifiers`}</p>
                <AddButtonLight
                   onAddButnLightClick={() => setModalIsOpen(true)}
                   addButnLightInnerText={"add modifier"}

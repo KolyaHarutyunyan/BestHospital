@@ -35,6 +35,15 @@ export const InvoicePayments = () => {
       dispatch(clientActions.getClients());
    }, []);
 
+   useEffect(
+      () => () => {
+         if (pageIsChanging) {
+            handlePageChange(false);
+         }
+      },
+      [pageIsChanging]
+   );
+
    useEffect(() => {
       if (!!success.length) {
          if (!pageIsChanging) setPage(1);

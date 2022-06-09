@@ -21,10 +21,6 @@ export function getHeaderTitlesForNote() {
    ];
 }
 
-export function getModifierTypes() {
-   return [0, 1];
-}
-
 export const getModifierNameErrorText = (error, backError) => {
    if (error === "name") {
       return ErrorText.field;

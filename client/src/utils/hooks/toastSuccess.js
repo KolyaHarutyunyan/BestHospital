@@ -116,7 +116,7 @@ export const ToastSuccess = (success) => {
          ? "Successfully deleted Mileage"
          : success === "IS_CLINICIAN"
          ? "Successfully changed Clinician"
-         : success === "SET_STATUS"
+         : success === "SET_STATUS" || success === "CHANGE_FUNDING_SOURCE_STATUS"
          ? "Successfully changed Status"
          : success === "CREATE_PLACE_GLOBAL"
          ? "Successfully created Place"

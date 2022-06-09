@@ -51,3 +51,31 @@ export const manageStatus = (status) => {
          return status;
    }
 };
+
+export const manageType = (type) => {
+   switch (type) {
+      case "DIRECT":
+         return "Direct";
+      case "INDIRECT":
+         return "Indirect";
+      case "PRIVATE":
+         return "Private Insurance";
+      case "PUBLIC":
+         return "Public Insurance";
+      case "SCHOOL":
+         return "School";
+      case "Direct":
+         return "DIRECT";
+      case "Indirect":
+         return "INDIRECT";
+      case "Private Insurance":
+         return "PRIVATE";
+      case "Public Insurance":
+         return "PUBLIC";
+      case "School":
+         return "SCHOOL";
+
+      default:
+         return type;
+   }
+};

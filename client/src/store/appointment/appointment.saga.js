@@ -73,7 +73,11 @@ function* getAppointmentSaga(action) {
          payload: [],
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+      if (err?.data?.message === "Internal server error") {
+         yield put(
+            httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message)
+         );
+      }
    }
 }
 
@@ -96,7 +100,11 @@ function* getAppointmentFilterSaga(action) {
          payload: [],
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+      if (err?.data?.message === "Internal server error") {
+         yield put(
+            httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message)
+         );
+      }
    }
 }
 
@@ -115,7 +123,11 @@ function* getAppointmentByIdSaga(action) {
       });
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+      if (err?.data?.message === "Internal server error") {
+         yield put(
+            httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message)
+         );
+      }
       // yield put({
       //     type: GET_GLOBAL_NOTES_SUCCESS,
       //     payload: [],

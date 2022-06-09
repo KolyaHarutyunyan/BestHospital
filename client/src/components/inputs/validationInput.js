@@ -55,6 +55,13 @@ export const ValidationInput = ({
       }
    };
 
+   const changeInput = (event) => {
+      if (+event.target.value < 0) {
+         event.target.value = "";
+      }
+      onChange(event);
+   };
+
    return (
       <Fragment>
          <div className={style ? style : classes.SignInInput}>
@@ -86,7 +93,7 @@ export const ValidationInput = ({
                onWheel={() => document.activeElement.blur()}
                disabled={disabled}
                maxLength={Length}
-               onChange={(ev) => onChange(ev)}
+               onChange={changeInput}
                onFocus={() => setValidEmail(false)}
                onBlur={(e) => chechValid(e)}
                fullWidth

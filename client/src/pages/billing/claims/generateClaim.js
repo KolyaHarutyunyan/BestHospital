@@ -25,6 +25,15 @@ export const GenerateClaim = () => {
       dispatch(billActions.getBills());
    }, []);
 
+   useEffect(
+      () => () => {
+         if (pageIsChanging) {
+            handlePageChange(false);
+         }
+      },
+      [pageIsChanging]
+   );
+
    useEffect(() => {
       if (!!success.length) {
          if (!pageIsChanging) setPage(1);

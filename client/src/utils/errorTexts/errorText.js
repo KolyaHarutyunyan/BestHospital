@@ -11,6 +11,6 @@ export const ErrorText = {
    phoneError: "Phone number must be a valid phone number",
    emailError: "User already exists",
    equalityError: (min, max) => `${min} must be smaller than ${max}`,
-   websiteError: "invalid website",
+   websiteError: "Invalid Website",
    existenceError: (value = "") => `${value} already exists`,
 };

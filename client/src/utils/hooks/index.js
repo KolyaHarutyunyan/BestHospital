@@ -17,7 +17,7 @@ export { makeEnum } from "./makeEnum";
 export { transformPermission } from "./transformPermissions";
 export { getValTillTenDig } from "./getValTillTenDig";
 export { getLimitedVal } from "./getLimitedVal";
-export { manageStatus } from "./manageStatus";
+export { manageStatus, manageType } from "./manageStatus";
 export { getMenuTitle } from "./getMenuTitle";
 export { makeCapitalize } from "./makeCapitalize";
 export { useWidth } from "./useWidth";

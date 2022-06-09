@@ -66,7 +66,11 @@ function* getCredentialGlobal(action) {
          payload: "",
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+      if (err?.data?.message === "Internal server error") {
+         yield put(
+            httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message)
+         );
+      }
    }
 }
 
@@ -141,7 +145,11 @@ function* getServices(action) {
          payload: "",
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+      if (err?.data?.message === "Internal server error") {
+         yield put(
+            httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message)
+         );
+      }
    }
 }
 
@@ -214,7 +222,11 @@ function* getDepartments(action) {
          payload: "",
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+      if (err?.data?.message === "Internal server error") {
+         yield put(
+            httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message)
+         );
+      }
    }
 }
 
@@ -289,7 +301,11 @@ function* getJobs(action) {
          payload: "",
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+      if (err?.data?.message === "Internal server error") {
+         yield put(
+            httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message)
+         );
+      }
    }
 }
 
@@ -362,7 +378,11 @@ function* getPlaces(action) {
          payload: "",
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+      if (err?.data?.message === "Internal server error") {
+         yield put(
+            httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message)
+         );
+      }
    }
 }
 

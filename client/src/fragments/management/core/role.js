@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { managementFragments } from "./style";
 import {
    DeleteButton,
@@ -10,19 +10,29 @@ import {
    NoYet,
    PaginationItem,
 } from "@eachbase/components";
-import { FindLoad, FindSuccess, Images } from "@eachbase/utils";
+import { FindLoad, FindSuccess, Images, PaginationContext } from "@eachbase/utils";
 import { httpRequestsOnSuccessActions, roleActions } from "@eachbase/store";
 import { useDispatch, useSelector } from "react-redux";
 import { SlicedText } from "@eachbase/components";
 
-export const Role = ({ key, roleInfo = [] }) => {
+export const Role = ({
+   key,
+   roleInfo = [],
+   handleGetPage,
+   page,
+   roleLoader,
+   rolesCount,
+}) => {
+   const classes = managementFragments();
+
    const dispatch = useDispatch();
+
+   const { handlePageChange, pageIsChanging } = useContext(PaginationContext);
+
    const [open, setOpen] = useState(false);
    const [role, setRole] = useState("");
    const [activeRole, setActiveRole] = useState("");
    const [title, setTitle] = useState("");
-   const [page, setPage] = useState(1);
-   const classes = managementFragments();
 
    const { httpOnLoad } = useSelector((state) => ({
       httpOnLoad: state.httpOnLoad,
@@ -35,8 +45,11 @@ export const Role = ({ key, roleInfo = [] }) => {
    };
 
    const changePage = (number) => {
+      if (page === number) return;
+      handlePageChange(true);
       let start = number > 1 ? number - 1 + "0" : 0;
-      setPage(number);
+      dispatch(roleActions.getRole({ limit: 10, skip: start }));
+      handleGetPage(number);
    };
 
    // const searchRole = (ev) => {
@@ -63,6 +76,10 @@ export const Role = ({ key, roleInfo = [] }) => {
          dispatch(httpRequestsOnSuccessActions.removeSuccess("DELETE_ROLE"));
       }
    }, [success]);
+
+   if (roleLoader && pageIsChanging) {
+      return <Loader circleSize={50} />;
+   }
 
    if (!!httpOnLoad.length && httpOnLoad[0] === "GET_PERMISSIONS")
       return <Loader style={"relative"} />;
@@ -120,7 +137,7 @@ export const Role = ({ key, roleInfo = [] }) => {
                   page={page}
                   listLength={roleInfo.length}
                   entries={roleInfo.length}
-                  count={roleInfo.length}
+                  count={rolesCount}
                   handleReturn={(number) => changePage(number)}
                />
             </div>

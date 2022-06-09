@@ -49,6 +49,15 @@ export const AddClaimModalInputs = ({
       dispatch(claimActions.getClaims());
    }, []);
 
+   useEffect(
+      () => () => {
+         if (pageIsChanging) {
+            handlePageChange(false);
+         }
+      },
+      [pageIsChanging]
+   );
+
    useEffect(() => {
       if (!!getClaimsSuccess.length) {
          if (!pageIsChanging) setPage(1);
