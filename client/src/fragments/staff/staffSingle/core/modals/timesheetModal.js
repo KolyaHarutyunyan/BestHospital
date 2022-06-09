@@ -165,7 +165,7 @@ export const TimesheetModal = ({ handleClose, info, allPaycodes }) => {
                      handleSelect={handleChange}
                      value={payCode ? payCode.name : ""}
                      list={paycodes}
-                     typeError={error === "payCode" ? ErrorText.field : ""}
+                     typeError={error === "payCode" ? ErrorText.selectField : ""}
                   />
                   <div className={classes.displayCodeBlock}>
                      <div className={classes_v2.paycodeBox}>

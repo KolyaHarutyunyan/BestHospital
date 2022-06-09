@@ -1,3 +1,5 @@
+import { makeCapitalize } from "@eachbase/utils";
+
 export const headerTitles = [
    {
       title: "Service Code",
@@ -40,9 +42,9 @@ export const clientEnrollmentHeaderTitles = [
 
 export function getGeneralInfo(info) {
    return [
-      { title: "First Name", value: info?.firstName },
-      { title: "Middle Name", value: info?.middleName },
-      { title: "Last Name", value: info?.lastName },
+      { title: "First Name", value: makeCapitalize(info?.firstName) },
+      { title: "Middle Name", value: makeCapitalize(info?.middleName) },
+      { title: "Last Name", value: makeCapitalize(info?.lastName) },
       { title: "Code", value: info?.code },
    ].filter((item) => !!item.value);
 }

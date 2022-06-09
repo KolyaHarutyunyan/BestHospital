@@ -24,7 +24,7 @@ export const ClientSingle = () => {
       dispatch(clientActions.getClientsAuthorizations(params.id));
       dispatch(noteActions.getGlobalNotes(params.id, "Client"));
       dispatch(availabilityScheduleActions.getAvailabilitySchedule(params.id));
-      dispatch(fundingSourceActions.getFundingSource());
+      dispatch(fundingSourceActions.getFundingSource({ status: "ACTIVE" }));
       dispatch(fundingSourceActions.getFundingSourceHistoriesById("Client"));
    }, []);
 

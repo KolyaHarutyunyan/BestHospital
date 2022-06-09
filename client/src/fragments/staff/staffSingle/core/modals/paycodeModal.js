@@ -140,7 +140,7 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
                      value={inputs.payCodeTypeId}
                      type={"id"}
                      list={globalPayCodes}
-                     typeError={error === "payCodeTypeId" ? ErrorText.field : ""}
+                     typeError={error === "payCodeTypeId" ? ErrorText.selectField : ""}
                      disabled={!!info}
                   />
                   <div className={classes.displayCodeBlock}>

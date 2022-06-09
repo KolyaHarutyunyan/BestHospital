@@ -110,7 +110,7 @@ export const Credentials = ({ removeItem, openModal, globalCredentials }) => {
                handleSelect={handleChange}
                value={inputs.type}
                list={credentialsList}
-               typeError={error === "type" ? ErrorText.field : ""}
+               typeError={error === "type" ? ErrorText.selectField : ""}
             />
             <AddButton
                loader={!!loader.length}

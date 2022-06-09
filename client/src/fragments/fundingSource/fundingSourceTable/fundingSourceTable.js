@@ -6,13 +6,6 @@ import { PaginationContext, useGlobalStyles } from "@eachbase/utils";
 import { Loader, NoItemText, PaginationItem } from "@eachbase/components";
 import { fundingSourceActions } from "@eachbase/store";
 
-const loaderContainerStyle = {
-   minHeight: "695px",
-   display: "flex",
-   justifyContent: "center",
-   alignItems: "center",
-};
-
 export const FundingSourceTable = ({
    status,
    handleGetPage,
@@ -35,8 +28,8 @@ export const FundingSourceTable = ({
       dispatch(
          fundingSourceActions.getFundingSource({
             status: status,
-            start: start,
-            end: 10,
+            skip: start,
+            limit: 10,
          })
       );
       handleGetPage(number);
@@ -48,7 +41,7 @@ export const FundingSourceTable = ({
             {!!fundingSourceList?.funders?.length ? (
                <div>
                   {!!fundingSourceLoader && pageIsChanging ? (
-                     <div style={loaderContainerStyle}>
+                     <div className={globalStyle.loaderContainerStyle}>
                         <Loader circleSize={50} />
                      </div>
                   ) : (

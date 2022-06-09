@@ -42,7 +42,9 @@ export const AddContact = ({ handleClose, info }) => {
       info ? info.address?.formattedAddress : ""
    );
    const classes = createClientStyle();
+
    const dispatch = useDispatch();
+
    const params = useParams();
 
    const success = info

@@ -141,7 +141,7 @@ export const AddEnrollment = ({ handleClose, info }) => {
                      handleSelect={handleChange}
                      value={inputs?.funding}
                      list={fSelect ? fSelect : []}
-                     typeError={error === "funding" ? ErrorText.field : ""}
+                     typeError={error === "funding" ? ErrorText.selectField : ""}
                   />
                   <ValidationInput
                      variant={"outlined"}

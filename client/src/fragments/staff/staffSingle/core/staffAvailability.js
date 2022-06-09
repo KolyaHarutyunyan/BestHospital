@@ -7,9 +7,9 @@ export const StaffAvailability = ({ onModel, availabilityData, staffGeneral }) =
    const classes = serviceSingleStyles();
 
    const generalInfo = [
-      { title: "First Name", value: staffGeneral?.firstName },
-      { title: "Middle Name", value: staffGeneral?.middleName },
-      { title: "Last Name", value: staffGeneral?.lastName },
+      { title: "First Name", value: makeCapitalize(staffGeneral?.firstName) },
+      { title: "Middle Name", value: makeCapitalize(staffGeneral?.middleName) },
+      { title: "Last Name", value: makeCapitalize(staffGeneral?.lastName) },
       { title: "Primary Email", value: staffGeneral?.email },
       { title: "Secondary Email", value: staffGeneral?.secondaryEmail },
       { title: "Primary Phone Number", value: staffGeneral?.phone },

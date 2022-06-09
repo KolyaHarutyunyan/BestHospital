@@ -18,6 +18,7 @@ import {
    FindSuccess,
    Images,
    isNotEmpty,
+   makeCapitalize,
 } from "@eachbase/utils";
 import { SelectInputPlaceholder } from "@eachbase/components";
 import {
@@ -85,9 +86,9 @@ export const StaffService = ({ staffGeneral, info, services }) => {
    };
 
    const generalInfo = [
-      { title: "First Name", value: staffGeneral?.firstName },
-      { title: "Middle Name", value: staffGeneral?.middleName },
-      { title: "Last Name", value: staffGeneral?.lastName },
+      { title: "First Name", value: makeCapitalize(staffGeneral?.firstName) },
+      { title: "Middle Name", value: makeCapitalize(staffGeneral?.middleName) },
+      { title: "Last Name", value: makeCapitalize(staffGeneral?.lastName) },
       { title: "Primary Email", value: staffGeneral?.email },
       { title: "Secondary Email", value: staffGeneral?.secondaryEmail },
       { title: "Primary Phone Number", value: staffGeneral?.phone },
@@ -153,7 +154,7 @@ export const StaffService = ({ staffGeneral, info, services }) => {
                   list={filteredList ? filteredList : []}
                   typeError={
                      error === "serviceType"
-                        ? ErrorText.field
+                        ? ErrorText.selectField
                         : fail && fail.length && fail[0].error === "Service already exist"
                         ? "Service already exist"
                         : ""

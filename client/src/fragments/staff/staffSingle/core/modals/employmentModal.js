@@ -203,7 +203,7 @@ export const EmploymentModal = ({ handleClose, info }) => {
                      handleSelect={handleChange}
                      value={inputs.supervisor}
                      list={staffList ? staffList : []}
-                     typeError={error === "supervisor" ? ErrorText.field : ""}
+                     typeError={error === "supervisor" ? ErrorText.selectField : ""}
                   />
                   <SelectInput
                      name={"departmentId"}
@@ -211,7 +211,7 @@ export const EmploymentModal = ({ handleClose, info }) => {
                      handleSelect={handleChange}
                      value={inputs.departmentId}
                      list={departments ? departments : []}
-                     typeError={error === "departmentId" ? ErrorText.field : ""}
+                     typeError={error === "departmentId" ? ErrorText.selectField : ""}
                   />
                   <SelectInput
                      name="employmentType"
@@ -219,7 +219,7 @@ export const EmploymentModal = ({ handleClose, info }) => {
                      handleSelect={handleChange}
                      value={inputs.employmentType}
                      list={_list}
-                     typeError={error === "employmentType" ? ErrorText.field : ""}
+                     typeError={error === "employmentType" ? ErrorText.selectField : ""}
                   />
 
                   <div className={classes.curentlyCheckbox}>

@@ -183,7 +183,7 @@ export const Break = ({
                handleSelect={handleChange}
                value={modalDate ? inputs.staff._id : inputs.staff}
                list={staffList ? staffList : []}
-               typeError={error === "staff" && ErrorText.field}
+               typeError={error === "staff" ? ErrorText.selectField : ""}
             />
             <SelectInput
                type={"id"}
@@ -199,7 +199,7 @@ export const Break = ({
                      : inputs.staffPayCode
                }
                list={activeStaffPaycodes}
-               typeError={error === "staffPayCode" && ErrorText.field}
+               typeError={error === "staffPayCode" ? ErrorText.selectField : ""}
             />
             <ValidationInput
                variant={"outlined"}

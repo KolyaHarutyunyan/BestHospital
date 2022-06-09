@@ -1,4 +1,7 @@
 export const getMenuTitle = (url = "") => {
+   if (url.startsWith("/fundingSource/")) return "Funding Source";
+   if (url.startsWith("/staff/")) return "Staff";
+   if (url.startsWith("/client/")) return "Client";
    if (url.startsWith("/bill/")) return "Bills";
    if (url.startsWith("/claim/")) return "Claims";
    if (url.startsWith("/invoice/")) return "Invoices";

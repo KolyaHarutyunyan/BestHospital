@@ -20,7 +20,7 @@ export const ClaimPaymentDetails = () => {
 
    useEffect(() => {
       dispatch(claimPaymentActions.getClaimPaymentById(params.id));
-      dispatch(fundingSourceActions.getFundingSource());
+      dispatch(fundingSourceActions.getFundingSource({ status: "ACTIVE" }));
       return () => {
          dispatch({
             type: "GET_CLAIM_PAYMENT_BY_ID_SUCCESS",

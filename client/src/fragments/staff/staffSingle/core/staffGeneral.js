@@ -1,14 +1,14 @@
 import { Card } from "@eachbase/components";
-import { Colors, Images } from "@eachbase/utils";
+import { Colors, Images, makeCapitalize } from "@eachbase/utils";
 import { serviceSingleStyles } from "./styles";
 
 export const StaffGeneral = ({ staffGeneral }) => {
    const classes = serviceSingleStyles();
 
    const generalInfo = [
-      { title: "First Name", value: staffGeneral?.firstName },
-      { title: "Middle Name", value: staffGeneral?.middleName },
-      { title: "Last Name", value: staffGeneral?.lastName },
+      { title: "First Name", value: makeCapitalize(staffGeneral?.firstName) },
+      { title: "Middle Name", value: makeCapitalize(staffGeneral?.middleName) },
+      { title: "Last Name", value: makeCapitalize(staffGeneral?.lastName) },
       { title: "Primary Email", value: staffGeneral?.email },
       { title: "Secondary Email", value: staffGeneral?.secondaryEmail },
       { title: "Primary Phone Number", value: staffGeneral?.phone },

@@ -220,6 +220,13 @@ export const useGlobalStyles = makeStyles({
       height: "calc(100vh - 380px)",
       overflow: "auto",
    },
+
+   loaderContainerStyle: {
+      minHeight: "695px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+   },
 });
 
 export const useGlobalTextStyles = makeStyles({

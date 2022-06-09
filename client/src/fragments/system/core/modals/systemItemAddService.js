@@ -258,7 +258,7 @@ export const SystemItemAddService = ({ modalInformation, modalType, handleClose 
                   list={credentialsList}
                   handleSelect={handleChange}
                   value={inputs.credentialType}
-                  typeError={error === "credentialType" && ErrorText.field}
+                  typeError={error === "credentialType" ? ErrorText.selectField : ""}
                />
             </>
          ) : mType === "editDepartment" ? (

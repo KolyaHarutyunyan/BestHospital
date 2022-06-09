@@ -52,7 +52,9 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
       info ? { ...info, name: info.serviceId, credential: info.credentialId?._id } : {}
    );
 
-   const sysServiceItem = systemServices.find((service) => service.id === inputs?.name);
+   const sysServiceItem = systemServices.find(
+      (service) => service.id === inputs?.serviceId
+   );
 
    function handleChange(e) {
       setInputs((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
@@ -69,7 +71,7 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
       const unitsArePositive = +inputs.min >= 0 && +inputs.max >= 0;
 
       const serviceDataIsValid =
-         isNotEmpty(inputs.name) &&
+         isNotEmpty(inputs.serviceId) &&
          isNotEmpty(inputs.cptCode) &&
          isNotEmpty(inputs.size) &&
          isNotEmpty(inputs.min) &&
@@ -79,9 +81,10 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
          isNotEmpty(inputs.chargeRate) &&
          isNotEmpty(inputs.credential);
       if (serviceDataIsValid) {
+         const serviceIdKey = !!info ? "globServiceId" : "serviceId";
          const data = {
             name: sysServiceItem?.name,
-            serviceId: inputs.name,
+            [serviceIdKey]: inputs.serviceId,
             rate: 0,
             cptCode: inputs.cptCode,
             size: +inputs.size,
@@ -98,7 +101,7 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
             );
          }
       } else {
-         const serviceDataErrorText = !isNotEmpty(inputs.name)
+         const serviceDataErrorText = !isNotEmpty(inputs.serviceId)
             ? "name"
             : !isNotEmpty(inputs.cptCode)
             ? "cptCode"
@@ -132,13 +135,13 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
             <div className={classes.serviceInputsContainerStyle}>
                <div className={classes.leftInputsBoxStyle}>
                   <SelectInput
-                     name={"name"}
+                     name={"serviceId"}
                      type={"id"}
                      label={"Service*"}
                      handleSelect={handleChange}
-                     value={inputs.name}
+                     value={inputs.serviceId}
                      list={systemServices}
-                     typeError={error === "name" ? ErrorText.selectField : ""}
+                     typeError={error === "serviceId" ? ErrorText.selectField : ""}
                   />
                   <div className={classes.displayCodeBlock}>
                      <p className={classes.displayCodeBlockText}>
@@ -146,7 +149,7 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
                         <span className={classes.displayCode}>
                            {sysServiceItem !== null &&
                            sysServiceItem?.displayCode !== "displayCode" &&
-                           inputs?.name !== ""
+                           inputs?.serviceId !== ""
                               ? sysServiceItem?.displayCode
                               : "N/A"}
                         </span>
@@ -159,7 +162,7 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
                         <span className={classes.displayCode}>
                            {sysServiceItem !== null &&
                            sysServiceItem?.category !== "category" &&
-                           inputs?.name !== ""
+                           inputs?.serviceId !== ""
                               ? sysServiceItem?.category
                               : "N/A"}
                         </span>

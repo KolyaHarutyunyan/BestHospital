@@ -67,7 +67,7 @@ function* getFundingSource(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    try {
-      const res = yield call(authService.getFundingSourceService, action.payload);
+      const res = yield call(authService.getFundingSourceService, action.payload.data);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put({
          type: GET_FUNDING_SOURCE_SUCCESS,

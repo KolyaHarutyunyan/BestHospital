@@ -9,7 +9,7 @@ export const Single = ({}) => {
    const [open, setOpen] = useState(false);
 
    useEffect(() => {
-      dispatch(fundingSourceActions.getFundingSource());
+      dispatch(fundingSourceActions.getFundingSource({ status: "ACTIVE" }));
    }, []);
 
    const handleOpenClose = () => {

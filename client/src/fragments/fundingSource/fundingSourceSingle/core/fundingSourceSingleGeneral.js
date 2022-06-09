@@ -1,7 +1,7 @@
 import React from "react";
 import { Card } from "@eachbase/components";
 import { fundingSourceSingleStyles } from "./styles";
-import { manageType } from "@eachbase/utils";
+import { makeCapitalize, manageType } from "@eachbase/utils";
 
 export const FundingSourceSingleGeneral = ({ data }) => {
    const classes = fundingSourceSingleStyles();
@@ -11,7 +11,7 @@ export const FundingSourceSingleGeneral = ({ data }) => {
          <div className={classes.fundingSourceSingleGeneralStyles}>
             <Card
                cardInfo={[
-                  { title: "Name", value: data?.name },
+                  { title: "Name", value: makeCapitalize(data?.name) },
                   { title: "Email Address", value: data?.email },
                   { title: "Phone Number", value: data?.phoneNumber },
                ].filter((item) => !!item.value)}

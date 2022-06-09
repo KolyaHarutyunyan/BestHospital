@@ -268,7 +268,7 @@ export const Service = ({
                         handleSelect={handleSelect}
                         value={inputs.client}
                         list={clientList ? clientList : []}
-                        typeError={error === "client" && ErrorText.field}
+                        typeError={error === "client" ? ErrorText.selectField : ""}
                      />
                      <SelectInput
                         type={"service"}
@@ -278,7 +278,9 @@ export const Service = ({
                         handleSelect={handleSelect}
                         value={inputs.authorizedService}
                         list={clientService ? clientService : []}
-                        typeError={error === "authorizedService" && ErrorText.field}
+                        typeError={
+                           error === "authorizedService" ? ErrorText.selectField : ""
+                        }
                      />
                      <SelectInput
                         type={"id"}
@@ -288,7 +290,7 @@ export const Service = ({
                         handleSelect={handleSelect}
                         value={inputs.staff}
                         list={staffList ? staffList : []}
-                        typeError={error === "staff" && ErrorText.field}
+                        typeError={error === "staff" ? ErrorText.selectField : ""}
                      />
                      <SelectInput
                         type={"id"}
@@ -298,7 +300,7 @@ export const Service = ({
                         handleSelect={handleSelect}
                         value={inputs.placeService}
                         list={places ? places : []}
-                        typeError={error === "placeService" && ErrorText.field}
+                        typeError={error === "placeService" ? ErrorText.selectField : ""}
                      />
                   </div>
                   <div>
@@ -386,7 +388,7 @@ export const Service = ({
                               : inputs.staffPayCode
                         }
                         list={activeStaffPaycodes}
-                        typeError={error === "staffPayCode" && ErrorText.field}
+                        typeError={error === "staffPayCode" ? ErrorText.selectField : ""}
                      />
                      <div className={classes.signatureStyle}>
                         <p>Require Signature</p>

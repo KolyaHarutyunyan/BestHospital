@@ -49,11 +49,9 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
       inputs.phone.trim().length >= 10 &&
       !/[a-zA-Z]/g.test(inputs.phone);
 
-   const emailIsValid =
-      isNotEmpty(inputs.email) && EmailValidator.test(inputs.email);
+   const emailIsValid = isNotEmpty(inputs.email) && EmailValidator.test(inputs.email);
    const secEmailIsValid =
-      isNotEmpty(inputs.secondaryEmail) &&
-      EmailValidator.test(inputs.secondaryEmail);
+      isNotEmpty(inputs.secondaryEmail) && EmailValidator.test(inputs.secondaryEmail);
 
    const disabledOne =
       isNotEmpty(inputs.firstName) &&
@@ -62,8 +60,7 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
       emailIsValid &&
       (isNotEmpty(inputs.secondaryEmail) ? secEmailIsValid : true);
 
-   const disableSecond =
-      !isNotEmpty(fullAddress) && !isNotEmpty(enteredAddress);
+   const disableSecond = !isNotEmpty(fullAddress) && !isNotEmpty(enteredAddress);
 
    const dispatch = useDispatch();
 
@@ -134,8 +131,7 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
             secondaryPhone: inputs.secondaryPhone || undefined,
             state: "state",
             gender: inputs.gender,
-            birthday:
-               inputs.birthday && new Date(inputs.birthday).toISOString(),
+            birthday: inputs.birthday && new Date(inputs.birthday).toISOString(),
             residency: inputs.residency,
             ssn: parseInt(inputs.ssn),
             status: staffGeneral ? staffGeneral.status : 1,
@@ -272,9 +268,7 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
          <ValidationInput
             Length={11}
             onChange={handleChange}
-            value={
-               inputs.secondaryPhone && inputs.secondaryPhone.replace("+", "")
-            }
+            value={inputs.secondaryPhone && inputs.secondaryPhone.replace("+", "")}
             variant={"outlined"}
             type={"number"}
             label={"Secondary Phone Number"}
@@ -318,7 +312,7 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
                handleSelect={handleChangeLicense}
                value={license ? license.state : ""}
                list={issuingStateList}
-               typeError={error === "state" ? ErrorText.field : ""}
+               typeError={error === "state" ? ErrorText.selectField : ""}
             />
             <ValidationInput
                variant={"outlined"}
@@ -333,16 +327,14 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
                typeError={error === "expireDate" ? ErrorText.field : ""}
             />
          </div>
-         <p className={`${classes.otherDetailsTitle} ${classes.titlePadding}`}>
-            Other
-         </p>
+         <p className={`${classes.otherDetailsTitle} ${classes.titlePadding}`}>Other</p>
          <SelectInput
             name={"residency"}
             label={"Residency Status"}
             handleSelect={handleChange}
             value={inputs.residency}
             list={residencyList}
-            typeError={error === "residency" ? ErrorText.field : ""}
+            typeError={error === "residency" ? ErrorText.selectField : ""}
          />
          <ValidationInput
             variant={"outlined"}
@@ -361,14 +353,13 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
                handleSelect={handleChange}
                value={inputs.gender}
                list={genderList}
-               typeError={error === "gender" ? ErrorText.field : ""}
+               typeError={error === "gender" ? ErrorText.selectField : ""}
             />
             <ValidationInput
                variant={"outlined"}
                onChange={handleChange}
                value={
-                  inputs.birthday &&
-                  moment(inputs.birthday).format().substring(0, 10)
+                  inputs.birthday && moment(inputs.birthday).format().substring(0, 10)
                }
                type={"date"}
                label={"Date of Birth*"}

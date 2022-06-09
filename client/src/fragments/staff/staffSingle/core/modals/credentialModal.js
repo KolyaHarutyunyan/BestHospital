@@ -43,11 +43,15 @@ export const CredentialModal = ({
    const globalText = useGlobalTextStyles();
 
    const [mType, setMType] = useState(credModalType);
-   const [checkboxValue, setCheckboxValue] = useState(!!globalCredentialInformation?.expirationDate ? "expiring" : "nonExpiring");
+   const [checkboxValue, setCheckboxValue] = useState(
+      !!globalCredentialInformation?.expirationDate ? "expiring" : "nonExpiring"
+   );
 
    const [error, setError] = useState("");
    const [inputs, setInputs] = useState(
-      !!globalCredentialInformation ? { ...globalCredentialInformation } : { expirationDate: "" }
+      !!globalCredentialInformation
+         ? { ...globalCredentialInformation }
+         : { expirationDate: "" }
    );
 
    const [globalCredId, setGlobalCredId] = useState("");
@@ -188,7 +192,7 @@ export const CredentialModal = ({
                list={globalCredentials}
                value={inputs.type}
                handleSelect={handleChange}
-               typeError={error === "type" && ErrorText.field}
+               typeError={error === "type" ? ErrorText.selectField : ""}
             />
          ) : (
             <SelectInputPlaceholder
@@ -198,7 +202,7 @@ export const CredentialModal = ({
                list={globalCredentials}
                value={inputs.type}
                handleSelect={handleChange}
-               typeError={error === "type" && ErrorText.field}
+               typeError={error === "type" ? ErrorText.selectField : ""}
             />
          )}
 
