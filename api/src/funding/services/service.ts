@@ -17,7 +17,6 @@ export class Service extends BaseService {
       const service = new this.serviceModel({
         funderId: _id,
         serviceId: globService.id,
-        name: dto.name,
         rate: dto.rate,
         cptCode: dto.cptCode,
         size: dto.size,
@@ -86,7 +85,6 @@ export class Service extends BaseService {
       this.checkFundingService(service);
       const funder = await this.model.findOne({ _id: service.funderId });
       this.checkFunder(funder);
-      if (dto.name) service.name = dto.name;
       if (dto.rate) service.rate = dto.rate;
       if (dto.cptCode) service.cptCode = dto.cptCode;
       if (dto.size) service.size = dto.size;

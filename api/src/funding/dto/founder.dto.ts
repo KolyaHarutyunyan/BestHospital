@@ -39,8 +39,6 @@ export class ServiceDTO {
   @ApiProperty()
   funderId: string;
   @ApiProperty()
-  name: string;
-  @ApiProperty()
   rate: number;
   @ApiProperty()
   cptCode: string;

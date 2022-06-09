@@ -38,7 +38,6 @@ export class FundingSanitizer implements ISanitize {
       funderId: service.funderId,
       serviceId: service.serviceId,
       modifiers: service.modifiers,
-      name: service.name,
       rate: service.rate,
       cptCode: service.cptCode,
       size: service.size,
