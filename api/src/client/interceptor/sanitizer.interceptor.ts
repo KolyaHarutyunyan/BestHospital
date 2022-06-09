@@ -11,7 +11,6 @@ export class ClientSanitizer implements ISanitize {
       firstName: client.firstName,
       middleName: client.middleName,
       lastName: client.lastName,
-      code: client.code,
       ethnicity: client.ethnicity,
       language: client.language,
       familyLanguage: client.familyLanguage,

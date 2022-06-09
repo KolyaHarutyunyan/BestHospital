@@ -18,10 +18,6 @@ export class UpdateClientDto {
   @ApiProperty()
   @IsOptional()
   @IsString()
-  code: string;
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
   ethnicity: string;
   @ApiProperty()
   @IsOptional()

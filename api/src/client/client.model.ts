@@ -15,7 +15,6 @@ const ClientSchema = new Schema({
   firstName: { type: String },
   middleName: { type: String, default: null },
   lastName: { type: String },
-  code: { type: String },
   ethnicity: { type: String },
   language: { type: String },
   familyLanguage: { type: String },

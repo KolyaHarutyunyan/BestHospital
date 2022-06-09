@@ -13,8 +13,6 @@ export class ClientDTO {
   @ApiProperty()
   lastName: string;
   @ApiProperty()
-  code: string;
-  @ApiProperty()
   ethnicity: string;
   @ApiProperty()
   language: string;

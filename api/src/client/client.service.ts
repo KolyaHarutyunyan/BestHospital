@@ -29,7 +29,6 @@ export class ClientService {
         firstName: dto.firstName,
         middleName: dto.middleName,
         lastName: dto.lastName,
-        code: dto.code,
         ethnicity: dto.ethnicity,
         language: dto.language,
         familyLanguage: dto.familyLanguage,
@@ -90,7 +89,6 @@ export class ClientService {
       if (dto.firstName) client.firstName = dto.firstName;
       if (dto.middleName) client.middleName = dto.middleName;
       if (dto.lastName) client.lastName = dto.lastName;
-      if (dto.code) client.code = dto.code;
       if (dto.ethnicity) client.ethnicity = dto.ethnicity;
       if (dto.language) client.language = dto.language;
       if (dto.familyLanguage) client.familyLanguage = dto.familyLanguage;
