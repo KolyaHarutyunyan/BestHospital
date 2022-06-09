@@ -18,10 +18,6 @@ export class CreateClientDTO extends DTO {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  code: string;
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
   ethnicity: string;
   @ApiProperty()
   @IsNotEmpty()
