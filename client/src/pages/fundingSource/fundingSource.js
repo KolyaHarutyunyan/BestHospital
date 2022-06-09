@@ -17,8 +17,8 @@ export const FundingSource = () => {
       dispatch(
          fundingSourceActions.getFundingSource({
             status: status,
-            start: 0,
-            end: 10,
+            skip: 0,
+            limit: 10,
          })
       );
    }, []);
@@ -29,11 +29,13 @@ export const FundingSource = () => {
 
    const handleActiveOrInactive = (status) => {
       setStatus(status);
+      handlePageChange(true);
+      setPage(1);
       dispatch(
          fundingSourceActions.getFundingSource({
             status: status,
-            start: 0,
-            end: 10,
+            skip: 0,
+            limit: 10,
          })
       );
    };

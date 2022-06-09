@@ -186,7 +186,7 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
                      handleSelect={handleChange}
                      value={inputs.modifiers}
                      list={fSelect ? fSelect : []}
-                     typeError={error === "modifiers" ? ErrorText.field : ""}
+                     typeError={error === "modifiers" ? ErrorText.selectField : ""}
                   />
                   <div
                      className={`${classes.displayCodeBlock2} ${

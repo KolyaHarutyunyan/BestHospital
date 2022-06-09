@@ -57,7 +57,7 @@ export const FirstStepInputs = ({
                handleSelect={handleChange}
                value={inputs.paymentType}
                language={enumValues.PAYMENT_TYPES}
-               typeError={error === "paymentType" && ErrorText.field}
+               typeError={error === "paymentType" ? ErrorText.selectField : ""}
             />
             <ValidationInput
                styles={smallInputStyles}

@@ -1,120 +1,113 @@
 import {
-    GET_CLIENTS_SUCCESS,
-    GET_CLIENT_BY_ID_SUCCESS,
-    GET_CLIENT_CONTACTS_SUCCESS,
-    GET_CLIENT_ENROLLMENT_SUCCESS,
-    GET_CLIENT_AUTHORIZATION_SUCCESS,
-    GET_CLIENT_HISTORIES_SUCCESS,
-    CREATE_CLIENT_CONTACT_SUCCESS,
-    GET_CLIENT_AUTHORIZATION_SERV_SUCCESS,
-    GET_CLIENT_AUTHORIZATION_SERV_ERROR,
-    GET_CLIENT_AUTHORIZATION_ERROR,
-    GET_CLIENT_AUTHORIZATION_FILE,
-    CREATE_CLIENT_AUTHORIZATION_FILE,
-    EDIT_CLIENT_AUTHORIZATION_FILE,
-    DELETE_CLIENT_AUTHORIZATION_FILE
+   GET_CLIENTS_SUCCESS,
+   GET_CLIENT_BY_ID_SUCCESS,
+   GET_CLIENT_CONTACTS_SUCCESS,
+   GET_CLIENT_ENROLLMENT_SUCCESS,
+   GET_CLIENT_AUTHORIZATION_SUCCESS,
+   GET_CLIENT_HISTORIES_SUCCESS,
+   CREATE_CLIENT_CONTACT_SUCCESS,
+   GET_CLIENT_AUTHORIZATION_SERV_SUCCESS,
+   GET_CLIENT_AUTHORIZATION_SERV_ERROR,
+   GET_CLIENT_AUTHORIZATION_ERROR,
+   GET_CLIENT_AUTHORIZATION_FILE,
+   CREATE_CLIENT_AUTHORIZATION_FILE,
+   EDIT_CLIENT_AUTHORIZATION_FILE,
+   DELETE_CLIENT_AUTHORIZATION_FILE,
 } from "./client.types";
 
-
 const initialState = {
-    clientList: [],
-    clientItemInfo : {},
-    clientContacts : [],
-    clientEnrollment : [],
-    clientsAuthorizations : [],
-    clientHistories : [],
-    clientsNotes : []
+   clientList: [],
+   clientItemInfo: {},
+   clientContacts: [],
+   clientEnrollment: [],
+   clientsAuthorizations: [],
+   clientHistories: [],
+   clientsNotes: [],
 };
 
 export const clientReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case  GET_CLIENTS_SUCCESS:
-            return {
-                ...state,
-                clientList: action.payload ,
-                clientContacts : [],
-                clientEnrollment : [],
-                clientsAuthorizations : [],
-                clientsAuthorizationsServices : [],
-                clientHistories : [],
-                clientsNotes : []
-            }
+   switch (action.type) {
+      case GET_CLIENTS_SUCCESS:
+         return {
+            ...state,
+            clientList: action.payload,
+         };
 
-        case  GET_CLIENT_BY_ID_SUCCESS:
-            return {
-                ...state,
-                clientItemInfo: action.payload,
-            }
-        case  GET_CLIENT_CONTACTS_SUCCESS:
-            return {
-                ...state,
-                clientContacts: action.payload,
-            }
-            case  CREATE_CLIENT_CONTACT_SUCCESS:
-            return {
-                ...state,
-                clientContacts: [...state.clientContacts,action.payload],
-            }
-            case  GET_CLIENT_ENROLLMENT_SUCCESS:
-            return {
-                ...state,
-                clientEnrollment: action.payload,
-            }
-        case  GET_CLIENT_AUTHORIZATION_SUCCESS:
-            return {
-                ...state,
-                clientsAuthorizations: action.payload.reverse(),
-            }
-            case  GET_CLIENT_AUTHORIZATION_ERROR:
-                return {
-                    ...state,
-                    clientsAuthorizations: [],
-                }
+      case GET_CLIENT_BY_ID_SUCCESS:
+         return {
+            ...state,
+            clientItemInfo: action.payload,
+         };
+      case GET_CLIENT_CONTACTS_SUCCESS:
+         return {
+            ...state,
+            clientContacts: action.payload,
+         };
+      case CREATE_CLIENT_CONTACT_SUCCESS:
+         return {
+            ...state,
+            clientContacts: [...state.clientContacts, action.payload],
+         };
+      case GET_CLIENT_ENROLLMENT_SUCCESS:
+         return {
+            ...state,
+            clientEnrollment: action.payload,
+         };
+      case GET_CLIENT_AUTHORIZATION_SUCCESS:
+         return {
+            ...state,
+            clientsAuthorizations: action.payload.reverse(),
+         };
+      case GET_CLIENT_AUTHORIZATION_ERROR:
+         return {
+            ...state,
+            clientsAuthorizations: [],
+         };
 
-        case  GET_CLIENT_AUTHORIZATION_SERV_SUCCESS:
-            return {
-                ...state,
-                clientsAuthorizationsServices: action.payload,
-            }
-        case  GET_CLIENT_AUTHORIZATION_SERV_ERROR:
-            return {
-                ...state,
-                clientsAuthorizationsServices: [],
-            }
+      case GET_CLIENT_AUTHORIZATION_SERV_SUCCESS:
+         return {
+            ...state,
+            clientsAuthorizationsServices: action.payload,
+         };
+      case GET_CLIENT_AUTHORIZATION_SERV_ERROR:
+         return {
+            ...state,
+            clientsAuthorizationsServices: [],
+         };
 
-        case  GET_CLIENT_HISTORIES_SUCCESS:
-            return {
-                ...state,
-                clientHistories: action.payload,
-            }
+      case GET_CLIENT_HISTORIES_SUCCESS:
+         return {
+            ...state,
+            clientHistories: action.payload,
+         };
 
-            // authorization file
+      // authorization file
 
-        case CREATE_CLIENT_AUTHORIZATION_FILE :
-            return {
-                ...state,
-                file: action.payload
-            }
+      case CREATE_CLIENT_AUTHORIZATION_FILE:
+         return {
+            ...state,
+            file: action.payload,
+         };
 
-        case GET_CLIENT_AUTHORIZATION_FILE :
-            return {
-                ...state,
-                file: action.payload
-            }
-        case EDIT_CLIENT_AUTHORIZATION_FILE :
-            return {
-                ...state,
-                file: action.payload
-            }
-        case DELETE_CLIENT_AUTHORIZATION_FILE :
-            return {
-                ...state,
-                file: {}
-            }
+      case GET_CLIENT_AUTHORIZATION_FILE:
+         return {
+            ...state,
+            file: action.payload,
+         };
+      case EDIT_CLIENT_AUTHORIZATION_FILE:
+         return {
+            ...state,
+            file: action.payload,
+         };
+      case DELETE_CLIENT_AUTHORIZATION_FILE:
+         return {
+            ...state,
+            file: {},
+         };
 
-            // end
+      // end
 
-        default:
-            return state;
-    }
+      default:
+         return state;
+   }
 };

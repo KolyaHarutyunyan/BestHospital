@@ -75,12 +75,12 @@ function* createClient(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
-      const res = yield call(authService.createClientService, action);
+      yield call(authService.createClientService, action);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_CLIENTS,
-         payload: { status: "ACTIVE", start: 0, end: 10 },
+         payload: { data: { status: "ACTIVE", start: 0, end: 10 } },
       });
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
@@ -93,7 +93,7 @@ function* deleteClient(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
-      const res = yield call(authService.deleteClientService, action);
+      yield call(authService.deleteClientService, action);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
@@ -109,9 +109,11 @@ function* deleteClient(action) {
 function* editClient(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.editClientService, action);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_CLIENT_BY_ID_SUCCESS,
          payload: res.data,
@@ -175,9 +177,11 @@ function* getClientContacts(action) {
 function* createClientContact(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.createClientContactService, action);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: CREATE_CLIENT_CONTACT_SUCCESS,
          payload: res.data,

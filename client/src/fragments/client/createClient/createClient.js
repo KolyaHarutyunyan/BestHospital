@@ -9,7 +9,14 @@ import {
    ModalHeader,
 } from "@eachbase/components";
 import { createClientStyle } from "./styles";
-import { ErrorText, FindLoad, FindSuccess, isNotEmpty, languages } from "@eachbase/utils";
+import {
+   ErrorText,
+   FindLoad,
+   FindSuccess,
+   isNotEmpty,
+   languages,
+   makeCapitalize,
+} from "@eachbase/utils";
 import { clientActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 
 export const CreateClient = ({ handleClose, info }) => {
@@ -22,8 +29,8 @@ export const CreateClient = ({ handleClose, info }) => {
    const classes = createClientStyle();
    const dispatch = useDispatch();
 
-   const success = info ? FindSuccess("EDIT_CLIENT") : FindSuccess("CREATE_CLIENT");
-   const loader = info ? FindLoad("EDIT_CLIENT") : FindLoad("CREATE_CLIENT");
+   const success = !!info ? FindSuccess("EDIT_CLIENT") : FindSuccess("CREATE_CLIENT");
+   const loader = !!info ? FindLoad("EDIT_CLIENT") : FindLoad("CREATE_CLIENT");
 
    const handleChange = (e) =>
       setInputs(
@@ -41,9 +48,9 @@ export const CreateClient = ({ handleClose, info }) => {
    const handleCreate = () => {
       if (step === "first") {
          const firstStepIsValid =
-            isNotEmpty(inputs.firstName) &&
-            isNotEmpty(inputs.lastName) &&
-            isNotEmpty(inputs.code);
+            isNotEmpty(inputs.firstName) && isNotEmpty(inputs.lastName);
+         // &&
+         // isNotEmpty(inputs.code);
 
          if (firstStepIsValid) {
             setStep("second");
@@ -52,9 +59,9 @@ export const CreateClient = ({ handleClose, info }) => {
                ? "firstName"
                : !isNotEmpty(inputs.lastName)
                ? "lastName"
-               : !isNotEmpty(inputs.code)
-               ? "code"
-               : "";
+               : // : !isNotEmpty(inputs.code)
+                 // ? "code"
+                 "";
 
             setError(firstStepErrorText);
          }
@@ -72,17 +79,16 @@ export const CreateClient = ({ handleClose, info }) => {
                middleName: inputs.middleName,
                lastName: inputs.lastName,
                ethnicity: inputs.ethnicity,
-               code: inputs.code,
                language: inputs.language,
                familyLanguage: inputs.familyLanguage,
                gender: inputs.gender,
                birthday: inputs.birthday,
                status: "ACTIVE",
             };
-            if (!info) {
-               dispatch(clientActions.createClient(data));
-            } else if (info) {
+            if (!!info) {
                dispatch(clientActions.editClient(data, params.id));
+            } else {
+               dispatch(clientActions.createClient(data));
             }
          } else {
             const secondStepErrorText = !isNotEmpty(inputs.gender)
@@ -143,7 +149,7 @@ export const CreateClient = ({ handleClose, info }) => {
                         name="lastName"
                         typeError={error === "lastName" ? ErrorText.field : ""}
                      />
-                     <ValidationInput
+                     {/* <ValidationInput
                         variant={"outlined"}
                         onChange={handleChange}
                         value={inputs.code}
@@ -151,7 +157,7 @@ export const CreateClient = ({ handleClose, info }) => {
                         label={"Code*"}
                         name="code"
                         typeError={error === "code" ? ErrorText.field : ""}
-                     />
+                     /> */}
                   </div>
                ) : (
                   <div style={{ width: 463 }}>
@@ -161,7 +167,7 @@ export const CreateClient = ({ handleClose, info }) => {
                         handleSelect={handleChange}
                         value={inputs.gender}
                         list={list}
-                        typeError={error === "gender" ? ErrorText.field : ""}
+                        typeError={error === "gender" ? ErrorText.selectField : ""}
                      />
                      <ValidationInput
                         variant={"outlined"}
@@ -189,7 +195,7 @@ export const CreateClient = ({ handleClose, info }) => {
                         handleSelect={handleChange}
                         value={inputs.language}
                         language={languages}
-                        typeError={error === "language" ? ErrorText.field : ""}
+                        typeError={error === "language" ? ErrorText.selectField : ""}
                      />
                      <SelectInput
                         name={"familyLanguage"}
@@ -197,7 +203,9 @@ export const CreateClient = ({ handleClose, info }) => {
                         handleSelect={handleChange}
                         value={inputs.familyLanguage}
                         language={languages}
-                        typeError={error === "familyLanguage" ? ErrorText.field : ""}
+                        typeError={
+                           error === "familyLanguage" ? ErrorText.selectField : ""
+                        }
                      />
                   </div>
                )}

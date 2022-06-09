@@ -15,7 +15,14 @@ import {
    TableBodyComponent,
 } from "@eachbase/components";
 import { serviceSingleStyles } from "./styles";
-import { Colors, FindLoad, FindSuccess, Images, ImgUploader } from "@eachbase/utils";
+import {
+   Colors,
+   FindLoad,
+   FindSuccess,
+   Images,
+   ImgUploader,
+   makeCapitalize,
+} from "@eachbase/utils";
 import { CircularProgress, TableCell } from "@material-ui/core";
 import { clientActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 import { AddAuthorization, AddAuthorizationService } from "../../clientModals";
@@ -108,17 +115,23 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
             }}
          >
             <TableCell>
-               <p className={classes.tableName}>{item?.serviceId?.name}</p>
+               <p className={classes.tableName}>
+                  {makeCapitalize(item?.serviceId?.name)}
+               </p>
             </TableCell>
             <TableCell>
                {" "}
                {item.modifiers && item.modifiers.length > 0 ? (
                   <span>
                      {" "}
-                     {`${item && item.modifiers && item.modifiers.map((i) => i.name)}, `}
+                     {`${
+                        item &&
+                        item.modifiers &&
+                        item.modifiers.map((i) => makeCapitalize(i.name))
+                     }, `}
                   </span>
                ) : (
-                  item && item.modifiers && item.modifiers[0].name
+                  item && item.modifiers && makeCapitalize(item.modifiers[0].name)
                )}
             </TableCell>
             <TableCell> {item?.total} </TableCell>
@@ -133,7 +146,6 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
                   />
                </div>
             </TableCell>
-
             <TableCell>
                <>
                   <img

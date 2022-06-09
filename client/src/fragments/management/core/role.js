@@ -7,10 +7,15 @@ import {
    DeleteElement,
    Loader,
    NoItemText,
-   NoYet,
    PaginationItem,
 } from "@eachbase/components";
-import { FindLoad, FindSuccess, Images, PaginationContext } from "@eachbase/utils";
+import {
+   FindLoad,
+   FindSuccess,
+   Images,
+   makeCapitalize,
+   PaginationContext,
+} from "@eachbase/utils";
 import { httpRequestsOnSuccessActions, roleActions } from "@eachbase/store";
 import { useDispatch, useSelector } from "react-redux";
 import { SlicedText } from "@eachbase/components";
@@ -21,7 +26,7 @@ export const Role = ({
    handleGetPage,
    page,
    roleLoader,
-   rolesCount,
+   rolesCount = 11,
 }) => {
    const classes = managementFragments();
 
@@ -77,14 +82,8 @@ export const Role = ({
       }
    }, [success]);
 
-   if (roleLoader && pageIsChanging) {
-      return <Loader circleSize={50} />;
-   }
-
    if (!!httpOnLoad.length && httpOnLoad[0] === "GET_PERMISSIONS")
       return <Loader style={"relative"} />;
-
-   if (!roleInfo?.length) return <NoItemText text={"No Roles Yet"} />;
 
    return (
       <>
@@ -93,46 +92,54 @@ export const Role = ({
                <SearchAndFilter title={"Role"} />
             </div>
             <div className={classes.scroll}>
-               <div>
-                  {roleInfo.map((item, j) => (
-                     <div
-                        style={{ margin: "4px", borderRadius: "8px" }}
-                        onClick={() => openRolePermission(item)}
-                        key={j}
-                        className={
-                           activeRole === item.title
-                              ? classes.tableBodyBottomActive
-                              : classes.tableBodyBottom
-                        }
-                     >
-                        <div className={classes.tableBodyStyle}>
-                           <div>
-                              <img
-                                 src={Images.accessManagementUser}
-                                 alt={"accessManagementUser"}
-                              />
-                              <SlicedText
-                                 type={"name"}
-                                 size={10}
-                                 data={item && item.title}
-                              />
-                              <SlicedText
-                                 fontSize={"14px"}
-                                 type={"desc"}
-                                 size={40}
-                                 data={item && item.description}
-                              />
+               {roleLoader && pageIsChanging ? (
+                  <Loader circleSize={50} />
+               ) : (
+                  <div>
+                     {!!roleInfo.length ? (
+                        roleInfo.map((item, j) => (
+                           <div
+                              style={{ margin: "4px", borderRadius: "8px" }}
+                              onClick={() => openRolePermission(item)}
+                              key={j}
+                              className={
+                                 activeRole === item.title
+                                    ? classes.tableBodyBottomActive
+                                    : classes.tableBodyBottom
+                              }
+                           >
+                              <div className={classes.tableBodyStyle}>
+                                 <div>
+                                    <img
+                                       src={Images.accessManagementUser}
+                                       alt={"accessManagementUser"}
+                                    />
+                                    <SlicedText
+                                       type={"name"}
+                                       size={10}
+                                       data={item && makeCapitalize(item.title)}
+                                    />
+                                    <SlicedText
+                                       fontSize={"14px"}
+                                       type={"desc"}
+                                       size={40}
+                                       data={item && item.description}
+                                    />
+                                 </div>
+                                 <div>
+                                    <DeleteButton
+                                       toolTipTitle={"Remove Role"}
+                                       handleClick={() => handleOpenClose(item)}
+                                    />
+                                 </div>
+                              </div>
                            </div>
-                           <div>
-                              <DeleteButton
-                                 toolTipTitle={"Remove Role"}
-                                 handleClick={() => handleOpenClose(item)}
-                              />
-                           </div>
-                        </div>
-                     </div>
-                  ))}
-               </div>
+                        ))
+                     ) : (
+                        <NoItemText text={"No Roles Yet"} />
+                     )}
+                  </div>
+               )}
                <PaginationItem
                   page={page}
                   listLength={roleInfo.length}

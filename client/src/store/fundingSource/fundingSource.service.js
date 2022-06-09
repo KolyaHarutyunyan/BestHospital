@@ -6,15 +6,8 @@ export const authService = {
    editFundingSourceService: (id, body) =>
       axios.patch(`/funding/${id}`, body, { auth: true }),
 
-   getFundingSourceService: ({ data }) => {
-      if (data) {
-         return axios.get(
-            `/funding/?skip=${data.start}&&limit=${data.end}&&status=${data.status}`,
-            { auth: true }
-         );
-      } else {
-         return axios.get("/funding", { auth: true });
-      }
+   getFundingSourceService: (data) => {
+      return axios.get("/funding", { auth: true, params: { ...data } });
    },
 
    getFoundingSourceByIdService: (id) => axios.get(`/funding/${id}`, { auth: true }),

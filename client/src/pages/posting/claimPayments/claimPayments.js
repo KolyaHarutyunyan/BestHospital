@@ -27,7 +27,7 @@ export const ClaimPayments = () => {
 
    useEffect(() => {
       dispatch(claimPaymentActions.getClaimPayments());
-      dispatch(fundingSourceActions.getFundingSource());
+      dispatch(fundingSourceActions.getFundingSource({ status: "ACTIVE" }));
    }, []);
 
    useEffect(

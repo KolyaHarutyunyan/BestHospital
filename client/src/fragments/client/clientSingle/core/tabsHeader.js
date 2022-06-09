@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { editButtonStyle, serviceSingleStyles } from "./styles";
-import { FindLoad, Images } from "@eachbase/utils";
+import { FindLoad, Images, makeCapitalize } from "@eachbase/utils";
 import {
    AddButton,
    AddModalButton,
@@ -61,7 +61,7 @@ export const TabsHeader = ({ activeTab, data, authActive, availabilityData }) =>
                <img src={Images.userProfile} alt="avatar" className={classes.avatar} />
                <div className={classes.nameContent}>
                   <h1 className={classes.name}>
-                     {data ? `${data?.firstName} ${data?.lastName}` : ""}
+                     {data ? makeCapitalize(`${data?.firstName} ${data?.lastName}`) : ""}
                   </h1>
                </div>
             </li>
@@ -120,7 +120,7 @@ export const TabsHeader = ({ activeTab, data, authActive, availabilityData }) =>
                authActive ? (
                   <AddAuthorizationService handleClose={handleOpenClose} />
                ) : activeTab === 0 ? (
-                  <CreateClient info={data} handleClose={handleOpenClose} />
+                  <CreateClient info={data} handleClose={() => setOpen(false)} />
                ) : activeTab === 1 ? (
                   <AddContact handleClose={handleOpenClose} />
                ) : activeTab === 2 ? (

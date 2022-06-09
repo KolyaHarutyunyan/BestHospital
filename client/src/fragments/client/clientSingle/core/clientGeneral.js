@@ -2,7 +2,7 @@ import React from "react";
 import moment from "moment";
 import { Card } from "@eachbase/components";
 import { serviceSingleStyles } from "./styles";
-import { Colors, Images } from "@eachbase/utils";
+import { Colors, Images, makeCapitalize } from "@eachbase/utils";
 
 export const ClientGeneral = ({ data }) => {
    let today = new Date();
@@ -26,9 +26,9 @@ export const ClientGeneral = ({ data }) => {
    const classes = serviceSingleStyles();
 
    const generalInfo = [
-      { title: "First Name", value: data?.firstName },
-      { title: "Middle Name", value: data?.middleName },
-      { title: "Last Name", value: data?.lastName },
+      { title: "First Name", value: makeCapitalize(data?.firstName) },
+      { title: "Middle Name", value: makeCapitalize(data?.middleName) },
+      { title: "Last Name", value: makeCapitalize(data?.lastName) },
       { title: "Code", value: data?.code },
    ].filter((item) => !!item.value);
 

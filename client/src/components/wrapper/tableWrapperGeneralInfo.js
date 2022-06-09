@@ -36,16 +36,16 @@ export const TableWrapperGeneralInfo = ({
    const handleSelectionChange = (selected) => {
       if (selectedStatus === selected) return;
 
-      if (_isForFundingSource) {
-         const status =
-            selected === "Active" ? "active" : selected === "Inactive" ? "inActive" : "";
+      const status =
+         selected === "Active" ? "active" : selected === "Inactive" ? "inActive" : "";
 
+      if (_isForFundingSource) {
          dispatch(fundingSourceActions.changeFundingSourceStatus(id, status));
       } else {
          const upperCasedStatus = ActiveInactiveStatus(selected);
 
-         if (upperCasedStatus === "ACTIVE") {
-            dispatch(fundingSourceActions.setStatus(id, path, "active", null, type));
+         if (upperCasedStatus === "ACTIVE" || upperCasedStatus === "INACTIVE") {
+            dispatch(fundingSourceActions.setStatus(id, path, status, null, type));
          } else {
             handleOpen(upperCasedStatus);
          }

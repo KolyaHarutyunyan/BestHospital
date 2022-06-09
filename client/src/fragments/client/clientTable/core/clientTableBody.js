@@ -5,33 +5,42 @@ import { TableBodyComponent } from "@eachbase/components";
 import { TableCell } from "@material-ui/core";
 import { Images, makeCapitalize, useGlobalStyles } from "@eachbase/utils";
 import { clientStyles } from "./styles";
+import { hooksForTable } from "@eachbase/utils";
 
 export const ClientTableBody = ({ data, setOpen, index, setDeleteClient }) => {
-   const globalClasses = useGlobalStyles();
-   const history = useHistory();
    const classes = clientStyles();
-   const handleOpenOfficeInfo = (id) => {
-      history.push(`/client/${id}`);
-   };
+   const globalClasses = useGlobalStyles();
+
+   const history = useHistory();
+
+   const { getFullName, showDashIfEmpty } = hooksForTable;
+
+   const firstN = makeCapitalize(data?.firstName);
+   const lastN = makeCapitalize(data?.lastName);
+
+   const clientFullName = getFullName(firstN, lastN, showDashIfEmpty);
+   const _clientCreationCode = `${firstN.substring(0, 2)}${lastN.substring(0, 2)}`;
+   const gender = showDashIfEmpty(data?.gender);
+   const dateOfBirth = showDashIfEmpty(moment(data?.birthday).format("DD/MM/YYYY"));
+   const status = showDashIfEmpty(makeCapitalize(data?.status));
+   const enrollment = showDashIfEmpty(data?.enrollment?.name);
 
    return (
       <TableBodyComponent
-         handleOpenInfo={() => handleOpenOfficeInfo(data.id)}
          key={index}
+         handleOpenInfo={() => history.push(`/client/${data?.id}`)}
       >
          <TableCell>
             <div className={globalClasses.InfoAndImage}>
                <img src={Images.clients} alt={"client"} />
-               <p>
-                  {data?.firstName} {data?.lastName}
-               </p>
+               <p>{clientFullName}</p>
             </div>
          </TableCell>
-         <TableCell> {data?.code} </TableCell>
-         <TableCell>{data?.gender}</TableCell>
-         <TableCell>{moment(data?.birthday).format("DD/MM/YYYY")}</TableCell>
-         <TableCell>{makeCapitalize(data?.status)} </TableCell>
-         <TableCell>{data?.enrollment?.name}</TableCell>
+         <TableCell> {_clientCreationCode} </TableCell>
+         <TableCell>{gender}</TableCell>
+         <TableCell>{dateOfBirth}</TableCell>
+         <TableCell>{status} </TableCell>
+         <TableCell>{makeCapitalize(enrollment)}</TableCell>
          <TableCell>
             <img
                src={Images.remove}
@@ -39,7 +48,7 @@ export const ClientTableBody = ({ data, setOpen, index, setDeleteClient }) => {
                className={classes.iconCursor}
                onClick={(e) => {
                   e.stopPropagation();
-                  setDeleteClient({ id: data.id, firstName: data.firstName });
+                  setDeleteClient({ id: data?.id, firstName: data?.firstName });
                   setOpen(true);
                }}
             />

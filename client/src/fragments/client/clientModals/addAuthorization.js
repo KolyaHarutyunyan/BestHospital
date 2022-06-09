@@ -40,13 +40,9 @@ export const AddAuthorization = ({ handleClose, info }) => {
            }
          : {}
    );
-   const [authStatus, setAuthStatus] = useState(
-      info ? makeCapitalize(info?.status) : ""
-   );
+   const [authStatus, setAuthStatus] = useState(info ? makeCapitalize(info?.status) : "");
    const [fullAddress, setFullAddress] = useState(info ? info.location : "");
-   const [enteredAddress, setEnteredAddress] = useState(
-      info ? info.location : ""
-   );
+   const [enteredAddress, setEnteredAddress] = useState(info ? info.location : "");
 
    const params = useParams();
 
@@ -54,9 +50,9 @@ export const AddAuthorization = ({ handleClose, info }) => {
 
    const enrolment = useSelector((state) => state.client.clientEnrollment);
 
-   let enrolments = useSelector(
-      (state) => state?.client?.clientEnrollment
-   ).filter((item) => item.funderId);
+   let enrolments = useSelector((state) => state?.client?.clientEnrollment).filter(
+      (item) => item.funderId
+   );
 
    let fSelect = useSelector((state) => state.fundingSource.fSelect.funders);
 
@@ -73,27 +69,21 @@ export const AddAuthorization = ({ handleClose, info }) => {
       if (!success.length) return;
 
       handleClose();
-      dispatch(
-         httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION")
-      );
+      dispatch(httpRequestsOnErrorsActions.removeError("GET_CLIENT_AUTHORIZATION"));
 
       if (info) {
          dispatch(
-            httpRequestsOnSuccessActions.removeSuccess(
-               "EDIT_CLIENT_AUTHORIZATION"
-            )
+            httpRequestsOnSuccessActions.removeSuccess("EDIT_CLIENT_AUTHORIZATION")
          );
       } else {
          dispatch(
-            httpRequestsOnSuccessActions.removeSuccess(
-               "CREATE_CLIENT_AUTHORIZATION"
-            )
+            httpRequestsOnSuccessActions.removeSuccess("CREATE_CLIENT_AUTHORIZATION")
          );
       }
    }, [success]);
 
    useEffect(() => {
-      dispatch(fundingSourceActions.getFundingSource());
+      dispatch(fundingSourceActions.getFundingSource({ status: "ACTIVE" }));
    }, []);
 
    const handleChange = (e) => {
@@ -101,8 +91,7 @@ export const AddAuthorization = ({ handleClose, info }) => {
          ...prevState,
          [e.target.name]: e.target.value,
       }));
-      (error === e.target.name || error === ErrorText.dateError) &&
-         setError("");
+      (error === e.target.name || error === ErrorText.dateError) && setError("");
    };
 
    const handleStatusChange = (event) => {
@@ -119,8 +108,7 @@ export const AddAuthorization = ({ handleClose, info }) => {
       const dateComparingIsValid =
          !!inputs.startDate &&
          !!inputs.endDate &&
-         new Date(inputs.startDate).getTime() <
-            new Date(inputs.endDate).getTime();
+         new Date(inputs.startDate).getTime() < new Date(inputs.endDate).getTime();
 
       const authorizationDataIsValid =
          isNotEmpty(inputs.authId) &&
@@ -148,16 +136,10 @@ export const AddAuthorization = ({ handleClose, info }) => {
          };
 
          if (info) {
-            dispatch(
-               clientActions.editClientsAuthorizations(data, info.id, params.id)
-            );
+            dispatch(clientActions.editClientsAuthorizations(data, info.id, params.id));
          } else {
             dispatch(
-               clientActions.createClientsAuthorizations(
-                  data,
-                  params.id,
-                  id[0].id
-               )
+               clientActions.createClientsAuthorizations(data, params.id, id[0].id)
             );
          }
       } else {
@@ -207,7 +189,7 @@ export const AddAuthorization = ({ handleClose, info }) => {
                      handleSelect={handleChange}
                      value={inputs.funding}
                      list={fSelect ? fSelect : []}
-                     typeError={error === "funding" ? ErrorText.field : ""}
+                     typeError={error === "funding" ? ErrorText.selectField : ""}
                   />
                   <div style={{ display: "flex" }}>
                      <ValidationInput
@@ -251,7 +233,7 @@ export const AddAuthorization = ({ handleClose, info }) => {
                      handleSelect={handleStatusChange}
                      value={authStatus}
                      list={_list}
-                     typeError={error === "status" ? ErrorText.field : ""}
+                     typeError={error === "status" ? ErrorText.selectField : ""}
                   />
                   <AddressInput
                      name={"location"}
@@ -261,9 +243,7 @@ export const AddAuthorization = ({ handleClose, info }) => {
                      handleSelectValue={handleAddressChange}
                      onTrigger={setFullAddress}
                      info={info ? info : ""}
-                     errorBoolean={
-                        error === "enteredAddress" ? ErrorText.field : ""
-                     }
+                     errorBoolean={error === "enteredAddress" ? ErrorText.field : ""}
                      enteredValue={enteredAddress}
                   />
                </div>

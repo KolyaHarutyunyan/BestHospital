@@ -10,7 +10,14 @@ import {
    TableBodyComponent,
 } from "@eachbase/components";
 import { serviceSingleStyles } from "./styles";
-import { Colors, FindLoad, FindSuccess, getLimitedVal, Images } from "@eachbase/utils";
+import {
+   Colors,
+   FindLoad,
+   FindSuccess,
+   getLimitedVal,
+   Images,
+   makeCapitalize,
+} from "@eachbase/utils";
 import { TableCell } from "@material-ui/core";
 import { clientActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 
@@ -66,9 +73,9 @@ export const ClientContact = ({ data, setContactId, handleOpenClose, info }) => 
    }, [success]);
 
    const generalInfo = [
-      { title: "First Name", value: data?.firstName },
-      { title: "Middle Name", value: data?.middleName },
-      { title: "Last Name", value: data?.lastName },
+      { title: "First Name", value: makeCapitalize(data?.firstName) },
+      { title: "Middle Name", value: makeCapitalize(data?.middleName) },
+      { title: "Last Name", value: makeCapitalize(data?.lastName) },
       { title: "Code", value: data?.code },
    ].filter((item) => !!item.value);
 
@@ -80,9 +87,9 @@ export const ClientContact = ({ data, setContactId, handleOpenClose, info }) => 
       return (
          <TableBodyComponent key={index}>
             <TableCell>
-               <p className={classes.tableName}>{item?.firstName}</p>
+               <p className={classes.tableName}>{makeCapitalize(item?.firstName)}</p>
             </TableCell>
-            <TableCell> {item?.lastName} </TableCell>
+            <TableCell> {makeCapitalize(item?.lastName)} </TableCell>
             <TableCell> {item?.relationship} </TableCell>
             <TableCell> {getLimitedVal(item?.address?.formattedAddress, 22)} </TableCell>
             <TableCell> {item?.phoneNumber} </TableCell>

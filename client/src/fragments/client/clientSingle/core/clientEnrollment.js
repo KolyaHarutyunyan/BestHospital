@@ -9,14 +9,11 @@ import {
    TableBodyComponent,
 } from "@eachbase/components";
 import { serviceSingleStyles } from "./styles";
-import { Colors, FindLoad, FindSuccess, Images } from "@eachbase/utils";
+import { Colors, FindLoad, FindSuccess, Images, makeCapitalize } from "@eachbase/utils";
 import { Radio, TableCell } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import { AddEnrollment } from "../../clientModals";
-import {
-   clientActions,
-   httpRequestsOnSuccessActions,
-} from "@eachbase/store";
+import { clientActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 import { clientEnrollmentHeaderTitles, getGeneralInfo } from "./constants";
 
 export const ClientEnrollment = ({ data, info }) => {
@@ -77,7 +74,7 @@ export const ClientEnrollment = ({ data, info }) => {
                   />
                )}
             </TableCell>
-            <TableCell> {item.funderId?.name} </TableCell>
+            <TableCell> {makeCapitalize(item.funderId?.name)} </TableCell>
             <TableCell>
                <p className={classes.tableID}>{item?.clientId}</p>
             </TableCell>

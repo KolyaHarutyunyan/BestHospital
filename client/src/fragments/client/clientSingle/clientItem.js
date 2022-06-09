@@ -20,7 +20,7 @@ import {
 } from "./core";
 import { AddContact } from "../clientModals";
 import { clientItemStyles } from "./styles";
-import { FindLoad } from "@eachbase/utils";
+import { FindLoad, makeCapitalize } from "@eachbase/utils";
 import { useParams } from "react-router-dom";
 
 const tabsLabels = [
@@ -149,7 +149,7 @@ export const ClientItem = () => {
             body={
                <InactiveModal
                   statusType={statusType}
-                  name={data?.firstName}
+                  name={makeCapitalize(data?.firstName)}
                   info={{
                      path: "client",
                      type: "GET_CLIENT_BY_ID_SUCCESS",

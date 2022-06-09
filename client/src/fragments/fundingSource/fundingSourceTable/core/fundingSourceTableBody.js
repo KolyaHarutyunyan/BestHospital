@@ -2,35 +2,41 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { TableBodyComponent } from "@eachbase/components";
 import { TableCell } from "@material-ui/core";
-import { Images, useGlobalStyles } from "@eachbase/utils";
+import { hooksForTable, Images, makeCapitalize, useGlobalStyles } from "@eachbase/utils";
 
 export const FundingSourceTableBody = ({ data }) => {
    const globalClasses = useGlobalStyles();
+
    const history = useHistory();
-   const handleOpenOfficeInfo = (id) => {
-      history.push(`/fundingSource/${id}`);
-   };
+
+   const currentAddress = data?.address?.street
+      ? data?.address?.street
+      : data?.address?.city
+      ? data?.address?.city
+      : data?.address?.country
+      ? data?.address?.country
+      : "";
+
+   const funderName = hooksForTable.showDashIfEmpty(data?.name);
+   const type = hooksForTable.showDashIfEmpty(data?.type);
+   const address = hooksForTable.showDashIfEmpty(currentAddress);
+   const email = hooksForTable.showDashIfEmpty(data.email);
+   const phoneNumber = hooksForTable.showDashIfEmpty(data.phoneNumber);
 
    return (
-      <TableBodyComponent handleOpenInfo={() => handleOpenOfficeInfo(data.id)}>
+      <TableBodyComponent
+         handleOpenInfo={() => history.push(`/fundingSource/${data?.id}`)}
+      >
          <TableCell>
             <div className={globalClasses.InfoAndImage}>
                <img src={Images.fundingSourceOutline} alt={"funding"} />
-               <p>{data.name}</p>
+               <p>{makeCapitalize(funderName)}</p>
             </div>
          </TableCell>
-         <TableCell>{data?.type}</TableCell>
-         <TableCell>
-            {data.address?.street
-               ? data.address?.street
-               : data.address?.city
-               ? data.address?.city
-               : data.address?.country
-               ? data.address?.country
-               : null}
-         </TableCell>
-         <TableCell>{data.email}</TableCell>
-         <TableCell>{data.phoneNumber}</TableCell>
+         <TableCell>{type}</TableCell>
+         <TableCell>{address}</TableCell>
+         <TableCell>{email}</TableCell>
+         <TableCell>{phoneNumber}</TableCell>
       </TableBodyComponent>
    );
 };

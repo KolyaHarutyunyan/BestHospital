@@ -219,7 +219,7 @@ export const CreateFundingSource = ({ handleClose, info }) => {
                      handleSelect={handleChange}
                      value={inputs.type}
                      language={enumValues.FUNDING_SOURCE_TYPES}
-                     typeError={error === "type" ? ErrorText.field : ""}
+                     typeError={error === "type" ? ErrorText.selectField : ""}
                   />
                   <ValidationInput
                      onChange={handleChange}

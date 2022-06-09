@@ -15,6 +15,7 @@ import {
 import { fundingSourceItemStyle } from "./styles";
 import { useParams } from "react-router-dom";
 import { ServiceTable } from "./core/common";
+import { makeCapitalize } from "@eachbase/utils";
 
 const tabsLabels = [
    { label: "General Information" },
@@ -97,7 +98,7 @@ export const FundingSourceItem = ({}) => {
             body={
                <InactiveModal
                   statusType={statusType}
-                  name={data?.name}
+                  name={makeCapitalize(data?.name)}
                   info={{
                      path: "funding",
                      type: "GET_FUNDING_SOURCE_BY_ID_SUCCESS",

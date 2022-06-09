@@ -17,7 +17,13 @@ import {
    StaffAvailability,
    StaffTimesheet,
 } from "./core";
-import { DrawerContext, FindLoad, FindSuccess, Images } from "@eachbase/utils";
+import {
+   DrawerContext,
+   FindLoad,
+   FindSuccess,
+   Images,
+   makeCapitalize,
+} from "@eachbase/utils";
 import {
    SimpleTabs,
    Notes,
@@ -287,7 +293,7 @@ export const StaffItem = ({ gen }) => {
             body={
                <InactiveModal
                   statusType={statusType}
-                  name={staffGeneral?.firstName}
+                  name={makeCapitalize(staffGeneral?.firstName)}
                   info={{
                      path: "staff",
                      type: "GET_ADMIN_BY_ID_SUCCESS",

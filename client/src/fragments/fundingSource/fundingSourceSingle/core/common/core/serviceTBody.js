@@ -14,7 +14,6 @@ import { Drawer } from "@material-ui/core";
 
 export const ServiceTBody = ({ service, globalCredentials }) => {
    const classes = fundingSourceCommonCoreStyle();
-
    const width = useWidth();
 
    const { open } = useContext(DrawerContext);
@@ -26,12 +25,7 @@ export const ServiceTBody = ({ service, globalCredentials }) => {
    }
 
    const [modalIsOpen, setModalIsOpen] = useState(false);
-   const [drawerPosition, setDrawerPosition] = useState({
-      top: false,
-      right: false,
-      bottom: false,
-      right: false,
-   });
+   const [drawerPosition, setDrawerPosition] = useState({ right: false });
 
    function toggleDrawer(anchor, open) {
       setDrawerPosition({ ...drawerPosition, [anchor]: open });
