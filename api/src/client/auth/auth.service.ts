@@ -1,17 +1,17 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { AuthDTO, CreateAuthDTO, UpdateAuthDTO } from './dto';
-import { IClient } from '../interface';
-import { IAuth, IAuthDoc } from './interface';
-import { MongooseUtil } from '../../util';
 import { Model } from 'mongoose';
-import { AuthSanitizer } from './interceptor/auth.sanitizer';
-import { ClientAuthorizationModel } from './auth.model';
+import { FileService } from '../../files/file.service';
+import { MongooseUtil } from '../../util';
+import { AuthService } from '../auth-service/auth-service.service';
 import { ClientModel } from '../client.model';
 import { EnrollmentService } from '../enrollment';
-import { AuthService } from '../auth-service/auth-service.service';
-import { CreateDocDTO } from './dto/create.dto';
+import { IClient } from '../interface';
 import { DocumentStatus } from './auth.constants';
-import { FileService } from '../../files/file.service';
+import { ClientAuthorizationModel } from './auth.model';
+import { AuthDTO, CreateAuthDTO, UpdateAuthDTO } from './dto';
+import { CreateDocDTO } from './dto/create.dto';
+import { AuthSanitizer } from './interceptor/auth.sanitizer';
+import { IAuth, IAuthDoc } from './interface';
 
 @Injectable()
 export class AuthorizationService {
@@ -33,9 +33,12 @@ export class AuthorizationService {
   /** Create a new authorization */
   create = async (clientId: string, funderId: string, dto: CreateAuthDTO): Promise<AuthDTO> => {
     try {
-      const client = await this.clientModel.findById({ _id: clientId });
+      this.checkTime(dto.startDate, dto.endDate);
+      const [client] = await Promise.all([
+        this.clientModel.findById({ _id: clientId }),
+        this.enrollmentService.findByFunder(funderId)
+      ])
       this.checkClient(client);
-      await this.enrollmentService.findByFunder(funderId);
       const auth = new this.model({
         authId: dto.authId,
         clientId: client._id,
@@ -45,8 +48,6 @@ export class AuthorizationService {
         status: dto.status,
         location: dto.location,
       });
-      // chka status
-      // if startDate >= date.now && <= endDate then status == true
       await auth.save();
       return this.sanitizer.sanitize(auth);
     } catch (e) {
@@ -138,6 +139,12 @@ export class AuthorizationService {
       list.splice(index, 1);
     } else {
       throw new HttpException('Was not found in list', HttpStatus.NOT_FOUND);
+    }
+  }
+  /** check dates */
+  private checkTime(start: Date, end: Date) {
+    if (new Date(start) > new Date(end)) {
+      throw new HttpException('End date should be greater than start date', HttpStatus.BAD_REQUEST);
     }
   }
 }

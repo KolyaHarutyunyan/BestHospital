@@ -58,6 +58,12 @@ export class AuthService {
           modifiers,
         );
       }
+      else if (!dto.modifiers || dto.modifiers.length === 0) {
+        const authService = await this.model.findOne({ authorizationId, modifiers: null })
+        if(authService){
+          throw new HttpException('Can not be two authorization service without the modifiers', HttpStatus.BAD_REQUEST);
+        }
+      }
       const authorizationService = new this.model({
         total: dto.total,
         authorizationId: authorizationId,
@@ -185,25 +191,13 @@ export class AuthService {
       ]);
       this.checkAuthService(authService);
       this.checkAuth(auth);
-      const modifiers = [];
-      const brokenModifiers = [];
-      const [fundingService, compareByFundingService] = await Promise.all([
-        this.fundingService.findAllServiceForClient(auth.funderId, dto.fundingServiceId),
-        this.compareModifiersByFundingService(dto, service, modifiers),
-        this.compareModifiersByAuthService(
-          dto.authorizationId,
-          dto.fundingServiceId,
-          dto,
-          brokenModifiers,
-        ),
-      ]);
+      const fundingService = await this.fundingService.findAllServiceForClient(auth.funderId, dto.fundingServiceId);
       if (!fundingService.length) {
         throw new HttpException('Invalid fundingServiceId', HttpStatus.NOT_FOUND);
       }
       if (dto.total) {
         authService.total = dto.total;
       }
-      authService.modifiers = compareByFundingService || [];
       authService.serviceId = dto.fundingServiceId;
       await authService.save();
       return this.sanitizer.sanitize(authService);

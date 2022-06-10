@@ -12,10 +12,8 @@ const AuthSchema = new Schema({
   clientId: { type: Types.ObjectId, ref: 'Client' },
   authId: { type: String },
   funderId: { type: Types.ObjectId, ref: 'Funder' },
-  // petqa partadir active enrollmenti tak lini aysinqn ete terminate chi
   startDate: { type: String },
   endDate: { type: String },
-  // start u end@ partadir field en
   status: { type: String, enum: [AuthorizationStatus] },
   createdDate: { type: Date, default: Date.now() },
   updatedDate: { type: Date, default: null },

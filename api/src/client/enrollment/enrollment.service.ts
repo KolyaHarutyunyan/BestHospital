@@ -85,6 +85,9 @@ export class EnrollmentService {
     try {
       const enrollment = await this.model.findOne({ funderId });
       this.checkEnrollment(enrollment);
+      if (enrollment.terminationDate) {
+        throw new HttpException('Enrollment is not active', HttpStatus.NOT_FOUND);
+      }
       return this.sanitizer.sanitize(enrollment);
     } catch (e) {
       throw e;

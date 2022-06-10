@@ -5,7 +5,6 @@ const AuthServiceSchema = new Schema({
   authorizationId: { type: Types.ObjectId, ref: 'ClientAuth' },
   serviceId: { type: Types.ObjectId, ref: 'FundingService' },
   modifiers: [{ type: Object }],
-  // can not update the modifier
   total: { type: Number },
   completed: { type: Number, default: 0 },
   createdDate: { type: Date, default: Date.now() },
