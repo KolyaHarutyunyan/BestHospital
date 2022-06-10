@@ -30,12 +30,19 @@ export class HistoryController {
     required: false,
     type: Date,
   })
+  @ApiQuery({
+    name: 'onResource',
+    description: 'Model id',
+    required: false,
+    type: String
+  })
   async findAll(
     @Query('skip') skip: number,
     @Query('limit') limit: number,
     @Query('start') start: Date,
+    @Query('onResource') onResource: string,
     @Param('onModel') onModel: string,
   ) {
-    return await this.historyService.findAll(onModel, skip, limit, start);
+    return await this.historyService.findAll(onModel, onResource, skip, limit, start);
   }
 }

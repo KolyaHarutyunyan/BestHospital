@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { MongooseUtil } from '../util';
 import { CreateHistoryDTO, HistoryDTO } from './dto';
 import { HistoryModel } from './history.model';
-import { IHistory } from './interface';
 import { HistorySanitizer } from './interceptor';
+import { IHistory } from './interface';
 
 @Injectable()
 export class HistoryService {
@@ -33,7 +33,7 @@ export class HistoryService {
   }
 
   /** returns all histories */
-  async findAll(onModel: string, skip: number, limit: number, start: Date): Promise<HistoryDTO[]> {
+  async findAll(onModel: string, onResource: string, skip: number, limit: number, start: Date): Promise<HistoryDTO[]> {
     try {
       let noDate = true;
       let startDate, endDate;
@@ -48,6 +48,9 @@ export class HistoryService {
 
       if (noDate) {
         query.createdDate = { $gte: startDate, $lte: endDate };
+      }
+      if(onResource){
+        query.resource =Types.ObjectId(onResource);
       }
       query.onModel = onModel;
       if (isNaN(skip)) skip = 0;

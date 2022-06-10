@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { MongooseUtil } from '../../util';
 import { Model } from 'mongoose';
-import { ClientEnrollmentModel } from './enrollment.model';
-import { ClientModel } from '../client.model';
-import { CreateEnrollmentDTO, EnrollmentDTO, UpdateEnrollmentDTO } from './dto';
-import { IEnrollment } from './interface';
-import { IClient } from '../interface';
 import { FundingService } from '../../funding';
+import { MongooseUtil } from '../../util';
+import { ClientModel } from '../client.model';
+import { IClient } from '../interface';
+import { CreateEnrollmentDTO, EnrollmentDTO, UpdateEnrollmentDTO } from './dto';
+import { ClientEnrollmentModel } from './enrollment.model';
 import { EnrollmentSanitizer } from './interceptor/enrollment.sanitizer';
+import { IEnrollment } from './interface';
 
 @Injectable()
 export class EnrollmentService {
@@ -31,9 +31,18 @@ export class EnrollmentService {
     funderId: string,
   ): Promise<EnrollmentDTO> {
     try {
-      const client = await this.clientModel.findById({ _id: clientId });
+      if (new Date(dto.startDate) > new Date(Date.now())) {
+        throw new HttpException('Date cannot be in the future', HttpStatus.BAD_REQUEST);
+      }
+      const [client, activeEnrollment] = await Promise.all([
+        this.clientModel.findById({ _id: clientId }),
+        this.model.findOne({ clientId, terminationDate: null }),
+        this.fundingService.findById(funderId)
+      ])
       this.checkClient(client);
-      await this.fundingService.findById(funderId);
+      if (activeEnrollment) {
+        throw new HttpException('Can not be two active enrollment', HttpStatus.BAD_REQUEST);
+      }
       if (dto.primary) {
         const findEnrollment = await this.model.findOne({ clientId, primary: true });
         if (findEnrollment !== null) {
@@ -95,7 +104,12 @@ export class EnrollmentService {
       this.checkClient(client);
       await this.fundingService.findById(funderId);
       enrollment.funderId = funderId;
-      if (dto.startDate) enrollment.startDate = dto.startDate;
+      if (dto.startDate) {
+        if (new Date(dto.startDate) > new Date(Date.now())) {
+          throw new HttpException('Date cannot be in the future', HttpStatus.BAD_REQUEST);
+        }
+        enrollment.startDate = dto.startDate;
+      }
       if (dto.primary) {
         const findEnrollment = await this.model.findOne({ clientId, primary: true });
         if (findEnrollment !== null && enrollment.id != findEnrollment.id) {

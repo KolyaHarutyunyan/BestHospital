@@ -60,7 +60,7 @@ export class ClientService {
         this.model
           .find({ status: status ? status : ClientStatus.ACTIVE })
           .populate({ path: 'enrollment', select: 'name' })
-          .sort({ _id: 1 })
+          .sort({ _id: -1 })
           .skip(skip)
           .limit(limit),
         this.model.countDocuments({ status: status ? status : ClientStatus.ACTIVE }),
