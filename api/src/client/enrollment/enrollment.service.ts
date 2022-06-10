@@ -140,6 +140,7 @@ export class EnrollmentService {
     const enrollment = await this.model.findById({ _id });
     this.checkEnrollment(enrollment);
     enrollment.terminationDate = new Date(Date.now());
+    await enrollment.save();
     return this.sanitizer.sanitize(enrollment);
   }
   //remove the enrollment
