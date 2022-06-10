@@ -40,6 +40,9 @@ export const CREATE_CLIENT_ENROLLMENT = "CREATE_CLIENT_ENROLLMENT";
 /** Edit client enrollment **/
 export const EDIT_CLIENT_ENROLLMENT = "EDIT_CLIENT_ENROLLMENT";
 
+/** Terminate client enrollment */
+export const TERMINATE_CLIENT_ENROLLMENT = "TERMINATE_CLIENT_ENROLLMENT";
+
 /** Delete client enrollment **/
 export const DELETE_CLIENT_ENROLLMENT = "DELETE_CLIENT_ENROLLMENT";
 

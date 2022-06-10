@@ -217,6 +217,10 @@ export const serviceSingleStyles = makeStyles(() => ({
       "&.starIcon": { color: `${Colors.ThemeRed}!important` },
    },
    addAuthFilesButnStyle: { marginTop: "16px" },
+   contactActionsStyle: {
+      display: "flex",
+      alignItems: "center",
+   },
 }));
 
 export const editButtonStyle = {

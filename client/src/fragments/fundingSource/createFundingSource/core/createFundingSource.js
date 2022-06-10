@@ -9,7 +9,6 @@ import {
 } from "@eachbase/components";
 import { createFoundingSourceStyle } from "./styles";
 import {
-   DomainNameValidator,
    EmailValidator,
    enumValues,
    ErrorText,
@@ -19,6 +18,7 @@ import {
    isNotEmpty,
    manageType,
    URLValidator,
+   hooksForErrors,
 } from "@eachbase/utils";
 import {
    fundingSourceActions,
@@ -26,7 +26,7 @@ import {
    httpRequestsOnSuccessActions,
 } from "@eachbase/store";
 import { FindError } from "@eachbase/utils";
-import { getPhoneError, getEmailError, checkWebsite } from "../constant";
+import { checkWebsite } from "../constant";
 
 export const CreateFundingSource = ({ handleClose, info }) => {
    const classes = createFoundingSourceStyle();
@@ -56,16 +56,19 @@ export const CreateFundingSource = ({ handleClose, info }) => {
 
    useEffect(() => {
       return () => {
-         dispatch(httpRequestsOnErrorsActions.removeError("CREATE_FUNDING_SOURCE"));
-         dispatch(httpRequestsOnErrorsActions.removeError("EDIT_FUNDING_SOURCE"));
+         if (info) {
+            dispatch(httpRequestsOnErrorsActions.removeError("EDIT_FUNDING_SOURCE"));
+         } else {
+            dispatch(httpRequestsOnErrorsActions.removeError("CREATE_FUNDING_SOURCE"));
+         }
       };
    }, []);
 
    const phoneErrorMsg = getPhoneErrorText(inputs.phoneNumber);
    const emailErrorMsg = !EmailValidator.test(inputs.email) ? ErrorText.emailValid : "";
 
-   const phoneErrorText = getPhoneError(error, backError, phoneErrorMsg);
-   const emailErrorText = getEmailError(error, backError, emailErrorMsg);
+   const phoneErrorText = hooksForErrors.getPhoneError(error, backError, phoneErrorMsg);
+   const emailErrorText = hooksForErrors.getEmailError(error, backError, emailErrorMsg);
 
    const handleCheck = (bool) => {
       if (bool === true) {

@@ -28,6 +28,7 @@ import {
    GET_CLIENT_AUTHORIZATION_FILE,
    ADD_FILES_TO_CLIENT_AUTH,
    REMOVE_FILES_FROM_CLIENT_AUTH,
+   TERMINATE_CLIENT_ENROLLMENT,
 } from "./client.types";
 
 export const getClients = (data) => {
@@ -111,6 +112,13 @@ export const editClientEnrollment = (body, clientId, funderId, id) => {
    return {
       type: EDIT_CLIENT_ENROLLMENT,
       payload: { body, clientId, id, funderId },
+   };
+};
+
+export const terminateClientEnrollment = (enrollmentId) => {
+   return {
+      type: TERMINATE_CLIENT_ENROLLMENT,
+      payload: { enrollmentId },
    };
 };
 

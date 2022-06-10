@@ -71,6 +71,7 @@ export const modalsStyle = makeStyles(() => ({
       display: "flex",
       flexDirection: "column",
       textAlign: "center",
+      "& button": { backgroundColor: Colors.BackgroundWater },
    },
    AddAvailabilityScheduelBlock: {
       margin: "40px 0",

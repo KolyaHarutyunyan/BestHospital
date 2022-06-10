@@ -36,7 +36,7 @@ export const clientEnrollmentHeaderTitles = [
    { title: "Funding Source", sortable: true },
    { title: "Client ID", sortable: false },
    { title: "Start Date", sortable: true },
-   { title: "Terminated...", sortable: true },
+   { title: "Termination Date", sortable: true },
    { title: "Action", sortable: false },
 ];
 

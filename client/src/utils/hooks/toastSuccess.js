@@ -152,6 +152,8 @@ export const ToastSuccess = (success) => {
          ? "Modifier was created"
          : success === "EDIT_FUNDING_MODIFIER"
          ? "Modifier was edited"
+         : success === "TERMINATE_CLIENT_ENROLLMENT"
+         ? "Enrollment was terminated"
          : false;
    }
 };

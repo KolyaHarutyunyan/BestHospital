@@ -10,11 +10,7 @@ import {
 } from "@eachbase/components";
 import { createClientStyle } from "./styles";
 import { ErrorText, FindLoad, FindSuccess } from "@eachbase/utils";
-import {
-   clientActions,
-   httpRequestsOnErrorsActions,
-   httpRequestsOnSuccessActions,
-} from "@eachbase/store";
+import { clientActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 import { Checkbox } from "@material-ui/core";
 
 export const AddEnrollment = ({ handleClose, info }) => {
@@ -31,18 +27,12 @@ export const AddEnrollment = ({ handleClose, info }) => {
       info
          ? {
               ...info,
-              funding: info.funderId.name,
-              startDate: info?.startDate && moment(info?.startDate).format("YYYY-MM-DD"),
-              terminationDate:
-                 info?.terminationDate &&
-                 moment(info?.terminationDate).format("YYYY-MM-DD"),
+              funding: info.funderId?.name,
+              startDate: info.startDate && moment(info.startDate).format("YYYY-MM-DD"),
            }
          : {}
    );
-   const [isPrimaryEnrol, setIsPrimaryEnrol] = useState(info ? !!info.primary : false);
-   const [hasTerminationDate, setHasTerminationDate] = useState(
-      info ? !!info.terminationDate : false
-   );
+   const [isPrimaryEnrol, setIsPrimaryEnrol] = useState(info ? info.primary : false);
 
    const success = info
       ? FindSuccess("EDIT_CLIENT_ENROLLMENT")
@@ -60,32 +50,14 @@ export const AddEnrollment = ({ handleClose, info }) => {
 
    function handleChange(e) {
       setInputs((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
-      (error === e.target.name || error === ErrorText.dateError) && setError("");
-   }
-
-   function handlePrimaryEnrolChane(e) {
-      setIsPrimaryEnrol(e.target.checked);
-   }
-
-   function handleTerminationChange(e) {
-      if (!e.target.checked) {
-         inputs["terminationDate"] = null;
-      }
-      setHasTerminationDate(e.target.checked);
-      (error === "terminationDate" || error === ErrorText.dateError) && setError("");
+      (error === e.target.name || error === ErrorText.startDateError) && setError("");
    }
 
    function handleCreate() {
-      const dateComparingIsValid =
-         !!inputs.terminationDate &&
-         new Date(inputs.startDate).getTime() <
-            new Date(inputs.terminationDate).getTime();
-
+      const startDateIsValid =
+         new Date(inputs.startDate).getTime() <= new Date(new Date()).getTime();
       const enrollmentDataIsValid =
-         !!inputs.funding &&
-         !!inputs.startDate &&
-         (hasTerminationDate ? dateComparingIsValid : true);
-
+         !!inputs.funding && !!inputs.startDate && startDateIsValid;
       if (enrollmentDataIsValid) {
          let funderId;
          fSelect.forEach((item) => {
@@ -93,13 +65,10 @@ export const AddEnrollment = ({ handleClose, info }) => {
                funderId = item.id;
             }
          });
-
          const data = {
             primary: isPrimaryEnrol,
             startDate: inputs.startDate,
-            terminationDate: inputs.terminationDate || null,
          };
-
          if (info) {
             dispatch(
                clientActions.editClientEnrollment(data, params.id, funderId, info.id)
@@ -113,10 +82,8 @@ export const AddEnrollment = ({ handleClose, info }) => {
                ? "funding"
                : !inputs.startDate
                ? "startDate"
-               : !inputs.terminationDate
-               ? "terminationDate"
-               : !dateComparingIsValid
-               ? ErrorText.dateError
+               : !startDateIsValid
+               ? ErrorText.startDateError
                : "Input is not field"
          );
       }
@@ -128,7 +95,9 @@ export const AddEnrollment = ({ handleClose, info }) => {
             handleClose={handleClose}
             title={info ? "Edit an Enrollment" : "Add an Enrollment"}
             text={
-               "To add a new enrollment in the system, please fulfill the below fields."
+               info
+                  ? "To edit this enrollment, please modify the below fields."
+                  : "To add a new enrollment in the system, please fulfill the below fields."
             }
          />
          <div className={classes.createFoundingSourceBody}>
@@ -150,40 +119,22 @@ export const AddEnrollment = ({ handleClose, info }) => {
                      type={"date"}
                      label={"Start Date*"}
                      name="startDate"
-                     typeError={error === "startDate" && ErrorText.field}
+                     typeError={
+                        error === "startDate"
+                           ? ErrorText.field
+                           : error === ErrorText.startDateError
+                           ? ErrorText.startDateError
+                           : ""
+                     }
                   />
                   <div className={classes.curentlyCheckbox}>
                      <Checkbox
                         checked={isPrimaryEnrol}
-                        onClick={handlePrimaryEnrolChane}
+                        onClick={(e) => setIsPrimaryEnrol(e.target.checked)}
                         color="primary"
                      />
                      <p className={classes.curently}>Set as primary enrollment</p>
                   </div>
-                  <div className={classes.curentlyCheckbox}>
-                     <Checkbox
-                        checked={hasTerminationDate}
-                        onClick={handleTerminationChange}
-                        color="primary"
-                     />
-                     <p className={classes.curently}>Terminate</p>
-                  </div>
-                  <ValidationInput
-                     variant={"outlined"}
-                     disabled={!hasTerminationDate}
-                     onChange={handleChange}
-                     value={inputs.terminationDate}
-                     type={"date"}
-                     label={"Terminated Date"}
-                     name="terminationDate"
-                     typeError={
-                        error === "terminationDate"
-                           ? ErrorText.field
-                           : error === ErrorText.dateError
-                           ? ErrorText.dateError
-                           : ""
-                     }
-                  />
                </div>
             </div>
             <div className={classes.clientModalBlock}>

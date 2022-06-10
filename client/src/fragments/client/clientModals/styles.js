@@ -33,7 +33,9 @@ export const createClientStyle = makeStyles(() => ({
       justifyContent: "space-between",
    },
    clientModalBox: {
-      width: 463,
+      maxWidth: "463px",
+      width: "100%",
+      "&.hidden": { display: "none" },
    },
    inputInfo: {
       fontSize: 18,

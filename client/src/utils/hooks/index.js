@@ -23,3 +23,4 @@ export { makeCapitalize } from "./makeCapitalize";
 export { useWidth } from "./useWidth";
 export { hooksForTable } from "./hooksForTable";
 export { ImgUploader } from "./uploadImages";
+export { hooksForErrors } from "./hooksForErrors";
