@@ -49,7 +49,14 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
 
    const [error, setError] = useState("");
    const [inputs, setInputs] = useState(
-      info ? { ...info, name: info.serviceId, credential: info.credentialId?._id } : {}
+      info
+         ? {
+              ...info,
+              name: info.serviceId?.name,
+              serviceId: info.serviceId?._id,
+              credential: info.credentialId?._id,
+           }
+         : {}
    );
 
    const sysServiceItem = systemServices.find(
@@ -102,7 +109,7 @@ export const FundingSourceServiceAdd = ({ handleClose, info }) => {
          }
       } else {
          const serviceDataErrorText = !isNotEmpty(inputs.serviceId)
-            ? "name"
+            ? "serviceId"
             : !isNotEmpty(inputs.cptCode)
             ? "cptCode"
             : !isNotEmpty(inputs.size)

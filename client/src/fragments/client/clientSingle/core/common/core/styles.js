@@ -1,7 +1,7 @@
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from "@material-ui/core";
 import { Colors, Shadow } from "@eachbase/utils";
 
-export const fundingSourceCommonCoreStyle = makeStyles(() => ({
+export const clientEnrollmentCommonCoreStyle = makeStyles(() => ({
    tableTheadStyle: {
       width: "100%",
       display: "flex",
@@ -46,18 +46,19 @@ export const fundingSourceCommonCoreStyle = makeStyles(() => ({
       fontWeight: 400,
       color: Colors.TextSecondary,
    },
+   terminationDateTextStyle: { marginLeft: "16px" },
    editModifierIconStyle: {
       width: "24px",
       height: "24px",
       cursor: "pointer",
    },
-   showModifiersButnStyle: {
-      marginLeft: "16px",
-      padding: "9px 16px",
-   },
-   modifierTextStyle: {
+   loadStyle: {
       display: "flex",
       alignItems: "center",
    },
-   modifierQtyStyle: { marginLeft: "4px" },
+   radio: {
+      color: "#D263E4",
+      "&$checked": { color: "#D263E4" },
+   },
+   checked: { color: "green" },
 }));

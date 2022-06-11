@@ -44,6 +44,7 @@ export {
    hooksForTable,
    ImgUploader,
    manageType,
+   hooksForErrors,
 } from "./hooks";
 export { ErrorText } from "./errorTexts";
 export { CountryList } from "./jsons";

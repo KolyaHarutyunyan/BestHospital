@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
    ValidationInput,
@@ -14,6 +14,7 @@ import {
    FindLoad,
    FindSuccess,
    getPhoneErrorText,
+   hooksForErrors,
    isNotEmpty,
 } from "@eachbase/utils";
 import {
@@ -22,7 +23,53 @@ import {
    httpRequestsOnSuccessActions,
 } from "@eachbase/store";
 
+function addHiddenClass(className, isHidden = false) {
+   return `${className} ${isHidden ? "hidden" : ""}`;
+}
+
 export const AddContact = ({ handleClose, info }) => {
+   const classes = createClientStyle();
+
+   const params = useParams();
+
+   const dispatch = useDispatch();
+
+   const success = info
+      ? FindSuccess("EDIT_CLIENT_CONTACT")
+      : FindSuccess("CREATE_CLIENT_CONTACT");
+   const loader = info
+      ? FindLoad("EDIT_CLIENT_CONTACT")
+      : FindLoad("CREATE_CLIENT_CONTACT");
+   const backError = info
+      ? FindError("EDIT_CLIENT_CONTACT")
+      : FindError("CREATE_CLIENT_CONTACT");
+
+   useEffect(() => {
+      if (!!backError?.length) {
+         if (backError[0]?.error[0] === "phoneNumber must be a valid phone number") {
+            setStep("first");
+         }
+      }
+   }, [backError]);
+
+   useEffect(
+      () => () => {
+         if (!!info) {
+            dispatch(httpRequestsOnErrorsActions.removeError("EDIT_CLIENT_CONTACT"));
+         } else {
+            dispatch(httpRequestsOnErrorsActions.removeError("CREATE_CLIENT_CONTACT"));
+         }
+      },
+      []
+   );
+
+   useEffect(() => {
+      if (!!success.length) {
+         handleClose();
+         dispatch(httpRequestsOnSuccessActions.removeSuccess(success[0].type));
+      }
+   }, [success]);
+
    const [error, setError] = useState("");
    const [inputs, setInputs] = useState(
       info
@@ -41,39 +88,12 @@ export const AddContact = ({ handleClose, info }) => {
    const [enteredAddress, setEnteredAddress] = useState(
       info ? info.address?.formattedAddress : ""
    );
-   const classes = createClientStyle();
 
-   const dispatch = useDispatch();
-
-   const params = useParams();
-
-   const success = info
-      ? FindSuccess("EDIT_CLIENT_CONTACT")
-      : FindSuccess("CREATE_CLIENT_CONTACT");
-   const loader = info
-      ? FindLoad("EDIT_CLIENT_CONTACT")
-      : FindLoad("CREATE_CLIENT_CONTACT");
-   const backError = info
-      ? FindError("EDIT_CLIENT_CONTACT")
-      : FindError("CREATE_CLIENT_CONTACT");
-
-   useEffect(() => {
-      if (!!success.length) {
-         handleClose();
-         dispatch(httpRequestsOnSuccessActions.removeSuccess(success[0].type));
-      }
-   }, [success]);
+   const firstContentStyle = addHiddenClass(classes.clientModalBox, step === "second");
+   const secondContentStyle = addHiddenClass(classes.clientModalBox, step === "first");
 
    const phoneErrorMsg = getPhoneErrorText(inputs.phoneNumber);
-   const phoneErrorText =
-      error === "phoneNumber"
-         ? ErrorText.field
-         : error === phoneErrorMsg
-         ? phoneErrorMsg
-         : backError.length &&
-           backError[0].error[0] === "phoneNumber must be a valid phone number"
-         ? "Phone number must be a valid phone number"
-         : "";
+   const phoneErrorText = hooksForErrors.getPhoneError(error, backError, phoneErrorMsg);
 
    const handleChange = (e) => {
       setInputs((prevState) => ({
@@ -136,10 +156,10 @@ export const AddContact = ({ handleClose, info }) => {
                relationship: inputs.relationship,
                address: fullAddress,
             };
-            if (!info) {
-               dispatch(clientActions.createClientContact(data, params.id));
-            } else if (info) {
+            if (!!info) {
                dispatch(clientActions.editClientContact(data, info.id, params.id));
+            } else {
+               dispatch(clientActions.createClientContact(data, params.id));
             }
          } else {
             setError(!enteredAddress ? "enteredAddress" : "Input is not field");
@@ -158,58 +178,55 @@ export const AddContact = ({ handleClose, info }) => {
          />
          <div className={classes.createFoundingSourceBody}>
             <div className={classes.clientModalBlock}>
-               {step === "first" ? (
-                  <div className={classes.clientModalBox}>
-                     <ValidationInput
-                        variant={"outlined"}
-                        onChange={handleChange}
-                        value={inputs.firstName}
-                        type={"text"}
-                        label={"First Name*"}
-                        name="firstName"
-                        typeError={error === "firstName" ? ErrorText.field : ""}
-                     />
-                     <ValidationInput
-                        variant={"outlined"}
-                        onChange={handleChange}
-                        value={inputs.lastName}
-                        type={"text"}
-                        label={"Last Name*"}
-                        name="lastName"
-                        typeError={error === "lastName" ? ErrorText.field : ""}
-                     />
-                     <ValidationInput
-                        Length={11}
-                        variant={"outlined"}
-                        onChange={handleChange}
-                        value={inputs.phoneNumber}
-                        type={"number"}
-                        label={"Phone Number*"}
-                        name="phoneNumber"
-                        typeError={phoneErrorText}
-                     />
-                     <ValidationInput
-                        variant={"outlined"}
-                        onChange={handleChange}
-                        value={inputs.relationship}
-                        type={"text"}
-                        label={"Relationship*"}
-                        name="relationship"
-                        typeError={error === "relationship" ? ErrorText.field : ""}
-                     />
-                  </div>
-               ) : (
-                  <div className={classes.clientModalBox}>
-                     <AddressInput
-                        flex={true}
-                        handleSelectValue={handleAddressChange}
-                        info={info && info.address ? info : ""}
-                        errorBoolean={error === "enteredAddress" ? ErrorText.field : ""}
-                        onTrigger={setFullAddress}
-                        enteredValue={enteredAddress}
-                     />
-                  </div>
-               )}
+               <div className={firstContentStyle}>
+                  <ValidationInput
+                     variant={"outlined"}
+                     onChange={handleChange}
+                     value={inputs.firstName}
+                     type={"text"}
+                     label={"First Name*"}
+                     name="firstName"
+                     typeError={error === "firstName" ? ErrorText.field : ""}
+                  />
+                  <ValidationInput
+                     variant={"outlined"}
+                     onChange={handleChange}
+                     value={inputs.lastName}
+                     type={"text"}
+                     label={"Last Name*"}
+                     name="lastName"
+                     typeError={error === "lastName" ? ErrorText.field : ""}
+                  />
+                  <ValidationInput
+                     Length={11}
+                     variant={"outlined"}
+                     onChange={handleChange}
+                     value={inputs.phoneNumber}
+                     type={"number"}
+                     label={"Phone Number*"}
+                     name="phoneNumber"
+                     typeError={phoneErrorText}
+                  />
+                  <ValidationInput
+                     variant={"outlined"}
+                     onChange={handleChange}
+                     value={inputs.relationship}
+                     type={"text"}
+                     label={"Relationship*"}
+                     name="relationship"
+                     typeError={error === "relationship" ? ErrorText.field : ""}
+                  />
+               </div>
+               <div className={secondContentStyle}>
+                  <AddressInput
+                     flex={true}
+                     handleSelectValue={handleAddressChange}
+                     info={info && info.address ? info : ""}
+                     errorBoolean={error === "enteredAddress" ? ErrorText.field : ""}
+                     onTrigger={setFullAddress}
+                     enteredValue={enteredAddress}
+                  />
+               </div>
             </div>
             <div className={classes.clientModalBlock}>
                <CreateChancel

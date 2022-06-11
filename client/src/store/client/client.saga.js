@@ -44,6 +44,7 @@ import {
    DELETE_CLIENT_AUTHORIZATION_FILE,
    ADD_FILES_TO_CLIENT_AUTH,
    REMOVE_FILES_FROM_CLIENT_AUTH,
+   TERMINATE_CLIENT_ENROLLMENT,
 } from "./client.types";
 import { httpRequestsOnErrorsActions } from "../http_requests_on_errors";
 import { httpRequestsOnLoadActions } from "../http_requests_on_load";
@@ -271,12 +272,30 @@ function* editClientEnrollment(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
-      const res = yield call(authService.editClientEnrollmentService, action);
+      yield call(authService.editClientEnrollmentService, action);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_CLIENT_ENROLLMENT,
          payload: { id: action.payload.clientId },
+      });
+   } catch (err) {
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+   }
+}
+
+function* terminateClientEnrollment(action) {
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
+   try {
+      const res = yield call(authService.terminateClientEnrollmentService, action);
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+      yield put({
+         type: GET_CLIENT_ENROLLMENT,
+         payload: { id: res.data?.clientId },
       });
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
@@ -626,6 +645,7 @@ export const watchClient = function* watchClientSaga() {
    yield takeLatest(GET_CLIENT_ENROLLMENT, getClientEnrollment);
    yield takeLatest(CREATE_CLIENT_ENROLLMENT, createClientEnrollment);
    yield takeLatest(EDIT_CLIENT_ENROLLMENT, editClientEnrollment);
+   yield takeLatest(TERMINATE_CLIENT_ENROLLMENT, terminateClientEnrollment);
    yield takeLatest(DELETE_CLIENT_ENROLLMENT, deleteClientEnrollment);
    yield takeLatest(GET_CLIENT_AUTHORIZATION, getClientsAuthorizations);
    yield takeLatest(CREATE_CLIENT_AUTHORIZATION, createClientsAuthorizations);

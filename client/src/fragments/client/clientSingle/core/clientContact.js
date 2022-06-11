@@ -4,26 +4,18 @@ import { useDispatch } from "react-redux";
 import {
    Card,
    DeleteElement,
-   NoItemText,
    Notes,
    SimpleModal,
    TableBodyComponent,
 } from "@eachbase/components";
 import { serviceSingleStyles } from "./styles";
-import {
-   Colors,
-   FindLoad,
-   FindSuccess,
-   getLimitedVal,
-   Images,
-   makeCapitalize,
-} from "@eachbase/utils";
+import { Colors, FindLoad, FindSuccess, Images, makeCapitalize } from "@eachbase/utils";
 import { TableCell } from "@material-ui/core";
 import { clientActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 
 const headerTitles = [
    {
-      title: "First Na...",
+      title: "First Name",
       sortable: true,
    },
    {
@@ -39,7 +31,7 @@ const headerTitles = [
       sortable: true,
    },
    {
-      title: "Phone Num...",
+      title: "Phone Number",
       sortable: false,
    },
    {
@@ -91,10 +83,12 @@ export const ClientContact = ({ data, setContactId, handleOpenClose, info }) => 
             </TableCell>
             <TableCell> {makeCapitalize(item?.lastName)} </TableCell>
             <TableCell> {item?.relationship} </TableCell>
-            <TableCell> {getLimitedVal(item?.address?.formattedAddress, 22)} </TableCell>
+            <TableCell style={{ maxWidth: "200px" }}>
+               {item?.address?.formattedAddress}
+            </TableCell>
             <TableCell> {item?.phoneNumber} </TableCell>
             <TableCell>
-               <>
+               <div className={classes.contactActionsStyle}>
                   <img
                      src={Images.edit}
                      alt="edit"
@@ -113,7 +107,7 @@ export const ClientContact = ({ data, setContactId, handleOpenClose, info }) => 
                         setIndex(index);
                      }}
                   />
-               </>
+               </div>
             </TableCell>
          </TableBodyComponent>
       );

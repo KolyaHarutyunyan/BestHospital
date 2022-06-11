@@ -31,7 +31,7 @@ export const ServiceTBody = ({ service, globalCredentials }) => {
       setDrawerPosition({ ...drawerPosition, [anchor]: open });
    }
 
-   const serviceName = getTableData(service?.name);
+   const serviceName = getTableData(service?.serviceId?.name);
    const cptCode = getTableData(service?.cptCode);
    const size = getTableData(service?.size);
    const min = getTableData(service?.min);

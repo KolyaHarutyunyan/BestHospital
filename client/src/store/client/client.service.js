@@ -53,6 +53,9 @@ export const authService = {
          { auth: true }
       ),
 
+   terminateClientEnrollmentService: ({ payload }) =>
+      axios.patch(`/enrollment/${payload.enrollmentId}/terminate`, null, { auth: true }),
+
    deleteClientEnrollmentService: ({ payload }) =>
       axios.delete(`/enrollment/${payload.id}`, { auth: true }),
 

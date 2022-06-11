@@ -74,6 +74,8 @@ export const ToastFail = (fail, errorMessage) => {
          ? "Something went wrong"
          : fail === "CREATE_ROLE"
          ? "Something went wrong"
+         : fail === "TERMINATE_CLIENT_ENROLLMENT"
+         ? "Something went wrong"
          : false;
    }
    if (errorMessage) {
