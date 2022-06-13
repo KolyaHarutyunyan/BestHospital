@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ACCESS_TOKEN } from 'src/authN';
 import { Public, ParseObjectIdPipe } from '../../util';
@@ -31,6 +31,18 @@ export class AuthController {
   ): Promise<AuthDTO> {
     return await this.authorizationService.addDocument(id, dto);
   }
+  /** update document*/
+  @Patch(':id/documents/:docId')
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: AuthDTO })
+  async updateDocument(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Param('docId', ParseObjectIdPipe) docId: string,
+    @Query('name') name: string,
+  ): Promise<AuthDTO> {
+    return await this.authorizationService.updateDocument(id, docId, name);
+  }
+
   /** delete document*/
   @Delete(':id/documents/:docId')
   @ApiHeader({ name: ACCESS_TOKEN })

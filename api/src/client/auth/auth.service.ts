@@ -77,7 +77,19 @@ export class AuthorizationService {
   async deleteDocument(_id: string, fileId: string): Promise<AuthDTO> {
     const auth = await this.model.findById(_id);
     this.checkAuth(auth);
-    this.removeFromList(auth.documents, fileId);
+    await this.removeFromList(auth.documents, fileId);
+    await auth.save();
+    return this.sanitizer.sanitize(auth);
+  }
+  /** update document name */
+  async updateDocument(_id: string, fileId: string, name: string): Promise<AuthDTO> {
+    const auth = await this.model.findById(_id);
+    this.checkAuth(auth);
+    auth.documents.map((file: any) => {
+      if (file._id == fileId) {
+        file.name = name;
+      }
+    });
     await auth.save();
     return this.sanitizer.sanitize(auth);
   }
@@ -133,10 +145,11 @@ export class AuthorizationService {
     }
   }
   /** Removes a file from the list if the file exists */
-  private removeFromList(list: any[], element: any) {
-    const index = list.findIndex((file) => file.id == element);
+  private async removeFromList(list: any[], element: any) {
+    const index = list.findIndex((file) => file._id == element);
     if (index !== -1) {
       list.splice(index, 1);
+      await this.fileService.deleteImages(list[index].file.id);
     } else {
       throw new HttpException('Was not found in list', HttpStatus.NOT_FOUND);
     }
