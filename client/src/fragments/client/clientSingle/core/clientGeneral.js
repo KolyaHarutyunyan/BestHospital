@@ -1,36 +1,14 @@
 import React from "react";
-import moment from "moment";
 import { Card } from "@eachbase/components";
 import { serviceSingleStyles } from "./styles";
-import { Colors, Images, makeCapitalize } from "@eachbase/utils";
+import { Colors, Images } from "@eachbase/utils";
+import { getGeneralInfo, getOtherDetails } from "./constants";
 
 export const ClientGeneral = ({ data }) => {
-   let today = new Date();
-
-   const otherDetails = [
-      { title: "Gender", value: data?.gender },
-      {
-         title: "Date of Birth",
-         value: data?.birthday && moment(data?.birthday).format("DD/MM/YYYY"),
-      },
-      {
-         title: "Age",
-         value:
-            data?.birthday && today.getFullYear() - new Date(data.birthday).getFullYear(),
-      },
-      { title: "Ethnicity", value: data?.ethnicity },
-      { title: "Language", value: data?.language },
-      { title: "Family Language:", value: data?.familyLanguage },
-   ];
-
    const classes = serviceSingleStyles();
 
-   const generalInfo = [
-      { title: "First Name", value: makeCapitalize(data?.firstName) },
-      { title: "Middle Name", value: makeCapitalize(data?.middleName) },
-      { title: "Last Name", value: makeCapitalize(data?.lastName) },
-      { title: "Code", value: data?.code },
-   ].filter((item) => !!item.value);
+   const generalInfo = getGeneralInfo(data);
+   const otherDetails = getOtherDetails(data);
 
    return (
       <div className={classes.staffGeneralWrapper}>

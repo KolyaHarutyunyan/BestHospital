@@ -13,4 +13,5 @@ export const ErrorText = {
    equalityError: (min, max) => `${min} must be smaller than ${max}`,
    websiteError: "Invalid Website",
    existenceError: (value = "") => `${value} already exists`,
+   enrollmentError: "Can not be two active Enrollment with the same Funding Source",
 };

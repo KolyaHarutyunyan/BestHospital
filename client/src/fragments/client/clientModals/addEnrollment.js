@@ -9,8 +9,18 @@ import {
    ModalHeader,
 } from "@eachbase/components";
 import { createClientStyle } from "./styles";
-import { ErrorText, FindLoad, FindSuccess } from "@eachbase/utils";
-import { clientActions, httpRequestsOnSuccessActions } from "@eachbase/store";
+import {
+   ErrorText,
+   FindError,
+   FindLoad,
+   FindSuccess,
+   hooksForErrors,
+} from "@eachbase/utils";
+import {
+   clientActions,
+   httpRequestsOnErrorsActions,
+   httpRequestsOnSuccessActions,
+} from "@eachbase/store";
 import { Checkbox } from "@material-ui/core";
 
 export const AddEnrollment = ({ handleClose, info }) => {
@@ -40,6 +50,21 @@ export const AddEnrollment = ({ handleClose, info }) => {
    const loader = info
       ? FindLoad("EDIT_CLIENT_ENROLLMENT")
       : FindLoad("CREATE_CLIENT_ENROLLMENT");
+   const backError = info
+      ? FindError("EDIT_CLIENT_ENROLLMENT")
+      : FindError("CREATE_CLIENT_ENROLLMENT");
+
+   const enrollmentErrorText = hooksForErrors.getEnrollmentErrorText(error, backError);
+
+   useEffect(() => {
+      return () => {
+         if (info) {
+            dispatch(httpRequestsOnErrorsActions.removeError("EDIT_CLIENT_ENROLLMENT"));
+         } else {
+            dispatch(httpRequestsOnErrorsActions.removeError("CREATE_CLIENT_ENROLLMENT"));
+         }
+      };
+   }, []);
 
    useEffect(() => {
       if (!!success.length) {
@@ -50,7 +75,16 @@ export const AddEnrollment = ({ handleClose, info }) => {
 
    function handleChange(e) {
       setInputs((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
-      (error === e.target.name || error === ErrorText.startDateError) && setError("");
+      if (
+         error === e.target.name ||
+         error === ErrorText.startDateError ||
+         (backError && backError.length)
+      ) {
+         setError("");
+      }
+      if (backError && backError.length) {
+         dispatch(httpRequestsOnErrorsActions.removeError(backError[0].type));
+      }
    }
 
    function handleCreate() {
@@ -110,7 +144,7 @@ export const AddEnrollment = ({ handleClose, info }) => {
                      handleSelect={handleChange}
                      value={inputs?.funding}
                      list={fSelect ? fSelect : []}
-                     typeError={error === "funding" ? ErrorText.selectField : ""}
+                     typeError={enrollmentErrorText}
                   />
                   <ValidationInput
                      variant={"outlined"}

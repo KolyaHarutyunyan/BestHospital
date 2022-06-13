@@ -11,6 +11,8 @@ export const hooksForErrors = {
          return ErrorText.phoneError;
       } else if (error === phoneErrorMsg) {
          return phoneErrorMsg;
+      } else {
+         return "";
       }
    },
 
@@ -21,6 +23,34 @@ export const hooksForErrors = {
          return ErrorText.emailError;
       } else if (error === emailErrorMsg) {
          return emailErrorMsg;
+      } else {
+         return "";
+      }
+   },
+
+   getEnrollmentErrorText: (error, backError) => {
+      if (error === "funding") {
+         return ErrorText.selectField;
+      } else if (
+         backError?.length &&
+         backError[0]?.error === "Can not be two active enrollment"
+      ) {
+         return ErrorText.enrollmentError;
+      } else {
+         return "";
+      }
+   },
+
+   getRoleNameErrorText: (error, backError) => {
+      if (error === "role") {
+         return ErrorText.field;
+      } else if (
+         backError?.length &&
+         backError[0]?.error === "A role with this title already exists"
+      ) {
+         return ErrorText.existenceError("A role with this title");
+      } else {
+         return "";
       }
    },
 };

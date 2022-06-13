@@ -1,18 +1,14 @@
 import React from "react";
 import { Card } from "@eachbase/components";
 import { serviceSingleStyles } from "./styles";
-import { Colors, Images, makeCapitalize } from "@eachbase/utils";
+import { Colors, Images } from "@eachbase/utils";
 import { AvailableHours } from "@eachbase/components/availability";
+import { getGeneralInfo } from "./constants";
 
 export const ClientAvailabilitySchedule = ({ availabilityData, data }) => {
    const classes = serviceSingleStyles();
 
-   const generalInfo = [
-      { title: "First Name", value: makeCapitalize(data?.firstName) },
-      { title: "Middle Name", value: makeCapitalize(data?.middleName) },
-      { title: "Last Name", value: makeCapitalize(data?.lastName) },
-      { title: "Code", value: data?.code },
-   ].filter((item) => !!item.value);
+   const generalInfo = getGeneralInfo(data);
 
    return (
       <div className={classes.staffGeneralWrapper}>

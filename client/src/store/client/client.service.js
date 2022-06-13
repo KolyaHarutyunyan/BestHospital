@@ -126,4 +126,9 @@ export const authService = {
       axios.delete(`/auth/${authId}/documents/${docId}`, {
          auth: true,
       }),
+
+   editFileNameOfClientAuthService: (authId, docId, fileName) =>
+      axios.patch(`/auth/${authId}/documents/${docId}/?name=${fileName}`, {
+         auth: true,
+      }),
 };

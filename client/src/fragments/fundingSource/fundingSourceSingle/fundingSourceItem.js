@@ -86,10 +86,13 @@ export const FundingSourceItem = ({}) => {
             selectStatus={true}
             status={data?.status}
             id={params.id}
-            handleOpen={handleOpenClose}
+            handleOpen={(currentStatus) => {
+               setOpen(true);
+               setStatusType(currentStatus);
+            }}
             path={"funding"}
             type={"GET_FUNDING_SOURCE_BY_ID_SUCCESS"}
-            title={data?.name}
+            title={makeCapitalize(data?.name)}
             parent="Funding Source"
             parentLink="/fundingSource"
             buttonsTabAddButton={true}

@@ -2,17 +2,16 @@ import React, { useEffect, useRef, useState } from "react";
 import { checkFileType, checkImmediatelyUploadedFileType } from "./constants";
 import { getLimitedVal, Images, isNotEmpty } from "@eachbase/utils";
 import { imagesFileUploaderCoreStyle } from "./styles";
-import { DownloadLink, Loader } from "@eachbase/components";
+import { DownloadLink } from "@eachbase/components";
 
 export const UploadedFileCard = ({
    file,
    deleteFile,
-   handleFilePass,
    uploadOnlyOneFile,
    changeNameAfterFileUpload,
    fileName,
    passCurrentFileName,
-   uploadLoding,
+   passCurrentFileId,
    uploadImmediately,
 }) => {
    const classes = imagesFileUploaderCoreStyle();
@@ -33,7 +32,7 @@ export const UploadedFileCard = ({
    const [change, setChange] = useState(false);
    const [wasChanged, setWasChanged] = useState(false);
    const [currentFileName, setCurrentFileName] = useState(
-      uploadImmediately ? file?.fileName : fileName
+      uploadImmediately && file.fileName ? file.fileName : fileName
    );
 
    const fileNameInputRef = useRef(null);
@@ -43,10 +42,8 @@ export const UploadedFileCard = ({
          fileNameInputRef.current.focus();
       } else {
          if (wasChanged) {
-            if (uploadImmediately) {
-               handleFilePass(file);
-            }
-            passCurrentFileName(currentFileName);
+            passCurrentFileName && passCurrentFileName(currentFileName);
+            passCurrentFileId && passCurrentFileId(file.id);
          }
       }
    }, [change, wasChanged]);
@@ -61,10 +58,6 @@ export const UploadedFileCard = ({
          setCurrentFileName(fileName);
       }
       setChange(false);
-   }
-
-   if (uploadLoding) {
-      return <Loader circleSize={30} />;
    }
 
    return (
@@ -107,15 +100,11 @@ export const UploadedFileCard = ({
                )}
             </div>
          </div>
-         {/* {uploadLoding ? (
-            <Loader circleSize={20} />
-         ) : ( */}
          <DownloadLink
             linkClassName={downloadLinkStyle}
             linkHref={_imageURL}
             linkDownload={true}
          />
-         {/* )} */}
       </div>
    );
 };

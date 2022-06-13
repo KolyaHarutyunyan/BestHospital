@@ -16,7 +16,7 @@ export const checkFileType = (uploadedFileType) => {
 };
 
 export const checkImmediatelyUploadedFileType = (fileName) => {
-   return fileName.endsWith(".jpeg") ? (
+   return fileName.endsWith(".jpeg") || fileName.endsWith(".jpg") ? (
       <img src={Images.jpegIcon} alt="jpeg" />
    ) : fileName.endsWith(".png") ? (
       <img src={Images.pngIcon} alt="png" />
