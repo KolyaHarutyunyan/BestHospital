@@ -36,8 +36,8 @@ export class AuthorizationService {
       this.checkTime(dto.startDate, dto.endDate);
       const [client] = await Promise.all([
         this.clientModel.findById({ _id: clientId }),
-        this.enrollmentService.findByFunder(funderId)
-      ])
+        this.enrollmentService.findByFunder(funderId),
+      ]);
       this.checkClient(client);
       const auth = new this.model({
         authId: dto.authId,
@@ -134,7 +134,7 @@ export class AuthorizationService {
   }
   /** Removes a file from the list if the file exists */
   private removeFromList(list: any[], element: any) {
-    const index = list.findIndex((id) => id == element);
+    const index = list.findIndex((file) => file.id == element);
     if (index !== -1) {
       list.splice(index, 1);
     } else {

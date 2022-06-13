@@ -42,11 +42,11 @@ export class StaffService {
         residency: dto.residency,
         ssn: dto.ssn,
         license: dto.license ? dto.license : {},
+        middleName: dto.middleName,
+        secondaryEmail: dto.secondaryEmail,
+        secondaryPhone: dto.secondaryPhone,
         address: await this.addressService.getAddress(dto.address),
       });
-      if (dto.middleName) user.middleName = dto.middleName;
-      if (dto.secondaryEmail) user.secondaryEmail = dto.secondaryEmail;
-      if (dto.secondaryPhone) user.secondaryPhone = dto.secondaryPhone;
       user = (
         await Promise.all([
           user.save(),
@@ -70,9 +70,11 @@ export class StaffService {
   /** add a new service */
   addService = async (_id: string, serviceId: string): Promise<StaffDTO> => {
     try {
-      let staff = await this.model.findById({ _id });
+      let [staff, service] = await Promise.all([
+        this.model.findById({ _id }),
+        this.globalService.findOne(serviceId),
+      ]);
       this.checkStaff(staff);
-      const service = await this.globalService.findOne(serviceId);
       if (staff.service.indexOf(service.id) != -1) {
         throw new HttpException('Service already exist', HttpStatus.BAD_REQUEST);
       }
@@ -174,7 +176,7 @@ export class StaffService {
 
   /** Find the user using the email */
   findByEmail = async (email: string): Promise<StaffDTO> => {
-    const user = await this.model.findOne({ email: email });
+    const user = await this.model.findOne({ email });
     this.checkStaff(user);
     return this.sanitizer.sanitize(user);
   };

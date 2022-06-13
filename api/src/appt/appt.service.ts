@@ -604,6 +604,38 @@ export class ApptService {
         throw new HttpException(`appointment overlapping`, HttpStatus.BAD_REQUEST);
       }
     }
+    // const [ , clients] = await Promise.all([
+    //   this.model.find({
+    //     staff: dto.staff,
+    //   }),
+    //   this.model.find({
+    //     client: dto.client,
+    //   }),
+    // ]);
+    // for (let i = 0; i < overlapping.length; i++) {
+    //   if (
+    //     new Date(startDate) < new Date(overlapping[i].startDate) &&
+    //     !endDate &&
+    //     _id.toString() !== overlapping[i]._id.toString()
+    //   ) {
+    //     throw new HttpException(`employment overlapping1`, HttpStatus.BAD_REQUEST);
+    //   } else if (new Date(startDate) < new Date(overlapping[i].startDate) && endDate) {
+    //     if (new Date(endDate) >= new Date(overlapping[i].startDate)) {
+    //       throw new HttpException(`employment overlapping2`, HttpStatus.BAD_REQUEST);
+    //     }
+    //   } else if (new Date(startDate) > new Date(overlapping[i].startDate)) {
+    //     if (overlapping[i].endDate && new Date(overlapping[i].endDate) >= new Date(startDate)) {
+    //       overlapping[i].endDate = new Date(
+    //         new Date(startDate).setDate(new Date(startDate).getDate() - 1),
+    //       );
+    //     } else if (!overlapping[i].endDate && !endDate) {
+    //       overlapping[i].endDate = new Date(
+    //         new Date(startDate).setDate(new Date(startDate).getDate() - 1),
+    //       );
+    //     }
+    //     await overlapping[i].save();
+    //   }
+    // }
   }
   /** check authorization service */
   private checkAuthorizedService(authorizedService: string) {
