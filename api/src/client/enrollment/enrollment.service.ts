@@ -36,9 +36,9 @@ export class EnrollmentService {
       }
       const [client, activeEnrollment] = await Promise.all([
         this.clientModel.findById({ _id: clientId }),
-        this.model.findOne({ clientId, terminationDate: null }),
-        this.fundingService.findById(funderId)
-      ])
+        this.model.findOne({ clientId, funderId, terminationDate: null }),
+        this.fundingService.findById(funderId),
+      ]);
       this.checkClient(client);
       if (activeEnrollment) {
         throw new HttpException('Can not be two active enrollment', HttpStatus.BAD_REQUEST);
