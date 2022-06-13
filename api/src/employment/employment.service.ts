@@ -200,11 +200,15 @@ export class EmploymentService {
       }),
       this.model.find(),
     ]);
-    if (employment[0]) {
+    if (employment[0] && employment[0]._id.toString() !== _id.toString()) {
       throw new HttpException(`employment overlapping3`, HttpStatus.BAD_REQUEST);
     }
     for (let i = 0; i < overlapping.length; i++) {
-      if (new Date(startDate) < new Date(overlapping[i].startDate) && !endDate && _id == null) {
+      if (
+        new Date(startDate) < new Date(overlapping[i].startDate) &&
+        !endDate &&
+        _id.toString() !== overlapping[i]._id.toString()
+      ) {
         throw new HttpException(`employment overlapping1`, HttpStatus.BAD_REQUEST);
       } else if (new Date(startDate) < new Date(overlapping[i].startDate) && endDate) {
         if (new Date(endDate) >= new Date(overlapping[i].startDate)) {
