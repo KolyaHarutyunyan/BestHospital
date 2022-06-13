@@ -68,7 +68,7 @@ export class AuthorizationService {
       this.fileService.getOne(dto.file.id),
     ]);
     this.checkAuth(auth);
-    auth.documents.push(document);
+    auth.documents.unshift(document);
     await auth.save();
     return this.sanitizer.sanitize(auth);
   }
