@@ -14,6 +14,7 @@ import {
    FindSuccess,
    getValTillTenDig,
    globalModals,
+   hooksForErrors,
    isNotEmpty,
    useGlobalTextStyles,
 } from "@eachbase/utils";
@@ -23,7 +24,6 @@ import {
    httpRequestsOnSuccessActions,
    roleActions,
 } from "@eachbase/store";
-import { getRoleNameErrorText } from "./constants";
 
 export const AddRoleModal = ({ handleClose, permissionsList }) => {
    const classes = managementFragments();
@@ -41,7 +41,7 @@ export const AddRoleModal = ({ handleClose, permissionsList }) => {
    const loader = FindLoad("CREATE_ROLE");
    const backError = FindError("CREATE_ROLE");
 
-   const roleNameErrorText = getRoleNameErrorText(error, backError);
+   const roleNameErrorText = hooksForErrors.getRoleNameErrorText(error, backError);
 
    useEffect(() => {
       if (!!success.length) {

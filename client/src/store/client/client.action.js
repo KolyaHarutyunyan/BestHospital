@@ -244,3 +244,10 @@ export const removeFilesFromClientAuth = (authId, docId) => {
       payload: { authId, docId },
    };
 };
+
+export const editFileNameOfClientAuth = (authId, docId, fileName) => {
+   return {
+      type: REMOVE_FILES_FROM_CLIENT_AUTH,
+      payload: { authId, docId, fileName },
+   };
+};

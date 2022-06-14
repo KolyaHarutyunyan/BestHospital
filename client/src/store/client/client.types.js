@@ -107,3 +107,6 @@ export const ADD_FILES_TO_CLIENT_AUTH = "ADD_FILES_TO_CLIENT_AUTH";
 
 /**remove Files from Client Auth */
 export const REMOVE_FILES_FROM_CLIENT_AUTH = "REMOVE_FILES_FROM_CLIENT_AUTH";
+
+/**edit File Name of Client Auth */
+export const EDIT_FILE_NAME_OF_CLIENT_AUTH = "EDIT_FILE_NAME_OF_CLIENT_AUTH";

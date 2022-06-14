@@ -2,7 +2,13 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { TableBodyComponent } from "@eachbase/components";
 import { TableCell } from "@material-ui/core";
-import { hooksForTable, Images, makeCapitalize, useGlobalStyles } from "@eachbase/utils";
+import {
+   hooksForTable,
+   Images,
+   makeCapitalize,
+   manageType,
+   useGlobalStyles,
+} from "@eachbase/utils";
 
 export const FundingSourceTableBody = ({ data }) => {
    const globalClasses = useGlobalStyles();
@@ -18,7 +24,7 @@ export const FundingSourceTableBody = ({ data }) => {
       : "";
 
    const funderName = hooksForTable.showDashIfEmpty(data?.name);
-   const type = hooksForTable.showDashIfEmpty(data?.type);
+   const type = hooksForTable.showDashIfEmpty(manageType(data?.type));
    const address = hooksForTable.showDashIfEmpty(currentAddress);
    const email = hooksForTable.showDashIfEmpty(data.email);
    const phoneNumber = hooksForTable.showDashIfEmpty(data.phoneNumber);

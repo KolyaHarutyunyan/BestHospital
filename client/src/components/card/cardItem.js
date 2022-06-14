@@ -1,5 +1,6 @@
 import { cardStyle } from "./style";
 import Box from "@material-ui/core/Box";
+import { getTitleDisplay, getValueDisplay } from "./constants";
 
 export const CardItem = ({
    title,
@@ -13,14 +14,8 @@ export const CardItem = ({
 }) => {
    const classes = cardStyle();
 
-   const valueDisplay =
-      title === "Website" ? (
-         <a href={value} target="_blank">
-            {value}
-         </a>
-      ) : (
-         <span>{value}</span>
-      );
+   const titleDisplay = getTitleDisplay(title, value);
+   const valueDisplay = getValueDisplay(value, title);
 
    return (
       <>
@@ -35,14 +30,15 @@ export const CardItem = ({
                }
             >
                <p style={active === index ? { color: "white" } : {}}>
-                  {" "}
-                  {employment ? title : `#${authId}`}{" "}
+                  {employment ? title : `#${authId}`}
                </p>
             </Box>
          ) : (
             <Box className={classes.cardItem}>
-               <span>{title}:</span>
-               {valueDisplay}
+               <div className={classes.cardItemContainerStyle}>
+                  {titleDisplay}
+                  {valueDisplay}
+               </div>
             </Box>
          )}
       </>

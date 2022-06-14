@@ -31,6 +31,7 @@ import {
    //end
    addFilesToClientAuth,
    removeFilesFromClientAuth,
+   editFileNameOfClientAuth,
 } from "./client.action";
 
 export { clientReducer } from "./client.reducer";
@@ -72,4 +73,5 @@ export const clientActions = {
    // end
    addFilesToClientAuth,
    removeFilesFromClientAuth,
+   editFileNameOfClientAuth,
 };

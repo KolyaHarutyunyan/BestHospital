@@ -281,7 +281,10 @@ export const StaffItem = ({ gen }) => {
             selectStatus={true}
             status={staffGeneral?.status}
             id={params.id}
-            handleOpen={handleOpenClose}
+            handleOpen={(currentStatus) => {
+               setOpen(true);
+               setStatusType(currentStatus);
+            }}
             path={"staff"}
             type={"GET_ADMIN_BY_ID_SUCCESS"}
             parent="Staff"
@@ -307,7 +310,9 @@ export const StaffItem = ({ gen }) => {
                <StaffItemHeader
                   onModel="Staff"
                   availabilityData={availabilityData}
-                  title={`${staffGeneral?.firstName} ${staffGeneral?.lastName}`}
+                  title={makeCapitalize(
+                     `${staffGeneral?.firstName} ${staffGeneral?.lastName}`
+                  )}
                   noteModalTypeInfo={noteModalTypeInfo}
                   handleOpenClose={handleOpenCloseNote}
                   openModal={openModal}

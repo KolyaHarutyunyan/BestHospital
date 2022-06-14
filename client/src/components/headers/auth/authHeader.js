@@ -1,5 +1,11 @@
 import { authHeaderStyles } from "./styles";
-import { Colors, Images, makeCapitalize } from "@eachbase/utils";
+import {
+   ActiveInactiveStatus,
+   ActiveInactiveStatusReverse,
+   Colors,
+   Images,
+   makeCapitalize,
+} from "@eachbase/utils";
 import React from "react";
 import moment from "moment";
 import { SlicedText } from "../../messages";
@@ -118,15 +124,21 @@ export const AuthHeader = ({
                   {empoloyment ? "Supervisor:" : "Funding Source:"}{" "}
                </p>
                <p className={classes.AuthHeaderBottomBoxText}>
-                  {empoloyment ? info?.supervisor?.firstName : info?.funderId?.name}
+                  {empoloyment
+                     ? makeCapitalize(info?.supervisor?.firstName)
+                     : makeCapitalize(info?.funderId?.name)}
                </p>
             </div>
             <div className={classes.AuthHeaderBottomBox}>
                <p className={classes.AuthHeaderBottomBoxTitle}>
                   {empoloyment ? "Department:" : "Status:"}
                </p>
-               <p className={classes.AuthHeaderBottomBoxText}>
-                  {empoloyment ? info?.departmentId?.name : makeCapitalize(info?.status)}
+               <p
+                  className={`${classes.AuthHeaderBottomBoxText} statusStyle ${info?.status}`}
+               >
+                  {empoloyment
+                     ? info?.departmentId?.name
+                     : ActiveInactiveStatusReverse(info?.status)}
                </p>
             </div>
             <div className={classes.AuthHeaderBottomBox}>

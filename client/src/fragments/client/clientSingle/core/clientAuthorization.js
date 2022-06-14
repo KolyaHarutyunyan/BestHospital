@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
    AddButtonLight,
-   AddModalButton,
    Card,
    DeleteElement,
    ImagesFileUploader,
@@ -15,14 +14,7 @@ import {
    TableBodyComponent,
 } from "@eachbase/components";
 import { serviceSingleStyles } from "./styles";
-import {
-   Colors,
-   FindLoad,
-   FindSuccess,
-   Images,
-   ImgUploader,
-   makeCapitalize,
-} from "@eachbase/utils";
+import { Colors, FindLoad, FindSuccess, Images, makeCapitalize } from "@eachbase/utils";
 import { CircularProgress, TableCell } from "@material-ui/core";
 import { clientActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 import { AddAuthorization, AddAuthorizationService } from "../../clientModals";
@@ -46,9 +38,8 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
    const [modalIsOpen, setModalIsOpen] = useState(false);
    const [authIndex, setAuthIndex] = useState(0);
    const [serviceIndex, setServiceIndex] = useState(null);
-   const [chosenImages, setChosenImages] = useState([]);
    const [enteredFileName, setEnteredFileName] = useState("");
-   const [loaderUpload, setLoaderUpload] = useState(false);
+   const [currentFileId, setCurrentFileId] = useState("");
 
    const [chosenFile, setChosenFile] = useState();
 
@@ -57,8 +48,8 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
    const loader = FindLoad("GET_CLIENT_AUTHORIZATION_SERV");
    const delAuthLoader = FindLoad("DELETE_CLIENT_AUTHORIZATION");
    const delAuthServLoader = FindLoad("DELETE_CLIENT_AUTHORIZATION_SERV");
-   const sendFilesSuccess = FindSuccess("ADD_FILES_TO_CLIENT_AUTH");
    const sendFilesLoader = FindLoad("ADD_FILES_TO_CLIENT_AUTH");
+   const removeFilesLoader = FindLoad("REMOVE_FILES_FROM_CLIENT_AUTH");
 
    useEffect(() => {
       if (info) {
@@ -85,11 +76,33 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
    }, [successDelServ]);
 
    useEffect(() => {
-      if (!!sendFilesSuccess.length) {
-         setModalIsOpen(true);
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("ADD_FILES_TO_CLIENT_AUTH"));
+      if (currentFileId) {
+         dispatch(
+            clientActions.editFileNameOfClientAuth(
+               info[authIndex].id,
+               currentFileId,
+               enteredFileName
+            )
+         );
       }
-   }, [sendFilesSuccess]);
+   }, [currentFileId]);
+
+   useEffect(() => {
+      if (!!chosenFile) {
+         const fileData = {
+            file: chosenFile,
+            name: enteredFileName,
+         };
+         dispatch(clientActions.addFilesToClientAuth(info[authIndex].id, fileData));
+         setChosenFile("");
+         setEnteredFileName("");
+      }
+   }, [chosenFile]);
+
+   const _uploadedFiles = info[authIndex]?.documents?.map((document) => ({
+      ...document.file,
+      fileName: document.name,
+   }));
 
    function deleteAuthorization() {
       dispatch(clientActions.deleteClientsAuthorization(info[authIndex].id, params.id));
@@ -176,43 +189,6 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
       );
    }
 
-   // function handleAuthFilesSend() {
-   //    if (!!chosenImages.length) {
-   //       setLoaderUpload(true);
-
-   //       ImgUploader(chosenImages, true).then((uploadedImages) => {
-   //          setLoaderUpload(false);
-
-   //          for (let i = 0; i < uploadedImages.length; i++) {
-   //             const filesData = {
-   //                file: uploadedImages[i],
-   //                name: enteredFileName,
-   //             };
-   //             dispatch(
-   //                clientActions.addFilesToClientAuth(info[authIndex].id, filesData)
-   //             );
-   //          }
-   //       });
-   //    } else {
-   //       setModalIsOpen(false);
-   //    }
-   // }
-
-   useEffect(() => {
-      if (!!chosenFile) {
-         const fileData = {
-            file: chosenFile,
-            name: enteredFileName,
-         };
-         dispatch(clientActions.addFilesToClientAuth(info[authIndex].id, fileData));
-      }
-   }, [chosenFile]);
-
-   const _uploadedFiles = info[authIndex]?.documents?.map((document) => ({
-      ...document.file,
-      fileName: document.name,
-   }));
-
    return (
       <div className={classes.staffGeneralWrapper}>
          <SimpleModal
@@ -281,8 +257,11 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
                      <p className={classes.contentStyle}>
                         <span className={`${classes.contentIconStyle} starIcon`}>*</span>
                         Only
-                        <span className={classes.contentIconStyle}>PDF , PNG , CSV</span>&
-                        <span> JPEG </span>
+                        <span className={classes.contentIconStyle}>
+                           {" "}
+                           PDF , PNG , CSV{" "}
+                        </span>
+                        &<span className={classes.contentIconStyle}> JPEG </span>
                         formats are supported
                      </p>
                   }
@@ -293,6 +272,8 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
                      uploadImmediately={true}
                      handleFilePass={(file) => setChosenFile(file)}
                      handleFileNamePass={(fileName) => setEnteredFileName(fileName)}
+                     handleFileIdPass={(fileId) => setCurrentFileId(fileId)}
+                     fileLoader={!!sendFilesLoader.length || !!removeFilesLoader.length}
                      handleFileRemove={(fileId) =>
                         dispatch(
                            clientActions.removeFilesFromClientAuth(
@@ -301,19 +282,7 @@ export const ClientAuthorization = ({ info, setAuthActive, setAuthItemIndex }) =
                            )
                         )
                      }
-                     fileLoader={!!sendFilesLoader.length}
                   />
-                  {/* <ImagesFileUploader   
-                     changeNameAfterFileUpload={true}
-                     handleImagesPass={(images) => setChosenImages(images)}
-                     handleFileNamePass={(fileName) => setEnteredFileName(fileName)}
-                  /> */}
-                  {/* <AddModalButton
-                     buttonClassName={classes.addAuthFilesButnStyle}
-                     handleClick={handleAuthFilesSend}
-                     loader={loaderUpload || !!sendFilesLoader.length}
-                     text="Done"
-                  /> */}
                </ModalContentWrapper>
             }
          />

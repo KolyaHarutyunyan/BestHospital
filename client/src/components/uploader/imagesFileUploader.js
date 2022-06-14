@@ -4,13 +4,14 @@ import { ValidationInput } from "@eachbase/components";
 import { UploadedFileCard } from "./core";
 import { Images, ImgUploader, isNotEmpty } from "@eachbase/utils";
 import ReactFileReader from "react-file-reader";
-import { Loader } from "../loader";
+import { Loader } from "@eachbase/components";
 
 export const ImagesFileUploader = ({
    uploadedFiles = [],
    handleImagesPass,
    handleFilePass,
    handleFileNamePass,
+   handleFileIdPass,
    handleFileRemove,
    changeNameAfterFileUpload,
    uploadOnlyOneFile,
@@ -30,9 +31,10 @@ export const ImagesFileUploader = ({
    const [loaderUpload, setLoaderUpload] = useState(false);
 
    const uniqueImages = [...new Map(images.map((image) => [image.name, image])).values()];
+   const _currentFiles = uploadImmediately ? images : uniqueImages;
 
    useEffect(() => {
-      handleImagesPass && handleImagesPass(uniqueImages);
+      handleImagesPass && handleImagesPass(_currentFiles);
    }, [images]);
 
    useEffect(() => {
@@ -79,12 +81,6 @@ export const ImagesFileUploader = ({
          setLoaderUpload(true);
          ImgUploader(Array.from(imageList), false).then((uploadedFile) => {
             setLoaderUpload(false);
-            const _fileExists = uniqueImages.includes(uploadedFile?.name);
-
-            if (_fileExists) {
-               setError("This file exists!");
-               return;
-            }
             setImages((prevState) => prevState.concat(uploadedFile));
             handleFilePass(uploadedFile);
          });
@@ -111,7 +107,10 @@ export const ImagesFileUploader = ({
       <div>
          {uploadOnlyOneFile ? (
             <div>
-               <ReactFileReader handleFiles={handleFileChange}>
+               <ReactFileReader
+                  handleFiles={handleFileChange}
+                  fileTypes={["image/*", "application/pdf"]}
+               >
                   <label className={classes.uploadOneFileStyle}>Upload Signature</label>
                </ReactFileReader>
                <p className={classes.errorStyle}>{error}</p>
@@ -131,6 +130,7 @@ export const ImagesFileUploader = ({
                   <ReactFileReader
                      disabled={!isNotEmpty(enteredFileName)}
                      handleFiles={handleFileChange}
+                     fileTypes={["image/*", "application/pdf"]}
                   >
                      <label className={uploadButnStyle}>Upload a file</label>
                   </ReactFileReader>
@@ -140,25 +140,24 @@ export const ImagesFileUploader = ({
             </div>
          )}
          <div className={fileCardContainerStyle}>
-            {!!uniqueImages.length ? (
-               uniqueImages
-                  .reverse()
-                  .map((item, index) => (
-                     <UploadedFileCard
-                        key={index}
-                        file={item}
-                        deleteFile={handleFileDelete}
-                        handleFilePass={handleFilePass}
-                        uploadOnlyOneFile={uploadOnlyOneFile}
-                        changeNameAfterFileUpload={changeNameAfterFileUpload}
-                        fileName={fileName}
-                        passCurrentFileName={(currentFileName) =>
-                           setFileName(currentFileName)
-                        }
-                        uploadLoading={loaderUpload || fileLoader}
-                        uploadImmediately={uploadImmediately}
-                     />
-                  ))
+            {loaderUpload || fileLoader ? (
+               <Loader circleSize={50} />
+            ) : !!_currentFiles.length ? (
+               _currentFiles.map((item, index) => (
+                  <UploadedFileCard
+                     key={index}
+                     file={item}
+                     deleteFile={handleFileDelete}
+                     uploadOnlyOneFile={uploadOnlyOneFile}
+                     uploadImmediately={uploadImmediately}
+                     changeNameAfterFileUpload={changeNameAfterFileUpload}
+                     fileName={fileName}
+                     passCurrentFileName={(currentFileName) =>
+                        setFileName(currentFileName)
+                     }
+                     passCurrentFileId={handleFileIdPass}
+                  />
+               ))
             ) : uploadOnlyOneFile ? null : (
                <div className={classes.iconText}>
                   <img src={Images.fileIcon} alt="" />
