@@ -51,7 +51,6 @@ export const createClientStyle = makeStyles(() => ({
    displayCodeBlock2: {
       width: "100%",
       padding: "24px 16px",
-      margin: "16px 0",
       boxShadow: "0px 0px 6px #347AF03D",
       "&.error": { border: `1px solid ${Colors.ThemeRed}` },
    },
@@ -62,9 +61,10 @@ export const createClientStyle = makeStyles(() => ({
    },
    availableModfiers: {
       display: "flex",
-      justifyContent: "center",
-      marginTop: 8,
       flexWrap: "wrap",
+      alignItems: "center",
+      "&.notApplicable": { justifyContent: "center" },
+      marginTop: "16px",
    },
    modifiersStyle: {
       margin: "4px",
@@ -94,9 +94,11 @@ export const createClientStyle = makeStyles(() => ({
          backgroundColor: "#347AF080",
          cursor: "default",
       },
+      "&:disabled": { cursor: "default" },
    },
    loaderBoxStyle: {
-      height: "16px",
+      justifySelf: "center",
+      height: "36px",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
@@ -118,5 +120,15 @@ export const createClientStyle = makeStyles(() => ({
       display: "flex",
       alignItems: "center",
       marginBottom: 16,
+   },
+   serviceModifiersContainerStyle: {
+      display: "flex",
+      alignItems: "center",
+   },
+   notApplicableStyle: {
+      marginLeft: "8px",
+      height: "36px",
+      display: "flex",
+      alignItems: "center",
    },
 }));

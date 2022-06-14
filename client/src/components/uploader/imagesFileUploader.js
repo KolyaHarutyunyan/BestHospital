@@ -11,6 +11,7 @@ export const ImagesFileUploader = ({
    handleImagesPass,
    handleFilePass,
    handleFileNamePass,
+   handleChangedFileNamePass,
    handleFileIdPass,
    handleFileRemove,
    changeNameAfterFileUpload,
@@ -152,9 +153,7 @@ export const ImagesFileUploader = ({
                      uploadImmediately={uploadImmediately}
                      changeNameAfterFileUpload={changeNameAfterFileUpload}
                      fileName={fileName}
-                     passCurrentFileName={(currentFileName) =>
-                        setFileName(currentFileName)
-                     }
+                     passCurrentFileName={handleChangedFileNamePass}
                      passCurrentFileId={handleFileIdPass}
                   />
                ))

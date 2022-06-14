@@ -13,7 +13,7 @@ import {
    Images,
    makeCapitalize,
 } from "@eachbase/utils";
-import { clientEnrollmentCommonCoreStyle } from "./styles";
+import { clientCommonCoreStyle } from "./styles";
 import { hooksForTable } from "@eachbase/utils";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router";
@@ -27,7 +27,7 @@ function getModifierData(givenData = "") {
 }
 
 export const ClientEnrollmentTBody = ({ enrollment }) => {
-   const classes = clientEnrollmentCommonCoreStyle();
+   const classes = clientCommonCoreStyle();
 
    const params = useParams();
 
