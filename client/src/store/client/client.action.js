@@ -29,6 +29,7 @@ import {
    ADD_FILES_TO_CLIENT_AUTH,
    REMOVE_FILES_FROM_CLIENT_AUTH,
    TERMINATE_CLIENT_ENROLLMENT,
+   EDIT_FILE_NAME_OF_CLIENT_AUTH,
 } from "./client.types";
 
 export const getClients = (data) => {
@@ -247,7 +248,7 @@ export const removeFilesFromClientAuth = (authId, docId) => {
 
 export const editFileNameOfClientAuth = (authId, docId, fileName) => {
    return {
-      type: REMOVE_FILES_FROM_CLIENT_AUTH,
+      type: EDIT_FILE_NAME_OF_CLIENT_AUTH,
       payload: { authId, docId, fileName },
    };
 };

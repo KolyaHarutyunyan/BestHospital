@@ -53,4 +53,18 @@ export const hooksForErrors = {
          return "";
       }
    },
+
+   getAuthServiceDefaultErrorText: (error, backError) => {
+      if (error === "modifiersPost") {
+         return ErrorText.availableModifierError;
+      } else if (
+         backError?.length &&
+         backError[0]?.error ===
+            "Can not be two authorization service without the modifiers"
+      ) {
+         return ErrorText.authServiceDefaultError;
+      } else {
+         return "";
+      }
+   },
 };

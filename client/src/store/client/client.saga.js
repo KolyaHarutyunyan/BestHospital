@@ -624,7 +624,7 @@ function* removeFilesFromClientAuth(action) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
-         type: GET_CLIENT_BY_ID,
+         type: GET_CLIENT_AUTHORIZATION,
          payload: { id: res.data?.clientId },
       });
    } catch (err) {
@@ -647,7 +647,7 @@ function* editFileNameOfClientAuth(action) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
-         type: GET_CLIENT_BY_ID,
+         type: GET_CLIENT_AUTHORIZATION,
          payload: { id: res.data?.clientId },
       });
    } catch (err) {

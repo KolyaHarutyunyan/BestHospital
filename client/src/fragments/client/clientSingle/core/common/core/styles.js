@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core";
 import { Colors, Shadow } from "@eachbase/utils";
 
-export const clientEnrollmentCommonCoreStyle = makeStyles(() => ({
+export const clientCommonCoreStyle = makeStyles(() => ({
    tableTheadStyle: {
       width: "100%",
       display: "flex",
@@ -10,6 +10,7 @@ export const clientEnrollmentCommonCoreStyle = makeStyles(() => ({
       boxShadow: Shadow.tableTheadShadow,
       backgroundColor: Colors.BackgroundWater,
       borderRadius: "8px",
+      cursor: "default",
    },
    thStyle: {
       maxWidth: "242px",
@@ -61,4 +62,26 @@ export const clientEnrollmentCommonCoreStyle = makeStyles(() => ({
       "&$checked": { color: "#D263E4" },
    },
    checked: { color: "green" },
+   percentageBoxStyle: {
+      display: "flex",
+      alignItems: "center",
+   },
+   percTextStyle: { marginRight: "8px" },
+   actionBoxStyle: {
+      display: "flex",
+      alignItems: "center",
+   },
+   editAuthServiceIconStyle: {
+      width: "24px",
+      height: "24px",
+      cursor: "pointer",
+      "& > img": { width: "100%" },
+   },
+   removeAuthServiceIconStyle: {
+      width: "24px",
+      height: "24px",
+      cursor: "pointer",
+      "& > img": { width: "100%" },
+      marginLeft: "16px",
+   },
 }));

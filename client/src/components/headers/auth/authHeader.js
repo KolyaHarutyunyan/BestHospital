@@ -1,6 +1,5 @@
 import { authHeaderStyles } from "./styles";
 import {
-   ActiveInactiveStatus,
    ActiveInactiveStatusReverse,
    Colors,
    Images,
@@ -61,59 +60,41 @@ export const AuthHeader = ({
                )}
             </div>
 
-            <div
-               className={classes.AuthHeaderTopRight}
-               style={{ display: "flex", alignItems: "center" }}
-            >
-               <p style={{ cursor: "pointer", marginRight: 10 }} onClick={openModal}>
-                  {!empoloyment && (
-                     <img
-                        alt="file"
-                        src={Images.authEdit}
-                        style={{
-                           width: 24,
-                           height: 24,
-                           marginTop: 7,
-                           marginRight: 7,
-                        }}
-                     />
-                  )}
-               </p>
-               <img
-                  src={Images.edit}
-                  alt="edit"
-                  className={classes.iconStyle}
+            <div className={classes.AuthHeaderTopRight}>
+               {!empoloyment && (
+                  <div className={classes.fileListStyle} onClick={openModal}>
+                     <img alt="file" src={Images.authEdit} />
+                  </div>
+               )}
+               <div
+                  className={classes.fileListStyle}
                   onClick={() => {
                      setDelEdit(true);
                      setToggleModal(!toggleModal);
                   }}
-               />
+               >
+                  <img src={Images.edit} alt="edit" />
+               </div>
                {empoloyment ? (
-                  <p
-                     style={{
-                        color: Colors.ThemeBlue,
-                        fontSize: 14,
-                        fontWeight: "bold",
-                        marginLeft: 8,
-                        cursor: "pointer",
-                     }}
+                  <div
+                     className={classes.editTextStyle}
                      onClick={() => {
                         setDelEdit(true);
                         setToggleModal(!toggleModal);
                      }}
                   >
                      Edit
-                  </p>
+                  </div>
                ) : (
-                  <img
-                     src={Images.remove}
-                     alt="delete"
-                     className={classes.iconDeleteStyle}
+                  <div
+                     className={classes.removeIconStyle}
                      onClick={() => {
                         setDelEdit(false);
                         setToggleModal(!toggleModal);
                      }}
-                  />
+                  >
+                     <img src={Images.remove} alt="delete" />
+                  </div>
                )}
             </div>
          </div>

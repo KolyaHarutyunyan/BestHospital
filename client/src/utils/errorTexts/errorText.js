@@ -14,4 +14,6 @@ export const ErrorText = {
    websiteError: "Invalid Website",
    existenceError: (value = "") => `${value} already exists`,
    enrollmentError: "Can not be two active Enrollment with the same Funding Source",
+   availableModifierError: "Please select some modifier",
+   authServiceDefaultError: "Can not be two authorization service without the modifiers",
 };

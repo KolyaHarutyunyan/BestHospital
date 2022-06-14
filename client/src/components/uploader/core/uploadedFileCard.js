@@ -43,7 +43,7 @@ export const UploadedFileCard = ({
       } else {
          if (wasChanged) {
             passCurrentFileName && passCurrentFileName(currentFileName);
-            passCurrentFileId && passCurrentFileId(file.id);
+            passCurrentFileId && passCurrentFileId(file._id);
          }
       }
    }, [change, wasChanged]);
