@@ -1,6 +1,4 @@
-import { Document } from 'mongoose';
-
-export interface ILicense extends Document {
+export interface ILicense {
   driverLicense: string;
   expireDate: Date;
   state: string;

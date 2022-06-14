@@ -2,13 +2,16 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsDateString,
+  IsEnum,
   IsNumber,
   IsOptional,
   IsPhoneNumber,
   IsString,
+  Matches,
   ValidateNested,
 } from 'class-validator';
 import { UserDTO } from '../../authN';
+import { ResidencyStatus } from '../staff.constants';
 import { LicenseDTO } from './license.dto';
 
 export class EditStaffDTO {
@@ -52,13 +55,15 @@ export class EditStaffDTO {
   @IsOptional()
   @IsDateString()
   birthday: Date;
-  @ApiProperty({ required: false })
-  @IsString()
+  @ApiProperty({ required: false, enum: ResidencyStatus })
+  @IsEnum(ResidencyStatus)
   @IsOptional()
   residency: string;
   @ApiProperty({ required: false })
-  @IsNumber()
   @IsOptional()
+  @Matches(/^(?!000|666)[0-8][0-9]{2}-(?!00)[0-9]{2}-(?!0000)[0-9]{4}$/, {
+    message: 'Social security number is incorrect',
+  })
   ssn: number;
   @ApiProperty({ required: false })
   address: string;

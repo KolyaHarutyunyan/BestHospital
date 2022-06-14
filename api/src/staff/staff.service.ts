@@ -6,10 +6,10 @@ import { HistoryService, serviceLog } from '../history';
 import { HistoryStatus } from '../history/history.constants';
 import { ServiceService } from '../service';
 import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
-import { MongooseUtil } from '../util';
+import { DTO, MongooseUtil } from '../util';
 import { CreateStaffDto, EditStaffDTO, StaffDTO } from './dto';
 import { StaffSanitizer } from './interceptor';
-import { IStaff } from './interface';
+import { ILicense, IStaff } from './interface';
 import { StaffStatus } from './staff.constants';
 import { StaffModel } from './staff.model';
 
@@ -31,6 +31,8 @@ export class StaffService {
   /** Create a new user */
   create = async (dto: CreateStaffDto): Promise<StaffDTO> => {
     try {
+      // check if email is unique
+      this.checkLicense(dto.license);
       let user = new this.model({
         email: dto.email,
         firstName: dto.firstName,
@@ -193,27 +195,44 @@ export class StaffService {
     const sanFun = this.sanitizer.sanitizeMany(staff);
     return { staff: sanFun, count };
   };
-
-  /** Set Status of a staff Inactive*/
-  setStatus = async (
-    _id: string,
-    status: StaffStatus,
-    dto: CreateTerminationDto,
-  ): Promise<StaffDTO> => {
-    const staff = await this.model.findById({ _id });
+  /** activate the staff */
+  inActive = async (_id: string, reason: string): Promise<StaffDTO> => {
+    let staff = await this.model.findById(_id);
     this.checkStaff(staff);
-    if (status != StaffStatus.ACTIVE && !dto.date) {
-      throw new HttpException(
-        'If status is not active, then date is required field',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-    staff.termination.date = dto.date;
-    if (dto.reason) {
-      staff.termination.reason = dto.reason;
-    }
-    staff.status = status;
-    await staff.save();
+    staff.termination.date = new Date(Date.now());
+    reason ? (staff.termination.reason = reason) : undefined;
+    staff.status = StaffStatus.INACTIVE;
+    staff = (
+      await Promise.all([
+        staff.save(),
+        this.historyService.create({
+          resource: staff._id,
+          onModel: HistoryStatus.STAFF,
+          title: serviceLog.inactiveStaff,
+          user: staff._id,
+        }),
+      ])
+    )[0];
+    return this.sanitizer.sanitize(staff);
+  };
+  /** inactive the staff */
+  active = async (_id: string): Promise<StaffDTO> => {
+    let staff = await this.model.findById(_id);
+    this.checkStaff(staff);
+    staff.termination.date = null;
+    staff.termination.reason ? (staff.termination.reason = null) : undefined;
+    staff.status = StaffStatus.ACTIVE;
+    staff = (
+      await Promise.all([
+        staff.save(),
+        this.historyService.create({
+          resource: staff._id,
+          onModel: HistoryStatus.STAFF,
+          title: serviceLog.activeStaff,
+          user: staff._id,
+        }),
+      ])
+    )[0];
     return this.sanitizer.sanitize(staff);
   };
 
@@ -233,6 +252,20 @@ export class StaffService {
   private checkStaff(staff: IStaff) {
     if (!staff) {
       throw new HttpException('Staff with this id was not found', HttpStatus.NOT_FOUND);
+    }
+  }
+  /** check license details */
+  private checkLicense(license: ILicense) {
+    if (!license) {
+      return;
+    }
+    if (license.driverLicense || license.expireDate || license.state) {
+      if (!license.driverLicense || !license.expireDate || !license.state) {
+        throw new HttpException(
+          'driverLicense, expireDate, and expireDate are required',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
     }
   }
 }

@@ -1,7 +1,7 @@
 import { model, Schema, Types } from 'mongoose';
 import { addressSchema } from '../address';
 // import { TerminationSchema } from '../termination';
-import { StaffStatus } from './staff.constants';
+import { ResidencyStatus, StaffStatus } from './staff.constants';
 import { IStaff } from './interface';
 
 export const TerminationSchema = {
@@ -26,7 +26,7 @@ const StaffSchema = new Schema({
   state: { type: String },
   gender: { type: String },
   birthday: { type: Date },
-  residency: { type: String },
+  residency: { type: String, enum: ResidencyStatus },
   ssn: { type: Number },
   status: { type: String, enum: StaffStatus, default: StaffStatus.ACTIVE },
   clinical: { type: Boolean },

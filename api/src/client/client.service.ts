@@ -121,8 +121,8 @@ export class ClientService {
   async active(_id: string): Promise<ClientDTO> {
     const client = await this.model.findById({ _id });
     this.checkClient(client);
-    client.termination.date ? (client.termination.date = undefined) : undefined;
-    client.termination.reason ? (client.termination.reason = undefined) : undefined;
+    client.termination.date ? (client.termination.date = null) : undefined;
+    client.termination.reason ? (client.termination.reason = null) : undefined;
     client.status = ClientStatus.ACTIVE;
     await client.save();
     return this.sanitizer.sanitize(client);
@@ -131,8 +131,8 @@ export class ClientService {
   async inActive(_id: string): Promise<ClientDTO> {
     const client = await this.model.findById({ _id });
     this.checkClient(client);
-    client.termination.date ? (client.termination.date = undefined) : undefined;
-    client.termination.reason ? (client.termination.reason = undefined) : undefined;
+    client.termination.date ? (client.termination.date = null) : undefined;
+    client.termination.reason ? (client.termination.reason = null) : undefined;
     client.status = ClientStatus.INACTIVE;
     await client.save();
     return this.sanitizer.sanitize(client);

@@ -2,18 +2,21 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsDateString,
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsPhoneNumber,
   IsString,
+  Matches,
   ValidateNested,
 } from 'class-validator';
-import { UserDTO } from 'src/authN';
 import { AddressDTO } from '../../address';
+import { ResidencyStatus } from '../staff.constants';
 import { LicenseDTO } from './license.dto';
+import { DTO } from '../../util';
 
-export class CreateStaffDto {
+export class CreateStaffDto extends DTO {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
@@ -54,13 +57,14 @@ export class CreateStaffDto {
   @IsNotEmpty()
   @IsDateString()
   birthday: Date;
-  @ApiProperty()
+  @ApiProperty({ enum: ResidencyStatus })
+  @IsEnum(ResidencyStatus)
   @IsNotEmpty()
-  @IsString()
   residency: string;
   @ApiProperty()
-  @IsNotEmpty()
-  @IsNumber()
+  @Matches(/^(?!000|666)[0-8][0-9]{2}-(?!00)[0-9]{2}-(?!0000)[0-9]{4}$/, {
+    message: 'Social security number is incorrect',
+  })
   ssn: number;
   @ApiProperty({ type: AddressDTO })
   address: string;
@@ -68,6 +72,4 @@ export class CreateStaffDto {
   @ValidateNested({ each: true })
   @Type(() => LicenseDTO)
   license: LicenseDTO;
-  /** System set values */
-  user: UserDTO;
 }

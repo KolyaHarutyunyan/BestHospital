@@ -1,17 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsNotEmpty, IsString } from 'class-validator';
+import { IsDateString, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class LicenseDTO {
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   driverLicense: string;
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsDateString()
   expireDate: Date;
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   state: string;
 }

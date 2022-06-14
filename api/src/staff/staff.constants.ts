@@ -8,3 +8,10 @@ export enum StaffStatus {
   HOLD = 'HOLD',
   TERMINATE = 'TERMINATE',
 }
+export enum ResidencyStatus {
+  US = 'US',
+  CITIZEN = 'CITIZEN',
+  PCITIZEN = 'PCITIZEN',
+  WORK = 'WORK',
+  VISA = 'VISA',
+}
