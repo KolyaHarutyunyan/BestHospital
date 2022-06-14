@@ -57,11 +57,13 @@ export class AuthService {
           findService,
           modifiers,
         );
-      }
-      else if (!dto.modifiers || dto.modifiers.length === 0) {
-        const authService = await this.model.findOne({ authorizationId, modifiers: null })
-        if(authService){
-          throw new HttpException('Can not be two authorization service without the modifiers', HttpStatus.BAD_REQUEST);
+      } else if (!dto.modifiers || dto.modifiers.length === 0) {
+        const authService = await this.model.findOne({ authorizationId, modifiers: null });
+        if (authService) {
+          throw new HttpException(
+            'Can not be two authorization service without the modifiers',
+            HttpStatus.BAD_REQUEST,
+          );
         }
       }
       const authorizationService = new this.model({
@@ -173,7 +175,8 @@ export class AuthService {
   async findById(authServiceId: string): Promise<AuthServiceDTO> {
     const authService = await this.model
       .findById({ _id: authServiceId })
-      .populate('authorizationId');
+      .populate('authorizationId')
+      .populate('serviceId');
     this.checkAuthService(authService);
     return this.sanitizer.sanitize(authService);
   }
@@ -191,7 +194,10 @@ export class AuthService {
       ]);
       this.checkAuthService(authService);
       this.checkAuth(auth);
-      const fundingService = await this.fundingService.findAllServiceForClient(auth.funderId, dto.fundingServiceId);
+      const fundingService = await this.fundingService.findAllServiceForClient(
+        auth.funderId,
+        dto.fundingServiceId,
+      );
       if (!fundingService.length) {
         throw new HttpException('Invalid fundingServiceId', HttpStatus.NOT_FOUND);
       }
