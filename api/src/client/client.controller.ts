@@ -3,7 +3,6 @@ import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ACCESS_TOKEN } from '../authN/authN.constants';
 import { CreateTerminationDto } from 'src/termination/dto/create-termination.dto';
 import { ParseObjectIdPipe } from '../util';
-import { ClientStatus } from './client.constants';
 import { ClientService } from './client.service';
 import { ClientDTO, CreateClientDTO, UpdateClientDto, ClientQueryDTO } from './dto';
 

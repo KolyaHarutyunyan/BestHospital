@@ -3,7 +3,6 @@ import { Type } from 'class-transformer';
 import {
   IsDateString,
   IsEnum,
-  IsNumber,
   IsOptional,
   IsPhoneNumber,
   IsString,

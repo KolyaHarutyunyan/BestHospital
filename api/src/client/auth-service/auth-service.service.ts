@@ -184,7 +184,7 @@ export class AuthService {
   // update authorization service
   async update(_id: string, dto: UpdateAuthServiceDTO): Promise<AuthServiceDTO> {
     try {
-      const [authService, auth, service] = await Promise.all([
+      const [authService, auth] = await Promise.all([
         this.model.findById({
           _id,
           authorizationId: dto.authorizationId,

@@ -4,8 +4,6 @@ import { StaffService } from './staff.service';
 import { StaffDTO, CreateStaffDto, EditStaffDTO, StaffQueryDTO } from './dto';
 import { ACCESS_TOKEN, UserDTO } from '../authN';
 import { Public, ParseObjectIdPipe } from '../util';
-import { StaffStatus } from './staff.constants';
-import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
 
 @Controller('staff')
 @ApiTags('Staff Endpoints')
