@@ -20,22 +20,27 @@ export class PaycodeService {
 
   // create the paycode
   async create(dto: CreatePaycodeDTO): Promise<PayCodeDTO> {
-    const employment = await this.employmentService.findOne(dto.employmentId);
-    const payCodeType = await this.PayCodeTypeService.findOne(dto.payCodeTypeId);
+    if (dto.startDate > dto.endDate) {
+      throw new HttpException(
+        'startDate can not be greater than the endDate',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (!dto.active && !dto.endDate) {
+      throw new HttpException('endDate required field', HttpStatus.BAD_REQUEST);
+    }
+    const [employment, payCodeType] = await Promise.all([
+      this.employmentService.findOne(dto.employmentId),
+      this.PayCodeTypeService.findOne(dto.payCodeTypeId),
+    ]);
     const paycode = new this.model({
       employmentId: employment.id,
       payCodeTypeId: payCodeType.id,
       rate: dto.rate,
       active: dto.active,
       startDate: dto.startDate,
+      endDate: dto.endDate,
     });
-    if (!dto.active && !dto.endDate) {
-      throw new HttpException('endDate required field', HttpStatus.BAD_REQUEST);
-    }
-    if (dto.endDate) paycode.endDate = dto.endDate;
-    if (dto.startDate > dto.endDate) {
-      throw new HttpException('startDate can not be higher than endDate', HttpStatus.BAD_REQUEST);
-    }
     await paycode.save();
     return this.sanitizer.sanitize(paycode);
   }

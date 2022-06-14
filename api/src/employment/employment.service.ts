@@ -25,9 +25,17 @@ export class EmploymentService {
   async create(dto: CreateEmploymentDto): Promise<EmploymentDto> {
     try {
       if (dto.endDate && new Date(dto.startDate) > new Date(dto.endDate)) {
-        throw new HttpException(`startDate can't be high then endDate`, HttpStatus.BAD_REQUEST);
+        throw new HttpException(
+          `startDate can't be greater than the endDate`,
+          HttpStatus.BAD_REQUEST,
+        );
       }
-      const staff = await this.staffService.findById(dto.staffId);
+      await Promise.all([
+        this.checkOverlap(null, dto.startDate, dto.endDate),
+        this.staffService.findById(dto.supervisor),
+        this.staffService.findById(dto.staffId),
+      ]);
+
       let employment = new this.model({
         staffId: dto.staffId,
         schedule: dto.schedule,
@@ -36,10 +44,7 @@ export class EmploymentService {
         endDate: dto.endDate ? dto.endDate : null,
         title: dto.title,
       });
-      await Promise.all([
-        this.checkOverlap(null, dto.startDate, dto.endDate),
-        this.staffService.findById(dto.supervisor),
-      ]);
+
       employment.supervisor = dto.supervisor;
       if (dto.departmentId) {
         await this.departmentService.findOne(dto.departmentId);

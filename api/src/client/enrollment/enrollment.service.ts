@@ -101,11 +101,13 @@ export class EnrollmentService {
     dto: UpdateEnrollmentDTO,
   ): Promise<EnrollmentDTO> {
     try {
-      const enrollment = await this.model.findById({ _id, clientId });
+      const [enrollment, client] = await Promise.all([
+        this.model.findById({ _id, clientId }),
+        this.clientModel.findById({ _id: clientId }),
+        this.fundingService.findById(funderId),
+      ]);
       this.checkEnrollment(enrollment);
-      const client = await this.clientModel.findById({ _id: clientId });
       this.checkClient(client);
-      await this.fundingService.findById(funderId);
       enrollment.funderId = funderId;
       if (dto.startDate) {
         if (new Date(dto.startDate) > new Date(Date.now())) {
