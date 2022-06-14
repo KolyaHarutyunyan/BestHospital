@@ -27,7 +27,7 @@ const StaffSchema = new Schema({
   gender: { type: String },
   birthday: { type: Date },
   residency: { type: String, enum: ResidencyStatus },
-  ssn: { type: Number },
+  ssn: { type: String },
   status: { type: String, enum: StaffStatus, default: StaffStatus.ACTIVE },
   clinical: { type: Boolean },
   createdDate: { type: Date, default: Date.now },

@@ -64,7 +64,7 @@ export class CreateStaffDto extends DTO {
   @Matches(/^(?!000|666)[0-8][0-9]{2}-(?!00)[0-9]{2}-(?!0000)[0-9]{4}$/, {
     message: 'Social security number is incorrect',
   })
-  ssn: number;
+  ssn: string;
   @ApiProperty({ type: AddressDTO })
   address: string;
   @ApiProperty({ type: LicenseDTO })
