@@ -152,7 +152,9 @@ export class AuthService {
   // find all authorization services
   async findAll(authId: string): Promise<AuthServiceDTO[]> {
     try {
-      const authService = await this.model.find({ authorizationId: authId }).populate('serviceId');
+      const authService = await this.model
+        .find({ authorizationId: authId })
+        .populate({ path: 'serviceId', populate: 'serviceId' });
       return this.sanitizer.sanitizeMany(authService);
     } catch (e) {
       throw e;
@@ -176,7 +178,7 @@ export class AuthService {
     const authService = await this.model
       .findById({ _id: authServiceId })
       .populate('authorizationId')
-      .populate('serviceId');
+      .populate({ path: 'serviceId', populate: 'serviceId, name' });
     this.checkAuthService(authService);
     return this.sanitizer.sanitize(authService);
   }
