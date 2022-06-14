@@ -148,8 +148,8 @@ export class AuthorizationService {
   private async removeFromList(list: any[], element: any) {
     const index = list.findIndex((file) => file._id == element);
     if (index !== -1) {
-      list.splice(index, 1);
       await this.fileService.deleteImages(list[index].file.id);
+      list.splice(index, 1);
     } else {
       throw new HttpException('Was not found in list', HttpStatus.NOT_FOUND);
     }

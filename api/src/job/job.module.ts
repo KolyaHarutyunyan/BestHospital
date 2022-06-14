@@ -6,5 +6,6 @@ import { JobSanitizer } from './job.sanitizer';
 @Module({
   controllers: [JobController],
   providers: [JobService, JobSanitizer],
+  exports: [JobService],
 })
 export class JobModule {}

@@ -8,10 +8,12 @@ import { EmploymentModel } from './employment.model';
 import { EmploymentSanitizer } from './interceptor/employment.interceptor';
 import { IEmployment } from './interface';
 import * as dateFns from 'date-fns';
+import { JobService } from '../job/job.service';
 @Injectable()
 export class EmploymentService {
   constructor(
     private readonly staffService: StaffService,
+    private readonly jobService: JobService,
     private readonly departmentService: DepartmentService,
     private readonly sanitizer: EmploymentSanitizer,
   ) {
@@ -34,11 +36,13 @@ export class EmploymentService {
         this.checkOverlap(null, dto.startDate, dto.endDate),
         this.staffService.findById(dto.supervisor),
         this.staffService.findById(dto.staffId),
+        this.jobService.findOne(dto.title),
       ]);
 
       let employment = new this.model({
         staffId: dto.staffId,
         schedule: dto.schedule,
+        type: dto.type,
         termination: dto.termination,
         startDate: dto.startDate,
         endDate: dto.endDate ? dto.endDate : null,
@@ -68,6 +72,7 @@ export class EmploymentService {
     const employments = await this.model
       .find({ staffId })
       .populate('departmentId', 'name')
+      .populate('title')
       .populate('supervisor', 'firstName');
     return this.sanitizer.sanitizeMany(employments);
   }
@@ -87,6 +92,7 @@ export class EmploymentService {
     const employment = await this.model
       .findById({ _id })
       .populate('departmentId', 'name')
+      .populate('title')
       .populate('supervisor', 'firstName');
     this.checkEmployment(employment);
     return this.sanitizer.sanitize(employment);
@@ -120,7 +126,13 @@ export class EmploymentService {
       await this.departmentService.findOne(dto.departmentId);
       employment.departmentId = dto.departmentId;
     }
+    if (dto.title) {
+      await this.jobService.findOne(dto.title);
+      employment.title = dto.title;
+    }
     if (dto.schedule) employment.schedule = dto.schedule;
+    if (dto.type) employment.type = dto.type;
+
     const date = new Date().getTime();
     if (dto.endDate) {
       const endDate = new Date(dto.endDate).getTime();

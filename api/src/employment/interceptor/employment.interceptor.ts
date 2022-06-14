@@ -16,6 +16,7 @@ export class EmploymentSanitizer implements ISanitize {
       endDate: employment.endDate,
       active: employment.active,
       schedule: employment.schedule,
+      type: employment.type,
       termination: employment.termination,
     };
     return employmentDTO;

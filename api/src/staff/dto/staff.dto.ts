@@ -33,7 +33,7 @@ export class StaffDTO {
   @ApiProperty()
   residency: string;
   @ApiProperty()
-  ssn: number;
+  ssn: string;
   @ApiProperty({ enum: StaffStatus })
   status: string;
   @ApiProperty()

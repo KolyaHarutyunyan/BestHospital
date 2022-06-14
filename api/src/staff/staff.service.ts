@@ -120,36 +120,40 @@ export class StaffService {
   /** Edit a Staff */
   edit = async (id: string, dto: EditStaffDTO): Promise<StaffDTO> => {
     try {
-      const admin: any = await this.model.findOne({ _id: id });
-      this.checkStaff(admin);
+      let staff = await this.model.findOne({ _id: id });
+      this.checkStaff(staff);
       if (dto.email) {
-        admin.email = dto.email;
+        staff.email = dto.email;
         await this.authnService.changeEmail(id, dto.email);
       }
-      if (dto.phone) admin.phone = dto.phone;
-      if (dto.secondaryPhone) admin.secondaryPhone = dto.secondaryPhone;
-      if (dto.firstName) admin.firstName = dto.firstName;
-      if (dto.lastName) admin.lastName = dto.lastName;
-      if (dto.state) admin.state = dto.state;
-      if (dto.gender) admin.gender = dto.gender;
-      if (dto.birthday) admin.birthday = dto.birthday;
-      if (dto.residency) admin.residency = dto.residency;
-      if (dto.ssn) admin.ssn = dto.ssn;
-      if (dto.middleName) admin.middleName = dto.middleName;
-      if (dto.email) admin.email = dto.email;
-      if (dto.secondaryEmail) admin.secondaryEmail = dto.secondaryEmail;
+      if (dto.phone) staff.phone = dto.phone;
+      if (dto.secondaryPhone) staff.secondaryPhone = dto.secondaryPhone;
+      if (dto.firstName) staff.firstName = dto.firstName;
+      if (dto.lastName) staff.lastName = dto.lastName;
+      if (dto.state) staff.state = dto.state;
+      if (dto.gender) staff.gender = dto.gender;
+      if (dto.birthday) staff.birthday = dto.birthday;
+      if (dto.residency) staff.residency = dto.residency;
+      if (dto.ssn) staff.ssn = dto.ssn;
+      if (dto.middleName) staff.middleName = dto.middleName;
+      if (dto.email) staff.email = dto.email;
+      if (dto.secondaryEmail) staff.secondaryEmail = dto.secondaryEmail;
       if (dto.license) {
-        admin.license = dto.license;
+        staff.license = dto.license;
       }
-      if (dto.address) admin.address = await this.addressService.getAddress(dto.address);
-      await admin.save();
-      await this.historyService.create({
-        resource: admin._id,
-        onModel: HistoryStatus.STAFF,
-        title: serviceLog.updateStaff,
-        user: admin._id,
-      });
-      return this.sanitizer.sanitize(admin);
+      if (dto.address) staff.address = await this.addressService.getAddress(dto.address);
+      staff = (
+        await Promise.all([
+          staff.save(),
+          this.historyService.create({
+            resource: staff._id,
+            onModel: HistoryStatus.STAFF,
+            title: serviceLog.updateStaff,
+            user: staff._id,
+          }),
+        ])
+      )[0];
+      return this.sanitizer.sanitize(staff);
     } catch (e) {
       this.mongooseUtil.checkDuplicateKey(e, 'Staff already exists');
       throw e;

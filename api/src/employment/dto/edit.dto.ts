@@ -5,7 +5,7 @@ import { TerminationDTO, CreateTerminationDto } from '../../termination';
 
 export class UpdateEmploymentDto {
   @ApiProperty()
-  @IsString()
+  @IsMongoId()
   @IsOptional()
   title: string;
   @ApiProperty({ required: false })
@@ -28,6 +28,10 @@ export class UpdateEmploymentDto {
   @IsEnum(ScheduleStatus)
   @IsOptional()
   schedule: number;
+  @ApiProperty({ enum: ScheduleStatus })
+  @IsEnum(ScheduleStatus)
+  @IsOptional()
+  type: string;
   @ApiProperty({ type: TerminationDTO })
   @IsOptional()
   termination: CreateTerminationDto;

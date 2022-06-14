@@ -23,6 +23,8 @@ export class EmploymentDto {
   @ApiProperty({ enum: ScheduleStatus })
   @IsEnum(ScheduleStatus)
   schedule: number;
+  @ApiProperty()
+  type: string;
   @ApiProperty({ type: TerminationDTO })
   termination: CreateTerminationDto;
 }
