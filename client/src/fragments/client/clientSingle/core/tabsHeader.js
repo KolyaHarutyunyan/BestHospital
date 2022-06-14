@@ -8,6 +8,7 @@ import {
    AddNotes,
    ValidationInput,
    AvailabilitySchedule,
+   SimpleTooltip,
 } from "@eachbase/components";
 import {
    AddContact,
@@ -17,7 +18,7 @@ import {
    AddAuthorizationService,
 } from "@eachbase/fragments/client";
 import { fundingSourceActions } from "@eachbase/store";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const filterBtn = {
    width: 93,
@@ -28,6 +29,10 @@ export const TabsHeader = ({ activeTab, data, authActive, availabilityData }) =>
    const classes = serviceSingleStyles();
 
    const dispatch = useDispatch();
+
+   const _activeEnrollments = useSelector(
+      (state) => state?.client?.clientEnrollment
+   ).filter((item) => !item.terminationDate);
 
    const [open, setOpen] = useState();
    const [searchDate, setSearchDate] = useState("");
@@ -96,20 +101,36 @@ export const TabsHeader = ({ activeTab, data, authActive, availabilityData }) =>
                ) : activeTab === 4 ? (
                   <AddButton text="Available Hours" handleClick={handleOpenClose} />
                ) : activeTab !== 6 && activeTab !== 4 ? (
-                  <AddButton
-                     text={
-                        authActive
-                           ? "Add Authorized Service"
-                           : activeTab === 1
-                           ? "Add Contact"
-                           : activeTab === 2
-                           ? "Add Enrollments"
-                           : activeTab === 3
-                           ? "Add Authorization"
-                           : "Add Notes"
-                     }
-                     handleClick={handleOpenClose}
-                  />
+                  activeTab === 3 && !_activeEnrollments?.length ? (
+                     <SimpleTooltip
+                        title={
+                           <p className={classes.infoTextForAuthStyle}>
+                              You can only add authorization if you have at least one
+                              Enrollment.
+                           </p>
+                        }
+                        placement="top-end"
+                     >
+                        <div>
+                           <AddButton text={"Add Authorization"} disabled={true} />
+                        </div>
+                     </SimpleTooltip>
+                  ) : (
+                     <AddButton
+                        text={
+                           authActive
+                              ? "Add Authorized Service"
+                              : activeTab === 1
+                              ? "Add Contact"
+                              : activeTab === 2
+                              ? "Add Enrollments"
+                              : activeTab === 3
+                              ? "Add Authorization"
+                              : "Add Notes"
+                        }
+                        handleClick={handleOpenClose}
+                     />
+                  )
                ) : null}
             </li>
          </ul>

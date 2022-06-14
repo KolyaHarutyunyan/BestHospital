@@ -68,5 +68,20 @@ export const authHeaderStyles = makeStyles(() => ({
       fontSize: "14px",
       color: Colors.TextPrimary,
       marginLeft: 8,
+      "&.statusStyle": {
+         display: "flex",
+         alignItems: "center",
+         "&::before": {
+            content: "''",
+            width: "12px",
+            height: "12px",
+            borderRadius: "50%",
+            marginRight: "8px",
+         },
+         "&.ACTIVE::before": { backgroundColor: Colors.ThemeGreen },
+         "&.INACTIVE::before": { backgroundColor: Colors.TextSecondary },
+         "&.HOLD::before": { backgroundColor: Colors.ThemeBlue },
+         "&.TERMINATE::before": { backgroundColor: Colors.ThemeRed },
+      },
    },
 }));

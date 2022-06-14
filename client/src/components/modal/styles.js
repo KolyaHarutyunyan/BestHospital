@@ -52,6 +52,7 @@ export const modalsStyle = makeStyles(() => ({
       position: "absolute",
       right: "8px",
       top: "8px",
+      "& > button": { backgroundColor: Colors.BackgroundWater },
    },
    inactiveModalInfo: {
       fontSize: "16px",

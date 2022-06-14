@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { Backgrounds, Colors } from "@eachbase/utils";
+import { Backgrounds, Colors, Images } from "@eachbase/utils";
 
 export const serviceSingleStyles = makeStyles(() => ({
    staffGeneralWrapper: {
@@ -220,6 +220,19 @@ export const serviceSingleStyles = makeStyles(() => ({
    contactActionsStyle: {
       display: "flex",
       alignItems: "center",
+   },
+   infoTextForAuthStyle: {
+      display: "flex",
+      "&::before": {
+         content: "''",
+         width: "24px",
+         height: "24px",
+         backgroundImage: `url(${Images.infoIcon})`,
+         backgroundRepeat: "no-repeat",
+         BackgroundSize: "contain",
+         backgroundPosition: "center",
+         marginRight: "8px",
+      },
    },
 }));
 

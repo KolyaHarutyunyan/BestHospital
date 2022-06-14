@@ -45,6 +45,7 @@ import {
    ADD_FILES_TO_CLIENT_AUTH,
    REMOVE_FILES_FROM_CLIENT_AUTH,
    TERMINATE_CLIENT_ENROLLMENT,
+   EDIT_FILE_NAME_OF_CLIENT_AUTH,
 } from "./client.types";
 import { httpRequestsOnErrorsActions } from "../http_requests_on_errors";
 import { httpRequestsOnLoadActions } from "../http_requests_on_load";
@@ -632,6 +633,29 @@ function* removeFilesFromClientAuth(action) {
    }
 }
 
+function* editFileNameOfClientAuth(action) {
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
+   try {
+      const res = yield call(
+         authService.editFileNameOfClientAuthService,
+         action.payload.authId,
+         action.payload.docId,
+         action.payload.fileName
+      );
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+      yield put({
+         type: GET_CLIENT_BY_ID,
+         payload: { id: res.data?.clientId },
+      });
+   } catch (err) {
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+   }
+}
+
 export const watchClient = function* watchClientSaga() {
    yield takeLatest(GET_CLIENTS, getClients);
    yield takeLatest(CREATE_CLIENT, createClient);
@@ -666,4 +690,5 @@ export const watchClient = function* watchClientSaga() {
 
    yield takeLatest(ADD_FILES_TO_CLIENT_AUTH, addFilesToClientAuth);
    yield takeLatest(REMOVE_FILES_FROM_CLIENT_AUTH, removeFilesFromClientAuth);
+   yield takeLatest(EDIT_FILE_NAME_OF_CLIENT_AUTH, editFileNameOfClientAuth);
 };

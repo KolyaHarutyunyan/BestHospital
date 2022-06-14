@@ -19,7 +19,6 @@ import {
 } from "@eachbase/utils";
 import {
    clientActions,
-   fundingSourceActions,
    httpRequestsOnErrorsActions,
    httpRequestsOnSuccessActions,
 } from "@eachbase/store";
@@ -31,32 +30,16 @@ const _list = [
 ];
 
 export const AddAuthorization = ({ handleClose, info }) => {
-   const [error, setError] = useState("");
-   const [inputs, setInputs] = useState(
-      info
-         ? {
-              ...info,
-              funding: info?.funderId?.name,
-           }
-         : {}
-   );
-   const [authStatus, setAuthStatus] = useState(info ? makeCapitalize(info?.status) : "");
-   const [fullAddress, setFullAddress] = useState(info ? info.location : "");
-   const [enteredAddress, setEnteredAddress] = useState(info ? info.location : "");
+   const classes = createClientStyle();
 
    const params = useParams();
 
    const dispatch = useDispatch();
 
-   const enrolment = useSelector((state) => state.client.clientEnrollment);
-
-   let enrolments = useSelector((state) => state?.client?.clientEnrollment).filter(
-      (item) => item.funderId
-   );
-
-   let fSelect = useSelector((state) => state.fundingSource.fSelect.funders);
-
-   const classes = createClientStyle();
+   const _activeEnrollments = useSelector(
+      (state) => state?.client?.clientEnrollment
+   ).filter((item) => !item.terminationDate);
+   const _primaryEnrollment = _activeEnrollments.find((item) => item.primary);
 
    const success = info
       ? FindSuccess("EDIT_CLIENT_AUTHORIZATION")
@@ -82,34 +65,44 @@ export const AddAuthorization = ({ handleClose, info }) => {
       }
    }, [success]);
 
-   useEffect(() => {
-      dispatch(fundingSourceActions.getFundingSource({ status: "ACTIVE" }));
-   }, []);
+   const [error, setError] = useState("");
+   const [inputs, setInputs] = useState(
+      info
+         ? {
+              ...info,
+              funding: info?.funderId?._id,
+           }
+         : {
+              funding: _primaryEnrollment?.funderId?._id,
+           }
+   );
+   const [authStatus, setAuthStatus] = useState(info ? makeCapitalize(info?.status) : "");
+   const [fullAddress, setFullAddress] = useState(info ? info.location : "");
+   const [enteredAddress, setEnteredAddress] = useState(info ? info.location : "");
 
-   const handleChange = (e) => {
+   function handleChange(e) {
       setInputs((prevState) => ({
          ...prevState,
          [e.target.name]: e.target.value,
       }));
       (error === e.target.name || error === ErrorText.dateError) && setError("");
-   };
+   }
 
-   const handleStatusChange = (event) => {
+   function handleStatusChange(event) {
       setAuthStatus(event.target.value);
       error === "status" && setError("");
-   };
+   }
 
-   const handleAddressChange = (selectedAddress) => {
+   function handleAddressChange(selectedAddress) {
       setEnteredAddress(selectedAddress);
       error === "enteredAddress" && setError("");
-   };
+   }
 
-   const handleCreate = () => {
+   function handleCreate() {
       const dateComparingIsValid =
          !!inputs.startDate &&
          !!inputs.endDate &&
          new Date(inputs.startDate).getTime() < new Date(inputs.endDate).getTime();
-
       const authorizationDataIsValid =
          isNotEmpty(inputs.authId) &&
          isNotEmpty(inputs.funding) &&
@@ -118,15 +111,6 @@ export const AddAuthorization = ({ handleClose, info }) => {
          isNotEmpty(enteredAddress);
 
       if (authorizationDataIsValid) {
-         let funderId;
-         enrolments.forEach((item) => {
-            if (inputs.funding === item.name) {
-               funderId = item._id;
-            }
-         });
-
-         const id = fSelect.filter((i) => i.name === inputs.funding);
-
          const data = {
             authId: inputs.authId,
             startDate: inputs.startDate,
@@ -134,12 +118,11 @@ export const AddAuthorization = ({ handleClose, info }) => {
             location: fullAddress,
             status: makeEnum(authStatus),
          };
-
-         if (info) {
+         if (!!info) {
             dispatch(clientActions.editClientsAuthorizations(data, info.id, params.id));
          } else {
             dispatch(
-               clientActions.createClientsAuthorizations(data, params.id, id[0].id)
+               clientActions.createClientsAuthorizations(data, params.id, inputs.funding)
             );
          }
       } else {
@@ -158,10 +141,9 @@ export const AddAuthorization = ({ handleClose, info }) => {
             : !isNotEmpty(enteredAddress)
             ? "enteredAddress"
             : "";
-
          setError(dataErrorText);
       }
-   };
+   }
 
    return (
       <div className={classes.createFoundingSource}>
@@ -185,10 +167,15 @@ export const AddAuthorization = ({ handleClose, info }) => {
                   <SelectInput
                      language={null}
                      name={"funding"}
+                     type={"id"}
                      label={"Funding Source*"}
                      handleSelect={handleChange}
                      value={inputs.funding}
-                     list={fSelect ? fSelect : []}
+                     list={
+                        _activeEnrollments
+                           ? _activeEnrollments.map((item) => item.funderId)
+                           : []
+                     }
                      typeError={error === "funding" ? ErrorText.selectField : ""}
                   />
                   <div style={{ display: "flex" }}>

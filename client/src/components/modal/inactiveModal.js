@@ -52,10 +52,10 @@ export const InactiveModal = ({ handleOpenClose, info, name, statusType }) => {
             reason: inputs.reason,
          };
          const status =
-            statusType === "ACTIVE"
-               ? "active"
-               : statusType === "INACTIVE"
-               ? "inActive"
+            statusType === "HOLD"
+               ? "hold"
+               : statusType === "TERMINATE"
+               ? "terminate"
                : "";
          dispatch(
             fundingSourceActions.setStatus(params.id, info.path, status, data, info.type)

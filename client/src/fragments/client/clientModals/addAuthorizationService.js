@@ -26,12 +26,11 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
 
    const [error, setError] = useState("");
    const [inputs, setInputs] = useState(
-      info ? { ...info, modifiers: info.serviceId._id } : { total: "" }
+      info ? { ...info, name: info.serviceId?.name, modifiers: info.id } : {}
    );
    const [modCheck, setModCheck] = useState([]);
    const [modif, setModif] = useState(!!info ? info.modifiers : []);
    const [loader, setLoader] = useState(false);
-
    const activeModifiers = modif.filter((modifier) => modifier.status === true);
 
    let modifierExists = false;
@@ -43,8 +42,8 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
       dispatch(fundingSourceActions.getFoundingSourceServiceById(fundingId));
       let funderId = "";
       fSelect.forEach((item) => {
-         if (inputs.modifiers === item._id) {
-            funderId = item._id;
+         if (inputs.modifiers === item.id) {
+            funderId = item.id;
          }
       });
    }, []);
@@ -67,12 +66,10 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
       if (e.target.name === "modifiers") {
          setLoader(true);
          setModCheck([]);
-         let id = fSelect.find((item) => item._id === e.target.value);
+         const _fundingService = fSelect.find((item) => item.id === e.target.value);
          axios
             .post(
-               `/authservice/auth/${authId}/fundingService/${
-                  id && id._id
-               }/checkModifiers`,
+               `/authservice/auth/${authId}/fundingService/${_fundingService?.id}/checkModifiers`,
                null,
                { auth: true }
             )
@@ -105,8 +102,8 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
       });
       let funderId;
       fSelect.forEach((item) => {
-         if (inputs.modifiers === item._id) {
-            funderId = item._id;
+         if (inputs.modifiers === item.id) {
+            funderId = item.id;
          }
       });
       if (inputs.total && inputs.total > 0 && modifiersPost?.length > 0) {
@@ -172,7 +169,9 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
             handleClose={handleClose}
             title={info ? "Edit Authorization Service" : "Add Authorized Service"}
             text={
-               "To add a new authorization service in the system, please fulfill the below fields."
+               info
+                  ? "To edit this authorization service, please modify the below fields."
+                  : "To add a new authorization service in the system, please fulfill the below fields."
             }
          />
          <div className={classes.createFoundingSourceBody}>
@@ -185,8 +184,16 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
                      label={"Service Code*"}
                      handleSelect={handleChange}
                      value={inputs.modifiers}
-                     list={fSelect ? fSelect : []}
+                     list={
+                        fSelect
+                           ? fSelect.map((item) => ({
+                                ...item,
+                                name: item.serviceId?.name,
+                             }))
+                           : []
+                     }
                      typeError={error === "modifiers" ? ErrorText.selectField : ""}
+                     disabled={!!info}
                   />
                   <div
                      className={`${classes.displayCodeBlock2} ${

@@ -14,7 +14,7 @@ import {
    TabsHeader,
    ClientEnrollment,
    ClientNotes,
-   ClientAvailabilitySchedule,
+   // ClientAvailabilitySchedule,
    ClientHistory,
    ClientAuthorization,
 } from "./core";
@@ -28,7 +28,7 @@ const tabsLabels = [
    { label: "Contacts" },
    { label: "Enrollments" },
    { label: "Authorization" },
-   { label: "Availability" },
+   // { label: "Availability" },
    { label: "Notes" },
    { label: "History" },
 ];
@@ -110,11 +110,11 @@ export const ClientItem = () => {
             <NoItemText text={"No Authorization Yet"} />
          ),
       },
-      {
-         tabComponent: (
-            <ClientAvailabilitySchedule data={data} availabilityData={availabilityData} />
-         ),
-      },
+      // {
+      //    tabComponent: (
+      //       <ClientAvailabilitySchedule data={data} availabilityData={availabilityData} />
+      //    ),
+      // },
       {
          tabComponent: clientsNotes.length ? (
             <ClientNotes data={clientsNotes} />
@@ -137,11 +137,14 @@ export const ClientItem = () => {
             selectStatus={true}
             status={data?.status}
             id={params.id}
-            handleOpen={() => setOpen(true)}
+            handleOpen={(currentStatus) => {
+               setOpen(true);
+               setStatusType(currentStatus);
+            }}
             path={"client"}
             type={"GET_CLIENT_BY_ID_SUCCESS"}
             parent="Clients"
-            title={data ? `${data?.firstName} ${data?.lastName}` : ""}
+            title={data ? makeCapitalize(`${data.firstName} ${data.lastName}`) : ""}
             parentLink="/client"
             buttonsTabAddButton={true}
             openCloseInfo={open}
