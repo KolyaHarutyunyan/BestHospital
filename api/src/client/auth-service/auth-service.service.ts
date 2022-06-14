@@ -45,7 +45,7 @@ export class AuthService {
       const brokenModifiers = [];
       let compareByFundingService;
       const findService = await this.fundingService.findService(fundingServiceId);
-      if (dto.modifiers) {
+      if (dto.modifiers.length !== 0) {
         await this.compareModifiersByAuthService(
           authorizationId,
           fundingServiceId,
