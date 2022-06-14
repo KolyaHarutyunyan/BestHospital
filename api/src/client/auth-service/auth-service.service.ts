@@ -58,7 +58,10 @@ export class AuthService {
           modifiers,
         );
       } else if (!dto.modifiers || dto.modifiers.length === 0) {
-        const authService = await this.model.findOne({ authorizationId, modifiers: null });
+        const authService = await this.model.findOne({
+          authorizationId,
+          modifiers: { $exists: true, $size: 0 },
+        });
         if (authService) {
           throw new HttpException(
             'Can not be two authorization service without the modifiers',
