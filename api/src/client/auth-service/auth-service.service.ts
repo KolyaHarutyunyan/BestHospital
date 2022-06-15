@@ -57,14 +57,15 @@ export class AuthService {
           findService,
           modifiers,
         );
-      } else if (!dto.modifiers || dto.modifiers.length === 0) {
+      }
+      if (dto.default) {
         const authService = await this.model.findOne({
           authorizationId,
-          modifiers: { $exists: true, $size: 0 },
+          default: true,
         });
         if (authService) {
           throw new HttpException(
-            'Can not be two authorization service without the modifiers',
+            'Can not be two authorization service with default modifiers',
             HttpStatus.BAD_REQUEST,
           );
         }
@@ -73,9 +74,9 @@ export class AuthService {
         total: dto.total,
         authorizationId: authorizationId,
         serviceId: fundingServiceId,
-        modifiers: compareByFundingService || [],
+        modifiers: dto.modifiers || [],
       });
-      await authorizationService.save();
+      await (await authorizationService.save()).populate('serviceId').execPopulate();
       return this.sanitizer.sanitize(authorizationService);
     } catch (e) {
       console.log(e);
@@ -219,15 +220,15 @@ export class AuthService {
   }
 
   /** remove the authorization service */
-  async remove(_id: string): Promise<string> {
-    try {
-      const authService = await this.model.findByIdAndDelete({ _id });
-      this.checkAuthService(authService);
-      return authService._id;
-    } catch (e) {
-      throw e;
-    }
-  }
+  // async remove(_id: string): Promise<string> {
+  //   try {
+  //     const authService = await this.model.findByIdAndDelete({ _id });
+  //     this.checkAuthService(authService);
+  //     return authService._id;
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  // }
 
   // get by funding service id
   async getByServiceId(serviceId: string) {

@@ -45,6 +45,7 @@ export class AuthorizationService {
         funderId: funderId,
         startDate: dto.startDate,
         endDate: dto.endDate,
+        // status hanel
         status: dto.status,
         location: dto.location,
       });
@@ -124,12 +125,12 @@ export class AuthorizationService {
   }
 
   //remove authorization
-  async remove(_id: string): Promise<string> {
-    const auth = await this.model.findById({ _id });
-    this.checkAuth(auth);
-    auth.remove();
-    return auth._id;
-  }
+  // async remove(_id: string): Promise<string> {
+  //   const auth = await this.model.findById({ _id });
+  //   this.checkAuth(auth);
+  //   auth.remove();
+  //   return auth._id;
+  // }
 
   /** Private methods */
   /** if the client is not found, throws an exception */

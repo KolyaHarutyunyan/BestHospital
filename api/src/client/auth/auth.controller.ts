@@ -66,10 +66,10 @@ export class AuthController {
   update(@Param('id', ParseObjectIdPipe) id: string, @Body() dto: UpdateAuthDTO) {
     return this.authorizationService.update(id, dto);
   }
-  @Delete(':id')
-  @ApiOkResponse({ type: String })
-  @Public()
-  remove(@Param('id', ParseObjectIdPipe) id: string) {
-    return this.authorizationService.remove(id);
-  }
+  // @Delete(':id')
+  // @ApiOkResponse({ type: String })
+  // @Public()
+  // remove(@Param('id', ParseObjectIdPipe) id: string) {
+  //   return this.authorizationService.remove(id);
+  // }
 }

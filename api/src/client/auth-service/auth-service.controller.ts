@@ -55,10 +55,10 @@ export class AuthServiceController {
     return this.authService.update(id, updateAuthServiceDto);
   }
 
-  @Delete(':id')
-  @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({ type: String })
-  remove(@Param('id', ParseObjectIdPipe) id: string) {
-    return this.authService.remove(id);
-  }
+  // @Delete(':id')
+  // @ApiHeader({ name: ACCESS_TOKEN })
+  // @ApiOkResponse({ type: String })
+  // remove(@Param('id', ParseObjectIdPipe) id: string) {
+  //   return this.authService.remove(id);
+  // }
 }

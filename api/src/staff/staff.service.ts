@@ -72,7 +72,7 @@ export class StaffService {
   addService = async (_id: string, serviceId: string): Promise<StaffDTO> => {
     try {
       let [staff, service] = await Promise.all([
-        this.model.findById({ _id }),
+        this.model.findById({ _id, clinical: true }),
         this.globalService.findOne(serviceId),
       ]);
       this.checkStaff(staff);
@@ -187,12 +187,19 @@ export class StaffService {
   };
 
   /** returns all users */
-  getUsers = async (skip: number, limit: number, status: string): Promise<any> => {
-    if (!status) {
-      status = StaffStatus.ACTIVE;
-    }
+  getUsers = async (
+    skip: number,
+    limit: number,
+    status: string,
+    isClinical: boolean,
+  ): Promise<any> => {
+    let query: any = {
+      status: StaffStatus.ACTIVE,
+    };
+    if (status) query.status = status;
+    if (isClinical) query.clinical = isClinical;
     const [staff, count] = await Promise.all([
-      this.model.find({ status }).sort({ _id: -1 }).skip(skip).limit(limit),
+      this.model.find({ query }).sort({ _id: -1 }).skip(skip).limit(limit),
       this.model.countDocuments({ status }),
     ]);
     const sanFun = this.sanitizer.sanitizeMany(staff);
@@ -240,7 +247,7 @@ export class StaffService {
   };
 
   /** Set isClinical of a staff Active */
-  isClinical = async (id: string, status: boolean): Promise<StaffDTO> => {
+  setClinical = async (id: string, status: boolean): Promise<StaffDTO> => {
     const staff = await this.model.findOneAndUpdate(
       { _id: id },
       { $set: { clinical: status } },
@@ -254,7 +261,10 @@ export class StaffService {
   /** if the admin is not found, throws an exception */
   private checkStaff(staff: IStaff) {
     if (!staff) {
-      throw new HttpException('Staff with this id was not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        'Staff with this id was not found or staff is not clinical',
+        HttpStatus.NOT_FOUND,
+      );
     }
   }
   /** check license details */

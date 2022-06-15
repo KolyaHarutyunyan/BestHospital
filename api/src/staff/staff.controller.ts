@@ -60,8 +60,9 @@ export class StaffController {
     @Query('skip') skip: number,
     @Query('limit') limit: number,
     @Query('status') status: string,
+    @Query('isClinical') isClinical: boolean,
   ): Promise<StaffDTO[]> {
-    return await this.staffService.getUsers(skip, limit, status);
+    return await this.staffService.getUsers(skip, limit, status, isClinical);
   }
 
   /** Get the staff profile */
@@ -102,11 +103,11 @@ export class StaffController {
   @Patch(':id/:isClinical')
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: StaffDTO })
-  async isClinical(
+  async setClinical(
     @Param('id', ParseObjectIdPipe) staffId: string,
     @Param('isClinical') isClinical: boolean,
   ): Promise<StaffDTO> {
-    const staff = await this.staffService.isClinical(staffId, isClinical);
+    const staff = await this.staffService.setClinical(staffId, isClinical);
     return staff;
   }
   /** Create a new service */

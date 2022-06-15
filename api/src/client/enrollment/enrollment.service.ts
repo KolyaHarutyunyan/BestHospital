@@ -101,13 +101,17 @@ export class EnrollmentService {
     dto: UpdateEnrollmentDTO,
   ): Promise<EnrollmentDTO> {
     try {
-      const [enrollment, client] = await Promise.all([
+      const [enrollment, client, activeEnrollment] = await Promise.all([
         this.model.findById({ _id, clientId }),
         this.clientModel.findById({ _id: clientId }),
+        this.model.findOne({ clientId, funderId, terminationDate: null }),
         this.fundingService.findById(funderId),
       ]);
       this.checkEnrollment(enrollment);
       this.checkClient(client);
+      if (activeEnrollment) {
+        throw new HttpException('Can not be two active enrollment', HttpStatus.BAD_REQUEST);
+      }
       enrollment.funderId = funderId;
       if (dto.startDate) {
         if (new Date(dto.startDate) > new Date(Date.now())) {
@@ -116,6 +120,12 @@ export class EnrollmentService {
         enrollment.startDate = dto.startDate;
       }
       if (dto.primary) {
+        if (enrollment.terminationDate) {
+          throw new HttpException(
+            'Can not set primary because enrollment have a termination date',
+            HttpStatus.BAD_REQUEST,
+          );
+        }
         const findEnrollment = await this.model.findOne({ clientId, primary: true });
         if (findEnrollment !== null && enrollment.id != findEnrollment.id) {
           findEnrollment.primary = false;
@@ -142,6 +152,7 @@ export class EnrollmentService {
     const enrollment = await this.model.findById({ _id });
     this.checkEnrollment(enrollment);
     enrollment.terminationDate = new Date(Date.now());
+    enrollment.primary ? (enrollment.primary = false) : undefined;
     await enrollment.save();
     return this.sanitizer.sanitize(enrollment);
   }
