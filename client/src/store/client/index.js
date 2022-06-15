@@ -15,7 +15,6 @@ import {
    terminateClientEnrollment,
    editClientsAuthorizations,
    editClientsAuthorizationsServ,
-   getClientHistories,
    getClients,
    getClientsAuthorizations,
    getClientsAuthorizationsServ,
@@ -60,7 +59,6 @@ export const clientActions = {
    createClientsAuthorizationsServ,
    editClientsAuthorizationsServ,
    deleteClientsAuthorizationServ,
-   getClientHistories,
    getClientsAuthorizationsServModifiersCheck,
 
    // authorization file file

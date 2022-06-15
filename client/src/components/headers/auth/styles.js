@@ -88,9 +88,16 @@ export const authHeaderStyles = makeStyles(() => ({
       cursor: "pointer",
       "& > img": { width: "100%" },
    },
+   editIconStyle: {
+      width: "24px",
+      height: "24px",
+      cursor: "pointer",
+      "& > img": { width: "100%" },
+   },
    removeIconStyle: {
       width: "24px",
       height: "24px",
+      marginLeft: "16px",
       cursor: "pointer",
       "& > img": { width: "100%" },
    },

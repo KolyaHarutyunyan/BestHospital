@@ -40,24 +40,21 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
    const [modCheck, setModCheck] = useState([]);
    const [modif, setModif] = useState(!!info ? info.modifiers : []);
    const [checkModifiersLoader, setCheckModifiersLoader] = useState(false);
-   const [createWihtoutModifiers, setCreateWithoutModifiers] = useState(false);
+   const [defaultIsChecked, setDefaultIsChecked] = useState(
+      !!info ? info.serviceId?.default : false
+   );
 
+   const _defaultIsChosen = info?.default === true;
    const activeModifiers = modif.filter((modifier) => modifier.status === true);
 
    let modifierExists = false;
-   for (let i = 0; i < info?.modifiers?.length; i++) {
-      modifierExists = activeModifiers.includes(info?.modifiers[i]);
+   for (let i = 0; i < info?.serviceId?.modifiers?.length; i++) {
+      modifierExists = activeModifiers.includes(info?.serviceId?.modifiers[i]);
    }
 
    useEffect(() => {
       dispatch(fundingSourceActions.getFoundingSourceServiceById(fundingId));
    }, []);
-
-   useEffect(() => {
-      if (createWihtoutModifiers === true) {
-         setModCheck([]);
-      }
-   }, [createWihtoutModifiers]);
 
    const success = !!info
       ? FindSuccess("EDIT_CLIENT_AUTHORIZATION_SERV")
@@ -99,7 +96,7 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
    function handleChange(e) {
       if (e.target.name === "modifiers") {
          if (e.target.value === "") return;
-         setCreateWithoutModifiers(false);
+         if (defaultIsChecked) setDefaultIsChecked(false);
          setCheckModifiersLoader(true);
          setModCheck([]);
          const _fundingService = fSelect.find((item) => item.id === e.target.value);
@@ -138,7 +135,7 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
    }
 
    function handleChangeDefault() {
-      setCreateWithoutModifiers((prevState) => !prevState);
+      setDefaultIsChecked((prevState) => !prevState);
       if (error === "modifiersPost" || (backError && backError.length)) {
          setError("");
       }
@@ -156,14 +153,14 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
             }
          });
       });
-      const modifiersAreValid =
-         createWihtoutModifiers === true || !!modifiersPost?.length;
+      const modifiersAreValid = defaultIsChecked || !!modifiersPost?.length;
       const authServiceDataIsValid = !!info
          ? isNotEmpty(inputs.total)
          : isNotEmpty(inputs.total) && modifiersAreValid;
       if (authServiceDataIsValid) {
          const createAuthServiceData = {
             total: +inputs.total,
+            default: defaultIsChecked,
             modifiers: modifiersPost,
          };
          if (!!info) {
@@ -261,7 +258,8 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
                      <p className={classes.displayCodeBlockText}>Available Modfiers </p>
                      <div
                         className={`${classes.availableModfiers} ${
-                           (activeModifiers && !activeModifiers.length) ||
+                           !inputs.modifiers ||
+                           !_defaultIsChosen ||
                            checkModifiersLoader === true
                               ? "notApplicable"
                               : ""
@@ -273,45 +271,46 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
                            </div>
                         ) : (
                            <div className={classes.serviceModifiersContainerStyle}>
-                              {inputs.modifiers && !info && (
+                              {!inputs.modifiers || !_defaultIsChosen ? (
+                                 <div className={classes.notApplicableStyle}>N/A</div>
+                              ) : (
                                  <button
                                     className={`${classes.availableModfier} ${
-                                       createWihtoutModifiers ? "checked" : ""
-                                    }`}
-                                    onClick={handleChangeDefault}
-                                 >
-                                    {"Default"}
-                                 </button>
-                              )}
-                              {activeModifiers && activeModifiers.length ? (
-                                 activeModifiers.map((item, index) => {
-                                    const modifierCardStyle = `${
-                                       classes.availableModfier
-                                    } ${
-                                       modCheck.includes(index)
+                                       defaultIsChecked
                                           ? "checked"
-                                          : modifierExists
+                                          : _defaultIsChosen
                                           ? "chosen"
                                           : ""
-                                    }`;
-                                    function handleModifierCheckup() {
-                                       if (modifierExists) return;
-                                       onModifier(index);
-                                    }
-                                    return (
-                                       <button
-                                          key={index}
-                                          className={modifierCardStyle}
-                                          onClick={handleModifierCheckup}
-                                          disabled={createWihtoutModifiers}
-                                       >
-                                          {item.name}
-                                       </button>
-                                    );
-                                 })
-                              ) : (
-                                 <div className={classes.notApplicableStyle}>N/A</div>
+                                    }`}
+                                    onClick={handleChangeDefault}
+                                    disabled={_defaultIsChosen}
+                                 >
+                                    {"default"}
+                                 </button>
                               )}
+                              {activeModifiers && activeModifiers.length
+                                 ? activeModifiers.map((item, index) => {
+                                      const modifierButnStyle = `${
+                                         classes.availableModfier
+                                      } ${
+                                         modCheck.includes(index)
+                                            ? "checked"
+                                            : modifierExists
+                                            ? "chosen"
+                                            : ""
+                                      }`;
+                                      return (
+                                         <button
+                                            key={index}
+                                            className={modifierButnStyle}
+                                            onClick={() => onModifier(index)}
+                                            disabled={modifierExists}
+                                         >
+                                            {item.name}
+                                         </button>
+                                      );
+                                   })
+                                 : null}
                            </div>
                         )}
                      </div>

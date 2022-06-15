@@ -133,6 +133,8 @@ export const cardStyle = makeStyles(() => ({
       },
    },
    linkStyle: {
+      display: "inline-flex",
+      alignItems: "center",
       fontSize: "14px",
       fontWeight: 400,
       color: Colors.BackgroundBlue,

@@ -17,6 +17,7 @@ export { availabilityScheduleActions } from "./availabilitySchedule";
 export { appointmentActions } from "./appointment";
 export { billActions, claimActions, invoiceActions } from "./billing";
 export { claimPaymentActions, invoicePaymentActions } from "./posting";
+export { historyActions } from "./history";
 
 export { httpRequestsOnSuccessActions } from "./http_requests_on_success";
 export { httpRequestsOnErrorsActions } from "./http_requests_on_errors";

@@ -59,6 +59,18 @@ export const ClientEnrollmentTBody = ({ enrollment }) => {
       ? getModifierData(moment(enrollment?.terminationDate).format("DD/MM/YYYY"))
       : null;
 
+   function resetPrimaryEnrollmentHandler(event) {
+      event.stopPropagation();
+      dispatch(
+         clientActions.editClientEnrollment(
+            { primary: true },
+            params.id,
+            enrollment?.funderId?._id,
+            enrollment?.id
+         )
+      );
+   }
+
    return (
       <>
          <div className={classes.tbodyContainerStyle}>
@@ -69,19 +81,10 @@ export const ClientEnrollmentTBody = ({ enrollment }) => {
                   </div>
                ) : (
                   <Radio
-                     onChange={(e) => {
-                        e.stopPropagation();
-                        dispatch(
-                           clientActions.editClientEnrollment(
-                              { primary: true },
-                              params.id,
-                              enrollment?.funderId?._id,
-                              enrollment?.id
-                           )
-                        );
-                     }}
+                     onChange={resetPrimaryEnrollmentHandler}
                      checked={enrollment?.primary}
                      classes={{ root: classes.radio, checked: classes.checked }}
+                     disabled={_dateIsTerminated}
                   />
                )}
             </div>

@@ -9,6 +9,7 @@ import {
    availabilityScheduleActions,
    roleActions,
    authActions,
+   historyActions,
 } from "@eachbase/store";
 import { useParams } from "react-router-dom";
 import { Loader } from "@eachbase/components";
@@ -25,7 +26,7 @@ export const SingleStaff = () => {
       dispatch(adminActions.getAdminById(params.id));
       dispatch(systemActions.getCredentialGlobal());
       dispatch(noteActions.getGlobalNotes(params.id, "Staff"));
-      dispatch(fundingSourceActions.getFundingSourceHistoriesById("Staff"));
+      dispatch(historyActions.getHistory("Staff", { onResource: params.id }));
       dispatch(availabilityScheduleActions.getAvailabilitySchedule(params.id));
       dispatch(adminActions.getEmployment(params.id));
       dispatch(adminActions.getStaffService(params.id));

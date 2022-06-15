@@ -47,6 +47,11 @@ export const ClientAuthorization = ({ info }) => {
    const editFileNameLoader = FindLoad("EDIT_FILE_NAME_OF_CLIENT_AUTH");
    const editFileNameSuccess = FindSuccess("EDIT_FILE_NAME_OF_CLIENT_AUTH");
 
+   const fileUploadLoader =
+      !!sendFilesLoader.length ||
+      !!removeFilesLoader.length ||
+      !!editFileNameLoader.length;
+
    useEffect(() => {
       if (info) {
          dispatch(clientActions.getClientsAuthorizationsServ(info[authIndex].id));
@@ -63,11 +68,11 @@ export const ClientAuthorization = ({ info }) => {
    }, [success]);
 
    useEffect(() => {
-      if (
+      const fileUploadSuccess =
          !!sendFilesSuccess.length ||
          !!removeFilesSuccess.length ||
-         !!editFileNameSuccess.length
-      ) {
+         !!editFileNameSuccess.length;
+      if (fileUploadSuccess) {
          setModalIsOpen(false);
          if (!!sendFilesSuccess.length) {
             dispatch(
@@ -110,6 +115,10 @@ export const ClientAuthorization = ({ info }) => {
       }
    }, [chosenFile]);
 
+   function handleFileRemove(fileId) {
+      dispatch(clientActions.removeFilesFromClientAuth(info[authIndex].id, fileId));
+   }
+
    const _uploadedFiles = info[authIndex]?.documents?.map((document) => ({
       ...document.file,
       _id: document._id,
@@ -120,6 +129,16 @@ export const ClientAuthorization = ({ info }) => {
       dispatch(clientActions.deleteClientsAuthorization(info[authIndex].id, params.id));
       setAuthIndex(0);
    }
+
+   const fileModalUpperContent = (
+      <p className={classes.contentStyle}>
+         <span className={`${classes.contentIconStyle} starIcon`}>*</span>
+         Only
+         <span className={classes.contentIconStyle}> PDF , PNG , CSV </span>&
+         <span className={classes.contentIconStyle}> JPEG </span>
+         formats are supported
+      </p>
+   );
 
    return (
       <div className={classes.staffGeneralWrapper}>
@@ -162,18 +181,7 @@ export const ClientAuthorization = ({ info }) => {
                   onClose={() => setModalIsOpen(false)}
                   titleContent={"Uploaded files"}
                   subtitleContent={"Please fulfill the file type to upload a file."}
-                  content={
-                     <p className={classes.contentStyle}>
-                        <span className={`${classes.contentIconStyle} starIcon`}>*</span>
-                        Only
-                        <span className={classes.contentIconStyle}>
-                           {" "}
-                           PDF , PNG , CSV{" "}
-                        </span>
-                        &<span className={classes.contentIconStyle}> JPEG </span>
-                        formats are supported
-                     </p>
-                  }
+                  content={fileModalUpperContent}
                >
                   <ImagesFileUploader
                      uploadedFiles={_uploadedFiles}
@@ -185,19 +193,8 @@ export const ClientAuthorization = ({ info }) => {
                         setEnteredFileName(changedFileName)
                      }
                      handleFileIdPass={(fileId) => setCurrentFileId(fileId)}
-                     fileLoader={
-                        !!sendFilesLoader.length ||
-                        !!removeFilesLoader.length ||
-                        !!editFileNameLoader.length
-                     }
-                     handleFileRemove={(fileId) => {
-                        dispatch(
-                           clientActions.removeFilesFromClientAuth(
-                              info[authIndex].id,
-                              fileId
-                           )
-                        );
-                     }}
+                     fileLoader={fileUploadLoader}
+                     handleFileRemove={handleFileRemove}
                   />
                </ModalContentWrapper>
             }

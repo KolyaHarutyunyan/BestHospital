@@ -13,7 +13,7 @@ import { FindLoad, Images } from "@eachbase/utils";
 import { CreateStaff, CredentialModal } from "@eachbase/fragments";
 import { useDispatch, useSelector } from "react-redux";
 import { EmploymentModal, TimesheetModal } from "./modals";
-import { adminActions, fundingSourceActions } from "@eachbase/store";
+import { adminActions, historyActions } from "@eachbase/store";
 import { useParams } from "react-router-dom";
 
 const editButtonStyle = {
@@ -57,7 +57,7 @@ export const StaffItemHeader = ({
    const [searchDate, setSearchDate] = useState("");
    const [isDisabled, setIsDisabled] = useState(false);
 
-   const staffHistoryLoader = !!FindLoad("GET_FUNDING_SOURCE_HISTORIES_BY_ID").length;
+   const staffHistoryLoader = !!FindLoad("GET_HISTORY").length;
 
    useEffect(() => {
       dispatch(adminActions.getAllPaycodes(params.id));
@@ -81,12 +81,11 @@ export const StaffItemHeader = ({
 
    function handleSubmit() {
       setIsDisabled(true);
-      dispatch(
-         fundingSourceActions.getFundingSourceHistoriesById(
-            "Staff",
-            searchDate && new Date(searchDate).toISOString()
-         )
-      );
+      const paramsForStaffHistory = {
+         onResource: params.id,
+         start: searchDate && new Date(searchDate).toISOString(),
+      };
+      dispatch(historyActions.getHistory("Staff", paramsForStaffHistory));
    }
 
    return (

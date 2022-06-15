@@ -17,7 +17,7 @@ import { clientActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 const { showDashIfEmpty } = hooksForTable;
 
 function getAuthServiceData(givenData = "") {
-   return showDashIfEmpty(getLimitedVal(makeCapitalize(givenData)));
+   return showDashIfEmpty(getLimitedVal(makeCapitalize(givenData), 15));
 }
 
 export const ClientAuthServiceTBody = ({ authService, authId, fundingId }) => {
@@ -41,11 +41,21 @@ export const ClientAuthServiceTBody = ({ authService, authId, fundingId }) => {
    const [modalIsOpen, setModalIsOpen] = useState(false);
    const [modalContent, setModalContent] = useState("");
 
-   const serviceCode = getAuthServiceData(authService?.serviceId?.name);
+   const serviceCode = getAuthServiceData(authService?.serviceId?.serviceId?.name);
    const modifiers =
       authService?.modifiers?.length > 1
-         ? authService?.modifiers?.map((item) => `${makeCapitalize(item.name)}, `)
-         : showDashIfEmpty(makeCapitalize(authService?.modifiers[0]?.name));
+         ? authService?.modifiers?.map((item, index, arr) => {
+              if (index === arr.length - 1) {
+                 return `${makeCapitalize(item.name)}`;
+              }
+              return `${makeCapitalize(item.name)}, `;
+           })
+         : makeCapitalize(authService?.modifiers[0]?.name);
+   const modifiersDisplay = authService?.default
+      ? !!modifiers
+         ? showDashIfEmpty(`default, ${modifiers}`)
+         : showDashIfEmpty("default")
+      : showDashIfEmpty(modifiers);
    const totalUnits = getAuthServiceData(authService?.total);
    const completedUnits = getAuthServiceData(authService?.completed);
    const availableUnits = getAuthServiceData(authService?.total - authService?.completed);
@@ -55,7 +65,7 @@ export const ClientAuthServiceTBody = ({ authService, authId, fundingId }) => {
       <>
          <div className={classes.tbodyContainerStyle}>
             <div className={classes.tdStyle}>{serviceCode} </div>
-            <div className={classes.tdStyle}>{modifiers}</div>
+            <div className={classes.tdStyle}>{modifiersDisplay}</div>
             <div className={classes.tdStyle}>{totalUnits}</div>
             <div className={classes.tdStyle}>{completedUnits}</div>
             <div className={classes.tdStyle}> {availableUnits}</div>
@@ -76,7 +86,7 @@ export const ClientAuthServiceTBody = ({ authService, authId, fundingId }) => {
                   >
                      <img src={Images.edit} alt="edit" />
                   </div>
-                  <div
+                  {/* <div
                      className={classes.removeAuthServiceIconStyle}
                      onClick={() => {
                         setModalIsOpen(true);
@@ -84,7 +94,7 @@ export const ClientAuthServiceTBody = ({ authService, authId, fundingId }) => {
                      }}
                   >
                      <img src={Images.remove} alt="remove" />
-                  </div>
+                  </div> */}
                </div>
             </div>
          </div>
@@ -101,7 +111,7 @@ export const ClientAuthServiceTBody = ({ authService, authId, fundingId }) => {
                   />
                ) : modalContent === "REMOVE" ? (
                   <DeleteElement
-                     info={`Delete ${authService?.serviceId?.name}?`}
+                     info={`Delete ${serviceCode}?`}
                      handleDel={() =>
                         dispatch(
                            clientActions.deleteClientsAuthorizationServ(
