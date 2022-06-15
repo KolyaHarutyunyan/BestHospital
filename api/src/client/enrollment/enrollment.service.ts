@@ -109,7 +109,7 @@ export class EnrollmentService {
       ]);
       this.checkEnrollment(enrollment);
       this.checkClient(client);
-      if (activeEnrollment) {
+      if (activeEnrollment && activeEnrollment._id.toString() !== _id.toString()) {
         throw new HttpException('Can not be two active enrollment', HttpStatus.BAD_REQUEST);
       }
       enrollment.funderId = funderId;
