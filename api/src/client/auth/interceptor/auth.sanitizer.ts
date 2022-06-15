@@ -15,7 +15,6 @@ export class AuthSanitizer implements ISanitize {
       funderId: auth.funderId,
       startDate: auth.startDate,
       endDate: auth.endDate,
-      status: auth.status,
       documents: auth.documents,
       location: auth.location,
     };

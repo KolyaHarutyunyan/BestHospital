@@ -45,8 +45,6 @@ export class AuthorizationService {
         funderId: funderId,
         startDate: dto.startDate,
         endDate: dto.endDate,
-        // status hanel
-        status: dto.status,
         location: dto.location,
       });
       await auth.save();
@@ -102,7 +100,6 @@ export class AuthorizationService {
       if (dto.startDate) auth.startDate = dto.startDate;
       if (dto.endDate) auth.endDate = dto.endDate;
       if (dto.authId) auth.authId = dto.authId;
-      if (dto.status) auth.status = dto.status;
       if (dto.location) auth.location = dto.location;
       await auth.save();
       return this.sanitizer.sanitize(auth);

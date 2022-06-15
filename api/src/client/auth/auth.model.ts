@@ -14,7 +14,6 @@ const AuthSchema = new Schema({
   funderId: { type: Types.ObjectId, ref: 'Funder' },
   startDate: { type: String },
   endDate: { type: String },
-  status: { type: String, enum: [AuthorizationStatus] },
   createdDate: { type: Date, default: Date.now() },
   updatedDate: { type: Date, default: null },
   documents: [authDocSchema],

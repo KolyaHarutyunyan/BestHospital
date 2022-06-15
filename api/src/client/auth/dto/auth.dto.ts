@@ -17,8 +17,6 @@ export class AuthDTO {
   endDate: Date;
   @ApiProperty()
   location: string;
-  @ApiProperty({ enum: AuthorizationStatus })
-  status: string;
   @ApiProperty()
   documents: FileDTO[];
 }

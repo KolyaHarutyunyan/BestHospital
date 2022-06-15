@@ -22,9 +22,6 @@ export class CreateAuthDTO {
   @IsNotEmpty()
   @IsString()
   location: string;
-  @ApiProperty({ enum: AuthorizationStatus })
-  @IsEnum(AuthorizationStatus)
-  status: string;
 }
 export class CreateDocDTO extends DTO {
   @ApiProperty({ type: FileDTO })

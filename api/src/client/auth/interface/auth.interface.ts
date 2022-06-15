@@ -10,7 +10,6 @@ export interface IAuth extends Document {
   startDate: Date;
   endDate: Date;
   location: string;
-  status: string;
   documents: FileDTO[];
 }
 export interface IAuthDoc extends Document {

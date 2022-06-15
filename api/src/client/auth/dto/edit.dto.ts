@@ -20,8 +20,4 @@ export class UpdateAuthDTO {
   @IsString()
   @IsOptional()
   location: string;
-  @ApiProperty({ enum: AuthorizationStatus })
-  @IsEnum(AuthorizationStatus)
-  @IsOptional()
-  status: string;
 }
