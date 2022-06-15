@@ -14,4 +14,6 @@ export class AuthServiceDTO {
   modifiers: Array<string>;
   @ApiProperty()
   completed: number;
+  @ApiProperty()
+  default: boolean;
 }

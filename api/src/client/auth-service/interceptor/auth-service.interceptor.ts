@@ -13,6 +13,7 @@ export class AuthServiceSanitizer implements ISanitize {
       modifiers: authService.modifiers,
       total: authService.total,
       completed: authService.completed,
+      default: authService.default,
     };
     return authServiceDTO;
   }

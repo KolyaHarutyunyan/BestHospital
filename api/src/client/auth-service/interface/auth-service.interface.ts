@@ -8,4 +8,5 @@ export interface IAuthService extends Document {
   modifiers: any;
   total: number;
   completed: number;
+  default: boolean;
 }

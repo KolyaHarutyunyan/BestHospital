@@ -75,6 +75,7 @@ export class AuthService {
         authorizationId: authorizationId,
         serviceId: fundingServiceId,
         modifiers: dto.modifiers || [],
+        default: dto.default,
       });
       await (await authorizationService.save()).populate('serviceId').execPopulate();
       return this.sanitizer.sanitize(authorizationService);
