@@ -128,7 +128,7 @@ export const authService = {
       }),
 
    editFileNameOfClientAuthService: (authId, docId, fileName) =>
-      axios.patch(`/auth/${authId}/documents/${docId}/?name=${fileName}`, {
+      axios.patch(`/auth/${authId}/documents/${docId}/?name=${fileName}`, null, {
          auth: true,
       }),
 };

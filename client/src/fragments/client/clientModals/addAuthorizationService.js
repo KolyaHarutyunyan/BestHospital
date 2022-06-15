@@ -9,10 +9,19 @@ import {
    MinLoader,
 } from "@eachbase/components";
 import { createClientStyle } from "./styles";
-import { Colors, ErrorText, FindLoad, FindSuccess } from "@eachbase/utils";
+import {
+   Colors,
+   ErrorText,
+   FindError,
+   FindLoad,
+   FindSuccess,
+   hooksForErrors,
+   isNotEmpty,
+} from "@eachbase/utils";
 import {
    clientActions,
    fundingSourceActions,
+   httpRequestsOnErrorsActions,
    httpRequestsOnSuccessActions,
 } from "@eachbase/store";
 import axios from "axios";
@@ -26,11 +35,13 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
 
    const [error, setError] = useState("");
    const [inputs, setInputs] = useState(
-      info ? { ...info, name: info.serviceId?.name, modifiers: info.id } : {}
+      info ? { ...info, name: info.serviceId?.name, modifiers: info.serviceId?._id } : {}
    );
    const [modCheck, setModCheck] = useState([]);
    const [modif, setModif] = useState(!!info ? info.modifiers : []);
-   const [loader, setLoader] = useState(false);
+   const [checkModifiersLoader, setCheckModifiersLoader] = useState(false);
+   const [createWihtoutModifiers, setCreateWithoutModifiers] = useState(false);
+
    const activeModifiers = modif.filter((modifier) => modifier.status === true);
 
    let modifierExists = false;
@@ -40,20 +51,43 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
 
    useEffect(() => {
       dispatch(fundingSourceActions.getFoundingSourceServiceById(fundingId));
-      let funderId = "";
-      fSelect.forEach((item) => {
-         if (inputs.modifiers === item.id) {
-            funderId = item.id;
-         }
-      });
    }, []);
+
+   useEffect(() => {
+      if (createWihtoutModifiers === true) {
+         setModCheck([]);
+      }
+   }, [createWihtoutModifiers]);
 
    const success = !!info
       ? FindSuccess("EDIT_CLIENT_AUTHORIZATION_SERV")
       : FindSuccess("CREATE_CLIENT_AUTHORIZATION_SERV");
-   const load = !!info
+   const loader = !!info
       ? FindLoad("EDIT_CLIENT_AUTHORIZATION_SERV")
       : FindLoad("CREATE_CLIENT_AUTHORIZATION_SERV");
+   const backError = !!info
+      ? FindError("EDIT_CLIENT_AUTHORIZATION_SERV")
+      : FindError("CREATE_CLIENT_AUTHORIZATION_SERV");
+
+   const authServiceDefaultErrorText = hooksForErrors.getAuthServiceDefaultErrorText(
+      error,
+      backError
+   );
+
+   useEffect(
+      () => () => {
+         if (!!info) {
+            dispatch(
+               httpRequestsOnErrorsActions.removeError("EDIT_CLIENT_AUTHORIZATION_SERV")
+            );
+         } else {
+            dispatch(
+               httpRequestsOnErrorsActions.removeError("CREATE_CLIENT_AUTHORIZATION_SERV")
+            );
+         }
+      },
+      []
+   );
 
    useEffect(() => {
       if (!!success.length) {
@@ -64,7 +98,9 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
 
    function handleChange(e) {
       if (e.target.name === "modifiers") {
-         setLoader(true);
+         if (e.target.value === "") return;
+         setCreateWithoutModifiers(false);
+         setCheckModifiersLoader(true);
          setModCheck([]);
          const _fundingService = fSelect.find((item) => item.id === e.target.value);
          axios
@@ -74,20 +110,40 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
                { auth: true }
             )
             .then((res) => {
-               setModif(res.data), setLoader(false);
+               setModif(res.data), setCheckModifiersLoader(false);
             })
             .catch(() => {
-               setLoader(false);
+               setCheckModifiersLoader(false);
             });
       }
       setInputs((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
-      error === e.target.name && setError(""), error === "notZero" && setError("");
+      if (error === e.target.name || (backError && backError.length)) {
+         setError("");
+      }
+      if (backError && backError.length) {
+         dispatch(httpRequestsOnErrorsActions.removeError(backError[0].type));
+      }
    }
 
    function handleChangeTotal(e) {
       if (e.target.value >= 0 && e.target.value.indexOf(".") === -1) {
          setInputs((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
-         error === e.target.name && setError(""), error === "notZero" && setError("");
+         if (error === e.target.name || (backError && backError.length)) {
+            setError("");
+         }
+         if (backError && backError.length) {
+            dispatch(httpRequestsOnErrorsActions.removeError(backError[0].type));
+         }
+      }
+   }
+
+   function handleChangeDefault() {
+      setCreateWithoutModifiers((prevState) => !prevState);
+      if (error === "modifiersPost" || (backError && backError.length)) {
+         setError("");
+      }
+      if (backError && backError.length) {
+         dispatch(httpRequestsOnErrorsActions.removeError(backError[0].type));
       }
    }
 
@@ -100,13 +156,12 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
             }
          });
       });
-      let funderId;
-      fSelect.forEach((item) => {
-         if (inputs.modifiers === item.id) {
-            funderId = item.id;
-         }
-      });
-      if (inputs.total && inputs.total > 0 && modifiersPost?.length > 0) {
+      const modifiersAreValid =
+         createWihtoutModifiers === true || !!modifiersPost?.length;
+      const authServiceDataIsValid = !!info
+         ? isNotEmpty(inputs.total)
+         : isNotEmpty(inputs.total) && modifiersAreValid;
+      if (authServiceDataIsValid) {
          const createAuthServiceData = {
             total: +inputs.total,
             modifiers: modifiersPost,
@@ -115,7 +170,7 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
             const editAuthServiceData = {
                ...createAuthServiceData,
                authorizationId: authId,
-               fundingServiceId: funderId,
+               fundingServiceId: inputs.modifiers,
             };
             dispatch(
                clientActions.editClientsAuthorizationsServ(
@@ -129,22 +184,23 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
                clientActions.createClientsAuthorizationsServ(
                   createAuthServiceData,
                   authId,
-                  funderId
+                  inputs.modifiers
                )
             );
          }
       } else {
-         setError(
-            !inputs.modifiers
-               ? "modifiers"
-               : !modifiersPost.length
-               ? "modifiersPost"
-               : !inputs.total
+         const authServiceDataErrorText = !!info
+            ? !isNotEmpty(inputs.total)
                ? "total"
-               : inputs.total <= 0
-               ? "notZero"
-               : "Input is not field"
-         );
+               : ""
+            : !inputs.modifiers
+            ? "modifiers"
+            : !modifiersAreValid
+            ? "modifiersPost"
+            : !isNotEmpty(inputs.total)
+            ? "total"
+            : "";
+         setError(authServiceDataErrorText);
       }
    }
 
@@ -197,46 +253,70 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
                   />
                   <div
                      className={`${classes.displayCodeBlock2} ${
-                        error === "modifiersPost" ? "error" : ""
+                        error === "modifiersPost" || (backError && backError.length)
+                           ? "error"
+                           : ""
                      }`}
                   >
                      <p className={classes.displayCodeBlockText}>Available Modfiers </p>
-                     <div className={classes.availableModfiers}>
-                        {activeModifiers && activeModifiers.length > 0 ? (
-                           activeModifiers.map((item, index) => {
-                              const modifierCardStyle = `${classes.availableModfier} ${
-                                 modCheck.includes(index)
-                                    ? "checked"
-                                    : modifierExists
-                                    ? "chosen"
-                                    : ""
-                              }`;
-                              function handleModifierCheckup() {
-                                 if (modifierExists) return;
-                                 onModifier(index);
-                              }
-                              return (
-                                 <p
-                                    key={index}
-                                    className={modifierCardStyle}
-                                    onClick={handleModifierCheckup}
-                                 >
-                                    {item.name}
-                                 </p>
-                              );
-                           })
-                        ) : loader === true ? (
+                     <div
+                        className={`${classes.availableModfiers} ${
+                           (activeModifiers && !activeModifiers.length) ||
+                           checkModifiersLoader === true
+                              ? "notApplicable"
+                              : ""
+                        }`}
+                     >
+                        {checkModifiersLoader === true ? (
                            <div className={classes.loaderBoxStyle}>
                               <MinLoader margin={"0"} color={Colors.ThemeBlue} />
                            </div>
                         ) : (
-                           <p>N/A</p>
+                           <div className={classes.serviceModifiersContainerStyle}>
+                              {inputs.modifiers && !info && (
+                                 <button
+                                    className={`${classes.availableModfier} ${
+                                       createWihtoutModifiers ? "checked" : ""
+                                    }`}
+                                    onClick={handleChangeDefault}
+                                 >
+                                    {"Default"}
+                                 </button>
+                              )}
+                              {activeModifiers && activeModifiers.length ? (
+                                 activeModifiers.map((item, index) => {
+                                    const modifierCardStyle = `${
+                                       classes.availableModfier
+                                    } ${
+                                       modCheck.includes(index)
+                                          ? "checked"
+                                          : modifierExists
+                                          ? "chosen"
+                                          : ""
+                                    }`;
+                                    function handleModifierCheckup() {
+                                       if (modifierExists) return;
+                                       onModifier(index);
+                                    }
+                                    return (
+                                       <button
+                                          key={index}
+                                          className={modifierCardStyle}
+                                          onClick={handleModifierCheckup}
+                                          disabled={createWihtoutModifiers}
+                                       >
+                                          {item.name}
+                                       </button>
+                                    );
+                                 })
+                              ) : (
+                                 <div className={classes.notApplicableStyle}>N/A</div>
+                              )}
+                           </div>
                         )}
                      </div>
                   </div>
-                  {error === "modifiersPost" && (
-                     <ErrMessage text={"Please select some modifier"} />
-                  )}
+                  <ErrMessage text={authServiceDefaultErrorText} />
                   <p className={classes.inputInfo}>Availability</p>
                   <ValidationInput
                      variant={"outlined"}
@@ -244,19 +324,13 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
                      value={inputs.total === 0 ? "0" : inputs.total}
                      label={"Total Units*"}
                      name="total"
-                     typeError={
-                        error === "total"
-                           ? ErrorText.field
-                           : error === "notZero"
-                           ? "Total Units must be greater than 0"
-                           : ""
-                     }
+                     typeError={error === "total" ? ErrorText.field : ""}
                   />
                </div>
             </div>
             <div className={classes.clientModalBlock}>
                <CreateChancel
-                  loader={!!load.length}
+                  loader={!!loader.length}
                   create={!!info ? "Save" : "Add"}
                   chancel={"Cancel"}
                   onCreate={handleCreate}

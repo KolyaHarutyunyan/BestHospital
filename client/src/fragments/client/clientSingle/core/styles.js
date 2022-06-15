@@ -194,7 +194,6 @@ export const serviceSingleStyles = makeStyles(() => ({
       width: "100%",
       justifyContent: "space-between",
       alignItems: "center",
-      padding: "24px 24px 0 ",
    },
    authorizationServicesTitle: {
       fontSize: 18,
@@ -233,6 +232,10 @@ export const serviceSingleStyles = makeStyles(() => ({
          backgroundPosition: "center",
          marginRight: "8px",
       },
+   },
+   authServiceContainerStyle: {
+      width: "100%",
+      padding: "24px 24px 0",
    },
 }));
 

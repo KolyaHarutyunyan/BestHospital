@@ -40,13 +40,6 @@ export const authHeaderStyles = makeStyles(() => ({
       marginLeft: 8,
       borderRadius: "50%",
    },
-   iconStyle: {
-      cursor: "pointer",
-   },
-   iconDeleteStyle: {
-      marginLeft: 16,
-      cursor: "pointer",
-   },
    AuthHeaderBottom: {
       display: "flex",
       justifyContent: "space-between",
@@ -83,5 +76,28 @@ export const authHeaderStyles = makeStyles(() => ({
          "&.HOLD::before": { backgroundColor: Colors.ThemeBlue },
          "&.TERMINATE::before": { backgroundColor: Colors.ThemeRed },
       },
+   },
+   AuthHeaderTopRight: {
+      display: "flex",
+      alignItems: "center",
+   },
+   fileListStyle: {
+      width: "24px",
+      height: "24px",
+      marginRight: "16px",
+      cursor: "pointer",
+      "& > img": { width: "100%" },
+   },
+   removeIconStyle: {
+      width: "24px",
+      height: "24px",
+      cursor: "pointer",
+      "& > img": { width: "100%" },
+   },
+   editTextStyle: {
+      color: Colors.ThemeBlue,
+      fontSize: "14px",
+      fontWeight: 700,
+      cursor: "pointer",
    },
 }));
