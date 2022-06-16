@@ -16,6 +16,8 @@ export const UploadedFileCard = ({
 }) => {
    const classes = imagesFileUploaderCoreStyle();
 
+   const fileNameInputRef = useRef(null);
+
    const fileNameDetailsStyle = `${classes.fileNameDetailsStyle} ${
       uploadOnlyOneFile ? "singleFile" : ""
    }`;
@@ -25,17 +27,21 @@ export const UploadedFileCard = ({
 
    const _imageURL = file?.url || URL.createObjectURL(file);
 
-   const typeDisplay = uploadImmediately
+   const _typeDisplay = uploadImmediately
       ? checkImmediatelyUploadedFileType(file?.name)
       : checkFileType(file?.type);
 
+   const _uploadedFileName = uploadImmediately ? file?.fileName : fileName;
+
    const [change, setChange] = useState(false);
    const [wasChanged, setWasChanged] = useState(false);
-   const [currentFileName, setCurrentFileName] = useState(
-      uploadImmediately && file.fileName ? file.fileName : fileName
-   );
+   const [currentFileName, setCurrentFileName] = useState(fileName);
 
-   const fileNameInputRef = useRef(null);
+   useEffect(() => {
+      if (uploadImmediately) {
+         setCurrentFileName(file?.fileName);
+      }
+   }, [file]);
 
    useEffect(() => {
       if (change) {
@@ -55,9 +61,10 @@ export const UploadedFileCard = ({
 
    function blurFileNameHandler() {
       if (!isNotEmpty(currentFileName)) {
-         setCurrentFileName(fileName);
+         setCurrentFileName(_uploadedFileName);
+      } else {
+         setChange(false);
       }
-      setChange(false);
    }
 
    return (
@@ -65,7 +72,7 @@ export const UploadedFileCard = ({
          <div className={classes.fileDetailsBoxStyle}>
             <div className={classes.imageContainer}>
                <div>
-                  {typeDisplay}
+                  {_typeDisplay}
                   <p className={classes.fileSize}>{file.size}</p>
                   <img
                      onClick={() => deleteFile(file)}
