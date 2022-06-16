@@ -41,7 +41,7 @@ export const fileUploadersStyle = makeStyles(() => ({
       fontSize: 16,
       color: Colors.TextSecondary,
       fontWeight: 600,
-      marginTop: "20px",
+      margin: "20px 0 24px",
       textTransform: "capitalize",
       textAlign: "left",
    },
@@ -91,7 +91,7 @@ export const fileUploadersStyle = makeStyles(() => ({
       marginLeft: 16,
    },
    iconText: {
-      margin: "104px 0px",
+      marginTop: "104px",
       textAlign: "center",
    },
    noFilesYetTextStyle: {

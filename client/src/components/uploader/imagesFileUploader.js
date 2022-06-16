@@ -27,12 +27,18 @@ export const ImagesFileUploader = ({
 
    const [enteredFileName, setEnteredFileName] = useState("");
    const [fileName, setFileName] = useState("");
-   const [images, setImages] = useState(uploadImmediately ? uploadedFiles : []);
+   const [images, setImages] = useState([]);
    const [error, setError] = useState("");
    const [loaderUpload, setLoaderUpload] = useState(false);
 
    const uniqueImages = [...new Map(images.map((image) => [image.name, image])).values()];
    const _currentFiles = uploadImmediately ? images : uniqueImages;
+
+   useEffect(() => {
+      if (uploadImmediately) {
+         setImages(uploadedFiles);
+      }
+   }, [uploadedFiles]);
 
    useEffect(() => {
       handleImagesPass && handleImagesPass(_currentFiles);
@@ -110,7 +116,7 @@ export const ImagesFileUploader = ({
             <div>
                <ReactFileReader
                   handleFiles={handleFileChange}
-                  fileTypes={["image/*", "application/pdf"]}
+                  fileTypes={["image/*", "application/pdf", "text/csv"]}
                >
                   <label className={classes.uploadOneFileStyle}>Upload Signature</label>
                </ReactFileReader>
@@ -131,7 +137,7 @@ export const ImagesFileUploader = ({
                   <ReactFileReader
                      disabled={!isNotEmpty(enteredFileName)}
                      handleFiles={handleFileChange}
-                     fileTypes={["image/*", "application/pdf"]}
+                     fileTypes={["image/*", "application/pdf", "text/csv"]}
                   >
                      <label className={uploadButnStyle}>Upload a file</label>
                   </ReactFileReader>

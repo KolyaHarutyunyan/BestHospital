@@ -34,23 +34,25 @@ export const ClientAuthorization = ({ info }) => {
    const [authIndex, setAuthIndex] = useState(0);
    const [enteredFileName, setEnteredFileName] = useState("");
    const [currentFileId, setCurrentFileId] = useState("");
-
    const [chosenFile, setChosenFile] = useState();
 
    const success = FindSuccess("DELETE_CLIENT_AUTHORIZATION");
    const loader = FindLoad("GET_CLIENT_AUTHORIZATION_SERV");
    const delAuthLoader = FindLoad("DELETE_CLIENT_AUTHORIZATION");
    const sendFilesLoader = FindLoad("ADD_FILES_TO_CLIENT_AUTH");
-   const sendFilesSuccess = FindSuccess("ADD_FILES_TO_CLIENT_AUTH");
    const removeFilesLoader = FindLoad("REMOVE_FILES_FROM_CLIENT_AUTH");
-   const removeFilesSuccess = FindSuccess("REMOVE_FILES_FROM_CLIENT_AUTH");
    const editFileNameLoader = FindLoad("EDIT_FILE_NAME_OF_CLIENT_AUTH");
-   const editFileNameSuccess = FindSuccess("EDIT_FILE_NAME_OF_CLIENT_AUTH");
 
    const fileUploadLoader =
       !!sendFilesLoader.length ||
       !!removeFilesLoader.length ||
       !!editFileNameLoader.length;
+
+   const clientAuthFiles = info[authIndex]?.documents?.map((document) => ({
+      ...document.file,
+      _id: document._id,
+      fileName: document.name,
+   }));
 
    useEffect(() => {
       if (info) {
@@ -68,30 +70,7 @@ export const ClientAuthorization = ({ info }) => {
    }, [success]);
 
    useEffect(() => {
-      const fileUploadSuccess =
-         !!sendFilesSuccess.length ||
-         !!removeFilesSuccess.length ||
-         !!editFileNameSuccess.length;
-      if (fileUploadSuccess) {
-         setModalIsOpen(false);
-         if (!!sendFilesSuccess.length) {
-            dispatch(
-               httpRequestsOnSuccessActions.removeSuccess("ADD_FILES_TO_CLIENT_AUTH")
-            );
-         } else if (!!removeFilesSuccess.length) {
-            dispatch(
-               httpRequestsOnSuccessActions.removeSuccess("REMOVE_FILES_FROM_CLIENT_AUTH")
-            );
-         } else if (!!editFileNameSuccess.length) {
-            dispatch(
-               httpRequestsOnSuccessActions.removeSuccess("EDIT_FILE_NAME_OF_CLIENT_AUTH")
-            );
-         }
-      }
-   }, [sendFilesSuccess, removeFilesSuccess, editFileNameSuccess]);
-
-   useEffect(() => {
-      if (currentFileId) {
+      if (!!currentFileId) {
          dispatch(
             clientActions.editFileNameOfClientAuth(
                info[authIndex].id,
@@ -118,12 +97,6 @@ export const ClientAuthorization = ({ info }) => {
    function handleFileRemove(fileId) {
       dispatch(clientActions.removeFilesFromClientAuth(info[authIndex].id, fileId));
    }
-
-   const _uploadedFiles = info[authIndex]?.documents?.map((document) => ({
-      ...document.file,
-      _id: document._id,
-      fileName: document.name,
-   }));
 
    function deleteAuthorization() {
       dispatch(clientActions.deleteClientsAuthorization(info[authIndex].id, params.id));
@@ -184,7 +157,8 @@ export const ClientAuthorization = ({ info }) => {
                   content={fileModalUpperContent}
                >
                   <ImagesFileUploader
-                     uploadedFiles={_uploadedFiles}
+                     uploadedFiles={clientAuthFiles}
+                     uploadedFileName={enteredFileName}
                      changeNameAfterFileUpload={true}
                      uploadImmediately={true}
                      handleFilePass={(file) => setChosenFile(file)}
