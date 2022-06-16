@@ -16,4 +16,6 @@ export class AuthServiceDTO {
   completed: number;
   @ApiProperty()
   default: boolean;
+  @ApiProperty()
+  authModifiers: any
 }

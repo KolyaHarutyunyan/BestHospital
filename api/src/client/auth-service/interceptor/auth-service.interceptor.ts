@@ -11,6 +11,7 @@ export class AuthServiceSanitizer implements ISanitize {
       authorizationId: authService.authorizationId,
       serviceId: authService.serviceId,
       modifiers: authService.modifiers,
+      authModifiers: authService.authModifiers,
       total: authService.total,
       completed: authService.completed,
       default: authService.default,

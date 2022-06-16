@@ -160,26 +160,18 @@ export class AuthService {
       const authServices: any = await this.model
         .find({ authorizationId: authId })
         .populate({ path: 'serviceId', populate: 'serviceId' });
-      // console.log('a');
-      // authServices.map((authService) => {
-      //   console.log('1', authService, '1');
-      //   if (authService.modifiers.length !== 0) {
-      //     console.log('2');
-      //     for (let i = 0; i < authService.modifiers.length; i++) {
-      //       console.log(authService.modifiers[i], 'utyuk');
-      //       console.log('eeeeh', authService.serviceId, 'eeeeh');
-      //       authService.serviceId.modifiers.map((modifier) => {
-      //         if (modifier._id.toString() === authService.modifiers[i].toString()) {
-      //         }
-      //         // if (authService.modifiers[i].toString() === modifier._id.toString()) {
-      //         //   authService.modifiers.push(modifier);
-      //         // }
-      //       });
-      //     }
-      //   }
-      // });
-      console.log('b');
-
+      authServices.map((authService) => {
+        if (authService.modifiers.length !== 0) {
+          for (let i = 0; i < authService.modifiers.length; i++) {
+            authService.serviceId.modifiers.map((modifier) => {
+              if (modifier._id.toString() === authService.modifiers[i].toString()) {
+                authService.authModifiers.push(modifier);
+                console.log(authService, 'aaaaaaa')
+              }
+            });
+          }
+        }
+      });
       return this.sanitizer.sanitizeMany(authServices);
     } catch (e) {
       throw e;

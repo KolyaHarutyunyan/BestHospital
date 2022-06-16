@@ -6,6 +6,7 @@ export interface IAuthService extends Document {
   authorizationId: string;
   serviceId: IService | string;
   modifiers: any;
+  authModifiers: Object;
   total: number;
   completed: number;
   default: boolean;
