@@ -81,14 +81,19 @@ export class EnrollmentService {
     }
   }
   // find enrollment by funder
-  async findByFunder(funderId: string, clientId: string): Promise<EnrollmentDTO> {
+  async findByFunder(funderId: string, clientId: string): Promise<EnrollmentDTO[]> {
     try {
-      const enrollment = await this.model.findOne({ funderId, clientId });
-      this.checkEnrollment(enrollment);
-      if (enrollment.terminationDate) {
+      let activeEnrollment = false;
+      const enrollments = await this.model.find({ funderId, clientId });
+      enrollments.map((enrollment) => {
+        if (enrollment.terminationDate) {
+          activeEnrollment = true;
+        }
+      });
+      if (!activeEnrollment) {
         throw new HttpException('Enrollment is not active', HttpStatus.BAD_REQUEST);
       }
-      return this.sanitizer.sanitize(enrollment);
+      return this.sanitizer.sanitizeMany(enrollments);
     } catch (e) {
       throw e;
     }

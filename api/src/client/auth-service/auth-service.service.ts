@@ -157,10 +157,30 @@ export class AuthService {
   // find all authorization services
   async findAll(authId: string): Promise<AuthServiceDTO[]> {
     try {
-      const authService = await this.model
+      const authServices: any = await this.model
         .find({ authorizationId: authId })
         .populate({ path: 'serviceId', populate: 'serviceId' });
-      return this.sanitizer.sanitizeMany(authService);
+      // console.log('a');
+      // authServices.map((authService) => {
+      //   console.log('1', authService, '1');
+      //   if (authService.modifiers.length !== 0) {
+      //     console.log('2');
+      //     for (let i = 0; i < authService.modifiers.length; i++) {
+      //       console.log(authService.modifiers[i], 'utyuk');
+      //       console.log('eeeeh', authService.serviceId, 'eeeeh');
+      //       authService.serviceId.modifiers.map((modifier) => {
+      //         if (modifier._id.toString() === authService.modifiers[i].toString()) {
+      //         }
+      //         // if (authService.modifiers[i].toString() === modifier._id.toString()) {
+      //         //   authService.modifiers.push(modifier);
+      //         // }
+      //       });
+      //     }
+      //   }
+      // });
+      console.log('b');
+
+      return this.sanitizer.sanitizeMany(authServices);
     } catch (e) {
       throw e;
     }
