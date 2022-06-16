@@ -31,12 +31,24 @@ export const ClientEnrollmentTHead = () => {
 
    return (
       <div className={classes.tableTheadStyle}>
-         <div className={classes.thStyle}>{primary}</div>
-         <div className={classes.thStyle}>{fundingSource}</div>
-         <div className={classes.thStyle}>{clientId}</div>
-         <div className={classes.thStyle}>{startDate}</div>
-         <div className={classes.thStyle}>{terminationDate}</div>
-         <div className={classes.thStyle}>{action}</div>
+         <div className={classes.thStyle} style={{ maxWidth: "120px" }}>
+            {primary}
+         </div>
+         <div className={classes.thStyle} style={{ maxWidth: "280px" }}>
+            {fundingSource}
+         </div>
+         <div className={classes.thStyle} style={{ maxWidth: "155px" }}>
+            {clientId}
+         </div>
+         <div className={classes.thStyle} style={{ maxWidth: "175px" }}>
+            {startDate}
+         </div>
+         <div className={classes.thStyle} style={{ maxWidth: "207px" }}>
+            {terminationDate}
+         </div>
+         <div className={classes.thStyle} style={{ maxWidth: "107px" }}>
+            {action}
+         </div>
       </div>
    );
 };

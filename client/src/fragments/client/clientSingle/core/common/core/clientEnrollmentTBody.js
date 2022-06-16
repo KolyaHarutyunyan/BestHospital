@@ -52,7 +52,7 @@ export const ClientEnrollmentTBody = ({ enrollment }) => {
 
    const _dateIsTerminated = !!enrollment?.terminationDate;
 
-   const funderName = getModifierData(enrollment?.funderId?.name);
+   const funderName = hooksForTable.showDashIfEmpty(enrollment?.funderId?.name);
    const clientId = getModifierData(enrollment?.clientId);
    const startDate = getModifierData(moment(enrollment?.startDate).format("DD/MM/YYYY"));
    const terminationDate = !!enrollment?.terminationDate
@@ -74,7 +74,7 @@ export const ClientEnrollmentTBody = ({ enrollment }) => {
    return (
       <>
          <div className={classes.tbodyContainerStyle}>
-            <div className={classes.tdStyle}>
+            <div className={classes.tdStyle} style={{ maxWidth: "120px" }}>
                {changePrimaryLoader.length ? (
                   <div className={classes.loadStyle}>
                      <MinLoader margin={"0"} color={Colors.BackgroundBlue} />
@@ -88,10 +88,16 @@ export const ClientEnrollmentTBody = ({ enrollment }) => {
                   />
                )}
             </div>
-            <div className={classes.tdStyle}>{funderName}</div>
-            <div className={classes.tdStyle}>{clientId}</div>
-            <div className={classes.tdStyle}>{startDate}</div>
-            <div className={classes.tdStyle}>
+            <div className={classes.tdStyle} style={{ maxWidth: "280px" }}>
+               {funderName}
+            </div>
+            <div className={classes.tdStyle} style={{ maxWidth: "155px" }}>
+               {clientId}
+            </div>
+            <div className={classes.tdStyle} style={{ maxWidth: "175px" }}>
+               {startDate}
+            </div>
+            <div className={classes.tdStyle} style={{ maxWidth: "207px" }}>
                <CustomizedSwitch
                   checked={_dateIsTerminated}
                   handleClick={() => {
@@ -104,7 +110,7 @@ export const ClientEnrollmentTBody = ({ enrollment }) => {
                />
                <p className={classes.terminationDateTextStyle}>{terminationDate}</p>
             </div>
-            <div className={classes.tdStyle}>
+            <div className={classes.tdStyle} style={{ maxWidth: "107px" }}>
                <div
                   className={classes.editModifierIconStyle}
                   onClick={() => {
