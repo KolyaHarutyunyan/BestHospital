@@ -4,7 +4,6 @@ import {
    GET_CLIENT_CONTACTS_SUCCESS,
    GET_CLIENT_ENROLLMENT_SUCCESS,
    GET_CLIENT_AUTHORIZATION_SUCCESS,
-   GET_CLIENT_HISTORIES_SUCCESS,
    CREATE_CLIENT_CONTACT_SUCCESS,
    GET_CLIENT_AUTHORIZATION_SERV_SUCCESS,
    GET_CLIENT_AUTHORIZATION_SERV_ERROR,
@@ -21,7 +20,6 @@ const initialState = {
    clientContacts: [],
    clientEnrollment: [],
    clientsAuthorizations: [],
-   clientHistories: [],
    clientsNotes: [],
 };
 
@@ -73,12 +71,6 @@ export const clientReducer = (state = initialState, action) => {
          return {
             ...state,
             clientsAuthorizationsServices: [],
-         };
-
-      case GET_CLIENT_HISTORIES_SUCCESS:
-         return {
-            ...state,
-            clientHistories: action.payload,
          };
 
       // authorization file

@@ -9,8 +9,6 @@ import {
    GET_FUNDING_SOURCE_SERVICE_BY_ID,
    GET_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
    CREATE_FUNDING_SOURCE_SERVICE_BY_ID,
-   GET_FUNDING_SOURCE_HISTORIES_BY_ID,
-   GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS,
    EDIT_FUNDING_SOURCE,
    EDIT_FUNDING_SOURCE_SERVICE,
    CREATE_FUNDING_MODIFIER,
@@ -170,36 +168,6 @@ function* editFundingSourceService(action) {
    }
 }
 
-function* getFundingSourceHistoriesById(action) {
-   yield put(httpRequestsOnErrorsActions.removeError(action.type));
-   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
-   try {
-      const res = yield call(
-         authService.getFundingSourceHistoriesByIdService,
-         action.payload.onModal,
-         action.payload.searchDate
-      );
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put({
-         type: GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS,
-         payload: res.data,
-      });
-   } catch (err) {
-      if (!action.payload.searchDate) {
-         yield put({
-            type: GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS,
-            payload: [],
-         });
-      }
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      if (err?.data?.message === "Internal server error") {
-         yield put(
-            httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message)
-         );
-      }
-   }
-}
-
 function* changeFundingSourceStatus(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
@@ -325,7 +293,6 @@ export const watchFundingSource = function* watchFundingSourceSaga() {
    yield takeLatest(GET_FUNDING_SOURCE_SERVICE_BY_ID, getFundingSourceServicesById);
    yield takeLatest(CREATE_FUNDING_SOURCE_SERVICE_BY_ID, createFundingSourceServiceById);
    yield takeLatest(EDIT_FUNDING_SOURCE_SERVICE, editFundingSourceService);
-   yield takeLatest(GET_FUNDING_SOURCE_HISTORIES_BY_ID, getFundingSourceHistoriesById);
    yield takeLatest(SET_STATUS, changeFundingSourceStatus);
    yield takeLatest(CREATE_FUNDING_MODIFIER, createFundingModifier);
    yield takeLatest(EDIT_FUNDING_MODIFIER, editFundingModifier);

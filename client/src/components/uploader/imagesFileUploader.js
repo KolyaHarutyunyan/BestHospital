@@ -98,7 +98,7 @@ export const ImagesFileUploader = ({
 
    function handleFileDelete(file) {
       if (uploadImmediately) {
-         handleFileRemove && handleFileRemove(file.id);
+         handleFileRemove && handleFileRemove(file._id);
       } else {
          setImages(uniqueImages.filter((image) => image.name !== file.name));
       }

@@ -19,7 +19,6 @@ import {
    GET_CLIENT_BY_ID,
    GET_CLIENT_CONTACTS,
    GET_CLIENT_ENROLLMENT,
-   GET_CLIENT_HISTORIES,
    GET_CLIENTS,
    GET_CLIENT_AUTHORIZATION_MOD_CHECK,
    DELETE_CLIENT_AUTHORIZATION_FILE,
@@ -222,13 +221,6 @@ export const deleteClientsAuthorizationServ = (id, authID) => {
    return {
       type: DELETE_CLIENT_AUTHORIZATION_SERV,
       payload: { id, authID },
-   };
-};
-
-export const getClientHistories = (id, onModal) => {
-   return {
-      type: GET_CLIENT_HISTORIES,
-      payload: { id, onModal },
    };
 };
 

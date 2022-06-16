@@ -94,7 +94,10 @@ export const createClientStyle = makeStyles(() => ({
          backgroundColor: "#347AF080",
          cursor: "default",
       },
-      "&:disabled": { cursor: "default" },
+      "&:disabled": {
+         cursor: "default",
+         color: Colors.TextWhite,
+      },
    },
    loaderBoxStyle: {
       justifySelf: "center",

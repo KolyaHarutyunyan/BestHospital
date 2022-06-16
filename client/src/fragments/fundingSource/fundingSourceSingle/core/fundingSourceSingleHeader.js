@@ -11,7 +11,8 @@ import {
 } from "@eachbase/components";
 import { FundingSourceServiceAdd } from "./modals";
 import { CreateFundingSource } from "../../createFundingSource";
-import { fundingSourceActions } from "@eachbase/store";
+import { historyActions } from "@eachbase/store";
+import { useParams } from "react-router";
 
 const filterBtn = {
    width: 93,
@@ -23,13 +24,15 @@ export const FundingSourceSingleHeader = ({ activeTab, title }) => {
 
    const dispatch = useDispatch();
 
+   const params = useParams();
+
    const prevData = useSelector((state) => state.fundingSource.fundingSourceItem);
 
    const [open, setOpen] = useState(false);
    const [searchDate, setSearchDate] = useState("");
    const [isDisabled, setIsDisabled] = useState(false);
 
-   const fsHistoryLoader = !!FindLoad("GET_FUNDING_SOURCE_HISTORIES_BY_ID").length;
+   const fsHistoryLoader = !!FindLoad("GET_HISTORY").length;
 
    function handleOpenClose() {
       setOpen((prevState) => !prevState);
@@ -42,12 +45,11 @@ export const FundingSourceSingleHeader = ({ activeTab, title }) => {
 
    function handleSubmit() {
       setIsDisabled(true);
-      dispatch(
-         fundingSourceActions.getFundingSourceHistoriesById(
-            "Funder",
-            searchDate && new Date(searchDate).toISOString()
-         )
-      );
+      const paramsForFunderHistory = {
+         onResource: params.id,
+         start: searchDate && new Date(searchDate).toISOString(),
+      };
+      dispatch(historyActions.getHistory("Funder", paramsForFunderHistory));
    }
 
    return (

@@ -4,7 +4,6 @@ import {
    GET_FUNDING_SOURCE_BY_ID,
    GET_FUNDING_SOURCE_SERVICE_BY_ID,
    CREATE_FUNDING_SOURCE_SERVICE_BY_ID,
-   GET_FUNDING_SOURCE_HISTORIES_BY_ID,
    EDIT_FUNDING_SOURCE,
    EDIT_FUNDING_SOURCE_SERVICE,
    DELETE_FUNDING_SOURCE_SERVICE,
@@ -68,13 +67,6 @@ export const deleteFoundingSourceServiceById = (id) => {
    return {
       type: DELETE_FUNDING_SOURCE_SERVICE,
       payload: { id },
-   };
-};
-
-export const getFundingSourceHistoriesById = (onModal, searchDate) => {
-   return {
-      type: GET_FUNDING_SOURCE_HISTORIES_BY_ID,
-      payload: { onModal, searchDate },
    };
 };
 

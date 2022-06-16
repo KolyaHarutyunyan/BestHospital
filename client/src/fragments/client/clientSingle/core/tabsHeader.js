@@ -7,7 +7,7 @@ import {
    SimpleModal,
    AddNotes,
    ValidationInput,
-   AvailabilitySchedule,
+   // AvailabilitySchedule,
    SimpleTooltip,
 } from "@eachbase/components";
 import {
@@ -17,7 +17,7 @@ import {
    AddAuthorization,
    AddAuthorizationService,
 } from "@eachbase/fragments/client";
-import { fundingSourceActions } from "@eachbase/store";
+import { historyActions } from "@eachbase/store";
 import { useDispatch, useSelector } from "react-redux";
 
 const filterBtn = {
@@ -38,7 +38,7 @@ export const TabsHeader = ({ activeTab, data, authActive, availabilityData }) =>
    const [searchDate, setSearchDate] = useState("");
    const [isDisabled, setIsDisabled] = useState(false);
 
-   const clientHistoryLoader = !!FindLoad("GET_FUNDING_SOURCE_HISTORIES_BY_ID").length;
+   const clientHistoryLoader = !!FindLoad("GET_HISTORY").length;
 
    const handleOpenClose = () => {
       setOpen((prevState) => !prevState);
@@ -51,12 +51,11 @@ export const TabsHeader = ({ activeTab, data, authActive, availabilityData }) =>
 
    const handleSubmit = () => {
       setIsDisabled(true);
-      dispatch(
-         fundingSourceActions.getFundingSourceHistoriesById(
-            "Client",
-            searchDate && new Date(searchDate).toISOString()
-         )
-      );
+      const paramsForClientHistory = {
+         onResource: data?.id,
+         start: searchDate && new Date(searchDate).toISOString(),
+      };
+      dispatch(historyActions.getHistory("Client", paramsForClientHistory));
    };
 
    return (
@@ -71,7 +70,7 @@ export const TabsHeader = ({ activeTab, data, authActive, availabilityData }) =>
                </div>
             </li>
             <li className={classes.headerRight}>
-               {activeTab === 6 ? (
+               {activeTab === 5 ? (
                   <>
                      <div className={classes.searchContainer}>
                         <ValidationInput
@@ -99,13 +98,13 @@ export const TabsHeader = ({ activeTab, data, authActive, availabilityData }) =>
                      text="Edit"
                   />
                ) : activeTab === 4 ? (
-                  <AddButton text="Available Hours" handleClick={handleOpenClose} />
+                  <AddButton text="Add Notes" handleClick={handleOpenClose} />
                ) : activeTab !== 6 && activeTab !== 4 ? (
                   activeTab === 3 && !_activeEnrollments?.length ? (
                      <SimpleTooltip
                         title={
                            <p className={classes.infoTextForAuthStyle}>
-                              You can only add authorization if you have at least one
+                              You can only add Authorization if you have at least one
                               Enrollment.
                            </p>
                         }
@@ -126,7 +125,7 @@ export const TabsHeader = ({ activeTab, data, authActive, availabilityData }) =>
                               ? "Add Enrollments"
                               : activeTab === 3
                               ? "Add Authorization"
-                              : "Add Notes"
+                              : "Available Hours"
                         }
                         handleClick={handleOpenClose}
                      />
@@ -148,13 +147,13 @@ export const TabsHeader = ({ activeTab, data, authActive, availabilityData }) =>
                   <AddEnrollment handleClose={handleOpenClose} />
                ) : activeTab === 3 ? (
                   <AddAuthorization handleClose={handleOpenClose} />
-               ) : activeTab === 4 ? (
-                  <AvailabilitySchedule
-                     onModel={"Client"}
-                     availabilityData={availabilityData}
-                     handleClose={handleOpenClose}
-                  />
-               ) : activeTab === 5 ? (
+               ) : // ) : activeTab === 4 ? (
+               //    <AvailabilitySchedule
+               //       onModel={"Client"}
+               //       availabilityData={availabilityData}
+               //       handleClose={handleOpenClose}
+               //    />
+               activeTab === 4 ? (
                   <AddNotes model="Client" handleClose={handleOpenClose} />
                ) : null
             }

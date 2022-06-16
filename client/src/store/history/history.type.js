@@ -1,0 +1,2 @@
+export const GET_HISTORY = "GET_HISTORY";
+export const GET_HISTORY_SUCCESS = "GET_HISTORY_SUCCESS";

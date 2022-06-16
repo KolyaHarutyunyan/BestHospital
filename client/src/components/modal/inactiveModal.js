@@ -11,7 +11,7 @@ import {
 import { modalsStyle } from "./styles";
 import { AddModalButton, CloseButton } from "../buttons";
 import { ValidationInput, Textarea } from "../inputs";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { fundingSourceActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 
 export const InactiveModal = ({ handleOpenClose, info, name, statusType }) => {
@@ -44,8 +44,7 @@ export const InactiveModal = ({ handleOpenClose, info, name, statusType }) => {
    };
 
    const handleCreate = () => {
-      const dataIsValid = isNotEmpty(inputs.date) && isNotEmpty(inputs.reason);
-
+      const dataIsValid = isNotEmpty(inputs.date);
       if (dataIsValid) {
          const data = {
             date: inputs.date,
@@ -61,12 +60,7 @@ export const InactiveModal = ({ handleOpenClose, info, name, statusType }) => {
             fundingSourceActions.setStatus(params.id, info.path, status, data, info.type)
          );
       } else {
-         const dataErrorText = !isNotEmpty(inputs.date)
-            ? "date"
-            : !isNotEmpty(inputs.reason)
-            ? "reason"
-            : "";
-
+         const dataErrorText = !isNotEmpty(inputs.date) ? "date" : "";
          setError(dataErrorText);
       }
    };
@@ -103,7 +97,6 @@ export const InactiveModal = ({ handleOpenClose, info, name, statusType }) => {
             onChange={handleChange}
             label={"Write  reason here..."}
             name="reason"
-            typeError={error === "reason" ? ErrorText.field : ""}
          />
          <AddModalButton
             btnStyles={inactivateButtonStyle}

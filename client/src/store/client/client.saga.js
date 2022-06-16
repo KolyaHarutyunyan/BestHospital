@@ -28,10 +28,7 @@ import {
    CREATE_CLIENT_AUTHORIZATION_SERV,
    EDIT_CLIENT_AUTHORIZATION_SERV,
    DELETE_CLIENT_AUTHORIZATION_SERV,
-   GET_CLIENT_HISTORIES_SUCCESS,
-   GET_CLIENT_HISTORIES,
    CREATE_CLIENT_CONTACT_SUCCESS,
-   GET_CLIENT_AUTHORIZATION_SERV_ERROR,
    GET_CLIENT_AUTHORIZATION_ERROR,
    GET_CLIENT_AUTHORIZATION_MOD_CHECK,
    GET_CLIENT_AUTHORIZATION_FILE_SUCCESS,
@@ -565,30 +562,6 @@ function* deleteClientAuthorizationsServ(action) {
    }
 }
 
-function* getClientHistories(action) {
-   yield put(httpRequestsOnErrorsActions.removeError(action.type));
-   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
-   try {
-      const res = yield call(
-         authService.getClientHistoriesService,
-         action.payload.id,
-         action.payload.onModal
-      );
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put({
-         type: GET_CLIENT_HISTORIES_SUCCESS,
-         payload: res.data,
-      });
-   } catch (err) {
-      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      if (err?.data?.message === "Internal server error") {
-         yield put(
-            httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message)
-         );
-      }
-   }
-}
-
 function* addFilesToClientAuth(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
@@ -685,7 +658,6 @@ export const watchClient = function* watchClientSaga() {
    yield takeLatest(EDIT_CLIENT_AUTHORIZATION_FILE, editClientAuthorizationFile);
    yield takeLatest(DELETE_CLIENT_AUTHORIZATION_FILE, deleteClientAuthorizationFile);
 
-   yield takeLatest(GET_CLIENT_HISTORIES, getClientHistories);
    yield takeLatest(GET_CLIENT_AUTHORIZATION_MOD_CHECK, getClientsAuthorizationsModCheck);
 
    yield takeLatest(ADD_FILES_TO_CLIENT_AUTH, addFilesToClientAuth);

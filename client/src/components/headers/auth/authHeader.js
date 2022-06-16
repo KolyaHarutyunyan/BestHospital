@@ -1,3 +1,4 @@
+import React from "react";
 import { authHeaderStyles } from "./styles";
 import {
    ActiveInactiveStatusReverse,
@@ -5,9 +6,9 @@ import {
    Images,
    makeCapitalize,
 } from "@eachbase/utils";
-import React from "react";
 import moment from "moment";
 import { SlicedText } from "../../messages";
+import { getAuthStatusDisplay } from "./constants";
 
 export const AuthHeader = ({
    openModal,
@@ -19,6 +20,8 @@ export const AuthHeader = ({
    type,
 }) => {
    const classes = authHeaderStyles();
+
+   const authStatusDisplay = getAuthStatusDisplay(info);
 
    return (
       <div className={classes.AuthHeader}>
@@ -67,7 +70,7 @@ export const AuthHeader = ({
                   </div>
                )}
                <div
-                  className={classes.fileListStyle}
+                  className={classes.editIconStyle}
                   onClick={() => {
                      setDelEdit(true);
                      setToggleModal(!toggleModal);
@@ -85,17 +88,16 @@ export const AuthHeader = ({
                   >
                      Edit
                   </div>
-               ) : (
-                  <div
-                     className={classes.removeIconStyle}
-                     onClick={() => {
-                        setDelEdit(false);
-                        setToggleModal(!toggleModal);
-                     }}
-                  >
-                     <img src={Images.remove} alt="delete" />
-                  </div>
-               )}
+               ) : // <div
+               //    className={classes.removeIconStyle}
+               //    onClick={() => {
+               //       setDelEdit(false);
+               //       setToggleModal(!toggleModal);
+               //    }}
+               // >
+               //    <img src={Images.remove} alt="delete" />
+               // </div>
+               null}
             </div>
          </div>
          <div className={classes.AuthHeaderBottom}>
@@ -115,11 +117,11 @@ export const AuthHeader = ({
                   {empoloyment ? "Department:" : "Status:"}
                </p>
                <p
-                  className={`${classes.AuthHeaderBottomBoxText} statusStyle ${info?.status}`}
+                  className={`${classes.AuthHeaderBottomBoxText} statusStyle ${authStatusDisplay}`}
                >
                   {empoloyment
                      ? info?.departmentId?.name
-                     : ActiveInactiveStatusReverse(info?.status)}
+                     : ActiveInactiveStatusReverse(authStatusDisplay)}
                </p>
             </div>
             <div className={classes.AuthHeaderBottomBox}>

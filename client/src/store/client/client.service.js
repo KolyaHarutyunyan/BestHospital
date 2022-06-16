@@ -114,9 +114,6 @@ export const authService = {
    deleteClientAuthorizationServService: ({ payload }) =>
       axios.delete(`/authservice/${payload.id}`, { auth: true }),
 
-   getClientHistoriesService: (id, onModal) =>
-      axios.get(`/history/${id}/${onModal}`, { auth: true }),
-
    addFilesToClientAuthService: (authId, files) =>
       axios.post(`/auth/${authId}/documents`, files, {
          auth: true,
