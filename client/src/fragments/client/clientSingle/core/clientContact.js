@@ -12,33 +12,7 @@ import { serviceSingleStyles } from "./styles";
 import { Colors, FindLoad, FindSuccess, Images, makeCapitalize } from "@eachbase/utils";
 import { TableCell } from "@material-ui/core";
 import { clientActions, httpRequestsOnSuccessActions } from "@eachbase/store";
-
-const headerTitles = [
-   {
-      title: "First Name",
-      sortable: true,
-   },
-   {
-      title: "Last Name",
-      sortable: true,
-   },
-   {
-      title: "Relationship",
-      sortable: false,
-   },
-   {
-      title: "Address",
-      sortable: true,
-   },
-   {
-      title: "Phone Number",
-      sortable: false,
-   },
-   {
-      title: "Action",
-      sortable: false,
-   },
-];
+import { contactHeaderTitles, getGeneralInfo } from "./constants";
 
 export const ClientContact = ({ data, setContactId, handleOpenClose, info }) => {
    const classes = serviceSingleStyles();
@@ -64,12 +38,7 @@ export const ClientContact = ({ data, setContactId, handleOpenClose, info }) => 
       }
    }, [success]);
 
-   const generalInfo = [
-      { title: "First Name", value: makeCapitalize(data?.firstName) },
-      { title: "Middle Name", value: makeCapitalize(data?.middleName) },
-      { title: "Last Name", value: makeCapitalize(data?.lastName) },
-      { title: "Code", value: data?.code },
-   ].filter((item) => !!item.value);
+   const generalInfo = getGeneralInfo(data);
 
    function deleteContact() {
       dispatch(clientActions.deleteClientContact(info[index].id, params.id));
@@ -142,7 +111,7 @@ export const ClientContact = ({ data, setContactId, handleOpenClose, info }) => 
                restHeight={"360px"}
                data={info}
                items={clientContactItem}
-               headerTitles={headerTitles}
+               headerTitles={contactHeaderTitles}
                defaultStyle={true}
             />
          </div>

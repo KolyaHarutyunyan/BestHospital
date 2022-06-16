@@ -2,7 +2,6 @@ import {
    GET_FUNDING_SOURCE_BY_ID_SUCCESS,
    GET_FUNDING_SOURCE_SUCCESS,
    GET_FUNDING_SOURCE_SERVICE_BY_ID_SUCCESS,
-   GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS,
 } from "./fundingSource.types";
 
 const initialState = {
@@ -10,7 +9,6 @@ const initialState = {
    fSelect: [],
    fundingSourceListReserve: [],
    fundingSourceServices: [],
-   fundingSourceHistories: [],
 };
 
 export const fundingSourceReducer = (state = initialState, action) => {
@@ -33,12 +31,6 @@ export const fundingSourceReducer = (state = initialState, action) => {
          return {
             ...state,
             fundingSourceServices: action.payload.reverse(),
-         };
-
-      case GET_FUNDING_SOURCE_HISTORIES_BY_ID_SUCCESS:
-         return {
-            ...state,
-            fundingSourceHistories: action.payload,
          };
 
       default:

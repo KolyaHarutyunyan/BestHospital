@@ -14,8 +14,8 @@ import {
    FindLoad,
    FindSuccess,
    isNotEmpty,
-   makeCapitalize,
-   makeEnum,
+   // makeCapitalize,
+   // makeEnum,
 } from "@eachbase/utils";
 import {
    clientActions,
@@ -24,10 +24,10 @@ import {
 } from "@eachbase/store";
 import moment from "moment";
 
-const _list = [
-   { name: "Inactive", id: 0, code: 0 },
-   { name: "Active", id: 1, code: 1 },
-];
+// const _list = [
+//    { name: "Inactive", id: 0, code: 0 },
+//    { name: "Active", id: 1, code: 1 },
+// ];
 
 export const AddAuthorization = ({ handleClose, info }) => {
    const classes = createClientStyle();
@@ -76,7 +76,7 @@ export const AddAuthorization = ({ handleClose, info }) => {
               funding: _primaryEnrollment?.funderId?._id,
            }
    );
-   const [authStatus, setAuthStatus] = useState(info ? makeCapitalize(info?.status) : "");
+   // const [authStatus, setAuthStatus] = useState(info ? makeCapitalize(info?.status) : "");
    const [fullAddress, setFullAddress] = useState(info ? info.location : "");
    const [enteredAddress, setEnteredAddress] = useState(info ? info.location : "");
 
@@ -88,10 +88,10 @@ export const AddAuthorization = ({ handleClose, info }) => {
       (error === e.target.name || error === ErrorText.dateError) && setError("");
    }
 
-   function handleStatusChange(event) {
-      setAuthStatus(event.target.value);
-      error === "status" && setError("");
-   }
+   // function handleStatusChange(event) {
+   //    setAuthStatus(event.target.value);
+   //    error === "status" && setError("");
+   // }
 
    function handleAddressChange(selectedAddress) {
       setEnteredAddress(selectedAddress);
@@ -107,7 +107,7 @@ export const AddAuthorization = ({ handleClose, info }) => {
          isNotEmpty(inputs.authId) &&
          isNotEmpty(inputs.funding) &&
          dateComparingIsValid &&
-         !!authStatus &&
+         // !!authStatus &&
          isNotEmpty(enteredAddress);
 
       if (authorizationDataIsValid) {
@@ -116,7 +116,7 @@ export const AddAuthorization = ({ handleClose, info }) => {
             startDate: inputs.startDate,
             endDate: inputs.endDate,
             location: fullAddress,
-            status: makeEnum(authStatus),
+            // status: makeEnum(authStatus),
          };
          if (!!info) {
             dispatch(clientActions.editClientsAuthorizations(data, info.id, params.id));
@@ -136,9 +136,9 @@ export const AddAuthorization = ({ handleClose, info }) => {
             ? "endDate"
             : !dateComparingIsValid
             ? ErrorText.dateError
-            : !authStatus
-            ? "status"
-            : !isNotEmpty(enteredAddress)
+            : // : !authStatus
+            // ? "status"
+            !isNotEmpty(enteredAddress)
             ? "enteredAddress"
             : "";
          setError(dataErrorText);
@@ -213,7 +213,7 @@ export const AddAuthorization = ({ handleClose, info }) => {
                         }
                      />
                   </div>
-                  <SelectInput
+                  {/* <SelectInput
                      type={"status"}
                      name={"status"}
                      label={"Status*"}
@@ -221,7 +221,7 @@ export const AddAuthorization = ({ handleClose, info }) => {
                      value={authStatus}
                      list={_list}
                      typeError={error === "status" ? ErrorText.selectField : ""}
-                  />
+                  /> */}
                   <AddressInput
                      name={"location"}
                      auth={true}

@@ -1,29 +1,25 @@
 import { ActiveInactiveStatusReverse, makeCapitalize } from "@eachbase/utils";
 import moment from "moment";
 
-export const headerTitles = [
+export const contactHeaderTitles = [
    {
-      title: "Service Code",
+      title: "First Name",
+      sortable: true,
+   },
+   {
+      title: "Last Name",
+      sortable: true,
+   },
+   {
+      title: "Relationship",
       sortable: false,
    },
    {
-      title: "Modifiers",
-      sortable: false,
+      title: "Address",
+      sortable: true,
    },
    {
-      title: "Total Units",
-      sortable: false,
-   },
-   {
-      title: "Completed Units",
-      sortable: false,
-   },
-   {
-      title: "Available Units",
-      sortable: false,
-   },
-   {
-      title: "Percent Utilization",
+      title: "Phone Number",
       sortable: false,
    },
    {

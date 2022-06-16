@@ -21,14 +21,6 @@ export const authService = {
    editFoundingSourceServiceService: (id, body) =>
       axios.patch(`/funding/service/${id}`, body, { auth: true }),
 
-   getFundingSourceHistoriesByIdService: (onModal, searchDate) => {
-      if (searchDate) {
-         return axios.get(`/history/${onModal}?start=${searchDate}`, { auth: true });
-      } else {
-         return axios.get(`/history/${onModal}`, { auth: true });
-      }
-   },
-
    changeFundingSourceStatusService: (id, path, status, body) =>
       axios.patch(`/${path}/${id}/${status}`, body, { auth: true }),
 

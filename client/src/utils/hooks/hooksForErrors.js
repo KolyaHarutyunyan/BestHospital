@@ -36,6 +36,12 @@ export const hooksForErrors = {
          backError[0]?.error === "Can not be two active enrollment"
       ) {
          return ErrorText.enrollmentError;
+      } else if (
+         backError?.length &&
+         backError[0]?.error ===
+            "Can not set primary because enrollment have a termination date"
+      ) {
+         return ErrorText.enrollmentPrimaryError;
       } else {
          return "";
       }
@@ -60,7 +66,7 @@ export const hooksForErrors = {
       } else if (
          backError?.length &&
          backError[0]?.error ===
-            "Can not be two authorization service without the modifiers"
+            "Can not be two authorization service with default modifiers"
       ) {
          return ErrorText.authServiceDefaultError;
       } else {

@@ -56,9 +56,7 @@ export const ClientItem = () => {
    const clientsAuthorizations = useSelector(
       (state) => state.client.clientsAuthorizations
    );
-   const clientsHistories = useSelector(
-      (state) => state.fundingSource.fundingSourceHistories
-   );
+   const clientHistory = useSelector((state) => state.history.history);
    const clientsNotes = useSelector((state) => state.note.notes);
    const availabilityData = useSelector(
       (state) => state.availabilitySchedule.availabilitySchedule
@@ -123,8 +121,8 @@ export const ClientItem = () => {
          ),
       },
       {
-         tabComponent: clientsHistories.length ? (
-            <ClientHistory info={clientsHistories} />
+         tabComponent: clientHistory.length ? (
+            <ClientHistory info={clientHistory} />
          ) : (
             <NoItemText text={"There is no history in this date"} />
          ),

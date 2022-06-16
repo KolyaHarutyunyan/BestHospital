@@ -5,6 +5,7 @@ import {
    fundingSourceActions,
    noteActions,
    availabilityScheduleActions,
+   historyActions,
 } from "@eachbase/store";
 
 import { useDispatch } from "react-redux";
@@ -25,7 +26,7 @@ export const ClientSingle = () => {
       dispatch(noteActions.getGlobalNotes(params.id, "Client"));
       dispatch(availabilityScheduleActions.getAvailabilitySchedule(params.id));
       dispatch(fundingSourceActions.getFundingSource({ status: "ACTIVE" }));
-      dispatch(fundingSourceActions.getFundingSourceHistoriesById("Client"));
+      dispatch(historyActions.getHistory("Client", { onResource: params.id }));
    }, []);
 
    return (

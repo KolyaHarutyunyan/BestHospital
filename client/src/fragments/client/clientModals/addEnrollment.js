@@ -166,6 +166,7 @@ export const AddEnrollment = ({ handleClose, info }) => {
                         checked={isPrimaryEnrol}
                         onClick={(e) => setIsPrimaryEnrol(e.target.checked)}
                         color="primary"
+                        disabled={!!info?.terminationDate}
                      />
                      <p className={classes.curently}>Set as primary enrollment</p>
                   </div>

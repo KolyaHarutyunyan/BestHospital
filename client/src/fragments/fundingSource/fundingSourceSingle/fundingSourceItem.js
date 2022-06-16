@@ -31,9 +31,7 @@ export const FundingSourceItem = ({}) => {
 
    const data = useSelector((state) => state.fundingSource.fundingSourceItem);
    const servicesData = useSelector((state) => state.fundingSource.fundingSourceServices);
-   const historiesData = useSelector(
-      (state) => state.fundingSource.fundingSourceHistories
-   );
+   const funderHistory = useSelector((state) => state.history.history);
    const globalNotes = useSelector((state) => state.note.notes);
    const globalServices = useSelector((state) => state.system.services);
    const globalCredentials = useSelector((state) => state.system.credentials);
@@ -72,8 +70,8 @@ export const FundingSourceItem = ({}) => {
          ),
       },
       {
-         tabComponent: historiesData.length ? (
-            <FundingSourceSingleHistories data={historiesData} />
+         tabComponent: funderHistory.length ? (
+            <FundingSourceSingleHistories data={funderHistory} />
          ) : (
             <NoItemText text="There is no history in this date" />
          ),

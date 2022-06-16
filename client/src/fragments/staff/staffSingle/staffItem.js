@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { TableCell } from "@material-ui/core";
 import {
    adminActions,
-   fundingSourceActions,
    httpRequestsOnSuccessActions,
    systemActions,
 } from "@eachbase/store";
@@ -88,9 +87,7 @@ export const StaffItem = ({ gen }) => {
    const credentialData = useSelector((state) => state.admins.credential);
    const globalCredentials = useSelector((state) => state.system.credentials);
    const globalNotes = useSelector((state) => state.note.notes);
-   const historiesData = useSelector(
-      (state) => state.fundingSource.fundingSourceHistories
-   );
+   const staffHistory = useSelector((state) => state.history.history);
    const availabilityData = useSelector(
       (state) => state.availabilitySchedule.availabilitySchedule
    );
@@ -251,7 +248,7 @@ export const StaffItem = ({ gen }) => {
          ),
       },
       {
-         tabComponent: <StaffHistory data={historiesData} />,
+         tabComponent: <StaffHistory data={staffHistory} />,
       },
    ];
 

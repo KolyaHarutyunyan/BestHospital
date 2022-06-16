@@ -7,6 +7,7 @@ import {
    httpRequestsOnSuccessActions,
    systemActions,
    noteActions,
+   historyActions,
 } from "@eachbase/store";
 import { useParams } from "react-router-dom";
 import { FindLoad } from "@eachbase/utils";
@@ -21,7 +22,7 @@ export const FundingSourceSingle = () => {
       dispatch(adminActions.getAdmins());
       dispatch(fundingSourceActions.getFundingSourceById(params.id));
       dispatch(fundingSourceActions.getFoundingSourceServiceById(params.id));
-      dispatch(fundingSourceActions.getFundingSourceHistoriesById("Funder"));
+      dispatch(historyActions.getHistory("Funder", { onResource: params.id }));
       dispatch(noteActions.getGlobalNotes(params.id, "Funder"));
       dispatch(systemActions.getServices());
       dispatch(systemActions.getCredentialGlobal());
