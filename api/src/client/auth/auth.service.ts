@@ -36,7 +36,7 @@ export class AuthorizationService {
       this.checkTime(dto.startDate, dto.endDate);
       const [client] = await Promise.all([
         this.clientModel.findById({ _id: clientId }),
-        this.enrollmentService.findByFunder(funderId),
+        this.enrollmentService.findByFunder(funderId, clientId),
       ]);
       this.checkClient(client);
       const auth = new this.model({

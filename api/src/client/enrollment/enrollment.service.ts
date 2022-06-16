@@ -81,12 +81,12 @@ export class EnrollmentService {
     }
   }
   // find enrollment by funder
-  async findByFunder(funderId: string): Promise<EnrollmentDTO> {
+  async findByFunder(funderId: string, clientId: string): Promise<EnrollmentDTO> {
     try {
-      const enrollment = await this.model.findOne({ funderId });
+      const enrollment = await this.model.findOne({ funderId, clientId });
       this.checkEnrollment(enrollment);
       if (enrollment.terminationDate) {
-        throw new HttpException('Enrollment is not active', HttpStatus.NOT_FOUND);
+        throw new HttpException('Enrollment is not active', HttpStatus.BAD_REQUEST);
       }
       return this.sanitizer.sanitize(enrollment);
     } catch (e) {
