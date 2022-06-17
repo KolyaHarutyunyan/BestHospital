@@ -9,6 +9,7 @@ import {
 } from "@eachbase/components";
 import { createClientStyle } from "./styles";
 import {
+   addHiddenClass,
    ErrorText,
    FindError,
    FindLoad,
@@ -22,10 +23,6 @@ import {
    httpRequestsOnErrorsActions,
    httpRequestsOnSuccessActions,
 } from "@eachbase/store";
-
-function addHiddenClass(className, isHidden = false) {
-   return `${className} ${isHidden ? "hidden" : ""}`;
-}
 
 export const AddContact = ({ handleClose, info }) => {
    const classes = createClientStyle();

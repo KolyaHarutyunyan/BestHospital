@@ -22,14 +22,14 @@ export const Client = ({}) => {
    const [status, setStatus] = useState("ACTIVE");
 
    useEffect(() => {
-      dispatch(clientActions.getClients({ status: status, start: 0, end: 10 }));
+      dispatch(clientActions.getClients({ status: status, skip: 0, limit: 10 }));
    }, []);
 
    const handleActiveOrInactive = (status) => {
       setStatus(status);
       handlePageChange(true);
       setPage(1);
-      dispatch(clientActions.getClients({ status: status, start: 0, end: 10 }));
+      dispatch(clientActions.getClients({ status: status, skip: 0, limit: 10 }));
    };
 
    const handleOpenClose = () => {

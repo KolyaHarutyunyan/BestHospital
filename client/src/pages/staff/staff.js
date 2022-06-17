@@ -1,34 +1,60 @@
-import React, { useEffect, useState } from "react";
-import { TableWrapper } from "@eachbase/components";
+import React, { useContext, useEffect, useState } from "react";
+import { Loader, TableWrapper } from "@eachbase/components";
 import { CreateStaff, StaffTable } from "@eachbase/fragments";
-import { adminActions, systemActions } from "@eachbase/store";
+import {
+   adminActions,
+   httpRequestsOnSuccessActions,
+   systemActions,
+} from "@eachbase/store";
 import { useDispatch, useSelector } from "react-redux";
-import { FindLoad } from "@eachbase/utils";
+import { FindLoad, FindSuccess, PaginationContext } from "@eachbase/utils";
 
 export const Staff = () => {
    const dispatch = useDispatch();
+
+   const { pageIsChanging, handlePageChange } = useContext(PaginationContext);
+
+   const loader = FindLoad("GET_ADMINS");
+   const success = FindSuccess("GET_ADMINS");
+
+   const globalDepartments = useSelector((state) => state.system.departments);
+   const adminsList = useSelector((state) => state.admins.adminsList);
+   const { staff, count } = adminsList || {};
+
    const [open, setOpen] = useState(false);
    const [page, setPage] = useState(1);
    const [status, setStatus] = useState("ACTIVE");
-   const loader = FindLoad("GET_ADMINS");
-   const { adminsList } = useSelector((state) => ({
-      adminsList: state.admins.adminsList,
-   }));
-   const globalDepartments = useSelector((state) => state.system.departments);
 
    useEffect(() => {
-      dispatch(adminActions.getAdmins({ status: status, start: 0, end: 20 }));
+      dispatch(adminActions.getAdmins({ status: status, skip: 0, limit: 10 }));
       dispatch(systemActions.getDepartments());
    }, []);
 
-   const handleOpenClose = () => {
-      setOpen((prevState) => !prevState);
-   };
+   useEffect(
+      () => () => {
+         if (pageIsChanging) {
+            handlePageChange(false);
+         }
+      },
+      [pageIsChanging]
+   );
 
-   const handleActiveOrInactive = (status) => {
+   useEffect(() => {
+      if (!!success.length) {
+         if (!pageIsChanging) setPage(1);
+         handlePageChange(false);
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("GET_ADMINS"));
+      }
+   }, [success]);
+
+   if (!!loader.length && !pageIsChanging) return <Loader />;
+
+   function handleActiveOrInactive(status) {
       setStatus(status);
-      dispatch(adminActions.getAdmins({ status: status, start: 0, end: 10 }));
-   };
+      handlePageChange(true);
+      setPage(1);
+      dispatch(adminActions.getAdmins({ status: status, skip: 0, limit: 10 }));
+   }
 
    return (
       <>
@@ -41,17 +67,24 @@ export const Staff = () => {
             buttonsTabAddButton={true}
             addButtonText={"Add Staff Member"}
             openCloseInfo={open}
-            handleOpenClose={handleOpenClose}
+            handleOpenClose={() => setOpen((prevState) => !prevState)}
             body={
                <CreateStaff
                   globalDepartments={globalDepartments}
                   adminsList={adminsList && adminsList.staff}
                   resetData={true}
-                  handleClose={handleOpenClose}
+                  handleClose={() => setOpen(false)}
                />
             }
          >
-            <StaffTable handleGetPage={setPage} status={status} />
+            <StaffTable
+               staff={staff}
+               staffLoader={!!loader.length}
+               staffCount={count}
+               page={page}
+               status={status}
+               handleGetPage={setPage}
+            />
          </TableWrapper>
       </>
    );

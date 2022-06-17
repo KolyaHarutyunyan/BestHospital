@@ -40,10 +40,10 @@ export const ValidationInput = ({
          if (validator) {
             if (validator.test(Value)) {
                setValidEmail(false);
-               sendBoolean(false);
+               sendBoolean && sendBoolean(false);
             } else {
                setValidEmail(true);
-               sendBoolean(true);
+               sendBoolean && sendBoolean(true);
             }
          }
       }

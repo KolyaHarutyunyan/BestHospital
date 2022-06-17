@@ -45,6 +45,8 @@ export {
    ImgUploader,
    manageType,
    hooksForErrors,
+   addHiddenClass,
+   makeSSN,
 } from "./hooks";
 export { ErrorText } from "./errorTexts";
 export { CountryList } from "./jsons";

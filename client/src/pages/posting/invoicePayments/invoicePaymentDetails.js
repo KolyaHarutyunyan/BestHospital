@@ -25,7 +25,7 @@ export const InvoicePaymentDetails = () => {
 
    useEffect(() => {
       dispatch(invoicePaymentActions.getInvoicePaymentById(params.id));
-      dispatch(clientActions.getClients());
+      dispatch(clientActions.getClients({ status: "ACTIVE" }));
       return () => {
          dispatch({
             type: "GET_INVOICE_PAYMENT_BY_ID_SUCCESS",
