@@ -38,7 +38,7 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
       info ? { ...info, name: info.serviceId?.name, modifiers: info.serviceId?._id } : {}
    );
    const [modCheck, setModCheck] = useState([]);
-   const [modif, setModif] = useState(!!info ? info.modifiers : []);
+   const [modif, setModif] = useState(!!info ? info.authModifiers : []);
    const [checkModifiersLoader, setCheckModifiersLoader] = useState(false);
    const [defaultIsChecked, setDefaultIsChecked] = useState(
       !!info ? info.serviceId?.default : false
@@ -48,8 +48,8 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
    const activeModifiers = modif.filter((modifier) => modifier.status === true);
 
    let modifierExists = false;
-   for (let i = 0; i < info?.serviceId?.modifiers?.length; i++) {
-      modifierExists = activeModifiers.includes(info?.serviceId?.modifiers[i]);
+   for (let i = 0; i < info?.authModifiers?.length; i++) {
+      modifierExists = activeModifiers.includes(info?.authModifiers[i]);
    }
 
    useEffect(() => {
@@ -258,9 +258,7 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
                      <p className={classes.displayCodeBlockText}>Available Modfiers </p>
                      <div
                         className={`${classes.availableModfiers} ${
-                           !inputs.modifiers ||
-                           !_defaultIsChosen ||
-                           checkModifiersLoader === true
+                           !inputs.modifiers || checkModifiersLoader === true
                               ? "notApplicable"
                               : ""
                         }`}
@@ -271,7 +269,7 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
                            </div>
                         ) : (
                            <div className={classes.serviceModifiersContainerStyle}>
-                              {!inputs.modifiers || !_defaultIsChosen ? (
+                              {!inputs.modifiers ? (
                                  <div className={classes.notApplicableStyle}>N/A</div>
                               ) : (
                                  <button

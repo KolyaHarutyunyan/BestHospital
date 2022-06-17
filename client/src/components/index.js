@@ -58,7 +58,6 @@ export { SimpleTooltip } from "./tooltip/tooltip";
 export { CustomBreadcrumbs } from "./breadcrumbs";
 export { PaginationItem } from "./pagination";
 export { CircleAndTitle } from "./sections";
-export { Steps } from "./steps";
 export { Card, Notes, HistoryCard } from "./card";
 export { SimpleTabs } from "./tabs";
 export { ModalHeader, TabsHeader } from "./headers";

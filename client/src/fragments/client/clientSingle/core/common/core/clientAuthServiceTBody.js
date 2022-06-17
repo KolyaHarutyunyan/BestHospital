@@ -42,20 +42,22 @@ export const ClientAuthServiceTBody = ({ authService, authId, fundingId }) => {
    const [modalContent, setModalContent] = useState("");
 
    const serviceCode = getAuthServiceData(authService?.serviceId?.serviceId?.name);
-   const modifiers =
-      authService?.modifiers?.length > 1
-         ? authService?.modifiers?.map((item, index, arr) => {
-              if (index === arr.length - 1) {
-                 return `${makeCapitalize(item.name)}`;
-              }
-              return `${makeCapitalize(item.name)}, `;
-           })
-         : makeCapitalize(authService?.modifiers[0]?.name);
-   const modifiersDisplay = authService?.default
-      ? !!modifiers
-         ? showDashIfEmpty(`default, ${modifiers}`)
+   const authModifiers =
+      authService?.authModifiers?.length > 1
+         ? authService?.authModifiers
+              ?.filter((item) => !!item)
+              .map((item, index, arr) => {
+                 if (index === arr.length - 1) {
+                    return `${makeCapitalize(item.name)}`;
+                 }
+                 return `${makeCapitalize(item.name)}, `;
+              })
+         : makeCapitalize(authService?.authModifiers[0]?.name);
+   const authModifiersDisplay = authService?.default
+      ? !!authModifiers
+         ? showDashIfEmpty(`default, ${authModifiers}`)
          : showDashIfEmpty("default")
-      : showDashIfEmpty(modifiers);
+      : showDashIfEmpty(authModifiers);
    const totalUnits = getAuthServiceData(authService?.total);
    const completedUnits = getAuthServiceData(authService?.completed);
    const availableUnits = getAuthServiceData(authService?.total - authService?.completed);
@@ -65,7 +67,7 @@ export const ClientAuthServiceTBody = ({ authService, authId, fundingId }) => {
       <>
          <div className={classes.tbodyContainerStyle}>
             <div className={classes.tdStyle}>{serviceCode} </div>
-            <div className={classes.tdStyle}>{modifiersDisplay}</div>
+            <div className={classes.tdStyle}>{authModifiersDisplay}</div>
             <div className={classes.tdStyle}>{totalUnits}</div>
             <div className={classes.tdStyle}>{completedUnits}</div>
             <div className={classes.tdStyle}> {availableUnits}</div>

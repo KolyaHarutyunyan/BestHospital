@@ -19,7 +19,7 @@ export const FundingSourceSingle = () => {
    const loader = FindLoad("GET_FUNDING_SOURCE_BY_ID");
 
    useEffect(() => {
-      dispatch(adminActions.getAdmins());
+      dispatch(adminActions.getAdmins({ status: "ACTIVE" }));
       dispatch(fundingSourceActions.getFundingSourceById(params.id));
       dispatch(fundingSourceActions.getFoundingSourceServiceById(params.id));
       dispatch(historyActions.getHistory("Funder", { onResource: params.id }));

@@ -2,14 +2,7 @@ import axios from "axios";
 
 export const authService = {
    getClientsService: ({ data }) => {
-      if (data) {
-         return axios.get(
-            `/client/?skip=${data.start}&&limit=${data.end}&&status=${data.status}`,
-            { auth: true }
-         );
-      } else {
-         return axios.get("/client", { auth: true });
-      }
+      return axios.get("/client", { auth: true, params: { ...data } });
    },
 
    createClientService: ({ payload }) =>

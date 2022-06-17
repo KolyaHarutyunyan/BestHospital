@@ -24,3 +24,5 @@ export { useWidth } from "./useWidth";
 export { hooksForTable } from "./hooksForTable";
 export { ImgUploader } from "./uploadImages";
 export { hooksForErrors } from "./hooksForErrors";
+export { addHiddenClass } from "./addHiddenClass";
+export { makeSSN } from "./makeSSN";

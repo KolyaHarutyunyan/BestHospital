@@ -18,4 +18,5 @@ export const ErrorText = {
       "Can not set primary because enrollment has a termination date",
    availableModifierError: "Please select some modifier",
    authServiceDefaultError: "Can not be two authorization service with default modifiers",
+   ssnError: "The Social Security Number (SSN) must contain 9 digits",
 };

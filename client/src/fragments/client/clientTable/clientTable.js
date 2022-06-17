@@ -27,7 +27,7 @@ export const ClientTable = ({
       if (page === number) return;
       handlePageChange(true);
       let start = number > 1 ? number - 1 + "0" : 0;
-      dispatch(clientActions.getClients({ status: status, start: start, end: 10 }));
+      dispatch(clientActions.getClients({ status: status, skip: start, limit: 10 }));
       handleGetPage(number);
    };
 
@@ -40,37 +40,33 @@ export const ClientTable = ({
                      <Loader circleSize={50} />
                   </div>
                ) : (
-                  <>
-                     <TableContainer
-                        component={Paper}
-                        style={{
-                           height: `calc(100vh - ${
-                              !!clients.length ? "250px" : "150px"
-                           } )`,
-                        }}
+                  <TableContainer
+                     component={Paper}
+                     style={{
+                        height: `calc(100vh - ${!!clients.length ? "250px" : "150px"} )`,
+                     }}
+                  >
+                     <Table
+                        stickyHeader
+                        className={globalStyle.table}
+                        size="small"
+                        aria-label="a dense table"
                      >
-                        <Table
-                           stickyHeader
-                           className={globalStyle.table}
-                           size="small"
-                           aria-label="a dense table"
-                        >
-                           <ClientTableHead />
-                           <TableBody>
-                              {clients.map((item, i) => (
-                                 <ClientTableBody
-                                    key={i}
-                                    data={item}
-                                    index={i}
-                                    setOpen={setOpen}
-                                    handleClose={handleClose}
-                                    setDeleteClient={setDeleteClient}
-                                 />
-                              ))}
-                           </TableBody>
-                        </Table>
-                     </TableContainer>
-                  </>
+                        <ClientTableHead />
+                        <TableBody>
+                           {clients.map((item, i) => (
+                              <ClientTableBody
+                                 key={i}
+                                 data={item}
+                                 index={i}
+                                 setOpen={setOpen}
+                                 handleClose={handleClose}
+                                 setDeleteClient={setDeleteClient}
+                              />
+                           ))}
+                        </TableBody>
+                     </Table>
+                  </TableContainer>
                )}
                <PaginationItem
                   listLength={clients.length}

@@ -5,8 +5,9 @@ export const hooksForErrors = {
       if (error === "phoneNumber") {
          return ErrorText.field;
       } else if (
-         backError?.length &&
-         backError[0]?.error[0] === "phoneNumber must be a valid phone number"
+         (backError?.length &&
+            backError[0]?.error[0] === "phoneNumber must be a valid phone number") ||
+         backError[0]?.error[0] === "phone must be a valid phone number"
       ) {
          return ErrorText.phoneError;
       } else if (error === phoneErrorMsg) {

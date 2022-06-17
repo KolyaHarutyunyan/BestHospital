@@ -32,7 +32,7 @@ export const InvoicePayments = () => {
 
    useEffect(() => {
       dispatch(invoicePaymentActions.getInvoicePayments());
-      dispatch(clientActions.getClients());
+      dispatch(clientActions.getClients({ status: "ACTIVE" }));
    }, []);
 
    useEffect(

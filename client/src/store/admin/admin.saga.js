@@ -53,7 +53,7 @@ function* createAdmin(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_ADMINS,
-         payload: { status: 1, start: 0, end: 10 },
+         payload: { status: "ACTIVE", skip: 0, limit: 10 },
       });
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
@@ -65,10 +65,17 @@ function* getAdmins(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    try {
-      yield call(authService.getAdminsService, action.payload);
+      const res = yield call(authService.getAdminsService, action.payload.data);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
-      yield put({ type: GET_ADMINS_SUCCESS });
+      yield put({
+         type: GET_ADMINS_SUCCESS,
+         payload: { staff: res.data },
+      });
    } catch (err) {
+      yield put({
+         type: GET_ADMINS_SUCCESS,
+         payload: { staff: { staff: [], count: 0 } },
+      });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       if (err?.data?.message === "Internal server error") {
          yield put(

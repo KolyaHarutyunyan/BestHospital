@@ -1,190 +1,70 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import moment from "moment";
-import {
-   AddressInput,
-   ValidationInput,
-   SelectInput,
-   Steps,
-   CloseButton,
-} from "@eachbase/components";
-import { createStaffModalStyle } from "./style";
+import { CloseButton, CreateChancel } from "@eachbase/components";
+import { ColorlibConnector, createStaffModalStyle, stepStyles } from "./style";
 import {
    useGlobalTextStyles,
    EmailValidator,
-   ErrorText,
-   isNotEmpty,
    FindSuccess,
+   FindLoad,
+   FindError,
+   getPhoneErrorText,
+   ErrorText,
+   addHiddenClass,
 } from "@eachbase/utils";
-import { adminActions, httpRequestsOnSuccessActions } from "@eachbase/store";
+import {
+   httpRequestsOnErrorsActions,
+   httpRequestsOnSuccessActions,
+} from "@eachbase/store";
 import { inputStyle } from "../../../fundingSource/createFundingSource/core/styles";
+import {
+   CreateStaffFirstStep,
+   CreateStaffSecondStep,
+   CreateStaffThirdStep,
+} from "./common";
+import { Step, StepLabel, Stepper } from "@material-ui/core";
+import {
+   firstStepHandler,
+   getColorlibStepIcon,
+   secondStepHandler,
+   thirdStepHandler,
+} from "./constants";
 
 const steps = ["General Info", "Address", "Other Details"];
 
-const issuingStateList = [{ name: "1" }, { name: "2" }];
-const residencyList = [{ name: "7" }, { name: "8" }];
-
-const genderList = [{ name: "Male" }, { name: "Female" }, { name: "Other" }];
-
 export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
-   const [error, setError] = useState("");
-   const [emailError, setEmailError] = useState("");
-   const [errorSec, setErrorSec] = useState("");
-   const [inputs, setInputs] = useState(staffGeneral ? staffGeneral : {});
-   const [fullAddress, setFullAddress] = useState(
-      staffGeneral ? staffGeneral.address?.formattedAddress : ""
-   );
-   const [enteredAddress, setEnteredAddress] = useState(
-      staffGeneral ? staffGeneral.address?.formattedAddress : ""
-   );
-
-   const [license, setLicense] = useState(
-      staffGeneral
-         ? staffGeneral.license
-         : { driverLicense: "", expireDate: "", state: "" }
-   );
-
-   const phoneIsValid =
-      isNotEmpty(inputs.phone) &&
-      inputs.phone.trim().length >= 10 &&
-      !/[a-zA-Z]/g.test(inputs.phone);
-
-   const emailIsValid = isNotEmpty(inputs.email) && EmailValidator.test(inputs.email);
-   const secEmailIsValid =
-      isNotEmpty(inputs.secondaryEmail) && EmailValidator.test(inputs.secondaryEmail);
-
-   const disabledOne =
-      isNotEmpty(inputs.firstName) &&
-      isNotEmpty(inputs.lastName) &&
-      phoneIsValid &&
-      emailIsValid &&
-      (isNotEmpty(inputs.secondaryEmail) ? secEmailIsValid : true);
-
-   const disableSecond = !isNotEmpty(fullAddress) && !isNotEmpty(enteredAddress);
+   const classes = createStaffModalStyle();
+   const stepsStyles = stepStyles();
+   const globalText = useGlobalTextStyles();
 
    const dispatch = useDispatch();
 
-   const classes = createStaffModalStyle();
-   const globalText = useGlobalTextStyles();
-
-   const handleCheck = (bool) => {
-      if (bool === true) {
-         setEmailError("Not valid email");
-      } else {
-         setEmailError("");
-      }
-   };
-   const handleCheckSecondary = (bool) => {
-      if (bool === true) {
-         setErrorSec("Not valid email");
-      } else {
-         setErrorSec("");
-      }
-   };
-
-   const handleChange = (e) => {
-      setInputs((prevState) => ({
-         ...prevState,
-         [e.target.name]: e.target.value,
-      }));
-
-      error === e.target.name && setError("");
-   };
-
-   const handleChangeLicense = (e) => {
-      setLicense((prevState) => ({
-         ...prevState,
-         [e.target.name]: e.target.value,
-      }));
-      error === e.target.name && setError("");
-   };
-
-   const handleAddressChange = (selectedAddress) => {
-      setEnteredAddress(selectedAddress);
-      error === "enteredAddress" && setError("");
-   };
-
-   const handleCreate = () => {
-      const staffDataIsValid =
-         isNotEmpty(inputs.firstName) &&
-         isNotEmpty(inputs.lastName) &&
-         isNotEmpty(inputs.email) &&
-         isNotEmpty(inputs.phone) &&
-         isNotEmpty(license.driverLicense) &&
-         isNotEmpty(license.state) &&
-         isNotEmpty(license.expireDate) &&
-         isNotEmpty(inputs.gender) &&
-         isNotEmpty(inputs.birthday) &&
-         isNotEmpty(inputs.residency) &&
-         isNotEmpty(inputs.ssn) &&
-         isNotEmpty(fullAddress) &&
-         isNotEmpty(enteredAddress);
-
-      if (staffDataIsValid) {
-         const data = {
-            firstName: inputs.firstName,
-            middleName: inputs.middleName || undefined,
-            lastName: inputs.lastName,
-            email: inputs.email,
-            secondaryEmail: inputs.secondaryEmail || undefined,
-            phone: inputs.phone,
-            secondaryPhone: inputs.secondaryPhone || undefined,
-            state: "state",
-            gender: inputs.gender,
-            birthday: inputs.birthday && new Date(inputs.birthday).toISOString(),
-            residency: inputs.residency,
-            ssn: parseInt(inputs.ssn),
-            status: staffGeneral ? staffGeneral.status : 1,
-            address: fullAddress,
-            license:
-               license.driverLicense && license.state && license.expireDate
-                  ? {
-                       driverLicense: license.driverLicense,
-                       expireDate: new Date(license.expireDate).toISOString(),
-                       state: license.state,
-                    }
-                  : undefined,
-         };
-
-         if (staffGeneral) {
-            dispatch(adminActions.editAdminById(data, staffGeneral.id));
-         } else {
-            dispatch(adminActions.createAdmin(data));
-         }
-      } else {
-         const staffDataErrorText = !isNotEmpty(inputs.firstName)
-            ? "firstName"
-            : !isNotEmpty(inputs.lastName)
-            ? "lastName"
-            : !isNotEmpty(inputs.email)
-            ? "email"
-            : !isNotEmpty(inputs.phone)
-            ? "phone"
-            : !isNotEmpty(license.driverLicense)
-            ? "driverLicense"
-            : !isNotEmpty(license.state)
-            ? "state"
-            : !isNotEmpty(license.expireDate)
-            ? "expireDate"
-            : !isNotEmpty(inputs.residency)
-            ? "residency"
-            : !isNotEmpty(inputs.ssn)
-            ? "ssn"
-            : !isNotEmpty(inputs.gender)
-            ? "gender"
-            : !isNotEmpty(inputs.birthday)
-            ? "birthday"
-            : !isNotEmpty(enteredAddress)
-            ? "enteredAddress"
-            : "";
-
-         setError(staffDataErrorText);
-      }
-   };
-
-   const success = staffGeneral
+   const loader = FindLoad("CREATE_ADMIN");
+   const editLoader = FindLoad("EDIT_ADMIN_BY_ID");
+   const success = !!staffGeneral
       ? FindSuccess("EDIT_ADMIN_BY_ID")
       : FindSuccess("CREATE_ADMIN");
+   const backError = !!staffGeneral
+      ? FindError("EDIT_ADMIN_BY_ID")
+      : FindError("CREATE_ADMIN");
+
+   useEffect(() => {
+      if (!!backError?.length) {
+         if (backError[0]?.error[0] === "phone must be a valid phone number") {
+            setActiveStep(0);
+         }
+      }
+   }, [backError]);
+
+   useEffect(() => {
+      return () => {
+         if (!!staffGeneral) {
+            dispatch(httpRequestsOnErrorsActions.removeError("EDIT_ADMIN_BY_ID"));
+         } else {
+            dispatch(httpRequestsOnErrorsActions.removeError("CREATE_ADMIN"));
+         }
+      };
+   }, []);
 
    useEffect(() => {
       if (!!success.length) {
@@ -193,202 +73,162 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
       }
    }, [success]);
 
-   const firstStep = (
-      <React.Fragment>
-         <ValidationInput
-            variant={"outlined"}
-            onChange={handleChange}
-            value={inputs.firstName}
-            type={"text"}
-            label={"First Name*"}
-            name="firstName"
-            typeError={error === "firstName" ? ErrorText.field : ""}
-         />
-         <ValidationInput
-            variant={"outlined"}
-            onChange={handleChange}
-            value={inputs.middleName}
-            type={"text"}
-            label={"Middle Name"}
-            name="middleName"
-         />
-         <ValidationInput
-            variant={"outlined"}
-            onChange={handleChange}
-            value={inputs.lastName}
-            type={"text"}
-            label={"Last Name*"}
-            name="lastName"
-            typeError={error === "lastName" ? ErrorText.field : ""}
-         />
-         <ValidationInput
-            validator={EmailValidator}
-            variant={"outlined"}
-            name={"email"}
-            type={"email"}
-            label={"Primary Email*"}
-            typeError={
-               error === "email"
-                  ? ErrorText.field
-                  : emailError === "Not valid email"
-                  ? "Not valid email"
-                  : ""
-            }
-            sendBoolean={handleCheck}
-            value={inputs.email}
-            onChange={handleChange}
-         />
-         <ValidationInput
-            validator={EmailValidator}
-            variant={"outlined"}
-            name={"secondaryEmail"}
-            type={"email"}
-            label={"Secondary Email"}
-            typeError={
-               errorSec === "secondaryEmail"
-                  ? ErrorText.field
-                  : errorSec === "Not valid email"
-                  ? "Not valid email"
-                  : ""
-            }
-            sendBoolean={handleCheckSecondary}
-            value={inputs.secondaryEmail}
-            onChange={handleChange}
-         />
-         <ValidationInput
-            Length={11}
-            onChange={handleChange}
-            value={inputs.phone && inputs.phone.replace("+", "")}
-            variant={"outlined"}
-            type={"number"}
-            label={"Primary Phone Number*"}
-            name={"phone"}
-            typeError={error === "phone" ? ErrorText.field : ""}
-         />
-         <ValidationInput
-            Length={11}
-            onChange={handleChange}
-            value={inputs.secondaryPhone && inputs.secondaryPhone.replace("+", "")}
-            variant={"outlined"}
-            type={"number"}
-            label={"Secondary Phone Number"}
-            name={"secondaryPhone"}
-         />
-      </React.Fragment>
+   const [error, setError] = useState("");
+   const [inputs, setInputs] = useState(
+      !!staffGeneral ? { ...staffGeneral, phoneNumber: staffGeneral.phone } : {}
+   );
+   const [fullAddress, setFullAddress] = useState(
+      !!staffGeneral ? staffGeneral.address?.formattedAddress : ""
+   );
+   const [enteredAddress, setEnteredAddress] = useState(
+      !!staffGeneral ? staffGeneral.address?.formattedAddress : ""
+   );
+   const [license, setLicense] = useState(
+      !!staffGeneral
+         ? staffGeneral.license
+         : { driverLicense: "", expireDate: "", state: "" }
+   );
+   const [activeStep, setActiveStep] = useState(0);
+
+   const firstStepStyle = addHiddenClass(
+      classes.firstStepContainer,
+      activeStep === 1 || activeStep === 2
+   );
+   const secondStepStyle = addHiddenClass(
+      classes.secondStepContainer,
+      activeStep === 0 || activeStep === 2
+   );
+   const thirdStepStyle = addHiddenClass(
+      classes.thirdStepContainer,
+      activeStep === 0 || activeStep === 1
    );
 
-   const secondStep = (
-      <React.Fragment>
-         <AddressInput
-            handleSelectValue={handleAddressChange}
-            onTrigger={setFullAddress}
-            Value={"Street Address*"}
-            flex="block"
-            info={staffGeneral}
-            styles={inputStyle}
-            errorBoolean={error === "enteredAddress" ? ErrorText.field : ""}
-            enteredValue={enteredAddress}
-         />
-      </React.Fragment>
-   );
+   const createButnText = activeStep === 2 ? (!!staffGeneral ? "Save" : "Add") : "Next";
+   const phoneErrorMsg = getPhoneErrorText(inputs.phoneNumber);
+   const emailErrorMsg = !EmailValidator.test(inputs.email) ? ErrorText.emailValid : "";
 
-   const thirdStep = (
-      <React.Fragment>
-         <p className={classes.otherDetailsTitle}>Driver License</p>
-         <ValidationInput
-            variant={"outlined"}
-            onChange={handleChangeLicense}
-            value={license ? license.driverLicense : ""}
-            type={"text"}
-            label={"Driver License"}
-            name="driverLicense"
-            typeError={error === "driverLicense" ? ErrorText.field : ""}
-         />
-         <div className={classes.flexContainer}>
-            <SelectInput
-               style={classes.selectMargin}
-               name={"state"}
-               label={"Issuing State"}
-               handleSelect={handleChangeLicense}
-               value={license ? license.state : ""}
-               list={issuingStateList}
-               typeError={error === "state" ? ErrorText.selectField : ""}
-            />
-            <ValidationInput
-               variant={"outlined"}
-               onChange={handleChangeLicense}
-               value={
-                  license?.expireDate &&
-                  moment(license?.expireDate).format().substring(0, 10)
-               }
-               type={"date"}
-               label={"Expiration Date"}
-               name="expireDate"
-               typeError={error === "expireDate" ? ErrorText.field : ""}
-            />
-         </div>
-         <p className={`${classes.otherDetailsTitle} ${classes.titlePadding}`}>Other</p>
-         <SelectInput
-            name={"residency"}
-            label={"Residency Status"}
-            handleSelect={handleChange}
-            value={inputs.residency}
-            list={residencyList}
-            typeError={error === "residency" ? ErrorText.selectField : ""}
-         />
-         <ValidationInput
-            variant={"outlined"}
-            value={inputs.ssn}
-            type={"number"}
-            label={"SSN Number*"}
-            name="ssn"
-            onChange={handleChange}
-            typeError={error === "ssn" ? ErrorText.field : ""}
-         />
-         <div className={classes.flexContainer}>
-            <SelectInput
-               style={classes.selectMargin}
-               name={"gender"}
-               label={"Gender*"}
-               handleSelect={handleChange}
-               value={inputs.gender}
-               list={genderList}
-               typeError={error === "gender" ? ErrorText.selectField : ""}
-            />
-            <ValidationInput
-               variant={"outlined"}
-               onChange={handleChange}
-               value={
-                  inputs.birthday && moment(inputs.birthday).format().substring(0, 10)
-               }
-               type={"date"}
-               label={"Date of Birth*"}
-               name="birthday"
-               typeError={error === "birthday" ? ErrorText.field : ""}
-            />
-         </div>
-      </React.Fragment>
-   );
+   function handleChange(e) {
+      setInputs((prevState) => ({
+         ...prevState,
+         [e.target.name]: e.target.value,
+      }));
+      if (
+         error === e.target.name ||
+         error === phoneErrorMsg ||
+         error === emailErrorMsg ||
+         error === ErrorText.ssnError ||
+         (backError && backError.length)
+      ) {
+         setError("");
+      }
+      if (backError && backError.length) {
+         dispatch(httpRequestsOnErrorsActions.removeError(backError[0].type));
+      }
+   }
+
+   function handleChangeLicense(e) {
+      setLicense((prevState) => ({
+         ...prevState,
+         [e.target.name]: e.target.value,
+      }));
+      error === e.target.name && setError("");
+   }
+
+   function handleAddressChange(selectedAddress) {
+      setEnteredAddress(selectedAddress);
+      error === "enteredAddress" && setError("");
+   }
+
+   const handleBack = (step) => setActiveStep(step - 1);
+   const ColorlibStepIcon = (props) => getColorlibStepIcon(props, handleBack);
+
+   const handleFirstStep = () =>
+      firstStepHandler(inputs, setActiveStep, emailErrorMsg, phoneErrorMsg, setError);
+
+   const handleSecondStep = () =>
+      secondStepHandler(fullAddress, enteredAddress, setActiveStep, setError);
+
+   const handleThirdStep = () =>
+      thirdStepHandler(license, inputs, staffGeneral, fullAddress, dispatch, setError);
+
+   function handleCreate() {
+      if (activeStep === 0) {
+         handleFirstStep();
+      } else if (activeStep === 1) {
+         handleSecondStep();
+      } else if (activeStep === 2) {
+         handleThirdStep();
+      } else return;
+   }
 
    return (
       <div className={classes.modalDimensions}>
          <h1 className={`${globalText.modalTitle} ${classes.modalTitle}`}>
-            {resetData ? "Add Staff Member" : "Edit Staff Member"}{" "}
+            {!!resetData ? "Add Staff Member" : "Edit Staff Member"}{" "}
          </h1>
          <div className={classes.positionedButton}>
             <CloseButton handleCLic={handleClose} />
          </div>
-         <Steps
-            handleClick={handleCreate}
-            firstStep={firstStep}
-            secondStep={secondStep}
-            thirdStep={thirdStep}
-            stepTitles={steps}
-            handleClose={handleClose}
-            disabledOne={disabledOne}
-            disableSecond={disableSecond}
-            staffGeneral={staffGeneral}
-         />
+         <div className={classes.root}>
+            <Stepper
+               className={stepsStyles.stepHeader}
+               alternativeLabel
+               activeStep={activeStep}
+               connector={<ColorlibConnector />}
+            >
+               {steps.map((label) => (
+                  <Step key={label}>
+                     <StepLabel
+                        classes={{ label: classes.step_label_root }}
+                        StepIconComponent={ColorlibStepIcon}
+                     >
+                        {label}
+                     </StepLabel>
+                  </Step>
+               ))}
+            </Stepper>
+            <div className={stepsStyles.stepBody}>
+               <div className={firstStepStyle}>
+                  <CreateStaffFirstStep
+                     inputs={inputs}
+                     handleChange={handleChange}
+                     error={error}
+                     backError={backError}
+                     phoneErrorMsg={phoneErrorMsg}
+                     emailErrorMsg={emailErrorMsg}
+                  />
+               </div>
+               <div className={secondStepStyle}>
+                  <CreateStaffSecondStep
+                     inputStyle={inputStyle}
+                     staffGeneral={staffGeneral}
+                     enteredAddress={enteredAddress}
+                     setFullAddress={setFullAddress}
+                     handleAddressChange={handleAddressChange}
+                     error={error}
+                  />
+               </div>
+               <div className={thirdStepStyle}>
+                  <CreateStaffThirdStep
+                     inputs={inputs}
+                     handleChange={handleChange}
+                     handleChangeLicense={handleChangeLicense}
+                     license={license}
+                     error={error}
+                  />
+               </div>
+               <div className={stepsStyles.buttonsContainer}>
+                  <CreateChancel
+                     loader={!!loader.length || !!editLoader.length}
+                     buttonWidth="224px"
+                     create={createButnText}
+                     chancel={"Cancel"}
+                     onClose={handleClose}
+                     onCreate={handleCreate}
+                  />
+               </div>
+            </div>
+         </div>
       </div>
    );
 };

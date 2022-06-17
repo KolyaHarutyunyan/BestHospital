@@ -13,11 +13,12 @@ export const FundingSourceTable = ({
    page,
 }) => {
    const globalStyle = useGlobalStyles();
+
    const dispatch = useDispatch();
 
-   const { fundingSourceList } = useSelector((state) => ({
-      fundingSourceList: state.fundingSource.fundingSourceList,
-   }));
+   const fundingSourceList = useSelector(
+      (state) => state.fundingSource.fundingSourceList
+   );
 
    const { handlePageChange, pageIsChanging } = useContext(PaginationContext);
 
