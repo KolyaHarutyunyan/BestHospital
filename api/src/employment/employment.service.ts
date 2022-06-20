@@ -34,11 +34,15 @@ export class EmploymentService {
       }
       await Promise.all([
         this.checkOverlap(null, dto.startDate, dto.endDate),
-        this.staffService.findById(dto.supervisor),
         this.staffService.findById(dto.staffId),
         this.jobService.findOne(dto.title),
       ]);
-
+      if (dto.supervisor) {
+        const supervisor = await this.staffService.findById(dto.supervisor);
+        if (!supervisor) {
+          throw new HttpException('supervisor is not found', HttpStatus.NOT_FOUND);
+        }
+      }
       let employment = new this.model({
         staffId: dto.staffId,
         schedule: dto.schedule,
@@ -47,9 +51,9 @@ export class EmploymentService {
         startDate: dto.startDate,
         endDate: dto.endDate ? dto.endDate : null,
         title: dto.title,
+        supervisor: dto.supervisor,
       });
 
-      employment.supervisor = dto.supervisor;
       if (dto.departmentId) {
         await this.departmentService.findOne(dto.departmentId);
         employment.departmentId = dto.departmentId;

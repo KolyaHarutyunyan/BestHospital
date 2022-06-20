@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum } from 'class-validator';
 import { ScheduleStatus } from '..';
 import { TerminationDTO, CreateTerminationDto } from '../../termination';
+import { EmploymentType } from '../employment.constants';
 
 export class EmploymentDto {
   @ApiProperty()
@@ -23,7 +24,7 @@ export class EmploymentDto {
   @ApiProperty({ enum: ScheduleStatus })
   @IsEnum(ScheduleStatus)
   schedule: number;
-  @ApiProperty()
+  @ApiProperty({ enum: EmploymentType })
   type: string;
   @ApiProperty({ type: TerminationDTO })
   termination: CreateTerminationDto;
