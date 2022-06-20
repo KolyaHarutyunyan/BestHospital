@@ -46,7 +46,7 @@ export {
    manageType,
    hooksForErrors,
    addHiddenClass,
-   makeSSN,
+   ssnActions,
 } from "./hooks";
 export { ErrorText } from "./errorTexts";
 export { CountryList } from "./jsons";

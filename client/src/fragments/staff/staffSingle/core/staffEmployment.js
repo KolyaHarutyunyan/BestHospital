@@ -56,24 +56,17 @@ const headerTitles = [
 
 export const StaffEmployment = ({ info }) => {
    const classes = serviceSingleStyles();
-   const dispatch = useDispatch();
-   const [delEdit, setDelEdit] = useState(null);
-   const [toggleModal, setToggleModal] = useState(false);
-   const [toggleModal2, setToggleModal2] = useState(false);
-   const [toggleModal3, setToggleModal3] = useState(false);
-   const [authIndex, setAuthIndex] = useState(0);
-   const [paycodeIndex, setPaycodeIndex] = useState(0);
-   const payCodes = useSelector((state) => state.admins.payCodes);
+
    const params = useParams();
+
+   const dispatch = useDispatch();
+
+   const payCodes = useSelector((state) => state.admins.payCodes);
 
    const success = FindSuccess("DELETE_CLIENT_AUTHORIZATION");
    const successDelServ = FindSuccess("DELETE_CLIENT_AUTHORIZATION_SERV");
    const loaderDel = FindLoad("DELETE_CLIENT_AUTHORIZATION_SERV");
    const loader = FindLoad("GET_PAY_CODE");
-
-   useEffect(() => {
-      dispatch(adminActions.getPayCode(info[authIndex]?.id));
-   }, [authIndex]);
 
    useEffect(() => {
       dispatch(payrollActions.getPayCodeGlobal());
@@ -97,18 +90,29 @@ export const StaffEmployment = ({ info }) => {
       }
    }, [successDelServ]);
 
-   let deleteAuthorization = () => {
+   const [delEdit, setDelEdit] = useState(null);
+   const [toggleModal, setToggleModal] = useState(false);
+   const [toggleModal2, setToggleModal2] = useState(false);
+   const [toggleModal3, setToggleModal3] = useState(false);
+   const [authIndex, setAuthIndex] = useState(0);
+   const [paycodeIndex, setPaycodeIndex] = useState(0);
+
+   useEffect(() => {
+      dispatch(adminActions.getPayCode(info[authIndex]?.id));
+   }, [authIndex]);
+
+   function deleteAuthorization() {
       dispatch(clientActions.deleteClientsAuthorization(info[authIndex].id, params.id));
       // setAuthIndex(0)
-   };
+   }
 
-   let payCodeItem = (item, index) => {
+   function payCodeItem(item, index) {
       return (
          <TableBodyComponent
             key={index}
             handleOpenInfo={() => {
                setPaycodeIndex(index);
-               setToggleModal3(prevState => !prevState);
+               setToggleModal3((prevState) => !prevState);
             }}
          >
             <TableCell>
@@ -128,7 +132,7 @@ export const StaffEmployment = ({ info }) => {
             <TableCell>{Number(item.active)} </TableCell>
          </TableBodyComponent>
       );
-   };
+   }
 
    return (
       <div className={classes.staffGeneralWrapper}>

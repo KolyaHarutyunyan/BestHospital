@@ -5,16 +5,12 @@ export const authService = {
 
    editAdminByIdService: (id, body) => axios.patch(`/staff/${id}`, body, { auth: true }),
 
-   getAdminsService: (data) => {
-      // if (data) {
-      //     return axios.get(`/staff/?skip=${data.start}&&limit=${data.end}&&status=${data.status}`, {auth:true})
-      // } else {
-      //     return axios.get('/staff', {auth:true})
-      // }
-      return axios.get("/staff", { auth: true, params: { ...data } });
-   },
+   getAdminsService: (data) => axios.get("/staff", { auth: true, params: { ...data } }),
 
    getAdminByIdService: (id) => axios.get(`/staff/${id}`, { auth: true }),
+
+   changeAdminStatusService: (id, status) =>
+      axios.patch(`/staff/${id}/${status}`, null, { auth: true }),
 
    createCredentialService: (body) => axios.post(`/scredential`, body, { auth: true }),
 

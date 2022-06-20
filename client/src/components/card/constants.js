@@ -1,4 +1,4 @@
-import { ActiveInactiveStatus } from "@eachbase/utils";
+import { ActiveInactiveStatus, Colors } from "@eachbase/utils";
 import { cardStyle } from ".";
 
 export function getTitleDisplay(givenTitle = "", givenValue = "") {
@@ -62,4 +62,18 @@ export function getValueDisplay(givenValue = "", givenTitle = "") {
    ) : (
       <p className={classes.valueStyle}>{givenValue}</p>
    );
+}
+
+export function getCardBorderTop(cardTitle) {
+   switch (cardTitle) {
+      case "General Info":
+         return `4px solid ${Colors.BackgroundBlue}`;
+      case "Address":
+         return `4px solid ${Colors.BackgroundMango}`;
+      case "Other Details":
+         return `4px solid ${Colors.ThemeRed}`;
+
+      default:
+         return "unset";
+   }
 }

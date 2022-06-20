@@ -1,35 +1,18 @@
 import { Card } from "@eachbase/components";
-import { Colors, Images, makeCapitalize } from "@eachbase/utils";
+import { Colors, Images } from "@eachbase/utils";
+import {
+   getStaffAddressInfo,
+   getStaffGeneralInfo,
+   getStaffOtherDetails,
+} from "./constants";
 import { serviceSingleStyles } from "./styles";
 
 export const StaffGeneral = ({ staffGeneral }) => {
    const classes = serviceSingleStyles();
 
-   const generalInfo = [
-      { title: "First Name", value: makeCapitalize(staffGeneral?.firstName) },
-      { title: "Middle Name", value: makeCapitalize(staffGeneral?.middleName) },
-      { title: "Last Name", value: makeCapitalize(staffGeneral?.lastName) },
-      { title: "Primary Email", value: staffGeneral?.email },
-      { title: "Secondary Email", value: staffGeneral?.secondaryEmail },
-      { title: "Primary Phone Number", value: staffGeneral?.phone },
-      { title: "Secondary Phone Number", value: staffGeneral?.secondaryPhone },
-   ].filter((item) => !!item.value);
-   const addressInfo = [
-      { title: "Street Address", value: staffGeneral?.address?.street },
-      { title: "Country", value: staffGeneral?.address?.country },
-      { title: "City", value: staffGeneral?.address?.city },
-      { title: "State", value: staffGeneral?.address?.state },
-      { title: "Zip Code", value: staffGeneral?.address?.zip },
-   ].filter((item) => !!item.value);
-   const otherDetails = [
-      { title: "Driver License", value: staffGeneral?.license?.driverLicense },
-      { title: "Issuing State", value: staffGeneral?.license?.state },
-      { title: "Expiration Date", value: staffGeneral?.license?.expireDate },
-      { title: "Residency Status", value: staffGeneral?.residency },
-      { title: "SSn Number", value: staffGeneral?.ssn },
-      { title: "Gender", value: staffGeneral?.gender },
-      { title: "Date of Birth", value: staffGeneral?.birthday },
-   ].filter((item) => !!item.value);
+   const generalInfo = getStaffGeneralInfo(staffGeneral);
+   const addressInfo = getStaffAddressInfo(staffGeneral);
+   const otherDetails = getStaffOtherDetails(staffGeneral);
 
    return (
       <div className={classes.staffGeneralWrapper}>

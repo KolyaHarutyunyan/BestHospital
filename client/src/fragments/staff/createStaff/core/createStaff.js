@@ -11,6 +11,7 @@ import {
    getPhoneErrorText,
    ErrorText,
    addHiddenClass,
+   ssnActions,
 } from "@eachbase/utils";
 import {
    httpRequestsOnErrorsActions,
@@ -29,6 +30,7 @@ import {
    secondStepHandler,
    thirdStepHandler,
 } from "./constants";
+import moment from "moment";
 
 const steps = ["General Info", "Address", "Other Details"];
 
@@ -69,13 +71,19 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
    useEffect(() => {
       if (!!success.length) {
          handleClose();
-         dispatch(httpRequestsOnSuccessActions.removeSuccess(success.type));
+         dispatch(httpRequestsOnSuccessActions.removeSuccess(success[0].type));
       }
    }, [success]);
 
    const [error, setError] = useState("");
    const [inputs, setInputs] = useState(
-      !!staffGeneral ? { ...staffGeneral, phoneNumber: staffGeneral.phone } : {}
+      !!staffGeneral
+         ? {
+              ...staffGeneral,
+              phoneNumber: staffGeneral.phone,
+              ssn: ssnActions.modifySSN(staffGeneral.ssn),
+           }
+         : {}
    );
    const [fullAddress, setFullAddress] = useState(
       !!staffGeneral ? staffGeneral.address?.formattedAddress : ""

@@ -5,7 +5,7 @@ import {
    Images,
    isNotEmpty,
    makeEnum,
-   makeSSN,
+   ssnActions,
 } from "@eachbase/utils";
 import clsx from "clsx";
 import { useColorlibStepIconStyles } from "./style";
@@ -86,7 +86,7 @@ export function thirdStepHandler(
            isNotEmpty(license.state) &&
            isNotEmpty(license.expireDate)
          : true;
-   const ssnIsValid = inputs.ssn.trim().length === 9;
+   const ssnIsValid = inputs.ssn?.trim().length === 9;
    const thirdDataIsValid =
       driverLicenseIsValid &&
       isNotEmpty(inputs.gender) &&
@@ -94,6 +94,7 @@ export function thirdStepHandler(
       isNotEmpty(inputs.residency) &&
       isNotEmpty(inputs.ssn) &&
       ssnIsValid;
+   console.log(ssnActions.makeSSN(inputs.ssn), " ssnActions.makeSSN(inputs.ssn)");
    if (thirdDataIsValid) {
       const data = {
          firstName: inputs.firstName,
@@ -107,7 +108,7 @@ export function thirdStepHandler(
          gender: inputs.gender,
          birthday: inputs.birthday && new Date(inputs.birthday).toISOString(),
          residency: makeEnum(inputs.residency),
-         ssn: makeSSN(inputs.ssn),
+         ssn: ssnActions.makeSSN(inputs.ssn),
          status: !!staffGeneral ? staffGeneral.status : 1,
          address: fullAddress,
          license:

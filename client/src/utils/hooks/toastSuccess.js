@@ -154,6 +154,8 @@ export const ToastSuccess = (success) => {
          ? "Modifier was edited"
          : success === "TERMINATE_CLIENT_ENROLLMENT"
          ? "Enrollment was terminated"
+         : success === "CHANGE_ADMIN_STATUS"
+         ? "Staff status was edited"
          : false;
    }
 };

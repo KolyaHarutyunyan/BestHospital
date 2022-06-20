@@ -9,7 +9,12 @@ export const cardStyle = makeStyles(() => ({
       boxShadow: Shadow.changeShadow,
       padding: "18px 16px 32px 16px",
    },
-
+   headerBorder: {
+      width: "100%",
+      borderRight: "4px solid transparent",
+      borderLeft: "4px solid transparent",
+      margin: "-18px 0 18px",
+   },
    cardHeader: {
       display: "flex",
       alignItems: "center",
@@ -51,9 +56,7 @@ export const cardStyle = makeStyles(() => ({
       borderRadius: "0 0 8px 8px",
    },
    cardBody: {
-      maxHeight: 404,
       overflowY: "scroll",
-      overflow: "hidden",
       msOverflowStyle: "none",
       scrollbarWidth: "none",
       "&::-webkit-scrollbar": {

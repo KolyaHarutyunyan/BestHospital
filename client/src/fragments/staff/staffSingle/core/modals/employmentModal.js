@@ -8,7 +8,16 @@ import {
    CreateChancel,
    ModalHeader,
 } from "@eachbase/components";
-import { ErrorText, FindError, FindLoad, FindSuccess, isNotEmpty } from "@eachbase/utils";
+import {
+   enumValues,
+   ErrorText,
+   FindError,
+   FindLoad,
+   FindSuccess,
+   isNotEmpty,
+   makeEnum,
+   manageType,
+} from "@eachbase/utils";
 import {
    adminActions,
    httpRequestsOnErrorsActions,
@@ -23,33 +32,17 @@ const _partTime = _list[0].name;
 const _fullTime = _list[1].name;
 
 export const EmploymentModal = ({ handleClose, info }) => {
-   const [error, setError] = useState("");
-   const [inputs, setInputs] = useState(
-      info
-         ? {
-              ...info,
-              supervisor: info.supervisor.firstName,
-              departmentId: info?.departmentId?.name,
-              startDate: moment(info?.startDate).format("YYYY-MM-DD"),
-              endDate: moment(info.endDate).format("YYYY-MM-DD"),
-              employmentType:
-                 info?.schedule === 0 ? _partTime : info?.schedule === 1 ? _fullTime : "",
-           }
-         : {}
-   );
-
-   const [checked, setChecked] = useState(info ? info.endDate === null : true);
+   const classes = createClientStyle();
 
    const params = useParams();
 
    const dispatch = useDispatch();
 
+   const jobTitles = useSelector((state) => state.system.jobs);
    const departments = useSelector((state) => state.system.departments);
    const staffList = useSelector((state) => state.admins.adminsAllList.staff)?.filter(
       (item) => item.id !== params.id && item
    );
-
-   const classes = createClientStyle();
 
    const success = info
       ? FindSuccess("EDIT_EMPLOYMENT")
@@ -66,6 +59,7 @@ export const EmploymentModal = ({ handleClose, info }) => {
    }, [employmentIsOverlapping]);
 
    useEffect(() => {
+      dispatch(systemActions.getJobs());
       dispatch(systemActions.getDepartments());
       dispatch(adminActions.getAllAdmins());
    }, []);
@@ -77,13 +71,29 @@ export const EmploymentModal = ({ handleClose, info }) => {
       }
    }, [success]);
 
-   const onCheck = (e) => {
+   const [error, setError] = useState("");
+   const [inputs, setInputs] = useState(
+      info
+         ? {
+              ...info,
+              title: info.title?._id,
+              supervisor: info.supervisor?.firstName,
+              departmentId: info?.departmentId?.name,
+              startDate: moment(info?.startDate).format("YYYY-MM-DD"),
+              endDate: moment(info.endDate).format("YYYY-MM-DD"),
+              employmentType: manageType(info.type),
+           }
+         : {}
+   );
+   const [checked, setChecked] = useState(info ? info.endDate === null : true);
+
+   function onCheck(e) {
       setChecked(e.target.checked);
       inputs["endDate"] = null;
       (error === "endDate" || error === ErrorText.dateError) && setError("");
-   };
+   }
 
-   const handleChange = (e) => {
+   function handleChange(e) {
       setInputs((prevState) => ({
          ...prevState,
          [e.target.name]: e.target.value === 0 ? "0" : e.target.value,
@@ -99,41 +109,41 @@ export const EmploymentModal = ({ handleClose, info }) => {
       if (!!backError.length) {
          dispatch(httpRequestsOnErrorsActions.removeError(backError.type));
       }
-   };
+   }
 
-   const handleCreate = () => {
+   function handleCreate() {
       const startDateIsValid =
          new Date(inputs.startDate).getTime() < new Date(new Date()).getTime();
-
       const dateComparingIsValid =
          !!inputs.endDate &&
          new Date(inputs.startDate).getTime() < new Date(inputs.endDate).getTime();
-
       const employmentDataIsValid =
-         isNotEmpty(inputs.title) &&
+         !!inputs.title &&
          isNotEmpty(inputs.departmentId) &&
-         isNotEmpty(inputs.supervisor) &&
+         // isNotEmpty(inputs.supervisor) &&
          isNotEmpty(inputs.employmentType) &&
          !!inputs.startDate &&
          (checked ? startDateIsValid : dateComparingIsValid);
-
       if (employmentDataIsValid) {
          let depId;
          let supervisorID;
-
          departments.forEach((item) => {
             if (inputs.departmentId === item.name) {
                depId = item.id;
             }
          });
-
          staffList &&
             staffList.forEach((item) => {
                if (inputs.supervisor === item.firstName) {
                   supervisorID = item.id;
                }
             });
-
+         const scheduleEnum =
+            inputs.employmentType === "Full-time"
+               ? 1
+               : inputs.employmentType === "Part-time"
+               ? 0
+               : undefined;
          const data = {
             title: inputs.title,
             staffId: params.id,
@@ -142,25 +152,20 @@ export const EmploymentModal = ({ handleClose, info }) => {
             active: false,
             startDate: new Date(),
             endDate: inputs.endDate || null,
-            schedule:
-               inputs.employmentType === _partTime
-                  ? 0
-                  : inputs.employmentType === _fullTime
-                  ? 1
-                  : "",
+            schedule: scheduleEnum,
+            type: manageType(inputs.employmentType),
          };
-
          if (info) {
             dispatch(adminActions.editEmployment(data, info.id, params.id));
          } else {
             dispatch(adminActions.createEmployment(data, params.id));
          }
       } else {
-         const employmentDataErrorText = !isNotEmpty(inputs.title)
+         const employmentDataErrorText = !inputs.title
             ? "title"
-            : !isNotEmpty(inputs.supervisor)
-            ? "supervisor"
-            : !isNotEmpty(inputs.departmentId)
+            : // : !isNotEmpty(inputs.supervisor)
+            // ? "supervisor"
+            !isNotEmpty(inputs.departmentId)
             ? "departmentId"
             : !isNotEmpty(inputs.employmentType)
             ? "employmentType"
@@ -173,10 +178,9 @@ export const EmploymentModal = ({ handleClose, info }) => {
             : !dateComparingIsValid
             ? ErrorText.dateError
             : "";
-
          setError(employmentDataErrorText);
       }
-   };
+   }
 
    return (
       <div className={classes.createFoundingSource}>
@@ -188,22 +192,22 @@ export const EmploymentModal = ({ handleClose, info }) => {
          <div className={classes.createFoundingSourceBody}>
             <div className={classes.clientModalBlock}>
                <div className={classes.clientModalBox}>
-                  <ValidationInput
-                     variant={"outlined"}
-                     onChange={handleChange}
-                     value={inputs.title}
-                     type={"text"}
-                     label={"Title*"}
+                  <SelectInput
                      name="title"
-                     typeError={error === "title" && ErrorText.field}
+                     type={"id"}
+                     label={"Title*"}
+                     handleSelect={handleChange}
+                     value={inputs.title}
+                     list={jobTitles ? jobTitles : []}
+                     typeError={error === "title" ? ErrorText.selectField : ""}
                   />
                   <SelectInput
                      name={"supervisor"}
-                     label={"Supervisor*"}
+                     label={"Supervisor"}
                      handleSelect={handleChange}
                      value={inputs.supervisor}
                      list={staffList ? staffList : []}
-                     typeError={error === "supervisor" ? ErrorText.selectField : ""}
+                     // typeError={error === "supervisor" ? ErrorText.selectField : ""}
                   />
                   <SelectInput
                      name={"departmentId"}
@@ -218,7 +222,7 @@ export const EmploymentModal = ({ handleClose, info }) => {
                      label={"Employment Type*"}
                      handleSelect={handleChange}
                      value={inputs.employmentType}
-                     list={_list}
+                     language={enumValues.EMPLOYMENT_TYPES}
                      typeError={error === "employmentType" ? ErrorText.selectField : ""}
                   />
 

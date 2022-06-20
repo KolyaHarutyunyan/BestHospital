@@ -27,8 +27,8 @@ export const TableWrapper = ({
       handleType && handleType(ActiveInactiveStatus(selected));
    };
 
-   const currentStatuses =
-      addButtonText === "Add Funding Source"
+   const _currentStatuses =
+      addButtonText === "Add Funding Source" || addButtonText === "Add Staff Member"
          ? enumValues.STATUSES.slice(0, 2)
          : enumValues.STATUSES;
 
@@ -37,7 +37,7 @@ export const TableWrapper = ({
          {buttonsTab && (
             <div className={classes.buttonsTabStyle}>
                <UserInputsDropdown
-                  dropdownOptions={currentStatuses}
+                  dropdownOptions={_currentStatuses}
                   onPass={handleSelection}
                   selected={selectedStatus}
                />
