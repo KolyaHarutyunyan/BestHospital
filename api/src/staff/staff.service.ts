@@ -197,9 +197,9 @@ export class StaffService {
       status: StaffStatus.ACTIVE,
     };
     if (status) query.status = status;
-    if (isClinical) query.clinical = isClinical;
+    if (isClinical || isClinical === false) query.clinical = isClinical;
     const [staff, count] = await Promise.all([
-      this.model.find({ query }).sort({ _id: -1 }).skip(skip).limit(limit),
+      this.model.find(query).sort({ _id: -1 }).skip(skip).limit(limit),
       this.model.countDocuments({ status }),
     ]);
     const sanFun = this.sanitizer.sanitizeMany(staff);
