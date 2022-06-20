@@ -22,13 +22,13 @@ export const AuthHeader = ({
    const classes = authHeaderStyles();
 
    const authStatusDisplay = getAuthStatusDisplay(info);
-
+   console.log(info, "info, info");
    return (
       <div className={classes.AuthHeader}>
          <div className={classes.AuthHeaderTop}>
             <div className={classes.AuthHeaderTopLeft}>
                <p className={classes.AuthHeaderTopLeftTitle}>
-                  {empoloyment ? info?.title : `# ${info?.authId}`}
+                  {empoloyment ? makeCapitalize(info?.title?.name) : `# ${info?.authId}`}
                </p>
                {empoloyment ? (
                   <p className={classes.AuthHeaderTopLeftText}>
@@ -48,7 +48,7 @@ export const AuthHeader = ({
                   </p>
                )}
 
-               {type === "staff" && (
+               {type === "staff" && !empoloyment && (
                   <div className={classes.activeInactive}>
                      <p> {info?.active ? "Active" : "Inactive"}</p>
                      <div
@@ -108,7 +108,9 @@ export const AuthHeader = ({
                </p>
                <p className={classes.AuthHeaderBottomBoxText}>
                   {empoloyment
-                     ? makeCapitalize(info?.supervisor?.firstName)
+                     ? info?.supervisor
+                        ? makeCapitalize(info?.supervisor?.firstName)
+                        : "--"
                      : makeCapitalize(info?.funderId?.name)}
                </p>
             </div>
@@ -117,10 +119,12 @@ export const AuthHeader = ({
                   {empoloyment ? "Department:" : "Status:"}
                </p>
                <p
-                  className={`${classes.AuthHeaderBottomBoxText} statusStyle ${authStatusDisplay}`}
+                  className={`${classes.AuthHeaderBottomBoxText} ${
+                     !empoloyment ? "statusStyle" : ""
+                  } ${authStatusDisplay}`}
                >
                   {empoloyment
-                     ? info?.departmentId?.name
+                     ? makeCapitalize(info?.departmentId?.name)
                      : ActiveInactiveStatusReverse(authStatusDisplay)}
                </p>
             </div>

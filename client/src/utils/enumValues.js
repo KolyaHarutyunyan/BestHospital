@@ -21,9 +21,10 @@ export const enumValues = {
    PAYMENT_STATUSES: ["Open", "Closed", "Voided"],
    // end
 
-   // enums for Client staff
+   // enums for Staff
    RESIDENCIES: ["US", "citizen", "pcitizen", "work", "visa"],
    ISSUING_STATES: ["1", "2"],
    GENDER_OPTIONS: ["male", "female", "other"],
+   EMPLOYMENT_TYPES: ["Full-time", "Part-time", "Intern", "Contractor"],
    // end
 };

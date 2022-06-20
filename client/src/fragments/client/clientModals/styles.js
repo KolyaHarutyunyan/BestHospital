@@ -94,6 +94,7 @@ export const createClientStyle = makeStyles(() => ({
          backgroundColor: "#347AF080",
          cursor: "default",
       },
+      "&.hidden": { display: "none" },
       "&:disabled": {
          cursor: "default",
          color: Colors.TextWhite,
@@ -133,5 +134,6 @@ export const createClientStyle = makeStyles(() => ({
       height: "36px",
       display: "flex",
       alignItems: "center",
+      "&.hidden": { display: "none" },
    },
 }));

@@ -28,6 +28,7 @@ import {
 } from "@eachbase/store";
 import { systemItemStyles } from "@eachbase/fragments/system/core";
 import { serviceSingleStyles } from "./styles";
+import { getStaffGeneralInfo } from "./constants";
 
 const credentialBtn = {
    maxWidth: "174px",
@@ -85,15 +86,7 @@ export const StaffService = ({ staffGeneral, info, services }) => {
       }
    };
 
-   const generalInfo = [
-      { title: "First Name", value: makeCapitalize(staffGeneral?.firstName) },
-      { title: "Middle Name", value: makeCapitalize(staffGeneral?.middleName) },
-      { title: "Last Name", value: makeCapitalize(staffGeneral?.lastName) },
-      { title: "Primary Email", value: staffGeneral?.email },
-      { title: "Secondary Email", value: staffGeneral?.secondaryEmail },
-      { title: "Primary Phone Number", value: staffGeneral?.phone },
-      { title: "Secondary Phone Number", value: staffGeneral?.secondaryPhone },
-   ].filter((item) => !!item.value);
+   const generalInfo = getStaffGeneralInfo(staffGeneral);
 
    const filteredList =
       services &&

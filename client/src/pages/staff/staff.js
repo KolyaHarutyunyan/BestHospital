@@ -57,35 +57,33 @@ export const Staff = () => {
    }
 
    return (
-      <>
-         <TableWrapper
-            loader={!!loader.length}
-            handleType={handleActiveOrInactive}
-            firstButton={"Active"}
-            secondButton={"Inactive"}
-            buttonsTab={true}
-            buttonsTabAddButton={true}
-            addButtonText={"Add Staff Member"}
-            openCloseInfo={open}
-            handleOpenClose={() => setOpen((prevState) => !prevState)}
-            body={
-               <CreateStaff
-                  globalDepartments={globalDepartments}
-                  adminsList={adminsList && adminsList.staff}
-                  resetData={true}
-                  handleClose={() => setOpen(false)}
-               />
-            }
-         >
-            <StaffTable
-               staff={staff}
-               staffLoader={!!loader.length}
-               staffCount={count}
-               page={page}
-               status={status}
-               handleGetPage={setPage}
+      <TableWrapper
+         loader={!!loader.length}
+         handleType={handleActiveOrInactive}
+         firstButton={"Active"}
+         secondButton={"Inactive"}
+         buttonsTab={true}
+         buttonsTabAddButton={true}
+         addButtonText={"Add Staff Member"}
+         openCloseInfo={open}
+         handleOpenClose={() => setOpen((prevState) => !prevState)}
+         body={
+            <CreateStaff
+               globalDepartments={globalDepartments}
+               adminsList={adminsList && adminsList.staff}
+               resetData={true}
+               handleClose={() => setOpen(false)}
             />
-         </TableWrapper>
-      </>
+         }
+      >
+         <StaffTable
+            staff={staff}
+            staffLoader={!!loader.length}
+            staffCount={count}
+            page={page}
+            status={status}
+            handleGetPage={setPage}
+         />
+      </TableWrapper>
    );
 };

@@ -116,7 +116,7 @@ export const AddressInput = ({
    const placeholder = auth
       ? authPlaceHolder
       : info
-      ? info.address.formattedAddress
+      ? info.address?.formattedAddress
       : "Physical Address*";
 
    return (
@@ -126,17 +126,10 @@ export const AddressInput = ({
             onChange={handleChangeAddress}
             onSelect={(ev) => handleSelect(ev)}
          >
-            {({
-               getInputProps,
-               suggestions,
-               getSuggestionItemProps,
-               loading,
-            }) => (
+            {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
                <div
                   className={
-                     !oneInput
-                        ? globalInputs.simpleInput
-                        : globalInputs.simpleInputFull
+                     !oneInput ? globalInputs.simpleInput : globalInputs.simpleInputFull
                   }
                >
                   <input
@@ -178,9 +171,7 @@ export const AddressInput = ({
                               >
                                  <div>
                                     <span
-                                       className={
-                                          classes.searchfAddressDescriptionText
-                                       }
+                                       className={classes.searchfAddressDescriptionText}
                                     >
                                        {suggestion.description}
                                     </span>

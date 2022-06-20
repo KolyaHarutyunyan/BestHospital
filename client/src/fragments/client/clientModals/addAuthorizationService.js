@@ -270,7 +270,13 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
                         ) : (
                            <div className={classes.serviceModifiersContainerStyle}>
                               {!inputs.modifiers ? (
-                                 <div className={classes.notApplicableStyle}>N/A</div>
+                                 <div
+                                    className={`${classes.notApplicableStyle} ${
+                                       !!info ? "hidden" : ""
+                                    }`}
+                                 >
+                                    N/A
+                                 </div>
                               ) : (
                                  <button
                                     className={`${classes.availableModfier} ${
@@ -278,6 +284,8 @@ export const AddAuthorizationService = ({ handleClose, info, fundingId, authId }
                                           ? "checked"
                                           : _defaultIsChosen
                                           ? "chosen"
+                                          : !!info && !_defaultIsChosen
+                                          ? "hidden"
                                           : ""
                                     }`}
                                     onClick={handleChangeDefault}

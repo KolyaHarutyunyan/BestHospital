@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CustomBreadcrumbs } from "@eachbase/components";
 import { wrapperStyle } from "./styles";
 import { SimpleModal } from "../modal";
-import { fundingSourceActions } from "@eachbase/store";
+import { adminActions, fundingSourceActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import {
    ActiveInactiveStatus,
@@ -32,33 +32,34 @@ export const TableWrapperGeneralInfo = ({
 
    const _isForFundingSource =
       path === "funding" && type === "GET_FUNDING_SOURCE_BY_ID_SUCCESS";
+   const _isForStaff = path === "staff" && type === "GET_ADMIN_BY_ID_SUCCESS";
 
-   const handleSelectionChange = (selected) => {
+   function handleSelectionChange(selected) {
       if (selectedStatus === selected) return;
-
       const status =
          selected === "Active" ? "active" : selected === "Inactive" ? "inActive" : "";
-
       if (_isForFundingSource) {
          dispatch(fundingSourceActions.changeFundingSourceStatus(id, status));
+      } else if (_isForStaff) {
+         dispatch(adminActions.changeAdminStatus(id, status));
       } else {
          const upperCasedStatus = ActiveInactiveStatus(selected);
-
          if (upperCasedStatus === "ACTIVE" || upperCasedStatus === "INACTIVE") {
             dispatch(fundingSourceActions.setStatus(id, path, status, null, type));
          } else {
             handleOpen(upperCasedStatus);
          }
       }
-   };
+   }
 
    useEffect(() => {
       setSelectedStatus(ActiveInactiveStatusReverse(status));
    }, [status]);
 
-   const currentStatuses = _isForFundingSource
-      ? enumValues.STATUSES.slice(0, 2)
-      : enumValues.STATUSES;
+   const _currentStatuses =
+      _isForFundingSource || _isForStaff
+         ? enumValues.STATUSES.slice(0, 2)
+         : enumValues.STATUSES;
 
    return (
       <React.Fragment>
@@ -74,7 +75,7 @@ export const TableWrapperGeneralInfo = ({
             <div>
                {selectStatus && (
                   <UserInputsDropdown
-                     dropdownOptions={currentStatuses}
+                     dropdownOptions={_currentStatuses}
                      onPass={handleSelectionChange}
                      selected={selectedStatus}
                   />
