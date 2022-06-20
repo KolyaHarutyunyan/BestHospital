@@ -15,3 +15,7 @@ export enum ResidencyStatus {
   WORK = 'WORK',
   VISA = 'VISA',
 }
+export enum ClinicalStatus {
+  true = 'true',
+  false = 'false',
+}

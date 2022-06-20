@@ -4,6 +4,7 @@ import { StaffService } from './staff.service';
 import { StaffDTO, CreateStaffDto, EditStaffDTO, StaffQueryDTO } from './dto';
 import { ACCESS_TOKEN, UserDTO } from '../authN';
 import { Public, ParseObjectIdPipe } from '../util';
+import { ClinicalStatus } from './staff.constants';
 
 @Controller('staff')
 @ApiTags('Staff Endpoints')
@@ -55,12 +56,18 @@ export class StaffController {
     required: false,
     type: StaffQueryDTO,
   })
+  @ApiQuery({
+    name: 'isClinical',
+    description: 'isClinical',
+    required: false,
+    enum: ClinicalStatus,
+  })
   // @ApiQuery({ name: 'status', enum: StaffStatus })
   async getUsers(
     @Query('skip') skip: number,
     @Query('limit') limit: number,
     @Query('status') status: string,
-    @Query('isClinical') isClinical: boolean,
+    @Query('isClinical') isClinical: ClinicalStatus,
   ): Promise<StaffDTO[]> {
     return await this.staffService.getUsers(skip, limit, status, isClinical);
   }

@@ -9,7 +9,7 @@ import { MongooseUtil } from '../util';
 import { CreateStaffDto, EditStaffDTO, StaffDTO } from './dto';
 import { StaffSanitizer } from './interceptor';
 import { ILicense, IStaff } from './interface';
-import { StaffStatus } from './staff.constants';
+import { ClinicalStatus, StaffStatus } from './staff.constants';
 import { StaffModel } from './staff.model';
 
 @Injectable()
@@ -191,13 +191,11 @@ export class StaffService {
     skip: number,
     limit: number,
     status: string,
-    isClinical: boolean,
+    isClinical: ClinicalStatus,
   ): Promise<any> => {
-    let query: any = {
-      status: StaffStatus.ACTIVE,
-    };
+    let query: any = {};
     if (status) query.status = status;
-    if (isClinical || isClinical === false) query.clinical = isClinical;
+    if (isClinical) query.clinical = isClinical;
     const [staff, count] = await Promise.all([
       this.model.find(query).sort({ _id: -1 }).skip(skip).limit(limit),
       this.model.countDocuments({ status }),
