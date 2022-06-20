@@ -161,12 +161,12 @@ export class AuthService {
         .find({ authorizationId: authId })
         .populate({ path: 'serviceId', populate: 'serviceId' });
       authServices.map((authService) => {
+        authService.authModifiers = [];
         if (authService.modifiers.length !== 0) {
           for (let i = 0; i < authService.modifiers.length; i++) {
             authService.serviceId.modifiers.map((modifier) => {
               if (modifier._id.toString() === authService.modifiers[i].toString()) {
                 authService.authModifiers.push(modifier);
-                console.log(authService, 'aaaaaaa')
               }
             });
           }
