@@ -36,6 +36,9 @@ export const authService = {
 
    editPayCodeService: (body, id) => axios.patch(`/paycode/${id}`, body, { auth: true }),
 
+   terminatePaycodeService: (paycodeId) =>
+      axios.patch(`/paycode/${paycodeId}/terminate`, null, { auth: true }),
+
    getStaffServService: (id) => axios.get(`/staff/${id}/service`, { auth: true }),
 
    createStaffServService: (id, serviceId) =>

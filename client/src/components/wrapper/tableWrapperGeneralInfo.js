@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { CustomBreadcrumbs } from "@eachbase/components";
 import { wrapperStyle } from "./styles";
-import { SimpleModal } from "../modal";
+import { DeleteElement, SimpleModal } from "../modal";
 import { adminActions, fundingSourceActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import {
    ActiveInactiveStatus,
    ActiveInactiveStatusReverse,
    enumValues,
+   FindLoad,
 } from "@eachbase/utils";
 import { UserInputsDropdown } from "../dropdowns";
 
@@ -27,8 +28,14 @@ export const TableWrapperGeneralInfo = ({
    type,
 }) => {
    const classes = wrapperStyle();
+
    const dispatch = useDispatch();
+
+   const staffStatusLoader = FindLoad("CHANGE_ADMIN_STATUS");
+
    const [selectedStatus, setSelectedStatus] = useState("");
+   const [staffStatusModalIsOpen, setStaffStatusModalIsOpen] = useState(false);
+   const [staffStatus, setStaffStatus] = useState("");
 
    const _isForFundingSource =
       path === "funding" && type === "GET_FUNDING_SOURCE_BY_ID_SUCCESS";
@@ -36,16 +43,19 @@ export const TableWrapperGeneralInfo = ({
 
    function handleSelectionChange(selected) {
       if (selectedStatus === selected) return;
-      const status =
+      const _currentStatus =
          selected === "Active" ? "active" : selected === "Inactive" ? "inActive" : "";
       if (_isForFundingSource) {
-         dispatch(fundingSourceActions.changeFundingSourceStatus(id, status));
+         dispatch(fundingSourceActions.changeFundingSourceStatus(id, _currentStatus));
       } else if (_isForStaff) {
-         dispatch(adminActions.changeAdminStatus(id, status));
+         setStaffStatusModalIsOpen(true);
+         setStaffStatus(_currentStatus);
       } else {
          const upperCasedStatus = ActiveInactiveStatus(selected);
          if (upperCasedStatus === "ACTIVE" || upperCasedStatus === "INACTIVE") {
-            dispatch(fundingSourceActions.setStatus(id, path, status, null, type));
+            dispatch(
+               fundingSourceActions.setStatus(id, path, _currentStatus, null, type)
+            );
          } else {
             handleOpen(upperCasedStatus);
          }
@@ -90,6 +100,21 @@ export const TableWrapperGeneralInfo = ({
             />
          </div>
          {children}
+         <SimpleModal
+            openDefault={staffStatusModalIsOpen}
+            handleOpenClose={() => setStaffStatusModalIsOpen(false)}
+            content={
+               <DeleteElement
+                  info="Are you sure you want to change the status?"
+                  handleDel={() =>
+                     dispatch(adminActions.changeAdminStatus(id, staffStatus))
+                  }
+                  handleClose={() => setStaffStatusModalIsOpen(false)}
+                  innerText={"Change"}
+                  loader={!!staffStatusLoader.length}
+               />
+            }
+         />
       </React.Fragment>
    );
 };

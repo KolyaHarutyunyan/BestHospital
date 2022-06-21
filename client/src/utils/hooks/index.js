@@ -26,3 +26,4 @@ export { ImgUploader } from "./uploadImages";
 export { hooksForErrors } from "./hooksForErrors";
 export { addHiddenClass } from "./addHiddenClass";
 export { ssnActions } from "./ssnActions";
+export { createCodeFromName } from "./createCodeFromName";

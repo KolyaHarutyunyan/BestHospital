@@ -94,7 +94,6 @@ export function thirdStepHandler(
       isNotEmpty(inputs.residency) &&
       isNotEmpty(inputs.ssn) &&
       ssnIsValid;
-   console.log(ssnActions.makeSSN(inputs.ssn), " ssnActions.makeSSN(inputs.ssn)");
    if (thirdDataIsValid) {
       const data = {
          firstName: inputs.firstName,

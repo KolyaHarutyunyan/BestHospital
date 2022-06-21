@@ -30,7 +30,6 @@ import {
    secondStepHandler,
    thirdStepHandler,
 } from "./constants";
-import moment from "moment";
 
 const steps = ["General Info", "Address", "Other Details"];
 
@@ -51,15 +50,8 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
       : FindError("CREATE_ADMIN");
 
    useEffect(() => {
-      if (!!backError?.length) {
-         if (backError[0]?.error[0] === "phone must be a valid phone number") {
-            setActiveStep(0);
-         }
-      }
-   }, [backError]);
-
-   useEffect(() => {
       return () => {
+         setError("");
          if (!!staffGeneral) {
             dispatch(httpRequestsOnErrorsActions.removeError("EDIT_ADMIN_BY_ID"));
          } else {
@@ -98,6 +90,19 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
    );
    const [activeStep, setActiveStep] = useState(0);
 
+   useEffect(() => {
+      if (!!backError?.length) {
+         if (backError[0]?.error === "User already exists") {
+            setActiveStep(0);
+            setError(ErrorText.existenceError("Staff with this email"));
+         }
+         if (backError[0]?.error[0] === "phone must be a valid phone number") {
+            setActiveStep(0);
+            setError(ErrorText.phoneError);
+         }
+      }
+   }, [backError]);
+
    const firstStepStyle = addHiddenClass(
       classes.firstStepContainer,
       activeStep === 1 || activeStep === 2
@@ -125,7 +130,11 @@ export const CreateStaff = ({ handleClose, resetData, staffGeneral }) => {
          error === phoneErrorMsg ||
          error === emailErrorMsg ||
          error === ErrorText.ssnError ||
-         (backError && backError.length)
+         error === ErrorText.phoneError ||
+         error ===
+            ErrorText.existenceError("Staff with this email")(
+               backError && backError.length
+            )
       ) {
          setError("");
       }

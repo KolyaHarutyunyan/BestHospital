@@ -3,7 +3,12 @@ import moment from "moment";
 import { useHistory } from "react-router-dom";
 import { TableBodyComponent } from "@eachbase/components";
 import { TableCell } from "@material-ui/core";
-import { Images, makeCapitalize, useGlobalStyles } from "@eachbase/utils";
+import {
+   createCodeFromName,
+   Images,
+   makeCapitalize,
+   useGlobalStyles,
+} from "@eachbase/utils";
 import { clientStyles } from "./styles";
 import { hooksForTable } from "@eachbase/utils";
 
@@ -19,7 +24,7 @@ export const ClientTableBody = ({ data, setOpen, index, setDeleteClient }) => {
    const lastN = makeCapitalize(data?.lastName);
 
    const clientFullName = getFullName(firstN, lastN, showDashIfEmpty);
-   const _clientCreationCode = `${firstN.substring(0, 2)}${lastN.substring(0, 2)}`;
+   const _clientCreationCode = createCodeFromName(`${firstN} ${lastN}`);
    const gender = showDashIfEmpty(data?.gender);
    const dateOfBirth = showDashIfEmpty(moment(data?.birthday).format("DD/MM/YYYY"));
    const status = showDashIfEmpty(makeCapitalize(data?.status));

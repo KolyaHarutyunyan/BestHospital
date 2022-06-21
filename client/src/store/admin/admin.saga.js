@@ -39,6 +39,7 @@ import {
    GET_TIMESHEET_BY_ID_SUCCESS,
    GET_ALL_PAYCODES_FAIL,
    CHANGE_ADMIN_STATUS,
+   TERMINATE_PAYCODE,
 } from "./admin.types";
 import { httpRequestsOnErrorsActions } from "../http_requests_on_errors";
 import { httpRequestsOnLoadActions } from "../http_requests_on_load";
@@ -378,6 +379,24 @@ function* editPayCode(action) {
    }
 }
 
+function* terminatePaycode(action) {
+   yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
+   try {
+      yield call(authService.terminatePaycodeService, action.payload.paycodeId);
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+      yield put({
+         type: GET_PAY_CODE,
+         payload: { id: action.payload.paycodeId },
+      });
+   } catch (err) {
+      yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
+   }
+}
+
 function* getStaffService(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
@@ -459,13 +478,17 @@ function* isClinician(action) {
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
-      const res = yield call(
+      yield call(
          authService.isClinicianService,
          action.payload.id,
          action.payload.isClinical
       );
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
+      yield put({
+         type: GET_STAFF_SERVICE,
+         payload: { id: action.payload.id },
+      });
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -602,6 +625,7 @@ export const watchAdmin = function* watchAdminSaga() {
    yield takeLatest(GET_PAY_CODE, getPayCode);
    yield takeLatest(CREATE_PAY_CODE, createPayCode);
    yield takeLatest(EDIT_PAY_CODE, editPayCode);
+   yield takeLatest(TERMINATE_PAYCODE, terminatePaycode);
    yield takeLatest(GET_STAFF_SERVICE, getStaffService);
    yield takeLatest(CREATE_STAFF_SERVICE, createStaffService);
    yield takeLatest(DELETE_STAFF_SERVICE, delteStaffService);

@@ -2,11 +2,18 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Colors, Shadow } from "@eachbase/utils";
 
 export const serviceSingleStyles = makeStyles(() => ({
+   headerSize: {
+      marginLeft: "24px",
+      borderRadius: "8px",
+      boxShadow: "0px 0px 6px #8A8A8A3D",
+      padding: "24px",
+      width: "100%",
+      flexDirection: "column",
+   },
    // General
    staffGeneralWrapper: {
       display: "flex",
       justifyContent: "space-between",
-      alignItems: "flex-start",
    },
    // Access
    staffAccessWrapper: {

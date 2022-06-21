@@ -6,37 +6,31 @@ import {
    CreateChancel,
    ModalHeader,
 } from "@eachbase/components";
-import { Checkbox } from "@material-ui/core";
 import { ErrorText, FindLoad, FindSuccess } from "@eachbase/utils";
-import {
-   adminActions,
-   httpRequestsOnErrorsActions,
-   httpRequestsOnSuccessActions,
-} from "@eachbase/store";
+import { adminActions, httpRequestsOnSuccessActions } from "@eachbase/store";
 import { createClientStyle } from "@eachbase/fragments/client";
 import { staffModalsStyle } from "./styles";
-import moment from "moment";
 
 export const PaycodeModal = ({ handleClose, info, employmentId }) => {
-   const dispatch = useDispatch();
    const classes = createClientStyle();
    const classes_v2 = staffModalsStyle();
+
+   const dispatch = useDispatch();
+
+   const success = FindSuccess("CREATE_PAY_CODE");
+   const loader = FindLoad("CREATE_PAY_CODE");
+
+   useEffect(() => {
+      if (!!success.length) {
+         handleClose();
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_PAY_CODE"));
+      }
+   }, [success]);
+
    const globalPayCodes = useSelector((state) => state.payroll.PayCodes);
 
    const [error, setError] = useState("");
-   const [inputs, setInputs] = useState(
-      info
-         ? {
-              employmentId: info.employmentId,
-              payCodeTypeId: info.payCodeTypeId._id,
-              rate: +info.rate,
-              active: info.active,
-              startDate: moment(info.startDate).format("YYYY-MM-DD"),
-              endDate: moment(info.endDate).format("YYYY-MM-DD"),
-           }
-         : {}
-   );
-   const [checked, setChecked] = useState(info ? info.endDate === "Precent" : true);
+   const [inputs, setInputs] = useState({});
    const [payCode, setPayCode] = useState(
       info ? globalPayCodes.find((item) => item.id === info.payCodeTypeId._id) : null
    );
@@ -45,17 +39,7 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
       (item) => item.id === inputs.payCodeTypeId
    )?.name;
 
-   const success = info ? FindSuccess("EDIT_PAY_CODE") : FindSuccess("CREATE_PAY_CODE");
-   const loader = info ? FindLoad("EDIT_PAY_CODE") : FindLoad("CREATE_PAY_CODE");
-
-   useEffect(() => {
-      if (!!success.length) {
-         handleClose();
-         dispatch(httpRequestsOnSuccessActions.removeSuccess(success[0].type));
-      }
-   }, [success]);
-
-   const handleChange = (e) => {
+   function handleChange(e) {
       if (e.target.name === "payCodeTypeId") {
          setPayCode(globalPayCodes.find((item) => item.id === e.target.value));
       }
@@ -63,31 +47,18 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
          ...prevState,
          [e.target.name]: e.target.value,
       }));
-      (error === e.target.name ||
-         error === ErrorText.dateError ||
-         error === ErrorText.startDateError) &&
-         setError("");
-   };
+      (error === e.target.name || error === ErrorText.startDateError) && setError("");
+   }
 
-   const onCheck = (e) => {
-      setChecked(e.target.checked);
-      inputs["endDate"] = null;
-      (error === "endDate" || error === ErrorText.dateError) && setError("");
-   };
-
-   const handleCreate = () => {
+   function handleCreate() {
       const startDateIsValid =
          new Date(inputs.startDate).getTime() < new Date(new Date()).getTime();
-
-      const dateComparingIsValid =
-         !!inputs.endDate &&
-         new Date(inputs.startDate).getTime() < new Date(inputs.endDate).getTime();
 
       const payCodeDataIsValid =
          !!inputs.rate &&
          !!inputs.payCodeTypeId &&
          !!inputs.startDate &&
-         (checked ? startDateIsValid : dateComparingIsValid);
+         startDateIsValid;
 
       if (payCodeDataIsValid) {
          const data = {
@@ -95,15 +66,9 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
             payCodeTypeId: inputs.payCodeTypeId,
             employmentId: employmentId,
             rate: +inputs.rate,
-            active: checked,
             startDate: inputs.startDate,
-            endDate: inputs.endDate ? inputs.endDate : null,
          };
-         if (!info) {
-            dispatch(adminActions.createPayCode(data, employmentId));
-         } else {
-            dispatch(adminActions.editPayCode(data, employmentId, info.id));
-         }
+         dispatch(adminActions.createPayCode(data, employmentId));
       } else {
          setError(
             !inputs.payCodeTypeId
@@ -114,47 +79,48 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
                ? "startDate"
                : !startDateIsValid
                ? ErrorText.startDateError
-               : !inputs.endDate
-               ? "endDate"
-               : !dateComparingIsValid
-               ? ErrorText.dateError
-               : "Input is not field"
+               : ""
          );
       }
-   };
+   }
 
    return (
       <div className={classes.createFoundingSource}>
          <ModalHeader
+            className={classes_v2.paycodeModalStyle}
             handleClose={handleClose}
-            title={info ? "Edit Time" : "Add a New Paycode"}
-            text={!info && "Please fulfill the below fields to add a paycode."}
+            title={"Add a New Paycode"}
+            text={"Please fulfill the below fields to add a paycode."}
          />
          <div className={classes.createFoundingSourceBody}>
             <div className={classes.clientModalBlock}>
                <div className={classes.clientModalBox}>
                   <SelectInput
                      name={"payCodeTypeId"}
-                     label={"Name"}
+                     label={"Name*"}
                      handleSelect={handleChange}
                      value={inputs.payCodeTypeId}
                      type={"id"}
                      list={globalPayCodes}
                      typeError={error === "payCodeTypeId" ? ErrorText.selectField : ""}
-                     disabled={!!info}
                   />
-                  <div className={classes.displayCodeBlock}>
-                     <div className={classes_v2.paycodeBox}>
-                        <p className={classes_v2.paycodeBoxTitle}>Code:</p>
-                        <p className={classes_v2.paycodeBoxText}>
-                           {payCode?.code ? payCode.code : " N/A"}
-                        </p>
-                     </div>
-                     <div className={classes_v2.paycodeBox} style={{ marginBottom: 0 }}>
-                        <p className={classes_v2.paycodeBoxTitle}>Type:</p>
-                        <p className={classes_v2.paycodeBoxText}>
-                           {payCode?.type ? payCode.type : "N/A"}
-                        </p>
+                  <div className={classes_v2.codeAndTypeBoxStyle}>
+                     <div>
+                        <div className={classes_v2.paycodeBox}>
+                           <p className={classes_v2.paycodeBoxTitle}>Code:</p>
+                           <p className={classes_v2.paycodeBoxText}>
+                              {payCode?.code ? payCode.code : " N/A"}
+                           </p>
+                        </div>
+                        <div
+                           className={classes_v2.paycodeBox}
+                           style={{ marginBottom: 0 }}
+                        >
+                           <p className={classes_v2.paycodeBoxTitle}>Type:</p>
+                           <p className={classes_v2.paycodeBoxText}>
+                              {payCode?.type ? payCode.type : "N/A"}
+                           </p>
+                        </div>
                      </div>
                   </div>
                   <ValidationInput
@@ -165,52 +131,28 @@ export const PaycodeModal = ({ handleClose, info, employmentId }) => {
                      label={"Rate*"}
                      name="rate"
                      typeError={error === "rate" && ErrorText.field}
-                     disabled={!!info}
                   />
-                  <div className={classes_v2.paycodeBox}>
-                     <Checkbox checked={checked} onClick={onCheck} color="primary" />
-                     <p className={classes_v2.activePaycode}>Active Paycode</p>
-                  </div>
-                  <div style={{ display: "flex" }}>
-                     <ValidationInput
-                        variant={"outlined"}
-                        onChange={handleChange}
-                        value={inputs.startDate}
-                        type={"date"}
-                        label={"Start Date*"}
-                        name="startDate"
-                        typeError={
-                           error === "startDate"
-                              ? ErrorText.field
-                              : error === ErrorText.startDateError
-                              ? ErrorText.startDateError
-                              : ""
-                        }
-                     />
-                     <div style={{ width: 16 }} />
-                     <ValidationInput
-                        variant={"outlined"}
-                        disabled={checked ? true : false}
-                        onChange={handleChange}
-                        value={checked ? "Present" : inputs.endDate}
-                        type={checked ? "text" : "date"}
-                        label={"End Date*"}
-                        name="endDate"
-                        typeError={
-                           error === "endDate"
-                              ? ErrorText.field
-                              : error === ErrorText.dateError
-                              ? ErrorText.dateError
-                              : ""
-                        }
-                     />
-                  </div>
+                  <ValidationInput
+                     variant={"outlined"}
+                     onChange={handleChange}
+                     value={inputs.startDate}
+                     type={"date"}
+                     label={"Start Date*"}
+                     name="startDate"
+                     typeError={
+                        error === "startDate"
+                           ? ErrorText.field
+                           : error === ErrorText.startDateError
+                           ? ErrorText.startDateError
+                           : ""
+                     }
+                  />
                </div>
             </div>
             <div className={classes.clientModalBlock}>
                <CreateChancel
                   loader={!!loader.length}
-                  create={info ? "Save" : "Add"}
+                  create={"Add"}
                   chancel={"Cancel"}
                   onCreate={handleCreate}
                   onClose={handleClose}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { serviceSingleStyles } from "./styles";
 import {
    AddButton,
@@ -8,23 +8,19 @@ import {
    AvailabilitySchedule,
    ValidationInput,
    CustomizedSwitch,
+   DeleteElement,
 } from "@eachbase/components";
-import { FindLoad, Images } from "@eachbase/utils";
+import { FindLoad, FindSuccess, Images } from "@eachbase/utils";
 import { CreateStaff, CredentialModal } from "@eachbase/fragments";
 import { useDispatch, useSelector } from "react-redux";
 import { EmploymentModal, TimesheetModal } from "./modals";
-import { adminActions, historyActions } from "@eachbase/store";
+import {
+   adminActions,
+   historyActions,
+   httpRequestsOnSuccessActions,
+} from "@eachbase/store";
 import { useParams } from "react-router-dom";
-
-const editButtonStyle = {
-   height: 36,
-   paddingInline: 24,
-};
-
-const filterBtn = {
-   width: 93,
-   height: 36,
-};
+import { editButtonStyle, filterBtnStyle } from "./constants";
 
 export const StaffItemHeader = ({
    onModel,
@@ -52,12 +48,27 @@ export const StaffItemHeader = ({
 
    const params = useParams();
 
-   const [switchBoolean, setSwitchBoolean] = useState(adminInfoById?.clinical || false);
+   const staffHistoryLoader = FindLoad("GET_HISTORY");
+   const clinicianLoader = FindLoad("IS_CLINICIAN");
+   const clinicianSuccess = FindSuccess("IS_CLINICIAN");
+
+   useEffect(() => {
+      if (!!clinicianSuccess.length) {
+         setClinicianModalIsOpen(false);
+         setSwitched(false);
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("IS_CLINICIAN"));
+      }
+   }, [clinicianSuccess]);
+
+   const [switchBoolean, setSwitchBoolean] = useState(false);
    const [switched, setSwitched] = useState(false);
    const [searchDate, setSearchDate] = useState("");
    const [isDisabled, setIsDisabled] = useState(false);
+   const [clinicianModalIsOpen, setClinicianModalIsOpen] = useState(false);
 
-   const staffHistoryLoader = !!FindLoad("GET_HISTORY").length;
+   useEffect(() => {
+      setSwitchBoolean(adminInfoById?.clinical);
+   }, [adminInfoById]);
 
    useEffect(() => {
       dispatch(adminActions.getAllPaycodes(params.id));
@@ -89,85 +100,72 @@ export const StaffItemHeader = ({
    }
 
    return (
-      <div>
-         <ul className={classes.tabsWrapper}>
-            <li style={{ display: "flex", alignItems: "center" }}>
-               <img src={Images.userProfile} alt="avatar" className={classes.avatar} />
-               <div className={classes.nameContent}>
-                  <h1 className={classes.name}>{title}</h1>
-               </div>
-            </li>
-            <li className={classes.headerRight}>
-               {activeTab === 0 ? (
-                  <AddModalButton
-                     btnStyles={editButtonStyle}
-                     handleClick={handleOpenClose}
-                     text="edit"
-                  />
-               ) : activeTab === 2 ? (
-                  <AddButton text="Add Timesheet" handleClick={handleOpenClose} />
-               ) : activeTab === 3 ? (
-                  <AddButton
-                     text="Add Credential"
-                     handleClick={() => openCloseCredModal("addCredential")}
-                  />
-               ) : activeTab === 5 ? (
-                  <AddButton text="Available Hours" handleClick={handleOpenClose} />
-               ) : activeTab === 1 ? (
-                  <>
-                     <div className={classes.clinicalWrapper}>
-                        <p>Clinician</p>
-                        <div>
-                           <CustomizedSwitch
-                              checked={switchBoolean}
-                              handleClick={handleSwitchChange}
-                           />
-                        </div>
-                     </div>
-                     <AddButton text="Add Employment" handleClick={handleOpenClose} />
-                  </>
-               ) : activeTab === 7 ? (
-                  <AddButton text="Add Note" handleClick={handleOpenClose} />
-               ) : activeTab === 3 ? (
-                  <AddButton
-                     text="Add Credential"
-                     handleClick={() => openCloseCredModal("addCredential")}
-                  />
-               ) : activeTab === 1 ? (
+      <Fragment>
+         <div>
+            <ul className={classes.tabsWrapper}>
+               <li style={{ display: "flex", alignItems: "center" }}>
+                  <img src={Images.userProfile} alt="avatar" className={classes.avatar} />
+                  <div className={classes.nameContent}>
+                     <h1 className={classes.name}>{title}</h1>
+                  </div>
+               </li>
+               <li className={classes.headerRight}>
                   <div className={classes.clinicalWrapper}>
                      <p>Clinician</p>
                      <div>
                         <CustomizedSwitch
                            checked={switchBoolean}
-                           handleClick={handleSwitchChange}
+                           handleClick={() => setClinicianModalIsOpen(true)}
                         />
                      </div>
-                     <AddButton text="Add Employment" handleClick={handleOpenClose} />
                   </div>
-               ) : activeTab === 7 ? (
-                  <AddButton text="Add Note" handleClick={handleOpenClose} />
-               ) : activeTab === 8 ? (
-                  <div className={classes.searchContainer}>
-                     <ValidationInput
-                        className={classes.dateInput}
-                        errorFalse={true}
-                        variant={"outlined"}
-                        onChange={(e) => handleChange(e)}
-                        value={searchDate}
-                        type={"date"}
-                        name="searchDate"
-                     />
+                  {activeTab === 0 ? (
                      <AddModalButton
-                        handleClick={handleSubmit}
-                        text="Search"
-                        loader={staffHistoryLoader}
-                        btnStyles={filterBtn}
-                        disabled={isDisabled}
+                        btnStyles={editButtonStyle}
+                        handleClick={handleOpenClose}
+                        text="edit"
                      />
-                  </div>
-               ) : null}
-            </li>
-         </ul>
+                  ) : activeTab === 2 ? (
+                     <AddButton text="Add Timesheet" handleClick={handleOpenClose} />
+                  ) : activeTab === 3 ? (
+                     <AddButton
+                        text="Add Credential"
+                        handleClick={() => openCloseCredModal("addCredential")}
+                     />
+                  ) : // ) : activeTab === 5 ? (
+                  //    <AddButton text="Available Hours" handleClick={handleOpenClose} />
+                  activeTab === 1 ? (
+                     <AddButton text="Add Employment" handleClick={handleOpenClose} />
+                  ) : activeTab === 7 ? (
+                     <AddButton text="Add Note" handleClick={handleOpenClose} />
+                  ) : activeTab === 3 ? (
+                     <AddButton
+                        text="Add Credential"
+                        handleClick={() => openCloseCredModal("addCredential")}
+                     />
+                  ) : activeTab === 8 ? (
+                     <div className={classes.searchContainer}>
+                        <ValidationInput
+                           className={classes.dateInput}
+                           errorFalse={true}
+                           variant={"outlined"}
+                           onChange={(e) => handleChange(e)}
+                           value={searchDate}
+                           type={"date"}
+                           name="searchDate"
+                        />
+                        <AddModalButton
+                           handleClick={handleSubmit}
+                           text="Search"
+                           loader={!!staffHistoryLoader.length}
+                           btnStyles={filterBtnStyle}
+                           disabled={isDisabled}
+                        />
+                     </div>
+                  ) : null}
+               </li>
+            </ul>
+         </div>
          <SimpleModal
             openDefault={activeTab === 3 ? openCredModal : openModal}
             handleOpenClose={() =>
@@ -210,6 +208,19 @@ export const StaffItemHeader = ({
                ) : null
             }
          />
-      </div>
+         <SimpleModal
+            openDefault={clinicianModalIsOpen}
+            handleOpenClose={() => setClinicianModalIsOpen(false)}
+            content={
+               <DeleteElement
+                  info="Are you sure?"
+                  handleDel={handleSwitchChange}
+                  handleClose={() => setClinicianModalIsOpen(false)}
+                  innerText={"Designate"}
+                  loader={!!clinicianLoader.length}
+               />
+            }
+         />
+      </Fragment>
    );
 };

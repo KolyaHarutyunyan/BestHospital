@@ -47,6 +47,7 @@ export {
    hooksForErrors,
    addHiddenClass,
    ssnActions,
+   createCodeFromName,
 } from "./hooks";
 export { ErrorText } from "./errorTexts";
 export { CountryList } from "./jsons";

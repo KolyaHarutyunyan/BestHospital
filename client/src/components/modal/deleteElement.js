@@ -5,7 +5,14 @@ import { Colors, useGlobalTextStyles } from "@eachbase/utils";
 import { modalsStyle } from "./styles";
 import { MinLoader } from "../loader";
 
-export const DeleteElement = ({ text, info, handleDel, handleClose, loader, innerText = "" }) => {
+export const DeleteElement = ({
+   text,
+   info,
+   handleDel,
+   handleClose,
+   loader,
+   innerText = "",
+}) => {
    const classes = modalsStyle();
    const globalText = useGlobalTextStyles();
    return (
@@ -13,16 +20,9 @@ export const DeleteElement = ({ text, info, handleDel, handleClose, loader, inne
          <div className={classes.closeButton}>
             <CloseButton handleCLic={handleClose} isInModal={true} />
          </div>
-
          <div className={classes.deleteModalWrapper}>
-            <p
-               className={globalText.modalTitle}
-               style={{ width: 400, overflow: "hidden", height: 52, textOverflow: "ellipsis" }}
-            >
-               {info}
-            </p>
+            <p className={globalText.modalTitle}>{info}</p>
             <p className={globalText.modalText}>{text}</p>
-
             <div className={classes.buttons}>
                <Button
                   style={{
@@ -53,7 +53,11 @@ export const DeleteElement = ({ text, info, handleDel, handleClose, loader, inne
                   }}
                   onClick={handleDel}
                >
-                  {loader === true ? <MinLoader margin={"0"} color={Colors.TextWhite} /> : innerText || "Delete"}
+                  {loader === true ? (
+                     <MinLoader margin={"0"} color={Colors.TextWhite} />
+                  ) : (
+                     innerText || "Delete"
+                  )}
                </Button>
             </div>
          </div>

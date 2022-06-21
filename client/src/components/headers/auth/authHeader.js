@@ -5,6 +5,7 @@ import {
    Colors,
    Images,
    makeCapitalize,
+   manageType,
 } from "@eachbase/utils";
 import moment from "moment";
 import { SlicedText } from "../../messages";
@@ -15,14 +16,14 @@ export const AuthHeader = ({
    info,
    setToggleModal,
    toggleModal,
-   setDelEdit,
+   // setDelEdit,
    empoloyment,
    type,
 }) => {
    const classes = authHeaderStyles();
 
    const authStatusDisplay = getAuthStatusDisplay(info);
-   console.log(info, "info, info");
+
    return (
       <div className={classes.AuthHeader}>
          <div className={classes.AuthHeaderTop}>
@@ -47,7 +48,6 @@ export const AuthHeader = ({
                         ).format("DD/MM/YYYY")}`}
                   </p>
                )}
-
                {type === "staff" && !empoloyment && (
                   <div className={classes.activeInactive}>
                      <p> {info?.active ? "Active" : "Inactive"}</p>
@@ -72,22 +72,14 @@ export const AuthHeader = ({
                <div
                   className={classes.editIconStyle}
                   onClick={() => {
-                     setDelEdit(true);
+                     // setDelEdit(true);
                      setToggleModal(!toggleModal);
                   }}
                >
                   <img src={Images.edit} alt="edit" />
                </div>
                {empoloyment ? (
-                  <div
-                     className={classes.editTextStyle}
-                     onClick={() => {
-                        setDelEdit(true);
-                        setToggleModal(!toggleModal);
-                     }}
-                  >
-                     Edit
-                  </div>
+                  <div className={classes.editTextStyle}>Edit</div>
                ) : // <div
                //    className={classes.removeIconStyle}
                //    onClick={() => {
@@ -136,7 +128,7 @@ export const AuthHeader = ({
                   <SlicedText
                      type={"address"}
                      size={25}
-                     data={empoloyment ? info?.schedule : info?.location}
+                     data={empoloyment ? manageType(info?.type) : info?.location}
                   />
                </p>
             </div>

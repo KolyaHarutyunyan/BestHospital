@@ -7,7 +7,8 @@ export const hooksForErrors = {
       } else if (
          (backError?.length &&
             backError[0]?.error[0] === "phoneNumber must be a valid phone number") ||
-         backError[0]?.error[0] === "phone must be a valid phone number"
+         backError[0]?.error[0] === "phone must be a valid phone number" ||
+         error === ErrorText.phoneError
       ) {
          return ErrorText.phoneError;
       } else if (error === phoneErrorMsg) {
@@ -20,8 +21,11 @@ export const hooksForErrors = {
    getEmailError: (error, backError, emailErrorMsg) => {
       if (error === "email") {
          return ErrorText.field;
-      } else if (backError?.length && backError[0]?.error === "User already exists") {
-         return ErrorText.emailError;
+      } else if (
+         (backError?.length && backError[0]?.error === "User already exists") ||
+         error === ErrorText.existenceError("Staff with this email")
+      ) {
+         return ErrorText.existenceError("Staff with this email");
       } else if (error === emailErrorMsg) {
          return emailErrorMsg;
       } else {
@@ -70,6 +74,16 @@ export const hooksForErrors = {
             "Can not be two authorization service with default modifiers"
       ) {
          return ErrorText.authServiceDefaultError;
+      } else {
+         return "";
+      }
+   },
+
+   getModifierNameErrorText: (error, backError) => {
+      if (error === "name") {
+         return ErrorText.field;
+      } else if (backError?.length && backError[0]?.error === "Modifier already exists") {
+         return ErrorText.existenceError("Modifier with this name");
       } else {
          return "";
       }

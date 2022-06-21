@@ -1,6 +1,6 @@
-import { DrawerContext, hooksForTable, useWidth } from "@eachbase/utils";
 import React, { useContext } from "react";
 import { clientCommonCoreStyle } from "./styles";
+import { DrawerContext, hooksForTable, useWidth } from "@eachbase/utils";
 
 export const ClientEnrollmentTHead = () => {
    const classes = clientCommonCoreStyle();

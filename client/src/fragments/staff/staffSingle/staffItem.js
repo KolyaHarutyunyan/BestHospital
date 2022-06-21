@@ -1,11 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { TableCell } from "@material-ui/core";
-import {
-   adminActions,
-   httpRequestsOnSuccessActions,
-   systemActions,
-} from "@eachbase/store";
+import { httpRequestsOnSuccessActions } from "@eachbase/store";
 import {
    StaffGeneral,
    StaffHistory,
@@ -13,7 +9,7 @@ import {
    StaffEmployment,
    StaffAccess,
    StaffItemHeader,
-   StaffAvailability,
+   // StaffAvailability,
    StaffTimesheet,
 } from "./core";
 import {
@@ -197,14 +193,14 @@ export const StaffItem = ({ gen }) => {
       {
          tabComponent: <StaffAccess rolesList={rolesList} accessList={accessList} />,
       },
-      {
-         tabComponent: (
-            <StaffAvailability
-               availabilityData={availabilityData}
-               staffGeneral={staffGeneral}
-            />
-         ),
-      },
+      // {
+      //    tabComponent: (
+      //       <StaffAvailability
+      //          availabilityData={availabilityData}
+      //          staffGeneral={staffGeneral}
+      //       />
+      //    ),
+      // },
       {
          tabComponent: (
             <StaffService

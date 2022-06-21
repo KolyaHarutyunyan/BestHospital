@@ -106,5 +106,6 @@ export const authHeaderStyles = makeStyles(() => ({
       fontSize: "14px",
       fontWeight: 700,
       marginLeft: "8px",
+      cursor: "default",
    },
 }));
