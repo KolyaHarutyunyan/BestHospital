@@ -22,6 +22,7 @@ import {
    getAllPaycodes,
    getAllAdmins,
    editPayCode,
+   terminatePaycode,
    getTimesheetById,
    editTimesheet,
    clearAllPaycodes,
@@ -56,5 +57,6 @@ export const adminActions = {
    getAllPaycodes,
    getAllAdmins,
    editPayCode,
+   terminatePaycode,
    clearAllPaycodes,
 };

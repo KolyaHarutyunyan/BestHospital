@@ -194,6 +194,7 @@ export const serviceSingleStyles = makeStyles(() => ({
       width: "100%",
       justifyContent: "space-between",
       alignItems: "center",
+      marginTop: "24px",
    },
    authorizationServicesTitle: {
       fontSize: 18,

@@ -30,6 +30,7 @@ export const createFoundingSourceStyle = makeStyles(() => ({
    createFoundingSourceBody: {
       width: "100%",
       padding: "40px",
+      "@media (max-width: 1280px)": { padding: "32px" },
    },
    createFoundingSourceBodyBlock: {
       display: "flex",

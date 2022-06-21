@@ -22,4 +22,20 @@ export const staffModalsStyle = makeStyles(() => ({
       fontSize: 16,
       marginLeft: 10,
    },
+   codeAndTypeBoxStyle: {
+      width: "100%",
+      height: "112px",
+      padding: "0 16px",
+      display: "flex",
+      alignItems: "center",
+      backgroundColor: Colors.BackgroundWater,
+      marginBottom: "24px",
+   },
+   paycodeModalStyle: {
+      backgroundColor: Colors.BackgroundWhite,
+      textAlign: "left",
+      "& p": { textAlign: "left" },
+      "& button": { backgroundColor: Colors.BackgroundWater },
+      paddingBottom: "0",
+   },
 }));

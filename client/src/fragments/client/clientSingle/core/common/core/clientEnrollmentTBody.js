@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import {
    CustomizedSwitch,
    DeleteElement,
@@ -72,7 +72,7 @@ export const ClientEnrollmentTBody = ({ enrollment }) => {
    }
 
    return (
-      <>
+      <Fragment>
          <div className={classes.tbodyContainerStyle}>
             <div className={classes.tdStyle} style={{ maxWidth: "120px" }}>
                {changePrimaryLoader.length ? (
@@ -147,6 +147,6 @@ export const ClientEnrollmentTBody = ({ enrollment }) => {
                ) : null
             }
          />
-      </>
+      </Fragment>
    );
 };

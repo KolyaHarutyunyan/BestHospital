@@ -25,6 +25,7 @@ import {
    GET_TIMESHEET_BY_ID,
    CLEAR_ALL_PAYCODES,
    CHANGE_ADMIN_STATUS,
+   TERMINATE_PAYCODE,
 } from "./admin.types";
 
 export const createAdmin = (body) => {
@@ -135,6 +136,13 @@ export const editPayCode = (body, id, payCodeId) => {
    return {
       type: EDIT_PAY_CODE,
       payload: { body, id, payCodeId },
+   };
+};
+
+export const terminatePaycode = (paycodeId) => {
+   return {
+      type: TERMINATE_PAYCODE,
+      payload: { paycodeId },
    };
 };
 

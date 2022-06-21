@@ -17,8 +17,9 @@ export const modalHeadersStyle = makeStyles(() => ({
       width: "100%",
       background: Colors.BackgroundWater,
       borderRadius: "8px 8px 0px 0px",
-      padding: "32px",
       textAlign: "center",
+      padding: "40px",
+      "@media (max-width: 1280px)": { padding: "32px" },
    },
    createFoundingSourceHeaderTop: {
       width: "24px",
@@ -30,6 +31,7 @@ export const modalHeadersStyle = makeStyles(() => ({
    createFoundingSourceBody: {
       width: "100%",
       padding: "40px",
+      "@media (max-width: 1280px)": { padding: "32px" },
    },
    createFundingSourceHeaderBottom: {
       width: "100%",

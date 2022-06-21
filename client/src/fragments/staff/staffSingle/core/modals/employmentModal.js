@@ -15,7 +15,6 @@ import {
    FindLoad,
    FindSuccess,
    isNotEmpty,
-   makeEnum,
    manageType,
 } from "@eachbase/utils";
 import {
@@ -26,10 +25,6 @@ import {
 } from "@eachbase/store";
 import { createClientStyle } from "@eachbase/fragments/client";
 import { Checkbox } from "@material-ui/core";
-
-const _list = [{ name: "Part Time" }, { name: "Full Time" }];
-const _partTime = _list[0].name;
-const _fullTime = _list[1].name;
 
 export const EmploymentModal = ({ handleClose, info }) => {
    const classes = createClientStyle();
@@ -50,7 +45,7 @@ export const EmploymentModal = ({ handleClose, info }) => {
    const loader = info ? FindLoad("EDIT_EMPLOYMENT") : FindLoad("CREATE_EMPLOYMENT");
    const backError = info ? FindError("EDIT_EMPLOYMENT") : FindError("CREATE_EMPLOYMENT");
 
-   const employmentIsOverlapping = backError[1]?.error === "employment overlapping";
+   const employmentIsOverlapping = backError[0]?.error === "employment overlapping3";
 
    useEffect(() => {
       if (employmentIsOverlapping) {
@@ -185,9 +180,14 @@ export const EmploymentModal = ({ handleClose, info }) => {
    return (
       <div className={classes.createFoundingSource}>
          <ModalHeader
+            className={classes.employmentModalStyle}
             handleClose={handleClose}
             title={info ? "Edit Employment" : "Add a New Employment"}
-            text={"Please fulfill the below fields to add an employment."}
+            text={
+               info
+                  ? "Please modify the below fields to edit this employment."
+                  : "Please fulfill the below fields to add an employment."
+            }
          />
          <div className={classes.createFoundingSourceBody}>
             <div className={classes.clientModalBlock}>
@@ -225,7 +225,6 @@ export const EmploymentModal = ({ handleClose, info }) => {
                      language={enumValues.EMPLOYMENT_TYPES}
                      typeError={error === "employmentType" ? ErrorText.selectField : ""}
                   />
-
                   <div className={classes.curentlyCheckbox}>
                      <Checkbox checked={checked} onClick={onCheck} color="primary" />
                      <p className={classes.curently}>Currently works in this role</p>

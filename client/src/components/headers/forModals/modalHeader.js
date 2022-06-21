@@ -6,6 +6,7 @@ import { ModalHeaderBottom } from "./modalHeaderBottom";
 import { ModalsTabs } from "@eachbase/components/tabs";
 
 export const ModalHeader = ({
+   className,
    handleClose,
    title,
    headerBottom,
@@ -17,8 +18,10 @@ export const ModalHeader = ({
    const classes = modalHeadersStyle();
    const globalStyle = useGlobalTextStyles();
 
+   const modalHeaderStyle = `${classes.createFoundingSourceHeader} ${className}`;
+
    return (
-      <div className={classes.createFoundingSourceHeader}>
+      <div className={modalHeaderStyle}>
          <div className={classes.createFoundingSourceHeaderTop}>
             <CloseButton handleCLic={handleClose} isInModal={true} />
          </div>

@@ -57,6 +57,9 @@ export const CREATE_PAY_CODE = "CREATE_PAY_CODE";
 /**edit Pay Code */
 export const EDIT_PAY_CODE = "EDIT_PAY_CODE";
 
+/**terminate Paycode */
+export const TERMINATE_PAYCODE = "TERMINATE_PAYCODE";
+
 /** create staff service */
 export const CREATE_STAFF_SERVICE = "CREATE_STAFF_SERVICE";
 

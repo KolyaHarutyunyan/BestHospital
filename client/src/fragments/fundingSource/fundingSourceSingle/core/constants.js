@@ -1,4 +1,4 @@
-import { ErrorText } from "@eachbase/utils";
+import { ActiveInactiveStatusReverse, makeCapitalize, manageType } from "@eachbase/utils";
 
 export function getHeaderTitlesForNote() {
    return [
@@ -21,10 +21,29 @@ export function getHeaderTitlesForNote() {
    ];
 }
 
-export const getModifierNameErrorText = (error, backError) => {
-   if (error === "name") {
-      return ErrorText.field;
-   } else if (backError?.length && backError[0]?.error === "Modifier already exists") {
-      return ErrorText.existenceError("Modifier with this name");
-   }
-};
+export function getFundingSourceGeneralInfo(info) {
+   return [
+      { title: "Name", value: makeCapitalize(info?.name) },
+      { title: "Email Address", value: info?.email },
+      { title: "Phone Number", value: info?.phoneNumber },
+      { title: "Status", value: ActiveInactiveStatusReverse(info?.status) },
+   ].filter((item) => !!item.value);
+}
+
+export function getFundingSourceContactInfo(info) {
+   return [
+      { title: "Type", value: manageType(info?.type) },
+      { title: "Contact Person", value: info?.contact },
+      { title: "Website", value: info?.website },
+   ].filter((item) => !!item.value);
+}
+
+export function getFundingSourceAddressInfo(info) {
+   return [
+      { title: "Street Address", value: info?.address?.street },
+      { title: "Country", value: info?.address?.country },
+      { title: "City", value: info?.address?.city },
+      { title: "State", value: info?.address?.state },
+      { title: "Zip Code", value: info?.address?.zip },
+   ].filter((item) => !!item.value);
+}

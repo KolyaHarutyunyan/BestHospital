@@ -10,7 +10,7 @@ export const staffTabsLabels = [
    { label: "Timesheet" },
    { label: "Credentials & Clearances" },
    { label: "Access" },
-   { label: "Availability" },
+   // { label: "Availability" },
    { label: "Services" },
    { label: "Notes" },
    { label: "History" },
@@ -63,3 +63,13 @@ export function getStaffOtherDetails(info) {
       },
    ].filter((item) => !!item.value);
 }
+
+export const editButtonStyle = {
+   height: "36px",
+   paddingInline: "24px",
+};
+
+export const filterBtnStyle = {
+   width: "93px",
+   height: "36px",
+};
