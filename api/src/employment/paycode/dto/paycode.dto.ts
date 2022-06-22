@@ -16,6 +16,4 @@ export class PayCodeDTO {
   active: boolean;
   @ApiProperty()
   startDate: Date;
-  @ApiProperty()
-  endDate?: Date;
 }

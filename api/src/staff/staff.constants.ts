@@ -5,8 +5,8 @@ export const summaries = {
 export enum StaffStatus {
   INACTIVE = 'INACTIVE',
   ACTIVE = 'ACTIVE',
-  HOLD = 'HOLD',
-  TERMINATE = 'TERMINATE',
+  // HOLD = 'HOLD',
+  // TERMINATE = 'TERMINATE',
 }
 export enum ResidencyStatus {
   US = 'US',

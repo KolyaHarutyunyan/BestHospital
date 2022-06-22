@@ -15,5 +15,4 @@ const EmploymentSchema = new Schema({
   startDate: { type: Date, default: Date.now },
   endDate: { type: Date, default: null },
 });
-
 export const EmploymentModel = model<IEmployment>('Employment', EmploymentSchema);

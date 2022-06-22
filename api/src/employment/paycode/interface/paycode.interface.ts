@@ -6,6 +6,5 @@ export interface IPayCode extends Document {
   rate: number;
   active: boolean;
   startDate: Date;
-  endDate?: any;
   employmentId: any;
 }

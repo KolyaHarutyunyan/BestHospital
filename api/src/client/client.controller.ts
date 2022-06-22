@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ApiHeader, ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ACCESS_TOKEN } from '../authN/authN.constants';
-import { CreateTerminationDto } from 'src/termination/dto/create-termination.dto';
+import { CreateTerminationDto } from '../termination/dto/create-termination.dto';
 import { ParseObjectIdPipe } from '../util';
 import { ClientService } from './client.service';
 import { ClientDTO, CreateClientDTO, UpdateClientDto, ClientQueryDTO } from './dto';

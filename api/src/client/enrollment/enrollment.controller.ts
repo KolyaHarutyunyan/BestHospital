@@ -46,10 +46,4 @@ export class EnrollmentController {
   async terminate(@Param('id', ParseObjectIdPipe) id: string) {
     return await this.enrollmentService.terminate(id);
   }
-  //delete the enrollment
-  // @Delete(':id')
-  // @ApiHeader({ name: ACCESS_TOKEN })
-  // remove(@Param('id', ParseObjectIdPipe) id: string) {
-  //   return this.enrollmentService.remove(id);
-  // }
 }

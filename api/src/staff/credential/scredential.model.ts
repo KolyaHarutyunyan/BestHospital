@@ -6,6 +6,7 @@ const StaffCredentialSchema = new Schema({
   credentialId: { type: Types.ObjectId, ref: 'Credential' },
   expirationDate: { type: Date, default: null },
   receiveData: { type: String },
+  // poxe receiveDate
 });
 
 export const StaffCredentialModel = model<ICredential>('StaffCredential', StaffCredentialSchema);

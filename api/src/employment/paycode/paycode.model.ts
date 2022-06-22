@@ -5,9 +5,8 @@ const PayCodeSchema = new Schema({
   employmentId: { type: Types.ObjectId, ref: 'Employment' },
   payCodeTypeId: { type: Types.ObjectId, ref: 'PayCodeType' },
   rate: { type: Number },
-  active: { type: Boolean },
+  active: { type: Boolean, default: true },
   startDate: { type: Date, default: Date.now },
-  endDate: { type: Schema.Types.Mixed, default: 'Precent' },
 });
-
+// karox enq inactive sarqel u apppti mej cuyc chenq ta
 export const PayCodeModel = model<IPayCode>('PayCode', PayCodeSchema);

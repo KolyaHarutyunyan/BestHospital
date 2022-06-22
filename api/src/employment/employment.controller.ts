@@ -5,6 +5,7 @@ import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { EmploymentDto, CreateEmploymentDto, UpdateEmploymentDto } from './dto';
 import { ACCESS_TOKEN } from '../authN/authN.constants';
 import { Cron } from '@nestjs/schedule';
+import { CreateTerminationDto } from '../termination/dto';
 
 @Controller('employment')
 @ApiTags('Employment Endpoints')
@@ -39,6 +40,28 @@ export class EmploymentController {
     @Body() updateEmploymentDto: UpdateEmploymentDto,
   ) {
     return await this.employmentService.update(id, updateEmploymentDto);
+  }
+
+  @Patch(':id/active')
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: EmploymentDto })
+  async active(@Param('id', ParseObjectIdPipe) id: string) {
+    return await this.employmentService.active(id);
+  }
+
+  @Patch(':id/inActive')
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: EmploymentDto })
+  async inActive(@Param('id', ParseObjectIdPipe) id: string) {
+    return await this.employmentService.inActive(id);
+  }
+  @Patch(':id/terminate')
+  @ApiOkResponse({ type: EmploymentDto })
+  async terminate(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @Body() dto: CreateTerminationDto,
+  ): Promise<EmploymentDto> {
+    return await this.employmentService.terminate(id, dto);
   }
   // @Cron('0 1 * * *')
   // async activeEmploymentCheck() {

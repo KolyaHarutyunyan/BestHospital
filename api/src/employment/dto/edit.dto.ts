@@ -33,7 +33,4 @@ export class UpdateEmploymentDto {
   @IsEnum(EmploymentType)
   @IsOptional()
   type: string;
-  @ApiProperty({ type: TerminationDTO })
-  @IsOptional()
-  termination: CreateTerminationDto;
 }

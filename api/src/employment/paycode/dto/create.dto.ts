@@ -6,7 +6,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
-  IsString,
+  IsPositive,
 } from 'class-validator';
 
 export class CreatePaycodeDTO {
@@ -21,17 +21,10 @@ export class CreatePaycodeDTO {
   @ApiProperty()
   @IsNumber()
   @IsNotEmpty()
+  @IsPositive()
   rate: number;
-  @ApiProperty()
-  @IsBoolean()
-  @IsNotEmpty()
-  active: boolean;
   @ApiProperty()
   @IsDateString()
   @IsNotEmpty()
   startDate: Date;
-  @ApiProperty()
-  @IsDateString()
-  @IsOptional()
-  endDate?: Date;
 }

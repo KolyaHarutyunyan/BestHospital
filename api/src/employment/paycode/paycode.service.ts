@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { CreatePaycodeDTO, UpdatePayCodeDTO, PayCodeDTO } from './dto';
+import { CreatePaycodeDTO, PayCodeDTO } from './dto';
 import { IPayCode } from './interface';
 import { PayCodeModel } from './paycode.model';
 import { EmploymentService } from '../employment.service';
@@ -20,26 +20,22 @@ export class PaycodeService {
 
   // create the paycode
   async create(dto: CreatePaycodeDTO): Promise<PayCodeDTO> {
-    if (dto.startDate > dto.endDate) {
+    const [employment, payCodeType, payCodes] = await Promise.all([
+      this.employmentService.findOne(dto.employmentId),
+      this.PayCodeTypeService.findOne(dto.payCodeTypeId),
+      this.model.find({ employmentId: dto.employmentId, active: true }),
+    ]);
+    if (payCodes.length !== 0) {
       throw new HttpException(
-        'startDate can not be greater than the endDate',
+        'Can not be two active payCodes with same employment',
         HttpStatus.BAD_REQUEST,
       );
     }
-    if (!dto.active && !dto.endDate) {
-      throw new HttpException('endDate required field', HttpStatus.BAD_REQUEST);
-    }
-    const [employment, payCodeType] = await Promise.all([
-      this.employmentService.findOne(dto.employmentId),
-      this.PayCodeTypeService.findOne(dto.payCodeTypeId),
-    ]);
     const paycode = new this.model({
       employmentId: employment.id,
       payCodeTypeId: payCodeType.id,
       rate: dto.rate,
-      active: dto.active,
       startDate: dto.startDate,
-      endDate: dto.endDate,
     });
     await paycode.save();
     return this.sanitizer.sanitize(paycode);
@@ -95,40 +91,22 @@ export class PaycodeService {
       throw e;
     }
   }
-
-  // update the payCode
-  async update(_id: string, dto: UpdatePayCodeDTO): Promise<PayCodeDTO> {
-    try {
-      let payCode = await this.model.findById(_id);
-      this.checkPayCode(payCode);
-
-      if (dto.payCodeTypeId) {
-        await this.PayCodeTypeService.findOne(dto.payCodeTypeId);
-        payCode.payCodeTypeId = dto.payCodeTypeId;
-      }
-      if (dto.employmentId) {
-        await this.employmentService.findOne(dto.employmentId);
-        payCode.employmentId = dto.employmentId;
-      }
-      if (dto.rate) payCode.rate = dto.rate;
-      if (!dto.active && !dto.endDate) {
-        throw new HttpException('endDate required field', HttpStatus.BAD_REQUEST);
-      }
-      if (dto.active && !dto.endDate) {
-        payCode.endDate = 'Precent';
-      }
-      if (dto.endDate && !dto.active) payCode.endDate = dto.endDate;
-      if (dto.startDate) payCode.startDate = dto.startDate;
-      payCode = await (await payCode.save()).populate('payCodeTypeId').execPopulate();
-      return this.sanitizer.sanitize(payCode);
-    } catch (e) {
-      throw e;
-    }
+  // activated the payCode
+  async active(_id: string): Promise<PayCodeDTO> {
+    const payCode = await this.model.findById(_id);
+    this.checkPayCode(payCode);
+    payCode.active = true;
+    await payCode.save();
+    return this.sanitizer.sanitize(payCode);
   }
-  // remove(id: string) {
-  //   return `This action removes a #${id} paycode`;
-  // }
-
+  // inactivated the payCode
+  async inActive(_id: string): Promise<PayCodeDTO> {
+    const payCode = await this.model.findById(_id);
+    this.checkPayCode(payCode);
+    payCode.active = false;
+    await payCode.save();
+    return this.sanitizer.sanitize(payCode);
+  }
   /** Private methods */
   /** if the employment is not valid, throws an exception */
   private checkPayCode(payCode: IPayCode) {

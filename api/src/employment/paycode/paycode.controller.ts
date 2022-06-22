@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch } from '@nestjs/common';
 import { PaycodeService } from './paycode.service';
-import { CreatePaycodeDTO, UpdatePayCodeDTO, PayCodeDTO } from './dto';
+import { CreatePaycodeDTO, PayCodeDTO } from './dto';
 import { ParseObjectIdPipe } from '../../util';
 import { ApiHeader, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ACCESS_TOKEN } from '../../authN/authN.constants';
@@ -16,7 +16,18 @@ export class PaycodeController {
   async create(@Body() createPaycodeDto: CreatePaycodeDTO) {
     return await this.paycodeService.create(createPaycodeDto);
   }
-
+  @Patch(':id/active')
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: PayCodeDTO })
+  async active(@Param('id', ParseObjectIdPipe) id: string) {
+    return await this.paycodeService.active(id);
+  }
+  @Patch(':id/inActive')
+  @ApiHeader({ name: ACCESS_TOKEN })
+  @ApiOkResponse({ type: PayCodeDTO })
+  async inActive(@Param('id', ParseObjectIdPipe) id: string) {
+    return await this.paycodeService.inActive(id);
+  }
   @Get('employment/:employmentId')
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: [PayCodeDTO] })
@@ -45,18 +56,4 @@ export class PaycodeController {
   async findAll() {
     return await this.paycodeService.findAll();
   }
-
-  @Patch(':id')
-  @ApiOkResponse({ type: PayCodeDTO })
-  @ApiHeader({ name: ACCESS_TOKEN })
-  update(@Param('id') id: string, @Body() updatePaycodeDto: UpdatePayCodeDTO) {
-    return this.paycodeService.update(id, updatePaycodeDto);
-  }
-
-  // @Delete(':id')
-  // @Public()
-  // @ApiOkResponse({ type: String })
-  // remove(@Param('id') id: string) {
-  //   return this.paycodeService.remove(id);
-  // }
 }

@@ -36,6 +36,4 @@ export class CreateEmploymentDto {
   @ApiProperty({ enum: EmploymentType })
   @IsEnum(EmploymentType)
   type: string;
-  @ApiProperty({ type: TerminationDTO })
-  termination: CreateTerminationDto;
 }
