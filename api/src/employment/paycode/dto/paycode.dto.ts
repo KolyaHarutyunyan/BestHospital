@@ -12,8 +12,6 @@ export class PayCodeDTO {
   payCodeTypeId: string | PayCodeTypeDTO;
   @IsNumber()
   rate: number;
-  @IsBoolean()
-  active: boolean;
   @ApiProperty()
   startDate: Date;
   @ApiProperty()

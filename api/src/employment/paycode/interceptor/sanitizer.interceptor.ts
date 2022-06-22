@@ -11,7 +11,6 @@ export class PayCodeSanitizer implements ISanitize {
       employmentId: payCode.employmentId,
       payCodeTypeId: payCode.payCodeTypeId,
       rate: payCode.rate,
-      active: payCode.active,
       startDate: payCode.startDate,
       terminationDate: payCode.terminationDate,
     };
