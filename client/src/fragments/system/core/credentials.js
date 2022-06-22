@@ -1,68 +1,46 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { AddButton, NoItemText, SlicedText, ValidationInput } from "@eachbase/components";
+import React, { Fragment, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { AddButton, NoItemText, ValidationInput } from "@eachbase/components";
 import { systemItemStyles } from "./styles";
-import { ErrorText, FindLoad, FindSuccess, Images, isNotEmpty } from "@eachbase/utils";
+import {
+   ErrorText,
+   FindLoad,
+   FindSuccess,
+   Images,
+   isNotEmpty,
+   makeCapitalize,
+} from "@eachbase/utils";
 import { SelectInputPlaceholder } from "@eachbase/components";
 import { httpRequestsOnSuccessActions, systemActions } from "@eachbase/store";
-
-const credentialBtn = {
-   maxWidth: "174px",
-   width: "100%",
-   flex: "0 0 174px",
-   padding: 0,
-};
-
-const credentialsList = [{ name: "Degree" }, { name: "Clearance" }, { name: "licence" }];
+import { checkType, convertType, credentialBtn, credentialsList } from "../constants";
 
 export const Credentials = ({ removeItem, openModal, globalCredentials }) => {
-   const dispatch = useDispatch();
    const classes = systemItemStyles();
 
-   const [inputs, setInputs] = useState({ name: "", type: "" });
+   const dispatch = useDispatch();
+
+   const [inputs, setInputs] = useState({});
    const [error, setError] = useState("");
 
-   const editCredential = (modalType, modalId) => {
+   function editCredential(modalType, modalId) {
       openModal(modalType, modalId);
-   };
+   }
 
-   const handleChange = (e) => {
+   function handleChange(e) {
       setInputs((prevState) => ({
          ...prevState,
          [e.target.name]: e.target.value,
       }));
       error === e.target.name && setError("");
-   };
+   }
 
-   const checkType = (type) => {
-      if (type === "Degree") {
-         return 0;
-      } else if (type === "Clearance") {
-         return 1;
-      } else if (type === "licence") {
-         return 2;
-      }
-   };
-
-   const convertType = (index) => {
-      if (index === 0) {
-         return "Degree";
-      } else if (index === 1) {
-         return "Clearance";
-      } else if (index === 2) {
-         return "licence";
-      }
-   };
-
-   const handleSubmit = () => {
+   function handleSubmit() {
       const dataIsValid = isNotEmpty(inputs.name) && isNotEmpty(inputs.type);
-
       if (dataIsValid) {
          const data = {
             name: inputs.name,
             type: checkType(inputs.type),
          };
-
          dispatch(systemActions.createCredentialGlobal(data));
       } else {
          const dataErrorText = !isNotEmpty(inputs.name)
@@ -70,28 +48,22 @@ export const Credentials = ({ removeItem, openModal, globalCredentials }) => {
             : !isNotEmpty(inputs.type)
             ? "type"
             : "";
-
          setError(dataErrorText);
       }
-   };
-
-   const isDisabled = isNotEmpty(inputs.name) && isNotEmpty(inputs.type);
+   }
 
    const loader = FindLoad("CREATE_CREDENTIAL_GLOBAL");
    const success = FindSuccess("CREATE_CREDENTIAL_GLOBAL");
 
    useEffect(() => {
       if (!!success.length) {
-         setInputs({
-            name: "",
-            type: "",
-         });
+         setInputs({});
          dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_CREDENTIAL_GLOBAL"));
       }
    }, [success]);
 
    return (
-      <>
+      <Fragment>
          <div className={`${classes.flexContainer} ${classes.headerSize}`}>
             <ValidationInput
                style={classes.credentialInputStyle}
@@ -101,6 +73,7 @@ export const Credentials = ({ removeItem, openModal, globalCredentials }) => {
                name={"name"}
                type={"text"}
                placeholder={"Name*"}
+               typeError={error === "name" ? ErrorText.field : ""}
             />
             <SelectInputPlaceholder
                placeholder="Type"
@@ -115,7 +88,6 @@ export const Credentials = ({ removeItem, openModal, globalCredentials }) => {
             <AddButton
                loader={!!loader.length}
                type={"CREATE_CREDENTIAL_GLOBAL"}
-               disabled={!isDisabled}
                styles={credentialBtn}
                handleClick={handleSubmit}
                text="Add Credential"
@@ -127,15 +99,10 @@ export const Credentials = ({ removeItem, openModal, globalCredentials }) => {
                globalCredentials.map((credentialItem, index) => {
                   return (
                      <div className={classes.item} key={index}>
-                        <p style={{ display: "flex", alignItems: "center" }}>
-                           <span>
-                              <SlicedText
-                                 type={"responsive"}
-                                 size={25}
-                                 data={credentialItem.name}
-                              />
-                           </span>
-                           {` - ${convertType(credentialItem.type)}`}
+                        <p className={classes.credentialNameTypeStyle}>
+                           <em>{makeCapitalize(credentialItem.name)}</em>
+                           {" - "}
+                           {convertType(credentialItem.type)}
                         </p>
                         <div className={classes.icons}>
                            <img
@@ -149,7 +116,7 @@ export const Credentials = ({ removeItem, openModal, globalCredentials }) => {
                               }
                               alt="edit"
                            />
-                           <img
+                           {/* <img
                               src={Images.remove}
                               alt="delete"
                               onClick={() =>
@@ -159,7 +126,7 @@ export const Credentials = ({ removeItem, openModal, globalCredentials }) => {
                                     type: "editCredential",
                                  })
                               }
-                           />
+                           /> */}
                         </div>
                      </div>
                   );
@@ -168,6 +135,6 @@ export const Credentials = ({ removeItem, openModal, globalCredentials }) => {
                <NoItemText text="No Credentials Yet" />
             )}
          </div>
-      </>
+      </Fragment>
    );
 };

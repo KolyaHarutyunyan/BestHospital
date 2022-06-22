@@ -1,7 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { AddButton, NoItemText, SlicedText, ValidationInput } from "@eachbase/components";
 import { useDispatch } from "react-redux";
-import { FindLoad, FindSuccess, Images, isNotEmpty } from "@eachbase/utils";
+import {
+   ErrorText,
+   FindLoad,
+   FindSuccess,
+   Images,
+   isNotEmpty,
+   makeCapitalize,
+} from "@eachbase/utils";
 import { systemItemStyles } from "./styles";
 import { httpRequestsOnSuccessActions, systemActions } from "@eachbase/store";
 
@@ -13,52 +20,46 @@ const credentialBtn = {
 };
 
 export const JobTitles = ({ globalJobs, removeItem, openModal }) => {
-   const dispatch = useDispatch();
    const classes = systemItemStyles();
 
-   const [inputs, setInputs] = useState({ name: "" });
-   const [error, setError] = useState("");
-
-   const handleChange = (e) => {
-      setInputs((prevState) => ({
-         ...prevState,
-         [e.target.name]: e.target.value,
-      }));
-      error === e.target.name && setError("");
-   };
-
-   const handleSubmit = () => {
-      if (isNotEmpty(inputs.name)) {
-         const data = {
-            name: inputs.name,
-         };
-
-         dispatch(systemActions.createJobGlobal(data));
-      } else {
-         setError(!isNotEmpty(inputs.name) ? "name" : "");
-      }
-   };
-
-   const editJob = (modalType, modalId) => {
-      openModal(modalType, modalId);
-   };
-
-   const isDisabled = isNotEmpty(inputs.name);
+   const dispatch = useDispatch();
 
    const loader = FindLoad("CREATE_JOB_GLOBAL");
    const success = FindSuccess("CREATE_JOB_GLOBAL");
 
    useEffect(() => {
       if (!!success.length) {
-         setInputs({
-            name: "",
-         });
+         setInputs({});
          dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_JOB_GLOBAL"));
       }
    }, [success]);
 
+   const [inputs, setInputs] = useState({});
+   const [error, setError] = useState("");
+
+   function handleChange(e) {
+      setInputs((prevState) => ({
+         ...prevState,
+         [e.target.name]: e.target.value,
+      }));
+      error === e.target.name && setError("");
+   }
+
+   function handleSubmit() {
+      if (isNotEmpty(inputs.name)) {
+         const data = { name: inputs.name };
+         dispatch(systemActions.createJobGlobal(data));
+      } else {
+         setError(!isNotEmpty(inputs.name) ? "name" : "");
+      }
+   }
+
+   function editJob(modalType, modalId) {
+      openModal(modalType, modalId);
+   }
+
    return (
-      <>
+      <Fragment>
          <div className={`${classes.flexContainer} ${classes.headerSize}`}>
             <ValidationInput
                style={classes.credentialInputStyle}
@@ -67,11 +68,11 @@ export const JobTitles = ({ globalJobs, removeItem, openModal }) => {
                variant={"outlined"}
                name={"name"}
                type={"text"}
-               placeholder={"Job Titles*"}
+               placeholder={"Job Title*"}
+               typeError={error === "name" ? ErrorText.field : ""}
             />
             <AddButton
                type={"CREATE_JOB_GLOBAL"}
-               disabled={!isDisabled}
                styles={credentialBtn}
                loader={!!loader.length}
                handleClick={handleSubmit}
@@ -88,7 +89,7 @@ export const JobTitles = ({ globalJobs, removeItem, openModal }) => {
                            <SlicedText
                               type={"responsive"}
                               size={25}
-                              data={jobItem.name}
+                              data={makeCapitalize(jobItem.name)}
                            />
                         </p>
                         <div className={classes.icons}>
@@ -102,7 +103,7 @@ export const JobTitles = ({ globalJobs, removeItem, openModal }) => {
                               }
                               alt="edit"
                            />
-                           <img
+                           {/* <img
                               src={Images.remove}
                               alt="delete"
                               onClick={() =>
@@ -112,7 +113,7 @@ export const JobTitles = ({ globalJobs, removeItem, openModal }) => {
                                     type: "editJobTitles",
                                  })
                               }
-                           />
+                           /> */}
                         </div>
                      </div>
                   );
@@ -121,6 +122,6 @@ export const JobTitles = ({ globalJobs, removeItem, openModal }) => {
                <NoItemText text="No Job Titles Yet" />
             )}
          </div>
-      </>
+      </Fragment>
    );
 };

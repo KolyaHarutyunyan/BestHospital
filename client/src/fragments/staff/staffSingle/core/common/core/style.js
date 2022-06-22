@@ -34,6 +34,7 @@ export const staffSingleCoreCommonCoreStyle = makeStyles(() => ({
       backgroundColor: Colors.BackgroundWhite,
       boxShadow: Shadow.tableTheadShadow,
       cursor: "default",
+      "&:hover": { backgroundColor: Colors.BackgroundWater },
    },
    tdStyle: {
       maxWidth: "242px",

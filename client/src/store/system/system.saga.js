@@ -133,16 +133,16 @@ function* getServices(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    try {
-      const res = yield call(systemService.getServicesService);
+      const res = yield call(systemService.getServicesService, action.payload.data);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put({
          type: GET_SERVICES_SUCCESS,
-         payload: res.data.reverse(),
+         payload: { services: res.data },
       });
    } catch (err) {
       yield put({
          type: GET_SERVICES_SUCCESS,
-         payload: "",
+         payload: { services: { services: [], count: 0 } },
       });
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       if (err?.data?.message === "Internal server error") {

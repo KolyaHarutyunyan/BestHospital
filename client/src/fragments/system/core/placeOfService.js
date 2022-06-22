@@ -1,7 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { AddButton, NoItemText, SlicedText, ValidationInput } from "@eachbase/components";
 import { useDispatch } from "react-redux";
-import { FindLoad, FindSuccess, Images, isNotEmpty } from "@eachbase/utils";
+import {
+   ErrorText,
+   FindLoad,
+   FindSuccess,
+   Images,
+   isNotEmpty,
+   makeCapitalize,
+} from "@eachbase/utils";
 import { systemItemStyles } from "./styles";
 import { httpRequestsOnSuccessActions, systemActions } from "@eachbase/store";
 
@@ -13,62 +20,55 @@ const credentialBtn = {
 };
 
 export const PlaceOfService = ({ globalJobs, removeItem, openModal }) => {
-   const dispatch = useDispatch();
    const classes = systemItemStyles();
 
-   const [inputs, setInputs] = useState({ name: "", code: "" });
-   const [error, setError] = useState("");
-
-   const handleChange = (e) => {
-      setInputs((prevState) => ({
-         ...prevState,
-         [e.target.name]: e.target.value,
-      }));
-      error === e.target.name && setError("");
-   };
-
-   const handleSubmit = () => {
-      const dataIsValid = isNotEmpty(inputs.name) && isNotEmpty(inputs.code);
-
-      if (dataIsValid) {
-         const data = {
-            name: inputs.name,
-            code: inputs.code,
-         };
-
-         dispatch(systemActions.createPlaceGlobal(data));
-      } else {
-         const dataErrorText = !isNotEmpty(inputs.name)
-            ? "name"
-            : !isNotEmpty(inputs.code)
-            ? "name"
-            : "";
-
-         setError(dataErrorText);
-      }
-   };
-
-   const editJob = (modalType, modalId) => {
-      openModal(modalType, modalId);
-   };
-
-   const isDisabled = isNotEmpty(inputs.name) && isNotEmpty(inputs.code);
+   const dispatch = useDispatch();
 
    const loader = FindLoad("CREATE_PLACE_GLOBAL");
    const success = FindSuccess("CREATE_PLACE_GLOBAL");
 
    useEffect(() => {
       if (!!success.length) {
-         setInputs({
-            name: "",
-            code: "",
-         });
+         setInputs({});
          dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_PLACE_GLOBAL"));
       }
    }, [success]);
 
+   const [inputs, setInputs] = useState({});
+   const [error, setError] = useState("");
+
+   function handleChange(e) {
+      setInputs((prevState) => ({
+         ...prevState,
+         [e.target.name]: e.target.value,
+      }));
+      error === e.target.name && setError("");
+   }
+
+   function handleSubmit() {
+      const dataIsValid = isNotEmpty(inputs.name) && isNotEmpty(inputs.code);
+      if (dataIsValid) {
+         const data = {
+            name: inputs.name,
+            code: inputs.code,
+         };
+         dispatch(systemActions.createPlaceGlobal(data));
+      } else {
+         const dataErrorText = !isNotEmpty(inputs.name)
+            ? "name"
+            : !isNotEmpty(inputs.code)
+            ? "code"
+            : "";
+         setError(dataErrorText);
+      }
+   }
+
+   function editJob(modalType, modalId) {
+      openModal(modalType, modalId);
+   }
+
    return (
-      <>
+      <Fragment>
          <div className={`${classes.flexContainer} ${classes.headerSize}`}>
             <ValidationInput
                style={classes.credentialInputStyle}
@@ -78,8 +78,8 @@ export const PlaceOfService = ({ globalJobs, removeItem, openModal }) => {
                name={"name"}
                type={"text"}
                placeholder={"Name*"}
+               typeError={error === "name" ? ErrorText.field : ""}
             />
-
             <ValidationInput
                style={classes.codInputStyle}
                onChange={handleChange}
@@ -88,10 +88,10 @@ export const PlaceOfService = ({ globalJobs, removeItem, openModal }) => {
                name={"code"}
                type={"number"}
                placeholder={"Code*"}
+               typeError={error === "code" ? ErrorText.field : ""}
             />
             <AddButton
                type={"CREATE_PLACE_GLOBAL"}
-               disabled={!isDisabled}
                styles={credentialBtn}
                loader={!!loader.length}
                handleClick={handleSubmit}
@@ -108,7 +108,7 @@ export const PlaceOfService = ({ globalJobs, removeItem, openModal }) => {
                            <SlicedText
                               type={"responsive"}
                               size={25}
-                              data={`${item.name} - ${item.code}`}
+                              data={`${makeCapitalize(item.name)} - ${item.code}`}
                            />
                         </div>
                         <div className={classes.icons}>
@@ -123,7 +123,7 @@ export const PlaceOfService = ({ globalJobs, removeItem, openModal }) => {
                               }
                               alt="edit"
                            />
-                           <img
+                           {/* <img
                               src={Images.remove}
                               alt="delete"
                               onClick={() =>
@@ -133,7 +133,7 @@ export const PlaceOfService = ({ globalJobs, removeItem, openModal }) => {
                                     type: "editPlaceTitles",
                                  })
                               }
-                           />
+                           /> */}
                         </div>
                      </div>
                   );
@@ -142,6 +142,6 @@ export const PlaceOfService = ({ globalJobs, removeItem, openModal }) => {
                <NoItemText text="No Place of Services Yet" />
             )}
          </div>
-      </>
+      </Fragment>
    );
 };
