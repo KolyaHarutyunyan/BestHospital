@@ -27,6 +27,7 @@ export const createClientStyle = makeStyles(() => ({
    createFoundingSourceBody: {
       width: "100%",
       padding: "40px",
+      "@media (max-width: 1280px)": { padding: "32px" },
    },
    clientModalBlock: {
       display: "flex",
@@ -94,6 +95,7 @@ export const createClientStyle = makeStyles(() => ({
          backgroundColor: "#347AF080",
          cursor: "default",
       },
+      "&.hidden": { display: "none" },
       "&:disabled": {
          cursor: "default",
          color: Colors.TextWhite,
@@ -133,5 +135,13 @@ export const createClientStyle = makeStyles(() => ({
       height: "36px",
       display: "flex",
       alignItems: "center",
+      "&.hidden": { display: "none" },
+   },
+   employmentModalStyle: {
+      backgroundColor: Colors.BackgroundWhite,
+      textAlign: "left",
+      "& p": { textAlign: "left" },
+      "& button": { backgroundColor: Colors.BackgroundWater },
+      paddingBottom: "0",
    },
 }));

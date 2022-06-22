@@ -6,7 +6,6 @@ import {
    Card,
    DeleteElement,
    NoItemText,
-   SelectInput,
    SimpleModal,
    SlicedText,
 } from "@eachbase/components";
@@ -18,7 +17,6 @@ import {
    FindSuccess,
    Images,
    isNotEmpty,
-   makeCapitalize,
 } from "@eachbase/utils";
 import { SelectInputPlaceholder } from "@eachbase/components";
 import {
@@ -28,6 +26,7 @@ import {
 } from "@eachbase/store";
 import { systemItemStyles } from "@eachbase/fragments/system/core";
 import { serviceSingleStyles } from "./styles";
+import { getStaffGeneralInfo } from "./constants";
 
 const credentialBtn = {
    maxWidth: "174px",
@@ -36,19 +35,27 @@ const credentialBtn = {
    padding: 0,
 };
 export const StaffService = ({ staffGeneral, info, services }) => {
-   const params = useParams();
-   const dispatch = useDispatch();
    const classes = systemItemStyles();
    const classes2 = serviceSingleStyles();
-   const [inputs, setInputs] = useState({ serviceType: "" });
-   const [error, setError] = useState("");
-   const [index, setIndex] = useState(0);
-   const [toggleModal, setToggleModal] = useState(false);
+
+   const params = useParams();
+
+   const dispatch = useDispatch();
 
    const success = FindSuccess("DELETE_STAFF_SERVICE");
    const fail = FindError("CREATE_STAFF_SERVICE");
    const loadDel = FindLoad("DELETE_STAFF_SERVICE");
    const loadCreate = FindLoad("CREATE_STAFF_SERVICE");
+
+   const [inputs, setInputs] = useState({});
+   const [error, setError] = useState("");
+   const [index, setIndex] = useState(0);
+   const [toggleModal, setToggleModal] = useState(false);
+
+   const _isNotClinician = staffGeneral?.clinical === false;
+   const servicesInfoText = _isNotClinician
+      ? "Services can be added for Clinicians only"
+      : "No Services yet";
 
    useEffect(() => {
       if (!!success.length) {
@@ -85,15 +92,7 @@ export const StaffService = ({ staffGeneral, info, services }) => {
       }
    };
 
-   const generalInfo = [
-      { title: "First Name", value: makeCapitalize(staffGeneral?.firstName) },
-      { title: "Middle Name", value: makeCapitalize(staffGeneral?.middleName) },
-      { title: "Last Name", value: makeCapitalize(staffGeneral?.lastName) },
-      { title: "Primary Email", value: staffGeneral?.email },
-      { title: "Secondary Email", value: staffGeneral?.secondaryEmail },
-      { title: "Primary Phone Number", value: staffGeneral?.phone },
-      { title: "Secondary Phone Number", value: staffGeneral?.secondaryPhone },
-   ].filter((item) => !!item.value);
+   const generalInfo = getStaffGeneralInfo(staffGeneral);
 
    const filteredList =
       services &&
@@ -130,28 +129,19 @@ export const StaffService = ({ staffGeneral, info, services }) => {
             color={Colors.BackgroundBlue}
             icon={Images.generalInfoIcon}
          />
-         <div
-            className={`${classes.flexContainer} ${classes.headerSize}`}
-            style={{
-               marginLeft: 24,
-               borderRadius: "8px",
-               boxShadow: "0px 0px 6px #8A8A8A3D",
-               padding: 24,
-               width: "100%",
-               flexDirection: "column",
-            }}
-         >
+         <div className={`${classes.flexContainer} ${classes2.headerSize}`}>
             <span className={classes.title} style={{ marginBottom: 24 }}>
                Services
             </span>
             <div style={{ display: "flex", width: "100%" }}>
                <SelectInputPlaceholder
-                  placeholder="Service Type"
+                  placeholder="Service Type*"
                   style={classes.credentialInputStyle2}
                   name={"serviceType"}
                   handleSelect={handleChange}
                   value={inputs.serviceType}
                   list={filteredList ? filteredList : []}
+                  disabled={_isNotClinician}
                   typeError={
                      error === "serviceType"
                         ? ErrorText.selectField
@@ -166,12 +156,13 @@ export const StaffService = ({ staffGeneral, info, services }) => {
                   styles={credentialBtn}
                   handleClick={handleSubmit}
                   text="Add Service Type"
+                  disabled={_isNotClinician}
                />
             </div>
-            {services && services.length ? (
+            {!!services?.length ? (
                <></>
             ) : (
-               <span className={classes.noTypeYet}>No services found</span>
+               <span className={classes.noTypeYet}>{servicesInfoText}</span>
             )}
             <div className={classes.credentialTable}>
                {info && info.length ? (
@@ -199,7 +190,7 @@ export const StaffService = ({ staffGeneral, info, services }) => {
                      );
                   })
                ) : (
-                  <NoItemText text="No Services Yet" />
+                  <NoItemText text={servicesInfoText} />
                )}
             </div>
          </div>

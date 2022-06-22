@@ -1,6 +1,7 @@
 import { CardItem } from "./cardItem";
 import { CardHeader } from "./cardHeader";
 import { cardStyle } from "./style";
+import { getCardBorderTop } from "./constants";
 
 export const Card = ({
    cardInfo = [],
@@ -17,15 +18,20 @@ export const Card = ({
 }) => {
    const classes = cardStyle();
 
+   const borderTop = getCardBorderTop(title);
+
    return (
       <div className={classes.card} style={width && { width: width, maxWidth: 563 }}>
          {showHeader && (
-            <CardHeader
-               hideHeaderLine={hideHeaderLine}
-               color={color}
-               title={title}
-               icon={icon}
-            />
+            <>
+               <div className={classes.headerBorder} style={{ borderTop }} />
+               <CardHeader
+                  hideHeaderLine={hideHeaderLine}
+                  color={color}
+                  title={title}
+                  icon={icon}
+               />
+            </>
          )}
          <div className={classes.cardBody}>
             {cardInfo.map((item, index) => {

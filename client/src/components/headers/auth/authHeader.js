@@ -5,6 +5,7 @@ import {
    Colors,
    Images,
    makeCapitalize,
+   manageType,
 } from "@eachbase/utils";
 import moment from "moment";
 import { SlicedText } from "../../messages";
@@ -15,7 +16,7 @@ export const AuthHeader = ({
    info,
    setToggleModal,
    toggleModal,
-   setDelEdit,
+   // setDelEdit,
    empoloyment,
    type,
 }) => {
@@ -28,7 +29,7 @@ export const AuthHeader = ({
          <div className={classes.AuthHeaderTop}>
             <div className={classes.AuthHeaderTopLeft}>
                <p className={classes.AuthHeaderTopLeftTitle}>
-                  {empoloyment ? info?.title : `# ${info?.authId}`}
+                  {empoloyment ? makeCapitalize(info?.title?.name) : `# ${info?.authId}`}
                </p>
                {empoloyment ? (
                   <p className={classes.AuthHeaderTopLeftText}>
@@ -47,8 +48,7 @@ export const AuthHeader = ({
                         ).format("DD/MM/YYYY")}`}
                   </p>
                )}
-
-               {type === "staff" && (
+               {type === "staff" && !empoloyment && (
                   <div className={classes.activeInactive}>
                      <p> {info?.active ? "Active" : "Inactive"}</p>
                      <div
@@ -72,22 +72,14 @@ export const AuthHeader = ({
                <div
                   className={classes.editIconStyle}
                   onClick={() => {
-                     setDelEdit(true);
+                     // setDelEdit(true);
                      setToggleModal(!toggleModal);
                   }}
                >
                   <img src={Images.edit} alt="edit" />
                </div>
                {empoloyment ? (
-                  <div
-                     className={classes.editTextStyle}
-                     onClick={() => {
-                        setDelEdit(true);
-                        setToggleModal(!toggleModal);
-                     }}
-                  >
-                     Edit
-                  </div>
+                  <div className={classes.editTextStyle}>Edit</div>
                ) : // <div
                //    className={classes.removeIconStyle}
                //    onClick={() => {
@@ -108,7 +100,9 @@ export const AuthHeader = ({
                </p>
                <p className={classes.AuthHeaderBottomBoxText}>
                   {empoloyment
-                     ? makeCapitalize(info?.supervisor?.firstName)
+                     ? info?.supervisor
+                        ? makeCapitalize(info?.supervisor?.firstName)
+                        : "--"
                      : makeCapitalize(info?.funderId?.name)}
                </p>
             </div>
@@ -117,10 +111,12 @@ export const AuthHeader = ({
                   {empoloyment ? "Department:" : "Status:"}
                </p>
                <p
-                  className={`${classes.AuthHeaderBottomBoxText} statusStyle ${authStatusDisplay}`}
+                  className={`${classes.AuthHeaderBottomBoxText} ${
+                     !empoloyment ? "statusStyle" : ""
+                  } ${authStatusDisplay}`}
                >
                   {empoloyment
-                     ? info?.departmentId?.name
+                     ? makeCapitalize(info?.departmentId?.name)
                      : ActiveInactiveStatusReverse(authStatusDisplay)}
                </p>
             </div>
@@ -132,7 +128,7 @@ export const AuthHeader = ({
                   <SlicedText
                      type={"address"}
                      size={25}
-                     data={empoloyment ? info?.schedule : info?.location}
+                     data={empoloyment ? manageType(info?.type) : info?.location}
                   />
                </p>
             </div>

@@ -1,6 +1,7 @@
 import { cardStyle } from "./style";
 import Box from "@material-ui/core/Box";
 import { getTitleDisplay, getValueDisplay } from "./constants";
+import { makeCapitalize } from "@eachbase/utils";
 
 export const CardItem = ({
    title,
@@ -30,7 +31,7 @@ export const CardItem = ({
                }
             >
                <p style={active === index ? { color: "white" } : {}}>
-                  {employment ? title : `#${authId}`}
+                  {employment ? makeCapitalize(title?.name) : `#${authId}`}
                </p>
             </Box>
          ) : (

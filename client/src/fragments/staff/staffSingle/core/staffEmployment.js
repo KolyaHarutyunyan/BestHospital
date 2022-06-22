@@ -1,134 +1,40 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import moment from "moment";
-import { TableCell } from "@material-ui/core";
 import {
+   AddButtonLight,
    Card,
-   DeleteElement,
    Loader,
    NoItemText,
-   Notes,
    SimpleModal,
-   TableBodyComponent,
 } from "@eachbase/components";
 import { EmploymentModal, PaycodeModal } from "./modals";
 import { AuthHeader } from "@eachbase/components/headers/auth/authHeader";
-import { Colors, FindLoad, FindSuccess, getLimitedVal, Images } from "@eachbase/utils";
-import {
-   adminActions,
-   clientActions,
-   httpRequestsOnSuccessActions,
-   payrollActions,
-} from "@eachbase/store";
+import { Colors, FindLoad, Images } from "@eachbase/utils";
+import { adminActions, payrollActions } from "@eachbase/store";
 import { serviceSingleStyles } from "@eachbase/fragments/client/clientSingle/core";
-
-const headerTitles = [
-   {
-      title: "Name",
-      sortable: false,
-   },
-   {
-      title: "Code",
-      sortable: false,
-   },
-   {
-      title: "Type",
-      sortable: false,
-   },
-   {
-      title: "Rate",
-      sortable: false,
-   },
-   {
-      title: "Start Date",
-      sortable: true,
-   },
-   {
-      title: "End Date",
-      sortable: true,
-   },
-   {
-      title: "Status",
-      sortable: false,
-   },
-];
+import { PaycodeTable } from "./common";
 
 export const StaffEmployment = ({ info }) => {
    const classes = serviceSingleStyles();
-   const dispatch = useDispatch();
-   const [delEdit, setDelEdit] = useState(null);
-   const [toggleModal, setToggleModal] = useState(false);
-   const [toggleModal2, setToggleModal2] = useState(false);
-   const [toggleModal3, setToggleModal3] = useState(false);
-   const [authIndex, setAuthIndex] = useState(0);
-   const [paycodeIndex, setPaycodeIndex] = useState(0);
-   const payCodes = useSelector((state) => state.admins.payCodes);
-   const params = useParams();
 
-   const success = FindSuccess("DELETE_CLIENT_AUTHORIZATION");
-   const successDelServ = FindSuccess("DELETE_CLIENT_AUTHORIZATION_SERV");
-   const loaderDel = FindLoad("DELETE_CLIENT_AUTHORIZATION_SERV");
+   const dispatch = useDispatch();
+
+   const payCodes = useSelector((state) => state.admins.payCodes);
+
    const loader = FindLoad("GET_PAY_CODE");
 
-   useEffect(() => {
-      dispatch(adminActions.getPayCode(info[authIndex]?.id));
-   }, [authIndex]);
+   // const [delEdit, setDelEdit] = useState(null);
+   const [toggleModal, setToggleModal] = useState(false);
+   const [toggleModal2, setToggleModal2] = useState(false);
+   const [authIndex, setAuthIndex] = useState(0);
 
    useEffect(() => {
       dispatch(payrollActions.getPayCodeGlobal());
    }, []);
 
    useEffect(() => {
-      if (!!success.length) {
-         setToggleModal(false);
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT_AUTHORIZATION")
-         );
-      }
-   }, [success]);
-
-   useEffect(() => {
-      if (!!successDelServ.length) {
-         setToggleModal3(false);
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess("DELETE_CLIENT_AUTHORIZATION_SERV")
-         );
-      }
-   }, [successDelServ]);
-
-   let deleteAuthorization = () => {
-      dispatch(clientActions.deleteClientsAuthorization(info[authIndex].id, params.id));
-      // setAuthIndex(0)
-   };
-
-   let payCodeItem = (item, index) => {
-      return (
-         <TableBodyComponent
-            key={index}
-            handleOpenInfo={() => {
-               setPaycodeIndex(index);
-               setToggleModal3(prevState => !prevState);
-            }}
-         >
-            <TableCell>
-               <p className={classes.tableName}>
-                  {getLimitedVal(item.payCodeTypeId.name, 18)}
-               </p>
-            </TableCell>
-            <TableCell> {item.payCodeTypeId.code} </TableCell>
-            <TableCell> {item.payCodeTypeId.type} </TableCell>
-            <TableCell>{item.rate} </TableCell>
-            <TableCell>{moment(item.startDate).format("DD/MM/YYYY")} </TableCell>
-            <TableCell>
-               {item.endDate === "Precent"
-                  ? "Not Set"
-                  : moment(item.endDate).format("DD/MM/YYYY")}{" "}
-            </TableCell>
-            <TableCell>{Number(item.active)} </TableCell>
-         </TableBodyComponent>
-      );
-   };
+      dispatch(adminActions.getPayCode(info[authIndex]?.id));
+   }, [authIndex]);
 
    return (
       <div className={classes.staffGeneralWrapper}>
@@ -136,19 +42,19 @@ export const StaffEmployment = ({ info }) => {
             handleOpenClose={() => setToggleModal((prevState) => !prevState)}
             openDefault={toggleModal}
             content={
-               delEdit ? (
-                  <EmploymentModal
-                     fundingId={info[authIndex]?.funderId?._id}
-                     info={info[authIndex]}
-                     handleClose={() => setToggleModal((prevState) => !prevState)}
-                  />
-               ) : (
-                  <DeleteElement
-                     loader={!!loaderDel.length}
-                     handleClose={() => setToggleModal((prevState) => !prevState)}
-                     handleDel={deleteAuthorization}
-                  />
-               )
+               // delEdit ? (
+               <EmploymentModal
+                  fundingId={info[authIndex]?.funderId?._id}
+                  info={info[authIndex]}
+                  handleClose={() => setToggleModal((prevState) => !prevState)}
+               />
+               // ) : (
+               //    <DeleteElement
+               //       loader={!!loaderDel.length}
+               //       handleClose={() => setToggleModal((prevState) => !prevState)}
+               //       handleDel={deleteAuthorization}
+               //    />
+               // )
             }
          />
          <SimpleModal
@@ -159,17 +65,6 @@ export const StaffEmployment = ({ info }) => {
                   employmentId={info[authIndex]?.id}
                   authId={info[authIndex]?.id}
                   handleClose={() => setToggleModal2((prevState) => !prevState)}
-               />
-            }
-         />
-         <SimpleModal
-            handleOpenClose={() => setToggleModal3((prevState) => !prevState)}
-            openDefault={toggleModal3}
-            content={
-               <PaycodeModal
-                  info={payCodes && payCodes[paycodeIndex]}
-                  employmentId={info[authIndex]?.id}
-                  handleClose={() => setToggleModal3((prevState) => !prevState)}
                />
             }
          />
@@ -191,40 +86,25 @@ export const StaffEmployment = ({ info }) => {
             <AuthHeader
                type={"staff"}
                empoloyment={true}
-               setDelEdit={setDelEdit}
+               // setDelEdit={setDelEdit}
                info={info[authIndex]}
                setToggleModal={setToggleModal}
                toggleModal={toggleModal}
             />
             <div className={classes.authorizationServices}>
                <p className={classes.authorizationServicesTitle}>Paycodes</p>
-               <div className={classes.authorizationServicesRight}>
-                  <img
-                     src={Images.addHours}
-                     alt=""
-                     className={classes.iconStyle}
-                     onClick={() => setToggleModal2((prevState) => !prevState)}
-                  />
-                  <p
-                     onClick={() => setToggleModal2((prevState) => !prevState)}
-                     className={classes.authorizationServicesText}
-                  >
-                     Add Paycode
-                  </p>
-               </div>
+               <AddButtonLight
+                  addButnLightClassName={classes.addAuthServiceButnStyle}
+                  addButnLightInnerText={"Add Paycode"}
+                  onAddButnLightClick={() => setToggleModal2(true)}
+               />
             </div>
             {!!loader.length ? (
-               <Loader />
+               <Loader circleSize={50} />
             ) : (
                <div>
-                  {!!payCodes && !!payCodes.length ? (
-                     <Notes
-                        restHeight="560px"
-                        data={payCodes}
-                        items={payCodeItem}
-                        headerTitles={headerTitles}
-                        defaultStyle={true}
-                     />
+                  {!!payCodes?.length ? (
+                     <PaycodeTable paycodes={payCodes} />
                   ) : (
                      <NoItemText text={"No Paycodes Yet"} />
                   )}

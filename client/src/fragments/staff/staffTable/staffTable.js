@@ -54,10 +54,9 @@ export const StaffTable = ({
                         >
                            <StaffTableHead />
                            <TableBody>
-                              {staff &&
-                                 adminsList.staff.map((item, i) => (
-                                    <StaffTableBody key={i} data={item} index={i} />
-                                 ))}
+                              {staff.map((item, i) => (
+                                 <StaffTableBody key={i} data={item} index={i} />
+                              ))}
                            </TableBody>
                         </Table>
                      </TableContainer>

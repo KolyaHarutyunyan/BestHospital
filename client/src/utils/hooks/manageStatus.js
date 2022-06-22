@@ -75,6 +75,36 @@ export const manageType = (type) => {
       case "School":
          return "SCHOOL";
 
+      case "FULL":
+         return "Full-time";
+      case "PART":
+         return "Part-time";
+      case "INTERN":
+         return "Intern";
+      case "CONTRACTOR":
+         return "Contractor";
+      case "Full-time":
+         return "FULL";
+      case "Part-time":
+         return "PART";
+      case "Intern":
+         return "INTERN";
+      case "Contractor":
+         return "CONTRACTOR";
+
+      case "HOURLY":
+         return "Hourly";
+      case "SALARY":
+         return "Salary";
+      case "FIXED":
+         return "Fixed";
+      case "Hourly":
+         return "HOURLY";
+      case "Salary":
+         return "SALARY";
+      case "Fixed":
+         return "FIXED";
+
       default:
          return type;
    }

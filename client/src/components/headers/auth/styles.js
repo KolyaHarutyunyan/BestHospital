@@ -105,6 +105,7 @@ export const authHeaderStyles = makeStyles(() => ({
       color: Colors.ThemeBlue,
       fontSize: "14px",
       fontWeight: 700,
-      cursor: "pointer",
+      marginLeft: "8px",
+      cursor: "default",
    },
 }));

@@ -12,6 +12,7 @@ import {
    FindError,
    FindLoad,
    FindSuccess,
+   hooksForErrors,
    isNotEmpty,
    manageType,
 } from "@eachbase/utils";
@@ -22,7 +23,6 @@ import {
    httpRequestsOnSuccessActions,
 } from "@eachbase/store";
 import { useParams } from "react-router";
-import { getModifierNameErrorText } from "../constants";
 
 export const FundingSourceModifiersAdd = ({
    info,
@@ -51,7 +51,10 @@ export const FundingSourceModifiersAdd = ({
       ? FindError("EDIT_FUNDING_MODIFIER")
       : FindError("CREATE_FUNDING_MODIFIER");
 
-   const modifierNameErrorText = getModifierNameErrorText(error, backError);
+   const modifierNameErrorText = hooksForErrors.getModifierNameErrorText(
+      error,
+      backError
+   );
 
    useEffect(() => {
       if (!!success.length) {
