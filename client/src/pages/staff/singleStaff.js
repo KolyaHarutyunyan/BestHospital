@@ -31,7 +31,7 @@ export const SingleStaff = () => {
       dispatch(adminActions.getEmployment(params.id));
       dispatch(adminActions.getStaffService(params.id));
       dispatch(adminActions.getTimesheet(params.id));
-      dispatch(systemActions.getServices());
+      dispatch(systemActions.getServices({ limit: 10, skip: 0 }));
       dispatch(roleActions.getRole());
       dispatch(authActions.getAccess(params.id));
    }, []);

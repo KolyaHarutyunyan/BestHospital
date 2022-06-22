@@ -12,4 +12,9 @@ export const staffStyle = makeStyles(() => ({
          "&.narrow": { maxWidth: "1000px" },
       },
    },
+   removeNoteBoxStyle: {
+      display: "flex",
+      alignItems: "center",
+      cursor: "pointer",
+   },
 }));

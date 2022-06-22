@@ -127,10 +127,8 @@ export const StaffItem = ({ gen }) => {
             <TableCell>{`${item?.user?.firstName} ${item?.user?.lastName}`}</TableCell>
             <TableCell>{item?.subject}</TableCell>
             <TableCell>
-               <img
-                  src={Images.remove}
-                  alt="delete"
-                  style={{ cursor: "pointer" }}
+               <div
+                  className={classes.removeNoteBoxStyle}
                   onClick={(e) => {
                      e.stopPropagation();
                      handleOpenCloseDel({
@@ -139,7 +137,9 @@ export const StaffItem = ({ gen }) => {
                         text: item.text,
                      });
                   }}
-               />
+               >
+                  <img src={Images.remove} alt="delete" />
+               </div>
             </TableCell>
          </TableBodyComponent>
       );

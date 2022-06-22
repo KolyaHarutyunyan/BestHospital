@@ -14,6 +14,7 @@ import { Drawer } from "@material-ui/core";
 
 export const ServiceTBody = ({ service, globalCredentials }) => {
    const classes = fundingSourceCommonCoreStyle();
+
    const width = useWidth();
 
    const { open } = useContext(DrawerContext);
