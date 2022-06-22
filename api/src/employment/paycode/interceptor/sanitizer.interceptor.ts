@@ -13,6 +13,7 @@ export class PayCodeSanitizer implements ISanitize {
       rate: payCode.rate,
       active: payCode.active,
       startDate: payCode.startDate,
+      terminationDate: payCode.terminationDate,
     };
     return payCodeDTO;
   }

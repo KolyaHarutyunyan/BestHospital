@@ -7,4 +7,5 @@ export interface IPayCode extends Document {
   active: boolean;
   startDate: Date;
   employmentId: any;
+  terminationDate: Date;
 }

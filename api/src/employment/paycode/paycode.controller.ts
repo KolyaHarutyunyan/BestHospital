@@ -16,12 +16,12 @@ export class PaycodeController {
   async create(@Body() createPaycodeDto: CreatePaycodeDTO) {
     return await this.paycodeService.create(createPaycodeDto);
   }
-  @Patch(':id/active')
-  @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({ type: PayCodeDTO })
-  async active(@Param('id', ParseObjectIdPipe) id: string) {
-    return await this.paycodeService.active(id);
-  }
+  // @Patch(':id/active')
+  // @ApiHeader({ name: ACCESS_TOKEN })
+  // @ApiOkResponse({ type: PayCodeDTO })
+  // async active(@Param('id', ParseObjectIdPipe) id: string) {
+  //   return await this.paycodeService.active(id);
+  // }
   @Patch(':id/inActive')
   @ApiHeader({ name: ACCESS_TOKEN })
   @ApiOkResponse({ type: PayCodeDTO })

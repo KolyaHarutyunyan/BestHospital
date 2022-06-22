@@ -92,18 +92,19 @@ export class PaycodeService {
     }
   }
   // activated the payCode
-  async active(_id: string): Promise<PayCodeDTO> {
-    const payCode = await this.model.findById(_id);
-    this.checkPayCode(payCode);
-    payCode.active = true;
-    await payCode.save();
-    return this.sanitizer.sanitize(payCode);
-  }
+  // async active(_id: string): Promise<PayCodeDTO> {
+  //   const payCode = await this.model.findById(_id);
+  //   this.checkPayCode(payCode);
+  //   payCode.active = true;
+  //   await payCode.save();
+  //   return this.sanitizer.sanitize(payCode);
+  // }
   // inactivated the payCode
   async inActive(_id: string): Promise<PayCodeDTO> {
     const payCode = await this.model.findById(_id);
     this.checkPayCode(payCode);
     payCode.active = false;
+    payCode.terminationDate = new Date(Date.now());
     await payCode.save();
     return this.sanitizer.sanitize(payCode);
   }
