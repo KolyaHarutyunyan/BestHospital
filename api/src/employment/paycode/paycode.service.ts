@@ -23,7 +23,7 @@ export class PaycodeService {
     const [employment, payCodeType, payCodes] = await Promise.all([
       this.employmentService.findOne(dto.employmentId),
       this.PayCodeTypeService.findOne(dto.payCodeTypeId),
-      this.model.find({ employmentId: dto.employmentId, active: true }),
+      this.model.find({ employmentId: dto.employmentId, terminationDate: null }),
     ]);
     if (payCodes.length !== 0) {
       throw new HttpException(

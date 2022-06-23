@@ -5,7 +5,7 @@ const PayCodeSchema = new Schema({
   employmentId: { type: Types.ObjectId, ref: 'Employment' },
   payCodeTypeId: { type: Types.ObjectId, ref: 'PayCodeType' },
   rate: { type: Number },
-  terminationDate: { type: Date },
+  terminationDate: { type: Date, default: null },
   startDate: { type: Date, default: Date.now },
 });
 // karox enq inactive sarqel u apppti mej cuyc chenq ta
