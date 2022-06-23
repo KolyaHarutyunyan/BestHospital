@@ -383,12 +383,15 @@ function* terminatePaycode(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
-      yield call(authService.terminatePaycodeService, action.payload.paycodeId);
+      const res = yield call(
+         authService.terminatePaycodeService,
+         action.payload.paycodeId
+      );
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_PAY_CODE,
-         payload: { id: action.payload.paycodeId },
+         payload: { id: res.data.employmentId },
       });
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
@@ -485,8 +488,8 @@ function* isClinician(action) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
-         type: GET_STAFF_SERVICE,
-         payload: { id: action.payload.id },
+         type: GET_ADMIN_BY_ID,
+         payload: { adminId: action.payload.id },
       });
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));

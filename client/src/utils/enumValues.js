@@ -27,4 +27,9 @@ export const enumValues = {
    GENDER_OPTIONS: ["male", "female", "other"],
    EMPLOYMENT_TYPES: ["Full-time", "Part-time", "Intern", "Contractor"],
    // end
+
+   // other enums
+   PAYMENT_TYPES: ["Hourly", "Salary", "Fixed"],
+   TIME_TYPES: ["Daily", "Weekly", "Consecutive"],
+   // end
 };

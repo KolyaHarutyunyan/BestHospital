@@ -1,53 +1,71 @@
 import React, { useEffect, useState } from "react";
-import {
-   AddModalButton,
-   ValidationInput,
-   CreateChancel,
-} from "@eachbase/components";
+import { AddModalButton, ValidationInput, CreateChancel } from "@eachbase/components";
 import { PayrollSetupStyles } from "../styles";
-import { ErrorText, FindLoad, FindSuccess, isNotEmpty } from "@eachbase/utils";
+import {
+   ErrorText,
+   FindLoad,
+   FindSuccess,
+   hooksForTable,
+   isNotEmpty,
+} from "@eachbase/utils";
 import { useDispatch } from "react-redux";
 import { httpRequestsOnSuccessActions, mileagesActions } from "@eachbase/store";
 import moment from "moment";
-
-const overtimeBtn = {
-   width: "100%",
-   height: "48px",
-};
+import { overtimeBtn } from "./constants";
 
 export const MileageCompensation = ({
    marginTop,
    marginRight,
    maxWidth,
    editedData,
-   handleOpenClose,
+   handleClose,
 }) => {
    const classes = PayrollSetupStyles();
 
    const dispatch = useDispatch();
 
-   const [inputs, setInputs] = useState(editedData ? editedData : {});
+   const success = !!editedData
+      ? FindSuccess("EDIT_MILEAGE")
+      : FindSuccess("CREATE_MILEAGE");
+   const loader = !!editedData ? FindLoad("EDIT_MILEAGE") : FindLoad("CREATE_MILEAGE");
+
+   useEffect(() => {
+      if (!!success.length) {
+         if (!!editedData) {
+            handleClose();
+            dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_MILEAGE"));
+         } else {
+            setInputs({});
+            dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_MILEAGE"));
+         }
+      }
+   }, [success]);
+
+   const [inputs, setInputs] = useState(
+      !!editedData
+         ? {
+              ...editedData,
+              startDate: moment(editedData.startDate).format().substring(0, 10),
+           }
+         : {}
+   );
    const [error, setError] = useState("");
 
-   const handleChange = (e) => {
+   function handleChange(e) {
       setInputs((prevState) => ({
          ...prevState,
          [e.target.name]: e.target.value,
       }));
       error === e.target.name && setError("");
-   };
+   }
 
-   const handleSubmit = () => {
+   function handleSubmit() {
       const dataIsValid = isNotEmpty(inputs.compensation) && !!inputs.startDate;
-
       if (dataIsValid) {
          const data = {
             compensation: parseInt(inputs.compensation),
-            startDate: inputs.startDate
-               ? new Date(inputs.startDate).toISOString()
-               : "",
+            startDate: inputs.startDate ? new Date(inputs.startDate).toISOString() : "",
          };
-
          if (editedData) {
             dispatch(mileagesActions.editMileage(inputs._id, data));
          } else {
@@ -59,58 +77,28 @@ export const MileageCompensation = ({
             : !inputs.startDate
             ? "startDate"
             : "";
-
          setError(dataErrorText);
       }
-   };
-
-   const success = FindSuccess("CREATE_MILEAGE");
-   const editSuccess = FindSuccess("EDIT_MILEAGE");
-   const load = FindLoad("CREATE_MILEAGE");
-   const editLoad = FindLoad("EDIT_MILEAGE");
-
-   useEffect(() => {
-      if (!!success.length) {
-         setInputs({
-            compensation: "",
-            startDate: "",
-         });
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_MILEAGE"));
-      }
-   }, [success]);
-
-   useEffect(() => {
-      if (!!editSuccess.length) {
-         handleOpenClose && handleOpenClose();
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_MILEAGE"));
-      }
-   }, [editSuccess]);
+   }
 
    return (
       <div
-         className={classes.payCodeType}
+         className={!editedData ? classes.payCodeType : {}}
          style={{
             maxWidth: maxWidth,
             marginRight: marginRight ? marginRight : 0,
             marginTop: marginTop ? marginTop : 0,
          }}
       >
-         {editedData ? (
-            <h1 className={classes.editModalTitle}>
-               Edit Mileage Compensation
-            </h1>
-         ) : (
+         {!editedData && (
             <>
-               <h1 className={classes.modalTitle}>
-                  Add a New Mileage Compensation
-               </h1>
+               <h1 className={classes.modalTitle}>Add a New Mileage Compensation</h1>
                <p className={classes.modalSubTitle}>
-                  Please fulfill the below fields to add a Mileage Compensation
-                  in the system.
+                  Please fulfill the below fields to add a Mileage Compensation in the
+                  system.
                </p>
             </>
          )}
-
          <ValidationInput
             onChange={handleChange}
             value={inputs.compensation}
@@ -123,29 +111,26 @@ export const MileageCompensation = ({
          />
          <ValidationInput
             onChange={handleChange}
-            value={
-               editedData
-                  ? moment(inputs.startDate).format().substring(0, 10)
-                  : inputs.startDate
-            }
+            value={inputs.startDate}
             variant={"outlined"}
             name={"startDate"}
             type={"date"}
-            placeholder={"Start Date*"}
+            label={"Start Date*"}
             typeError={error === "startDate" ? ErrorText.field : ""}
          />
-         {editedData ? (
+         {!!editedData ? (
             <CreateChancel
-               loader={!!editLoad.length}
-               buttonWidth="192px"
-               create="Save"
-               chancel="Cancel"
-               onClose={handleOpenClose}
+               loader={!!loader.length}
+               create={"Save"}
+               chancel={"Cancel"}
+               onClose={handleClose}
                onCreate={handleSubmit}
+               buttonWidth={"192px"}
+               createButnMargin={"16px"}
             />
          ) : (
             <AddModalButton
-               loader={!!load.length}
+               loader={!!loader.length}
                handleClick={handleSubmit}
                text={"Add Mileage Compensation"}
                styles={overtimeBtn}

@@ -1,17 +1,19 @@
 import React, { Fragment, useState } from "react";
 import { systemCoreCommonCoreStyle } from "./style";
-import { Images } from "@eachbase/utils";
+import { hooksForTable, Images } from "@eachbase/utils";
 import { ModalContentWrapper, SimpleModal } from "@eachbase/components";
 import { CreateEditServiceType } from "..";
 
 export const SystemServiceTypeTBody = ({ serviceType }) => {
    const classes = systemCoreCommonCoreStyle();
 
+   const { showDashIfEmpty } = hooksForTable;
+
    const [modalIsOpen, setModalIsOpen] = useState(false);
 
-   const name = serviceType?.name;
-   const displayCode = serviceType?.displayCode;
-   const category = serviceType?.category;
+   const name = showDashIfEmpty(serviceType?.name);
+   const displayCode = showDashIfEmpty(serviceType?.displayCode);
+   const category = showDashIfEmpty(serviceType?.category);
 
    return (
       <Fragment>

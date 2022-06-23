@@ -19,4 +19,5 @@ export const ErrorText = {
    availableModifierError: "Please select some modifier",
    authServiceDefaultError: "Can not be two authorization service with default modifiers",
    ssnError: "The Social Security Number (SSN) must contain 9 digits",
+   paycodeActiveError: "Can not be two active payCodes with same employment",
 };

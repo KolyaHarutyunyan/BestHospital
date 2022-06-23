@@ -159,11 +159,6 @@ export const StaffService = ({ staffGeneral, info, services }) => {
                   disabled={_isNotClinician}
                />
             </div>
-            {!!services?.length ? (
-               <></>
-            ) : (
-               <span className={classes.noTypeYet}>{servicesInfoText}</span>
-            )}
             <div className={classes.credentialTable}>
                {info && info.length ? (
                   info.map((item, index) => {

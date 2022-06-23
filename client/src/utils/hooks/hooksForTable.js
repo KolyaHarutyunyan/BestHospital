@@ -7,7 +7,7 @@ function isNotString(value = "") {
 }
 
 export const hooksForTable = {
-   addSignToValueFromStart: (value = "", sign = "$") => `${sign} ${value}`,
+   addSignToValueFromStart: (value = "", sign = "$") => `${sign}${value}`,
 
    getFullName: (first = "", last = "", callback) => {
       if (typeof first !== "string" || typeof last !== "string") return;

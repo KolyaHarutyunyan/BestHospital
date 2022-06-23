@@ -1,2 +1,2 @@
-export { MileageTable } from './mileageTable';
-export { MileageCompensation } from './mileageCompensation';
+export { MileageCompensation } from "./mileageCompensation";
+export { MileageCompensationTable } from "./mileageCompensationTable";

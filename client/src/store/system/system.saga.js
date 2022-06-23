@@ -122,7 +122,7 @@ function* createServiceGlobal(action) {
       yield call(systemService.createServiceGlobalService, action.payload.body);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-      yield put({ type: GET_SERVICES });
+      yield put({ type: GET_SERVICES, payload: { skip: 0, limit: 10 } });
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -165,7 +165,7 @@ function* editServiceByIdGlobal(action) {
       );
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-      yield put({ type: GET_SERVICES });
+      yield put({ type: GET_SERVICES, payload: { skip: 0, limit: 10 } });
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -180,7 +180,7 @@ function* deleteServiceByIdGlobal(action) {
       yield call(systemService.deleteServiceByIdService, action.payload.id);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
-      yield put({ type: GET_SERVICES });
+      yield put({ type: GET_SERVICES, payload: { skip: 0, limit: 10 } });
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
       yield put(httpRequestsOnErrorsActions.appendError(action.type, err?.data?.message));
@@ -190,7 +190,6 @@ function* deleteServiceByIdGlobal(action) {
 /** End */
 
 /** Departments */
-
 function* createDepartmentGlobal(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
