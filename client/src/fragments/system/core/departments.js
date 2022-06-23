@@ -1,7 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { AddButton, NoItemText, SlicedText, ValidationInput } from "@eachbase/components";
-import { FindLoad, FindSuccess, Images, isNotEmpty } from "@eachbase/utils";
+import {
+   ErrorText,
+   FindLoad,
+   FindSuccess,
+   Images,
+   isNotEmpty,
+   makeCapitalize,
+} from "@eachbase/utils";
 import { systemItemStyles } from "./styles";
 import { httpRequestsOnSuccessActions, systemActions } from "@eachbase/store";
 
@@ -13,52 +20,46 @@ const credentialBtn = {
 };
 
 export const Departments = ({ globalDepartments, removeItem, openModal }) => {
-   const dispatch = useDispatch();
    const classes = systemItemStyles();
 
-   const [inputs, setInputs] = useState({ name: "" });
-   const [error, setError] = useState("");
-
-   const handleChange = (e) => {
-      setInputs((prevState) => ({
-         ...prevState,
-         [e.target.name]: e.target.value,
-      }));
-      error === e.target.name && setError("");
-   };
-
-   const editDepartment = (modalType, modalId) => {
-      openModal(modalType, modalId);
-   };
-
-   const handleSubmit = () => {
-      if (isNotEmpty(inputs.name)) {
-         const data = {
-            name: inputs.name,
-         };
-
-         dispatch(systemActions.createDepartmentGlobal(data));
-      } else {
-         setError(!isNotEmpty(inputs.name) ? "name" : "");
-      }
-   };
-
-   const isDisabled = isNotEmpty(inputs.name);
+   const dispatch = useDispatch();
 
    const loader = FindLoad("CREATE_DEPARTMENT_GLOBAL");
    const success = FindSuccess("CREATE_DEPARTMENT_GLOBAL");
 
    useEffect(() => {
       if (!!success.length) {
-         setInputs({
-            name: "",
-         });
+         setInputs({});
          dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_DEPARTMENT_GLOBAL"));
       }
    }, [success]);
 
+   const [inputs, setInputs] = useState({});
+   const [error, setError] = useState("");
+
+   function handleChange(e) {
+      setInputs((prevState) => ({
+         ...prevState,
+         [e.target.name]: e.target.value,
+      }));
+      error === e.target.name && setError("");
+   }
+
+   function editDepartment(modalType, modalId) {
+      openModal(modalType, modalId);
+   }
+
+   function handleSubmit() {
+      if (isNotEmpty(inputs.name)) {
+         const data = { name: inputs.name };
+         dispatch(systemActions.createDepartmentGlobal(data));
+      } else {
+         setError(!isNotEmpty(inputs.name) ? "name" : "");
+      }
+   }
+
    return (
-      <>
+      <Fragment>
          <div className={`${classes.flexContainer} ${classes.headerSize}`}>
             <ValidationInput
                style={classes.credentialInputStyle}
@@ -68,11 +69,11 @@ export const Departments = ({ globalDepartments, removeItem, openModal }) => {
                name={"name"}
                type={"text"}
                placeholder={"Name*"}
+               typeError={error === "name" ? ErrorText.field : ""}
             />
             <AddButton
                type={"CREATE_DEPARTMENT_GLOBAL"}
                loader={!!loader.length}
-               disabled={!isDisabled}
                styles={credentialBtn}
                handleClick={handleSubmit}
                text="Add Department"
@@ -89,7 +90,7 @@ export const Departments = ({ globalDepartments, removeItem, openModal }) => {
                               <SlicedText
                                  type={"responsive"}
                                  size={25}
-                                 data={departmentItem.name}
+                                 data={makeCapitalize(departmentItem.name)}
                               />
                            </span>
                            {departmentItem.type}
@@ -105,7 +106,7 @@ export const Departments = ({ globalDepartments, removeItem, openModal }) => {
                               }
                               alt="edit"
                            />
-                           <img
+                           {/* <img
                               src={Images.remove}
                               alt="delete"
                               onClick={() =>
@@ -115,7 +116,7 @@ export const Departments = ({ globalDepartments, removeItem, openModal }) => {
                                     type: "editDepartment",
                                  })
                               }
-                           />
+                           /> */}
                         </div>
                      </div>
                   );
@@ -124,6 +125,6 @@ export const Departments = ({ globalDepartments, removeItem, openModal }) => {
                <NoItemText text="No Departments Yet" />
             )}
          </div>
-      </>
+      </Fragment>
    );
 };

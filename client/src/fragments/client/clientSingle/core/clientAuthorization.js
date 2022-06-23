@@ -198,7 +198,7 @@ export const ClientAuthorization = ({ info }) => {
             <div className={classes.authServiceContainerStyle}>
                <div className={classes.authorizationServices}>
                   <p className={classes.authorizationServicesTitle}>
-                     Authorization Services
+                     Authorized Services
                   </p>
                   <AddButtonLight
                      addButnLightClassName={classes.addAuthServiceButnStyle}
@@ -215,7 +215,7 @@ export const ClientAuthorization = ({ info }) => {
                      fundingId={info[authIndex].funderId?._id}
                   />
                ) : (
-                  <NoItemText text={"No Authorization Services Yet"} />
+                  <NoItemText text={"No Authorized Services Yet"} />
                )}
             </div>
          </div>

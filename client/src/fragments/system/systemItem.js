@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Loader, SimpleTabs } from "@eachbase/components";
 import {
    ServiceType,
@@ -10,84 +10,84 @@ import {
    PayrollSetup,
 } from "./core";
 import { useDispatch, useSelector } from "react-redux";
-import { mileagesActions, systemActions } from "@eachbase/store";
-import { payrollActions } from "@eachbase/store/payroll";
-import { FindLoad } from "../../utils";
+import { httpRequestsOnSuccessActions } from "@eachbase/store";
+import { FindSuccess, FindLoad, PaginationContext } from "@eachbase/utils";
 import { PlaceOfService } from "./core/placeOfService";
+import { tabsLabels } from "./constants";
 
 export const SystemItem = () => {
+   const classes = systemItemStyles();
+
+   const dispatch = useDispatch();
+
+   const { pageIsChanging, handlePageChange } = useContext(PaginationContext);
+
+   const loader = FindLoad("GET_SERVICES");
+   const success = FindSuccess("GET_SERVICES");
+
+   const globalCredentials = useSelector((state) => state.system.credentials);
+   const globalDepartments = useSelector((state) => state.system.departments);
+   const globalJobs = useSelector((state) => state.system.jobs);
+   const globalPayCodes = useSelector((state) => state.payroll.PayCodes);
+   const globalOvertimeSettings = useSelector((state) => state.payroll.overtimeSettings);
+   const globalPlaces = useSelector((state) => state.system.places);
+   const globalServices = useSelector((state) => state.system.services);
+   const { services, count } = globalServices;
+
+   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
+   const [deletedId, setDeletedId] = useState("");
    const [activeTab, setActiveTab] = useState(0);
    const [open, setOpen] = useState(false);
    const [modalType, setModalType] = useState("");
    const [modalInformation, setModalInformation] = useState("");
    const [deletedName, setDeletedName] = useState();
-   const classes = systemItemStyles();
+   const [page, setPage] = useState(1);
 
-   const globalCredentials = useSelector((state) => state.system.credentials);
-   const globalServices = useSelector((state) => state.system.services);
-   const globalDepartments = useSelector((state) => state.system.departments);
-   const globalJobs = useSelector((state) => state.system.jobs);
-   const globalPayCodes = useSelector((state) => state.payroll.PayCodes);
-   const globalOvertimeSettings = useSelector((state) => state.payroll.overtimeSettings);
+   useEffect(
+      () => () => {
+         if (pageIsChanging) {
+            handlePageChange(false);
+         }
+      },
+      [pageIsChanging]
+   );
 
-   const globalPlaces = useSelector((state) => state.system.places);
+   useEffect(() => {
+      if (!!success.length) {
+         if (!pageIsChanging) setPage(1);
+         handlePageChange(false);
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("GET_SERVICES"));
+      }
+   }, [success]);
 
-   const dispatch = useDispatch();
-   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
-   const [deletedId, setDeletedId] = useState("");
+   if (!!loader.length && !pageIsChanging) return <Loader />;
 
-   const tabsLabels = [
-      {
-         label: "Service Types",
-      },
-      {
-         label: "Credentials",
-      },
-      {
-         label: "Departments",
-      },
-      {
-         label: "Job Titles",
-      },
-      {
-         label: "Payroll Setup",
-      },
-      {
-         label: "Place of Service",
-      },
-   ];
-
-   const handleOpenClose = (modalType, modalInformation) => {
+   function handleOpenClose(modalType, modalInformation) {
       setModalType(modalType);
       setModalInformation(modalInformation);
       setOpen((prevState) => !prevState);
-   };
+   }
 
-   const handleDeletedOpenClose = () => {
+   function handleDeletedOpenClose() {
       setDeleteModalOpened(false);
-   };
+   }
 
-   const handleRemoveItem = (data) => {
+   function handleRemoveItem(data) {
       setDeleteModalOpened(true);
       setDeletedId(data.id);
       setDeletedName(data.name);
       setModalType(data.type);
-   };
+   }
 
-   const { httpOnLoad } = useSelector((state) => ({
-      httpOnLoad: state.httpOnLoad,
-   }));
-
-   const loader = FindLoad("GET_SERVICES");
    const tabsContent = [
       {
-         tabComponent: loader.length ? (
-            <Loader />
-         ) : (
+         tabComponent: (
             <ServiceType
                globalServices={globalServices}
-               removeItem={handleRemoveItem}
-               openModal={handleOpenClose}
+               serviceTypesQty={count}
+               serviceTypesLoader={!!loader.length}
+               page={page}
+               handleGetPage={setPage}
             />
          ),
       },
