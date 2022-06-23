@@ -1,2 +1,2 @@
-export { PayCodeType } from './paycodeType';
-export { PayCodeTable } from './paycodeTable';
+export { SystemPaycodeTypeTable } from "./systemPaycodeTypeTable";
+export { PayCodeType } from "./paycodeType";

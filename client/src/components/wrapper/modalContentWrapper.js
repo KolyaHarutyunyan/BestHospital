@@ -18,8 +18,12 @@ export const ModalContentWrapper = ({
       <div className={modalContentWrapperStyle}>
          <CloseButton handleCLic={onClose} />
          <div>
-            <h2 className={classes.wrapperTitleStyle}>{titleContent}</h2>
-            <p className={classes.wrapperSubtitleStyle}>{subtitleContent}</p>
+            {titleContent && (
+               <h2 className={classes.wrapperTitleStyle}>{titleContent}</h2>
+            )}
+            {subtitleContent && (
+               <p className={classes.wrapperSubtitleStyle}>{subtitleContent}</p>
+            )}
             {content}
          </div>
          <div>{children}</div>

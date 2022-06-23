@@ -88,4 +88,17 @@ export const hooksForErrors = {
          return "";
       }
    },
+
+   getPaycodeActiveErrorText: (error, backError) => {
+      if (error === "payCodeTypeId") {
+         return ErrorText.selectField;
+      } else if (
+         backError?.length &&
+         backError[0]?.error === "Can not be two active payCodes with same employment"
+      ) {
+         return ErrorText.paycodeActiveError;
+      } else {
+         return "";
+      }
+   },
 };

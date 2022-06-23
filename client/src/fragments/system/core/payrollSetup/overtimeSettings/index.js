@@ -1,2 +1,2 @@
-export { OvertimeSettings } from './overtimeSettings';
-export { OvertimeTable } from './overtimeTable'
+export { OvertimeSettings } from "./overtimeSettings";
+export { OvertimeSettingTable } from "./overtimeSettingTable";

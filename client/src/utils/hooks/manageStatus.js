@@ -105,6 +105,19 @@ export const manageType = (type) => {
       case "Fixed":
          return "FIXED";
 
+      case "CONSECUTIVE":
+         return "Consecutive";
+      case "WEEKLY":
+         return "Weekly";
+      case "DAILY":
+         return "Daily";
+      case "Consecutive":
+         return "CONSECUTIVE";
+      case "Weekly":
+         return "WEEKLY";
+      case "Daily":
+         return "DAILY";
+
       default:
          return type;
    }

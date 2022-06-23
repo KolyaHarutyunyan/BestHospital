@@ -25,16 +25,16 @@ export const PaycodeTBody = ({ paycode }) => {
 
    const [modalIsOpen, setModalIsOpen] = useState(false);
 
-   const _dateIsTerminated = !!paycode?.endDate;
+   const _dateIsTerminated = !!paycode?.terminationDate;
 
    const name = showDashIfEmpty(makeCapitalize(paycode?.payCodeTypeId?.name));
    const code = showDashIfEmpty(paycode?.payCodeTypeId?.code);
    const type = showDashIfEmpty(manageType(paycode?.payCodeTypeId?.type));
    const rate = showDashIfEmpty(addSignToValueFromStart(paycode?.rate));
    const startDate = showDashIfEmpty(handleCreatedAtDate(paycode?.startDate));
-   const status = paycode?.active === true ? "Active" : "Inactive";
-   const terminationDate = !!paycode?.endDate
-      ? showDashIfEmpty(handleCreatedAtDate(paycode?.endDate))
+   const status = _dateIsTerminated ? "Inactive" : "Active";
+   const terminationDate = _dateIsTerminated
+      ? showDashIfEmpty(handleCreatedAtDate(paycode?.terminationDate))
       : null;
 
    return (

@@ -76,7 +76,7 @@ export const Credentials = ({ removeItem, openModal, globalCredentials }) => {
                typeError={error === "name" ? ErrorText.field : ""}
             />
             <SelectInputPlaceholder
-               placeholder="Type"
+               placeholder="Type*"
                status="CREATE_CREDENTIAL_GLOBAL"
                style={classes.credentialInputStyle}
                name={"type"}

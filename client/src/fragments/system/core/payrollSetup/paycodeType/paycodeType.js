@@ -2,99 +2,86 @@ import React, { useEffect, useState } from "react";
 import {
    AddModalButton,
    RadioButton,
-   SelectInputPlaceholder,
    SelectInput,
    ValidationInput,
    CreateChancel,
 } from "@eachbase/components";
-import { PayrollSetupStyles } from "../styles";
-import { ErrorText, FindLoad, FindSuccess, isNotEmpty } from "@eachbase/utils";
+import {
+   enumValues,
+   ErrorText,
+   FindLoad,
+   FindSuccess,
+   isNotEmpty,
+   manageType,
+} from "@eachbase/utils";
 import { useDispatch } from "react-redux";
 import { payrollActions } from "@eachbase/store/payroll";
 import { httpRequestsOnSuccessActions } from "@eachbase/store";
-
-const payCodeType = [{ name: "HOURLY" }, { name: "SALARY" }, { name: "FIXED" }];
-
-const payCodeBtn = {
-   width: "100%",
-   height: "48px",
-};
-
-const applyOvertimeData = [
-   {
-      label: "No",
-      value: "No",
-   },
-   {
-      label: "Yes",
-      value: "Yes",
-   },
-];
-
-const ptoData = [
-   {
-      label: "No",
-      value: "No",
-   },
-   {
-      label: "Yes",
-      value: "Yes",
-   },
-];
-
-const checkboxStyle = {
-   display: "flex",
-   alignItems: "center",
-   flexDirection: "row",
-};
+import { applyOvertimeData, checkboxStyle, payCodeBtn, ptoData } from "./constants";
+import { PayrollSetupStyles } from "../styles";
 
 export const PayCodeType = ({
-   handleOpenClose,
+   handleClose,
    editedData,
    maxWidth,
    marginRight,
    marginTop,
 }) => {
    const classes = PayrollSetupStyles();
+
    const dispatch = useDispatch();
+
+   const loader = !!editedData
+      ? FindLoad("EDIT_PAYCODE_BY_ID_GLOBAL")
+      : FindLoad("CREATE_PAYCODE_GLOBAL");
+   const success = !!editedData
+      ? FindSuccess("EDIT_PAYCODE_BY_ID_GLOBAL")
+      : FindSuccess("CREATE_PAYCODE_GLOBAL");
+
+   useEffect(() => {
+      if (!!success.length) {
+         if (!!editedData) {
+            handleClose();
+            dispatch(
+               httpRequestsOnSuccessActions.removeSuccess("EDIT_PAYCODE_BY_ID_GLOBAL")
+            );
+         } else {
+            setInputs({});
+            dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_PAYCODE_GLOBAL"));
+         }
+      }
+   }, [success]);
+
    const [inputs, setInputs] = useState(
-      editedData
-         ? editedData
-         : {
-              name: "",
-              code: "",
-              type: "",
-           }
+      !!editedData ? { ...editedData, type: manageType(editedData.type) } : {}
    );
    const [error, setError] = useState("");
    const [applyOvertime, setApplyOvertime] = useState(
-      editedData && editedData.overtime === true ? "Yes" : "No"
+      !!editedData && editedData.overtime === true ? "Yes" : "No"
    );
    const [AccruePTO, setAccruePTO] = useState(
-      editedData && editedData.pto === true ? "Yes" : "No"
+      !!editedData && editedData.pto === true ? "Yes" : "No"
    );
 
-   const handleChange = (e) => {
+   function handleChange(e) {
       setInputs((prevState) => ({
          ...prevState,
          [e.target.name]: e.target.value,
       }));
       error === e.target.name && setError("");
-   };
+   }
 
-   const handleSubmit = () => {
+   function handleSubmit() {
       const dataIsValid =
          isNotEmpty(inputs.name) && isNotEmpty(inputs.type) && isNotEmpty(inputs.code);
-
       if (dataIsValid) {
          const data = {
             name: inputs.name,
             code: inputs.code,
-            type: inputs.type,
+            type: manageType(inputs.type),
             overtime: applyOvertime === "Yes",
             pto: AccruePTO === "Yes",
          };
-
          if (editedData) {
             dispatch(payrollActions.editPayCodeByIdGlobal(data, editedData?.id));
          } else {
@@ -110,57 +97,20 @@ export const PayCodeType = ({
             : !isNotEmpty(inputs.type)
             ? "type"
             : "";
-
          setError(dataErrorText);
       }
-   };
-
-   const change = (event) => {
-      setApplyOvertime(event.target.value);
-   };
-
-   const changePTO = (event) => {
-      setAccruePTO(event.target.value);
-   };
-
-   const loader = FindLoad("CREATE_PAYCODE_GLOBAL");
-   const loaderEdit = FindLoad("EDIT_PAYCODE_BY_ID_GLOBAL");
-   const success = FindSuccess("CREATE_PAYCODE_GLOBAL");
-   const edit = FindSuccess("EDIT_PAYCODE_BY_ID_GLOBAL");
-
-   useEffect(() => {
-      if (!!success.length) {
-         setInputs({
-            name: "",
-            code: "",
-            type: "",
-         });
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_PAYCODE_GLOBAL"));
-      }
-   }, [success]);
-
-   useEffect(() => {
-      if (!!edit.length) {
-         handleOpenClose && handleOpenClose();
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess("EDIT_PAYCODE_BY_ID_GLOBAL")
-         );
-      }
-   }, [edit]);
+   }
 
    return (
       <div
-         className={classes.payCodeType}
+         className={!editedData ? classes.payCodeType : {}}
          style={{
             maxWidth: maxWidth,
             marginRight: marginRight ? marginRight : 0,
             marginTop: marginTop ? marginTop : 0,
-            width: editedData ? "480px" : "100%",
          }}
       >
-         {editedData ? (
-            <h1 className={classes.editModalTitle}>Edit Paycode Type</h1>
-         ) : (
+         {!editedData && (
             <>
                <h1 className={classes.modalTitle}>Add a New Paycode Type</h1>
                <p className={classes.modalSubTitle}>
@@ -168,7 +118,6 @@ export const PayCodeType = ({
                </p>
             </>
          )}
-
          <ValidationInput
             onChange={handleChange}
             value={inputs.name}
@@ -189,36 +138,22 @@ export const PayCodeType = ({
             placeholder={"Code*"}
             typeError={error === "code" ? ErrorText.field : ""}
          />
-         {editedData ? (
-            <SelectInput
-               label={"Type*"}
-               placeholder="Type"
-               name={"type"}
-               handleSelect={handleChange}
-               value={inputs.type}
-               list={payCodeType}
-               typeError={error === "type" ? ErrorText.selectField : ""}
-            />
-         ) : (
-            <SelectInputPlaceholder
-               label={"Type*"}
-               placeholder="Type*"
-               F
-               name={"type"}
-               handleSelect={handleChange}
-               value={inputs.type}
-               list={payCodeType}
-               typeError={error === "type" ? ErrorText.selectField : ""}
-            />
-         )}
-
+         <SelectInput
+            label={"Type*"}
+            placeholder="Type"
+            name={"type"}
+            handleSelect={handleChange}
+            value={inputs.type}
+            language={enumValues.PAYMENT_TYPES}
+            typeError={error === "type" ? ErrorText.selectField : ""}
+         />
          <div className={classes.flexBox}>
             <div className={classes.checkboxContainer}>
                <p>Apply Overtime?</p>
                <RadioButton
                   styles={checkboxStyle}
                   value={applyOvertime}
-                  onChange={change}
+                  onChange={(e) => setApplyOvertime(e.target.value)}
                   radioData={applyOvertimeData}
                />
             </div>
@@ -227,19 +162,21 @@ export const PayCodeType = ({
                <RadioButton
                   styles={checkboxStyle}
                   value={AccruePTO}
-                  onChange={changePTO}
+                  onChange={(e) => setAccruePTO(e.target.value)}
                   radioData={ptoData}
                />
             </div>
          </div>
-         {editedData ? (
+         {!!editedData ? (
             <CreateChancel
-               loader={!!loaderEdit.length}
+               loader={!!loader.length}
                buttonWidth="192px"
                create="Save"
                chancel="Cancel"
-               onClose={handleOpenClose}
+               onClose={handleClose}
                onCreate={handleSubmit}
+               buttonWidth={"192px"}
+               createButnMargin={"16px"}
             />
          ) : (
             <AddModalButton

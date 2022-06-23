@@ -1,68 +1,95 @@
 import React, { useEffect, useState } from "react";
 import {
    AddModalButton,
-   SelectInputPlaceholder,
    SelectInput,
    ValidationInput,
    CreateChancel,
 } from "@eachbase/components";
 import { PayrollSetupStyles } from "../styles";
-import { ErrorText, FindLoad, FindSuccess, isNotEmpty } from "@eachbase/utils";
+import {
+   enumValues,
+   ErrorText,
+   FindLoad,
+   FindSuccess,
+   isNotEmpty,
+   manageType,
+} from "@eachbase/utils";
 import { useDispatch } from "react-redux";
 import { payrollActions } from "@eachbase/store/payroll";
 import { httpRequestsOnSuccessActions } from "@eachbase/store";
-
-const timeType = [{ name: "DAILY" }, { name: "WEEKLY" }, { name: "CONSECUTIVE" }];
-
-const overtimeBtn = {
-   width: "100%",
-   height: "48px",
-};
+import { overtimeBtn } from "./constants";
 
 export const OvertimeSettings = ({
-   handleOpenClose,
+   handleClose,
    editedData,
    maxWidth,
    marginRight,
    marginTop,
 }) => {
    const classes = PayrollSetupStyles();
+
    const dispatch = useDispatch();
+
+   const loader = !!editedData
+      ? FindLoad("EDIT_OVERTIME_SETTINGS_BY_ID_GLOBAL")
+      : FindLoad("CREATE_OVERTIME_SETTINGS_GLOBAL");
+   const success = !!editedData
+      ? FindSuccess("EDIT_OVERTIME_SETTINGS_BY_ID_GLOBAL")
+      : FindSuccess("CREATE_OVERTIME_SETTINGS_GLOBAL");
+
+   useEffect(() => {
+      if (!!success.length) {
+         if (!!editedData) {
+            handleClose();
+            dispatch(
+               httpRequestsOnSuccessActions.removeSuccess(
+                  "EDIT_OVERTIME_SETTINGS_BY_ID_GLOBAL"
+               )
+            );
+         } else {
+            setInputs({});
+            dispatch(
+               httpRequestsOnSuccessActions.removeSuccess(
+                  "CREATE_OVERTIME_SETTINGS_GLOBAL"
+               )
+            );
+         }
+      }
+   }, [success]);
+
    const [inputs, setInputs] = useState(
-      editedData
-         ? editedData
-         : {
-              name: "",
-              type: "",
-              threshold: "",
-              multiplier: "",
-           }
+      editedData ? { ...editedData, type: manageType(editedData.type) } : {}
    );
    const [error, setError] = useState("");
 
-   const handleChange = (e) => {
+   const thresholdLabel = !!inputs?.type
+      ? inputs?.type?.toUpperCase() === "CONSECUTIVE"
+         ? "Threshold in days*"
+         : "Threshold in hours*"
+      : "Threshold*";
+
+   function handleChange(e) {
       setInputs((prevState) => ({
          ...prevState,
          [e.target.name]: e.target.value,
       }));
       error === e.target.name && setError("");
-   };
+   }
 
-   const handleSubmit = () => {
+   function handleSubmit() {
       const dataIsValid =
          isNotEmpty(inputs.name) &&
          isNotEmpty(inputs.type) &&
          isNotEmpty(inputs.threshold) &&
          isNotEmpty(inputs.multiplier);
-
       if (dataIsValid) {
          const data = {
             name: inputs.name,
-            type: inputs.type,
+            type: manageType(inputs.type),
             threshold: parseInt(inputs.threshold),
             multiplier: parseInt(inputs.multiplier),
          };
-         if (editedData) {
+         if (!!editedData) {
             dispatch(payrollActions.editOvertimeSettingsByIdGlobal(data, editedData?.id));
          } else {
             dispatch(payrollActions.createOvertimeSettingsGlobal(data));
@@ -77,54 +104,20 @@ export const OvertimeSettings = ({
             : !isNotEmpty(inputs.multiplier)
             ? "multiplier"
             : "";
-
          setError(dataErrorText);
       }
-   };
-
-   const loader = FindLoad("CREATE_OVERTIME_SETTINGS_GLOBAL");
-   const loaderEdit = FindLoad("EDIT_OVERTIME_SETTINGS_BY_ID_GLOBAL");
-   const success = FindSuccess("CREATE_OVERTIME_SETTINGS_GLOBAL");
-   const edit = FindSuccess("EDIT_OVERTIME_SETTINGS_BY_ID_GLOBAL");
-
-   useEffect(() => {
-      if (!!success.length) {
-         setInputs({
-            name: "",
-            type: "",
-            threshold: "",
-            multiplier: "",
-         });
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess("CREATE_OVERTIME_SETTINGS_GLOBAL")
-         );
-      }
-   }, [success]);
-
-   useEffect(() => {
-      if (!!edit.length) {
-         handleOpenClose && handleOpenClose();
-         dispatch(
-            httpRequestsOnSuccessActions.removeSuccess(
-               "EDIT_OVERTIME_SETTINGS_BY_ID_GLOBAL"
-            )
-         );
-      }
-   }, [edit]);
+   }
 
    return (
       <div
-         className={classes.payCodeType}
+         className={!editedData ? classes.payCodeType : {}}
          style={{
             maxWidth: maxWidth,
             marginRight: marginRight ? marginRight : 0,
             marginTop: marginTop ? marginTop : 0,
-            width: editedData ? "480px" : "100%",
          }}
       >
-         {editedData ? (
-            <h1 className={classes.editModalTitle}>Edit Overtime Setting</h1>
-         ) : (
+         {!editedData && (
             <>
                <h1 className={classes.modalTitle}>Add an Overtime Setting</h1>
                <p className={classes.modalSubTitle}>
@@ -141,39 +134,23 @@ export const OvertimeSettings = ({
             label={"Name*"}
             typeError={error === "name" ? ErrorText.field : ""}
          />
-         {editedData ? (
-            <SelectInput
-               label="Type"
-               name={"type"}
-               handleSelect={handleChange}
-               value={inputs.type}
-               list={timeType}
-               typeError={error === "type" ? ErrorText.selectField : ""}
-            />
-         ) : (
-            <SelectInputPlaceholder
-               placeholder="Type"
-               name={"type"}
-               handleSelect={handleChange}
-               value={inputs.type}
-               list={timeType}
-               typeError={error === "type" ? ErrorText.selectField : ""}
-            />
-         )}
+         <SelectInput
+            label="Type*"
+            name={"type"}
+            handleSelect={handleChange}
+            value={inputs.type}
+            language={enumValues.TIME_TYPES}
+            typeError={error === "type" ? ErrorText.selectField : ""}
+         />
          <ValidationInput
             onChange={handleChange}
             value={inputs.threshold}
             variant={"outlined"}
             name={"threshold"}
             type={"number"}
-            label={
-               inputs.type === "CONSECUTIVE"
-                  ? "Threshold in days*"
-                  : inputs.type === undefined
-                  ? "Threshold"
-                  : "Threshold in hours*"
-            }
+            label={thresholdLabel}
             typeError={error === "threshold" ? ErrorText.field : ""}
+            disabled={!inputs?.type}
          />
          <ValidationInput
             onChange={handleChange}
@@ -184,14 +161,15 @@ export const OvertimeSettings = ({
             label={"Multiplier*"}
             typeError={error === "multiplier" ? ErrorText.field : ""}
          />
-         {editedData ? (
+         {!!editedData ? (
             <CreateChancel
-               loader={!!loaderEdit.length}
-               buttonWidth="192px"
+               loader={!!loader.length}
                create="Save"
                chancel="Cancel"
-               onClose={handleOpenClose}
+               onClose={handleClose}
                onCreate={handleSubmit}
+               buttonWidth="192px"
+               createButnMargin={"16px"}
             />
          ) : (
             <AddModalButton

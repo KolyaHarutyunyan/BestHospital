@@ -106,7 +106,6 @@ export const wrapperStyle = makeStyles(() => ({
       fontSize: "32px",
       fontWeight: 700,
       color: Colors.TextSecondary,
-      marginBottom: "16px",
    },
    wrapperSubtitleStyle: {
       maxWidth: "406px",
@@ -115,7 +114,7 @@ export const wrapperStyle = makeStyles(() => ({
       fontWeight: 400,
       color: Colors.TextSecondary,
       lineHeight: "24px",
-      marginBottom: "24px",
+      margin: "16px 0 24px",
    },
    //**end */
 
