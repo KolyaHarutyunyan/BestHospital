@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+import { ServiceDTO } from '../dto';
 
 export interface IService extends Document {
   funderId: string;
@@ -14,4 +15,8 @@ export interface IService extends Document {
   text: string;
   created: Date;
   user: string;
+}
+export interface IServiceCount {
+  services: ServiceDTO[];
+  count: number;
 }

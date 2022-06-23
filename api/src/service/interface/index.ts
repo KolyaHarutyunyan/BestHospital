@@ -1,1 +1,1 @@
-export { IService } from './service.interface';
+export { IService, IServiceCount } from './service.interface';

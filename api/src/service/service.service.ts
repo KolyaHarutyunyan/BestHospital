@@ -2,10 +2,10 @@ import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { MongooseUtil } from '../util';
 import { ServiceModel } from './service.model';
-import { IService } from './interface';
+import { IService, IServiceCount } from './interface';
 import { ServiceSanitizer } from './interceptor';
 import { CreateServiceDto } from './dto/create.dto';
-import { UpdateServiceDto } from './dto/edit.dto';
+import { UpdateGlobServiceDto } from './dto/edit.dto';
 import { ServiceDTO } from './dto';
 import { isValidObjectId } from '../util';
 
@@ -35,10 +35,14 @@ export class ServiceService {
   }
 
   /** returns all services */
-  async findAll(): Promise<ServiceDTO[]> {
+  async findAll(skip: number, limit: number): Promise<IServiceCount> {
     try {
-      const services = await this.model.find({});
-      return this.sanitizer.sanitizeMany(services);
+      const [services, count] = await Promise.all([
+        this.model.find().sort({ _id: -1 }).skip(skip).limit(limit),
+        this.model.countDocuments(),
+      ]);
+      const sanServices = this.sanitizer.sanitizeMany(services);
+      return { services: sanServices, count };
     } catch (e) {
       throw e;
     }
@@ -57,7 +61,7 @@ export class ServiceService {
   }
 
   /** Update the Service */
-  async update(_id: string, dto: UpdateServiceDto): Promise<ServiceDTO> {
+  async update(_id: string, dto: UpdateGlobServiceDto): Promise<ServiceDTO> {
     try {
       const service = await this.model.findOne({ _id });
       this.checkService(service);
