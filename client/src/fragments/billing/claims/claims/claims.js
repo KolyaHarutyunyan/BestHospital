@@ -7,7 +7,7 @@ import {
    PaginationItem,
    BillFiltersSelectors,
 } from "@eachbase/components";
-import { enumValues, PaginationContext } from "@eachbase/utils";
+import { enumValues, getSkipCount, PaginationContext } from "@eachbase/utils";
 import { claimActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import { ClaimTable } from "./core";
@@ -49,11 +49,13 @@ export const ClaimsFragment = ({
       selectedStatus
    );
 
+   const _limit = 10;
+
    const changePage = (number) => {
       if (page === number) return;
       handlePageChange(true);
-      let start = number > 1 ? number - 1 + "0" : 0;
-      dispatch(claimActions.getClaims({ limit: 10, skip: start }));
+      const _skip = getSkipCount(number, _limit);
+      dispatch(claimActions.getClaims({ limit: _limit, skip: _skip }));
       handleGetPage(number);
    };
 
@@ -96,9 +98,9 @@ export const ClaimsFragment = ({
                <PaginationItem
                   listLength={claimsWithFilters.length}
                   page={page}
-                  handleReturn={(number) => changePage(number)}
+                  handleChangePage={(number) => changePage(number)}
                   count={claimsQty}
-                  entries={claims.length}
+                  limitCountNumber={_limit}
                />
             </div>
          ) : (

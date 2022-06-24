@@ -27,3 +27,4 @@ export { hooksForErrors } from "./hooksForErrors";
 export { addHiddenClass } from "./addHiddenClass";
 export { ssnActions } from "./ssnActions";
 export { createCodeFromName } from "./createCodeFromName";
+export { getSkipCount } from "./getSkipCount";

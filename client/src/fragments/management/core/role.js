@@ -12,6 +12,7 @@ import {
 import {
    FindLoad,
    FindSuccess,
+   getSkipCount,
    Images,
    makeCapitalize,
    PaginationContext,
@@ -49,11 +50,13 @@ export const Role = ({
       setRole(item?.id);
    };
 
+   const _limit = 10;
+
    const changePage = (number) => {
       if (page === number) return;
       handlePageChange(true);
-      let start = number > 1 ? number - 1 + "0" : 0;
-      dispatch(roleActions.getRole({ limit: 10, skip: start }));
+      const _skip = getSkipCount(number, _limit);
+      dispatch(roleActions.getRole({ limit: _limit, skip: _skip }));
       handleGetPage(number);
    };
 
@@ -82,8 +85,9 @@ export const Role = ({
       }
    }, [success]);
 
-   if (!!httpOnLoad.length && httpOnLoad[0] === "GET_PERMISSIONS")
+   if (!!httpOnLoad.length && httpOnLoad[0] === "GET_PERMISSIONS") {
       return <Loader style={"relative"} />;
+   }
 
    return (
       <>
@@ -143,9 +147,9 @@ export const Role = ({
                <PaginationItem
                   page={page}
                   listLength={roleInfo.length}
-                  entries={roleInfo.length}
                   count={rolesCount}
-                  handleReturn={(number) => changePage(number)}
+                  limitCountNumber={_limit}
+                  handleChangePage={(number) => changePage(number)}
                />
             </div>
             <SimpleModal

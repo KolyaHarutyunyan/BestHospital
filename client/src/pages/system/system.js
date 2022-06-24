@@ -8,7 +8,7 @@ export const System = () => {
 
    useEffect(() => {
       dispatch(systemActions.getCredentialGlobal());
-      dispatch(systemActions.getServices({ limit: 10, skip: 0 }));
+      dispatch(systemActions.getServices({ limit: 7, skip: 0 }));
       dispatch(systemActions.getDepartments());
       dispatch(systemActions.getJobs());
       dispatch(systemActions.getPlaces());

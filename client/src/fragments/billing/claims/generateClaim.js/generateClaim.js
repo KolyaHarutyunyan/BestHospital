@@ -8,7 +8,12 @@ import {
    NoItemText,
    BillFiltersSelectors,
 } from "@eachbase/components";
-import { CheckupContext, FindLoad, PaginationContext } from "@eachbase/utils";
+import {
+   CheckupContext,
+   FindLoad,
+   getSkipCount,
+   PaginationContext,
+} from "@eachbase/utils";
 import { billActions, claimActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import Pagination from "@material-ui/lab/Pagination";
@@ -68,13 +73,15 @@ export const GenerateClaimFragment = ({
       filteredServiceDate
    );
 
+   const _limit = 10;
+
    function changePage(number) {
       if (page === number) return;
       handlePageChange(true);
       handleItemsCheckup(false);
       setBills(mapBills(bills, false));
-      let start = number > 1 ? number - 1 + "0" : 0;
-      dispatch(billActions.getBills({ limit: 10, skip: start }));
+      const _skip = getSkipCount(number, _limit);
+      dispatch(billActions.getBills({ limit: _limit, skip: _skip }));
       handleGetPage(number);
    }
 
@@ -125,7 +132,7 @@ export const GenerateClaimFragment = ({
                   <Pagination
                      onChange={(event, value) => changePage(value)}
                      page={page}
-                     count={Math.ceil(notClaimedBillsQty / 10)}
+                     count={Math.ceil(notClaimedBillsQty / _limit)}
                      color={"primary"}
                   />
                   <CreateChancel

@@ -7,7 +7,7 @@ import {
    PaginationItem,
    BillFiltersSelectors,
 } from "@eachbase/components";
-import { enumValues, PaginationContext } from "@eachbase/utils";
+import { enumValues, getSkipCount, PaginationContext } from "@eachbase/utils";
 import { invoiceActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import { InvoiceTable } from "./core";
@@ -48,11 +48,13 @@ export const InvoicesFragment = ({
       filteredInvoiceDate
    );
 
+   const _limit = 10;
+
    const changePage = (number) => {
       if (page === number) return;
       handlePageChange(true);
-      let start = number > 1 ? number - 1 + "0" : 0;
-      dispatch(invoiceActions.getInvoices({ limit: 10, skip: start }));
+      const _skip = getSkipCount(number, _limit);
+      dispatch(invoiceActions.getInvoices({ limit: _limit, skip: _skip }));
       handleGetPage(number);
    };
 
@@ -94,9 +96,9 @@ export const InvoicesFragment = ({
                <PaginationItem
                   listLength={invoicesWithFilters.length}
                   page={page}
-                  handleReturn={(number) => changePage(number)}
+                  handleChangePage={(number) => changePage(number)}
                   count={invoicesQty}
-                  entries={invoices.length}
+                  limitCountNumber={_limit}
                />
             </div>
          ) : (

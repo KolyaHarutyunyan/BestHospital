@@ -3,6 +3,9 @@ import { makeStyles } from "@material-ui/core";
 export const systemCoreCommonStyle = makeStyles(() => ({
    serviceTypeTableStyle: {
       width: "100%",
+      maxHeight: "480px",
+      overflow: "auto",
+      minHeight: "480px",
       marginTop: "16px",
       paddingBottom: "16px",
    },

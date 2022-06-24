@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Paper, Table, TableBody, TableContainer } from "@material-ui/core";
 import { FundingSourceTableBody, FundingSourceTableHead } from "./core";
-import { PaginationContext, useGlobalStyles } from "@eachbase/utils";
+import { getSkipCount, PaginationContext, useGlobalStyles } from "@eachbase/utils";
 import { Loader, NoItemText, PaginationItem } from "@eachbase/components";
 import { fundingSourceActions } from "@eachbase/store";
 
@@ -22,15 +22,17 @@ export const FundingSourceTable = ({
 
    const { handlePageChange, pageIsChanging } = useContext(PaginationContext);
 
+   const _limit = 10;
+
    const changePage = (number) => {
       if (page === number) return;
       handlePageChange(true);
-      let start = number > 1 ? number - 1 + "0" : 0;
+      const _skip = getSkipCount(number, _limit);
       dispatch(
          fundingSourceActions.getFundingSource({
-            status: status,
-            skip: start,
-            limit: 10,
+            status,
+            limit: _limit,
+            skip: _skip,
          })
       );
       handleGetPage(number);
@@ -75,9 +77,9 @@ export const FundingSourceTable = ({
                   <PaginationItem
                      listLength={fundingSourceList?.funders?.length}
                      page={page}
-                     handleReturn={(number) => changePage(number)}
+                     handleChangePage={(number) => changePage(number)}
                      count={fundingSourceList?.count}
-                     entries={fundingSourceList?.funders?.length}
+                     limitCountNumber={_limit}
                   />
                </div>
             ) : (

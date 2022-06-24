@@ -7,7 +7,7 @@ import {
    PaginationItem,
    BillFiltersSelectors,
 } from "@eachbase/components";
-import { DrawerContext, PaginationContext } from "@eachbase/utils";
+import { DrawerContext, getSkipCount, PaginationContext } from "@eachbase/utils";
 import { billActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import { getFilteredBills } from "./constants";
@@ -44,11 +44,13 @@ export const BillsFragment = ({
       filteredDate
    );
 
+   const _limit = 10;
+
    const changePage = (number) => {
       if (page === number) return;
       handlePageChange(true);
-      let start = number > 1 ? number - 1 + "0" : 0;
-      dispatch(billActions.getBills({ limit: 10, skip: start }));
+      const _skip = getSkipCount(number, _limit);
+      dispatch(billActions.getBills({ limit: _limit, skip: _skip }));
       handleGetPage(number);
    };
 
@@ -82,9 +84,9 @@ export const BillsFragment = ({
                <PaginationItem
                   listLength={billsWithFilters.length}
                   page={page}
-                  handleReturn={(number) => changePage(number)}
+                  handleChangePage={(number) => changePage(number)}
                   count={billsQty}
-                  entries={billsWithFilters.length}
+                  limitCountNumber={_limit}
                />
             </div>
          ) : (

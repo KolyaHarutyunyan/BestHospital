@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { claimReceivableTableStyle } from "./styles";
 import { Loader, NoItemText, BillFiltersSelectors } from "@eachbase/components";
-import { PaginationContext } from "@eachbase/utils";
+import { getSkipCount, PaginationContext } from "@eachbase/utils";
 import { claimActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 import Pagination from "@material-ui/lab/Pagination";
@@ -37,11 +37,13 @@ export const ModalFirstStepInput = ({
       filteredDateTo
    );
 
+   const _limit = 10;
+
    const changePage = (number) => {
       if (page === number) return;
       handlePageChange(true);
-      let start = number > 1 ? number - 1 + "0" : 0;
-      dispatch(claimActions.getClaims({ limit: 10, skip: start }));
+      const _skip = getSkipCount(number, _limit);
+      dispatch(claimActions.getClaims({ limit: _limit, skip: _skip }));
       handleGetPage(number);
    };
 
@@ -78,7 +80,7 @@ export const ModalFirstStepInput = ({
                      <Pagination
                         onChange={(event, number) => changePage(number)}
                         page={page}
-                        count={Math.ceil(claimsQty / 10)}
+                        count={Math.ceil(claimsQty / _limit)}
                         color={"primary"}
                         size={"small"}
                      />

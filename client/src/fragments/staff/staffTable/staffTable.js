@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Paper, Table, TableBody, TableContainer } from "@material-ui/core";
-import { PaginationContext, useGlobalStyles } from "@eachbase/utils";
+import { getSkipCount, PaginationContext, useGlobalStyles } from "@eachbase/utils";
 import { Loader, NoItemText, PaginationItem } from "@eachbase/components";
 import { StaffTableBody, StaffTableHead } from "./core";
 import { useDispatch } from "react-redux";
@@ -20,11 +20,13 @@ export const StaffTable = ({
 
    const { pageIsChanging, handlePageChange } = useContext(PaginationContext);
 
+   const _limit = 10;
+
    function changePage(number) {
       if (page === number) return;
       handlePageChange(true);
-      let start = number > 1 ? number - 1 + "0" : 0;
-      dispatch(adminActions.getAdmins({ status: status, skip: start, limit: 10 }));
+      const _skip = getSkipCount(number, _limit);
+      dispatch(adminActions.getAdmins({ status, limit: _limit, skip: _skip }));
       handleGetPage(number);
    }
 
@@ -64,10 +66,9 @@ export const StaffTable = ({
                   <PaginationItem
                      listLength={staff.length}
                      page={page}
-                     component="div"
-                     handleReturn={(number) => changePage(number)}
+                     handleChangePage={(number) => changePage(number)}
                      count={staffCount}
-                     entries={staff.length}
+                     limitCountNumber={_limit}
                   />
                </div>
             ) : (

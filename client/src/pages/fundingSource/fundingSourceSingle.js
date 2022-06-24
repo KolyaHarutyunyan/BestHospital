@@ -24,7 +24,7 @@ export const FundingSourceSingle = () => {
       dispatch(fundingSourceActions.getFoundingSourceServiceById(params.id));
       dispatch(historyActions.getHistory("Funder", { onResource: params.id }));
       dispatch(noteActions.getGlobalNotes(params.id, "Funder"));
-      dispatch(systemActions.getServices({ limit: 10, skip: 0 }));
+      dispatch(systemActions.getServices({ limit: 7, skip: 0 }));
       dispatch(systemActions.getCredentialGlobal());
       dispatch(httpRequestsOnSuccessActions.removeSuccess());
    }, []);

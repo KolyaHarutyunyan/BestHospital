@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { useDispatch } from "react-redux";
 import { Paper, Table, TableBody, TableContainer } from "@material-ui/core";
 import { ClientTableBody, ClientTableHead } from "./core";
-import { PaginationContext, useGlobalStyles } from "@eachbase/utils";
+import { getSkipCount, PaginationContext, useGlobalStyles } from "@eachbase/utils";
 import { Loader, NoItemText, PaginationItem } from "@eachbase/components";
 import { clientActions } from "@eachbase/store";
 
@@ -23,11 +23,13 @@ export const ClientTable = ({
 
    const { pageIsChanging, handlePageChange } = useContext(PaginationContext);
 
+   const _limit = 10;
+
    const changePage = (number) => {
       if (page === number) return;
       handlePageChange(true);
-      let start = number > 1 ? number - 1 + "0" : 0;
-      dispatch(clientActions.getClients({ status: status, skip: start, limit: 10 }));
+      const _skip = getSkipCount(number, _limit);
+      dispatch(clientActions.getClients({ status, limit: _limit, skip: _skip }));
       handleGetPage(number);
    };
 
@@ -71,9 +73,9 @@ export const ClientTable = ({
                <PaginationItem
                   listLength={clients.length}
                   page={page}
-                  handleReturn={(number) => changePage(number)}
+                  handleChangePage={(number) => changePage(number)}
                   count={clientsCount}
-                  entries={clients.length}
+                  limitCountNumber={_limit}
                />
             </div>
          ) : (

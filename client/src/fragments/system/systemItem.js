@@ -83,9 +83,8 @@ export const SystemItem = () => {
       {
          tabComponent: (
             <ServiceType
-               globalServices={globalServices}
+               globalServices={services}
                serviceTypesQty={count}
-               serviceTypesLoader={!!loader.length}
                page={page}
                handleGetPage={setPage}
             />

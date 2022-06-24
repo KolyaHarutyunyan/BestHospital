@@ -2,7 +2,7 @@ import React, { Fragment, useContext } from "react";
 import { Loader, NoItemText, PaginationItem } from "@eachbase/components";
 import { systemItemStyles } from "./styles";
 import { CreateEditServiceType, SystemServiceTypeTable } from "./common";
-import { PaginationContext } from "@eachbase/utils";
+import { FindLoad, getSkipCount, PaginationContext } from "@eachbase/utils";
 import { systemActions } from "@eachbase/store";
 import { useDispatch } from "react-redux";
 
@@ -11,19 +11,22 @@ export const ServiceType = ({
    serviceTypesQty = 0,
    page,
    handleGetPage,
-   serviceTypesLoader,
 }) => {
    const classes = systemItemStyles();
 
    const { pageIsChanging, handlePageChange } = useContext(PaginationContext);
 
+   const loader = FindLoad("GET_SERVICES");
+
    const dispatch = useDispatch();
+
+   const _limit = 7;
 
    function changePage(number) {
       if (page === number) return;
       handlePageChange(true);
-      let start = number > 1 ? number - 1 + "0" : 0;
-      dispatch(systemActions.getServices({ limit: 10, skip: start }));
+      const _skip = getSkipCount(number, _limit);
+      dispatch(systemActions.getServices({ limit: _limit, skip: _skip }));
       handleGetPage(number);
    }
 
@@ -31,17 +34,21 @@ export const ServiceType = ({
       <Fragment>
          <CreateEditServiceType />
          <p className={classes.title}>Service Type</p>
-         {serviceTypesLoader && pageIsChanging ? (
-            <Loader circleSize={50} height={"200px"} />
-         ) : !!globalServices.length ? (
+         {!!globalServices.length ? (
             <>
-               <SystemServiceTypeTable serviceTypes={globalServices} />
+               {!!loader.length && pageIsChanging ? (
+                  <div className={classes.loaderStyle}>
+                     <Loader circleSize={50} height={"100%"} />
+                  </div>
+               ) : (
+                  <SystemServiceTypeTable serviceTypes={globalServices} />
+               )}
                <PaginationItem
                   listLength={globalServices.length}
                   page={page}
-                  handleReturn={(number) => changePage(number)}
+                  handleChangePage={(number) => changePage(number)}
                   count={serviceTypesQty}
-                  entries={globalServices.length}
+                  limitCountNumber={_limit}
                />
             </>
          ) : (

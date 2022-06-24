@@ -139,4 +139,9 @@ export const systemItemStyles = makeStyles(() => ({
    credentialNameTypeStyle: {
       "& > em": { fontWeight: 600 },
    },
+   loaderStyle: {
+      minHeight: "496px",
+      display: "flex",
+      alignItems: "center",
+   },
 }));
