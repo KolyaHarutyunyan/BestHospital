@@ -1,0 +1,89 @@
+// — Theme Colors
+$themePrimary: #0090f0;
+$themeYellow: #ffc051;
+$themeGreen: #6fd231;
+$themeRed: #fe7070;
+
+// — Background Colors
+$backgroundPrimary: #ffffff;
+$backgroundSecondary: #f7f9fc;
+$backgroundDark: #1a3855;
+
+// — Text Colors
+$textPrimary: #122942;
+$textSecondary: #2d4365;
+$textWhite: #ffffff;
+$textGrey: #ffffff82;
+
+$mobile: 375px;
+$tablet: 768px;
+$desktop: 1280px;
+
+body {
+   // font-family: "GT Walsheim Pro";
+
+   @media (max-width: $desktop) {
+      //  padding-top: 76px;
+   }
+   @media (max-width: $tablet) {
+      //  padding-top: 72px;
+   }
+   @media (max-width: $mobile) {
+      //  padding-top: 64px;
+   }
+}
+
+::-webkit-scrollbar {
+   display: none;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+   -webkit-appearance: none;
+   margin: 0;
+}
+
+.space-between {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   width: 100%;
+}
+
+.space-between-flex-start {
+   display: flex;
+   justify-content: space-between;
+   width: 100%;
+}
+
+.flex {
+   display: flex;
+}
+
+.flex-align-center {
+   display: flex;
+   align-items: center;
+}
+
+.flex-align-start {
+   display: flex;
+   align-items: flex-start;
+}
+
+.flex-column-start {
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+}
+
+.column {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+.flex-end {
+   width: 100%;
+   justify-content: flex-end;
+   display: flex;
+}
