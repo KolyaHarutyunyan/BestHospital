@@ -2,7 +2,7 @@ import React from "react";
 import {useHistory} from "react-router-dom";
 import {SlicedText, TableBodyComponent} from "@eachbase/components";
 import {TableCell} from "@material-ui/core";
-import {Images, useGlobalStyles} from "@eachbase/utils";
+import {Images, useGlobalStyles, makeCapitalize} from "@eachbase/utils";
 import {staffTableStyles} from "./styles";
 
 export const StaffTableBody = ({index, data}) => {
@@ -18,7 +18,7 @@ export const StaffTableBody = ({index, data}) => {
             <TableCell className={classes.tableRow}>
                 <div className={globalClasses.InfoAndImage}>
                     <img src={Images.staffOutline} alt={"funding"}/>
-                    <SlicedText type={'name'} size={10} data={`${data.firstName} ${data.lastName}`}/>
+                    <SlicedText type={'name'} size={10} data={makeCapitalize(`${data.firstName} ${data.lastName}`)}/>
                 </div>
             </TableCell>
             <TableCell className={classes.tableRow}>
