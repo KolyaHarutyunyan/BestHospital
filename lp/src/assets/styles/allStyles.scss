@@ -1,5 +1,14 @@
 /* Global and Reset */
-@import "globalStyles";
-@import "reset";
+@import "./globalStyles.scss";
+@import "./reset.scss";
 
 /* Pages */
+
+/* Components */
+@import "src/components/logo/logo.scss";
+@import "src/components/button/button.scss";
+
+/* Fragments */
+@import "src/fragments/topBar/topBar.scss";
+@import "src/fragments/main/main.scss";
+@import "src/fragments/footer/footer.scss";

@@ -15,8 +15,8 @@ $textSecondary: #2d4365;
 $textWhite: #ffffff;
 $textGrey: #ffffff82;
 
-$mobile: 375px;
-$tablet: 768px;
+$mobile: 735px;
+$tablet: 1000px;
 $desktop: 1280px;
 
 body {
@@ -65,6 +65,12 @@ input[type="number"]::-webkit-outer-spin-button {
    align-items: center;
 }
 
+.flex-justify-align-center {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
 .flex-align-start {
    display: flex;
    align-items: flex-start;
@@ -86,6 +92,12 @@ input[type="number"]::-webkit-outer-spin-button {
    width: 100%;
    justify-content: flex-end;
    display: flex;
+}
+
+.background-img {
+   background-repeat: no-repeat;
+   background-size: contain;
+   background-position: center;
 }
 
 .desktop {
@@ -141,4 +153,10 @@ input[type="number"]::-webkit-outer-spin-button {
    min-height: 100vh;
    display: flex;
    flex-direction: column;
+}
+
+.container-max-size {
+   max-width: 1440px;
+   width: 100%;
+   margin: 0 auto;
 }

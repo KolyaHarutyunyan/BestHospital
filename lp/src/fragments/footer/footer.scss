@@ -1,7 +1,236 @@
 @import "src/assets/styles/globalStyles";
 
+@mixin before-after-content($positionOne, $positionTwo, $width, $height, $image) {
+   content: "";
+   position: absolute;
+   #{$positionOne}: 0;
+   #{$positionTwo}: 0;
+   width: $width;
+   height: $height;
+   background-image: url($image);
+   background-repeat: no-repeat;
+   background-size: contain;
+   background-position: center;
+}
+
+@mixin list-font {
+   font-size: 12px;
+   font-weight: 400;
+   color: $textWhite;
+   line-height: 14px;
+}
+
+@mixin list-border {
+   &:not(:first-child) {
+      border-left: 1px solid $textWhite;
+      margin-left: 8px;
+      padding-left: 8px;
+   }
+}
+
 .footer-container {
-    flex-shrink: 0;
-    width: 100%;
-    border: 1px solid green;
+   flex-shrink: 0;
+   position: relative;
+   width: 100%;
+   background-color: $backgroundDark;
+   &::before {
+      @include before-after-content(
+         bottom,
+         left,
+         179px,
+         172px,
+         "../../assets/images/footer/pathToBottomLeft.svg"
+      );
+   }
+   &::after {
+      @include before-after-content(
+         top,
+         right,
+         278px,
+         252px,
+         "../../assets/images/footer/pathToTopRight.svg"
+      );
+   }
+   .footer-content {
+      position: relative;
+      z-index: 1;
+      min-height: 329px;
+      padding: 78px 80px 24px;
+      @media (max-width: $desktop) {
+         padding: 78px 32px 24px;
+      }
+      @media (max-width: $tablet) {
+         padding: 40px 32px 24px;
+      }
+      @media (max-width: $mobile) {
+         padding: 40px 16px 17px;
+      }
+      .footer-contact-content-box {
+         width: 100%;
+         display: flex;
+         justify-content: space-between;
+         @media (max-width: $tablet) {
+            flex-direction: column-reverse;
+         }
+         .title {
+            font-size: 16px;
+            font-weight: 500;
+            color: $themePrimary;
+            line-height: 18px;
+         }
+         .info-box {
+            max-width: 255px;
+            width: 100%;
+            @media (max-width: $tablet) {
+               margin-top: 56px;
+            }
+            .info-text {
+               max-width: 184px;
+               width: 100%;
+               font-size: 14px;
+               font-weight: 500;
+               color: $textWhite;
+               margin: 16px 0 24px;
+            }
+            .social-media-icons-box {
+               width: 100%;
+               .social-media-icons-list {
+                  & li:not(:first-child) {
+                     margin-left: 24px;
+                  }
+                  .social-media-icons-anchor {
+                     display: inline-block;
+                     width: 40px;
+                     height: 40px;
+                     & img {
+                        width: 100%;
+                        object-fit: contain;
+                        &.social-media-icon-hover {
+                           display: none;
+                        }
+                     }
+                     &:hover {
+                        img.social-media-icon {
+                           display: none;
+                        }
+                        img.social-media-icon-hover {
+                           display: block;
+                        }
+                     }
+                  }
+               }
+            }
+         }
+         .contact-and-sign-up-box {
+            flex-grow: 1;
+            display: flex;
+            @media (max-width: $mobile) {
+               flex-direction: column;
+            }
+            .contact-box {
+               width: 100%;
+               display: flex;
+               .company-box {
+                  max-width: 255px;
+                  width: 100%;
+               }
+               .contact-us-box {
+                  margin-left: 84px;
+               }
+               .list {
+                  margin-top: 16px;
+                  & a {
+                     font-size: 14px;
+                     font-weight: 500;
+                     color: $textWhite;
+                     line-height: 16px;
+                     text-decoration: none;
+                  }
+                  &.contact-us-list {
+                     display: flex;
+                     align-items: center;
+                     & img {
+                        width: 24px;
+                        height: 24px;
+                     }
+                     & a {
+                        margin-left: 8px;
+                     }
+                  }
+               }
+            }
+            .sign-up-box {
+               max-width: 255px;
+               width: 100%;
+               margin-left: 85px;
+               @media (max-width: $mobile) {
+                  margin-left: 0;
+                  margin-top: 56px;
+               }
+               .sign-up-info {
+                  margin: 16px 0;
+                  font-size: 14px;
+                  font-weight: 500;
+                  color: $textGrey;
+                  line-height: 16px;
+               }
+               .sign-up-label {
+                  display: block;
+                  position: relative;
+                  padding: 12px 8px 12px 16px;
+                  background-color: $backgroundPrimary;
+                  border-radius: 10px;
+                  input {
+                     border: none;
+                     outline: none;
+                     width: 100%;
+                     font-size: 14px;
+                     font-weight: 400;
+                     color: $textSecondary;
+                  }
+                  .sign-up-button {
+                     border: none;
+                     width: 40px;
+                     height: 40px;
+                     position: absolute;
+                     right: 8px;
+                     top: 50%;
+                     transform: translateY(-50%);
+                     background-color: inherit;
+                  }
+               }
+            }
+         }
+      }
+      .footer-copyright-and-terms-privacy-box {
+         margin-top: 80px;
+         @media (max-width: $tablet) {
+            margin-top: 56px;
+         }
+         @media (max-width: $mobile) {
+            flex-direction: column;
+            align-items: flex-start;
+         }
+         .copyright-list {
+            li {
+               @include list-font();
+               @include list-border();
+            }
+         }
+         .terms-privacy-box {
+            @media (max-width: $mobile) {
+               margin-top: 8px;
+            }
+            .terms-privacy-list {
+               li {
+                  @include list-border();
+                  a {
+                     @include list-font();
+                     text-decoration: none;
+                  }
+               }
+            }
+         }
+      }
+   }
 }

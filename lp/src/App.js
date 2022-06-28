@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { TopBar, Main, Footer } from "fragments";
 import { ToastContainer } from "react-toastify";
 
@@ -7,14 +7,12 @@ function App() {
       window.scrollTo(0, 0);
    };
    return (
-      <Fragment>
-         <div className="App">
-            <TopBar />
-            <Main />
-            <Footer />
-         </div>
+      <div className="App">
+         <TopBar />
+         <Main />
+         <Footer />
          <ToastContainer position={"bottom-right"} />
-      </Fragment>
+      </div>
    );
 }
 
