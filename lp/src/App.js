@@ -1,6 +1,7 @@
 import React from "react";
-import { TopBar, Main, Footer } from "fragments";
+import { TopBar, Footer } from "fragments";
 import { ToastContainer } from "react-toastify";
+import { Routers } from "router/route";
 
 function App() {
    window.onbeforeunload = function () {
@@ -9,7 +10,7 @@ function App() {
    return (
       <div className="App">
          <TopBar />
-         <Main />
+         <Routers />
          <Footer />
          <ToastContainer position={"bottom-right"} />
       </div>

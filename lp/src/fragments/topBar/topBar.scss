@@ -1,0 +1,195 @@
+@import "src/assets/styles/globalStyles";
+
+@mixin links-and-button-font {
+   font-size: 16px;
+   font-weight: 700;
+   color: $textWhite;
+   line-height: 18px;
+}
+
+.topbar-container {
+   width: 100%;
+   background-color: $backgroundDark;
+   .topbar-content {
+      position: relative;
+      z-index: 1;
+      min-height: 80px;
+      padding: 0 80px;
+      @media (max-width: $desktop) {
+         padding: 0 32px;
+      }
+      @media (max-width: $mobile) {
+         padding: 0 16px;
+         min-height: 62px;
+      }
+      .topbar-logo {
+         font-size: 24px;
+         font-weight: 700;
+         line-height: 28px;
+         position: relative;
+         z-index: 2;
+      }
+      .desktop-nav {
+         @media (max-width: $tablet) {
+            display: none;
+         }
+         .nav-links-container {
+            width: 100%;
+            .nav-links-list {
+               li {
+                  &:not(:first-child) {
+                     margin-left: 32px;
+                  }
+                  a {
+                     @include links-and-button-font();
+                     text-decoration: none;
+                     &:hover {
+                        color: $themePrimary;
+                     }
+                     &.active {
+                        color: $themePrimary;
+                        cursor: default;
+                     }
+                  }
+                  .box-for-gap {
+                     width: 156px;
+                     height: 0;
+                  }
+               }
+               .sign-in-button {
+                  padding: 0;
+                  background-color: inherit;
+                  @include links-and-button-font();
+                  &:hover {
+                     color: $themePrimary;
+                  }
+               }
+               .book-demo-button {
+                  position: fixed;
+                  top: 40px;
+                  transform: translateY(-50%);
+                  right: calc((100% - 1440px) / 2 + 80px);
+                  @media (max-width: 1440px) {
+                     right: 80px;
+                  }
+                  @media (max-width: $desktop) {
+                     right: 32px;
+                  }
+                  z-index: 2;
+                  width: 156px;
+                  height: 48px;
+                  border-radius: 10px;
+                  box-shadow: 0px 0px 6px #347af069;
+                  background-color: $themePrimary;
+                  margin-left: 32px;
+                  font-size: 18px;
+                  font-weight: 500;
+                  color: $textWhite;
+               }
+            }
+         }
+      }
+      .tablet-nav {
+         display: none;
+         @media (max-width: $tablet) {
+            display: block;
+            .menu-button {
+               padding: 0;
+               width: 42px;
+               height: 42px;
+               background-image: url("../../assets/images/topBar/menuIcon.svg");
+               background-repeat: no-repeat;
+               background-size: contain;
+               background-position: center;
+               transition: all 0.2s linear;
+               &.shown {
+                  background-image: url("../../assets/images/topBar/menuCloseIcon.svg");
+               }
+               background-color: inherit;
+               position: fixed;
+               top: 40px;
+               transform: translateY(-50%);
+               right: 32px;
+               z-index: 2;
+               @media (max-width: $mobile) {
+                  width: 30px;
+                  height: 30px;
+                  top: 32px;
+                  right: 16px;
+               }
+            }
+            .menu-container {
+               position: fixed;
+               left: 0;
+               top: 0;
+               width: 100%;
+               height: 100vh;
+               background-color: #0000007e;
+               border: 1px solid #707070;
+               opacity: 0;
+               transition: all 0.2s linear;
+               .nav-links-container {
+                  width: 100%;
+                  height: 0;
+                  overflow-y: auto;
+                  position: fixed;
+                  background-color: $backgroundSecondary;
+                  padding: 80px 32px;
+                  display: flex;
+                  justify-content: center;
+                  transition: all 0.3s linear;
+                  .nav-links-list {
+                     max-width: 360px;
+                     width: 100%;
+                     @media (max-width: $mobile) {
+                        max-width: 263px;
+                     }
+                     li {
+                        width: 100%;
+                        padding-bottom: 16px;
+                        margin-bottom: 16px;
+                        border-bottom: 1px solid #0493ec5a;
+                        display: flex;
+                        justify-content: center;
+                        a {
+                           font-size: 20px;
+                           font-weight: 700;
+                           color: $textSecondary;
+                           text-decoration: none;
+                        }
+                        .sign-in-button {
+                           font-size: 20px;
+                           font-weight: 700;
+                           color: $textSecondary;
+                           background-color: inherit;
+                        }
+                     }
+                     .book-demo-button {
+                        width: 230px;
+                        height: 48px;
+                        border-radius: 10px;
+                        box-shadow: 0px 0px 6px #0000001a;
+                        background-color: $themePrimary;
+                        font-size: 16px;
+                        font-weight: 500;
+                        color: $textWhite;
+                        margin-top: 16px;
+                     }
+                  }
+               }
+               &.shown {
+                  opacity: 1;
+                  z-index: 1;
+                  .nav-links-container {
+                     z-index: 2;
+                     height: 444px;
+                     @media (max-width: $mobile) {
+                        height: 492px;
+                     }
+                  }
+               }
+            }
+         }
+      }
+   }
+}

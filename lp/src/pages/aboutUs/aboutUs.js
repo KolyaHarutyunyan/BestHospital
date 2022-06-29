@@ -1,7 +1,6 @@
 import React from "react";
+import { Main } from "fragments";
 
 export const AboutUs = () => {
-  return (
-    <div>aboutUs</div>
-  );
+   return <Main>aboutUs</Main>;
 };

@@ -1,7 +1,6 @@
-import React from "react"
+import React from "react";
+import { Main } from "fragments";
 
 export const NotFound = () => {
-  return (
-    <div>notFound</div>
-  );
+   return <Main>notFound</Main>;
 };

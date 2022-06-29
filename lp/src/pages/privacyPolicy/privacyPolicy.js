@@ -1,7 +1,6 @@
 import React from "react";
+import { Main } from "fragments";
 
 export const PrivacyPolicy = () => {
-  return (
-    <div>privacyPolicy</div>
-  );
+   return <Main>privacyPolicy</Main>;
 };

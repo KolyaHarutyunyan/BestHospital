@@ -1,7 +1,6 @@
 import React from "react";
+import { Main } from "fragments";
 
 export const Home = () => {
-  return (
-    <div>home</div>
-  );
+   return <Main>home</Main>;
 };

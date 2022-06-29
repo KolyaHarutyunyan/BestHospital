@@ -8,6 +8,8 @@ import TwitterHover from "./images/footer/twitterHover.svg";
 import Phone from "./images/footer/phone.svg";
 import WhiteEnvelope from "./images/footer/whiteEnvelope.svg";
 import BlueEnvelope from "./images/footer/blueEnvelope.svg";
+import MenuIcon from "./images/topBar/menuIcon.svg";
+import MenuCloseIcon from "./images/topBar/menuCloseIcon.svg";
 
 export const Images = {
    Facebook,
@@ -19,4 +21,6 @@ export const Images = {
    Phone,
    WhiteEnvelope,
    BlueEnvelope,
+   MenuIcon,
+   MenuCloseIcon,
 };
