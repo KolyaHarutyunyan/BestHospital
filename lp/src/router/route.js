@@ -8,10 +8,11 @@ import {
    PrivacyPolicy,
    NotFound,
 } from "pages";
+import { Main } from "fragments";
 
 export const Routers = () => {
    return (
-      <div>
+      <Main>
          <Routes>
             <Route path={"/"} element={<Home />} />
             <Route path={"/about-us"} element={<AboutUs />} />
@@ -21,6 +22,6 @@ export const Routers = () => {
             <Route path={"/privacy-policy"} element={<PrivacyPolicy />} />
             <Route path={"*"} element={<NotFound />} />
          </Routes>
-      </div>
+      </Main>
    );
 };

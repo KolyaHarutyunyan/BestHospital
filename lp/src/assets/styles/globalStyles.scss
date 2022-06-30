@@ -16,7 +16,7 @@ $textWhite: #ffffff;
 $textGrey: #ffffff82;
 
 $mobile: 735px;
-$tablet: 1000px;
+$tablet: 1024px;
 $desktop: 1280px;
 
 body {
@@ -155,8 +155,18 @@ input[type="number"]::-webkit-outer-spin-button {
    flex-direction: column;
 }
 
-.container-max-size {
+.content-container {
    max-width: 1440px;
    width: 100%;
    margin: 0 auto;
+   padding-left: 80px;
+   padding-right: 80px;
+   @media (max-width: $desktop) {
+      padding-left: 32px;
+      padding-right: 32px;
+   }
+   @media (max-width: $mobile) {
+      padding-left: 16px;
+      padding-right: 16px;
+   }
 }

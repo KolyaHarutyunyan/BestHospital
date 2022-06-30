@@ -36,7 +36,7 @@ export const Footer = () => {
 
    return (
       <footer className="footer-container">
-         <div className="footer-content container-max-size">
+         <div className="footer-content content-container">
             <div className="footer-contact-content-box">
                <div className="info-box">
                   <Logo />
@@ -112,7 +112,7 @@ export const Footer = () => {
                            <Button
                               buttonType={"submit"}
                               buttonLoader={loader}
-                              buttonClassName={"sign-up-button flex-justify-align-center"}
+                              buttonClassName={"sign-up-button"}
                            >
                               <img src={Images.BlueEnvelope} alt="blue-envelope" />
                            </Button>

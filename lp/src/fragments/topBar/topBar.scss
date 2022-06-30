@@ -1,25 +1,13 @@
 @import "src/assets/styles/globalStyles";
 
-@mixin links-and-button-font {
-   font-size: 16px;
-   font-weight: 700;
-   color: $textWhite;
-   line-height: 18px;
-}
-
 .topbar-container {
    width: 100%;
-   background-color: $backgroundDark;
+   background-color: #152f4b;
    .topbar-content {
       position: relative;
       z-index: 1;
       min-height: 80px;
-      padding: 0 80px;
-      @media (max-width: $desktop) {
-         padding: 0 32px;
-      }
       @media (max-width: $mobile) {
-         padding: 0 16px;
          min-height: 62px;
       }
       .topbar-logo {
@@ -41,7 +29,10 @@
                      margin-left: 32px;
                   }
                   a {
-                     @include links-and-button-font();
+                     font-size: 16px;
+                     font-weight: 700;
+                     color: $textWhite;
+                     line-height: 18px;
                      text-decoration: none;
                      &:hover {
                         color: $themePrimary;
@@ -55,36 +46,6 @@
                      width: 156px;
                      height: 0;
                   }
-               }
-               .sign-in-button {
-                  padding: 0;
-                  background-color: inherit;
-                  @include links-and-button-font();
-                  &:hover {
-                     color: $themePrimary;
-                  }
-               }
-               .book-demo-button {
-                  position: fixed;
-                  top: 40px;
-                  transform: translateY(-50%);
-                  right: calc((100% - 1440px) / 2 + 80px);
-                  @media (max-width: 1440px) {
-                     right: 80px;
-                  }
-                  @media (max-width: $desktop) {
-                     right: 32px;
-                  }
-                  z-index: 2;
-                  width: 156px;
-                  height: 48px;
-                  border-radius: 10px;
-                  box-shadow: 0px 0px 6px #347af069;
-                  background-color: $themePrimary;
-                  margin-left: 32px;
-                  font-size: 18px;
-                  font-weight: 500;
-                  color: $textWhite;
                }
             }
          }
@@ -137,7 +98,7 @@
                   padding: 80px 32px;
                   display: flex;
                   justify-content: center;
-                  transition: all 0.3s linear;
+                  transition: all 0.2s linear;
                   .nav-links-list {
                      max-width: 360px;
                      width: 100%;
@@ -157,23 +118,6 @@
                            color: $textSecondary;
                            text-decoration: none;
                         }
-                        .sign-in-button {
-                           font-size: 20px;
-                           font-weight: 700;
-                           color: $textSecondary;
-                           background-color: inherit;
-                        }
-                     }
-                     .book-demo-button {
-                        width: 230px;
-                        height: 48px;
-                        border-radius: 10px;
-                        box-shadow: 0px 0px 6px #0000001a;
-                        background-color: $themePrimary;
-                        font-size: 16px;
-                        font-weight: 500;
-                        color: $textWhite;
-                        margin-top: 16px;
                      }
                   }
                }

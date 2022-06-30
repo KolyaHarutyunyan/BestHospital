@@ -3,10 +3,12 @@
 @import "./reset.scss";
 
 /* Pages */
+@import "src/pages/home/fragments/home.scss";
 
 /* Components */
 @import "src/components/logo/logo.scss";
 @import "src/components/button/button.scss";
+@import "src/components/card/card.scss";
 
 /* Fragments */
 @import "src/fragments/topBar/topBar.scss";

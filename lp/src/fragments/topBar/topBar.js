@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Button, Logo } from "components";
+import { Logo, Button } from "components";
 import { navLinks } from "./constants";
 
 export const TopBar = () => {
@@ -8,8 +8,11 @@ export const TopBar = () => {
 
    return (
       <nav className="topbar-container">
-         <div className="topbar-content container-max-size space-between">
-            <Logo logoClassName={"topbar-logo"} />
+         <div className="topbar-content content-container space-between">
+            <Logo
+               logoClassName={"topbar-logo"}
+               onClickLogo={() => setMenuIsShown(false)}
+            />
             <div className="desktop-nav">
                <div className="nav-links-container">
                   <ul className="nav-links-list flex-align-center">
@@ -60,7 +63,7 @@ export const TopBar = () => {
                         <li>
                            <Button
                               buttonType={"button"}
-                              buttonClassName={"sign-in-button"}
+                              buttonClassName={"sign-in-button-mobile"}
                               onClickButton={() => {}}
                            >
                               Sign In
@@ -68,7 +71,7 @@ export const TopBar = () => {
                         </li>
                         <Button
                            buttonType={"button"}
-                           buttonClassName={"book-demo-button"}
+                           buttonClassName={"book-demo-button-mobile"}
                            onClickButton={() => {}}
                         >
                            Book Demo
