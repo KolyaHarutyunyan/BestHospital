@@ -2,42 +2,34 @@
 
 .card {
    position: relative;
+   // z-index: -2;
    width: 100%;
    overflow: hidden;
    background-color: $backgroundPrimary;
-   // background: transparent
-   //    radial-gradient(
-   //       closest-side at 10% 50%,
-   //       #0c3965 0%,
-   //       #152f4b 12%,
-   //       #13283e 24%,
-   //       #112437 70%,
-   //       #17324c 100%,
-   //       #0e1e2e 100%,
-   //       #050b11 100%
-   //    )
-   //    0% 0% no-repeat padding-box;
    &.gradient-card {
       &::after {
          content: "";
          position: absolute;
          top: 0;
          right: 0;
+         // z-index: -1;
          width: 598px;
          height: 602px;
          background-image: url("../../assets/images/home/cardGradientWeb.png");
          background-repeat: no-repeat;
          background-size: contain;
          background-position: 70px 0%;
-         @media (max-width: $tablet) {
+         @media (max-width: $desktop) {
             width: 452px;
             height: 740px;
             background-image: url("../../assets/images/home/cardGradientTablet.png");
+            background-position: 0% 26px;
          }
          @media (max-width: $mobile) {
-            width: 197px;
-            height: 358px;
+            width: 251px;
+            height: 412px;
             background-image: url("../../assets/images/home/cardGradientMobile.png");
+            background-position: 0% 199px;
          }
       }
    }

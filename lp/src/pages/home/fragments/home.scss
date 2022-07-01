@@ -1,19 +1,58 @@
 @import "src/assets/styles/globalStyles";
 
+@mixin card-border {
+   border-left: 1px solid #edf8ff;
+   border-right: 1px solid #edf8ff;
+   @media (max-width: $mobile) {
+      border-left: none;
+      border-right: none;
+   }
+}
+
 .home-fragment {
    width: 100%;
+   .radial-gradient-image {
+      background-image: url("../../../assets/images/base.svg");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+   }
    .home-first-box {
       width: 100%;
       display: flex;
       justify-content: space-between;
+      margin-top: -24px;
+      @media (max-width: $desktop) {
+         flex-direction: column;
+         align-items: center;
+         margin-top: -64px;
+      }
+      @media (max-width: $mobile) {
+         margin-top: -38px;
+      }
       .first-box-content {
          max-width: 640px;
          width: 100%;
+         @media (max-width: $desktop) {
+            max-width: 533px;
+            text-align: center;
+         }
+         @media (max-width: $mobile) {
+            max-width: 343px;
+         }
          .content-title {
             font-size: 56px;
             font-weight: 700;
             color: $backgroundPrimary;
             line-height: 66px;
+            @media (max-width: $desktop) {
+               font-size: 40px;
+               line-height: 60px;
+            }
+            @media (max-width: $mobile) {
+               font-size: 32px;
+               line-height: 48px;
+            }
          }
          .content-subtitle {
             font-size: 18px;
@@ -21,28 +60,335 @@
             color: $backgroundSecondary;
             line-height: 27px;
             margin-top: 24px;
+            @media (max-width: $desktop) {
+               font-size: 16px;
+            }
          }
          .content-actions-box {
             width: 100%;
             margin-top: 46px;
+            @media (max-width: $desktop) {
+               flex-direction: column;
+               margin-top: 32px;
+            }
          }
       }
       .first-box-picture {
-         position: relative;
-         z-index: 1;
-         min-width: 569px;
+         width: 569px;
          height: 392px;
          background-image: url(../../../assets/images/home/hero.png);
          background-repeat: no-repeat;
          background-size: contain;
          background-position: center;
-         @media (max-width: $tablet) {
+         @media (max-width: $desktop) {
+            margin-top: 16px;
             width: 533px;
             height: 351px;
          }
          @media (max-width: $mobile) {
             width: 320px;
             height: 209px;
+         }
+      }
+   }
+   .home-second-box {
+      width: 100%;
+      padding: 56px 0;
+      background-image: inherit;
+      @media (max-width: $desktop) {
+         padding: 16px 0;
+      }
+      @media (max-width: $mobile) {
+         padding: 0;
+         margin: -8px 0;
+      }
+      .content-title {
+         font-size: 46px;
+         font-weight: 700;
+         color: $textPrimary;
+         line-height: 52px;
+         text-align: center;
+         @media (max-width: $desktop) {
+            font-size: 32px;
+            line-height: 48px;
+         }
+      }
+      .features-list-box {
+         width: 100%;
+         margin-top: 56px;
+         @media (max-width: $desktop) {
+            margin-top: 40px;
+         }
+         @media (max-width: $mobile) {
+            margin-top: 32px;
+         }
+         & > div {
+            display: flex;
+            justify-content: center;
+            @media (max-width: $mobile) {
+               flex-direction: column;
+               align-items: center;
+            }
+            &.first-list-box {
+               border-bottom: 1px solid #edf8ff;
+               @media (max-width: $mobile) {
+                  border-bottom: none;
+               }
+               .feature-card:nth-child(2) {
+                  @include card-border();
+               }
+            }
+            &.second-list-box {
+               .feature-card:nth-child(2) {
+                  @include card-border();
+               }
+            }
+            .feature-card {
+               width: 100%;
+               text-align: center;
+               padding: 40px;
+               @media (max-width: $desktop) {
+                  padding: 24px;
+               }
+               @media (max-width: $mobile) {
+                  &:not(:last-child) {
+                     border-bottom: 1px solid #edf8ff;
+                  }
+               }
+               img {
+                  width: 50px;
+                  height: 50px;
+                  @media (max-width: $desktop) {
+                     width: 48px;
+                     height: 48px;
+                  }
+                  @media (max-width: $mobile) {
+                     width: 40px;
+                     height: 40px;
+                  }
+               }
+               .feature-title {
+                  font-size: 24px;
+                  font-weight: 700;
+                  color: $textPrimary;
+                  line-height: 28px;
+                  margin: 16px 0;
+                  @media (max-width: $desktop) {
+                     font-size: 18px;
+                     line-height: 20px;
+                  }
+               }
+               .feature-description {
+                  font-size: 18px;
+                  font-weight: 400;
+                  color: $textSecondary;
+                  line-height: 27px;
+                  @media (max-width: $desktop) {
+                     font-size: 16px;
+                     line-height: 24px;
+                  }
+               }
+            }
+         }
+      }
+   }
+   .home-third-box {
+      width: 100%;
+      background-color: inherit;
+      @media (max-width: $desktop) {
+         padding: 16px 0;
+      }
+      @media (max-width: $mobile) {
+         padding: 0;
+         margin: -24px 0;
+      }
+      .content-title {
+         font-size: 46px;
+         font-weight: 700;
+         color: $textWhite;
+         line-height: 58px;
+         text-align: center;
+         @media (max-width: $desktop) {
+            font-size: 32px;
+            font-weight: 48px;
+         }
+      }
+      .best-jobs-container {
+         width: 100%;
+         display: flex;
+         justify-content: space-between;
+         margin-top: 80px;
+         @media (max-width: $desktop) {
+            flex-direction: column;
+            align-items: center;
+            margin-top: 40px;
+         }
+         @media (max-width: $mobile) {
+            margin-top: 32px;
+            align-items: flex-start;
+         }
+         .best-jobs-navigation-box {
+            .navigation-list {
+               @media (max-width: $desktop) {
+                  display: flex;
+               }
+               @media (max-width: $mobile) {
+                  max-width: 703px;
+                  width: 100%;
+                  overflow-x: auto;
+               }
+               li {
+                  display: flex;
+                  align-items: center;
+                  &:not(:first-child) {
+                     margin-top: 32px;
+                     @media (max-width: $desktop) {
+                        margin-top: 0;
+                        margin-left: 24px;
+                     }
+                  }
+                  &::before {
+                     content: "";
+                     width: 4px;
+                     height: 33px;
+                     border-radius: 0px 8px 8px 0px;
+                     background-color: $textGrey;
+                     margin-right: 16px;
+                     @media (max-width: $desktop) {
+                        height: 27px;
+                        margin-right: 8px;
+                     }
+                  }
+                  &.active::before {
+                     background-color: $themeYellow;
+                  }
+                  &.active {
+                     a {
+                        color: $textWhite;
+                        cursor: default;
+                     }
+                  }
+                  a {
+                     font-size: 24px;
+                     font-weight: 500;
+                     color: $textGrey;
+                     line-height: 28px;
+                     text-decoration: none;
+                     cursor: pointer;
+                     @media (max-width: $desktop) {
+                        font-size: 18px;
+                        line-height: 20px;
+                     }
+                  }
+               }
+            }
+         }
+         .best-jobs-list-box {
+            max-width: 891px;
+            width: 100%;
+            height: 324px;
+            overflow-y: auto;
+            @media (max-width: $desktop) {
+               max-width: 658px;
+               height: 282px;
+               margin-top: 46px;
+            }
+            @media (max-width: $mobile) {
+               max-width: 308px;
+               height: 493px;
+            }
+            .best-job-card {
+               display: flex;
+               justify-content: space-between;
+               width: 100%;
+               @media (max-width: $mobile) {
+                  flex-direction: column-reverse;
+                  align-items: center;
+               }
+               &:not(:first-child) {
+                  margin-top: 40px;
+                  @media (max-width: $desktop) {
+                     margin-top: 52px;
+                  }
+               }
+               .best-job-screenshot {
+                  width: 417px;
+                  height: 324px;
+                  @media (max-width: $desktop) {
+                     width: 306px;
+                     height: 238px;
+                  }
+                  img {
+                     width: 100%;
+                     object-fit: contain;
+                  }
+               }
+               .best-job-content {
+                  max-width: 409px;
+                  width: 100%;
+                  @media (max-width: $desktop) {
+                     max-width: 308px;
+                  }
+                  .best-job-title-box {
+                     .best-job-title {
+                        font-size: 32px;
+                        font-weight: 500;
+                        color: $textWhite;
+                        line-height: 37px;
+                        @media (max-width: $desktop) {
+                           font-size: 24px;
+                           line-height: 28px;
+                        }
+                     }
+                     img {
+                        width: 40px;
+                        height: 40px;
+                        margin-left: 16px;
+                        @media (max-width: $desktop) {
+                           width: 32px;
+                           height: 32px;
+                        }
+                     }
+                  }
+                  .best-job-info {
+                     font-size: 18px;
+                     font-weight: 400;
+                     color: $textWhite;
+                     line-height: 27px;
+                     margin: 16px 0;
+                     @media (max-width: $desktop) {
+                        font-size: 16px;
+                        line-height: 24px;
+                     }
+                  }
+                  .best-job-services-list {
+                     width: 100%;
+                     li {
+                        display: flex;
+                        align-items: center;
+                        img {
+                           width: 24px;
+                           height: 24px;
+                           margin-right: 16px;
+                           @media (max-width: $desktop) {
+                              width: 18px;
+                              height: 18px;
+                           }
+                        }
+                        span {
+                           font-size: 18px;
+                           font-weight: 400;
+                           color: $textWhite;
+                           line-height: 20px;
+                           @media (max-width: $desktop) {
+                              font-size: 16px;
+                              line-height: 18px;
+                           }
+                        }
+                     }
+                  }
+               }
+            }
          }
       }
    }

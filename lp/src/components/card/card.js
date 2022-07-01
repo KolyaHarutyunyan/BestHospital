@@ -1,7 +1,9 @@
 import React from "react";
 
-export const Card = ({ cardBackgroundColor, showGradient, children }) => {
-   const cardContentClassName = `card ${showGradient ? "gradient-card" : ""}`;
+export const Card = ({ cardBackgroundColor, cardClassName, showGradient, children }) => {
+   const cardContentClassName = `card ${cardClassName} ${
+      showGradient ? "gradient-card" : ""
+   }`;
 
    return (
       <div

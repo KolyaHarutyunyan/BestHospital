@@ -49,6 +49,7 @@ export const Footer = () => {
                                  className={"social-media-icons-anchor"}
                                  href={socialMediaIcon.iconURL}
                                  target={"_blank"}
+                                 rel="noopener noreferrer"
                               >
                                  <img
                                     className="social-media-icon"
