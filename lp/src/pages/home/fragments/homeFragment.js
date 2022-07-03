@@ -1,15 +1,32 @@
-import React from "react";
-import { Button, Card } from "components";
+import React, { useState } from "react";
+import { Carousel } from "react-responsive-carousel";
+import { Button, Card, MainCarousel } from "components";
 import {
    bestJobs,
+   customersReviews,
    featuresForProductiveMgmt,
+   highlightedWord,
+   homeFifthBoxContentSubtitle,
+   homeFifthBoxContentTitle,
    homeFirstBoxContentSubtitle,
    homeFirstBoxContentTitle,
+   homeFourthBoxContentTitle,
    homeSecondBoxContentTitle,
    homeThirdBoxContentTitle,
 } from "./constants";
+import { Images } from "assets";
+import { useWidth } from "utils";
+
+const DESKTOP = 1280;
+const MOBILE = 735;
 
 export const HomeFragment = () => {
+   const [jobNavTitle, setJobNavTitle] = useState(bestJobs[0].jobNavigationTitle);
+
+   const width = useWidth();
+
+   const carouselHeight = width <= DESKTOP && width > MOBILE ? "295px" : width <= MOBILE ? "261px" : "319px";
+
    return (
       <div className="home-fragment">
          <Card showGradient cardClassName={"radial-gradient-image"}>
@@ -68,7 +85,11 @@ export const HomeFragment = () => {
                   <div className="best-jobs-navigation-box">
                      <ul className="navigation-list">
                         {bestJobs.map((job, index) => (
-                           <li key={index}>
+                           <li 
+                              key={index} 
+                              className={jobNavTitle === job.jobNavigationTitle ? "active" : ""}
+                              onClick={() => setJobNavTitle(job.jobNavigationTitle)}
+                           >
                               <a href={`#${job.jobTitle}`}>{job.jobNavigationTitle}</a>
                            </li>
                         ))}
@@ -103,8 +124,56 @@ export const HomeFragment = () => {
                </div>
             </div>
          </Card>
-         <Card cardBackgroundColor={"#F7F9FC"}>home milk</Card>
-         <Card cardBackgroundColor={"#FFFFFF"}>home light</Card>
+         <Card cardBackgroundColor={"#F7F9FC"}>
+         <div className="home-fourth-box">
+            <h2 className="content-title">
+               {homeFourthBoxContentTitle}<em>{highlightedWord}</em>
+            </h2>
+            <div className="customers-reviews-box">
+               <MainCarousel 
+                  height={carouselHeight} 
+                  slidesToShow={width <= DESKTOP ? 1 : 2} 
+                  renderBottomCenterControls={() => false}
+                  // cellSpacing={width <= DESKTOP ? 500 : 100}
+               >
+               {/* <Carousel className="customer-review-carousel"> */}
+                  {customersReviews.map((review, index) => (
+                     <div key={index} className="customer-review-card">
+                         <div className="customer-avatar-box">
+                           <img src={review.customerAvatar} alt={review.customerName} />
+                        </div>
+                        <div className="customer-review-card-container">
+                        <div className="customer-review-content-box">
+                           <img src={Images.Quotes} alt="quotes" />
+                           <p className="customer-comment">{review.customerComment}</p>
+                           <div className="customer-bio-box">
+                              <p className="customer-name">- {review.customerName} -</p>
+                              <p className="customer-profesion">{review.customerProfesion}</p>
+                           </div>
+                        </div>
+                        </div>
+                     </div>
+                  ))}
+               {/* </Carousel> */}
+               </MainCarousel>
+            </div>
+         </div>
+         </Card>
+         <Card cardBackgroundColor={"#FFFFFF"}>
+            <div className="home-fifth-box">
+               <div className="fifth-box-content-box">
+                  <h4 className="content-title">{homeFifthBoxContentTitle}</h4>
+                  <p className="content-subtitle">{homeFifthBoxContentSubtitle}</p>
+                  <Button 
+                     buttonType={"button"} 
+                     buttonClassName={"book-demo"} 
+                     onClickButton={() => {}}
+                  >
+                     Book Demo
+                  </Button>
+               </div>
+            </div>
+         </Card>
       </div>
    );
 };

@@ -57,81 +57,84 @@
          display: none;
          @media (max-width: $tablet) {
             display: block;
-            .menu-button {
-               padding: 0;
-               width: 42px;
-               height: 42px;
-               background-image: url("../../assets/images/topBar/menuIcon.svg");
-               background-repeat: no-repeat;
-               background-size: contain;
-               background-position: center;
-               transition: all 0.2s linear;
-               &.shown {
-                  background-image: url("../../assets/images/topBar/menuCloseIcon.svg");
-               }
-               background-color: inherit;
-               position: fixed;
-               top: 40px;
-               transform: translateY(-50%);
-               right: 32px;
-               z-index: 2;
-               @media (max-width: $mobile) {
-                  width: 30px;
-                  height: 30px;
-                  top: 32px;
-                  right: 16px;
-               }
+         }
+         .menu-button {
+            padding: 0;
+            width: 42px;
+            height: 42px;
+            background-image: url("../../assets/images/topBar/menuIcon.svg");
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
+            transition: all 0.2s linear;
+            &.shown {
+               background-image: url("../../assets/images/topBar/menuCloseIcon.svg");
             }
-            .menu-container {
-               position: fixed;
-               left: 0;
-               top: 0;
-               z-index: -9;
-               width: 100%;
-               height: 100vh;
-               background-color: #0000007e;
-               border: 1px solid #707070;
-               opacity: 0;
-               transition: all 0.2s linear;
-               &.shown {
-                  opacity: 1;
-                  z-index: 9;
-                  .nav-links-container {
-                     height: 444px;
-                     @media (max-width: $mobile) {
-                        height: 492px;
-                     }
+            background-color: inherit;
+            position: fixed;
+            top: 40px;
+            transform: translateY(-50%);
+            right: 32px;
+            z-index: 2;
+            @media (max-width: $mobile) {
+               width: 30px;
+               height: 30px;
+               top: 32px;
+               right: 16px;
+            }
+         }
+         .menu-container {
+            position: fixed;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            max-height: 0;
+            height: 100%;
+            background-color: #0000007e;
+            border: 1px solid #707070;
+            transition: all 0.1s linear;
+            &.shown {
+               max-height: 100vh;
+               opacity: 1;
+               .nav-links-container {
+                  max-height: 444px;
+                  padding: 80px 32px;
+                  @media (max-width: $mobile) {
+                     max-height: 492px;
                   }
                }
-               .nav-links-container {
+            }
+            .nav-links-container {
+               width: 100%;
+               max-height: 0;
+               overflow-y: auto;
+               position: fixed;
+               top: 0;
+               left: 0;
+               background-color: $backgroundSecondary;
+               padding: 0;
+               display: flex;
+               justify-content: center;
+               transition: all 0.2s linear;
+               .nav-links-list {
+                  max-width: 360px;
                   width: 100%;
-                  height: 0;
-                  overflow-y: auto;
-                  position: fixed;
-                  background-color: $backgroundSecondary;
-                  padding: 80px 32px;
-                  display: flex;
-                  justify-content: center;
-                  transition: all 0.2s linear;
-                  .nav-links-list {
-                     max-width: 360px;
+                  @media (max-width: $mobile) {
+                     max-width: 263px;
+                  }
+                  li {
                      width: 100%;
-                     @media (max-width: $mobile) {
-                        max-width: 263px;
-                     }
-                     li {
-                        width: 100%;
-                        padding-bottom: 16px;
-                        margin-bottom: 16px;
-                        border-bottom: 1px solid #0493ec5a;
-                        display: flex;
-                        justify-content: center;
-                        a {
-                           font-size: 20px;
-                           font-weight: 700;
-                           color: $textSecondary;
-                           text-decoration: none;
-                        }
+                     padding-bottom: 16px;
+                     margin-bottom: 16px;
+                     border-bottom: 1px solid #0493ec5a;
+                     display: flex;
+                     justify-content: center;
+                     a {
+                        font-size: 20px;
+                        font-weight: 700;
+                        color: $textSecondary;
+                        text-decoration: none;
                      }
                   }
                }

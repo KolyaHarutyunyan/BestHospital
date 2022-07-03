@@ -1,17 +1,17 @@
 @import "src/assets/styles/globalStyles";
 
-@mixin before-after-content($positionOne, $positionTwo, $width, $height, $image) {
-   content: "";
-   position: absolute;
-   #{$positionOne}: 0;
-   #{$positionTwo}: 0;
-   width: $width;
-   height: $height;
-   background-image: url($image);
-   background-repeat: no-repeat;
-   background-size: contain;
-   background-position: center;
-}
+// @mixin before-after-content($positionOne, $positionTwo, $width, $height, $image) {
+//    content: "";
+//    position: absolute;
+//    #{$positionOne}: 0;
+//    #{$positionTwo}: 0;
+//    width: $width;
+//    height: $height;
+//    background-image: url($image);
+//    background-repeat: no-repeat;
+//    background-size: contain;
+//    background-position: center;
+// }
 
 @mixin list-font {
    font-size: 12px;
@@ -33,27 +33,27 @@
    position: relative;
    width: 100%;
    background-color: $backgroundDark;
-   &::before {
-      @include before-after-content(
-         bottom,
-         left,
-         179px,
-         172px,
-         "../../assets/images/footer/bottomLeftGradient.svg"
-      );
-   }
-   &::after {
-      @include before-after-content(
-         top,
-         right,
-         278px,
-         252px,
-         "../../assets/images/footer/topRightGradient.svg"
-      );
-   }
+   // &::before {
+   //    @include before-after-content(
+   //       bottom,
+   //       left,
+   //       179px,
+   //       172px,
+   //       "../../assets/images/footer/bottomLeftGradient.svg"
+   //    );
+   // }
+   // &::after {
+   //    @include before-after-content(
+   //       top,
+   //       right,
+   //       278px,
+   //       252px,
+   //       "../../assets/images/footer/topRightGradient.svg"
+   //    );
+   // }
    .footer-content {
-      position: relative;
-      z-index: 1;
+      // position: relative;
+      // z-index: 1;
       min-height: 329px;
       padding-top: 78px;
       padding-bottom: 24px;

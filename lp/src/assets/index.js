@@ -38,6 +38,11 @@ import SchedulingScreen from "./images/home/schedulingScreen.png";
 import Billing from "./images/home/billing.svg";
 import BillingMark from "./images/home/billingMark.svg";
 import BillingScreen from "./images/home/billingScreen.png";
+import CustomerOne from "./images/home/customerOne.png";
+import CustomerTwo from "./images/home/customerTwo.png";
+import Quotes from "./images/home/quotes.svg";
+import LeftArrow from "./images/home/leftArrow.svg";
+import RightArrow from "./images/home/rightArrow.svg";
 
 export const Images = {
    Facebook,
@@ -75,4 +80,9 @@ export const Images = {
    Billing,
    BillingMark,
    BillingScreen,
+   CustomerOne,
+   CustomerTwo,
+   Quotes,
+   LeftArrow,
+   RightArrow,
 };

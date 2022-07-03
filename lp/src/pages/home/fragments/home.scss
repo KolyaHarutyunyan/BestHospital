@@ -9,6 +9,13 @@
    }
 }
 
+@mixin font-style ($size, $weight, $lineHeight) {
+   font-size: $size;
+   font-weight: $weight;
+   color: $textSecondary;
+   line-height: $lineHeight;
+}
+
 .home-fragment {
    width: 100%;
    .radial-gradient-image {
@@ -225,7 +232,6 @@
          }
          @media (max-width: $mobile) {
             margin-top: 32px;
-            align-items: flex-start;
          }
          .best-jobs-navigation-box {
             .navigation-list {
@@ -233,10 +239,23 @@
                   display: flex;
                }
                @media (max-width: $mobile) {
-                  max-width: 703px;
+                  max-width: 288px;
                   width: 100%;
                   overflow-x: auto;
+                  padding-bottom: 24px;
                }
+               &::-webkit-scrollbar {
+                  height: 5px;
+                }
+                
+                &::-webkit-scrollbar-track {
+                  background-color: inherit;
+                }
+                 
+                &::-webkit-scrollbar-thumb {
+                  background-color: #FFFFFF50; 
+                  border-radius: 3px;
+                }
                li {
                   display: flex;
                   align-items: center;
@@ -280,22 +299,30 @@
                         line-height: 20px;
                      }
                   }
+                  @media (max-width: $mobile) {
+                     min-width: 112px;
+                  }
                }
             }
          }
          .best-jobs-list-box {
             max-width: 891px;
             width: 100%;
-            height: 324px;
+            max-height: 324px;
+            height: 100%;
             overflow-y: auto;
+            &::-webkit-scrollbar {
+               display: none;
+            }
             @media (max-width: $desktop) {
                max-width: 658px;
-               height: 282px;
+               max-height: 282px;
                margin-top: 46px;
             }
             @media (max-width: $mobile) {
                max-width: 308px;
-               height: 493px;
+               max-height: 493px;
+               margin-top: 32px;
             }
             .best-job-card {
                display: flex;
@@ -303,7 +330,6 @@
                width: 100%;
                @media (max-width: $mobile) {
                   flex-direction: column-reverse;
-                  align-items: center;
                }
                &:not(:first-child) {
                   margin-top: 40px;
@@ -318,6 +344,9 @@
                      width: 306px;
                      height: 238px;
                   }
+                  @media (max-width: $mobile) {
+                     margin-top: 16px;
+                  }
                   img {
                      width: 100%;
                      object-fit: contain;
@@ -330,6 +359,9 @@
                      max-width: 308px;
                   }
                   .best-job-title-box {
+                     @media (max-width: $mobile) {
+                        justify-content: center;
+                     }
                      .best-job-title {
                         font-size: 32px;
                         font-weight: 500;
@@ -360,12 +392,25 @@
                         font-size: 16px;
                         line-height: 24px;
                      }
+                     @media (max-width: $mobile) {
+                        text-align: center;
+                        margin: 16px 0 8px;
+                     }
                   }
                   .best-job-services-list {
                      width: 100%;
+                     @media (max-width: $mobile) {
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: center;
+                        align-items: center;
+                     }
                      li {
                         display: flex;
                         align-items: center;
+                        @media (max-width: $mobile) {
+                           margin: 8px;
+                        }
                         img {
                            width: 24px;
                            height: 24px;
@@ -373,6 +418,9 @@
                            @media (max-width: $desktop) {
                               width: 18px;
                               height: 18px;
+                           }
+                           @media (max-width: $mobile) {
+                              margin-right: 8px;
                            }
                         }
                         span {
@@ -390,6 +438,193 @@
                }
             }
          }
+      }
+   }
+   .home-fourth-box {
+      width: 100%;
+      background-color: inherit;
+      @media (max-width: $desktop) {
+         padding: 16px 0;
+      }
+      @media (max-width: $mobile) {
+         padding: 0;
+         margin: -8px 0;
+      }
+      .content-title {
+         font-size: 46px;
+         font-weight: 700;
+         color: $textPrimary;
+         line-height: 58px;
+         text-align: center;
+         em {
+            color: $themePrimary;
+         }
+         @media (max-width: $desktop) {
+           font-size: 32px;
+         }
+      }
+      .customers-reviews-box {
+         width: 100%;
+         margin-top: 76px;
+         @media (max-width: $desktop) {
+            margin-top: 40px;
+         }
+         @media (max-width: $mobile) {
+            margin-top: 32px;
+         }
+         .customer-review-carousel {
+            border: 2px solid !important;
+            .slider {
+               display: flex;
+            }
+         }
+         .customer-review-card {
+            position: relative;
+            max-width: 546px;
+            width: 100%;
+            height: 319px;
+            display: flex;
+            align-items: flex-end;
+            @media (max-width: $desktop) {
+               max-width: 530px;
+               height: 295px;
+            }
+            @media (max-width: $mobile) {
+               max-width: 291px;
+               height: 261px;
+            }
+            &::after {
+               content: "";
+               width: 110px;
+               height: 110px;
+               position: absolute;
+               top: 0px;
+               right: calc(50% - 4px);
+               transform: translateX(50%);
+               border-radius: 50%;
+               border: 1px solid $themeYellow;
+               @media (max-width: $desktop) {
+                  width: 90px;
+                  height: 90px;
+               }
+               @media (max-width: $mobile) {
+                  width: 66px;
+                  height: 66px;
+               }
+            }
+            .customer-avatar-box {
+               width: 110px;
+               height: 110px;
+               border-radius: 50%;
+               overflow: hidden;
+               position: absolute;
+               top: 4px;
+               left: 50%;
+               transform: translateX(-50%);
+               img {
+                  width: 100%;
+                  object-fit: contain;
+               }
+               @media (max-width: $desktop) {
+                  width: 90px;
+                  height: 90px;
+               }
+               @media (max-width: $mobile) {
+                  width: 66px;
+                  height: 66px;
+               }
+            }
+            .customer-review-card-container {
+               width: 100%;
+               padding: 40px;
+               background-color: $backgroundPrimary;
+               box-shadow: 0px 3px 6px #EBF2FDB3;
+               border-radius: 12px;
+               @media (max-width: $desktop) {
+                  padding: 32px;
+               }
+               @media (max-width: $mobile) {
+                  padding: 28px;
+               }
+               .customer-review-content-box {
+                  img {
+                     width: 40px;
+                     height: 40px;
+                     @media (max-width: $mobile) {
+                        width: 24px;
+                        height: 24px;
+                     }
+                  }
+                  .customer-comment {
+                     @include font-style(18px, 400, 27px);
+                     margin: 16px 0;
+                     @media (max-width: $mobile) {
+                        font-size: 14px;
+                        line-height: 20px;
+                     }
+                  }
+                  .customer-bio-box {
+                     width: 100%;
+                     text-align: right;
+                     .customer-name {
+                        @include font-style(18px, 500, 20px);
+                        @media (max-width: $mobile) {
+                           font-size: 16px;
+                        }
+                     }
+                     .customer-profesion {
+                        @include font-style(16px, 400, 18px);
+                        @media (max-width: $mobile) {
+                           font-size: 14px;
+                           line-height: 16px;
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      }
+   }
+   .home-fifth-box {
+      width: 100%;
+      background-color: inherit;
+      padding: 56px 0;
+      display: flex;
+      justify-content: center;
+      @media (max-width: $desktop) {
+         padding: 16px 0;
+      }
+      @media (max-width: $mobile) {
+         padding: 0;
+         margin: -8px 0;
+      }
+      .fifth-box-content-box {
+         background-color: $backgroundDark;
+         border-radius: 30px;
+         padding: 60px 250px;
+         text-align: center;
+         @media (max-width: $desktop) {
+            padding: 40px;
+         }
+         .content-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: $textWhite;
+            line-height: 50px;
+            max-width: 547px;
+            width: 100%;
+            margin: 0 auto;
+         }
+         .content-subtitle {
+            font-size: 16px;
+            font-weight: 400;
+            color: $backgroundSecondary;
+            line-height: 18px;
+            max-width: 400px;
+            width: 100%;
+            margin: 16px auto 32px;
+         }
+
       }
    }
 }

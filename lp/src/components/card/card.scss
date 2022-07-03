@@ -2,37 +2,35 @@
 
 .card {
    position: relative;
-   // z-index: -2;
    width: 100%;
    overflow: hidden;
    background-color: $backgroundPrimary;
-   &.gradient-card {
-      &::after {
-         content: "";
-         position: absolute;
-         top: 0;
-         right: 0;
-         // z-index: -1;
-         width: 598px;
-         height: 602px;
-         background-image: url("../../assets/images/home/cardGradientWeb.png");
-         background-repeat: no-repeat;
-         background-size: contain;
-         background-position: 70px 0%;
-         @media (max-width: $desktop) {
-            width: 452px;
-            height: 740px;
-            background-image: url("../../assets/images/home/cardGradientTablet.png");
-            background-position: 0% 26px;
-         }
-         @media (max-width: $mobile) {
-            width: 251px;
-            height: 412px;
-            background-image: url("../../assets/images/home/cardGradientMobile.png");
-            background-position: 0% 199px;
-         }
-      }
-   }
+   // &.gradient-card {
+   //    &::after {
+   //       content: "";
+   //       position: absolute;
+   //       top: 0;
+   //       right: 0;
+   //       width: 598px;
+   //       height: 602px;
+   //       background-image: url("../../assets/images/home/cardGradientWeb.png");
+   //       background-repeat: no-repeat;
+   //       background-size: contain;
+   //       background-position: 70px 0%;
+   //       @media (max-width: $desktop) {
+   //          width: 452px;
+   //          height: 740px;
+   //          background-image: url("../../assets/images/home/cardGradientTablet.png");
+   //          background-position: 0% 26px;
+   //       }
+   //       @media (max-width: $mobile) {
+   //          width: 251px;
+   //          height: 412px;
+   //          background-image: url("../../assets/images/home/cardGradientMobile.png");
+   //          background-position: 0% 199px;
+   //       }
+   //    }
+   // }
    .card-content-container {
       padding-top: 80px;
       padding-bottom: 80px;
