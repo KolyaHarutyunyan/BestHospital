@@ -1,5 +1,10 @@
 import React from "react";
+import { PrivacyPolicyFragment } from "./fragments";
 
 export const PrivacyPolicy = () => {
-   return <section>privacyPolicy</section>;
+   return (
+      <section>
+         <PrivacyPolicyFragment />
+      </section>
+   );
 };

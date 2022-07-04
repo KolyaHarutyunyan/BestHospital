@@ -1,0 +1,1 @@
+export { PrivacyPolicyFragment } from "./privacyPolicyFragment";

@@ -1,5 +1,10 @@
 import React from "react";
+import { TermsAndConditionsFragment } from "./fragments";
 
 export const TermsAndConditions = () => {
-   return <section>termsAndConditions</section>;
+   return (
+      <section>
+         <TermsAndConditionsFragment />
+      </section>
+   );
 };

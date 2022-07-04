@@ -1,0 +1,1 @@
+export { TermsAndConditionsFragment } from "./termsAndConditionsFragment";
