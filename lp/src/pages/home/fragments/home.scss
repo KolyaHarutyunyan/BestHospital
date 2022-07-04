@@ -18,24 +18,18 @@
 
 .home-fragment {
    width: 100%;
-   .radial-gradient-image {
-      background-image: url("../../../assets/images/base.svg");
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center;
-   }
    .home-first-box {
       width: 100%;
       display: flex;
       justify-content: space-between;
-      margin-top: -24px;
+      padding: 56px 0 137px;
       @media (max-width: $desktop) {
          flex-direction: column;
          align-items: center;
-         margin-top: -64px;
+         padding: 16px 0 97px;
       }
       @media (max-width: $mobile) {
-         margin-top: -38px;
+         padding: 42px 0 104px;
       }
       .first-box-content {
          max-width: 640px;
@@ -100,14 +94,13 @@
    }
    .home-second-box {
       width: 100%;
-      padding: 56px 0;
+      padding: 136px 0;
       background-image: inherit;
       @media (max-width: $desktop) {
-         padding: 16px 0;
+         padding: 96px 0;
       }
       @media (max-width: $mobile) {
-         padding: 0;
-         margin: -8px 0;
+         padding: 72px 0;
       }
       .content-title {
          font-size: 46px;
@@ -202,12 +195,12 @@
    .home-third-box {
       width: 100%;
       background-color: inherit;
+      padding: 80px 0;
       @media (max-width: $desktop) {
-         padding: 16px 0;
+         padding: 96px 0 100px;
       }
       @media (max-width: $mobile) {
-         padding: 0;
-         margin: -24px 0;
+         padding: 56px 0;
       }
       .content-title {
          font-size: 46px;
@@ -443,12 +436,12 @@
    .home-fourth-box {
       width: 100%;
       background-color: inherit;
+      padding: 80px 0;
       @media (max-width: $desktop) {
-         padding: 16px 0;
+         padding: 96px 0;
       }
       @media (max-width: $mobile) {
-         padding: 0;
-         margin: -8px 0;
+         padding: 72px 0;
       }
       .content-title {
          font-size: 46px;
@@ -456,7 +449,8 @@
          color: $textPrimary;
          line-height: 58px;
          text-align: center;
-         em {
+         &::after {
+            content: "Wellness.";
             color: $themePrimary;
          }
          @media (max-width: $desktop) {
@@ -588,15 +582,14 @@
    .home-fifth-box {
       width: 100%;
       background-color: inherit;
-      padding: 56px 0;
+      padding: 136px 0 138px;
       display: flex;
       justify-content: center;
       @media (max-width: $desktop) {
-         padding: 16px 0;
+         padding: 96px 0;
       }
       @media (max-width: $mobile) {
-         padding: 0;
-         margin: -8px 0;
+         padding: 72px 0;
       }
       .fifth-box-content-box {
          background-color: $backgroundDark;

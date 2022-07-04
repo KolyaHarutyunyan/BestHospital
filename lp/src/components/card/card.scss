@@ -5,6 +5,12 @@
    width: 100%;
    overflow: hidden;
    background-color: $backgroundPrimary;
+   &.radial-gradient-image {
+      background-image: url("../../assets/images/base.svg");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+   }
    // &.gradient-card {
    //    &::after {
    //       content: "";
@@ -31,8 +37,4 @@
    //       }
    //    }
    // }
-   .card-content-container {
-      padding-top: 80px;
-      padding-bottom: 80px;
-   }
 }

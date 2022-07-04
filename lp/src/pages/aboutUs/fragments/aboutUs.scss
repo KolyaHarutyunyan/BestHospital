@@ -1,0 +1,339 @@
+@import "src/assets/styles/globalStyles";
+
+@mixin font-style ($size, $weight, $color, $lineHeight) {
+    font-size: $size;
+    font-weight: $weight;
+    color: $color;
+    line-height: $lineHeight;
+}
+
+.about-us-fragment {
+    width: 100%;
+    .about-us-first-box {
+        width: 100%;
+        background-color: inherit;
+        padding: 56px 0 136px;
+        @media (max-width: $desktop) {
+            padding: 48px 0 126px;
+        }
+        @media (max-width: $mobile) {
+            padding: 42px 0 104px;
+        }
+        .first-box-content {
+            max-width: 578px;
+            width: 100%;
+            margin: 0 auto;
+            text-align: center;
+            .content-title {
+                font-size: 56px;
+                font-weight: 700;
+                color: $textWhite;
+                line-height: 66px;
+                @media (max-width: $tablet) {
+                    font-size: 40px;
+                    line-height: 50px;
+                }
+                @media (max-width: $tablet) {
+                    font-size: 32px;
+                    line-height: 50px;
+                }
+            }
+            .content-subtitle {
+                font-size: 18px;
+                font-weight: 400;
+                color: #EBF2FD;
+                line-height: 27px;
+                margin: 24px 0 40px;
+                @media (max-width: $tablet) {
+                    font-size: 16px;
+                    line-height: 24px;
+                    margin-bottom: 32px;
+                }
+            }   
+            & button {
+                margin: 0 auto;
+            }
+        }
+    }
+    .about-us-second-box {
+        width: 100%;
+        background-color: inherit;
+        padding: 136px 0;
+        @media (max-width: $desktop) {
+            padding: 96px 0;
+        }
+        @media (max-width: $mobile) {
+            padding: 72px 0;
+        }
+        .second-box-content {
+            width: 100%;
+            .about-section-card {
+                @media (max-width: $desktop) {
+                    flex-direction: column-reverse;
+                    align-items: flex-start;
+                }
+                &:not(:first-child) {
+                    margin-top: 136px;
+                    @media (max-width: $desktop) {
+                        margin-top: 96px;
+                    }
+                    @media (max-width: $mobile) {
+                        margin-top: 72px;
+                    }
+                }
+                &.we-are-wellness {
+                    .about-section-content {
+                        margin-left: 40px;
+                        @media (max-width: $desktop) {
+                            margin-left: 0;
+                        }
+                    }
+                }
+                &.strong-happy-team {
+                    @media (max-width: $desktop) {
+                        flex-direction: column-reverse;
+                    }
+                    flex-direction: row-reverse;
+                    .about-section-content {
+                        margin-right: 40px;
+                        @media (max-width: $desktop) {
+                            margin-right: 0;
+                        }
+                    }
+                }
+                .about-section-picture {
+                    max-width: 577px;
+                    width: 100%;
+                    border-radius: 10px;
+                    overflow: hidden;
+                    img {
+                        width: 100%;
+                        object-fit: contain;
+                    }
+                }
+                .about-section-content {
+                    max-width: 599px;
+                    width: 100%;
+                    @media (max-width: $desktop) {
+                        margin-bottom: 32px;
+                    }
+                    @media (max-width: $tablet) {
+                        max-width: 577px;
+                    }
+                    @media (max-width: $mobile) {
+                        margin-bottom: 24px;
+                    }
+                    .content-title {
+                        @include font-style(46px, 700, $textPrimary, 58px);
+                        @media (max-width: $tablet) {
+                            font-size: 40px;
+                        }
+                        @media (max-width: $mobile) {
+                            font-size: 32px;
+                            line-height: 48px;
+                        }
+                    }
+                    .content-subtitle {
+                        @include font-style(18px, 700, $textSecondary, 28px);
+                        margin: 24px 0 16px;
+                        @media (max-width: $mobile) {
+                            line-height: 27px;
+                            margin: 24px 0;
+                        }
+                    }
+                    .content-text {
+                        @include font-style(18px, 400, $textSecondary, 28px);
+                        @media (max-width: $tablet) {
+                            font-size: 16px;
+                        }
+                        @media (max-width: $mobile) {
+                            line-height: 24px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .about-us-third-box {
+        width: 100%;
+        background-color: inherit;
+        padding: 80px 0;
+        @media (max-width: $desktop) {
+            padding: 60px 0;
+        }
+        @media (max-width: $mobile) {
+            padding: 40px 0;
+        }
+        .third-box-content {
+            width: 100%;
+            .content-title {
+                @include font-style(46px, 700, $textWhite, 58px);
+                text-align: center;
+                &::before {
+                   content: "Why ";
+                   color: $themePrimary; 
+                }
+                @media (max-width: $desktop) {
+                    font-size: 40px;
+                }
+                @media (max-width: $mobile) {
+                    font-size: 32px;
+                    line-height: 48px;
+                }
+            }
+            .reasons-box {
+                margin-top: 56px;
+                @media (max-width: $desktop) {
+                    margin-top: 40px;
+                }
+                @media (max-width: $mobile) {
+                    margin-top: 0;
+                    flex-direction: column;
+                    align-items: center;
+                }
+                .reason-card {
+                    max-width: 333px;
+                    width: 100%;
+                    margin: 0 20px;
+                    &:first-child {
+                        margin-left: 0;
+                    }
+                    @media (max-width: $mobile) {
+                        max-width: 343px;
+                        margin: 32px 0 0;
+                        text-align: center;
+                    }
+                    img {
+                        width: 55px;
+                        height: 55px;
+                        @media (max-width: $desktop) {
+                            width: 45px;
+                            height: 45px;
+                        }
+                    }
+                    .reason-title {
+                        @include font-style(24px, 700, $textWhite, 28px);
+                        margin: 24px 0 16px;
+                        @media (max-width: $desktop) {
+                          font-size: 18px;
+                          line-height: 20px;
+                          margin: 16px 0;
+                        }
+                    }
+                    .reason-text {
+                        @include font-style(18px, 400, $textWhite, 28px);
+                    }
+                }
+            }
+        }
+    }
+    .about-us-fourth-box {
+        width: 100%;
+        background-color: inherit;
+        padding: 72px 0;
+        @media (max-width: $desktop) {
+            padding: 52px 0;
+        }
+        .fourth-box-content {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            @media (max-width: $mobile) {
+               align-items: center;  
+               text-align: center;              
+            }
+            .content-and-avatar {
+                display: flex;
+                @media (max-width: $mobile) {
+                    flex-direction: column-reverse;
+                    align-items: center;
+                }
+                .content-title {
+                    @include font-style(46px, 700, $textPrimary, 58px);
+                    & em {
+                        color: $themePrimary;
+                    }
+                    @media (max-width: $desktop) {
+                        font-size: 24px;
+                        line-height: 36px;
+                    }
+                }
+                .content-avatar-container {
+                    margin-left: 64px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-end;
+                    @media (max-width: $desktop) {
+                        margin-left: 30px;
+                    }
+                    @media (max-width: $mobile) {
+                        margin-left: 0;
+                        margin-bottom: 24px;
+                    }
+                    .avatar-box {
+                        position: relative;
+                        &::before {
+                            content: "";
+                            position: absolute;
+                            top: -12px;
+                            left: -12px;
+                            width: 181px;
+                            height: 187px;
+                            border-radius: 50%;
+                            border: 1px solid $themeYellow;
+                            @media (max-width: $desktop) {
+                                width: 130px;
+                                height: 137px;                    
+                            }
+                            @media (max-width: $mobile) {
+                                width: 100px;
+                                height: 107px;                    
+                            }
+                        }
+                        .cofounder-avatar {
+                            width: 180px;
+                            height: 181px;
+                            border-radius: 50%;
+                            overflow: hidden;
+                            @media (max-width: $desktop) {
+                                width: 130px;
+                                height: 130px;                    
+                            }
+                            @media (max-width: $mobile) {
+                                width: 100px;
+                                height: 100px;                    
+                            }
+                            img {
+                                width: 100%;
+                                object-fit: contain;
+                            }
+                        }
+                    }
+                }
+            }
+            .cofounder-bio {
+                margin-top: 32px;
+                @media (max-width: $desktop) {
+                   margin-top: 16px;                   
+                }
+                .cofounder-name {
+                    @include font-style(18px, 500, $textSecondary, 20px);
+                }
+                .cofounder-profesion {
+                    @include font-style(16px, 400, $textSecondary, 18px);
+                }
+            }
+        }
+    }
+    .divider {
+        background-color: inherit;
+        padding: 68px 0;
+        @media (max-width: $desktop) {
+            padding: 48px 0 60px;
+        }
+        @media (max-width: $mobile) {
+            padding: 36px 0;
+        }
+    }
+}

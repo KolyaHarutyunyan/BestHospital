@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Carousel } from "react-responsive-carousel";
+// import { Carousel } from "react-responsive-carousel";
 import { Button, Card, MainCarousel } from "components";
 import {
    bestJobs,
    customersReviews,
+   DESKTOP,
    featuresForProductiveMgmt,
-   highlightedWord,
    homeFifthBoxContentSubtitle,
    homeFifthBoxContentTitle,
    homeFirstBoxContentSubtitle,
@@ -13,12 +13,10 @@ import {
    homeFourthBoxContentTitle,
    homeSecondBoxContentTitle,
    homeThirdBoxContentTitle,
+   MOBILE,
 } from "./constants";
 import { Images } from "assets";
 import { useWidth } from "utils";
-
-const DESKTOP = 1280;
-const MOBILE = 735;
 
 export const HomeFragment = () => {
    const [jobNavTitle, setJobNavTitle] = useState(bestJobs[0].jobNavigationTitle);
@@ -37,7 +35,7 @@ export const HomeFragment = () => {
                   <div className="content-actions-box flex-align-center">
                      <Button
                         buttonType={"button"}
-                        buttonClassName={"book-demo-from-homepage-button"}
+                        buttonClassName={"book-demo-with-shadow-button"}
                      >
                         Book Demo
                      </Button>
@@ -126,9 +124,7 @@ export const HomeFragment = () => {
          </Card>
          <Card cardBackgroundColor={"#F7F9FC"}>
          <div className="home-fourth-box">
-            <h2 className="content-title">
-               {homeFourthBoxContentTitle}<em>{highlightedWord}</em>
-            </h2>
+            <h2 className="content-title">{homeFourthBoxContentTitle}</h2>
             <div className="customers-reviews-box">
                <MainCarousel 
                   height={carouselHeight} 

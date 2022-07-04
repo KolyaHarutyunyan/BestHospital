@@ -44,6 +44,14 @@ import Quotes from "./images/home/quotes.svg";
 import LeftArrow from "./images/home/leftArrow.svg";
 import RightArrow from "./images/home/rightArrow.svg";
 
+// ABOUT_US_PAGE_IMAGES
+import TeamFirst from "./images/aboutUs/teamFirst.png";
+import TeamSecond from "./images/aboutUs/teamSecond.png";
+import Easy from "./images/aboutUs/easy.svg";
+import Effective from "./images/aboutUs/effective.svg";
+import Organize from "./images/aboutUs/organize.svg";
+import Cofounder from "./images/aboutUs/cofounder.png";
+
 export const Images = {
    Facebook,
    Instagram,
@@ -85,4 +93,10 @@ export const Images = {
    Quotes,
    LeftArrow,
    RightArrow,
+   TeamFirst,
+   TeamSecond,
+   Easy,
+   Effective,
+   Organize,
+   Cofounder,
 };

@@ -1,12 +1,15 @@
 import { Images } from "assets";
 
-// first-box-content
+export const DESKTOP = 1280;
+export const MOBILE = 735;
+
+// home-first-box-content
 export const homeFirstBoxContentTitle = "Make your healthcare management better.";
 
 export const homeFirstBoxContentSubtitle =
    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s";
 
-// second-box-content
+// home-second-box-content
 export const homeSecondBoxContentTitle = "Features for productive management";
 
 export const featuresForProductiveMgmt = [
@@ -48,7 +51,7 @@ export const featuresForProductiveMgmt = [
    },
 ];
 
-// third-box-content
+// home-third-box-content
 export const homeThirdBoxContentTitle = "We are helping teams do their best work.";
 
 export const bestJobs = [
@@ -186,9 +189,8 @@ export const bestJobs = [
    },
 ];
 
-// fourth-box-content
+// home-fourth-box-content
 export const homeFourthBoxContentTitle = "Our customers love ";
-export const highlightedWord = "Wellness.";
 
 export const customersReviews = [
    {
@@ -217,7 +219,8 @@ export const customersReviews = [
    },
 ];
 
-// fifth-box-content
+// home-fifth-box-content
 export const homeFifthBoxContentTitle = "See for yourself how we are helping teams do their best work!";
+
 export const homeFifthBoxContentSubtitle = 
    "Imagine you have scheduled lore Epsom Here are many variations of passages of Lorem Ipsum available."; 

@@ -68,7 +68,7 @@
       background-color: inherit;
    }
 
-   &.book-demo-from-homepage-button {
+   &.book-demo-with-shadow-button {
       position: relative;
       width: 156px;
       height: 48px;
@@ -134,5 +134,15 @@
       font-size: 18px;
       font-weight: 500;
       color: $textWhite;
+   }
+
+   &.read-more-button {
+      display: inline-flex;
+      background-color: inherit;
+      padding: 0;
+      font-size: 16px;
+      font-weight: 500;
+      color: $themePrimary;
+      line-height: 24px;
    }
 }
