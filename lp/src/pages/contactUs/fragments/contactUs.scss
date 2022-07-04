@@ -1,0 +1,27 @@
+@import "src/assets/styles/globalStyles";
+
+.contact-us-fragment {
+    width: 100%;
+    .contact-us-first-box {
+        width: 100%;
+        background-color: inherit;
+        padding: 56px 0 136px;
+        @media (max-width: $desktop) {
+            padding: 48px 0 128px;
+        }
+        @media (max-width: $mobile) {
+            padding: 42px 0 104px;
+        }
+    }
+    .contact-us-second-box {
+        width: 100%;
+        background-color: inherit;
+        padding: 136px 0 138px;
+        @media (max-width: $desktop) {
+            padding: 96px 0;
+        }
+        @media (max-width: $mobile) {
+            padding: 72px 0;
+        }
+    }
+}

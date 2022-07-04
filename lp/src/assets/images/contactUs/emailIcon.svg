@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="Icon" transform="translate(-141 -323)">
+    <rect id="Base" width="24" height="24" transform="translate(141 323)" fill="#0090f0" opacity="0"/>
+    <g id="email_2_" data-name="email (2)" transform="translate(132.647 302.832)">
+      <path id="Path_4895" data-name="Path 4895" d="M29.187,39.412H11.519a2.168,2.168,0,0,1-2.166-2.166V26.334a2.168,2.168,0,0,1,2.166-2.166H29.187a2.168,2.168,0,0,1,2.166,2.166V37.246a2.168,2.168,0,0,1-2.166,2.166ZM11.519,25a1.34,1.34,0,0,0-1.338,1.338V37.246a1.34,1.34,0,0,0,1.338,1.338H29.187a1.34,1.34,0,0,0,1.338-1.338V26.334A1.34,1.34,0,0,0,29.187,25Z" transform="translate(0 0)" fill="#0090f0"/>
+      <path id="Path_4896" data-name="Path 4896" d="M23.226,36.247a.414.414,0,0,1-.274-.1l-9.976-8.806.548-.621,9.7,8.565,9.7-8.564.548.621L23.5,36.144A.413.413,0,0,1,23.226,36.247Z" transform="translate(-2.873 -2.021)" fill="#0090f0"/>
+      <path id="Path_4897" data-name="Path 4897" d="M0,0H10.154V.828H0Z" transform="translate(9.878 38.112) rotate(-48.728)" fill="#0090f0"/>
+      <path id="Path_4898" data-name="Path 4898" d="M0,0H.828V10.155H0Z" transform="translate(23.525 31.014) rotate(-41.272)" fill="#0090f0"/>
+    </g>
+  </g>
+</svg>

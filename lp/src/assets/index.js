@@ -52,6 +52,20 @@ import Effective from "./images/aboutUs/effective.svg";
 import Organize from "./images/aboutUs/organize.svg";
 import Cofounder from "./images/aboutUs/cofounder.png";
 
+// CONTACT_US_PAGE_IMAGES
+import ChatWithUs from "./images/contactUs/chatWithUs.svg";
+import EmailUs from "./images/contactUs/emailUs.svg";
+import CallUs from "./images/contactUs/callUs.svg";
+import ChatIcon from "./images/contactUs/chatIcon.svg";
+import EmailIcon from "./images/contactUs/emailIcon.svg";
+import CallIcon from "./images/contactUs/callIcon.svg";
+import LocationIcon from "./images/contactUs/locationIcon.svg";
+import MinusIcon from "./images/contactUs/minusIcon.svg";
+import PlusIcon from "./images/contactUs/plusIcon.svg";
+
+// NOT_FOUND_PAGE_IMAGES
+import Warning from "./images/notFound/warning.png";
+
 export const Images = {
    Facebook,
    Instagram,
@@ -99,4 +113,14 @@ export const Images = {
    Effective,
    Organize,
    Cofounder,
+   ChatWithUs,
+   EmailUs,
+   CallUs,
+   ChatIcon,
+   EmailIcon,
+   CallIcon,
+   LocationIcon,
+   MinusIcon,
+   PlusIcon,
+   Warning,
 };

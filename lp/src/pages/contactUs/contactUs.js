@@ -1,5 +1,10 @@
 import React from "react";
+import { ContactUsFragment } from "./fragments";
 
 export const ContactUs = () => {
-   return <section>contactUs</section>;
+   return (
+      <section>
+         <ContactUsFragment />
+      </section>
+   );
 };

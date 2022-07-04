@@ -1,5 +1,10 @@
 import React from "react";
+import { NotFoundFragment } from "./fragments";
 
 export const NotFound = () => {
-   return <section>notFound</section>;
+   return (
+      <section>
+         <NotFoundFragment />
+      </section>
+   );
 };
