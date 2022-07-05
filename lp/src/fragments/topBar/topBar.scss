@@ -14,11 +14,9 @@
          min-height: 62px;
       }
       .topbar-logo {
-         font-size: 24px;
-         font-weight: 700;
-         line-height: 28px;
          position: relative;
          z-index: 2;
+         @include font-style(24px, 700, $themePrimary, 28px);
       }
       .desktop-nav {
          @media (max-width: $tablet) {
@@ -131,9 +129,7 @@
                      display: flex;
                      justify-content: center;
                      a {
-                        font-size: 20px;
-                        font-weight: 700;
-                        color: $textSecondary;
+                        @include font-style(20px, 700, $textSecondary, 23px);
                         text-decoration: none;
                      }
                   }

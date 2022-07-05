@@ -160,4 +160,11 @@ input[type="number"]::-webkit-outer-spin-button {
    }
 }
 
+@mixin font-style ($size, $weight, $color, $lineHeight) {
+   font-size: $size;
+   font-weight: $weight;
+   color: $color;
+   line-height: $lineHeight;
+}
+
 

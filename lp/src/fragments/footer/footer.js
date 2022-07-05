@@ -90,6 +90,8 @@ export const Footer = () => {
                                  />
                                  <a
                                     href={contact.contactOption.optionHref}
+                                    target={"_blank"}
+                                    rel="noopener noreferrer"
                                     className="contact-option"
                                  >
                                     {contact.contactOption.optionLabel}

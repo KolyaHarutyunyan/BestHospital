@@ -24,9 +24,7 @@
       box-shadow: 0px 0px 6px #347af069;
       background-color: $themePrimary;
       margin-left: 32px;
-      font-size: 18px;
-      font-weight: 500;
-      color: $textWhite;
+      @include font-style(18px, 500, $textWhite, 20px);
    }
    &.book-demo-button-mobile {
       width: 230px;
@@ -34,27 +32,20 @@
       border-radius: 10px;
       box-shadow: 0px 0px 6px #0000001a;
       background-color: $themePrimary;
-      font-size: 16px;
-      font-weight: 500;
-      color: $textWhite;
+      @include font-style(16px, 500, $textWhite, 18px);
       margin-top: 16px;
    }
 
    &.sign-in-button {
       padding: 0;
       background-color: inherit;
-      font-size: 16px;
-      font-weight: 700;
-      color: $textWhite;
-      line-height: 18px;
+      @include font-style(16px, 700, $textWhite, 18px);
       &:hover {
          color: $themePrimary;
       }
    }
    &.sign-in-button-mobile {
-      font-size: 20px;
-      font-weight: 700;
-      color: $textSecondary;
+      @include font-style(20px, 700, $textSecondary, 23px);
       background-color: inherit;
    }
 
@@ -97,16 +88,12 @@
             width: 275px;
          }
       }
-      font-size: 16px;
-      font-weight: 500;
-      color: $textWhite;
+      @include font-style(16px, 500, $textWhite, 24px);
    }
 
    &.watch-video-button {
       background-color: inherit;
-      font-size: 16px;
-      font-weight: 500;
-      color: $textWhite;
+      @include font-style(16px, 500, $textWhite, 24px);
       margin-left: 24px;
       @media (max-width: $desktop) {
          margin-left: 0;
@@ -131,29 +118,21 @@
       box-shadow: 0px 0px 6px #347AF069;
       border-radius: 10px;
       background-color: $themePrimary;
-      font-size: 18px;
-      font-weight: 500;
-      color: $textWhite;
+      @include font-style(18px, 500, $textWhite, 20px);
    }
 
    &.read-more-button {
       display: inline-flex;
       background-color: inherit;
       padding: 0;
-      font-size: 16px;
-      font-weight: 500;
-      color: $themePrimary;
-      line-height: 24px;
+      @include font-style(16px, 500, $themePrimary, 24px);
    }
 
    &.back-to-homepage-button {
       margin: 0 auto;
       padding: 0;
       background-color: inherit;
-      font-size: 24px;
-      font-weight: 700;
-      color: $themePrimary;
-      line-height: 28px;
+      @include font-style(24px, 700, $themePrimary, 28px);
       @media (max-width: $desktop) {
         font-weight: 500;
       }
@@ -161,5 +140,15 @@
          font-size: 18px;
          font-weight: 700;
        }
+   }
+
+   &.send-message-button {
+      width: 150px;
+      height: 48px;
+      background-color: #0390F0;
+      box-shadow: 0px 0px 6px #347AF069;
+      border-radius: 10px;
+      margin: 24px 0 0 auto;
+      @include font-style(18px, 500, $textWhite, 20px);
    }
 }

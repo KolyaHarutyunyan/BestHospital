@@ -158,15 +158,17 @@ export const HomeFragment = () => {
          <Card cardBackgroundColor={"#FFFFFF"}>
             <div className="home-fifth-box">
                <div className="fifth-box-content-box">
-                  <h4 className="content-title">{homeFifthBoxContentTitle}</h4>
-                  <p className="content-subtitle">{homeFifthBoxContentSubtitle}</p>
-                  <Button 
-                     buttonType={"button"} 
-                     buttonClassName={"book-demo"} 
-                     onClickButton={() => {}}
-                  >
-                     Book Demo
-                  </Button>
+                  <div className="content-container">
+                     <h4 className="content-title">{homeFifthBoxContentTitle}</h4>
+                     <p className="content-subtitle">{homeFifthBoxContentSubtitle}</p>
+                     <Button 
+                        buttonType={"button"} 
+                        buttonClassName={"book-demo"} 
+                        onClickButton={() => {}}
+                     >
+                        Book Demo
+                     </Button>
+                  </div>
                </div>
             </div>
          </Card>

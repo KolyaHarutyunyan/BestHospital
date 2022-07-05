@@ -1,12 +1,5 @@
 @import "src/assets/styles/globalStyles";
 
-@mixin font-style ($size, $weight, $color, $lineHeight) {
-    font-size: $size;
-    font-weight: $weight;
-    color: $color;
-    line-height: $lineHeight;
-}
-
 .about-us-fragment {
     width: 100%;
     .about-us-first-box {
@@ -25,10 +18,7 @@
             margin: 0 auto;
             text-align: center;
             .content-title {
-                font-size: 56px;
-                font-weight: 700;
-                color: $textWhite;
-                line-height: 66px;
+                @include font-style(56px, 700, #F8FAFB, 66px);
                 @media (max-width: $tablet) {
                     font-size: 40px;
                     line-height: 50px;
@@ -39,11 +29,8 @@
                 }
             }
             .content-subtitle {
-                font-size: 18px;
-                font-weight: 400;
-                color: #EBF2FD;
-                line-height: 27px;
                 margin: 24px 0 40px;
+                @include font-style(18px, 400, #EBF2FD, 27px);
                 @media (max-width: $tablet) {
                     font-size: 16px;
                     line-height: 24px;

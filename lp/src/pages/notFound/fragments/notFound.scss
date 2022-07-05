@@ -21,11 +21,8 @@
                 max-width: 325px;
             } 
             .content-title {
-                font-size: 46px;
-                font-weight: 700;
-                color: $textPrimary;     
-                line-height: 52px;       
                 margin-bottom: 24px;   
+                @include font-style(46px, 700, $textPrimary, 52px);
                 @media (max-width: $mobile) {
                     font-size: 24px;
                     line-height: 28px;

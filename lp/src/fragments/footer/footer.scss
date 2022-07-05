@@ -13,13 +13,6 @@
 //    background-position: center;
 // }
 
-@mixin list-font {
-   font-size: 12px;
-   font-weight: 400;
-   color: $textWhite;
-   line-height: 14px;
-}
-
 @mixin list-border {
    &:not(:first-child) {
       border-left: 1px solid $textWhite;
@@ -71,10 +64,7 @@
             flex-direction: column-reverse;
          }
          .title {
-            font-size: 16px;
-            font-weight: 500;
-            color: $themePrimary;
-            line-height: 18px;
+            @include font-style(16px, 500, $themePrimary, 18px);
          }
          .info-box {
             max-width: 290px;
@@ -85,9 +75,7 @@
             .info-text {
                max-width: 184px;
                width: 100%;
-               font-size: 14px;
-               font-weight: 500;
-               color: $textWhite;
+               @include font-style(14px, 500, $textWhite, 16px);
                margin: 16px 0 24px;
             }
             .social-media-icons-box {
@@ -138,10 +126,7 @@
                .list {
                   margin-top: 16px;
                   & a {
-                     font-size: 14px;
-                     font-weight: 500;
-                     color: $textWhite;
-                     line-height: 16px;
+                     @include font-style(14px, 500, $textWhite, 16px);
                      text-decoration: none;
                   }
                   &.contact-us-list {
@@ -167,10 +152,7 @@
                }
                .sign-up-info {
                   margin: 16px 0;
-                  font-size: 14px;
-                  font-weight: 500;
-                  color: $textGrey;
-                  line-height: 16px;
+                  @include font-style(14px, 500, $textGrey, 16px);
                }
                .sign-up-label {
                   display: block;
@@ -182,9 +164,7 @@
                      border: none;
                      outline: none;
                      width: 100%;
-                     font-size: 14px;
-                     font-weight: 400;
-                     color: $textSecondary;
+                     @include font-style(14px, 400, $textSecondary, 16px);
                   }
                }
             }
@@ -201,7 +181,7 @@
          }
          .copyright-list {
             li {
-               @include list-font();
+               @include font-style(12px, 400, $textWhite, 14px);
                @include list-border();
             }
          }
@@ -213,7 +193,7 @@
                li {
                   @include list-border();
                   a {
-                     @include list-font();
+                     @include font-style(12px, 400, $textWhite, 14px);
                      text-decoration: none;
                   }
                }

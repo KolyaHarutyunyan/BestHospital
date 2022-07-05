@@ -9,13 +9,6 @@
    }
 }
 
-@mixin font-style ($size, $weight, $lineHeight) {
-   font-size: $size;
-   font-weight: $weight;
-   color: $textSecondary;
-   line-height: $lineHeight;
-}
-
 .home-fragment {
    width: 100%;
    .home-first-box {
@@ -42,10 +35,7 @@
             max-width: 343px;
          }
          .content-title {
-            font-size: 56px;
-            font-weight: 700;
-            color: $backgroundPrimary;
-            line-height: 66px;
+            @include font-style(56px, 700, #F8FAFB, 66px);
             @media (max-width: $desktop) {
                font-size: 40px;
                line-height: 60px;
@@ -56,11 +46,8 @@
             }
          }
          .content-subtitle {
-            font-size: 18px;
-            font-weight: 400;
-            color: $backgroundSecondary;
-            line-height: 27px;
             margin-top: 24px;
+            @include font-style(18px, 400, #EBF2FD, 27px);
             @media (max-width: $desktop) {
                font-size: 16px;
             }
@@ -103,11 +90,8 @@
          padding: 72px 0;
       }
       .content-title {
-         font-size: 46px;
-         font-weight: 700;
-         color: $textPrimary;
-         line-height: 52px;
          text-align: center;
+         @include font-style(46px, 700, $textPrimary, 52px);
          @media (max-width: $desktop) {
             font-size: 32px;
             line-height: 48px;
@@ -168,21 +152,15 @@
                   }
                }
                .feature-title {
-                  font-size: 24px;
-                  font-weight: 700;
-                  color: $textPrimary;
-                  line-height: 28px;
                   margin: 16px 0;
+                  @include font-style(24px, 700, $textPrimary, 28px);
                   @media (max-width: $desktop) {
                      font-size: 18px;
                      line-height: 20px;
                   }
                }
                .feature-description {
-                  font-size: 18px;
-                  font-weight: 400;
-                  color: $textSecondary;
-                  line-height: 27px;
+                  @include font-style(18px, 400, $textSecondary, 27px);
                   @media (max-width: $desktop) {
                      font-size: 16px;
                      line-height: 24px;
@@ -203,11 +181,8 @@
          padding: 56px 0;
       }
       .content-title {
-         font-size: 46px;
-         font-weight: 700;
-         color: $textWhite;
-         line-height: 58px;
          text-align: center;
+         @include font-style(46px, 700, $textWhite, 58px);
          @media (max-width: $desktop) {
             font-size: 32px;
             font-weight: 48px;
@@ -281,11 +256,8 @@
                      }
                   }
                   a {
-                     font-size: 24px;
-                     font-weight: 500;
-                     color: $textGrey;
-                     line-height: 28px;
                      text-decoration: none;
+                     @include font-style(24px, 500, $textGrey, 28px);
                      cursor: pointer;
                      @media (max-width: $desktop) {
                         font-size: 18px;
@@ -356,10 +328,7 @@
                         justify-content: center;
                      }
                      .best-job-title {
-                        font-size: 32px;
-                        font-weight: 500;
-                        color: $textWhite;
-                        line-height: 37px;
+                        @include font-style(32px, 500, $textWhite, 37px);
                         @media (max-width: $desktop) {
                            font-size: 24px;
                            line-height: 28px;
@@ -376,11 +345,8 @@
                      }
                   }
                   .best-job-info {
-                     font-size: 18px;
-                     font-weight: 400;
-                     color: $textWhite;
-                     line-height: 27px;
                      margin: 16px 0;
+                     @include font-style(18px, 400, $textWhite, 27px);
                      @media (max-width: $desktop) {
                         font-size: 16px;
                         line-height: 24px;
@@ -417,10 +383,7 @@
                            }
                         }
                         span {
-                           font-size: 18px;
-                           font-weight: 400;
-                           color: $textWhite;
-                           line-height: 20px;
+                           @include font-style(18px, 400, $textWhite, 20px);
                            @media (max-width: $desktop) {
                               font-size: 16px;
                               line-height: 18px;
@@ -444,11 +407,8 @@
          padding: 72px 0;
       }
       .content-title {
-         font-size: 46px;
-         font-weight: 700;
-         color: $textPrimary;
-         line-height: 58px;
          text-align: center;
+         @include font-style(46px, 700, $textPrimary, 58px);
          &::after {
             content: "Wellness.";
             color: $themePrimary;
@@ -550,7 +510,7 @@
                      }
                   }
                   .customer-comment {
-                     @include font-style(18px, 400, 27px);
+                     @include font-style(18px, 400, $textSecondary, 27px);
                      margin: 16px 0;
                      @media (max-width: $mobile) {
                         font-size: 14px;
@@ -561,13 +521,13 @@
                      width: 100%;
                      text-align: right;
                      .customer-name {
-                        @include font-style(18px, 500, 20px);
+                        @include font-style(18px, 500, $textSecondary, 20px);
                         @media (max-width: $mobile) {
                            font-size: 16px;
                         }
                      }
                      .customer-profesion {
-                        @include font-style(16px, 400, 18px);
+                        @include font-style(16px, 400, $textSecondary, 18px);
                         @media (max-width: $mobile) {
                            font-size: 14px;
                            line-height: 16px;
@@ -592,32 +552,27 @@
          padding: 72px 0;
       }
       .fifth-box-content-box {
+         max-width: 1048px;
+         width: 100%;
          background-color: $backgroundDark;
          border-radius: 30px;
-         padding: 60px 250px;
-         text-align: center;
+         padding: 60px;
          @media (max-width: $desktop) {
             padding: 40px;
          }
-         .content-title {
-            font-size: 32px;
-            font-weight: 700;
-            color: $textWhite;
-            line-height: 50px;
+         .content-container {
             max-width: 547px;
             width: 100%;
             margin: 0 auto;
+            text-align: center;
+            .content-title {
+               @include font-style(32px, 700, $textWhite, 50px);
+            }
+            .content-subtitle {
+               @include font-style(16px, 400, $backgroundSecondary, 18px);
+               margin: 16px 0 32px;
+            }
          }
-         .content-subtitle {
-            font-size: 16px;
-            font-weight: 400;
-            color: $backgroundSecondary;
-            line-height: 18px;
-            max-width: 400px;
-            width: 100%;
-            margin: 16px auto 32px;
-         }
-
       }
    }
 }

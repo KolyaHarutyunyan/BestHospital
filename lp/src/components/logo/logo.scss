@@ -1,8 +1,6 @@
 @import "src/assets/styles/globalStyles";
 
 .logo-link {
-   font-size: 16px;
-   font-weight: 700;
-   color: $themePrimary;
+   @include font-style(16px, 700, $themePrimary, 18px);
    text-decoration: none;
 }

@@ -13,10 +13,7 @@
             padding: 48px 0;
         }
         .content-title {
-            font-size: 32px;
-            font-weight: 700;
-            color: #2B273C;
-            line-height: 37px;
+            @include font-style(32px, 700, #2B273C, 37px);
             @media (max-width: $mobile) {
                 font-size: 24px;
                 line-height: 28px;
@@ -38,10 +35,7 @@
                 padding: 16px;
             }
             .privacy-policy-paragraph {
-                font-size: 16px;
-                font-weight: 500;
-                color: $textSecondary;
-                line-height: 24px;
+                @include font-style(16px, 500, $textSecondary, 24px);
                 &:not(:first-child) {
                     margin-top: 24px;
                 }
