@@ -1,40 +1,43 @@
 @import "src/assets/styles/globalStyles";
 
+@mixin background-style($bgImage) {
+   background-image: url($bgImage);
+   background-repeat: no-repeat;
+   background-size: cover;
+   background-position: center;
+}
+
 .card {
-   position: relative;
    width: 100%;
    overflow: hidden;
-   background-color: $backgroundPrimary;
-   &.radial-gradient-image {
-      background-image: url("../../assets/images/base.svg");
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center;
+
+   &.home-page-cover {
+      @include background-style("../../assets/images/home/homeCoverWeb.svg");
+      @media (max-width: $desktop) {
+         background-image: url("../../assets/images/home/homeCoverTablet.svg");
+      }
+      @media (max-width: $mobile) {
+         background-image: url("../../assets/images/home/homeCoverMobile.svg");
+      }
    }
-   // &.gradient-card {
-   //    &::after {
-   //       content: "";
-   //       position: absolute;
-   //       top: 0;
-   //       right: 0;
-   //       width: 598px;
-   //       height: 602px;
-   //       background-image: url("../../assets/images/home/cardGradientWeb.png");
-   //       background-repeat: no-repeat;
-   //       background-size: contain;
-   //       background-position: 70px 0%;
-   //       @media (max-width: $desktop) {
-   //          width: 452px;
-   //          height: 740px;
-   //          background-image: url("../../assets/images/home/cardGradientTablet.png");
-   //          background-position: 0% 26px;
-   //       }
-   //       @media (max-width: $mobile) {
-   //          width: 251px;
-   //          height: 412px;
-   //          background-image: url("../../assets/images/home/cardGradientMobile.png");
-   //          background-position: 0% 199px;
-   //       }
-   //    }
-   // }
+
+   &.about-us-page-cover {
+      @include background-style("../../assets/images/aboutUs/aboutUsCoverWeb.svg");
+      @media (max-width: $desktop) {
+         background-image: url("../../assets/images/aboutUs/aboutUsCoverTablet.svg");
+      }
+      @media (max-width: $mobile) {
+         background-image: url("../../assets/images/aboutUs/aboutUsCoverMobile.svg");
+      }
+   }
+
+   &.contact-us-page-cover {
+      @include background-style("../../assets/images/contactUs/contactUsCoverWeb.svg");
+      @media (max-width: $desktop) {
+         background-image: url("../../assets/images/contactUs/contactUsCoverTablet.svg");
+      }
+      @media (max-width: $mobile) {
+         background-image: url("../../assets/images/contactUs/contactUsCoverMobile.svg");
+      }
+   }
 }
