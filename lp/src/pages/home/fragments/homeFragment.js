@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 // import { Carousel } from "react-responsive-carousel";
 import { Button, Card, MainCarousel } from "components";
 import {
@@ -16,10 +16,12 @@ import {
    MOBILE,
 } from "./constants";
 import { Images } from "assets";
-import { useWidth } from "utils";
+import { BookDemoContext, useWidth } from "utils";
 
 export const HomeFragment = () => {
    const [jobNavTitle, setJobNavTitle] = useState(bestJobs[0].jobNavigationTitle);
+
+   const { handleModalOpenClose } = useContext(BookDemoContext);
 
    const width = useWidth();
 
@@ -37,6 +39,7 @@ export const HomeFragment = () => {
                      <Button
                         buttonType={"button"}
                         buttonClassName={"book-demo-with-shadow-button"}
+                        onClickButton={handleModalOpenClose}
                      >
                         Book Demo
                      </Button>
@@ -176,7 +179,7 @@ export const HomeFragment = () => {
                      <Button
                         buttonType={"button"}
                         buttonClassName={"book-demo"}
-                        onClickButton={() => {}}
+                        onClickButton={handleModalOpenClose}
                      >
                         Book Demo
                      </Button>

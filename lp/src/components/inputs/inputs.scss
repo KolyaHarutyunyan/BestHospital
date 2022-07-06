@@ -1,0 +1,26 @@
+@import "src/assets/styles/globalStyles";
+
+// check-box-input-style
+.checkbox-label {
+   display: inline-flex;
+   align-items: center;
+   transition: all 0.1s linear;
+   cursor: pointer;
+   & input {
+      display: none;
+   }
+   & input:checked + .input-checkbox {
+      background-color: $backgroundDark;
+   }
+   .input-checkbox {
+      transition: background-image 0.2s linear;
+      width: 24px;
+      height: 24px;
+      border-radius: 5px;
+      background-color: $backgroundPrimary;
+      margin-right: 8px;
+   }
+   .input-label-text {
+      @include font-style(16px, 500, $textSecondary, 18px);
+   }
+}

@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Logo, Button } from "components";
+import { Logo, Button, SimpleModal } from "components";
 import { navLinks } from "./constants";
+import { BookDemoContext } from "utils";
 
 export const TopBar = () => {
    const [menuIsShown, setMenuIsShown] = useState(false);
+   const [signInModalIsOpen, setSignInModalIsOpen] = useState(false);
+
+   const { handleModalOpenClose } = useContext(BookDemoContext);
 
    return (
       <nav className="topbar-container">
@@ -25,7 +29,7 @@ export const TopBar = () => {
                         <Button
                            buttonType={"button"}
                            buttonClassName={"sign-in-button"}
-                           onClickButton={() => {}}
+                           onClickButton={() => setSignInModalIsOpen(true)}
                         >
                            Sign In
                         </Button>
@@ -36,7 +40,7 @@ export const TopBar = () => {
                      <Button
                         buttonType={"button"}
                         buttonClassName={"book-demo-button"}
-                        onClickButton={() => {}}
+                        onClickButton={handleModalOpenClose}
                      >
                         Book Demo
                      </Button>
@@ -64,7 +68,7 @@ export const TopBar = () => {
                            <Button
                               buttonType={"button"}
                               buttonClassName={"sign-in-button-mobile"}
-                              onClickButton={() => {}}
+                              onClickButton={() => setSignInModalIsOpen(true)}
                            >
                               Sign In
                            </Button>
@@ -72,7 +76,7 @@ export const TopBar = () => {
                         <Button
                            buttonType={"button"}
                            buttonClassName={"book-demo-button-mobile"}
-                           onClickButton={() => {}}
+                           onClickButton={handleModalOpenClose}
                         >
                            Book Demo
                         </Button>
@@ -81,6 +85,12 @@ export const TopBar = () => {
                </div>
             </div>
          </div>
+         <SimpleModal
+            openDefault={signInModalIsOpen}
+            closeModal={() => setSignInModalIsOpen(false)}
+            // content={""}
+            disableScrollLock={true}
+         />
       </nav>
    );
 };

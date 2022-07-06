@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button, Card } from "components";
 import {
    aboutUsFirstBoxContentSubtitle,
@@ -10,8 +10,11 @@ import {
 } from "./constants";
 import { AboutUsSection, ReasonWhyWeAreHere } from "./core";
 import { Images } from "assets";
+import { BookDemoContext } from "utils";
 
 export const AboutUsFragment = () => {
+   const { handleModalOpenClose } = useContext(BookDemoContext);
+
    return (
       <div className="about-us-fragment">
          <Card cardClassName={"about-us-page-cover"}>
@@ -22,7 +25,7 @@ export const AboutUsFragment = () => {
                   <Button
                      buttonType={"button"}
                      buttonClassName={"book-demo-with-shadow-button"}
-                     onClickButton={() => {}}
+                     onClickButton={handleModalOpenClose}
                   >
                      Book Demo
                   </Button>

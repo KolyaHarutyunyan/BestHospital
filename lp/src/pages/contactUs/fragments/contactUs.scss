@@ -1,366 +1,367 @@
 @import "src/assets/styles/globalStyles";
 
 @mixin input-style {
-    width: 100%;
-    border: none;
-    outline: none;
-    padding: 16px;
-    background-color: $backgroundPrimary;
-    border-radius: 10px;
-    @include font-style(16px, 400, #1229425A, 20px);
+   width: 100%;
+   border: none;
+   outline: none;
+   padding: 16px;
+   background-color: $backgroundPrimary;
+   border-radius: 10px;
+   @include font-style(16px, 400, #1229425a, 20px);
 }
 
 .contact-us-fragment {
-    width: 100%;
-    .contact-us-first-box {
-        width: 100%;
-        background-color: inherit;
-        padding: 56px 0 136px;
-        @media (max-width: $desktop) {
-            padding: 48px 0 128px;
-        }
-        @media (max-width: $mobile) {
-            padding: 42px 0 104px;
-        }
-        .first-box-content {
-            max-width: 514px;
+   width: 100%;
+   .contact-us-first-box {
+      width: 100%;
+      background-color: inherit;
+      padding: 56px 0 136px;
+      @media (max-width: $desktop) {
+         padding: 48px 0 128px;
+      }
+      @media (max-width: $mobile) {
+         padding: 42px 0 104px;
+      }
+      .first-box-content {
+         max-width: 514px;
+         width: 100%;
+         margin: 0 auto;
+         text-align: center;
+         .content-title {
+            @include font-style(56px, 700, #f8fafb, 66px);
+            margin-bottom: 24px;
+            @media (max-width: $desktop) {
+               font-size: 40px;
+            }
+            @media (max-width: $mobile) {
+               font-size: 32px;
+               line-height: 50px;
+            }
+         }
+         .content-subtitle {
+            @include font-style(16px, 400, #ebf2fd, 20px);
+         }
+         .contact-options-list {
             width: 100%;
-            margin: 0 auto;
-            text-align: center;
-            .content-title {
-                @include font-style(56px, 700, #F8FAFB, 66px);
-                margin-bottom: 24px;
-                @media (max-width: $desktop) {
-                    font-size: 40px;
-                }
-                @media (max-width: $mobile) {
-                    font-size: 32px;
-                    line-height: 50px;
-                }
-            }
-            .content-subtitle {
-                @include font-style(16px, 400, #EBF2FD, 20px);
-            }
-            .contact-options-list {
-                width: 100%;
-                display: flex;
-                justify-content: center;
-                li {
-                    margin: 40px;
-                    @media (max-width: $desktop) {
-                        margin: 40px 28px;
-                    }
-                    @media (max-width: $mobile) {
-                        margin: 32px 20px;
-                    }
-                    a {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        text-decoration: none;
-                        img {
-                            width: 40px;
-                            height: 40px;
-                            margin-bottom: 16px;
-                            @media (max-width: $desktop) {
-                                width: 32px;
-                                height: 32px;
-                            }
-                            @media (max-width: $mobile) {
-                                width: 23px;
-                                height: 23px;
-                            }
-                        }
-                        span {
-                            @include font-style(18px, 700, $textWhite, 20px);
-                            @media (max-width: $mobile) {
-                                display: none;
-                            }
-                        }
-                    }
-                }
-            }
-            button {
-                margin: 0 auto;
-            }
-        }
-    }
-    .contact-us-second-box {
-        width: 100%;
-        background-color: inherit;
-        padding: 136px 0 138px;
-        @media (max-width: $desktop) {
-            padding: 96px 0;
-        }
-        @media (max-width: $mobile) {
-            padding: 72px 0;
-        }
-        .second-box-content {
-            width: 100%;
-            .our-team-and-message-container {
-                width: 100%;
-                display: flex;
-                justify-content: space-between;
-                margin-bottom: 136px;
-                @media (max-width: $desktop) {
-                    flex-direction: column;
-                    margin-bottom: 96px;
-                }
-                @media (max-width: $mobile) {
-                   margin-bottom: 72px;
-                }
-                .contact-our-team {
-                    max-width: 474px;
-                    width: 100%;
-                    margin-right: 40px;
-                    @media (max-width: $desktop) {
-                        max-width: 640px;
-                        margin-right: 0;
-                        margin-bottom: 96px;
-                    }
-                    @media (max-width: $mobile) {
-                        margin-bottom: 72px;
-                    }
-                    .first-part {
-                        width: 100%;
-                        .title {
-                            @include font-style(46px, 700, $textPrimary, 58px);
-                            margin-bottom: 16px;
-                            @media (max-width: $desktop) {
-                                font-size: 32px;
-                                line-height: 48px;
-                                margin-bottom: 24px;
-                            }
-                            @media (max-width: $mobile) {
-                                margin-bottom: 26px;
-                            }
-                        }
-                        .text {
-                            @include font-style(18px, 400, $textSecondary, 27px);
-                            @media (max-width: $mobile) {
-                                font-size: 16px;
-                                line-height: 24px;
-                            }
-                        }
-                    }
-                    .second-part {
-                        width: 100%;
-                        margin: 24px 0;
-                        padding: 24px 0;
-                        border-top: 1px solid #0493EC5A;
-                        border-bottom: 1px solid #0493EC5A;
-                        .title {
-                            @include font-style(18px, 700, $textSecondary, 20px);
-                            margin-bottom: 16px;
-                        }
-                        .text {
-                            @include font-style(18px, 400, $textSecondary, 27px);
-                            @media (max-width: $mobile) {
-                                font-size: 16px;
-                                line-height: 24px;
-                            }
-                        }
-                    } 
-                    .third-part {
-                        max-width: 210px;
-                        width: 100%;
-                        @media (max-width: $desktop) {
-                            max-width: 100%;
-                        }
-                        .title {
-                            @include font-style(18px, 700, $textSecondary, 20px);
-                            margin-bottom: 16px;
-                        }
-                        .get-in-touch-list {
-                            width: 100%;
-                            @media (max-width: $desktop) {
-                                display: flex;
-                                flex-wrap: wrap;
-                            }
-                            @media (max-width: $mobile) {
-                               display: block;
-                            }
-                            li {
-                                margin-bottom: 16px;
-                                @media (max-width: $desktop) {
-                                    &:not(:last-child) {
-                                        margin-right: 56px;
-                                    }
-                                    &:last-child {
-                                        margin-left: 32px;
-                                    }
-                                }
-                                @media (max-width: $mobile) {
-                                   &:not(:last-child) {
-                                        margin-right: 0;
-                                    }
-                                    &:last-child {
-                                        margin-left: 0;
-                                    }
-                                }
-                                a {
-                                    display: flex;
-                                    text-decoration: none;
-                                    img {
-                                        width: 24px;
-                                        height: 24px;
-                                        margin-right: 16px;
-                                        @media (max-width: $desktop) {
-                                            margin-right: 8px;
-                                        }
-                                    }
-                                    span {
-                                        @include font-style(18px, 400, $textSecondary, 20px);
-                                    }
-                                }
-                            }
-                        }
-                    }     
-                }
-                .send-us-a-message {
-                    max-width: 640px;
-                    width: 100%;
-                    padding: 40px;
-                    background-color: $backgroundSecondary;
-                    border-radius: 10px;
-                    @media (max-width: $mobile) {
-                        padding: 16px;
+            display: flex;
+            justify-content: center;
+            li {
+               margin: 40px;
+               @media (max-width: $desktop) {
+                  margin: 40px 28px;
+               }
+               @media (max-width: $mobile) {
+                  margin: 32px 20px;
+               }
+               a {
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  text-decoration: none;
+                  img {
+                     width: 40px;
+                     height: 40px;
+                     margin-bottom: 16px;
+                     @media (max-width: $desktop) {
+                        width: 32px;
+                        height: 32px;
                      }
-                    .message-content {
-                        max-width: 100%;
-                        width: 100%;
-                        .title {
-                            @include font-style(46px, 700, $textPrimary, 20px);
-                            margin-bottom: 32px;
-                            @media (max-width: $desktop) {
-                                font-size: 32px;
-                                margin-bottom: 40px;
-                            }
-                            @media (max-width: $mobile) {
-                                font-size: 24px;
-                                text-align: center;
-                             }
-                        }
-                        .request-input-card {
-                            width: 100%;
-                            display: flex;
-                            flex-direction: column;
-                            margin-bottom: 16px;
-                            label {
-                                @include font-style(16px, 500, #2B273C, 24px);
-                                display: flex;
-                                margin-bottom: 8px;
-                                @media (max-width: $mobile) {
-                                    margin-bottom: 4px;
-                                 }
-                                &::before {
-                                    content: "*";
-                                    color: $themePrimary;
-                                    margin-right: 4px;
-                                }
-                            }
-                            input {
-                                @include input-style();
-                            }
-                            textarea {
-                                resize: none;
-                                @include input-style();
-                                height: 250px;
-                                overflow-y: auto;
-                                @media (max-width: $mobile) {
-                                    height: 187px;
-                                }
-                            }
-                        }
-                    }
-                }
+                     @media (max-width: $mobile) {
+                        width: 23px;
+                        height: 23px;
+                     }
+                  }
+                  span {
+                     @include font-style(18px, 700, $textWhite, 20px);
+                     @media (max-width: $mobile) {
+                        display: none;
+                     }
+                  }
+               }
             }
-            .do-you-have-questions {
-                width: 100%;
-                .content-title-and-subtitle {
-                    text-align: center;
-                    margin-bottom: 56px;
-                    @media (max-width: $desktop) {
-                        margin-bottom: 32px;
-                    }
-                    .content-title {
-                        @include font-style(46px, 700, $textPrimary, 58px);
+         }
+         button {
+            margin: 0 auto;
+         }
+      }
+   }
+   .contact-us-second-box {
+      width: 100%;
+      background-color: inherit;
+      padding: 136px 0 138px;
+      @media (max-width: $desktop) {
+         padding: 96px 0;
+      }
+      @media (max-width: $mobile) {
+         padding: 72px 0;
+      }
+      .second-box-content {
+         width: 100%;
+         .our-team-and-message-container {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 136px;
+            @media (max-width: $desktop) {
+               flex-direction: column;
+               margin-bottom: 96px;
+            }
+            @media (max-width: $mobile) {
+               margin-bottom: 72px;
+            }
+            .contact-our-team {
+               max-width: 474px;
+               width: 100%;
+               margin-right: 40px;
+               @media (max-width: $desktop) {
+                  max-width: 640px;
+                  margin-right: 0;
+                  margin-bottom: 96px;
+               }
+               @media (max-width: $mobile) {
+                  margin-bottom: 72px;
+               }
+               .first-part {
+                  width: 100%;
+                  .title {
+                     @include font-style(46px, 700, $textPrimary, 58px);
+                     margin-bottom: 16px;
+                     @media (max-width: $desktop) {
+                        font-size: 32px;
+                        line-height: 48px;
+                        margin-bottom: 24px;
+                     }
+                     @media (max-width: $mobile) {
+                        margin-bottom: 26px;
+                     }
+                  }
+                  .text {
+                     @include font-style(18px, 400, $textSecondary, 27px);
+                     @media (max-width: $mobile) {
+                        font-size: 16px;
+                        line-height: 24px;
+                     }
+                  }
+               }
+               .second-part {
+                  width: 100%;
+                  margin: 24px 0;
+                  padding: 24px 0;
+                  border-top: 1px solid #0493ec5a;
+                  border-bottom: 1px solid #0493ec5a;
+                  .title {
+                     @include font-style(18px, 700, $textSecondary, 20px);
+                     margin-bottom: 16px;
+                  }
+                  .text {
+                     @include font-style(18px, 400, $textSecondary, 27px);
+                     @media (max-width: $mobile) {
+                        font-size: 16px;
+                        line-height: 24px;
+                     }
+                  }
+               }
+               .third-part {
+                  max-width: 210px;
+                  width: 100%;
+                  @media (max-width: $desktop) {
+                     max-width: 100%;
+                  }
+                  .title {
+                     @include font-style(18px, 700, $textSecondary, 20px);
+                     margin-bottom: 16px;
+                  }
+                  .get-in-touch-list {
+                     width: 100%;
+                     @media (max-width: $desktop) {
+                        display: flex;
+                        flex-wrap: wrap;
+                     }
+                     @media (max-width: $mobile) {
+                        display: block;
+                     }
+                     li {
                         margin-bottom: 16px;
                         @media (max-width: $desktop) {
-                            font-size: 32px;
+                           &:not(:last-child) {
+                              margin-right: 56px;
+                           }
+                           &:last-child {
+                              margin-left: 32px;
+                           }
                         }
                         @media (max-width: $mobile) {
-                            font-size: 24px;
-                            line-height: 48px;
+                           &:not(:last-child) {
+                              margin-right: 0;
+                           }
+                           &:last-child {
+                              margin-left: 0;
+                           }
                         }
-                    }
-                    .content-subtitle {
+                        a {
+                           display: flex;
+                           text-decoration: none;
+                           img {
+                              width: 24px;
+                              height: 24px;
+                              margin-right: 16px;
+                              @media (max-width: $desktop) {
+                                 margin-right: 8px;
+                              }
+                           }
+                           span {
+                              @include font-style(18px, 400, $textSecondary, 20px);
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+            .send-us-a-message {
+               max-width: 640px;
+               width: 100%;
+               padding: 40px;
+               background-color: $backgroundSecondary;
+               border-radius: 10px;
+               @media (max-width: $mobile) {
+                  padding: 16px;
+               }
+               .message-content {
+                  max-width: 100%;
+                  width: 100%;
+                  .title {
+                     @include font-style(46px, 700, $textPrimary, 20px);
+                     margin-bottom: 32px;
+                     @media (max-width: $desktop) {
+                        font-size: 32px;
+                        margin-bottom: 40px;
+                     }
+                     @media (max-width: $mobile) {
+                        font-size: 24px;
+                        text-align: center;
+                     }
+                  }
+                  .request-input-card {
+                     width: 100%;
+                     display: flex;
+                     flex-direction: column;
+                     margin-bottom: 16px;
+                     label {
+                        @include font-style(16px, 500, #2b273c, 24px);
+                        display: flex;
+                        margin-bottom: 8px;
+                        @media (max-width: $mobile) {
+                           margin-bottom: 4px;
+                        }
+                        &::before {
+                           content: "*";
+                           color: $themePrimary;
+                           margin-right: 4px;
+                        }
+                     }
+                     input {
+                        @include input-style();
+                        height: 48px;
+                     }
+                     textarea {
+                        resize: none;
+                        @include input-style();
+                        height: 250px;
+                        overflow-y: auto;
+                        @media (max-width: $mobile) {
+                           height: 187px;
+                        }
+                     }
+                  }
+               }
+            }
+         }
+         .do-you-have-questions {
+            width: 100%;
+            .content-title-and-subtitle {
+               text-align: center;
+               margin-bottom: 56px;
+               @media (max-width: $desktop) {
+                  margin-bottom: 32px;
+               }
+               .content-title {
+                  @include font-style(46px, 700, $textPrimary, 58px);
+                  margin-bottom: 16px;
+                  @media (max-width: $desktop) {
+                     font-size: 32px;
+                  }
+                  @media (max-width: $mobile) {
+                     font-size: 24px;
+                     line-height: 48px;
+                  }
+               }
+               .content-subtitle {
+                  @include font-style(18px, 400, $textSecondary, 27px);
+                  @media (max-width: $mobile) {
+                     font-size: 16px;
+                     line-height: 24px;
+                  }
+               }
+            }
+            .questions-answers-container {
+               max-width: 100%;
+               width: 100%;
+               .question-answer-card {
+                  width: 100%;
+                  border-top: 1px solid #0493ec5a;
+                  &:last-child {
+                     border-bottom: 1px solid #0493ec5a;
+                  }
+                  .question-box {
+                     padding: 26px 0;
+                     cursor: pointer;
+                     @media (max-width: $mobile) {
+                        padding: 20px 0;
+                     }
+                     .question {
+                        @include font-style(18px, 500, $textPrimary, 27px);
+                        @media (max-width: $mobile) {
+                           font-size: 16px;
+                        }
+                     }
+                     img {
+                        width: 24px;
+                        height: 24px;
+                     }
+                  }
+                  .answer-box {
+                     padding-bottom: 0;
+                     transition: padding-bottom 0.2s linear;
+                     &.shown {
+                        padding-bottom: 24px;
+                        @media (max-width: $mobile) {
+                           padding-bottom: 16px;
+                        }
+                        .answer {
+                           max-height: 250px;
+                           overflow: auto;
+                           @media (max-width: $mobile) {
+                              max-height: 187px;
+                           }
+                        }
+                     }
+                     .answer {
+                        max-height: 0;
+                        overflow: hidden;
+                        transition: max-height 0.2s linear;
                         @include font-style(18px, 400, $textSecondary, 27px);
                         @media (max-width: $mobile) {
-                            font-size: 16px;
-                            line-height: 24px;
-                         }
-                    }
-                }
-                .questions-answers-container {
-                    max-width: 100%;
-                    width: 100%;
-                    .question-answer-card {
-                        width: 100%;
-                        border-top: 1px solid #0493EC5A;
-                        &:last-child {
-                            border-bottom: 1px solid #0493EC5A;
+                           font-size: 16px;
+                           line-height: 24px;
                         }
-                        .question-box {
-                            padding: 26px 0;
-                            cursor: pointer;
-                            @media (max-width: $mobile) {
-                                padding: 20px 0;
-                             }
-                            .question {
-                                @include font-style(18px, 500, $textPrimary, 27px);
-                                @media (max-width: $mobile) {
-                                    font-size: 16px;
-                                 }
-                            }
-                            img {
-                                width: 24px;
-                                height: 24px;
-                            }
+                        &::-webkit-scrollbar {
+                           display: none;
                         }
-                        .answer-box {
-                            padding-bottom: 0;
-                            transition: padding-bottom 0.2s linear;
-                            &.shown {
-                                padding-bottom: 24px;
-                                @media (max-width: $mobile) {
-                                    padding-bottom: 16px;
-                                 }
-                                .answer {
-                                    max-height: 250px;
-                                    overflow: auto;
-                                    @media (max-width: $mobile) {
-                                        max-height: 187px;
-                                     }
-                                }
-                            }
-                            .answer {
-                                max-height: 0;
-                                overflow: hidden;
-                                transition: max-height 0.2s linear;
-                                @include font-style(18px, 400, $textSecondary, 27px);
-                                @media (max-width: $mobile) {
-                                    font-size: 16px;
-                                    line-height: 24px;
-                                 }
-                                &::-webkit-scrollbar {
-                                    display: none;
-                                }
-                            }
-                        }
-                    }
-                }
+                     }
+                  }
+               }
             }
-        }
-    }
+         }
+      }
+   }
 }

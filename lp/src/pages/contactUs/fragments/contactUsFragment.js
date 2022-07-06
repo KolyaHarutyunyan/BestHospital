@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button, Card } from "components";
 import {
    contactOptions,
@@ -15,8 +15,11 @@ import {
    waysToGetInTouch,
 } from "./constants";
 import { QuestionAnswerSection, SendMessageSection } from "./core";
+import { BookDemoContext } from "utils";
 
 export const ContactUsFragment = () => {
+   const { handleModalOpenClose } = useContext(BookDemoContext);
+
    return (
       <div className="contact-us-fragment">
          <Card cardClassName={"about-us-page-cover"}>
@@ -41,7 +44,7 @@ export const ContactUsFragment = () => {
                   <Button
                      buttonType={"button"}
                      buttonClassName={"book-demo-with-shadow-button"}
-                     onClickButton={() => {}}
+                     onClickButton={handleModalOpenClose}
                   >
                      Book Demo
                   </Button>

@@ -66,6 +66,9 @@ import PlusIcon from "./images/contactUs/plusIcon.svg";
 // NOT_FOUND_PAGE_IMAGES
 import Warning from "./images/notFound/warning.png";
 
+// COMMON_IMAGES_AND_ICONS
+import CloseIcon from "./images/common/closeIcon.svg";
+
 export const Images = {
    Facebook,
    Instagram,
@@ -123,4 +126,5 @@ export const Images = {
    MinusIcon,
    PlusIcon,
    Warning,
+   CloseIcon,
 };
