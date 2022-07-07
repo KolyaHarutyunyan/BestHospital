@@ -152,29 +152,6 @@
       @include font-style(18px, 500, $textWhite, 20px);
    }
 
-   &.close-button {
-      position: absolute;
-      top: 18px;
-      right: 18px;
-      background-color: inherit;
-      @media (max-width: $desktop) {
-         top: 16px;
-         right: 16px;
-      }
-      @media (max-width: $mobile) {
-         top: 8px;
-         right: 8px;
-      }
-      img {
-         width: 28px;
-         height: 28px;
-         @media (max-width: $mobile) {
-            width: 24px;
-            height: 24px;
-         }
-      }
-   }
-
    &.submit-button {
       width: 100%;
       height: 48px;

@@ -1,22 +1,9 @@
 @import "src/assets/styles/globalStyles";
 
 .book-demo-container {
-   position: relative;
-   max-width: 762px;
+   max-width: 100%;
    width: 100%;
-   padding: 48px;
-   border-radius: 10px;
-   background-color: $backgroundSecondary;
-   @media (max-width: $desktop) {
-      max-width: 704px;
-      padding: 32px;
-   }
-   @media (max-width: $mobile) {
-      max-width: 343px;
-      padding: 24px;
-   }
    .book-demo-content {
-      max-width: 100%;
       width: 100%;
       .content-title {
          @include font-style(46px, 700, $textPrimary, 52px);
@@ -70,7 +57,7 @@
                height: 48px;
                background-color: $backgroundPrimary;
                border-radius: 10px;
-               @include font-style(16px, 400, #1229425a, 20px);
+               @include font-style(16px, 400, $textSecondary, 20px);
             }
          }
       }

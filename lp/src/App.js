@@ -21,11 +21,12 @@ function App() {
          </div>
          <ToastContainer position={"bottom-right"} />
          <SimpleModal
-            openDefault={bookDemoModalIsOpen}
+            modalOpen={bookDemoModalIsOpen}
             closeModal={handleModalOpenClose}
-            content={<BookDemoSection onClose={handleModalOpenClose} />}
-            disableScrollLock={true}
-         />
+            enableScrollLock={true}
+         >
+            <BookDemoSection />
+         </SimpleModal>
       </Fragment>
    );
 }

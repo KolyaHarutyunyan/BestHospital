@@ -7,7 +7,7 @@
    padding: 16px;
    background-color: $backgroundPrimary;
    border-radius: 10px;
-   @include font-style(16px, 400, #1229425a, 20px);
+   @include font-style(16px, 400, $textSecondary, 20px);
 }
 
 .contact-us-fragment {

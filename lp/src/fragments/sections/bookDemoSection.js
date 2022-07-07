@@ -3,22 +3,33 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { Button, CheckBoxInput } from "components";
-import { Images } from "assets";
-import { bookDemoContentTitle, bookDemoInformation, inputsToBookDemo } from "./constants";
+import { Button, CheckBoxInput, SelectInput } from "components";
+import {
+   bookDemoContentTitle,
+   bookDemoInformation,
+   companySizeOptions,
+   inputsToBookDemo,
+} from "./constants";
 import { BookDemoContext } from "utils";
 
-export const BookDemoSection = ({ onClose }) => {
+export const BookDemoSection = () => {
    const [subscribeIsChecked, setSubscribeIsChecked] = useState(false);
+   const [selectedCompanySize, setSelectedCompanySize] = useState(companySizeOptions[0]);
    const [loader, setLoader] = useState(false);
+
    const { handleSubmit, register, reset } = useForm();
 
    const { handleModalOpenClose } = useContext(BookDemoContext);
 
    function onSubmit(data) {
+      const demoFormData = {
+         ...data,
+         subscribeIsChecked,
+         companySize: selectedCompanySize,
+      };
       setLoader(true);
       axios
-         .post("https://rresdx/fd", data)
+         .post("https://rresdx/fd", demoFormData)
          .then(() => {
             setLoader(false);
             toast("Your message was sent");
@@ -33,13 +44,6 @@ export const BookDemoSection = ({ onClose }) => {
 
    return (
       <section className="book-demo-container">
-         <Button
-            buttonType={"button"}
-            buttonClassName={"close-button"}
-            onClickButton={onClose}
-         >
-            <img src={Images.CloseIcon} alt="closer" />
-         </Button>
          <div className="book-demo-content">
             <h2 className="content-title">{bookDemoContentTitle}</h2>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -55,13 +59,20 @@ export const BookDemoSection = ({ onClose }) => {
                         />
                      </div>
                   ))}
+                  <SelectInput
+                     selectInputId={"company-size"}
+                     selectInputName={"companySize"}
+                     selectInputLabelText={"Company size"}
+                     selectInputOptions={companySizeOptions}
+                     selectInputProps={{ ...register("select") }}
+                     selectInputIsRequired={true}
+                     onChangeSelectInput={(e) => setSelectedCompanySize(e.target.value)}
+                  />
                   <CheckBoxInput
                      inputId={"subscribe"}
-                     inputChecked={subscribeIsChecked}
-                     onInputChange={(event) =>
-                        setSubscribeIsChecked(event.target.checked)
-                     }
                      inputLabelText={"Subscribe to Wellness"}
+                     inputChecked={subscribeIsChecked}
+                     onInputChange={(e) => setSubscribeIsChecked(e.target.checked)}
                   />
                </div>
                <div className="information-box">

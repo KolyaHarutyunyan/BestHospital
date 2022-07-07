@@ -1,14 +1,8 @@
-import React, { Fragment } from "react";
-import { Modal } from "@mui/material";
-import { Backdrop } from "@mui/material";
+import React from "react";
+import { Button } from "components";
+import { Images } from "assets";
 
-export const SimpleModal = ({
-   openDefault,
-   closeModal,
-   content,
-   backdropCustom,
-   disableScrollLock,
-}) => {
+export const SimpleModal = ({ modalClassName, modalOpen, closeModal, children }) => {
    const [open, setOpen] = React.useState(false);
 
    function handleClose() {
@@ -19,26 +13,22 @@ export const SimpleModal = ({
       }
    }
 
+   const _modalIsOpen = modalOpen ? modalOpen : open;
+
+   if (!_modalIsOpen) return;
+
    return (
-      <Modal
-         disableScrollLock={disableScrollLock}
-         open={openDefault ? openDefault : open}
-         onClose={handleClose}
-         aria-labelledby="spring-modal-title"
-         aria-describedby="spring-modal-description"
-         className={backdropCustom ? backdropCustom : ""}
-         style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-         }}
-         closeAfterTransition
-         BackdropComponent={Backdrop}
-         BackdropProps={{
-            timeout: 500,
-         }}
-      >
-         <Fragment>{content}</Fragment>
-      </Modal>
+      <div className={`modal-overlay ${modalClassName}`} onClick={handleClose}>
+         <div className="modal-popup" onClick={(event) => event.stopPropagation()}>
+            <Button
+               buttonType={"button"}
+               buttonClassName={"modal-close-button"}
+               onClickButton={closeModal}
+            >
+               <img src={Images.CloseIcon} alt="closer" />
+            </Button>
+            <div className="modal-content">{children}</div>
+         </div>
+      </div>
    );
 };

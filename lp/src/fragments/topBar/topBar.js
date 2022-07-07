@@ -86,11 +86,11 @@ export const TopBar = () => {
             </div>
          </div>
          <SimpleModal
-            openDefault={signInModalIsOpen}
+            modalOpen={signInModalIsOpen}
             closeModal={() => setSignInModalIsOpen(false)}
-            // content={""}
-            disableScrollLock={true}
-         />
+         >
+            Sign In content here
+         </SimpleModal>
       </nav>
    );
 };

@@ -24,7 +24,7 @@ export const socialMediaIcons = [
 export const companyLinks = [
    { name: "About Us", path: "/about-us" },
    { name: "Contact Us", path: "/contact-us" },
-   { name: "Support", path: "/support" },
+   { name: "Help Center", path: "/help-center" },
 ];
 
 export const contactDetails = [

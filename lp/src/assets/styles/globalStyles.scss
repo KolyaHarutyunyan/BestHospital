@@ -160,11 +160,18 @@ input[type="number"]::-webkit-outer-spin-button {
    }
 }
 
-@mixin font-style ($size, $weight, $color, $lineHeight) {
+@mixin font-style($size, $weight, $color, $lineHeight) {
    font-size: $size;
    font-weight: $weight;
    color: $color;
    line-height: $lineHeight;
 }
 
-
+@mixin overlay-style($zIndex) {
+   position: fixed;
+   top: 0;
+   left: 0;
+   z-index: $zIndex;
+   width: 100%;
+   height: 100vh;
+}

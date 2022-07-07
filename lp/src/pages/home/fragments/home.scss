@@ -9,6 +9,20 @@
    }
 }
 
+@mixin slider-button-style($bgImage) {
+   width: 34px !important;
+   height: 18px !important;
+   background-color: $backgroundPrimary !important;
+   background-image: url($bgImage) !important;
+   background-repeat: no-repeat !important;
+   background-size: contain !important;
+   background-position: center !important;
+   cursor: pointer;
+   &:disabled {
+      cursor: default !important;
+   }
+}
+
 .home-fragment {
    width: 100%;
    .home-first-box {
@@ -35,7 +49,7 @@
             max-width: 343px;
          }
          .content-title {
-            @include font-style(56px, 700, #F8FAFB, 66px);
+            @include font-style(56px, 700, #f8fafb, 66px);
             @media (max-width: $desktop) {
                font-size: 40px;
                line-height: 60px;
@@ -47,7 +61,7 @@
          }
          .content-subtitle {
             margin-top: 24px;
-            @include font-style(18px, 400, #EBF2FD, 27px);
+            @include font-style(18px, 400, #ebf2fd, 27px);
             @media (max-width: $desktop) {
                font-size: 16px;
             }
@@ -214,16 +228,16 @@
                }
                &::-webkit-scrollbar {
                   height: 5px;
-                }
-                
-                &::-webkit-scrollbar-track {
+               }
+
+               &::-webkit-scrollbar-track {
                   background-color: inherit;
-                }
-                 
-                &::-webkit-scrollbar-thumb {
-                  background-color: #FFFFFF50; 
+               }
+
+               &::-webkit-scrollbar-thumb {
+                  background-color: #ffffff50;
                   border-radius: 3px;
-                }
+               }
                li {
                   display: flex;
                   align-items: center;
@@ -414,7 +428,7 @@
             color: $themePrimary;
          }
          @media (max-width: $desktop) {
-           font-size: 32px;
+            font-size: 32px;
          }
       }
       .customers-reviews-box {
@@ -426,10 +440,20 @@
          @media (max-width: $mobile) {
             margin-top: 32px;
          }
-         .customer-review-carousel {
-            border: 2px solid !important;
-            .slider {
-               display: flex;
+         .slider-container {
+            .slider-control-centerleft {
+               button {
+                  @include slider-button-style(
+                     "../../../assets/images/home/leftArrow.svg"
+                  );
+               }
+            }
+            .slider-control-centerright {
+               button {
+                  @include slider-button-style(
+                     "../../../assets/images/home/rightArrow.svg"
+                  );
+               }
             }
          }
          .customer-review-card {
@@ -492,7 +516,7 @@
                width: 100%;
                padding: 40px;
                background-color: $backgroundPrimary;
-               box-shadow: 0px 3px 6px #EBF2FDB3;
+               box-shadow: 0px 3px 6px #ebf2fdb3;
                border-radius: 12px;
                @media (max-width: $desktop) {
                   padding: 32px;

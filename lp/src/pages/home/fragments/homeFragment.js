@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-// import { Carousel } from "react-responsive-carousel";
 import { Button, Card, MainCarousel } from "components";
 import {
    bestJobs,
@@ -138,7 +137,6 @@ export const HomeFragment = () => {
                      renderBottomCenterControls={() => false}
                      // cellSpacing={width <= DESKTOP ? 500 : 100}
                   >
-                     {/* <Carousel className="customer-review-carousel"> */}
                      {customersReviews.map((review, index) => (
                         <div key={index} className="customer-review-card">
                            <div className="customer-avatar-box">
@@ -165,7 +163,6 @@ export const HomeFragment = () => {
                            </div>
                         </div>
                      ))}
-                     {/* </Carousel> */}
                   </MainCarousel>
                </div>
             </div>
