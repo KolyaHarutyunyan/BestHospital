@@ -119,20 +119,20 @@ export const ClientAuthorization = ({ info }) => {
             handleOpenClose={() => setToggleModal((prevState) => !prevState)}
             openDefault={toggleModal}
             content={
-               delEdit ? (
-                  <AddAuthorization
-                     fundingId={info[authIndex]?.funderId?._id}
-                     info={info[authIndex]}
-                     handleClose={() => setToggleModal(false)}
-                  />
-               ) : (
-                  <DeleteElement
-                     loader={!!delAuthLoader.length}
-                     info={`Delete ${info[authIndex].authId}`}
-                     handleClose={() => setToggleModal(false)}
-                     handleDel={deleteAuthorization}
-                  />
-               )
+               // delEdit ? (
+               <AddAuthorization
+                  fundingId={info[authIndex]?.funderId?._id}
+                  info={info[authIndex]}
+                  handleClose={() => setToggleModal(false)}
+               />
+               // ) : (
+               //    <DeleteElement
+               //       loader={!!delAuthLoader.length}
+               //       info={`Delete ${info[authIndex].authId}`}
+               //       handleClose={() => setToggleModal(false)}
+               //       handleDel={deleteAuthorization}
+               //    />
+               // )
             }
          />
          <SimpleModal

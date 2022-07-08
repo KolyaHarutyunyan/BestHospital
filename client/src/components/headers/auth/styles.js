@@ -101,11 +101,15 @@ export const authHeaderStyles = makeStyles(() => ({
       cursor: "pointer",
       "& > img": { width: "100%" },
    },
+   employmentEditBoxStyle: {
+      display: "flex",
+      alignItems: "center",
+      cursor: "pointer",
+   },
    editTextStyle: {
       color: Colors.ThemeBlue,
       fontSize: "14px",
       fontWeight: 700,
       marginLeft: "8px",
-      cursor: "default",
    },
 }));

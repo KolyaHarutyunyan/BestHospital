@@ -14,8 +14,8 @@ export const Staff = () => {
 
    const { pageIsChanging, handlePageChange } = useContext(PaginationContext);
 
-   const loader = FindLoad("GET_ADMINS");
    const success = FindSuccess("GET_ADMINS");
+   const loader = FindLoad("GET_ADMINS");
 
    const globalDepartments = useSelector((state) => state.system.departments);
    const adminsList = useSelector((state) => state.admins.adminsList);
@@ -58,7 +58,6 @@ export const Staff = () => {
 
    return (
       <TableWrapper
-         loader={!!loader.length}
          handleType={handleActiveOrInactive}
          firstButton={"Active"}
          secondButton={"Inactive"}
