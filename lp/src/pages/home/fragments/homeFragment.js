@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Button, Card, MainCarousel } from "components";
+import { Button, Card } from "components";
 import {
    bestJobs,
    customersReviews,
@@ -16,6 +16,7 @@ import {
 } from "./constants";
 import { Images } from "assets";
 import { BookDemoContext, useWidth } from "utils";
+import Carousel from "nuka-carousel";
 
 export const HomeFragment = () => {
    const [jobNavTitle, setJobNavTitle] = useState(bestJobs[0].jobNavigationTitle);
@@ -26,6 +27,7 @@ export const HomeFragment = () => {
 
    const carouselHeight =
       width <= DESKTOP && width > MOBILE ? "295px" : width <= MOBILE ? "261px" : "319px";
+   const slidesToShow = width <= DESKTOP ? 1 : 2;
 
    return (
       <div className="home-fragment">
@@ -131,11 +133,11 @@ export const HomeFragment = () => {
             <div className="home-fourth-box">
                <h2 className="content-title">{homeFourthBoxContentTitle}</h2>
                <div className="customers-reviews-box">
-                  <MainCarousel
-                     height={carouselHeight}
-                     slidesToShow={width <= DESKTOP ? 1 : 2}
+                  <Carousel
                      renderBottomCenterControls={() => false}
-                     // cellSpacing={width <= DESKTOP ? 500 : 100}
+                     height={carouselHeight}
+                     slidesToShow={slidesToShow}
+                     slidesToScroll={1}
                   >
                      {customersReviews.map((review, index) => (
                         <div key={index} className="customer-review-card">
@@ -163,7 +165,7 @@ export const HomeFragment = () => {
                            </div>
                         </div>
                      ))}
-                  </MainCarousel>
+                  </Carousel>
                </div>
             </div>
          </Card>
