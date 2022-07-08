@@ -12,7 +12,7 @@
 @mixin slider-button-style($bgImage) {
    width: 34px !important;
    height: 18px !important;
-   background-color: $backgroundPrimary !important;
+   background-color: inherit !important;
    background-image: url($bgImage) !important;
    background-repeat: no-repeat !important;
    background-size: contain !important;
@@ -20,6 +20,12 @@
    cursor: pointer;
    &:disabled {
       cursor: default !important;
+   }
+   @media (max-width: $tablet) {
+      width: 32px !important;
+   }
+   @media (max-width: $mobile) {
+      width: 18px !important;
    }
 }
 
@@ -453,6 +459,20 @@
                   @include slider-button-style(
                      "../../../assets/images/home/rightArrow.svg"
                   );
+               }
+            }
+            .slider-frame {
+               .slide {
+                  transform: translate3d(7%, 0px, 0px) !important;
+                  @media (max-width: $desktop) {
+                     transform: translate3d(23%, 0px, 0px) !important;
+                  }
+                  @media (max-width: $tablet) {
+                     transform: translate3d(12%, 0px, 0px) !important;
+                  }
+                  @media (max-width: $mobile) {
+                     transform: translate3d(8%, 0px, 0px) !important;
+                  }
                }
             }
          }
