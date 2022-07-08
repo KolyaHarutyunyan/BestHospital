@@ -1,0 +1,87 @@
+@import "src/assets/styles/globalStyles";
+
+.book-demo-container {
+   max-width: 100%;
+   width: 100%;
+   .book-demo-content {
+      width: 100%;
+      .content-title {
+         @include font-style(46px, 700, $textPrimary, 52px);
+         text-align: center;
+         margin-bottom: 40px;
+         @media (max-width: $desktop) {
+            margin-bottom: 32px;
+         }
+         @media (max-width: $mobile) {
+            margin-bottom: 24px;
+            font-size: 32px;
+         }
+      }
+      .book-demo-form-container {
+         display: flex;
+         justify-content: space-between;
+         flex-wrap: wrap;
+         @media (max-width: $mobile) {
+            display: block;
+         }
+         .request-input-card {
+            max-width: 321px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 32px;
+            @media (max-width: $desktop) {
+               max-width: 308px;
+            }
+            @media (max-width: $mobile) {
+               margin-bottom: 16px;
+            }
+            label {
+               @include font-style(16px, 500, $textSecondary, 24px);
+               display: flex;
+               margin-bottom: 6px;
+               @media (max-width: $mobile) {
+                  margin-bottom: 4px;
+               }
+               &::before {
+                  content: "*";
+                  color: $themePrimary;
+                  margin-right: 4px;
+               }
+            }
+            input {
+               width: 100%;
+               border: none;
+               outline: none;
+               padding: 0 16px;
+               height: 48px;
+               background-color: $backgroundPrimary;
+               border-radius: 10px;
+               @include font-style(16px, 400, $textSecondary, 20px);
+            }
+         }
+      }
+      .information-box {
+         width: 100%;
+         margin: 16px 0 32px;
+         @media (max-width: $mobile) {
+            margin: 16px 0 24px;
+         }
+         .information {
+            @include font-style(16px, 400, $textSecondary, 18px);
+            margin-right: 4px;
+            @media (max-width: $mobile) {
+               font-size: 14px;
+               line-height: 20px;
+            }
+         }
+         a {
+            @include font-style(16px, 400, $textSecondary, 18px);
+            @media (max-width: $mobile) {
+               font-size: 14px;
+               line-height: 20px;
+            }
+         }
+      }
+   }
+}

@@ -1,0 +1,51 @@
+@import "src/assets/styles/globalStyles";
+
+.modal-overlay {
+   @include overlay-style(3);
+   background-color: #00000080;
+   .modal-popup {
+      position: relative;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 4;
+      max-width: 762px;
+      width: 100%;
+      padding: 48px;
+      border-radius: 10px;
+      background-color: $backgroundSecondary;
+      @media (max-width: $desktop) {
+         max-width: 704px;
+         padding: 32px;
+      }
+      @media (max-width: $mobile) {
+         max-width: 343px;
+         padding: 24px;
+      }
+      .modal-close-button {
+         position: absolute;
+         top: 18px;
+         right: 18px;
+         background-color: inherit;
+         @media (max-width: $desktop) {
+            top: 16px;
+            right: 16px;
+         }
+         @media (max-width: $mobile) {
+            top: 8px;
+            right: 8px;
+         }
+         img {
+            width: 28px;
+            height: 28px;
+            @media (max-width: $mobile) {
+               width: 24px;
+               height: 24px;
+            }
+         }
+      }
+      .modal-content {
+         width: 100%;
+      }
+   }
+}

@@ -1,0 +1,1 @@
+export { AboutUsFragment } from "./aboutUsFragment";

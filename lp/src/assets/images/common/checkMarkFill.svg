@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="Input" transform="translate(-644 -552)">
+    <rect id="Base" width="24" height="24" rx="5" transform="translate(644 552)" fill="#fff"/>
+    <g id="Checked_Checkmark" data-name="Checked Checkmark" transform="translate(644 552)">
+      <rect id="Base-2" data-name="Base" width="24" height="24" rx="5" fill="#347af0"/>
+      <path id="Checkmark" d="M25.355,13.551,24.129,12.29a.264.264,0,0,0-.2-.084h0a.253.253,0,0,0-.2.084l-8.5,8.561-3.093-3.093a.269.269,0,0,0-.39,0L10.518,19a.278.278,0,0,0,0,.4l3.9,3.9a1.234,1.234,0,0,0,.815.4,1.293,1.293,0,0,0,.808-.383h.007l9.313-9.362A.3.3,0,0,0,25.355,13.551Z" transform="translate(-5.434 -6.206)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

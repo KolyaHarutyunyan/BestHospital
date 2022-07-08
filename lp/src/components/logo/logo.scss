@@ -1,0 +1,6 @@
+@import "src/assets/styles/globalStyles";
+
+.logo-link {
+   @include font-style(16px, 700, $themePrimary, 18px);
+   text-decoration: none;
+}

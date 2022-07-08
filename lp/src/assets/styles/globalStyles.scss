@@ -1,0 +1,177 @@
+// — Theme Colors
+$themePrimary: #0090f0;
+$themeYellow: #ffc051;
+$themeGreen: #6fd231;
+$themeRed: #fe7070;
+
+// — Background Colors
+$backgroundPrimary: #ffffff;
+$backgroundSecondary: #f7f9fc;
+$backgroundDark: #1a3855;
+
+// — Text Colors
+$textPrimary: #122942;
+$textSecondary: #2d4365;
+$textWhite: #ffffff;
+$textGrey: #ffffff82;
+
+$mobile: 735px;
+$tablet: 1024px;
+$desktop: 1280px;
+
+body {
+   // font-family: "GT Walsheim Pro";
+   &::-webkit-scrollbar {
+      display: none;
+   }
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+   -webkit-appearance: none;
+   margin: 0;
+}
+
+.space-between {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   width: 100%;
+}
+
+.space-between-flex-start {
+   display: flex;
+   justify-content: space-between;
+   width: 100%;
+}
+
+.flex {
+   display: flex;
+}
+
+.flex-align-center {
+   display: flex;
+   align-items: center;
+}
+
+.flex-justify-align-center {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.flex-align-start {
+   display: flex;
+   align-items: flex-start;
+}
+
+.flex-column-start {
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+}
+
+.column {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+.flex-end {
+   width: 100%;
+   justify-content: flex-end;
+   display: flex;
+}
+
+.background-img {
+   background-repeat: no-repeat;
+   background-size: contain;
+   background-position: center;
+}
+
+.desktop {
+   @media (min-width: $mobile) {
+      display: none;
+   }
+   @media (min-width: $desktop) {
+      display: block;
+   }
+}
+
+.mobile {
+   @media (min-width: $mobile) {
+      display: block;
+   }
+   @media (min-width: $desktop) {
+      display: none;
+   }
+}
+
+.only-mobile {
+   @media (min-width: $mobile) {
+      display: block;
+   }
+   @media (min-width: $tablet) {
+      display: none;
+   }
+}
+
+.tablet {
+   @media (min-width: $mobile) {
+      display: none;
+   }
+   @media (min-width: $tablet) {
+      display: block;
+   }
+   @media (min-width: $desktop) {
+      display: none;
+   }
+}
+
+.only-tablet {
+   @media (min-width: $mobile) {
+      display: none;
+   }
+   @media (min-width: $tablet) {
+      display: block;
+   }
+}
+
+.App {
+   width: 100%;
+   min-height: 100vh;
+   display: flex;
+   flex-direction: column;
+}
+
+.content-container {
+   max-width: 1440px;
+   width: 100%;
+   margin: 0 auto;
+   padding-left: 80px;
+   padding-right: 80px;
+   @media (max-width: $desktop) {
+      padding-left: 32px;
+      padding-right: 32px;
+   }
+   @media (max-width: $mobile) {
+      padding-left: 16px;
+      padding-right: 16px;
+   }
+}
+
+@mixin font-style($size, $weight, $color, $lineHeight) {
+   font-size: $size;
+   font-weight: $weight;
+   color: $color;
+   line-height: $lineHeight;
+}
+
+@mixin overlay-style($zIndex) {
+   position: fixed;
+   top: 0;
+   left: 0;
+   z-index: $zIndex;
+   width: 100%;
+   height: 100vh;
+}

@@ -1,0 +1,71 @@
+@import "src/assets/styles/globalStyles";
+
+// checkbox-input-style
+.checkbox-label {
+   display: inline-flex;
+   align-items: center;
+   transition: all 0.1s linear;
+   cursor: pointer;
+   & input {
+      display: none;
+   }
+   & input:checked + .input-checkbox {
+      background-image: url("../../assets/images/common/checkMarkFill.svg");
+   }
+   .input-checkbox {
+      transition: background-image 0.1s linear;
+      width: 24px;
+      height: 24px;
+      border-radius: 5px;
+      background-image: url("../../assets/images/common/checkMarkEmpty.svg");
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+      margin-right: 8px;
+   }
+   .input-label-text {
+      @include font-style(16px, 500, $textSecondary, 18px);
+   }
+}
+
+// select-input-style
+.select-input {
+   .label-text {
+      @include font-style(16px, 500, $textSecondary, 24px);
+      display: flex;
+      margin-bottom: 6px;
+      @media (max-width: $mobile) {
+         margin-bottom: 4px;
+      }
+      &::before {
+         content: "*";
+         color: $themePrimary;
+         margin-right: 4px;
+      }
+   }
+   .html-select {
+      border: none;
+      outline: none;
+      width: 321px;
+      height: 48px;
+      padding: 0 16px;
+      margin-bottom: 32px;
+      border-radius: 10px;
+      background-color: $backgroundPrimary;
+      cursor: pointer;
+      @media (max-width: $desktop) {
+         width: 308px;
+      }
+      @media (max-width: $mobile) {
+         width: 295px;
+         margin-bottom: 16px;
+      }
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-image: url("../../assets/images/common/dropdownArrow.svg");
+      background-repeat: no-repeat;
+      background-size: 18px 18px;
+      background-position: top 50% right 16px;
+   }
+}

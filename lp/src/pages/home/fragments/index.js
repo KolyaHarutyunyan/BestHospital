@@ -1,0 +1,1 @@
+export { HomeFragment } from "./homeFragment";

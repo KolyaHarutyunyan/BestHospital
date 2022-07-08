@@ -1,0 +1,46 @@
+@import "src/assets/styles/globalStyles";
+
+.not-found-fragment {
+    width: 100%;
+    .not-found-container {
+        width: 100%;
+        background-color: inherit;
+        padding: 92px 0;
+        @media (max-width: $desktop) {
+            padding: 64px 0;
+        }
+        @media (max-width: $mobile) {
+            padding: 48px 0;
+        }
+        .not-found-content {
+            max-width: 632px;
+            width: 100%;
+            margin: 0 auto;
+            text-align: center;
+            @media (max-width: $mobile) {
+                max-width: 325px;
+            } 
+            .content-title {
+                margin-bottom: 24px;   
+                @include font-style(46px, 700, $textPrimary, 52px);
+                @media (max-width: $mobile) {
+                    font-size: 24px;
+                    line-height: 28px;
+                } 
+            }
+            .not-found-picture-box {
+                width: 100%;
+                margin-top: 24px;
+                padding: 40px;
+                @media (max-width: $mobile) {
+                    margin-top: 16px;
+                    padding: 24px;
+                } 
+                img {
+                    width: 100%;
+                    object-fit: contain;
+                }
+            }
+        }
+    }
+}

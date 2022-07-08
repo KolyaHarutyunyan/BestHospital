@@ -1,0 +1,602 @@
+@import "src/assets/styles/globalStyles";
+
+@mixin card-border {
+   border-left: 1px solid #edf8ff;
+   border-right: 1px solid #edf8ff;
+   @media (max-width: $mobile) {
+      border-left: none;
+      border-right: none;
+   }
+}
+
+@mixin slider-button-style($bgImage) {
+   width: 34px !important;
+   height: 18px !important;
+   background-color: $backgroundPrimary !important;
+   background-image: url($bgImage) !important;
+   background-repeat: no-repeat !important;
+   background-size: contain !important;
+   background-position: center !important;
+   cursor: pointer;
+   &:disabled {
+      cursor: default !important;
+   }
+}
+
+.home-fragment {
+   width: 100%;
+   .home-first-box {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 56px 0 137px;
+      @media (max-width: $desktop) {
+         flex-direction: column;
+         align-items: center;
+         padding: 16px 0 97px;
+      }
+      @media (max-width: $mobile) {
+         padding: 42px 0 104px;
+      }
+      .first-box-content {
+         max-width: 640px;
+         width: 100%;
+         @media (max-width: $desktop) {
+            max-width: 533px;
+            text-align: center;
+         }
+         @media (max-width: $mobile) {
+            max-width: 343px;
+         }
+         .content-title {
+            @include font-style(56px, 700, #f8fafb, 66px);
+            @media (max-width: $desktop) {
+               font-size: 40px;
+               line-height: 60px;
+            }
+            @media (max-width: $mobile) {
+               font-size: 32px;
+               line-height: 48px;
+            }
+         }
+         .content-subtitle {
+            margin-top: 24px;
+            @include font-style(18px, 400, #ebf2fd, 27px);
+            @media (max-width: $desktop) {
+               font-size: 16px;
+            }
+         }
+         .content-actions-box {
+            width: 100%;
+            margin-top: 46px;
+            @media (max-width: $desktop) {
+               flex-direction: column;
+               margin-top: 32px;
+            }
+         }
+      }
+      .first-box-picture {
+         width: 569px;
+         height: 392px;
+         background-image: url(../../../assets/images/home/hero.png);
+         background-repeat: no-repeat;
+         background-size: contain;
+         background-position: center;
+         @media (max-width: $desktop) {
+            margin-top: 16px;
+            width: 533px;
+            height: 351px;
+         }
+         @media (max-width: $mobile) {
+            width: 320px;
+            height: 209px;
+         }
+      }
+   }
+   .home-second-box {
+      width: 100%;
+      padding: 136px 0;
+      background-image: inherit;
+      @media (max-width: $desktop) {
+         padding: 96px 0;
+      }
+      @media (max-width: $mobile) {
+         padding: 72px 0;
+      }
+      .content-title {
+         text-align: center;
+         @include font-style(46px, 700, $textPrimary, 52px);
+         @media (max-width: $desktop) {
+            font-size: 32px;
+            line-height: 48px;
+         }
+      }
+      .features-list-box {
+         width: 100%;
+         margin-top: 56px;
+         @media (max-width: $desktop) {
+            margin-top: 40px;
+         }
+         @media (max-width: $mobile) {
+            margin-top: 32px;
+         }
+         & > div {
+            display: flex;
+            justify-content: center;
+            @media (max-width: $mobile) {
+               flex-direction: column;
+               align-items: center;
+            }
+            &.first-list-box {
+               border-bottom: 1px solid #edf8ff;
+               @media (max-width: $mobile) {
+                  border-bottom: none;
+               }
+               .feature-card:nth-child(2) {
+                  @include card-border();
+               }
+            }
+            &.second-list-box {
+               .feature-card:nth-child(2) {
+                  @include card-border();
+               }
+            }
+            .feature-card {
+               width: 100%;
+               text-align: center;
+               padding: 40px;
+               @media (max-width: $desktop) {
+                  padding: 24px;
+               }
+               @media (max-width: $mobile) {
+                  &:not(:last-child) {
+                     border-bottom: 1px solid #edf8ff;
+                  }
+               }
+               img {
+                  width: 50px;
+                  height: 50px;
+                  @media (max-width: $desktop) {
+                     width: 48px;
+                     height: 48px;
+                  }
+                  @media (max-width: $mobile) {
+                     width: 40px;
+                     height: 40px;
+                  }
+               }
+               .feature-title {
+                  margin: 16px 0;
+                  @include font-style(24px, 700, $textPrimary, 28px);
+                  @media (max-width: $desktop) {
+                     font-size: 18px;
+                     line-height: 20px;
+                  }
+               }
+               .feature-description {
+                  @include font-style(18px, 400, $textSecondary, 27px);
+                  @media (max-width: $desktop) {
+                     font-size: 16px;
+                     line-height: 24px;
+                  }
+               }
+            }
+         }
+      }
+   }
+   .home-third-box {
+      width: 100%;
+      background-color: inherit;
+      padding: 80px 0;
+      @media (max-width: $desktop) {
+         padding: 96px 0 100px;
+      }
+      @media (max-width: $mobile) {
+         padding: 56px 0;
+      }
+      .content-title {
+         text-align: center;
+         @include font-style(46px, 700, $textWhite, 58px);
+         @media (max-width: $desktop) {
+            font-size: 32px;
+            font-weight: 48px;
+         }
+      }
+      .best-jobs-container {
+         width: 100%;
+         display: flex;
+         justify-content: space-between;
+         margin-top: 80px;
+         @media (max-width: $desktop) {
+            flex-direction: column;
+            align-items: center;
+            margin-top: 40px;
+         }
+         @media (max-width: $mobile) {
+            margin-top: 32px;
+         }
+         .best-jobs-navigation-box {
+            .navigation-list {
+               @media (max-width: $desktop) {
+                  display: flex;
+               }
+               @media (max-width: $mobile) {
+                  max-width: 288px;
+                  width: 100%;
+                  overflow-x: auto;
+                  padding-bottom: 24px;
+               }
+               &::-webkit-scrollbar {
+                  height: 5px;
+               }
+
+               &::-webkit-scrollbar-track {
+                  background-color: inherit;
+               }
+
+               &::-webkit-scrollbar-thumb {
+                  background-color: #ffffff50;
+                  border-radius: 3px;
+               }
+               li {
+                  display: flex;
+                  align-items: center;
+                  &:not(:first-child) {
+                     margin-top: 32px;
+                     @media (max-width: $desktop) {
+                        margin-top: 0;
+                        margin-left: 24px;
+                     }
+                  }
+                  &::before {
+                     content: "";
+                     width: 4px;
+                     height: 33px;
+                     border-radius: 0px 8px 8px 0px;
+                     background-color: $textGrey;
+                     margin-right: 16px;
+                     @media (max-width: $desktop) {
+                        height: 27px;
+                        margin-right: 8px;
+                     }
+                  }
+                  &.active::before {
+                     background-color: $themeYellow;
+                  }
+                  &.active {
+                     a {
+                        color: $textWhite;
+                        cursor: default;
+                     }
+                  }
+                  a {
+                     text-decoration: none;
+                     @include font-style(24px, 500, $textGrey, 28px);
+                     cursor: pointer;
+                     @media (max-width: $desktop) {
+                        font-size: 18px;
+                        line-height: 20px;
+                     }
+                  }
+                  @media (max-width: $mobile) {
+                     min-width: 112px;
+                  }
+               }
+            }
+         }
+         .best-jobs-list-box {
+            max-width: 891px;
+            width: 100%;
+            max-height: 324px;
+            height: 100%;
+            overflow-y: auto;
+            &::-webkit-scrollbar {
+               display: none;
+            }
+            @media (max-width: $desktop) {
+               max-width: 658px;
+               max-height: 282px;
+               margin-top: 46px;
+            }
+            @media (max-width: $mobile) {
+               max-width: 308px;
+               max-height: 493px;
+               margin-top: 32px;
+            }
+            .best-job-card {
+               display: flex;
+               justify-content: space-between;
+               width: 100%;
+               @media (max-width: $mobile) {
+                  flex-direction: column-reverse;
+               }
+               &:not(:first-child) {
+                  margin-top: 40px;
+                  @media (max-width: $desktop) {
+                     margin-top: 52px;
+                  }
+               }
+               .best-job-screenshot {
+                  width: 417px;
+                  height: 324px;
+                  @media (max-width: $desktop) {
+                     width: 306px;
+                     height: 238px;
+                  }
+                  @media (max-width: $mobile) {
+                     margin-top: 16px;
+                  }
+                  img {
+                     width: 100%;
+                     object-fit: contain;
+                  }
+               }
+               .best-job-content {
+                  max-width: 409px;
+                  width: 100%;
+                  @media (max-width: $desktop) {
+                     max-width: 308px;
+                  }
+                  .best-job-title-box {
+                     @media (max-width: $mobile) {
+                        justify-content: center;
+                     }
+                     .best-job-title {
+                        @include font-style(32px, 500, $textWhite, 37px);
+                        @media (max-width: $desktop) {
+                           font-size: 24px;
+                           line-height: 28px;
+                        }
+                     }
+                     img {
+                        width: 40px;
+                        height: 40px;
+                        margin-left: 16px;
+                        @media (max-width: $desktop) {
+                           width: 32px;
+                           height: 32px;
+                        }
+                     }
+                  }
+                  .best-job-info {
+                     margin: 16px 0;
+                     @include font-style(18px, 400, $textWhite, 27px);
+                     @media (max-width: $desktop) {
+                        font-size: 16px;
+                        line-height: 24px;
+                     }
+                     @media (max-width: $mobile) {
+                        text-align: center;
+                        margin: 16px 0 8px;
+                     }
+                  }
+                  .best-job-services-list {
+                     width: 100%;
+                     @media (max-width: $mobile) {
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: center;
+                        align-items: center;
+                     }
+                     li {
+                        display: flex;
+                        align-items: center;
+                        @media (max-width: $mobile) {
+                           margin: 8px;
+                        }
+                        img {
+                           width: 24px;
+                           height: 24px;
+                           margin-right: 16px;
+                           @media (max-width: $desktop) {
+                              width: 18px;
+                              height: 18px;
+                           }
+                           @media (max-width: $mobile) {
+                              margin-right: 8px;
+                           }
+                        }
+                        span {
+                           @include font-style(18px, 400, $textWhite, 20px);
+                           @media (max-width: $desktop) {
+                              font-size: 16px;
+                              line-height: 18px;
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      }
+   }
+   .home-fourth-box {
+      width: 100%;
+      background-color: inherit;
+      padding: 80px 0;
+      @media (max-width: $desktop) {
+         padding: 96px 0;
+      }
+      @media (max-width: $mobile) {
+         padding: 72px 0;
+      }
+      .content-title {
+         text-align: center;
+         @include font-style(46px, 700, $textPrimary, 58px);
+         &::after {
+            content: "Wellness.";
+            color: $themePrimary;
+         }
+         @media (max-width: $desktop) {
+            font-size: 32px;
+         }
+      }
+      .customers-reviews-box {
+         width: 100%;
+         margin-top: 76px;
+         @media (max-width: $desktop) {
+            margin-top: 40px;
+         }
+         @media (max-width: $mobile) {
+            margin-top: 32px;
+         }
+         .slider-container {
+            .slider-control-centerleft {
+               button {
+                  @include slider-button-style(
+                     "../../../assets/images/home/leftArrow.svg"
+                  );
+               }
+            }
+            .slider-control-centerright {
+               button {
+                  @include slider-button-style(
+                     "../../../assets/images/home/rightArrow.svg"
+                  );
+               }
+            }
+         }
+         .customer-review-card {
+            position: relative;
+            max-width: 546px;
+            width: 100%;
+            height: 319px;
+            display: flex;
+            align-items: flex-end;
+            @media (max-width: $desktop) {
+               max-width: 530px;
+               height: 295px;
+            }
+            @media (max-width: $mobile) {
+               max-width: 291px;
+               height: 261px;
+            }
+            &::after {
+               content: "";
+               width: 110px;
+               height: 110px;
+               position: absolute;
+               top: 0px;
+               right: calc(50% - 4px);
+               transform: translateX(50%);
+               border-radius: 50%;
+               border: 1px solid $themeYellow;
+               @media (max-width: $desktop) {
+                  width: 90px;
+                  height: 90px;
+               }
+               @media (max-width: $mobile) {
+                  width: 66px;
+                  height: 66px;
+               }
+            }
+            .customer-avatar-box {
+               width: 110px;
+               height: 110px;
+               border-radius: 50%;
+               overflow: hidden;
+               position: absolute;
+               top: 4px;
+               left: 50%;
+               transform: translateX(-50%);
+               img {
+                  width: 100%;
+                  object-fit: contain;
+               }
+               @media (max-width: $desktop) {
+                  width: 90px;
+                  height: 90px;
+               }
+               @media (max-width: $mobile) {
+                  width: 66px;
+                  height: 66px;
+               }
+            }
+            .customer-review-card-container {
+               width: 100%;
+               padding: 40px;
+               background-color: $backgroundPrimary;
+               box-shadow: 0px 3px 6px #ebf2fdb3;
+               border-radius: 12px;
+               @media (max-width: $desktop) {
+                  padding: 32px;
+               }
+               @media (max-width: $mobile) {
+                  padding: 28px;
+               }
+               .customer-review-content-box {
+                  img {
+                     width: 40px;
+                     height: 40px;
+                     @media (max-width: $mobile) {
+                        width: 24px;
+                        height: 24px;
+                     }
+                  }
+                  .customer-comment {
+                     @include font-style(18px, 400, $textSecondary, 27px);
+                     margin: 16px 0;
+                     @media (max-width: $mobile) {
+                        font-size: 14px;
+                        line-height: 20px;
+                     }
+                  }
+                  .customer-bio-box {
+                     width: 100%;
+                     text-align: right;
+                     .customer-name {
+                        @include font-style(18px, 500, $textSecondary, 20px);
+                        @media (max-width: $mobile) {
+                           font-size: 16px;
+                        }
+                     }
+                     .customer-profesion {
+                        @include font-style(16px, 400, $textSecondary, 18px);
+                        @media (max-width: $mobile) {
+                           font-size: 14px;
+                           line-height: 16px;
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      }
+   }
+   .home-fifth-box {
+      width: 100%;
+      background-color: inherit;
+      padding: 136px 0 138px;
+      display: flex;
+      justify-content: center;
+      @media (max-width: $desktop) {
+         padding: 96px 0;
+      }
+      @media (max-width: $mobile) {
+         padding: 72px 0;
+      }
+      .fifth-box-content-box {
+         max-width: 1048px;
+         width: 100%;
+         background-color: $backgroundDark;
+         border-radius: 30px;
+         padding: 60px;
+         @media (max-width: $desktop) {
+            padding: 40px;
+         }
+         .content-container {
+            max-width: 547px;
+            width: 100%;
+            margin: 0 auto;
+            text-align: center;
+            .content-title {
+               @include font-style(32px, 700, $textWhite, 50px);
+            }
+            .content-subtitle {
+               @include font-style(16px, 400, $backgroundSecondary, 18px);
+               margin: 16px 0 32px;
+            }
+         }
+      }
+   }
+}

@@ -1,0 +1,43 @@
+@import "src/assets/styles/globalStyles";
+
+@mixin background-style($bgImage) {
+   background-image: url($bgImage);
+   background-repeat: no-repeat;
+   background-size: cover;
+   background-position: center;
+}
+
+.card {
+   width: 100%;
+   overflow: hidden;
+
+   &.home-page-cover {
+      @include background-style("../../assets/images/home/homeCoverWeb.svg");
+      @media (max-width: $desktop) {
+         background-image: url("../../assets/images/home/homeCoverTablet.svg");
+      }
+      @media (max-width: $mobile) {
+         background-image: url("../../assets/images/home/homeCoverMobile.svg");
+      }
+   }
+
+   &.about-us-page-cover {
+      @include background-style("../../assets/images/aboutUs/aboutUsCoverWeb.svg");
+      @media (max-width: $desktop) {
+         background-image: url("../../assets/images/aboutUs/aboutUsCoverTablet.svg");
+      }
+      @media (max-width: $mobile) {
+         background-image: url("../../assets/images/aboutUs/aboutUsCoverMobile.svg");
+      }
+   }
+
+   &.contact-us-page-cover {
+      @include background-style("../../assets/images/contactUs/contactUsCoverWeb.svg");
+      @media (max-width: $desktop) {
+         background-image: url("../../assets/images/contactUs/contactUsCoverTablet.svg");
+      }
+      @media (max-width: $mobile) {
+         background-image: url("../../assets/images/contactUs/contactUsCoverMobile.svg");
+      }
+   }
+}

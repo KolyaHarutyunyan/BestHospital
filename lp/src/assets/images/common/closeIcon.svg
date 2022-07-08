@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="Close" transform="translate(-1732 -178)">
+    <g id="_Base" data-name=" Base" transform="translate(1732 178)" fill="#2d4365" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <path id="Close-2" data-name="Close" d="M23.969,15.969H17.961V9.961a1,1,0,0,0-1.992,0v6.008H9.961a1,1,0,0,0,0,1.992h6.008v6.008a1,1,0,1,0,1.992,0V17.961h6.008a1,1,0,0,0,0-1.992Z" transform="translate(1744.314 166.322) rotate(45)" fill="#2d4365"/>
+  </g>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+  <g id="Icon" transform="translate(-141 -323)">
+    <rect id="Baase" width="40" height="40" transform="translate(141 323)" fill="#0090f0" opacity="0"/>
+    <g id="email_2_" data-name="email (2)" transform="translate(133.647 306.36)">
+      <path id="Path_4895" data-name="Path 4895" d="M41.809,49.113H12.9a3.548,3.548,0,0,1-3.544-3.545V27.713A3.548,3.548,0,0,1,12.9,24.168H41.809a3.548,3.548,0,0,1,3.544,3.545V45.568a3.548,3.548,0,0,1-3.544,3.545ZM12.9,25.523a2.192,2.192,0,0,0-2.19,2.19V45.568a2.192,2.192,0,0,0,2.19,2.19H41.809A2.192,2.192,0,0,0,44,45.568V27.713a2.192,2.192,0,0,0-2.19-2.19Z" transform="translate(0 0)" fill="#0090f0"/>
+      <path id="Path_4896" data-name="Path 4896" d="M29.749,42.312a.677.677,0,0,1-.448-.169L12.976,27.732l.9-1.016L29.749,40.732,45.626,26.718l.9,1.016L30.2,42.144A.675.675,0,0,1,29.749,42.312Z" transform="translate(-2.396 -1.685)" fill="#0090f0"/>
+      <path id="Path_4897" data-name="Path 4897" d="M0,0H16.616V1.355H0Z" transform="translate(10.212 46.986) rotate(-48.728)" fill="#0090f0"/>
+      <path id="Path_4898" data-name="Path 4898" d="M0,0H1.355V16.616H0Z" transform="translate(32.543 35.371) rotate(-41.272)" fill="#0090f0"/>
+    </g>
+  </g>
+</svg>
