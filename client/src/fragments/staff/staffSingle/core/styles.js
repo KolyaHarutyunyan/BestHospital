@@ -325,4 +325,18 @@ export const serviceSingleStyles = makeStyles(() => ({
       transition: ".5s",
       color: Colors.TextPrimary,
    },
+
+   staffCredentialBoxStyle: {
+      height: "550px",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
+      overflowY: "auto",
+   },
+   loaderContainerStyle: {
+      minHeight: "400px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+   },
 }));

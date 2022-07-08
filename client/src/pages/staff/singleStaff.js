@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StaffItem } from "@eachbase/fragments";
 import { useDispatch, useSelector } from "react-redux";
 import {
    adminActions,
-   fundingSourceActions,
    systemActions,
    noteActions,
    availabilityScheduleActions,
@@ -13,13 +12,41 @@ import {
 } from "@eachbase/store";
 import { useParams } from "react-router-dom";
 import { Loader } from "@eachbase/components";
-import { FindLoad } from "@eachbase/utils";
+import { FindLoad, FindSuccess, PaginationContext } from "@eachbase/utils";
 
 export const SingleStaff = () => {
+   const { pageIsChanging, handlePageChange } = useContext(PaginationContext);
+
+   const success = FindSuccess("GET_CREDENTIAL");
+
    const staffGeneral = useSelector((state) => state.admins.adminInfoById);
+   const staffCredentialList = useSelector((state) => state.admins.credential);
+   const { credentials, count } = staffCredentialList || {};
+
+   const [page, setPage] = useState(1);
+
+   useEffect(
+      () => () => {
+         if (pageIsChanging) {
+            handlePageChange(false);
+         }
+      },
+      [pageIsChanging]
+   );
+
+   useEffect(() => {
+      if (!!success.length) {
+         if (!pageIsChanging) setPage(1);
+         handlePageChange(false);
+         dispatch(httpRequestsOnSuccessActions.removeSuccess("GET_CREDENTIAL"));
+      }
+   }, [success]);
+
    const dispatch = useDispatch();
+
    const params = useParams();
-   const loader = FindLoad("GET_ADMIN_BY_ID");
+
+   const getAdminByIdLoader = FindLoad("GET_ADMIN_BY_ID");
 
    useEffect(() => {
       dispatch(adminActions.getCredential(params.id));
@@ -38,12 +65,18 @@ export const SingleStaff = () => {
 
    return (
       <>
-         {loader.length ? (
+         {getAdminByIdLoader.length ? (
             <div style={{ height: "85vh" }}>
                <Loader />
             </div>
          ) : (
-            <StaffItem gen={staffGeneral} />
+            <StaffItem
+               gen={staffGeneral}
+               credentialPage={page}
+               credentials={staffCredentialList}
+               credentialsCount={count}
+               handleGetCredentialPage={setPage}
+            />
          )}
       </>
    );

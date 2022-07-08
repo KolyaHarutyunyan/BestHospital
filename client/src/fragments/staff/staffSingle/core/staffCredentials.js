@@ -1,155 +1,60 @@
-import React, { useEffect, useState } from "react";
-import { TableCell } from "@material-ui/core";
-import {
-   DeleteElement,
-   NoItemText,
-   Notes,
-   SimpleModal,
-   TableBodyComponent,
-} from "@eachbase/components";
-import { FindLoad, FindSuccess, Images } from "@eachbase/utils";
-import moment from "moment";
+import React, { useContext } from "react";
 import { useDispatch } from "react-redux";
-import { adminActions, httpRequestsOnSuccessActions } from "@eachbase/store";
-import { useParams } from "react-router-dom";
+import { Loader, NoItemText, PaginationItem } from "@eachbase/components";
+import { StaffCredentialTable } from "./common";
+import { PaginationContext, getSkipCount, FindLoad } from "@eachbase/utils";
+import { serviceSingleStyles } from ".";
+import { adminActions } from "@eachbase/store";
 
-export const StaffCredentials = ({ credentialData, openModal }) => {
-   const [open, setOpen] = useState(false);
-   const [deletedId, setDeletedId] = useState("");
+export const StaffCredentials = ({
+   credentialData = [],
+   globalCredentials,
+   page,
+   handleGetPage,
+   credentialsCount,
+   credentialLoader,
+}) => {
+   const classes = serviceSingleStyles();
+
    const dispatch = useDispatch();
-   const params = useParams();
 
-   const handleClose = () => {
-      setOpen(false);
+   const _limit = 7;
+
+   const { pageIsChanging, handlePageChange } = useContext(PaginationContext);
+
+   const changePage = (number) => {
+      if (page === number) return;
+      handlePageChange(true);
+      const _skip = getSkipCount(number, _limit);
+      dispatch(adminActions.getCredential({ limit: _limit, skip: _skip }));
+      handleGetPage(number);
    };
-
-   const editCredential = (modalType, globalCredentialInfo) => {
-      openModal(modalType, globalCredentialInfo);
-   };
-
-   const removeCredential = () => {
-      dispatch(adminActions.deleteCredentialById(deletedId, params.id));
-   };
-
-   const convertType = (index) => {
-      if (index === 0) {
-         return "Degree";
-      } else if (index === 1) {
-         return "Clearance";
-      } else if (index === 2) {
-         return "licence";
-      }
-   };
-
-   const loader = FindLoad("DELETE_CREDENTIAL_BY_ID");
-   const success = FindSuccess("DELETE_CREDENTIAL_BY_ID");
-
-   useEffect(() => {
-      if (!!success.length) {
-         handleClose();
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("DELETE_CREDENTIAL_BY_ID"));
-      }
-   }, [success]);
-
-   const notesItem = (item, index) => {
-      return (
-         <TableBodyComponent
-            key={index}
-            handleClick={() => editCredential("credentialPreview")}
-         >
-            <TableCell>{item?.credentialId?.name}</TableCell>
-            <TableCell>{convertType(item?.credentialId?.type)}</TableCell>
-            <TableCell>
-               {item?.receiveData && moment(item.receiveData).format("L")}
-            </TableCell>
-            <TableCell>
-               {item.expirationDate
-                  ? moment(item.expirationDate).format("L")
-                  : "Non-Expiring"}
-            </TableCell>
-            <TableCell>
-               {
-                  <>
-                     <img
-                        src={Images.edit}
-                        style={{ cursor: "pointer" }}
-                        onClick={(e) => {
-                           e.stopPropagation();
-                           editCredential("editCredential", {
-                              id: item._id,
-                              credId: item.credentialId?._id,
-                              type: item.credentialId?.name,
-                              expirationDate: item.expirationDate,
-                           });
-                        }}
-                        alt="edit"
-                     />
-                     <img
-                        src={Images.remove}
-                        alt="delete"
-                        style={{ cursor: "pointer", marginLeft: 16 }}
-                        onClick={(e) => {
-                           e.stopPropagation();
-                           setDeletedId(item._id);
-                           setOpen(true);
-                        }}
-                     />
-                  </>
-               }
-            </TableCell>
-         </TableBodyComponent>
-      );
-   };
-
-   const headerTitles = [
-      {
-         title: "Name",
-         sortable: true,
-      },
-      {
-         title: "Type",
-         sortable: true,
-      },
-      {
-         title: "Received Date",
-         sortable: true,
-      },
-      {
-         title: "Expiration Date",
-         sortable: false,
-      },
-      {
-         title: "Action",
-         sortable: false,
-      },
-   ];
 
    return (
-      <div>
-         {credentialData.length ? (
-            <Notes
-               defaultStyle={true}
-               data={credentialData}
-               pagination={true}
-               items={notesItem}
-               headerTitles={headerTitles}
-            />
+      <div className={classes.staffCredentialBoxStyle}>
+         {!!credentialData.length ? (
+            <>
+               {credentialLoader && pageIsChanging ? (
+                  <div className={classes.loaderContainerStyle}>
+                     <Loader circleSize={50} />
+                  </div>
+               ) : (
+                  <StaffCredentialTable
+                     staffCredentials={credentialData}
+                     globalCredentials={globalCredentials}
+                  />
+               )}
+               <PaginationItem
+                  listLength={credentialData.length}
+                  page={page}
+                  handleChangePage={(number) => changePage(number)}
+                  count={credentialsCount}
+                  limitCountNumber={_limit}
+               />
+            </>
          ) : (
             <NoItemText text="No Credentials Yet" />
          )}
-         <SimpleModal
-            openDefault={open}
-            handleOpenClose={handleClose}
-            content={
-               <DeleteElement
-                  loader={!!loader.length}
-                  text="Delete Credential"
-                  info="info"
-                  handleClose={handleClose}
-                  handleDel={removeCredential}
-               />
-            }
-         />
       </div>
    );
 };

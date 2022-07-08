@@ -42,6 +42,24 @@ export const CredentialModal = ({
    const classes = modalsStyle();
    const globalText = useGlobalTextStyles();
 
+   const success = !!globalCredentialInformation
+      ? FindSuccess("EDIT_CREDENTIAL_BY_ID")
+      : FindSuccess("CREATE_CREDENTIAL");
+   const loader = !!globalCredentialInformation
+      ? FindLoad("EDIT_CREDENTIAL_BY_ID")
+      : FindLoad("CREATE_CREDENTIAL");
+
+   useEffect(() => {
+      if (!!success.length) {
+         handleClose();
+         if (!!globalCredentialInformation) {
+            dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_CREDENTIAL_BY_ID"));
+         } else {
+            dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_CREDENTIAL"));
+         }
+      }
+   }, [success]);
+
    const [mType, setMType] = useState(credModalType);
    const [checkboxValue, setCheckboxValue] = useState(
       !!globalCredentialInformation?.expirationDate ? "expiring" : "nonExpiring"
@@ -137,11 +155,6 @@ export const CredentialModal = ({
       }
    };
 
-   const loader = FindLoad("CREATE_CREDENTIAL");
-   const loaderEdit = FindLoad("EDIT_CREDENTIAL_BY_ID");
-   const success = FindSuccess("CREATE_CREDENTIAL");
-   const edit = FindSuccess("EDIT_CREDENTIAL_BY_ID");
-
    const handleChange = (e) => {
       setInputs((prevState) => ({
          ...prevState,
@@ -149,20 +162,6 @@ export const CredentialModal = ({
       }));
       error === e.target.name && setError("");
    };
-
-   useEffect(() => {
-      if (!!success.length) {
-         handleClose();
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("CREATE_CREDENTIAL"));
-      }
-   }, [success]);
-
-   useEffect(() => {
-      if (!!edit.length) {
-         handleClose();
-         dispatch(httpRequestsOnSuccessActions.removeSuccess("EDIT_CREDENTIAL_BY_ID"));
-      }
-   }, [edit]);
 
    return (
       <div className={classes.inactiveModalBody}>
@@ -237,7 +236,7 @@ export const CredentialModal = ({
             />
          ) : (
             <CreateChancel
-               loader={!!loaderEdit.length || !!loader.length}
+               loader={!!loader.length}
                buttonWidth="192px"
                create={mType === "addCredential" ? "Add" : "Save"}
                chancel="Cancel"

@@ -85,4 +85,17 @@ export const staffSingleCoreCommonCoreStyle = makeStyles(() => ({
       "& > img": { width: "100%" },
       marginLeft: "16px",
    },
+   editStaffCredentialIconStyle: {
+      width: "24px",
+      height: "24px",
+      cursor: "pointer",
+      "& > img": { width: "100%" },
+   },
+   removeStaffCredentialIconStyle: {
+      width: "24px",
+      height: "24px",
+      cursor: "pointer",
+      "& > img": { width: "100%" },
+      marginLeft: "16px",
+   },
 }));

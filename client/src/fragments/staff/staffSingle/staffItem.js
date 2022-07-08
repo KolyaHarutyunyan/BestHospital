@@ -37,12 +37,20 @@ import moment from "moment";
 import { StaffService } from "./core/staffService";
 import { staffHeaderTitles, staffTabsLabels } from "./core/constants";
 
-export const StaffItem = ({ gen }) => {
+export const StaffItem = ({
+   gen,
+   credentialPage,
+   credentials,
+   credentialsCount,
+   handleGetPage,
+}) => {
    const classes = staffStyle();
 
    const dispatch = useDispatch();
 
    const params = useParams();
+
+   const credentialLoader = FindLoad("GET_CREDENTIAL");
 
    const { open: drawerOpen } = useContext(DrawerContext);
 
@@ -63,7 +71,7 @@ export const StaffItem = ({ gen }) => {
    const [statusType, setStatusType] = useState("");
 
    const staffGeneral = useSelector((state) => state.admins.adminInfoById);
-   const credentialData = useSelector((state) => state.admins.credential);
+   // const credentialData = useSelector((state) => state.admins.credential);
    const globalCredentials = useSelector((state) => state.system.credentials);
    const globalNotes = useSelector((state) => state.note.notes);
    const staffHistory = useSelector((state) => state.history.history);
@@ -183,10 +191,16 @@ export const StaffItem = ({ gen }) => {
             ),
       },
       {
-         tabComponent: (
+         tabComponent: !!credentialLoader.length ? (
+            <Loader circleSize={50} />
+         ) : (
             <StaffCredentials
-               credentialData={credentialData}
-               openModal={openCloseCredModal}
+               credentialData={credentials}
+               page={credentialPage}
+               credentialsCount={credentialsCount}
+               globalCredentials={globalCredentials}
+               handleGetPage={handleGetPage}
+               credentialLoader={!!credentialLoader.length}
             />
          ),
       },

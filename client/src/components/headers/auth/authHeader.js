@@ -62,35 +62,39 @@ export const AuthHeader = ({
                   </div>
                )}
             </div>
-
-            <div className={classes.AuthHeaderTopRight}>
-               {!empoloyment && (
+            {!!empoloyment ? (
+               <div
+                  className={classes.employmentEditBoxStyle}
+                  onClick={() => setToggleModal((prevState) => !prevState)}
+               >
+                  <img src={Images.edit} alt="edit" />
+                  <span className={classes.editTextStyle}>Edit</span>
+               </div>
+            ) : (
+               <div className={classes.AuthHeaderTopRight}>
                   <div className={classes.fileListStyle} onClick={openModal}>
                      <img alt="file" src={Images.authEdit} />
                   </div>
-               )}
-               <div
-                  className={classes.editIconStyle}
-                  onClick={() => {
-                     // setDelEdit(true);
-                     setToggleModal(!toggleModal);
-                  }}
-               >
-                  <img src={Images.edit} alt="edit" />
+                  <div
+                     className={classes.editIconStyle}
+                     onClick={() => {
+                        // setDelEdit(true);
+                        setToggleModal((prevState) => !prevState);
+                     }}
+                  >
+                     <img src={Images.edit} alt="edit" />
+                  </div>
+                  {/* <div
+                     className={classes.removeIconStyle}
+                     onClick={() => {
+                        setDelEdit(false);
+                        setToggleModal((prevState) => !prevState);
+                     }}
+                  >
+                     <img src={Images.remove} alt="delete" />
+                  </div> */}
                </div>
-               {empoloyment ? (
-                  <div className={classes.editTextStyle}>Edit</div>
-               ) : // <div
-               //    className={classes.removeIconStyle}
-               //    onClick={() => {
-               //       setDelEdit(false);
-               //       setToggleModal(!toggleModal);
-               //    }}
-               // >
-               //    <img src={Images.remove} alt="delete" />
-               // </div>
-               null}
-            </div>
+            )}
          </div>
          <div className={classes.AuthHeaderBottom}>
             <div className={classes.AuthHeaderBottomBox}>

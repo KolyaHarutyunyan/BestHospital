@@ -107,7 +107,9 @@ function* getAllAdmins(action) {
 }
 
 function* getAdminById(action) {
-   yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   if (action.payload?.load !== "noload") {
+      yield put(httpRequestsOnLoadActions.appendLoading(action.type));
+   }
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
    try {
       const res = yield call(authService.getAdminByIdService, action.payload.adminId);
@@ -171,9 +173,11 @@ function* editAdminById(action) {
 function* createCredential(action) {
    yield put(httpRequestsOnLoadActions.appendLoading(action.type));
    yield put(httpRequestsOnErrorsActions.removeError(action.type));
+   yield put(httpRequestsOnSuccessActions.removeSuccess(action.type));
    try {
       const res = yield call(authService.createCredentialService, action.payload.body);
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
+      yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: CREATE_CREDENTIAL_SUCCESS,
          payload: res.data,
@@ -489,7 +493,7 @@ function* isClinician(action) {
       yield put(httpRequestsOnSuccessActions.appendSuccess(action.type));
       yield put({
          type: GET_ADMIN_BY_ID,
-         payload: { adminId: action.payload.id },
+         payload: { adminId: action.payload.id, load: "noload" },
       });
    } catch (err) {
       yield put(httpRequestsOnLoadActions.removeLoading(action.type));
