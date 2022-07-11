@@ -1,6 +1,4 @@
 import {
-    CREATE_ROLE_SUCCESS, DELETE_ROLE_PERMISSION_SUCCESS,
-    DELETE_ROLE_SUCCESS,
     GET_ROLE, GET_ROLE_BY_ID_SUCCESS,
     GET_ROLE_SUCCESS,
     OPEN_ROLE, REMOVE_ROLE,
@@ -13,7 +11,7 @@ const initialState = {
     role: []
 };
 
-export const roleReducer = (state = initialState, action) => {
+export const roleReducer =  (state = initialState, action) => {
     switch (action.type) {
 
         case  GET_ROLE:
@@ -28,16 +26,6 @@ export const roleReducer = (state = initialState, action) => {
                 rolesListReserve: action.payload
             };
 
-        case CREATE_ROLE_SUCCESS:
-            return {
-                ...state,
-                rolesList: [...state.rolesList, action.payload]
-
-            };
-
-
-        case DELETE_ROLE_SUCCESS:
-            return [...state.rolesList.filter(a => a.id !== action.id)];
 
         case SEARCH_ROLE: {
             const filterItems = (query) => {

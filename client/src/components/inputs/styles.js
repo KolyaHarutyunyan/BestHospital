@@ -197,8 +197,15 @@ export const inputsStyle = makeStyles(() => ({
    },
 
    // AutoComplete style **
+   noChip:{
+      '& .MuiAutocomplete-tag':{
+        display:'none'
+      },
+   },
+
    autocompleteStyle: {
       minHeight: "70px",
+
       "& fieldset": { borderColor: Colors.ThemeBlue },
       "& .MuiInputBase-root.MuiOutlinedInput-root.MuiAutocomplete-inputRoot.MuiInputBase-fullWidth.MuiInputBase-formControl.MuiInputBase-adornedEnd.MuiOutlinedInput-adornedEnd:hover fieldset":
          { borderColor: Colors.ThemeBlue },
@@ -226,7 +233,7 @@ export const inputsStyle = makeStyles(() => ({
          backgroundPosition: "center",
       },
       "& .MuiInputBase-root.MuiOutlinedInput-root.MuiAutocomplete-inputRoot.MuiInputBase-fullWidth.MuiInputBase-formControl.MuiInputBase-adornedEnd.MuiOutlinedInput-adornedEnd":
-         { padding: 0, height: "48px" },
+         { padding: 0, minHeight: "48px" },
    },
    optionsStyle: {
       fontSize: "16px",
