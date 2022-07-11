@@ -16,6 +16,6 @@ export class SCreateCredentialDTO {
   expirationDate: Date;
   @ApiProperty()
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   receiveData: string;
 }
