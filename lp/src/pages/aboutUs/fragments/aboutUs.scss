@@ -19,19 +19,18 @@
             text-align: center;
             .content-title {
                 @include font-style(56px, 700, #F8FAFB, 66px);
-                @media (max-width: $tablet) {
+                @media (max-width: $desktop) {
                     font-size: 40px;
                     line-height: 50px;
                 }
-                @media (max-width: $tablet) {
+                @media (max-width: $mobile) {
                     font-size: 32px;
-                    line-height: 50px;
                 }
             }
             .content-subtitle {
                 margin: 24px 0 40px;
                 @include font-style(18px, 400, #EBF2FD, 27px);
-                @media (max-width: $tablet) {
+                @media (max-width: $mobile) {
                     font-size: 16px;
                     line-height: 24px;
                     margin-bottom: 32px;

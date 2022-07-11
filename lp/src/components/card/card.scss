@@ -40,4 +40,14 @@
          background-image: url("../../assets/images/contactUs/contactUsCoverMobile.svg");
       }
    }
+
+   &.help-center-page-cover {
+      @include background-style("../../assets/images/helpCenter/helpCenterCoverWeb.svg");
+      @media (max-width: $desktop) {
+         background-image: url("../../assets/images/helpCenter/helpCenterCoverTablet.svg");
+      }
+      @media (max-width: $mobile) {
+         background-image: url("../../assets/images/helpCenter/helpCenterCoverMobile.svg");
+      }
+   }
 }

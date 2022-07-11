@@ -159,4 +159,36 @@
       background-color: $themePrimary;
       @include font-style(16px, 500, $textWhite, 24px);
    }
+
+   &.contact-support-button {
+      position: relative;
+      width: 200px;
+      height: 48px;
+      background-color: $themePrimary;
+      border-radius: 10px;
+      box-shadow: 0px 0px 6px #347AF069;
+      @media (max-width: $desktop) {
+         width: 230px;
+      }
+      @media (max-width: $mobile) {
+         width: 263px;
+      }
+      @media (max-width: $desktop) {
+         margin: 0 auto;
+         &::before {
+            content: "";
+            position: absolute;
+            top: -6px;
+            left: -6px;
+            width: 242px;
+            height: 60px;
+            background-color: #f8fafb1a;
+            border-radius: 10px;
+            @media (max-width: $mobile) {
+               width: 275px;
+            }
+         }
+      }
+      @include font-style(16px, 500, $textWhite, 24px);
+   }
 }

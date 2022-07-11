@@ -1,3 +1,39 @@
+@font-face {
+   font-family: 'GT Walsheim Pro';
+   src: url('../fonts/GTWalsheimPro-Regular.eot');
+   src: local('GT Walsheim Pro Regular'), local('GTWalsheimPro-Regular'),
+       url('../fonts/GTWalsheimPro-Regular.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/GTWalsheimPro-Regular.woff2') format('woff2'),
+       url('../fonts/GTWalsheimPro-Regular.woff') format('woff'),
+       url('../fonts/GTWalsheimPro-Regular.ttf') format('truetype');
+   font-weight: 400;
+   font-style: normal;
+}
+
+@font-face {
+   font-family: 'GT Walsheim Pro';
+   src: url('../fonts/GTWalsheimPro-Medium.eot');
+   src: local('GT Walsheim Pro Medium'), local('GTWalsheimPro-Medium'),
+       url('../fonts/GTWalsheimPro-Medium.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/GTWalsheimPro-Medium.woff2') format('woff2'),
+       url('../fonts/GTWalsheimPro-Medium.woff') format('woff'),
+       url('../fonts/GTWalsheimPro-Medium.ttf') format('truetype');
+   font-weight: 500;
+   font-style: normal;
+}
+
+@font-face {
+   font-family: 'GT Walsheim Pro';
+   src: url('../fonts/GTWalsheimPro-Bold.eot');
+   src: local('GT Walsheim Pro Bold'), local('GTWalsheimPro-Bold'),
+       url('../fonts/GTWalsheimPro-Bold.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/GTWalsheimPro-Bold.woff2') format('woff2'),
+       url('../fonts/GTWalsheimPro-Bold.woff') format('woff'),
+       url('../fonts/GTWalsheimPro-Bold.ttf') format('truetype');
+   font-weight: 700;
+   font-style: normal;
+}
+
 // — Theme Colors
 $themePrimary: #0090f0;
 $themeYellow: #ffc051;
@@ -20,7 +56,7 @@ $tablet: 1024px;
 $desktop: 1280px;
 
 body {
-   // font-family: "GT Walsheim Pro";
+   font-family: "GT Walsheim Pro";
    &::-webkit-scrollbar {
       display: none;
    }
