@@ -105,7 +105,7 @@ export const StaffService = ({ staffGeneral, info, services }) => {
             }).length === 0
          );
       });
-
+   console.log(services, "services");
    return (
       <div className={classes2.staffGeneralWrapper}>
          <SimpleModal
