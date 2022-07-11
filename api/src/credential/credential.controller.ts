@@ -41,10 +41,10 @@ export class CredentialController {
     return this.credentialService.update(id, updateCredentialDto);
   }
 
-  @Delete(':id')
-  @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({ type: String })
-  remove(@Param('id', ParseObjectIdPipe) id: string) {
-    return this.credentialService.remove(id);
-  }
+  // @Delete(':id')
+  // @ApiHeader({ name: ACCESS_TOKEN })
+  // @ApiOkResponse({ type: String })
+  // remove(@Param('id', ParseObjectIdPipe) id: string) {
+  //   return this.credentialService.remove(id);
+  // }
 }

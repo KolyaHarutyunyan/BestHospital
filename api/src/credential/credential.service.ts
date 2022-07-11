@@ -77,12 +77,12 @@ export class CredentialService {
   }
 
   /** Delete the Credential */
-  async remove(_id: string): Promise<string> {
-    const credential = await this.model.findById({ _id });
-    this.checkCredential(credential);
-    await credential.remove();
-    return credential._id;
-  }
+  // async remove(_id: string): Promise<string> {
+  //   const credential = await this.model.findById({ _id });
+  //   this.checkCredential(credential);
+  //   await credential.remove();
+  //   return credential._id;
+  // }
 
   /** Private methods */
   /** if the comment is not found, throws an exception */

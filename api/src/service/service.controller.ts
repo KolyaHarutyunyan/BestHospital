@@ -55,10 +55,10 @@ export class ServiceController {
     return this.serviceService.update(id, updateServiceDto);
   }
 
-  @Delete(':id')
-  @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({ type: ServiceDTO })
-  remove(@Param('id', ParseObjectIdPipe) id: string) {
-    return this.serviceService.remove(id);
-  }
+  // @Delete(':id')
+  // @ApiHeader({ name: ACCESS_TOKEN })
+  // @ApiOkResponse({ type: ServiceDTO })
+  // remove(@Param('id', ParseObjectIdPipe) id: string) {
+  //   return this.serviceService.remove(id);
+  // }
 }

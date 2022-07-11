@@ -54,11 +54,11 @@ export class PlaceService {
   }
 
   // remove the place
-  async remove(_id: string): Promise<string> {
-    const place = await this.model.findByIdAndDelete(_id);
-    this.checkPlace(place);
-    return place._id;
-  }
+  // async remove(_id: string): Promise<string> {
+  //   const place = await this.model.findByIdAndDelete(_id);
+  //   this.checkPlace(place);
+  //   return place._id;
+  // }
 
   /** Private methods */
   /** if the place is not found, throws an exception */

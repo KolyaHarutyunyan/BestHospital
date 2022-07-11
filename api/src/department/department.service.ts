@@ -60,15 +60,15 @@ export class DepartmentService {
   }
 
   // remove the department
-  async remove(_id: string): Promise<string> {
-    try {
-      const department = await this.model.findByIdAndDelete({ _id });
-      this.checkDepartment(department);
-      return department._id;
-    } catch (e) {
-      throw e;
-    }
-  }
+  // async remove(_id: string): Promise<string> {
+  //   try {
+  //     const department = await this.model.findByIdAndDelete({ _id });
+  //     this.checkDepartment(department);
+  //     return department._id;
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  // }
 
   /** Private methods */
   /** if the department is not valid, throws an exception */

@@ -38,10 +38,10 @@ export class PlaceController {
     return this.placeService.update(id, updatePlaceDto);
   }
 
-  @Delete(':id')
-  @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({ type: String })
-  remove(@Param('id', ParseObjectIdPipe) id: string) {
-    return this.placeService.remove(id);
-  }
+  // @Delete(':id')
+  // @ApiHeader({ name: ACCESS_TOKEN })
+  // @ApiOkResponse({ type: String })
+  // remove(@Param('id', ParseObjectIdPipe) id: string) {
+  //   return this.placeService.remove(id);
+  // }
 }

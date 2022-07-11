@@ -41,10 +41,10 @@ export class DepartmentController {
     return this.departmentService.update(id, updateDepartmentDto);
   }
 
-  @Delete(':id')
-  @ApiHeader({ name: ACCESS_TOKEN })
-  @ApiOkResponse({ type: String })
-  remove(@Param('id', ParseObjectIdPipe) id: string) {
-    return this.departmentService.remove(id);
-  }
+  // @Delete(':id')
+  // @ApiHeader({ name: ACCESS_TOKEN })
+  // @ApiOkResponse({ type: String })
+  // remove(@Param('id', ParseObjectIdPipe) id: string) {
+  //   return this.departmentService.remove(id);
+  // }
 }

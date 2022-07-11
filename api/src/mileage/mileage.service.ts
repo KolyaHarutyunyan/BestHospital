@@ -4,6 +4,7 @@ import { MileageDTO, CreateMileageDto, UpdateMileageDto } from './dto';
 import { MileageSanitizer } from './interceptor/mileage.interceptor';
 import { IMileage } from './interface/mileage.interface';
 import { MileageModel } from './mileage.model';
+import * as dateFns from 'date-fns';
 
 @Injectable()
 export class MileageService {
@@ -14,10 +15,18 @@ export class MileageService {
 
   // create the mileage
   async create(dto: CreateMileageDto): Promise<MileageDTO> {
+    const [mileages] = await Promise.all([
+      this.model.find({ endDate: null }),
+      this.checkOverlap(null, dto.startDate),
+    ]);
+    if (mileages.length !== 0) {
+      throw new HttpException(`can not be two active mileage`, HttpStatus.BAD_REQUEST);
+    }
     const mileage = new this.model({
       compensation: dto.compensation,
       startDate: dto.startDate,
     });
+    // erb enq end Date dnum?
     await mileage.save();
     return this.sanitizer.sanitize(mileage);
   }
@@ -57,6 +66,18 @@ export class MileageService {
   private checkMileage(mileage: IMileage) {
     if (!mileage) {
       throw new HttpException('Mileage with this id was not found', HttpStatus.NOT_FOUND);
+    }
+  }
+  /** check mileage overlapping */
+  private async checkOverlap(_id = null, startDate: Date) {
+    const mileage = await this.model.find({
+      startDate: {
+        $gte: dateFns.startOfDay(new Date(startDate)),
+        $lte: dateFns.endOfDay(new Date(startDate)),
+      },
+    });
+    if (mileage[0] && mileage[0]._id.toString() !== _id.toString()) {
+      throw new HttpException(`Mileage overlapping`, HttpStatus.BAD_REQUEST);
     }
   }
 }

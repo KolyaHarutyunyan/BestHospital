@@ -77,11 +77,11 @@ export class ServiceService {
   }
 
   /** Delete the service */
-  async remove(_id: string) {
-    const service = await this.model.findByIdAndDelete({ _id });
-    this.checkService(service);
-    return service._id;
-  }
+  // async remove(_id: string) {
+  //   const service = await this.model.findByIdAndDelete({ _id });
+  //   this.checkService(service);
+  //   return service._id;
+  // }
 
   /** Private methods */
   /** if the service is not found, throws an exception */
