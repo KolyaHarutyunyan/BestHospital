@@ -245,7 +245,7 @@ export const managementFragments = makeStyles(() => ({
    },
 
    scrollPermission: {
-      height: "250px",
+      height: "100%",
       overflow: "auto",
    },
 

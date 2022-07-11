@@ -30,6 +30,7 @@ export const Management = ({}) => {
 
    const loader = FindLoad("GET_ROLE");
    const success = FindSuccess("GET_ROLE");
+   const createSuccess = FindSuccess("CREATE_ROLE");
 
    useEffect(() => {
       dispatch(permissionsActions.getPermissions());
@@ -52,6 +53,12 @@ export const Management = ({}) => {
          dispatch(httpRequestsOnSuccessActions.removeSuccess("GET_ROLE"));
       }
    }, [success]);
+
+   useEffect(() => {
+       if(createSuccess){
+           setPage(1)
+       }
+   },[createSuccess])
 
    if (!!loader.length && !pageIsChanging) return <Loader />;
 

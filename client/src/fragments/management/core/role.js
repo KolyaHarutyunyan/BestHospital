@@ -23,12 +23,13 @@ import { SlicedText } from "@eachbase/components";
 
 export const Role = ({
    key,
-   roleInfo = [],
+   roleInfo,
    handleGetPage,
    page,
    roleLoader,
    rolesCount = 11,
 }) => {
+   const _limit = 10;
    const classes = managementFragments();
 
    const dispatch = useDispatch();
@@ -40,17 +41,13 @@ export const Role = ({
    const [activeRole, setActiveRole] = useState("");
    const [title, setTitle] = useState("");
 
-   const { httpOnLoad } = useSelector((state) => ({
-      httpOnLoad: state.httpOnLoad,
-   }));
-
    const handleOpenClose = (item) => {
       setTitle(item?.title);
       setOpen((prevState) => !prevState);
       setRole(item?.id);
    };
 
-   const _limit = 10;
+
 
    const changePage = (number) => {
       if (page === number) return;
@@ -59,10 +56,6 @@ export const Role = ({
       dispatch(roleActions.getRole({ limit: _limit, skip: _skip }));
       handleGetPage(number);
    };
-
-   // const searchRole = (ev) => {
-   //   dispatch(roleActions.searchRoles(ev.target.value));
-   // };
 
    const openRolePermission = (role) => {
       dispatch(roleActions.openRole(role));
@@ -75,17 +68,19 @@ export const Role = ({
 
    const loader = FindLoad("DELETE_ROLE");
    const success = FindSuccess("DELETE_ROLE");
+   const getLoader = FindLoad('GET_PERMISSIONS')
 
    useEffect(() => {
       if (!!success.length) {
          setOpen(false);
          setRole("id");
          setActiveRole("");
+         dispatch(roleActions.removeRole())
          dispatch(httpRequestsOnSuccessActions.removeSuccess("DELETE_ROLE"));
       }
    }, [success]);
 
-   if (!!httpOnLoad.length && httpOnLoad[0] === "GET_PERMISSIONS") {
+   if (getLoader?.length) {
       return <Loader style={"relative"} />;
    }
 
@@ -100,8 +95,7 @@ export const Role = ({
                   <Loader circleSize={50} />
                ) : (
                   <div>
-                     {!!roleInfo.length ? (
-                        roleInfo.map((item, j) => (
+                     {roleInfo?.length ? (roleInfo.map((item, j) => (
                            <div
                               style={{ margin: "4px", borderRadius: "8px" }}
                               onClick={() => openRolePermission(item)}
@@ -144,13 +138,16 @@ export const Role = ({
                      )}
                   </div>
                )}
-               <PaginationItem
-                  page={page}
-                  listLength={roleInfo.length}
-                  count={rolesCount}
-                  limitCountNumber={_limit}
-                  handleChangePage={(number) => changePage(number)}
-               />
+
+               {!roleLoader &&
+                   <PaginationItem
+                       page={page}
+                       listLength={roleInfo?.length}
+                       count={rolesCount}
+                       limitCountNumber={_limit}
+                       handleChangePage={(number) => changePage(number)}
+                   />
+               }
             </div>
             <SimpleModal
                handleOpenClose={handleOpenClose}

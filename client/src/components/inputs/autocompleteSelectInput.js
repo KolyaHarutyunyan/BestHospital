@@ -16,12 +16,15 @@ export const CheckboxesTags = ({
    handleChange,
    styles,
    typeError,
+    noChip
 }) => {
    const classes = inputsStyle();
 
+   const classname = !noChip ? classes.noChip : ''
+
    return (
       <Autocomplete
-         className={classes.autocompleteStyle}
+         className={`${classes.autocompleteStyle} ${classname}`}
          multiple
          style={styles}
          id="checkboxes-tags-demo"
