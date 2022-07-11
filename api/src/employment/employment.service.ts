@@ -193,15 +193,17 @@ export class EmploymentService {
     const month = new Date().getMonth();
     const year = new Date().getFullYear();
     const employments = await this.model.find();
-    employments.map((empl) => {
+    for (let i = 0; i < employments.length; i++) {
       if (
-        new Date(empl.startDate).getDate() === day &&
-        new Date(empl.startDate).getMonth() === month &&
-        new Date(empl.startDate).getFullYear() === year
+        new Date(employments[i].startDate).getDate() === day &&
+        new Date(employments[i].startDate).getMonth() === month &&
+        new Date(employments[i].startDate).getFullYear() === year
       ) {
+        employments[i].active = true;
+        await employments[i].save();
       }
-    });
-    console.log('ok');
+    }
+    return 'ok';
   }
   // activated the payCode
   async active(_id: string): Promise<EmploymentDto> {

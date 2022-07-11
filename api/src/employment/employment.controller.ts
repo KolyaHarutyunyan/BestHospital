@@ -63,8 +63,8 @@ export class EmploymentController {
   ): Promise<EmploymentDto> {
     return await this.employmentService.terminate(id, dto);
   }
-  // @Cron('0 1 * * *')
-  // async activeEmploymentCheck() {
-  //   return await this.employmentService.setEmploymentActive();
-  // }
+  @Cron('0 1 * * *')
+  async activeEmploymentCheck() {
+    return await this.employmentService.setEmploymentActive();
+  }
 }
