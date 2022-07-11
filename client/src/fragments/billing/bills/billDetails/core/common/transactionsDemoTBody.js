@@ -18,7 +18,7 @@ export const TransactionsDemoTBody = ({
    const width = useWidth();
 
    const { open } = useContext(DrawerContext);
-
+   console.log(billTransaction, "billTransaction");
    const {
       showDashIfEmpty,
       addSignToValueFromStart,

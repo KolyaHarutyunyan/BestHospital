@@ -81,7 +81,7 @@ export const StaffItem = ({
    const employments = useSelector((state) => state.admins.employments);
    const staffServices = useSelector((state) => state.admins.staffServices.service);
    const staffTimesheet = useSelector((state) => state.admins.timesheet);
-   const services = useSelector((state) => state.system.services);
+   const { services } = useSelector((state) => state.system.services);
    const rolesList = useSelector((state) => state.roles.rolesList?.roles);
    const accessList = useSelector((state) => state.auth.accessList);
 
