@@ -3,6 +3,16 @@
 .modal-overlay {
    @include overlay-style(3);
    background-color: #00000080;
+
+   &.home-video-modal {
+      .modal-popup {
+         padding: 0;
+         .modal-close-button {
+            display: none;
+         }
+      }
+   }
+
    .modal-popup {
       position: relative;
       top: 50%;
