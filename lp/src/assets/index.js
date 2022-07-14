@@ -63,11 +63,16 @@ import LocationIcon from "./images/contactUs/locationIcon.svg";
 import MinusIcon from "./images/contactUs/minusIcon.svg";
 import PlusIcon from "./images/contactUs/plusIcon.svg";
 
+// HELP_CENTER_PAGE_IMAGES
+import Knowledge from "./images/helpCenter/knowledge.png";
+import ScheduleScreen from "./images/helpCenter/scheduleScreen.png";
+
 // NOT_FOUND_PAGE_IMAGES
 import Warning from "./images/notFound/warning.png";
 
 // COMMON_IMAGES_AND_ICONS
 import CloseIcon from "./images/common/closeIcon.svg";
+import MenuMobileIcon from "./images/common/menuMobileIcon.png";
 
 export const Images = {
    Facebook,
@@ -127,4 +132,7 @@ export const Images = {
    PlusIcon,
    Warning,
    CloseIcon,
+   Knowledge,
+   ScheduleScreen,
+   MenuMobileIcon,
 };

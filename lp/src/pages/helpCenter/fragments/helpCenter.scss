@@ -1,46 +1,334 @@
 @import "src/assets/styles/globalStyles";
 
+@mixin knowledge-base-style {
+   max-width: 250px;
+   width: 100%;
+   display: flex;
+   margin-bottom: 32px;
+   @media (max-width: $desktop) {
+      margin-bottom: 24px;
+   }
+   .knowledge-base-title-subtitle-box {
+      margin-right: 16px;
+      .knowledge-base-title {
+         @include font-style(24px, 700, $themePrimary, 20px);
+         margin-bottom: 8px;
+      }
+      .knowledge-base-subtitle {
+         @include font-style(14px, 500, #2d4365b3, 20px);
+      }
+   }
+   .knowledge-base-icon {
+      width: 40px;
+      height: 40px;
+   }
+}
+
 .help-center-fragment {
-    width: 100%;
-    .help-center-header {
-        width: 100%;
-        padding: 56px 0 136px;
-        @media (max-width: $desktop) {
-            padding: 48px 0 144px;
-        }
-        @media (max-width: $mobile) {
-            padding: 42px 0 61px;
-        }
-        .header-content {
-            max-width: 651px;
-            width: 100%;
+   width: 100%;
+   .help-center-header {
+      width: 100%;
+      padding: 56px 0 136px;
+      @media (max-width: $desktop) {
+         padding: 48px 0 144px;
+      }
+      @media (max-width: $mobile) {
+         padding: 42px 0 61px;
+      }
+      .header-content {
+         max-width: 651px;
+         width: 100%;
+         @media (max-width: $desktop) {
+            margin: 0 auto;
+            text-align: center;
+         }
+         .content-title {
+            @include font-style(56px, 700, #f8fafb, 66px);
             @media (max-width: $desktop) {
-                margin: 0 auto;
-                text-align: center;
+               font-size: 40px;
+               line-height: 50px;
             }
-            .content-title {
-                @include font-style(56px, 700, #F8FAFB, 66px);
-                @media (max-width: $desktop) {
-                    font-size: 40px;
-                    line-height: 50px;
-                }
-                @media (max-width: $mobile) {
-                    font-size: 32px;
-                }
+            @media (max-width: $mobile) {
+               font-size: 32px;
             }
-            .content-subtitle {
-                margin: 11px 0 30px;
-                @media (max-width: $desktop) {
-                    margin: 14px 0 32px;
-                }
-                @media (max-width: $mobile) {
-                    margin: 18px 0 29px;
-                }
-                @include font-style(16px, 400, #EBF2FD, 20px);
-                @media (max-width: $desktop) {
-                    line-height: 24px;
-                }
+         }
+         .content-subtitle {
+            margin: 11px 0 30px;
+            @media (max-width: $desktop) {
+               margin: 14px 0 32px;
             }
-        }
-    }
+            @media (max-width: $mobile) {
+               margin: 18px 0 29px;
+            }
+            @include font-style(16px, 400, #ebf2fd, 20px);
+            @media (max-width: $desktop) {
+               line-height: 24px;
+            }
+         }
+      }
+   }
+   .help-center-main {
+      width: 100%;
+      min-height: 1082px;
+      display: flex;
+      background-color: inherit;
+      @media (max-width: $mobile) {
+         position: relative;
+      }
+      .help-center-menu-container {
+         @media (min-width: $mobile) {
+            margin-left: -80px;
+            max-width: 399px;
+            max-height: 850px;
+            width: 100%;
+            height: 100%;
+            background-color: $backgroundPrimary;
+            box-shadow: 0px 6px 10px #0493ec19;
+            border-bottom-right-radius: 10px;
+            padding: 124px 6px 111px 80px;
+            @media (max-width: $desktop) {
+               margin-left: -32px;
+               padding: 96px 6px 150px 32px;
+            }
+         }
+         @media (max-width: $mobile) {
+            position: fixed;
+            top: auto;
+            right: 0;
+         }
+         .menu-overlay {
+            @include overlay-style(9);
+         }
+         .help-center-menu-bar {
+            @media (max-width: $mobile) {
+               position: absolute;
+               top: 0;
+               right: 40px;
+               z-index: 9;
+               width: 254px;
+               height: 291px;
+               padding: 15px 0 14px 16px;
+               background-color: $backgroundSecondary;
+               box-shadow: 0px 6px 10px #0493ec19;
+               border-bottom-right-radius: 10px;
+            }
+            .knowledge-base {
+               @include knowledge-base-style();
+               @media (max-width: $mobile) {
+                  display: none;
+               }
+            }
+            .help-center-tabs-container {
+               max-height: 508px;
+               height: 100%;
+               overflow-y: auto;
+               &::-webkit-scrollbar {
+                  width: 8px;
+               }
+               &::-webkit-scrollbar-track {
+                  background-color: $backgroundSecondary;
+                  border-radius: 5px;
+               }
+               &::-webkit-scrollbar-thumb {
+                  background-color: #2d4365cc;
+                  border-radius: 5px;
+               }
+               .menu-bar-tab {
+                  margin-bottom: 24px;
+                  &.active-tab {
+                     .tab-label {
+                        color: $themePrimary;
+                        cursor: default;
+                        &::before {
+                           background-image: url("../../../assets/images/common/tabArrowOpen.svg");
+                        }
+                     }
+                     .tab-subtab-list {
+                        height: 100%;
+                     }
+                  }
+                  .tab-label {
+                     display: flex;
+                     align-items: center;
+                     @include font-style(18px, 500, $textSecondary, 20px);
+                     cursor: pointer;
+                     &::before {
+                        content: "";
+                        width: 24px;
+                        height: 24px;
+                        background-image: url("../../../assets/images/common/tabArrowClose.svg");
+                        background-repeat: no-repeat;
+                        background-size: contain;
+                        background-position: center;
+                        margin-right: 8px;
+                     }
+                  }
+                  .tab-subtab-list {
+                     margin: 16px 0 0 32px;
+                     height: 0;
+                     overflow: hidden;
+                     &::-webkit-scrollbar {
+                        display: none;
+                     }
+                     li {
+                        @include font-style(16px, 400, $themePrimary, 18px);
+                        &:not(:last-child) {
+                           margin-bottom: 16px;
+                        }
+                        a {
+                           text-decoration: none;
+                           color: inherit;
+                        }
+                     }
+                  }
+               }
+            }
+         }
+         .mobile-menu-icon {
+            display: none;
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 9;
+            cursor: pointer;
+            img {
+               width: 100%;
+               object-fit: contain;
+            }
+            @media (max-width: $mobile) {
+               display: block;
+            }
+         }
+      }
+      .help-center-content-container {
+         width: 100%;
+         padding: 124px 0 165px 56px;
+         background-color: inherit;
+         @media (max-width: $desktop) {
+            padding: 96px 0 96px 24px;
+         }
+         @media (max-width: $mobile) {
+            padding: 72px 0 72px 16px;
+         }
+         .knowledge-base {
+            @include knowledge-base-style();
+            display: none;
+            max-width: 275px;
+            justify-content: space-between;
+            align-items: center;
+            @media (max-width: $mobile) {
+               display: block;
+            }
+         }
+         .breadcrumbs-box {
+            width: 100%;
+            margin-bottom: 8px;
+            @media (max-width: $mobile) {
+               margin-top: 24px;
+               padding-top: 24px;
+               border-top: 1px solid #0493ec5a;
+            }
+            .breadcrumbs-text {
+               @include font-style(16px, 400, #2d4365cf, 20px);
+            }
+         }
+         .help-center-content {
+            width: 100%;
+            .content-row {
+               width: 100%;
+               padding: 24px 0;
+               &.subcontent {
+                  border-top: 1px solid #0493ec5a;
+                  .content-title-box {
+                     margin-bottom: 16px;
+                  }
+               }
+               .content-subtitle {
+                  @include font-style(16px, 400, #2d4365cf, 20px);
+                  margin-bottom: 8px;
+               }
+               .content-title-box {
+                  display: flex;
+                  align-items: center;
+                  margin-bottom: 24px;
+                  img {
+                     width: 30px;
+                     height: 30px;
+                     margin-right: 8px;
+                  }
+                  .content-title {
+                     @include font-style(24px, 700, $textPrimary, auto);
+                  }
+               }
+               .content-text {
+                  @include font-style(18px, 400, $textSecondary, 28px);
+                  @media (max-width: $desktop) {
+                     font-size: 16px;
+                     line-height: 24px;
+                  }
+               }
+               .content-description {
+                  width: 100%;
+                  display: flex;
+                  margin-top: 55px;
+                  @media (max-width: $desktop) {
+                     margin-top: 32px;
+                  }
+                  @media (max-width: $mobile) {
+                     flex-direction: column-reverse;
+                  }
+                  .description-screen {
+                     max-width: 361px;
+                     width: 100%;
+                     border-radius: 10px;
+                     overflow: hidden;
+                     margin-right: 40px;
+                     img {
+                        width: 100%;
+                        object-fit: contain;
+                     }
+                     @media (max-width: $desktop) {
+                        display: none;
+                     }
+                     @media (max-width: $mobile) {
+                        display: block;
+                        margin-top: 24px;
+                     }
+                  }
+                  .description-details {
+                     width: 100%;
+                     .details-title {
+                        @include font-style(16px, 700, $textPrimary, auto);
+                        margin-bottom: 24px;
+                     }
+                     .description-screen {
+                        display: none;
+                        @media (max-width: $desktop) {
+                           display: block;
+                        }
+                        @media (max-width: $mobile) {
+                           display: none;
+                        }
+                     }
+                     .details-list {
+                        list-style: decimal;
+                        margin-left: 20px;
+                        li {
+                           @include font-style(16px, 400, $textPrimary, 20px);
+                           @media (max-width: $desktop) {
+                              line-height: 24px;
+                           }
+                           &:not(:last-child) {
+                              margin-bottom: 16px;
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      }
+   }
 }

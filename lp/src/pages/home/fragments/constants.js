@@ -101,7 +101,7 @@ export const bestJobs = [
    },
    {
       jobScreenshot: Images.FSMgmtScreen,
-      jobTitle: "Founding Sources Mgmt",
+      jobTitle: "Funding Sources Mgmt",
       jobIcon: Images.FSMgmt,
       jobNavigationTitle: "F.S. Mgmt",
       jobInfo:
@@ -195,32 +195,37 @@ export const homeFourthBoxContentTitle = "Our customers love ";
 export const customersReviews = [
    {
       customerAvatar: Images.CustomerOne,
-      customerComment: "Not able to tell you how happy I am with Wellness Software. I want to get a T-Shirt with Wellness on it so I can show it off to everyone.",
+      customerComment:
+         "Not able to tell you how happy I am with Wellness Software. I want to get a T-Shirt with Wellness on it so I can show it off to everyone.",
       customerName: "Lucy",
-      customerProfesion: "Doctor of Healthy Roster"
+      customerProfesion: "Doctor of Healthy Roster",
    },
    {
       customerAvatar: Images.CustomerTwo,
-      customerComment: "Not able to tell you how happy I am with Wellness Software. I want to get a T-Shirt with Wellness on it so I can show it off to everyone.",
+      customerComment:
+         "Not able to tell you how happy I am with Wellness Software. I want to get a T-Shirt with Wellness on it so I can show it off to everyone.",
       customerName: "Jack Calderon",
-      customerProfesion: "Doctor of Healthy Roster"
+      customerProfesion: "Doctor of Healthy Roster",
    },
    {
       customerAvatar: Images.CustomerOne,
-      customerComment: "Not able to tell you how happy I am with Wellness Software. I want to get a T-Shirt with Wellness on it so I can show it off to everyone.",
+      customerComment:
+         "Not able to tell you how happy I am with Wellness Software. I want to get a T-Shirt with Wellness on it so I can show it off to everyone.",
       customerName: "Lucy",
-      customerProfesion: "Doctor of Healthy Roster"
+      customerProfesion: "Doctor of Healthy Roster",
    },
    {
       customerAvatar: Images.CustomerTwo,
-      customerComment: "Not able to tell you how happy I am with Wellness Software. I want to get a T-Shirt with Wellness on it so I can show it off to everyone.",
+      customerComment:
+         "Not able to tell you how happy I am with Wellness Software. I want to get a T-Shirt with Wellness on it so I can show it off to everyone.",
       customerName: "Jack Calderon",
-      customerProfesion: "Doctor of Healthy Roster"
+      customerProfesion: "Doctor of Healthy Roster",
    },
 ];
 
 // home-fifth-box-content
-export const homeFifthBoxContentTitle = "See for yourself how we are helping teams do their best work!";
+export const homeFifthBoxContentTitle =
+   "See for yourself how we are helping teams do their best work!";
 
-export const homeFifthBoxContentSubtitle = 
-   "Imagine you have scheduled lore Epsom Here are many variations of passages of Lorem Ipsum available."; 
+export const homeFifthBoxContentSubtitle =
+   "Imagine you have scheduled lore Epsom Here are many variations of passages of Lorem Ipsum available.";
