@@ -1,9 +1,12 @@
 import React from "react";
 import { InView } from "react-intersection-observer";
 
-export const ScrollWrapper = ({ children, onChange, ...props }) => {
+export const ScrollWrapper = ({ className, children, onChange, ...props }) => {
   return (
-    <InView  {...props} className="scroll-wrapper" onChange={onChange}>
+    <InView  
+      {...props} 
+      className={`scroll-wrapper ${className}`} 
+      onChange={onChange}>
         {children}
     </InView>
   );

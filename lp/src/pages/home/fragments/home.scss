@@ -283,7 +283,7 @@
                      }
                   }
                   @media (max-width: $mobile) {
-                     min-width: 112px;
+                     min-width: 122px;
                   }
                }
             }
@@ -308,6 +308,7 @@
                margin-top: 32px;
             }
             .best-job-card {
+               position: relative;
                width: 100%;
                display: flex;
                justify-content: space-between;

@@ -15,7 +15,7 @@ export const WeAreHelpingTeams = () => {
                      <li
                         key={index}
                         className={jobNavTitle === job.jobNavigationTitle ? "active" : ""}
-                        onClick={() => setJobNavTitle(job.jobNavigationTitle)}
+                        onClick={() => setJobNavTitle(() => job.jobNavigationTitle)}
                      >
                         <a href={`#${job.jobTitle}`}>{job.jobNavigationTitle}</a>
                      </li>
@@ -24,7 +24,7 @@ export const WeAreHelpingTeams = () => {
             </div>
             <div className="best-jobs-list-box">
                {bestJobs.map((job, index) => (
-                  <div key={index} className="best-job-card" style={{ position: "relative" }}>
+                  <div key={index} className="best-job-card">
                      <ScrollWrapper 
                         onChange={(isInView) => isInView && setJobNavTitle(() => job.jobNavigationTitle)} 
                      />
