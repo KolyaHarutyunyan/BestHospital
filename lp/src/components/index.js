@@ -5,3 +5,4 @@ export { SimpleModal } from "./modal/modal";
 export { CheckBoxInput } from "./inputs/checkBoxInput";
 export { SelectInput } from "./inputs/selectInput";
 export { YoutubeEmbed } from "./embeds/youtubeEmbed";
+export { ScrollWrapper } from "./wrappers/scrollWrapper";

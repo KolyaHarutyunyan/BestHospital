@@ -308,17 +308,17 @@
                margin-top: 32px;
             }
             .best-job-card {
+               width: 100%;
                display: flex;
                justify-content: space-between;
-               width: 100%;
-               @media (max-width: $mobile) {
-                  flex-direction: column-reverse;
-               }
                &:not(:first-child) {
                   margin-top: 40px;
                   @media (max-width: $desktop) {
                      margin-top: 52px;
                   }
+               }
+               @media (max-width: $mobile) {
+                  flex-direction: column-reverse;
                }
                .best-job-screenshot {
                   width: 417px;

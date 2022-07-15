@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-// import { useInView } from "react-intersection-observer";
+import { ScrollWrapper } from "components";
 import { bestJobs, homeThirdBoxContentTitle } from "../constants";
 
 export const WeAreHelpingTeams = () => {
    const [jobNavTitle, setJobNavTitle] = useState(bestJobs[0].jobNavigationTitle);
-
-   // const { ref, inView } = useInView({ threshold: 0 });
 
    return (
       <div className="home-third-box">
@@ -26,7 +24,10 @@ export const WeAreHelpingTeams = () => {
             </div>
             <div className="best-jobs-list-box">
                {bestJobs.map((job, index) => (
-                  <div key={index} className="best-job-card">
+                  <div key={index} className="best-job-card" style={{ position: "relative" }}>
+                     <ScrollWrapper 
+                        onChange={(isInView) => isInView && setJobNavTitle(() => job.jobNavigationTitle)} 
+                     />
                      <div className="best-job-screenshot">
                         <img src={job.jobScreenshot} alt={job.jobTitle} />
                      </div>
