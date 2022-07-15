@@ -9,7 +9,6 @@
 
 .card {
    width: 100%;
-   overflow: hidden;
 
    &.home-page-cover {
       @include background-style("../../assets/images/home/homeCoverWeb.svg");

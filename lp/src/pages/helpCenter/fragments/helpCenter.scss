@@ -77,6 +77,9 @@
       }
       .help-center-menu-container {
          @media (min-width: $mobile) {
+            position: sticky;
+            position: -webkit-sticky;
+            top: 0;
             margin-left: -80px;
             max-width: 399px;
             max-height: 850px;
@@ -89,6 +92,9 @@
             @media (max-width: $desktop) {
                margin-left: -32px;
                padding: 96px 6px 150px 32px;
+            }
+            @media (max-width: $tablet) {
+               max-width: 304px;
             }
          }
          @media (max-width: $mobile) {

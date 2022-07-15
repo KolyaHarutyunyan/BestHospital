@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+// import { useInView } from "react-intersection-observer";
 import { bestJobs, homeThirdBoxContentTitle } from "../constants";
 
 export const WeAreHelpingTeams = () => {
    const [jobNavTitle, setJobNavTitle] = useState(bestJobs[0].jobNavigationTitle);
+
+   // const { ref, inView } = useInView({ threshold: 0 });
 
    return (
       <div className="home-third-box">
